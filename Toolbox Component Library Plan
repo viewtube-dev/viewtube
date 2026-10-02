@@ -1604,4 +1604,2112 @@ The next implementation move is:
 
 
 
+The first concrete output should be the production-derived component/source manifest. That manifest becomes the checklist for building the HTML and prevents the earlier problem where only ~10 components were reproduced and the three levels were incorrectly treated as separate component sets.Worked for 1m 53s
+
+This looks bounded, so I’ll make the first pass as a focused correction wave against the existing Studio Hub Component Library → Primitive track, not create a new system.
+
+I’ve reconciled the request against the current Toolbox authorities and the Conversation OS. The handwritten numbers map to the current Primitive Migration catalog as follows:
+
+#	Component	First-pass correction
+
+5	Square Icon Button	Restore true square L0/L1/L2 geometry
+6	Split Left Button	Restore border/divider and vertically centered icon/text
+7	Head Tail Action	Match the corrected arrow treatment
+8	Split Menu	Restore the divided left rail, divider line, and label
+10	Top Title Dropdown	Center bottom/value text and use the canonical chevron
+12	Context Menu	Restore the missing right-side section/anatomy
+15	Split Search	Correct focused inner border/accent color
+17	Input Action	Apply the same focus treatment
+23	Checkbox	Increase the X/check stroke thickness
+28	Removable Tag	Make the tag a proper two-color pair
+38	Knob Dial	Treat as a full visual redesign while preserving the primitive contract
+57	Skeleton	Increase the visual stroke/weight where noted
+78	Loader Split	Slow the mouseover/hover transition
+
+
+Implementation approach
+
+Primitive implementation first: correct the canonical SubToolbox* primitive/CSS where the defect is systemic.
+
+Catalog presentation second: only touch the Primitive Library catalog CSS when the issue is specifically demo presentation.
+
+Keep the Hardcoded library frozen as the comparison baseline.
+
+Preserve the existing L0/L1/L2 ratio system, inherited palette pair, responsive behavior, and business/interactivity.
+
+Add/update focused regression assertions for the changed anatomy and states.
+
+Do not create duplicate component implementations or page-local geometry rules.
+
+After the code pass, verify the Primitive Library against the supplied screenshots, especially mobile.
+
+
+This follows the current authority chain: production tokens/code → coded primitive → Reference Library → production consumer, and the Conversation OS resource-first rule.
+
+Approval gate: reply “approve” and I’ll proceed with this correction wave.I started the next pass against the current main.
+
+The repository already has the first layer of the approved level-system contract in place:
+
+L0 = 56px
+
+L1 = 48px
+
+L2 = 32px
+
+L0 geometry is proportional to L1 for stroke/radius/shadow.
+
+L0 typography remains the intentional 24px exception.
+
+A parity test already verifies those ratios and the typography exception.
+
+Production primitive files are already expected to consume getComponentLevelCssVars().
+
+
+The next problem I found
+
+The token system is not yet completely unified.
+
+There are still two overlapping concepts:
+
+COMPONENT_LEVEL_DNA
+    L0 / L1 / L2
+
+TOOLBOX_LEVEL_DNA
+    Toolbox / L0 / L1 / L2
+
+and then another legacy control-size layer:
+
+micro / compact / standard / action
+
+The code itself acknowledges that these ladders were historically conflated and that reconciliation is still outstanding.
+
+That is exactly the architectural issue our approved plan is supposed to resolve.
+
+So I'm moving forward with this sequence
+
+1. Preserve the structural Toolbox ladder.
+
+T0/T1/T2/T3 remain structural and separate from component control levels.
+
+2. Make COMPONENT_LEVEL_DNA the sole authority for normal L0/L1/L2 component geometry.
+
+3. Keep the L0 24px typography exception.
+
+4. Map legacy micro / compact / standard / action only where they represent an actual component-size variant—not as a competing level system.
+
+5. Audit every primitive CSS file for geometry that bypasses those variables.
+
+6. Classify each bypass as either:
+
+migrate;
+
+legitimate exception;
+
+fixed compound;
+
+legacy/alternate.
+
+
+7. Then update the Component Library so its default examples consume the exact production components rather than catalog geometry.
+
+I am not changing TOOLBOX_LEVEL_DNA blindly, because that would risk breaking the structural shell system that the master handoff explicitly separates from control levels. The current repository confirms that distinction and needs to be preserved.
+
+This gives us a much safer path to completing the level system without recreating the Toolbox CSS problems we're simultaneously trying to eliminate.Worked for 28s
+
+I read the four documents you provided and followed their referenced authority chain far enough to reconcile the master resource, master handoff, conversation handoff, update protocol, README, and Studio Hub Component Library source-of-truth. The important thing is that these documents actually change how we should execute the level-system work.
+
+The biggest correction to our plan
+
+Our earlier plan treated the L0/L1/L2 ladder as the primary architecture. The Toolbox documentation makes a more important distinction:
+
+There are two separate ladders.
+
+1. Structural ladder
+
+T0 Main Toolbox
+
+T1 SubToolbox
+
+T2 interior structural level
+
+T3 dense structural level
+
+
+
+2. Component/control ladder
+
+L0 = 56px
+
+L1 = 48px
+
+L2 = 32px
+
+
+
+
+The documentation explicitly says never infer shell geometry from control size.
+
+That distinction becomes a hard constraint for our future work.
+
+
+---
+
+Revised Level-System Plan
+
+Phase 0 — Authority reconciliation
+
+Before changing anything:
+
+Current executable authority wins:
+
+tokens.ts → Toolbox.tsx → toolbox-system.css → subtoolbox-system.css → primitive implementations/tests.
+
+The Component Library is a certification surface, not a second design system.
+
+So every proposed L0/L1/L2 change gets checked against:
+
+production tokens;
+
+production primitive;
+
+reference-library representation;
+
+production consumer;
+
+tests;
+
+visual certification.
+
+
+That exact chain is mandated by the handoff protocol.
+
+
+---
+
+Phase 1 — Formalize the component-level DNA
+
+Our approved rule remains:
+
+L1 = dimensional reference
+
+L0 = L1 × 56/48
+L1 = reference
+L2 = L1 × 32/48
+
+But now the contract explicitly covers:
+
+height;
+
+stroke;
+
+radius;
+
+shadow;
+
+width;
+
+icon;
+
+rail;
+
+padding;
+
+gaps;
+
+compound minimums.
+
+
+And L0 typography remains the deliberate exception at 24px.
+
+This aligns directly with the Component Library authority, which says L0/L1/L2 must be one anatomy rather than three separately tuned designs.
+
+
+---
+
+Phase 2 — Audit every primitive for violations
+
+This becomes much more comprehensive than simply changing tokens.ts.
+
+We need to find:
+
+data-vt-control-level="l0"
+data-vt-control-level="l1"
+data-vt-control-level="l2"
+
+and identify every place where CSS subsequently says:
+
+l0 { ... }
+l1 { ... }
+l2 { ... }
+
+when the difference should instead come from the shared variables.
+
+We already found examples such as:
+
+[data-vt-control-level="l0"] svg { stroke-width: ... }
+[data-vt-control-level="l2"] svg { stroke-width: ... }
+
+in the split and stepper systems.
+
+Those are exactly the kinds of overrides Phase 2 must audit.
+
+Exception: if a level-specific value represents a real anatomical/semantic exception, it stays—but it must be documented as EXCEPTION.
+
+
+---
+
+Phase 3 — Component Library becomes a truth test
+
+This is especially important given your earlier request.
+
+The Component Library must demonstrate:
+
+> the exact production primitive, at the exact production level, using the exact production tokens.
+
+
+
+It cannot have:
+
+catalog-specific widths;
+
+catalog-specific radii;
+
+catalog-specific icon sizes;
+
+catalog-specific typography;
+
+!important geometry;
+
+duplicate component implementations.
+
+
+The catalog owns placement.
+
+The primitive owns geometry.
+
+That's explicitly required by the Component Library source-of-truth.
+
+Therefore:
+
+Default Component Library → production truth.
+
+Top/alternate/reference library → legacy, experimental, donor, historical, or non-uniform variants.
+
+This exactly matches the direction you've been asking for.
+
+
+---
+
+Phase 4 — Fixed compound exceptions
+
+This is another important improvement to our plan.
+
+We will not force every component into L0/L1/L2.
+
+The documentation explicitly establishes fixed compound families such as:
+
+Vault Asset Module;
+
+Calendar;
+
+other registered compound/canvas families.
+
+
+For example, Calendar intentionally has one production size: L0. Vault Asset Module has its own VAULT_ASSET_MODULE_DNA and explicitly does not scale its outer anatomy through L0/L1/L2.
+
+So our audit classification becomes:
+
+Finding	Action
+
+Normal primitive geometry	Normalize to L0/L1/L2
+Typography exception	Preserve/document
+Fixed compound	Preserve separate DNA
+Semantic state color	Preserve
+Catalog-only geometry	Remove
+Legacy design	Move to alternate/reference
+Feature-local duplicate geometry	Remove
+Genuine anatomy difference	Document as exception
+
+
+
+---
+
+Phase 5 — Responsive certification
+
+The level system can't be considered finished after desktop measurements.
+
+The documentation requires visual certification across:
+
+desktop;
+
+mobile portrait;
+
+mobile landscape;
+
+long labels;
+
+no clipping;
+
+default;
+
+hover;
+
+focus;
+
+selected;
+
+disabled;
+
+open dropdown;
+
+portalized overlays;
+
+connected/disconnected states where relevant.
+
+
+The master handoff specifically warns that merged code is not the same thing as visual verification.
+
+This is important because our current Render deployment is still broken.
+
+So we should not mark the level work VERIFIED until Render/browser certification actually passes.
+
+
+---
+
+Phase 6 — CSS ownership enforcement
+
+This becomes part of the level work.
+
+The ownership boundary is:
+
+toolbox-system.css
+
+Owns:
+
+shell;
+
+structural geometry;
+
+header allocation;
+
+title slots;
+
+gutters;
+
+mobile shell;
+
+structural responsive behavior.
+
+
+subtoolbox-system.css
+
+Owns:
+
+primitive anatomy;
+
+controls;
+
+fields;
+
+dropdowns;
+
+toggles;
+
+states;
+
+focus;
+
+primitive responsive behavior.
+
+
+Feature CSS
+
+Must not redefine canonical Toolbox geometry.
+
+The documentation specifically forbids patterns like:
+
+w-[210px] inside headerActions
+page-local Toolbox title geometry
+page-local shell geometry
+mobile h-full on ordinary stacked SubToolboxes
+overflow:hidden hiding title failures
+feature-local normal Toolbox colors
+
+That means our level audit should also be an ownership audit.
+
+
+---
+
+Phase 7 — Governance and handoff
+
+Every system-level change now gets classified using the approved vocabulary:
+
+CANONICAL
+IMPLEMENTED
+VERIFIED
+MIGRATE
+LEGACY COMPATIBILITY
+EXCEPTION
+PLANNED
+SUPERSEDED
+REMOVE
+REGRESSION / OPEN ISSUE
+
+And after meaningful work we update the master living log rather than creating another competing document.
+
+
+---
+
+What this changes about PR #23
+
+PR #23 is still useful, but it is only the regression-contract portion of the larger work.
+
+It should not be treated as "the level system is finished."
+
+The proper completion sequence is now:
+
+AUTHORITY RECONCILIATION
+        ↓
+L0/L1/L2 TOKEN DNA
+        ↓
+PRIMITIVE GEOMETRY AUDIT
+        ↓
+REMOVE DUPLICATE LEVEL CSS
+        ↓
+COMPOUND EXCEPTION CLASSIFICATION
+        ↓
+COMPONENT LIBRARY TRUTH MIGRATION
+        ↓
+LEGACY → ALTERNATE LIBRARY
+        ↓
+REGRESSION TESTS
+        ↓
+BUILD
+        ↓
+RENDER
+        ↓
+BROWSER VISUAL CERTIFICATION
+        ↓
+MASTER HANDOFF UPDATE
+        ↓
+VERIFIED
+
+And one very important rule going forward
+
+We should stop creating new component/library implementations when the repository already contains the correct production primitive.
+
+The documentation's entire architecture points toward:
+
+> find the existing authority → correct it once → have every consumer use it → certify it in the library.
+
+
+
+That is now the operating model I'll use for the remaining Toolbox, Component Library, primitive, and level-system work.
+
+I also found that the repository's current documentation has some historical contradictions—particularly the older 56/44 shell language versus the newer 80/56 desktop authority. The newer master resource and executable code are the authority, and the older material should be treated as superseded rather than silently mixed into implementation decisions.Absolutely. Below is the complete handoff document to carry the standalone HTML component-library work forward. It is written as an implementation handoff, not merely a description, and is designed to preserve the discoveries and corrections from this conversation.
+
+VIEWTUBE — TOOLBOX / SUBTOOLBOX STANDALONE HTML COMPONENT LIBRARY MASTER HANDOFF
+
+Document type: Implementation Handoff / Master Build Specification
+Project: ViewTube
+Primary source repository: themotionvisual/viewtubebuild
+Target artifact: Standalone HTML component-library reproduction of the ViewTube Studio Hub Toolbox UI system
+Purpose: Reproduce the actual production Toolbox/SubToolbox/component/primitive system as a faithful visual and structural reference artifact.
+
+
+---
+
+1. Mission
+
+Create a single standalone HTML file that functions as a comprehensive, interactive visual component library for the ViewTube Toolbox UI system.
+
+This is not a generic UI kit.
+
+It must reproduce the actual ViewTube system discovered in:
+
+the themotionvisual/viewtubebuild repository
+
+the Studio Hub component library
+
+application component implementations
+
+Toolbox/SubToolbox source
+
+CSS and token systems
+
+standalone HTML component-library artifacts
+
+Toolbox handoff/master resources
+
+UI audits
+
+screenshots and deployed Studio Hub implementations
+
+related conversations and planning artifacts
+
+
+The resulting HTML should be usable as:
+
+1. a visual source of truth;
+
+
+2. a design-system reference;
+
+
+3. a component/primitive catalog;
+
+
+4. a state/style/token reference;
+
+
+5. a regression-comparison artifact;
+
+
+6. a blueprint for rebuilding or correcting the production Toolbox system.
+
+
+
+
+---
+
+2. CRITICAL CORRECTION FROM EARLIER ATTEMPTS
+
+The previous standalone HTML drafts were too generic and therefore incorrect.
+
+They failed because they:
+
+contained too few components;
+
+invented generic components instead of reproducing production components;
+
+treated the three levels as three different component catalogs;
+
+used incorrect typography;
+
+used incorrect font weights;
+
+used incorrect color relationships;
+
+omitted the actual 12-color system;
+
+omitted the 2-color pairing system;
+
+used incorrect shadows;
+
+failed to reproduce Toolbox anatomy;
+
+failed to reproduce SubToolbox anatomy;
+
+failed to reproduce split-left sections;
+
+failed to reproduce icon rails;
+
+failed to reproduce header controls;
+
+failed to reproduce actual states;
+
+did not reproduce the Studio Hub component library;
+
+did not sufficiently use the production CSS/TSX implementations.
+
+
+Do not repeat those approaches.
+
+The production repository is the authority.
+
+
+---
+
+3. SOURCE OF TRUTH HIERARCHY
+
+When sources disagree, use this priority:
+
+Tier 1 — Production implementation
+
+Use:
+
+actual TSX/React components;
+
+actual CSS;
+
+actual design tokens;
+
+actual primitive implementations;
+
+actual Studio Hub implementations.
+
+
+Tier 2 — Studio Hub component library
+
+Use the actual Studio Hub catalog to establish:
+
+component inventory;
+
+component anatomy;
+
+levels;
+
+variants;
+
+states;
+
+visual hierarchy;
+
+layout;
+
+spacing;
+
+colors;
+
+typography.
+
+
+Tier 3 — Existing standalone HTML artifacts
+
+Use existing HTML component-library files as implementation/reference material.
+
+Do not assume they are automatically correct.
+
+Tier 4 — Handoff/master resources
+
+Use Toolbox UI master resources and handoffs to recover:
+
+design intent;
+
+naming;
+
+governance;
+
+migration rules;
+
+component relationships;
+
+token contracts;
+
+historical decisions.
+
+
+Tier 5 — Screenshots/deployments
+
+Use screenshots and deployed Studio Hub pages for visual verification.
+
+Screenshots are evidence, not the primary implementation source.
+
+
+---
+
+4. PRIMARY REPOSITORY
+
+The principal source repository is:
+
+https://github.com/themotionvisual/viewtubebuild
+
+The repository contains the important existing work that should be recovered rather than recreated from memory.
+
+Specifically investigate:
+
+src/
+docs/
+studio/
+components/
+styles/
+css/
+public/
+
+and search recursively for:
+
+Toolbox
+SubToolbox
+Studio Hub
+component library
+component catalog
+primitive
+design token
+level
+color pair
+palette
+shadow
+split
+icon rail
+thumbnail
+
+Also search for:
+
+.html
+.tsx
+.css
+.scss
+.json
+.md
+
+related to the Toolbox system.
+
+
+---
+
+5. REQUIRED DISCOVERY BEFORE IMPLEMENTATION
+
+Before writing the final standalone HTML:
+
+5.1 Inventory production components
+
+Extract the complete Studio Hub component catalog.
+
+Do not estimate the number.
+
+The Studio Hub has a large component system, historically described as 150+ component sets.
+
+The final inventory must come from the repository.
+
+
+---
+
+5.2 Inventory primitives
+
+Identify all primitives used to construct the component families.
+
+For every primitive record:
+
+name;
+
+source file;
+
+props;
+
+variants;
+
+size/level behavior;
+
+states;
+
+typography;
+
+color behavior;
+
+radius;
+
+border;
+
+shadow;
+
+icon behavior.
+
+
+
+---
+
+5.3 Inventory modules
+
+Identify reusable modules built from primitives.
+
+For each:
+
+module
+  ├── primitives
+  ├── subcomponents
+  ├── layout
+  ├── states
+  ├── variants
+  └── level behavior
+
+
+---
+
+6. THREE LEVEL SYSTEM
+
+A critical rule:
+
+> The three levels do NOT represent three different component libraries.
+
+
+
+A component family can exist across multiple levels.
+
+The level controls things such as:
+
+density;
+
+scale;
+
+height;
+
+typography;
+
+padding;
+
+icon scale;
+
+border/stroke;
+
+radius;
+
+spacing;
+
+visual hierarchy.
+
+
+Therefore the HTML must represent:
+
+Component Family
+ ├── Level 0
+ ├── Level 1
+ └── Level 2
+
+rather than:
+
+Level 0 components
+Level 1 components
+Level 2 components
+
+
+---
+
+7. LEVEL REPRESENTATION
+
+The exact production values must be extracted from the repository.
+
+Do not hard-code guessed values as the final system.
+
+The standalone HTML should expose the level token system visibly:
+
+L0
+ ├─ height
+ ├─ padding
+ ├─ typography
+ ├─ icon size
+ ├─ radius
+ ├─ stroke
+ └─ spacing
+
+L1
+ └─ same token categories
+
+L2
+ └─ same token categories
+
+Each component must show its L0/L1/L2 implementations where production supports them.
+
+
+---
+
+8. COLOR SYSTEM
+
+The system must reproduce the actual ViewTube 12-color palette.
+
+Do not substitute arbitrary Tailwind colors.
+
+The HTML should provide a palette reference showing:
+
+Color 01
+Color 02
+Color 03
+...
+Color 12
+
+For every color record:
+
+token name;
+
+hex;
+
+RGB/HSL if production defines it;
+
+semantic role;
+
+usage;
+
+paired color.
+
+
+
+---
+
+9. TWO-COLOR PAIR SYSTEM
+
+The production system uses a two-color pairing model.
+
+The HTML must demonstrate:
+
+Pair
+ ├── Color A
+ └── Color B
+
+and show how that pair is used across:
+
+Toolbox;
+
+SubToolbox;
+
+controls;
+
+icon rails;
+
+buttons;
+
+badges;
+
+cards;
+
+states;
+
+shadows.
+
+
+The pair must not simply be a random two-color combination.
+
+Recover the actual pairing logic from the repository.
+
+
+---
+
+10. SHADOW SYSTEM
+
+This is a critical visual rule.
+
+DO NOT USE:
+
+box-shadow: ... black;
+
+for normal component elevation.
+
+The production system uses:
+
+> colored transparent shadows
+
+
+
+The shadow should derive from the component/palette color system.
+
+The HTML must demonstrate:
+
+shadow color;
+
+opacity;
+
+offset;
+
+blur/spread where applicable;
+
+flat/no-shadow variants.
+
+
+Black should primarily remain structural:
+
+borders;
+
+outlines;
+
+icon strokes;
+
+dividers;
+
+structural separators.
+
+
+
+---
+
+11. CORNER RADIUS SYSTEM
+
+Rounded corners are a fundamental part of the system.
+
+Every component family must document:
+
+outer radius;
+
+inner radius;
+
+nested radius;
+
+control radius;
+
+icon radius;
+
+card radius.
+
+
+Do not flatten the system into square cards.
+
+
+---
+
+12. TOOLBOX SHELL
+
+The Toolbox itself must be represented as a first-class component.
+
+Required anatomy:
+
+┌─────────────────────────────────────┐
+│ ICON │ TITLE │ HELP │ ACTIONS │ ↕  │
+├─────────────────────────────────────┤
+│                                     │
+│             CONTENT                 │
+│                                     │
+└─────────────────────────────────────┘
+
+The actual production anatomy must be recovered from source.
+
+Document:
+
+header height;
+
+icon rail;
+
+title;
+
+secondary controls;
+
+help;
+
+collapse;
+
+toggle;
+
+borders;
+
+radius;
+
+shadow;
+
+spacing;
+
+collapsed state;
+
+expanded state.
+
+
+
+---
+
+13. SUBTOOLBOX
+
+SubToolbox is a separate but related shell.
+
+Required documentation:
+
+header;
+
+left icon section;
+
+title;
+
+controls;
+
+collapse;
+
+content;
+
+nested relationships;
+
+split sections.
+
+
+Special attention must be paid to the known visual problems from the earlier reproduction:
+
+Known defects to avoid
+
+weird black top-right line;
+
+incorrect split-left icon section;
+
+incorrect icon background;
+
+incorrect collapse animation;
+
+incorrect double bottom line;
+
+incorrect border treatment.
+
+
+The standalone HTML should represent the correct production implementation, not reproduce those defects.
+
+
+---
+
+14. SPLIT-LEFT SYSTEM
+
+Split-left components are a major part of the ViewTube design language.
+
+Their anatomy should generally be represented as:
+
+┌────────────┬────────────────────────┐
+│ ICON/      │                        │
+│ ACTION     │ MAIN BODY              │
+│ SECTION    │                        │
+└────────────┴────────────────────────┘
+
+Document:
+
+left width;
+
+left color;
+
+right color;
+
+divider;
+
+icon position;
+
+icon background;
+
+hover;
+
+active;
+
+disabled;
+
+selected;
+
+radius;
+
+shadow.
+
+
+The left section should not be treated as an arbitrary icon container.
+
+
+---
+
+15. ICON SYSTEM
+
+Document:
+
+icon family;
+
+stroke weight;
+
+icon dimensions;
+
+alignment;
+
+icon container;
+
+icon background;
+
+icon color;
+
+active state;
+
+disabled state;
+
+split-left treatment.
+
+
+The standalone HTML should visibly demonstrate the icon rail system.
+
+
+---
+
+16. TYPOGRAPHY
+
+Recover exact production typography.
+
+Document:
+
+font family;
+
+font stack;
+
+font size;
+
+font weight;
+
+line height;
+
+letter spacing;
+
+uppercase/lowercase behavior;
+
+title styles;
+
+labels;
+
+metadata;
+
+buttons;
+
+numeric values.
+
+
+Do not use generic bold text as a substitute.
+
+
+---
+
+17. STATE MATRIX
+
+Each component should document applicable states:
+
+default
+hover
+focus
+active
+selected
+pressed
+disabled
+loading
+error
+warning
+success
+open
+closed
+expanded
+collapsed
+checked
+unchecked
+indeterminate
+
+Only show states applicable to the component.
+
+
+---
+
+18. REQUIRED COMPONENT CATEGORIES
+
+The final inventory should be organized into production categories rather than one enormous unordered list.
+
+At minimum:
+
+Foundations
+
+colors
+
+color pairs
+
+typography
+
+spacing
+
+radius
+
+borders
+
+shadows
+
+iconography
+
+levels
+
+motion
+
+
+Toolbox
+
+Toolbox
+
+Toolbox header
+
+Toolbox icon rail
+
+Toolbox title
+
+Toolbox help
+
+Toolbox toggle
+
+Toolbox collapse
+
+Toolbox actions
+
+
+SubToolbox
+
+SubToolbox
+
+SubToolbox header
+
+SubToolbox icon rail
+
+SubToolbox title
+
+SubToolbox help
+
+SubToolbox toggle
+
+SubToolbox collapse
+
+
+Inputs
+
+text input
+
+textarea
+
+search
+
+number input
+
+dropdown
+
+select
+
+slider
+
+range slider
+
+toggle
+
+checkbox
+
+radio
+
+segmented controls
+
+stepper
+
+color picker
+
+
+Actions
+
+primary button
+
+secondary button
+
+neutral button
+
+destructive button
+
+icon button
+
+split button
+
+menu button
+
+action button
+
+button group
+
+
+Navigation
+
+tabs
+
+breadcrumbs
+
+pagination
+
+command palette
+
+menus
+
+context menus
+
+
+Feedback
+
+alert
+
+toast
+
+tooltip
+
+popover
+
+status
+
+progress
+
+loaders
+
+skeletons
+
+
+Data
+
+table
+
+grid
+
+stat
+
+KPI
+
+metric
+
+data strip
+
+name/value list
+
+progress
+
+
+Media
+
+image
+
+video
+
+audio
+
+media card
+
+media controls
+
+media inspector
+
+asset card
+
+asset preview
+
+
+Studio/Vault
+
+upload
+
+asset rows
+
+vault cards
+
+document asset
+
+audio asset
+
+portrait asset
+
+landscape asset
+
+metadata
+
+lineage
+
+rights
+
+inspector
+
+
+Layout
+
+cards
+
+surfaces
+
+sections
+
+dividers
+
+drawers
+
+dialogs
+
+panels
+
+bands
+
+rails
+
+grids
+
+scroll regions.
+
+
+The actual repository inventory supersedes this category outline.
+
+
+---
+
+19. STANDALONE HTML ARCHITECTURE
+
+The final file should be self-contained.
+
+No external framework should be required.
+
+Recommended structure:
+
+<!doctype html>
+
+<html>
+
+<head>
+  design tokens
+  CSS
+  component styles
+</head>
+
+<body>
+
+  system overview
+
+  palette
+  color pairs
+  typography
+  levels
+  spacing
+  radius
+  shadows
+
+  Toolbox
+    components
+
+  SubToolbox
+    components
+
+  primitives
+    components
+
+  modules
+    components
+
+  application components
+    components
+
+  state matrix
+
+  responsive examples
+
+<script>
+  filters
+  level selector
+  color-pair selector
+  component search
+  collapse interaction
+  state interaction
+</script>
+
+</body>
+</html>
+
+
+---
+
+20. INTERACTIVE FEATURES
+
+The standalone artifact should provide:
+
+Component search
+
+Search components...
+
+Category filtering
+
+All
+Foundations
+Toolbox
+SubToolbox
+Inputs
+Actions
+Navigation
+Feedback
+Data
+Media
+Vault
+Layout
+
+Level selector
+
+L0
+L1
+L2
+All
+
+Color-pair selector
+
+Display the actual palette pair combinations.
+
+State selector
+
+Default
+Hover
+Focus
+Active
+Disabled
+Selected
+Loading
+Error
+
+Toolbox collapse demo
+
+The collapse icon should actually animate/rotate according to the production motion contract.
+
+
+---
+
+21. RESPONSIVE REQUIREMENTS
+
+The HTML must demonstrate:
+
+Desktop
+
+Full Studio Hub presentation.
+
+Tablet
+
+Reduced spacing and appropriate control wrapping.
+
+Mobile
+
+Single-column component specimens.
+
+The component itself should remain structurally consistent.
+
+
+---
+
+22. VISUAL VERIFICATION
+
+Use Browser Use against:
+
+https://viewtube-idgh.onrender.com/studio
+
+and, where accessible:
+
+https://viewtube.live
+
+Take screenshots of:
+
+1. Toolbox header;
+
+
+2. Toolbox expanded;
+
+
+3. Toolbox collapsed;
+
+
+4. SubToolbox;
+
+
+5. split-left controls;
+
+
+6. component library;
+
+
+7. buttons;
+
+
+8. inputs;
+
+
+9. cards;
+
+
+10. media components;
+
+
+11. palette;
+
+
+12. level examples.
+
+
+
+Compare these against the standalone HTML.
+
+
+---
+
+23. REPOSITORY COMPARISON
+
+Compare the standalone implementation against:
+
+themotionvisual/viewtubebuild
+
+Search for actual source implementations before inventing anything.
+
+For every component:
+
+HTML specimen
+        ↓
+production source
+        ↓
+production CSS
+        ↓
+Studio Hub rendering
+        ↓
+screenshot comparison
+
+
+---
+
+24. PLUGINS / SKILLS TO USE
+
+Superpowers
+
+Use:
+
+brainstorming
+
+writing-plans
+
+test-driven-development
+
+systematic-debugging
+
+executing-plans
+
+verification-before-completion
+
+requesting-code-review
+
+
+Build Web Data Visualization
+
+Use:
+
+visualization strategy
+
+accessibility
+
+React/Next.js integration where relevant
+
+testing
+
+TypeScript engineering
+
+
+Browser Use
+
+Use for:
+
+deployed Studio Hub inspection;
+
+screenshots;
+
+visual comparison;
+
+regression checks.
+
+
+GitHub
+
+Use for:
+
+repository discovery;
+
+source retrieval;
+
+history;
+
+component inventory;
+
+exact implementation recovery.
+
+
+Superhuman Docs
+
+Use for:
+
+durable handoff;
+
+design-system resources;
+
+master resource updates;
+
+governance documentation.
+
+
+
+---
+
+25. IMPLEMENTATION PHASES
+
+Phase 1 — Source recovery
+
+Recover:
+
+component catalog;
+
+primitives;
+
+modules;
+
+tokens;
+
+CSS;
+
+Toolbox;
+
+SubToolbox;
+
+Studio Hub source;
+
+existing HTML artifacts.
+
+
+Deliverable: source inventory.
+
+
+---
+
+Phase 2 — Token reconstruction
+
+Recover exact:
+
+palette;
+
+pair system;
+
+typography;
+
+levels;
+
+spacing;
+
+radius;
+
+border;
+
+shadow;
+
+motion.
+
+
+Deliverable: standalone token layer.
+
+
+---
+
+Phase 3 — Shell reconstruction
+
+Build:
+
+Toolbox;
+
+SubToolbox;
+
+icon rails;
+
+headers;
+
+title areas;
+
+help controls;
+
+toggles;
+
+collapse controls.
+
+
+Deliverable: faithful Toolbox shell.
+
+
+---
+
+Phase 4 — Primitive reconstruction
+
+Build every production primitive.
+
+Deliverable: primitive catalog.
+
+
+---
+
+Phase 5 — Component reconstruction
+
+Build the complete Studio Hub component inventory.
+
+Deliverable: complete component catalog.
+
+
+---
+
+Phase 6 — State reconstruction
+
+Implement applicable states.
+
+Deliverable: state matrix.
+
+
+---
+
+Phase 7 — Level system
+
+Implement L0/L1/L2 using the same component families.
+
+Deliverable: level comparison system.
+
+
+---
+
+Phase 8 — Palette/pair system
+
+Implement the real 12-color palette and pair logic.
+
+Deliverable: interactive palette/pair demonstration.
+
+
+---
+
+Phase 9 — Responsive system
+
+Implement desktop/tablet/mobile specimens.
+
+Deliverable: responsive catalog.
+
+
+---
+
+Phase 10 — Visual audit
+
+Compare every major component against production.
+
+Deliverable: visual discrepancy report.
+
+
+---
+
+Phase 11 — Correction
+
+Fix discrepancies.
+
+Deliverable: corrected standalone HTML.
+
+
+---
+
+Phase 12 — Freeze
+
+Produce:
+
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY.html
+
+plus:
+
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY_HANDOFF.md
+
+and a source manifest.
+
+
+---
+
+26. ACCEPTANCE CRITERIA
+
+The artifact is not complete merely because it opens in a browser.
+
+It must satisfy:
+
+[ ] production component inventory recovered;
+
+[ ] 150+ component families accounted for where present in source;
+
+[ ] all three levels represented;
+
+[ ] levels share component families;
+
+[ ] actual typography reproduced;
+
+[ ] actual font weights reproduced;
+
+[ ] 12-color palette reproduced;
+
+[ ] two-color pair system reproduced;
+
+[ ] colored transparent shadows reproduced;
+
+[ ] black structural borders retained;
+
+[ ] corner-radius system reproduced;
+
+[ ] Toolbox reproduced;
+
+[ ] SubToolbox reproduced;
+
+[ ] split-left anatomy reproduced;
+
+[ ] icon rails reproduced;
+
+[ ] collapse animation reproduced;
+
+[ ] state matrix reproduced;
+
+[ ] responsive behavior represented;
+
+[ ] production CSS compared;
+
+[ ] production TSX compared;
+
+[ ] Studio Hub screenshots compared;
+
+[ ] visual discrepancies corrected;
+
+[ ] no generic substitute components remain where production components exist.
+
+
+
+---
+
+27. GOVERNANCE RULE
+
+The standalone HTML is a reference artifact, not a replacement for production source.
+
+If the production component changes:
+
+production source
+       ↓
+update design-system source
+       ↓
+update standalone HTML
+       ↓
+visual verification
+       ↓
+update handoff
+
+Do not allow the standalone file to become an independent competing design system.
+
+
+---
+
+28. IMPORTANT LOST-WORK RECOVERY RULE
+
+The standalone library should also act as a recovery artifact for the work lost during the GitHub account/repository access problem.
+
+Recovered knowledge should be encoded into:
+
+component inventory;
+
+token definitions;
+
+design rules;
+
+state rules;
+
+level rules;
+
+color-pair rules;
+
+Toolbox anatomy;
+
+SubToolbox anatomy;
+
+split-left anatomy;
+
+visual examples;
+
+implementation notes.
+
+
+This allows future work to recover the knowledge and decisions, rather than merely recreating a sequence of conversations.
+
+
+---
+
+29. FINAL DELIVERABLE SET
+
+The completed effort should produce:
+
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY.html
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY_HANDOFF.md
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY_SOURCE_MANIFEST.md
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY_TOKEN_REFERENCE.md
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY_STATE_MATRIX.md
+VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY_VISUAL_AUDIT.md
+
+The HTML is the visual artifact.
+
+The Markdown files preserve the knowledge required to maintain and reproduce it.
+
+
+---
+
+30. NEXT ACTION
+
+Do not start by designing another generic HTML mockup.
+
+The next implementation move is:
+
+> Mine themotionvisual/viewtubebuild for the actual Studio Hub component catalog, Toolbox/SubToolbox source, primitives, CSS, tokens, levels and existing standalone HTML, then build the standalone library directly from those sources.
+
+
+
 The first concrete output should be the production-derived component/source manifest. That manifest becomes the checklist for building the HTML and prevents the earlier problem where only ~10 components were reproduced and the three levels were incorrectly treated as separate component sets.
