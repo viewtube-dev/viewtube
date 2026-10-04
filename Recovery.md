@@ -245,3 +245,10 @@ The broader recovered ChatGPT document catalog remains at:
 The recovery system must let a future engineer or ChatGPT agent reconstruct and continue ViewTube from durable evidence without relying on one conversation's memory.
 
 **READ → INVENTORY → EXTRACT → CLASSIFY → PRESERVE → LOG → CONTRIBUTE → VERIFY → RECONCILE → CONTINUE**
+
+
+## 14. Agent quick-start
+
+For the shortest operational path, use [AGENT_RECOVERY_PLAYBOOK.md](docs/recovery/AGENT_RECOVERY_PLAYBOOK.md).
+
+For a reusable handoff, use [RECOVERY_HANDOFF_TEMPLATE.md](docs/recovery/handoffs/RECOVERY_HANDOFF_TEMPLATE.md).
