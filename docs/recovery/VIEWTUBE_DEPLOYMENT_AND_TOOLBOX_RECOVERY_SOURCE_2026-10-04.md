@@ -71,3 +71,19 @@ These are preserved as **REPORTED** evidence only. The current canonical reposit
 3. Inspect current build/deploy status.
 4. If a build fails, preserve the exact current error.
 5. Verify any Toolbox compatibility fix against the actual canonical source before promoting it.
+
+
+## Verified Render service boundary — 2026-10-04 recovery pass
+
+The accessible Render workspace currently exposes a service named `viewtube-main-preview` (`srv-davin39srm7s73c5ljmg`) whose repository is explicitly:
+
+`https://github.com/cbrewsterthegreat/ViewTube`
+
+It tracks `main` and uses:
+
+- build: `npm run build`
+- start: `npm run preview -- --host 0.0.0.0`
+
+Recent deployments queried during recovery are recorded as `build_failed`, including deployment `dep-davskv3tqb8s73fon8hg` for commit `bdf80ca0922aecd69bb37429e79f6b5e3ee19b76`.
+
+**Conclusion:** Render access verified here is tied to the historical `cbrewsterthegreat/ViewTube` repository, not canonical `viewtube-dev/viewtube`. Therefore it cannot be used as canonical runtime verification for the current recovery target. The canonical Render service/deployment remains UNKNOWN.
