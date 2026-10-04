@@ -77,3 +77,21 @@ The recovery system now uses a two-layer format for easier maintenance:
 | `Recovery` | Legacy compatibility pointer; do not use as the primary editing surface |
 
 Agents should read **both `Recovery.md` and `Recovery.yaml`** before recovery work and update the appropriate layer after contributing.
+
+## Round 1 recovery addition — Documentation / Brain / Account artifact inventory
+
+| Area | Recovered artifact / subject | Classification |
+|---|---|---|
+| Documentation | Conversation-derived master documentation/artifact inventory | VERIFIED RECOVERY ARTIFACT |
+| AI Brain | Proposed Brain runtime/context/memory/knowledge/agent/tool/workflow/evidence/governance artifact family | PROPOSED; reconcile with existing Brain report |
+| Account / Identity | Proposed account/authentication/session/authorization/Google/YouTube/security artifact family | PROPOSED; reconcile with existing Account System resources |
+| Context | Proposed user/workspace/project/content/asset/conversation context family | PROPOSED; reconcile across Brain/Conversation OS/Projects/Vault/Account |
+| Projects | Page-level tool grouping: AI Brain, Analytics, Vault, Editor | REPORTED; repository context exists |
+| Analytics | Sync Controller, Intelligence Hub, Master Data Tables, Data Visuals | REPORTED; reconcile with current implementation |
+| UI | Size-system, component-level, reference-vs-production, Toolbox, Studio Hub, modernization artifacts | RECOVERED / PROPOSED; existing authorities must be checked |
+| Recovery | Full conversation document-equivalent inventory | VERIFIED RECOVERY ARTIFACT |
+
+The detailed inventory is preserved at:
+`docs/recovery/handoffs/VIEWTUBE_DOCUMENT_ARTIFACT_INVENTORY_2026-10-04.md`
+
+Important: this catalog records provenance and recovery targets. It does not imply runtime implementation.
