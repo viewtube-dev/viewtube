@@ -238,3 +238,37 @@ agent_update_report:
   optimizations_are_first_class_artifacts: true
   preserve_in_recovery_md: true
   preserve_in_structured_state_when_appropriate: true
+
+
+engineering_product_intelligence:
+  mandatory: true
+  finding_classes:
+    - bugs
+    - code_structure_issues
+    - tool_improvements
+    - new_tools
+    - workflow_improvements
+    - handoff_improvements
+    - ai_improvements
+    - ux_product_improvements
+    - performance_scalability
+    - security_reliability
+    - data_model_improvements
+    - testing_verification_improvements
+  implementation_not_required_to_record: true
+  required_finding_fields:
+    - finding_id
+    - category
+    - title
+    - affected_area
+    - discovery
+    - source
+    - evidence
+    - status
+    - impact
+    - recommended_improvement
+    - proposed_implementation
+    - dependencies
+    - related_documents
+    - verification_needed
+  preserve_as_first_class_project_intelligence: true
