@@ -94,3 +94,23 @@ The repository is the durable shared coordination surface. Chat history is not t
 Recovered material includes the adaptive Asset Workbench architecture, full Vault capability inventory, Projects/Mini Library grouping model, Toolbox/SubToolbox consolidation rules, shared operation/ActionPacket flow, implementation claims from the external `cbrewsterthegreat/ViewTube` repository, and Render deployment evidence.
 
 The contribution explicitly preserves the repository-identity conflict: `viewtube-dev/viewtube` is canonical for this recovery pass; external repository claims are not treated as current implementation until independently verified.
+
+
+## Registered Round 1 contribution — Creator Workspace Documentation + Resource Verification — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Recovery + Research + Documentation + Implementation Agent; exact conversation title unavailable |
+| Round | 1 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_CREATOR_WORKSPACE_RECOVERY_2026-10-04.md` |
+| Source | Current ChatGPT conversation |
+| Status | VERIFIED |
+| Provenance | Conversation source → repository inspection → public resource inspection → recovery artifact |
+| Verification | Recovery governance, creator-workspace master, Studio Hub source relationships, and the public Resource Library URL were directly inspected |
+| Commit | `7bf178ba7f6715ce09a9761b9232063474dbd3b9` |
+| LOG-ID | `REC-20261004-creator-workspace-001` |
+| Follow-up | Round 2 reconciliation of Dashboard inventory, Studio Hub registry/documentation drift, Brain/Account/Context authorities, and historical Toolbox claims |
+
+### Contribution summary
+
+Recovered the canonical tool-context hierarchy, 12 core creator-workspace tools, 66-widget Dashboard evidence, 13 Studio Hub tools, UI sizing/reference-library decisions, Toolbox/SubToolbox recovery concerns, Brain/Account/Context architecture observations, and the public Resource Library verification. The inspected public resource is an analytics guide, not the general master documentation itself.
