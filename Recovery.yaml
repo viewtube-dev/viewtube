@@ -316,3 +316,20 @@ engineering_product_intelligence:
       - "Existing Account System recovery/master resources."
       - "Context across Brain, Conversation OS, Creator Workspaces, Vault, Projects, and Account."
       - "Proposed artifact families must not create competing sources of truth."
+
+
+  - id: "REC-20261004-account-system-conversation-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Account / YouTube / Beta Conversation Recovery"
+    path: "docs/recovery/handoffs/VIEWTUBE_ACCOUNT_YOUTUBE_BETA_CONVERSATION_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Canonical recovery files and playbook directly read; historical account-system repository work preserved with explicit non-canonical status."
+    commit: "b940b17396e2115b9897859cde347ece4d6f6b91"
+    unresolved:
+      - "Reconcile historical cbrewsterthegreat/ViewTube account branch against canonical viewtube-dev/viewtube/main."
+      - "Finish canonical channel-state migration."
+      - "Migrate VT Sync analytics to typed server-side analytics transport and verify parity."
+      - "Remove browser-token fallback only after parity."
+      - "Complete production Google OAuth/live verification when external access returns."
