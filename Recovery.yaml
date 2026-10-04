@@ -10,7 +10,7 @@ canonical:
   compatibility_pointer: "Recovery"
   source_protocol: "docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md"
   source_ledger: "docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md"
-  artifact_index: "docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md"
+  artifact_index: "docs/recovery/Index.md"
 
 agent_contract:
   read_before_work:
@@ -58,17 +58,15 @@ event_classes:
 artifact_roots:
   canonical_project: "Use existing project path when known"
   recovery_only: "docs/recovery"
-  handoffs: "docs/recovery/handoffs"
-  architecture: "docs/recovery/architecture"
-  plans: "docs/recovery/plans"
-  audits: "docs/recovery/audits"
-  implementation: "docs/recovery/implementation"
-  governance: "docs/recovery/governance"
-  design: "docs/recovery/design"
-  deployment: "docs/recovery/deployment"
-  data: "docs/recovery/data"
-  youtube: "docs/recovery/youtube"
-  technical: "docs/recovery/technical"
+  structure: "flat"
+  canonical_short_docs:
+    index: "docs/recovery/Index.md"
+    agent: "docs/recovery/Agent.md"
+    playbook: "docs/recovery/Playbook.md"
+    knowledge: "docs/recovery/Knowledge.md"
+    findings: "docs/recovery/Findings.md"
+    handoff: "docs/recovery/Handoff.md"
+  rule: "Keep recovery artifacts flat under docs/recovery/; use short descriptive names and metadata inside files."
 
 rounds:
   round_1:
