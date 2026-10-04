@@ -174,3 +174,17 @@ conversation_recovery_artifacts:
       - "Reconcile cbrewsterthegreat/ViewTube historical implementation claims against viewtube-dev/viewtube/main."
       - "Determine current runtime ownership for Vault assets and Projects."
       - "Determine canonical SubToolbox implementation and available primitives."
+
+  - id: "REC-20261004-quickwins-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Quick Wins Conversation Recovery Handoff"
+    path: "docs/recovery/handoffs/VIEWTUBE_QUICK_WINS_CONVERSATION_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Canonical Recovery system and Quick Wins 100 resource references inspected; historical implementation claims remain unverified against canonical main."
+    commit: "2de62da15c8b261c1d2ed4f0fc3210bb7695f3a3"
+    unresolved:
+      - "Recover the authoritative Quick Wins 100 source before recreating the tracker."
+      - "Reconcile historical cbrewsterthegreat/ViewTube quick-win claims against viewtube-dev/viewtube/main."
+      - "Establish the canonical implementation count only from merged and verified main state."
