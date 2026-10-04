@@ -240,3 +240,12 @@ These findings must be recorded even when they are not implemented during the co
 For each material finding, record when applicable: finding ID, category, title, affected area/file/tool, discovery, source/provenance, evidence, status, impact, recommended improvement, proposed implementation direction, dependencies, related documents, and verification needed.
 
 Add material findings to the durable repository documentation and the agent update report. Treat discoveries, bugs, structural issues, ideas, and optimization opportunities as first-class project intelligence.
+
+
+## Knowledge-system navigation
+
+For the complete documentation architecture, read `docs/recovery/VIEWTUBE_KNOWLEDGE_OPERATING_SYSTEM.md` and `docs/recovery/KNOWLEDGE_INDEX.md`.
+
+Use `docs/recovery/FINDINGS_REGISTER.md` for bugs, code-structure issues, discoveries, ideas for improving existing tools, new-tool opportunities, workflow/handoff improvements, AI improvements, UX/product opportunities, performance, security/reliability, data/model, and testing/verification findings.
+
+**Do not create a new document until you have checked the Knowledge Index and the relevant canonical domain document. Consolidate related knowledge instead of creating competing sources of truth.**
