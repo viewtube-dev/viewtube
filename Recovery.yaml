@@ -398,3 +398,25 @@ engineering_product_intelligence:
       - "Run the real production build against the exact current main SHA."
       - "Verify Vercel/Render deployment provenance against current main."
       - "Reconcile remaining historical branches and PRs against canonical main."
+
+
+knowledge_system:
+  canonical_index: "docs/recovery/KNOWLEDGE_INDEX.md"
+  operating_system: "docs/recovery/VIEWTUBE_KNOWLEDGE_OPERATING_SYSTEM.md"
+  findings_register: "docs/recovery/FINDINGS_REGISTER.md"
+  lifecycle:
+    - SOURCE
+    - FINDING
+    - KNOWLEDGE
+    - DECISION
+    - PLAN
+    - IMPLEMENTATION
+    - VERIFICATION
+    - HANDOFF_REUSE
+  document_selection:
+    existing_canonical: "update"
+    related_documents: "consolidate_when_appropriate"
+    no_canonical_owner: "create"
+    conversation_specific_evidence: "handoff_recovery_artifact"
+    superseded_material: "preserve_as_history"
+  goal: "Maximum reusable project intelligence with minimum duplication and ambiguity."
