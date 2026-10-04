@@ -528,3 +528,22 @@ These findings are first-class project intelligence and must be preserved in dur
 - **Blockers:** Authoritative historical source repository/files for the matrix are not currently accessible through the connected GitHub repository set; canonical main does not yet expose the source families required by the matrix.
 - **Next action:** Recover the referenced source artifacts from other durable conversation/library material or an explicitly connected historical repository; then select the first five genuinely mergeable canonical implementation slices.
 - **Required update report:** UPDATE-20261004-quickwins-matrix-002 → 2026-10-04 → current ViewTube Quick Wins recovery conversation → recover/reconcile 100-task matrix → added `docs/recovery/handoffs/VIEWTUBE_QUICK_WINS_MATRIX_RECOVERED_2026-10-04.md` → edited `Recovery.md`, `Recovery.yaml`, and the 2026-10-04 recovery index → commit SHAs recorded in those files → source-family recovery, canonical mismatch, and completion-gate findings recorded above.
+
+## 2026-10-04 recovery continuation — Projects / ContentBuild / Asset Engine / Vault
+
+**LOG-ID:** REC-20261004-convergence-recovery-001  
+**UPDATE-ID:** UPDATE-20261004-recovery-001  
+**Timestamp:** 2026-10-04 02:08 EDT  
+**Agent / conversation:** ViewTube Recovery + Documentation Agent — Toolbox / Vault / Projects / Asset Engine convergence
+**Round:** 1
+**Category:** RECOVERY / ARCHITECTURE / IMPLEMENTATION / FAILURE / CONFLICT
+**Action:** Recovered and preserved the conversation's convergence decisions and code-work evidence while reconciling repository identity.
+**Source:** Current conversation; canonical recovery files; historical cbrewsterthegreat/ViewTube inspection attempts.
+**Evidence:** Canonical main confirms repository identity as viewtube-dev/viewtube. The canonical repository currently does not expose the historical ContentBuild/Asset Engine source paths searched during this conversation. The detailed convergence/code findings are therefore retained as historical/reported evidence.
+**Status:** VERIFIED recovery update; historical implementation claims remain REPORTED / NOT VERIFIED; attempted revision implementation is FAILED/incomplete.
+**Artifact:** docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md
+**External identifier:** Historical repository cbrewsterthegreat/ViewTube; prior convergence branch and commit claims.
+**Dependencies:** Canonical application source recovery; Vault/Projects master; Asset Engine/ContentBuild implementation; recovery governance.
+**Result:** Durable recovery state now records the user's approved transition from planning to code, the identity-spine architecture, the revision-concurrency discovery, the test/implementation mismatch, and the canonical-vs-historical repository boundary.
+**Next action:** Establish/recover canonical application source, then implement and verify the Project ↔ ContentBuild revision-safe slice in that source.
+**Verification:** Recovery protocol, Recovery.md, Recovery.yaml, playbook, index, Vault/Projects recovery handoff, and canonical repository metadata were directly inspected.
