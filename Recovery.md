@@ -565,3 +565,31 @@ These findings are first-class project intelligence and must be preserved in dur
 - **Next action:** Execute a real build against the exact current main SHA, then verify an isolated deployment from that SHA before reconciling remaining branches.
 - **Verification:** Repository source facts were directly inspected. Current production build/deployment remains UNKNOWN until executed against the current main SHA.
 \n\n## 18. Shared multi-conversation recovery prompt\n\nThe reusable prompt for the two-round cross-conversation recovery workflow is:\n\n- [VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROMPT_2026-10-04.md](docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROMPT_2026-10-04.md)\n\nUse it when activating another ChatGPT conversation for recovery. Round 1 preserves each conversation's unique evidence and updates the shared recovery state. Round 2 is performed after the Round 1 corpus is collected and uses the shared artifacts to reconcile duplicates, conflicts, authoritative state, and remaining gaps.\n
+
+## 18. Consolidated knowledge-system architecture
+
+The recovery system is now organized as a broader **ViewTube Knowledge Operating System**. Recovery remains the governance/state layer; the knowledge system organizes reusable project intelligence.
+
+### Canonical navigation
+
+- `Recovery.md` — recovery governance, provenance, reconciliation, work log.
+- `Recovery.yaml` — structured recovery state.
+- `docs/recovery/KNOWLEDGE_INDEX.md` — navigation map; prevents competing documents.
+- `docs/recovery/VIEWTUBE_KNOWLEDGE_OPERATING_SYSTEM.md` — knowledge lifecycle, document-selection rules, optimization loop, and quality gate.
+- `docs/recovery/FINDINGS_REGISTER.md` — centralized bugs, structural issues, discoveries, tool ideas, workflow/handoff opportunities, AI improvements, UX/performance/security/data/testing findings.
+- `docs/recovery/AGENT_RECOVERY_PLAYBOOK.md` — operational agent procedure.
+- `docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md` — agent activation contract.
+
+### Knowledge lifecycle
+
+`SOURCE → FINDING → KNOWLEDGE → DECISION → PLAN → IMPLEMENTATION → VERIFICATION → HANDOFF/REUSE`
+
+The objective is not to maximize document count. It is to maintain one authoritative current source per subject, preserve evidence/history, and connect findings to decisions and implementation.
+
+### Consolidation rule
+
+Before creating a document, agents must check `KNOWLEDGE_INDEX.md` and the relevant domain directory. Existing canonical documents are updated rather than duplicated. Related recovery documents are consolidated when appropriate; superseded material is preserved as historical evidence rather than silently deleted.
+
+### Optimization requirement
+
+Every substantial conversation must actively search for bugs, code-structure problems, tool improvements, new tools, workflow improvements, handoff improvements, AI improvements, UX/product improvements, performance opportunities, security/reliability issues, data/model improvements, and testing/verification improvements. Material findings belong in `FINDINGS_REGISTER.md` and/or a detailed linked artifact.
