@@ -377,3 +377,24 @@ engineering_product_intelligence:
       - "Recover authoritative A/B/C/D source artifacts referenced by the historical matrix."
       - "Reconcile every task against canonical main before implementation."
       - "Do not promote this snapshot to QUICK_WINS_100_MASTER until source authority is established."
+
+  - id: "REC-20261004-deployment-branch-recovery-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Deployment + Branch Recovery Conversation Handoff"
+    path: "docs/recovery/handoffs/VIEWTUBE_DEPLOYMENT_BRANCH_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "Conversation source → GitHub repository inspection → recovery artifact"
+    verification: "Canonical Recovery files and current main source were directly inspected; current production build/deployment remains UNKNOWN."
+    commit: "1cbb7ec3817fdb9142f8a0b1730388b82d3b0f10"
+    update_id: "UPDATE-20261004-deployment-branch-recovery-001"
+    discoveries:
+      - "Current main uses a source-local Resource Library glob and has runtime resources under src/features/resource-library/resources/."
+      - "The historical Vercel unresolved docs import came from an older feature-branch commit and must not be used to diagnose current main without reproducing it."
+      - "Current main package.json contains a start script suitable for the earlier Render npm start failure."
+      - "Current main Toolbox source contains the compatibility exports implicated by the earlier Render build failure."
+      - "User requires that application/runtime imports remain inside src."
+    unresolved:
+      - "Run the real production build against the exact current main SHA."
+      - "Verify Vercel/Render deployment provenance against current main."
+      - "Reconcile remaining historical branches and PRs against canonical main."
