@@ -216,3 +216,27 @@ Required format:
 **UPDATE-ID → EXACT EASTERN TIMESTAMP → CONVERSATION TITLE → MAIN FOCUS → FILES ADDED → FILES EDITED → COMMITS → DISCOVERIES → CODE DISCOVERIES → OPTIMIZATIONS → RECOMMENDED IMPROVEMENTS → VERIFICATION → BLOCKERS → NEXT ACTIONS**
 
 Use an UPDATE-ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID.
+
+
+## Mandatory engineering, product, workflow, and AI discovery review
+
+Before completing the conversation, actively identify and document all material findings in these categories:
+
+- bugs, regressions, failure modes, reproduction/evidence, impact, and fixes;
+- code structure issues such as duplication, coupling, dead code, weak abstractions, dependency problems, technical debt, ownership ambiguity, and scalability concerns;
+- improvements to existing ViewTube tools, widgets, editors, analytics, libraries, and developer tools;
+- ideas and requirements for new tools, services, widgets, dashboards, agents, or capabilities;
+- workflow improvements, automation, standardization, validation, and orchestration opportunities;
+- handoff/recovery improvements and better agent coordination;
+- AI improvements involving prompts, agents, context, memory/recovery, tool use, automation, evaluation, verification, and AI-powered ViewTube features;
+- UX/product improvements;
+- performance/scalability opportunities;
+- security/reliability risks;
+- data/schema/model improvements;
+- testing and verification improvements.
+
+These findings must be recorded even when they are not implemented during the conversation. Do not invent findings; if a category has no material finding, state that it was reviewed and none was identified.
+
+For each material finding, record when applicable: finding ID, category, title, affected area/file/tool, discovery, source/provenance, evidence, status, impact, recommended improvement, proposed implementation direction, dependencies, related documents, and verification needed.
+
+Add material findings to the durable repository documentation and the agent update report. Treat discoveries, bugs, structural issues, ideas, and optimization opportunities as first-class project intelligence.
