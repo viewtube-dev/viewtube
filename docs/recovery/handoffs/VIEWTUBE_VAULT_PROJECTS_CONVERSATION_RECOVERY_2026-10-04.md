@@ -625,3 +625,55 @@ Use the repository's required workflow:
 and preserve the distinction:
 
 **RECOVERED SOURCE ≠ CURRENT IMPLEMENTATION ≠ VERIFIED IMPLEMENTATION.**
+
+## 18. Recovery continuation — Projects / ContentBuild / Asset Engine / Vault convergence
+
+**UPDATE-ID:** UPDATE-20261004-recovery-001  
+**Timestamp:** 2026-10-04 02:08 EDT  
+**Conversation title:** ViewTube Toolbox / Vault / Projects / Asset Engine convergence and implementation continuation  
+**Main focus:** Reduce overlapping video/content/project systems and begin hardening the actual application identity spine rather than producing additional planning artifacts.
+
+### Durable discoveries
+
+- The conversation converged on a single system-level workflow rather than separate Projects, ContentBuild, Asset Engine, Vault, Video Package, Publishing Package, and specialist-tool silos.
+- The intended durable spine is: Project → ContentBuild → Asset Engine → canonical Asset identity → Vault artifact → Video Package projection → Publishing Package snapshot → Publisher → Outcome/Learning.
+- Projects owns creator planning/work-container concerns; ContentBuild is the durable content lifecycle identity; Asset Engine owns production asset relationships, versions, variants, selections, generation and lineage; Vault owns durable artifact/media storage and organization; packages are projections/snapshots rather than competing content identities.
+- The user explicitly approved moving from planning into actual application/code improvements. Further planning documents should not be produced unless required by the recovery protocol or a code contract genuinely requires one.
+- The first approved implementation slice is Project ↔ ContentBuild identity hardening, followed by the Project → ContentBuild → Asset → Vault → Asset Engine vertical slice.
+
+### Code discoveries and implementation evidence
+
+- A historical code inspection in the cbrewsterthegreat/ViewTube context found an existing ProjectContentIdentityService, ContentBuildRepository, Asset Engine services, and package/bridge code. Those findings remain REPORTED / HISTORICAL because that repository is not the connected canonical repository.
+- The attempted revision-concurrency implementation exposed a real verification failure: a test change was created against a three-argument updateContentBuild API, while the corresponding production repository implementation still had the old two-argument signature. The change therefore must not be called complete.
+- The correct production direction is optimistic concurrency at the ContentBuild repository boundary: read revision N, require the caller's expected revision to equal N, reject stale writes, and only then persist revision N+1.
+- No canonical viewtube-dev/viewtube/main source file named src/services/asset-engine/ContentBuildRepository.ts or src/services/projects/ProjectContentIdentityService.ts was found by repository search during this recovery pass. The canonical repository currently exposes the recovery/documentation corpus and a minimal README.md; therefore the historical code implementation cannot yet be promoted to canonical implementation evidence.
+
+### Optimizations / architecture decisions
+
+- Do not create another identity service or another content store merely to solve convergence. First locate/recover the canonical implementation and harden its existing ownership boundaries.
+- Do not remove compatibility bridges until callers are migrated, parity is demonstrated, production reachability is zero, and removal is verified.
+- Package writes that duplicate ContentBuild state are a known convergence seam. They should eventually become projections/snapshots, but migration must be evidence-driven.
+- The identity certification path should cover create → retry → reopen → edit → handoff → return → package → publish while preserving the same Project and ContentBuild identity and rejecting stale revisions.
+
+### Verification
+
+- VERIFIED: Connected GitHub account is viewtube-dev; canonical repository is viewtube-dev/viewtube; default branch is main.
+- VERIFIED: Canonical recovery protocol, Recovery.md, Recovery.yaml, playbook, recovery index, and Vault/Projects recovery handoff were read from canonical main.
+- VERIFIED: Canonical recovery rules require implementation to be distinguished from plans and require implemented → merged to main → verified for completion.
+- VERIFIED: Canonical viewtube-dev/viewtube/main currently does not expose the historical ContentBuild/Asset Engine source paths searched above.
+- REPORTED / NOT VERIFIED: Historical cbrewsterthegreat/ViewTube code paths, branches, commits, tests, and implementation status.
+- FAILED: The attempted historical revision API change was not production-complete because test and implementation signatures were inconsistent.
+
+### Blockers / unresolved items
+
+- Recover or otherwise establish the actual canonical application source tree for viewtube-dev/viewtube before modifying production code there.
+- Determine whether the historical cbrewsterthegreat/ViewTube repository/branch can be recovered and whether its code is authorized source material for canonical reconstruction.
+- Reconcile the historical Project/ContentBuild/Asset Engine/Vault implementation against canonical main before transferring code.
+
+### Next actions
+
+1. Preserve this recovery evidence in canonical recovery state.
+2. Recover the canonical application source or establish the correct source repository/branch.
+3. Re-run the Project ↔ ContentBuild identity inspection against that canonical code.
+4. Implement revision-safe mutation with matching production callers and tests in the canonical source.
+5. Verify tests/builds before proceeding to the Asset/Vault vertical slice.
