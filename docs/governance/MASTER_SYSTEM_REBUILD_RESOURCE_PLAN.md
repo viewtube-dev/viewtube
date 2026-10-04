@@ -323,3 +323,35 @@ This program is complete only when:
 - Quick Wins have traceable verification;
 - final changes are reconciled with `main`;
 - handoff state can be resumed without relying on conversation memory alone.
+
+
+## 13. Reconciliation checkpoint — 2026-10-04
+
+This checkpoint records repository evidence found after the initial plan was created.
+
+### Verified discovery results
+
+- No authoritative **Quick Wins 100** registry or task matrix was surfaced by current `main` code search.
+- No current branch was surfaced by branch-name searches for **quick**, **account**, or **thinking**.
+- No current PR or commit search surfaced a separate Quick Wins implementation program; the only matching PR is this rebuild plan PR.
+- No current **Account System** implementation was established by the repository search performed so far.
+- No repository source containing **@Thinking** material was found. The existing master plan therefore correctly treats it as an external/conversation source requiring supplied or retrievable content rather than inventing it.
+- No literal **Asset Workbench** implementation source was surfaced. Current evidence does establish Vault/Asset concepts in the Toolbox Component Library Plan and creator-workspace documentation, while the dedicated Vault master on this branch remains a reconstruction artifact rather than proof of runtime implementation.
+- No literal **DOCUMENT_OUTPUT_ROUTING** file was surfaced by current repository search.
+- Conversation OS references are present in Recovery, the Brain/AI report, and the Toolbox Component Library Plan, but a definitive current canonical `docs/governance/CONVERSATION_OS.md` was not surfaced.
+
+### Consequence
+
+The following remain **reconstruction/discovery states**, not implementation claims:
+
+| System | Current evidence state | Next action |
+|---|---|---|
+| Conversation OS | REPORTED/RECONSTRUCTION | reconcile Recovery + current governance material into one canonical authority |
+| Documentation Governance | RECONSTRUCTION | inventory current docs governance and consolidate overlaps |
+| Vault / Asset Workbench | RECONSTRUCTION | inspect current runtime/UI code before claiming tools are implemented |
+| Quick Wins 100 | UNKNOWN | recover exact 100-task source from history/approved conversation material |
+| Account System | UNKNOWN | inspect runtime/auth boundaries and recover approved account architecture |
+| @Thinking | EXTERNAL/UNAVAILABLE IN REPO | obtain or retrieve source before incorporating claims |
+
+**Rule:** absence from search is not proof of absence from the repository. These findings mean only that the current search pass did not surface authoritative implementation/source material.
+
