@@ -188,3 +188,26 @@ conversation_recovery_artifacts:
       - "Recover the authoritative Quick Wins 100 source before recreating the tracker."
       - "Reconcile historical cbrewsterthegreat/ViewTube quick-win claims against viewtube-dev/viewtube/main."
       - "Establish the canonical implementation count only from merged and verified main state."
+
+
+# Full-conversation document preservation policy
+conversation_document_preservation:
+  review_entire_conversation: true
+  preserve_major_plans: true
+  preserve_major_audits: true
+  preserve_substantive_assistant_responses: true
+  response_can_be_document_equivalent: true
+  summary_is_not_substitute_for_artifact: true
+  one_line_log_is_not_sufficient_for_major_artifact: true
+  update_existing_canonical_document_when_available: true
+  consolidate_related_documents_when_appropriate: true
+  create_new_document_when_no_canonical_target_exists: true
+  preserve_conversation_specific_material_as_recovery_artifact: true
+  preserve_conflicting_versions_for_round_2: true
+  required_final_report:
+    - documents_created
+    - documents_updated
+    - material_not_preserved_and_reason
+    - verification_status
+    - unresolved_items
+  activation_prompt: "docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md"
