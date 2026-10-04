@@ -190,6 +190,27 @@ conversation_recovery_artifacts:
       - "Establish the canonical implementation count only from merged and verified main state."
 
 
+  - id: "REC-20261004-creator-workspace-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Creator Workspace Documentation + Resource Verification Handoff"
+    path: "docs/recovery/handoffs/VIEWTUBE_CREATOR_WORKSPACE_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Recovery governance, creator-workspace master, source relationships, and public Resource Library URL were directly inspected."
+    commit: "7bf178ba7f6715ce09a9761b9232063474dbd3b9"
+    discoveries:
+      - "Canonical tool-context hierarchy is Description → Inputs → Workflow → Outputs → Connections."
+      - "Dashboard evidence contains 66 widgets while an older registry reported 65."
+      - "Studio Hub contains 13 documented tools."
+      - "The inspected public Resource Library URL is a published analytics guide, not the general master documentation."
+      - "Brain, Account/Identity, and Context require cross-document reconciliation before new competing authorities are created."
+    unresolved:
+      - "Reconcile Dashboard 66-vs-65 inventory against current implementation."
+      - "Run Round 2 reconciliation across Brain, Account, Context, Conversation OS, Creator Workspaces, Vault, Projects, Analytics, Dashboard, Studio Hub, and Master Rebuild resources."
+      - "Verify historical Toolbox/SubToolbox and external-repository implementation claims against current main."
+
+
 # Full-conversation document preservation policy
 conversation_document_preservation:
   review_entire_conversation: true
