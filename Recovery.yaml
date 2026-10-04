@@ -272,3 +272,26 @@ engineering_product_intelligence:
     - related_documents
     - verification_needed
   preserve_as_first_class_project_intelligence: true
+
+  - id: "REC-20261004-document-inventory-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Documentation / Brain / Account Artifact Inventory"
+    path: "docs/recovery/handoffs/VIEWTUBE_DOCUMENT_ARTIFACT_INVENTORY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Recovery system, playbook, index, catalog, and relevant Brain/Account/Project/Vault resources inspected on canonical main."
+    commit: "d7c813b519951330953068a3a963ea9701411a03"
+    discoveries:
+      - "AI Brain is a first-class ViewTube system."
+      - "Account/Login/Identity is a first-class foundation."
+      - "Context bridges Account/Identity and AI Brain."
+      - "Projects page-level tools are AI Brain, Analytics, Vault, and Editor; Analytics contains Sync Controller, Intelligence Hub, Master Data Tables, and Data Visuals."
+      - "Resource Library is a page-level tool."
+      - "UI size defaults apply to widget layouts while components/primitives remain adaptable."
+      - "Audits are evidence/findings, not implementation completion."
+    reconciliation_required:
+      - "Existing Brain report and related Brain resources."
+      - "Existing Account System recovery/master resources."
+      - "Context across Brain, Conversation OS, Creator Workspaces, Vault, Projects, and Account."
+      - "Proposed artifact families must not create competing sources of truth."
