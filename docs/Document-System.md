@@ -276,3 +276,16 @@ An operation is complete only when:
 ## Principle
 
 **Every document operation should leave the repository more understandable than it found it, without making the knowledge less complete.**
+
+
+## Agent integration
+
+This standard is mandatory for recovery/documentation agents.
+
+Agents must use `docs/recovery/Agent.md` for operating behavior and `docs/recovery/History.md` for the repository-wide operation receipt. The agent must not treat a final chat response, branch, PR, or commit as a substitute for the durable document update.
+
+For every substantive operation, the sequence is:
+
+**DISCOVER → PRESERVE → CHANGE → VERIFY → LOG → REGISTER → HAND OFF**
+
+The History ledger is append-only-style. Historical corrections receive a new operation ID rather than silently rewriting prior entries.
