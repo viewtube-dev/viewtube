@@ -92,3 +92,10 @@ Before creating a file:
 **Evidence → Finding → Knowledge → Decision → Plan → Implementation → Verification → Handoff**
 
 The system optimizes for **clarity, reuse, low duplication, and easy agent navigation**, not maximum document count.
+
+## Document operations
+
+- `docs/Document-System.md` — canonical document lifecycle, editing, merging, restructuring, provenance, verification, and quality standard.
+- `docs/recovery/History.md` — shared append-only-style operation ledger for substantive document changes.
+
+**Agent rule:** every substantive document operation must update History.md after verification.
