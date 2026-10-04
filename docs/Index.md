@@ -55,3 +55,12 @@ Recovery and historical evidence belong under docs/recovery/.
 Runtime implementation belongs under src/.
 
 Do not create a new document for an existing subject. Update or consolidate its canonical owner first.
+
+## Documentation operations
+
+| Subject | Canonical document |
+|---|---|
+| Document System | Document-System.md |
+| Repository document history | recovery/History.md |
+
+**Rule:** substantive knowledge belongs in its canonical subject document; operation history belongs in `docs/recovery/History.md`.
