@@ -1,0 +1,160 @@
+schema_version: "1.0"
+updated: "2026-10-04"
+project: "ViewTube"
+repository: "viewtube-dev/viewtube"
+branch: "main"
+
+canonical:
+  human_document: "Recovery.md"
+  structured_state: "Recovery.yaml"
+  compatibility_pointer: "Recovery"
+  source_protocol: "docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md"
+  source_ledger: "docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md"
+  artifact_index: "docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md"
+
+agent_contract:
+  read_before_work:
+    - "Recovery.md"
+    - "Recovery.yaml"
+  write_durable_artifacts: true
+  update_work_log: true
+  preserve_provenance: true
+  append_round_1: true
+  reconcile_round_2: true
+  stale_write_protection: true
+  require_current_blob_sha_before_update: true
+
+status_vocabulary:
+  - VERIFIED
+  - REPORTED
+  - INFERRED
+  - PROPOSED
+  - IMPLEMENTED
+  - VERIFIED IMPLEMENTATION
+  - FAILED
+  - BLOCKED
+  - SUPERSEDED
+  - UNKNOWN
+
+event_classes:
+  - DISCOVERY
+  - DOCUMENT
+  - ARCHITECTURE
+  - IMPLEMENTATION
+  - FIX
+  - TEST
+  - BUILD
+  - DEPLOYMENT
+  - DECISION
+  - APPROVAL
+  - FAILURE
+  - REGRESSION
+  - BLOCKER
+  - CONFLICT
+  - RECONCILIATION
+  - HANDOFF
+  - UNKNOWN
+
+artifact_roots:
+  canonical_project: "Use existing project path when known"
+  recovery_only: "docs/recovery"
+  handoffs: "docs/recovery/handoffs"
+  architecture: "docs/recovery/architecture"
+  plans: "docs/recovery/plans"
+  audits: "docs/recovery/audits"
+  implementation: "docs/recovery/implementation"
+  governance: "docs/recovery/governance"
+  design: "docs/recovery/design"
+  deployment: "docs/recovery/deployment"
+  data: "docs/recovery/data"
+  youtube: "docs/recovery/youtube"
+  technical: "docs/recovery/technical"
+
+rounds:
+  round_1:
+    purpose: "Independent conversation recovery"
+    reconciliation: false
+    preserve_conflicts: true
+  round_2:
+    purpose: "Cross-conversation reconciliation"
+    reconciliation: true
+    establish_authoritative_versions: true
+
+completion_rule:
+  plans_are_completion: false
+  audits_are_completion: false
+  tracked_task_completion_requires:
+    - "implementation completed"
+    - "merged to main"
+    - "verified"
+
+provenance_chain:
+  - SOURCE
+  - DISCOVERY
+  - DECISION
+  - IMPLEMENTATION
+  - VERIFICATION
+
+priority_for_conflict_resolution:
+  - "current verified implementation"
+  - "verified tests/deployments"
+  - "current canonical docs"
+  - "explicit approved decisions"
+  - "recovery artifacts"
+  - "conversation plans"
+  - "general discussion"
+
+work_log:
+  format: "REC-YYYYMMDD-<agent>-<sequence>"
+  append_only_round_1: true
+  required_fields:
+    - LOG-ID
+    - timestamp
+    - agent
+    - round
+    - category
+    - action
+    - source
+    - evidence
+    - status
+    - artifact
+    - external_identifier
+    - dependencies
+    - result
+    - next_action
+    - verification
+
+initial_events:
+  - id: "REC-20261004-system-001"
+    status: "VERIFIED IMPLEMENTATION"
+    category: "GOVERNANCE / RECOVERY"
+    action: "Converted recovery to Markdown master plus structured YAML state."
+    artifacts:
+      - "Recovery.md"
+      - "Recovery.yaml"
+    date: "2026-10-04"
+
+current_state:
+  repository_recoverability: "UNKNOWN"
+  code_recoverability: "UNKNOWN"
+  documentation_recoverability: "VERIFIED"
+  architecture_recoverability: "RECOVERED / REQUIRES RECONCILIATION"
+  deployment_recoverability: "UNKNOWN"
+  data_schema_recoverability: "UNKNOWN"
+  youtube_creator_recoverability: "UNKNOWN"
+  remaining_gaps: []
+  reconciliation_round: "PENDING"
+
+known_repository_facts:
+  repository: "viewtube-dev/viewtube"
+  default_branch: "main"
+  recovery_directory: "Recovery"
+  note: "Current GitHub repository state is authoritative for file existence; historical conversation claims require verification."
+
+agent_handoff_minimum:
+  - "what_was_found"
+  - "where_it_came_from"
+  - "what_it_means"
+  - "what_is_verified"
+  - "what_is_not"
+  - "what_must_happen_next"
