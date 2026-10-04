@@ -211,3 +211,30 @@ conversation_document_preservation:
     - verification_status
     - unresolved_items
   activation_prompt: "docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md"
+
+
+agent_update_report:
+  required: true
+  timezone: America/New_York
+  exact_timestamp: true
+  distinguish_est_from_edt: true
+  required_fields:
+    - update_id
+    - exact_eastern_timestamp
+    - conversation_title
+    - main_focus
+    - files_added
+    - files_edited
+    - commit_shas
+    - discoveries
+    - code_discoveries
+    - optimizations
+    - recommended_improvements
+    - verification
+    - blockers
+    - next_actions
+  inventory_all_repository_file_changes: true
+  discoveries_are_first_class_artifacts: true
+  optimizations_are_first_class_artifacts: true
+  preserve_in_recovery_md: true
+  preserve_in_structured_state_when_appropriate: true
