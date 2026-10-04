@@ -333,3 +333,18 @@ engineering_product_intelligence:
       - "Migrate VT Sync analytics to typed server-side analytics transport and verify parity."
       - "Remove browser-token fallback only after parity."
       - "Complete production Google OAuth/live verification when external access returns."
+
+
+  - id: "REC-20261004-quickwins-matrix-recovery-002"
+    round: 1
+    status: "VERIFIED"
+    title: "Quick Wins 100 Recovered Conversation Matrix Snapshot"
+    path: "docs/recovery/handoffs/VIEWTUBE_QUICK_WINS_MATRIX_RECOVERED_2026-10-04.md"
+    source: "Prior 2026-10-02 ViewTube conversation matrix recovered through conversation context"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT → CANONICAL RECONCILIATION"
+    commit: "5ee9b13d801f8a7e0af15375f616c8cb529aea44"
+    verification: "Recovered QW-001–100 task sequence and searched canonical viewtube-dev/viewtube/main for the referenced historical source families; no matching canonical implementation surface was established."
+    unresolved:
+      - "Recover authoritative A/B/C/D source artifacts referenced by the historical matrix."
+      - "Reconcile every task against canonical main before implementation."
+      - "Do not promote this snapshot to QUICK_WINS_100_MASTER until source authority is established."
