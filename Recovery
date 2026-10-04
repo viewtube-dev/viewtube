@@ -1,752 +1,1076 @@
-VIEWTUBE — GITHUB SUSPENSION / MULTI-CONVERSATION RECOVERY PROTOCOL
-PURPOSE
+# VIEWTUBE — CANONICAL MULTI-CONVERSATION RECOVERY DOCUMENT
+
+> **Canonical repository copy:** `Recovery` on `viewtube-dev/viewtube` / `main`.
+>
+> This file is the **live cross-conversation recovery document**. Conversation agents must read the latest repository copy before making recovery contributions, preserve existing evidence, append rather than silently overwrite, and commit their recovered documents/artifacts to this repository.
+
+## GitHub operating contract for every conversation agent
+
+1. **READ FIRST:** fetch `Recovery` from the repository before doing recovery work.
+2. **RECOVER:** inventory the entire conversation and identify documents, document-equivalent responses, implementation evidence, decisions, failures, discoveries, plans, and unknowns.
+3. **WRITE DURABLY:** every material recovered document/artifact must be added to this repository. Use the existing project path when known; otherwise place recovery artifacts under `docs/recovery/<category>/`.
+4. **UPDATE THIS FILE:** add the agent's unique contribution to the appropriate ledger/work-log section of this canonical document. Do not delete or silently rewrite another agent's contribution.
+5. **LINK EVERYTHING:** record each created repository artifact in the recovery index/ledger with its path, source conversation, status, provenance, and verification level.
+6. **PRESERVE PROVENANCE:** distinguish VERIFIED, REPORTED, INFERRED, PROPOSED, IMPLEMENTED, VERIFIED IMPLEMENTATION, FAILED, BLOCKED, SUPERSEDED, and UNKNOWN.
+7. **NO STALE WRITES:** before updating this file, fetch the current repository copy and its blob SHA. Never write an older copy over a newer one. If concurrent editing is detected, preserve both contributions and reconcile them rather than losing work.
+8. **ROUND 1:** contribute independently; do not prematurely reconcile other conversations.
+9. **ROUND 2:** reread the complete repository recovery corpus, reconcile duplicates/conflicts, establish authoritative/current versions, and update the consolidated state.
+10. **COMPLETION:** audits, plans, proposals, and analysis are not implementation completion. For tracked task/quick-win completion, implementation must be actually completed, merged to `main`, and verified.
+
+**Canonical artifact flow:**
+
+`CONVERSATION → RECOVERY → ARTIFACT → GITHUB → LEDGER → VERIFICATION → RECONCILIATION`
+
+The detailed protocol and ledger are preserved below as the unified operational document.
+
+---
+# VIEWTUBE — GITHUB SUSPENSION / MULTI-CONVERSATION RECOVERY PROTOCOL
+
+## PURPOSE
+
 This conversation is one agent in a coordinated ViewTube recovery operation.
+
 The original GitHub account used for ViewTube has been suspended. The repository may be inaccessible, moved, recovered under a new account, or reconstructed from surviving sources.
+
 Your job is to recover and preserve the useful work contained in THIS conversation while also contributing your findings to a shared recovery record that other ChatGPT conversations can read.
+
 This is NOT a generic summarization task.
+
 Treat the conversation as a project archive and perform a forensic recovery pass.
-SHARED RECOVERY FILES
+
+---
+
+# SHARED RECOVERY FILES
+
 The canonical shared artifacts are:
-VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md
-This file: the instructions you are reading.
-VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md
-Shared cross-conversation status and knowledge ledger.
-Read it BEFORE doing recovery work.
-Update it AFTER completing your first-round recovery.
-Do not erase another agent's findings.
-VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md
-Conversation-specific recovery index created/updated by this agent.
-If it already exists, update rather than replacing useful prior information.
+
+1. `VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md`
+   - This file: the instructions you are reading.
+
+2. `VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md`
+   - Shared cross-conversation status and knowledge ledger.
+   - Read it BEFORE doing recovery work.
+   - Update it AFTER completing your first-round recovery.
+   - Do not erase another agent's findings.
+
+3. `VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md`
+   - Conversation-specific recovery index created/updated by this agent.
+   - If it already exists, update rather than replacing useful prior information.
+
 These files are stored in the ChatGPT Library under:
-/ViewTube/Recovery/
+
+`/ViewTube/Recovery/`
+
 If the Library search interface does not expose a direct clickable URL, search the exact filenames above. The Library artifact itself is the shared handoff mechanism.
-OPERATING MODEL
+
+---
+
+# OPERATING MODEL
+
 There are TWO recovery rounds.
-ROUND 1 — INDIVIDUAL CONVERSATION RECOVERY
+
+## ROUND 1 — INDIVIDUAL CONVERSATION RECOVERY
+
 Each conversation independently:
-reads the shared ledger;
-inventories its own conversation;
-extracts documents and document-equivalent responses;
-recovers technical knowledge;
-identifies successful work;
-records failures and unresolved work;
-creates durable artifacts;
-updates the shared ledger.
+
+- reads the shared ledger;
+- inventories its own conversation;
+- extracts documents and document-equivalent responses;
+- recovers technical knowledge;
+- identifies successful work;
+- records failures and unresolved work;
+- creates durable artifacts;
+- updates the shared ledger.
+
 Do NOT attempt to reconcile every other conversation during Round 1.
+
 Your primary responsibility is to preserve everything useful from THIS conversation.
-ROUND 2 — CROSS-CONVERSATION RECONCILIATION
+
+## ROUND 2 — CROSS-CONVERSATION RECONCILIATION
+
 After all Round 1 agents have updated the shared ledger, this same protocol is submitted again to the conversations.
+
 Round 2 agents must:
-reread the complete shared ledger;
-inspect relevant artifacts created by other conversations;
-identify duplicates;
-reconcile conflicting versions;
-identify authoritative/current versions;
-identify missing information;
-connect related plans, audits, discoveries, and implementation work;
-update the master recovery architecture;
-produce consolidated artifacts.
+
+- reread the complete shared ledger;
+- inspect relevant artifacts created by other conversations;
+- identify duplicates;
+- reconcile conflicting versions;
+- identify authoritative/current versions;
+- identify missing information;
+- connect related plans, audits, discoveries, and implementation work;
+- update the master recovery architecture;
+- produce consolidated artifacts.
+
 Do not assume Round 1 information is authoritative merely because another agent recorded it.
-CRITICAL RULE: PRESERVE, DON'T GUESS
+
+---
+
+# CRITICAL RULE: PRESERVE, DON'T GUESS
+
 Never fabricate:
-GitHub commits
-branches
-PRs
-file paths
-URLs
-implementation status
-test results
-deployment state
-architecture decisions
-approvals
-repository contents
-dates
-code changes
+
+- GitHub commits
+- branches
+- PRs
+- file paths
+- URLs
+- implementation status
+- test results
+- deployment state
+- architecture decisions
+- approvals
+- repository contents
+- dates
+- code changes
+
 Classify information as:
-VERIFIED — directly confirmed by an authoritative source
-REPORTED — stated in the conversation but not independently verified
-INFERRED — reasoned from evidence
-PROPOSED — planned but not implemented
-IMPLEMENTED — actually completed
-VERIFIED IMPLEMENTATION — implemented and independently verified
-FAILED — attempted and failed
-BLOCKED — cannot continue because of a dependency
-SUPERSEDED — replaced by later work
-UNKNOWN — cannot currently be established
+
+- VERIFIED — directly confirmed by an authoritative source
+- REPORTED — stated in the conversation but not independently verified
+- INFERRED — reasoned from evidence
+- PROPOSED — planned but not implemented
+- IMPLEMENTED — actually completed
+- VERIFIED IMPLEMENTATION — implemented and independently verified
+- FAILED — attempted and failed
+- BLOCKED — cannot continue because of a dependency
+- SUPERSEDED — replaced by later work
+- UNKNOWN — cannot currently be established
+
 Preserve uncertainty.
-1. FORENSIC INVENTORY
+
+---
+
+# 1. FORENSIC INVENTORY
+
 Inspect the ENTIRE conversation.
+
 Identify:
-Explicit documents
+
+### Explicit documents
 Every document, markdown file, specification, plan, audit, handoff, report, prompt, matrix, schema, or other artifact explicitly created.
+
 For each record:
-title
-filename/path
-type
-purpose
-status
-source
-dependencies
-whether it was saved/exported
-whether it should be preserved
-Document-equivalent responses
+
+- title
+- filename/path
+- type
+- purpose
+- status
+- source
+- dependencies
+- whether it was saved/exported
+- whether it should be preserved
+
+### Document-equivalent responses
+
 Identify assistant responses that effectively function as documents even if they were never saved.
+
 Examples:
-architecture specifications
-implementation plans
-technical designs
-audits
-findings
-governance rules
-recovery procedures
-design-system definitions
-deployment diagnoses
-decision records
-handoffs
+
+- architecture specifications
+- implementation plans
+- technical designs
+- audits
+- findings
+- governance rules
+- recovery procedures
+- design-system definitions
+- deployment diagnoses
+- decision records
+- handoffs
+
 Convert important ones into durable artifacts.
-2. TECHNICAL RECOVERY
+
+---
+
+# 2. TECHNICAL RECOVERY
+
 Extract exact information about:
-GitHub repository
-repository URLs
-branches
-commit SHAs
-pull requests
-file paths
-source files
-patches/diffs
-code changes
-tests
-test results
-builds
-deployments
-Render services
-Vercel services
-package/dependency changes
-environment/configuration findings
-integrations
-APIs
-external services
-scripts
-commands
+
+- GitHub repository
+- repository URLs
+- branches
+- commit SHAs
+- pull requests
+- file paths
+- source files
+- patches/diffs
+- code changes
+- tests
+- test results
+- builds
+- deployments
+- Render services
+- Vercel services
+- package/dependency changes
+- environment/configuration findings
+- integrations
+- APIs
+- external services
+- scripts
+- commands
+
 Preserve exact identifiers.
-3. VIEWTUBE PROJECT CATEGORIES
+
+---
+
+# 3. VIEWTUBE PROJECT CATEGORIES
+
 Organize findings into the relevant categories below. Add categories when the conversation contains material that does not fit.
-Core Application
-ViewTube application
-routing
-pages
-layouts
-state
-shared infrastructure
-Toolbox / UI System
-Toolbox
-SubToolbox
-Widget system
-Dashboard UI
-UI primitives
-component contracts
-CSS
-design tokens
-sizing
-responsive behavior
-accessibility
-visual reference library
-Asset / Media Systems
-Asset Engine
-Resource Library
-asset inspection
-image/video/audio tools
-metadata / EXIF
-technical media information
-lineage / provenance
-rights / usage
-derivatives
-transformations
-Projects / Content
-Projects
-ContentBuild
-content workflows
-project structures
-publishing workflows
-asset relationships
-Analytics / Data
-Analytics
-VT Sync
-master data tables
-schemas
-metrics
-KPI definitions
-mock data
-analytics UI
-dashboards
-data quality
-YouTube / Creator Systems
+
+### Core Application
+- ViewTube application
+- routing
+- pages
+- layouts
+- state
+- shared infrastructure
+
+### Toolbox / UI System
+- Toolbox
+- SubToolbox
+- Widget system
+- Dashboard UI
+- UI primitives
+- component contracts
+- CSS
+- design tokens
+- sizing
+- responsive behavior
+- accessibility
+- visual reference library
+
+### Asset / Media Systems
+- Asset Engine
+- Resource Library
+- asset inspection
+- image/video/audio tools
+- metadata / EXIF
+- technical media information
+- lineage / provenance
+- rights / usage
+- derivatives
+- transformations
+
+### Projects / Content
+- Projects
+- ContentBuild
+- content workflows
+- project structures
+- publishing workflows
+- asset relationships
+
+### Analytics / Data
+- Analytics
+- VT Sync
+- master data tables
+- schemas
+- metrics
+- KPI definitions
+- mock data
+- analytics UI
+- dashboards
+- data quality
+
+### YouTube / Creator Systems
 When applicable, preserve:
-YouTube channel data
-videos
-Shorts
-playlists
-livestreams
-comments
-thumbnails
-titles
-descriptions
-tags/metadata
-channel analytics
-audience data
-creator workflows
-publishing workflows
-monetization-related information
-YouTube API integration
-YouTube-specific categories/classifications
-video/content taxonomy
-content performance analysis
-competitor/reference-channel research
-YouTube ingestion/sync architecture
+- YouTube channel data
+- videos
+- Shorts
+- playlists
+- livestreams
+- comments
+- thumbnails
+- titles
+- descriptions
+- tags/metadata
+- channel analytics
+- audience data
+- creator workflows
+- publishing workflows
+- monetization-related information
+- YouTube API integration
+- YouTube-specific categories/classifications
+- video/content taxonomy
+- content performance analysis
+- competitor/reference-channel research
+- YouTube ingestion/sync architecture
+
 Do NOT invent YouTube data that is not present in the conversation.
-Governance / Development
-Conversation OS
-governance
-implementation rules
-task matrices
-quick wins
-approval gates
-testing rules
-merge requirements
-branch strategy
-recovery procedures
-Deployment / Operations
-Render
-Vercel
-CI/CD
-deployment environments
-build failures
-runtime failures
-logs
-monitoring
-infrastructure
-Other
+
+### Governance / Development
+- Conversation OS
+- governance
+- implementation rules
+- task matrices
+- quick wins
+- approval gates
+- testing rules
+- merge requirements
+- branch strategy
+- recovery procedures
+
+### Deployment / Operations
+- Render
+- Vercel
+- CI/CD
+- deployment environments
+- build failures
+- runtime failures
+- logs
+- monitoring
+- infrastructure
+
+### Other
 Create additional categories where appropriate.
-4. SUCCESSFUL WORK HAS HIGH PRIORITY
+
+---
+
+# 4. SUCCESSFUL WORK HAS HIGH PRIORITY
+
 Explicitly identify work that was actually accomplished.
+
 Examples:
-code fixes
-created files
-merged changes
-passing tests
-successful builds
-successful deployments
-completed audits
-established architecture
-completed data models
-implemented workflows
-resolved bugs
-verified behavior
+
+- code fixes
+- created files
+- merged changes
+- passing tests
+- successful builds
+- successful deployments
+- completed audits
+- established architecture
+- completed data models
+- implemented workflows
+- resolved bugs
+- verified behavior
+
 Preserve successful work even if later superseded.
-5. FAILURES AND DISCOVERIES ALSO MATTER
+
+---
+
+# 5. FAILURES AND DISCOVERIES ALSO MATTER
+
 Record:
-failures
-regressions
-architectural problems
-rejected approaches
-causes discovered
-debugging findings
-dependency problems
-export/import problems
-deployment problems
-account/repository problems
-important negative results
+
+- failures
+- regressions
+- architectural problems
+- rejected approaches
+- causes discovered
+- debugging findings
+- dependency problems
+- export/import problems
+- deployment problems
+- account/repository problems
+- important negative results
+
 Explain why each matters to recovery.
-6. DECISIONS AND APPROVALS
+
+---
+
+# 6. DECISIONS AND APPROVALS
+
 Recover:
-explicit user decisions
-approvals
-rejected proposals
-constraints
-priorities
-design choices
-architectural decisions
-governance decisions
+
+- explicit user decisions
+- approvals
+- rejected proposals
+- constraints
+- priorities
+- design choices
+- architectural decisions
+- governance decisions
+
 Distinguish a user-approved decision from an assistant suggestion.
-7. CREATE DURABLE ARTIFACTS
+
+---
+
+# 7. CREATE DURABLE ARTIFACTS
+
 Create the actual documents in the ChatGPT Library where possible.
+
 Use:
-/ViewTube/Recovery/
+
+`/ViewTube/Recovery/`
+
 Suggested structure:
-/ViewTube/Recovery/Index/
-/ViewTube/Recovery/Architecture/
-/ViewTube/Recovery/Plans/
-/ViewTube/Recovery/Audits/
-/ViewTube/Recovery/Implementation/
-/ViewTube/Recovery/Governance/
-/ViewTube/Recovery/Design/
-/ViewTube/Recovery/Deployment/
-/ViewTube/Recovery/Data/
-/ViewTube/Recovery/YouTube/
-/ViewTube/Recovery/Handoffs/
-/ViewTube/Recovery/Technical/
+
+- `/ViewTube/Recovery/Index/`
+- `/ViewTube/Recovery/Architecture/`
+- `/ViewTube/Recovery/Plans/`
+- `/ViewTube/Recovery/Audits/`
+- `/ViewTube/Recovery/Implementation/`
+- `/ViewTube/Recovery/Governance/`
+- `/ViewTube/Recovery/Design/`
+- `/ViewTube/Recovery/Deployment/`
+- `/ViewTube/Recovery/Data/`
+- `/ViewTube/Recovery/YouTube/`
+- `/ViewTube/Recovery/Handoffs/`
+- `/ViewTube/Recovery/Technical/`
+
 Do not create meaningless placeholders.
+
 Use original filenames when known.
+
 If unknown:
-VIEWTUBE_<SUBJECT>_<TYPE>_RECOVERY_2026-10-02.md
-8. MASTER RECOVERY INDEX
+
+`VIEWTUBE_<SUBJECT>_<TYPE>_RECOVERY_2026-10-02.md`
+
+---
+
+# 8. MASTER RECOVERY INDEX
+
 Create or update:
-VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md
+
+`VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md`
+
 Include:
-Conversation identity
-Recovery timestamp
-Documents recovered
-Document-equivalent responses
-Architecture knowledge
-Technical implementation
-Successful work
-Audits
-Discoveries
-Plans
-GitHub history
-Deployment history
-Tests / verification
-Failures
-Open work
-Conflicts
-Unknowns
-Recovery recommendations
-Artifact inventory
-Cross-references
-9. UPDATE THE SHARED LEDGER
+
+1. Conversation identity
+2. Recovery timestamp
+3. Documents recovered
+4. Document-equivalent responses
+5. Architecture knowledge
+6. Technical implementation
+7. Successful work
+8. Audits
+9. Discoveries
+10. Plans
+11. GitHub history
+12. Deployment history
+13. Tests / verification
+14. Failures
+15. Open work
+16. Conflicts
+17. Unknowns
+18. Recovery recommendations
+19. Artifact inventory
+20. Cross-references
+
+---
+
+# 9. UPDATE THE SHARED LEDGER
+
 Before updating it:
-Read the latest version.
-Preserve existing entries.
-Determine what THIS conversation uniquely contributes.
-Add your findings under a uniquely identifiable agent/conversation section.
-Do not silently rewrite another conversation's findings.
-If you disagree with another entry, record the disagreement and evidence.
+
+1. Read the latest version.
+2. Preserve existing entries.
+3. Determine what THIS conversation uniquely contributes.
+4. Add your findings under a uniquely identifiable agent/conversation section.
+5. Do not silently rewrite another conversation's findings.
+6. If you disagree with another entry, record the disagreement and evidence.
+
 Use an entry like:
-AGENT: <short conversation identifier> ROUND: 1 DATE: 2026-10-02
+
+`AGENT: <short conversation identifier>`
+`ROUND: 1`
+`DATE: 2026-10-02`
+
 Then include:
-recovered documents
-new artifacts
-important discoveries
-successful work
-failed work
-technical identifiers
-open issues
-dependencies
-conflicts
-recommended follow-up
-10. SHARED LEDGER IS A COORDINATION BUS
+
+- recovered documents
+- new artifacts
+- important discoveries
+- successful work
+- failed work
+- technical identifiers
+- open issues
+- dependencies
+- conflicts
+- recommended follow-up
+
+---
+
+# 10. SHARED LEDGER IS A COORDINATION BUS
+
 The ledger is not merely a report.
+
 It is the cross-conversation coordination mechanism.
+
 Every agent should:
+
 READ → ANALYZE → CONTRIBUTE → PRESERVE → RE-READ IF NECESSARY
+
 Do not assume another conversation will see your chat history.
+
 Put important cross-conversation information into the shared ledger and durable artifacts.
-11. SAFE CONCURRENT EDITING
+
+---
+
+# 11. SAFE CONCURRENT EDITING
+
 Multiple conversations may attempt to update the ledger.
+
 Therefore:
-append rather than replace;
-use unique agent sections;
-never delete another agent's contribution;
-never overwrite a newer version with an older copy;
-preserve timestamps;
-preserve conflicting versions until reconciled;
-if simultaneous editing cannot be safely performed, create a clearly named contribution artifact and record that the contribution needs ledger consolidation.
-12. ROUND 2 RULES
+
+- append rather than replace;
+- use unique agent sections;
+- never delete another agent's contribution;
+- never overwrite a newer version with an older copy;
+- preserve timestamps;
+- preserve conflicting versions until reconciled;
+- if simultaneous editing cannot be safely performed, create a clearly named contribution artifact and record that the contribution needs ledger consolidation.
+
+---
+
+# 12. ROUND 2 RULES
+
 When this prompt is submitted again after Round 1:
+
 DO NOT simply repeat your Round 1 work.
+
 Instead:
-Read the shared ledger from the beginning.
-Read relevant artifacts created by other agents.
-Compare their findings with this conversation.
-Identify overlap.
-Identify contradictions.
-Identify missing pieces.
-Establish provenance.
-Consolidate related artifacts.
-Update authoritative/current status.
-Create reconciliation documents where necessary.
+
+1. Read the shared ledger from the beginning.
+2. Read relevant artifacts created by other agents.
+3. Compare their findings with this conversation.
+4. Identify overlap.
+5. Identify contradictions.
+6. Identify missing pieces.
+7. Establish provenance.
+8. Consolidate related artifacts.
+9. Update authoritative/current status.
+10. Create reconciliation documents where necessary.
+
 Round 2 is where the project knowledge begins to become a coherent recovery corpus.
-13. RECOVERY PRIORITY
+
+---
+
+# 13. RECOVERY PRIORITY
+
 Prioritize information in this order:
-Actual successful code/implementation
-Verified architecture
-Verified tests/builds/deployments
-Existing project documents
-Explicit user-approved decisions
-Technical discoveries
-Detailed implementation plans
-Audits and findings
-Unimplemented proposals
-General discussion
+
+1. Actual successful code/implementation
+2. Verified architecture
+3. Verified tests/builds/deployments
+4. Existing project documents
+5. Explicit user-approved decisions
+6. Technical discoveries
+7. Detailed implementation plans
+8. Audits and findings
+9. Unimplemented proposals
+10. General discussion
+
 Do not discard lower-priority information if it may explain higher-priority artifacts.
-14. FINAL REPORT
+
+---
+
+# 14. FINAL REPORT
+
 At the end of this conversation's recovery pass, report:
-RECOVERED
+
+## RECOVERED
 What was preserved.
-ARTIFACTS CREATED
+
+## ARTIFACTS CREATED
 Every artifact created.
-SHARED LEDGER CONTRIBUTIONS
+
+## SHARED LEDGER CONTRIBUTIONS
 What was added for other conversations.
-IMPORTANT TECHNICAL FINDINGS
+
+## IMPORTANT TECHNICAL FINDINGS
 Key repository/code/deployment discoveries.
-SUCCESSFUL WORK
+
+## SUCCESSFUL WORK
 What was actually accomplished.
-FAILURES / REGRESSIONS
+
+## FAILURES / REGRESSIONS
 What went wrong and what was learned.
-UNKNOWN / UNVERIFIED
+
+## UNKNOWN / UNVERIFIED
 What requires external verification.
-ROUND 2 INPUT
+
+## ROUND 2 INPUT
 What later agents should specifically investigate.
-FINAL OPERATING PRINCIPLE
+
+---
+
+# FINAL OPERATING PRINCIPLE
+
 The objective is to make ViewTube recoverable without relying on the suspended GitHub account or on memory of individual conversations.
+
 Preserve the project's:
-code knowledge
-architecture
-documents
-decisions
-successful work
-failures
-discoveries
-plans
-audits
-UI system
-data system
-YouTube/creator information
-deployment knowledge
-governance
-workflows
+
+- code knowledge
+- architecture
+- documents
+- decisions
+- successful work
+- failures
+- discoveries
+- plans
+- audits
+- UI system
+- data system
+- YouTube/creator information
+- deployment knowledge
+- governance
+- workflows
+
 The end state should allow a future engineer or ChatGPT agent to reconstruct and continue ViewTube from the recovery corpus.
+
 BEGIN ROUND 1 RECOVERY NOW.
-VIEWTUBE — MULTI-CONVERSATION RECOVERY LEDGER
-Created: 2026-10-02
-Purpose: Shared coordination bus for ViewTube recovery after GitHub account suspension.
-OPERATING RULES
-Read the entire ledger before contributing.
-Preserve prior contributions.
-Append new findings under a unique agent/conversation heading.
-Never silently overwrite another agent's findings.
-Record provenance and confidence/status.
-Round 1 = independent conversation recovery.
-Round 2 = cross-conversation reconciliation after Round 1 contributions are present.
-Conflicts are preserved until reconciled with evidence.
-GLOBAL RECOVERY STATUS
-GitHub Account / Repository
-Original GitHub account: cbrewsterthegreat
-Account status: suspended (reported/observed during recovery)
-ViewTube repository: cbrewsterthegreat/ViewTube
-Repository accessibility: currently blocked through the suspended account; repository deletion has NOT been established.
-Recovery sources to investigate: ChatGPT Library, Render services/deployments, local clones, archives, other connected systems.
-Known Render Recovery Sources
+
+# VIEWTUBE — MULTI-CONVERSATION RECOVERY LEDGER
+
+**Created:** 2026-10-02  
+**Purpose:** Shared coordination bus for ViewTube recovery after GitHub account suspension.
+
+## OPERATING RULES
+
+- Read the entire ledger before contributing.
+- Preserve prior contributions.
+- Append new findings under a unique agent/conversation heading.
+- Never silently overwrite another agent's findings.
+- Record provenance and confidence/status.
+- Round 1 = independent conversation recovery.
+- Round 2 = cross-conversation reconciliation after Round 1 contributions are present.
+- Conflicts are preserved until reconciled with evidence.
+
+---
+
+# GLOBAL RECOVERY STATUS
+
+## GitHub Account / Repository
+
+- Original GitHub account: `cbrewsterthegreat`
+- Account status: suspended (reported/observed during recovery)
+- ViewTube repository: `cbrewsterthegreat/ViewTube`
+- Repository accessibility: currently blocked through the suspended account; repository deletion has NOT been established.
+- Recovery sources to investigate: ChatGPT Library, Render services/deployments, local clones, archives, other connected systems.
+
+## Known Render Recovery Sources
+
 The Render workspace previously exposed these ViewTube services:
-viewtube — https://viewtube-idgh.onrender.com
-viewtube-preview-main — https://viewtube-preview-main.onrender.com
-viewtube-main-preview — https://viewtube-main-preview.onrender.com
-Repository association observed: https://github.com/cbrewsterthegreat/ViewTube
+
+- `viewtube` — `https://viewtube-idgh.onrender.com`
+- `viewtube-preview-main` — `https://viewtube-preview-main.onrender.com`
+- `viewtube-main-preview` — `https://viewtube-main-preview.onrender.com`
+
+Repository association observed:
+`https://github.com/cbrewsterthegreat/ViewTube`
+
 Status: preserve as recovery leads; verify current state before relying on them.
-PROJECT CATEGORIES
+
+---
+
+# PROJECT CATEGORIES
+
 Track contributions under the relevant categories:
-Core Application
-Toolbox / SubToolbox / Widget UI
-CSS / Design Tokens / Primitives
-UI Reference Library
-Asset Engine / Resource Library
-Projects / ContentBuild
-Analytics / VT Sync / Master Data
-YouTube / Creator Systems
-Governance / Conversation OS
-Deployment / Render / Vercel
-Data / Schemas / Mock Data
-Testing / Verification
-Recovery / Repository Reconstruction
-Other
-ROUND 1 CONTRIBUTIONS
-�
 
-AGENT TEMPLATE
-AGENT: 
-Round: 1
-Date: 2026-10-02
-Documents recovered
+- Core Application
+- Toolbox / SubToolbox / Widget UI
+- CSS / Design Tokens / Primitives
+- UI Reference Library
+- Asset Engine / Resource Library
+- Projects / ContentBuild
+- Analytics / VT Sync / Master Data
+- YouTube / Creator Systems
+- Governance / Conversation OS
+- Deployment / Render / Vercel
+- Data / Schemas / Mock Data
+- Testing / Verification
+- Recovery / Repository Reconstruction
+- Other
 
-New artifacts created
+---
 
-Important technical findings
+# ROUND 1 CONTRIBUTIONS
 
-Successful work
+<!-- Each conversation agent appends its own uniquely named section here. -->
 
-Failed work / regressions
+## AGENT TEMPLATE
 
-GitHub identifiers
+### AGENT: <conversation identifier>
+**Round:** 1  
+**Date:** 2026-10-02
 
-Deployment / infrastructure
+#### Documents recovered
+- 
 
-Architecture / design-system findings
+#### New artifacts created
+- 
 
-YouTube / creator-system findings
+#### Important technical findings
+- 
 
-Plans / open work
+#### Successful work
+- 
 
-Conflicts with other information
+#### Failed work / regressions
+- 
 
-Unknown / requires verification
+#### GitHub identifiers
+- 
 
-Recommended Round 2 investigation
+#### Deployment / infrastructure
+- 
 
-ROUND 1 COMPLETION TRACKER
-Agent / Conversation
-Round 1 Complete
-Artifacts Created
-Ledger Updated
-Needs Follow-up
+#### Architecture / design-system findings
+- 
 
+#### YouTube / creator-system findings
+- 
 
+#### Plans / open work
+- 
 
+#### Conflicts with other information
+- 
 
+#### Unknown / requires verification
+- 
 
-ROUND 2 — CROSS-CONVERSATION RECONCILIATION
+#### Recommended Round 2 investigation
+- 
+
+---
+
+# ROUND 1 COMPLETION TRACKER
+
+| Agent / Conversation | Round 1 Complete | Artifacts Created | Ledger Updated | Needs Follow-up |
+|---|---:|---:|---:|---:|
+| | | | | |
+
+---
+
+# ROUND 2 — CROSS-CONVERSATION RECONCILIATION
+
 Do not populate this section until Round 1 contributions are substantially complete.
-Consolidated Findings
-Authoritative architecture
 
-Authoritative documents
+## Consolidated Findings
 
-Verified implementation
+### Authoritative architecture
+- 
 
-Verified deployment state
+### Authoritative documents
+- 
 
-Verified Git history
+### Verified implementation
+- 
 
-Recovered Toolbox/UI system
+### Verified deployment state
+- 
 
-Recovered Asset system
+### Verified Git history
+- 
 
-Recovered Analytics/data system
+### Recovered Toolbox/UI system
+- 
 
-Recovered YouTube/creator system
+### Recovered Asset system
+- 
 
-Governance/workflow
+### Recovered Analytics/data system
+- 
 
-Repository reconstruction plan
+### Recovered YouTube/creator system
+- 
 
-Conflicts Requiring Resolution
+### Governance/workflow
+- 
 
-Missing Artifacts
+### Repository reconstruction plan
+- 
 
-Remaining Unknowns
+## Conflicts Requiring Resolution
 
-Round 2 Decisions
+- 
 
-FINAL RECOVERY STATE
+## Missing Artifacts
+
+- 
+
+## Remaining Unknowns
+
+- 
+
+## Round 2 Decisions
+
+- 
+
+---
+
+# FINAL RECOVERY STATE
+
 This section should only be finalized after the cross-conversation reconciliation round.
-Repository recoverability:
-Code recoverability:
-Documentation recoverability:
-Architecture recoverability:
-Deployment recoverability:
-Data/schema recoverability:
-YouTube/creator-system recoverability:
-Remaining gaps:
-Recommended reconstruction order:
-15. UNIFIED WORK LOG / LEDGER SYSTEM
+
+- Repository recoverability:
+- Code recoverability:
+- Documentation recoverability:
+- Architecture recoverability:
+- Deployment recoverability:
+- Data/schema recoverability:
+- YouTube/creator-system recoverability:
+- Remaining gaps:
+- Recommended reconstruction order:
+
+# 15. UNIFIED WORK LOG / LEDGER SYSTEM
+
 This section unifies the recovery protocol with the shared ledger so that each conversation can both preserve its own evidence and contribute to a durable cross-conversation record.
-15.1 Two linked records
+
+## 15.1 Two linked records
+
 Every recovery agent maintains two linked records:
-Conversation Recovery Record
-The forensic record for the individual conversation.
-Captures documents, document-equivalent responses, implementation evidence, decisions, discoveries, failures, plans, and unknowns.
-Shared Recovery Ledger
-The cross-conversation coordination bus.
-Captures only the contribution needed by other agents to understand project state, provenance, dependencies, conflicts, and follow-up.
+
+1. **Conversation Recovery Record**
+   - The forensic record for the individual conversation.
+   - Captures documents, document-equivalent responses, implementation evidence, decisions, discoveries, failures, plans, and unknowns.
+
+2. **Shared Recovery Ledger**
+   - The cross-conversation coordination bus.
+   - Captures only the contribution needed by other agents to understand project state, provenance, dependencies, conflicts, and follow-up.
+
 The conversation record is detailed; the shared ledger is the coordination layer. Neither replaces the other.
-15.2 Work-log entry format
+
+## 15.2 Work-log entry format
+
 For every material recovery event, use:
-LOG-ID: REC-YYYYMMDD-<agent>-<sequence>
+
+`LOG-ID: REC-YYYYMMDD-<agent>-<sequence>`
+
 Record:
-Timestamp
-Agent / conversation
-Round
-Category
-Action
-Source
-Evidence
-Status
-Artifact / file
-GitHub / Render / external identifier, if applicable
-Dependencies
-Result
-Next action
-Confidence / verification level
+
+- **Timestamp**
+- **Agent / conversation**
+- **Round**
+- **Category**
+- **Action**
+- **Source**
+- **Evidence**
+- **Status**
+- **Artifact / file**
+- **GitHub / Render / external identifier, if applicable**
+- **Dependencies**
+- **Result**
+- **Next action**
+- **Confidence / verification level**
+
 Use the existing status vocabulary:
-VERIFIED
-REPORTED
-INFERRED
-PROPOSED
-IMPLEMENTED
-VERIFIED IMPLEMENTATION
-FAILED
-BLOCKED
-SUPERSEDED
-UNKNOWN
-15.3 Ledger-entry rules
+
+- VERIFIED
+- REPORTED
+- INFERRED
+- PROPOSED
+- IMPLEMENTED
+- VERIFIED IMPLEMENTATION
+- FAILED
+- BLOCKED
+- SUPERSEDED
+- UNKNOWN
+
+## 15.3 Ledger-entry rules
+
 A ledger entry must:
-identify its source;
-preserve exact technical identifiers where known;
-distinguish fact from report, inference, and proposal;
-avoid silently replacing another conversation's contribution;
-link to durable artifacts where possible;
-record disagreements rather than hiding them;
-state what later agents need to verify;
-remain append-oriented during concurrent Round 1 recovery.
-15.4 Implementation completion rule
+
+- identify its source;
+- preserve exact technical identifiers where known;
+- distinguish fact from report, inference, and proposal;
+- avoid silently replacing another conversation's contribution;
+- link to durable artifacts where possible;
+- record disagreements rather than hiding them;
+- state what later agents need to verify;
+- remain append-oriented during concurrent Round 1 recovery.
+
+## 15.4 Implementation completion rule
+
 For ViewTube implementation work, an item is not considered a completed task merely because an audit, plan, proposal, or code change was discussed.
-Where implementation status is being tracked, completion requires the applicable implementation to be actually completed and, for project task/quick-win purposes, merged to main and verified.
+
+Where implementation status is being tracked, completion requires the applicable implementation to be actually completed and, for project task/quick-win purposes, merged to `main` and verified.
+
 Audits and analysis remain valuable recovery evidence, but they are not themselves implementation completion unless the task definition explicitly says otherwise.
-15.5 Recovery lineage
+
+## 15.5 Recovery lineage
+
 When an artifact or implementation is reconstructed from another source, record its lineage:
-SOURCE → DISCOVERY → DECISION → IMPLEMENTATION → VERIFICATION
+
+`SOURCE → DISCOVERY → DECISION → IMPLEMENTATION → VERIFICATION`
+
 Where a stage is unavailable, mark it UNKNOWN rather than inventing it.
+
 For recovered/donor code or reconstructed repositories, preserve:
-donor/source repository;
-source commit or revision when known;
-files copied or reconstructed;
-modifications made after recovery;
-verification performed;
-unresolved divergence from the original project;
-whether the result is canonical, compatibility-only, historical, or unverified.
-15.6 Cross-conversation handoff rule
+
+- donor/source repository;
+- source commit or revision when known;
+- files copied or reconstructed;
+- modifications made after recovery;
+- verification performed;
+- unresolved divergence from the original project;
+- whether the result is canonical, compatibility-only, historical, or unverified.
+
+## 15.6 Cross-conversation handoff rule
+
 A conversation must leave enough information in the shared ledger and durable artifacts that another conversation can continue without access to the original chat.
+
 The minimum handoff is:
-WHAT WAS FOUND → WHERE IT CAME FROM → WHAT IT MEANS → WHAT IS VERIFIED → WHAT IS NOT → WHAT MUST HAPPEN NEXT
-15.7 Round 1 / Round 2 log behavior
-Round 1
-Work independently.
-Read the ledger first.
-Append only unique findings.
-Preserve conflicting versions.
-Create durable artifacts for important material.
-Do not attempt full cross-conversation reconciliation.
-Round 2
-Re-read the complete ledger.
-Re-read relevant durable artifacts.
-Compare evidence across conversations.
-Reconcile duplicates and conflicts.
-Establish authoritative/current versions.
-Update the consolidated recovery state.
-Record reconciliation decisions and their evidence.
-15.8 Recovery event classes
+
+`WHAT WAS FOUND → WHERE IT CAME FROM → WHAT IT MEANS → WHAT IS VERIFIED → WHAT IS NOT → WHAT MUST HAPPEN NEXT`
+
+## 15.7 Round 1 / Round 2 log behavior
+
+**Round 1**
+
+- Work independently.
+- Read the ledger first.
+- Append only unique findings.
+- Preserve conflicting versions.
+- Create durable artifacts for important material.
+- Do not attempt full cross-conversation reconciliation.
+
+**Round 2**
+
+- Re-read the complete ledger.
+- Re-read relevant durable artifacts.
+- Compare evidence across conversations.
+- Reconcile duplicates and conflicts.
+- Establish authoritative/current versions.
+- Update the consolidated recovery state.
+- Record reconciliation decisions and their evidence.
+
+## 15.8 Recovery event classes
+
 Use these event classes where useful:
-DISCOVERY
-DOCUMENT
-ARCHITECTURE
-IMPLEMENTATION
-FIX
-TEST
-BUILD
-DEPLOYMENT
-DECISION
-APPROVAL
-FAILURE
-REGRESSION
-BLOCKER
-CONFLICT
-RECONCILIATION
-HANDOFF
-UNKNOWN
-15.9 Integrity rule
+
+- `DISCOVERY`
+- `DOCUMENT`
+- `ARCHITECTURE`
+- `IMPLEMENTATION`
+- `FIX`
+- `TEST`
+- `BUILD`
+- `DEPLOYMENT`
+- `DECISION`
+- `APPROVAL`
+- `FAILURE`
+- `REGRESSION`
+- `BLOCKER`
+- `CONFLICT`
+- `RECONCILIATION`
+- `HANDOFF`
+- `UNKNOWN`
+
+## 15.9 Integrity rule
+
 Never turn a reported claim into a verified fact merely by repeating it in the ledger.
+
 A later agent may promote status only when new evidence supports the promotion, and the ledger should preserve the provenance of that evidence.
-16. CONVERSATION-DERIVED VIEWTUBE GOVERNANCE ELABORATIONS
+
+---
+
+# 16. CONVERSATION-DERIVED VIEWTUBE GOVERNANCE ELABORATIONS
+
 The following points are included as conversation-derived operating context and are not presented as independent verification of repository state.
-16.1 Task / quick-win completion
+
+## 16.1 Task / quick-win completion
+
 The project conversation established that audits alone are not quick wins or completed tasks. A quick win/task must represent an actual code update, fix, write, implementation, or completed fragment of an established plan.
-For implementation work tracked as completed, the project requirement is that the work be merged to main and verified.
+
+For implementation work tracked as completed, the project requirement is that the work be merged to `main` and verified.
+
 This supplements the recovery protocol's distinction between plans, implementation, and verification.
-16.2 Recovery and reconstruction
+
+## 16.2 Recovery and reconstruction
+
 The project recovery work has discussed reconstructing ViewTube from accessible surviving sources, including a donor/recovered repository source. Such sources must be explicitly classified as source/discovery/decision/implementation/design/governance/lost-unverified as applicable.
+
 The donor baseline and recovery knowledge should be preserved rather than silently treated as identical to the original suspended repository.
-16.3 Deployment provenance
+
+## 16.3 Deployment provenance
+
 Render is a relevant recovery/deployment source. Deployment evidence should be preserved separately from repository evidence, and deployment failures should not automatically be treated as proof that the underlying implementation is invalid.
+
 Known Render recovery leads from the shared ledger remain subject to verification.
-16.4 UI / Toolbox recovery context
+
+## 16.4 UI / Toolbox recovery context
+
 The project discussions distinguish the Toolbox/SubToolbox/UI primitive system, widget/dashboard design system, CSS/design tokens, and the visual reference library.
+
 The sizing system is intended as the default set of sizes used when constructing widget layouts; components and primitives may adapt to other sizes when required by the component's context.
+
 Recovered UI artifacts should preserve their source and status and should not be treated as authoritative merely because they appear in a reference library.
-16.5 Canonical-versus-legacy implementation context
+
+## 16.5 Canonical-versus-legacy implementation context
+
 Where multiple implementations or compatibility barrels exist, recovery records should distinguish canonical production implementations from compatibility, legacy, alternate, or unverified variants.
+
 The recovery process should preserve the evidence needed to establish which implementation is current rather than deleting historical alternatives prematurely.
-16.6 Existing governance over parallel systems
+
+## 16.6 Existing governance over parallel systems
+
 Where an existing ViewTube governance, task-ID, plan, audit, handoff, or consolidation system already exists, recovery should prefer reconciling into that system rather than inventing a parallel permanent index.
+
 The recovery ledger itself remains the cross-conversation coordination bus defined by this document.
-17. CONSOLIDATED OPERATING CHECKLIST
+
+---
+
+# 17. CONSOLIDATED OPERATING CHECKLIST
+
 Before finishing a recovery pass:
-[ ]
-Read the complete shared ledger.
-[ ]
-Inventory the entire conversation.
-[ ]
-Extract explicit documents.
-[ ]
-Extract document-equivalent responses.
-[ ]
-Preserve exact technical identifiers.
-[ ]
-Classify status and provenance.
-[ ]
-Identify successful work.
-[ ]
-Identify failures and negative results.
-[ ]
-Recover decisions and approvals.
-[ ]
-Recover architecture and design-system knowledge.
-[ ]
-Recover YouTube/creator-system knowledge when present.
-[ ]
-Recover deployment/infrastructure evidence.
-[ ]
-Create durable artifacts.
-[ ]
-Create/update the conversation recovery index.
-[ ]
-Append a unique shared-ledger contribution.
-[ ]
-Create work-log entries for material recovery events.
-[ ]
-Record unresolved conflicts.
-[ ]
-Record unknowns requiring verification.
-[ ]
-State explicit Round 2 inputs.
-[ ]
-Do not claim implementation completion without implementation evidence.
-[ ]
-For task/quick-win completion, confirm merge to main and verification.
-18. CONSOLIDATED SOURCE DOCUMENTS
+
+- [ ] Read the complete shared ledger.
+- [ ] Inventory the entire conversation.
+- [ ] Extract explicit documents.
+- [ ] Extract document-equivalent responses.
+- [ ] Preserve exact technical identifiers.
+- [ ] Classify status and provenance.
+- [ ] Identify successful work.
+- [ ] Identify failures and negative results.
+- [ ] Recover decisions and approvals.
+- [ ] Recover architecture and design-system knowledge.
+- [ ] Recover YouTube/creator-system knowledge when present.
+- [ ] Recover deployment/infrastructure evidence.
+- [ ] Create durable artifacts.
+- [ ] Create/update the conversation recovery index.
+- [ ] Append a unique shared-ledger contribution.
+- [ ] Create work-log entries for material recovery events.
+- [ ] Record unresolved conflicts.
+- [ ] Record unknowns requiring verification.
+- [ ] State explicit Round 2 inputs.
+- [ ] Do not claim implementation completion without implementation evidence.
+- [ ] For task/quick-win completion, confirm merge to `main` and verification.
+
+---
+
+# 18. CONSOLIDATED SOURCE DOCUMENTS
+
 This unified document incorporates:
-VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md
-VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md
-Conversation-derived ViewTube governance elaborations available to this recovery pass.
+
+1. `VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md`
+2. `VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md`
+3. Conversation-derived ViewTube governance elaborations available to this recovery pass.
+
 The first two sources remain independently meaningful canonical artifacts. This document is their combined operational form; it does not invalidate or replace the originals.
-19. FINAL RECOVERY PRINCIPLE
+
+---
+
+# 19. FINAL RECOVERY PRINCIPLE
+
 The recovery system exists to make ViewTube reconstructable and continuable without dependence on the suspended GitHub account or on the memory of individual conversations.
+
 The durable recovery corpus must preserve:
-code knowledge;
-architecture;
-documents;
-decisions;
-successful implementation;
-failures and regressions;
-discoveries;
-plans;
-audits;
-UI and design-system knowledge;
-data and schema knowledge;
-YouTube/creator information;
-deployment knowledge;
-governance;
-work logs;
-cross-conversation ledger state;
-provenance and verification.
+
+- code knowledge;
+- architecture;
+- documents;
+- decisions;
+- successful implementation;
+- failures and regressions;
+- discoveries;
+- plans;
+- audits;
+- UI and design-system knowledge;
+- data and schema knowledge;
+- YouTube/creator information;
+- deployment knowledge;
+- governance;
+- work logs;
+- cross-conversation ledger state;
+- provenance and verification.
+
 The final system should allow a future engineer or ChatGPT agent to reconstruct the project, understand why each recovered fact is trusted or untrusted, identify what remains unresolved, and continue implementation from durable evidence.
-BEGIN / CONTINUE RECOVERY
-READ → INVENTORY → EXTRACT → CLASSIFY → PRESERVE → LOG → CONTRIBUTE → VERIFY → RECONCILE → CONTINUE
+
+## BEGIN / CONTINUE RECOVERY
+
+`READ → INVENTORY → EXTRACT → CLASSIFY → PRESERVE → LOG → CONTRIBUTE → VERIFY → RECONCILE → CONTINUE`
