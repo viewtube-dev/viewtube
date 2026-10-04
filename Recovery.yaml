@@ -158,3 +158,19 @@ agent_handoff_minimum:
   - "what_is_verified"
   - "what_is_not"
   - "what_must_happen_next"
+
+
+conversation_recovery_artifacts:
+  - id: "REC-20261004-vault-recovery-001"
+    round: 1
+    status: "IMPLEMENTED"
+    title: "Vault + Projects Conversation Recovery Handoff"
+    path: "docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Canonical Recovery files and Vault/Asset Workbench master inspected; external implementation claims remain unverified."
+    commit: "c0e4696167ea1ca459a69812402736d8c3158411"
+    unresolved:
+      - "Reconcile cbrewsterthegreat/ViewTube historical implementation claims against viewtube-dev/viewtube/main."
+      - "Determine current runtime ownership for Vault assets and Projects."
+      - "Determine canonical SubToolbox implementation and available primitives."
