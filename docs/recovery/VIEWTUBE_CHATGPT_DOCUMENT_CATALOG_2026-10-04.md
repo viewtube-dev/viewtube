@@ -65,3 +65,15 @@ After Round 1 contributions from all conversations are available, perform Round 
 - update the master recovery state.
 
 Do not discard a conflicting artifact until its useful information and provenance have been preserved.
+
+## Recovery format modernization — 2026-10-04
+
+The recovery system now uses a two-layer format for easier maintenance:
+
+| File | Role |
+|---|---|
+| `Recovery.md` | Human-readable canonical operating document, work log, handoffs, and reconciliation notes |
+| `Recovery.yaml` | Structured machine-readable state, schema, status vocabulary, event classes, and current recovery state |
+| `Recovery` | Legacy compatibility pointer; do not use as the primary editing surface |
+
+Agents should read **both `Recovery.md` and `Recovery.yaml`** before recovery work and update the appropriate layer after contributing.
