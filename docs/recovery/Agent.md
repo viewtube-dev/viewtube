@@ -16,8 +16,8 @@ Your responsibility is to recover and preserve **all major durable knowledge in 
 Read the current versions of:
 1. `Recovery.md`
 2. `Recovery.yaml`
-3. `docs/recovery/AGENT_RECOVERY_PLAYBOOK.md`
-4. `docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md`
+3. `docs/recovery/Playbook.md`
+4. `docs/recovery/Index.md`
 
 GitHub is shared durable memory. Chat history is source evidence.
 
@@ -67,18 +67,7 @@ Preserve original meaning, important detail, terminology, structure, decisions, 
 
 ### 5. Document categories
 
-Use the established project path when known. Otherwise:
-- `docs/recovery/plans/`
-- `docs/recovery/audits/`
-- `docs/recovery/architecture/`
-- `docs/recovery/design/`
-- `docs/recovery/implementation/`
-- `docs/recovery/governance/`
-- `docs/recovery/deployment/`
-- `docs/recovery/data/`
-- `docs/recovery/youtube/`
-- `docs/recovery/technical/`
-- `docs/recovery/handoffs/`
+Use the established project path when known. Otherwise, keep the artifact flat under `docs/recovery/` and use a short descriptive filename. Use `Plan-`, `Audit-`, `Handoff-`, or `Source-` only when useful.
 
 Preserve original filenames when known.
 
@@ -244,8 +233,8 @@ Add material findings to the durable repository documentation and the agent upda
 
 ## Knowledge-system navigation
 
-For the complete documentation architecture, read `docs/recovery/VIEWTUBE_KNOWLEDGE_OPERATING_SYSTEM.md` and `docs/recovery/KNOWLEDGE_INDEX.md`.
+For the complete documentation architecture, read `docs/recovery/Knowledge.md` and `docs/recovery/Index.md`.
 
-Use `docs/recovery/FINDINGS_REGISTER.md` for bugs, code-structure issues, discoveries, ideas for improving existing tools, new-tool opportunities, workflow/handoff improvements, AI improvements, UX/product opportunities, performance, security/reliability, data/model, and testing/verification findings.
+Use `docs/recovery/Findings.md` for bugs, code-structure issues, discoveries, ideas for improving existing tools, new-tool opportunities, workflow/handoff improvements, AI improvements, UX/product opportunities, performance, security/reliability, data/model, and testing/verification findings.
 
 **Do not create a new document until you have checked the Knowledge Index and the relevant canonical domain document. Consolidate related knowledge instead of creating competing sources of truth.**
