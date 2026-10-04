@@ -211,6 +211,35 @@ conversation_recovery_artifacts:
       - "Verify historical Toolbox/SubToolbox and external-repository implementation claims against current main."
 
 
+  - id: "REC-20261004-convergence-recovery-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Projects / ContentBuild / Asset Engine / Vault Convergence Conversation Recovery"
+    path: "docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT → REPOSITORY RECONCILIATION"
+    verification: "Canonical viewtube-dev/viewtube/main recovery state was read. Historical application-code claims remain explicitly non-canonical until source recovery and verification."
+    commit: "badd45135efa5a4383bac35dabdc84f46d5c2d19"
+    update_id: "UPDATE-20261004-recovery-001"
+    discoveries:
+      - "User approved stopping planning-only work and beginning actual application/code improvement."
+      - "Target architecture converges Project, ContentBuild, Asset Engine, Vault, Video Package, Publishing Package, and specialist tools around one identity spine."
+      - "Historical code inspection identified a revision-concurrency gap at ContentBuildRepository and exposed a test/implementation API mismatch."
+      - "The connected canonical repository is viewtube-dev/viewtube; cbrewsterthegreat/ViewTube remains historical/unverified source evidence."
+    optimizations:
+      - "Do not create another content identity/store to solve convergence."
+      - "Treat package duplication as a migration seam toward projections/snapshots."
+      - "Require create → retry → reopen → edit → handoff → return → package → publish identity certification."
+    blockers:
+      - "Canonical application source tree for the historical code paths has not been established in viewtube-dev/viewtube/main."
+      - "Historical repository/branch authorization and recoverability remain unresolved."
+    next_actions:
+      - "Recover or establish the canonical application source."
+      - "Re-run Project ↔ ContentBuild identity inspection against canonical code."
+      - "Implement revision-safe mutation with matching production callers and tests."
+      - "Verify tests/builds before the Asset/Vault vertical slice."
+
+
 # Full-conversation document preservation policy
 conversation_document_preservation:
   review_entire_conversation: true
