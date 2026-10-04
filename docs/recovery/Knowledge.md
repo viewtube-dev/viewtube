@@ -23,28 +23,20 @@ Do not let important knowledge remain only in a conversation.
 Use an existing project document when one already owns the subject. Recovery documentation must not create competing authorities.
 
     docs/recovery/
-      KNOWLEDGE_OPERATING_SYSTEM.md
-      KNOWLEDGE_INDEX.md
-      FINDINGS_REGISTER.md
-      plans/
-      audits/
-      architecture/
-      design/
-      implementation/
-      governance/
-      data/
-      deployment/
-      youtube/
-      technical/
-      handoffs/
-      archive/
+      Index.md
+      Agent.md
+      Playbook.md
+      Knowledge.md
+      Findings.md
+      Handoff.md
+      [project knowledge, plans, audits, design, architecture, implementation, and historical records]
 
 ## 4. Document selection rules
 - Existing canonical document → update it.
 - Several related documents → consolidate into the authoritative document and preserve source history.
 - No canonical document → create one in the appropriate domain.
-- Conversation-specific evidence that should not become canonical → handoff/recovery artifact.
-- Superseded material → archive; do not silently delete historical evidence.
+- Conversation-specific evidence that should not become canonical → a flat recovery/handoff artifact.
+- Superseded material → mark `SUPERSEDED` or retain as historical evidence; do not create unnecessary archive folders.
 
 Never create multiple documents that compete to define the same system without explicitly declaring their relationship.
 
