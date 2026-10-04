@@ -2110,3 +2110,489 @@ Any future tool proposal must prove:
 5. the required ViewTube UI/toolbox architecture.
 
 If it cannot satisfy those conditions, it should become a capability, variant, subtoolbox, or feature of an existing canonical tool rather than a new Studio Hub tool.
+
+---
+
+# 19. Studio Hub Tool Interaction Architecture
+
+The 13 Studio Hub tools are not 13 isolated pages. They form a typed **interaction graph** in which each tool owns one transformation and passes structured results to the next appropriate tool.
+
+The interaction model is:
+
+**Context → Evidence → Specialized Transformation → Typed Result → Handoff → Execution/Measurement → Learning**
+
+A tool should interact with another tool through a declared contract, not by duplicating its logic, scraping another tool's UI, or silently taking ownership of another tool's decision.
+
+## 19.1 Interaction Rules
+
+1. **Every handoff has a reason.** A tool may send data downstream only when the receiving tool can perform a transformation the sender does not own.
+2. **Outputs remain attributable.** Every handoff retains `sourceTool`, source version, evidence, confidence, uncertainty, validation state, and references.
+3. **The receiving tool does not inherit ownership.** Receiving an input does not allow a tool to perform the sender's primary transformation.
+4. **Tools may have multiple consumers.** A useful result can fan out to several tools without creating duplicate records.
+5. **The canonical object remains linked.** Tools reference the original Opportunity, Concept, StoryGraph, AssetManifest, Finding, Experiment, Scenario, or Project rather than creating disconnected copies.
+6. **User-controlled promotion is preferred.** High-impact transitions should expose the handoff and its rationale in the UI.
+7. **Validated knowledge is different from operational context.** Tools may consume observations, signals, hypotheses, and predictions, but only validated findings become durable AI Brain knowledge.
+8. **Execution happens through Projects.** Studio Hub tools recommend, prepare, analyze, and hand off; Projects owns execution state, tasks, milestones, and delivery.
+9. **Analytics measures outcomes.** Analytics is the measurement source; Studio Hub tools interpret those measurements for their own specialized purpose.
+10. **AI Brain stores durable knowledge.** AI Brain is not a passive database dump and should not receive every raw tool output.
+11. **No circular ownership loops.** Feedback loops are allowed, but the same decision must not bounce between tools without a new evidence state, user decision, or measured outcome.
+12. **Creator Strategy Engine is the strategic synthesis boundary.** Other tools can recommend actions inside their own domain, but only Creator Strategy Engine combines cross-tool recommendations into the prioritized next best move.
+
+## 19.2 Canonical Tool-to-Tool Interaction Matrix
+
+| From | Primary interaction | To | Handoff |
+|---|---|---|---|
+| Opportunity Radar | Converts emerging signals into an actionable opportunity | Content Architect | OpportunityContext |
+| Opportunity Radar | Surfaces audience demand requiring relationship attention | Audience Pulse | Opportunity + AudienceSignal references |
+| Opportunity Radar | Identifies possible monetization opportunities | Revenue Architect | OpportunityContext |
+| Opportunity Radar | Provides validated/qualified opportunities for prioritization | Creator Strategy Engine | OpportunityContext |
+| Content Architect | Converts an opportunity into a content concept | Story Engine | ContentConcept |
+| Content Architect | Uses historical content patterns to improve concept quality | Video Genome | PatternRequest / ContentReferences |
+| Content Architect | Creates execution-ready concept context | Projects | ProjectBrief |
+| Content Architect | Requests production requirements | Asset Forge | ProductionRequirementRequest |
+| Content Architect | Provides candidate concepts for strategic prioritization | Creator Strategy Engine | ContentConcept |
+| Video Genome | Supplies reusable content patterns | Content Architect | PatternSet |
+| Video Genome | Supplies structural references for narrative design | Story Engine | PatternSet |
+| Video Genome | Finds reusable segments and derivative candidates | Content Autopilot | ContentPatternSet |
+| Video Genome | Provides feature/evidence context for experiments | Experiment Lab | PatternEvidence |
+| Video Genome | Provides observed pattern evidence for causal analysis | Causal Intelligence | PatternEvidence |
+| Video Genome | Supplies validated historical patterns | Creator Strategy Engine | ValidatedPatternReference |
+| Story Engine | Converts a concept into a production blueprint | Asset Forge | StoryGraph + ProductionBlueprint |
+| Story Engine | Moves narrative work into execution | Projects | StoryBlueprint / ProjectBrief |
+| Story Engine | Provides production-ready structure to Editor | Editor | EditBlueprint |
+| Story Engine | Provides narrative assumptions for later measurement | Experiment Lab | RetentionHypothesis / ExperimentCandidate |
+| Story Engine | Provides validated narrative patterns to strategy | Creator Strategy Engine | StoryPatternReference |
+| Asset Forge | Resolves production requirements into assets | Projects | AssetManifest |
+| Asset Forge | Makes production-ready assets available to Editor | Editor | ProductionAssetPackage |
+| Asset Forge | Identifies asset gaps that may affect a project | Creator Strategy Engine | AssetConstraint |
+| Audience Pulse | Turns audience needs into content opportunities | Content Architect | AudienceOpportunity |
+| Audience Pulse | Creates relationship actions | Projects | RelationshipAction / ProjectTask |
+| Audience Pulse | Provides audience segments and needs to Revenue Architect | Revenue Architect | AudienceValueContext |
+| Audience Pulse | Supplies audience evidence for Opportunity Radar | Opportunity Radar | AudienceSignal |
+| Audience Pulse | Supplies audience hypotheses for experiments | Experiment Lab | AudienceHypothesis |
+| Content Autopilot | Turns published content into derivative opportunities | Content Architect | DerivativeOpportunity |
+| Content Autopilot | Creates derivative production packages | Projects | DerivativeProjectBrief |
+| Content Autopilot | Requests existing/reusable assets | Asset Forge | AssetReuseRequest |
+| Content Autopilot | Identifies follow-up experiments | Experiment Lab | ExperimentCandidate |
+| Content Autopilot | Identifies monetization extensions | Revenue Architect | MonetizationCandidate |
+| Experiment Lab | Produces measured learning | Causal Intelligence | ExperimentResult |
+| Experiment Lab | Produces validated findings when evidence supports them | AI Brain | KnowledgeCandidate |
+| Experiment Lab | Supplies learning to strategy | Creator Strategy Engine | ValidatedFinding / ExperimentResult |
+| Causal Intelligence | Explains observed outcomes | Experiment Lab | CausalHypothesis / TestCandidate |
+| Causal Intelligence | Produces probable explanations for Flywheel bottlenecks | Channel Flywheel | CausalFinding |
+| Causal Intelligence | Produces validated causal findings for durable knowledge | AI Brain | KnowledgeCandidate |
+| Causal Intelligence | Supplies explanations to strategy | Creator Strategy Engine | CausalFinding |
+| Channel Simulator | Uses current intelligence to model possible futures | Creator Strategy Engine | ScenarioSet |
+| Channel Simulator | Tests consequences of strategic/content choices | Content Architect | ScenarioConstraint / ScenarioResult |
+| Channel Simulator | Tests revenue paths | Revenue Architect | RevenueScenario |
+| Channel Simulator | Provides scenario hypotheses for Experiment Lab | Experiment Lab | ScenarioHypothesis |
+| Revenue Architect | Turns monetization intelligence into a revenue plan | Projects | RevenueProjectBrief |
+| Revenue Architect | Identifies content required for a revenue path | Content Architect | RevenueContentRequirement |
+| Revenue Architect | Identifies assets required for monetization | Asset Forge | MonetizationAssetRequest |
+| Revenue Architect | Supplies revenue opportunities to strategy | Creator Strategy Engine | RevenueOpportunity |
+| Channel Flywheel | Identifies the weakest growth stage | Causal Intelligence | BottleneckDiagnostic |
+| Channel Flywheel | Identifies where an experiment could improve flow | Experiment Lab | BottleneckExperimentCandidate |
+| Channel Flywheel | Supplies system-level diagnosis to strategy | Creator Strategy Engine | FlywheelBottleneck |
+| Creator Strategy Engine | Turns cross-tool intelligence into a prioritized move | Projects | NextBestMove / ProjectBrief |
+| Creator Strategy Engine | Routes a chosen content action | Content Architect | StrategicContentDirective |
+| Creator Strategy Engine | Routes a chosen production action | Story Engine / Asset Forge | StrategicProductionDirective |
+| Creator Strategy Engine | Routes a chosen learning action | Experiment Lab | StrategicExperimentDirective |
+| Creator Strategy Engine | Routes a chosen monetization action | Revenue Architect | StrategicRevenueDirective |
+| Creator Strategy Engine | Routes a chosen growth investigation | Causal Intelligence / Channel Flywheel | StrategicDiagnosticDirective |
+
+## 19.3 The Main Creator Workflow
+
+The normal creation path should behave like a chain of specialized transformations:
+
+```text
+Signals / Audience / Existing Content
+              │
+              ▼
+      ┌─────────────────┐
+      │ Opportunity      │
+      │ Radar            │
+      └────────┬────────┘
+               │ Opportunity
+               ▼
+      ┌─────────────────┐
+      │ Content          │
+      │ Architect        │
+      └────────┬────────┘
+               │ ContentConcept
+               ▼
+      ┌─────────────────┐
+      │ Story Engine     │
+      └────────┬────────┘
+               │ StoryGraph / Blueprint
+               ▼
+      ┌─────────────────┐
+      │ Asset Forge      │
+      └────────┬────────┘
+               │ AssetManifest
+               ▼
+      ┌─────────────────┐
+      │ Projects         │
+      └────────┬────────┘
+               │ execution
+               ▼
+      ┌─────────────────┐
+      │ Editor           │
+      └────────┬────────┘
+               │
+               ▼
+            Publish
+               │
+       ┌───────┼────────┐
+       ▼       ▼        ▼
+   Audience  Content  Analytics
+    Pulse   Autopilot    │
+       │       │         ▼
+       │       │    Causal Intelligence
+       │       │         │
+       │       └────┐    │
+       │            ▼    ▼
+       │       Experiment Lab
+       │            │
+       └────────────┴───────┐
+                            ▼
+                         AI Brain
+                            │
+              ┌─────────────┼─────────────┐
+              ▼             ▼             ▼
+       Channel Simulator Revenue Architect Channel Flywheel
+              │             │             │
+              └─────────────┼─────────────┘
+                            ▼
+                 Creator Strategy Engine
+                            │
+                            ▼
+                      Next Best Move
+                            │
+                            ▼
+                         Projects
+```
+
+This is a **workflow graph**, not a requirement that every creator use every tool for every project.
+
+## 19.4 Interaction With Existing Studio Hub / Workspace Systems
+
+The Studio Hub tools must also interact cleanly with the existing ViewTube workspace systems:
+
+### Projects — execution system
+
+Projects receives actionable outputs from Studio Hub and turns them into execution state.
+
+Typical flow:
+
+```text
+Studio Tool
+   ↓
+Typed Brief / Directive
+   ↓
+Project
+   ├── Objective
+   ├── Evidence
+   ├── Hypothesis
+   ├── Deliverables
+   ├── Tasks
+   ├── Assets
+   ├── Milestones
+   ├── Experiments
+   └── Outcome Measurements
+```
+
+Projects should not re-run Studio Hub intelligence. It executes and tracks the chosen work.
+
+### Analytics — measurement system
+
+Analytics provides measurements to the tools and receives no authority to make cross-tool strategy decisions.
+
+```text
+Analytics
+   ├── Sync Controller
+   ├── Intelligence Hub
+   ├── Master Data Tables
+   └── Data Visuals
+             │
+             ▼
+       Studio Hub tools
+```
+
+Analytics answers **what happened / what is measured**. Specialized Studio Hub tools answer their respective transformation questions.
+
+### AI Brain — durable intelligence system
+
+AI Brain receives validated knowledge candidates rather than every raw observation.
+
+```text
+Tool Output
+   ↓
+Evidence
+   ↓
+Interpretation
+   ↓
+Hypothesis / Prediction
+   ↓
+Finding
+   ↓
+Validation
+   ↓
+AI Brain Knowledge
+```
+
+AI Brain then supplies validated creator-specific knowledge back to the tools.
+
+### Asset Engine / Vault — reusable production system
+
+Asset Forge is the primary Studio Hub gateway into reusable production assets, but other tools may request assets through typed references.
+
+```text
+Story / Concept / Revenue / Autopilot requirement
+                  ↓
+              Asset Forge
+                  ↓
+       Asset Engine / Vault
+                  ↓
+          AssetManifest
+                  ↓
+        Projects / Editor
+```
+
+No Studio Hub tool should create a second asset-storage system.
+
+### Editor — production system
+
+Editor consumes production-ready narrative and asset references.
+
+```text
+Story Engine → EditBlueprint
+Asset Forge  → ProductionAssetPackage
+                         ↓
+                      Editor
+                         ↓
+                    Published Work
+```
+
+Editor owns editing and assembly, not opportunity discovery or strategy.
+
+### Resource Library — reference system
+
+The Resource Library supplies reusable source material, references, documentation, templates, and other governed resources.
+
+Studio Hub tools should reference Resource Library records instead of embedding duplicated copies of the same resource.
+
+### Account / Creator Context — identity and permissions
+
+Every handoff must retain creator/account scope and respect the permissions of the originating workspace.
+
+No tool should infer identity from a free-text handoff.
+
+## 19.5 Handoff Object
+
+Where a full object contract is not necessary, tools should use a common handoff envelope:
+
+```text
+ToolHandoff {
+  id
+  sourceTool
+  sourceVersion
+  targetTool
+  creatorId
+  projectId?
+  timestamp
+  handoffType
+  primaryObjectRef
+  supportingReferences[]
+  evidence[]
+  assumptions[]
+  confidence
+  uncertainty
+  validationState
+  requestedAction
+  userDecision?
+  provenance[]
+}
+```
+
+The receiving tool should be able to reconstruct enough context to continue the workflow without asking the creator to manually re-enter information that already exists in ViewTube.
+
+## 19.6 Fan-Out and Fan-In Rules
+
+### Fan-out
+
+One result can feed several tools when each consumer has a legitimate use.
+
+Example:
+
+```text
+Opportunity
+   ├── Content Architect
+   ├── Audience Pulse
+   ├── Revenue Architect
+   └── Creator Strategy Engine
+```
+
+This does not mean each tool creates a separate opportunity record. They reference the canonical Opportunity.
+
+### Fan-in
+
+Creator Strategy Engine may receive:
+
+```text
+Opportunity
+Concept
+Audience Finding
+Experiment Finding
+Causal Finding
+Scenario
+Revenue Opportunity
+Flywheel Bottleneck
+Project State
+Creator Goal
+       │
+       ▼
+Creator Strategy Engine
+       │
+       ▼
+Next Best Move
+```
+
+No other tool gets equivalent unrestricted fan-in authority.
+
+## 19.7 Feedback Loops
+
+The important feedback loops are:
+
+### Content learning loop
+
+```text
+Video Genome
+   ↓
+Content Architect
+   ↓
+Story Engine
+   ↓
+Projects / Editor
+   ↓
+Publish
+   ↓
+Analytics
+   ↓
+Causal Intelligence / Experiment Lab
+   ↓
+AI Brain
+   ↓
+Content Architect / Story Engine
+```
+
+### Audience loop
+
+```text
+Publish
+   ↓
+Audience Pulse
+   ↓
+Audience needs / relationship actions
+   ├── Content Architect
+   ├── Projects
+   └── Opportunity Radar
+```
+
+### Monetization loop
+
+```text
+Audience + Content + Assets + Channel Intelligence
+                    ↓
+             Revenue Architect
+                    ↓
+             Revenue Plan
+                    ↓
+                 Projects
+                    ↓
+                Results
+                    ↓
+                Analytics
+                    ↓
+        Causal Intelligence / AI Brain
+                    ↓
+          Revenue Architect
+```
+
+### Growth loop
+
+```text
+Analytics
+   ↓
+Channel Flywheel
+   ↓
+Bottleneck
+   ↓
+Causal Intelligence
+   ↓
+Experiment Lab
+   ↓
+Measured Result
+   ↓
+AI Brain
+   ↓
+Creator Strategy Engine
+   ↓
+Next Best Move
+```
+
+## 19.8 What Each Tool Should NOT Do
+
+| Tool | Must not become |
+|---|---|
+| Opportunity Radar | A generic content planner or strategy chatbot |
+| Content Architect | A story editor or analytics dashboard |
+| Video Genome | A causal engine or strategy engine |
+| Story Engine | A general project manager or asset repository |
+| Asset Forge | A general asset database outside the Asset Engine/Vault |
+| Audience Pulse | A generic CRM replacing the workspace's relationship systems |
+| Content Autopilot | A cross-tool strategy engine |
+| Experiment Lab | A generic analytics dashboard |
+| Causal Intelligence | A prediction engine that presents hypotheses as facts |
+| Channel Simulator | A strategy recommender or guaranteed forecast |
+| Revenue Architect | A generic business chatbot |
+| Channel Flywheel | A causal-analysis replacement or strategy engine |
+| Creator Strategy Engine | A generic chatbot or replacement for specialist tools |
+
+## 19.9 Interaction UI Requirements
+
+Every cross-tool handoff should be visible to the user as an intentional action where practical.
+
+A handoff UI should show:
+
+- **From:** originating tool;
+- **To:** receiving tool;
+- **Object:** what is being handed off;
+- **Why:** reason for the handoff;
+- **Evidence:** supporting evidence;
+- **Confidence:** confidence level;
+- **State:** observation/signal/hypothesis/prediction/finding/validated;
+- **What happens next:** receiving tool's primary transformation;
+- **User action:** Accept, Review, Edit, Save, Defer, or Cancel where appropriate.
+
+The creator should never have to wonder why a result appeared in another tool.
+
+## 19.10 Interaction Completion Criteria
+
+Studio Hub integration is complete when:
+
+- every canonical tool has documented upstream inputs;
+- every canonical tool has documented downstream consumers;
+- each handoff uses a typed object or `ToolHandoff`;
+- source provenance survives the handoff;
+- evidence and uncertainty survive the handoff;
+- canonical objects are referenced rather than duplicated;
+- Projects owns execution state;
+- Analytics owns measurement;
+- AI Brain owns durable validated knowledge;
+- Asset Engine/Vault owns reusable assets;
+- Editor owns editing/assembly;
+- Creator Strategy Engine owns cross-tool strategic synthesis;
+- no tool silently assumes another tool's primary transformation;
+- user-facing handoffs are understandable and actionable;
+- closed-loop learning can return measured results to the relevant tools.
+
