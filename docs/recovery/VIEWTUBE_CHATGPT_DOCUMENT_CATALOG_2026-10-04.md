@@ -65,3 +65,16 @@ After Round 1 contributions from all conversations are available, perform Round 
 - update the master recovery state.
 
 Do not discard a conflicting artifact until its useful information and provenance have been preserved.
+
+## Canonical repository synchronization added 2026-10-04
+
+| Artifact | Repository path | Classification |
+|---|---|---|
+| Canonical unified multi-conversation Recovery document | `Recovery` | CANONICAL / LIVE COORDINATION DOCUMENT |
+| Recovery Protocol source | `docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_PROTOCOL_2026-10-02.md` | SOURCE / PRESERVED |
+| Recovery Ledger source | `docs/recovery/VIEWTUBE_MULTI_CONVERSATION_RECOVERY_LEDGER_2026-10-02.md` | SOURCE / PRESERVED |
+| Repository Recovery Index | `docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md` | REPOSITORY REGISTRY |
+
+### Agent synchronization rule
+
+Conversation agents must read the current `Recovery` file before contributing, preserve prior evidence, add every material recovered document/artifact to the repository, register the artifact path and provenance, and avoid stale overwrites. Round 1 is append-oriented independent recovery; Round 2 performs evidence-based reconciliation.
