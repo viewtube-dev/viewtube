@@ -270,3 +270,20 @@ For a reusable handoff, use [RECOVERY_HANDOFF_TEMPLATE.md](docs/recovery/handoff
 - **Result:** Durable recovery handoff created. The detailed adaptive Workbench proposal is preserved without falsely upgrading external implementation claims to canonical status.
 - **Next action:** Round 2 reconciliation should compare the recovered proposal and any accessible external implementation against current `viewtube-dev/viewtube/main`.
 - **Verification:** Handoff committed to canonical repository at commit `c0e4696167ea1ca459a69812402736d8c3158411`; canonical Vault master and recovery governance were directly inspected.
+
+#### LOG-ID: REC-20261004-activation-001
+
+- **Timestamp:** 2026-10-04
+- **Agent:** ViewTube Conversation Agent — Recovery + Research + Documentation + Implementation
+- **Round:** 1
+- **Category:** GOVERNANCE / RECOVERY
+- **Action:** Activated the conversation under the current ViewTube Conversation Agent Recovery & Contribution Protocol and inspected the canonical recovery system before further project work.
+- **Source:** User-provided ViewTube Conversation Agent Activation Prompt plus current `viewtube-dev/viewtube/main` recovery files.
+- **Evidence:** Direct GitHub reads of `Recovery.md`, `Recovery.yaml`, `docs/recovery/AGENT_RECOVERY_PLAYBOOK.md`, and `docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md`.
+- **Status:** VERIFIED
+- **Artifact / file:** `Recovery.md`
+- **External identifier:** None.
+- **Dependencies:** Canonical recovery protocol, structured recovery state, recovery index.
+- **Result:** The current repository-side recovery contract is confirmed. `Recovery.md` is the human-readable master, `Recovery.yaml` is structured state, the playbook defines operational behavior, and the recovery index registers conversation artifacts. The conversation is operating as Round 1 unless explicitly instructed otherwise.
+- **Next action:** Inventory this conversation's durable ViewTube knowledge and preserve material artifacts without prematurely reconciling other conversations.
+- **Verification:** GitHub returned the current files from `main`; no implementation or deployment claim was inferred from this activation step.
