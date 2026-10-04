@@ -12,7 +12,7 @@ Read, in this order:
 
 1. `Recovery.md`
 2. `Recovery.yaml`
-3. `docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md`
+3. `docs/recovery/Index.md`
 4. The specific project/artifact files relevant to the conversation.
 
 ## Before you change anything
@@ -51,23 +51,7 @@ If the conversation contains a material document or artifact, put it in GitHub.
 
 Use the established project path when known.
 
-Otherwise:
-
-| Type | Location |
-|---|---|
-| Handoff | `docs/recovery/handoffs/` |
-| Architecture | `docs/recovery/architecture/` |
-| Plan | `docs/recovery/plans/` |
-| Audit | `docs/recovery/audits/` |
-| Implementation evidence | `docs/recovery/implementation/` |
-| Governance | `docs/recovery/governance/` |
-| Design/UI | `docs/recovery/design/` |
-| Deployment | `docs/recovery/deployment/` |
-| Data | `docs/recovery/data/` |
-| YouTube | `docs/recovery/youtube/` |
-| Technical | `docs/recovery/technical/` |
-
-Preserve original filenames whenever they are known.
+Otherwise, keep the artifact flat under `docs/recovery/`. Use a short descriptive filename; use `Plan-`, `Audit-`, `Handoff-`, or `Source-` only when useful.
 
 ## Record the contribution
 
@@ -146,7 +130,7 @@ For a tracked task to be marked complete:
 
 If the work is too large for the current conversation, create a handoff using:
 
-`docs/recovery/handoffs/RECOVERY_HANDOFF_TEMPLATE.md`
+`docs/recovery/Handoff.md`
 
 A future agent should be able to continue without reopening the original conversation.
 
