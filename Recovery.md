@@ -547,3 +547,20 @@ These findings are first-class project intelligence and must be preserved in dur
 **Result:** Durable recovery state now records the user's approved transition from planning to code, the identity-spine architecture, the revision-concurrency discovery, the test/implementation mismatch, and the canonical-vs-historical repository boundary.
 **Next action:** Establish/recover canonical application source, then implement and verify the Project ↔ ContentBuild revision-safe slice in that source.
 **Verification:** Recovery protocol, Recovery.md, Recovery.yaml, playbook, index, Vault/Projects recovery handoff, and canonical repository metadata were directly inspected.
+
+
+#### LOG-ID: REC-20261004-deployment-branch-recovery-001
+
+- **Timestamp:** 2026-10-04 02:10 EDT
+- **Agent:** ViewTube Recovery + Research + Documentation + Implementation Agent
+- **Round:** 1
+- **Category:** DEPLOYMENT / BRANCH RECOVERY / TECHNICAL
+- **Action:** Recovered and preserved the conversation's deployment, branch, Resource Library, Toolbox/SubToolbox, Render, Vercel, merge, and verification knowledge in a durable handoff.
+- **Source:** Current ChatGPT conversation; directly inspected canonical GitHub repository state.
+- **Evidence:** docs/recovery/handoffs/VIEWTUBE_DEPLOYMENT_BRANCH_RECOVERY_2026-10-04.md, current canonical main source inspection, user-provided Render/Vercel build logs.
+- **Status:** VERIFIED for repository/source facts; historical deployment/branch claims retain individual evidence status.
+- **Artifact:** docs/recovery/handoffs/VIEWTUBE_DEPLOYMENT_BRANCH_RECOVERY_2026-10-04.md
+- **External identifier:** Current canonical main checkpoint 914eaf0d8ca25d916a8b7db5e37b9cc6e7a11457
+- **Result:** Preserved the correction that the old Vercel Resource Library error came from an older feature-branch commit; current main already uses src/features/resource-library/resources/ and a source-local glob. Preserved the user's hard runtime-import boundary: no imports outside src. Preserved the Render missing-start discovery and current main source verification. Preserved the merge-all-work and deployment-provenance plan.
+- **Next action:** Execute a real build against the exact current main SHA, then verify an isolated deployment from that SHA before reconciling remaining branches.
+- **Verification:** Repository source facts were directly inspected. Current production build/deployment remains UNKNOWN until executed against the current main SHA.
