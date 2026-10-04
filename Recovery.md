@@ -342,3 +342,42 @@ The agent must report documents created, documents updated, and any material int
 - Result: Full-conversation document preservation is now an explicit mandatory rule.
 - Next action: All future conversation agents use the activation prompt and updated playbook.
 - Verification: Activation prompt committed to main.
+
+
+## 16. Mandatory agent update report
+
+Every conversation agent must record a complete update report in the recovery system for its work. A generic summary is not sufficient.
+
+Each update must record:
+
+- Exact update time: exact timestamp in US Eastern Time. Use America/New_York and explicitly distinguish EST (UTC-05:00) from EDT (UTC-04:00); never guess the offset.
+- Conversation title: the exact title of the source conversation when available.
+- Main focus: the primary purpose/topic of the conversation.
+- Documents added: every repository document/file created by the agent, with exact repository path.
+- Documents edited: every existing repository document/file changed by the agent, with exact repository path.
+- Commits: commit SHA(s) associated with the update when available.
+- Major discoveries: all new facts, capabilities, relationships, technical findings, or recovered knowledge discovered during the conversation.
+- Code discoveries: important implementation details, code patterns, dependencies, architecture discoveries, technical debt, bugs, or previously unknown behavior found in the repository.
+- Optimizations: every meaningful code, architecture, UX, performance, data, workflow, tooling, or maintainability optimization identified or implemented.
+- Recommended improvements: concrete recommendations for improving the ViewTube application, prioritized when possible.
+- Verification: what was actually checked and what remains unverified.
+- Open questions/blockers: unresolved issues and dependencies.
+- Next actions: recommended follow-up work.
+
+### Mandatory document/file inventory
+
+The agent must provide a complete inventory of all documents/files added or edited in the repository during the conversation, not only the most important ones. If no files were added or edited, explicitly state that.
+
+### Discovery and optimization rule
+
+New discoveries and optimizations are first-class recovery artifacts. They must not be buried in prose or omitted because they did not result in a code change. Record them with their source, evidence, status, affected area, and recommended action.
+
+### Required update record format
+
+Every material agent update must contain:
+
+UPDATE-ID → EXACT EASTERN TIMESTAMP → CONVERSATION TITLE → MAIN FOCUS → FILES ADDED → FILES EDITED → COMMITS → DISCOVERIES → CODE DISCOVERIES → OPTIMIZATIONS → RECOMMENDED IMPROVEMENTS → VERIFICATION → BLOCKERS → NEXT ACTIONS
+
+Use a unique ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID.
+
+This report is part of the durable project memory and must be preserved in Recovery.md and, where structured state is appropriate, Recovery.yaml.
