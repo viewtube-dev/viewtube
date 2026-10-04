@@ -181,3 +181,38 @@ Update existing canonical documents when they exist; create new documents when t
 Then update `Recovery.md`, `Recovery.yaml`, and the recovery index, commit the work, verify the writes, and report exactly what was created/updated.
 
 **GitHub is canonical shared memory. Chat history is evidence.**
+
+
+## Mandatory update report
+
+At the end of every material work cycle, create a durable update report. Do not provide only a generic summary.
+
+The report must contain:
+
+1. **Exact Eastern Time timestamp** using America/New_York. Explicitly label EST or EDT according to the actual date/offset.
+2. **Exact conversation title** when available.
+3. **Main focus of the conversation.**
+4. **Complete list of every repository document/file added**, with exact paths.
+5. **Complete list of every repository document/file edited**, with exact paths.
+6. **Commit SHA(s)** for the changes.
+7. **All new discoveries**, including recovered knowledge, capabilities, relationships, technical findings, and important facts.
+8. **All code discoveries**, including implementation details, dependencies, bugs, technical debt, architecture findings, and previously unknown behavior.
+9. **All optimizations identified or implemented**, including code, architecture, performance, UX, data, workflow, tooling, and maintainability improvements.
+10. **Recommended improvements to the ViewTube application**, with priority/reason when useful.
+11. **Verification status**, separating verified facts from reported/inferred/proposed material.
+12. **Blockers/open questions.**
+13. **Next actions.**
+
+### File inventory rule
+
+List **every file added or edited during the conversation**, not just the major documents. If none were changed, explicitly say so.
+
+### Discovery/optimization rule
+
+New discoveries and optimizations are first-class project knowledge. Record them even when they do not produce an immediate code change. Include source/evidence, affected area, status, and recommended action.
+
+Required format:
+
+**UPDATE-ID → EXACT EASTERN TIMESTAMP → CONVERSATION TITLE → MAIN FOCUS → FILES ADDED → FILES EDITED → COMMITS → DISCOVERIES → CODE DISCOVERIES → OPTIMIZATIONS → RECOMMENDED IMPROVEMENTS → VERIFICATION → BLOCKERS → NEXT ACTIONS**
+
+Use an UPDATE-ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID.
