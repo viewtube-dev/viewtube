@@ -341,3 +341,30 @@ Further recovered AI/workflow improvements:
 **WHAT IS NOT VERIFIED:** Historical Dashboard implementation, historical PR #39/#40 in the external repository, current Render deployment state, and current canonical Dashboard code.
 
 **WHAT MUST HAPPEN NEXT:** Complete Round 1 durable registration for this conversation, then perform Round 2 reconciliation against canonical main and the repository-connected Render service.
+
+
+## 15. Render service verification during recovery
+
+Render was queried after the user requested Render as the runtime tool.
+
+**Verified Render service relationship:**
+
+- service: `viewtube-main-preview`
+- service ID: `srv-davin39srm7s73c5ljmg`
+- branch: `main`
+- repository: `https://github.com/cbrewsterthegreat/ViewTube`
+- Render URL: `https://viewtube-main-preview.onrender.com`
+- build command: `npm run build`
+- start command: `npm run preview -- --host 0.0.0.0`
+
+Recent Render deployment records were build failures, including:
+
+- `dep-davskv3tqb8s73fon8hg` for commit `bdf80ca0922aecd69bb37429e79f6b5e3ee19b76`
+- `dep-davs260ae00c73dtu8v0` for commit `9eabd247c30dd8a45b56e3f164bb4cdaafa71e94`
+- `dep-davru5dg1s2s7381om6g` for commit `914eaf0d8ca25d916a8b7db5e37b9cc6e7a11457`
+
+All three are recorded by Render with status `build_failed`.
+
+**Important:** this verifies the existence and failure state of a Render service connected to the historical `cbrewsterthegreat/ViewTube` repository. It does **not** verify a Render deployment for canonical `viewtube-dev/viewtube`.
+
+The canonical Render service for `viewtube-dev/viewtube` remains **UNKNOWN** from the accessible Render workspace.
