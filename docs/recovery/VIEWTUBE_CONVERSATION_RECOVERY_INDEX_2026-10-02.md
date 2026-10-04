@@ -73,3 +73,24 @@ The initial repository recovery corpus consists of the unified recovery document
 ## Final principle
 
 The repository is the durable shared coordination surface. Chat history is not the canonical storage location for recovered project knowledge.
+
+
+## Registered Round 1 contribution — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | Vault + Projects adaptive Asset Workbench conversation |
+| Round | 1 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md` |
+| Source | Current ChatGPT conversation |
+| Status | IMPLEMENTED |
+| Provenance | Conversation source → repository discovery → recovery artifact |
+| Verification | Canonical Recovery system and Vault master inspected; external implementation claims remain unverified |
+| LOG-ID | `REC-20261004-vault-recovery-001` |
+| Follow-up | Round 2 reconciliation against current `main` and any accessible historical source branch |
+
+### Contribution summary
+
+Recovered material includes the adaptive Asset Workbench architecture, full Vault capability inventory, Projects/Mini Library grouping model, Toolbox/SubToolbox consolidation rules, shared operation/ActionPacket flow, implementation claims from the external `cbrewsterthegreat/ViewTube` repository, and Render deployment evidence.
+
+The contribution explicitly preserves the repository-identity conflict: `viewtube-dev/viewtube` is canonical for this recovery pass; external repository claims are not treated as current implementation until independently verified.
