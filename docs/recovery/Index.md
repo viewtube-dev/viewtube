@@ -1,42 +1,94 @@
-# ViewTube Knowledge Index
+# ViewTube Recovery & Knowledge Index
 
-**Purpose:** Fast map of the durable ViewTube knowledge system. This index tells an agent where to look; it does not duplicate the underlying documents.
+**Goal:** one shallow, easy-to-navigate knowledge system. Keep the number of folders and competing documents low.
 
 ## Start here
-1. Recovery.md — recovery rules, provenance, work log, reconciliation.
-2. Recovery.yaml — machine-readable recovery state.
-3. docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md — agent activation instructions.
-4. docs/recovery/AGENT_RECOVERY_PLAYBOOK.md — operational recovery procedure.
-5. docs/recovery/VIEWTUBE_KNOWLEDGE_OPERATING_SYSTEM.md — how project knowledge is captured, classified, connected, and optimized.
-6. docs/recovery/FINDINGS_REGISTER.md — centralized engineering/product findings and opportunities.
 
-## Knowledge map
-| Knowledge | Canonical location | Role |
-|---|---|---|
-| Recovery governance | Recovery.md, Recovery.yaml | State + operating rules |
-| Agent operation | docs/recovery/AGENT_RECOVERY_PLAYBOOK.md | Execution procedure |
-| Agent activation | docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md | Activation contract |
-| Knowledge system | docs/recovery/VIEWTUBE_KNOWLEDGE_OPERATING_SYSTEM.md | Documentation architecture |
-| Findings | docs/recovery/FINDINGS_REGISTER.md | Bugs + ideas + discoveries |
-| Plans | docs/recovery/plans/ | Actionable work |
-| Audits | docs/recovery/audits/ | Investigations/evidence |
-| Architecture | docs/recovery/architecture/ | System structure |
-| Design | docs/recovery/design/ | UI/UX/design-system knowledge |
-| Implementation | docs/recovery/implementation/ | Code/implementation evidence |
-| Governance | docs/recovery/governance/ | Development rules |
-| Data | docs/recovery/data/ | Data/schema knowledge |
-| Deployment | docs/recovery/deployment/ | Operations/deployment |
-| YouTube | docs/recovery/youtube/ | Creator/YouTube systems |
-| Technical | docs/recovery/technical/ | Technical investigations |
-| Handoffs | docs/recovery/handoffs/ | Continuation packages |
-| Archive | docs/recovery/archive/ | Superseded historical material |
+| File | Purpose |
+|---|---|
+| `Recovery.md` | Master recovery state, rules, provenance, work log |
+| `Recovery.yaml` | Machine-readable recovery state |
+| `docs/recovery/Index.md` | This map |
+| `docs/recovery/Agent.md` | Full agent activation instructions |
+| `docs/recovery/Playbook.md` | Operational recovery procedure |
+| `docs/recovery/Knowledge.md` | How ViewTube knowledge is captured and organized |
+| `docs/recovery/Findings.md` | Bugs, discoveries, issues, ideas, opportunities |
+| `docs/recovery/Handoff.md` | Standard continuation/handoff format |
 
-## Knowledge relationships
-Use links between artifacts rather than copying content:
-**Finding → Evidence/Audit → Decision → Plan → Implementation → Verification → Handoff**
+## Simple structure
 
-## Navigation rule
-If you do not know where information belongs, start here, then follow the canonical owner of the subject. Do not create a new document until you have checked this index and the relevant domain directory.
+```
+Recovery.md
+Recovery.yaml
+docs/
+  recovery/
+    Index.md
+    Agent.md
+    Playbook.md
+    Knowledge.md
+    Findings.md
+    Handoff.md
+    [project knowledge and historical recovery records]
+```
+
+**No routine nested folders are required.** Keep recovery artifacts flat under `docs/recovery/`.
+
+## What belongs where
+
+- **Recovery:** project-wide recovery state and coordination.
+- **Agent:** instructions every conversation agent follows.
+- **Playbook:** step-by-step operating procedure.
+- **Knowledge:** documentation architecture and optimization method.
+- **Findings:** bugs, code issues, tool ideas, new tools, workflow/handoff improvements, AI improvements, UX, performance, security, data, and testing findings.
+- **Handoff:** reusable continuation template.
+- **Other recovery files:** source evidence, detailed plans, audits, design/architecture records, implementation records, and conversation recoveries. Give them short descriptive names.
+
+## Naming rules
+
+Use **short, descriptive, stable names**.
+
+Preferred:
+- `Toolbox.md`
+- `Architecture.md`
+- `Widgets.md`
+- `UI.md`
+- `AI.md`
+- `Account.md`
+- `Analytics.md`
+- `Plan-Toolbox.md`
+- `Audit-Exports.md`
+- `Handoff-Toolbox.md`
+
+Avoid:
+- repeated `VIEWTUBE_` prefixes
+- repeated `2026-10-04` in the filename unless the date is essential to distinguish historical records
+- long all-caps filenames
+- nested category folders for small numbers of documents
+- duplicate documents with overlapping authority
+
+## Classification rule
+
+The **file name says what it is**; the document metadata says status, source, date, owner, and provenance.
+
+Use prefixes only when useful:
+- `Plan-`
+- `Audit-`
+- `Handoff-`
+- `Source-`
+
+Do not encode every metadata field into the filename.
 
 ## Consolidation rule
-When multiple documents contain overlapping knowledge, prefer one authoritative current document plus linked historical evidence over parallel competing documents.
+
+Before creating a file:
+1. Check this index.
+2. Search for an existing owner of the subject.
+3. Update or consolidate the existing document when possible.
+4. Create a new document only when the knowledge has no suitable owner.
+5. Preserve historical evidence without allowing it to become a competing source of truth.
+
+## Knowledge flow
+
+**Evidence → Finding → Knowledge → Decision → Plan → Implementation → Verification → Handoff**
+
+The system optimizes for **clarity, reuse, low duplication, and easy agent navigation**, not maximum document count.
