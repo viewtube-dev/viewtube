@@ -173,3 +173,20 @@ A separate ViewTube deployment-recovery investigation established:
 | Commit | `5ee9b13d801f8a7e0af15375f616c8cb529aea44` |
 | Verification | QW-001–100 sequence recovered; canonical source-family searches performed; no canonical implementation completion claimed |
 | Follow-up | Recover A/B/C/D source artifacts, map tasks to canonical paths, then execute only merged-and-verified implementation slices |
+
+
+## Registered Round 1 contribution — Dashboard UI + Render conversation — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Recovery + Research + Documentation + Implementation Agent / activation title “VIEWTUBE RECOVERY AGENT — ACTIVATE” |
+| Round | 1 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_DASHBOARD_UI_RENDER_CONVERSATION_RECOVERY_2026-10-04.md` |
+| Source | Current ChatGPT conversation |
+| Status | VERIFIED recovery artifact; recovered implementation claims remain REPORTED until canonical reconciliation |
+| Provenance | Conversation source → canonical recovery inspection → recovery artifact |
+| Commit | `2ddae8cd9eb900be17ed235a429512d6c04b4ef9` |
+| Major recovered areas | Dashboard/Widget UI modernization, CSS/token consolidation, component canonicalization, responsive/accessibility/performance strategy, visual regression, Render verification, recovery governance, AI/workflow improvements |
+| Critical authority correction | `viewtube.live` is not repository-connected and is explicitly excluded as repository runtime evidence |
+| Canonical-main finding | The detailed Dashboard implementation files discussed in the conversation were not established on `viewtube-dev/viewtube/main`; historical external-repository claims remain provenance-preserved rather than promoted |
+| Round 2 follow-up | Reconcile Dashboard/UI history against canonical main and verify the exact Render service/deployment tied to the canonical repository/commit |
