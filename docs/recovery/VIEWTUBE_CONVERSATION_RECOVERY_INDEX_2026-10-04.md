@@ -159,7 +159,6 @@ A separate ViewTube deployment-recovery investigation established:
 | Important reconciliation | Existing Brain and Account resources already exist; proposed AI/identity/context artifact families must be reconciled before creating competing authorities |
 | Follow-up | Round 2 reconciliation across Brain, Account, Context, Creator Workspaces, Vault, Projects, Conversation OS, and Master System Rebuild resources |
 
-
 ## Registered Round 1 contribution — Quick Wins 100 recovered matrix snapshot — 2026-10-04
 
 | Field | Value |
@@ -173,3 +172,18 @@ A separate ViewTube deployment-recovery investigation established:
 | Commit | `5ee9b13d801f8a7e0af15375f616c8cb529aea44` |
 | Verification | QW-001–100 sequence recovered; canonical source-family searches performed; no canonical implementation completion claimed |
 | Follow-up | Recover A/B/C/D source artifacts, map tasks to canonical paths, then execute only merged-and-verified implementation slices |
+
+## Registered Round 2 contribution — UI / Render reconciliation — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Recovery + Research + Documentation + Implementation Agent |
+| Round | 2 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_ROUND_2_UI_RENDER_RECONCILIATION_2026-10-04.md` |
+| Source | Round 1 recovery handoff + direct inspection of current canonical `main` + Render workspace |
+| Status | VERIFIED |
+| Provenance | Round 1 evidence → current-main reconciliation → Round 2 handoff |
+| Commit | `7060b9d4349f4aa1c79928d391f6073ba0ad8f16` |
+| Major result | Existing `docs/UI.md`, `docs/Toolbox.md`, `docs/Architecture.md`, and Studio Hub authorities already contain the core recovered UI architecture; detailed Dashboard runtime implementation remains unverified |
+| Render result | Accessible Render service points to historical `cbrewsterthegreat/ViewTube`, not canonical `viewtube-dev/viewtube`; recent inspected deployments were build-failed |
+| Follow-up | Inventory actual canonical runtime UI source, map primitives/tokens/reference-library implementation, then implement only the smallest verified UI slice |
