@@ -95,3 +95,18 @@ The detailed inventory is preserved at:
 `docs/recovery/handoffs/VIEWTUBE_DOCUMENT_ARTIFACT_INVENTORY_2026-10-04.md`
 
 Important: this catalog records provenance and recovery targets. It does not imply runtime implementation.
+
+
+## Round 1 recovery addition — Dashboard UI + Render conversation
+
+| Area | Artifact / subject | Classification |
+|---|---|---|
+| Dashboard / Widget UI | Dashboard UI + Render Conversation Recovery | VERIFIED RECOVERY ARTIFACT |
+| CSS / Design Tokens | Dashboard CSS/token consolidation and drift audit | RECOVERED / REPORTED; canonical-main reconciliation required |
+| Component Architecture | Widget/component canonicalization and duplication findings | RECOVERED / REPORTED; canonical-main reconciliation required |
+| Responsive / Accessibility | Responsive matrix, state matrix, accessibility, performance, visual-regression proposals | RECOVERED / PROPOSED |
+| Deployment | Render build/runtime investigation and repository-authority correction | RECOVERED / REPORTED; current Render verification required |
+| AI / Workflow | UI impact map, migration receipts, token/duplication detectors, screenshot evidence workflow | RECOVERED / PROPOSED |
+
+Detailed recovery handoff:
+`docs/recovery/handoffs/VIEWTUBE_DASHBOARD_UI_RENDER_CONVERSATION_RECOVERY_2026-10-04.md`
