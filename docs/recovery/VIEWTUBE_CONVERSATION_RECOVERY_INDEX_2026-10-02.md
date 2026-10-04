@@ -133,3 +133,22 @@ Recovered the canonical tool-context hierarchy, 12 core creator-workspace tools,
 ### Contribution summary
 
 Recovered the beta-critical account/login/Google/YouTube requirements; the account/channel canonical-state architecture; YouTube read/write transport migration findings; VT Sync credential-boundary issue; typed analytics transport; historical working-branch commits; branch-divergence/merge constraints; production Google Cloud blockers; and the complete unfinished-work inventory. The artifact explicitly distinguishes verified repository findings, historical branch implementation, proposed work, and production-blocked work.
+
+
+## Registered Round 1 contribution — Deployment + Branch Recovery — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Recovery + Research + Documentation + Implementation Agent; exact title preserved in handoff |
+| Round | 1 |
+| Artifact | docs/recovery/handoffs/VIEWTUBE_DEPLOYMENT_BRANCH_RECOVERY_2026-10-04.md |
+| Source | Current ChatGPT conversation |
+| Status | VERIFIED for canonical source/recovery facts; historical deployment claims retain evidence-specific status |
+| Provenance | Conversation source → canonical GitHub inspection → recovery artifact |
+| Commit | 1cbb7ec3817fdb9142f8a0b1730388b82d3b0f10 |
+| LOG-ID | REC-20261004-deployment-branch-recovery-001 |
+| Follow-up | Build and deploy exact current main SHA; reconcile remaining branches/PRs |
+
+### Contribution summary
+
+Recovered the Render npm start failure and its current-source fix, the historical Vercel Resource Library unresolved-import failure, the current source-local Resource Library architecture, the user's hard src-only runtime import constraint, Toolbox compatibility-export findings, current main checkpoint evidence, merge-all-work rules, deployment provenance requirements, and the distinction between historical external-repository evidence and canonical viewtube-dev/viewtube state.
