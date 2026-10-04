@@ -381,3 +381,58 @@ UPDATE-ID → EXACT EASTERN TIMESTAMP → CONVERSATION TITLE → MAIN FOCUS → 
 Use a unique ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID.
 
 This report is part of the durable project memory and must be preserved in Recovery.md and, where structured state is appropriate, Recovery.yaml.
+
+
+## 17. Mandatory engineering and product intelligence capture
+
+Every conversation agent must actively document more than plans and audits. During the full-conversation review, capture and preserve every material engineering, product, workflow, and AI-system observation discovered.
+
+### Required discovery classes
+
+Agents must document, when discovered:
+
+- **Bugs:** confirmed bugs, suspected bugs, regressions, failure modes, reproduction information, affected areas, severity/impact, evidence, workaround, and recommended fix.
+- **Code structure issues:** poor separation of concerns, duplication, dead code, coupling, dependency problems, inconsistent patterns, unclear ownership, scalability concerns, technical debt, fragile abstractions, and architectural inconsistencies.
+- **Tool improvements:** ideas to improve existing ViewTube tools, widgets, editors, analytics, libraries, workflows, interfaces, and developer tooling.
+- **New tools:** ideas or requirements for entirely new tools, utilities, services, widgets, agents, dashboards, or capabilities.
+- **Workflow improvements:** opportunities to simplify, automate, standardize, parallelize, validate, or otherwise improve ViewTube workflows.
+- **Handoff improvements:** ways to make agent-to-agent handoffs, recovery, provenance, task continuity, and project coordination more reliable.
+- **AI improvements:** opportunities to improve AI agents, prompts, context handling, memory/recovery, tool use, automation, reasoning workflows, evaluation, verification, and AI-assisted ViewTube features.
+- **UX/product improvements:** usability problems, missing capabilities, friction, information architecture issues, and product opportunities.
+- **Performance/scalability:** performance bottlenecks, expensive operations, caching opportunities, rendering/data-flow problems, and scalability risks.
+- **Security/reliability:** security weaknesses, unsafe assumptions, resilience problems, validation gaps, and reliability risks.
+- **Data/model improvements:** schema problems, data-flow issues, normalization opportunities, missing metadata, and better source-of-truth strategies.
+- **Testing/verification improvements:** missing tests, weak coverage, poor verification workflows, reproducibility problems, and opportunities for automated validation.
+
+### Do not require implementation before recording
+
+An observation is valuable even if it is not fixed or implemented during the conversation. Record ideas and discoveries with an accurate status such as PROPOSED, REPORTED, INFERRED, VERIFIED, FAILED, or UNKNOWN.
+
+### Required structure for each engineering/product finding
+
+When applicable, record:
+
+- Finding ID
+- Category
+- Title
+- Affected ViewTube area/tool/file
+- What was discovered
+- Source/provenance
+- Evidence
+- Current status
+- Impact/severity
+- Recommended improvement
+- Proposed implementation direction
+- Dependencies
+- Related documents/issues
+- Verification needed
+
+### Mandatory question before completion
+
+Before finishing a conversation, the agent must explicitly ask itself:
+
+**What bugs, code-structure problems, tool ideas, new tools, workflow improvements, handoff improvements, AI improvements, UX improvements, performance opportunities, security/reliability issues, data improvements, and testing improvements did this conversation reveal?**
+
+If none were found in a category, record that the category was reviewed and no material finding was identified. Do not invent findings.
+
+These findings are first-class project intelligence and must be preserved in durable repository documentation and included in the agent update report when material.
