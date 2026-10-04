@@ -43,3 +43,31 @@ A successful GitHub commit or build does not establish a successful production d
 
 ## Current-target caution
 The canonical repository for this recovery pass is `viewtube-dev/viewtube`. Historical identifiers from another repository/account context must not be treated as current-target commits without explicit repository evidence.
+
+
+## Additional conversation recovery evidence — 2026-10-04
+
+**Status:** REPORTED CONVERSATION EVIDENCE / REQUIRES CURRENT RENDER VERIFICATION
+
+A subsequent ViewTube conversation explicitly requested Render as the runtime verification surface after the user corrected that `viewtube.live` is not connected to the repository.
+
+The conversation reported:
+
+- one Render-connected preview service failed during Vite parsing at `src/components/Toolbox.ts:44:21` with `Expected `>` but found `{``;
+- the reported diagnosis was JSX inside a `.ts` compatibility facade;
+- another Render preview service was reported to invoke `npm run build` without installing dependencies and consequently reported `vite: not found`;
+- a historical PR #40 was claimed to replace JSX-returning compatibility-facade functions with `React.createElement`.
+
+These are preserved as **REPORTED** evidence only. The current canonical repository does not contain the historical implementation surface needed to independently verify these claims, and the external PR identifiers were not retrievable through the available GitHub search surface during this recovery pass.
+
+### Authority correction
+
+`viewtube.live` must not be used as repository runtime evidence unless a future verified deployment relationship explicitly establishes that it is built from the canonical repository/commit.
+
+### Required verification
+
+1. Query the current Render workspace/service connected to `viewtube-dev/viewtube`.
+2. Identify the exact deployed commit.
+3. Inspect current build/deploy status.
+4. If a build fails, preserve the exact current error.
+5. Verify any Toolbox compatibility fix against the actual canonical source before promoting it.
