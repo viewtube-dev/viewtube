@@ -238,3 +238,26 @@ For the complete documentation architecture, read `docs/recovery/Knowledge.md` a
 Use `docs/recovery/Findings.md` for bugs, code-structure issues, discoveries, ideas for improving existing tools, new-tool opportunities, workflow/handoff improvements, AI improvements, UX/product opportunities, performance, security/reliability, data/model, and testing/verification findings.
 
 **Do not create a new document until you have checked the Knowledge Index and the relevant canonical domain document. Consolidate related knowledge instead of creating competing sources of truth.**
+
+
+## Mandatory document-operation ledger
+
+Every substantive document operation must also be recorded in `docs/recovery/History.md`.
+
+Before changing a document:
+1. Fetch the latest target content and blob SHA.
+2. Check its current authority/status and related canonical owner.
+3. Identify the operation type and preservation requirements.
+
+After changing a document:
+1. Record a unique `DOC-YYYYMMDD-NNN` operation in `docs/recovery/History.md`.
+2. Record the exact America/New_York timestamp and explicitly label EST or EDT.
+3. Record the conversation title, agent/model, application/tool, action, source, destination, every file added/edited/moved/merged/superseded/archived, commit SHA(s), summary, important information preserved, discoveries, conflicts, verification, blockers, and follow-up.
+4. Keep the History entry append-only-style. Correct historical mistakes with a new correction entry rather than silently rewriting the old entry.
+5. Treat History as an operation receipt, not as a substitute for preserving substantive knowledge in the affected canonical/recovery document.
+
+The completion gate is now:
+
+**DOCUMENT CHANGE → SOURCE/PRESERVATION CHECK → WRITE → VERIFY → HISTORY RECEIPT → RECOVERY REGISTRATION → HANDOFF**
+
+If multiple agents are operating concurrently, re-fetch History.md before appending so the newest ledger state is preserved.
