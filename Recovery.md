@@ -57,21 +57,17 @@ Record missing stages as `UNKNOWN`; never invent them.
 
 ## 4. Artifact placement
 
-Use the existing canonical project path when one is known. Otherwise use:
+Use the existing canonical project path when one is known.
 
-- `docs/recovery/handoffs/`
-- `docs/recovery/architecture/`
-- `docs/recovery/plans/`
-- `docs/recovery/audits/`
-- `docs/recovery/implementation/`
-- `docs/recovery/governance/`
-- `docs/recovery/design/`
-- `docs/recovery/deployment/`
-- `docs/recovery/data/`
-- `docs/recovery/youtube/`
-- `docs/recovery/technical/`
+For recovery-owned documentation, keep artifacts **flat under `docs/recovery/`**. Do not create routine category subfolders.
 
-Preserve original filenames where known.
+Use short descriptive names. Optional prefixes:
+- `Plan-`
+- `Audit-`
+- `Handoff-`
+- `Source-`
+
+Put status, date, owner, and provenance inside the document rather than encoding them into long filenames.
 
 ## 5. Work-log format
 
@@ -122,7 +118,7 @@ Use:
 
 ## 6. Conversation recovery record
 
-Each agent should add a concise contribution here or create a dedicated handoff under `docs/recovery/handoffs/`.
+Each agent should add a concise contribution here or create/update a dedicated flat recovery artifact under `docs/recovery/`.
 
 Required minimum:
 
@@ -249,9 +245,9 @@ The recovery system must let a future engineer or ChatGPT agent reconstruct and 
 
 ## 14. Agent quick-start
 
-For the shortest operational path, use [AGENT_RECOVERY_PLAYBOOK.md](docs/recovery/AGENT_RECOVERY_PLAYBOOK.md).
+For the shortest operational path, use [Playbook.md](docs/recovery/Playbook.md).
 
-For a reusable handoff, use [RECOVERY_HANDOFF_TEMPLATE.md](docs/recovery/handoffs/RECOVERY_HANDOFF_TEMPLATE.md).
+For a reusable handoff, use [Handoff.md](docs/recovery/Handoff.md).
 
 
 #### LOG-ID: REC-20261004-vault-recovery-001
