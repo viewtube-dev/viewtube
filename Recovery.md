@@ -484,3 +484,24 @@ These findings are first-class project intelligence and must be preserved in dur
 - **Blockers:** Round 2 cross-conversation reconciliation remains pending; Dashboard count discrepancy remains unresolved; historical Toolbox/SubToolbox and external-repository implementation claims require current-main verification.
 - **Next action:** Reconcile the recovered handoff with current canonical product/architecture resources and verify inventory drift against implementation.
 - **Required update report:** UPDATE-20261004-creator-workspace-001 → 2026-10-04 02:06 EDT → conversation title unavailable → creator-workspace recovery/documentation/resource verification → added docs/recovery/handoffs/VIEWTUBE_CREATOR_WORKSPACE_RECOVERY_2026-10-04.md → edited Recovery.md, Recovery.yaml, and recovery index → commit 7bf178ba7f6715ce09a9761b9232063474dbd3b9 → discoveries/code discoveries/optimizations/recommendations/verification/blockers as recorded above.
+
+
+#### LOG-ID: REC-20261004-account-system-conversation-001
+
+- **Timestamp:** 2026-10-04 02:07 EDT (America/New_York)
+- **Agent:** ViewTube Recovery + Research + Documentation + Implementation Agent
+- **Round:** 1
+- **Category:** ACCOUNT / YOUTUBE / VT SYNC / BETA / RECOVERY
+- **Action:** Recovered the entire account-system/YouTube-beta conversation and preserved its substantive plans, architecture findings, implementation claims, blockers, failures, optimization ideas, and unfinished-work inventory as a durable handoff.
+- **Source:** Current ChatGPT conversation, including user requirements and substantive implementation/audit responses.
+- **Evidence:** Canonical recovery files and playbook were directly read from `viewtube-dev/viewtube/main`. Historical account-system work was preserved from the conversation's verified GitHub interactions with `cbrewsterthegreat/ViewTube`.
+- **Status:** VERIFIED
+- **Artifact:** `docs/recovery/handoffs/VIEWTUBE_ACCOUNT_YOUTUBE_BETA_CONVERSATION_RECOVERY_2026-10-04.md`
+- **External identifiers:** Historical repository `cbrewsterthegreat/ViewTube`; historical branch `codex/account-system-beta-phase1`; reported commits `45f19b1`, `09bde69`, `e3d8fdc`.
+- **Result:** Durable Round 1 recovery artifact created in the canonical repository. Historical branch implementation is explicitly not promoted to canonical-main completion.
+- **Major discoveries:** YouTube read and write transports are already substantially migrated; VT Sync remains a browser-token credential-boundary hotspot; a typed `POST /api/youtube/analytics/query` route already exists; `UnifiedAccountSnapshot` already contains canonical channel information; `connectionState.ts` should be a projection of canonical account/channel state rather than another source of truth.
+- **Code/architecture discoveries:** The safest path is incremental credential/transport convergence, not rebuilding VT Sync, publishing, or account systems. Existing dataset/master-table contracts should remain unchanged while transport boundaries are migrated.
+- **Optimizations:** Prefer typed server-side YouTube routes; preserve stable output contracts; use parity tests before removing compatibility; treat the application as an OS-like system where new versions preserve existing capabilities; consolidate video systems behind a coherent Video Project experience without duplicating backend capabilities.
+- **Blockers:** User currently lacks old Google Cloud account/site access; production OAuth and live YouTube verification remain blocked. Historical branch/main divergence requires Round 2 reconciliation.
+- **Next action:** Reconcile the historical account branch against canonical main, finish canonical channel-state migration, migrate VT Sync analytics to the typed analytics route, then retire browser-token fallback after parity verification.
+- **Verification:** Recovery governance files were directly read; the new handoff was successfully committed to canonical main at `b940b17396e2115b9897859cde347ece4d6f6b91`. Historical implementation claims remain individually status-labeled in the handoff.

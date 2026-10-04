@@ -114,3 +114,22 @@ The contribution explicitly preserves the repository-identity conflict: `viewtub
 ### Contribution summary
 
 Recovered the canonical tool-context hierarchy, 12 core creator-workspace tools, 66-widget Dashboard evidence, 13 Studio Hub tools, UI sizing/reference-library decisions, Toolbox/SubToolbox recovery concerns, Brain/Account/Context architecture observations, and the public Resource Library verification. The inspected public resource is an analytics guide, not the general master documentation itself.
+
+
+## Registered Round 1 contribution — Account / YouTube / Beta conversation — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | Account / YouTube / Beta continuation conversation |
+| Round | 1 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_ACCOUNT_YOUTUBE_BETA_CONVERSATION_RECOVERY_2026-10-04.md` |
+| Source | Current ChatGPT conversation |
+| Status | VERIFIED recovery artifact; historical implementation claims retain individual status |
+| Provenance | Conversation source → repository discovery → recovery artifact |
+| Verification | Canonical Recovery files/playbook directly read; historical cbrewsterthegreat/ViewTube work preserved with explicit non-canonical status |
+| LOG-ID | `REC-20261004-account-system-conversation-001` |
+| Follow-up | Round 2 reconciliation against canonical `viewtube-dev/viewtube/main` |
+
+### Contribution summary
+
+Recovered the beta-critical account/login/Google/YouTube requirements; the account/channel canonical-state architecture; YouTube read/write transport migration findings; VT Sync credential-boundary issue; typed analytics transport; historical working-branch commits; branch-divergence/merge constraints; production Google Cloud blockers; and the complete unfinished-work inventory. The artifact explicitly distinguishes verified repository findings, historical branch implementation, proposed work, and production-blocked work.
