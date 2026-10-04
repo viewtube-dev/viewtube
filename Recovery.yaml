@@ -418,3 +418,36 @@ knowledge_system:
     conversation_specific_evidence: "handoff_recovery_artifact"
     superseded_material: "preserve_as_history"
   goal: "Maximum reusable project intelligence with minimum duplication and ambiguity."
+
+document_system:
+  canonical_standard: "docs/Document-System.md"
+  operation_history: "docs/recovery/History.md"
+  lifecycle:
+    - IDEA
+    - DRAFT
+    - ACTIVE
+    - UPDATED
+    - CONSOLIDATED
+    - SUPERSEDED
+    - ARCHIVED
+  operation_ids: "DOC-YYYYMMDD-NNN"
+  required_receipt_fields:
+    - update_id
+    - timestamp
+    - conversation
+    - agent
+    - application
+    - action
+    - source
+    - destination
+    - files
+    - commits
+    - summary
+    - important_information
+    - discoveries
+    - conflicts
+    - verification
+    - blockers
+    - follow_up
+  concurrency_rule: "Fetch latest blob SHA before update; re-fetch shared History.md before append."
+  completion_gate: "CHANGE -> PRESERVATION CHECK -> WRITE -> VERIFY -> HISTORY RECEIPT -> RECOVERY REGISTRATION -> HANDOFF"
