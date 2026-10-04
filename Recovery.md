@@ -252,3 +252,21 @@ The recovery system must let a future engineer or ChatGPT agent reconstruct and 
 For the shortest operational path, use [AGENT_RECOVERY_PLAYBOOK.md](docs/recovery/AGENT_RECOVERY_PLAYBOOK.md).
 
 For a reusable handoff, use [RECOVERY_HANDOFF_TEMPLATE.md](docs/recovery/handoffs/RECOVERY_HANDOFF_TEMPLATE.md).
+
+
+#### LOG-ID: REC-20261004-vault-recovery-001
+
+- **Timestamp:** 2026-10-04
+- **Agent:** ViewTube Recovery + Research + Documentation + Implementation Agent
+- **Round:** 1
+- **Category:** VAULT / PROJECTS / RECOVERY
+- **Action:** Recovered and preserved the current conversation's Vault/Projects adaptive Asset Workbench decisions, capability inventory, implementation claims, and deployment evidence.
+- **Source:** Current ChatGPT conversation.
+- **Evidence:** Canonical `viewtube-dev/viewtube/main` inspection of Recovery system, Vault/Asset Workbench master, rebuild dependency/resource plans, creator-workspace context, and Toolbox/SubToolbox prior art.
+- **Status:** IMPLEMENTED
+- **Artifact:** `docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md`
+- **External identifier:** Conversation references `cbrewsterthegreat/ViewTube` and branch `vault/adaptive-asset-workbench`; these are preserved as reported historical evidence and are not treated as canonical.
+- **Dependencies:** `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`, Projects/ContentBuild, Toolbox/SubToolbox, Recovery governance.
+- **Result:** Durable recovery handoff created. The detailed adaptive Workbench proposal is preserved without falsely upgrading external implementation claims to canonical status.
+- **Next action:** Round 2 reconciliation should compare the recovered proposal and any accessible external implementation against current `viewtube-dev/viewtube/main`.
+- **Verification:** Handoff committed to canonical repository at commit `c0e4696167ea1ca459a69812402736d8c3158411`; canonical Vault master and recovery governance were directly inspected.
