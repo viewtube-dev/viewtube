@@ -305,3 +305,40 @@ For a reusable handoff, use [RECOVERY_HANDOFF_TEMPLATE.md](docs/recovery/handoff
 - **Result:** Durable handoff committed to canonical repository. The conversation's claimed Quick Wins count is not promoted to canonical state because the canonical repository identifies Quick Wins 100 as a resource that must be recovered before recreation.
 - **Next action:** Recover/reconcile the authoritative Quick Wins 100 source in `viewtube-dev/viewtube`, then execute only genuine unfinished implementation slices through merge-to-main verification.
 - **Verification:** Handoff commit `2de62da15c8b261c1d2ed4f0fc3210bb7695f3a3`; canonical Recovery system and Quick Wins resource references were directly inspected.
+
+
+## 15. Mandatory full-conversation document preservation
+
+Every conversation agent must preserve major plans, audits, and substantive responses, not merely summarize them.
+
+A substantive assistant response is a document-equivalent artifact when it contains reusable ViewTube knowledge such as a plan, roadmap, audit, specification, research result, architecture, design decision, implementation proposal/detail, analysis, workflow, governance rule, decision record, failure analysis, or other durable project material.
+
+### Required behavior
+
+- Review the entire conversation before declaring recovery complete.
+- Existing canonical document: update it.
+- Related canonical document: consolidate into it while preserving provenance.
+- No suitable document: create one.
+- Conversation-specific/history-only material: create a durable recovery artifact or handoff.
+- Conflicting versions: preserve evidence and defer reconciliation; never silently discard material.
+- A one-line work-log entry is not sufficient preservation for a major artifact.
+- A summary is not a substitute for preserving substantive source content.
+
+Every Round 1 recovery must answer: Which major plans, audits, and substantive assistant responses from this conversation were converted into durable documents or incorporated into canonical documents?
+
+The agent must report documents created, documents updated, and any material intentionally not preserved with the reason.
+
+#### LOG-ID: REC-20261004-system-002
+
+- Timestamp: 2026-10-04
+- Agent: repository recovery coordinator
+- Round: 1
+- Category: GOVERNANCE / RECOVERY / DOCUMENTATION
+- Action: Strengthened the recovery contract so every conversation must preserve major plans, audits, and substantive assistant responses as actual durable documents or updates to canonical documents.
+- Source: User-directed recovery-system requirement.
+- Evidence: Updated canonical activation prompt and repository governance documents.
+- Status: VERIFIED IMPLEMENTATION
+- Artifact: docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md
+- Result: Full-conversation document preservation is now an explicit mandatory rule.
+- Next action: All future conversation agents use the activation prompt and updated playbook.
+- Verification: Activation prompt committed to main.
