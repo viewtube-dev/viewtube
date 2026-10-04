@@ -348,3 +348,25 @@ engineering_product_intelligence:
       - "Recover authoritative A/B/C/D source artifacts referenced by the historical matrix."
       - "Reconcile every task against canonical main before implementation."
       - "Do not promote this snapshot to QUICK_WINS_100_MASTER until source authority is established."
+
+
+  - id: "REC-20261004-ui-render-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Dashboard UI + Render Conversation Recovery"
+    path: "docs/recovery/handoffs/VIEWTUBE_DASHBOARD_UI_RENDER_CONVERSATION_RECOVERY_2026-10-04.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Canonical recovery protocol, Recovery.md, Recovery.yaml, recovery index, deployment/toolbox recovery source, document catalog, and current repository tree inspected; historical Dashboard implementation claims were not found on canonical main and remain recovered/report-only."
+    commit: "2ddae8cd9eb900be17ed235a429512d6c04b4ef9"
+    discoveries:
+      - "Dashboard/Widget modernization is a consolidation effort, not a greenfield rebuild."
+      - "Historical Dashboard implementation details from cbrewsterthegreat/ViewTube are not established on canonical viewtube-dev/viewtube/main."
+      - "viewtube.live is explicitly not repository-connected and must not be used as repository runtime verification."
+      - "Render should be the runtime verification surface only when the service is explicitly connected to the canonical repository/commit."
+      - "Substantive assistant responses are document-equivalent and must be preserved."
+    unresolved:
+      - "Reconcile historical Dashboard/UI implementation claims against canonical main."
+      - "Verify the current Render service and deployment connected to canonical main."
+      - "Reconcile historical external PR #39/#40 claims; they were not independently retrievable through the available GitHub search surface."
+      - "Map the recovered Dashboard/UI master-resource claims to existing canonical documentation before creating any competing authority."
