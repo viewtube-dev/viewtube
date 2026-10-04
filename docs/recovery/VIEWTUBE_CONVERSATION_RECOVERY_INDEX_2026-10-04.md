@@ -143,3 +143,18 @@ A separate ViewTube deployment-recovery investigation established:
 | Verification | Recovery system and Quick Wins 100 references inspected directly on canonical `main`; historical implementation claims remain unverified against canonical repository |
 | LOG-ID | `REC-20261004-quickwins-001` |
 | Follow-up | Recover authoritative Quick Wins 100 source; reconcile historical quick-win claims; execute only merged-and-verified canonical work |
+
+## Registered Round 1 contribution — Documentation / Brain / Account artifact inventory — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Recovery + Documentation Agent |
+| Round | 1 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_DOCUMENT_ARTIFACT_INVENTORY_2026-10-04.md` |
+| Source | Current ChatGPT conversation |
+| Status | VERIFIED |
+| Provenance | Conversation source → repository search/evidence → recovery artifact |
+| Commit | `d7c813b519951330953068a3a963ea9701411a03` |
+| Major recovered areas | Documentation governance, Conversation OS, recovery, UI/component system, Vault/Projects, Projects/Analytics tool grouping, AI Brain, Account/Login/Identity, Context, Quick Wins, deployment/beta, handoffs |
+| Important reconciliation | Existing Brain and Account resources already exist; proposed AI/identity/context artifact families must be reconciled before creating competing authorities |
+| Follow-up | Round 2 reconciliation across Brain, Account, Context, Creator Workspaces, Vault, Projects, Conversation OS, and Master System Rebuild resources |
