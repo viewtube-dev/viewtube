@@ -715,3 +715,56 @@ latest_conversation_update_widget_ui_governance:
   next_actions:
     - "Re-read the committed files from main."
     - "Build the Widget source map and audit matrix."
+
+
+latest_conversation_update_widget_source_audit:
+  update_id: "UPDATE-20261004-widget-source-audit-001"
+  exact_eastern_timestamp: "2026-10-04 22:12:28 EDT"
+  timezone: "America/New_York"
+  conversation_title: "UNKNOWN — title not exposed in current conversation context"
+  main_focus: "Source-level Widget UI reconciliation against canonical main and the preserved pre-migration snapshot."
+  status: "VERIFIED DISCOVERY / BLOCKED"
+  files_added: []
+  files_edited:
+    - "docs/Widgets.md"
+    - "docs/recovery/Handoff-Widget-UI-Governance-2026-10-04.md"
+    - "docs/recovery/Findings.md"
+    - "Recovery.md"
+    - "Recovery.yaml"
+    - "docs/recovery/History.md"
+  files_moved: []
+  files_merged: []
+  files_superseded: []
+  files_archived: []
+  commits_pending_history_receipt:
+    - "0b57ccb4b1b15f8c0275aea198a8375eab0455a9"
+    - "8c953511d22ebb0900c4a4a0de3ff9704b28f4e5"
+    - "8ce501a8bdaa7b7245c30c23efb779da82ff7297"
+    - "4773041e2211960fed8e3c09b5880396144ccae9"
+  discoveries:
+    - "The previously referenced Widget runtime paths are absent from canonical main."
+    - "The preserved recovery/pre-document-system-migration-2026-10-04 tree also lacks those implementation paths."
+    - "Direct fetches returned 404 and repository code search found no matches for the named Widget primitive/Reference Library symbols."
+    - "The Widget governance model is therefore preserved design/recovery knowledge, not verified current runtime implementation."
+  code_discoveries:
+    - "No canonical Widget primitive, Reference Library, primitive-extension, Dashboard-widget, or related runtime source surface was established in the inspected trees."
+  optimizations:
+    - "Do not reconstruct production Widget code from documentation alone."
+    - "Recover source authority before implementing fixes; this prevents creating a third parallel implementation."
+  recommended_improvements:
+    - "Identify the authoritative runtime source repository/branch and establish provenance against main and deployment history."
+    - "After recovery, build the source map from primitives/tokens/sizes/CSS through Reference Library and representative consumers."
+    - "Apply CANONICAL / DRIFT / DEFECT / INTENTIONAL classification only after source authority is established."
+  conflicts:
+    - "Widget governance documentation describes an existing production system, while the canonical main tree does not currently expose the previously referenced implementation paths."
+  verification:
+    - "Directly fetched all three previously referenced Widget source paths on main; each returned 404."
+    - "Inspected recursive trees for main and recovery/pre-document-system-migration-2026-10-04."
+    - "Ran repository code searches for WidgetPrimitives, WidgetPrimitiveExtensions, UIReferenceLibraryWidget, and related source-path references."
+  blockers:
+    - "Authoritative runtime Widget source is unresolved."
+    - "Representative Widget consumers cannot yet be audited or certified."
+  next_actions:
+    - "Recover/identify the authoritative runtime source."
+    - "Establish source provenance against canonical main and deployment history."
+    - "Build the Widget source map and then resume implementation-level reconciliation."
