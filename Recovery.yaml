@@ -451,3 +451,20 @@ document_system:
     - follow_up
   concurrency_rule: "Fetch latest blob SHA before update; re-fetch shared History.md before append."
   completion_gate: "CHANGE -> PRESERVATION CHECK -> WRITE -> VERIFY -> HISTORY RECEIPT -> RECOVERY REGISTRATION -> HANDOFF"
+
+
+document_health:
+  canonical_standard: "docs/Document-Health.md"
+  migration_plan: "docs/Organization.md"
+  pre_migration_snapshot_branch: "recovery/pre-document-system-migration-2026-10-04"
+  states:
+    - HEALTHY
+    - ATTENTION
+    - WARNING
+    - CONFLICT
+    - BLOCKED
+    - UNKNOWN
+    - VERIFIED
+  workflow: "SCAN -> CLASSIFY -> COLLECT EVIDENCE -> RECOMMEND -> REVIEW -> CHANGE -> VERIFY -> LOG"
+  destructive_cleanup_gate: "INVENTORY -> PRESERVATION -> RECONCILIATION -> LINK CHECK -> VERIFICATION -> HISTORY RECEIPT -> CLEANUP"
+  destructive_automation: false
