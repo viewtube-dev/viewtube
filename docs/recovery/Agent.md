@@ -261,3 +261,16 @@ The completion gate is now:
 **DOCUMENT CHANGE → SOURCE/PRESERVATION CHECK → WRITE → VERIFY → HISTORY RECEIPT → RECOVERY REGISTRATION → HANDOFF**
 
 If multiple agents are operating concurrently, re-fetch History.md before appending so the newest ledger state is preserved.
+
+
+## Mandatory document-health gate
+
+Before a major consolidation, migration, move, rename, merge, or cleanup operation:
+
+1. Read `docs/Document-Health.md`.
+2. Determine whether the affected source/destination is canonical, historical evidence, a plan, an audit, or an unresolved competing source.
+3. Run or record the applicable health checks: authority, preservation, metadata, links, provenance, and reconciliation.
+4. Do not perform destructive cleanup until the migration gates pass.
+5. If a category has not been checked, record it as `UNKNOWN` rather than assuming it is healthy.
+
+The branch `recovery/pre-document-system-migration-2026-10-04` is the current pre-migration safety snapshot for this migration and is not a competing source of truth.
