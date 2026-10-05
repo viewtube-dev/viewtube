@@ -172,7 +172,6 @@ agent_handoff_minimum:
   - "what_is_not"
   - "what_must_happen_next"
 
-
 conversation_recovery_artifacts:
   - id: "REC-20261004-vault-recovery-001"
     round: 1
@@ -202,7 +201,6 @@ conversation_recovery_artifacts:
       - "Reconcile historical cbrewsterthegreat/ViewTube quick-win claims against viewtube-dev/viewtube/main."
       - "Establish the canonical implementation count only from merged and verified main state."
 
-
   - id: "REC-20261004-creator-workspace-001"
     round: 1
     status: "VERIFIED"
@@ -222,7 +220,6 @@ conversation_recovery_artifacts:
       - "Reconcile Dashboard 66-vs-65 inventory against current implementation."
       - "Run Round 2 reconciliation across Brain, Account, Context, Conversation OS, Creator Workspaces, Vault, Projects, Analytics, Dashboard, Studio Hub, and Master Rebuild resources."
       - "Verify historical Toolbox/SubToolbox and external-repository implementation claims against current main."
-
 
   - id: "REC-20261004-convergence-recovery-001"
     round: 1
@@ -252,7 +249,6 @@ conversation_recovery_artifacts:
       - "Implement revision-safe mutation with matching production callers and tests."
       - "Verify tests/builds before the Asset/Vault vertical slice."
 
-
 # Full-conversation document preservation policy
 conversation_document_preservation:
   review_entire_conversation: true
@@ -274,7 +270,6 @@ conversation_document_preservation:
     - verification_status
     - unresolved_items
   activation_prompt: "docs/recovery/VIEWTUBE_CONVERSATION_AGENT_ACTIVATION_PROMPT.md"
-
 
 agent_update_report:
   required: true
@@ -301,7 +296,6 @@ agent_update_report:
   optimizations_are_first_class_artifacts: true
   preserve_in_recovery_md: true
   preserve_in_structured_state_when_appropriate: true
-
 
 engineering_product_intelligence:
   mandatory: true
@@ -359,7 +353,6 @@ engineering_product_intelligence:
       - "Context across Brain, Conversation OS, Creator Workspaces, Vault, Projects, and Account."
       - "Proposed artifact families must not create competing sources of truth."
 
-
   - id: "REC-20261004-account-system-conversation-001"
     round: 1
     status: "VERIFIED"
@@ -375,7 +368,6 @@ engineering_product_intelligence:
       - "Migrate VT Sync analytics to typed server-side analytics transport and verify parity."
       - "Remove browser-token fallback only after parity."
       - "Complete production Google OAuth/live verification when external access returns."
-
 
   - id: "REC-20261004-quickwins-matrix-recovery-002"
     round: 1
@@ -411,7 +403,6 @@ engineering_product_intelligence:
       - "Run the real production build against the exact current main SHA."
       - "Verify Vercel/Render deployment provenance against current main."
       - "Reconcile remaining historical branches and PRs against canonical main."
-
 
 knowledge_system:
   canonical_index: "docs/recovery/KNOWLEDGE_INDEX.md"
@@ -467,7 +458,6 @@ document_system:
   concurrency_rule: "Fetch latest blob SHA before update; re-fetch shared History.md before append."
   completion_gate: "CHANGE -> PRESERVATION CHECK -> WRITE -> VERIFY -> HISTORY RECEIPT -> RECOVERY REGISTRATION -> HANDOFF"
 
-
 document_health:
   canonical_standard: "docs/Document-Health.md"
   migration_plan: "docs/Organization.md"
@@ -484,13 +474,13 @@ document_health:
   destructive_cleanup_gate: "INVENTORY -> PRESERVATION -> RECONCILIATION -> LINK CHECK -> VERIFICATION -> HISTORY RECEIPT -> CLEANUP"
   destructive_automation: false
 
-
 sync_activation:
   canonical_prompt: "docs/recovery/Sync.md"
-  activation_phrase: "VIEWTUBE SYNC"
+  activation_phrase: "VIEWTUBE SYNC — GO TO GITHUB"
+  internal_shorthand: "VIEWTUBE SYNC"
   canonical_branch: "main"
-  behavior: "Read Sync.md and execute the full ViewTube documentation/recovery synchronization protocol."
-
+  canonical_repository_url: "https://github.com/viewtube-dev/viewtube"
+  behavior: "Go to the canonical GitHub repository, open docs/recovery/Sync.md, read the canonical system files it specifies, and execute the full ViewTube documentation/recovery synchronization protocol. A fresh conversation must not assume prior knowledge."
 
 latest_conversation_update:
   update_id: "UPDATE-20261004-analytics-001"
