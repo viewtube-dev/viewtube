@@ -15,7 +15,7 @@
 ## 1.1 Project Builder
 
 ### Description
-Create and configure a project that keeps its brief, goals, content, assets, tasks, and publishing work together.
+The Project Builder is a workspace for creating and configuring projects which keep their brief, goals, content, assets, tasks, and publishing work together.
 
 ### Inputs
 Project name, concept or brief, channel context, goals, target content, schedule, and available assets.
@@ -38,7 +38,7 @@ A structured project with its content plan, production state, tasks, assets, and
 ## 1.2 Project Board
 
 ### Description
-Manage projects through their production lifecycle and see what is planned, active, blocked, ready, or complete.
+The Project Board is a workspace for managing projects through their production lifecycle and seeing what is planned, active, blocked, ready, or complete.
 
 ### Inputs
 Projects, ContentBuilds, task state, readiness information, deadlines, blockers, and project status.
@@ -61,7 +61,7 @@ Updated project status, workflow state, priorities, and visible production progr
 ## 1.3 Project Calendar
 
 ### Description
-Plan project timing, deadlines, production milestones, and publishing activity in a calendar view.
+The Project Calendar is a calendar-based workspace for planning project timing, deadlines, production milestones, and publishing activity.
 
 ### Inputs
 Projects, tasks, milestones, planned publish dates, deadlines, and scheduling context.
@@ -83,7 +83,7 @@ Scheduled project activities, dates, milestones, and publishing timing.
 ## 1.4 Storyboard Studio
 
 ### Description
-Turn a project's creative direction into an organized visual plan for scenes, beats, shots, and production.
+The Storyboard Studio is a visual planning workspace for turning a project's creative direction into an organized plan for scenes, beats, shots, and production.
 
 ### Inputs
 Project brief, chosen angle, script, beats, visual direction, references, assets, and production requirements.
@@ -108,7 +108,7 @@ Storyboard structure, scene plans, visual direction, shot/scene information, and
 ## 2.1 AI Brain
 
 ### Description
-Provide channel-aware intelligence, conversation, reasoning, and orchestration across ViewTube's creator workflows.
+The AI Brain is ViewTube's channel-aware intelligence system for conversation, reasoning, knowledge, and orchestration across creator workflows.
 
 ### Inputs
 Creator questions, channel context, goals, content, analytics, projects, assets, tool state, and available evidence.
@@ -134,7 +134,7 @@ Answers, analysis, recommendations, decisions, generated content, tool actions, 
 ## 3.1 Sync Controller
 
 ### Description
-Control the synchronization of YouTube and ViewTube analytics data so downstream analytics surfaces use current, traceable datasets.
+The Sync Controller is the analytics synchronization system that keeps YouTube and ViewTube data current, traceable, and available to downstream analytics tools.
 
 ### Inputs
 Connected channel, synchronization scope, date range, refresh controls, and available YouTube data sources.
@@ -156,7 +156,7 @@ Synchronized analytics datasets, sync status, refresh information, and data avai
 ## 3.2 Intelligence Hub
 
 ### Description
-Turn synchronized channel data into higher-level performance intelligence, findings, opportunities, and decisions.
+The Intelligence Hub is a performance intelligence workspace that turns synchronized YouTube data into findings, opportunities, explanations, and creator decisions.
 
 ### Inputs
 Master analytics data, channel context, video performance, audience data, goals, comparisons, and selected reporting periods.
@@ -179,7 +179,7 @@ Performance findings, trends, opportunities, comparisons, explanations, and acti
 ## 3.3 Master Data Tables
 
 ### Description
-Provide the structured, queryable analytics datasets that form the canonical data foundation for ViewTube analytics.
+The Master Data Tables are the structured, queryable analytics datasets that form the canonical data foundation for ViewTube analytics.
 
 ### Inputs
 Synchronized YouTube data, channel/video records, audience metrics, traffic data, revenue data, retention data, and reporting periods.
@@ -201,7 +201,7 @@ Structured analytics tables and datasets used by Intelligence Hub, Data Visuals,
 ## 3.4 Data Visuals
 
 ### Description
-Turn ViewTube analytics data into charts, graphs, comparisons, and visual performance views.
+The Data Visuals is a collection of graphs, charts, and data visualizations that turn YouTube data into understandable visual communication.
 
 ### Inputs
 Master data tables, selected metrics, dimensions, date ranges, filters, comparisons, and channel/video context.
@@ -225,7 +225,7 @@ Charts, graphs, trend views, comparisons, performance visualizations, and visual
 ## 4.1 Vault
 
 ### Description
-Store, organize, inspect, version, and reuse creator assets across projects and ViewTube production workflows.
+The Vault is an organized system for storing, organizing, inspecting, versioning, and reusing creator assets across projects and ViewTube production workflows.
 
 ### Inputs
 Uploaded media, generated assets, project context, asset metadata, tags, collections, versions, and existing Vault content.
@@ -251,7 +251,7 @@ Organized creator assets, project-linked media, asset metadata, versions, collec
 ## 5.1 Editor
 
 ### Description
-Edit and compose video from media, scenes, audio, captions, overlays, and other production assets on a timeline.
+The Editor is a video production workspace for editing and composing media, scenes, audio, captions, overlays, and other production assets on a timeline.
 
 ### Inputs
 Video and image assets, scenes, clips, audio, voice, captions, transcripts, overlays, transitions, title cards, and project direction.
@@ -277,7 +277,7 @@ Edited video timelines, rendered video, captions/subtitles, edited scenes, and p
 ## 6.1 Resource Library
 
 ### Description
-Provide a searchable, organized collection of ViewTube documentation, guides, references, playbooks, and reusable creator resources.
+The Resource Library is an organized collection of documents which contain YouTube-related guides, references, playbooks, and other important creator knowledge and information to help YouTubers best manage their channels and operate ViewTube.
 
 ### Inputs
 Resource documents, categories, tags, search terms, related-resource context, tool references, and source metadata.
