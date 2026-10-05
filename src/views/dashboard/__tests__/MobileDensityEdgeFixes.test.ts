@@ -1,0 +1,173 @@
+import { readFileSync } from "node:fs"
+import { describe, expect, it } from "vitest"
+import { overviewSlices } from "../widgets/channelOverviewChartData"
+
+const mobile = readFileSync(new URL("../widgetMobileContract.css", import.meta.url), "utf8")
+const shellCss = readFileSync(new URL("../widgetShellOwnership.css", import.meta.url), "utf8")
+const scrollbar = readFileSync(new URL("../widgetScrollbar.css", import.meta.url), "utf8")
+const about = readFileSync(new URL("../widgets/VerificationExplainerWidget.css", import.meta.url), "utf8")
+const oracle = readFileSync(new URL("../widgets/DailyOracleWidget.css", import.meta.url), "utf8")
+const imageSource = readFileSync(new URL("../widgets/ImageGeneratorWidget.tsx", import.meta.url), "utf8")
+const uploaderSource = readFileSync(new URL("../widgets/VideoUploaderWidget.tsx", import.meta.url), "utf8")
+const managerSource = readFileSync(new URL("../widgets/VideoManagerWidget.tsx", import.meta.url), "utf8")
+const settingsCss = readFileSync(new URL("../widgets/SettingsWidget.css", import.meta.url), "utf8")
+const directorCss = readFileSync(new URL("../widgets/video-director/videoDirectorWidget.css", import.meta.url), "utf8")
+const shellSource = readFileSync(new URL("../WidgetShell.tsx", import.meta.url), "utf8")
+const referenceSource = readFileSync(new URL("../widgets/UIReferenceLibraryWidget.tsx", import.meta.url), "utf8")
+const assetCss = readFileSync(new URL("../widgets/VideoAssetEngineWidget.css", import.meta.url), "utf8")
+const assetSource = readFileSync(new URL("../widgets/VideoAssetEngineWidget.tsx", import.meta.url), "utf8")
+const legacy = readFileSync(new URL("../toolboxWidgetSystem.css", import.meta.url), "utf8")
+const flightCss = readFileSync(new URL("../widgets/FlightCheckWidget.css", import.meta.url), "utf8")
+const flightSource = readFileSync(new URL("../widgets/FlightCheckWidget.tsx", import.meta.url), "utf8")
+const primitiveSource = readFileSync(new URL("../WidgetPrimitives.tsx", import.meta.url), "utf8")
+const navigationCss = readFileSync(new URL("../../../components/navigation/adaptive-navigation.css", import.meta.url), "utf8")
+const canvasSource = readFileSync(new URL("../DashboardCanvas.tsx", import.meta.url), "utf8")
+
+describe("mobile widget density and edge contracts", () => {
+  it("does not reserve a desktop scroll-track lane around the mobile dashboard", () => {
+    expect(navigationCss).toContain('.vt-adaptive-shell[data-layout="mobile"] > .vt-adaptive-main')
+    expect(navigationCss).toContain("padding: 20px 8px 300px")
+    expect(navigationCss).toContain("padding-inline: 8px")
+    expect(navigationCss).toContain("scrollbar-gutter: auto")
+  })
+
+  it("does not reserve an invisible mobile scroll gutter and does not re-clamp cells in legacy CSS", () => {
+    expect(scrollbar).toContain("@media (pointer: coarse), (max-width: 767px)")
+    expect(scrollbar).toContain("padding-inline: 0")
+    expect(scrollbar).not.toContain("width: calc(100% + (2 * var(--widget-shadow-clearance)))")
+    expect(mobile).toContain("scrollbar-gutter: auto")
+    expect(mobile).toContain("--vt-mobile-widget-gutter: 4px")
+    expect(canvasSource).toContain("dashboard-canvas-inner")
+    expect(mobile).toContain("--vt-mobile-canvas-reclaim-right")
+    expect(mobile).toContain("width: calc(100% + var(--vt-mobile-canvas-reclaim-right))")
+    expect(mobile).toContain("margin-inline-end: calc(-1 * var(--vt-mobile-canvas-reclaim-right))")
+    expect(mobile).toContain("--vt-widget-edge-safe: 0px")
+    expect(mobile).toContain(".dashboard-barrier .vt-widget-body")
+    expect(mobile).toContain("--vt-widget-edge-safe: 0px !important")
+    expect(legacy).not.toContain("max-width: calc(100vw - 32px)")
+    expect(legacy).not.toContain("margin-right: 8px")
+  })
+
+  it("removes legacy horizontal clipping that chops full-bleed bands, glows and shadows", () => {
+    expect(legacy).not.toContain("overflow-x: hidden !important")
+    expect(mobile).toContain("--vt-widget-edge-safe")
+    expect(shellCss).toContain(".vt-widget-shadow-safe")
+    expect(shellCss).toContain(".vt-widget-paint-clip {\n    overflow:visible;")
+  })
+
+  it("keeps shell interior geometry out of the legacy monolith", () => {
+    expect(legacy).not.toContain("margin-top: -3px")
+    expect(legacy).not.toContain("padding: var(--vt-widget-body-inset)")
+    expect(legacy).not.toContain("display: flex;\n  flex-direction: column;\n  flex: 1;\n  min-height: 0;\n  overflow: visible;\n}\n\n/* Modules that own their section spacing")
+    expect(legacy).not.toContain(".vt-widget {\n  margin-bottom: 4px")
+    expect(legacy).not.toContain(".flex-1.flex.flex-col.gap-2.overflow-y-auto")
+    expect(legacy).not.toContain("textarea.vt-textarea {\n  margin: 4px")
+    expect(shellCss).toContain("display:grid")
+    expect(shellCss).toContain("padding:0")
+    expect(shellCss).toContain("grid-column:full-start / full-end")
+  })
+
+  it("keeps scrolling geometry on canonical named tracks without negative-margin width compensation", () => {
+    expect(scrollbar).not.toContain("margin-inline-end: calc(-1 * var(--widget-content-inset))")
+    expect(scrollbar).not.toContain("margin-inline-start: calc(-1 * var(--widget-content-inset))")
+    expect(scrollbar).not.toContain("margin-inline: calc(-1 * var(--vt-widget-body-inset")
+    expect(scrollbar).toContain(".widget-scroll-area.is-full")
+    expect(scrollbar).toContain("grid-column: full-start / full-end")
+    expect(scrollbar).toContain(".widget-scroll-area.is-full .widget-scroll-viewport")
+    expect(scrollbar).toContain("padding-inline-end: 0")
+    expect(scrollbar).toContain(".widget-scroll-area.is-full .widget-scroll-content")
+    expect(scrollbar).toContain("[full-start]")
+    expect(scrollbar).toContain("[inset-start]")
+    expect(scrollbar).toContain("--widget-scroll-safe-end")
+  })
+
+  it("uses one canonical full-bleed owner for About and Oracle bands", () => {
+    expect(about).not.toContain(".about-vt__intro,\n.about-vt__handoff")
+    expect(oracle).not.toContain(".daily-oracle-v2__source-strip,\n.daily-oracle-v2__footer")
+    expect(oracle).not.toContain("text-overflow: ellipsis")
+    expect(scrollbar).toContain(".vt-widget-track-stack")
+    expect(scrollbar).toContain(".vt-widget-track-stack > :is(")
+  })
+
+  it("lets header toggle labels wrap instead of collide", () => {
+    expect(imageSource).toContain("image-generator-template-toggle")
+    expect(mobile).toContain(".widget-header-toggle button")
+    expect(mobile).toContain("white-space: normal")
+    expect(mobile).toContain("text-overflow: clip")
+    expect(mobile).toContain("flex: 0 0 auto !important")
+    expect(mobile).toContain("max-width: 46%")
+    expect(legacy).toContain("flex: 0 0 auto !important")
+    expect(legacy).not.toContain("flex: 1 1 132px !important")
+    expect(legacy).not.toContain('[data-widget-id="comment-replier"] .vt-widget-header .title')
+    expect(legacy).toContain("line-height: 1;")
+  })
+
+  it("keeps the mobile control deck visible while a widget is collapsed", () => {
+    expect(mobile).toContain('.dashboard-widget-slot.is-collapsed:has(.vt-widget.mobile-controls-open)')
+    expect(shellSource).toContain("mobileControlsOpen")
+  })
+
+  it("provides one canonical shell-owned full-bleed utility for bands and horizontal rails", () => {
+    expect(shellCss).toContain(".vt-full-bleed")
+    expect(shellCss).toContain(".vt-widget-zone-full")
+    expect(shellCss).toContain("grid-column:full-start / full-end")
+    expect(mobile).not.toContain(".vt-widget-full-bleed")
+    expect(assetCss).toContain("vt-asset-engine-slot-panel")
+    expect(assetCss).toContain("overflow:visible")
+    expect(assetCss).not.toContain("width:calc(100% + (2 * var(--widget-content-inset)))")
+    expect(assetSource).toContain("vt-widget-zone-full")
+    expect(assetCss).toContain("grid-template-columns:repeat(4,minmax(0,1fr))")
+  })
+
+  it("keeps Publishing Command on canonical full-width tracks and compact task rows", () => {
+    expect(flightCss).toContain(".vt-publishing-command__manual-list")
+    expect(flightCss).toContain("min-height:28px")
+    expect(flightCss).not.toContain("width:calc(100% + (2 * var(--widget-content-inset)))")
+    expect(flightCss).not.toContain("margin-inline:calc(-1 * var(--widget-content-inset))")
+    expect(flightSource).toContain("vt-widget-track-stack vt-widget-zone-full")
+    expect(flightSource).toContain("WidgetCheckbox")
+    expect(flightSource).toContain("ADD TASK")
+  })
+
+  it("uses canonical text fields and sized left-split publishing actions", () => {
+    expect(uploaderSource).toContain("WidgetTextInput")
+    expect(uploaderSource).toContain("WidgetTextArea")
+    expect(uploaderSource).toContain("WidgetLeftSplitButton")
+    expect(uploaderSource).toContain('height={38}')
+    expect(managerSource).toContain("WidgetLeftSplitButton")
+    expect(managerSource).toContain('className="video-manager-page-button"')
+    expect(settingsCss).toContain("grid-template-columns:repeat(2,minmax(0,1fr))")
+  })
+
+  it("keeps Settings dense on compact widths", () => {
+    expect(settingsCss).toContain(".settings-switchboard-control-grid")
+    expect(settingsCss).toContain("grid-template-columns:repeat(2,minmax(0,1fr))")
+  })
+
+  it("separates Video Director rows vertically on narrow containers", () => {
+    expect(directorCss).toContain("row-gap:6px")
+    expect(directorCss).toContain("align-content:start")
+  })
+
+  it("documents canonical video-select and header-action primitives in the UI reference library", () => {
+    expect(referenceSource).toContain("WidgetVideoSelect")
+    expect(referenceSource).toContain("WidgetHeaderActionButton")
+    expect(referenceSource).toContain("Canonical header action for one destination")
+    expect(primitiveSource).toContain("export const WidgetHeaderActionButton")
+  })
+})
+
+describe("Channel Overview synced fallback", () => {
+  it("uses synced aggregate audience/device rows when the exact window bucket is empty", () => {
+    const base:any = {
+      devices:[{device:"MOBILE",views:70},{device:"TV",views:30}],
+      subscriptionStatuses:[{status:"SUBSCRIBED",views:60},{status:"UNSUBSCRIBED",views:40}],
+      trafficByDay:[],
+      datasetsByWindow:{ "28d": { device_type:[], subscription_status:[] } },
+      storageMetadata:{},
+      capturedAt:new Date().toISOString(),
+    }
+    expect(overviewSlices(base,"audience",28)).toHaveLength(2)
+    expect(overviewSlices(base,"devices",28)).toHaveLength(2)
+  })
+})

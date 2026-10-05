@@ -1,0 +1,484 @@
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
+import { describe, expect, it } from "vitest"
+
+const productionSubtoolboxConsumers = [
+ "src/components/PreLaunchPriming.tsx",
+ "src/components/ProjectStudio.tsx",
+ "src/views/ActionableTactics.tsx",
+ "src/views/MediaAnalyzer.tsx",
+ "src/views/VideoManager.tsx",
+ "src/views/VideoPublisher.tsx",
+ "src/views/StoryboardStudio.tsx",
+ "src/views/supertools/SuperToolPrototypeWorkspace.tsx",
+]
+
+const source = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8")
+
+describe("subtoolbox design governance", () => {
+ it.each(productionSubtoolboxConsumers)("keeps %s on the canonical nested shell", (path) => {
+  const contents = source(path)
+
+  expect(contents).not.toMatch(/<Toolbox\s[^>]*variant=["']sub["']/s)
+  expect(contents).not.toContain("AccordionContainer")
+ })
+
+ it("does not replace palette shadows with inherited black on mobile", () => {
+  const responsiveCss = source("src/styles/perf.css")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+
+  expect(responsiveCss).not.toMatch(/\.vt-toolbox\[data-vt-toolbox\][^{]*\{[^}]*currentColor/s)
+  expect(responsiveCss).not.toContain('--vt-subtoolbox-shadow-offset')
+  expect(systemCss).toMatch(/--vt-subtoolbox-shadow-offset:\s*6px/)
+  expect(systemCss).not.toContain("--vt-subtoolbox-header-height:44px")
+  expect(systemCss).not.toContain("--vt-subtoolbox-shadow-offset:4px")
+  expect(systemCss).toContain('[data-vt-toolbox-level="sub"]')
+ })
+
+ it("locks the mobile shell density and restored header anatomy", () => {
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+
+  expect(toolboxCss).toContain("--vt-toolbox-header-height: 56px")
+  expect(toolboxCss).toContain("--vt-subtoolbox-header-height: 44px")
+  expect(toolboxCss).toContain("--vt-toolbox-shadow-offset: 6px")
+  expect(toolboxCss).toContain("--vt-subtoolbox-shadow-offset: 4px")
+  expect(toolboxCss).toContain("--vt-toolbox-radius: 14px")
+  expect(toolboxCss).toContain("--vt-subtoolbox-radius: 10px")
+  expect(systemCss).toContain(".vt-toolbox-header-toggle")
+  expect(systemCss).toContain(".vt-subtoolbox-file-target.vt-upload-tight-reveal")
+  expect(systemCss).toContain("box-shadow: none !important")
+  expect(primitives).toContain("export const ToolboxHeaderToggle")
+  expect(catalog).toContain('"Toolbox Header Toggle"')
+  expect(catalog).toContain('"SubToolbox Header Toggle"')
+ })
+
+ it("uses V38 #95 as the canonical Toolbox header toggle primitive", () => {
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+
+  expect(primitives).toContain('data-vt-header-toggle-primitive="v38-95"')
+  expect(primitives).not.toContain("--vt-header-toggle-count")
+  expect(systemCss).toContain("V38 #95 HEADER SEGMENT AUTHORITY")
+  expect(systemCss).toContain("display: inline-flex")
+  expect(systemCss).toContain("background: color-mix(in srgb, var(--pair-a")
+  expect(systemCss).toContain(".vt-toolbox-header-toggle button.is-active")
+  expect(systemCss).toContain("background: var(--pair-a")
+  expect(systemCss).not.toContain("grid-template-columns: repeat(var(--vt-header-toggle-count")
+  expect(systemCss).not.toContain("box-shadow: 3px 3px 0 0 #000")
+  expect(toolboxCss).not.toContain("min-width: 148px")
+  expect(toolboxCss).toContain("width: max-content")
+ })
+
+ it("keeps header anatomy and primary actions on canonical primitives", () => {
+  const toolbox = source("src/components/Toolbox.tsx")
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+  const manager = source("src/views/VideoManager.tsx")
+  const commentResponder = source("src/components/CommentResponder.tsx")
+  const endScreen = source("src/components/EndScreenTool.tsx")
+
+  for (const primitive of [
+    "ToolboxHeaderIconRail",
+    "ToolboxHeaderTitle",
+    "ToolboxHeaderHelpButton",
+    "ToolboxHeaderCollapseButton",
+    "ToolboxHeaderToggle",
+  ]) {
+    expect(primitives).toContain(`export const ${primitive}`)
+    expect(toolbox).toContain(primitive)
+  }
+
+  for (const family of [
+    "Toolbox Header Icon Rail",
+    "SubToolbox Header Icon Rail",
+    "Toolbox Header Title",
+    "SubToolbox Header Title",
+    "Toolbox Header Help",
+    "SubToolbox Header Help",
+    "Toolbox Header Collapse",
+    "SubToolbox Header Collapse",
+    "Toolbox Header Toggle",
+    "SubToolbox Header Toggle",
+  ]) expect(catalog).toContain(`"${family}"`)
+
+  expect(toolbox).toContain('data-vt-split-left={isSubtoolboxPeer && showIconSection ? "true" : undefined}')
+  expect(toolbox).toContain('showIconSection={props.showIconSection ?? true}')
+  expect(manager).toContain('<SubToolboxGridActionButton')
+  expect(commentResponder).toContain('label="Connect YouTube Channel"')
+  expect(endScreen).toContain('label={genLoading ? "Creating..." : "Generate Template"}')
+ })
+
+ it("keeps first-layer interior strokes uniform with the upload-frame exception", () => {
+  const css = source("src/styles/subtoolbox-system.css")
+  const toolboxCss = source("src/styles/toolbox-system.css")
+
+  expect(css).toContain("First visual layer inside a SubToolbox shares one 3px interior stroke")
+  expect(css).toContain(":not(.vt-subtoolbox-file-target)")
+  expect(css).toContain("--vt-component-stroke: var(--vt-subtoolbox-inner-stroke,3px)!important")
+  expect(css).toContain(".vt-subtoolbox-file-target.vt-upload-tight-reveal")
+  expect(css).toContain("box-shadow: none !important")
+  expect(toolboxCss).toContain(".vt-subtoolbox-inset")
+  expect(toolboxCss).toContain("padding: 4px 4px 0 !important")
+ })
+
+ it("keeps Thumbnail Studio primitive-native in the mobile density pass", () => {
+  const thumbnail = source("src/views/ThumbnailStudio.tsx")
+
+  expect(thumbnail).not.toContain("<button")
+  expect(thumbnail).not.toContain("<select")
+  expect(thumbnail).not.toContain("StandardUploadBox")
+  expect(thumbnail).toContain("SubToolboxFileTarget")
+  expect(thumbnail).toContain("SubToolboxSelectableTag")
+  expect(thumbnail).toContain("SubToolboxSelectableListRow")
+  expect(thumbnail).toContain('label={analyzeLoading ? "Scanning..." : "Scan Potential"}')
+ })
+
+ it("keeps the compact inner-control hierarchy below the subtoolbox shell", () => {
+  const tokenSource = source("src/components/subtoolbox/tokens.ts")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+
+  expect(tokenSource).toContain('radius: 8')
+  expect(tokenSource).toContain('radius: 12')
+  expect(systemCss).toMatch(/--vt-subtoolbox-inner-radius:\s*8px/)
+  expect(systemCss).toContain('var(--vt-subtoolbox-shadow')
+ })
+
+ it("keeps the Mini Toolbox Lab divider and collapse timing contract", () => {
+  const toolboxSource = source("src/components/Toolbox.tsx")
+  const tokenSource = source("src/components/subtoolbox/tokens.ts")
+
+  expect(tokenSource).toContain('duration-[600ms] ease-out motion-reduce:transition-none')
+  expect(toolboxSource).toContain('borderBottom: `var(--vt-toolbox-stroke, ${stroke}px) solid black`')
+  expect(toolboxSource).toContain('borderBottom: `var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_INNER_STROKE}px) solid black`')
+  expect(toolboxSource).toContain('SHELL_COLLAPSE_DURATION_MS = SUBTOOLBOX_TOKENS.motion.collapseMs')
+  expect(toolboxSource).toContain('shouldRenderContent = !unmountWhenClosed || open || keepClosingContentMounted')
+  expect(toolboxSource).toContain('shouldRenderContent = !unmountOnClose || open || keepClosingContentMounted')
+ })
+
+ it("keeps one token authority and the analytics recipe on the canonical seam", () => {
+  const toolboxSystem = source("src/components/ToolboxUISystem.tsx")
+  const chartModule = source("src/components/SubToolboxChartModule.tsx")
+
+  expect(toolboxSystem).not.toMatch(/export const CONTROL_SHELL\s*=\s*\{/)
+  expect(toolboxSystem).toContain('export { CONTROL_SHELL } from "./subtoolbox/tokens"')
+  expect(chartModule).toContain('data-vt-subtoolbox-module="true"')
+  expect(chartModule).toContain('borderBottom: `var(--vt-subtoolbox-stroke')
+  expect(chartModule).not.toContain('const headerBorderClass = collapsible && !internalOpen')
+ })
+
+ it("certifies the video-tool migration wave on canonical interior primitives", () => {
+  const manager = source("src/views/VideoManager.tsx")
+  const publisher = source("src/views/VideoPublisher.tsx")
+  const registry = source("src/components/subtoolbox/registry.ts")
+
+  for (const contents of [manager, publisher]) {
+   expect(contents).not.toContain("StandardInput")
+   expect(contents).not.toContain("StandardTextArea")
+   expect(contents).not.toContain("SubToolboxInnerActionButton")
+   expect(contents).toContain("SubToolboxStack")
+  }
+
+  expect(manager).toContain("SubToolboxVideoSelector")
+  expect(manager).toContain("SubToolboxLabeledInput")
+  expect(manager).toContain("SubToolboxLabeledTextArea")
+  expect(manager).toContain("MiniSubToolbox")
+  expect(manager).toContain("SubToolboxTagEditor")
+  expect(manager).not.toContain("SubToolboxMetric")
+  expect(manager).not.toContain('title="Choose Video"')
+  expect(manager).not.toContain('title="Save Video Changes"')
+  expect(manager).toContain('label={!connected ? connectionLabel')
+  expect(manager).not.toContain("chooseVideoPalette")
+  expect(manager).not.toContain("accentColor={card.accentColor}")
+  expect(publisher).toContain("SubToolboxOutputCard")
+  expect(publisher).toContain("SubToolboxFileTarget")
+  expect(registry).toContain('{ id: 2, status: "complete", surfaces: ["VideoManager", "VideoPublisher"] }')
+ })
+
+ it("locks Video Manager spacing and level hierarchy to the new mobile authority", () => {
+  const manager = source("src/views/VideoManager.tsx")
+  const toolbox = source("src/components/Toolbox.tsx")
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const primitiveCss = source("src/styles/subtoolbox-system.css")
+  const service = source("src/services/simpleYouTubeApi.ts")
+
+  expect(toolboxCss).toContain("--vt-toolbox-shell-gutter:6px")
+  expect(toolboxCss).toContain("--vt-toolbox-shell-gutter:5px")
+  expect(toolboxCss).toContain('[data-vt-toolbox-level="sub"] .vt-subtoolbox-inset')
+  expect(toolboxCss).toContain("padding:0!important")
+  expect(toolbox).toContain("export const MiniSubToolbox")
+  expect(toolbox).toContain('data-vt-toolbox-level="mini"')
+  expect(primitiveCss).toContain(".vt-subtoolbox-labeled-field")
+  expect(primitiveCss).toContain(".vt-subtoolbox-video-selector")
+  expect(primitiveCss).toContain("text-overflow:clip")
+  expect(primitiveCss).toContain(".vm-thumbnail-canvas")
+  expect(manager).toContain('level="l0"')
+  expect(manager).toContain('overlayLabel="TITLE"')
+  expect(manager).toContain('overlayLabel="DESCRIPTION"')
+  expect(manager).toContain('navigate("/thumbnail-studio"')
+  expect(service).toContain("duration?: string")
+ })
+
+ it("locks paint-safe shell edges and mobile keyboard-safe editing", () => {
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const keyboardHook = source("src/hooks/useRestoreKeyboardPosition.ts")
+
+  expect(toolboxCss).toContain("--vt-toolbox-header-edge-clearance:8px")
+  expect(toolboxCss).toContain("--vt-toolbox-header-edge-clearance:7px")
+  expect(toolboxCss).toContain("padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter)!important")
+  expect(toolboxCss).toContain("--vt-keyboard-occlusion:0px")
+  expect(systemCss).toContain("Mobile editable-control contract — 2026-09-25")
+  expect(systemCss).toContain("font-size:16px!important")
+  expect(systemCss).toContain("scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px)")
+
+  expect(keyboardHook).toContain('window.visualViewport?.addEventListener("resize", onVisualViewportChange)')
+  expect(keyboardHook).toContain('window.visualViewport?.addEventListener("scroll", onVisualViewportChange)')
+  expect(keyboardHook).toContain('document.documentElement.style.setProperty("--vt-keyboard-occlusion"')
+  expect(keyboardHook).toContain('document.documentElement.dataset.vtMobileEditing = "true"')
+  expect(keyboardHook).toContain('main.scrollBy({ top: delta, behavior: "auto" })')
+ })
+
+ it("keeps Toolbox header controls isolated, square, and mobile-safe", () => {
+  const toolbox = source("src/components/Toolbox.tsx")
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const library = source("src/components/ToolboxUIReferenceLibrary.tsx")
+  const manager = source("src/views/VideoManager.tsx")
+
+  expect(toolbox).toContain("vt-toolbox-header-actions")
+  expect(toolbox).toContain("vt-toolbox-header-extras")
+  expect(toolbox).toContain("<ChevronDown")
+  expect(toolbox).not.toContain("AnimatedToggleIcon open={open}")
+
+  expect(toolboxCss).not.toContain('> header > div:last-child > *')
+  expect(toolboxCss).not.toContain('> header > div:last-child span')
+  expect(toolboxCss).not.toContain('> header > div:last-child svg')
+
+  expect(toolboxCss).toContain("CANONICAL HEADER ALLOCATION CONTRACT")
+  expect(toolboxCss).toContain(".vt-toolbox-header-actions")
+  expect(toolboxCss).toContain(".vt-toolbox-header-extras")
+  expect(toolboxCss).toContain(".vt-toolbox-header-secondary-actions")
+  expect(systemCss).toContain("CANONICAL HEADER CONTROL PRIMITIVES — 2026-09-26")
+  expect(systemCss).not.toContain(".vt-toolbox-header-actions{")
+  expect(systemCss).not.toContain(".vt-toolbox-header-icon-rail.is-toolbox { width:56px; }")
+  expect(systemCss).toContain(".vt-toolbox-header-collapse.is-toolbox")
+  expect(systemCss).toContain(".vt-toolbox-header-palette-button")
+  expect(systemCss).toContain(".vt-toolbox-header-collapse svg.is-open")
+
+  expect(library).toContain("SubToolboxIconButton")
+  expect(library).toContain("vt-toolbox-header-palette-button")
+  expect(library).not.toContain("Studio Hub Component Library — Hardcoded")
+  expect(manager).toContain("RefreshCw")
+ })
+
+ it("keeps production fields and the imported component library on one styling authority", () => {
+  const toolboxSource = source("src/components/Toolbox.tsx")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const migrationCatalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+  const migrationCss = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css")
+
+  expect(toolboxSource).toContain('["--pair-a" as any]: headerHex')
+  expect(toolboxSource).toContain('["--pair-b" as any]: iconBg')
+
+  expect(systemCss).toContain("CANONICAL TEXT FIELD STATE CONTRACT")
+  expect(systemCss).toContain("color-mix(in srgb,var(--field-accent) 50%,white)")
+  expect(systemCss).toContain("caret-color:var(--field-accent)!important")
+  expect(systemCss).toContain("inset 0 0 0 var(--field-stroke) var(--field-accent)")
+  expect(systemCss).toContain("color-mix(in srgb,var(--field-glow) 78%,transparent)")
+
+  expect(migrationCatalog).toContain('from "../subtoolbox/SubToolboxPrimitives"')
+  expect(migrationCatalog).toContain('from "../subtoolbox/SubToolboxSplitPrimitives"')
+  expect(migrationCatalog).toContain('import "./studio-hub-primitive-migration-catalog.css"')
+  expect(migrationCatalog).not.toContain('import "./studio-hub-complete-primitive-catalog.css"')
+  expect(migrationCatalog).toContain('className="vt-primitive-migration-catalog"')
+  expect(migrationCatalog).toContain('import { MiniSubToolbox, SubToolbox } from "../Toolbox"')
+  expect(migrationCatalog).toContain('import type { ToolboxControlLevel } from "../subtoolbox/tokens"')
+  expect(migrationCatalog).not.toContain('from "./StudioHubCompletePrimitiveCatalog"')
+  expect(migrationCatalog).toContain('paletteIndex={paletteIndex + index}')
+  expect(migrationCatalog).not.toContain("VT_SPECTRUM_PALETTE_06")
+  expect(migrationCatalog).not.toContain("const pair =")
+  expect(migrationCatalog).not.toContain('"--pair-a"')
+  expect(migrationCatalog).not.toContain('"--pair-b"')
+  expect(migrationCss).not.toContain(".vt-subtoolbox-input")
+  expect(migrationCss).not.toContain(".vt-subtoolbox-textarea")
+  expect(migrationCss).not.toContain("[data-vt-studio-control]")
+ })
+
+ it("keeps component colors owned by the nearest SubToolbox pair", () => {
+  const split = source("src/components/subtoolbox/SubToolboxSplitPrimitives.tsx")
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+  const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
+  const toolbox = source("src/components/Toolbox.tsx")
+  const manager = source("src/views/VideoManager.tsx")
+  const publisher = source("src/views/VideoPublisher.tsx")
+  const community = source("src/components/CommunityPostGenerator.tsx")
+
+  for (const forbidden of ["railColor?:", "labelColor?:", "accentColor?:"]) {
+   expect(split).not.toContain(forbidden)
+  }
+  expect(primitives).not.toContain("toneColor?:")
+  expect(primitives).not.toContain("accentColor?:")
+  expect(studioControls).not.toContain("railColor?:")
+  expect(toolbox).not.toContain("surfaceColor?: string;")
+  expect(toolbox).not.toContain("controlColor?: string;")
+  expect(manager).not.toContain("surfaceColor=")
+  expect(manager).not.toContain("controlColor=")
+  expect(publisher).not.toContain("accentColor=")
+  expect(publisher).not.toContain("surfaceColor=")
+  expect(community).not.toContain("railColor=")
+  expect(community).not.toContain("--vt-studio-control-accent")
+  expect(manager).toContain('className="vm-update-video-action"')
+  expect(publisher).toContain('title="Generate Assets"')
+  expect(publisher).toContain('title="Generated Assets"')
+ })
+
+ it("keeps legacy production dropdowns on pair A / pair B even through portals", () => {
+  const toolbox = source("src/components/Toolbox.tsx")
+  const css = source("src/styles/subtoolbox-system.css")
+
+  expect(toolbox).toContain("const resolvedSurface = `var(--pair-a")
+  expect(toolbox).toContain("const resolvedSecondary = `var(--pair-b")
+  expect(toolbox).toContain("const resolvedTitle = `var(--pair-a")
+  expect(toolbox).toContain("const resolvedBody = `var(--pair-b")
+  expect(toolbox).toContain('data-vt-subtoolbox-dropdown-portal="true"')
+  expect(toolbox).toContain('getPropertyValue("--pair-a")')
+  expect(toolbox).toContain('getPropertyValue("--pair-b")')
+  expect(css).toContain('[data-vt-subtoolbox-dropdown-portal="true"]')
+ })
+
+ it("bridges the owning SubToolbox pair into detached dropdown portals", () => {
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+  const css = source("src/styles/subtoolbox-system.css")
+
+  expect(primitives).toContain('getPropertyValue("--pair-a")')
+  expect(primitives).toContain('getPropertyValue("--pair-b")')
+  expect(primitives).toContain('["--pair-a" as string]: inheritedPair.pairA')
+  expect(primitives).toContain('["--pair-b" as string]: inheritedPair.pairB')
+  expect(css).toContain(".vt-subtoolbox-top-title-dropdown-panel{")
+  expect(css).toContain("--vt-top-title-title:var(--pair-a")
+  expect(css).toContain("--vt-top-title-body:var(--pair-b")
+ })
+
+ it("keeps legacy Studio field wrappers on the same inherited pair and field-state contract", () => {
+  const studioCss = source("src/styles/studio-control-system.css")
+
+  expect(studioCss).toContain("--vt-studio-control-accent: var(--pair-a")
+  expect(studioCss).toContain("--vt-studio-control-secondary: var(--pair-b")
+  expect(studioCss).toContain("color-mix(in srgb, var(--vt-studio-control-accent) 50%, #fff)")
+  expect(studioCss).toContain("inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent)")
+  expect(studioCss).toContain("color-mix(in srgb, var(--vt-studio-control-secondary) 78%, transparent)")
+ })
+
+ it("derives every SubToolbox component pair from the canonical 12-color title/icon pattern", () => {
+  const palette = source("src/styles/toolboxPalette.ts")
+  const toolboxSource = source("src/components/Toolbox.tsx")
+  const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+
+  expect(palette).toContain("export const VT_SPECTRUM_PALETTE_06 = [")
+  expect(palette).toContain("header: getPaletteColor(index)")
+  expect(palette).toContain("icon: getPaletteColor(index + 4)")
+  expect(toolboxSource).toContain('["--pair-a" as any]: headerHex')
+  expect(toolboxSource).toContain('["--pair-b" as any]: iconBg')
+  expect(splitCss).toContain("--vt-split-rail: var(--pair-b")
+  expect(splitCss).toContain("--vt-split-label: var(--pair-a")
+  expect(splitCss).toContain("--vt-kpi-accent: var(--pair-a")
+  expect(splitCss).toContain("--vt-kpi-rail: var(--pair-b")
+ })
+
+ it("protects mobile toolbox titles and keeps stacked publisher modules intrinsic", () => {
+  const toolbox = source("src/components/Toolbox.tsx")
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const publisher = source("src/views/VideoPublisher.tsx")
+  const perfCss = source("src/styles/perf.css")
+
+  expect(toolbox).toContain("vt-toolbox-header-title-slot")
+  expect(toolboxCss).toContain("--vt-toolbox-title-protected-width")
+  expect(toolboxCss).toContain("clamp(148px, 42vw, 168px)")
+  expect(toolboxCss).toContain(".vt-toolbox-header-title-slot")
+  expect(toolboxCss).toContain("CANONICAL HEADER ALLOCATION CONTRACT")
+  expect(toolboxCss).toContain("overflow-wrap: normal")
+  expect(toolboxCss).toContain("word-break: normal")
+  expect(toolboxCss).not.toContain("overflow-wrap: anywhere")
+  expect(systemCss).toContain("overflow-wrap:normal")
+  expect(systemCss).toContain("word-break:normal")
+  expect(systemCss).not.toContain("overflow-wrap:anywhere")
+  expect(toolboxCss).toContain(".vt-toolbox-header-secondary-actions")
+  expect(systemCss).toContain("min-width:44px!important")
+  expect(perfCss).not.toContain('[data-vt-toolbox-level="main"] > header')
+
+  expect(publisher).toContain("ToolboxHeaderToggle")
+  expect(publisher).not.toContain('w-[210px]')
+  expect(publisher).not.toContain('shellClassName="h-full"')
+  expect(publisher).not.toContain('contentClassName="h-full"')
+  expect(publisher).not.toContain("minHeight={220}")
+  expect(publisher).not.toContain('headerColor="bg-[#CCFF00]"')
+  expect(publisher).not.toContain('iconBoxColor="bg-[#00FF99]"')
+  expect(toolboxCss).toContain("min-height: 0 !important")
+  expect(systemCss).toContain("--vt-upload-target-min-height")
+ })
+
+
+ it("prevents page-local header width locks and mobile subtoolbox stretching", () => {
+  const headerActionConsumers = [
+    "src/components/ToolHeader.tsx",
+    "src/components/ToolboxUIReferenceLibrary.tsx",
+    "src/components/ProjectStudio.tsx",
+    "src/components/projects/ProjectBuilderModule.tsx",
+    "src/components/projects/ProjectsToolboxModule.tsx",
+    "src/views/BrainCommandCenter.tsx",
+    "src/views/PerformanceHub.tsx",
+    "src/views/SeoGenerator.tsx",
+    "src/views/ThumbnailStudio.tsx",
+    "src/views/VideoManager.tsx",
+    "src/views/VideoPublisher.tsx",
+    "src/views/supertools/SuperToolPrototypeWorkspace.tsx",
+    "src/views/supertools/SuperToolShell.tsx",
+  ]
+
+  for (const path of headerActionConsumers) {
+    const contents = source(path)
+    const headerActionRegion = contents.match(/headerActions=\{[\s\S]{0,1600}?\n\s*\}/g)?.join("\n") || ""
+    expect(headerActionRegion).not.toMatch(/\bw-\[\d+px\]/)
+    expect(headerActionRegion).not.toMatch(/\bmin-w-\[\d+px\]/)
+  }
+
+  const mediaAnalyzer = source("src/views/MediaAnalyzer.tsx")
+  const storyboard = source("src/views/StoryboardStudio.tsx")
+
+  expect(mediaAnalyzer).not.toContain('shellClassName="h-full"')
+  expect(mediaAnalyzer).toContain('shellClassName="md:h-full"')
+  expect(mediaAnalyzer).not.toMatch(/contentClassName="[^"]*(?:^|\s)h-full(?:\s|")/)
+  expect(mediaAnalyzer).toContain('contentClassName="p-5 md:h-full flex flex-col"')
+
+  expect(storyboard).not.toContain('shellClassName="h-full"')
+  expect(storyboard).toContain('shellClassName="xl:h-full"')
+ })
+
+
+ it("keeps one canonical mobile shell geometry and gutter authority", () => {
+  const toolboxCss = source("src/styles/toolbox-system.css")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const navigationCss = source("src/components/navigation/adaptive-navigation.css")
+
+  expect(toolboxCss).toContain("Mobile density authority — 2026-09-22")
+  expect(toolboxCss).toContain("Canonical shell gutter authority — 2026-09-25")
+  expect(toolboxCss).not.toContain("Phone geometry. Titles retain their established size.")
+  expect(toolboxCss).not.toContain("Interior safety inset: all Toolbox and SubToolbox bodies")
+  expect(toolboxCss).not.toContain("Second mobile-density pass:")
+  expect(toolboxCss).not.toContain('data-vt-toolbox-help="true"')
+  expect(toolboxCss).not.toContain('data-vt-toolbox-toggle="true"')
+  expect(toolboxCss).not.toContain('data-vt-subtoolbox-help="true"')
+  expect(toolboxCss).not.toContain('data-vt-subtoolbox-toggle="true"')
+  expect(navigationCss).not.toContain("top: 64px;")
+  expect(navigationCss).toContain("var(--vt-toolbox-header-height, 80px)")
+  expect(navigationCss).toContain("var(--vt-toolbox-stroke, 5px)")
+  expect(systemCss).toContain(".vt-toolbox-header-collapse:focus-visible")
+  expect(systemCss).toContain(".vt-toolbox-header-help:focus-visible")
+ })
+
+})

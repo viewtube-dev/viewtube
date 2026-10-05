@@ -1,0 +1,130 @@
+import React, { useState } from 'react';
+
+/**
+ * CustomIcon Component
+ * Renders proprietary VT Icons from the assets directory.
+ * Supports animation sequences (starting with >) and mandatory mappings (starting with !!!).
+ */
+
+type IconName = 
+  | 'home' 
+  | 'search' 
+  | 'video' 
+  | 'image' 
+  | 'analytics' 
+  | 'ideas' 
+  | 'settings'
+  | 'zap'
+  | 'sparkles'
+  | 'target'
+  | 'cloud'
+  | 'database'
+  | 'mic'
+  | 'volume'
+  | 'headset'
+  | string;
+
+interface CustomIconProps {
+  name: IconName;
+  size?: number;
+  className?: string;
+  animate?: boolean;
+  strokeWidth?: number;
+}
+
+const iconMap: Record<string, string> = {
+  home: 'home_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  search: 'search_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  video: '!!!POST-VIDEO.svg',
+  image: '!!!POST-IMAGE.svg',
+  analytics: '!!!TRAFIC.svg',
+  ideas: 'lightbulb_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  settings: '!!!SETTINGS.svg',
+  zap: '!!!GENERATE1.svg',
+  sparkles: 'wand_stars_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48(1).svg',
+  target: 'center_focus_weak_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  cloud: 'cloud_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  database: 'storage_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  mic: 'mic_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  volume: 'volume_up_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  headset: 'podcasts_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  calendar: 'calendar_apps_script_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  // `rule_*.svg` was never added to src/assets/icons, so `checklist` resolved to
+  // /icons/rule_*.svg and 404'd wherever it was used (Script Architect included).
+  // view_cozy is the closest bundled list glyph.
+  checklist: 'view_cozy_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  play: '!!!GENERATE1.svg',
+  pause: '!!!GENERATE2.svg',
+  layers: 'view_cozy_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  eye: '!!!GENERATE1.svg',
+  'eye-off': '!!!DELETE.svg',
+  audio: 'mic_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  'AB-TESTING': 'AB-TESTING.svg',
+  '!!!TRAFIC': '!!!TRAFIC.svg',
+  '!!!REVENUE': '!!!REVENUE.svg',
+  '!!!SUBSCRIBERS': '!!!SUBSCRIBERS.svg',
+  '!!!GEOGRAPHY': '!!!GEOGRAPHY.svg',
+  '!!!YOUTUBE': '!!!YOUTUBE.svg',
+  '!!!POST-VIDEO': '!!!POST-VIDEO.svg',
+  '!!!IDEA': 'lightbulb_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  '!!!ANALYTICS': '!!!TRAFIC.svg',
+  '!!!PALETTE': 'palette_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  // The Palette sub-toolboxes in ThumbnailStudio and EndScreenTool pass
+  // `paint-bucket` as the icon name; there is no paint-bucket asset in
+  // src/assets/icons, so the resolver was falling through to
+  // /icons/paint-bucket.svg which 404s. Map to the existing Material
+  // palette svg — semantically identical for a color-palette rail.
+  'paint-bucket': 'palette_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  '!!!TEXT': 'format_shapes_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  '!!!COLLECTION': 'view_cozy_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  '!!!CLOUD': 'cloud_70dp_1F1F1F_FILL0_wght700_GRAD0_opsz48.svg',
+  '!!!GENERATE1': '!!!GENERATE1.svg',
+  '!!!GENERATE2': '!!!GENERATE2.svg',
+  'SYMBOLS 19': '*SYMBOLS19.svg',
+  'SYMBOLS 22': '*SYMBOLS22.svg'
+};
+
+const iconAssets = import.meta.glob("../assets/icons/*.{svg,png}", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>
+
+const iconUrlMap = Object.fromEntries(
+  Object.entries(iconAssets).map(([modulePath, url]) => {
+    const fileName = modulePath.split("/").pop() || modulePath
+    return [fileName, url]
+  }),
+)
+
+export const resolveCustomIconSrc = (name: IconName, animate = true, hovered = false): string => {
+  let fileName = iconMap[name] || name
+  if (!fileName.endsWith('.svg') && !fileName.endsWith('.png')) {
+    fileName += '.svg'
+  }
+
+  const isSequence = name.startsWith('>')
+  if (isSequence && animate && hovered && name.endsWith('1')) {
+    const altName = name.replace('1', '2')
+    const altFile = `${altName}.svg`
+    return iconUrlMap[altFile] || iconUrlMap[fileName] || `/icons/${fileName}`
+  }
+
+  return iconUrlMap[fileName] || `/icons/${fileName}`
+}
+
+export const CustomIcon: React.FC<CustomIconProps> = ({ name, size = 24, className = "", animate = true, strokeWidth }) => {
+  const [hovered, setHovered] = useState(false);
+  const finalPath = resolveCustomIconSrc(name, animate, hovered)
+
+  return (
+    <img 
+      src={finalPath} 
+      alt={`${name} icon`} 
+      data-stroke-width={strokeWidth}
+      style={{ width: size, height: size }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`inline-block select-none pointer-events-none transition-transform duration-200 ${hovered ? 'scale-110' : ''} ${className}`}
+    />
+  );
+};

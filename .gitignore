@@ -1,0 +1,129 @@
+# Ignore everything in the root by default to keep the repo absolutely pristine
+/*
+
+# -------------------------------------------------------------------
+# ALLOW-LIST: Only these essential files and directories are tracked
+# -------------------------------------------------------------------
+
+# Essential root directories for the application to run and build
+!/src/
+!/public/
+!/ui/
+!/server/
+!/api/
+!/scripts/
+!/tests/
+!/.github/
+!/governance/
+# Herald conversation runtime. The ledger and thread files are appended by an
+# agent at the end of every turn; if they need `git add -f` they will silently
+# never be committed, which is the exact failure the Herald plan documents (O9).
+!/.viewtube/
+!/agent/
+# Repo-authored docs (migration guides, phase plans). Only /docs/migration/
+# is tracked; other subtrees under /docs/ are user-download reference
+# material and remain ignored by the docs/* rule further down.
+!/docs/
+
+# Essential root configuration files
+!/package.json
+!/package-lock.json
+!/vite.config.ts
+!/tsconfig.json
+!/tsconfig.app.json
+!/tsconfig.node.json
+!/eslint.config.js
+!/index.html
+!/.gitignore
+!/README.md
+!/CLAUDE.md
+!/.env.billing.example
+!/.vercelignore
+!/skills-lock.json
+
+# -------------------------------------------------------------------
+# IGNORE-LIST: Standard ignores within the allowed directories
+# -------------------------------------------------------------------
+
+# Build output
+dist/
+build/
+out/
+coverage/
+.vite/
+.vt-e1-render/
+
+# Dependencies
+node_modules/
+
+# Local ViewTube planning/reference material
+# These belong in the parent workspace under /Users/cwb/Downloads/viewtube/docs/
+# or /Users/cwb/Downloads/viewtube/standalone-html/, not in the launchable app repo.
+# Ignore user-download docs (a Downloads-path standalone-html bundle etc.),
+# but keep the door open for repo-authored subtrees below. Using `docs/*`
+# (not `docs/`) is deliberate — git cannot re-include a file whose parent
+# DIRECTORY is excluded, only whose children are excluded.
+docs/*
+# Repo-authored migration guides — see docs/migration/README.md.
+!docs/migration/
+!docs/migration/**
+# Herald conversation artifacts — screenshots, documents and versioned families
+# saved per conversation. Without this the deny-by-default `docs/*` above drops
+# them silently: the commit succeeds and captures nothing.
+!docs/herald/
+!docs/herald/**
+_quarantine/
+_migration_hub/
+sources/
+WORKTREE_TRIAGE_MANIFEST.md
+public/html_hub/
+public/standalone-html/
+public/editors/
+public/*.html
+!public/oauth-callback.html
+src/archive/
+src/standalone/
+src/generated/
+src/fix_*.py
+src/remove_subtoolbox*.py
+
+# Local task/workspace/tool caches
+.account/
+.billing/
+.agents/
+.claude/
+.codex_versions/
+.worktrees/
+.aider.tags.cache.v4/
+.venv/
+Roo-Code/
+
+# OS / Editor / Logs
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.swp
+*.swo
+.vscode/
+.idea/
+.cursor/
+
+# Local Environment Secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.pem
+*.key
+
+.gemini/
+gha-creds-*.json
+.env.local
+
+# Inventory outputs generated on demand by scripts/inventory/source-inventory.mjs.
+# They are for manual review, not for git history.
+scripts/inventory/reports/

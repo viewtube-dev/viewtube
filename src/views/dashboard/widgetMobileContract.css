@@ -1,0 +1,346 @@
+/* ViewTube Mobile Widget Contract
+   Phone geometry is owned here, after the canonical shell layers.
+   Desktop width state remains persisted; phones only override its rendered geometry. */
+
+@layer widgets {
+  @media (max-width: 767px) {
+    .dashboard-barrier {
+      --vt-mobile-widget-gap: 8px;
+      --vt-mobile-widget-gutter: 4px;
+      --vt-widget-edge-safe: 0px;
+      --vt-mobile-canvas-reclaim-right: 8px;
+      /* The dashboard owns the real phone viewport width. Earlier field-QA
+         compensation widened the row asymmetrically and eventually pushed
+         widget shells past the right edge. Keep outer gutter correction in the
+         app/grid owner instead of enlarging the dashboard canvas. */
+      width: 100%;
+      max-width: 100%;
+      margin-inline: 0;
+      box-sizing: border-box;
+      --vt-mobile-height-short: 150px;
+      --vt-mobile-height-medium: 250px;
+      --vt-mobile-height-tall: 350px;
+      --vt-mobile-height-xtall: 450px;
+      --vt-mobile-height-massive: 850px;
+    }
+
+    /* Reclaim only the excess right-side mobile canvas gap. The widget shell
+       and scroll content remain 100% canonical; the page/grid owner is the
+       only layer allowed to widen. */
+    .dashboard-canvas-inner {
+      width: calc(100% + var(--vt-mobile-canvas-reclaim-right));
+      max-width: none;
+      margin-inline-end: calc(-1 * var(--vt-mobile-canvas-reclaim-right));
+    }
+
+    /* On phones, FULL truly reaches the widget paint edge. Desktop keeps the
+       4px edge-safe track for offset shadows; touch layouts use SHADOW-SAFE
+       explicitly only where a component needs effect clearance. */
+    .dashboard-barrier .vt-widget-body {
+      --vt-widget-edge-safe: 0px !important;
+    }
+
+
+    /* Portrait widget chrome: one top-right trigger replaces the crowded
+       first-row control rail. Opening it reveals a colored second header row
+       containing square widget controls. Widget-specific header content keeps
+       the newly available first-row space. */
+    .dashboard-barrier .vt-widget-header .toggle {
+      display: none !important;
+    }
+
+    .dashboard-barrier .widget-mobile-controls-trigger {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      flex: 0 0 34px;
+      margin-inline: 4px;
+      padding: 0;
+      border: 2px solid var(--widget-border);
+      border-radius: 7px;
+      background: color-mix(in srgb, var(--widget-color) 20%, white);
+      color: var(--widget-border);
+      box-shadow: 3px 3px 0 color-mix(in srgb, var(--widget-color) 50%, transparent);
+    }
+
+    .dashboard-barrier .vt-widget-header .left {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .dashboard-barrier .vt-widget-header .header-extra:has(.widget-header-toggle) {
+      flex: 0 0 auto !important;
+      min-width: 0;
+      max-width: 54%;
+      overflow: visible;
+    }
+
+    .dashboard-barrier .vt-widget-header .widget-header-toggle {
+      width: fit-content;
+      min-width: 0;
+      max-width: 100%;
+      height: auto;
+      min-height: 30px;
+      overflow: visible;
+    }
+
+    .dashboard-barrier .vt-widget-header .widget-header-toggle button {
+      min-width: 0;
+      padding: 2px 3px;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      overflow-wrap: normal;
+      word-break: normal;
+      line-height: .82;
+    }
+
+    .dashboard-barrier .widget-mobile-control-row {
+      display: grid;
+      grid-template-rows: 0fr;
+      min-width: 0;
+      background: var(--widget-color, #40C6E9);
+      border-bottom: 0 solid var(--widget-border);
+      transition:
+        grid-template-rows 600ms ease-out,
+        border-bottom-width 600ms ease-out;
+    }
+
+    .dashboard-barrier .widget-mobile-control-row.is-open {
+      grid-template-rows: 1fr;
+      border-bottom-width: 3px;
+    }
+
+    .dashboard-barrier .dashboard-widget-slot.is-collapsed:has(.vt-widget.mobile-controls-open) {
+      height: auto;
+      min-height: 48px;
+      max-height: none;
+    }
+
+    .dashboard-barrier .dashboard-widget-slot.is-collapsed:has(.vt-widget.mobile-controls-open) .vt-widget {
+      height: auto;
+      min-height: 48px;
+      overflow: visible;
+    }
+
+    .dashboard-barrier .dashboard-widget-slot.is-collapsed:has(.vt-widget.mobile-controls-open),
+    .dashboard-barrier .dashboard-widget-slot.is-collapsed:has(.vt-widget.mobile-controls-open) > *,
+    .dashboard-barrier .vt-widget.is-collapsed.mobile-controls-open {
+      min-height: calc(var(--header-height, 48px) + 44px);
+      overflow: visible;
+    }
+
+    .dashboard-barrier .vt-widget.is-collapsed.mobile-controls-open .widget-mobile-control-row {
+      display: grid;
+      position: relative;
+      z-index: 40;
+    }
+
+
+    .dashboard-barrier .widget-mobile-control-row-inner {
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 0 6px;
+      transition: padding-block 600ms ease-out;
+    }
+
+    .dashboard-barrier .widget-mobile-control-row.is-open .widget-mobile-control-row-inner {
+      padding-block: 6px;
+    }
+
+    .dashboard-barrier .widget-mobile-square-control {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 2px solid var(--widget-border);
+      border-radius: 7px;
+      background: white;
+      color: var(--widget-border);
+      box-shadow: 3px 3px 0 color-mix(in srgb, var(--widget-color) 50%, transparent);
+      font-size: 11px;
+      font-weight: 1000;
+      line-height: 1;
+    }
+
+    .dashboard-barrier .widget-mobile-square-control.is-active {
+      background: color-mix(in srgb, var(--widget-color) 34%, white);
+    }
+
+    .dashboard-barrier .widget-mobile-square-control.is-danger {
+      background: color-mix(in srgb, var(--widget-color) 12%, white);
+    }
+
+    .dashboard-barrier .widget-mobile-square-control:disabled {
+      opacity: .32;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .dashboard-barrier .widget-mobile-icon-pair {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .dashboard-barrier .widget-mobile-icon-pair svg {
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      stroke-width: 2.6;
+    }
+
+    .dashboard-barrier .widget-mobile-icon-pair.is-horizontal svg:first-child { left: 0; }
+    .dashboard-barrier .widget-mobile-icon-pair.is-horizontal svg:last-child { right: 0; }
+    .dashboard-barrier .widget-mobile-icon-pair.is-vertical svg:first-child { top: 0; }
+    .dashboard-barrier .widget-mobile-icon-pair.is-vertical svg:last-child { bottom: 0; }
+
+    .dashboard-barrier .vt-dash-cell {
+      grid-column: 1 / -1;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      justify-self: stretch;
+    }
+
+    .dashboard-barrier .vt-dash-cell.vt-height-short:not(.is-collapsed) { height: var(--vt-mobile-height-short); }
+    .dashboard-barrier .vt-dash-cell.vt-height-medium:not(.is-collapsed) { height: var(--vt-mobile-height-medium); }
+    .dashboard-barrier .vt-dash-cell.vt-height-tall:not(.is-collapsed) { height: var(--vt-mobile-height-tall); }
+    .dashboard-barrier .vt-dash-cell.vt-height-xtall:not(.is-collapsed) { height: var(--vt-mobile-height-xtall); }
+    .dashboard-barrier .vt-dash-cell.vt-height-massive:not(.is-collapsed) { height: var(--vt-mobile-height-massive); }
+
+    .dashboard-barrier .vt-dash-cell:not(.is-collapsed),
+    .dashboard-barrier .vt-dash-cell:not(.is-collapsed) > *,
+    .dashboard-barrier .vt-dash-cell:not(.is-collapsed) .vt-widget {
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    .dashboard-barrier .vt-dash-cell:not(.is-collapsed) .vt-widget {
+      width: 100%;
+      height: 100%;
+    }
+
+    .dashboard-barrier .vt-widget-content,
+    .dashboard-barrier .vt-widget-body {
+      min-width: 0;
+      min-height: 0;
+    }
+
+    /* Phase 2 overflow policy. The shell never grows beyond H. Widgets that
+       already own a WidgetScrollArea keep that as their scroll viewport; the
+       body is only the safety fallback for older/content-heavy widgets. */
+    .dashboard-barrier .vt-widget-body {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-gutter: auto;
+    }
+
+    .dashboard-barrier .vt-widget-body:has(.widget-scroll-controller) {
+      overflow-y: hidden;
+      scrollbar-gutter: auto;
+    }
+
+    .dashboard-barrier .vt-widget-body > * {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    /* FULL / SHADOW-SAFE / INSET geometry is inherited from the canonical
+       shell grid. Phone mode owns only scrolling and composition, never width
+       compensation or negative-margin bleed math. */
+
+
+
+    /* Shared mobile composition registry. Internal layouts recompose according
+       to available component width; these rules do not change primitive style. */
+    .dashboard-barrier .widget-kpi-grid,
+    .dashboard-barrier .widget-grid,
+    .dashboard-barrier [data-widget-grid] {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .dashboard-barrier .widget-kpi-grid > *,
+    .dashboard-barrier .widget-grid > *,
+    .dashboard-barrier [data-widget-grid] > * {
+      min-width: 0;
+    }
+
+    .dashboard-barrier .widget-kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-barrier .widget-form-stack,
+    .dashboard-barrier .widget-segmented-deck,
+    .dashboard-barrier .widget-workflow-main {
+      min-width: 0;
+      min-height: 0;
+      max-width: 100%;
+    }
+
+    /* Reference Library = canonical SCROLL example. Its shell obeys H while
+       its existing WidgetScrollArea owns the long component catalogue. */
+    .dashboard-barrier [data-widget-id="ui-reference-library"] .vt-widget-body {
+      overflow: hidden;
+    }
+
+    .dashboard-barrier [data-widget-id="ui-reference-library"] .widget-scroll-controller {
+      min-height: 0;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    /* Dense reference matrices become two columns on normal phones and one on
+       very narrow containers via the widget's own container-query layer. */
+    .dashboard-barrier [data-widget-id="ui-reference-library"] .widget-reference-family,
+    .dashboard-barrier [data-widget-id="ui-reference-library"] .widget-reference-variants,
+    .dashboard-barrier [data-widget-id="ui-reference-library"] .widget-reference-square-variants {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    /* Channel Overview = ADAPT example: preserve a useful two-up KPI matrix,
+       then stack dense secondary layouts rather than allowing horizontal growth. */
+    .dashboard-barrier [data-widget-id="channel-overview"] .channel-overview-main {
+      min-width: 0;
+      min-height: 0;
+      max-width: 100%;
+    }
+
+    .dashboard-barrier [data-widget-id="channel-overview"] .widget-kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-barrier [data-widget-id="channel-overview"] :is(.grid-cols-3, .grid-cols-4, .grid-cols-5, .grid-cols-6) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-barrier .widget-edit-resize-grid > :nth-child(1),
+    .dashboard-barrier .widget-edit-resize-grid > :nth-child(2) {
+      opacity: .45;
+      pointer-events: none;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .dashboard-barrier .widget-kpi-grid,
+    .dashboard-barrier [data-widget-id="channel-overview"] .widget-kpi-grid,
+    .dashboard-barrier [data-widget-id="channel-overview"] :is(.grid-cols-3, .grid-cols-4, .grid-cols-5, .grid-cols-6) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

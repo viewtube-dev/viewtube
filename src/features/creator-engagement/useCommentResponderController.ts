@@ -1,0 +1,246 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { generatePerfectReply, recommendVideoForComment } from "../../services/gemini"
+import { fetchAllSimpleCommentThreads, fetchSimpleOwnedVideo, postSimpleCommentReply, toSimpleVideoDetails } from "../../services/simpleYouTubeApi"
+import { readBrainUserControls } from "../../services/brain/BrainUserControls"
+import type { CommentResponderController, CommentResponderTab, CreatorEngagementContext } from "./types"
+
+export const resolveSuggestedVideoId = (
+ suggestedVideoId: unknown,
+ videos: ReadonlyArray<{ videoId: string }>,
+ excludedVideoId?: string | null,
+): string | null => {
+ const candidate = typeof suggestedVideoId === "string" ? suggestedVideoId.trim() : ""
+ if (!candidate || (excludedVideoId && candidate === excludedVideoId)) return null
+ return videos.some((video) => video.videoId === candidate) ? candidate : null
+}
+
+export const partitionCommentThreads = (threads: any[], channelId: string) => {
+ const complete = threads.filter((thread) => thread.repliesComplete !== false)
+ const hasChannelReply = (thread: any) => (thread.replies?.comments || [])
+  .some((reply: any) => reply.snippet?.authorChannelId?.value === channelId)
+ return {
+  unreplied: complete.filter((thread) => !hasChannelReply(thread)),
+  replied: complete.filter(hasChannelReply),
+ }
+}
+
+export const useCommentResponderController = (context: CreatorEngagementContext): CommentResponderController => {
+ const [tab, setTabState] = useState<CommentResponderTab>("unreplied")
+ const [loading, setLoading] = useState(false)
+ const [error, setError] = useState<string | null>(null)
+ const [threads, setThreads] = useState<any[]>([])
+ const [replyText, setReplyTextById] = useState<Record<string, string>>({})
+ const [generatingIds, setGeneratingIds] = useState<Set<string>>(new Set())
+ const [currentIndex, setCurrentIndex] = useState(0)
+ const [fetchedVideoData, setFetchedVideoData] = useState<Record<string, any>>({})
+ const [inboundImageUrl, setInboundImageUrl] = useState<string | null>(null)
+ const fetchedRef = useRef<Record<string, any>>({})
+ const metadataInFlight = useRef(new Set<string>())
+ const requestGeneration = useRef(0)
+ const requestAbort = useRef<AbortController | null>(null)
+
+ const syncMetadata = useCallback(async (nextThreads: any[]) => {
+  const videoIds = Array.from(new Set<string>(nextThreads.map((thread) => thread.snippet?.videoId).filter(Boolean)))
+  const missing = videoIds.filter((id) => {
+   const canonical = context.videoAssets.find((video) => video.videoId === id)
+   const fetched = fetchedRef.current[id]
+   return (!canonical?.title || canonical.title === "Unknown Video") &&
+    (!fetched?.title || fetched.title === "Unknown Video") && !metadataInFlight.current.has(id)
+  })
+  if (!missing.length) return
+  missing.forEach((id) => metadataInFlight.current.add(id))
+  try {
+   const entries = await Promise.all(missing.map(async (id) => {
+    try {
+     const raw = await fetchSimpleOwnedVideo(id)
+     const detail = toSimpleVideoDetails(raw)
+     return [id, detail] as const
+    } catch (cause) {
+     console.warn(`[CommentResponder] Metadata sync failed for ${id}`, cause)
+     return null
+    }
+   }))
+   const details = Object.fromEntries(entries.filter((entry): entry is readonly [string, any] => Boolean(entry)))
+   fetchedRef.current = { ...fetchedRef.current, ...details }
+   setFetchedVideoData((current) => ({ ...current, ...details }))
+  } finally { missing.forEach((id) => metadataInFlight.current.delete(id)) }
+ }, [context.videoAssets])
+
+ const refresh = useCallback(async () => {
+  if (!context.connected) {
+   setLoading(false)
+   setError(null)
+   setThreads([])
+   return
+  }
+  const generation = ++requestGeneration.current
+  requestAbort.current?.abort()
+  const abortController = new AbortController()
+  requestAbort.current = abortController
+  setLoading(true)
+  setError(null)
+  try {
+   const nextThreads = await fetchAllSimpleCommentThreads(100)
+   if (generation !== requestGeneration.current) return
+   setThreads(nextThreads)
+   void syncMetadata(nextThreads)
+  } catch (cause) {
+   if (generation !== requestGeneration.current) return
+   if (cause instanceof DOMException && cause.name === "AbortError") return
+   console.error("Comment fetch failed", cause)
+   setError(cause instanceof Error ? cause.message : "ViewTube could not load comments. Reconnect and try again.")
+  } finally {
+   if (generation === requestGeneration.current) setLoading(false)
+  }
+ }, [context.connected, syncMetadata])
+
+ useEffect(() => {
+  if (!context.connected) {
+   requestGeneration.current += 1
+   requestAbort.current?.abort()
+   setLoading(false)
+   setThreads([])
+   setError(null)
+   return
+  }
+  void refresh()
+  return () => {
+   requestGeneration.current += 1
+   requestAbort.current?.abort()
+  }
+ }, [context.connected, refresh])
+
+ useEffect(() => {
+  const apply = (payload: any) => payload?.imageUrl && setInboundImageUrl(String(payload.imageUrl))
+  const onBridge = (event: Event) => {
+   const detail = (event as CustomEvent<any>).detail
+   if (detail?.targetWidget === "comment-replier") apply(detail)
+  }
+  window.addEventListener("vt_dashboard_generated_image", onBridge as EventListener)
+  try {
+   const cached = localStorage.getItem("vt_bridge_image_comment-replier")
+   if (cached) apply(JSON.parse(cached))
+  } catch { /* Ignore malformed bridge cache and keep the tool usable. */ }
+  return () => window.removeEventListener("vt_dashboard_generated_image", onBridge as EventListener)
+ }, [])
+
+ const partitions = useMemo(() => partitionCommentThreads(threads, context.channelId), [context.channelId, threads])
+ const unreplied = partitions.unreplied
+ const replied = partitions.replied
+ const displayThreads = tab === "unreplied" ? unreplied : replied
+ const safeIndex = Math.min(currentIndex, Math.max(0, displayThreads.length - 1))
+ const currentThread = displayThreads[safeIndex] || null
+ const currentId = currentThread?.id || ""
+
+ const setTab = (next: CommentResponderTab) => { setTabState(next); setCurrentIndex(0) }
+ const setGenerating = (id: string, active: boolean) => setGeneratingIds((current) => {
+  const next = new Set(current)
+  if (active) next.add(id); else next.delete(id)
+  return next
+ })
+
+ const sourceVideoContext = () => {
+  const sourceVideoId = String(currentThread?.snippet?.videoId || "")
+  const canonical = context.videoAssets.find((video) => video.videoId === sourceVideoId)
+  const fetched = fetchedVideoData[sourceVideoId] || fetchedRef.current[sourceVideoId]
+  const sourceTitle = canonical?.title || fetched?.title || "the current video"
+  const candidateVideos = context.videoAssets.filter((video) => video.videoId !== sourceVideoId)
+  return { sourceVideoId, sourceTitle, candidateVideos }
+ }
+
+ const draftReply = async () => {
+  if (!currentThread) return
+  const controls = readBrainUserControls()
+  if (!controls.allowComments) {
+   setError("Comment context is disabled in Brain User Controls.")
+   return
+  }
+  setGenerating(currentId, true)
+  setError(null)
+  try {
+   const comment = currentThread.snippet.topLevelComment.snippet
+   const { sourceVideoId, sourceTitle, candidateVideos } = sourceVideoContext()
+   const result = await generatePerfectReply(
+    `${comment.textOriginal}\n\nThis comment was left on: "${sourceTitle}". If recommending another video, choose a DIFFERENT video and only when it genuinely helps the viewer.`,
+    comment.authorDisplayName.replace(/@/g, ""),
+    context.channelName || "Content Creation",
+    candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
+    context.brain,
+    replyText[currentId]?.trim() || "",
+   )
+   const suggestedVideoId = resolveSuggestedVideoId(result.suggestedVideoId, candidateVideos, sourceVideoId)
+   const reply = suggestedVideoId
+    ? `${result.reply}\n\nCheck this out for more details: https://youtu.be/${suggestedVideoId}`
+    : result.reply
+   setReplyTextById((current) => ({ ...current, [currentId]: reply }))
+  } catch (cause) {
+   setError(cause instanceof Error ? cause.message : "ViewTube could not draft a reply. Try again.")
+  } finally { setGenerating(currentId, false) }
+ }
+
+ const suggestVideo = async () => {
+  if (!currentThread) return
+  const controls = readBrainUserControls()
+  if (!controls.allowComments) {
+   setError("Comment context is disabled in Brain User Controls.")
+   return
+  }
+  setGenerating(currentId, true)
+  setError(null)
+  try {
+   const comment = currentThread.snippet.topLevelComment.snippet
+   const { sourceVideoId, sourceTitle, candidateVideos } = sourceVideoContext()
+   if (!candidateVideos.length) {
+    setError("No other channel videos are available to recommend.")
+    return
+   }
+   const recommendation = await recommendVideoForComment(
+    `${comment.textOriginal}\n\nSOURCE VIDEO: "${sourceTitle}". Recommend a DIFFERENT creator-owned video only if it meaningfully answers or extends what this viewer wants.`,
+    candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
+    context.brain,
+   )
+   const suggestedVideoId = resolveSuggestedVideoId(
+    recommendation.recommendedVideoId,
+    candidateVideos,
+    sourceVideoId,
+   )
+   if (!suggestedVideoId) {
+    setError("Brain did not find a different channel video relevant enough to recommend.")
+    return
+   }
+   const bridge = recommendation.bridgePhrase?.trim() || "You might also enjoy this related video:"
+   setReplyTextById((current) => ({
+    ...current,
+    [currentId]: `${current[currentId]?.trim() ? `${current[currentId].trim()}\n\n` : ""}${bridge} https://youtu.be/${suggestedVideoId}`,
+   }))
+  } catch (cause) {
+   setError(cause instanceof Error ? cause.message : "ViewTube could not suggest a video. Try again.")
+  } finally { setGenerating(currentId, false) }
+ }
+
+ const postReply = async () => {
+  if (!currentThread || !replyText[currentId]?.trim()) return
+  if (!context.canPostComments) { setError("Reconnect Channel to grant comment-reply permission."); await context.reconnect(); return }
+  setLoading(true)
+  setError(null)
+  try {
+   const parentId = currentThread.snippet?.topLevelComment?.id || currentId
+   const text = replyText[currentId]
+   const posted = await postSimpleCommentReply(parentId, text)
+   setReplyTextById((current) => { const next = { ...current }; delete next[currentId]; return next })
+   setThreads((current) => current.map((thread) => thread.id !== currentId ? thread : ({ ...thread, replies: { ...thread.replies, comments: [...(thread.replies?.comments || []), { ...posted, snippet: { ...posted?.snippet, authorChannelId: posted?.snippet?.authorChannelId || { value: context.channelId }, authorDisplayName: posted?.snippet?.authorDisplayName || context.channelName, authorProfileImageUrl: posted?.snippet?.authorProfileImageUrl || context.channelThumbnail, textDisplay: posted?.snippet?.textDisplay || text, publishedAt: posted?.snippet?.publishedAt || new Date().toISOString() } }] } })))
+   setTab("history")
+  } catch (cause) {
+   setError(cause instanceof Error ? cause.message : "ViewTube could not post this reply. Reconnect and try again.")
+  } finally { setLoading(false) }
+ }
+
+ return {
+  tab, setTab, loading, error, threads, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
+  replyText: currentId ? replyText[currentId] || "" : "",
+  setReplyText: (value) => currentId && setReplyTextById((current) => ({ ...current, [currentId]: value })),
+  generating: generatingIds.has(currentId), fetchedVideoData, inboundImageUrl,
+  canPostReply: context.canPostComments, refresh, draftReply, suggestVideo, postReply, reconnect: context.reconnect,
+ }
+}

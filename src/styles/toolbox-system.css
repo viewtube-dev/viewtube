@@ -1,0 +1,642 @@
+/* Canonical ViewTube Toolbox hierarchy authority.
+ * One main Toolbox shell and one SubToolbox shell. Geometry is owned here/tokens,
+ * never recreated by feature-local CSS.
+ */
+[data-vt-toolbox][data-vt-toolbox-level="main"] {
+  --vt-toolbox-header-height: 80px;
+  --vt-toolbox-stroke: 5px;
+  --vt-toolbox-radius: 16px;
+  --vt-toolbox-shadow-offset: 10px;
+  --vt-toolbox-title-size: 26px;
+  --vt-toolbox-component-stroke: 3px;
+  --vt-toolbox-component-radius: 8px;
+  --vt-toolbox-component-shadow: 4px;
+  --vt-toolbox-component-compact: 32px;
+  --vt-toolbox-component-standard: 48px;
+  --vt-toolbox-component-action: 56px;
+  --vt-toolbox-content-padding: 4px;
+  --vt-toolbox-content-gap: 4px;
+  border-width: 5px !important;
+  border-style: solid !important;
+  border-color: #000 !important;
+  border-radius: 16px !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header {
+  height: 80px !important;
+  min-height: 80px !important;
+  max-height: 80px !important;
+  border-bottom: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Expanded shell divider spans the full header, including beneath the square icon rail. */
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: #000;
+  pointer-events: none;
+  z-index: 30;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header > :first-child {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header > :first-child > :first-child {
+  width: 80px !important;
+  min-width: 80px !important;
+  height: 80px !important;
+  flex: 0 0 80px !important;
+  aspect-ratio: 1 / 1 !important;
+  border-right: 5px solid #000 !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header > :first-child > :nth-child(2) {
+  min-width: 0 !important;
+  padding-left: 4px !important;
+  padding-right: 2px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header h1 {
+  display: -webkit-box !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 26px !important;
+  line-height: .82 !important;
+  font-weight: 1000 !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header > :last-child {
+  flex: 0 0 auto !important;
+  min-width: max-content !important;
+  gap: 4px !important;
+  padding-right: 4px !important;
+}
+
+/* Main toolbox content establishes the level-1 module contract. */
+[data-vt-toolbox][data-vt-toolbox-level="main"] > div > div > main,
+[data-vt-toolbox][data-vt-toolbox-level="main"] .vt-main-toolbox-content {
+  --vt-level1-stroke: 4px;
+  --vt-level1-radius: 12px;
+  --vt-level1-shadow: 6px;
+  --vt-inner-stroke: 3px;
+  --vt-inner-radius: 8px;
+  --vt-inner-shadow: 4px;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] .vt-level1-surface {
+  border-width: var(--vt-level1-stroke, 4px) !important;
+  border-style: solid !important;
+  border-color: #000 !important;
+  border-radius: var(--vt-level1-radius, 12px) !important;
+  box-shadow: var(--vt-level1-shadow, 6px) var(--vt-level1-shadow, 6px) 0 0 var(--vt-level1-shadow-color, var(--vt-toolbox-shadow-color, rgb(0 0 0 / .35))) !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] .vt-inner-surface {
+  border-width: var(--vt-inner-stroke, 3px) !important;
+  border-style: solid !important;
+  border-color: #000 !important;
+  border-radius: var(--vt-inner-radius, 8px) !important;
+  box-shadow: var(--vt-inner-shadow, 4px) var(--vt-inner-shadow, 4px) 0 0 var(--vt-subtoolbox-shadow, var(--vt-toolbox-shadow-color, rgb(0 0 0 / .3))) !important;
+}
+
+/* There is one production SubToolbox shell. The former compact shell style is removed. */
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] {
+  --vt-subtoolbox-stroke: 4px;
+  --vt-subtoolbox-radius: 12px;
+  --vt-subtoolbox-shadow-offset: 6px;
+  --vt-subtoolbox-header-height: 56px;
+  --vt-subtoolbox-title-size: 20px;
+  box-sizing: border-box;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header {
+  height: 56px !important;
+  min-height: 56px !important;
+  max-height: 56px !important;
+  border-bottom: 0 !important;
+  overflow: hidden !important;
+}
+
+/* SubToolbox uses the same full-width expanded-header divider law at its own stroke width. */
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: #000;
+  pointer-events: none;
+  z-index: 30;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header > :first-child {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header > :first-child > :nth-child(2) {
+  min-width: 0 !important;
+  padding-left: 4px !important;
+  padding-right: 2px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header h3 {
+  display: -webkit-box !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 20px !important;
+  line-height: .82 !important;
+  font-weight: 1000 !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header > :last-child {
+  flex: 0 0 auto !important;
+  min-width: max-content !important;
+  gap: 2px !important;
+  padding-right: 2px !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header svg {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  stroke-width: 2 !important;
+}
+
+/* A small edge inset prevents first/last child borders and shadows from striking the shell edge. */
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] .vt-subtoolbox-content {
+  box-sizing: border-box;
+  padding-left: max(4px, var(--vt-subtoolbox-content-inline-inset, 4px)) !important;
+  padding-right: max(4px, var(--vt-subtoolbox-content-inline-inset, 4px)) !important;
+  padding-bottom: max(4px, var(--vt-subtoolbox-content-bottom-inset, 4px)) !important;
+}
+
+/* Compatibility accordion resolves to the same single SubToolbox geometry. */
+[data-vt-toolbox][data-vt-toolbox-level="main"][data-vt-toolbox-variant="accordion"] {
+  --vt-toolbox-header-height: 56px;
+  --vt-toolbox-radius: 12px;
+  --vt-toolbox-title-size: 20px;
+  border-width: 4px !important;
+  border-radius: 12px !important;
+}
+
+/* Split-left module actions are peers of a collapsed SubToolbox. */
+[data-vt-split-left],
+.vt-split-left-module-action {
+  min-height: 48px !important;
+  height: 48px !important;
+  border-width: 4px !important;
+  border-style: solid !important;
+  border-color: #000 !important;
+  border-radius: 12px !important;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 0 !important;
+  font-size: 20px !important;
+  font-weight: 1000 !important;
+  line-height: .82 !important;
+}
+[data-vt-split-left] > [data-vt-split-left-rail],
+.vt-split-left-module-action > [data-vt-split-left-rail] {
+  width: 48px !important;
+  min-width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px !important;
+  aspect-ratio: 1 / 1 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 4px solid #000 !important;
+}
+[data-vt-split-left] > [data-vt-split-left-label],
+.vt-split-left-module-action > [data-vt-split-left-label] {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 4px;
+  font-size: 20px !important;
+  font-weight: 1000 !important;
+  line-height: .82 !important;
+}
+
+/* Compatibility grid actions that still carry historical inline heights are capped to T1. */
+[data-vt-toolbox-level="sub"] button[style*="height: 56px"],
+[data-vt-toolbox-level="sub"] button[style*="height: 52px"] {
+  max-height: 48px;
+}
+
+@media (max-width: 767px) {
+  [data-vt-toolbox][data-vt-toolbox-level="main"] {
+    /* Protect one complete long title word (for example PUBLISHER) before
+       optional chrome gets any horizontal space. Actions already move to the
+       secondary strip on phones, so the title can keep its established 26px
+       size without mid-word fragmentation. */
+    --vt-toolbox-title-protected-width: clamp(148px, 42vw, 168px);
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   CANONICAL HEADER ALLOCATION CONTRACT
+   Structural header geometry is owned here. Feature actions may consume only
+   unprotected space; on phone widths optional main-header actions move to the
+   secondary strip before the title, help, or collapse controls are compressed.
+   ========================================================================== */
+[data-vt-toolbox][data-vt-toolbox-level="main"] {
+  --vt-toolbox-title-protected-width: 168px;
+}
+.vt-toolbox-header-identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.vt-toolbox-header-title-slot {
+  flex: 1 1 var(--vt-toolbox-title-protected-width, 168px);
+  min-width: min(var(--vt-toolbox-title-protected-width, 168px), 100%);
+  max-width: 100%;
+}
+.vt-toolbox-header-title-slot.is-subtoolbox {
+  flex-basis: var(--vt-subtoolbox-title-protected-width, 110px);
+  min-width: min(var(--vt-subtoolbox-title-protected-width, 110px), 100%);
+}
+.vt-toolbox-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  min-width: 0;
+  height: 100%;
+  gap: 6px;
+  padding-right: 8px;
+}
+.vt-toolbox-header-actions.is-subtoolbox {
+  gap: 4px;
+  padding-right: 6px;
+}
+.vt-toolbox-header-extras {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  max-width: min(32vw, 220px);
+  gap: 4px;
+}
+.vt-toolbox-header-secondary-actions {
+  display: none;
+}
+.vt-subtoolbox-content {
+  min-height: var(--vt-subtoolbox-content-min-height, 0);
+}
+
+/* ==========================================================================
+   Title wrapping, icon contract and sub-toolbox inset.
+
+   A header row is a fixed height owned by its level. A title that does not fit
+   on one line takes a second line inside that same row rather than growing it,
+   so the square icon rail stays square and the toggle cluster keeps its place.
+   The row's height therefore sets the largest title that can be shown on two
+   lines, and each level's phone title size is derived from its own floor.
+   ========================================================================== */
+
+/* This file is the sole structural owner of Toolbox title wrapping. Titles
+   keep their level-owned size and may use two lines; performance/page CSS must
+   never restore nowrap/ellipsis behavior for canonical Toolbox headers. */
+.vt-toolbox-title,
+.vt-subtoolbox-title,
+[data-vt-toolbox-level="main"] > header h1.vt-toolbox-title,
+[data-vt-toolbox-level="main"] > header h3.vt-subtoolbox-title,
+[data-vt-toolbox-level="sub"] > div > header h3.vt-subtoolbox-title {
+  white-space: normal !important;
+  text-overflow: clip !important;
+  display: block;
+  max-height: 1.64em;
+  overflow: hidden;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: balance;
+}
+
+/* One icon size per level. These previously fought the size the shell clones
+   onto the element, so the rendered glyph did not match the contract. */
+[data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header > :first-child > :first-child svg {
+  width: 34px !important;
+  height: 34px !important;
+  max-width: 34px !important;
+  max-height: 34px !important;
+  stroke-width: 3.1px !important;
+}
+
+[data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header > :first-child > :first-child svg {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  stroke-width: 3.1px !important;
+}
+
+/* Sub-toolbox interior inset. Lives on the wrapper because contentClassName
+   replaces <main>'s padding wholesale — several call sites pass p-0, which put
+   their controls hard against the shell stroke. */
+.vt-subtoolbox-inset {
+  padding: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Phone action allocation and intrinsic sizing. Canonical 56/44 shell
+   geometry is declared once in the Mobile Density Authority below.
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .vt-toolbox-header-actions.is-toolbox .vt-toolbox-header-extras {
+    display: none !important;
+  }
+
+  .vt-toolbox-header-secondary-actions {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 56px;
+    padding: 6px 8px 8px;
+    gap: 8px;
+    background: #fff;
+    border-bottom: var(--vt-toolbox-stroke, 5px) solid #000;
+  }
+
+  .vt-toolbox-header-secondary-actions .vt-toolbox-header-toggle {
+    height: 44px;
+    min-height: 44px;
+    width: max-content;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  [data-vt-toolbox-level="sub"] {
+    height: auto !important;
+    min-height: 0 !important;
+    align-self: start;
+  }
+
+  [data-vt-toolbox-level="sub"] .vt-subtoolbox-content {
+    min-height: 0 !important;
+  }
+
+  .vt-subtoolbox-file-target.vt-upload-tight-reveal {
+    min-height: clamp(140px, 44vw, var(--vt-upload-target-min-height, 220px)) !important;
+  }
+
+
+}
+
+/* Collapsed SubToolbox uses its outer shell bottom stroke; hide the header divider to avoid a doubled seam. */
+[data-vt-toolbox-level="sub"][data-state="closed"] > div > header::after{
+  display:none!important;
+}
+
+/* ==========================================================================
+   Mobile density authority — 2026-09-22 screenshot certification.
+   Preserve title type sizes; reduce structural chrome around the two-line cap.
+   ========================================================================== */
+@media (max-width: 767px) {
+  [data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) {
+    --vt-toolbox-header-height: 56px;
+    --vt-toolbox-radius: 14px;
+    --vt-toolbox-shadow-offset: 6px;
+  }
+  [data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) {
+    border-radius: 14px !important;
+  }
+  [data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header {
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+  }
+  [data-vt-toolbox][data-vt-toolbox-level="main"]:not([data-vt-toolbox-variant="accordion"]) > header > :first-child > :first-child {
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    height: 56px !important;
+    flex-basis: 56px !important;
+  }
+
+  [data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"],
+  [data-vt-toolbox-level="sub"],
+  [data-vt-subtoolbox-module="true"] {
+    --vt-subtoolbox-header-height: 44px;
+    --vt-subtoolbox-radius: 10px;
+    --vt-subtoolbox-shadow-offset: 4px;
+  }
+  [data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] {
+    border-radius: 10px !important;
+  }
+  [data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header {
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+  }
+  [data-vt-toolbox][data-vt-toolbox-level="main"] [data-vt-toolbox-level="sub"] > div > header > :first-child > :first-child {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    height: 44px !important;
+    flex-basis: 44px !important;
+  }
+
+
+
+}
+
+
+/* Mobile split-left controls follow the certified compact control ladder. */
+@media (max-width: 767px) {
+  [data-vt-split-left],
+  .vt-split-left-module-action {
+    min-height: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+  }
+  [data-vt-split-left] > [data-vt-split-left-rail],
+  .vt-split-left-module-action > [data-vt-split-left-rail] {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    flex-basis: 44px !important;
+  }
+  [data-vt-split-left] > [data-vt-split-left-label],
+  .vt-split-left-module-action > [data-vt-split-left-label] {
+    font-size: 20px !important;
+    line-height: .88 !important;
+    white-space: normal !important;
+    text-wrap: balance;
+  }
+}
+
+
+/* ==========================================================================
+   Canonical shell gutter authority — 2026-09-25
+   Toolbox, SubToolbox and Mini SubToolbox use one equal interior rhythm.
+   ========================================================================== */
+:root{
+  --vt-toolbox-shell-gutter:6px;
+  /* Painted edge clearance is intentionally larger than sibling spacing.
+     Thick shell dividers, component strokes and shadows need extra breathing
+     room so the first control does not visually collide with a header. */
+  --vt-toolbox-header-edge-clearance:10px;
+  --vt-keyboard-occlusion:0px;
+}
+[data-vt-toolbox][data-vt-toolbox-level="main"] .vt-main-toolbox-content{
+  padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter)!important;
+  gap:var(--vt-toolbox-shell-gutter)!important;
+}
+[data-vt-toolbox-level="sub"] .vt-subtoolbox-inset{
+  padding:0!important;
+}
+[data-vt-toolbox-level="sub"] .vt-subtoolbox-content{
+  padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter)!important;
+  gap:var(--vt-toolbox-shell-gutter)!important;
+}
+[data-vt-toolbox-level="sub"] :is(.vt-subtoolbox-stack,.vt-subtoolbox-grid,.vt-subtoolbox-actions){
+  gap:var(--vt-toolbox-shell-gutter)!important;
+}
+[data-vt-toolbox-level="sub"] .vt-subtoolbox-section{
+  gap:var(--vt-toolbox-shell-gutter)!important;
+}
+
+.vt-mini-subtoolbox{
+  --vt-mini-height:40px;
+  --vt-mini-stroke:3px;
+  --vt-mini-radius:8px;
+  --vt-mini-shadow:4px;
+  width:100%;
+  overflow:hidden;
+  border:var(--vt-mini-stroke) solid #000;
+  border-radius:var(--vt-mini-radius);
+  background:#fff;
+  box-shadow:var(--vt-mini-shadow) var(--vt-mini-shadow) 0 color-mix(in srgb,var(--vt-mini-header) 34%,transparent);
+}
+.vt-mini-subtoolbox-header{
+  min-height:var(--vt-mini-height);
+  display:grid;
+  grid-template-columns:var(--vt-mini-height) minmax(0,1fr) auto;
+  align-items:stretch;
+  border-bottom:var(--vt-mini-stroke) solid #000;
+  background:var(--vt-mini-header);
+}
+.vt-mini-subtoolbox-icon{
+  display:grid;
+  place-items:center;
+  border-right:var(--vt-mini-stroke) solid #000;
+  background:var(--vt-mini-icon);
+}
+.vt-mini-subtoolbox-icon svg{width:58%;height:58%;stroke-width:3}
+.vt-mini-subtoolbox-title{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  padding:0 10px;
+  font-size:16px;
+  font-weight:1000;
+  line-height:.88;
+  letter-spacing:-.045em;
+  text-transform:uppercase;
+}
+.vt-mini-subtoolbox-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  min-width:max-content;
+  gap:4px;
+  padding:4px 5px 4px 4px;
+}
+.vt-mini-subtoolbox-actions>button{
+  min-width:auto!important;
+  width:auto!important;
+  height:calc(var(--vt-mini-height) - 8px)!important;
+  min-height:0!important;
+  padding:0 9px!important;
+  border:2px solid #000!important;
+  border-radius:5px!important;
+  box-shadow:2px 2px 0 color-mix(in srgb,var(--vt-mini-header) 48%,transparent)!important;
+  font-size:12px!important;
+  font-weight:1000!important;
+  text-transform:uppercase;
+}
+.vt-mini-subtoolbox-content{
+  padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter);
+  background:#fff;
+}
+.vt-thumbnail-mini-content{
+  padding:0!important;
+}
+.vt-thumbnail-mini-preview{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  background:color-mix(in srgb,var(--pair-a,#36e0f6) 12%,white);
+}
+.vt-thumbnail-mini-preview>img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  object-position:center;
+}
+.vt-thumbnail-mini-empty{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:8px;
+  padding:16px;
+  color:rgb(0 0 0/.34);
+  text-align:center;
+}
+.vt-thumbnail-mini-empty svg{width:32px;height:32px}
+.vt-thumbnail-mini-empty strong{
+  max-width:30ch;
+  font-size:13px;
+  font-weight:1000;
+  line-height:.95;
+  text-transform:uppercase;
+}
+
+@media(max-width:767px){
+  :root{--vt-toolbox-shell-gutter:5px;--vt-toolbox-header-edge-clearance:9px}
+  .vt-mini-subtoolbox{--vt-mini-height:36px;--vt-mini-radius:7px;--vt-mini-shadow:3px}
+  .vt-mini-subtoolbox-title{font-size:14px;padding-inline:7px}
+  .vt-mini-subtoolbox-actions{gap:3px;padding:4px}
+  .vt-mini-subtoolbox-actions>button{height:calc(var(--vt-mini-height) - 8px)!important;padding-inline:7px!important;font-size:11px!important}
+  .vt-thumbnail-mini-empty strong{font-size:11px}
+}
