@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ViewTube Toolbox UI & CSS System — Standalone Reference</title>
+<style>
+:root{
+  --vt-bg:#0b0d10; --vt-surface:#11151a; --vt-surface-2:#171c22; --vt-surface-3:#1d242c;
+  --vt-panel:#101419; --vt-border:#2b333d; --vt-border-soft:#202730;
+  --vt-text:#f2f5f7; --vt-muted:#9ca7b2; --vt-dim:#68737e; --vt-accent:#77a7ff;
+  --vt-success:#62d394; --vt-warning:#e7bd65; --vt-danger:#e87575;
+  --vt-radius-0:4px; --vt-radius-1:6px; --vt-radius-2:8px; --vt-radius-pill:999px;
+  --vt-unit:4px;
+  --vt-font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --vt-shadow-1:0 1px 2px #0008; --vt-shadow-2:0 6px 18px #0007;
+  --vt-l0-h:28px; --vt-l1-h:36px; --vt-l2-h:44px;
+  --vt-l0-pad:8px; --vt-l1-pad:10px; --vt-l2-pad:12px;
+  --vt-l0-icon:16px; --vt-l1-icon:18px; --vt-l2-icon:20px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--vt-bg);color:var(--vt-text);font-family:var(--vt-font);line-height:1.35}
+button,input,select,textarea{font:inherit}
+button{color:inherit}
+a{color:var(--vt-accent)}
+.page{max-width:1500px;margin:auto;padding:24px}
+.hero{margin-bottom:20px}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--vt-muted)}
+h1{font-size:28px;margin:4px 0 8px} h2{font-size:20px;margin:0 0 12px} h3{font-size:14px;margin:18px 0 8px}
+.lead{color:var(--vt-muted);max-width:900px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--vt-surface);border:1px solid var(--vt-border);border-radius:var(--vt-radius-2);padding:16px;box-shadow:var(--vt-shadow-1)}
+.card.full{grid-column:1/-1}
+.note{padding:10px 12px;background:var(--vt-surface-2);border:1px solid var(--vt-border-soft);border-radius:6px;color:var(--vt-muted);font-size:12px}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.swatch{height:52px;border:1px solid var(--vt-border);border-radius:6px;padding:7px;font-size:10px;display:flex;align-items:flex-end}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stack{display:grid;gap:8px}
+.section{margin-top:16px}
+.token{font-family:ui-monospace,monospace;font-size:10px;color:var(--vt-muted)}
+/* Canonical toolbox shell */
+.toolbox{border:1px solid var(--vt-border);border-radius:8px;background:var(--vt-panel);overflow:hidden;box-shadow:var(--vt-shadow-1)}
+.toolbox-header{height:44px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:0 10px;background:var(--vt-surface-2);border-bottom:1px solid var(--vt-border)}
+.toolbox-title{font-size:14px;font-weight:650}
+.toolbox-meta{font-size:11px;color:var(--vt-muted)}
+.icon-btn{width:28px;height:28px;display:grid;place-items:center;border:1px solid transparent;border-radius:6px;background:transparent;cursor:pointer}
+.icon-btn:hover{background:var(--vt-surface-3);border-color:var(--vt-border)}
+.chevron{width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
+.toolbox[data-state="open"] .chevron,.subtoolbox[data-state="open"] .chevron{transform:rotate(225deg)}
+.toolbox[data-state="closed"] .toolbox-header{border-bottom-color:transparent}
+.toolbox[data-state="closed"] .toolbox-content{display:none}
+.toolbox-content{padding:12px;background:var(--vt-panel)}
+/* Subtoolbox: same anatomy, smaller semantic shell */
+.subtoolbox{border:1px solid var(--vt-border);border-radius:6px;background:var(--vt-surface);overflow:hidden}
+.subtoolbox-header{min-height:36px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:0 8px;background:var(--vt-surface-2);border-bottom:1px solid var(--vt-border)}
+.subtoolbox[data-state="closed"] .subtoolbox-header{border-bottom-color:transparent}
+.subtoolbox[data-state="closed"] .subtoolbox-content{display:none}
+.subtoolbox-content{padding:10px;background:var(--vt-surface)}
+/* Split-left primitive */
+.split{display:grid;grid-template-columns:40px 1fr;border:1px solid var(--vt-border);border-radius:6px;overflow:hidden;background:var(--vt-surface)}
+.split-rail{background:var(--vt-surface-2);border-right:1px solid var(--vt-border);display:grid;align-content:start;padding:6px;gap:4px}
+.split-main{padding:10px}
+.rail-btn{width:28px;height:28px;border:1px solid transparent;border-radius:5px;background:transparent;display:grid;place-items:center}
+.rail-btn:hover,.rail-btn.active{background:var(--vt-surface-3);border-color:var(--vt-border)}
+/* primitives */
+.action{height:36px;padding:0 12px;border:1px solid var(--vt-border);border-radius:6px;background:var(--vt-surface-2);display:inline-flex;align-items:center;gap:7px;font-size:13px;cursor:pointer}
+.action.primary{background:var(--vt-accent);color:#07101d;border-color:transparent}
+.action.ghost{background:transparent}
+.action.danger{color:var(--vt-danger)}
+.action:disabled{opacity:.45;cursor:not-allowed}
+.grid-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.action-card{min-height:68px;padding:10px;border:1px solid var(--vt-border);border-radius:6px;background:var(--vt-surface-2);text-align:left}
+.field{display:grid;gap:5px}
+.field label{font-size:11px;color:var(--vt-muted)}
+input,select,textarea{width:100%;background:var(--vt-surface-2);color:var(--vt-text);border:1px solid var(--vt-border);border-radius:6px;padding:8px 10px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--vt-accent);box-shadow:0 0 0 2px #77a7ff22}
+.badge{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;border:1px solid var(--vt-border);font-size:10px;background:var(--vt-surface-2)}
+.state{border-radius:5px;padding:5px 8px;font-size:10px;border:1px solid var(--vt-border)}
+.state.open{color:var(--vt-success)} .state.closed{color:var(--vt-muted)} .state.active{color:var(--vt-accent)} .state.disabled{opacity:.45}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.level{display:grid;gap:8px;align-content:start}
+.level-demo{border:1px solid var(--vt-border);border-radius:6px;background:var(--vt-surface-2);display:flex;align-items:center;gap:8px}
+.l0{height:28px;padding:0 8px}.l0 .demo-icon{width:16px;height:16px}.l0 .demo-text{font-size:11px}
+.l1{height:36px;padding:0 10px}.l1 .demo-icon{width:18px;height:18px}.l1 .demo-text{font-size:13px}
+.l2{height:44px;padding:0 12px}.l2 .demo-icon{width:20px;height:20px}.l2 .demo-text{font-size:15px}
+.demo-icon{border:1px solid var(--vt-border);border-radius:4px;display:grid;place-items:center;font-size:9px;color:var(--vt-muted)}
+.demo-text{font-weight:600}
+.states{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.demo-box{height:58px;border:1px solid var(--vt-border);border-radius:6px;background:var(--vt-surface-2);display:grid;place-items:center;font-size:10px}
+.hover{background:var(--vt-surface-3)} .focus{outline:2px solid #77a7ff66;outline-offset:1px}.selected{border-color:var(--vt-accent)}.disabled{opacity:.4}
+.library{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.library-panel{border:1px solid var(--vt-border);border-radius:8px;background:var(--vt-panel);padding:12px}
+.library-panel h3{margin-top:0}
+.alt{border-color:#735a32}
+.canonical{border-color:#3c628e}
+.code{white-space:pre-wrap;background:#080a0d;border:1px solid var(--vt-border-soft);padding:10px;border-radius:6px;font:10px/1.5 ui-monospace,monospace;color:#cbd4dc}
+.matrix{width:100%;border-collapse:collapse;font-size:11px}.matrix th,.matrix td{border-bottom:1px solid var(--vt-border-soft);padding:7px;text-align:left}.matrix th{color:var(--vt-muted)}
+.footer{margin-top:20px;color:var(--vt-dim);font-size:10px}
+@media(max-width:900px){.grid,.library,.levels{grid-template-columns:1fr}.swatches,.states{grid-template-columns:repeat(2,1fr)}.grid-actions{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="hero">
+  <div class="kicker">ViewTube • standalone visual reference</div>
+  <h1>Toolbox UI + CSS System</h1>
+  <p class="lead">A dependency-free HTML/CSS reproduction of the accumulated Toolbox/SubToolbox design knowledge: shells, primitives, modules, levels, states, tokens, palette surfaces, split-left anatomy, component-library rules, and governance invariants.</p>
+  <div class="note">Reference artifact — not the production implementation. The production system remains the canonical coded Toolbox/SubToolbox components, tokens, CSS, and contract tests.</div>
+</header>
+
+<div class="grid">
+<section class="card full">
+<h2>1. Canonical Toolbox shell</h2>
+<div class="toolbox" data-vt-toolbox data-vt-toolbox-level="toolbox" data-state="open">
+  <div class="toolbox-header">
+    <button class="icon-btn" aria-label="Toolbox menu">☰</button>
+    <div><div class="toolbox-title">Toolbox</div><div class="toolbox-meta">canonical shell • level 1</div></div>
+    <button class="icon-btn collapse" aria-label="Toggle Toolbox"><span class="chevron"></span></button>
+  </div>
+  <div class="toolbox-content">
+    <div class="stack">
+      <div class="row"><span class="badge">expanded</span><span class="badge">palette-aware</span><span class="badge">canonical state contract</span></div>
+      <div class="subtoolbox" data-vt-subtoolbox="true" data-vt-toolbox-level="sub" data-state="open">
+        <div class="subtoolbox-header">
+          <button class="icon-btn" aria-label="Subtoolbox menu">⋮</button>
+          <div><div class="toolbox-title">SubToolbox</div><div class="toolbox-meta">same anatomy • smaller default size</div></div>
+          <button class="icon-btn collapse" aria-label="Toggle SubToolbox"><span class="chevron"></span></button>
+        </div>
+        <div class="subtoolbox-content">
+          <div class="row">
+            <button class="action">＋ Action</button>
+            <button class="action ghost">Secondary</button>
+            <button class="action primary">Primary</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="card">
+<h2>2. Tokens</h2>
+<div class="swatches">
+  <div class="swatch" style="background:var(--vt-bg)">bg</div>
+  <div class="swatch" style="background:var(--vt-surface)">surface</div>
+  <div class="swatch" style="background:var(--vt-surface-2)">surface-2</div>
+  <div class="swatch" style="background:var(--vt-surface-3)">surface-3</div>
+  <div class="swatch" style="background:var(--vt-border)">border</div>
+  <div class="swatch" style="background:var(--vt-accent);color:#07101d">accent</div>
+  <div class="swatch" style="background:var(--vt-success);color:#07101d">success</div>
+  <div class="swatch" style="background:var(--vt-warning);color:#07101d">warning</div>
+</div>
+<h3>Geometry</h3>
+<div class="stack">
+  <span class="token">unit: 4px • radius: 4 / 6 / 8px • pill: 999px</span>
+  <span class="token">L0: 28px • L1: 36px • L2: 44px</span>
+  <span class="token">L0 icon 16px • L1 icon 18px • L2 icon 20px</span>
+</div>
+</section>
+
+<section class="card">
+<h2>3. L0 / L1 / L2</h2>
+<p class="token">Same component anatomy; different default sizes. L0 geometry follows the L1-derived ratio. Text-size ratio remains the explicitly preserved L0 ratio.</p>
+<div class="levels">
+  <div class="level"><span class="badge">L0</span><div class="level-demo l0"><span class="demo-icon">16</span><span class="demo-text">Component</span></div></div>
+  <div class="level"><span class="badge">L1</span><div class="level-demo l1"><span class="demo-icon">18</span><span class="demo-text">Component</span></div></div>
+  <div class="level"><span class="badge">L2</span><div class="level-demo l2"><span class="demo-icon">20</span><span class="demo-text">Component</span></div></div>
+</div>
+</section>
+
+<section class="card full">
+<h2>4. Primitive families</h2>
+<div class="grid-actions">
+  <button class="action-card"><b>SubToolboxActionButton</b><br><span class="token">single action primitive</span></button>
+  <button class="action-card"><b>SubToolboxGridActionButton</b><br><span class="token">grid action primitive</span></button>
+  <button class="action-card"><b>SubToolboxInnerActionButton</b><br><span class="token">inner action primitive</span></button>
+  <button class="action-card"><b>SubToolboxDropdownControl</b><br><span class="token">dropdown/control primitive</span></button>
+  <button class="action-card"><b>StandardInput</b><br><span class="token">canonical field primitive</span></button>
+  <button class="action-card"><b>StandardTextArea</b><br><span class="token">canonical textarea primitive</span></button>
+</div>
+</section>
+
+<section class="card">
+<h2>5. Form primitives</h2>
+<div class="stack">
+  <div class="field"><label>StandardInput</label><input value="Example value"></div>
+  <div class="field"><label>SubToolboxDropdownControl</label><select><option>Default option</option><option>Alternate option</option></select></div>
+  <div class="field"><label>StandardTextArea</label><textarea rows="3">Canonical textarea surface</textarea></div>
+</div>
+</section>
+
+<section class="card">
+<h2>6. Split-left anatomy</h2>
+<div class="split">
+  <div class="split-rail">
+    <button class="rail-btn active">⌂</button><button class="rail-btn">◈</button><button class="rail-btn">⚙</button>
+  </div>
+  <div class="split-main"><b>Content region</b><div class="token">Palette-aware icon rail; no forced white background.</div></div>
+</div>
+</section>
+
+<section class="card">
+<h2>7. States</h2>
+<div class="states">
+  <div class="demo-box">default</div><div class="demo-box hover">hover</div><div class="demo-box focus">focus</div><div class="demo-box selected">selected</div>
+  <div class="demo-box disabled">disabled</div><div class="demo-box"><span class="state open">open</span></div><div class="demo-box"><span class="state closed">closed</span></div><div class="demo-box"><span class="state active">active</span></div>
+</div>
+</section>
+
+<section class="card full">
+<h2>8. Component Library truth model</h2>
+<div class="library">
+  <div class="library-panel canonical"><h3>Canonical / default library</h3><div class="note">Must render the actual coded uniform Toolbox/SubToolbox components and primitives. It is the visual representative of the production system.</div></div>
+  <div class="library-panel alt"><h3>Alternate / reference library</h3><div class="note">Legacy, hardcoded, historical, experimental, and non-default variants live here. They do not redefine the canonical system.</div></div>
+</div>
+</section>
+
+<section class="card">
+<h2>9. CSS ownership</h2>
+<table class="matrix"><tr><th>Owner</th><th>Responsibility</th></tr>
+<tr><td>toolbox-system.css</td><td>canonical Toolbox shell, states, geometry</td></tr>
+<tr><td>subtoolbox-system.css</td><td>canonical SubToolbox shell and nested behavior</td></tr>
+<tr><td>design tokens</td><td>sizes, radii, colors, typography, spacing</td></tr>
+<tr><td>primitives</td><td>reusable controls and anatomy</td></tr>
+<tr><td>page CSS</td><td>composition only; must not redefine shell contracts</td></tr></table>
+</section>
+
+<section class="card">
+<h2>10. Invariants</h2>
+<ul class="token">
+<li>Toolbox.tsx remains the canonical shell implementation.</li>
+<li>The compatibility barrel preserves legacy public imports; it is not a second shell.</li>
+<li>SubToolbox uses the canonical DOM/state contract.</li>
+<li>Collapsed shells suppress the seam without producing a double bottom line.</li>
+<li>ChevronDown rotates between open and closed states.</li>
+<li>Icon rails inherit palette surfaces rather than forced white backgrounds.</li>
+<li>L0/L1/L2 share component anatomy.</li>
+<li>Canonical Component Library examples are production primitives/components.</li>
+<li>Redundant correction CSS is folded into canonical owners.</li>
+<li>Work is complete only after verification and merge to main.</li>
+</ul>
+</section>
+
+<section class="card full">
+<h2>11. Representative CSS contract</h2>
+<div class="code">[data-vt-toolbox][data-state="closed"] .toolbox-header { border-bottom-color: transparent; }
+[data-vt-toolbox][data-state="closed"] .toolbox-content { display: none; }
+
+[data-vt-subtoolbox="true"][data-state="closed"] .subtoolbox-header { border-bottom-color: transparent; }
+[data-vt-subtoolbox="true"][data-state="closed"] .subtoolbox-content { display: none; }
+
+[data-vt-toolbox] .chevron { transition: transform .18s ease; }
+[data-vt-toolbox][data-state="open"] .chevron { transform: rotate(225deg); }
+
+Keep shell geometry, state selectors, tokens, and primitive anatomy in their canonical owners. Avoid page-specific symptom patches.</div>
+</section>
+
+<section class="card full">
+<h2>12. Reference provenance</h2>
+<p class="token">Compiled from the recovered ViewTube Toolbox/SubToolbox knowledge base, prior UI audit findings, the canonical Toolbox master-resource/handoff concepts, the Studio Hub Component Library source-of-truth rules, L0/L1/L2 decisions, deployment/build diagnostics, and the accessible themotionvisual/ViewTubeBUILD comparison baseline. This artifact is intentionally standalone and dependency-free so it can survive repository/account transitions.</p>
+</section>
+</div>
+
+<footer class="footer">ViewTube Toolbox UI/CSS Reference • standalone artifact • 2026-10-02</footer>
+</div>
+<script>
+document.querySelectorAll('.collapse').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const shell=btn.closest('[data-state]');
+    shell.dataset.state=shell.dataset.state==='open'?'closed':'open';
+  });
+});
+</script>
+</body>
+</html>
