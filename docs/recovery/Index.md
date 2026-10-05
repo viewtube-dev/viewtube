@@ -96,6 +96,7 @@ The system optimizes for **clarity, reuse, low duplication, and easy agent navig
 ## Document operations
 
 - `docs/Document-System.md` — canonical document lifecycle, editing, merging, restructuring, provenance, verification, and quality standard.
+- `docs/Document-Health.md` — health checks, reconciliation, migration gates, and non-destructive audit rules.
 - `docs/recovery/History.md` — shared append-only-style operation ledger for substantive document changes.
 
 **Agent rule:** every substantive document operation must update History.md after verification.
