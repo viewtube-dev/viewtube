@@ -62,6 +62,7 @@ Do not create a new document for an existing subject. Update or consolidate its 
 |---|---|
 | Document System | Document-System.md |
 | Document Health / Migration | Document-Health.md |
+| Conversation synchronization | recovery/Sync.md |
 | Repository document history | recovery/History.md |
 
 **Rule:** substantive knowledge belongs in its canonical subject document; operation history belongs in `docs/recovery/History.md`.
