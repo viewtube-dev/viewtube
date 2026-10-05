@@ -99,3 +99,30 @@ If an earlier entry is incomplete or inaccurate, add a new correction entry with
 - Blockers / unresolved items: Full canonical tool inventory, current ? implementation, canonical ownership of final copy catalog, and Round 2 reconciliation remain pending.
 - Recommended follow-up: Inspect canonical code/registries/routes for all manifestations, then update existing subject authorities rather than creating competing documents.
 - Next agent action: Continue Round 2 reconciliation from the canonical main branch.
+
+### DOC-20261004-014
+
+- Timestamp: 2026-10-04 21:34:53 EDT
+- Conversation: ViewTube synchronization activation refinement
+- Agent / model: GPT-5.6 Luna
+- Application / tool: ChatGPT + GitHub
+- Action: EDIT + VERIFY
+- Reason: Make the synchronization command usable by a completely fresh AI conversation with no prior knowledge of the ViewTube GitHub documentation system.
+- Source(s): User correction; docs/recovery/Sync.md
+- Destination(s): docs/recovery/Sync.md; docs/recovery/History.md
+- Files added: none
+- Files edited: docs/recovery/Sync.md; docs/recovery/History.md
+- Files moved: none
+- Files merged: none
+- Files superseded: none
+- Files archived: none
+- Commit(s): 8ae484d9ad8ffbe681a65a1d68b4795b6621f521
+- What changed: Replaced the ambiguous activation model with the self-contained phrase VIEWTUBE SYNC — GO TO GITHUB and explicitly instructs a fresh conversation to open the canonical repository and exact Sync.md path before relying on any prior context.
+- Why: A short phrase alone cannot reliably bootstrap an unfamiliar AI conversation unless the phrase itself supplies the repository and entry-point instructions.
+- Important information preserved: VIEWTUBE SYNC remains valid as internal shorthand after Sync.md has been loaded; the full phrase is now the recommended cross-conversation activation command.
+- Discoveries: The previous activation wording depended on the receiving conversation already knowing what VIEWTUBE SYNC meant.
+- Conflicts: None identified.
+- Verification: Sync.md was fetched from main before editing using blob SHA 23c7279254c2144523f04467a343234a071df646; the replacement write returned commit SHA 8ae484d9ad8ffbe681a65a1d68b4795b6621f521.
+- Blockers / unresolved items: None for the activation-file change. Actual behavior still depends on the receiving conversation having GitHub/web access.
+- Recommended follow-up: Use VIEWTUBE SYNC — GO TO GITHUB when bootstrapping an unfamiliar ViewTube conversation; use VIEWTUBE SYNC only after the protocol has already been loaded.
+- Next agent action: Test the full phrase in a genuinely fresh ViewTube conversation and confirm it opens the GitHub entry point before doing project work.
