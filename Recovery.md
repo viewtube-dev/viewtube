@@ -589,3 +589,25 @@ Before creating a document, agents must check `KNOWLEDGE_INDEX.md` and the relev
 ### Optimization requirement
 
 Every substantial conversation must actively search for bugs, code-structure problems, tool improvements, new tools, workflow improvements, handoff improvements, AI improvements, UX/product improvements, performance opportunities, security/reliability issues, data/model improvements, and testing/verification improvements. Material findings belong in `FINDINGS_REGISTER.md` and/or a detailed linked artifact.
+
+
+#### LOG-ID: REC-20261004-analytics-sync-001
+
+- **Timestamp:** 2026-10-04 21:32:50 EDT (UTC-04:00; exact runtime timestamp observed)
+- **Agent:** GPT-5.6 Luna — ViewTube documentation/recovery agent
+- **Round:** 1
+- **Category:** ANALYTICS / DATA VISUALS / RECOVERY / DOCUMENTATION
+- **Action:** Synchronized the conversation with the current documentation system and preserved the conversation's Analytics/Data Visuals requirements, observed runtime failures, import problem, and fixture/data-quality requirements.
+- **Source:** Current ChatGPT conversation, user-provided Analytics screenshots, browser-console output, and direct inspection of canonical `viewtube-dev/viewtube/main`.
+- **Evidence:** Current `Recovery.md`, `Recovery.yaml`, `docs/Index.md`, `docs/Organization.md`, `docs/Document-System.md`, `docs/Document-Health.md`, `docs/recovery/Index.md`, `docs/recovery/Agent.md`, `docs/recovery/History.md`, `docs/Analytics.md`, `docs/YouTube.md`, `docs/recovery/Findings.md`, and Analytics recovery source material were inspected. Repository search did not locate the reported runtime symbols/error strings in canonical main.
+- **Status:** VERIFIED
+- **Artifacts:** `docs/Analytics.md`; `docs/recovery/Findings.md`; `Recovery.md`; `Recovery.yaml`; `docs/recovery/History.md`
+- **Commits:** `57c40e723471299e3551f1d2270cc02573eb3e67`; `4c93e86c80db6acdb8433f947dbc10d0b24e5f70`; subsequent recovery/state/history commits recorded below.
+- **Important information preserved:** Analytics is a four-tool surface (Sync Controller, Intelligence Hub, Master Data Tables, Data Visuals); Data Visuals requirements include traffic by all seven days, video-level data, country dimensions, daily time series, all-day/all-time upload timing, and temporally varied successful-video records for consistency analysis; the attempted JSON bundle was rejected by the running import UI; the conversation also captured two runtime errors.
+- **Discoveries:** The conversation exposed a concrete mismatch between the intended Analytics fixture/bundle workflow and the running site's import behavior. The canonical repository does not currently expose the exact importer/error symbols through code search, so root cause remains UNKNOWN.
+- **Code discoveries:** No new canonical runtime code behavior was verified in this pass. Reported symbols/errors are preserved as conversation evidence only.
+- **Optimizations:** Prefer explicit dataset-level validation; support individual CSV fixtures as a diagnosable fallback; ensure test data has temporal diversity rather than clustered successful-video timestamps.
+- **Recommended improvements:** Establish the canonical Analytics import schema; trace the `/local-analytics` null assignment and toolbox persistence error; add fixture validation for day/time coverage; add regression tests for import validation and route bootstrap.
+- **Conflicts:** Historical/external runtime evidence is not treated as canonical implementation evidence. The repository's current main branch remains authoritative.
+- **Verification:** Canonical documentation and recovery files were read before edits; Analytics and Findings were updated using their current blob SHAs; no new competing Analytics document was created. Repository-wide link/orphan/obsolete-path scans were not completed and remain UNKNOWN.
+- **Next action:** Reconcile the running `viewtube.live/local-analytics` implementation against the canonical current-main source, establish the accepted Analytics bundle/CSV schema, and verify the reported runtime errors with stack traces.
