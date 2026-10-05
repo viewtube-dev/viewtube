@@ -468,3 +468,10 @@ document_health:
   workflow: "SCAN -> CLASSIFY -> COLLECT EVIDENCE -> RECOMMEND -> REVIEW -> CHANGE -> VERIFY -> LOG"
   destructive_cleanup_gate: "INVENTORY -> PRESERVATION -> RECONCILIATION -> LINK CHECK -> VERIFICATION -> HISTORY RECEIPT -> CLEANUP"
   destructive_automation: false
+
+
+sync_activation:
+  canonical_prompt: "docs/recovery/Sync.md"
+  activation_phrase: "VIEWTUBE SYNC"
+  canonical_branch: "main"
+  behavior: "Read Sync.md and execute the full ViewTube documentation/recovery synchronization protocol."
