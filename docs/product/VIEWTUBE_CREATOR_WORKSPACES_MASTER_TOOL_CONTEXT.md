@@ -326,13 +326,13 @@ Relevant documentation, guides, references, playbooks, contextual help, and reus
 
 **Screenshot-confirmed inventory:** 66 dashboard widget tools.
 
-> This document is based on the supplied ViewTube dashboard screenshots and the current ViewTubeBUILD widget inventory. It preserves the screenshot-visible tool names, including tools whose current registry status or implementation may differ. Where the source only establishes a widget purpose, the remaining fields are concise usage guidance rather than claims of undocumented API behavior.
+> This section follows the screenshot-confirmed 66-widget inventory. Widget descriptions are concise creator-facing definitions; detailed controls and implementation remain governed by the Widget and UI documentation.
 
 ## 1. About ViewTube
 
 ### Description
 
-Explain the ViewTube system, creator loop, connected tools, and Trust/data controls.
+About ViewTube is an overview of ViewTube's creator system, connected tools, creator loop, and Trust and data controls.
 
 ### Inputs
 
@@ -340,160 +340,160 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Explain the ViewTube system, creator loop, connected tools, and Trust/data controls.
+About ViewTube is an overview of ViewTube's creator system, connected tools, creator loop, and Trust and data controls.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 2. Channel Overview
 
 ### Description
 
-Monitor your channel's reach and engagement over the selected reporting period.
+Channel Overview is a summary of channel reach, engagement, and overall performance for the selected reporting period.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Monitor your channel's reach and engagement over the selected reporting period.
+Channel Overview is a summary of channel reach, engagement, and overall performance for the selected reporting period.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 3. Community Post
 
 ### Description
 
-Create community posts, polls, and image-based updates to keep viewers engaged between video uploads.
+Community Post is a quick way to create community posts, polls, and image-based updates that keep viewers engaged between video uploads.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Create community posts, polls, and image-based updates to keep viewers engaged between video uploads.
+Community Post is a quick way to create community posts, polls, and image-based updates that keep viewers engaged between video uploads.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 4. Comment Responder
 
 ### Description
 
-Draft replies to viewer comments and help turn comment activity into useful audience engagement.
+Comment Responder is a way to draft relevant replies to viewer comments and turn comment activity into useful audience engagement.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Draft replies to viewer comments and help turn comment activity into useful audience engagement.
+Comment Responder is a way to draft relevant replies to viewer comments and turn comment activity into useful audience engagement.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 5. Upload Cadence
 
 ### Description
 
-Track your publishing rhythm and identify gaps or changes in your upload schedule.
+Upload Cadence tracks a channel's publishing rhythm and highlights gaps or changes in the upload schedule.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Track your publishing rhythm and identify gaps or changes in your upload schedule.
+Upload Cadence tracks a channel's publishing rhythm and highlights gaps or changes in the upload schedule.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 6. Realtime
 
 ### Description
 
-Monitor current viewer activity and traffic while a video or channel is receiving live performance.
+Realtime shows current viewer activity and traffic while a video or channel is receiving live performance.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Monitor current viewer activity and traffic while a video or channel is receiving live performance.
+Realtime shows current viewer activity and traffic while a video or channel is receiving live performance.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 7. Goals Tracker
 
 ### Description
 
-Set and monitor channel goals for subscribers, views, revenue, and other growth targets.
+Goals Tracker helps set and monitor channel goals for subscribers, views, revenue, and other growth targets.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Set and monitor channel goals for subscribers, views, revenue, and other growth targets.
+Goals Tracker helps set and monitor channel goals for subscribers, views, revenue, and other growth targets.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 8. Keyword Engine
 
 ### Description
 
-Find search opportunities and keyword demand to help choose stronger video topics and positioning.
+Keyword Engine helps find search opportunities and keyword demand to support stronger video topics and positioning.
 
 ### Inputs
 
@@ -501,22 +501,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Find search opportunities and keyword demand to help choose stronger video topics and positioning.
+Keyword Engine helps find search opportunities and keyword demand to support stronger video topics and positioning.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 9. Daily Oracle
 
 ### Description
 
-Provide an evidence-ranked daily strategy focus based on your channel context, goals, performance, cadence, effort, and selected growth lens.
+Daily Oracle provides an evidence-ranked daily strategy focus based on channel context, goals, performance, cadence, effort, and the selected growth lens.
 
 ### Inputs
 
@@ -524,22 +524,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Provide an evidence-ranked daily strategy focus based on your channel context, goals, performance, cadence, effort, and selected growth lens.
+Daily Oracle provides an evidence-ranked daily strategy focus based on channel context, goals, performance, cadence, effort, and the selected growth lens.
 
 ### Connections
 
-- Brain Hub — supplies or receives strategic creator context.
-- AI Journal / Analytics — preserve lessons and evidence for future decisions.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 10. Ask Me
 
 ### Description
 
-Ask questions about your channel and data and get an immediate answer in plain language.
+Ask Me lets YouTubers ask questions about their channel and data and get immediate answers in plain language.
 
 ### Inputs
 
@@ -547,45 +547,45 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Ask questions about your channel and data and get an immediate answer in plain language.
+Ask Me lets YouTubers ask questions about their channel and data and get immediate answers in plain language.
 
 ### Connections
 
-- Brain Hub — supplies or receives strategic creator context.
-- AI Journal / Analytics — preserve lessons and evidence for future decisions.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 11. AI Journal
 
 ### Description
 
-Record what works, what does not, and what you learn so ViewTube can build a persistent Creator Playbook.
+AI Journal is a place to record what works, what does not, and what is learned so ViewTube can build a persistent Creator Playbook.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Record what works, what does not, and what you learn so ViewTube can build a persistent Creator Playbook.
+AI Journal is a place to record what works, what does not, and what is learned so ViewTube can build a persistent Creator Playbook.
 
 ### Connections
 
-- Brain Hub — supplies or receives strategic creator context.
-- AI Journal / Analytics — preserve lessons and evidence for future decisions.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 12. Brain Hub
 
 ### Description
 
-View and work with the Brain's evolving understanding of your channel identity, content DNA, performance, and goals.
+Brain Hub provides access to the AI Brain's evolving understanding of a channel's identity, content DNA, performance, and goals.
 
 ### Inputs
 
@@ -593,22 +593,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-View and work with the Brain's evolving understanding of your channel identity, content DNA, performance, and goals.
+Brain Hub provides access to the AI Brain's evolving understanding of a channel's identity, content DNA, performance, and goals.
 
 ### Connections
 
-- Brain Hub — supplies or receives strategic creator context.
-- AI Journal / Analytics — preserve lessons and evidence for future decisions.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 13. Next Best Action
 
 ### Description
 
-Turn current channel evidence into the highest-value creator move to take next.
+Next Best Action turns current channel evidence into the highest-value creator move to take next.
 
 ### Inputs
 
@@ -616,45 +616,45 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Turn current channel evidence into the highest-value creator move to take next.
+Next Best Action turns current channel evidence into the highest-value creator move to take next.
 
 ### Connections
 
-- Brain Hub — supplies or receives strategic creator context.
-- AI Journal / Analytics — preserve lessons and evidence for future decisions.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 14. Opportunity Radar
 
 ### Description
 
-Surface evidence-backed follow-up, refresh, and growth opportunities from current channel performance.
+Opportunity Radar surfaces evidence-backed follow-up, refresh, and growth opportunities from current channel performance.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Surface evidence-backed follow-up, refresh, and growth opportunities from current channel performance.
+Opportunity Radar surfaces evidence-backed follow-up, refresh, and growth opportunities from current channel performance.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 15. Content Pipeline
 
 ### Description
 
-Show the current production flow from idea through build, ready, and published content.
+Content Pipeline shows content moving from idea through production, readiness, and publication so creators can manage their production flow.
 
 ### Inputs
 
@@ -662,22 +662,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Show the current production flow from idea through build, ready, and published content.
+Content Pipeline shows content moving from idea through production, readiness, and publication so creators can manage their production flow.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 16. Audience Requests
 
 ### Description
 
-Surface recurring viewer questions and requests and turn promising demand into content opportunities.
+Audience Requests surfaces recurring viewer questions and requests and helps turn promising audience demand into content opportunities.
 
 ### Inputs
 
@@ -685,22 +685,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Surface recurring viewer questions and requests and turn promising demand into content opportunities.
+Audience Requests surfaces recurring viewer questions and requests and helps turn promising audience demand into content opportunities.
 
 ### Connections
 
-- Audience data — supplies viewer and community context.
-- Content Pipeline / Community workflows — turn audience signals into actions.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 17. Video Asset Engine
 
 ### Description
 
-Package, inspect, and hand off durable creator assets for reuse across ViewTube workflows.
+Video Asset Engine helps package, inspect, organize, and hand off durable creator assets for reuse across ViewTube workflows.
 
 ### Inputs
 
@@ -708,22 +708,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Package, inspect, and hand off durable creator assets for reuse across ViewTube workflows.
+Video Asset Engine helps package, inspect, organize, and hand off durable creator assets for reuse across ViewTube workflows.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 18. Publishing Command
 
 ### Description
 
-Run the final preflight and launch process for a video before sending it to publishing.
+Publishing Command helps run the final preflight and launch process for a video before it moves into publishing.
 
 ### Inputs
 
@@ -731,183 +731,183 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Run the final preflight and launch process for a video before sending it to publishing.
+Publishing Command helps run the final preflight and launch process for a video before it moves into publishing.
 
 ### Connections
 
-- Video Manager / Publishing workflows — manage the affected video and release state.
-- Studio Hub / Projects — provide the production context used before or after publishing.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 19. Channel Progress
 
 ### Description
 
-Compare current channel performance with active growth targets and use the trajectory signal to decide where to focus next.
+Channel Progress compares current channel performance with active growth targets and shows where the creator should focus next.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Compare current channel performance with active growth targets and use the trajectory signal to decide where to focus next.
+Channel Progress compares current channel performance with active growth targets and shows where the creator should focus next.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 20. Video Director
 
 ### Description
 
-Direct, storyboard, vary, and execute generated video from the dashboard, with a handoff to the full Studio Director.
+Video Director provides a quick way to direct, storyboard, vary, and execute generated video from the dashboard.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Direct, storyboard, vary, and execute generated video from the dashboard, with a handoff to the full Studio Director.
+Video Director provides a quick way to direct, storyboard, vary, and execute generated video from the dashboard.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 21. Shorts Multiplier
 
 ### Description
 
-Create repost-ready Shorts variants from existing content with trim and scheduling plans.
+Shorts Multiplier helps turn existing content into repost-ready Shorts variants with trim and scheduling plans.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Create repost-ready Shorts variants from existing content with trim and scheduling plans.
+Shorts Multiplier helps turn existing content into repost-ready Shorts variants with trim and scheduling plans.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 22. Image Generator
 
 ### Description
 
-Create images with style controls and send the results directly into other creator workflows.
+Image Generator creates images with style controls and sends the results into other creator workflows.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Create images with style controls and send the results directly into other creator workflows.
+Image Generator creates images with style controls and sends the results into other creator workflows.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 23. Video Uploader
 
 ### Description
 
-Prepare a video, thumbnail, metadata, publishing options, and ad-suitability information for upload and publication.
+Video Uploader helps prepare a video, thumbnail, metadata, publishing options, and ad-suitability information for upload and publication.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Prepare a video, thumbnail, metadata, publishing options, and ad-suitability information for upload and publication.
+Video Uploader helps prepare a video, thumbnail, metadata, publishing options, and ad-suitability information for upload and publication.
 
 ### Connections
 
-- Video Manager / Publishing workflows — manage the affected video and release state.
-- Studio Hub / Projects — provide the production context used before or after publishing.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 24. Video Manager
 
 ### Description
 
-Manage a published video by reviewing and updating its thumbnail, title, description, tags, metadata, and ad-suitability settings.
+Video Manager helps manage a published video by reviewing and updating its thumbnail, title, description, tags, metadata, and ad-suitability settings.
 
 ### Inputs
 
-Use the current channel, video, audience, project, or analytics context relevant to this widget.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Manage a published video by reviewing and updating its thumbnail, title, description, tags, metadata, and ad-suitability settings.
+Video Manager helps manage a published video by reviewing and updating its thumbnail, title, description, tags, metadata, and ad-suitability settings.
 
 ### Connections
 
-- Video Manager / Publishing workflows — manage the affected video and release state.
-- Studio Hub / Projects — provide the production context used before or after publishing.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 25. Traffic Sources
 
 ### Description
 
-Identify where your views come from, including Search, Suggested, Browse, and external sources.
+Traffic Sources shows where views come from, including Search, Suggested, Browse, and external sources.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Identify where your views come from, including Search, Suggested, Browse, and external sources.
+Traffic Sources shows where views come from, including Search, Suggested, Browse, and external sources.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 26. Long vs Short
 
 ### Description
 
-Compare long-form and Shorts performance to understand which format is driving different growth outcomes.
+Long vs Short compares long-form and Shorts performance to show how each format contributes to different growth outcomes.
 
 ### Inputs
 
@@ -915,91 +915,91 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Compare long-form and Shorts performance to understand which format is driving different growth outcomes.
+Long vs Short compares long-form and Shorts performance to show how each format contributes to different growth outcomes.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 27. Published Momentum
 
 ### Description
 
-Visualize when your audience is most active to help time uploads for maximum initial velocity.
+Published Momentum shows when an audience is most active to help time uploads for stronger initial velocity.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Visualize when your audience is most active to help time uploads for maximum initial velocity.
+Published Momentum shows when an audience is most active to help time uploads for stronger initial velocity.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 28. Audience Matrix
 
 ### Description
 
-Analyze geography, device, and sharing data in a unified audience view.
+Audience Matrix combines geography, device, and sharing data into a unified view of audience behavior.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Analyze geography, device, and sharing data in a unified audience view.
+Audience Matrix combines geography, device, and sharing data into a unified view of audience behavior.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 29. Settings
 
 ### Description
 
-Toggle dashboard visibility and quick channel-management settings.
+Settings provides quick controls for dashboard visibility and channel-management preferences.
 
 ### Inputs
 
-Use the widget's visible controls, selections, and current ViewTube workspace context.
+Use the widget's visible controls, selections, and current ViewTube interface context.
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available controls → make the needed selection or change → continue to the relevant ViewTube workflow.
 
 ### Outputs
 
-Toggle dashboard visibility and quick channel-management settings.
+Settings provides quick controls for dashboard visibility and channel-management preferences.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **ViewTube UI system** — provides shared interface behavior and visual references.
+- **Dashboard / Studio Hub** — uses the resulting settings, references, or navigation.
 
 ## 30. Keyword Overlap
 
 ### Description
 
-Map overlap and value among title keywords.
+Keyword Overlap maps the overlap and value among title keywords to help refine video positioning.
 
 ### Inputs
 
@@ -1007,68 +1007,68 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Map overlap and value among title keywords.
+Keyword Overlap maps the overlap and value among title keywords to help refine video positioning.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 31. Retention Simulator
 
 ### Description
 
-Analyze potential pacing danger zones during editing before publication.
+Retention Simulator helps identify potential pacing danger zones during editing before a video is published.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Analyze potential pacing danger zones during editing before publication.
+Retention Simulator helps identify potential pacing danger zones during editing before a video is published.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 32. Upload Scheduler
 
 ### Description
 
-Map out upcoming content and schedule releases to maintain a consistent publishing rhythm.
+Upload Scheduler helps plan upcoming content and schedule releases to maintain a consistent publishing rhythm.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Map out upcoming content and schedule releases to maintain a consistent publishing rhythm.
+Upload Scheduler helps plan upcoming content and schedule releases to maintain a consistent publishing rhythm.
 
 ### Connections
 
-- Video Manager / Publishing workflows — manage the affected video and release state.
-- Studio Hub / Projects — provide the production context used before or after publishing.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 33. Thumb AI
 
 ### Description
 
-Evaluate thumbnail CTR potential and generate thumbnail variations.
+Thumb AI evaluates thumbnail CTR potential and helps generate thumbnail variations.
 
 ### Inputs
 
@@ -1076,114 +1076,114 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Evaluate thumbnail CTR potential and generate thumbnail variations.
+Thumb AI evaluates thumbnail CTR potential and helps generate thumbnail variations.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 34. Quick Actions
 
 ### Description
 
-Quickly jump to the most common dashboard surfaces and ViewTube workflows.
+Quick Actions provides shortcuts to common dashboard surfaces and ViewTube creator workflows.
 
 ### Inputs
 
-Use the widget's visible controls, selections, and current ViewTube workspace context.
+Use the widget's visible controls, selections, and current ViewTube interface context.
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available controls → make the needed selection or change → continue to the relevant ViewTube workflow.
 
 ### Outputs
 
-Quickly jump to the most common dashboard surfaces and ViewTube workflows.
+Quick Actions provides shortcuts to common dashboard surfaces and ViewTube creator workflows.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **ViewTube UI system** — provides shared interface behavior and visual references.
+- **Dashboard / Studio Hub** — uses the resulting settings, references, or navigation.
 
 ## 35. Revenue Momentum
 
 ### Description
 
-Track how fast revenue is changing and where it peaks.
+Revenue Momentum tracks how revenue is changing over time and where revenue peaks occur.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Track how fast revenue is changing and where it peaks.
+Revenue Momentum tracks how revenue is changing over time and where revenue peaks occur.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 36. Title Rewriter
 
 ### Description
 
-Generate title alternatives from a video's core hook and compare different angles.
+Title Rewriter generates title alternatives from a video's core hook and helps compare different angles.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Generate title alternatives from a video's core hook and compare different angles.
+Title Rewriter generates title alternatives from a video's core hook and helps compare different angles.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 37. Description Editor
 
 ### Description
 
-Bulk edit or template descriptions with reusable SEO, link, and social blocks.
+Description Editor helps edit descriptions in bulk and apply reusable SEO, link, and social blocks.
 
 ### Inputs
 
-Provide the relevant content or creator context and use the available controls to define what you want to create, change, schedule, or analyze.
+Provide the relevant content, creator context, and available source assets.
 
 ### Workflow
 
-Provide the source context → configure the available controls → generate or edit → review the result → send it to the next workflow.
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
 
 ### Outputs
 
-Bulk edit or template descriptions with reusable SEO, link, and social blocks.
+Description Editor helps edit descriptions in bulk and apply reusable SEO, link, and social blocks.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 ## 38. Hashtag Analyzer
 
 ### Description
 
-See which hashtags are trending or oversaturated and select relevant tags.
+Hashtag Analyzer shows which hashtags are trending or oversaturated and helps select relevant tags.
 
 ### Inputs
 
@@ -1191,22 +1191,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-See which hashtags are trending or oversaturated and select relevant tags.
+Hashtag Analyzer shows which hashtags are trending or oversaturated and helps select relevant tags.
 
 ### Connections
 
-- Studio Hub — receives creative, packaging, or optimization work.
-- Projects / Content Pipeline — carries selected work into production.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 39. Social Channels
 
 ### Description
 
-Provide a holistic view of channel reach and engagement for longer-term trends and seasonality.
+Social Channels provides a broader view of channel reach and engagement across longer-term trends and seasonality.
 
 ### Inputs
 
@@ -1214,68 +1214,22 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Provide a holistic view of channel reach and engagement for longer-term trends and seasonality.
+Social Channels provides a broader view of channel reach and engagement across longer-term trends and seasonality.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 40. Mini Calendar
 
 ### Description
 
-Show upcoming tasks and deadlines so the creator can plan the week and avoid production bottlenecks.
-
-### Inputs
-
-Use the widget's visible controls, selections, and current ViewTube workspace context.
-
-### Workflow
-
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
-
-### Outputs
-
-Show upcoming tasks and deadlines so the creator can plan the week and avoid production bottlenecks.
-
-### Connections
-
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
-
-## 41. Task Stack
-
-### Description
-
-Manage production work from ideation through publish and keep multiple edits moving.
-
-### Inputs
-
-Use the widget's visible controls, selections, and current ViewTube workspace context.
-
-### Workflow
-
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
-
-### Outputs
-
-Manage production work from ideation through publish and keep multiple edits moving.
-
-### Connections
-
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
-
-## 42. Recent Uploads
-
-### Description
-
-Compare recent videos to spot topics, thumbnails, and releases that are currently resonating.
+Mini Calendar shows upcoming tasks and deadlines so creators can plan their work and avoid production bottlenecks.
 
 ### Inputs
 
@@ -1283,45 +1237,614 @@ Use the current channel, video, audience, project, or analytics context relevant
 
 ### Workflow
 
-Open the widget → review the available context → use its controls or analysis → act on the result in the relevant ViewTube workflow.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Compare recent videos to spot topics, thumbnails, and releases that are currently resonating.
+Mini Calendar shows upcoming tasks and deadlines so creators can plan their work and avoid production bottlenecks.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 41. Task Stack
+
+### Description
+
+Task Stack helps manage production work from ideation through publishing and keep multiple edits moving.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Task Stack helps manage production work from ideation through publishing and keep multiple edits moving.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 42. Recent Uploads
+
+### Description
+
+Recent Uploads compares recent videos to identify topics, thumbnails, and releases that are currently resonating.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Recent Uploads compares recent videos to identify topics, thumbnails, and releases that are currently resonating.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 43. Top Performer
 
 ### Description
 
-Analyze the strongest-performing videos to identify patterns worth repeating.
+Top Performer analyzes the strongest-performing videos to identify patterns worth repeating.
 
 ### Inputs
 
-Uses the relevant YouTube channel, video, audience, or performance data for the selected reporting context.
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
 
 ### Workflow
 
-Open the widget → review the current signal → compare the relevant values or periods → identify the important finding → follow the appropriate optimization or planning action.
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
 
 ### Outputs
 
-Analyze the strongest-performing videos to identify patterns worth repeating.
+Top Performer analyzes the strongest-performing videos to identify patterns worth repeating.
 
 ### Connections
 
-- YouTube Analytics — supplies channel, video, audience, or performance evidence.
-- Projects / Studio Hub — receives findings that need a creator action.
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
 
 ## 44. Alerts Feed
 
 ### Description
 
----
+Alerts Feed brings important channel, performance, publishing, and workflow alerts into one place so creators can respond quickly.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Alerts Feed brings important channel, performance, publishing, and workflow alerts into one place so creators can respond quickly.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 45. News Ticker
+
+### Description
+
+News Ticker keeps creators informed about relevant YouTube news, platform changes, trends, and creator-impacting updates.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+News Ticker keeps creators informed about relevant YouTube news, platform changes, trends, and creator-impacting updates.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 46. Tag Generator
+
+### Description
+
+Tag Generator helps generate and refine relevant tags for videos based on their content, topic, and positioning.
+
+### Inputs
+
+Provide the relevant content, creator context, and available source assets.
+
+### Workflow
+
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
+
+### Outputs
+
+Tag Generator helps generate and refine relevant tags for videos based on their content, topic, and positioning.
+
+### Connections
+
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
+
+## 47. Revenue Tracker
+
+### Description
+
+Revenue Tracker monitors channel revenue and shows changes across videos, periods, and revenue sources.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Revenue Tracker monitors channel revenue and shows changes across videos, periods, and revenue sources.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 48. Retention Dip
+
+### Description
+
+Retention Dip highlights significant audience-retention drops so creators can identify where viewers are losing interest.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Retention Dip highlights significant audience-retention drops so creators can identify where viewers are losing interest.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 49. Longform Optimizer
+
+### Description
+
+Longform Optimizer helps analyze and improve long-form videos for stronger retention, engagement, packaging, and performance.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Longform Optimizer helps analyze and improve long-form videos for stronger retention, engagement, packaging, and performance.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 50. Reach Funnel
+
+### Description
+
+Reach Funnel shows how viewers move from impressions and discovery through views and deeper channel engagement.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Reach Funnel shows how viewers move from impressions and discovery through views and deeper channel engagement.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 51. Algo Benchmark
+
+### Description
+
+Algo Benchmark compares performance signals against relevant benchmarks to help creators understand how content is performing.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Algo Benchmark compares performance signals against relevant benchmarks to help creators understand how content is performing.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 52. The Ad Stack
+
+### Description
+
+The Ad Stack organizes advertising and monetization information to help creators understand and improve ad-related performance.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+The Ad Stack organizes advertising and monetization information to help creators understand and improve ad-related performance.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 53. Bridge Efficiency
+
+### Description
+
+Bridge Efficiency helps evaluate how effectively content, audience activity, and channel workflows connect to one another.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Bridge Efficiency helps evaluate how effectively content, audience activity, and channel workflows connect to one another.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 54. Burnout Monitor
+
+### Description
+
+Burnout Monitor tracks creator workload and activity patterns to identify signs of overextension and support a sustainable publishing rhythm.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Burnout Monitor tracks creator workload and activity patterns to identify signs of overextension and support a sustainable publishing rhythm.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 55. Collab Matchmaker
+
+### Description
+
+Collab Matchmaker helps identify potential collaboration opportunities by comparing creator, audience, content, and channel fit.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Collab Matchmaker helps identify potential collaboration opportunities by comparing creator, audience, content, and channel fit.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 56. UI Reference Library
+
+### Description
+
+UI Reference Library provides the shared visual reference for ViewTube's primitives, components, styles, tokens, and default widget sizes.
+
+### Inputs
+
+Use the widget's visible controls, selections, and current ViewTube interface context.
+
+### Workflow
+
+Open the widget → review the available controls → make the needed selection or change → continue to the relevant ViewTube workflow.
+
+### Outputs
+
+UI Reference Library provides the shared visual reference for ViewTube's primitives, components, styles, tokens, and default widget sizes.
+
+### Connections
+
+- **ViewTube UI system** — provides shared interface behavior and visual references.
+- **Dashboard / Studio Hub** — uses the resulting settings, references, or navigation.
+
+## 57. Video Autopsy
+
+### Description
+
+Video Autopsy provides a detailed post-performance review of a video to identify what worked, what failed, and what should change next.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Video Autopsy provides a detailed post-performance review of a video to identify what worked, what failed, and what should change next.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 58. A/B Thumbnail Test
+
+### Description
+
+A/B Thumbnail Test helps compare thumbnail variations and evaluate which packaging option performs better.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+A/B Thumbnail Test helps compare thumbnail variations and evaluate which packaging option performs better.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 59. Algorithm Benchmark
+
+### Description
+
+Algorithm Benchmark provides a deeper comparison of algorithm-related performance signals against relevant benchmarks.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Algorithm Benchmark provides a deeper comparison of algorithm-related performance signals against relevant benchmarks.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 60. CPM by Geography
+
+### Description
+
+CPM by Geography compares estimated CPM across viewer locations to show where audience geography affects monetization.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+CPM by Geography compares estimated CPM across viewer locations to show where audience geography affects monetization.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 61. Device Matrix
+
+### Description
+
+Device Matrix compares performance across viewer devices to show how audience behavior changes by device type.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Device Matrix compares performance across viewer devices to show how audience behavior changes by device type.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 62. Guest Ratio
+
+### Description
+
+Guest Ratio shows the share of audience or content activity associated with guests and compares it with the channel's broader performance.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Guest Ratio shows the share of audience or content activity associated with guests and compares it with the channel's broader performance.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 63. Playback Origins
+
+### Description
+
+Playback Origins shows where video playback begins, helping creators understand the sources and surfaces driving views.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Playback Origins shows where video playback begins, helping creators understand the sources and surfaces driving views.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 64. Premium Pulse
+
+### Description
+
+Premium Pulse tracks signals from YouTube Premium viewers and shows how premium audience activity contributes to channel performance.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Premium Pulse tracks signals from YouTube Premium viewers and shows how premium audience activity contributes to channel performance.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 65. Sharing DNA
+
+### Description
+
+Sharing DNA analyzes sharing behavior to identify what content characteristics encourage viewers to share videos.
+
+### Inputs
+
+Use the current channel, video, audience, project, or analytics context relevant to this widget.
+
+### Workflow
+
+Open the widget → review the available context → use its controls or analysis → review the result → act on it in the relevant ViewTube workflow.
+
+### Outputs
+
+Sharing DNA analyzes sharing behavior to identify what content characteristics encourage viewers to share videos.
+
+### Connections
+
+- **Analytics** — supplies relevant channel, video, audience, or performance evidence.
+- **Projects / Studio Hub** — receives findings or outputs that need a creator action.
+
+## 66. Video Comment Operator
+
+### Description
+
+Video Comment Operator helps review, organize, and act on viewer comments and comment-driven opportunities across videos.
+
+### Inputs
+
+Provide the relevant content, creator context, and available source assets.
+
+### Workflow
+
+Provide the source context → configure the available controls → create or edit → review the result → send it to the next workflow.
+
+### Outputs
+
+Video Comment Operator helps review, organize, and act on viewer comments and comment-driven opportunities across videos.
+
+### Connections
+
+- **Studio Hub** — receives creative, publishing, or optimization work.
+- **Projects / Content Pipeline** — carries selected work into production.
 
 # 8. Studio Hub Tools
 
