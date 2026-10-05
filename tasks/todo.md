@@ -1,0 +1,29 @@
+# Liquid Glass Lab Tasks
+
+- [x] Create isolated `feature/liquid-glass-lab` branch
+  - Acceptance: branch exists from ViewTube main.
+  - Verify: GitHub branch search.
+- [x] Add capability/spec document
+  - Acceptance: architecture, scope, success criteria, boundaries documented.
+  - Verify: inspect `docs/plans/LIQUID_GLASS_LAB_SPEC.md`.
+- [x] Add architecture decisions
+  - Acceptance: isolation, renderer independence, progressive rendering, and independent concepts documented.
+  - Verify: inspect ADR.
+- [x] Add initial Glass agent skill
+  - Acceptance: skill contains workflow, gates, anti-rationalization, and evidence requirements.
+  - Verify: inspect `skills/viewtube-liquid-glass/SKILL.md`.
+- [x] Add Vercel-compatible React/Vite app
+  - Acceptance: app has package manifest, HTML entrypoint, source modules, and responsive CSS.
+  - Verify: run `npm install && npm run build` in the app directory.
+- [ ] Add browser runtime verification
+  - Acceptance: DOM, console, accessibility, responsive, and interaction checks recorded.
+  - Verify: browser testing skill.
+- [ ] Add optional WebGL/WebGPU renderer
+  - Acceptance: GPU renderer is progressive enhancement, never a requirement.
+  - Verify: capability/fallback tests.
+- [ ] Build first 10 ViewTube component experiments
+  - Acceptance: 4 independent concepts per component.
+  - Verify: design originality and functional review.
+- [ ] Promote selected concepts into canonical ViewTube component library
+  - Acceptance: explicit approval and ADR.
+  - Verify: ViewTube integration review.
