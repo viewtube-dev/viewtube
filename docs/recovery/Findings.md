@@ -277,3 +277,21 @@ During Round 2, merge duplicate findings, preserve conflicting evidence, establi
 | Recommended improvement | Keep documentation decisions and implementation verification explicitly separated; mark runtime alignment BLOCKED until source authority is recovered. |
 | Verification needed | Source/deployment provenance reconciliation. |
 | Owner/next action | Recovery/source-map reconciliation |
+
+
+### FIND-20261004-WIDGET-007 — Widget runtime source recovered in ViewTubeBUILD
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-007 |
+| Category | RECOVERY / CODE_STRUCTURE / ARCHITECTURE |
+| Affected area/tool/file | Widget primitives, UI Reference Library, Widget CSS/tokens, Toolbox/Studio Hub component library |
+| Discovery | The previously missing Widget implementation surface is present in the accessible `themotionvisual/ViewTubeBUILD` repository. Its source map identifies `WidgetPrimitives.tsx`, `WidgetPrimitiveExtensions.tsx`, `widgetPrimitiveSystem.ts`, primitive CSS layers, palette authority, and `UIReferenceLibraryWidget.tsx` as current production owners. |
+| Source | `themotionvisual/ViewTubeBUILD/main`; `.claude/skills/viewtube-widget-dashboard-system/references/source-code-map.md`; `primitives-tokens-color.md` |
+| Evidence | Recursive source-tree inspection found the complete Widget surface, including the named Reference Library/primitives, 40+ widget implementations, tests, and Reference Studio sources. Direct file reads verified the implementations. |
+| Status | VERIFIED RECOVERY SOURCE / NOT YET CANONICAL TARGET |
+| Impact | The Widget audit can now proceed against recovered production evidence, but `viewtube-dev/viewtube/main` must not be assumed equivalent or overwritten. Repository provenance and migration/selection remain unresolved. |
+| Important architecture | `WidgetPrimitives.tsx` is the primary consumer import surface; `WidgetPrimitiveExtensions.tsx` is documented as a temporary compatibility/implementation module; `widgetPrimitiveSystem.ts` owns the shared size/tone/state API; CSS layers own exact geometry/tones/variants/responsive behavior; `UIReferenceLibraryWidget.tsx` is the dashboard Reference Library surface. |
+| Verified system facts | Primitive sizes are 18/24/32/38px; tones are default/primary/secondary; states include default/selected/active/loading/disabled/success/warning/danger/info; size tokens define height/font/radius/stroke/shadow/padding/gap/icon/icon-stroke; palette authority is `src/styles/toolboxPalette.ts` with a 12-color spectrum. |
+| Recommended improvement | Treat ViewTubeBUILD as recovered implementation evidence and perform controlled repository reconciliation before any copy/migration. Establish whether it is the intended canonical implementation source, a recovery source, or a related branch/repository. |
+| Verification needed | Compare repository identity/history, deployment provenance, and intended canonical ownership; then compare recovered source to `viewtube-dev/viewtube/main` before moving/copying code. |
+| Owner/next action | Round 2 repository reconciliation |
