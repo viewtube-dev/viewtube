@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="ViewTube Studio Hub — interactive toolbox concepts for the creator operating system.">
+<title>ViewTube Studio Hub — Ten Creator Toolboxes</title>
+<style>
+:root{
+  --bg:#090b10;--panel:#10141c;--panel2:#141923;--line:#252c38;--text:#f3f6fb;
+  --muted:#8f9aac;--accent:#7c9cff;--accent2:#5de1c4;--warn:#ffcc66;
+  --danger:#ff7285;--radius:16px;--shadow:0 18px 50px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);
+font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}
+aside{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:#0c0f15;padding:20px 14px;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 20px;font-weight:800;font-size:18px}
+.logo{width:34px;height:24px;border-radius:7px;background:#fff;position:relative}.logo:after{content:"";position:absolute;left:13px;top:7px;border-left:9px solid #090b10;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.nav-label{color:#667184;text-transform:uppercase;font-size:10px;font-weight:800;letter-spacing:.12em;padding:15px 10px 7px}
+.nav button{width:100%;border:0;background:transparent;color:#aeb8c7;text-align:left;padding:9px 10px;border-radius:9px;margin:1px 0}
+.nav button:hover,.nav button.active{background:#171d27;color:#fff}
+.nav button.active{box-shadow:inset 2px 0 var(--accent)}
+main{min-width:0}.topbar{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(9,11,16,.92);backdrop-filter:blur(12px);z-index:5}
+.crumb{color:var(--muted)}.crumb b{color:#fff}.top-actions{display:flex;gap:8px}.btn{border:1px solid var(--line);background:#141923;color:#dfe6f0;padding:8px 12px;border-radius:9px}.btn.primary{background:#fff;color:#090b10;border-color:#fff}
+.wrap{max-width:1500px;margin:auto;padding:30px}.hero{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:26px}
+h1{font-size:34px;line-height:1.05;margin:0 0 9px;letter-spacing:-.03em}.hero p{color:var(--muted);max-width:720px;margin:0}
+.status{display:flex;gap:8px;align-items:center;border:1px solid var(--line);padding:9px 12px;border-radius:999px;color:#b7c1d0;white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent2)}
+.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.toolbox{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:90px}
+.toolbox-head{padding:18px 18px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px}
+.eyebrow{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:800}.toolbox h2{margin:3px 0;font-size:19px}.purpose{color:var(--muted);font-size:12px}.badge{border:1px solid #334052;border-radius:999px;padding:4px 8px;height:max-content;color:#aeb8c7;font-size:10px}
+.toolbox-body{display:grid;grid-template-columns:160px 1fr;min-height:390px}
+.subnav{border-right:1px solid var(--line);background:#0d1118;padding:10px}.subnav button{width:100%;border:0;background:transparent;color:#8f9aac;text-align:left;padding:9px;border-radius:8px;margin:2px 0;font-size:12px}
+.subnav button:hover,.subnav button.active{background:#171d27;color:#fff}
+.control{padding:17px}.panel{display:none}.panel.active{display:block}
+.section-title{font-size:12px;font-weight:800;margin-bottom:12px}.field{margin-bottom:14px}.field label{display:block;color:#aeb8c7;font-size:11px;margin-bottom:6px}
+input,select{width:100%;background:#0a0d13;border:1px solid #293241;color:#e9eef6;border-radius:8px;padding:9px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid #2d3746;border-radius:999px;padding:5px 8px;color:#aeb8c7;font-size:11px}.chip.on{border-color:#5870b4;background:#18223a;color:#fff}
+.actionbar{display:flex;gap:8px;margin-top:16px}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}.metric{background:#0c1017;border:1px solid var(--line);padding:10px;border-radius:10px}.metric strong{display:block;font-size:17px}.metric span{font-size:10px;color:var(--muted)}
+.feed{border:1px solid var(--line);border-radius:10px;overflow:hidden}.feed-row{padding:10px 11px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}.feed-row:last-child{border-bottom:0}.feed-row small{color:var(--muted)}
+.timeline{position:relative;padding-left:18px}.timeline:before{content:"";position:absolute;left:4px;top:4px;bottom:4px;width:1px;background:#354052}.step{position:relative;padding:0 0 16px}.step:before{content:"";position:absolute;left:-17px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--accent)}.step b{font-size:12px}.step p{color:var(--muted);font-size:11px;margin:3px 0}
+.score{font-size:36px;font-weight:800;letter-spacing:-.04em}.bar{height:7px;background:#1b222d;border-radius:99px;overflow:hidden;margin:8px 0 16px}.bar i{display:block;height:100%;width:78%;background:var(--accent);border-radius:inherit}
+.toast{position:fixed;right:20px;bottom:20px;background:#f4f6fa;color:#090b10;padding:11px 14px;border-radius:10px;box-shadow:var(--shadow);transform:translateY(20px);opacity:0;pointer-events:none;transition:.2s;z-index:20}.toast.show{transform:none;opacity:1}
+footer{max-width:1500px;margin:auto;padding:30px;color:#687385;font-size:11px}
+@media(max-width:1100px){.app{grid-template-columns:220px 1fr}.tools{grid-template-columns:1fr}}
+@media(max-width:760px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;overflow:auto}.nav-label{display:none}.nav button{min-width:max-content}.wrap{padding:18px}.topbar{padding:0 16px}.hero{align-items:start;flex-direction:column}.toolbox-body{grid-template-columns:1fr}.subnav{border-right:0;border-bottom:1px solid var(--line);display:flex;overflow:auto}.subnav button{min-width:max-content}.row{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand"><span class="logo" aria-hidden="true"></span> ViewTube Studio</div>
+  <div class="nav-label">Studio Hub</div>
+  <nav class="nav" aria-label="Studio tools">
+    <button class="active" data-target="tool-1">01 · Opportunities</button>
+    <button data-target="tool-2">02 · Video Genome</button>
+    <button data-target="tool-3">03 · Audience Signals</button>
+    <button data-target="tool-4">04 · Story Architect</button>
+    <button data-target="tool-5">05 · Content Autopilot</button>
+    <button data-target="tool-6">06 · Relationships</button>
+    <button data-target="tool-7">07 · Revenue Map</button>
+    <button data-target="tool-8">08 · Experiment Lab</button>
+    <button data-target="tool-9">09 · Command Brain</button>
+    <button data-target="tool-10">10 · Channel Flywheel</button>
+  </nav>
+  <div class="nav-label">Shared systems</div>
+  <nav class="nav">
+    <button onclick="toast('AI Brain context opened')">AI Brain</button>
+    <button onclick="toast('Projects context opened')">Projects</button>
+    <button onclick="toast('Asset Engine context opened')">Asset Engine</button>
+    <button onclick="toast('Resource Library context opened')">Resource Library</button>
+  </nav>
+</aside>
+
+<main>
+<header class="topbar">
+  <div class="crumb">ViewTube / <b>Studio Hub</b></div>
+  <div class="top-actions"><button class="btn" onclick="toast('Sync Controller: demo sync complete')">↻ Sync</button><button class="btn primary" onclick="toast('New Studio Project created')">+ New Project</button></div>
+</header>
+
+<div class="wrap">
+<section class="hero">
+  <div><h1>Creator Operating System</h1><p>Ten specialized toolboxes. Each has one decisive job, its own controls, and typed handoffs into Projects, the Asset Engine, Analytics and the AI Brain.</p></div>
+  <div class="status"><span class="dot"></span> Brain synchronized</div>
+</section>
+
+<div class="tools">
+
+<!-- 01 -->
+<section class="toolbox" id="tool-1">
+<header class="toolbox-head"><div><div class="eyebrow">01 · Discovery</div><h2>Content Opportunity Engine</h2><div class="purpose">Find the highest-value thing to make next.</div></div><span class="badge">→ Projects</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="opp-scan">Scan</button><button data-panel="opp-score">Score</button><button data-panel="opp-evidence">Evidence</button><button data-panel="opp-handoff">Handoff</button>
+</div><div class="control">
+<div class="panel active" id="opp-scan"><div class="section-title">Opportunity scan</div><div class="row"><div class="field"><label>Topic space</label><input value="Creator productivity"></div><div class="field"><label>Audience</label><select><option>New + returning viewers</option><option>Core audience</option></select></div></div><div class="field"><label>Signals to combine</label><div class="chips"><span class="chip on">Demand</span><span class="chip on">Channel history</span><span class="chip on">Audience requests</span><span class="chip">Competitors</span></div></div><div class="actionbar"><button class="btn primary" onclick="toast('Opportunity scan queued')">Find opportunities</button></div></div>
+<div class="panel" id="opp-score"><div class="section-title">Opportunity score</div><div class="metric-grid"><div class="metric"><strong>94</strong><span>Audience fit</span></div><div class="metric"><strong>88</strong><span>Evidence</span></div><div class="metric"><strong>81</strong><span>Revenue</span></div></div><div class="score">91<span style="font-size:14px;color:var(--muted)"> / 100</span></div><div class="bar"><i></i></div><small style="color:var(--muted)">Strong fit + low production friction.</small></div>
+<div class="panel" id="opp-evidence"><div class="section-title">Evidence stack</div><div class="feed"><div class="feed-row"><b>143 audience requests</b><small>high signal</small></div><div class="feed-row"><b>3 related winners</b><small>channel history</small></div><div class="feed-row"><b>Low competition</b><small>market</small></div></div></div>
+<div class="panel" id="opp-handoff"><div class="section-title">Create handoff</div><div class="timeline"><div class="step"><b>OpportunityContext</b><p>Topic + evidence + predicted value</p></div><div class="step"><b>Create Project</b><p>Pass research and audience context</p></div><div class="step"><b>Story Architect</b><p>Build viewer journey</p></div></div><button class="btn primary" onclick="toast('Project created from OpportunityContext')">Create project</button></div>
+</div></div></section>
+
+<!-- 02 -->
+<section class="toolbox" id="tool-2">
+<header class="toolbox-head"><div><div class="eyebrow">02 · Intelligence</div><h2>Video Genome</h2><div class="purpose">Discover repeatable patterns inside successful videos.</div></div><span class="badge">→ AI Brain</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="genome-map">Genome Map</button><button data-panel="genome-patterns">Patterns</button><button data-panel="genome-compare">Compare</button><button data-panel="genome-knowledge">Knowledge</button>
+</div><div class="control">
+<div class="panel active" id="genome-map"><div class="section-title">Video DNA</div><div class="metric-grid"><div class="metric"><strong>12</strong><span>Videos analyzed</span></div><div class="metric"><strong>7</strong><span>Patterns</span></div><div class="metric"><strong>4</strong><span>High confidence</span></div></div><div class="timeline"><div class="step"><b>0:00 Direct conflict hook</b><p>Strong first-30-second retention</p></div><div class="step"><b>1:12 Proof / demonstration</b><p>Repeated in top performers</p></div><div class="step"><b>4:30 Payoff loop</b><p>Delays drop-off</p></div></div></div>
+<div class="panel" id="genome-patterns"><div class="section-title">Repeatable patterns</div><div class="feed"><div class="feed-row"><b>Direct conflict hook</b><small>0.89 confidence</small></div><div class="feed-row"><b>Proof before explanation</b><small>0.82 confidence</small></div><div class="feed-row"><b>Fast visual reset</b><small>0.76 confidence</small></div></div></div>
+<div class="panel" id="genome-compare"><div class="section-title">Compare videos</div><div class="row"><select><option>Video #182 — 84K views</option></select><select><option>Video #176 — 21K views</option></select></div><div class="actionbar"><button class="btn primary" onclick="toast('Genome comparison generated')">Compare DNA</button></div></div>
+<div class="panel" id="genome-knowledge"><div class="section-title">Brain candidate</div><div class="feed"><div class="feed-row"><b>Conflict-based openings correlate with retention.</b><small>candidate</small></div></div><button class="btn primary" onclick="toast('Candidate promoted to Brain review')">Review knowledge</button></div>
+</div></div></section>
+
+<!-- 03 -->
+<section class="toolbox" id="tool-3">
+<header class="toolbox-head"><div><div class="eyebrow">03 · Audience</div><h2>Audience Signal Miner</h2><div class="purpose">Turn audience behavior into structured signals and actions.</div></div><span class="badge">→ Opportunities</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="aud-signals">Signals</button><button data-panel="aud-clusters">Clusters</button><button data-panel="aud-actions">Actions</button><button data-panel="aud-handoff">Handoff</button>
+</div><div class="control">
+<div class="panel active" id="aud-signals"><div class="section-title">Live audience signals</div><div class="metric-grid"><div class="metric"><strong>183</strong><span>Requests</span></div><div class="metric"><strong>27</strong><span>Questions</span></div><div class="metric"><strong>12</strong><span>Urgent</span></div></div><div class="feed"><div class="feed-row"><b>“Beginner version?”</b><small>143 mentions</small></div><div class="feed-row"><b>Template requests</b><small>61 mentions</small></div></div></div>
+<div class="panel" id="aud-clusters"><div class="section-title">Signal clusters</div><div class="chips"><span class="chip on">Beginner education</span><span class="chip on">Templates</span><span class="chip">Feature requests</span><span class="chip">Complaints</span></div></div>
+<div class="panel" id="aud-actions"><div class="section-title">Recommended actions</div><div class="timeline"><div class="step"><b>Create beginner tutorial</b><p>High evidence</p></div><div class="step"><b>Package template resource</b><p>Revenue potential</p></div></div></div>
+<div class="panel" id="aud-handoff"><div class="section-title">Route signal</div><button class="btn primary" onclick="toast('Signal routed to Opportunity Engine')">Create opportunity</button> <button class="btn" onclick="toast('Signal routed to Relationship Engine')">Create relationship task</button></div>
+</div></div></section>
+
+<!-- 04 -->
+<section class="toolbox" id="tool-4">
+<header class="toolbox-head"><div><div class="eyebrow">04 · Production planning</div><h2>Story & Retention Architect</h2><div class="purpose">Design the viewer journey before production.</div></div><span class="badge">→ Asset Engine</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="story-blueprint">Blueprint</button><button data-panel="story-retention">Retention</button><button data-panel="story-assets">Assets</button><button data-panel="story-project">Project</button>
+</div><div class="control">
+<div class="panel active" id="story-blueprint"><div class="section-title">Story blueprint</div><div class="field"><label>Premise</label><input value="Why most creators waste their best video ideas"></div><div class="row"><div class="field"><label>Hook</label><input value="You already have better ideas than you think."></div><div class="field"><label>Payoff</label><input value="A repeatable idea-selection system"></div></div><button class="btn primary" onclick="toast('Story blueprint generated')">Build blueprint</button></div>
+<div class="panel" id="story-retention"><div class="section-title">Retention risk map</div><div class="timeline"><div class="step"><b>0:00 Hook</b><p>Strong</p></div><div class="step"><b>0:40 Promise</b><p>Strong</p></div><div class="step"><b>2:10 Risk point</b><p>Add demonstration</p></div><div class="step"><b>5:20 Payoff</b><p>Major release</p></div></div></div>
+<div class="panel" id="story-assets"><div class="section-title">Asset manifest</div><div class="feed"><div class="feed-row"><b>A-roll</b><small>required</small></div><div class="feed-row"><b>3 B-roll sequences</b><small>required</small></div><div class="feed-row"><b>2 diagrams</b><small>required</small></div><div class="feed-row"><b>Thumbnail concept</b><small>required</small></div></div></div>
+<div class="panel" id="story-project"><div class="section-title">Project handoff</div><p style="color:var(--muted)">StoryBlueprint → Project → AssetManifest → Editor.</p><button class="btn primary" onclick="toast('Project + Asset Manifest created')">Send to Projects</button></div>
+</div></div></section>
+
+<!-- 05 -->
+<section class="toolbox" id="tool-5">
+<header class="toolbox-head"><div><div class="eyebrow">05 · Content multiplication</div><h2>Content Autopilot</h2><div class="purpose">Extract the highest-value derivatives from finished content.</div></div><span class="badge">→ Asset Engine</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="auto-source">Source</button><button data-panel="auto-opps">Derivatives</button><button data-panel="auto-assets">Assets</button><button data-panel="auto-learn">Learn</button>
+</div><div class="control">
+<div class="panel active" id="auto-source"><div class="section-title">Source content</div><div class="field"><label>Published video</label><select><option>Why most creators waste their best ideas</option></select></div><button class="btn primary" onclick="toast('Content analyzed for derivatives')">Analyze content</button></div>
+<div class="panel" id="auto-opps"><div class="section-title">Worth producing</div><div class="feed"><div class="feed-row"><b>Short #1 — 0:42 hook</b><small>High value</small></div><div class="feed-row"><b>Follow-up — “How to…”</b><small>High value</small></div><div class="feed-row"><b>Community post</b><small>Medium value</small></div><div class="feed-row"><b>Newsletter section</b><small>Low value</small></div></div></div>
+<div class="panel" id="auto-assets"><div class="section-title">Asset Engine queue</div><div class="metric-grid"><div class="metric"><strong>4</strong><span>New assets</span></div><div class="metric"><strong>9</strong><span>Reused</span></div><div class="metric"><strong>2h</strong><span>Est. effort</span></div></div><button class="btn primary" onclick="toast('Derivative assets sent to Asset Engine')">Queue assets</button></div>
+<div class="panel" id="auto-learn"><div class="section-title">Learning loop</div><p style="color:var(--muted)">Derivative performance returns to the Brain so future repurposing is selective rather than automatic.</p></div>
+</div></div></section>
+
+<!-- 06 -->
+<section class="toolbox" id="tool-6">
+<header class="toolbox-head"><div><div class="eyebrow">06 · Community</div><h2>Creator Relationship Engine</h2><div class="purpose">Find the audience relationships that deserve human attention.</div></div><span class="badge">→ Audience</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="rel-priority">Priority</button><button data-panel="rel-history">History</button><button data-panel="rel-actions">Actions</button><button data-panel="rel-projects">Projects</button>
+</div><div class="control">
+<div class="panel active" id="rel-priority"><div class="section-title">Relationships worth attention</div><div class="feed"><div class="feed-row"><b>Alex — emerging superfan</b><small>4 meaningful interactions</small></div><div class="feed-row"><b>Jamie — expert contributor</b><small>possible collaborator</small></div><div class="feed-row"><b>Sam — recurring question</b><small>video opportunity</small></div></div></div>
+<div class="panel" id="rel-history"><div class="section-title">Relationship stages</div><div class="metric-grid"><div class="metric"><strong>8.2K</strong><span>Returning</span></div><div class="metric"><strong>412</strong><span>Engaged</span></div><div class="metric"><strong>74</strong><span>Superfans</span></div></div></div>
+<div class="panel" id="rel-actions"><div class="section-title">Recommended human actions</div><div class="chips"><span class="chip on">Reply personally</span><span class="chip on">Invite collaboration</span><span class="chip">Feature viewer</span></div></div>
+<div class="panel" id="rel-projects"><div class="section-title">Create relationship project</div><button class="btn primary" onclick="toast('Collaboration Project created')">Create project</button></div>
+</div></div></section>
+
+<!-- 07 -->
+<section class="toolbox" id="tool-7">
+<header class="toolbox-head"><div><div class="eyebrow">07 · Monetization</div><h2>Revenue Opportunity Map</h2><div class="purpose">Find revenue opportunities supported by actual audience evidence.</div></div><span class="badge">→ Projects</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="rev-map">Map</button><button data-panel="rev-evidence">Evidence</button><button data-panel="rev-model">Model</button><button data-panel="rev-project">Project</button>
+</div><div class="control">
+<div class="panel active" id="rev-map"><div class="section-title">Revenue landscape</div><div class="metric-grid"><div class="metric"><strong>3</strong><span>Strong openings</span></div><div class="metric"><strong>87</strong><span>Audience fit</span></div><div class="metric"><strong>High</strong><span>Template demand</span></div></div><div class="feed"><div class="feed-row"><b>Template pack</b><small>highest fit</small></div><div class="feed-row"><b>Affiliate workflow</b><small>medium effort</small></div></div></div>
+<div class="panel" id="rev-evidence"><div class="section-title">Why this exists</div><div class="feed"><div class="feed-row"><b>61 template requests</b><small>audience</small></div><div class="feed-row"><b>4 winning tutorials</b><small>content</small></div></div></div>
+<div class="panel" id="rev-model"><div class="section-title">Opportunity model</div><div class="row"><div class="field"><label>Effort</label><input value="Low"></div><div class="field"><label>Confidence</label><input value="High"></div></div><div class="score">86<span style="font-size:14px;color:var(--muted)"> / 100</span></div></div>
+<div class="panel" id="rev-project"><div class="section-title">Revenue project</div><button class="btn primary" onclick="toast('Revenue project + asset brief created')">Create revenue project</button></div>
+</div></div></section>
+
+<!-- 08 -->
+<section class="toolbox" id="tool-8">
+<header class="toolbox-head"><div><div class="eyebrow">08 · Learning</div><h2>Experiment Lab</h2><div class="purpose">Turn creative decisions into controlled, reusable learning.</div></div><span class="badge">→ AI Brain</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="exp-new">New test</button><button data-panel="exp-active">Active</button><button data-panel="exp-results">Results</button><button data-panel="exp-knowledge">Knowledge</button>
+</div><div class="control">
+<div class="panel active" id="exp-new"><div class="section-title">Hypothesis</div><div class="field"><label>What do you want to learn?</label><input value="Question-based titles increase CTR"></div><div class="row"><div class="field"><label>Baseline</label><input value="7.2%"></div><div class="field"><label>Target</label><input value="8.0%"></div></div><button class="btn primary" onclick="toast('Experiment created')">Start experiment</button></div>
+<div class="panel" id="exp-active"><div class="section-title">Active experiments</div><div class="feed"><div class="feed-row"><b>Question titles</b><small>4 / 6 videos</small></div><div class="feed-row"><b>Shorter intros</b><small>2 / 4 videos</small></div></div></div>
+<div class="panel" id="exp-results"><div class="section-title">Result</div><div class="metric-grid"><div class="metric"><strong>8.0%</strong><span>Observed CTR</span></div><div class="metric"><strong>+0.8</strong><span>Lift</span></div><div class="metric"><strong>Med.</strong><span>Confidence</span></div></div></div>
+<div class="panel" id="exp-knowledge"><div class="section-title">Knowledge candidate</div><p style="color:var(--muted)">Do not promote until comparable evidence is sufficient.</p><button class="btn" onclick="toast('Sent to Brain validation queue')">Validate finding</button></div>
+</div></div></section>
+
+<!-- 09 -->
+<section class="toolbox" id="tool-9">
+<header class="toolbox-head"><div><div class="eyebrow">09 · Command</div><h2>Creator Command Brain</h2><div class="purpose">Determine the highest-leverage action right now.</div></div><span class="badge">→ All tools</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="cmd-now">Now</button><button data-panel="cmd-queue">Queue</button><button data-panel="cmd-evidence">Evidence</button><button data-panel="cmd-routing">Routing</button>
+</div><div class="control">
+<div class="panel active" id="cmd-now"><div class="section-title">What matters most?</div><div class="score">1</div><h3 style="margin:0 0 5px">Build the beginner editing project.</h3><p style="color:var(--muted)">Highest combined audience demand, channel fit and production leverage.</p><button class="btn primary" onclick="toast('Primary action opened in Projects')">Open action</button></div>
+<div class="panel" id="cmd-queue"><div class="section-title">Next actions</div><div class="feed"><div class="feed-row"><b>1 · Create outline</b><small>High impact</small></div><div class="feed-row"><b>2 · Reply to 4 priority viewers</b><small>Medium</small></div><div class="feed-row"><b>3 · Run thumbnail test</b><small>Medium</small></div></div></div>
+<div class="panel" id="cmd-evidence"><div class="section-title">Decision evidence</div><div class="chips"><span class="chip on">Audience demand</span><span class="chip on">Genome fit</span><span class="chip on">Low effort</span></div></div>
+<div class="panel" id="cmd-routing"><div class="section-title">Handoff</div><p style="color:var(--muted)">Decision → Project → Story Architect → Asset Engine → Editor → Analytics.</p></div>
+</div></div></section>
+
+<!-- 10 -->
+<section class="toolbox" id="tool-10">
+<header class="toolbox-head"><div><div class="eyebrow">10 · Strategy</div><h2>Channel Flywheel</h2><div class="purpose">Find the weakest link in the entire creator growth system.</div></div><span class="badge">→ Strategy</span></header>
+<div class="toolbox-body"><div class="subnav">
+<button class="active" data-panel="fly-health">Health</button><button data-panel="fly-bottleneck">Bottleneck</button><button data-panel="fly-system">System</button><button data-panel="fly-action">Action</button>
+</div><div class="control">
+<div class="panel active" id="fly-health"><div class="section-title">Flywheel health</div><div class="metric-grid"><div class="metric"><strong>82</strong><span>Discovery</span></div><div class="metric"><strong>91</strong><span>Watch</span></div><div class="metric"><strong>58</strong><span>Return</span></div></div><div class="bar"><i style="width:58%"></i></div><small style="color:var(--muted)">Returning-viewer conversion is currently the limiting node.</small></div>
+<div class="panel" id="fly-bottleneck"><div class="section-title">Primary bottleneck</div><h3 style="margin:0">New viewer → returning viewer</h3><p style="color:var(--muted)">Discovery is healthy. The next growth constraint is giving first-time viewers a strong reason to return.</p><button class="btn primary" onclick="toast('Bottleneck investigation opened')">Investigate</button></div>
+<div class="panel" id="fly-system"><div class="section-title">Growth loop</div><div class="timeline"><div class="step"><b>Discovery</b><p>Healthy</p></div><div class="step"><b>Watch</b><p>Strong</p></div><div class="step"><b>Return</b><p>Bottleneck</p></div><div class="step"><b>Relationship</b><p>Healthy</p></div><div class="step"><b>Revenue</b><p>Growing</p></div></div></div>
+<div class="panel" id="fly-action"><div class="section-title">Strategic intervention</div><p style="color:var(--muted)">Build a recurring series around the strongest topic cluster and connect each episode to the next.</p><button class="btn primary" onclick="toast('Strategic project created')">Create intervention project</button></div>
+</div></div></section>
+
+</div>
+</div>
+<footer>ViewTube Studio Hub concept prototype · Standalone HTML · Toolboxes use a shared component language and typed workflow handoffs.</footer>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const toastEl=document.getElementById('toast');let toastTimer;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2200)}
+document.querySelectorAll('.nav button[data-target]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.target).scrollIntoView({behavior:'smooth',block:'start'})));
+document.querySelectorAll('.subnav').forEach(nav=>{
+  nav.querySelectorAll('button[data-panel]').forEach(btn=>btn.addEventListener('click',()=>{
+    nav.querySelectorAll('button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+    const body=nav.parentElement.nextElementSibling;
+    body.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    const target=document.getElementById(btn.dataset.panel);if(target)target.classList.add('active');
+  }));
+});
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.target===e.target.id))}
+}),{rootMargin:'-20% 0px -70% 0px',threshold:0});
+document.querySelectorAll('.toolbox').forEach(x=>observer.observe(x));
+</script>
+</body>
+</html>
