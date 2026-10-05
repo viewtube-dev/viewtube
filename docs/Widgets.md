@@ -64,3 +64,14 @@ Runtime alignment is currently **BLOCKED / UNKNOWN**: the previously referenced 
 |---|---|---|---|---|---|
 | DOC-20261004-019 | Widget UI governance conversation / GPT-5.6 Luna | CREATE | 2026-10-04 22:05:18 EDT | Established Widget-specific authority and four-way audit model without replacing the existing UI primitive system. | Repository authority and related UI/recovery documents inspected before creation; runtime alignment remained UNKNOWN. |
 | DOC-20261004-020 | Widget source audit / GPT-5.6 Luna | AUDIT | 2026-10-04 22:12:28 EDT | Checked the previously referenced Widget runtime paths and both canonical main and the preserved pre-migration tree. | Named implementation paths are absent; runtime source authority remains BLOCKED / UNKNOWN. |
+
+
+## Recovered implementation source
+
+The Widget runtime implementation has been located in `themotionvisual/ViewTubeBUILD/main`. This repository is currently treated as a **recovered implementation source**, not automatically as the canonical target for `viewtube-dev/viewtube/main`.
+
+The recovered source contains the previously referenced Widget primitives, primitive extensions, primitive-system token API, primitive CSS layers, Widget UI Reference Library, Studio Hub primitive migration catalog, palette authority, and Widget tests.
+
+**Canonical-source decision: UNKNOWN pending repository/history/deployment reconciliation.**
+
+Until that decision is made, do not copy or rewrite production Widget code into `viewtube-dev/viewtube/main` merely to satisfy the documentation model.
