@@ -2626,6 +2626,28 @@ The current Round 1 proposal is to preserve the intelligence-engine architecture
 | Thumbnail Studio | Visual packaging; End-Screen functionality may be consolidated here |
 | Audience Studio | Proposed consolidation of Community Posts and Comment Responder |
 
+### 20.2.1 Pre-existing Studio Hub tools
+
+The following tools predate the current 13-engine proposal and must be treated as existing user-facing Studio Hub ownership when reconciling the architecture:
+
+| Pre-existing tool | Definitive purpose |
+|---|---|
+| **Video Manager** | Manages, edits, generates, compares, and improves metadata for already-published videos, including titles, descriptions, and thumbnails. |
+| **Video Publisher** | Prepares and compiles projects/content for publication, including multi-project workflows and publication metadata. |
+| **Content Analysis** | Generates user-controlled AI reviews of projects, videos, and other content; the final architecture may split this into dedicated pre- and post-publication tools. |
+| **Video Director** | Directs and coordinates the creative and production execution of a video or content project. |
+| **Script Architect** | Structures and develops scripts from concepts into executable written content; its functions are candidates for consolidation into Content Architect. |
+| **Thumbnail Studio** | Creates, evaluates, compares, and optimizes thumbnail packaging; End-Screen functionality is a candidate for consolidation here. |
+| **Publishing Package** | Compiles the assets, metadata, and requirements needed to make content publication-ready; this may become a workflow/subtool of Video Publisher. |
+| **Community Posts** | Creates and manages community posts, polls, updates, and other direct audience-publishing interactions; candidate for consolidation into Audience Studio. |
+| **Comment Responder** | Reviews and manages audience comments and supports creator responses; candidate for consolidation into Audience Studio. |
+| **End-Screen Architect** | Designs end-screen destinations and viewer continuation paths; candidate for consolidation into Thumbnail Studio rather than automatically remaining a top-level Toolbox. |
+| **Pre-Launch Priming** | Prepares audience-facing activity and messaging intended to build anticipation before content is published. |
+| **Hook Generator** | Generates and develops opening hooks for videos and other content; its final ownership should be reconciled with Content Architect. |
+| **Tactics Engine** | Converts intelligence and findings into concrete creator tactics, interventions, tests, and actions. |
+
+These are **pre-existing tools**, not newly invented replacements. Proposed consolidation means preserving their useful functionality under a definitive owner, not discarding the underlying capability.
+
 ## 20.3 Proposed user-facing inventory
 
 This is **PROPOSED / ROUND 1**, not final canonical implementation:
