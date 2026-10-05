@@ -189,3 +189,58 @@ During Round 2, merge duplicate findings, preserve conflicting evidence, establi
 - **Status:** VERIFIED DISCOVERY
 - **Recommended improvement:** Require implementation/evidence verification before marking copy as current product truth.
 - **Verification needed:** Tool-by-tool implementation tracing.
+
+### FIND-20261004-WIDGET-001 — UI Reference Library must be the production visual reference implementation
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-001 |
+| Category | ARCHITECTURE / UX_PRODUCT / DOCUMENTATION |
+| Affected area/tool/file | Widget UI Reference Library; Widget primitives/components |
+| Discovery | The UI Reference Library is intended to contain/render the actual production primitives and serve as their visual representation of the shared style, token, default-size, state, and responsive system. |
+| Source | Current conversation; canonical `docs/UI.md` reconciliation |
+| Evidence | Existing `docs/UI.md` already stated the Library represents actual primitives/reference representatives; repository search found corroborating UI reconciliation requirements. |
+| Status | VERIFIED DISCOVERY |
+| Impact | Prevents a second parallel reference implementation from drifting away from production primitives. |
+| Recommended improvement | Trace the Library to production primitive imports and use rendered Library examples as the shared visual baseline. |
+| Verification needed | Source-level inspection of canonical primitive, token, size, CSS, Library, and Widget consumer paths. |
+
+### FIND-20261004-WIDGET-002 — Widget default sizes are layout defaults, not rigid component dimensions
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-002 |
+| Category | ARCHITECTURE / UX_PRODUCT |
+| Affected area/tool/file | Widget size system; primitives/components |
+| Discovery | Established Widget sizes are default sizes used when building Widget layouts; components and primitives remain adaptable to other contextual sizes. |
+| Source | Current conversation; `docs/UI.md` |
+| Evidence | Canonical UI document now records this rule. |
+| Status | VERIFIED DISCOVERY |
+| Impact | Prevents false-positive UI audits and unnecessary proliferation of size-specific primitives. |
+| Recommended improvement | Audit size usage for semantic/layout correctness rather than exact pixel equality. |
+| Verification needed | Trace actual size tokens/definitions and representative rendered consumers. |
+
+### FIND-20261004-WIDGET-003 — Four-way Widget UI reconciliation classification
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-003 |
+| Category | WORKFLOW / TESTING_VERIFICATION / ARCHITECTURE |
+| Affected area/tool/file | Widget UI audits and implementation workflow |
+| Discovery | Widget reconciliation should classify findings as exactly CANONICAL, DRIFT, DEFECT, or INTENTIONAL. |
+| Source | Current conversation; user-approved decision |
+| Evidence | User explicitly selected the four classifications and clarified situation-dependent corrective action for defects. |
+| Status | VERIFIED DISCOVERY |
+| Impact | Separates consumer drift from shared-system defects and legitimate Widget-specific behavior. |
+| Recommended improvement | Make the four classifications the standard output of Widget UI audits and route each classification to the appropriate implementation action. |
+| Verification needed | Apply to a representative Widget cohort. |
+
+### FIND-20261004-WIDGET-004 — Primitive correction is situation-dependent
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-004 |
+| Category | ARCHITECTURE / WORKFLOW / TOOL_IMPROVEMENT |
+| Affected area/tool/file | Widget primitives/components and consumers |
+| Discovery | A shared UI problem may require fixing an existing primitive/component, changing token/size behavior, adding a variant, creating a new primitive/component, or fixing the consumer depending on evidence. |
+| Source | Current conversation; user clarification |
+| Status | VERIFIED DISCOVERY |
+| Impact | Prevents both under-generalizing shared defects and over-generalizing legitimate variations. |
+| Recommended improvement | Require audit evidence to identify semantic scope before selecting corrective action. |
+| Verification needed | Exercise the decision rule against real Widget discrepancies. |
