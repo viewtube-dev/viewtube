@@ -84,3 +84,37 @@ No destructive cleanup or superseding of historical UI artifacts was performed.
 4. Classify discrepancies CANONICAL / DRIFT / DEFECT / INTENTIONAL.
 5. Implement only evidence-backed corrections.
 6. Verify rendered UI and tests before claiming implementation completion.
+
+
+## Source audit — 2026-10-04 22:12:28 EDT
+
+The first source-level reconciliation pass was executed against canonical `viewtube-dev/viewtube/main` and the preserved `recovery/pre-document-system-migration-2026-10-04` snapshot.
+
+### Result
+
+The previously referenced runtime paths:
+
+- `src/views/dashboard/widgets/UIReferenceLibraryWidget.tsx`
+- `src/views/dashboard/widgets/WidgetPrimitives.tsx`
+- `src/views/dashboard/widgets/WidgetPrimitiveExtensions.tsx`
+
+are not present in canonical `main`. Direct fetches returned 404. A recursive repository-tree inspection also did not find matching Widget primitive, Reference Library, Dashboard-widget, or primitive-extension source paths. The preserved pre-migration snapshot likewise does not contain those implementation paths.
+
+### Classification
+
+This is **not yet classified as a runtime DEFECT**. It is a **CODE_STRUCTURE / RECOVERY blocker** because the authoritative runtime implementation source has not been established.
+
+The documentation decisions remain valid as recovered design/governance knowledge, but they must not be treated as proof that the corresponding implementation exists in current `main`.
+
+### Required next step
+
+Recover or identify the authoritative runtime source repository/branch and establish provenance before making Widget implementation changes. Then build the source map:
+
+`primitive sources → tokens → default sizes → primitive CSS → Reference Library → representative Widget consumers → rendered verification/tests`
+
+Do not reconstruct production Widget code from the governance documents alone.
+
+### Durable findings
+
+- `FIND-20261004-WIDGET-005` — canonical main has no verifiable Widget runtime source surface.
+- `FIND-20261004-WIDGET-006` — Widget governance documentation currently has no verified canonical runtime implementation backing.
