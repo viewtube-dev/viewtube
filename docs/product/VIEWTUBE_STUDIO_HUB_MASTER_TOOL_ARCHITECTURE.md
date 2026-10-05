@@ -2200,6 +2200,166 @@ A tool should interact with another tool through a declared contract, not by dup
 | Creator Strategy Engine | Routes a chosen monetization action | Revenue Architect | StrategicRevenueDirective |
 | Creator Strategy Engine | Routes a chosen growth investigation | Causal Intelligence / Channel Flywheel | StrategicDiagnosticDirective |
 
+
+## 19.2.1 Pre-existing user-facing Studio Hub interaction matrix
+
+The pre-existing Studio Hub tools are part of the interaction architecture and must be treated as real user-facing owners. Their capabilities may be implemented through the newer intelligence engines, but the user-facing tool remains the owner of its stated workflow.
+
+| From | Primary interaction | To | Handoff |
+|---|---|---|---|
+| Video Manager | Supplies published-video metadata, historical variants, and current packaging context for opportunity discovery | Opportunity Radar | PublishedContentContext |
+| Video Manager | Supplies historical titles, descriptions, thumbnails, and metadata outcomes to analysis | Pre-Publication Analysis / Post-Publication Analysis | MetadataHistoryContext |
+| Video Manager | Sends selected published-video metadata into audience/performance diagnosis | Post-Publication Analysis | PublishedMetadataContext |
+| Video Manager | Sends a selected published video for derivative or improvement work | Content Architect | ExistingContentOpportunityRequest |
+| Video Manager | Sends packaging history and performance evidence to Thumbnail Studio | Thumbnail Studio | PackagingHistoryContext |
+| Video Manager | Sends selected published content into Content Autopilot capability | Post-Publication Analysis / Content Architect | DerivativeContext |
+| Video Manager | Sends a completed metadata improvement back for user approval and application | Video Manager | MetadataRevision |
+| Video Publisher | Receives project-ready content, assets, metadata, and readiness findings | Publishing Package | PublicationPackageRequest |
+| Video Publisher | Receives final pre-publication review findings | Pre-Publication Analysis | PublicationReviewRequest |
+| Video Publisher | Receives approved title/description/thumbnail/package recommendations | Thumbnail Studio / Content Architect | PublicationPackagingContext |
+| Video Publisher | Receives project/content readiness from Projects | Projects | PublicationReadyProject |
+| Video Publisher | Sends publication outcome and final package context to post-publication analysis | Post-Publication Analysis | PublishedPackageContext |
+| Video Publisher | Sends publication timing/readiness context to Pre-Launch Priming | Pre-Launch Priming | LaunchPrimingContext |
+| Video Publisher | Sends completed publication package to Video Manager after publishing | Video Manager | PublishedVideoRecord |
+| Content Analysis | Routes a user-selected analysis into the appropriate pre- or post-publication workflow | Pre-Publication Analysis / Post-Publication Analysis | AnalysisContext |
+| Content Analysis | Sends structured findings to Tactics Engine for actionable interventions | Tactics Engine | AnalysisFinding |
+| Content Analysis | Sends content findings to Content Architect when a new/revised concept is warranted | Content Architect | ContentFinding |
+| Content Analysis | Sends audience/content findings to Opportunity Radar | Opportunity Radar | OpportunitySignal |
+| Content Analysis | Sends packaging findings to Thumbnail Studio | Thumbnail Studio | PackagingFinding |
+| Content Analysis | Sends production findings to Video Director | Video Director | ProductionFinding |
+| Video Director | Receives a promoted concept and turns it into coordinated production direction | Content Architect | ProductionDirectionRequest |
+| Video Director | Receives story/script structure for production execution | Content Architect | StoryProductionBrief |
+| Video Director | Requests required production assets | Asset Forge | ProductionAssetRequest |
+| Video Director | Sends production-ready direction and assets into Projects | Projects | ProductionProjectBrief |
+| Video Director | Sends edit/assembly requirements to Editor | Editor | EditDirection |
+| Video Director | Sends production issues or missing requirements back to Tactics Engine | Tactics Engine | ProductionConstraint |
+| Script Architect | Receives a promoted concept and develops script structure | Content Architect | ScriptArchitectureRequest |
+| Script Architect | Sends script structure into Video Director for production coordination | Video Director | ScriptProductionBrief |
+| Script Architect | Sends hooks/script variants into Hook Generator for refinement | Hook Generator | HookRefinementRequest |
+| Script Architect | Sends completed script package into Projects | Projects | ScriptProjectBrief |
+| Thumbnail Studio | Receives packaging findings and performance context | Post-Publication Analysis | ThumbnailAnalysisContext |
+| Thumbnail Studio | Receives concept/story context for packaging development | Content Architect | PackagingConceptContext |
+| Thumbnail Studio | Receives end-screen/viewer-path requirements | End-Screen Architect | EndScreenDesignRequest |
+| Thumbnail Studio | Sends approved thumbnail/end-screen package into Video Publisher | Video Publisher | PublicationPackagingPackage |
+| Thumbnail Studio | Sends packaging variants to Experiment Lab | Experiment Lab | PackagingExperimentCandidate |
+| Publishing Package | Collects assets, metadata, thumbnail, end-screen, and publication requirements | Video Publisher | PublicationPackage |
+| Publishing Package | Requests missing assets or production deliverables | Asset Forge / Video Director | PackageAssetRequest |
+| Publishing Package | Requests final pre-publication validation | Pre-Publication Analysis | PublicationValidationRequest |
+| Publishing Package | Returns publication-ready status and package evidence to Video Publisher | Video Publisher | PublicationReadiness |
+| Community Posts | Uses audience findings and opportunities to create audience-facing posts | Audience Studio | CommunityPostContext |
+| Community Posts | Sends post performance and audience response into Post-Publication Analysis | Post-Publication Analysis | CommunityResponseEvidence |
+| Community Posts | Sends post concepts to Content Architect when they reveal content demand | Content Architect | AudienceDemandSignal |
+| Community Posts | Sends selected audience opportunities to Opportunity Radar | Opportunity Radar | CommunityOpportunitySignal |
+| Comment Responder | Sends comment themes, questions, requests, and response outcomes to Audience Studio | Audience Studio | CommentAudienceContext |
+| Comment Responder | Sends high-value audience demand into Content Architect | Content Architect | CommentContentDemand |
+| Comment Responder | Sends emerging audience signals into Opportunity Radar | Opportunity Radar | CommentOpportunitySignal |
+| Comment Responder | Sends difficult/repeated response patterns into Tactics Engine | Tactics Engine | ResponseTacticCandidate |
+| End-Screen Architect | Receives content destination and continuation-path context | Thumbnail Studio | EndScreenPackagingContext |
+| End-Screen Architect | Receives performance findings about viewer continuation | Post-Publication Analysis | ContinuationPerformanceContext |
+| End-Screen Architect | Sends viewer-path variants into Experiment Lab | Experiment Lab | EndScreenExperimentCandidate |
+| End-Screen Architect | Sends approved continuation package into Video Publisher | Video Publisher | EndScreenPublicationPackage |
+| Pre-Launch Priming | Receives publication timing and content context | Video Publisher | LaunchScheduleContext |
+| Pre-Launch Priming | Uses audience opportunity/context to prepare pre-launch activity | Opportunity Radar | PreLaunchSignalContext |
+| Pre-Launch Priming | Uses content concept and hook context to create anticipation messaging | Content Architect / Hook Generator | PreLaunchContentContext |
+| Pre-Launch Priming | Sends pre-launch actions into Projects | Projects | PreLaunchProjectTasks |
+| Pre-Launch Priming | Sends pre-launch results into Post-Publication Analysis for later comparison | Post-Publication Analysis | PrimingOutcomeContext |
+| Hook Generator | Receives concepts, scripts, and analysis findings requiring stronger openings | Content Architect / Script Architect | HookInputContext |
+| Hook Generator | Sends hook candidates to Thumbnail Studio when title/thumbnail/hook packaging must be evaluated together | Thumbnail Studio | HookPackagingContext |
+| Hook Generator | Sends hook variants to Experiment Lab | Experiment Lab | HookExperimentCandidate |
+| Hook Generator | Sends selected hook into Video Director and Projects | Video Director / Projects | ApprovedHook |
+| Tactics Engine | Converts findings into concrete creator tactics, interventions, tests, and actions | Projects | TacticProjectBrief |
+| Tactics Engine | Converts analysis findings into targeted corrective actions | Pre-Publication Analysis / Post-Publication Analysis | AnalysisTactic |
+| Tactics Engine | Converts opportunity findings into actionable tests or interventions | Opportunity Radar | OpportunityActionPlan |
+| Tactics Engine | Converts audience findings into response/relationship tactics | Audience Studio | AudienceTactic |
+| Tactics Engine | Sends learning-oriented tactics into Experiment Lab | Experiment Lab | TacticExperimentCandidate |
+| Tactics Engine | Sends strategic action candidates to Creator Strategy Engine | Creator Strategy Engine | TacticCandidate |
+| Tactics Engine | Sends selected production tactics to Video Director | Video Director | ProductionTactic |
+| Tactics Engine | Sends selected publishing tactics to Video Publisher | Video Publisher | PublishingTactic |
+| Tactics Engine | Sends selected metadata tactics to Video Manager | Video Manager | MetadataTactic |
+
+## 19.2.2 New/consolidated user-facing tool interactions
+
+These are the planned interactions for the current Round 1 user-facing inventory. They complement, rather than replace, the capability-engine matrix above.
+
+| From | Primary interaction | To | Handoff |
+|---|---|---|---|
+| Opportunity Radar | Promotes a general opportunity into content development | Content Architect | OpportunityContext |
+| Opportunity Radar | Supplies opportunity evidence to post-publication diagnosis | Post-Publication Analysis | OpportunityAnalysisContext |
+| Opportunity Radar | Supplies revenue-specific opportunities to monetization planning | Revenue Architect | RevenueOpportunityCandidate |
+| Opportunity Radar | Supplies qualified opportunities to strategic prioritization | Creator Strategy Engine | OpportunityContext |
+| Content Architect | Converts opportunity into concept/story/script planning | Video Director | ContentProductionBrief |
+| Content Architect | Requests production assets | Asset Forge | ProductionRequirementRequest |
+| Content Architect | Sends concept/script decisions into Pre-Publication Analysis | Pre-Publication Analysis | PrePublicationReviewRequest |
+| Content Architect | Receives post-publication findings for concept iteration | Post-Publication Analysis | ContentRevisionContext |
+| Content Architect | Sends selected concepts into Video Publisher when ready for packaging | Video Publisher | PublicationConceptPackage |
+| Content Architect | Receives tactics and strategic directives without surrendering concept ownership | Tactics Engine / Creator Strategy Engine | ConceptDirective |
+| Video Director | Receives concept/script/hook context and coordinates production | Content Architect / Hook Generator | ProductionDirectionContext |
+| Video Director | Requests production-ready assets | Asset Forge | ProductionAssetRequest |
+| Video Director | Sends production status and constraints into Pre-Publication Analysis | Pre-Publication Analysis | ProductionReviewContext |
+| Video Director | Sends completed production into Video Publisher | Video Publisher | ProductionReadyPackage |
+| Asset Forge | Supplies production assets to Video Director | Video Director | ProductionAssetPackage |
+| Asset Forge | Supplies assets required for publication packaging | Video Publisher / Publishing Package | PublicationAssetPackage |
+| Asset Forge | Supplies monetization assets requested by Revenue Architect | Revenue Architect | RevenueAssetPackage |
+| Thumbnail Studio | Supplies packaging candidates to Pre-Publication Analysis | Pre-Publication Analysis | PackagingReviewRequest |
+| Thumbnail Studio | Receives post-publication performance evidence | Post-Publication Analysis | PackagingPerformanceContext |
+| Thumbnail Studio | Supplies approved thumbnails/end-screen packaging to Video Publisher | Video Publisher | PublicationPackagingPackage |
+| Video Manager | Provides published-video context to Opportunity Radar | Opportunity Radar | PublishedContentContext |
+| Video Manager | Receives post-publication analysis findings and applies approved metadata changes | Post-Publication Analysis | MetadataOptimizationContext |
+| Video Manager | Sends metadata history to Thumbnail Studio and Content Architect | Thumbnail Studio / Content Architect | MetadataHistoryContext |
+| Video Publisher | Receives final project, assets, metadata, and packaging | Projects / Asset Forge / Thumbnail Studio | PublicationPackageContext |
+| Video Publisher | Sends final pre-publication package to Pre-Publication Analysis | Pre-Publication Analysis | FinalPrePublicationReview |
+| Video Publisher | Sends published result into Video Manager | Video Manager | PublishedVideoRecord |
+| Video Publisher | Sends publication timing to Pre-Launch Priming | Pre-Launch Priming | LaunchScheduleContext |
+| Pre-Publication Analysis | Reviews content, packaging, metadata, production readiness, and risks before publication | Video Publisher | PublicationReadinessFinding |
+| Pre-Publication Analysis | Sends corrective actions to Tactics Engine | Tactics Engine | PrePublicationTactic |
+| Pre-Publication Analysis | Sends concept/script/packaging changes to their owning tools | Content Architect / Video Director / Thumbnail Studio | RevisionRequest |
+| Pre-Publication Analysis | Sends evidence-backed publication decision context to Creator Strategy Engine when a strategic tradeoff exists | Creator Strategy Engine | PrePublicationDecisionContext |
+| Post-Publication Analysis | Reviews published content with actual performance/audience evidence | Video Manager | PublishedMetadataFinding |
+| Post-Publication Analysis | Identifies content opportunities from observed outcomes | Opportunity Radar | PostPublicationOpportunitySignal |
+| Post-Publication Analysis | Sends findings into Content Architect for iteration | Content Architect | ContentIterationFinding |
+| Post-Publication Analysis | Sends audience findings to Audience Studio | Audience Studio | AudienceFinding |
+| Post-Publication Analysis | Sends packaging findings to Thumbnail Studio / End-Screen Architect | Thumbnail Studio / End-Screen Architect | PackagingFinding |
+| Post-Publication Analysis | Sends causal/experimental candidates to Tactics Engine / Experiment Lab | Tactics Engine / Experiment Lab | LearningCandidate |
+| Audience Studio | Consolidates Community Posts and Comment Responder workflows | Community Posts / Comment Responder | AudienceActionContext |
+| Audience Studio | Sends audience demand and relationship opportunities to Content Architect | Content Architect | AudienceOpportunity |
+| Audience Studio | Sends audience opportunities to Opportunity Radar | Opportunity Radar | AudienceSignal |
+| Audience Studio | Sends audience value/context to Revenue Architect | Revenue Architect | AudienceValueContext |
+| Audience Studio | Sends selected audience actions into Projects | Projects | AudienceActionProject |
+| Audience Studio | Sends response tactics to Tactics Engine | Tactics Engine | AudienceTactic |
+| Tactics Engine | Turns specialist findings into executable interventions | Projects | TacticProjectBrief |
+| Tactics Engine | Supplies domain-specific action candidates to Creator Strategy Engine | Creator Strategy Engine | TacticCandidate |
+| Revenue Architect | Converts revenue opportunities into monetization plans | Projects | RevenueProjectBrief |
+| Revenue Architect | Requests content required for revenue path | Content Architect | RevenueContentRequirement |
+| Revenue Architect | Requests assets required for offers/monetization | Asset Forge | MonetizationAssetRequest |
+| Revenue Architect | Uses audience value from Audience Studio | Audience Studio | RevenueAudienceContext |
+| Revenue Architect | Supplies revenue opportunities to Creator Strategy Engine | Creator Strategy Engine | RevenueOpportunity |
+| Creator Strategy Engine | Prioritizes cross-tool actions without taking specialist ownership | Tactics Engine / Content Architect / Video Director / Revenue Architect | StrategicDirective |
+| Creator Strategy Engine | Sends the selected next-best move into execution | Projects | NextBestMove |
+| Creator Strategy Engine | Can request investigation before committing to a strategic action | Pre-Publication Analysis / Post-Publication Analysis | StrategicReviewRequest |
+| Creator Strategy Engine | Can request growth/content opportunity discovery | Opportunity Radar | StrategicDiscoveryRequest |
+| Creator Strategy Engine | Can request monetization planning | Revenue Architect | StrategicRevenueDirective |
+
+### 19.2.3 Planned pre-existing-tool consolidation boundaries
+
+The interaction graph must preserve these ownership boundaries while allowing capability consolidation:
+
+| Pre-existing tool | Planned relationship to newer architecture |
+|---|---|
+| Video Manager | Remains a standalone published-content metadata owner; consumes post-publication intelligence rather than becoming the analysis engine. |
+| Video Publisher | Remains a standalone publication-preparation owner; Publishing Package is a supporting workflow/subtool rather than a competing owner. |
+| Content Analysis | Remains the historical umbrella concept; implementation may split it into Pre-Publication Analysis and Post-Publication Analysis while preserving shared analysis infrastructure. |
+| Video Director | Remains the production-direction owner; it consumes Content Architect, Hook Generator, Asset Forge, and analysis outputs. |
+| Script Architect | Remains a historical/pre-existing capability owner during migration; script architecture may become a mode/subtool of Content Architect without losing the capability. |
+| Thumbnail Studio | Remains the visual-packaging owner; End-Screen Architect may become a packaging subtool while preserving viewer-path functionality. |
+| Publishing Package | Remains a publication-package capability/workflow under Video Publisher unless a distinct ownership need is proven. |
+| Community Posts | Remains an audience-publishing capability under Audience Studio if consolidated. |
+| Comment Responder | Remains an audience-response capability under Audience Studio if consolidated. |
+| End-Screen Architect | Remains a viewer-continuation capability under Thumbnail Studio if consolidated. |
+| Pre-Launch Priming | Remains the pre-publication audience-activation capability and coordinates with Video Publisher, Content Architect, Opportunity Radar, and Projects. |
+| Hook Generator | Remains the hook-generation capability and should integrate with Content Architect, Script Architect, Video Director, Thumbnail Studio, and Experiment Lab. |
+| Tactics Engine | Remains the action/intervention engine and is the bridge from specialist findings to executable tactics; it does not replace Creator Strategy Engine's cross-tool prioritization. |
+
+
 ## 19.3 The Main Creator Workflow
 
 The normal creation path should behave like a chain of specialized transformations:
