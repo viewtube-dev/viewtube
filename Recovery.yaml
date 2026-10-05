@@ -845,3 +845,56 @@ studio_hub_document_split:
     - "584ab29c7cd20f9ea41b6f2214b562b6e10cf97b"
     - "ec9534c319ef74563a8d5c1f254ace0166433ad"
     - "555992dec835a154ab1fda3f2a8236e41ba1c729"
+
+
+latest_conversation_update_widget_source_recovery:
+  update_id: "UPDATE-20261004-widget-source-recovery-002"
+  exact_eastern_timestamp: "2026-10-04 22:25:00 EDT"
+  timezone: "America/New_York"
+  conversation_title: "UNKNOWN — title not exposed in current conversation context"
+  main_focus: "Recover the missing Widget runtime source and reconcile its provenance against canonical viewtube-dev/viewtube."
+  status: "VERIFIED RECOVERY SOURCE / CANONICAL TARGET UNKNOWN"
+  files_added: []
+  files_edited:
+    - "docs/recovery/Findings.md"
+    - "docs/recovery/Handoff-Widget-UI-Governance-2026-10-04.md"
+    - "docs/Widgets.md"
+    - "Recovery.md"
+    - "Recovery.yaml"
+    - "docs/recovery/History.md"
+  commits_pending_history_receipt:
+    - "f6df97076fede5256113aa018bdf97d69c9c349c"
+    - "51f2a22cc02ea0e5eec8422ba1d61592ef157208"
+    - "8382d089ccff3a468414c188d585b9b3b69ee371"
+    - "f2743e79e024f03c3f5d6fd3069e93560ad2c1e9"
+  discoveries:
+    - "Recovered the previously missing Widget runtime source in themotionvisual/ViewTubeBUILD/main."
+    - "Recovered source contains WidgetPrimitives, WidgetPrimitiveExtensions, widgetPrimitiveSystem, primitive CSS layers, UIReferenceLibraryWidget, ToolboxUIReferenceLibrary, Studio Hub primitive catalogs, and tests."
+    - "Recovered source map explicitly identifies current production owners and states that the UI Reference Library renders production primitives."
+    - "Concrete size/tone/state/palette architecture is now directly verified in source."
+  code_discoveries:
+    - "Widget primitive size lattice is 18/24/32/38px."
+    - "Primitive tones are default/primary/secondary; explicit states include default/selected/active/loading/disabled/success/warning/danger/info."
+    - "widgetPrimitiveSystem.ts centralizes size/tone/state classes and size tokens; dedicated CSS layers own exact geometry, tones, variants, responsive behavior, and mobile contracts."
+    - "WidgetPrimitives.tsx is the primary consumer import surface; WidgetPrimitiveExtensions.tsx is documented as a temporary compatibility/implementation module."
+  optimizations:
+    - "Use recovered source maps rather than reconstructing missing runtime code from documentation."
+    - "Require repository provenance reconciliation before copying implementation into canonical main."
+  recommended_improvements:
+    - "Compare repository identity/history and deployment provenance between ViewTubeBUILD and viewtube-dev/viewtube."
+    - "Produce a controlled source diff before any migration/copy."
+    - "After canonical-source decision, resume the Widget four-way audit against representative consumers."
+  conflicts:
+    - "viewtube-dev/viewtube/main is the canonical documentation target but lacks the recovered Widget runtime source; themotionvisual/ViewTubeBUILD/main contains it."
+  verification:
+    - "Fetched ViewTubeBUILD repository metadata and recursively inspected its main tree."
+    - "Directly fetched key Widget implementation files and source-map references."
+    - "Updated canonical Widget/recovery documents without copying production code."
+  blockers:
+    - "Canonical relationship between ViewTubeBUILD and viewtube-dev/viewtube is unresolved."
+    - "Deployment provenance and intended canonical implementation source remain unresolved."
+  next_actions:
+    - "Reconcile repository identity/history/deployment provenance."
+    - "Compare recovered Widget source against canonical main."
+    - "Make an explicit canonical-source decision."
+    - "Resume four-way Widget audit and implementation only after authority is established."
