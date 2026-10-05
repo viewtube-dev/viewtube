@@ -1,6 +1,6 @@
 # ViewTube Repository Organization & Consolidation Plan
 
-**Status:** PROPOSED — ROUND 2 CONSOLIDATION PLAN
+**Status:** ACTIVE — ROUND 2 CONSOLIDATION / MIGRATION
 **Repository:** viewtube-dev/viewtube
 **Branch inspected:** main
 **Goal:** reduce navigation complexity, merge overlapping documentation, preserve every material piece of information, and establish one clear authority per subject.
@@ -379,7 +379,25 @@ The organization migration is complete only when:
 - no implementation status was accidentally upgraded during documentation consolidation;
 - the repository can be understood without relying on conversation memory.
 
-## 12. Safe operating principle
+## 12. Migration execution baseline
+
+The pre-migration state of `main` was preserved before applying the new document system on a dedicated branch:
+
+`recovery/pre-document-system-migration-2026-10-04`
+
+The branch is a safety snapshot, not a competing source of truth. Migration changes are applied incrementally to `main` and must pass the Document System and Document Health gates before cleanup.
+
+The first migration infrastructure now active on `main` is:
+
+- `docs/Document-System.md` — lifecycle and document-operation standard.
+- `docs/Document-Health.md` — health checks, reconciliation gates, and migration verification.
+- `docs/recovery/History.md` — operation ledger.
+- `docs/Index.md` — current documentation navigation.
+- `docs/recovery/Index.md` — recovery navigation.
+
+No destructive cleanup is authorized merely because this infrastructure exists. Inventory, preservation, reconciliation, link verification, and History receipts must precede source retirement.
+
+## 13. Safe operating principle
 
 **Merge aggressively at the knowledge level; migrate conservatively at the filesystem level.**
 
