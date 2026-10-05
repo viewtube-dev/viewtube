@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ViewTube — Component Variant Lab · Phase 01</title>
+<style>
+:root{
+ --bg:#080a0d;--panel:#10141a;--panel2:#151a21;--line:#2b323c;--text:#edf2f7;--muted:#8792a0;
+ --cyan:#54d8ff;--blue:#4f78ff;--violet:#9b7cff;--lime:#9de36a;--amber:#f1c75b;--red:#ff6f73;
+ --r:14px;--gap:16px;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:
+ radial-gradient(circle at 80% 0%,rgba(79,120,255,.12),transparent 32rem),
+ radial-gradient(circle at 15% 20%,rgba(84,216,255,.07),transparent 28rem),var(--bg);
+ color:var(--text);font:13px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+button,input,select{font:inherit;color:inherit} button{cursor:pointer}
+.app{max-width:1600px;margin:auto;padding:24px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}
+.kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:800}
+h1{font-size:30px;line-height:1;margin:7px 0 8px;letter-spacing:-.04em}
+.lead{color:var(--muted);max-width:720px;margin:0}
+.count{border:1px solid var(--line);background:rgba(255,255,255,.025);padding:12px 15px;border-radius:12px;text-align:right;min-width:145px}
+.count b{display:block;font-size:24px} .count span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.toolbar{position:sticky;top:10px;z-index:10;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;border:1px solid var(--line);background:rgba(8,10,13,.86);backdrop-filter:blur(18px);border-radius:14px;margin-bottom:20px}
+.toolbar input,.toolbar select,.toolbar button{height:34px;border:1px solid var(--line);background:#0e1217;border-radius:9px;padding:0 11px;outline:none}
+.toolbar input{min-width:220px;flex:1} .toolbar button.active{border-color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(84,216,255,.2);color:var(--cyan)}
+.legend{display:flex;gap:6px;margin-left:auto} .legend button{font-size:11px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card{min-width:0;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.018));border-radius:var(--r);overflow:hidden;transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-2px);border-color:#46515f;box-shadow:0 16px 36px rgba(0,0,0,.24)}
+.card-top{height:36px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.06)}
+.eyebrow{font-size:9px;letter-spacing:.12em;color:var(--muted);font-weight:800} .more{background:none;border:0;color:var(--muted);font-size:18px}
+.visual{min-height:154px;padding:20px;display:grid;place-items:center;background:#0b0f14;position:relative;overflow:hidden}
+.visual:before{content:"";position:absolute;inset:0;opacity:.28;pointer-events:none}
+.signal .visual:before{background:linear-gradient(90deg,transparent 49.5%,rgba(84,216,255,.1) 50%,transparent 50.5%)}
+.layer .visual:before{background:radial-gradient(circle at 50% 40%,rgba(155,124,255,.18),transparent 60%)}
+.grid .visual:before{background-image:linear-gradient(rgba(84,216,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(84,216,255,.07) 1px,transparent 1px);background-size:20px 20px}
+.motion .visual:before{background:radial-gradient(circle at 30% 70%,rgba(157,227,106,.12),transparent 35%)}
+.card-copy{padding:13px 14px 12px} h3{font-size:14px;margin:0 0 3px} .card-copy p{margin:0;color:var(--muted);font-size:11px}
+.chips{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap} .chips span{font-size:9px;border:1px solid #303945;padding:3px 6px;border-radius:5px;color:#aeb8c4}
+details{border-top:1px solid rgba(255,255,255,.06)} summary{cursor:pointer;padding:9px 14px;color:#aeb8c4;font-size:10px;list-style:none} summary::-webkit-details-marker{display:none}
+.props{padding:0 14px 13px;display:grid;grid-template-columns:1fr 1fr;gap:6px} .props span{font-size:9px;color:var(--muted);border:1px solid #252c35;padding:6px;border-radius:6px} .props b{display:block;color:var(--text);font-size:10px;margin-top:2px}
+/* Shared demo primitives */
+.demo-btn{position:relative;border:0;min-width:150px;height:46px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.signal .demo-btn{background:#dce9f2;color:#0a0e12;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));box-shadow:5px 5px 0 #26323e}
+.layer .demo-btn{background:rgba(84,216,255,.12);border:1px solid rgba(84,216,255,.45);border-radius:14px;box-shadow:0 12px 28px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.14)}
+.grid .demo-btn{background:#151b22;border:1px solid #46515e;border-radius:4px;color:#eaf0f5;box-shadow:inset 0 -4px 0 rgba(84,216,255,.12)}
+.motion .demo-btn{background:linear-gradient(90deg,#9de36a,#54d8ff);color:#08100c;border-radius:24px;box-shadow:0 0 0 0 rgba(84,216,255,.2);animation:breath 2.8s infinite}
+.icon-demo{width:50px;height:50px;border:1px solid var(--line);display:grid;place-items:center;background:#12171d}
+.signal .icon-demo{border-radius:4px;box-shadow:4px 4px 0 #26323e;color:var(--cyan)} .layer .icon-demo{border-radius:16px;background:rgba(84,216,255,.08);box-shadow:0 10px 25px #0008;color:#fff} .grid .icon-demo{border-radius:0;border-width:0 1px;color:var(--cyan)} .motion .icon-demo{border-radius:50%;color:var(--lime);animation:pulse 2s infinite}
+.split-demo,.headtail,.stepper,.button-group,.segments,.toggle-demo,.choice-demo,.field-demo{display:flex;align-items:center}
+.split-demo button,.button-group button{height:42px;border:1px solid var(--line);background:#151a20;padding:0 14px}
+.signal .split-demo button:first-child{background:var(--cyan);color:#071016;border-color:var(--cyan)} .layer .split-demo{filter:drop-shadow(0 12px 20px #0007)} .layer .split-demo button{background:rgba(255,255,255,.08)} .grid .split-demo button{border-radius:0} .motion .split-demo button{transition:.3s;border-radius:20px}
+.headtail{gap:10px;min-width:180px;padding:9px 11px;border:1px solid var(--line)} .headtail span{color:var(--cyan)} .headtail strong{flex:1;font-size:11px} .headtail em{font-style:normal;color:var(--muted);font-size:9px}
+.signal .headtail{border-left:4px solid var(--cyan)} .layer .headtail{border-radius:13px;background:#171c24aa} .grid .headtail{border-style:dashed} .motion .headtail{border-radius:22px;animation:slide 3s infinite}
+.menu-demo,.context-demo{width:180px;border:1px solid var(--line);background:#11161c;padding:8px;display:grid;gap:4px} .menu-demo button{border:0;background:#1b222a;text-align:left;padding:9px} .menu-demo span,.context-demo span{padding:6px 8px;color:#9ba7b4;font-size:10px} .context-demo strong{font-size:10px;padding:6px 8px} .layer .menu-demo,.layer .context-demo{border-radius:15px;box-shadow:0 18px 35px #0009;background:#151a22ee} .grid .menu-demo,.grid .context-demo{border-radius:2px} .motion .menu-demo,.motion .context-demo{border-radius:12px;animation:rise 2.5s infinite}
+.field-demo{position:relative;gap:8px;width:210px;min-height:46px;border:1px solid #35404c;background:#0e1318;padding:9px 11px} .field-demo small{position:absolute;top:-7px;left:9px;background:#0b0f14;padding:0 4px;color:#8e9aa8;font-size:8px} .field-demo span,.field-demo strong{font-size:11px;color:#d9e0e7;flex:1} .field-demo i{font-style:normal;color:var(--cyan)} .field-demo b{font-size:11px;color:var(--cyan)} .signal .field-demo{border-left:3px solid var(--cyan);border-radius:2px} .layer .field-demo{border-radius:14px;background:rgba(255,255,255,.05);box-shadow:inset 0 1px rgba(255,255,255,.08),0 10px 25px #0005} .grid .field-demo{border-radius:0;border-color:#46515e} .motion .field-demo{border-radius:23px;overflow:hidden} .motion .field-demo:after{content:"";position:absolute;bottom:0;left:0;width:42%;height:2px;background:var(--lime);animation:grow 2s infinite}
+.stepper{border:1px solid var(--line);height:44px} .stepper button{height:100%;width:42px;border:0;background:#161c23} .stepper strong{padding:0 15px;font-variant-numeric:tabular-nums} .signal .stepper{border-radius:3px;box-shadow:4px 4px 0 #26323e} .layer .stepper{border-radius:13px;box-shadow:0 10px 25px #0006} .grid .stepper{border-radius:0} .motion .stepper{border-radius:24px}
+.slider-demo{width:210px} .rail{height:8px;background:#28313b;position:relative;border-radius:10px} .rail i{position:absolute;left:0;top:0;width:58%;height:100%;background:var(--cyan);border-radius:inherit} .rail b{position:absolute;left:55%;top:50%;width:17px;height:17px;transform:translate(-50%,-50%);border:2px solid #0b0f14;background:#e7f0f5;border-radius:50%} .slider-demo small{display:block;margin-top:8px;color:#9eabb8} .signal .rail b{border-radius:2px} .grid .rail{border-radius:0} .motion .rail i{background:linear-gradient(90deg,var(--lime),var(--cyan));animation:flow 2s infinite}
+.toggle-demo{width:200px;justify-content:space-between} .toggle-demo i{width:48px;height:26px;border:1px solid #3a4551;padding:3px;display:block} .toggle-demo i b{display:block;width:18px;height:18px;background:var(--cyan)} .signal .toggle-demo i{border-radius:4px} .layer .toggle-demo i{border-radius:20px;background:#ffffff12} .layer .toggle-demo i b{border-radius:50%;box-shadow:0 2px 8px #0008} .grid .toggle-demo i{border-radius:0} .motion .toggle-demo i{border-radius:20px} .motion .toggle-demo i b{border-radius:50%;animation:slideToggle 2s infinite}
+.choice-demo{gap:10px;width:190px} .choice-demo i{width:20px;height:20px;border:1px solid #5b6775;display:grid;place-items:center;font-size:11px} .signal .choice-demo i{border-radius:3px;background:#54d8ff22;color:var(--cyan)} .layer .choice-demo i{border-radius:50%;box-shadow:0 5px 12px #0007} .grid .choice-demo i{border-radius:0} .motion .choice-demo i{border-radius:50%;animation:pulse 2s infinite}
+.segments{border:1px solid var(--line);padding:3px;width:220px} .segments b{flex:1;text-align:center;padding:8px 3px;font-size:9px} .segments .on{background:#54d8ff1c;color:var(--cyan)} .signal .segments{border-radius:3px} .layer .segments{border-radius:14px;background:#ffffff08} .grid .segments{border-radius:0} .motion .segments{border-radius:22px} .motion .segments .on{animation:slideBg 2s infinite}
+.button-group button:first-child{border-radius:8px 0 0 8px} .button-group button:last-child{border-radius:0 8px 8px 0} .signal .button-group button{border-radius:2px} .layer .button-group button{background:#ffffff0a;border-radius:12px} .grid .button-group button{border-radius:0} .motion .button-group button{border-radius:20px}
+@keyframes pulse{50%{transform:scale(1.08);box-shadow:0 0 22px #54d8ff33}} @keyframes breath{50%{box-shadow:0 0 28px #54d8ff33}} @keyframes slide{50%{transform:translateX(4px)}} @keyframes rise{50%{transform:translateY(-4px)}} @keyframes grow{50%{width:70%}} @keyframes flow{50%{width:72%}} @keyframes slideToggle{50%{transform:translateX(20px)}} @keyframes slideBg{50%{transform:translateX(2px)}}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}} @media(max-width:650px){.app{padding:12px}header{display:block}.count{margin-top:14px;text-align:left}.grid{grid-template-columns:1fr}.legend{margin-left:0;width:100%}.toolbar input{min-width:150px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div><div class="kicker">VIEWTUBE · VARIANT LAB · PHASE 01</div>
+ <h1>Core Controls / 4× Redesign Matrix</h1>
+ <p class="lead">A runnable exploration of four independent visual systems applied to the first 23 canonical ViewTube component families. Same function. New composition, properties, state language and motion grammar.</p></div>
+ <div class="count"><b>92</b><span>variants · 23 families × 4</span></div>
+</header>
+<div class="toolbar">
+ <input id="search" placeholder="Filter components…" aria-label="Filter components">
+ <select id="family"><option value="">All families</option><option>Primary Button</option><option>Square Icon Button</option><option>Split Left Button</option><option>Head Tail Action</option><option>Split Menu</option><option>Dropdown</option><option>Top Title Dropdown</option><option>Select Menu</option><option>Context Menu</option><option>Text Input</option><option>Textarea</option><option>Split Search</option><option>Number Field</option><option>Input Action</option><option>Stepper</option><option>Slider</option><option>Range Slider</option><option>Toggle</option><option>Settings Switch</option><option>Checkbox</option><option>Radio</option><option>Segmented Choice</option><option>Button Group</option></select>
+ <div class="legend">
+  <button class="active" data-filter="all">All</button><button data-filter="signal">Signal</button><button data-filter="layer">Layer</button><button data-filter="grid">Grid</button><button data-filter="motion">Motion</button>
+ </div>
+</div>
+<main class="grid" id="cards">
+        <article class="card signal" data-family="Primary Button" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-01 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="demo-btn signal"><span>Primary Button</span><b>↗</b></button></div>
+          <div class="card-copy">
+            <h3>Primary Button</h3>
+            <p>Primary action control</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Primary Button" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-01 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="demo-btn layer"><span>Primary Button</span><b>↗</b></button></div>
+          <div class="card-copy">
+            <h3>Primary Button</h3>
+            <p>Primary action control</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Primary Button" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-01 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="demo-btn grid"><span>Primary Button</span><b>↗</b></button></div>
+          <div class="card-copy">
+            <h3>Primary Button</h3>
+            <p>Primary action control</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Primary Button" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-01 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="demo-btn motion"><span>Primary Button</span><b>↗</b></button></div>
+          <div class="card-copy">
+            <h3>Primary Button</h3>
+            <p>Primary action control</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Square Icon Button" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-02 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="icon-demo signal"><span>✦</span></button></div>
+          <div class="card-copy">
+            <h3>Square Icon Button</h3>
+            <p>Compact icon-only action</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Square Icon Button" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-02 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="icon-demo layer"><span>✦</span></button></div>
+          <div class="card-copy">
+            <h3>Square Icon Button</h3>
+            <p>Compact icon-only action</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Square Icon Button" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-02 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="icon-demo grid"><span>✦</span></button></div>
+          <div class="card-copy">
+            <h3>Square Icon Button</h3>
+            <p>Compact icon-only action</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Square Icon Button" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-02 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><button class="icon-demo motion"><span>✦</span></button></div>
+          <div class="card-copy">
+            <h3>Square Icon Button</h3>
+            <p>Compact icon-only action</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Split Left Button" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-03 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="split-demo signal"><button>◈</button><button>Split Left Button</button></div></div>
+          <div class="card-copy">
+            <h3>Split Left Button</h3>
+            <p>Action with left split affordance</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Split Left Button" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-03 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="split-demo layer"><button>◈</button><button>Split Left Button</button></div></div>
+          <div class="card-copy">
+            <h3>Split Left Button</h3>
+            <p>Action with left split affordance</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Split Left Button" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-03 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="split-demo grid"><button>◈</button><button>Split Left Button</button></div></div>
+          <div class="card-copy">
+            <h3>Split Left Button</h3>
+            <p>Action with left split affordance</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Split Left Button" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-03 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="split-demo motion"><button>◈</button><button>Split Left Button</button></div></div>
+          <div class="card-copy">
+            <h3>Split Left Button</h3>
+            <p>Action with left split affordance</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Head Tail Action" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-04 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="headtail signal"><span>◈</span><strong>Head Tail Action</strong><em>⌘↵</em></div></div>
+          <div class="card-copy">
+            <h3>Head Tail Action</h3>
+            <p>Action with distinct head/tail regions</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Head Tail Action" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-04 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="headtail layer"><span>◈</span><strong>Head Tail Action</strong><em>⌘↵</em></div></div>
+          <div class="card-copy">
+            <h3>Head Tail Action</h3>
+            <p>Action with distinct head/tail regions</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Head Tail Action" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-04 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="headtail grid"><span>◈</span><strong>Head Tail Action</strong><em>⌘↵</em></div></div>
+          <div class="card-copy">
+            <h3>Head Tail Action</h3>
+            <p>Action with distinct head/tail regions</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Head Tail Action" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-04 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="headtail motion"><span>◈</span><strong>Head Tail Action</strong><em>⌘↵</em></div></div>
+          <div class="card-copy">
+            <h3>Head Tail Action</h3>
+            <p>Action with distinct head/tail regions</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Split Menu" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-05 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="menu-demo signal"><button>Split Menu <i>⌄</i></button><span>Save preset</span><span>Duplicate</span></div></div>
+          <div class="card-copy">
+            <h3>Split Menu</h3>
+            <p>Action plus menu choice</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Split Menu" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-05 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="menu-demo layer"><button>Split Menu <i>⌄</i></button><span>Save preset</span><span>Duplicate</span></div></div>
+          <div class="card-copy">
+            <h3>Split Menu</h3>
+            <p>Action plus menu choice</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Split Menu" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-05 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="menu-demo grid"><button>Split Menu <i>⌄</i></button><span>Save preset</span><span>Duplicate</span></div></div>
+          <div class="card-copy">
+            <h3>Split Menu</h3>
+            <p>Action plus menu choice</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Split Menu" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-05 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="menu-demo motion"><button>Split Menu <i>⌄</i></button><span>Save preset</span><span>Duplicate</span></div></div>
+          <div class="card-copy">
+            <h3>Split Menu</h3>
+            <p>Action plus menu choice</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Dropdown" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-06 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike signal"><small>Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Dropdown</h3>
+            <p>Choose one item from a list</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Dropdown" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-06 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike layer"><small>Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Dropdown</h3>
+            <p>Choose one item from a list</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Dropdown" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-06 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike grid"><small>Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Dropdown</h3>
+            <p>Choose one item from a list</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Dropdown" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-06 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike motion"><small>Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Dropdown</h3>
+            <p>Choose one item from a list</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Top Title Dropdown" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-07 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike signal"><small>Top Title Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Top Title Dropdown</h3>
+            <p>Title-led selection control</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Top Title Dropdown" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-07 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike layer"><small>Top Title Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Top Title Dropdown</h3>
+            <p>Title-led selection control</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Top Title Dropdown" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-07 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike grid"><small>Top Title Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Top Title Dropdown</h3>
+            <p>Title-led selection control</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Top Title Dropdown" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-07 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike motion"><small>Top Title Dropdown</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Top Title Dropdown</h3>
+            <p>Title-led selection control</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Select Menu" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-08 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike signal"><small>Select Menu</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Select Menu</h3>
+            <p>Selection list control</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Select Menu" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-08 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike layer"><small>Select Menu</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Select Menu</h3>
+            <p>Selection list control</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Select Menu" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-08 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike grid"><small>Select Menu</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Select Menu</h3>
+            <p>Selection list control</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Select Menu" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-08 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo selectlike motion"><small>Select Menu</small><strong>Default selection</strong><i>⌄</i></div></div>
+          <div class="card-copy">
+            <h3>Select Menu</h3>
+            <p>Selection list control</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Context Menu" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-09 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="context-demo signal"><strong>Quick actions</strong><span>Rename</span><span>Duplicate</span><span>Archive</span></div></div>
+          <div class="card-copy">
+            <h3>Context Menu</h3>
+            <p>Contextual action menu</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Context Menu" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-09 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="context-demo layer"><strong>Quick actions</strong><span>Rename</span><span>Duplicate</span><span>Archive</span></div></div>
+          <div class="card-copy">
+            <h3>Context Menu</h3>
+            <p>Contextual action menu</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Context Menu" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-09 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="context-demo grid"><strong>Quick actions</strong><span>Rename</span><span>Duplicate</span><span>Archive</span></div></div>
+          <div class="card-copy">
+            <h3>Context Menu</h3>
+            <p>Contextual action menu</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Context Menu" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-09 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="context-demo motion"><strong>Quick actions</strong><span>Rename</span><span>Duplicate</span><span>Archive</span></div></div>
+          <div class="card-copy">
+            <h3>Context Menu</h3>
+            <p>Contextual action menu</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Text Input" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-10 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo signal"><small>Text Input</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Text Input</h3>
+            <p>Single-line text entry</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Text Input" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-10 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo layer"><small>Text Input</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Text Input</h3>
+            <p>Single-line text entry</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Text Input" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-10 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo grid"><small>Text Input</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Text Input</h3>
+            <p>Single-line text entry</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Text Input" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-10 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo motion"><small>Text Input</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Text Input</h3>
+            <p>Single-line text entry</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Textarea" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-11 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo signal"><small>Textarea</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Textarea</h3>
+            <p>Multi-line text entry</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Textarea" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-11 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo layer"><small>Textarea</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Textarea</h3>
+            <p>Multi-line text entry</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Textarea" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-11 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo grid"><small>Textarea</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Textarea</h3>
+            <p>Multi-line text entry</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Textarea" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-11 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo motion"><small>Textarea</small><span>Enter value…</span></div></div>
+          <div class="card-copy">
+            <h3>Textarea</h3>
+            <p>Multi-line text entry</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Split Search" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-12 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo signal"><small>Split Search</small><span>Search projects…</span>⌕</div></div>
+          <div class="card-copy">
+            <h3>Split Search</h3>
+            <p>Search field with action regions</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Split Search" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-12 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo layer"><small>Split Search</small><span>Search projects…</span>⌕</div></div>
+          <div class="card-copy">
+            <h3>Split Search</h3>
+            <p>Search field with action regions</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Split Search" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-12 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo grid"><small>Split Search</small><span>Search projects…</span>⌕</div></div>
+          <div class="card-copy">
+            <h3>Split Search</h3>
+            <p>Search field with action regions</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card motion" data-family="Split Search" data-system="motion">
+          <div class="card-top"><span class="eyebrow">VT-12 · MOTION</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo motion"><small>Split Search</small><span>Search projects…</span>⌕</div></div>
+          <div class="card-copy">
+            <h3>Split Search</h3>
+            <p>Search field with action regions</p>
+            <div class="chips"><span>Morphing geometry</span><span>kinetic feedback</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Morphing</b></span>
+              <span>Surface <b>Animated</b></span>
+              <span>Density <b>Adaptive</b></span>
+              <span>Motion <b>Morph</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card signal" data-family="Number Field" data-system="signal">
+          <div class="card-top"><span class="eyebrow">VT-13 · SIGNAL</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo signal"><small>Number Field</small><span>24</span></div></div>
+          <div class="card-copy">
+            <h3>Number Field</h3>
+            <p>Numeric input</p>
+            <div class="chips"><span>Hard geometry</span><span>fast mechanical state</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Stepped</b></span>
+              <span>Surface <b>Opaque</b></span>
+              <span>Density <b>Compact</b></span>
+              <span>Motion <b>Snap</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card layer" data-family="Number Field" data-system="layer">
+          <div class="card-top"><span class="eyebrow">VT-13 · LAYER</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo layer"><small>Number Field</small><span>24</span></div></div>
+          <div class="card-copy">
+            <h3>Number Field</h3>
+            <p>Numeric input</p>
+            <div class="chips"><span>Nested planes</span><span>elevation</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Nested</b></span>
+              <span>Surface <b>Translucent</b></span>
+              <span>Density <b>Floating</b></span>
+              <span>Motion <b>Lift</b></span>
+            </div>
+          </details>
+        </article>
+        <article class="card grid" data-family="Number Field" data-system="grid">
+          <div class="card-top"><span class="eyebrow">VT-13 · GRID</span><button class="more">⋯</button></div>
+          <div class="visual"><div class="field-demo grid"><small>Number Field</small><span>24</span></div></div>
+          <div class="card-copy">
+            <h3>Number Field</h3>
+            <p>Numeric input</p>
+            <div class="chips"><span>Ruled cells</span><span>modular density</span></div>
+          </div>
+          <details>
+            <summary>Variant properties</summary>
+            <div class="props">
+              <span>Geometry <b>Ruled</b></span>
+              <span>Surface <b>Segmented</b></span>
+              <span>Density <b>Modular</b></span>
+              <span>Motion <b>Slide</b></span>
