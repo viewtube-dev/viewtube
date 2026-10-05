@@ -721,3 +721,23 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Commits:** `0819fd2e25306ed60dc13d2826512293f0816a13`, `f9caf276b2e5a37a2bd4df8556400a9bddbfa982`, `e4938d4641eb6bfa5bca4d93a794fbe7d2939c42`, `d6cde2b53210bc9595ac3349b2961d9c58e88a81`, `493f2f7ce432e14ca330ff8569c86b8bb19ffc74`.
 - **Blockers:** Runtime/source-level Widget primitive, token, size, CSS, Reference Library, and consumer trace remains pending.
 - **Next action:** Perform source-level Widget system inventory and classify representative consumers before implementation changes.
+
+
+#### LOG-ID: REC-20261004-widget-source-audit-001
+
+- **Timestamp:** 2026-10-04 22:12:28 EDT
+- **Agent:** GPT-5.6 Luna / ViewTube Widget source-audit agent
+- **Round:** 2
+- **Category:** TOOLBOX / SUBTOOLBOX / WIDGET UI / CSS / PRIMITIVES / RECOVERY
+- **Action:** SOURCE AUDIT / RECONCILIATION / VERIFY
+- **Source:** Current conversation; canonical `viewtube-dev/viewtube/main`; preserved `recovery/pre-document-system-migration-2026-10-04` snapshot.
+- **Evidence:** Direct GitHub fetches of `src/views/dashboard/widgets/UIReferenceLibraryWidget.tsx`, `src/views/dashboard/widgets/WidgetPrimitives.tsx`, and `src/views/dashboard/widgets/WidgetPrimitiveExtensions.tsx` returned 404 on `main`. Recursive tree inspection of both `main` and the preserved pre-migration branch found no matching Widget implementation paths. Repository code search found no matches for the named symbols.
+- **Status:** BLOCKED / VERIFIED DISCOVERY
+- **Artifact:** `docs/Widgets.md`; `docs/recovery/Handoff-Widget-UI-Governance-2026-10-04.md`; `docs/recovery/Findings.md`
+- **Result:** The planned source-level Widget audit cannot yet proceed against canonical runtime code because the authoritative Widget implementation source has not been established. Documentation decisions remain preserved, but runtime implementation is not inferred from them.
+- **Important discovery:** This is a source/recovery problem, not a verified Widget runtime defect. No production Widget code should be reconstructed from the governance documents alone.
+- **Findings:** `FIND-20261004-WIDGET-005` and `FIND-20261004-WIDGET-006` record the missing source surface and documentation/implementation provenance gap.
+- **Conflicts:** Documentation describes an existing Widget primitive/Reference Library system, while canonical main currently lacks the previously referenced implementation paths. The discrepancy is preserved as unresolved provenance rather than silently resolved.
+- **Verification:** Canonical main and preserved pre-migration tree were inspected; direct source-path fetches and repository code searches were performed. No destructive cleanup was performed.
+- **Blockers:** Authoritative runtime source repository/branch is unresolved; representative Widget consumers cannot be classified until source authority is recovered.
+- **Recommended follow-up:** Recover/identify the authoritative runtime source, establish provenance against main/deployment history, then build the Widget source map and apply CANONICAL / DRIFT / DEFECT / INTENTIONAL classification.
