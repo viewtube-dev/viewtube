@@ -72,3 +72,30 @@ If an earlier entry is incomplete or inaccurate, add a new correction entry with
 
 
 | DOC-20261004-013 | 2026-10-04 21:32:50 EDT | UNKNOWN — Analytics / Data Visuals synchronization conversation | GPT-5.6 Luna | ChatGPT + GitHub | EDIT / REGISTER / VERIFY | Current conversation; canonical recovery/documentation standards; `docs/Analytics.md`; `docs/recovery/Findings.md` | `docs/Analytics.md`; `docs/recovery/Findings.md`; `Recovery.md`; `Recovery.yaml`; `docs/recovery/History.md` | 57c40e723471299e3551f1d2270cc02573eb3e67; 4c93e86c80db6acdb8433f947dbc10d0b24e5f70; 0fdcf0bc23cd0004a321e5d56c143c73b36a3d2b; 5910b2236b1ce765e334c7ac1bc626be28ead43f | Synchronized the conversation with the canonical documentation/recovery system and preserved Analytics/Data Visuals requirements, fixture requirements, import failure, and reported runtime errors. | Preserved the four-tool Analytics boundary; required seven-day traffic coverage, video/country/daily dimensions, all-day/all-time upload timing, and temporally varied successful-video observations for consistency analysis; preserved the failed JSON bundle import and console/runtime errors as reported evidence. No new competing Analytics document was created. | Canonical documentation/recovery files were inspected before edits; target files were fetched with current blob SHAs before writes; resulting commits were returned by GitHub. Runtime root causes remain UNKNOWN. Repository-wide link/orphan/obsolete-path scans remain UNKNOWN. | Reproduce `/local-analytics` against canonical main, establish the importer/bundle/CSV schema, trace the null assignment and toolbox persistence errors, and add fixture-validation/regression tests. |
+
+### DOC-20261004-013
+
+- Timestamp: 2026-10-04 21:32:00 EDT
+- Conversation: ViewTube tool/widget copy and documentation-system synchronization
+- Agent / model: GPT-5.6 Luna
+- Application / tool: ChatGPT + GitHub
+- Action: CREATE + VERIFY
+- Reason: Preserve the current conversation's tool-copy knowledge, inventory correction, contextual-help design, and reconciliation requirements under the canonical recovery system.
+- Source(s): Current conversation; historical cbrewsterthegreat/ViewTube tool-copy workstream and artifacts; canonical viewtube-dev/viewtube/main documentation system.
+- Destination(s): docs/recovery/Handoff-Tool-Copy-Knowledge.md; docs/recovery/Findings.md
+- Files added: docs/recovery/Handoff-Tool-Copy-Knowledge.md
+- Files edited: docs/recovery/Findings.md
+- Files moved: none
+- Files merged: none
+- Files superseded: none
+- Files archived: none
+- Commit(s): b1bcf82aaadeb105398d9d07974122c2cdc6096c; 90d02595a8498da347e32b8248a1cd4942568fd1
+- What changed: Preserved the conversation's tool/widget copy workstream, exact tool-record requirements, contextual ? / Learn More model, separate Dashboard/Toolbox ownership decision, inventory correction, historical artifact inventory, and unresolved reconciliation work. Added five durable findings covering incomplete inventory, derived contextual help, manifestation-level identity, ownership separation, and evidence-based copy.
+- Why: The historical work exists in a different repository context and is not yet canonical; the information must be preserved without upgrading it to verified implementation.
+- Important information preserved: historical document paths, reported commits, user-approved architecture/copy decisions, copy-risk rules, manifestation rules, integration-vs-handoff distinction, and unresolved inventory/reconciliation requirements.
+- Discoveries: A prior 68-widget assumption was incomplete; canonical main did not contain the named historical TOOL-COPY-KNOWLEDGE-WORKSTREAM.md during search.
+- Conflicts: Historical cbrewsterthegreat/ViewTube artifacts versus canonical viewtube-dev/viewtube/main remain unreconciled.
+- Verification: Recovery.md, Recovery.yaml, docs/Index.md, docs/Organization.md, docs/Document-System.md, docs/Document-Health.md, docs/recovery/Index.md, docs/recovery/Agent.md, docs/recovery/History.md, docs/recovery/Findings.md, and docs/recovery/KNOWLEDGE_INDEX.md were inspected from main before writes. New handoff and findings were committed and returned SHAs.
+- Blockers / unresolved items: Full canonical tool inventory, current ? implementation, canonical ownership of final copy catalog, and Round 2 reconciliation remain pending.
+- Recommended follow-up: Inspect canonical code/registries/routes for all manifestations, then update existing subject authorities rather than creating competing documents.
+- Next agent action: Continue Round 2 reconciliation from the canonical main branch.
