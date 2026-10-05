@@ -1325,377 +1325,282 @@ Analyze the strongest-performing videos to identify patterns worth repeating.
 
 # 8. Studio Hub Tools
 
-**Canonical Studio Hub inventory:** 13 user-facing Round 1 tools.  
 **Canonical information hierarchy:** Description → Learn More → Inputs → Workflow → Outputs → Connections
 
-> **Status:** Proposed / Round 1 architecture. Runtime ownership and implementation remain subject to the Studio Hub documentation and Round 2 reconciliation.
-
-## 8.1 Opportunity Radar
-
+## 8.1 Video Manager
 ### Description
-The Opportunity Radar identifies promising opportunities for channel growth, content development, audience engagement, and monetization from signals and evidence.
-
+Manage your published and unpublished videos, update video details, and keep your channel 
+content organized and ready for improvement or republishing.
 ### Learn More
-Use it to discover and prioritize opportunities before deciding exactly what content or action to create.
-
 ### Inputs
-Channel context, audience signals, performance evidence, demand signals, trends, goals, constraints, prior findings, and relevant project context.
-
+Select a video to manage and work with its existing title, description, thumbnail, metadata, 
+publishing status, and available content information. Use the available controls to update, review, 
+or move the video into another Studio workflow.
 ### Workflow
-Collect signals → detect potential opportunities → score freshness, demand, fit, effort, and confidence → compare opportunities → select or hand off the strongest opportunity.
-
+Select a video → review its current content and metadata → make the needed changes → send 
+the updated content into the appropriate publishing, analysis, or optimization workflow.
 ### Outputs
-Ranked opportunities, opportunity evidence, scores, confidence, watchlists, and recommended next steps.
-
+Updated video information, metadata, assets, and publishing-ready content.
 ### Connections
-- **Content Architect** — develops selected opportunities into content concepts.
-- **Audience Studio** — turns audience opportunities into relationship actions.
-- **Revenue Architect** — evaluates monetization opportunities.
-- **Creator Strategy Engine** — uses validated opportunities in strategic recommendations.
-- **Post-Publication Analysis** — supplies performance evidence that can reveal new opportunities.
-
----
-
-## 8.2 Content Architect
-
+- Content Analysis — analyzes the selected video to identify problems and opportunities for 
+improvement.
+- Thumbnail Studio — creates or replaces the video's thumbnail.
+- End-Screen Architect — improves the video's end-screen path and outro.
+- Video Publisher — prepares updated metadata and publishing information.
+- Publishing Package — brings the video's final assets and publishing information together.
+## 8.2 Video Director
 ### Description
-The Content Architect turns selected opportunities and creator goals into concrete content concepts and creative directions.
-
+Direct videos, variations, sequences, and campaigns from a shared creative direction and Video 
+DNA system.
 ### Learn More
-Use it to decide what should be made from an opportunity before moving into detailed production.
-
 ### Inputs
-Opportunities, channel strategy, audience context, research, evidence, goals, constraints, hooks, existing content, and project context.
-
+Start with a video concept, creative direction, existing content, or project context. Provide the 
+source material and direction needed to define the video's structure, visuals, variations, or 
+production requirements.
 ### Workflow
-Select an opportunity → define the content objective → explore concepts and angles → develop the strongest concept → hand it into story, production, analysis, or project workflows.
-
+Choose the project or video → establish the creative direction → define the required production 
+→ generate or organize the media → review the result and continue production or publishing.
 ### Outputs
-Content concepts, angles, briefs, creative directions, concept comparisons, and production-ready content context.
-
+Directed video concepts, production instructions, variations, sequences, campaigns, and 
+supporting media assets.
 ### Connections
-- **Opportunity Radar** — supplies opportunities to develop.
-- **Video Director** — takes approved concepts into production direction.
-- **Asset Forge** — identifies and resolves required production assets.
-- **Pre-Publication Analysis** — evaluates content before publication.
-- **Creator Strategy Engine** — uses concepts when recommending next-best moves.
-- **Projects** — carries approved concepts into execution.
-
----
-
-## 8.3 Video Director
-
+- Script Architect — provides the timed script, beats, visuals, and scene direction used for 
+production.
+- Hook Generator — supplies opening hooks and intros that can shape the video's opening.
+- Thumbnail Studio — creates visual packaging that represents the finished video.
+- Content Analysis — provides analysis that can inform creative and production improvements.
+- Publishing Package — receives completed production assets for final publishing preparation.
+## 8.3 Video Publisher
 ### Description
-The Video Director coordinates creative and production execution from an approved concept through the media and production work required to make the video.
-
+Create SEO-optimized titles, descriptions, tags, and other publishing information for new and 
+existing videos.
 ### Learn More
-Use it to direct how a video should be produced, including structure, visuals, sequences, variations, and production requirements.
-
 ### Inputs
-Content concepts, creative briefs, scripts, story structures, visual direction, assets, production requirements, analysis findings, and project context.
-
+Select a video or provide its content and context. Use the available metadata, analysis, audience 
+information, and creative assets to generate and refine the information needed to publish the 
+video.
 ### Workflow
-Select the production context → establish creative direction → define production requirements → organize or generate production work → review the result → continue into editing or publishing.
-
+Select the video → provide or review its context → generate publishing metadata → review and 
+refine the results → prepare the final publishing package.
 ### Outputs
-Production direction, video structures, sequences, variations, shot or scene plans, production instructions, and supporting media requirements.
-
+Titles, descriptions, tags, metadata, and other publishing information ready to use with the video.
 ### Connections
-- **Content Architect** — provides the approved concept and creative direction.
-- **Asset Forge** — resolves required production assets.
-- **Editor** — receives production direction and media for editing.
-- **Video Publisher** — receives completed production work for publication.
-- **Pre-Publication Analysis** — evaluates production-ready content.
-
----
-
-## 8.4 Asset Forge
-
+- Video Manager — applies or manages publishing information on the selected video.
+- Thumbnail Studio — supplies the thumbnail used with the video's publishing package.
+- Content Analysis — provides content findings that can inform titles, descriptions, and 
+positioning.
+- Publishing Package — combines publisher-generated metadata with the video's other final 
+assets.
+- Pre-Launch Priming — uses the prepared publishing information as part of the coordinated 
+launch process.
+## 8.4 Publishing Package
 ### Description
-The Asset Forge determines what production assets are required and creates, sources, organizes, or packages those assets for use in production.
-
+Bring a video's publishing details and assets together into one final readiness package.
 ### Learn More
-Use it when a project needs visual, audio, or other production assets resolved before editing or publishing.
-
 ### Inputs
-Production requirements, storyboards, scripts, creative direction, existing assets, asset references, project context, and output specifications.
-
+Start with a prepared video or ContentBuild and its available metadata, thumbnail, supporting 
+assets, and publishing information. Review the package's readiness and any remaining 
+requirements before publishing.
 ### Workflow
-Inspect production requirements → identify missing or reusable assets → create or source the required assets → validate them → package and hand them into production.
-
+Select the video or project → gather the required publishing assets → review metadata and 
+readiness → resolve missing items → send the completed package to publishing.
 ### Outputs
-Production asset packages, generated assets, asset manifests, resolved requirements, and references to reusable assets.
-
+A consolidated, publishing-ready package containing the video's required metadata, assets, and 
+readiness information.
 ### Connections
-- **Video Director** — supplies production requirements.
-- **Vault** — stores and retrieves reusable assets.
-- **Editor** — supplies assets for editing.
-- **Video Publisher** — supplies publication-ready supporting assets.
-- **Revenue Architect** — can identify assets with monetization or reuse value.
-
----
-
-## 8.5 Thumbnail Studio
-
+- Video Publisher — supplies titles, descriptions, tags, and other publishing metadata.
+- Thumbnail Studio — supplies the selected thumbnail and supporting visual assets.
+- Pre-Launch Priming — uses the prepared package to coordinate the video's launch.
+- Video Manager — provides the destination for managing the finished video's publishing 
+information.
+- Community Posts — can use the finished video's assets and context for launch-related posts.
+## 8.5 Content Analysis
 ### Description
-The Thumbnail Studio creates, evaluates, compares, and refines visual packaging for videos and related publishing surfaces.
-
+Analyze scripts and videos to identify pacing issues, retention problems, quality issues, and 
+opportunities for improvement.
 ### Learn More
-Use it to develop thumbnail concepts and visual variations and evaluate their fit with the video's content and audience.
-
 ### Inputs
-Video context, content concepts, audience information, creative direction, existing thumbnails, assets, performance evidence, and packaging requirements.
-
+Provide a video, script, or available content data. Use the analysis controls and available 
+metadata or context to focus the evaluation on content quality, pacing, retention, and 
+performance issues.
 ### Workflow
-Select the video or project → define the packaging direction → create concepts and variations → compare and evaluate them → refine the selected design → hand it into publishing or experimentation.
-
+Select the content → run the analysis → review identified issues and evidence → determine 
+improvements → send useful findings into the appropriate Studio workflow.
 ### Outputs
-Thumbnail concepts, finished thumbnails, variations, packaging evaluations, comparison results, and supporting visual assets.
-
+Content analysis, identified issues, improvement opportunities, evidence, and actionable findings.
 ### Connections
-- **Video Director** — provides creative and production context.
-- **Video Publisher** — uses the selected thumbnail in publication preparation.
-- **Pre-Publication Analysis** — evaluates packaging before publication.
-- **Post-Publication Analysis** — evaluates packaging performance.
-- **Experiment Lab** — supports thumbnail experiments.
-
----
-
-## 8.6 Video Manager
-
+- Video Manager — provides videos to analyze and can receive resulting improvements.
+- Thumbnail Studio — uses analysis to inform thumbnail packaging and visual direction.
+- Hook Generator — uses analysis to identify opportunities for stronger openings.
+- Tactics Engine — converts evidence and findings into concrete creator tactics.
+- End-Screen Architect — uses content context to improve the video's next-video path.
+- Video Publisher — uses findings to improve publishing metadata and positioning.
+## 8.6 Thumbnail Studio
 ### Description
-The Video Manager manages metadata and optimization for videos that already exist in the channel's published-content system.
-
+Create and refine thumbnails and visual assets for your videos, end screens, Community Posts, 
+polls, and more.
 ### Learn More
-Use it to change, compare, generate, and improve titles, descriptions, thumbnails, and related metadata for existing videos.
-
 ### Inputs
-Published video context, existing metadata, thumbnails, performance evidence, audience information, optimization goals, and historical metadata.
-
+Start with a video, project, image, or content context. Add available metadata, analysis, hooks, or 
+existing visual assets to guide the design. Generate concepts, create variations, compare 
+options, and refine the design until you have the asset you want to use.
 ### Workflow
-Select the video → inspect current metadata and performance → identify the required change → generate or edit variants → review the result → apply or hand off the selected update.
-
+Choose the video or project → provide your creative context → generate thumbnail concepts → 
+explore variations → compare and refine → select the final design.
 ### Outputs
-Updated metadata, metadata variants, thumbnail changes, optimization recommendations, and historical/current metadata context.
-
+Finished thumbnail designs and supporting visual assets ready for videos, end screens, 
+Community Posts, polls, and other publishing needs.
 ### Connections
-- **Post-Publication Analysis** — supplies performance findings.
-- **Thumbnail Studio** — supplies or evaluates thumbnail changes.
-- **Video Publisher** — coordinates publication-related metadata.
-- **Opportunity Radar** — can use changes and performance as future opportunity evidence.
-
----
-
-## 8.7 Video Publisher
-
+- Video Publisher — uses the finished thumbnail as part of the video's publishing package.
+- Publishing Package — brings the selected thumbnail together with the video's other 
+publishing assets and metadata.
+- Community Posts — uses generated images for posts and polls.
+- End-Screen Architect — can use visual assets when building the video's end-screen 
+experience.
+- Video Director — provides visual assets that support the video's creative and production 
+direction.
+## 8.7 Community Posts
 ### Description
-The Video Publisher prepares and compiles projects and content for publication, including publication metadata and readiness requirements.
-
+Create polls and community updates that keep viewers engaged between video uploads.
 ### Learn More
-Use it to turn completed production work into a publication-ready package and coordinate publication preparation across projects.
-
 ### Inputs
-Projects, completed media, titles, descriptions, tags, thumbnails, metadata, publishing requirements, readiness information, and launch context.
-
+Start with a video, image, topic, audience context, or existing content. Choose the post type and 
+provide the context needed to generate a community update, image post, or poll.
 ### Workflow
-Select the content or projects → gather required assets and metadata → validate publication readiness → resolve missing requirements → prepare the final publication package.
-
+Choose the post type → provide the video or campaign context → create the post or poll → 
+review and refine the content and image → prepare it for publishing.
 ### Outputs
-Publication-ready content, metadata, readiness status, publishing packages, and coordinated publication context.
-
+Community posts, polls, post copy, and supporting visual assets.
 ### Connections
-- **Video Manager** — manages existing video metadata.
-- **Thumbnail Studio** — supplies selected visual packaging.
-- **Pre-Publication Analysis** — evaluates readiness.
-- **Projects** — provides execution and scheduling context.
-- **Pre-Launch Priming** — supports launch preparation where applicable.
-
----
-
-## 8.8 Pre-Publication Analysis
-
+- Thumbnail Studio — supplies images and visual assets for posts and polls.
+- Video Manager — provides existing video content that can be promoted or referenced.
+- Video Publisher — connects community activity with a video's publishing workflow.
+- Pre-Launch Priming — uses community posts as part of the video's pre-launch and launch 
+sequence.
+- Publishing Package — provides final video context and assets for coordinated publishing.
+## 8.8 Comment Responder
 ### Description
-The Pre-Publication Analysis evaluates planned content before release to identify quality, packaging, pacing, retention, readiness, and other preventable risks.
-
+Draft on-brand replies and pinned comments that help increase engagement and guide viewers 
+to relevant content.
 ### Learn More
-Use it before publishing to find issues that can still be corrected and convert evidence into specific improvements.
-
 ### Inputs
-Scripts, story structures, edited videos, thumbnails, metadata, audience context, project goals, production context, and analysis settings.
-
+Provide comments or comment context along with the relevant video, metadata, or content 
+analysis. Use the available context to generate replies that match the creator's content and 
+audience.
 ### Workflow
-Select the content → choose the analysis depth → evaluate the relevant evidence → identify issues and opportunities → prioritize improvements → hand findings into the responsible tool.
-
+Provide comments → select the relevant video or context → generate responses → review and 
+refine the replies → select responses or pinned comments to use.
 ### Outputs
-Pre-publication findings, evidence, risks, improvement opportunities, readiness assessments, and recommended actions.
-
+Draft replies, pinned-comment copy, recommended responses, and relevant video 
+recommendations.
 ### Connections
-- **Content Architect** — receives concept-level improvements.
-- **Video Director** — receives production improvements.
-- **Thumbnail Studio** — receives packaging findings.
-- **Video Publisher** — receives publication-readiness findings.
-- **Tactics Engine** — converts findings into executable tactics.
-- **Creator Strategy Engine** — can use validated findings for strategic recommendations.
-
----
-
-## 8.9 Post-Publication Analysis
-
+- Video Manager — provides the videos and channel content associated with comments.
+- Content Analysis — supplies content context that can improve response relevance.
+- Video Publisher — provides video metadata and positioning context.
+- Video Manager / Video Library — provides relevant videos that can be recommended in 
+replies.
+## 8.9 End-Screen Architect
 ### Description
-The Post-Publication Analysis evaluates released content and performance to identify what happened, what changed, what may explain the result, and what should be learned.
-
+Design end-screen layouts and outro scripts that guide viewers toward the next video.
 ### Learn More
-Use it after publication to turn performance evidence into findings, experiments, opportunities, and improvements.
-
 ### Inputs
-Published videos, performance metrics, audience behavior, metadata history, thumbnail history, traffic sources, comparisons, goals, and relevant channel context.
-
+Start with a video and its available metadata, analysis, and content context. Define the desired 
+next-video path and use the available controls to shape the end-screen layout and outro.
 ### Workflow
-Select the content and reporting context → examine performance evidence → identify meaningful changes and patterns → interpret likely explanations → produce findings and hand them into optimization or strategy workflows.
-
+Select the video → review its content and available next-video options → design the end-screen 
+flow → create the outro copy → review the viewer path → finalize the end-screen plan.
 ### Outputs
-Performance findings, evidence, patterns, hypotheses, opportunities, experiment candidates, and actionable recommendations.
-
+End-screen layouts, next-video recommendations, outro scripts, and viewer-flow metadata.
 ### Connections
-- **Video Manager** — receives metadata optimization opportunities.
-- **Opportunity Radar** — receives newly discovered opportunities.
-- **Content Architect** — receives content-learning inputs.
-- **Audience Studio** — receives audience and relationship findings.
-- **Thumbnail Studio** — receives packaging performance findings.
-- **Experiment Lab** — receives test candidates and results.
-- **Tactics Engine** — converts findings into actions.
-
----
-
-## 8.10 Audience Studio
-
+- Content Analysis — identifies content context and opportunities for stronger viewer 
+continuation.
+- Video Manager — provides the source video and its available channel content.
+- Thumbnail Studio — supplies visual assets used in the end-screen experience.
+- Video Publisher — uses the resulting metadata and outro information when preparing the 
+video.
+- Video Director — can incorporate the outro and end-screen direction into production.
+## 8.10 Pre-Launch Priming
 ### Description
-The Audience Studio manages audience relationships and turns audience behavior, requests, comments, and engagement signals into useful creator actions.
-
+Plan the rollout before publishing with coordinated warm-up content and launch tactics.
 ### Learn More
-Use it to understand who needs attention and coordinate the appropriate audience-facing response.
-
 ### Inputs
-Audience behavior, comments, community activity, viewer requests, audience segments, content context, publishing context, and relationship goals.
-
+Start with a prepared video, thumbnail, metadata, analysis, or project. Use the available content 
+and launch context to determine the steps, timing, and supporting activities needed before 
+publication.
 ### Workflow
-Review audience signals → identify relationship opportunities → determine the appropriate response → create or coordinate audience-facing actions → measure the resulting relationship activity.
-
+Select the upcoming video → review its readiness → define the pre-launch activities → create 
+warm-up tactics and supporting content → organize the launch sequence.
 ### Outputs
-Audience opportunities, community content, response drafts, audience segments, relationship actions, and engagement plans.
-
+Pre-launch plans, launch tactics, warm-up activities, supporting metadata, and coordinated 
+project steps.
 ### Connections
-- **Opportunity Radar** — receives audience-derived opportunities.
-- **Content Architect** — turns audience needs into content concepts.
-- **Projects** — carries approved audience actions into execution.
-- **Revenue Architect** — evaluates audience value and monetization opportunities.
-- **Tactics Engine** — turns audience findings into executable tactics.
-
----
-
-## 8.11 Tactics Engine
-
+- Publishing Package — provides the prepared video, metadata, and assets that the launch 
+plan supports.
+- Thumbnail Studio — supplies the thumbnail and visual assets needed for promotion.
+- Community Posts — executes warm-up posts, polls, and audience engagement.
+- Video Publisher — provides the publishing information used to coordinate the launch.
+- Content Analysis — provides evidence and findings that can inform launch tactics.
+## 8.11 Hook Generator
 ### Description
-The Tactics Engine converts evidence, findings, and strategy into concrete creator actions, interventions, tests, and execution steps.
-
+Generate strong opening hooks and intros designed to capture attention in the first moments of a 
+video.
 ### Learn More
-Use it when a finding needs to become a specific action that can be implemented, tested, or measured.
-
 ### Inputs
-Analysis findings, evidence, strategic goals, content context, audience information, project context, constraints, and validated recommendations.
-
+Provide a script, video, topic, strategy, analysis, or metadata. Use the available context to 
+generate hooks that match the video's subject, audience, and intended direction.
 ### Workflow
-Provide the evidence and objective → generate possible tactics → evaluate and prioritize them → select actionable tactics → apply them to the appropriate workflow or experiment.
-
+Provide the content context → generate hook options → compare the openings → refine the 
+strongest option → use the selected hook in the script or video.
 ### Outputs
-Actionable tactics, interventions, tests, prioritized actions, and project-level execution steps.
-
+Opening hooks, intro variations, and revised script openings.
 ### Connections
-- **Pre-Publication Analysis** — supplies preventable issues and improvement findings.
-- **Post-Publication Analysis** — supplies performance findings.
-- **Audience Studio** — receives audience tactics.
-- **Video Director** — applies production tactics.
-- **Video Publisher** — applies publication tactics.
-- **Experiment Lab** — turns selected tactics into measurable tests.
-- **Creator Strategy Engine** — uses tactics when forming prioritized next-best moves.
-
----
-
-## 8.12 Revenue Architect
-
+- Script Architect — incorporates the selected hook into the timed script and overall structure.
+- Content Analysis — identifies opening and retention opportunities that can guide hook 
+generation.
+- Tactics Engine — provides strategy and tactics that can influence the hook direction.
+- Video Director — uses the selected hook to guide the video's opening production.
+- Video Publisher — can use the video's opening positioning when preparing publishing 
+metadata.
+## 8.12 Tactics Engine
 ### Description
-The Revenue Architect turns creator, audience, content, asset, and channel intelligence into monetization opportunities, models, and plans.
-
+Turn channel evidence and strategy into concrete creator actions you can use, test, and execute.
 ### Learn More
-Use it to identify practical ways the channel can create and capture additional economic value.
-
 ### Inputs
-Channel intelligence, audience value, content and asset inventory, creator capabilities, revenue history, goals, constraints, and available monetization models.
-
+Provide analysis, evidence, video or channel context, metadata, audience information, and 
+strategic goals. Use the available context to focus the generated tactics on a specific content or 
+growth objective.
 ### Workflow
-Assess the creator and audience context → identify monetization opportunities → model options and tradeoffs → prioritize viable paths → turn the selected opportunity into an executable plan.
-
+Provide the evidence and goal → generate strategic tactics → review and prioritize the 
+recommendations → select actionable tactics → apply them to the relevant project or content 
+workflow.
 ### Outputs
-Revenue opportunities, monetization models, scenarios, unit-economic considerations, priorities, and revenue plans.
-
+Actionable tactics, strategic recommendations, and project-level actions.
 ### Connections
-- **Opportunity Radar** — supplies monetization opportunities.
-- **Asset Forge** — identifies reusable or monetizable assets.
-- **Audience Studio** — supplies audience and relationship context.
-- **Projects** — carries approved revenue initiatives into execution.
-- **Creator Strategy Engine** — incorporates monetization into broader strategic recommendations.
-
----
-
-## 8.13 Creator Strategy Engine
-
+- Content Analysis — provides evidence and findings that become inputs for tactical 
+recommendations.
+- Hook Generator — uses tactics to guide stronger openings and hooks.
+- Pre-Launch Priming — turns selected tactics into launch and warm-up actions.
+- Video Director — applies relevant tactics to creative and production decisions.
+- Script Architect — can use strategic direction to shape script structure and content choices.
+## 8.13 Script Architect
 ### Description
-The Creator Strategy Engine synthesizes validated intelligence across Studio Hub and connected ViewTube systems into prioritized next-best moves for the creator.
-
+Turn an idea or complete creative brief into a timed script, visual direction, and production-ready 
+content plan.
 ### Learn More
-Use it when multiple findings, opportunities, constraints, or goals need to be combined into a clear strategic decision.
-
 ### Inputs
-Validated findings, opportunities, experiments, audience intelligence, revenue intelligence, channel state, projects, goals, constraints, evidence, assumptions, and uncertainty.
-
+Start with a spark, topic, chosen angle, or complete brief. Provide available research, evidence, 
+strategy, hooks, and content context, then set the desired script direction and length.
 ### Workflow
-Assemble relevant validated context → compare opportunities and constraints → reason across evidence → prioritize possible moves → explain the recommendation and assumptions → hand the selected move into execution or experimentation.
-
+Provide the idea or brief → choose the angle → build the structure → generate the timed script 
+and visual direction → review the beats and transitions → refine the final production plan.
 ### Outputs
-Prioritized next-best moves, strategic recommendations, decision context, supporting evidence, assumptions, confidence, and recommended handoffs.
-
+Timed scripts, structured beats, visual direction, storyboard-ready scene packets, and priming 
+Shorts.
 ### Connections
-- **Opportunity Radar** — provides prioritized opportunities.
-- **Content Architect** — receives strategic content direction.
-- **Video Director** — receives production priorities.
-- **Tactics Engine** — turns strategic recommendations into executable actions.
-- **Revenue Architect** — incorporates monetization strategy.
-- **Experiment Lab** — turns strategic uncertainty into measurable tests.
-- **Causal Intelligence / Channel Flywheel** — provide deeper explanations and system-level diagnosis.
-- **Projects** — receives approved strategic actions for execution.
-- **AI Brain** — supplies and preserves validated creator knowledge without replacing evidence or ownership.
-
----
-
-## Canonical Studio Hub Tool Inventory
-
-| # | Tool | Primary transformation |
-|---:|---|---|
-| 1 | Opportunity Radar | Signals → Opportunities |
-| 2 | Content Architect | Opportunities → Content Concepts |
-| 3 | Video Director | Concepts → Production Direction |
-| 4 | Asset Forge | Production Requirements → Asset Packages |
-| 5 | Thumbnail Studio | Content → Visual Packaging |
-| 6 | Video Manager | Published Content → Metadata Optimization |
-| 7 | Video Publisher | Completed Content → Publication Package |
-| 8 | Pre-Publication Analysis | Planned Content → Readiness Findings |
-| 9 | Post-Publication Analysis | Published Content → Performance Findings |
-| 10 | Audience Studio | Audience Behavior → Relationship Actions |
-| 11 | Tactics Engine | Findings → Executable Tactics |
-| 12 | Revenue Architect | Intelligence → Monetization Opportunities |
-| 13 | Creator Strategy Engine | Validated Intelligence → Next Best Move |
-
-**Total: 13 user-facing Studio Hub tools**
-
-**Ownership note:** Capability engines such as Video Genome, Story Engine, Audience Pulse, Content Autopilot, Experiment Lab, Causal Intelligence, Channel Simulator, and Channel Flywheel remain documented as capabilities in the canonical Studio Hub architecture. They are not incorrectly promoted here as additional page-level tools.
-
+- Hook Generator — supplies and improves the opening hook used by the script.
+- Tactics Engine — provides strategic direction that can shape the script and content angle.
+- Content Analysis — provides evidence and improvement findings that can inform the script.
+- Video Director — takes the script and visual direction into production.
+- Thumbnail Studio — uses the finished content direction to inform visual packaging.
+- Pre-Launch Priming — can use the resulting content and priming Shorts as part of the launch
+plan.
