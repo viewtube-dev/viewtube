@@ -736,11 +736,12 @@ latest_conversation_update_widget_source_audit:
   files_merged: []
   files_superseded: []
   files_archived: []
-  commits_pending_history_receipt:
+  commits:
     - "0b57ccb4b1b15f8c0275aea198a8375eab0455a9"
     - "8c953511d22ebb0900c4a4a0de3ff9704b28f4e5"
     - "8ce501a8bdaa7b7245c30c23efb779da82ff7297"
     - "4773041e2211960fed8e3c09b5880396144ccae9"
+    - "75a4ae048c0312fe84ff08773f9a6c37d032cfd6"
   discoveries:
     - "The previously referenced Widget runtime paths are absent from canonical main."
     - "The preserved recovery/pre-document-system-migration-2026-10-04 tree also lacks those implementation paths."
