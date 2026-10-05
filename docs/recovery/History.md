@@ -154,3 +154,31 @@ If an earlier entry is incomplete or inaccurate, add a new correction entry with
 - Blockers / unresolved items: Actual activation behavior still depends on the receiving conversation having GitHub/web access.
 - Recommended follow-up: Test the full activation phrase in a fresh conversation.
 - Next agent action: Confirm that a fresh conversation opens the canonical GitHub repository and docs/recovery/Sync.md before proceeding.
+
+
+### DOC-20261004-016
+
+- Timestamp: 2026-10-04 21:41:17 EDT
+- Conversation: UNKNOWN — ViewTube master system rebuild and synchronization conversation
+- Agent / model: GPT-5.6 Luna
+- Application / tool: ChatGPT + GitHub
+- Action: CREATE + VERIFY + REGISTER
+- Reason: Execute the canonical VIEWTUBE SYNC protocol and preserve the material knowledge, decisions, discoveries, implementation-status boundaries, and next actions from the conversation.
+- Source(s): Current conversation; `docs/recovery/Sync.md`; `Recovery.md`; `Recovery.yaml`; `docs/Index.md`; `docs/Organization.md`; `docs/Document-System.md`; `docs/Document-Health.md`; `docs/recovery/Index.md`; `docs/recovery/Agent.md`; `docs/recovery/History.md`; canonical subject documents on `main`.
+- Destination(s): `docs/recovery/System-Rebuild-Sync-2026-10-04.md`; `docs/recovery/History.md`; `Recovery.md`; `Recovery.yaml`
+- Files added: `docs/recovery/System-Rebuild-Sync-2026-10-04.md`
+- Files edited: `docs/recovery/History.md`; `Recovery.md`; `Recovery.yaml`
+- Files moved: none
+- Files merged: none
+- Files superseded: none
+- Files archived: none
+- Commit(s): `8c6664a71d191840c527bff10adada946123f3ad` plus the subsequent synchronization commits recorded in the final receipt.
+- What changed: Preserved the conversation as a durable recovery handoff and registered the synchronization event in the canonical history/recovery state.
+- Why: The Sync protocol requires durable preservation rather than leaving important knowledge only in chat context.
+- Important information preserved: Conversation OS lane/routing and blast-radius rules; reuse-before-create governance; master rebuild resource set; Quick Wins status boundaries; Account identity architecture and @Thinking uncertainty; Vault/Asset Workbench capability model; Brain relationship; UI/Toolbox system decisions; GitHub repository authority; historical-versus-canonical evidence rules; next System Inventory + Source Map action.
+- Discoveries: Current `main` already contains canonical short subject targets for Conversation OS, Vault, Quick Wins, Account, AI, and Studio Hub; `docs/Organization.md` defines consolidation of the detailed rebuild resources into those subject authorities.
+- Conflicts: Historical repository references and conversation-derived implementation claims remain lower-authority evidence until reconciled against current `main`.
+- Verification: Sync.md and all required canonical recovery/documentation files were read from `main` before mutation. Existing subject documents were inspected. The new handoff write returned commit `8c6664a71d191840c527bff10adada946123f3ad`.
+- Blockers / unresolved items: Full runtime implementation verification for the reconstructed systems remains incomplete; @Thinking source remains unavailable in canonical main; System Inventory + Source Map still needs reconciliation against existing inventory/source-map artifacts.
+- Recommended follow-up: Build/update the System Inventory + Source Map using existing canonical/recovery resources, then reconcile the rebuild masters into the short canonical subject documents.
+- Next agent action: Continue Round 2 reconciliation from current `main`; do not create competing system authorities.
