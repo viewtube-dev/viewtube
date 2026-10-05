@@ -2596,3 +2596,76 @@ Studio Hub integration is complete when:
 - user-facing handoffs are understandable and actionable;
 - closed-loop learning can return measured results to the relevant tools.
 
+# 20. User-Facing Studio Hub Reassessment — 2026-10-04
+
+The current conversation introduced an important ownership correction to the 13-engine architecture above.
+
+The **13 canonical engines in this document must not automatically be interpreted as 13 new user-facing Studio Hub Toolboxes**. The pre-existing Studio Hub already contains definitive creator-facing tools, including Video Manager, Video Publisher, Content Analysis, Thumbnail Studio, and related production/audience workflows.
+
+The current Round 1 proposal is to preserve the intelligence-engine architecture as a **capability and interaction model**, while separately determining the actual user-facing Toolbox inventory through reconciliation with the existing Studio Hub.
+
+## 20.1 User-facing ownership principles
+
+1. Existing tools retain their definitive purpose when that purpose is already distinct and useful.
+2. A new Toolbox is justified only when it owns a unique primary transformation and reason to exist.
+3. Related capabilities should be consolidated into an existing Toolbox when doing so does not blur its primary purpose.
+4. A capability may remain an internal engine, mode, subtoolbox, or workflow without becoming a new top-level Toolbox.
+5. Specialized opportunity systems may coexist when their opportunity domain is explicit. For example, Revenue Architect may own revenue opportunities while Opportunity Radar owns general content opportunities.
+6. Tool interactions must pass typed context rather than duplicate ownership.
+
+## 20.2 Clarified existing-tool boundaries
+
+| Tool | Definitive ownership |
+|---|---|
+| Video Manager | Metadata management for already-published videos: titles, descriptions, thumbnails, and related metadata |
+| Video Publisher | Pre-publication compilation and preparation, including multi-project publication work and publication metadata |
+| Pre-Publication Analysis | User-controlled AI review before publication |
+| Post-Publication Analysis | AI review after publication using actual content/performance/audience evidence; may produce opportunity candidates |
+| Revenue Architect | Income generation and revenue opportunity development |
+| Content Architect | Proposed consolidation of concept, story, and script planning |
+| Thumbnail Studio | Visual packaging; End-Screen functionality may be consolidated here |
+| Audience Studio | Proposed consolidation of Community Posts and Comment Responder |
+
+## 20.3 Proposed user-facing inventory
+
+This is **PROPOSED / ROUND 1**, not final canonical implementation:
+
+1. Opportunity Radar
+2. Content Architect
+3. Video Director
+4. Asset Forge
+5. Thumbnail Studio
+6. Video Manager
+7. Video Publisher
+8. Pre-Publication Analysis
+9. Post-Publication Analysis
+10. Audience Studio
+11. Tactics Engine
+12. Revenue Architect
+13. Creator Strategy Engine
+
+The following earlier engine concepts remain useful but are not automatically separate Toolboxes:
+
+- Video Genome
+- Audience Pulse
+- Content Autopilot
+- Experiment Lab
+- Causal Intelligence
+- Channel Simulator
+- Channel Flywheel
+- End-Screen Architect
+- Publishing Package
+
+Their final ownership must be reconciled against the existing Studio Hub implementation and canonical documentation.
+
+## 20.4 Important distinction
+
+The architecture now has two related but different questions:
+
+**Capability architecture:** What intelligence and transformations ViewTube needs.
+
+**User-facing Toolbox architecture:** Which existing or new tools should own those transformations.
+
+The capability architecture should inform the Toolbox architecture without forcing a one-engine-per-Toolbox mapping.
+
+**Round 1 status:** The user-facing inventory above is preserved as conversation evidence. Do not rename, merge, delete, or create production Toolboxes from this proposal until the existing Studio Hub inventory and implementation are reconciled.
