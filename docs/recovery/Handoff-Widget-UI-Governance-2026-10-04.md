@@ -118,3 +118,52 @@ Do not reconstruct production Widget code from the governance documents alone.
 
 - `FIND-20261004-WIDGET-005` — canonical main has no verifiable Widget runtime source surface.
 - `FIND-20261004-WIDGET-006` — Widget governance documentation currently has no verified canonical runtime implementation backing.
+
+
+## Recovered implementation source — 2026-10-04
+
+The missing Widget runtime surface has now been located in the accessible public repository **`themotionvisual/ViewTubeBUILD`**, branch `main`. This is recovered implementation evidence, not yet a change to canonical `viewtube-dev/viewtube/main`.
+
+Verified source owners include:
+
+- `src/views/dashboard/WidgetPrimitives.tsx`
+- `src/views/dashboard/WidgetPrimitiveExtensions.tsx`
+- `src/views/dashboard/widgetPrimitiveSystem.ts`
+- `src/views/dashboard/widgetPrimitiveSystem.css`
+- `src/views/dashboard/widgetPrimitiveExactHeights.css`
+- `src/views/dashboard/widgetPrimitiveTones.css`
+- `src/views/dashboard/widgetPrimitiveVariants.css`
+- `src/views/dashboard/widgetMatrixPrimitives.css`
+- `src/views/dashboard/widgetMobileContract.css`
+- `src/views/dashboard/widgetArchetypeResponsive.css`
+- `src/views/dashboard/widgets/UIReferenceLibraryWidget.tsx`
+- `src/components/ToolboxUIReferenceLibrary.tsx`
+- `src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx`
+- `src/styles/toolboxPalette.ts`
+
+The recovered source's own source-code map identifies these as current production owners and explicitly says the UI Reference Library should render the same production primitives.
+
+### First-pass source reconciliation
+
+The recovered implementation confirms the previously documented Widget model:
+
+`tokens/system → production primitives → Reference Library → Widget consumers`
+
+It also provides concrete implementation evidence for:
+
+- the 18 / 24 / 32 / 38px primitive size lattice;
+- default / primary / secondary primitive tones;
+- explicit primitive states;
+- size tokens for height, font, radius, stroke, shadow, padding, gap, icon size and icon stroke;
+- the 12-color ViewTube spectrum;
+- palette-derived widget colors and shadows;
+- production Widget primitive consumers;
+- a Reference Library that directly imports production primitives;
+- a separate Studio Hub primitive migration/reference catalog;
+- automated tests around Widget primitives and Reference Library behavior.
+
+### Critical provenance boundary
+
+Do **not** copy this implementation into `viewtube-dev/viewtube/main` yet. The repository relationship and canonical ownership have not been established. The correct next step is repository/history/deployment reconciliation, followed by a source comparison and explicit canonical-source decision.
+
+This supersedes the earlier statement that the Widget implementation could not be located, while preserving the earlier evidence that it was absent from the inspected `viewtube-dev/viewtube/main` and its preserved pre-migration snapshot.
