@@ -15,7 +15,7 @@
 ## 1.1 Project Builder
 
 ### Description
-The Project Builder is a workspace for creating and configuring projects which keep their brief, goals, content, assets, tasks, and publishing work together.
+The Project Builder is a workspace for creating and configuring projects that keep their brief, goals, content, assets, tasks, and publishing work together.
 
 ### Inputs
 Project name, concept or brief, channel context, goals, target content, schedule, and available assets.
