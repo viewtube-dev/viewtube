@@ -1,0 +1,58 @@
+export const CONCEPTS = [
+  {
+    id: "glass-slab",
+    name: "Glass Slab",
+    purpose: "Direct, high-confidence actions",
+    geometry: "flat",
+    treatment: "thick optical pane with hard ViewTube edge",
+  },
+  {
+    id: "fluid-capsule",
+    name: "Fluid Capsule",
+    purpose: "Frequent compact controls",
+    geometry: "capsule",
+    treatment: "soft refraction with responsive surface motion",
+  },
+  {
+    id: "refraction-rail",
+    name: "Refraction Rail",
+    purpose: "Dense tool navigation",
+    geometry: "rail",
+    treatment: "horizontal optical band with directional glare",
+  },
+  {
+    id: "prism-tile",
+    name: "Prism Tile",
+    purpose: "Choice and discovery",
+    geometry: "tile",
+    treatment: "edge dispersion and layered depth",
+  },
+  {
+    id: "frosted-command",
+    name: "Frosted Command",
+    purpose: "Keyboard-first commands",
+    geometry: "command sheet",
+    treatment: "high-contrast frosted surface with strong focus ring",
+  },
+  {
+    id: "optical-drawer",
+    name: "Optical Drawer",
+    purpose: "Contextual editing",
+    geometry: "drawer",
+    treatment: "foreground refraction with depth separation",
+  },
+  {
+    id: "liquid-stack",
+    name: "Liquid Stack",
+    purpose: "Grouped information",
+    geometry: "stack",
+    treatment: "overlapping panes with variable depth",
+  },
+  {
+    id: "crystal-control",
+    name: "Crystal Control",
+    purpose: "Precision numeric input",
+    geometry: "control",
+    treatment: "crisp edges and restrained optical distortion",
+  },
+];
