@@ -540,3 +540,76 @@ latest_conversation_update:
     commit: "410bda25665c91b604ea627abb3c8a0c2e01c88c"
     verification: "Confirmed 100 task rows are represented with execution metadata and explicit merge/verification gates."
     caveat: "Recovered planning artifact; not canonical task authority until source reconciliation."
+
+latest_conversation_update_studiohub_tools:
+  update_id: "UPDATE-20261004-studiohub-tools-001"
+  exact_eastern_timestamp: "2026-10-04 21:52:42 EDT"
+  timezone: "America/New_York"
+  conversation_title: "UNKNOWN — title not exposed in current conversation context"
+  main_focus: "Studio Hub user-facing tool inventory, definitive tool ownership, and consolidation of proposed intelligence capabilities into existing tools."
+  status: "VERIFIED_PRESERVATION / PROPOSED_ARCHITECTURE"
+  files_added:
+    - "docs/recovery/Handoff-Studio-Hub-Tool-Architecture-2026-10-04.md"
+  files_edited:
+    - "docs/product/VIEWTUBE_STUDIO_HUB_MASTER_TOOL_ARCHITECTURE.md"
+    - "Recovery.md"
+    - "Recovery.yaml"
+    - "docs/recovery/History.md"
+  files_moved: []
+  files_merged: []
+  files_superseded: []
+  commits:
+    - "d7784a4de90cf64564311357de9ca2c4bcf067c1"
+    - "8ec9179c594b36758beb71c368b8e5649755bfca"
+    - "d5bfe645bbd0a1905bdcc982afd1745124067a7b"
+  proposed_user_facing_tools:
+    - "Opportunity Radar"
+    - "Content Architect"
+    - "Video Director"
+    - "Asset Forge"
+    - "Thumbnail Studio"
+    - "Video Manager"
+    - "Video Publisher"
+    - "Pre-Publication Analysis"
+    - "Post-Publication Analysis"
+    - "Audience Studio"
+    - "Tactics Engine"
+    - "Revenue Architect"
+    - "Creator Strategy Engine"
+  preserved_boundaries:
+    - "Video Manager owns metadata management for already-published videos."
+    - "Video Publisher owns pre-publication preparation and multi-project publication packaging."
+    - "Pre-Publication Analysis owns user-controlled AI review before publication."
+    - "Post-Publication Analysis owns AI review after publication and may surface opportunity candidates."
+    - "Revenue Architect owns income generation and revenue opportunities."
+    - "Content Architect is the proposed consolidated concept/story/script planning tool."
+    - "Thumbnail Studio may absorb End-Screen/viewer-path functionality."
+    - "Audience Studio may absorb Community Posts and Comment Responder."
+  capability_reassessment:
+    - "Video Genome"
+    - "Audience Pulse"
+    - "Content Autopilot"
+    - "Experiment Lab"
+    - "Causal Intelligence"
+    - "Channel Simulator"
+    - "Channel Flywheel"
+    - "End-Screen Architect"
+    - "Publishing Package"
+  discoveries:
+    - "Capability architecture and user-facing Toolbox architecture are separate questions."
+    - "The earlier 13-engine model should not be treated as an automatic 13-Toolbox UI requirement."
+  code_discoveries:
+    - "No runtime implementation was established by this synchronization pass."
+  optimizations:
+    - "Use one definitive primary purpose per user-facing tool."
+    - "Prefer internal engines/subtools when a capability does not justify a separate top-level Toolbox."
+    - "Keep specialized opportunity ownership explicit."
+  conflicts:
+    - "Earlier canonical Studio Hub master describes 13 intelligence engines; the current conversation proposes a separate user-facing inventory. The master has been annotated to preserve both layers pending reconciliation."
+  blockers:
+    - "Exact current Studio Hub runtime/tool registry inventory remains to be verified."
+    - "Final ownership of several intelligence capabilities remains a Round 2 reconciliation task."
+  next_actions:
+    - "Inventory current Studio Hub routes/components/tool registry on main."
+    - "Map existing tools and proposed capabilities to definitive owners."
+    - "Update canonical subject documentation only after implementation/source reconciliation."
