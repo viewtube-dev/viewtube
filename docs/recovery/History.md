@@ -126,3 +126,31 @@ If an earlier entry is incomplete or inaccurate, add a new correction entry with
 - Blockers / unresolved items: None for the activation-file change. Actual behavior still depends on the receiving conversation having GitHub/web access.
 - Recommended follow-up: Use VIEWTUBE SYNC — GO TO GITHUB when bootstrapping an unfamiliar ViewTube conversation; use VIEWTUBE SYNC only after the protocol has already been loaded.
 - Next agent action: Test the full phrase in a genuinely fresh ViewTube conversation and confirm it opens the GitHub entry point before doing project work.
+
+
+### DOC-20261004-015
+
+- Timestamp: 2026-10-04 21:35:39 EDT
+- Conversation: ViewTube synchronization activation refinement
+- Agent / model: GPT-5.6 Luna
+- Application / tool: ChatGPT + GitHub
+- Action: EDIT + VERIFY + REGISTER
+- Reason: Keep machine-readable recovery state aligned with the new self-contained activation command.
+- Source(s): Recovery.yaml; docs/recovery/Sync.md
+- Destination(s): Recovery.yaml; docs/recovery/History.md
+- Files added: none
+- Files edited: Recovery.yaml; docs/recovery/History.md
+- Files moved: none
+- Files merged: none
+- Files superseded: none
+- Files archived: none
+- Commit(s): 12dd1c95f34053e4ccc0d8825306a8041b5d7916
+- What changed: Recovery.yaml now records VIEWTUBE SYNC — GO TO GITHUB as the external activation phrase, VIEWTUBE SYNC as internal shorthand, the canonical repository URL, and the requirement that a fresh conversation open Sync.md rather than assume prior knowledge.
+- Why: The structured recovery state must describe the same bootstrap behavior as Sync.md.
+- Important information preserved: Fresh-conversation bootstrapping, canonical repository URL, exact entry-point file, and distinction between external activation phrase and internal shorthand.
+- Discoveries: None beyond the activation-system correction already recorded in DOC-20261004-014.
+- Conflicts: None identified.
+- Verification: Recovery.yaml was fetched from main with blob SHA 40543da18cfb08c259252202580f2b478a7f92b0 before editing; the update returned commit SHA 12dd1c95f34053e4ccc0d8825306a8041b5d7916.
+- Blockers / unresolved items: Actual activation behavior still depends on the receiving conversation having GitHub/web access.
+- Recommended follow-up: Test the full activation phrase in a fresh conversation.
+- Next agent action: Confirm that a fresh conversation opens the canonical GitHub repository and docs/recovery/Sync.md before proceeding.
