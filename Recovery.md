@@ -774,3 +774,24 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Verification:** Five new files were created on main; the original master was not deleted; the original master now records the five-document split. Final content re-read remains the completion verification step.
 - **Blockers:** Final source-to-destination coverage audit and Round 2 reconciliation of runtime tool ownership remain pending.
 - **Next action:** Re-read all five split documents and the source master, then use the five-document set as the working Studio Hub documentation surface.
+
+
+#### LOG-ID: REC-20261004-widget-source-recovery-002
+
+- **Timestamp:** 2026-10-04 22:25:00 EDT
+- **Agent:** GPT-5.6 Luna / ViewTube Widget source-recovery agent
+- **Round:** 2
+- **Category:** TOOLBOX / SUBTOOLBOX / WIDGET UI / CSS / PRIMITIVES / RECOVERY
+- **Action:** SOURCE RECOVERY / RECONCILIATION / VERIFY
+- **Source:** Canonical `viewtube-dev/viewtube/main`; accessible `themotionvisual/ViewTubeBUILD/main`; recovered Widget source maps and implementation files.
+- **Evidence:** `themotionvisual/ViewTubeBUILD/main` contains the previously missing Widget implementation surface, including `UIReferenceLibraryWidget.tsx`, `WidgetPrimitives.tsx`, `WidgetPrimitiveExtensions.tsx`, primitive-system/token/CSS layers, Widget tests, and Reference Studio sources. Direct file reads verified the implementations and the repository's own Widget source map identifies their ownership.
+- **Status:** VERIFIED RECOVERY SOURCE / CANONICAL TARGET UNKNOWN
+- **Artifact:** `docs/Widgets.md`; `docs/recovery/Handoff-Widget-UI-Governance-2026-10-04.md`; `docs/recovery/Findings.md`
+- **Result:** The Widget source-level audit is unblocked at the evidence/recovery layer. The recovered source confirms the documented production primitive/reference-library architecture and concrete 18/24/32/38px size system. No code was copied into canonical main.
+- **Important discovery:** The prior missing-source blocker was a repository-target/provenance problem rather than evidence that the Widget implementation no longer existed anywhere accessible.
+- **Code discoveries:** `WidgetPrimitives.tsx` is the primary consumer import surface; `WidgetPrimitiveExtensions.tsx` is documented as a temporary compatibility/implementation module; `widgetPrimitiveSystem.ts` owns size/tone/state APIs; exact geometry/tones/variants/responsive behavior are distributed across dedicated CSS layers; `UIReferenceLibraryWidget.tsx` and `ToolboxUIReferenceLibrary.tsx` provide reference surfaces; Studio Hub has a large primitive migration catalog and tests.
+- **Optimizations:** Use the recovered source map instead of recreating missing paths; reconcile repository authority before copying; preserve source-vs-documentation provenance.
+- **Conflicts:** `viewtube-dev/viewtube/main` remains the canonical documentation target, but its current source tree lacks the recovered Widget implementation. `themotionvisual/ViewTubeBUILD/main` contains the implementation. Their canonical relationship is unresolved.
+- **Verification:** Inspected ViewTubeBUILD repository metadata; recursively inspected its main tree; directly fetched key Widget source files and source-map references; re-read updated canonical recovery files after writes. No destructive cleanup performed.
+- **Blockers:** Repository identity/history/deployment provenance and canonical-source ownership are unresolved. A production code migration is therefore not yet authorized by evidence.
+- **Recommended follow-up:** Compare ViewTubeBUILD history and repository identity against viewtube-dev/viewtube, inspect known-good/deployment references, then produce a controlled source diff and canonical-source decision. After that, resume the four-way Widget audit against representative consumers.
