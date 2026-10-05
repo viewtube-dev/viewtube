@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ViewTube — Video Manager Toolbox</title>
+<style>
+:root{
+  --ink:#111; --paper:#f4f4f4; --white:#fff; --cyan:#36d2e5;
+  --green:#36ed52; --pink:#f55b86; --orange:#ff806d; --yellow:#ffe04c;
+  --purple:#a263ed; --line:#151515; --shadow:5px 5px 0 var(--line);
+  --r:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-weight:800}
+button,input,select,textarea{font:inherit}
+.app{max-width:1180px;margin:auto;min-height:100vh;background:#fff}
+.header{height:74px;border-bottom:4px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:10px 18px;position:sticky;top:0;background:#fff;z-index:10}
+.brand{font-size:34px;letter-spacing:-2px}.brand span{color:#31cce0}
+.icon{width:48px;height:48px;border:4px solid var(--line);border-radius:13px;background:var(--cyan);display:grid;place-items:center;font-size:25px}
+.content{padding:18px}
+.titlebar{border:4px solid var(--line);border-radius:18px;background:var(--pink);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:16px}
+.titlebar h1{margin:0;font-size:28px}.titlebar p{margin:7px 0 0;font-size:14px;line-height:1.35}
+.toolbox{border:4px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)}
+.tbhead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--orange);border-bottom:4px solid var(--line)}
+.tbhead h2{margin:0;font-size:21px}.collapse{border:3px solid var(--line);border-radius:10px;background:#fff;padding:5px 10px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px;background:#fff}
+.control{border:3px solid var(--line);border-radius:12px;padding:9px;background:#f7f7f7;min-height:66px}
+.control label{display:block;font-size:11px;text-transform:uppercase;margin-bottom:6px}
+.control select,.control input{width:100%;border:2px solid var(--line);border-radius:8px;background:#fff;padding:7px;font-size:13px}
+.toggle{display:flex;align-items:center;justify-content:space-between;height:37px;border:2px solid var(--line);border-radius:8px;padding:5px 8px;background:#fff;font-size:12px}
+.switch{width:36px;height:20px;border:2px solid var(--line);border-radius:12px;background:var(--green)}
+.workspace{display:grid;grid-template-columns:1.35fr .9fr;gap:16px}
+.panel{border:4px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);background:#fff}
+.panelhead{padding:11px 14px;border-bottom:4px solid var(--line);background:var(--cyan);font-size:18px}
+.video{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:14px;border-bottom:2px solid #bbb}
+.thumb{height:86px;border:3px solid var(--line);border-radius:10px;background:linear-gradient(135deg,#222,#777);display:grid;place-items:center;color:#fff;font-size:28px}
+.meta h3{margin:0 0 5px;font-size:16px}.meta p{margin:3px 0;font-size:12px;font-weight:700}
+.badge{display:inline-block;border:2px solid var(--line);border-radius:8px;padding:3px 7px;background:var(--green);font-size:10px;margin-top:4px}
+.actions{display:flex;flex-wrap:wrap;gap:7px;padding:12px}
+.btn{border:3px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--yellow);box-shadow:3px 3px 0 var(--line);cursor:pointer}
+.btn.primary{background:var(--green)}.btn.alt{background:var(--purple);color:#fff}
+.detail{padding:14px}
+.field{margin-bottom:12px}.field label{display:block;font-size:11px;text-transform:uppercase;margin-bottom:5px}
+.field input,.field textarea{width:100%;border:3px solid var(--line);border-radius:10px;padding:9px;background:#fff}
+.field textarea{min-height:72px;resize:vertical}
+.footerbar{position:sticky;bottom:0;background:#fff;border-top:4px solid var(--line);padding:10px 18px;display:flex;gap:9px;justify-content:flex-end}
+@media(max-width:800px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .workspace{grid-template-columns:1fr}
+ .header{height:62px}.brand{font-size:27px}
+ .content{padding:12px}.titlebar h1{font-size:23px}
+}
+@media(max-width:470px){
+ .grid{grid-template-columns:1fr 1fr;gap:7px;padding:9px}
+ .control{padding:7px;min-height:60px}
+ .control label{font-size:9px}.control select,.control input{font-size:11px;padding:6px}
+ .video{grid-template-columns:105px 1fr;padding:10px;gap:9px}.thumb{height:66px}
+ .meta h3{font-size:13px}.meta p{font-size:10px}
+ .btn{padding:7px 9px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <button class="icon" aria-label="Menu">☰</button>
+  <div class="brand">VIEW<span>TUBE</span></div>
+  <button class="icon" aria-label="AI">✦</button>
+</header>
+
+<main class="content">
+<section class="titlebar">
+  <h1>VIDEO MANAGER</h1>
+  <p>Manage published videos on your channel, update video details like title, thumbnail, description, tags and more, and keep channel content organized and optimized.</p>
+</section>
+
+<section class="toolbox">
+  <div class="tbhead"><h2>VIDEO SELECTOR</h2><button class="collapse">⌄</button></div>
+  <div class="grid">
+    <div class="control"><label>Video</label><select><option>Choose a published video</option><option>How I Built My Studio</option><option>10 Editing Mistakes</option></select></div>
+    <div class="control"><label>Status</label><select><option>Published</option><option>Unlisted</option><option>Private</option></select></div>
+    <div class="control"><label>Search</label><input placeholder="Search videos"></div>
+    <div class="control"><label>Sort</label><select><option>Recently published</option><option>Views</option><option>CTR</option><option>Revenue</option></select></div>
+  </div>
+</section>
+
+<section class="toolbox">
+  <div class="tbhead" style="background:var(--yellow)"><h2>MANAGEMENT CONTROLS</h2><button class="collapse">⌄</button></div>
+  <div class="grid">
+    <div class="control"><label>Title</label><div class="toggle">Edit title <span class="switch"></span></div></div>
+    <div class="control"><label>Thumbnail</label><div class="toggle">Replace thumbnail <span class="switch"></span></div></div>
+    <div class="control"><label>Description</label><div class="toggle">Edit description <span class="switch"></span></div></div>
+    <div class="control"><label>Tags</label><div class="toggle">Manage tags <span class="switch"></span></div></div>
+    <div class="control"><label>Visibility</label><select><option>Keep published</option><option>Unlisted</option><option>Private</option></select></div>
+    <div class="control"><label>Optimization</label><select><option>Review opportunities</option><option>Metadata only</option><option>Full review</option></select></div>
+    <div class="control"><label>Ad Suitability</label><select><option>Review status</option><option>Suitable</option><option>Needs review</option></select></div>
+    <div class="control"><label>Version</label><select><option>Current</option><option>Previous metadata</option></select></div>
+  </div>
+</section>
+
+<div class="workspace">
+<section class="panel">
+  <div class="panelhead">PUBLISHED VIDEOS</div>
+  <article class="video">
+    <div class="thumb">▶</div>
+    <div class="meta">
+      <h3>How I Built My Studio</h3>
+      <p>Published · 128K views · 7.4% CTR</p>
+      <p>Current title, thumbnail, description and tags loaded.</p>
+      <span class="badge">OPTIMIZED</span>
+    </div>
+  </article>
+  <article class="video">
+    <div class="thumb">▶</div>
+    <div class="meta">
+      <h3>10 Editing Mistakes</h3>
+      <p>Published · 84K views · 5.9% CTR</p>
+      <p>Metadata review available.</p>
+      <span class="badge" style="background:var(--yellow)">REVIEW</span>
+    </div>
+  </article>
+  <div class="actions">
+    <button class="btn primary">EDIT SELECTED</button>
+    <button class="btn">OPTIMIZE</button>
+    <button class="btn alt">ANALYZE</button>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panelhead">VIDEO DETAILS</div>
+  <div class="detail">
+    <div class="field"><label>Title</label><input value="How I Built My Studio"></div>
+    <div class="field"><label>Description</label><textarea>Here is how I built my creator studio...</textarea></div>
+    <div class="field"><label>Tags</label><input value="creator studio, youtube setup, studio build"></div>
+    <div class="field"><label>Thumbnail</label><button class="btn">REPLACE FROM VAULT</button></div>
+  </div>
+</section>
+</div>
+</main>
+
+<footer class="footerbar">
+  <button class="btn">CANCEL</button>
+  <button class="btn primary">SAVE CHANGES</button>
+</footer>
+</div>
+</body>
+</html>
