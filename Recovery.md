@@ -611,3 +611,20 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Conflicts:** Historical/external runtime evidence is not treated as canonical implementation evidence. The repository's current main branch remains authoritative.
 - **Verification:** Canonical documentation and recovery files were read before edits; Analytics and Findings were updated using their current blob SHAs; no new competing Analytics document was created. Repository-wide link/orphan/obsolete-path scans were not completed and remain UNKNOWN.
 - **Next action:** Reconcile the running `viewtube.live/local-analytics` implementation against the canonical current-main source, establish the accepted Analytics bundle/CSV schema, and verify the reported runtime errors with stack traces.
+
+#### LOG-ID: REC-20261004-toolcopy-001
+
+- **Timestamp:** 2026-10-04 21:32:00 EDT
+- **Agent:** GPT-5.6 Luna — ViewTube documentation/recovery agent
+- **Round:** 1
+- **Category:** DOCUMENTATION / GOVERNANCE / TOOLBOX / WIDGETS / RECOVERY
+- **Action:** Synchronized the conversation with canonical recovery/documentation governance and preserved the conversation's tool-copy knowledge as a recovery handoff and findings.
+- **Source:** Current conversation; historical cbrewsterthegreat/ViewTube tool-copy artifacts; canonical viewtube-dev/viewtube/main documentation system.
+- **Evidence:** Direct reads of Recovery.md, Recovery.yaml, docs/Index.md, docs/Organization.md, docs/Document-System.md, docs/Document-Health.md, docs/recovery/Index.md, docs/recovery/Agent.md, docs/recovery/History.md, docs/recovery/Findings.md, and docs/recovery/KNOWLEDGE_INDEX.md from main.
+- **Status:** VERIFIED
+- **Artifact:** docs/recovery/Handoff-Tool-Copy-Knowledge.md
+- **External identifier:** Historical repository cbrewsterthegreat/ViewTube; reported historical PRs #14 and #17 and commits are preserved as unverified historical evidence.
+- **Dependencies:** Document-System, Document-Health, Organization, History, Findings, Knowledge Index.
+- **Result:** Conversation knowledge is durably preserved without treating historical external-repository claims as canonical implementation.
+- **Next action:** Round 2 reconciliation of the complete tool/widget manifestation inventory and canonical owners.
+- **Verification:** Handoff commit b1bcf82aaadeb105398d9d07974122c2cdc6096c and Findings commit 90d02595a8498da347e32b8248a1cd4942568fd1 verified by returned GitHub commit SHAs; operation logged in History.md as DOC-20261004-013.
