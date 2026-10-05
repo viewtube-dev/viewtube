@@ -132,6 +132,21 @@ initial_events:
       - "Recovery.yaml"
     date: "2026-10-04"
 
+  - id: "REC-20261004-toolcopy-001"
+    round: 1
+    status: "VERIFIED"
+    title: "Tool Copy / Widget Documentation Conversation Recovery Handoff"
+    path: "docs/recovery/Handoff-Tool-Copy-Knowledge.md"
+    source: "Current ChatGPT conversation"
+    provenance: "SOURCE → DISCOVERY → RECOVERY ARTIFACT"
+    verification: "Canonical recovery/documentation governance files inspected before write; historical tool-copy repository artifacts preserved as unverified historical evidence."
+    commit: "b1bcf82aaadeb105398d9d07974122c2cdc6096c"
+    unresolved:
+      - "Reconcile complete Dashboard and page/tool manifestation inventory against canonical main."
+      - "Determine canonical owner for final tool/widget copy catalog."
+      - "Verify current ? / Learn More implementation."
+      - "Reconcile historical cbrewsterthegreat/ViewTube artifacts against viewtube-dev/viewtube/main."
+
 current_state:
   repository_recoverability: "UNKNOWN"
   code_recoverability: "UNKNOWN"
