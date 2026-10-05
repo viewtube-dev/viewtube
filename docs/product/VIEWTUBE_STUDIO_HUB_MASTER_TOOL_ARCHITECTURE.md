@@ -2851,3 +2851,19 @@ The architecture now has two related but different questions:
 The capability architecture should inform the Toolbox architecture without forcing a one-engine-per-Toolbox mapping.
 
 **Round 1 status:** The user-facing inventory above is preserved as conversation evidence. Do not rename, merge, delete, or create production Toolboxes from this proposal until the existing Studio Hub inventory and implementation are reconciled.
+
+
+# 21. Five-Document Studio Hub Documentation Split — 2026-10-05
+
+The Studio Hub master has been structurally decomposed into five focused documents. The original master remains preserved as the source during migration and verification.
+
+Canonical split:
+1. `docs/product/studio-hub/01_STUDIO_HUB_ARCHITECTURE.md` — architecture, implementation, migration, governance.
+2. `docs/product/studio-hub/02_STUDIO_HUB_TOOLS.md` — canonical/user-facing tools and all pre-existing tools.
+3. `docs/product/studio-hub/03_STUDIO_HUB_INTELLIGENCE_AI_BRAIN_PROMPTS.md` — intelligence engines, AI generation, prompts, and AI Brain connection.
+4. `docs/product/studio-hub/04_STUDIO_HUB_INTERACTIONS_WORKFLOWS_HANDOFFS_CONTRACTS.md` — interactions, workflows, handoffs, and contracts.
+5. `docs/product/studio-hub/05_STUDIO_HUB_UI_ARCHITECTURE.md` — Toolbox/UI architecture, Reference Library rules, controls, states, and handoff UI.
+
+The split intentionally contains **exactly five documents**. No separate index, pre-existing-tools folder, interactions folder, contracts folder, or per-tool document family is introduced at this stage.
+
+The source master must not be deleted or declared superseded until source coverage and cross-document consistency are verified.
