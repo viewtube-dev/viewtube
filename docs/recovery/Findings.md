@@ -244,3 +244,36 @@ During Round 2, merge duplicate findings, preserve conflicting evidence, establi
 | Impact | Prevents both under-generalizing shared defects and over-generalizing legitimate variations. |
 | Recommended improvement | Require audit evidence to identify semantic scope before selecting corrective action. |
 | Verification needed | Exercise the decision rule against real Widget discrepancies. |
+
+
+### FIND-20261004-WIDGET-005 — Canonical main has no verifiable Widget runtime source surface
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-005 |
+| Category | CODE_STRUCTURE / ARCHITECTURE / DEPLOYMENT / TESTING_VERIFICATION |
+| Affected area/tool/file | Widget runtime; production primitives; UI Reference Library; Widget CSS/tokens/consumers |
+| Discovery | The previously referenced runtime paths `src/views/dashboard/widgets/UIReferenceLibraryWidget.tsx`, `src/views/dashboard/widgets/WidgetPrimitives.tsx`, and `src/views/dashboard/widgets/WidgetPrimitiveExtensions.tsx` are not present on canonical `main`. The recursive `main` tree currently exposes `src/features/resource-library` as the only application-source subtree found in the source tree inspection. |
+| Source | Canonical `viewtube-dev/viewtube/main` tree inspection at 2026-10-04 22:12:28 EDT; preserved `recovery/pre-document-system-migration-2026-10-04` tree inspection |
+| Evidence | Direct GitHub fetch of each named source path returned 404; recursive tree inspection of both `main` and the preserved pre-migration branch found no matching Widget primitive/Reference Library source paths. Repository code search also returned no matches for the named symbols. |
+| Status | VERIFIED DISCOVERY / BLOCKED |
+| Impact | The planned source-level Widget reconciliation cannot yet certify runtime behavior, classify real consumers, or safely implement Widget fixes because the canonical runtime implementation surface is absent/unresolved. |
+| Recommended improvement | Recover or identify the authoritative runtime source repository/branch before changing Widget implementation. Do not reconstruct production Widget code from documentation alone. Once source authority is established, rebuild the source map and apply the four-way audit. |
+| Proposed implementation | Trace repository history/branches and known historical ViewTube source locations; identify the authoritative implementation tree; preserve recovered source as evidence; then inventory primitives, tokens, sizes, CSS, Reference Library, and representative consumers. |
+| Dependencies | Authoritative runtime source location; branch/repository reconciliation; source provenance |
+| Verification needed | Establish the exact canonical runtime source and verify it against `main`/deployment provenance before any implementation change. |
+| Owner/next action | Round 2 repository/source reconciliation |
+
+### FIND-20261004-WIDGET-006 — Documentation references a Widget implementation surface that is not currently backed by canonical source
+| Field | Value |
+|---|---|
+| ID | FIND-20261004-WIDGET-006 |
+| Category | CODE_STRUCTURE / DOCUMENTATION / RECOVERY |
+| Affected area/tool/file | Widget UI governance docs; historical source references |
+| Discovery | Current recovery knowledge describes production Widget primitives and a UI Reference Library, while the canonical repository tree does not currently expose the referenced implementation surface. |
+| Source | Current Widget governance handoff plus canonical repository inspection |
+| Evidence | Governance claims are preserved as conversation/documentation evidence; implementation existence is not verified in canonical main. |
+| Status | BLOCKED / UNKNOWN IMPLEMENTATION |
+| Impact | Future agents could incorrectly treat recovered architecture descriptions as proof that the implementation exists in current main. |
+| Recommended improvement | Keep documentation decisions and implementation verification explicitly separated; mark runtime alignment BLOCKED until source authority is recovered. |
+| Verification needed | Source/deployment provenance reconciliation. |
+| Owner/next action | Recovery/source-map reconciliation |
