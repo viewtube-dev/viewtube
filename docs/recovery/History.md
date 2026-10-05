@@ -182,3 +182,30 @@ If an earlier entry is incomplete or inaccurate, add a new correction entry with
 - Blockers / unresolved items: Full runtime implementation verification for the reconstructed systems remains incomplete; @Thinking source remains unavailable in canonical main; System Inventory + Source Map still needs reconciliation against existing inventory/source-map artifacts.
 - Recommended follow-up: Build/update the System Inventory + Source Map using existing canonical/recovery resources, then reconcile the rebuild masters into the short canonical subject documents.
 - Next agent action: Continue Round 2 reconciliation from current `main`; do not create competing system authorities.
+
+### DOC-20261004-017
+
+- Timestamp: 2026-10-04 21:52:42 EDT
+- Conversation: UNKNOWN — ViewTube Studio Hub tool architecture conversation
+- Agent / model: GPT-5.6 Luna
+- Application / tool: ChatGPT + GitHub
+- Action: CREATE + EDIT + VERIFY + REGISTER
+- Reason: Preserve the conversation's corrected Studio Hub tool boundaries and synchronize them with the canonical recovery/documentation system.
+- Source(s): Current conversation; docs/recovery/Sync.md; Recovery.md; Recovery.yaml; current Studio Hub master architecture on main.
+- Destination(s): docs/recovery/Handoff-Studio-Hub-Tool-Architecture-2026-10-04.md; docs/product/VIEWTUBE_STUDIO_HUB_MASTER_TOOL_ARCHITECTURE.md; Recovery.md; Recovery.yaml; docs/recovery/History.md
+- Files added: docs/recovery/Handoff-Studio-Hub-Tool-Architecture-2026-10-04.md
+- Files edited: docs/product/VIEWTUBE_STUDIO_HUB_MASTER_TOOL_ARCHITECTURE.md; Recovery.md; Recovery.yaml; docs/recovery/History.md
+- Files moved: none
+- Files merged: none
+- Files superseded: none
+- Files archived: none
+- Commit(s): d7784a4de90cf64564311357de9ca2c4bcf067c1; 8ec9179c594b36758beb71c368b8e5649755bfca; d5bfe645bbd0a1905bdcc982afd1745124067a7b; d58c8903252f9249183239d0f0b477d9a0d76e5e
+- What changed: Added a durable Studio Hub architecture handoff; annotated the canonical Studio Hub master to distinguish intelligence/capability architecture from the user-facing Toolbox inventory; registered the proposed user-facing tool set and clarified ownership boundaries in Recovery.md and Recovery.yaml.
+- Why: The conversation established that existing tools such as Video Manager and Video Publisher have definitive standalone purposes and should not be absorbed merely because new intelligence capabilities can interact with them.
+- Important information preserved: Published-video metadata ownership for Video Manager; pre-publication and multi-project ownership for Video Publisher; potential pre/post publication Content Analysis split; standalone Revenue Architect; Content Architect consolidation of concept/story/script functions; possible Thumbnail Studio + End-Screen consolidation; possible Community Posts + Comment Responder consolidation into Audience Studio; and the distinction between capability engines and user-facing Toolboxes.
+- Discoveries: The earlier 13-engine architecture and the final user-facing Toolbox inventory are separate questions. Several earlier engine ideas may be internal capabilities rather than top-level Toolboxes.
+- Conflicts: Current master previously presented 13 canonical intelligence engines as the Studio Hub tool set. It is now explicitly annotated that this does not automatically define the user-facing Toolbox count. Final ownership remains PROPOSED pending Round 2 reconciliation.
+- Verification: Sync.md and required canonical recovery/documentation files were read from main before changes. Handoff creation returned d7784a4de90cf64564311357de9ca2c4bcf067c1. Master update returned 8ec9179c594b36758beb71c368b8e5649755bfca. Recovery.md returned d5bfe645bbd0a1905bdcc982afd1745124067a7b. Recovery.yaml returned d58c8903252f9249183239d0f0b477d9a0d76e5e. This History entry is being appended after re-fetching the latest History.md blob.
+- Blockers / unresolved items: Exact current Studio Hub runtime/tool registry and final ownership of several intelligence capabilities remain unverified.
+- Recommended follow-up: Inventory current Studio Hub routes/components/tool registry on main and map existing tools and proposed capabilities to definitive owners before any production rename, merge, creation, or deletion.
+- Next agent action: Continue Round 2 Studio Hub inventory and source-map reconciliation.
