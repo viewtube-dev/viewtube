@@ -100,3 +100,8 @@ The system optimizes for **clarity, reuse, low duplication, and easy agent navig
 - `docs/recovery/History.md` — shared append-only-style operation ledger for substantive document changes.
 
 **Agent rule:** every substantive document operation must update History.md after verification.
+
+
+## Current conversation recoveries
+
+- [Handoff-Tool-Copy-Knowledge.md](Handoff-Tool-Copy-Knowledge.md) — Round 1 recovery of the tool/widget copy workstream, contextual ? / Learn More model, inventory correction, historical artifacts, findings, and unresolved reconciliation work.
