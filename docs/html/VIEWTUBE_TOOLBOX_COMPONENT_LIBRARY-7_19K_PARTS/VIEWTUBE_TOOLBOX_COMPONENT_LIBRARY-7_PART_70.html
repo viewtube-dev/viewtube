@@ -1,0 +1,108 @@
+t';t.style.setProperty('--c',PALX[(n+3)%12]);t.textContent=v}
+ box.insertBefore(t,btn.nextSibling&&ex?btn:btn.nextSibling)}
+const PALX=['#FA618A','#FF7F6B','#FFA85C','#FFDA47','#C0F240','#3FEE56','#4EE4BE','#36E0F6','#528FFA','#A467F4','#F55EFC','#FF7AC8'];
+/* inputs */
+document.addEventListener('input',e=>{const r=e.target;
+ if(r.closest('.vt-subtoolbox-range')){const c=r.closest('.vt-subtoolbox-range-center'),i=$$('input',c),a=Math.min(+i[0].value,+i[1].value),b=Math.max(+i[0].value,+i[1].value),f=r.closest('.vt-subtoolbox-range');f.style.setProperty('--ra',a+'%');f.style.setProperty('--rb',b+'%');const o=$('output',f);if(o)o.textContent=a+'–'+b}
+ else if(r.type==='range'&&r.closest('.vt-subtoolbox-slider')){const sl=r.closest('.vt-subtoolbox-slider');sl.style.setProperty('--p',r.value+'%');const o=sl.querySelector('output,o');if(o)o.textContent=r.value}
+ if(r.closest('.lib-pw')){const v=r.value,s=[v.length>5,/[A-Z]/.test(v)&&/[a-z]/.test(v),/\d/.test(v),/[^A-Za-z0-9]/.test(v)&&v.length>7].filter(Boolean).length;const w=r.closest('.lib-pw');w.dataset.s=s;$('.lib-pw-t',w).textContent=['TOO SHORT','WEAK','FAIR','GOOD','STRONG'][v?s:0]}
+ if(r.closest('.lib-cb')){const w=r.closest('.lib-cb');showCb(w,r)}
+ if(r.closest('.lib-otp')&&r.value&&r.nextElementSibling)r.nextElementSibling.focus()});
+document.addEventListener('keydown',e=>{const r=e.target;if(e.key==='Backspace'&&r.closest?.('.lib-otp')&&!r.value&&r.previousElementSibling)r.previousElementSibling.focus()});
+$$('.vt-subtoolbox-range').forEach(f=>{f.style.setProperty('--ra','22%');f.style.setProperty('--rb','76%')});
+function showCb(w,inp){close();const q=inp.value.toLowerCase(),L=['Script architect','Thumbnail studio','Video publisher','Vault manager','Voiceover booth','Analytics'].filter(x=>x.toLowerCase().includes(q));if(!L.length)return;const p=pop(L.map(x=>'<button type="button" data-v="'+x.toUpperCase()+'">'+x+'</button>').join(''),'lib-cbp',w,{});p.style.width=w.getBoundingClientRect().width+'px';p._root=w;place(p,w);const f=p.querySelector('button');p.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){inp.value=b.dataset.v;close()}})}
+document.addEventListener('focusin',e=>{const w=e.target.closest?.('.lib-cb');if(w&&e.target.tagName==='INPUT'&&!$('.lib-cbp'))showCb(w,e.target)});
+/* delegated clicks for new/rebuilt components */
+document.addEventListener('click',e=>{const T=e.target;let r;
+ if(r=T.closest('.lib-rate button')){const w=r.closest('.lib-rate'),n=[...w.children].indexOf(r)+1;[...w.children].forEach((b,i)=>b.classList.toggle('on',i<n));w.dataset.v=n;return}
+ if(r=T.closest('.lib-eye')){const i=$('input',r.closest('.lib-pw'));i.type=i.type==='password'?'text':'password';r.textContent=i.type==='password'?'SHOW':'HIDE';return}
+ if(r=T.closest('.lib-chips button')){r.classList.toggle('on');const w=r.parentElement;$('.lib-cnt',w.parentElement).textContent=$$('.on',w).length+' SELECTED';return}
+ if(r=T.closest('.lib-acc-h')){const it=r.parentElement,o=it.classList.contains('open');$$('.lib-acc-i',it.parentElement).forEach(x=>x.classList.remove('open'));if(!o)it.classList.add('open');return}
+ if(r=T.closest('.lib-tnav button,.lib-snav button')){$$('button',r.parentElement).forEach(x=>x.classList.toggle('on',x===r));return}
+ if(r=T.closest('.lib-kc')){const c=r.parentElement,cols=$$('.lib-kcol',c.closest('.lib-kan')),i=cols.indexOf(c.closest('.lib-kcol'));cols[(i+1)%cols.length].appendChild(r);return}
+ if(r=T.closest('.lib-bar')){$$('.lib-bar',r.parentElement).forEach(x=>x.classList.toggle('on',x===r));const o=$('.lib-bo',r.closest('.lib-x'));if(o)o.textContent=r.dataset.v;return}
+ if(r=T.closest('.lib-ar button')){$$('button',r.parentElement).forEach(x=>x.classList.toggle('on',x===r));const[a,b]=r.dataset.r.split(':');$('.lib-arf',r.closest('.lib-ar-w')).style.aspectRatio=a+'/'+b;return}
+ if(r=T.closest('.lib-follow')){r.classList.toggle('on');r.textContent=r.classList.contains('on')?'FOLLOWING':'FOLLOW';return}
+ if(r=T.closest('.lib-play')){const w=r.closest('.lib-aud'),on=!w.classList.contains('go');w.classList.toggle('go',on);r.textContent=on?'❚❚':'▶';return}
+ if(r=T.closest('.lib-gauge')){const v=Math.round(Math.random()*100);r.style.setProperty('--g',v);$('output',r).textContent=v;return}
+ if(r=T.closest('.lib-cal-nav')){const c=r.closest('.lib-cal');c._m+=+r.dataset.d;calR(c);return}
+ if(r=T.closest('.lib-cal-d')){r.classList.toggle('sel');return}
+ if(r=T.closest('.lib-vm-pl')){r.classList.toggle('on');return}
+});
+/* drag controls: knob, joystick, compare, spring toggle */
+let drag=null;document.addEventListener('pointerdown',e=>{const T=e.target;let r;
+ if(r=T.closest('.lib-knob-dial')){drag={k:'knob',el:r};knob(e,r);e.preventDefault()}
+ else if(r=T.closest('.lib-joy')){drag={k:'joy',el:r};joy(e,r);e.preventDefault()}
+ else if(r=T.closest('.lib-cmp')){drag={k:'cmp',el:r};cmp(e,r);e.preventDefault()}
+ else if(r=T.closest('.lib-spring')){r.classList.add('on');drag={k:'spr',el:r}}});
+document.addEventListener('pointermove',e=>{if(!drag)return;({knob,joy,cmp}[drag.k]||(()=>{}))(e,drag.el)});
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,()=>{if(drag&&drag.k==='spr')drag.el.classList.remove('on');drag=null}));
+function knob(e,el){const r=el.getBoundingClientRect();let a=Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI+90;if(a>180)a-=360;a=Math.max(-135,Math.min(135,a));setK(el,Math.round((a+135)/2.7))}
+function setK(el,v){el.style.setProperty('--v',v);el.parentElement.style.setProperty('--v',v);el.setAttribute('aria-valuenow',v);$('output',el.parentElement).textContent=v}
+document.addEventListener('keydown',e=>{const el=e.target.closest?.('.lib-knob-dial');if(el&&/Arrow/.test(e.key)){e.preventDefault();setK(el,Math.max(0,Math.min(100,(+el.getAttribute('aria-valuenow')||0)+(/Up|Right/.test(e.key)?5:-5))))}});
+function joy(e,el){const r=el.getBoundingClientRect(),x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));el.style.setProperty('--x',x*100+'%');el.style.setProperty('--y',y*100+'%');const o=$('output',el.parentElement);o.textContent='X '+Math.round(x*100)+'  Y '+Math.round((1-y)*100)}
+function cmp(e,el){const r=el.getBoundingClientRect(),x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));el.style.setProperty('--c',x*100+'%')}
+/* cmyk */
+document.addEventListener('input',e=>{const w=e.target.closest?.('.lib-cmyk');if(!w)return;const v=['c','m','y','k'].map(k=>+$('[data-k='+k+']',w).value/100),rgb=[0,1,2].map(i=>Math.round(255*(1-v[i])*(1-v[3])));$('.lib-sw',w).style.background='rgb('+rgb+')';$$('input',w).forEach(i=>i.nextElementSibling.textContent=i.value)});
+/* calendar */
+function calR(c){const d=new Date(c._y,c._m,1),t=new Date(),mo=d.toLocaleString('en',{month:'long'}).toUpperCase(),n=new Date(c._y,c._m+1,0).getDate();let h='<div class="lib-cal-h"><button type="button" class="lib-cal-nav" data-d="-1" aria-label="Previous month">‹</button><b>'+mo+' '+d.getFullYear()+'</b><button type="button" class="lib-cal-nav" data-d="1" aria-label="Next month">›</button></div><div class="lib-cal-g">'+'SMTWTFS'.split('').map(x=>'<i>'+x+'</i>').join('')+'<span></span>'.repeat(d.getDay());for(let i=1;i<=n;i++){const td=t.getFullYear()===d.getFullYear()&&t.getMonth()===d.getMonth()&&t.getDate()===i;h+='<button type="button" class="lib-cal-d'+(td?' today':'')+'">'+i+'</button>'}c.innerHTML=h+'</div>'}
+$$('.lib-cal').forEach(c=>{const t=new Date();c._y=t.getFullYear();c._m=t.getMonth();calR(c)});
+/* progress fill animation */
+const PR=$$('.vt-subtoolbox-progress>span,.vt-subtoolbox-progress-value .fill').map(s=>{const p=s.parentElement,t=Math.round(s.getBoundingClientRect().width/Math.max(1,p.getBoundingClientRect().width)*100)||60;return{s,t,o:s.closest('.vt-subtoolbox-progress-value')?.querySelector('output')}});
+const t0=performance.now();(function f(n){const c=((n-t0)%4200)/4200,p=c<.55?1-Math.pow(1-c/.55,3):c<.85?1:0;PR.forEach(x=>{const v=x.t*p;x.s.style.width=v+'%';if(x.o)x.o.textContent=Math.round(v)+'%'});requestAnimationFrame(f)})(t0);
+/* color picker follows the pair */
+$$('[data-vt-family="Color Picker"]').forEach(f=>new MutationObserver(()=>{const a=f.style.getPropertyValue('--pair-a').trim();if(a)$$('input',f).forEach(i=>{i.value=a.toUpperCase()})}).observe(f,{attributes:true,attributeFilter:['style']}));
+$$('.lib-knob-dial').forEach(k=>setK(k,+k.getAttribute('aria-valuenow')||72));
+$$('.lib-gauge').forEach(g=>g.style.setProperty('--g',72));
+})();
+
+(()=>{const $$=(s,r=document)=>[...r.querySelectorAll(s)],fam=n=>$$('[data-vt-family="'+n+'"] .vt-catalog-demo'),lvl=d=>d.dataset.level;
+window.addEventListener('click',e=>{window.__fam=e.target.closest('[data-vt-family]')?.dataset.vtFamily;window.__trg=e.target.closest('button')},true);
+const GL=['▲','●','■'];
+new MutationObserver(m=>m.forEach(x=>x.addedNodes.forEach(n=>{if(n.nodeType!==1||!n.classList.contains('lib-pop'))return;
+ if(n.classList.contains('lib-tip'))n.dataset.fam=window.__fam||'';
+ if(window.__fam==='Context Menu'&&n.querySelector('button[data-v]')&&window.__trg){const r=window.__trg.getBoundingClientRect();n.className='lib-pop lib-ctx';n.style.width='auto';n.innerHTML=['✎','⧉','✕'].map((g,i)=>'<button type="button" role="menuitem" data-v="OPTION '+(i+1)+'" aria-label="Option '+(i+1)+'">'+g+'</button>').join('');const w=n.getBoundingClientRect().width;n.style.left=Math.max(6,Math.min(r.right+10,innerWidth-w-6))+'px';n.style.top=(r.top+r.height/2-n.getBoundingClientRect().height/2)+'px'}
+ $$('.vt-subtoolbox-split-dropdown-option',n).forEach((o,i)=>{if(!o.querySelector('.vt-subtoolbox-split-dropdown-option-rail')){const s=document.createElement('span');s.className='vt-subtoolbox-split-dropdown-option-rail';s.textContent=GL[i%3];o.prepend(s)}})}))).observe(document.body,{childList:true});
+/* header toggles */
+const HT=':is(.vt-toolbox-header-toggle,div[class*="subtoolbox-header-toggle"])',sync=t=>{const b=[...t.children].filter(x=>x.tagName==='BUTTON');t.style.setProperty('--n',b.length);t.style.setProperty('--i',Math.max(0,b.findIndex(x=>x.classList.contains('is-active'))))};
+$$('[data-vt-family$="Header Toggle"] .vt-catalog-demo').forEach(d=>{const t=d.querySelector(HT);if(!t)return;[['lib-ht2','ALT · PILL'],['lib-ht3','ALT · UNDERLINE'],['lib-ht4','ALT · INK']].forEach(([c,l])=>{const k=t.cloneNode(true);k.classList.add(c);const lb=document.createElement('div');lb.className='lib-ht-l';lb.textContent=l;d.append(lb,k)})});
+$$(HT).forEach(sync);document.addEventListener('click',e=>{const b=e.target.closest(HT+'>button');if(!b)return;e.stopImmediatePropagation();const t=b.parentElement;[...t.children].forEach(x=>x.classList.toggle('is-active',x===b));sync(t)},true);
+/* skeleton shapes, avatar alt */
+fam('Skeleton').forEach(d=>{const s=d.querySelector('.vt-subtoolbox-skeleton');s&&s.insertAdjacentHTML('afterend','<div class="lib-skx" style="'+(s.getAttribute('style')||'')+'"><i class="c"></i><i class="r"></i><i class="b"></i></div>')});
+fam('Avatar').forEach(d=>{const s=d.querySelector('.vt-subtoolbox-avatar');s&&d.insertAdjacentHTML('beforeend','<div class="lib-av2" style="'+(s.getAttribute('style')||'')+'"><span class="c">VT</span><span class="r"><strong>VIEW TUBE</strong><small>CREATOR</small></span></div>')});
+/* knob from scratch */
+$$('.lib-knob').forEach(k=>{k.innerHTML='<div class="d" tabindex="0" role="slider" aria-label="Dial value" aria-valuemin="0" aria-valuemax="100"><svg viewBox="0 0 100 100"><path d="M20.3 79.7A42 42 0 1 1 79.7 79.7" fill="none" stroke="#000" stroke-width="17" stroke-linecap="round"/><path d="M20.3 79.7A42 42 0 1 1 79.7 79.7" fill="none" stroke="var(--Al)" stroke-width="10" stroke-linecap="round"/><path class="v" pathLength="100" d="M20.3 79.7A42 42 0 1 1 79.7 79.7" fill="none" stroke="var(--A)" stroke-width="10" stroke-linecap="round"/></svg><div class="cap"><i></i></div></div><div><o></o><small>VALUE</small></div>';k.classList.add('lib-kd');
+ const d=k.querySelector('.d'),vp=k.querySelector('.v'),cap=k.querySelector('.cap'),o=k.querySelector('o');let v=72;const set=n=>{v=Math.max(0,Math.min(100,n));vp.style.strokeDasharray=(v*.9999)+' 100';cap.style.transform='rotate('+(-135+v*2.7)+'deg)';o.textContent=Math.round(v);d.setAttribute('aria-valuenow',Math.round(v))};set(72);let on=0;
+ const mv=e=>{const r=d.getBoundingClientRect();let a=Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI;let q=((a-135)%360+360)%360;if(q>270)q=q>315?0:270;set(q/2.7)};
+ d.addEventListener('pointerdown',e=>{on=1;d.setPointerCapture(e.pointerId);mv(e)});d.addEventListener('pointermove',e=>on&&mv(e));d.addEventListener('pointerup',()=>on=0);d.addEventListener('keydown',e=>{if(/Arrow(Right|Up)/.test(e.key))set(v+3);if(/Arrow(Left|Down)/.test(e.key))set(v-3)})});
+/* spring slider + joystick */
+fam('Spring-Loaded Toggle').forEach(d=>{const w=d.querySelector('.lib-x');if(!w)return;w.innerHTML='<div class="lib-sp"><i></i></div><div class="lib-sp-o">CENTER · 0</div>';const t=w.firstElementChild,h=t.firstElementChild,o=w.lastElementChild;let on=0;
+ const mv=e=>{const r=t.getBoundingClientRect(),m=(r.width-h.offsetWidth)/2,x=Math.max(-m,Math.min(m,e.clientX-(r.left+r.width/2))),v=Math.round(x/m*100);h.style.transform='translateX('+x+'px)';o.textContent=(v<-8?'◀ LEFT · ':v>8?'RIGHT ▶ · ':'CENTER · ')+v};
+ t.addEventListener('pointerdown',e=>{on=1;t.classList.add('drag');t.setPointerCapture(e.pointerId);mv(e)});t.addEventListener('pointermove',e=>on&&mv(e));const up=()=>{if(!on)return;on=0;t.classList.remove('drag');h.style.transform='';o.textContent='CENTER · 0'};t.addEventListener('pointerup',up);t.addEventListener('pointercancel',up)});
+$$('.lib-joy-w').forEach(w=>{w.innerHTML='<div class="lib-j2"><i></i></div><div class="lib-sp-o">X 0 · Y 0</div>';const t=w.firstElementChild,h=t.firstElementChild,o=w.lastElementChild;let on=0;
+ const mv=e=>{const r=t.getBoundingClientRect(),m=(r.width-h.offsetWidth)/2;let x=(e.clientX-(r.left+r.width/2))/m,y=(e.clientY-(r.top+r.height/2))/m;const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}h.style.transform='translate('+x*m+'px,'+y*m+'px)';o.textContent='X '+Math.round(x*100)+' · Y '+Math.round(-y*100)};
+ t.addEventListener('pointerdown',e=>{on=1;t.classList.add('drag');t.setPointerCapture(e.pointerId);mv(e)});t.addEventListener('pointermove',e=>on&&mv(e));const up=()=>{if(!on)return;on=0;t.classList.remove('drag');h.style.transform='';o.textContent='X 0 · Y 0'};t.addEventListener('pointerup',up);t.addEventListener('pointercancel',up)});
+/* cmyk in slider style */
+$$('.lib-cmyk').forEach(w=>{const l=lvl(w.closest('.vt-catalog-demo')),sl=document.querySelector('[data-vt-family="Slider"] .vt-catalog-demo[data-level="'+l+'"] .vt-subtoolbox-slider'),st=sl?sl.getAttribute('style'):'',V=[20,55,10,5];w.className='lib-x lib-cmy';
+ w.innerHTML=['C','M','Y','K'].map((c,i)=>'<div class="vt-subtoolbox-slider" data-vt-control-level="'+l+'" style="'+st+'"><button type="button" class="vt-subtoolbox-slider-rail" aria-label="Reset '+c+'"><span>'+c+'</span></button><div class="vt-subtoolbox-slider-center"><input type="range" min="0" max="100" value="'+V[i]+'" aria-label="'+c+'"></div><output>'+V[i]+'</output></div>').join('')+'<div></div>';
+ const up=()=>{const [c,m,y,k]=$$('input',w).map(i=>+i.value/100);w.lastElementChild.style.background='rgb('+[c,m,y].map(x=>Math.round(255*(1-x)*(1-k))).join(',')+')'};w.addEventListener('input',up);up()});
+/* carousel */
+fam('Carousel').forEach(d=>{const c=d.querySelector('.vt-subtoolbox-carousel');if(!c)return;const st=c.getAttribute('style')||'',C=['--A','--B','--Al','--Bl'];
+ d.innerHTML='<div class="lib-car" style="'+st+'"><div class="lib-car-v"><div class="lib-car-t">'+C.map((v,i)=>'<div style="background:var('+v+')">FRAME 0'+(i+1)+'</div>').join('')+'</div></div><div class="lib-car-n"><button type="button" aria-label="Previous slide">‹</button><span>'+C.map((_,i)=>'<i'+(i?'':' class="on"')+'></i>').join('')+'</span><button type="button" aria-label="Next slide">›</button></div></div>';
+ const t=d.querySelector('.lib-car-t'),dots=$$('i',d);let n=0;d.addEventListener('click',e=>{const b=e.target.closest('.lib-car-n button');if(!b)return;n=(n+(b.getAttribute('aria-label')[0]==='N'?1:3))%4;t.style.transform='translateX(-'+n*100+'%)';dots.forEach((x,i)=>x.classList.toggle('on',i===n))})});
+/* scrollbars: tap = slide, hold = keep moving */
+$$('.vt-subtoolbox-scrollbar').forEach(sb=>{const tr=sb.querySelector('.vt-subtoolbox-scrollbar-track'),th=tr&&tr.firstElementChild;if(!th)return;const vt=sb.classList.contains('is-vertical');let p=.25,raf=0,dir=0,t0=0,last=0;
+ const ap=()=>{const R=vt?tr.clientHeight-th.offsetHeight:tr.clientWidth-th.offsetWidth;th.style.transform=(vt?'translateY(':'translateX(')+p*R+'px)'};ap();
+ const lp=t=>{const dt=(t-last)/1000;last=t;p=Math.max(0,Math.min(1,p+dir*(.22+Math.min(1.3,(t-t0)/1000))*dt));ap();raf=requestAnimationFrame(lp)};
+ sb.addEventListener('click',e=>{if(e.target.closest('button'))e.stopImmediatePropagation()},true);
+ $$(':scope>button',sb).forEach(b=>{const d=/left|up/i.test(b.getAttribute('aria-label'))?-1:1;b.addEventListener('pointerdown',()=>{dir=d;t0=last=performance.now();sb.classList.add('is-held');raf=requestAnimationFrame(lp)});
+  const end=()=>{if(!dir)return;cancelAnimationFrame(raf);const h=performance.now()-t0;dir=0;sb.classList.remove('is-held');if(h<220){p=Math.max(0,Math.min(1,p+d*.16));ap()}};['pointerup','pointercancel','pointerleave'].forEach(v=>b.addEventListener(v,end))})});
+/* checklist drives progress */
+$$('.vt-workflow-checklist').forEach(c=>{c.insertAdjacentHTML('afterbegin','<div class="lib-ck-p"><i></i></div>');const up=()=>{const R=$$('.vt-workflow-checklist-row',c),n=R.filter(r=>r.classList.contains('is-checked')).length;c.querySelector('.lib-ck-p i').style.width=(R.length?n/R.length*100:0)+'%';R.forEach(r=>{const s=r.querySelector('strong');s&&s.classList.toggle('done',r.classList.contains('is-checked'))})};up();
+ c.addEventListener('click',e=>{const b=e.target.closest('.vt-workflow-check');if(!b)return;e.stopImmediatePropagation();b.closest('.vt-workflow-checklist-row').classList.toggle('is-checked');up()},true)});
+/* sliders: value fill follows the handle */
+const fill=i=>{const p=(i.value-i.min)/((i.max-i.min)||100)*100;i.style.setProperty('--p',p+'%')};
+$$('.vt-subtoolbox-slider input[type=range]').forEach(fill);document.addEventListener('input',e=>{if(e.target.matches&&e.target.matches('.vt-subtoolbox-slider input[type=range]'))fill(e.target)});
+fam('Step Indicator').forEach(d=>{const o=d.querySelector('ol');o&&d.insertAdjacentHTML('beforeend','<ol class="lib-st2" style="'+(o.getAttribute('style')||'')+'"><li class="done"><b>1</b>SCRIPT</li><li class="cur"><b>2</b>VISUALS</li><li><b>3</b>EXPORT</li></ol>')});
+/* tree view */
+document.addEventListener('click',e=>{const r=e.target.closest('.vt-subtoolbox-tree-row'),n=r&&r.nextElementSibling;if(n&&n.classList.contains('vt-subtoolbox-tree-children')){n.hidden=!n.hidden;r.setAt
