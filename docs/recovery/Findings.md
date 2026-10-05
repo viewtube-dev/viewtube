@@ -137,3 +137,55 @@ During Round 2, merge duplicate findings, preserve conflicting evidence, establi
 - Conflicting claims: no authoritative runtime contradiction was found; current-main code searches did not locate the reported symbols/error strings.
 - Orphaned recovery material: **UNKNOWN** repository-wide.
 - Obsolete paths: **UNKNOWN** repository-wide.
+
+
+### FINDING-20261004-COPY-001 — Incomplete tool/widget inventory
+- **Category:** TOOL_IMPROVEMENT / WORKFLOW / UX_PRODUCT
+- **Affected area:** Dashboard, Toolbox/SubToolbox, Projects, Vault, AI Brain, Resources, Analytics, Settings, User Guide, Editor
+- **Discovery:** A single Dashboard registry/count cannot safely be treated as the complete ViewTube tool inventory.
+- **Source:** Current conversation; historical tool-copy workstream
+- **Evidence:** Historical work produced a 68-widget assumption that the user later rejected as incomplete. Canonical main has not yet been fully reconciled.
+- **Status:** VERIFIED DISCOVERY
+- **Impact:** Incomplete inventory would produce missing or incorrect contextual help and User Guide coverage.
+- **Recommended improvement:** Reconcile registries, routes, toolbox definitions, page-native tools, and non-UI capabilities into one manifestation inventory.
+- **Verification needed:** Canonical code inspection and UI registry reconciliation.
+- **Owner/next action:** Tool-copy knowledge workstream.
+
+### FINDING-20261004-COPY-002 — Contextual help should project from canonical tool knowledge
+- **Category:** UX_PRODUCT / WORKFLOW / AI_IMPROVEMENT
+- **Affected area:** Tool/widget contextual ? and Learn More
+- **Discovery:** The user defined the ? panel as a one-tool User Guide.
+- **Source:** Current conversation
+- **Status:** PROPOSED
+- **Impact:** Independent copy creates stale or contradictory help.
+- **Recommended improvement:** Maintain one canonical tool record and project concise ? copy plus expanded Learn More from it.
+- **Verification needed:** Inspect current help implementation and rendering path.
+- **Owner/next action:** Tool-copy knowledge workstream.
+
+### FINDING-20261004-COPY-003 — Manifestation-level tool identity
+- **Category:** ARCHITECTURE / DOCUMENTATION
+- **Affected area:** Tool/widget/module catalog
+- **Discovery:** Tool identity needs exact title, page, manifestation type, module/widget/tool name, and canonical ID.
+- **Source:** Current conversation
+- **Status:** PROPOSED
+- **Impact:** Prevents backend services and similarly named Dashboard/Toolbox tools from being incorrectly merged.
+- **Verification needed:** Reconcile current IDs and registries.
+
+### FINDING-20261004-COPY-004 — Separate Dashboard and Toolbox ownership
+- **Category:** ARCHITECTURE / UX_PRODUCT
+- **Affected area:** Dashboard Widget system; Toolbox/SubToolbox system
+- **Discovery:** Matching primitives do not imply shared ownership.
+- **Source:** User-approved decision in current conversation
+- **Status:** PROPOSED
+- **Impact:** Prevents incorrect architectural/documentation consolidation.
+- **Recommended improvement:** Maintain separate authorities and explicitly link shared primitives.
+- **Verification needed:** Inspect current UI architecture.
+
+### FINDING-20261004-COPY-005 — Implementation evidence required for current-state copy
+- **Category:** UX_PRODUCT / TESTING_VERIFICATION
+- **Affected area:** Tool descriptions and contextual help
+- **Discovery:** Copy can overstate ranking, algorithmic, CTR, demand, or performance outcomes.
+- **Source:** Current conversation copy audit
+- **Status:** VERIFIED DISCOVERY
+- **Recommended improvement:** Require implementation/evidence verification before marking copy as current product truth.
+- **Verification needed:** Tool-by-tool implementation tracing.
