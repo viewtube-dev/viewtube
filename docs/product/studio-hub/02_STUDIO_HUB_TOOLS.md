@@ -143,3 +143,25 @@ Consolidation means preserving functionality under a clear owner, not deleting c
 
 ## Tool lifecycle
 Proposal → Ownership test → Contract → UI module → Implementation → Evidence/measurement → Validation → Brain learning → Governance
+
+
+## Metadata Master — ACTIVE IMPLEMENTATION
+
+**Definitive purpose:** Optimize and assemble the publication package for a video/project before publication, or prepare a proposed metadata update for an already-published video.
+
+**Core question:** What should this video's complete publication package be?
+
+**Owns:** generation, refinement, package comparison, package scoring, component selection, title/thumbnail relationship evaluation, publication-package readiness, and downstream metadata handoff.
+
+**Does not own:** live published-video mutation (Video Manager), publication execution (Video Publisher), thumbnail creation (Thumbnail Studio), content interpretation (Content Analysis), durable knowledge (AI Brain), or canonical asset storage (Asset Engine/Vault).
+
+**Primary output:** PublicationPackage.
+**Primary action:** OPTIMIZE PACKAGE.
+**Workflow:** Context → Analyze → Generate → Compare → Optimize → Decide → Package → Handoff.
+
+**Required integrations:** Content Analysis → evidence/context; AI Brain → creator/channel knowledge; Thumbnail Studio → thumbnail creation; Video Publisher → publication; Video Manager → proposed live-video updates; Projects/ContentBuild → execution continuity; Asset Engine/Vault → canonical assets; ActionPacket/Handoff → transport.
+
+**Implementation:** src/views/MetadataMaster.tsx + src/services/metadataMaster.ts.
+**Mount:** /studio#metadata-master.
+**UI architecture:** canonical Toolbox → Context → Optimization Brief → Generate → Publication Package Canvas → Evaluate/Compare → Handoff → History.
+
