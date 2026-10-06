@@ -2,6 +2,17 @@
 
 ## Rule
 
+
+## Canonical section hierarchy
+
+The metadata component system must render the following sequence without reordering:
+
+**Video Upload → Title → Thumbnail → Visibility → Audience → Timestamps → Description → Location → Playlists → Community → AI Use → Tags → Category**
+
+Primary components are used for Video Upload, Title, Thumbnail, Description, Playlists, Tags, and Category. Secondary components are intentionally compact for Visibility, Audience, Timestamps, Location, Community, and AI Use; many are binary or yes/no controls and should use switches, compact pills, badges, or tiny inline selectors rather than full SubToolboxes.
+
+This hierarchy is a layout contract, not a content suggestion. Empty or collapsed secondary controls retain their semantic position, and intelligence/generation actions must not create an alternate ordering.
+
 Use existing ViewTube Toolbox/SubToolbox primitives and the UI component library wherever possible. The new system adds only components that communicate metadata-specific concepts that cannot be expressed clearly with existing primitives.
 
 ## Existing primitive families to reuse
