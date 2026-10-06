@@ -15,6 +15,7 @@ import {
 } from "../services/simpleYouTubeApi"
 import { useSimpleAuth } from "../auth/AuthProvider"
 import { useNavigate } from "react-router-dom"
+import { useBrain } from "../context/useBrain"
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import type { LongformOptimizationHandoffPayload } from "../services/longformOptimization"
@@ -28,6 +29,7 @@ import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetad
 import MetadataMaster from "./MetadataMaster"
 import { validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
 import { PublishingControls } from "../components/metadata/PublishingControls"
+import ProjectManifestation from "../components/projects/ProjectManifestation"
 import { togglePlaylistSelection } from "../components/metadata/playlistSelection"
 import {
  X,
@@ -73,6 +75,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  paletteIndex,
 }) => {
  const auth = useSimpleAuth()
+ const { brain, updateProject, setActiveProject } = useBrain()
  const connected = auth.session.status === "ready" && auth.session.capabilities.youtubeRead
  const canManageVideos = auth.session.status === "ready" && auth.session.capabilities.youtubeWrite
  const navigate = useNavigate()
@@ -122,6 +125,26 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const hasTriggeredInitialLoadRef = useRef(false)
 
  const showHeaderLoadAssetsButton = connected && videos.length === 0
+
+ const handleProjectManifestLoad = useCallback((project: typeof brain.projects[number]) => {
+  setActiveProject(project.id)
+  setEditTitle(project.videoTitle || "")
+  setEditDescription(project.description || "")
+  setEditTags(project.tags || "")
+  setThumbnailPreview(project.thumbnailUrl || null)
+  setThumbnailFile(null)
+  setSaveSuccess(false)
+  setError(null)
+ }, [setActiveProject])
+
+ const saveProjectManifestState = useCallback((project: typeof brain.projects[number]) => {
+  updateProject(project.id, {
+   videoTitle: editTitle,
+   description: editDescription,
+   tags: editTags,
+   thumbnailUrl: thumbnailPreview || project.thumbnailUrl,
+  })
+ }, [editTitle, editDescription, editTags, thumbnailPreview, updateProject])
 
  const handleLongformOptimizerHandoff = useCallback((packet: ViewTubeActionPacket) => {
   if (packet.sourceToolId !== "longform-optimizer") return
@@ -416,9 +439,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     ...toAdd.map((id) => addSimpleVideoToPlaylist(id, selectedVideoId)),
     ...toRemove.map((m) => removeSimpleVideoFromPlaylist(m.playlistItemId)),
    ])
-   setSaveSuccess(true)
-   void handleSelectVideo(selectedVideoId, userPlaylists)
-   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
+   updateProject(brain.activeProjectId || "", {\n    videoTitle: editTitle,\n    description: editDescription,\n    tags: editTags,\n    thumbnailUrl: thumbnailPreview || undefined,\n   })\n   setSaveSuccess(true)\n   void handleSelectVideo(selectedVideoId, userPlaylists)\n   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    void loadInitialData()
   } catch (err: any) {
@@ -632,7 +653,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        </SubToolboxShellAction>
       )}
 
-      <PublishingControls
+      <ProjectManifestation\n       projects={brain.projects || []}\n       activeProjectId={brain.activeProjectId}\n       onLoadProject={handleProjectManifestLoad}\n       onSaveProject={saveProjectManifestState}\n       paletteIndex={basePalette + 1}\n      />\n      <PublishingControls
        privacy={editPrivacy}
        category={editCategoryId}
        playlistIds={selectedPlaylistIds}
