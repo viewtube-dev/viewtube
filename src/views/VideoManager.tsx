@@ -28,6 +28,7 @@ import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetad
 import MetadataMaster from "./MetadataMaster"
 import { EducationTimestampNotes, validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
 import { PublishingControls } from "../components/metadata/PublishingControls"
+import { togglePlaylistSelection } from "../components/metadata/playlistSelection"
 import {
  X,
  FileVideo,
@@ -51,6 +52,7 @@ import {
  SubToolboxLinkButton,
  SubToolboxOutputCard,
  SubToolboxStatePanel,
+ SubToolboxTag,
  SubToolboxVideoSelector,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 
@@ -341,6 +343,9 @@ const VideoManager: React.FC<VideoManagerProps> = ({
 
  const educationValidation = validateEducationTimestampLines(educationNotes)
  const educationReady = editCategoryId !== "27" || educationValidation.valid
+ const togglePlaylist = useCallback((playlistId: string) => {
+  setSelectedPlaylistIds((current) => togglePlaylistSelection(current, playlistId))
+ }, [])
 
  const handleSave = async () => {
   if (!connected || !canManageVideos) {
