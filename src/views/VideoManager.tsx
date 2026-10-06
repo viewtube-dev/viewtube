@@ -26,6 +26,8 @@ import {
 import type { TagSuggestion } from "../services/gemini"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import MetadataMaster from "./MetadataMaster"
+import { EducationTimestampNotes, validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
+import { PublishingControls } from "../components/metadata/PublishingControls"
 import {
  X,
  FileVideo,
@@ -95,6 +97,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [editLocation, setEditLocation] = useState("")
  const [editCommunity, setEditCommunity] = useState(false)
  const [editAiUse, setEditAiUse] = useState(true)
+ const [educationNotes, setEducationNotes] = useState("")
 
  const [userPlaylists, setUserPlaylists] = useState<Playlist[]>([])
  const [currentPlaylists, setCurrentPlaylists] = useState<PlaylistMembership[]>([])
@@ -336,12 +339,19 @@ const VideoManager: React.FC<VideoManagerProps> = ({
   reader.readAsDataURL(file)
  }
 
+ const educationValidation = validateEducationTimestampLines(educationNotes)
+ const educationReady = editCategoryId !== "27" || educationValidation.valid
+
  const handleSave = async () => {
   if (!connected || !canManageVideos) {
    auth.login("/video-manager")
    return
   }
   if (!selectedVideoId) return
+  if (!educationReady) {
+   setError(`Education timestamps contain invalid lines: ${educationValidation.invalidLines.join(", ")}`)
+   return
+  }
   setSaving(true)
   setError(null)
   setSaveSuccess(false)
@@ -349,7 +359,9 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    await patchSimpleOwnedVideo(selectedVideoId, {
     snippet: {
      title: editTitle,
-     description: editDescription,
+     description: educationNotes.trim() && editCategoryId === "27"
+      ? `${editDescription.trim()}\n\n${educationNotes.trim()}`.trim()
+      : editDescription,
      tags: editTags.split(",").map((t) => t.trim()).filter(Boolean),
      categoryId: editCategoryId,
     },
@@ -582,12 +594,35 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        </SubToolboxShellAction>
       )}
 
+      <PublishingControls
+       privacy={editPrivacy}
+       category={editCategoryId}
+       playlistIds={selectedPlaylistIds}
+       privacyOptions={[
+        { value: "public", label: "PUBLIC" },
+        { value: "unlisted", label: "UNLISTED" },
+        { value: "private", label: "PRIVATE" },
+       ]}
+       categoryOptions={categoryOptions}
+       playlistOptions={userPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title }))}
+       onPrivacyChange={setEditPrivacy}
+       onCategoryChange={setEditCategoryId}
+       onPlaylistToggle={togglePlaylist}
+      />
+      {editCategoryId === "27" ? (
+       <EducationTimestampNotes
+        value={educationNotes}
+        onChange={setEducationNotes}
+        disabled={!connected}
+       />
+      ) : null}
+
       <CanonicalMetadataSections
        title={editTitle}
        description={editDescription}
        tags={editTags}
        category={editCategoryId}
-       playlists={selectedPlaylistIds.join(", ")}
+       playlists={userPlaylists.filter(playlist => selectedPlaylistIds.includes(playlist.id)).map(playlist => playlist.title).join(", ") || selectedPlaylistIds.join(", ")}
        thumbnailPreview={thumbnailPreview || selectedVideo?.thumbnail || null}
        visibility={editPrivacy}
        audience={editAudience}
@@ -620,7 +655,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
 
       <SubToolboxGridActionButton
        onClick={connected ? handleSave : () => auth.login("/video-manager")}
-       disabled={connected ? saving || !selectedVideoId : auth.loading}
+       disabled={connected ? saving || !selectedVideoId || !educationReady : auth.loading}
        tone="blue"
        iconName="settings"
        showIconSection
