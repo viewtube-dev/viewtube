@@ -33,6 +33,8 @@ import { completePublishTransaction, listPublishTransactions } from "../services
 import { sheetsService } from "../services/sheetsService"
 import type { SeoResult } from "../types"
 import BrainLiveToolInbox from "../components/brain/BrainLiveToolInbox"
+import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
+import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../components/Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
@@ -258,6 +260,15 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     registerProvider("VIDEO_PUBLISHER")
     return () => unregisterProvider("VIDEO_PUBLISHER")
   }, [])
+
+  const handleMetadataMasterHandoff = (packet: ViewTubeActionPacket) => {
+    if (packet.sourceToolId !== "metadata-master") return
+    const payload = packet.payload as { title?: string; description?: string; tags?: string[] }
+    if (payload.title) setPublishTitle(payload.title)
+    if (payload.description) setPublishDescription(payload.description)
+    if (payload.tags) setPublishTags(payload.tags.join(", "))
+    setPublishRefresh(value => value + 1)
+  }
 
   const applyPrefill = (payload: Record<string, unknown>) => {
     const prefill = payload as Record<string, any>
@@ -494,6 +505,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         />
       }
     >
+      <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
       {publishState.projection ? (
         <SubToolboxStack density="comfortable">
           <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
