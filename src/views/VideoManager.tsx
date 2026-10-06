@@ -676,6 +676,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        onGenerate={(field) => { if (field === "tags") void handleGenerateTags() }}
        onRefine={(field) => { if (field === "tags") void handleRefineTags() }}
        onAnalyze={(field) => { if (field === "tags") void handleRankTags() }}
+       actionFields={["tags"]}
        onRankTags={handleRankTags}
        tagAnalysis={existingTagAnalysis}
        suggestedTags={suggestedTags}

@@ -10,6 +10,7 @@ import {
   SubToolboxSelect,
   SubToolboxStatusBadge,
   SubToolboxToggle,
+  SubToolboxTagEditor,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
 import { SubToolboxSplitButton } from "../subtoolbox/SubToolboxSplitPrimitives"
@@ -61,6 +62,7 @@ export interface CanonicalMetadataSectionsProps {
   onGenerate?: (field: string) => void
   onRefine?: (field: string) => void
   onAnalyze?: (field: string) => void
+  actionFields?: string[]
   categoryOptions?: { value: string; label: string }[]
   thumbnailActions?: React.ReactNode
   videoUploadLabel?: React.ReactNode
@@ -157,7 +159,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
-    onGenerate, onRefine, onAnalyze, categoryOptions = [], thumbnailActions,
+    onGenerate, onRefine, onAnalyze, actionFields, categoryOptions = [], thumbnailActions,
     videoUploadLabel, titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
     showVideoUpload = true, showPlaylists = true, showCategory = true,
     tagAnalysis = [], suggestedTags = [], tagInput = "", onTagInputChange, onAddTag,
@@ -166,8 +168,9 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     educationNotes = "", onEducationNotesChange, educationNotesDisabled = false,
   } = props
 
-  const hasTagEditor = Boolean(onTagInputChange && onAddTag)
+  const hasTagEditor = Boolean(onTagsChange)
   const currentTags = tags.split(",").map(tag => tag.trim()).filter(Boolean)
+  const shouldShowActions = (field: string) => !actionFields || actionFields.includes(field)
 
   return (
     <SubToolbox title="METADATA" icon={<FolderOpen size={20} strokeWidth={3} />} collapsible isOpenInitial className={className}>
@@ -185,9 +188,9 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           </SubToolboxSection>
         ) : null}
 
-        <SubToolboxSection label="TITLE">
+        <SubToolboxSection>
           <SubToolboxLabeledInput overlayLabel={titleLabel} value={title} onChange={e => onTitleChange(e.target.value)} placeholder="WRITE TITLE MANUALLY…" aria-label="Title" />
-          <FieldActions field="title" {...{ onGenerate, onRefine, onAnalyze }} />
+          {shouldShowActions("title") ? <FieldActions field="title" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
         <SubToolboxSection label="THUMBNAIL">
@@ -196,7 +199,12 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           ) : onThumbnailFileChange ? (
             <SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : "SELECT THUMBNAIL"} icon={<ImageIcon size={28} />} accept="image/jpeg,image/png,image/webp" onFiles={files => onThumbnailFileChange(files?.[0] || null)} />
           ) : <SubToolboxStatusBadge level="l1">THUMBNAIL NOT SELECTED</SubToolboxStatusBadge>}
-          <FieldActions field="thumbnail" {...{ onGenerate, onRefine, onAnalyze }} />
+          {shouldShowActions("thumbnail") ? <FieldActions field="thumbnail" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
+        </SubToolboxSection>
+
+        <SubToolboxSection>
+          <SubToolboxLabeledTextArea overlayLabel={descriptionLabel} value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="WRITE DESCRIPTION MANUALLY…" aria-label="Description" height="standard" />
+          {shouldShowActions("description") ? <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
         <SecondaryControls {...{ visibility, audience, timestamps, location, community, aiUse, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange }} />
@@ -212,31 +220,33 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           </SubToolboxSection>
         ) : null}
 
-        <SubToolboxSection label="DESCRIPTION">
+        <SubToolboxSection>
           <SubToolboxLabeledTextArea overlayLabel={descriptionLabel} value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="WRITE DESCRIPTION MANUALLY…" aria-label="Description" height="standard" />
-          <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze }} />
+          {shouldShowActions("description") ? <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
         {showPlaylists ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><ListVideo size={12} /> PLAYLISTS</span>}>
             <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder="PLAYLIST IDS / NAMES" aria-label="Playlists" />
-            <FieldActions field="playlists" {...{ onGenerate, onRefine, onAnalyze }} />
+            {shouldShowActions("playlists") ? <FieldActions field="playlists" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
           </SubToolboxSection>
         ) : null}
 
         <SubToolboxSection label={<span className="flex items-center gap-1"><Tags size={12} /> TAGS</span>}>
           {hasTagEditor ? (
             <>
-              <SubToolboxActions columns={2}>
-                <SubToolboxInput aria-label="Add video tag" value={tagInput} onChange={e => onTagInputChange?.(e.target.value)} placeholder="ADD TAG…" maxLength={maxTagChars} />
-                <SubToolboxButton level="l2" size="compact" icon={<Plus size={15} />} onClick={onAddTag} disabled={!tagInput.trim()}>ADD TAG</SubToolboxButton>
-              </SubToolboxActions>
-              <div className="flex min-h-[76px] flex-wrap content-start gap-2 border-[2px] border-black/15 bg-black/[.025] p-2">
-                {currentTags.length ? currentTags.map(tag => (
-                  <TagRankTag key={tag} tag={tag} analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())} onRemove={onRemoveTag ? () => onRemoveTag(tag) : undefined} />
-                )) : <span className="w-full py-4 text-center text-[10px] font-black uppercase opacity-35">NO TAGS POPULATED</span>}
-                <span className="ml-auto self-end text-[10px] font-black uppercase opacity-50">{tags.length}/{maxTagChars}</span>
-              </div>
+              <SubToolboxTagEditor
+                level="l1"
+                tags={currentTags}
+                onTagsChange={nextTags => onTagsChange(nextTags.join(", "))}
+                addIcon={<Plus size={15} />}
+                saveIcon="✓"
+                removeIcon="×"
+                renderTag={(tag, remove) => (
+                  <TagRankTag key={tag} tag={tag} analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())} onRemove={remove} />
+                )}
+              />
+              <div className="flex justify-end text-[10px] font-black uppercase opacity-50">{tags.length}/{maxTagChars}</div>
               {suggestedTags.length > 0 ? (
                 <SubToolboxSection label="RANKED SUGGESTIONS">
                   <div className="flex flex-wrap gap-2">
@@ -246,7 +256,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                   </div>
                 </SubToolboxSection>
               ) : null}
-              <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} />
+              {shouldShowActions("tags") ? <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
               {onRankTags ? (
                 <SubToolboxButton level="l2" size="compact" tone="neutral" onClick={onRankTags} disabled={isAnalyzingTags || !tags.trim()}>
                   {isAnalyzingTags ? "RANKING…" : tagAnalysis.length ? "VIEW TAG RANKINGS" : "RANK TAGS"}
@@ -269,7 +279,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                 {categoryOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
               </SubToolboxSelect>
             ) : <SubToolboxInput value={category} onChange={e => onCategoryChange(e.target.value)} placeholder="CATEGORY" aria-label="Category" />}
-            <FieldActions field="category" {...{ onGenerate, onRefine, onAnalyze }} />
+            {shouldShowActions("category") ? <FieldActions field="category" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
           </SubToolboxSection>
         ) : null}
       </SubToolboxStack>

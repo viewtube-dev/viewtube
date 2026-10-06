@@ -1064,6 +1064,7 @@ export interface SubToolboxTagEditorProps extends React.HTMLAttributes<HTMLDivEl
   label?: React.ReactNode
   tagLevel?: SubToolboxSpectrumTagLevel
   spectrum?: boolean
+  renderTag?: (tag: string, onRemove: () => void) => React.ReactNode
 }
 export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
   level = "l0",
@@ -1075,6 +1076,7 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
   label,
   tagLevel,
   spectrum = false,
+  renderTag,
   className,
   style,
   ...props
@@ -1092,7 +1094,7 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
     <div className={classes("vt-subtoolbox-tag-editor", editing && "is-editing", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
       {label ? <strong className="vt-subtoolbox-tag-editor-label">{label}</strong> : null}
       <div className="vt-subtoolbox-tag-editor-tags">
-        {tags.map((tag) => spectrum ? (
+        {tags.map((tag) => renderTag ? renderTag(tag, () => onTagsChange?.(tags.filter((item) => item !== tag))) : spectrum ? (
           <SubToolboxSpectrumRemovableTag
             key={tag}
             level={tagLevel ?? "l3"}
