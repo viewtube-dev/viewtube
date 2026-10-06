@@ -209,3 +209,25 @@ Video Manager's publishing controls are presented as one responsive row of three
 When Category is Education, the Education Questions & Phrases component is exposed. Each non-empty line must begin with M:SS or MM:SS followed by text. Invalid lines prevent the video update from being submitted. Valid education notes are included in the video's description when saved.
 
 These are library contracts, not local CSS skins. Production components must import the primitives from src/components/subtoolbox/SubToolboxPrimitives.tsx and must not duplicate their visual implementation.
+
+
+## Projects UI Manifestation
+
+`ProjectManifestation` is the shared visual authority for exposing Project + ContentBuild + Publishing Package state inside tools.
+
+- Source: `src/components/projects/ProjectManifestation.tsx`
+- Data adapter: `src/components/projects/projectManifestation.ts`
+- Canonical persistence: `ContentBuildRepository` / `VideoPackageRepository`
+- Canonical swap API: `setContentBuildSelection`
+- Visual primitives: existing Toolbox/SubToolbox, media poster, select, buttons, tags, status badges, and output cards.
+
+It represents the **project/package container**, not an individual Vault asset. Individual asset rendering remains owned by `VaultAssetModule`.
+
+The manifestation must remain portable across Studio Hub tools. A tool may load the manifestation, edit its owned fields, swap canonical asset selections, and save the resulting state without creating a parallel project/package store.
+
+Current integrations:
+- `VideoManager`
+- `VideoPublisher`
+
+Reference architecture:
+`docs/product/studio-hub/VIEWTUBE_PROJECTS_UI_MANIFESTATION_SYSTEM.md`
