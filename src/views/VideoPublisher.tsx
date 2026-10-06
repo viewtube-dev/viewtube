@@ -528,7 +528,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       {workspaceMode === "intelligence" ? (
         <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
       ) : (
-
+        <>
       {publishState.projection ? (
         <SubToolboxStack density="comfortable">
           <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
@@ -662,6 +662,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         </SubToolboxStack>
       )}
       )}
+        </>
     </ToolboxScaffold>
   )
 }
