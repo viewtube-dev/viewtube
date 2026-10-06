@@ -6,7 +6,7 @@ function target(gl,w,h){const t=texture(gl,w,h),f=gl.createFramebuffer();gl.bind
 function hex(s){const n=parseInt(s.slice(1),16);return[(n>>16&255)/255,(n>>8&255)/255,(n&255)/255];}
 export class GlassRenderer{
  constructor(canvas){
-  this.canvas=canvas;this.gl=canvas.getContext("webgl2",{antialias:true,alpha:false});if(!this.gl)throw Error("WebGL2 is required.");
+  this.canvas=canvas;this.gl=canvas.getContext("webgl2",{antialias:true,alpha:true,premultipliedAlpha:false});if(!this.gl)throw Error("WebGL2 is required.");
   const gl=this.gl;this.blur=program(gl,BLUR_FRAGMENT_SHADER);this.glass=program(gl,GLASS_FRAGMENT_SHADER);
   this.vao=gl.createVertexArray();gl.bindVertexArray(this.vao);const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);
   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
@@ -17,7 +17,7 @@ export class GlassRenderer{
  uploadEnvironment(source){const gl=this.gl;gl.bindTexture(gl.TEXTURE_2D,this.environment);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,source);}
  blurPass(src,dst,dir){const gl=this.gl;gl.useProgram(this.blur);gl.bindVertexArray(this.vao);const l=this.blurAttr;gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,2,gl.FLOAT,false,0,0);gl.bindFramebuffer(gl.FRAMEBUFFER,dst.f);gl.viewport(0,0,...this.size);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,src);gl.uniform1i(gl.getUniformLocation(this.blur,"uTexture"),0);gl.uniform2f(gl.getUniformLocation(this.blur,"uTexel"),1/this.size[0],1/this.size[1]);gl.uniform2f(gl.getUniformLocation(this.blur,"uDirection"),...dir);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);}
  render(rects){
-  const gl=this.gl;this.blurPass(this.environment,this.blurV,[0,1]);this.blurPass(this.blurV,this.blurH,[1,0]);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,...this.size);gl.clearColor(.94,.95,.97,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(this.glass);gl.bindVertexArray(this.vao);
+  const gl=this.gl;this.blurPass(this.environment,this.blurV,[0,1]);this.blurPass(this.blurV,this.blurH,[1,0]);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,...this.size);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.useProgram(this.glass);gl.bindVertexArray(this.vao);
   for(const r of rects){const bind=(n,v)=>{const l=gl.getUniformLocation(this.glass,n);if(typeof v==="number")gl.uniform1f(l,v);else if(v.length===2)gl.uniform2fv(l,v);else gl.uniform4fv(l,v);};
    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.environment);gl.uniform1i(gl.getUniformLocation(this.glass,"uEnvironment"),0);
    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,this.blurH);gl.uniform1i(gl.getUniformLocation(this.glass,"uBlurredEnvironment"),1);
