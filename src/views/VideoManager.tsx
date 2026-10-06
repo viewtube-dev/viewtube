@@ -29,42 +29,30 @@ import MetadataMaster from "./MetadataMaster"
 import {
  X,
  Plus,
- Tag,
  FileVideo,
- Upload,
- Sparkles,
- Image as ImageIcon,
  AlertCircle,
  CheckCircle,
  Edit,
- Settings,
  Search,
  RefreshCw,
 } from "lucide-react"
 import {
- ThumbnailMiniSubToolbox,
  SubToolboxGridActionButton,
  ToolboxScaffold,
- SubToolbox,
 } from "../components/Toolbox"
-import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
+import { SubToolboxActions } from "../components/subtoolbox/SubToolboxLayouts"
 import { SubToolboxShellAction } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 import {
  SubToolboxAlert,
  SubToolboxButton,
  SubToolboxDataTable,
  SubToolboxIconButton,
- SubToolboxLabeledInput,
- SubToolboxLabeledTextArea,
  SubToolboxLinkButton,
  SubToolboxOutputCard,
  SubToolboxRemovableTag,
  SubToolboxSelectableTag,
  SubToolboxStatePanel,
- SubToolboxSurface,
  SubToolboxTag,
- SubToolboxTagEditor,
- SubToolboxTopTitleDropdown,
  SubToolboxVideoSelector,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 
