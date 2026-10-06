@@ -635,7 +635,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      </>
     )}
 
-    <input type="file ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
+    <input type="file" ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
    </div>
   </ToolboxScaffold>
  )
