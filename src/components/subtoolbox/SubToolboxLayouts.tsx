@@ -26,7 +26,7 @@ export const SubToolboxActions: React.FC<React.HTMLAttributes<HTMLDivElement> & 
   className?: string
   children: React.ReactNode
 }> = ({ columns = 2, className, children, ...props }) => (
-  <div className={classes("vt-subtoolbox-actions", `has-${columns}-columns`, className)} {...props}>{children}</div>
+  <div className={classes("vt-subtoolbox-actions", `has-${columns}-columns`, forceRow && "is-forced-row", className)} {...props}>{children}</div>
 )
 
 export const SubToolboxSection: React.FC<{
