@@ -503,29 +503,26 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       shellClassName="animate-fade-in"
       contentClassName={embedded ? "p-0" : "p-8"}
       headerActions={
-        <ToolboxHeaderToggle
-          value={formatMode}
-          aria-label="Video format"
-          <div className="flex items-center gap-2">
-            <ToolboxHeaderToggle
-              value={workspaceMode}
-              aria-label="Publisher view"
-              options={[
-                { value: "workspace", label: "Workspace" },
-                { value: "intelligence", label: "Intelligence" },
-              ]}
-              onValueChange={(value) => setWorkspaceMode(value === "intelligence" ? "intelligence" : "workspace")}
-            />
-            <ToolboxHeaderToggle
-              value={formatMode}
-              aria-label="Video format"
-              options={[
-                { value: "longform", label: "Longform" },
-                { value: "shorts", label: "Shorts" },
-              ]}
-              onValueChange={(value) => setFormatMode(value === "shorts" ? "shorts" : "longform")}
-            />
-          </div>
+        <div className="flex items-center gap-2">
+          <ToolboxHeaderToggle
+            value={workspaceMode}
+            aria-label="Publisher view"
+            options={[
+              { value: "workspace", label: "Workspace" },
+              { value: "intelligence", label: "Intelligence" },
+            ]}
+            onValueChange={(value) => setWorkspaceMode(value === "intelligence" ? "intelligence" : "workspace")}
+          />
+          <ToolboxHeaderToggle
+            value={formatMode}
+            aria-label="Video format"
+            options={[
+              { value: "longform", label: "Longform" },
+              { value: "shorts", label: "Shorts" },
+            ]}
+            onValueChange={(value) => setFormatMode(value === "shorts" ? "shorts" : "longform")}
+          />
+        </div>
       }
     >
       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
