@@ -4,7 +4,7 @@ import type { ViewTubeVideoPackage, PackageArtifactRef } from "../../services/vi
 export type ProjectManifestationPackageLike = Pick<
   ViewTubeVideoPackage,
   "id" | "projectId" | "contentBuildId" | "identity" | "packaging"
->
+> & Partial<Pick<ViewTubeVideoPackage, "creative" | "production">>
 
 export type ProjectManifestationAssetSlot = {
   slot: string
