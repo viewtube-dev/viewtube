@@ -9,6 +9,7 @@ const productionSubtoolboxConsumers = [
  "src/views/MediaAnalyzer.tsx",
  "src/views/VideoManager.tsx",
  "src/views/VideoPublisher.tsx",
+ "src/views/MetadataMaster.tsx",
  "src/views/StoryboardStudio.tsx",
  "src/views/supertools/SuperToolPrototypeWorkspace.tsx",
 ]
