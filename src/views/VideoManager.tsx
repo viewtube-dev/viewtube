@@ -439,7 +439,14 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     ...toAdd.map((id) => addSimpleVideoToPlaylist(id, selectedVideoId)),
     ...toRemove.map((m) => removeSimpleVideoFromPlaylist(m.playlistItemId)),
    ])
-   if (brain.activeProjectId) updateProject(brain.activeProjectId, {\n    videoTitle: editTitle,\n    description: editDescription,\n    tags: editTags,\n    thumbnailUrl: thumbnailPreview || undefined,\n   })\n   setSaveSuccess(true)\n   void handleSelectVideo(selectedVideoId, userPlaylists)\n   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
+   if (brain.activeProjectId) updateProject(brain.activeProjectId, {
+    videoTitle: editTitle,
+    description: editDescription,
+    tags: editTags,
+    thumbnailUrl: thumbnailPreview || undefined,
+   })
+   setSaveSuccess(true)
+   void handleSelectVideo(selectedVideoId, userPlaylists)\n   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    void loadInitialData()
   } catch (err: any) {
