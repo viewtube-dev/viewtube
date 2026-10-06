@@ -554,7 +554,14 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       }
     >
       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
-      <ProjectManifestation\n       projects={brain.projects || []}\n       activeProjectId={brain.activeProjectId}\n       onLoadProject={handleProjectManifestLoad}\n       onSaveProject={saveProjectManifestState}\n       paletteIndex={basePalette}\n      />\n      {workspaceMode === "intelligence" ? (
+      <ProjectManifestation
+       projects={brain.projects || []}
+       activeProjectId={brain.activeProjectId}
+       onLoadProject={handleProjectManifestLoad}
+       onSaveProject={saveProjectManifestState}
+       paletteIndex={basePalette}
+      />
+      {workspaceMode === "intelligence" ? (
         <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
       ) : (
         <>
