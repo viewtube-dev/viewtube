@@ -191,3 +191,20 @@ Examples:
 - Preserve provenance through every generation.
 - Show uncertainty when evidence is weak.
 - Require user control for high-impact promotion where appropriate.
+
+
+## Metadata Master generation authority — ACTIVE
+
+Metadata Master does not introduce a parallel prompt/provider stack. Its initial generation path reuses the existing ViewTube metadata-generation capability exposed by `generateSeoData` and the existing Brain context.
+
+The distinctive intelligence layer is the package transformation around that generation:
+- generate coherent alternatives;
+- preserve provenance;
+- score the package deterministically;
+- detect conflicts/redundancy;
+- compare package sets;
+- respect creator locks and application choices;
+- hand the resulting package to the canonical downstream owner.
+
+Future prompt improvements should migrate through the existing prompt/generation authority rather than embedding a feature-local system prompt in Metadata Master.
+

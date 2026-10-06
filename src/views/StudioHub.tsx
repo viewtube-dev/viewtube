@@ -14,6 +14,7 @@ import { CommunityPostGenerator } from "../components/CommunityPostGenerator"
 import { CommentResponder } from "../components/CommentResponder"
 import { EndScreenTool } from "../components/EndScreenTool"
 import StudioPublishingCockpit from "../components/studio-hub/StudioPublishingCockpit"
+import MetadataMaster from "./MetadataMaster"
 
 const ToolboxUIReferenceLibrary = React.lazy(() => import("../components/ToolboxUIReferenceLibrary"))
 const VideoDirector = React.lazy(() => import("./VideoDirector"))
@@ -53,6 +54,9 @@ const StudioHub: React.FC = () => {
     </React.Suspense>
     <StudioPublishingCockpit />
     <VideoPublisher collapsible isOpenInitial={false} paletteIndex={1} />
+    <div id="metadata-master" className="scroll-mt-24">
+     <MetadataMaster collapsible isOpenInitial={false} paletteIndex={12} />
+    </div>
     <MediaAnalyzer collapsible isOpenInitial={false} paletteIndex={2} />
     <ThumbnailStudio collapsible isOpenInitial={false} paletteIndex={3} />
 

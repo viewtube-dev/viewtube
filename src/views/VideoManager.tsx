@@ -205,6 +205,20 @@ const VideoManager: React.FC<VideoManagerProps> = ({
   setIsOpen(true)
  }, [])
 
+ const handleMetadataMasterHandoff = useCallback((packet: ViewTubeActionPacket) => {
+  if (packet.sourceToolId !== "metadata-master") return
+  const payload = packet.payload as { title?: string; description?: string; tags?: string[]; category?: string; thumbnail?: { url?: string } }
+  if (packet.videoId) setSelectedVideoId(packet.videoId)
+  setEditTitle(payload.title || "")
+  setEditDescription(payload.description || "")
+  setEditTags((payload.tags || []).join(", "))
+  if (payload.category) setEditCategoryId(payload.category)
+  if (payload.thumbnail?.url) setThumbnailPreview(payload.thumbnail.url)
+  setSaveSuccess(false)
+  setError(null)
+  setIsOpen(true)
+ }, [])
+
  const formatVideoLoadError = (err: any) => {
   const raw = err?.message || "Failed to load channel assets."
   if (/session|auth|401|expired|invalid/i.test(raw)) {
@@ -566,6 +580,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    contentClassName={embedded ? "p-0" : "p-8"}>
    <div className="flex flex-col h-full">
     <ViewTubeHandoffReceiver targetToolId="video-manager" onPacket={handleLongformOptimizerHandoff} />
+    <ViewTubeHandoffReceiver targetToolId="video-manager" onPacket={handleMetadataMasterHandoff} />
     {error && <SubToolboxAlert level="l1" tone="danger" className="mb-6" icon={<AlertCircle size={20} />} title="Video Manager Issue" detail={error} />}
     {saveSuccess && <SubToolboxAlert level="l1" tone="success" className="mb-6" icon={<CheckCircle size={20} />} title="Asset Deployed Successfully" />}
 

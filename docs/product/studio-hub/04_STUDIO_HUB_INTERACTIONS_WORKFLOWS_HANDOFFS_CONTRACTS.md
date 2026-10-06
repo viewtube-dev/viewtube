@@ -382,3 +382,42 @@ Every handoff should show, where practical: From, To, Object, Why, Evidence, Con
 - Creator Strategy Engine owns cross-tool synthesis;
 - user-facing handoffs are understandable;
 - measured results can return to relevant tools.
+
+
+## Metadata Master handoff contract — ACTIVE
+
+### Metadata Master → Video Publisher
+**Object:** PublicationPackage transported as a metadata ActionPacket.
+Purpose: move an approved optimization package into publication without re-entering optimized metadata.
+Publisher owns validation, creator approval, upload, routing, scheduling/privacy, and remote publication.
+
+### Metadata Master → Video Manager
+**Object:** PublicationPackage transported as a metadata ActionPacket.
+Purpose: propose optimized changes to an already-published video.
+Video Manager owns selecting the live video and performing the actual YouTube mutation. Metadata Master never silently changes live metadata.
+
+### Metadata Master → Thumbnail Studio
+**Object:** publication-package thumbnail brief transported as the metadata package.
+Purpose: turn selected title/audience/goal/visual direction into an actual thumbnail asset. Thumbnail Studio remains the visual asset owner.
+
+### Content Analysis → Metadata Master
+Content Analysis supplies content evidence, detected topics, audience, transcript/chapters, strengths, weaknesses, and findings. Metadata Master transforms those findings into packaging decisions.
+
+### AI Brain ↔ Metadata Master
+AI Brain supplies validated creator/channel context, language preferences, audience knowledge, and historical packaging patterns. Metadata Master returns validated findings/knowledge candidates through existing Brain/Handoff infrastructure.
+
+### Canonical chain
+~~~text
+Content / Project
+      ↓
+Content Analysis + AI Brain
+      ↓
+Metadata Master
+      ├──→ Thumbnail Studio
+      ├──→ Video Publisher
+      └──→ Video Manager (published-video mode)
+~~~
+
+### Ownership invariant
+Metadata Master optimizes the package; Video Publisher executes publication; Video Manager mutates live published content.
+
