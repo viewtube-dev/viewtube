@@ -482,8 +482,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     {viewMode === "intelligence" ? (
      <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
     ) : (
-
-
+     <>
     {showRankDetails && existingTagAnalysis.length > 0 && (
      <div className="fixed inset-0 z-[110] bg-black/75 backdrop-blur-sm flex items-center justify-center p-6" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setShowRankDetails(false) }}>
       <SubToolboxOutputCard
@@ -634,6 +633,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     )}
 
     )}
+     </>
 
     <input type="file" ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
    </div>
