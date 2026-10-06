@@ -102,7 +102,7 @@ const FieldActions: React.FC<{
 }> = ({ field, onGenerate, onRefine, onAnalyze }) => {
   if (!onGenerate && !onRefine && !onAnalyze) return null
   return (
-    <SubToolboxActions columns={3} className="mt-2">
+    <SubToolboxActions columns={3} forceRow className="mt-2">
       {onGenerate ? <SubToolboxSplitButton level="l2" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SubToolboxSplitButton> : <span />}
       {onRefine ? <SubToolboxSplitButton level="l2" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SubToolboxSplitButton> : <span />}
       {onAnalyze ? <SubToolboxSplitButton level="l2" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SubToolboxSplitButton> : <span />}
@@ -160,7 +160,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
     onGenerate, onRefine, onAnalyze, actionFields, categoryOptions = [], thumbnailActions,
-    videoUploadLabel, titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
+    videoUploadLabel, thumbnailLabel = "THUMBNAIL", titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
     showVideoUpload = true, showPlaylists = true, showCategory = true,
     tagAnalysis = [], suggestedTags = [], tagInput = "", onTagInputChange, onAddTag,
     onRemoveTag, onAddSuggestedTag, maxTagChars = 500, isAnalyzingTags = false,
@@ -193,11 +193,11 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           {shouldShowActions("title") ? <FieldActions field="title" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
-        <SubToolboxSection label="THUMBNAIL">
+        <SubToolboxSection>
           {thumbnailPreview ? (
-            <ThumbnailMiniSubToolbox title="THUMBNAIL" icon={<ImageIcon size={18} />} src={thumbnailPreview} alt="Video thumbnail" actions={thumbnailActions} />
+            <ThumbnailMiniSubToolbox title="THUMBNAIL" icon={<ImageIcon size={18} />} overlayLabel={thumbnailLabel} src={thumbnailPreview} alt="Video thumbnail" actions={thumbnailActions} />
           ) : onThumbnailFileChange ? (
-            <SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : "SELECT THUMBNAIL"} icon={<ImageIcon size={28} />} accept="image/jpeg,image/png,image/webp" onFiles={files => onThumbnailFileChange(files?.[0] || null)} />
+            <div className="relative"><SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : "SELECT THUMBNAIL"} icon={<ImageIcon size={28} />} accept="image/jpeg,image/png,image/webp" onFiles={files => onThumbnailFileChange(files?.[0] || null)} />
           ) : <SubToolboxStatusBadge level="l1">THUMBNAIL NOT SELECTED</SubToolboxStatusBadge>}
           {shouldShowActions("thumbnail") ? <FieldActions field="thumbnail" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
