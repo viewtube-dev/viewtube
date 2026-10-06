@@ -24,6 +24,7 @@ import {
  hasGeminiKey,
 } from "../services/gemini"
 import type { TagSuggestion } from "../services/gemini"
+import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import {
  X,
  Plus,
@@ -165,6 +166,11 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [editTags, setEditTags] = useState("")
  const [editPrivacy, setEditPrivacy] = useState("public")
  const [editCategoryId, setEditCategoryId] = useState("27")
+ const [editAudience, setEditAudience] = useState(false)
+ const [editTimestamps, setEditTimestamps] = useState("")
+ const [editLocation, setEditLocation] = useState("")
+ const [editCommunity, setEditCommunity] = useState(false)
+ const [editAiUse, setEditAiUse] = useState(true)
 
  const [userPlaylists, setUserPlaylists] = useState<Playlist[]>([])
  const [currentPlaylists, setCurrentPlaylists] = useState<PlaylistMembership[]>([])
@@ -683,145 +689,41 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        </SubToolboxShellAction>
       )}
 
-      <SubToolbox
-       title="Video Details"
-       icon={<Settings size={20} strokeWidth={3} />}
-       collapsible
-       isOpenInitial
-      >
-       <SubToolboxStack density="dense">
-        <SubToolboxLabeledInput
-         id="video-manager-title"
-         level="l1"
-         overlayLabel="TITLE"
-         aria-label="Video title"
-         value={editTitle}
-         onChange={(event) => setEditTitle(event.target.value)}
-         placeholder=" "
-         disabled={!connected || !selectedVideo}
-        />
-
-        <ThumbnailMiniSubToolbox
-         title="Thumbnail"
-         icon={<ImageIcon size={18} strokeWidth={3} />}
-         className="vm-thumbnail-mini"
-         src={thumbnailPreview || selectedVideo?.thumbnail || null}
-         alt={`${editTitle || "Video"} thumbnail`}
-         emptyLabel={catalogLoading ? "LOADING THUMBNAIL" : "SELECT A VIDEO TO LOAD THUMBNAIL"}
-         previewClassName={isDraggingThumbnail ? "is-dragging" : ""}
-         onDragOver={(event) => { if (!connected || !selectedVideo) return; event.preventDefault(); setIsDraggingThumbnail(true) }}
-         onDragLeave={() => setIsDraggingThumbnail(false)}
-         onDrop={(event) => {
-          if (!connected || !selectedVideo) return
-          event.preventDefault()
-          setIsDraggingThumbnail(false)
-          if (event.dataTransfer.files[0]) handleThumbnailChange(event.dataTransfer.files[0])
-         }}
-         actions={(
-          <>
-           <SubToolboxButton
-            level="l2"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={!connected || !selectedVideo}
-           >
-            Upload
-           </SubToolboxButton>
-           <SubToolboxButton
-            level="l2"
-            onClick={() => navigate("/thumbnail-studio", { state: { source: "video-manager", videoId: selectedVideoId, title: editTitle, thumbnail: thumbnailPreview || selectedVideo?.thumbnail || null } })}
-            disabled={!selectedVideoId}
-           >
-            Generate
-           </SubToolboxButton>
-          </>
-         )}
-        />
-
-        <SubToolboxLabeledTextArea
-         level="l1"
-         overlayLabel="DESCRIPTION"
-         aria-label="Video description"
-         value={editDescription}
-         onChange={(event) => setEditDescription(event.target.value)}
-         height="fill"
-         className="vm-description-field"
-         placeholder=" "
-         disabled={!connected || !selectedVideo}
-        />
-
-        <SubToolboxSection label="Publishing Controls">
-         <SubToolboxGrid minItemWidth="compact" className="vm-publishing-grid">
-          <SubToolboxTopTitleDropdown
-           level="l1"
-           label="PRIVACY"
-           value={editPrivacy}
-           options={[{ value: "public", label: "public" }, { value: "unlisted", label: "unlisted" }, { value: "private", label: "private" }]}
-           onValueChange={setEditPrivacy}
-           ariaLabel="Video privacy"
-          />
-          <SubToolboxTopTitleDropdown
-           level="l1"
-           label="CATEGORY"
-           value={selectedCategoryLabel}
-           options={categoryOptions.map((option) => ({ value: option.value, label: option.label }))}
-           onValueChange={setEditCategoryId}
-           ariaLabel="Video category"
-          />
-          <SubToolboxTopTitleDropdown
-           level="l1"
-           label="PLAYLISTS"
-           value={!connected ? "CONNECT CHANNEL" : catalogLoading ? "LOADING..." : selectedPlaylistIds.length === 0 ? "NONE SELECTED" : `${selectedPlaylistIds.length} LINKED`}
-           options={userPlaylists.map((playlist) => ({ value: playlist.id, label: playlist.title }))}
-           onValueChange={togglePlaylist}
-           multiSelect
-           selectedValues={selectedPlaylistIds}
-           ariaLabel="Video playlists"
-          />
-         </SubToolboxGrid>
-        </SubToolboxSection>
-       </SubToolboxStack>
-      </SubToolbox>
-
-      <SubToolbox title="Video Tags" icon={<Tag size={20} strokeWidth={3} />} collapsible isOpen={isTagsExpanded} onToggle={() => setIsTagsExpanded((prev) => !prev)}>
-       <SubToolboxStack density="dense">
-        <SubToolboxTagEditor
-         level="l1"
-         tags={editTags.split(",").map((tag) => tag.trim()).filter(Boolean)}
-         onTagsChange={handleManagedTagsChange}
-         addIcon={<Plus size={18} strokeWidth={3} />}
-         saveIcon={<CheckCircle size={18} strokeWidth={3} />}
-         removeIcon={<X size={13} strokeWidth={3.2} />}
-         label="VIDEO TAGS"
-        />
-        <span className="vm-tag-character-count">{editTags.length}/{MAX_TAG_CHARS}</span>
-
-        <SubToolboxActions columns={2} className="vm-tag-actions">
-         <SubToolboxButton size="action" onClick={handleGenerateTags} disabled={!connected || !selectedVideo || isGeneratingTags || editTags.length >= MAX_TAG_CHARS}>
-          {isGeneratingTags ? "Scanning Market..." : "Generate High Ranking Video Tags"}
-         </SubToolboxButton>
-         <SubToolboxButton type="button" size="action" tone="neutral" onClick={handleRankTags} disabled={!connected || !selectedVideo || isAnalyzingTags || !editTags}>
-          {isAnalyzingTags ? "Ranking..." : existingTagAnalysis.length > 0 ? "View Rankings" : "Rank Tags"}
-         </SubToolboxButton>
-        </SubToolboxActions>
-
-        {suggestedTags.length > 0 ? (
-         <SubToolboxSection label="Ranked Suggestions">
-          <SubToolboxSurface className="flex flex-wrap gap-2">
-           {suggestedTags.map((suggestion) => (
-            <TagBadge
-             key={suggestion.tag}
-             tag={suggestion.tag}
-             isSuggested
-             isAdded={editTags.toLowerCase().includes(suggestion.tag.toLowerCase())}
-             onAdd={() => handleAddTag(suggestion.tag, suggestion)}
-             analysis={suggestion}
-            />
-           ))}
-          </SubToolboxSurface>
-         </SubToolboxSection>
-        ) : null}
-       </SubToolboxStack>
-      </SubToolbox>
+      <CanonicalMetadataSections
+       title={editTitle}
+       description={editDescription}
+       tags={editTags}
+       category={editCategoryId}
+       playlists={selectedPlaylistIds.join(", ")}
+       thumbnailPreview={thumbnailPreview || selectedVideo?.thumbnail || null}
+       visibility={editPrivacy}
+       audience={editAudience}
+       timestamps={editTimestamps}
+       location={editLocation}
+       community={editCommunity}
+       aiUse={editAiUse}
+       onTitleChange={setEditTitle}
+       onDescriptionChange={setEditDescription}
+       onTagsChange={setEditTags}
+       onCategoryChange={setEditCategoryId}
+       onPlaylistsChange={(value) => setSelectedPlaylistIds(value.split(/[\\n,]/).map(item => item.trim()).filter(Boolean))}
+       onVisibilityChange={setEditPrivacy}
+       onAudienceChange={setEditAudience}
+       onTimestampsChange={setEditTimestamps}
+       onLocationChange={setEditLocation}
+       onCommunityChange={setEditCommunity}
+       onAiUseChange={setEditAiUse}
+       onGenerate={(field) => { if (field === "tags") void handleGenerateTags() }}
+       onAnalyze={(field) => { if (field === "tags") void handleRankTags() }}
+       thumbnailActions={
+        <>
+         <SubToolboxButton level="l2" onClick={() => fileInputRef.current?.click()} disabled={!connected || !selectedVideo}>UPLOAD</SubToolboxButton>
+         <SubToolboxButton level="l2" onClick={() => navigate("/thumbnail-studio", { state: { source: "video-manager", videoId: selectedVideoId, title: editTitle, thumbnail: thumbnailPreview || selectedVideo?.thumbnail || null } })} disabled={!selectedVideoId}>GENERATE</SubToolboxButton>
+        </>
+       }
+       categoryOptions={categoryOptions}
+       videoUploadLabel={selectedVideo ? <>{selectedVideo.title}<br />PUBLISHED VIDEO SELECTED</> : "SELECT A PUBLISHED VIDEO ABOVE"}
+      />
 
       <SubToolboxGridActionButton
        onClick={connected ? handleSave : () => auth.login("/video-manager")}
