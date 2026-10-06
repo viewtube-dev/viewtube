@@ -1,0 +1,1233 @@
+/* Widget Library v12 matrix primitives.
+   Loaded after widgetPrimitiveTones.css so the shared --vt-tone-* tokens are
+   already resolved. Every control here is a .vt-sized-control, so the exact
+   height lattice in widgetPrimitiveExactHeights.css owns its box height and
+   these rules only describe the interior. */
+
+.widget-icon-button,
+.widget-icon-badge,
+.widget-stepper,
+.widget-pagination,
+.widget-split-badge,
+.widget-search-input,
+.widget-live-badge,
+.widget-spectrum-fill-badge,
+.widget-toggle-switch,
+.widget-radio,
+.widget-checkbox {
+  box-sizing: border-box;
+  font-family: inherit;
+  color: var(--vt-tone-ink, var(--widget-ink, #243247));
+  transition: background 160ms ease, border-color 160ms ease, transform 90ms linear,
+    box-shadow 90ms linear;
+}
+
+/* These controls size to their contents. Without this they stretch to fill a
+   grid/flex parent (the reference library lays each variant out in a grid,
+   whose items default to justify-self: stretch). */
+.widget-stepper,
+.widget-pagination,
+.widget-split-badge,
+.widget-search-input,
+.widget-live-badge,
+.widget-spectrum-fill-badge {
+  width: fit-content;
+  max-width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Compound controls own their internal cells. The base .vt-primitive adds
+   horizontal padding and gap for ordinary buttons; on steppers, pagination,
+   split badges and search controls that padding/gap appears as the unwanted
+   empty strips visible beside square bays. Reset both here. */
+.widget-stepper,
+.widget-pagination,
+.widget-split-badge,
+.widget-search-input {
+  padding: 0 !important;
+  gap: 0 !important;
+  justify-content: flex-start;
+}
+
+/* ── Square icon button / badge ─────────────────────────────── */
+.widget-icon-button,
+.widget-icon-badge {
+  aspect-ratio: 1 / 1;
+  width: var(--vt-primitive-height);
+  min-width: var(--vt-primitive-height);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid var(--vt-tone-stroke, currentColor);
+  border-radius: var(--vt-primitive-radius, 6px);
+  background: var(--vt-tone-bg, #fff);
+  cursor: pointer;
+}
+.widget-icon-button {
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--widget-color, #243247) 50%, transparent);
+}
+.widget-icon-badge { cursor: default; }
+.widget-icon-button:hover:not(:disabled) {
+  filter: brightness(0.97);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--widget-color, #243247) 50%, transparent);
+}
+.widget-icon-button:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+.widget-icon-button:disabled { opacity: 0.45; cursor: not-allowed; }
+.widget-icon-button-glyph {
+  display: grid;
+  place-items: center;
+  width: var(--vt-primitive-icon);
+  height: var(--vt-primitive-icon);
+}
+.widget-icon-button-glyph > svg {
+  width: var(--vt-primitive-icon);
+  height: var(--vt-primitive-icon);
+  stroke: currentColor;
+  stroke-width: var(--vt-primitive-icon-stroke);
+  fill: none;
+}
+
+/* ── Stepper ────────────────────────────────────────────────── */
+.widget-stepper,
+.widget-pagination {
+  display: inline-flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 2px solid var(--vt-tone-stroke, currentColor);
+  border-radius: 6px;
+  background: #fff;
+  font-weight: 900;
+  line-height: 1;
+}
+.widget-stepper-step {
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: var(--vt-tone-fill, var(--widget-color, #34cdea));
+  color: inherit;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.widget-stepper-step:hover:not(:disabled) { filter: brightness(0.95); }
+.widget-stepper-step:disabled { opacity: 0.4; cursor: not-allowed; }
+.widget-stepper-value {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 2.7ch;
+  min-width: 2.7ch;
+  max-width: 2.7ch;
+  padding: 0 0.12em;
+  border-inline: 2px solid var(--vt-tone-stroke, currentColor);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  background: #fff;
+}
+
+/* ── Pagination ─────────────────────────────────────────────── */
+.widget-pagination-page {
+  min-width: var(--vt-primitive-height);
+  padding: 0 0.4em;
+  border: 0;
+  border-inline-end: 2px solid var(--vt-tone-stroke, currentColor);
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.widget-pagination-page:last-child { border-inline-end: 0; }
+.widget-pagination-page:hover:not(.is-active) {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 22%, white);
+}
+.widget-pagination-page.is-active {
+  background: var(--vt-tone-fill, var(--widget-color, #34cdea));
+}
+
+/* ── Split-left badge ───────────────────────────────────────── */
+.widget-split-badge,
+.widget-search-input {
+  display: inline-flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 2px solid var(--vt-tone-stroke, currentColor);
+  border-radius: 6px;
+  background: var(--vt-tone-bg, #fff);
+}
+.widget-split-badge-icon,
+.widget-search-input-icon {
+  width: var(--vt-primitive-height);
+  min-width: var(--vt-primitive-height);
+  height: var(--vt-primitive-height);
+  flex: 0 0 var(--vt-primitive-height);
+  display: grid;
+  place-items: center;
+  border-inline-end: 2px solid var(--vt-tone-stroke, currentColor);
+  background: var(--vt-tone-fill, var(--widget-color, #34cdea));
+}
+.widget-split-badge-icon > svg,
+.widget-search-input-icon > svg {
+  width: var(--vt-primitive-icon);
+  height: var(--vt-primitive-icon);
+  stroke: currentColor;
+  stroke-width: var(--vt-primitive-icon-stroke);
+  fill: none;
+}
+.is-icon-white-on-color > .widget-split-badge-icon,
+.is-icon-white-on-color > .widget-search-input-icon { color: #fff; }
+.is-icon-color-on-light > .widget-split-badge-icon,
+.is-icon-color-on-light > .widget-search-input-icon {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 20%, white);
+  color: var(--widget-ink, #243247);
+}
+.widget-split-badge-label {
+  display: grid;
+  place-items: center;
+  padding: 0 0.7em;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ── Split-left search bar ────────────────────────────────────
+   Default/primary search editing surfaces use the same Community Post field
+   state contract as canonical text inputs and textareas. */
+.widget-search-input:not(.is-tone-secondary) {
+  border-color: var(--widget-field-rest-stroke, color-mix(in srgb, var(--widget-color, #34cdea) 52%, white));
+  background: #fff;
+}
+.widget-search-input > input {
+  flex: 0 1 auto;
+  width: 9ch;
+  min-width: 0;
+  border: 0;
+  padding: 0 0.6em;
+  background: transparent;
+  color: var(--vt-tone-ink, var(--widget-ink, #243247));
+  caret-color: var(--widget-color, #34cdea);
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+}
+.widget-search-input > input::placeholder {
+  color: currentColor;
+  opacity: .52;
+  transition: opacity 120ms ease;
+}
+.widget-search-input:focus-within > input::placeholder {
+  opacity: .12;
+}
+.widget-search-input > input::-webkit-search-cancel-button { cursor: pointer; }
+.widget-search-input:focus-within {
+  border-color: var(--widget-field-focus-border) !important;
+  background: var(--widget-field-focus-fill) !important;
+  box-shadow:
+    0 0 0 3px var(--widget-field-focus-ring),
+    0 0 16px 2px var(--widget-field-focus-glow);
+}
+
+/* ── Live badge ─────────────────────────────────────────────── */
+.widget-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0 0.75em;
+  border-radius: 999px;
+  background: var(--vt-tone-fill, var(--widget-color, #34cdea));
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.widget-live-badge-dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 999px;
+  background: currentColor;
+  animation: widget-live-pulse 1.6s ease-in-out infinite;
+}
+@keyframes widget-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.75); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-live-badge-dot { animation: none; }
+}
+
+/* ── 12-colour borderless fill badge, white text ────────────── */
+.widget-spectrum-fill-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.75em;
+  border: 0;
+  border-radius: var(--vt-primitive-radius, 6px);
+  background: var(--widget-spectrum-fill, #528FFA);
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+
+.widget-spectrum-fill-badge.is-width-full,
+.widget-split-badge.is-width-full {
+  grid-column: full-start / full-end;
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+}
+.widget-split-badge.is-width-full .widget-split-badge-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ── Toggle switch ──────────────────────────────────────────── */
+.widget-toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: calc(var(--vt-primitive-height) * 1.7);
+  min-width: calc(var(--vt-primitive-height) * 1.7);
+  padding: 0;
+  border: 2px solid var(--vt-tone-stroke, currentColor);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--widget-ink, #243247) 12%, #fff);
+  cursor: pointer;
+}
+.widget-toggle-switch.is-checked { background: var(--vt-tone-fill, var(--widget-color, #34cdea)); }
+.widget-toggle-switch:disabled { opacity: 0.45; cursor: not-allowed; }
+.widget-toggle-switch-thumb {
+  position: absolute;
+  inset-block: 2px;
+  inset-inline-start: 2px;
+  aspect-ratio: 1 / 1;
+  height: calc(100% - 4px);
+  border: 0;
+  border-radius: 999px;
+  background: var(--vt-tone-stroke, currentColor);
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.widget-toggle-switch.is-checked .widget-toggle-switch-thumb {
+  transform: translateX(calc(var(--vt-primitive-height) * 0.7));
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-toggle-switch-thumb { transition: none; }
+}
+
+/* ── Radio + checkbox ───────────────────────────────────────── */
+.widget-radio,
+.widget-checkbox {
+  aspect-ratio: 1 / 1;
+  width: var(--vt-primitive-height);
+  min-width: var(--vt-primitive-height);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid var(--vt-tone-stroke, currentColor);
+  background: #fff;
+  cursor: pointer;
+}
+.widget-radio { border-radius: 999px; }
+.widget-checkbox { border-radius: var(--vt-primitive-radius, 6px); }
+.widget-radio:disabled,
+.widget-checkbox:disabled { opacity: 0.45; cursor: not-allowed; }
+.widget-radio-dot {
+  width: 55%;
+  height: 55%;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: inset 0 0 0 0 var(--vt-tone-fill, var(--widget-color, #34cdea));
+  transform: scale(.2);
+  opacity: 0;
+  transition: background 120ms ease, transform 120ms ease, opacity 120ms ease;
+}
+.widget-radio.is-checked .widget-radio-dot,
+.widget-radio[aria-checked="true"] .widget-radio-dot {
+  background: var(--vt-tone-fill, var(--widget-color, #34cdea)) !important;
+  box-shadow: inset 0 0 0 999px var(--vt-tone-fill, var(--widget-color, #34cdea));
+  transform: scale(1);
+  opacity: 1;
+}
+.widget-checkbox.is-checked { background: var(--vt-tone-fill, var(--widget-color, #34cdea)); }
+.widget-checkbox > svg {
+  width: var(--vt-primitive-icon);
+  height: var(--vt-primitive-icon);
+  stroke: currentColor;
+  stroke-width: var(--vt-primitive-icon-stroke);
+  fill: none;
+}
+
+/* ── 18px rule: filled, borderless, shadowless ──────────────── */
+.is-height-18.widget-icon-button,
+.is-height-18.widget-icon-badge,
+.is-height-18.widget-stepper,
+.is-height-18.widget-pagination,
+.is-height-18.widget-split-badge,
+.is-height-18.widget-search-input,
+.is-height-18.widget-toggle-switch,
+.is-height-18.widget-radio,
+.is-height-18.widget-checkbox {
+  border-width: 0;
+  box-shadow: none;
+}
+.is-height-18 .widget-stepper-value { border-inline-width: 0; }
+.is-height-18 .widget-pagination-page { border-inline-end-width: 0; }
+.is-height-18 .widget-split-badge-icon,
+.is-height-18 .widget-search-input-icon { border-inline-end-width: 0; }
+.is-height-18 .widget-toggle-switch-thumb { border-width: 0; }
+
+/* Visually hidden label text for controls whose label is not rendered. */
+.vt-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 12-slot spectrum tones ─────────────────────────────────────
+   One class per VT_SPECTRUM_PALETTE_06 slot. These drive both the
+   borderless fill badge and the split-left badge's icon bay, so a
+   spectrum choice reads the same on every primitive that takes one.
+
+   WidgetSpectrumFillBadge has always emitted `is-spectrum-<name>`,
+   but nothing defined those classes and nothing set
+   --widget-spectrum-fill, so all twelve rendered the same royal
+   fallback. A gate in WidgetPrimitives.test.tsx now asserts every
+   spectrum name has a rule here and that the hex matches the
+   palette, since CSS cannot import the TS token.
+   ─────────────────────────────────────────────────────────────── */
+.widget-spectrum-fill-badge.is-spectrum-rose,
+.widget-toast.is-spectrum-rose,
+.widget-split-badge.is-spectrum-rose { --widget-spectrum-fill: #FA618A; --vt-tone-fill: #FA618A; }
+.widget-spectrum-fill-badge.is-spectrum-coral,
+.widget-toast.is-spectrum-coral,
+.widget-split-badge.is-spectrum-coral { --widget-spectrum-fill: #FF7F6B; --vt-tone-fill: #FF7F6B; }
+.widget-spectrum-fill-badge.is-spectrum-orange,
+.widget-toast.is-spectrum-orange,
+.widget-split-badge.is-spectrum-orange { --widget-spectrum-fill: #FFA85C; --vt-tone-fill: #FFA85C; }
+.widget-spectrum-fill-badge.is-spectrum-yellow,
+.widget-toast.is-spectrum-yellow,
+.widget-split-badge.is-spectrum-yellow { --widget-spectrum-fill: #FFDA47; --vt-tone-fill: #FFDA47; }
+.widget-spectrum-fill-badge.is-spectrum-lime,
+.widget-toast.is-spectrum-lime,
+.widget-split-badge.is-spectrum-lime { --widget-spectrum-fill: #C0F240; --vt-tone-fill: #C0F240; }
+.widget-spectrum-fill-badge.is-spectrum-green,
+.widget-toast.is-spectrum-green,
+.widget-split-badge.is-spectrum-green { --widget-spectrum-fill: #3FEE56; --vt-tone-fill: #3FEE56; }
+.widget-spectrum-fill-badge.is-spectrum-teal,
+.widget-toast.is-spectrum-teal,
+.widget-split-badge.is-spectrum-teal { --widget-spectrum-fill: #4EE4BE; --vt-tone-fill: #4EE4BE; }
+.widget-spectrum-fill-badge.is-spectrum-cyan,
+.widget-toast.is-spectrum-cyan,
+.widget-split-badge.is-spectrum-cyan { --widget-spectrum-fill: #36E0F6; --vt-tone-fill: #36E0F6; }
+.widget-spectrum-fill-badge.is-spectrum-royal,
+.widget-toast.is-spectrum-royal,
+.widget-split-badge.is-spectrum-royal { --widget-spectrum-fill: #528FFA; --vt-tone-fill: #528FFA; }
+.widget-spectrum-fill-badge.is-spectrum-purple,
+.widget-toast.is-spectrum-purple,
+.widget-split-badge.is-spectrum-purple { --widget-spectrum-fill: #A467F4; --vt-tone-fill: #A467F4; }
+.widget-spectrum-fill-badge.is-spectrum-magenta,
+.widget-toast.is-spectrum-magenta,
+.widget-split-badge.is-spectrum-magenta { --widget-spectrum-fill: #F55EFC; --vt-tone-fill: #F55EFC; }
+.widget-spectrum-fill-badge.is-spectrum-pink,
+.widget-toast.is-spectrum-pink,
+.widget-split-badge.is-spectrum-pink { --widget-spectrum-fill: #FF7AC8; --vt-tone-fill: #FF7AC8; }
+
+/* Spectrum badges/toasts keep their own hue identity while using a darker
+   same-hue Tone Ink for readable stroke/text/icon contrast. They never inherit
+   unrelated parent Widget Ink and never fall back to black/neutral grey. */
+.widget-spectrum-fill-badge[class*="is-spectrum-"],
+.widget-split-badge[class*="is-spectrum-"] {
+  --widget-spectrum-ink: color-mix(in srgb, var(--widget-spectrum-fill) 62%, var(--vt-ink) 38%);
+  border: 2px solid var(--widget-spectrum-ink) !important;
+  background: color-mix(in srgb, var(--widget-spectrum-fill) 18%, #fff) !important;
+  color: var(--widget-spectrum-ink) !important;
+  --vt-tone-stroke: var(--widget-spectrum-ink);
+  --vt-tone-ink: var(--widget-spectrum-ink);
+}
+
+.widget-spectrum-fill-badge[class*="is-spectrum-"] svg,
+.widget-split-badge[class*="is-spectrum-"] svg {
+  color: var(--widget-spectrum-ink) !important;
+  stroke: var(--widget-spectrum-ink) !important;
+}
+
+.widget-split-badge[class*="is-spectrum-"] .widget-split-badge-icon {
+  border-color: var(--widget-spectrum-ink) !important;
+  background: color-mix(in srgb, var(--widget-spectrum-fill) 28%, #fff) !important;
+  color: var(--widget-spectrum-ink) !important;
+}
+
+.widget-toast[class*="is-spectrum-"] {
+  --widget-toast-hue: var(--widget-spectrum-fill);
+  --widget-toast-ink: var(--widget-spectrum-ink);
+}
+
+/* ── Toast / alert ──────────────────────────────────────────────
+   Icon bay, body (title + optional detail), optional dismiss.
+   Not a .vt-sized-control: a toast wraps to its content, so the
+   exact-height lattice must not own its box. Semantic statuses map
+   onto spectrum slots via resolveBadgeHue, so an alert never
+   introduces a colour outside the palette.
+   ─────────────────────────────────────────────────────────────── */
+.widget-toast {
+  --widget-toast-hue: var(--widget-color, #34cdea);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 2px solid var(--widget-toast-ink, var(--vt-tone-stroke, var(--widget-ink, #243247)));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--widget-toast-hue) 16%, #fff);
+  color: var(--widget-toast-ink, var(--widget-ink, #243247));
+  box-shadow: 3px 3px 0 0 color-mix(in srgb, var(--widget-toast-hue) 55%, transparent);
+  font-family: inherit;
+}
+.widget-toast-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  border: 2px solid var(--widget-toast-ink, var(--vt-tone-stroke, var(--widget-ink, #243247)));
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--widget-toast-hue) 22%, #fff);
+  color: var(--widget-toast-ink, var(--widget-toast-hue));
+}
+.widget-toast-icon > svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.widget-toast-body { min-width: 0; }
+.widget-toast-title {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+.widget-toast-detail {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  opacity: 0.75;
+  overflow-wrap: anywhere;
+}
+.widget-toast-dismiss {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 2px solid var(--widget-toast-ink, var(--vt-tone-stroke, var(--widget-ink, #243247)));
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--widget-toast-hue) 10%, #fff);
+  color: var(--widget-toast-ink, inherit);
+  cursor: pointer;
+}
+.widget-toast-dismiss > svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+}
+.widget-toast-dismiss:hover { filter: brightness(0.96); transform: translate(1px, 1px); }
+
+/* A phone-width widget gives the copy the whole row. */
+@container vt-widget (max-width: 380px) {
+  .widget-toast { gap: 8px; padding: 8px 10px; }
+  .widget-toast-icon { width: 28px; min-width: 28px; height: 28px; }
+  .widget-toast-icon > svg { width: 16px; height: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-toast-dismiss:hover { transform: none; }
+}
+
+
+/* Reference-library contract repair: square inner split bays, visible state
+   glyphs, and canonical typography for compound controls. */
+.widget-split-badge-icon,
+.widget-search-input-icon {
+  width: calc(var(--vt-primitive-height) - 4px) !important;
+  min-width: calc(var(--vt-primitive-height) - 4px) !important;
+  height: calc(var(--vt-primitive-height) - 4px) !important;
+  flex: 0 0 calc(var(--vt-primitive-height) - 4px) !important;
+}
+.is-height-18 > .widget-split-badge-icon,
+.is-height-18 > .widget-search-input-icon {
+  width: var(--vt-primitive-height) !important;
+  min-width: var(--vt-primitive-height) !important;
+  height: var(--vt-primitive-height) !important;
+  flex-basis: var(--vt-primitive-height) !important;
+}
+
+.widget-stepper-step,
+.widget-pagination-page {
+  box-sizing: border-box;
+  width: calc(var(--vt-primitive-height) - 4px);
+  min-width: calc(var(--vt-primitive-height) - 4px) !important;
+  padding-inline: 0;
+  flex: 0 0 calc(var(--vt-primitive-height) - 4px);
+}
+.is-height-18 > .widget-stepper-step,
+.is-height-18 > .widget-pagination-page {
+  width: var(--vt-primitive-height);
+  min-width: var(--vt-primitive-height) !important;
+  flex-basis: var(--vt-primitive-height);
+}
+
+.widget-split-badge-label,
+.widget-search-input > input,
+.widget-stepper,
+.widget-pagination,
+.widget-spectrum-fill-badge {
+  font-size: var(--vt-primitive-font) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+}
+
+/* Selection marks stay inside the widget palette, but are deliberately
+   lighter than ViewTube Ink. Primary controls use a pale tint for contrast
+   against their filled surface; default/secondary controls use a stronger
+   widget-color tint. */
+.widget-radio.is-tone-default,
+.widget-checkbox.is-tone-default {
+  --vt-selection-mark: color-mix(in srgb, var(--widget-color, #34cdea) 84%, white);
+}
+.widget-radio.is-tone-primary,
+.widget-checkbox.is-tone-primary {
+  --vt-selection-mark: color-mix(in srgb, var(--widget-color, #34cdea) 34%, white);
+}
+.widget-radio.is-tone-secondary,
+.widget-checkbox.is-tone-secondary {
+  --vt-selection-mark: color-mix(in srgb, var(--widget-color, #34cdea) 74%, white);
+}
+
+/* Radio selection is drawn independently of the tone fill so it can never
+   disappear when foreground/background colors coincide. */
+.widget-radio { position: relative; }
+.widget-radio.is-checked .widget-radio-dot,
+.widget-radio[aria-checked="true"] .widget-radio-dot { opacity: 0 !important; }
+.widget-radio.is-checked::after,
+.widget-radio[aria-checked="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 24%;
+  border-radius: 50%;
+  background: var(--vt-selection-mark, color-mix(in srgb, var(--widget-color, #34cdea) 78%, white)) !important;
+  opacity: 1 !important;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Checked boxes use a large thick rounded X, rendered in CSS so nested SVG
+   rules cannot suppress it. */
+.widget-checkbox { position: relative; }
+.widget-checkbox.is-checked > svg,
+.widget-checkbox[aria-checked="true"] > svg { display: none !important; }
+.widget-checkbox.is-checked::before,
+.widget-checkbox.is-checked::after,
+.widget-checkbox[aria-checked="true"]::before,
+.widget-checkbox[aria-checked="true"]::after {
+  content: "";
+  position: absolute;
+  left: 17%;
+  top: 44%;
+  width: 66%;
+  height: max(3px, calc(var(--vt-primitive-height) * .12));
+  border-radius: 999px;
+  background: var(--vt-selection-mark, color-mix(in srgb, var(--widget-color, #34cdea) 78%, white)) !important;
+  z-index: 2;
+  pointer-events: none;
+}
+.widget-checkbox.is-checked::before,
+.widget-checkbox[aria-checked="true"]::before { transform: rotate(45deg); }
+.widget-checkbox.is-checked::after,
+.widget-checkbox[aria-checked="true"]::after { transform: rotate(-45deg); }
+
+
+/* ── Split-left counter ───────────────────────────────────────
+   One square left bay, divided horizontally into two 2:1 chevron buttons,
+   plus a compact two-digit value cell on the right. */
+.widget-split-counter {
+  --widget-split-counter-bay: calc(var(--vt-primitive-height) - var(--vt-primitive-stroke, 2px) - var(--vt-primitive-stroke, 2px));
+  box-sizing: border-box;
+  display: inline-grid;
+  grid-template-columns: var(--widget-split-counter-bay) 2.7ch;
+  align-items: stretch;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border: var(--vt-primitive-stroke, 2px) solid var(--vt-tone-stroke, currentColor);
+  border-radius: var(--vt-primitive-radius, 6px);
+  background: var(--vt-tone-bg, #fff);
+  color: var(--vt-tone-ink, var(--widget-ink, #243247));
+  font-family: inherit;
+  font-size: var(--vt-primitive-font);
+  font-weight: 1000;
+  line-height: 1;
+}
+.widget-split-counter-controls {
+  box-sizing: border-box;
+  width: var(--widget-split-counter-bay);
+  min-width: var(--widget-split-counter-bay);
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  border-inline-end: var(--vt-primitive-stroke, 2px) solid var(--vt-tone-stroke, currentColor);
+  background: var(--vt-tone-fill, var(--widget-color, #34cdea));
+}
+.widget-split-counter-controls > button {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.widget-split-counter-controls > button + button {
+  border-block-start: max(1px, var(--vt-primitive-stroke, 2px)) solid var(--vt-tone-stroke, currentColor);
+}
+.widget-split-counter-controls > button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+.widget-split-counter-controls svg {
+  width: min(var(--vt-primitive-icon), var(--vt-primitive-font), calc(var(--widget-split-counter-bay) * .42));
+  height: min(var(--vt-primitive-icon), var(--vt-primitive-font), calc(var(--widget-split-counter-bay) * .42));
+  stroke-width: var(--vt-primitive-icon-stroke, 2.5);
+}
+.widget-split-counter-value {
+  box-sizing: border-box;
+  min-width: 2.7ch;
+  width: 2.7ch;
+  display: grid;
+  place-items: center;
+  padding-inline: .12em;
+  background: #fff;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.is-height-18.widget-split-counter {
+  border-width: 0;
+  box-shadow: none;
+}
+.is-height-18.widget-split-counter .widget-split-counter-controls {
+  border-inline-end-width: 0;
+}
+.is-height-18.widget-split-counter .widget-split-counter-controls > button + button {
+  border-block-start-width: 1px;
+}
+
+/* ── Tiny spectrum icon set ─────────────────────────────────── */
+.widget-tiny-spectrum-icon {
+  --widget-tiny-icon-color: var(--widget-color, #34cdea);
+  box-sizing: border-box;
+  width: var(--vt-primitive-height, 18px);
+  min-width: var(--vt-primitive-height, 18px);
+  height: var(--vt-primitive-height, 18px);
+  display: inline-grid;
+  place-items: center;
+  color: var(--widget-tiny-icon-color);
+}
+.widget-tiny-spectrum-icon > svg {
+  width: 74%;
+  height: 74%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+.widget-tiny-spectrum-icon.is-height-32 > svg { width: 78%; height: 78%; }
+.widget-tiny-spectrum-icon.is-height-38 > svg { width: 80%; height: 80%; }
+
+/* ── Accent rail module ───────────────────────────────────────
+   The accent physically touches the module border: no wrapper padding,
+   no inset rail, and no empty edge between the rail and stroke. */
+.widget-accent-rail-module {
+  --widget-module-accent: var(--widget-color, #34cdea);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 7px minmax(0, 1fr) auto;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+  border: var(--widget-module-stroke, 2px) solid var(--widget-border, #243247);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--widget-border, #243247);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--widget-module-accent) 36%, transparent);
+}
+.widget-accent-rail {
+  align-self: stretch;
+  width: 100%;
+  min-height: 100%;
+  background: var(--widget-module-accent);
+}
+.widget-accent-rail-copy {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  padding: 7px 9px;
+}
+.widget-accent-rail-copy > strong {
+  font-size: 11px;
+  font-weight: 1000;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.widget-accent-rail-copy > small {
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.15;
+  opacity: .66;
+}
+.widget-accent-rail-action {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  padding: 5px 7px 5px 0;
+}
+
+/* ── Icon + title/subtitle module ─────────────────────────────
+   The colored icon bay is the left edge of the module itself, not an inset card. */
+.widget-icon-title-module {
+  --widget-module-accent: var(--widget-color, #34cdea);
+  --widget-icon-title-bay: calc(56px - var(--widget-module-stroke, 2px) - var(--widget-module-stroke, 2px));
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+  min-height: 56px;
+  max-height: 56px;
+  display: grid;
+  grid-template-columns: var(--widget-icon-title-bay) minmax(0, 1fr) auto;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+  border: var(--widget-module-stroke, 2px) solid var(--widget-module-accent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--widget-module-accent) 10%, #fff);
+  color: color-mix(in srgb, var(--widget-module-accent) 68%, var(--widget-border, #243247));
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--widget-module-accent) 32%, transparent);
+}
+.widget-icon-title-module-icon {
+  width: var(--widget-icon-title-bay);
+  min-width: var(--widget-icon-title-bay);
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  border-inline-end: var(--widget-module-stroke, 2px) solid var(--widget-module-accent);
+  background: color-mix(in srgb, var(--widget-module-accent) 32%, #fff);
+}
+.widget-icon-title-module-icon > svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.5;
+}
+.widget-icon-title-module-copy {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: 7px 9px;
+}
+.widget-icon-title-module-copy > strong {
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.widget-icon-title-module-copy > small {
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: var(--widget-border, #243247);
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.widget-icon-title-module-action {
+  display: grid;
+  place-items: center;
+  padding: 7px 8px 7px 0;
+}
+
+/* ── Rainbow surfaces ───────────────────────────────────────── */
+.widget-rainbow-panel {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 10px 10px 16px;
+  border: var(--widget-module-stroke, 2px) solid var(--widget-border, #243247);
+  border-radius: 7px;
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, #36E0F6 26%, transparent), transparent 34%),
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, #FF7AC8 24%, transparent), transparent 34%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, #A467F4 22%, transparent), transparent 36%),
+    radial-gradient(circle at 0% 100%, color-mix(in srgb, #C0F240 22%, transparent), transparent 36%),
+    #fff;
+}
+.widget-rainbow-divider {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 7px;
+  background: linear-gradient(90deg,
+    #FA618A 0 8.333%, #FF7F6B 8.333% 16.666%, #FFA85C 16.666% 25%,
+    #FFDA47 25% 33.333%, #C0F240 33.333% 41.666%, #3FEE56 41.666% 50%,
+    #4EE4BE 50% 58.333%, #36E0F6 58.333% 66.666%, #528FFA 66.666% 75%,
+    #A467F4 75% 83.333%, #F55EFC 83.333% 91.666%, #FF7AC8 91.666% 100%);
+}
+.widget-rainbow-panel > .widget-rainbow-divider {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+}
+
+/* ── Generic widget module frame + composable headers ───────── */
+.widget-module-frame {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: var(--widget-module-stroke, 2px) solid var(--widget-border, #243247);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--widget-border, #243247);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--widget-color, #34cdea) 35%, transparent);
+}
+.widget-module-header {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  padding: 0;
+  border-block-end: var(--widget-module-stroke, 2px) solid var(--widget-border, #243247);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 48%, #fff);
+}
+.widget-module-header.has-icon {
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+}
+.widget-module-header-icon {
+  width: 42px;
+  min-width: 42px;
+  display: grid;
+  place-items: center;
+  border-inline-end: var(--widget-module-stroke, 2px) solid var(--widget-border, #243247);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 72%, #fff);
+}
+.widget-module-header-icon > svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.5;
+}
+.widget-module-header-copy {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 1px;
+  padding: 5px 8px;
+}
+.widget-module-header-copy > strong {
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.widget-module-header-copy > small {
+  min-width: 0;
+  font-size: 8px;
+  font-weight: 850;
+  line-height: 1;
+  opacity: .62;
+  text-transform: uppercase;
+}
+.widget-module-header-controls {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 4px 5px 4px 0;
+}
+.widget-module-header-nav-cluster {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.widget-module-header-nav-cluster.is-choice-cluster {
+  gap: 6px;
+}
+.widget-module-header-controls :is(.widget-header-toggle,.widget-header-stepper,.widget-step-tabs,.widget-control-choice,.widget-control-switch) {
+  max-width: 100%;
+}
+
+.widget-module-frame-body {
+  min-width: 0;
+  padding: 9px;
+}
+.widget-module-frame-footer {
+  min-width: 0;
+  padding: 7px 9px;
+  border-block-start: var(--widget-module-stroke, 2px) solid var(--widget-border, #243247);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 8%, #fff);
+}
+
+@container vt-widget (max-width: 430px) {
+  .widget-module-header-copy > small { display: none; }
+  .widget-module-header { min-height: 38px; }
+  .widget-module-header.has-icon { grid-template-columns: 38px minmax(0, 1fr) auto; }
+  .widget-module-header-icon { width: 38px; min-width: 38px; }
+  .widget-module-header-controls { gap: 2px; padding-inline-end: 3px; }
+}
+
+
+/* ── Alternate tone constructions ─────────────────────────────
+   Tone names are not simple tint levels:
+   DEFAULT   = neutral white/reference construction.
+   PRIMARY   = emphasized tinted construction.
+   SECONDARY = inverse/compound construction with filled structural zones.
+   These overrides intentionally change component anatomy, not just hue. */
+
+/* Secondary stepper: saturated shell and side cells, white glyphs/value.
+   The outer stroke uses the same hue as the fill so the shell reads as one
+   continuous colored chassis rather than another outlined default stepper. */
+.widget-stepper.is-tone-secondary {
+  border-color: var(--widget-color, #34cdea);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-stepper.is-tone-secondary .widget-stepper-step {
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-stepper.is-tone-secondary .widget-stepper-value {
+  border-inline-color: var(--widget-color, #34cdea);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 84%, white);
+  color: #fff;
+}
+.widget-stepper.is-tone-secondary .widget-stepper-step:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 86%, white);
+}
+
+/* Secondary pagination: one saturated strip with white pages; selection is the
+   inverse white tile. This is intentionally opposite the default white strip. */
+.widget-pagination.is-tone-secondary {
+  border-color: var(--widget-color, #34cdea);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-pagination.is-tone-secondary .widget-pagination-page {
+  border-inline-end-color: color-mix(in srgb, #fff 30%, transparent);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-pagination.is-tone-secondary .widget-pagination-page:hover:not(.is-active) {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 82%, white);
+}
+.widget-pagination.is-tone-secondary .widget-pagination-page.is-active {
+  background: #fff;
+  color: var(--widget-color, #34cdea);
+}
+
+/* Secondary split-left search: filled field and filled bay with white glyph /
+   copy. The separator is a soft white structural line instead of dark ink. */
+.widget-search-input.is-tone-secondary {
+  border-color: var(--widget-color, #34cdea);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-search-input.is-tone-secondary .widget-search-input-icon {
+  border-inline-end-color: color-mix(in srgb, #fff 34%, transparent);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-search-input.is-tone-secondary .widget-search-input-icon svg {
+  color: #fff;
+  stroke: #fff;
+}
+.widget-search-input.is-tone-secondary > input {
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+  caret-color: #fff;
+}
+.widget-search-input.is-tone-secondary > input::placeholder {
+  color: #fff;
+  opacity: .58;
+}
+.widget-search-input.is-tone-secondary:focus-within {
+  border-color: var(--widget-color, #34cdea);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 86%, white);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--widget-color, #34cdea) 30%, transparent);
+}
+
+/* Secondary toggle: no stroke. OFF is the inverse state — pale/white track
+   with a colored handle. ON fades to a colored track with a white handle. */
+.widget-toggle-switch.is-tone-secondary {
+  border: 0 !important;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 14%, #fff);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--widget-color, #34cdea) 18%, transparent);
+  transition:
+    background 260ms ease,
+    box-shadow 260ms ease,
+    transform 90ms linear;
+}
+.widget-toggle-switch.is-tone-secondary .widget-toggle-switch-thumb {
+  inset-block: 2px;
+  inset-inline-start: 2px;
+  height: calc(100% - 4px);
+  background: var(--widget-color, #34cdea);
+  transition:
+    transform 240ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 260ms ease,
+    box-shadow 260ms ease;
+}
+.widget-toggle-switch.is-tone-secondary.is-checked {
+  background: var(--widget-color, #34cdea);
+  box-shadow: none;
+}
+.widget-toggle-switch.is-tone-secondary.is-checked .widget-toggle-switch-thumb {
+  background: #fff;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #fff 42%, transparent);
+}
+
+/* Secondary choice controls invert in the same family: pale unselected shell,
+   saturated selected shell, white selected mark. */
+.widget-radio.is-tone-secondary,
+.widget-checkbox.is-tone-secondary {
+  border-color: var(--widget-color, #34cdea);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 12%, #fff);
+  color: var(--widget-color, #34cdea);
+}
+.widget-radio.is-tone-secondary.is-checked,
+.widget-radio.is-tone-secondary[aria-checked="true"],
+.widget-checkbox.is-tone-secondary.is-checked,
+.widget-checkbox.is-tone-secondary[aria-checked="true"] {
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-radio.is-tone-secondary .widget-radio-dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 0 #fff;
+}
+.widget-radio.is-tone-secondary.is-checked .widget-radio-dot,
+.widget-radio.is-tone-secondary[aria-checked="true"] .widget-radio-dot {
+  background: #fff !important;
+  box-shadow: inset 0 0 0 999px #fff;
+}
+
+/* Secondary split-left counter follows the same inverted chassis language as
+   the redesigned stepper. */
+.widget-split-counter.is-tone-secondary {
+  border-color: var(--widget-color, #34cdea);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-split-counter.is-tone-secondary .widget-split-counter-controls {
+  border-inline-end-color: var(--widget-color, #34cdea);
+  background: var(--widget-color, #34cdea);
+  color: #fff;
+}
+.widget-split-counter.is-tone-secondary .widget-split-counter-controls > button + button {
+  border-block-start-color: color-mix(in srgb, #fff 30%, transparent);
+}
+.widget-split-counter.is-tone-secondary .widget-split-counter-controls svg {
+  color: #fff;
+  stroke: #fff;
+}
+.widget-split-counter.is-tone-secondary .widget-split-counter-value {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 84%, white);
+  color: #fff;
+}
+
+/* Keep 18px micro variants borderless while preserving the alternate filled
+   secondary construction. */
+.is-height-18.widget-stepper.is-tone-secondary,
+.is-height-18.widget-pagination.is-tone-secondary,
+.is-height-18.widget-search-input.is-tone-secondary,
+.is-height-18.widget-toggle-switch.is-tone-secondary,
+.is-height-18.widget-radio.is-tone-secondary,
+.is-height-18.widget-checkbox.is-tone-secondary,
+.is-height-18.widget-split-counter.is-tone-secondary {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+
+/* Spectrum split badges keep their spectrum surface but use global ViewTube Ink
+   for text, glyphs and dividers rather than inheriting the current widget ink. */
+.widget-split-badge[class*="is-spectrum-"]{
+  color:var(--vt-ink,#243247) !important;
+  border-color:var(--vt-ink,#243247) !important;
+}
+.widget-split-badge[class*="is-spectrum-"] .widget-split-badge-icon{
+  border-inline-end-color:var(--vt-ink,#243247) !important;
+  color:var(--vt-ink,#243247) !important;
+}
+.widget-split-badge[class*="is-spectrum-"] .widget-split-badge-icon > svg{
+  stroke:var(--vt-ink,#243247) !important;
+  color:var(--vt-ink,#243247) !important;
+}
+.widget-split-badge[class*="is-spectrum-"] .widget-split-badge-label{
+  color:var(--vt-ink,#243247) !important;
+}

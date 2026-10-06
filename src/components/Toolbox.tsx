@@ -1,0 +1,1428 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import '../styles/toolbox-entry.css';
+import { CustomIcon } from './CustomIcon';
+import { getToolboxPaletteColors } from '../styles/toolboxPalette';
+import { AnimatedToggleIcon, hexToRgba } from './ToolboxUISystem';
+import { ChevronDown, Cloud, Upload, Zap } from 'lucide-react';
+import {
+  ToolboxHeaderCollapseButton,
+  ToolboxHeaderHelpButton,
+  ToolboxHeaderIconRail,
+  ToolboxHeaderTitle,
+} from './subtoolbox/SubToolboxPrimitives';
+import { persistToolboxOpen, readPersistedToolboxOpen } from '../services/workspaceUiPersistence';
+import {
+  CONTROL_SHELL,
+  MINI_SUBTOOLBOX_DNA,
+  SUBTOOLBOX_COLLAPSE_TRANSITION,
+  SUBTOOLBOX_TOKENS,
+  TOOLBOX_HEADER_DNA,
+  resolveSubtoolboxMinHeight,
+} from './subtoolbox/tokens';
+
+export { CONTROL_SHELL } from './subtoolbox/tokens';
+
+const SHELL_COLLAPSE_TRANSITION = SUBTOOLBOX_COLLAPSE_TRANSITION;
+const SHELL_COLLAPSE_DURATION_MS = SUBTOOLBOX_TOKENS.motion.collapseMs;
+const MAIN_TOOLBOX_STROKE = 5;
+const MAIN_TOOLBOX_SHADOW = 10;
+const SUB_TOOLBOX_STROKE = SUBTOOLBOX_TOKENS.shell.stroke;
+const SUB_TOOLBOX_SHADOW = SUBTOOLBOX_TOKENS.shell.shadowOffset;
+/**
+ * One icon contract for every header rail. Size is level-owned; stroke is the
+ * same number at both levels and `absoluteStrokeWidth` stops it scaling with
+ * the glyph, so a 24px toolbox icon and a 20px subtoolbox icon draw the same
+ * weight of line. Caller-supplied size/strokeWidth are deliberately overridden:
+ * call sites were passing 2.5, 2.7 and 3 interchangeably.
+ */
+export const TOOLBOX_ICON_PROPS = { size: 34, strokeWidth: 3.1, absoluteStrokeWidth: true } as const;
+export const SUBTOOLBOX_ICON_PROPS = { size: 28, strokeWidth: 3.1, absoluteStrokeWidth: true } as const;
+
+const SUB_TOOLBOX_RADIUS = SUBTOOLBOX_TOKENS.shell.radius;
+const SUB_TOOLBOX_INNER_STROKE = SUBTOOLBOX_TOKENS.shell.stroke;
+const SUB_TOOLBOX_INNER_SHADOW = SUBTOOLBOX_TOKENS.interior.shadowOffset;
+
+type PaletteCycleContextValue = {
+  mainPaletteIndex: number | null;
+  allocateSubPaletteIndex: () => number | null;
+  currentSubPaletteIndex: number | null;
+};
+
+const PaletteCycleContext = React.createContext<PaletteCycleContextValue>({
+  mainPaletteIndex: null,
+  allocateSubPaletteIndex: () => null,
+  currentSubPaletteIndex: null,
+});
+
+export type ToolboxVariant = 'scaffold' | 'accordion' | 'sub' | 'header';
+export type ToolboxIndicator = 'symbols' | 'plusminus' | 'none';
+
+const extractHexFromBgClass = (bgClass: string): string | null => {
+  const match = bgClass.match(/bg-\[#([0-9a-fA-F]{3,6})\]/);
+  if (!match) return null;
+  return `#${match[1]}`;
+};
+
+// hexToRgba is now imported from ToolboxUISystem
+
+interface ToolboxProps {
+  variant?: ToolboxVariant;
+  title: string;
+  subtitle?: React.ReactNode;
+  icon?: React.ReactNode;
+  iconName?: string;
+  headerColor?: string;
+  iconBoxColor?: string;
+  textColor?: string;
+  paletteIndex?: number;
+  collapsible?: boolean;
+  isOpen?: boolean;
+  isOpenInitial?: boolean;
+  /** Optional stable identity for persisted open/closed state. Falls back to route + level + title + palette. */
+  persistenceId?: string;
+  onToggle?: () => void;
+  unmountWhenClosed?: boolean;
+  headerActions?: React.ReactNode;
+  indicator?: ToolboxIndicator;
+  outerClassName?: string;
+  shellClassName?: string;
+  contentClassName?: string;
+  embedded?: boolean;
+  children?: React.ReactNode;
+  helpTitle?: string;
+  helpText?: React.ReactNode;
+  helpGuide?: string[];
+  disableCollapseAnimation?: boolean;
+  fillAvailable?: boolean;
+  /** Solid black shell shadow instead of the default header-tinted 45%-opacity shadow. */
+  hardShadow?: boolean;
+  /**
+   * "none" renders the children with no shell, header, border, radius, shadow or
+   * collapse control — for a tool mounted inside another tool's shell, where a
+   * second level-0 frame would duplicate the host's own title and chrome.
+   *
+   * `embedded` does not do this: it only drops the content padding. Projects
+   * relied on arbitrary-variant `!important` overrides to strip the inner shell
+   * instead, which could not reach a nested frame and left two visible titles.
+   */
+  chrome?: "full" | "none";
+}
+
+export const Toolbox: React.FC<ToolboxProps> = ({
+  variant = 'scaffold',
+  title,
+  subtitle,
+  helpText,
+  helpGuide,
+  icon,
+  iconName,
+  headerColor = 'bg-[#FFDD00]',
+  iconBoxColor = 'bg-white',
+  textColor = 'text-black',
+  paletteIndex,
+  collapsible = false,
+  isOpen,
+  isOpenInitial = true,
+  persistenceId,
+  onToggle,
+  unmountWhenClosed = true,
+  headerActions,
+  indicator = 'symbols',
+  outerClassName = '',
+  shellClassName = '',
+  contentClassName = '',
+  embedded = false,
+  children,
+  disableCollapseAnimation = false,
+  fillAvailable = false,
+  hardShadow = false,
+  chrome = "full",
+}) => {
+  const controlled = typeof isOpen === 'boolean';
+  const mainPersistenceDescriptor = {
+    level: "main" as const,
+    title,
+    variant,
+    paletteIndex,
+    persistenceId,
+  };
+  const [internalOpen, setInternalOpen] = useState(() =>
+    controlled
+      ? isOpenInitial
+      : readPersistedToolboxOpen(mainPersistenceDescriptor, isOpenInitial)
+  );
+  const [showHelpRail, setShowHelpRail] = useState(false);
+  const subPaletteCursorRef = useRef(0);
+  const open = controlled ? Boolean(isOpen) : internalOpen;
+  const [keepClosingContentMounted, setKeepClosingContentMounted] = useState(open);
+
+  useEffect(() => {
+    if (open || !unmountWhenClosed) {
+      setKeepClosingContentMounted(true);
+      return;
+    }
+    const timer = window.setTimeout(() => setKeepClosingContentMounted(false), SHELL_COLLAPSE_DURATION_MS);
+    return () => window.clearTimeout(timer);
+  }, [open, unmountWhenClosed]);
+
+  const shouldRenderContent = !unmountWhenClosed || open || keepClosingContentMounted;
+
+  const setOpen = () => {
+    if (onToggle) {
+      onToggle();
+      return;
+    }
+    if (!controlled) {
+      setInternalOpen((prev) => {
+        const next = !prev;
+        persistToolboxOpen(mainPersistenceDescriptor, next);
+        return next;
+      });
+    }
+  };
+
+  const isCollapsible = collapsible || indicator === 'plusminus' || indicator === 'symbols';
+  const palette = paletteIndex !== undefined && paletteIndex !== null ? getToolboxPaletteColors(paletteIndex) : null;
+  const headerStyle = palette ? { backgroundColor: palette.header } : undefined;
+  const iconStyle = palette ? { backgroundColor: palette.icon } : undefined;
+  const headerHex = palette?.header ?? extractHexFromBgClass(headerColor);
+  
+  // Canonical colored shadow logic (opt out with hardShadow for a solid black shell shadow).
+  const shadowColor = hardShadow ? 'rgba(0,0,0,1)' : (headerHex ? hexToRgba(headerHex, 0.45) : 'rgba(0,0,0,0.45)');
+  const shadowOffset = MAIN_TOOLBOX_SHADOW;
+  
+  // Toolbox owns the level-0 shell. Nested production sections use SubToolbox.
+  const stroke = MAIN_TOOLBOX_STROKE;
+  const radius = variant === 'accordion' ? 12 : 16;
+  const finalContentClass = useMemo(() => {
+    if (contentClassName) return contentClassName;
+    if (embedded) return 'p-0';
+    if (variant === 'accordion') return 'p-1 flex flex-col gap-1 bg-white text-black';
+    return 'p-1 flex flex-col gap-1';
+  }, [contentClassName, variant, embedded]);
+
+  const resolvedIcon = useMemo(() => {
+    if (React.isValidElement(icon)) {
+      return React.cloneElement(icon as React.ReactElement<any>, TOOLBOX_ICON_PROPS);
+    }
+    if (icon) return icon;
+    if (iconName) return <CustomIcon name={iconName} size={TOOLBOX_ICON_PROPS.size} />;
+    return null;
+  }, [icon, iconName]);
+
+  if (variant === 'header') {
+    return (
+      <header
+        className={`${headerColor} ${textColor} h-[56px] flex items-center justify-between px-0 overflow-hidden border-b-[5px] border-black rounded-t-2xl mb-0 select-none ${outerClassName}`}
+        style={headerStyle}
+      >
+        <div className="flex items-center h-full">
+          <div
+            className={`${iconBoxColor} h-full w-[56px] flex items-center justify-center border-r-[5px] border-black flex-shrink-0`}
+            style={iconStyle}
+          >
+            {resolvedIcon}
+          </div>
+          <h1 className="text-[50px] font-[1000] uppercase tracking-tighter pl-8 leading-none mt-1 select-none pointer-events-none">{title}</h1>
+        </div>
+        <div className="flex items-center gap-6 pr-6">{headerActions}</div>
+      </header>
+    );
+  }
+
+  const frameClass = `vt-toolbox w-full bg-white overflow-hidden flex flex-col relative ${fillAvailable ? 'h-full min-h-0' : ''} ${outerClassName}`;
+  const collapseTransitionClass = disableCollapseAnimation
+    ? "duration-0 ease-linear"
+    : SHELL_COLLAPSE_TRANSITION;
+  
+  const headerHeight =
+    variant === 'accordion'
+      ? SUBTOOLBOX_TOKENS.shell.headerHeight
+      : TOOLBOX_HEADER_DNA.toolbox.height;
+  const paletteCycleContextValue = useMemo<PaletteCycleContextValue>(() => {
+    return {
+      mainPaletteIndex: paletteIndex ?? null,
+      allocateSubPaletteIndex: () => {
+        if (paletteIndex === undefined || paletteIndex === null) return null;
+        const allocated = paletteIndex + 1 + subPaletteCursorRef.current;
+        subPaletteCursorRef.current += 1;
+        return allocated;
+      },
+      currentSubPaletteIndex:
+        paletteIndex === undefined || paletteIndex === null
+          ? null
+          : paletteIndex + subPaletteCursorRef.current,
+    };
+  }, [paletteIndex]);
+
+  if (chrome === "none") {
+    // No shell: the host tool already owns the frame, header and collapse.
+    // The palette context still flows so nested subtoolboxes keep cycling.
+    return (
+      <PaletteCycleContext.Provider value={paletteCycleContextValue}>
+        <div className={`w-full min-w-0 ${fillAvailable ? "h-full min-h-0" : ""} ${outerClassName}`}>{children}</div>
+      </PaletteCycleContext.Provider>
+    );
+  }
+
+  return (
+    <PaletteCycleContext.Provider value={paletteCycleContextValue}>
+      <div className={`w-full ${fillAvailable ? 'h-full min-h-0' : ''} ${shellClassName} ${outerClassName}`}>
+        <div
+          data-vt-toolbox
+          data-vt-toolbox-level="main"
+          data-vt-toolbox-variant={variant}
+          className={frameClass}
+          style={{
+            border: `var(--vt-toolbox-stroke, ${stroke}px) solid black`,
+            borderRadius: `var(--vt-toolbox-radius, ${radius}px)`,
+            isolation: 'isolate',
+            contain: 'content',
+            boxShadow: `var(--vt-toolbox-shadow-offset, ${shadowOffset}px) var(--vt-toolbox-shadow-offset, ${shadowOffset}px) 0 0 var(--vt-toolbox-shadow-color)`,
+            ["--vt-toolbox-shadow-color" as any]: shadowColor,
+          }}
+        >
+        <header
+          className={`${headerColor} ${textColor} flex items-center justify-between select-none relative z-20 group ${isCollapsible ? 'cursor-pointer' : ''}`}
+          onClick={isCollapsible ? setOpen : undefined}
+          style={{
+            ...headerStyle,
+            minHeight: `var(--vt-toolbox-header-height, ${headerHeight}px)`,
+            borderBottom: `var(--vt-toolbox-stroke, ${stroke}px) solid black`,
+          }}
+        >
+          <div className="vt-toolbox-header-identity flex items-center h-full flex-1 min-w-0">
+            <ToolboxHeaderIconRail
+              level={variant === "accordion" ? "subtoolbox" : "toolbox"}
+              className={iconBoxColor}
+              style={iconStyle}
+            >
+              {resolvedIcon}
+            </ToolboxHeaderIconRail>
+
+            <div className="vt-toolbox-header-title-slot flex flex-col pl-4 justify-center min-w-0 pointer-events-none select-none">
+              <ToolboxHeaderTitle level={variant === "accordion" ? "subtoolbox" : "toolbox"}>
+                {title}
+              </ToolboxHeaderTitle>
+            </div>
+          </div>
+
+          <div
+            className={`vt-toolbox-header-actions ${variant === 'accordion' ? 'is-subtoolbox' : 'is-toolbox'}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            {headerActions ? <div className="vt-toolbox-header-extras">{headerActions}</div> : null}
+            {isCollapsible && (subtitle || helpText || (helpGuide && helpGuide.length > 0)) && (
+              <ToolboxHeaderHelpButton
+                level={variant === "accordion" ? "subtoolbox" : "toolbox"}
+                onClick={() => setShowHelpRail((prev) => !prev)}
+                aria-label="Toggle toolbox help"
+              />
+            )}
+            {indicator === 'symbols' && isCollapsible && (
+              <ToolboxHeaderCollapseButton
+                level={variant === "accordion" ? "subtoolbox" : "toolbox"}
+                open={open}
+                onClick={setOpen}
+                aria-label={open ? "Collapse toolbox" : "Expand toolbox"}
+                icon={<AnimatedToggleIcon open={open} size={variant === "accordion" ? 30 : 34} />}
+              />
+            )}
+          </div>
+        </header>
+
+        {headerActions && variant !== "accordion" ? (
+          <div
+            className="vt-toolbox-header-secondary-actions"
+            onClick={(event) => event.stopPropagation()}
+            aria-label="Toolbox actions"
+          >
+            {headerActions}
+          </div>
+        ) : null}
+
+        {(subtitle || helpText || (helpGuide && helpGuide.length > 0)) && (
+          <div
+            className={`grid transition-[grid-template-rows,opacity] ${SHELL_COLLAPSE_TRANSITION} ${
+              showHelpRail ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+            }`}
+            style={{ marginTop: 0 }}
+          >
+            <div className="overflow-hidden min-h-0">
+              <div className={`bg-white px-6 py-3 ${open ? "border-b-[4px] border-black" : ""}`}>
+                {(helpText || subtitle) && (
+                  typeof (helpText || subtitle) === "string" ? (
+                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-black/55">
+                      {helpText || subtitle}
+                    </p>
+                  ) : (
+                    <div className="text-[11px] font-black tracking-[0.02em] text-black/80">
+                      {helpText || subtitle}
+                    </div>
+                  )
+                )}
+                {!helpText && helpGuide && helpGuide.length > 0 && (
+                  <ul className="mt-2 space-y-1">
+                    {helpGuide.slice(0, 4).map((item, idx) => (
+                      <li key={`${title}-help-${idx}`} className="text-[11px] font-black uppercase tracking-[0.08em] text-black/70">
+                        {idx + 1}. {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div
+          className={`grid transition-[grid-template-rows,opacity] ${collapseTransitionClass} ${fillAvailable ? 'flex-1 min-h-0' : ''} ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+          style={{ marginTop: `calc(var(--vt-toolbox-stroke, ${stroke}px) * -1)` }}
+        >
+          <div className={`overflow-hidden min-h-0 ${fillAvailable ? 'h-full' : ''}`}>
+            {shouldRenderContent && (
+              <main
+                className={`flex-1 min-h-0 bg-white vt-main-toolbox-content ${fillAvailable ? 'h-full' : ''} ${finalContentClass}`}
+                style={
+                  {
+                    ["--vt-level1-stroke" as any]: "4px",
+                    ["--vt-level1-shadow" as any]: "6px",
+                    ["--vt-level1-shadow-color" as any]: headerHex ? hexToRgba(headerHex, 0.45) : "rgba(0,0,0,0.35)",
+                    ...(embedded ? {} : {
+                      paddingTop: "var(--vt-toolbox-content-padding, 4px)",
+                      paddingRight: "var(--vt-toolbox-content-padding, 4px)",
+                      paddingBottom: "var(--vt-toolbox-content-padding, 4px)",
+                      paddingLeft: "var(--vt-toolbox-content-padding, 4px)",
+                      gap: "var(--vt-toolbox-content-gap, 4px)",
+                    }),
+                  } as React.CSSProperties
+                }
+              >
+                {children}
+              </main>
+            )}
+          </div>
+        </div>
+        </div>
+      </div>
+    </PaletteCycleContext.Provider>
+  );
+};
+
+// --- Canonical wrapper exports (consolidated UI system) ---
+
+/** @deprecated Reference-library compatibility only. Production nested modules use SubToolbox. */
+interface AccordionContainerProps {
+  title: string;
+  subtitle?: string;
+  icon: string | React.ReactNode;
+  children: React.ReactNode;
+  headerColor?: string;
+  iconBoxColor?: string;
+  paletteIndex?: number;
+  isOpenInitial?: boolean;
+  unmountWhenClosed?: boolean;
+  helpTitle?: string;
+  helpText?: string;
+  helpGuide?: string[];
+}
+
+export const AccordionContainer: React.FC<AccordionContainerProps> = ({
+  title,
+  subtitle,
+  icon,
+  children,
+  headerColor = "bg-[#FFDD00]",
+  iconBoxColor = "bg-[#FF3399]",
+  paletteIndex,
+  isOpenInitial = false,
+  unmountWhenClosed = false,
+  helpTitle,
+  helpText,
+  helpGuide,
+}) => (
+  <Toolbox
+    variant="accordion"
+    title={title}
+    subtitle={subtitle}
+    icon={typeof icon === 'string' ? <CustomIcon name={icon} size={40} /> : icon}
+    headerColor={headerColor}
+    iconBoxColor={iconBoxColor}
+    paletteIndex={paletteIndex}
+    collapsible
+    isOpenInitial={isOpenInitial}
+    unmountWhenClosed={unmountWhenClosed}
+    // Canonical collapse indicator for reference-studio and toolbox-sized controls.
+    // Do not switch this back to plus/minus variants.
+    indicator="symbols"
+    contentClassName="p-6 bg-white text-black"
+    helpTitle={helpTitle}
+    helpText={helpText}
+    helpGuide={helpGuide}
+  >
+    {children}
+  </Toolbox>
+);
+
+interface ToolboxScaffoldProps {
+  title: string;
+  subtitle?: React.ReactNode;
+  icon?: React.ReactNode;
+  iconName?: string;
+  headerColor?: string;
+  iconBoxColor?: string;
+  textColor?: string;
+  paletteIndex?: number;
+  collapsible?: boolean;
+  isOpen?: boolean;
+  isOpenInitial?: boolean;
+  persistenceId?: string;
+  onToggle?: () => void;
+  unmountWhenClosed?: boolean;
+  embedded?: boolean;
+  fillAvailable?: boolean;
+  outerClassName?: string;
+  shellClassName?: string;
+  contentClassName?: string;
+  disableCollapseAnimation?: boolean;
+  headerActions?: React.ReactNode;
+  children: React.ReactNode;
+  helpTitle?: string;
+  helpText?: React.ReactNode;
+  helpGuide?: string[];
+  hardShadow?: boolean;
+  chrome?: "full" | "none";
+}
+
+export const ToolboxScaffold: React.FC<ToolboxScaffoldProps> = ({
+  title,
+  subtitle,
+  icon,
+  iconName,
+  headerColor = "bg-[#FFDD00]",
+  iconBoxColor = "bg-[#FF3399]",
+  textColor = "text-black",
+  paletteIndex,
+  collapsible = false,
+  isOpen,
+  isOpenInitial = true,
+  persistenceId,
+  onToggle,
+  unmountWhenClosed = false,
+  embedded = false,
+  fillAvailable = false,
+  outerClassName = "",
+  shellClassName = "",
+  contentClassName = "",
+  disableCollapseAnimation = false,
+  headerActions,
+  children,
+  helpTitle,
+  helpText,
+  helpGuide,
+  hardShadow = false,
+  chrome = "full",
+}) => (
+  <Toolbox
+    variant="scaffold"
+    title={title}
+    subtitle={subtitle}
+    icon={icon}
+    iconName={iconName}
+    headerColor={headerColor}
+    iconBoxColor={iconBoxColor}
+    textColor={textColor}
+    paletteIndex={paletteIndex}
+    collapsible={collapsible}
+    isOpen={isOpen}
+    isOpenInitial={isOpenInitial}
+    persistenceId={persistenceId}
+    onToggle={onToggle}
+    unmountWhenClosed={unmountWhenClosed}
+    embedded={embedded}
+    fillAvailable={fillAvailable}
+    outerClassName={outerClassName}
+    shellClassName={shellClassName}
+    contentClassName={contentClassName || (embedded ? "p-0" : "p-1 flex flex-col gap-1")}
+    headerActions={headerActions}
+    indicator={collapsible ? "symbols" : "none"}
+    disableCollapseAnimation={disableCollapseAnimation}
+    helpTitle={helpTitle}
+    helpText={helpText}
+    helpGuide={helpGuide}
+    hardShadow={hardShadow}
+    chrome={chrome}
+  >
+    {children}
+  </Toolbox>
+);
+
+interface SubToolboxProps {
+  title: string;
+  subtitle?: React.ReactNode;
+  icon?: React.ReactNode | string;
+  headerColor?: string;
+  textColor?: string;
+  paletteIndex?: number;
+  children: React.ReactNode;
+  actionButton?: React.ReactNode;
+  contentClassName?: string;
+  shellClassName?: string;
+  collapsible?: boolean;
+  isOpen?: boolean;
+  isOpenInitial?: boolean;
+  /** Optional stable identity for persisted open/closed state. Falls back to route + level + title + palette. */
+  persistenceId?: string;
+  onToggle?: () => void;
+  unmountOnClose?: boolean;
+  openUnits?: number;
+  heightMode?: "standard" | "compact";
+  overflowVisible?: boolean;
+  helpText?: React.ReactNode;
+  headerStyle?: React.CSSProperties;
+  style?: React.CSSProperties;
+}
+
+export const SubToolbox: React.FC<SubToolboxProps> = ({
+  title,
+  subtitle,
+  icon,
+  headerColor = "bg-[#00CCFF]",
+  textColor = "text-black",
+  paletteIndex,
+  children,
+  actionButton,
+  contentClassName,
+  shellClassName = "",
+  collapsible = true,
+  isOpen,
+  isOpenInitial = true,
+  persistenceId,
+  onToggle,
+  unmountOnClose = false,
+  openUnits = 3,
+  heightMode = "standard",
+  overflowVisible = false,
+  helpText,
+  headerStyle,
+  style,
+}) => {
+  const paletteCycle = React.useContext(PaletteCycleContext);
+  const allocatedPaletteRef = useRef<number | null>(null);
+  if (allocatedPaletteRef.current === null && paletteCycle.mainPaletteIndex !== null) {
+    allocatedPaletteRef.current = paletteCycle.allocateSubPaletteIndex();
+  } else if (allocatedPaletteRef.current === null && (paletteIndex === undefined || paletteIndex === null)) {
+    allocatedPaletteRef.current = paletteCycle.allocateSubPaletteIndex();
+  }
+
+  const controlled = typeof isOpen === 'boolean';
+  const effectivePersistencePalette =
+    paletteCycle.mainPaletteIndex !== null
+      ? allocatedPaletteRef.current
+      : (paletteIndex !== undefined && paletteIndex !== null ? paletteIndex : allocatedPaletteRef.current);
+  const subPersistenceDescriptor = {
+    level: "sub" as const,
+    title,
+    variant: "sub",
+    paletteIndex: effectivePersistencePalette,
+    persistenceId,
+  };
+  const [internalOpen, setInternalOpen] = useState(() =>
+    controlled
+      ? isOpenInitial
+      : readPersistedToolboxOpen(subPersistenceDescriptor, isOpenInitial)
+  );
+  const [showHelpRail, setShowHelpRail] = useState(false);
+  const open = controlled ? Boolean(isOpen) : internalOpen;
+  const [keepClosingContentMounted, setKeepClosingContentMounted] = useState(open);
+
+  useEffect(() => {
+    if (open || !unmountOnClose) {
+      setKeepClosingContentMounted(true);
+      return;
+    }
+    const timer = window.setTimeout(() => setKeepClosingContentMounted(false), SHELL_COLLAPSE_DURATION_MS);
+    return () => window.clearTimeout(timer);
+  }, [open, unmountOnClose]);
+
+  const shouldRenderContent = !unmountOnClose || open || keepClosingContentMounted;
+
+  const setOpen = () => {
+    if (onToggle) {
+      onToggle();
+      return;
+    }
+    if (!controlled) {
+      setInternalOpen((prev) => {
+        const next = !prev;
+        persistToolboxOpen(subPersistenceDescriptor, next);
+        return next;
+      });
+    }
+  };
+  const effectivePaletteIndex =
+    paletteCycle.mainPaletteIndex !== null
+      ? allocatedPaletteRef.current
+      : (paletteIndex !== undefined && paletteIndex !== null ? paletteIndex : allocatedPaletteRef.current);
+  const palette = effectivePaletteIndex !== undefined && effectivePaletteIndex !== null
+    ? getToolboxPaletteColors(effectivePaletteIndex)
+    : null;
+  const inlineHeaderColor =
+    typeof headerStyle?.backgroundColor === "string" ? headerStyle.backgroundColor : null;
+  const headerHex = palette?.header ?? inlineHeaderColor ?? extractHexFromBgClass(headerColor) ?? "#00CCFF";
+  const iconBg = palette?.icon ?? headerHex;
+
+  // Match the parent toolbox contract: the shadow is a translucent version of
+  // the visible title/header color, never the legacy solid-black shadow.
+  const shadowColor = headerHex.startsWith("#")
+    ? hexToRgba(headerHex, 0.5)
+    : `color-mix(in srgb, ${headerHex} 50%, transparent)`;
+  const minInnerHeight = resolveSubtoolboxMinHeight(openUnits, heightMode);
+
+  const contentSizeStyle = heightMode === "compact"
+    ? undefined
+    : { ["--vt-subtoolbox-content-min-height" as any]: `${Math.max(0, minInnerHeight)}px` };
+  const resolvedContentClassName = contentClassName || "p-4";
+
+  const finalIcon = React.isValidElement(icon)
+    ? React.cloneElement(icon as React.ReactElement<any>, SUBTOOLBOX_ICON_PROPS)
+    : (typeof icon === 'string' ? <CustomIcon name={icon} size={SUBTOOLBOX_ICON_PROPS.size} /> : icon);
+
+  return (
+    <div
+      data-vt-toolbox
+      data-vt-subtoolbox="true"
+      data-vt-toolbox-level="sub"
+      data-state={open ? "open" : "closed"}
+      className={`vt-toolbox w-full relative flex flex-col transition-all ${SHELL_COLLAPSE_TRANSITION} ${collapsible && !open ? "self-start" : ""} ${shellClassName}`}
+      style={{
+        borderRadius: `var(--vt-subtoolbox-radius, ${SUB_TOOLBOX_RADIUS}px)`,
+        boxShadow: `var(--vt-subtoolbox-shadow-offset, ${SUB_TOOLBOX_SHADOW}px) var(--vt-subtoolbox-shadow-offset, ${SUB_TOOLBOX_SHADOW}px) 0 0 var(--vt-subtoolbox-shell-shadow)`,
+        ["--vt-subtoolbox-header" as any]: headerHex,
+        ["--vt-subtoolbox-shell-shadow" as any]: shadowColor,
+        ...style,
+      }}
+    >
+      <div
+        className={`w-full bg-white relative flex flex-col flex-1 min-h-0 ${overflowVisible ? "" : "overflow-hidden"}`}
+        style={{
+          border: `var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_STROKE}px) solid black`,
+          borderRadius: `var(--vt-subtoolbox-radius, ${SUB_TOOLBOX_RADIUS}px)`,
+          isolation: "isolate",
+        }}
+      >
+      <header
+        className={`flex items-center justify-between select-none relative z-20 group ${textColor} ${collapsible ? 'cursor-pointer' : ''}`}
+        onClick={collapsible ? setOpen : undefined}
+        style={{
+          ...headerStyle,
+          minHeight: `var(--vt-subtoolbox-header-height, ${CONTROL_SHELL.headerHeight}px)`,
+          backgroundColor: headerHex,
+          borderBottom: `var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_INNER_STROKE}px) solid black`,
+          borderTopLeftRadius: `calc(var(--vt-subtoolbox-radius, ${SUB_TOOLBOX_RADIUS}px) - var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_STROKE}px))`,
+          borderTopRightRadius: `calc(var(--vt-subtoolbox-radius, ${SUB_TOOLBOX_RADIUS}px) - var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_STROKE}px))`,
+          overflow: "hidden",
+        }}
+      >
+        <div className="vt-toolbox-header-identity is-subtoolbox flex items-center h-full flex-1 min-w-0">
+          <ToolboxHeaderIconRail level="subtoolbox" backgroundColor={iconBg}>
+            <div className="text-black">{finalIcon}</div>
+          </ToolboxHeaderIconRail>
+
+          <div className="vt-toolbox-header-title-slot is-subtoolbox flex items-center pl-2.5 h-full min-w-0 pointer-events-none select-none">
+            <ToolboxHeaderTitle level="subtoolbox">{title}</ToolboxHeaderTitle>
+          </div>
+        </div>
+
+        <div className="vt-toolbox-header-actions is-subtoolbox" onClick={e => e.stopPropagation()}>
+          {actionButton ? <div className="vt-toolbox-header-extras">{actionButton}</div> : null}
+          {collapsible && (subtitle || helpText) && (
+            <ToolboxHeaderHelpButton
+              level="subtoolbox"
+              onClick={() => setShowHelpRail((prev) => !prev)}
+              aria-label="Toggle subtoolbox help"
+            />
+          )}
+          {collapsible && (
+            <ToolboxHeaderCollapseButton
+              level="subtoolbox"
+              open={open}
+              onClick={setOpen}
+              aria-label={open ? "Collapse subtoolbox" : "Expand subtoolbox"}
+              icon={<AnimatedToggleIcon open={open} size={30} />}
+            />
+          )}
+        </div>
+      </header>
+
+      {(subtitle || helpText) && (
+        <div
+          className={`grid transition-[grid-template-rows,opacity] ${SHELL_COLLAPSE_TRANSITION} ${
+            showHelpRail ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
+          style={{ marginTop: 0 }}
+        >
+          <div className="overflow-hidden min-h-0">
+            <div className="bg-white border-b-[3px] border-black px-4 py-2">
+              {typeof (helpText || subtitle) === "string" ? (
+                <p className="text-[10px] font-black uppercase tracking-[0.14em] text-black/55">{helpText || subtitle}</p>
+              ) : (
+                <div className="text-[10px] font-black tracking-[0.02em] text-black/75">{helpText || subtitle}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div
+        className={`grid transition-[grid-template-rows] ${SHELL_COLLAPSE_TRANSITION} ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr] overflow-hidden"}`}
+        style={{ marginTop: `calc(var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_INNER_STROKE}px) * -1)` }}
+      >
+        <div className={`vt-subtoolbox-inset ${overflowVisible ? "" : "overflow-hidden"} min-h-0`}>
+          {shouldRenderContent && <main
+            className={`bg-white w-full text-black flex flex-col transition-opacity vt-subtoolbox-content ${resolvedContentClassName} ${SHELL_COLLAPSE_TRANSITION} ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            style={{
+              ...contentSizeStyle,
+              // Provide parent accent to all inner controls via CSS vars
+              ["--vt-subtoolbox-fill" as any]: headerHex,
+              ["--vt-subtoolbox-shadow" as any]: shadowColor,
+              // Canonical two-color control pair. Production primitives and the
+              // imported Studio Hub component library read the same inherited DNA.
+              ["--pair-a" as any]: headerHex,
+              ["--pair-b" as any]: iconBg,
+              ["--vt-inner-stroke" as any]: `${SUBTOOLBOX_TOKENS.interior.stroke}px`,
+              ["--vt-inner-shadow" as any]: `${SUBTOOLBOX_TOKENS.interior.shadowOffset}px`,
+            }}
+          >
+            {children}
+          </main>}
+        </div>
+      </div>
+      </div>
+    </div>
+  );
+};
+
+export interface MiniSubToolboxProps {
+  title: React.ReactNode;
+  icon?: React.ReactNode;
+  actions?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  contentClassName?: string;
+  headerColor?: string;
+  iconColor?: string;
+}
+
+export const MiniSubToolbox: React.FC<MiniSubToolboxProps> = ({
+  title,
+  icon,
+  actions,
+  children,
+  className = "",
+  contentClassName = "",
+  headerColor = "var(--pair-a, #36E0F6)",
+  iconColor = "var(--pair-b, #FF7F6B)",
+}) => (
+  <section
+    data-vt-toolbox
+    data-vt-toolbox-level="mini"
+    className={`vt-mini-subtoolbox ${className}`}
+    style={{
+      ["--vt-mini-header" as any]: headerColor,
+      ["--vt-mini-icon" as any]: iconColor,
+      ["--vt-mini-height" as any]: `${MINI_SUBTOOLBOX_DNA.desktop.headerHeight}px`,
+      ["--vt-mini-stroke" as any]: `${MINI_SUBTOOLBOX_DNA.desktop.stroke}px`,
+      ["--vt-mini-radius" as any]: `${MINI_SUBTOOLBOX_DNA.desktop.radius}px`,
+      ["--vt-mini-shadow" as any]: `${MINI_SUBTOOLBOX_DNA.desktop.shadowOffset}px`,
+    }}
+  >
+    <header className="vt-mini-subtoolbox-header">
+      <span className="vt-mini-subtoolbox-icon" aria-hidden="true">{icon}</span>
+      <strong className="vt-mini-subtoolbox-title">{title}</strong>
+      {actions ? <span className="vt-mini-subtoolbox-actions">{actions}</span> : null}
+    </header>
+    <div className={`vt-mini-subtoolbox-content ${contentClassName}`}>{children}</div>
+  </section>
+);
+
+export interface ThumbnailMiniSubToolboxProps extends Omit<MiniSubToolboxProps, "children"> {
+  src?: string | null;
+  alt?: string;
+  emptyLabel?: React.ReactNode;
+  previewClassName?: string;
+  onDragOver?: React.DragEventHandler<HTMLDivElement>;
+  onDragLeave?: React.DragEventHandler<HTMLDivElement>;
+  onDrop?: React.DragEventHandler<HTMLDivElement>;
+}
+
+export const ThumbnailMiniSubToolbox: React.FC<ThumbnailMiniSubToolboxProps> = ({
+  src,
+  alt = "Thumbnail",
+  emptyLabel = "SELECT A VIDEO TO LOAD THUMBNAIL",
+  previewClassName = "",
+  onDragOver,
+  onDragLeave,
+  onDrop,
+  className = "",
+  contentClassName = "",
+  ...props
+}) => (
+  <MiniSubToolbox
+    {...props}
+    className={`vt-thumbnail-mini-subtoolbox ${className}`}
+    contentClassName={`vt-thumbnail-mini-content ${contentClassName}`}
+  >
+    <div
+      className={`vt-thumbnail-mini-preview ${previewClassName}`}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+    >
+      {src ? (
+        <img src={src} alt={alt} />
+      ) : (
+        <div className="vt-thumbnail-mini-empty">
+          <Upload aria-hidden="true" />
+          <strong>{emptyLabel}</strong>
+        </div>
+      )}
+    </div>
+  </MiniSubToolbox>
+);
+
+export interface StandardUploadBoxProps {
+  label?: string;
+  icon?: React.ReactNode;
+  iconBgColor?: string;
+  onUpload?: (files: FileList | null) => void;
+  minHeight?: string;
+}
+
+export const StandardUploadBox: React.FC<StandardUploadBoxProps> = ({
+  label = "UPLOAD.\nDROP FILES HERE OR CLICK BELOW.",
+  icon,
+  iconBgColor = "#FF3399",
+  onUpload,
+  minHeight = "220px",
+}) => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  return (
+    <div
+      className="w-full border-[3px] border-black bg-white rounded-[8px] flex-1 flex flex-col items-center justify-center p-3 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+      style={{
+        minHeight,
+        boxShadow: `${SUB_TOOLBOX_INNER_SHADOW}px ${SUB_TOOLBOX_INNER_SHADOW}px 0px 0px var(--vt-subtoolbox-shadow, rgba(0,0,0,0.25))`,
+      }}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        className="hidden"
+        onChange={(e) => onUpload?.(e.target.files)}
+      />
+      <div
+        onClick={() => inputRef.current?.click()}
+        className="w-full h-full border-[3px] border-[#9ca3af] border-dashed rounded-[6px] bg-gray-100 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-gray-200 transition-colors"
+      >
+        <div className="w-16 h-16 mt-2 border-[3px] border-black rounded-full bg-white flex items-center justify-center">
+          {icon || <Zap size={32} strokeWidth={2.5} className="text-black" style={{ color: iconBgColor }} />}
+        </div>
+        <h3 className="text-[32px] sm:text-[42px] font-[1000] uppercase tracking-tighter text-black leading-none text-center">
+          {label.includes('\n') ? (
+            label.split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < label.split('\n').length - 1 && <br />}
+              </React.Fragment>
+            ))
+          ) : (
+            <>{label}</>
+          )}
+        </h3>
+      </div>
+    </div>
+  );
+};
+
+export interface StandardTextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  minHeight?: string;
+  hasBorder?: boolean;
+  sizeMode?: "content" | "fill";
+  borderWidth?: 3 | 4;
+}
+
+export interface StandardInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  minHeight?: string;
+  hasBorder?: boolean;
+  sizeMode?: "content" | "fill";
+  borderWidth?: 3 | 4;
+}
+
+export const StandardInput = React.forwardRef<HTMLInputElement, StandardInputProps>(({
+  className,
+  minHeight = "48px",
+  hasBorder = true,
+  sizeMode = "content",
+  borderWidth = 3,
+  ...props
+}, ref) => {
+  return (
+    <input
+      ref={ref}
+      className={`vt-input-standard ${sizeMode === "fill" ? "vt-field-fill" : "vt-field-content"} ${hasBorder ? "" : "border-none bg-transparent p-0"} ${className || ""}`}
+      data-border-width={borderWidth}
+      style={{ minHeight }}
+      {...props}
+    />
+  );
+});
+StandardInput.displayName = "StandardInput";
+
+export const StandardTextArea: React.FC<StandardTextAreaProps> = ({
+  className,
+  minHeight = "96px",
+  hasBorder = true,
+  sizeMode = "content",
+  borderWidth = 3,
+  ...props
+}) => {
+  return (
+    <textarea
+      className={`vt-input-standard vt-textarea-standard ${sizeMode === "fill" ? "vt-field-fill" : "vt-field-content"} ${hasBorder ? "" : "p-0 bg-transparent border-none"} ${className || ""}`}
+      data-border-width={borderWidth}
+      style={{ minHeight }}
+      {...props}
+    />
+  );
+};
+
+type SubtoolboxControlTone = "pink" | "orange" | "yellow" | "green" | "cyan" | "blue" | "purple";
+
+const SUBTOOLBOX_CONTROL_THEMES: Record<SubtoolboxControlTone, { surface: string; control: string; shadow: string }> = {
+  pink: { surface: "#FF77D6", control: "#FF9CD8", shadow: "#E95EC6" },
+  orange: { surface: "#FFB158", control: "#FFC587", shadow: "#F59E46" },
+  yellow: { surface: "#F9F36B", control: "#FFE357", shadow: "#D9CC3C" },
+  green: { surface: "#57F15C", control: "#8CFF8F", shadow: "#3CCF41" },
+  cyan: { surface: "#45C8E9", control: "#73DEFF", shadow: "#2AA8C7" },
+  blue: { surface: "#579AFF", control: "#86B5FF", shadow: "#3979DB" },
+  purple: { surface: "#B14BFF", control: "#D08BFF", shadow: "#8F31D9" },
+};
+
+type SubToolboxDropdownControlProps = {
+  label: string;
+  value: string;
+  options: string[];
+  onChange: (option: string) => void;
+  tone?: SubtoolboxControlTone;
+  className?: string;
+};
+
+type SubToolboxDropdownTopTitleControlProps = {
+  label: string;
+  value: string;
+  options: Array<{ value: string; label: string }>;
+  onChange: (value: string) => void;
+  multiSelect?: boolean;
+  selectedValues?: string[];
+  tone?: SubtoolboxControlTone;
+  className?: string;
+  borderWidth?: 3 | 4;
+};
+
+export const SubToolboxDropdownControl: React.FC<SubToolboxDropdownControlProps> = ({
+  label,
+  value,
+  options,
+  onChange,
+  tone = "orange",
+  className = "",
+}) => {
+  const theme = SUBTOOLBOX_CONTROL_THEMES[tone];
+  const resolvedSurface = `var(--pair-a, var(--vt-subtoolbox-fill, ${theme.surface}))`;
+  const resolvedSecondary = `var(--pair-b, ${theme.control})`;
+  const resolvedShadow = `color-mix(in srgb, var(--pair-a, ${theme.shadow}) 45%, transparent)`;
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [menuRect, setMenuRect] = useState<{ left: number; top: number; width: number } | null>(null);
+  const [inheritedPair, setInheritedPair] = useState({ pairA: "", pairB: "" });
+
+  const recalcMenuRect = () => {
+    if (!rootRef.current) return;
+    const trigger = rootRef.current.querySelector("button");
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const inheritedStyle = getComputedStyle(rootRef.current);
+    setInheritedPair({
+      pairA: inheritedStyle.getPropertyValue("--pair-a").trim(),
+      pairB: inheritedStyle.getPropertyValue("--pair-b").trim(),
+    });
+    setMenuRect({
+      left: rect.left,
+      top: rect.bottom - CONTROL_SHELL.stroke,
+      width: rect.width,
+    });
+  };
+
+  useEffect(() => {
+    const onOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (!rootRef.current?.contains(target) && !panelRef.current?.contains(target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    recalcMenuRect();
+    const onWindowChange = () => recalcMenuRect();
+    window.addEventListener("resize", onWindowChange);
+    window.addEventListener("scroll", onWindowChange, true);
+    return () => {
+      window.removeEventListener("resize", onWindowChange);
+      window.removeEventListener("scroll", onWindowChange, true);
+    };
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className={`w-full relative ${className}`} style={{ zIndex: open ? 140 : 1 }}>
+      <button
+        type="button"
+        onClick={() => {
+          setOpen((v) => {
+            const next = !v;
+            if (next) setTimeout(() => recalcMenuRect(), 0);
+            return next;
+          });
+        }}
+        className={`group w-full border-[3px] border-black overflow-hidden transition-[border-radius] ${CONTROL_SHELL.transition} block appearance-none p-0 ${
+          open ? "rounded-t-[8px] rounded-b-none" : "rounded-[8px]"
+        }`}
+        style={{
+          backgroundColor: resolvedSurface,
+          height: `${CONTROL_SHELL.height}px`,
+          boxShadow: `${SUB_TOOLBOX_INNER_SHADOW}px ${SUB_TOOLBOX_INNER_SHADOW}px 0px 0px ${resolvedShadow}`,
+        }}
+      >
+        <div className="h-full flex items-center justify-between px-4">
+          <div className="flex flex-col items-start justify-center">
+            <span className="text-[8px] font-black uppercase tracking-[0.14em] text-black/65 leading-none">
+              {label}
+            </span>
+            <span className="text-[20px] font-[900] uppercase tracking-tighter leading-none mt-1">
+              {value}
+            </span>
+          </div>
+          <span className="h-8 w-8 shrink-0 rounded-[6px] border-[2px] border-black grid place-items-center" style={{ backgroundColor: resolvedSecondary }}>
+            <ChevronDown size={20} strokeWidth={3} className={`text-black transition-transform ${open ? "rotate-180" : ""}`} />
+          </span>
+        </div>
+      </button>
+      {open && menuRect &&
+        createPortal(
+          <div
+            ref={panelRef}
+            data-vt-subtoolbox-dropdown-portal="true"
+            className="border-x-[3px] border-b-[3px] border-black rounded-b-[8px] overflow-hidden bg-white"
+            style={{
+              ...(inheritedPair.pairA ? { ["--pair-a" as string]: inheritedPair.pairA } : {}),
+              ...(inheritedPair.pairB ? { ["--pair-b" as string]: inheritedPair.pairB } : {}),
+              position: "fixed",
+              left: menuRect.left,
+              top: menuRect.top,
+              width: menuRect.width,
+              zIndex: 1200,
+              boxShadow: `${SUB_TOOLBOX_INNER_SHADOW}px ${SUB_TOOLBOX_INNER_SHADOW}px 0px 0px ${resolvedShadow}`,
+            }}
+          >
+            {options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => {
+                  onChange(option);
+                  setOpen(false);
+                }}
+                data-selected={option === value ? "true" : "false"}
+                className="w-full h-11 border-t-[3px] border-black bg-white text-left px-4 text-[20px] font-[900] uppercase tracking-tighter leading-none"
+              >
+                {option}
+              </button>
+            ))}
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+};
+
+export const SubToolboxDropdownTopTitleControl: React.FC<SubToolboxDropdownTopTitleControlProps> = ({
+  label,
+  value,
+  options,
+  onChange,
+  multiSelect = false,
+  selectedValues = [],
+  tone = "green",
+  className = "",
+  borderWidth = 3,
+}) => {
+  const theme = SUBTOOLBOX_CONTROL_THEMES[tone];
+  const resolvedTitle = `var(--pair-a, var(--vt-subtoolbox-fill, ${theme.surface}))`;
+  const resolvedBody = `var(--pair-b, ${theme.control})`;
+  const resolvedShadow = `color-mix(in srgb, var(--pair-a, ${theme.shadow}) 45%, transparent)`;
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [menuRect, setMenuRect] = useState<{ left: number; top: number; width: number } | null>(null);
+  const [inheritedPair, setInheritedPair] = useState({ pairA: "", pairB: "" });
+  const borderClass = borderWidth === 3 ? "border-[3px]" : "border-[4px]";
+  const rowBorderClass = borderWidth === 3 ? "border-b-[3px]" : "border-b-[4px]";
+
+  const recalcMenuRect = () => {
+    if (!rootRef.current) return;
+    const trigger = rootRef.current.querySelector("button");
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const inheritedStyle = getComputedStyle(rootRef.current);
+    setInheritedPair({
+      pairA: inheritedStyle.getPropertyValue("--pair-a").trim(),
+      pairB: inheritedStyle.getPropertyValue("--pair-b").trim(),
+    });
+    setMenuRect({
+      left: rect.left,
+      top: rect.bottom - borderWidth,
+      width: rect.width,
+    });
+  };
+
+  useEffect(() => {
+    const onOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (!rootRef.current?.contains(target) && !panelRef.current?.contains(target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    recalcMenuRect();
+    const onWindowChange = () => recalcMenuRect();
+    window.addEventListener("resize", onWindowChange);
+    window.addEventListener("scroll", onWindowChange, true);
+    return () => {
+      window.removeEventListener("resize", onWindowChange);
+      window.removeEventListener("scroll", onWindowChange, true);
+    };
+  }, [open, borderWidth]);
+
+  return (
+    <div ref={rootRef} className={`w-full relative ${className}`} style={{ zIndex: open ? 140 : 1 }}>
+      <button
+        type="button"
+        onClick={() => {
+          setOpen((v) => {
+            const next = !v;
+            if (next) setTimeout(() => recalcMenuRect(), 0);
+            return next;
+          });
+        }}
+        className={`group w-full border-black overflow-hidden transition-[border-radius] ${CONTROL_SHELL.transition} block appearance-none p-0 ${
+          open ? "rounded-t-[8px] rounded-b-none" : "rounded-[8px]"
+        } ${borderClass}`}
+        style={{
+          backgroundColor: resolvedBody,
+          height: `${CONTROL_SHELL.height}px`,
+          boxShadow: `${borderWidth === 4 ? SUB_TOOLBOX_SHADOW : SUB_TOOLBOX_INNER_SHADOW}px ${borderWidth === 4 ? SUB_TOOLBOX_SHADOW : SUB_TOOLBOX_INNER_SHADOW}px 0px 0px ${resolvedShadow}`,
+        }}
+      >
+        <div className="h-full w-full flex flex-col">
+          <div
+            className={`h-1/2 ${rowBorderClass} border-black text-[9px] font-black uppercase tracking-[0.14em] flex items-center justify-center px-2 leading-none`}
+            style={{ backgroundColor: resolvedTitle }}
+          >
+            {label}
+          </div>
+          <div className="h-1/2 flex items-center justify-between px-3">
+            <div className="text-[20px] font-[900] uppercase tracking-tighter leading-none text-center">
+              {value}
+            </div>
+            <ChevronDown size={18} strokeWidth={3} className={`text-black transition-transform ${open ? "rotate-180" : ""}`} />
+          </div>
+        </div>
+      </button>
+      {open && menuRect &&
+        createPortal(
+          <div
+            ref={panelRef}
+            data-vt-subtoolbox-dropdown-portal="true"
+            className={`${borderClass} border-black rounded-b-[8px] overflow-hidden bg-white`}
+            style={{
+              ...(inheritedPair.pairA ? { ["--pair-a" as string]: inheritedPair.pairA } : {}),
+              ...(inheritedPair.pairB ? { ["--pair-b" as string]: inheritedPair.pairB } : {}),
+              position: "fixed",
+              left: menuRect.left,
+              top: menuRect.top,
+              width: menuRect.width,
+              zIndex: 1400,
+              boxShadow: `${borderWidth === 4 ? SUB_TOOLBOX_SHADOW : SUB_TOOLBOX_INNER_SHADOW}px ${borderWidth === 4 ? SUB_TOOLBOX_SHADOW : SUB_TOOLBOX_INNER_SHADOW}px 0px 0px ${resolvedShadow}`,
+            }}
+          >
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value);
+                  if (!multiSelect) setOpen(false);
+                }}
+                data-selected={selectedValues.includes(option.value) ? "true" : "false"}
+                className={`w-full h-11 ${rowBorderClass} last:border-b-0 border-black bg-white text-left px-4 text-[20px] font-[900] uppercase tracking-tighter leading-none`}
+              >
+                {multiSelect && (
+                  <span className="inline-block w-6 mr-2 text-center">
+                    {selectedValues.includes(option.value) ? "✓" : ""}
+                  </span>
+                )}
+                {option.label}
+              </button>
+            ))}
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+};
+
+type SubToolboxActionButtonProps = {
+  label: string;
+  iconName?: string;
+  onClick: () => void;
+  tone?: SubtoolboxControlTone;
+  disabled?: boolean;
+  className?: string;
+};
+
+type SubToolboxRefineButtonStyleProps = {
+  label: string;
+  iconName?: string;
+  showIconSection?: boolean;
+  onClick: () => void;
+  tone?: SubtoolboxControlTone;
+  disabled?: boolean;
+  className?: string;
+  borderWidth: 3 | 4;
+};
+
+const SubToolboxRefineButtonBase: React.FC<SubToolboxRefineButtonStyleProps> = ({
+  label,
+  iconName = "zap",
+  showIconSection = false,
+  onClick,
+  tone = "yellow",
+  disabled = false,
+  className = "",
+  borderWidth,
+}) => {
+  const [isHovering, setIsHovering] = useState(false);
+  const [isPressing, setIsPressing] = useState(false);
+  const theme = SUBTOOLBOX_CONTROL_THEMES[tone];
+  const resolvedSurface = `var(--pair-a, var(--vt-subtoolbox-fill, ${theme.surface}))`;
+  const resolvedControl = `var(--pair-b, ${theme.control})`;
+  const resolvedShadow = `var(--vt-subtoolbox-shadow, color-mix(in srgb, var(--pair-a, ${theme.shadow}) 45%, transparent))`;
+  const border = `${borderWidth}px solid black`;
+  const baseShadow = borderWidth === 4 ? SUB_TOOLBOX_SHADOW : SUB_TOOLBOX_INNER_SHADOW;
+  const hoverShadow = Math.max(1, Math.floor(baseShadow / 2));
+  const appliedShadow = isPressing ? 0 : isHovering ? hoverShadow : baseShadow;
+
+  const isSubtoolboxPeer = borderWidth === 4;
+  const peerHeight = isSubtoolboxPeer
+    ? `var(--vt-subtoolbox-header-height, ${SUBTOOLBOX_TOKENS.shell.headerHeight}px)`
+    : `${CONTROL_SHELL.height}px`;
+
+  return (
+    <button
+      type="button"
+      data-vt-split-left={isSubtoolboxPeer && showIconSection ? "true" : undefined}
+      onClick={onClick}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => {
+        setIsHovering(false);
+        setIsPressing(false);
+      }}
+      onMouseDown={() => setIsPressing(true)}
+      onMouseUp={() => setIsPressing(false)}
+      disabled={disabled}
+      className={`w-full overflow-hidden transition-all shrink-0 flex items-stretch appearance-none p-0 hover:translate-y-[1.5px] active:translate-y-[3px] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed ${isSubtoolboxPeer && showIconSection ? "vt-split-left-module-action" : ""} ${className}`}
+      style={{
+        height: peerHeight,
+        borderRadius: isSubtoolboxPeer
+          ? `var(--vt-subtoolbox-radius, ${SUBTOOLBOX_TOKENS.shell.radius}px)`
+          : "8px",
+        backgroundColor: resolvedSurface,
+        border,
+        boxShadow: `${appliedShadow}px ${appliedShadow}px 0px 0px ${resolvedShadow}`,
+      }}
+    >
+      {showIconSection && (
+        <div
+          data-vt-split-left-rail={isSubtoolboxPeer ? "true" : undefined}
+          className="h-full shrink-0 flex items-center justify-center"
+          style={{
+            width: isSubtoolboxPeer ? peerHeight : "48px",
+            backgroundColor: resolvedControl,
+            borderRight: border,
+          }}
+        >
+          <CustomIcon name={iconName} size={isSubtoolboxPeer ? 22 : 18} />
+        </div>
+      )}
+      <div
+        data-vt-split-left-label={isSubtoolboxPeer && showIconSection ? "true" : undefined}
+        className="h-full flex-1 flex items-center justify-center px-3 min-w-0"
+      >
+        <span
+          className="font-[1000] uppercase tracking-tighter mt-0.5 text-black text-center"
+          style={{
+            fontSize: isSubtoolboxPeer
+              ? `var(--vt-subtoolbox-title-size, ${SUBTOOLBOX_TOKENS.shell.titleSize}px)`
+              : "20px",
+            lineHeight: 0.88,
+          }}
+        >
+          {label}
+        </span>
+      </div>
+    </button>
+  );
+};
+
+type SubToolboxGridActionButtonProps = Omit<SubToolboxRefineButtonStyleProps, "borderWidth">;
+type SubToolboxInnerActionButtonProps = Omit<SubToolboxRefineButtonStyleProps, "borderWidth">;
+
+// 4px standard: for sub-toolbox grids (sub-toolbox color behavior, larger type)
+export const SubToolboxGridActionButton: React.FC<SubToolboxGridActionButtonProps> = (props) => (
+  <SubToolboxRefineButtonBase {...props} showIconSection={props.showIconSection ?? true} borderWidth={4} />
+);
+
+// 3px standard: for controls inside sub-toolboxes (same shell, compact stroke)
+export const SubToolboxInnerActionButton: React.FC<SubToolboxInnerActionButtonProps> = (props) => (
+  <SubToolboxRefineButtonBase {...props} borderWidth={3} />
+);
+
+export const SubToolboxActionButton: React.FC<SubToolboxActionButtonProps> = ({
+  label,
+  iconName = "zap",
+  onClick,
+  tone = "yellow",
+  disabled = false,
+  className = "",
+}) => {
+  return <SubToolboxGridActionButton label={label} iconName={iconName} onClick={onClick} tone={tone} disabled={disabled} className={className} />;
+};

@@ -1,0 +1,492 @@
+import React from "react"
+import { FileText, Image as ImageIcon, Music, Play } from "lucide-react"
+import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
+import { getToolboxColorPair, VAULT_ASSET_MODULE_DNA, type ToolboxControlLevel } from "./tokens"
+import "../../styles/vault-asset-module.css"
+
+export type VaultAssetModuleKind = "image" | "video" | "audio" | "document"
+export type VaultAssetModuleVariant =
+  | "landscape"
+  | "landscape-swapped"
+  | "portrait-single"
+  | "portrait-double"
+  | "audio"
+  | "document"
+
+const DEFAULT_SHARED_TAG_LIBRARY = [
+  "APPLE", "BALL", "BATTLE", "CAMERA", "DESIGN",
+  "EDIT", "EXPORT", "FINAL", "HISTORY", "INTRO",
+  "LANDSCAPE", "NAPOLEON", "PORTRAIT", "ROUGH", "SHORTS",
+  "SOCIAL", "THUMBNAIL", "TUTORIAL", "VIDEO", "YOUTUBE",
+]
+
+const classes = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
+
+export interface VaultAssetModuleProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
+  level?: ToolboxControlLevel
+  kind: VaultAssetModuleKind
+  variant?: VaultAssetModuleVariant
+  title: string
+  previewUrl?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  durationLabel?: string | null
+  fileTypeLabel?: string | null
+  documentExcerpt?: string | null
+  paletteIndex?: number
+  selected?: boolean
+  tags?: string[]
+  sharedTags?: string[]
+  mediaFit?: "cover" | "contain"
+  onSelectedChange?: (selected: boolean) => void
+  onTitleChange?: (title: string) => void
+  onTagsChange?: (tags: string[]) => void
+  onPreviewAction?: () => void
+}
+
+const resolveVariant = (
+  kind: VaultAssetModuleKind,
+  variant?: VaultAssetModuleVariant,
+): VaultAssetModuleVariant => {
+  if (variant) return variant
+  if (kind === "audio") return "audio"
+  if (kind === "document") return "document"
+  return "landscape"
+}
+
+const AssetIcon: React.FC<{ kind: VaultAssetModuleKind }> = ({ kind }) => {
+  if (kind === "audio") return <Music aria-hidden="true" />
+  if (kind === "document") return <FileText aria-hidden="true" />
+  return <ImageIcon aria-hidden="true" />
+}
+
+const VaultSelection: React.FC<{
+  checked: boolean
+  label: string
+  className?: string
+  onChange?: (selected: boolean) => void
+}> = ({ checked, label, className, onChange }) => (
+  <input
+    className={classes("vt-vault-module-check", className)}
+    type="checkbox"
+    checked={checked}
+    aria-label={label}
+    onChange={(event) => onChange?.(event.target.checked)}
+  />
+)
+
+const VaultEditableTitle: React.FC<{
+  value: string
+  doubleHeight?: boolean
+  onChange?: (title: string) => void
+}> = ({ value, doubleHeight = false, onChange }) => {
+  const [draft, setDraft] = React.useState(value)
+  React.useEffect(() => setDraft(value), [value])
+
+  const commit = () => {
+    const next = draft.trim()
+    if (!next) {
+      setDraft(value)
+      return
+    }
+    if (next !== value) onChange?.(next)
+  }
+
+  return (
+    <textarea
+      className={classes("vt-vault-module-title", doubleHeight && "is-double")}
+      aria-label="Asset title"
+      value={draft}
+      onChange={(event) => setDraft(event.target.value)}
+      onBlur={commit}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setDraft(value)
+          event.currentTarget.blur()
+        }
+        if (event.key === "Enter" && !doubleHeight) {
+          event.preventDefault()
+          event.currentTarget.blur()
+        }
+      }}
+    />
+  )
+}
+
+export const VaultAssetTagEditor: React.FC<{
+  tags: string[]
+  sharedTags?: string[]
+  onTagsChange?: (tags: string[]) => void
+}> = ({ tags, sharedTags = DEFAULT_SHARED_TAG_LIBRARY, onTagsChange }) => {
+  const [editing, setEditing] = React.useState(false)
+  const [draft, setDraft] = React.useState("")
+  const [existing, setExisting] = React.useState("")
+  const [selected, setSelected] = React.useState<string | null>(null)
+  const [expandedTags, setExpandedTags] = React.useState(false)
+
+  const library = React.useMemo(
+    () => [...new Set([...DEFAULT_SHARED_TAG_LIBRARY, ...sharedTags, ...tags].map((value) => value.trim().toUpperCase()).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b)),
+    [sharedTags, tags],
+  )
+
+  const finishEditing = () => {
+    setEditing(false)
+    setDraft("")
+    setExisting("")
+  }
+
+  const addTag = () => {
+    const next = (draft.trim() || existing).toUpperCase()
+    if (!next) return
+    const merged = [...new Set([...tags.map((tag) => tag.toUpperCase()), next])].sort((a, b) => a.localeCompare(b))
+    onTagsChange?.(merged)
+    setSelected(next)
+    finishEditing()
+  }
+
+  const removeSelected = () => {
+    if (!selected) return
+    onTagsChange?.(tags.filter((tag) => tag.toUpperCase() !== selected))
+    setSelected(null)
+  }
+
+  return (
+    <div className={classes(
+      "vt-vault-tag-panel",
+      editing && "is-editing",
+      selected && "has-selection",
+      tags.length > 0 && "has-tags",
+    )}>
+      <div className="vt-vault-tag-inline-row">
+        <span className="vt-vault-tag-label">TAGS:</span>
+        <div className="vt-vault-tag-list">
+          {(expandedTags ? [...tags].sort((a, b) => a.localeCompare(b)) : [...tags].sort((a, b) => a.localeCompare(b)).slice(0, 3)).map((tag) => {
+            const normalized = tag.toUpperCase()
+            const color = getAlphabeticalSpectrumColor(normalized)
+            return (
+              <button
+                type="button"
+                key={normalized}
+                className={classes("vt-vault-tag-badge", selected === normalized && "is-selected")}
+                data-tag={normalized}
+                style={{
+                  ["--vt-vault-tag-stroke" as string]: color,
+                  ["--vt-vault-tag-fill" as string]: `color-mix(in srgb, ${color} 35%, white)`,
+                } as React.CSSProperties}
+                onClick={() => setSelected((current) => current === normalized ? null : normalized)}
+              >
+                {normalized}
+              </button>
+            )
+          })}
+          {tags.length > 3 ? (
+            <button
+              type="button"
+              className="vt-vault-tag-badge vt-vault-tag-overflow"
+              aria-label={expandedTags ? "Collapse asset tags" : `Show ${tags.length - 3} more asset tags`}
+              onClick={() => setExpandedTags((current) => !current)}
+            >
+              {expandedTags ? "LESS" : `+${tags.length - 3}`}
+            </button>
+          ) : null}
+        </div>
+        <button type="button" className="vt-vault-add-tag" aria-label="Add tag" onClick={() => {
+          setSelected(null)
+          setEditing(true)
+        }}>+</button>
+        {!editing && selected ? (
+          <button type="button" className="vt-vault-remove-selected" aria-label="Remove selected tag" onClick={removeSelected}>×</button>
+        ) : null}
+      </div>
+
+      {editing ? (
+        <div className="vt-vault-tag-control-row">
+          <select
+            className="vt-vault-existing-tag-select"
+            aria-label="Existing tags"
+            value={existing}
+            onChange={(event) => {
+              setExisting(event.target.value)
+              if (event.target.value) setDraft("")
+            }}
+          >
+            <option value="">TAGS</option>
+            {library.map((tag) => <option value={tag} key={tag}>{tag}</option>)}
+          </select>
+          <input
+            autoFocus
+            className="vt-vault-new-tag-input"
+            type="text"
+            placeholder="NEW TAG"
+            aria-label="New tag"
+            value={draft}
+            onChange={(event) => {
+              setDraft(event.target.value.toUpperCase())
+              if (event.target.value) setExisting("")
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault()
+                addTag()
+              }
+              if (event.key === "Escape") finishEditing()
+            }}
+          />
+          <button type="button" className="vt-vault-tag-submit" aria-label="Save tag" onClick={addTag}>✓</button>
+          <button type="button" className="vt-vault-tag-cancel" aria-label="Cancel tag editing" onClick={finishEditing}>×</button>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+const VaultMedia: React.FC<{
+  kind: VaultAssetModuleKind
+  previewSrc?: string | null
+  mediaSrc?: string | null
+  title: string
+  selected?: boolean
+  showSelection?: boolean
+  fit: "cover" | "contain"
+  onSelectedChange?: (selected: boolean) => void
+  onPreviewAction?: () => void
+}> = ({ kind, previewSrc, mediaSrc, title, selected = false, showSelection = false, fit, onSelectedChange, onPreviewAction }) => (
+  <div className="vt-vault-media-frame" style={{ ["--vt-vault-media-fit" as string]: fit } as React.CSSProperties}>
+    {previewSrc ? (
+      <img src={previewSrc} alt="" />
+    ) : kind === "video" && mediaSrc ? (
+      <video src={mediaSrc} muted playsInline preload="metadata" aria-label={`Video preview for ${title}`} />
+    ) : mediaSrc && kind === "image" ? (
+      <img src={mediaSrc} alt="" />
+    ) : (
+      <AssetIcon kind={kind} />
+    )}
+    {kind !== "video" && onPreviewAction ? (
+      <button
+        type="button"
+        className="vt-vault-media-open"
+        aria-label={`Preview ${title}`}
+        onClick={onPreviewAction}
+      />
+    ) : null}
+    {showSelection ? (
+      <VaultSelection
+        checked={selected}
+        label={`Select ${title}`}
+        className="is-thumb"
+        onChange={onSelectedChange}
+      />
+    ) : null}
+    {kind === "video" ? (
+      <button type="button" className="vt-vault-play-button" aria-label={`Preview ${title}`} onClick={onPreviewAction}>
+        <Play aria-hidden="true" />
+      </button>
+    ) : null}
+  </div>
+)
+
+const AudioPreview: React.FC<{ durationLabel?: string | null; onPreviewAction?: () => void }> = ({ durationLabel, onPreviewAction }) => (
+  <div className="vt-vault-half-preview vt-vault-audio-preview">
+    <div className="vt-vault-waveform"><i /><i /><i /><i /><i /><i /><i /></div>
+    {durationLabel ? <div className="vt-vault-audio-time">{durationLabel}</div> : null}
+    <button type="button" className="vt-vault-audio-mini-play" aria-label="Play audio" onClick={onPreviewAction}>▶</button>
+  </div>
+)
+
+const DocumentPreview: React.FC<{
+  fileType?: string | null
+  excerpt?: string | null
+  title: string
+  onPreviewAction?: () => void
+}> = ({ fileType, excerpt, title, onPreviewAction }) => (
+  <button
+    type="button"
+    className="vt-vault-half-preview vt-vault-document-preview"
+    aria-label={`Preview ${title}`}
+    onClick={onPreviewAction}
+  >
+    {excerpt ? (
+      <div className="vt-vault-document-excerpt">{excerpt}</div>
+    ) : (
+      <div className="vt-vault-document-sheet">
+        <div className="vt-vault-document-line" />
+        <div className="vt-vault-document-line" />
+        <div className="vt-vault-document-line" />
+      </div>
+    )}
+    <span className="vt-vault-file-type">{(fileType || "DOC").replace(".", "").toUpperCase()}</span>
+  </button>
+)
+
+export const VaultAssetModule: React.FC<VaultAssetModuleProps> = ({
+  level = "l1",
+  kind,
+  variant,
+  title,
+  previewUrl,
+  mediaUrl,
+  mimeType,
+  durationLabel,
+  fileTypeLabel,
+  documentExcerpt,
+  paletteIndex = 0,
+  selected = false,
+  tags = [],
+  sharedTags,
+  mediaFit = "cover",
+  onSelectedChange,
+  onTitleChange,
+  onTagsChange,
+  onPreviewAction,
+  className,
+  style,
+  ...props
+}) => {
+  const resolvedVariant = resolveVariant(kind, variant)
+  const colors = getToolboxColorPair(paletteIndex)
+  const isHalf = resolvedVariant === "audio" || resolvedVariant === "document"
+  const fileType = fileTypeLabel
+    || mimeType?.split("/").pop()
+    || title.split(".").pop()
+    || "DOC"
+
+  const mergedStyle = {
+    ["--vt-vault-module-w" as string]: `${VAULT_ASSET_MODULE_DNA.width}px`,
+    ["--vt-vault-module-h" as string]: `${VAULT_ASSET_MODULE_DNA.height}px`,
+    ["--vt-vault-stroke" as string]: `${VAULT_ASSET_MODULE_DNA.stroke}px`,
+    ["--vt-vault-radius" as string]: `${VAULT_ASSET_MODULE_DNA.radius}px`,
+    ["--vt-vault-inner-w" as string]: `${VAULT_ASSET_MODULE_DNA.innerWidth}px`,
+    ["--vt-vault-inner-h" as string]: `${VAULT_ASSET_MODULE_DNA.innerHeight}px`,
+    ["--vt-vault-header-h" as string]: `${VAULT_ASSET_MODULE_DNA.headerHeight}px`,
+    ["--vt-vault-header-h-double" as string]: `${VAULT_ASSET_MODULE_DNA.doubleHeaderHeight}px`,
+    ["--vt-vault-landscape-w" as string]: `${VAULT_ASSET_MODULE_DNA.landscapeWidth}px`,
+    ["--vt-vault-landscape-h" as string]: `${VAULT_ASSET_MODULE_DNA.landscapeHeight}px`,
+    ["--vt-vault-portrait-h" as string]: `${VAULT_ASSET_MODULE_DNA.portraitHeight}px`,
+    ["--vt-vault-portrait-w" as string]: `${VAULT_ASSET_MODULE_DNA.portraitWidth}px`,
+    ["--vt-vault-portrait-left" as string]: `${VAULT_ASSET_MODULE_DNA.portraitLeftWidth}px`,
+    ["--vt-vault-tag-bg" as string]: VAULT_ASSET_MODULE_DNA.tagBackground,
+    ["--vt-vault-half-h" as string]: `${VAULT_ASSET_MODULE_DNA.halfHeight}px`,
+    ["--vt-vault-half-body-h" as string]: `${VAULT_ASSET_MODULE_DNA.halfBodyHeight}px`,
+    ["--vt-vault-half-preview-w" as string]: `${VAULT_ASSET_MODULE_DNA.halfPreviewWidth}px`,
+    ["--vt-vault-header" as string]: colors.body,
+    ["--vt-vault-icon" as string]: colors.rail,
+    ["--vt-vault-check" as string]: colors.rail,
+    ...style,
+  } as React.CSSProperties
+
+  if (isHalf) {
+    return (
+      <article
+        className={classes("vt-vault-asset-module", "is-half", `is-${resolvedVariant}`, className)}
+        data-vt-control-level={level}
+        data-vt-vault-asset-variant={resolvedVariant}
+        style={mergedStyle}
+        {...props}
+      >
+        <div className="vt-vault-module-header">
+          <div className="vt-vault-icon-box"><AssetIcon kind={kind} /></div>
+          <VaultEditableTitle value={title} onChange={onTitleChange} />
+          <VaultSelection checked={selected} label={`Select ${title}`} onChange={onSelectedChange} />
+        </div>
+        <div className="vt-vault-half-body">
+          <div className="vt-vault-half-left">
+            <VaultAssetTagEditor tags={tags} sharedTags={sharedTags} onTagsChange={onTagsChange} />
+            <div className="vt-vault-card-meta">{kind.toUpperCase()} · {fileType.toUpperCase()}</div>
+          </div>
+          {resolvedVariant === "audio"
+            ? <AudioPreview durationLabel={durationLabel} onPreviewAction={onPreviewAction} />
+            : <DocumentPreview fileType={fileType} excerpt={documentExcerpt} title={title} onPreviewAction={onPreviewAction} />}
+        </div>
+      </article>
+    )
+  }
+
+  if (resolvedVariant === "portrait-single" || resolvedVariant === "portrait-double") {
+    const double = resolvedVariant === "portrait-double"
+    return (
+      <article
+        className={classes("vt-vault-asset-module", "is-portrait", double ? "is-portrait-double" : "is-portrait-single", className)}
+        data-vt-control-level={level}
+        data-vt-vault-asset-variant={resolvedVariant}
+        style={mergedStyle}
+        {...props}
+      >
+        <div className="vt-vault-portrait-left">
+          <div className={classes("vt-vault-module-header", double && "is-double")}>
+            <div className={classes("vt-vault-icon-box", double && "is-double")}>
+              {double ? (
+                <>
+                  <div className="vt-vault-icon-stack-top"><AssetIcon kind={kind} /></div>
+                  <div className="vt-vault-icon-stack-bottom">
+                    <VaultSelection checked={selected} label={`Select ${title}`} onChange={onSelectedChange} />
+                  </div>
+                </>
+              ) : <AssetIcon kind={kind} />}
+            </div>
+            <VaultEditableTitle value={title} doubleHeight={double} onChange={onTitleChange} />
+          </div>
+          <VaultAssetTagEditor tags={tags} sharedTags={sharedTags} onTagsChange={onTagsChange} />
+          <div className="vt-vault-card-meta">{kind.toUpperCase()} · {tags.length} TAG{tags.length === 1 ? "" : "S"}</div>
+        </div>
+        <VaultMedia
+          kind={kind}
+          previewSrc={previewUrl}
+          mediaSrc={mediaUrl}
+          title={title}
+          selected={selected}
+          showSelection={!double}
+          fit={mediaFit}
+          onSelectedChange={onSelectedChange}
+          onPreviewAction={onPreviewAction}
+        />
+      </article>
+    )
+  }
+
+  if (resolvedVariant === "landscape-swapped") {
+    return (
+      <article
+        className={classes("vt-vault-asset-module", "is-landscape-swapped", className)}
+        data-vt-control-level={level}
+        data-vt-vault-asset-variant={resolvedVariant}
+        style={mergedStyle}
+        {...props}
+      >
+        <div className="vt-vault-module-header">
+          <div className="vt-vault-icon-box"><AssetIcon kind={kind} /></div>
+          <VaultEditableTitle value={title} onChange={onTitleChange} />
+          <VaultSelection checked={selected} label={`Select ${title}`} onChange={onSelectedChange} />
+        </div>
+        <div className="vt-vault-landscape-middle">
+          <VaultMedia kind={kind} previewSrc={previewUrl} mediaSrc={mediaUrl} title={title} fit={mediaFit} onPreviewAction={onPreviewAction} />
+          <div className="vt-vault-card-meta">{kind.toUpperCase()} · {tags.length} TAG{tags.length === 1 ? "" : "S"}</div>
+        </div>
+        <VaultAssetTagEditor tags={tags} sharedTags={sharedTags} onTagsChange={onTagsChange} />
+      </article>
+    )
+  }
+
+  return (
+    <article
+      className={classes("vt-vault-asset-module", "is-landscape", className)}
+      data-vt-control-level={level}
+      data-vt-vault-asset-variant="landscape"
+      style={mergedStyle}
+      {...props}
+    >
+      <div className="vt-vault-module-header">
+        <div className="vt-vault-icon-box"><AssetIcon kind={kind} /></div>
+        <VaultEditableTitle value={title} onChange={onTitleChange} />
+        <VaultSelection checked={selected} label={`Select ${title}`} onChange={onSelectedChange} />
+      </div>
+      <div className="vt-vault-landscape-middle">
+        <VaultMedia kind={kind} previewSrc={previewUrl} mediaSrc={mediaUrl} title={title} fit={mediaFit} onPreviewAction={onPreviewAction} />
+        <VaultAssetTagEditor tags={tags} sharedTags={sharedTags} onTagsChange={onTagsChange} />
+      </div>
+      <div className="vt-vault-card-meta">{kind.toUpperCase()} · {tags.length} TAG{tags.length === 1 ? "" : "S"}</div>
+    </article>
+  )
+}
+
+export default VaultAssetModule

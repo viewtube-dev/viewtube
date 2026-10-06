@@ -1,0 +1,312 @@
+/* Performance utilities from the quick-wins doc.
+   Loaded from index.css so the rules land globally. */
+
+/* -------------------------------------------------------------------- */
+/* QW#8 — content-visibility for offscreen analytics modules            */
+/* -------------------------------------------------------------------- */
+/*
+ * `content-visibility: auto` skips layout + paint work for elements that
+ * are offscreen, then re-runs it when they scroll into view. On a page
+ * with many heavy modules (Performance Hub, Reference Studio, the Tube
+ * Explorer visuals grid) this cuts initial paint work dramatically.
+ *
+ * `contain-intrinsic-size` is required — it tells the layout engine what
+ * size to reserve for the skipped element so the scrollbar stays stable.
+ * Wrong estimates cause visible jumps as content scrolls in; the values
+ * below are calibrated to the average module height observed in the app.
+ *
+ * The narrow-viewport skip is deliberate: on phones, sticky headers and
+ * short scroll heights make content-visibility less useful and more
+ * likely to cause jank. Desktop is where the win is.
+ */
+@media (min-width: 768px) {
+  .vt-toolbox {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
+  .vt-cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
+  .vt-cv-auto--large {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 620px;
+  }
+  .vt-cv-auto--table {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 700px;
+  }
+  .vt-toolbox[data-vt-cv-opt-out] {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* QW#10 — container-query density tokens                               */
+/* -------------------------------------------------------------------- */
+.vt-density-container {
+  container-type: inline-size;
+  --vt-control-height: 34px;
+  --vt-header-size: 15px;
+  --vt-gap: 10px;
+}
+@container (max-width: 520px) {
+  .vt-density-container {
+    --vt-control-height: 30px;
+    --vt-header-size: 13px;
+    --vt-gap: 7px;
+  }
+}
+@container (max-width: 360px) {
+  .vt-density-container {
+    --vt-control-height: 27px;
+    --vt-header-size: 12px;
+    --vt-gap: 5px;
+  }
+}
+
+/* ==================================================================== */
+/* MOBILE VISUAL-MODULE RESHAPE (2026-08-23) — the real fix             */
+/* ==================================================================== */
+/*
+ * Previous attempts capped `.vt-toolbox` and `[data-vt-visual-card]` at
+ * 44svh/70svh with overflow:hidden. That CLIPPED content instead of
+ * fitting it — user reported "still cut off" on every following deploy.
+ *
+ * Cause: each analytics visual card ships with a huge amount of shell
+ * chrome before the chart body even starts:
+ *
+ *   80px  icon box (aspect-square + min-w-[80px])
+ *   +     giant title (clamp 20-42px + subtitle) inside 80px header
+ *   +    ~130px controller stack (each row 42px, 3 rows stacked)
+ *   +    ~44px "active-context" stat row
+ *   +     chart body
+ *   +     legend / how-to-read footer
+ *   =    ~250px of chrome before ~300px chart body
+ *
+ * The right fix is not to hide the chart body — it's to SHRINK THE CHROME
+ * on mobile so the chart body gets room to render naturally, without
+ * clipping and without the user needing to scroll each card individually.
+ *
+ * Below: mobile-only overrides that (1) shrink the header block to ~44px,
+ * (2) shrink the icon box to a rectangle (aspect-square dropped), (3)
+ * scale down the title, (4) flip the controller stack from vertical to
+ * a single horizontal scroll band, and (5) REMOVE the earlier
+ * max-height clips so content flows naturally.
+ */
+
+/* ---- (1) Header wrapper: min-h-[80px] -> 44 on portrait, 36 on landscape */
+@media (max-width: 767px) {
+  .vt-toolbox [class~="min-h-[80px]"] {
+    min-height: 44px !important;
+  }
+}
+@media (max-width: 900px) and (orientation: landscape) {
+  .vt-toolbox [class~="min-h-[80px]"] {
+    min-height: 36px !important;
+  }
+}
+
+/* ---- (2) Icon box: aspect-square + min-w-[80px] -> compact rectangle */
+@media (max-width: 767px) {
+  .vt-toolbox [class~="aspect-square"][class~="min-w-[80px]"] {
+    min-width: 44px !important;
+    width: 44px !important;
+    aspect-ratio: unset !important;
+    align-self: stretch;
+  }
+  /* Shrink the icon SVG that lives inside — the source uses
+     `[&_svg]:h-[60px] [&_svg]:w-[60px]` which forces a 60×60 SVG. */
+  .vt-toolbox [class~="aspect-square"][class~="min-w-[80px]"] svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+}
+@media (max-width: 900px) and (orientation: landscape) {
+  .vt-toolbox [class~="aspect-square"][class~="min-w-[80px]"] {
+    min-width: 36px !important;
+    width: 36px !important;
+  }
+  .vt-toolbox [class~="aspect-square"][class~="min-w-[80px]"] svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* ---- (3) Title + subtitle: shrink font, kill responsive giant sizes.
+       Source uses `text-[clamp(20px,5vw,42px)]` for title and
+       `text-[clamp(10px,2.2vw,14px)]` for subtitle. Force fixed small
+       values on mobile so the header stays compact regardless of viewport
+       width variation. */
+@media (max-width: 767px) {
+  .vt-toolbox [class~="text-[clamp(20px,5vw,42px)]"] {
+    font-size: 16px !important;
+    line-height: 1 !important;
+  }
+  .vt-toolbox [class~="text-[clamp(10px,2.2vw,14px)]"] {
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+}
+
+/* ---- (4) One-row header + 2×2 controller grid on mobile.
+   Design pattern from the user's mock: on a phone, the whole header is
+   a single horizontal band:
+
+     [icon 44] [title flex-1 ellipsis] [2×2 controller grid 170] [reset 28]
+
+   Currently the source stacks title-over-controllers on mobile
+   (`flex-col sm:flex-row`) and the controller card is a vertical stack
+   (`flex-col`) that's easily 130+px tall. This override:
+
+     (a) forces the header wrapper to stay horizontal on mobile
+         (kills the `flex-col` layer);
+     (b) makes the controller container a fixed-width auto-height 2×2
+         GRID with wrapping so 1-4 rows all lay out sensibly;
+     (c) sizes each row cell to fit the grid instead of the 42px flex-col
+         stripe pattern the JS assumed.
+
+   4 controllers → 2×2 grid, 5-6 → 2×3, 3 → 2×2 with one blank slot,
+   2 → 1×2, 1 → single cell. The wrapping is automatic. */
+
+@media (max-width: 767px) {
+  /* (4a) Header wrapper — kill the mobile `flex-col` so title + controllers
+     sit on ONE row. Source class: `flex min-h-[80px] flex-col sm:flex-row …`.
+     Match by the min-h-[80px] class we already override for its height. */
+  .vt-toolbox [class~="min-h-[80px]"] {
+    flex-direction: row !important;
+    align-items: stretch !important;
+  }
+
+  /* (4b) Controllers container — the wrapper that holds data-controller-root.
+     Source: `flex w-full shrink-0 items-stretch overflow-x-auto border-t-[4px]
+     border-black sm:w-auto sm:border-t-0`. On mobile it takes full width and
+     puts a top border (because the header wrapper stacked). Force it to be a
+     RIGHT-side sibling with a LEFT border and its own compact width. */
+  .vt-toolbox [class~="min-h-[80px]"] > [class~="border-t-[4px]"] {
+    width: auto !important;
+    max-width: 60% !important;
+    border-top: none !important;
+    border-left: 4px solid #000 !important;
+    overflow: visible !important;
+  }
+
+  /* (4c) data-controller-root itself: swap flex-col for a 2-column grid
+     that auto-wraps rows into a 2×2 (or 2×3 for 5-6 rows) block. */
+  .vt-toolbox [data-controller-root] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-auto-rows: 30px !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 44px !important;
+    width: 170px !important;
+    max-width: 170px !important;
+    overflow: hidden !important;
+    border-left: none !important;
+  }
+  /* Each row cell — override the source's 42px flex-col stripe + border-b
+     pattern so the cells sit in the grid cleanly. */
+  .vt-toolbox [data-controller-root] > * {
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    min-width: 0 !important;
+    padding: 0 3px !important;
+    border-bottom: 2px solid #000 !important;
+    border-right: 2px solid #000 !important;
+    flex: unset !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  /* Kill the border on the last cell of each row and the bottom row so the
+     grid doesn't have redundant outside borders. */
+  .vt-toolbox [data-controller-root] > *:nth-child(2n) {
+    border-right: none !important;
+  }
+  .vt-toolbox [data-controller-root] > *:nth-last-child(-n+2) {
+    border-bottom: none !important;
+  }
+  /* Kill the inline 38px number-row font that the source hard-codes so it
+     fits the 30px cells. */
+  .vt-toolbox [data-controller-root] span[style*="font-size: 38px"] {
+    font-size: 12px !important;
+  }
+}
+@media (max-width: 900px) and (orientation: landscape) {
+  /* Landscape: shorter cells, slightly wider grid block. */
+  .vt-toolbox [data-controller-root] {
+    grid-auto-rows: 26px !important;
+    min-height: 40px !important;
+    width: 190px !important;
+    max-width: 190px !important;
+  }
+  .vt-toolbox [data-controller-root] > * {
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
+  }
+}
+
+/* ---- (5) Remove the earlier max-height clips.
+       With the chrome now ~80px instead of ~250px, the chart body gets
+       ~170px of extra vertical room per card without needing artificial
+       caps. The visuals themselves may still be tall on some pages;
+       users scroll the page, not each card. */
+@media (max-width: 767px) and (orientation: portrait) {
+  [data-vt-chart-body]:not([data-vt-chart-body-fixed]) {
+    /* Was: max-height: 28svh. Now: no cap — let content decide. */
+    max-height: none !important;
+  }
+  [data-vt-chart-body] [class*="min-h-["] {
+    min-height: 0 !important;
+  }
+  .vt-toolbox:not([data-vt-toolbox-uncapped]) {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  [data-vt-visual-card] {
+    max-height: none !important;
+    overflow: visible !important;
+    /* Keep a modest reserved height for offscreen cards so the scrollbar
+       doesn't lie about page length, but not so much it blocks 2-3-per-screen. */
+    contain-intrinsic-size: 260px !important;
+  }
+}
+@media (max-width: 900px) and (orientation: landscape) {
+  [data-vt-chart-body]:not([data-vt-chart-body-fixed]) {
+    max-height: none !important;
+  }
+  [data-vt-chart-body] [class*="min-h-["] {
+    min-height: 0 !important;
+  }
+  .vt-toolbox:not([data-vt-toolbox-uncapped]) {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  [data-vt-visual-card] {
+    max-height: none !important;
+    overflow: visible !important;
+    contain-intrinsic-size: 220px !important;
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* Studio Hub page-title fit                                            */
+/* -------------------------------------------------------------------- */
+/*
+ * Toolbox/SubToolbox geometry is intentionally NOT owned here.
+ * Canonical responsive shell geometry lives in toolbox-system.css;
+ * perf.css may optimize rendering work but must not resize, clamp,
+ * ellipsize, or otherwise restyle Toolbox headers.
+ */
+@media (max-width: 767px) and (orientation: portrait) {
+  .flex.flex-col > .mb-10 > h2.text-7xl {
+    font-size: 40px !important;
+    line-height: 1 !important;
+  }
+}

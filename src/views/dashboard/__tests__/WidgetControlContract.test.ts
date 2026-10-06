@@ -1,0 +1,195 @@
+import { readFileSync, readdirSync } from "node:fs"
+import { describe, expect, it } from "vitest"
+
+const widgetSystemCss = readFileSync(
+  new URL("../toolboxWidgetSystem.css", import.meta.url),
+  "utf8",
+)
+const widgetScrollbarCss = readFileSync(
+  new URL("../widgetScrollbar.css", import.meta.url),
+  "utf8",
+)
+const widgetPrimitiveExtensionsSource = readFileSync(
+  new URL("../WidgetPrimitiveExtensions.tsx", import.meta.url),
+  "utf8",
+)
+const dailyOracleSource = readFileSync(new URL("../widgets/DailyOracleWidget.tsx", import.meta.url), "utf8")
+const aiJournalSource = readFileSync(new URL("../widgets/AIJournalWidget.tsx", import.meta.url), "utf8")
+const imageGeneratorSource = readFileSync(new URL("../widgets/ImageGeneratorWidget.tsx", import.meta.url), "utf8")
+const videoManagerSource = readFileSync(new URL("../widgets/VideoManagerWidget.tsx", import.meta.url), "utf8")
+const videoUploaderSource = readFileSync(new URL("../widgets/VideoUploaderWidget.tsx", import.meta.url), "utf8")
+const keywordEngineSource = readFileSync(new URL("../widgets/KeywordEngineWidget.tsx", import.meta.url), "utf8")
+const commentResponderSource = readFileSync(new URL("../widgets/CommentReplyWidget.tsx", import.meta.url), "utf8")
+// WidgetRenderer.tsx is a delegating wrapper; the widget bodies it used to
+// hold live in WidgetRendererBase.tsx. Read both so the contract holds
+// wherever a body currently sits.
+const widgetRendererSource = [
+  readFileSync(new URL("../WidgetRenderer.tsx", import.meta.url), "utf8"),
+  readFileSync(new URL("../WidgetRendererBase.tsx", import.meta.url), "utf8"),
+].join("\n")
+const verificationExplainerSource = readFileSync(
+  new URL("../widgets/VerificationExplainerWidget.tsx", import.meta.url),
+  "utf8",
+)
+
+describe("dashboard widget control rhythm", () => {
+  it("defines one desktop and mobile geometry plus one control text treatment", () => {
+    expect(widgetSystemCss).toContain("--widget-control-height: 32px;")
+    expect(widgetSystemCss).toContain("--widget-control-height-mobile: 44px;")
+    expect(widgetSystemCss).toContain("--widget-control-font-size: 12px;")
+    expect(widgetSystemCss).toContain("--widget-control-font-weight: 900;")
+    expect(widgetSystemCss).toContain("--widget-control-line-height: 1;")
+  })
+
+  it.each([
+    ":where(.dashboard-barrier) .vt-widget-body .vt-button",
+    ":where(.dashboard-barrier) .vt-widget-body .vt-select",
+    ":where(.dashboard-barrier) .vt-widget-body .vt-dropdown-trigger",
+    ":where(.dashboard-barrier) .vt-widget-body .widget-select-trigger",
+    ":where(.dashboard-barrier) .vt-widget-body .vt-tab-button",
+    ":where(.dashboard-barrier) .vt-widget-body .vt-tab-btn",
+    ":where(.dashboard-barrier) .vt-widget-body .widget-step-tabs > button",
+  ])("routes %s through the canonical body-control rule", (selector) => {
+    expect(widgetSystemCss).toContain(selector)
+  })
+
+  it("gives portalled dropdown options the same fallback geometry and type", () => {
+    expect(widgetSystemCss).toContain("min-height: var(--widget-control-height);")
+    expect(widgetSystemCss).toContain("font-size: var(--widget-control-font-size, 12px) !important;")
+  })
+
+  it("keeps portalled sized-select menus out of primitive flex and adaptive-fit geometry", () => {
+    expect(widgetPrimitiveExtensionsSource).toContain("const selectMenuClass")
+    expect(widgetPrimitiveExtensionsSource).toContain("contentClassName={selectMenuClass(height,tone)}")
+    expect(widgetPrimitiveExtensionsSource).not.toContain("contentClassName={primitiveClass(height,tone,textFit)}")
+  })
+
+  it("does not clamp portalled dropdown menus to one control row on mobile", () => {
+    const exactHeightsCss = readFileSync(
+      new URL("../widgetPrimitiveExactHeights.css", import.meta.url),
+      "utf8",
+    )
+    expect(exactHeightsCss).toContain(".vt-sized-control:not(.widget-select-content)")
+    expect(exactHeightsCss).toContain(".widget-select-content.vt-sized-control {")
+    expect(exactHeightsCss).toContain("height:auto;")
+    expect(exactHeightsCss).toContain("max-height:min(340px,calc(var(--vt-primitive-height) * 9));")
+  })
+})
+
+describe("dashboard widget scrollbar contract", () => {
+  it("uses one spectrum-aware viewport-map geometry", () => {
+    expect(widgetScrollbarCss).toContain("--widget-scroll-lane: 21px;")
+    expect(widgetScrollbarCss).toContain("--widget-scroll-visual-width: 18px;")
+    expect(widgetScrollbarCss).toContain("--widget-scroll-edge: 3px;")
+    expect(widgetScrollbarCss).toContain("--widget-scroll-fill: color-mix(in srgb, var(--widget-color) 75%, transparent);")
+    expect(widgetScrollbarCss).toContain("--widget-scroll-ink: var(--widget-border);")
+    expect(widgetScrollbarCss).toContain(":where(.dashboard-barrier) .widget-scroll-controller")
+    expect(widgetScrollbarCss).toContain(":where(.dashboard-barrier) .widget-scroll-visual")
+    expect(widgetScrollbarCss).toContain(":where(.dashboard-barrier) .widget-scroll-segment")
+    expect(widgetScrollbarCss).toContain("width: 44px;")
+    expect(widgetScrollbarCss).toContain("background: #fff;")
+    expect(widgetScrollbarCss).toContain("border: 2px solid var(--widget-scroll-ink);")
+  })
+
+  it("hides native desktop chrome but preserves native forced-colors behavior", () => {
+    expect(widgetScrollbarCss).toContain("scrollbar-width: none;")
+    expect(widgetScrollbarCss).toContain(".widget-scroll-viewport::-webkit-scrollbar")
+    expect(widgetScrollbarCss).not.toContain("scrollbar-gutter: stable;")
+    expect(widgetScrollbarCss).toContain("@media (forced-colors: active)")
+    expect(widgetScrollbarCss).toContain("scrollbar-width: auto;")
+    expect(widgetScrollbarCss).toContain("@media (pointer: coarse), (max-width: 767px)")
+  })
+
+  it("keeps shell scrolling and full-bleed geometry out of widget-local implementations", () => {
+    const widgetsUrl = new URL("../widgets/", import.meta.url)
+    const sources = readdirSync(widgetsUrl)
+      .filter((file) => file.endsWith(".tsx"))
+      .map((file) => [file, readFileSync(new URL(file, widgetsUrl), "utf8")] as const)
+    sources.push(["WidgetRenderer.tsx", readFileSync(new URL("../WidgetRenderer.tsx", import.meta.url), "utf8")])
+
+    const forbidden = [
+      /::-webkit-scrollbar/,
+      /scrollbar-width/,
+      /overflow-y-auto/,
+      /overflowY:\s*["']auto["']/,
+      /marginLeft:\s*["']-10px["']/,
+      /width:\s*["']calc\(100% \+ 20px\)["']/,
+    ]
+
+    for (const [file, source] of sources) {
+      for (const pattern of forbidden) expect(source, `${file} contains ${pattern}`).not.toMatch(pattern)
+    }
+  })
+})
+
+describe("widget uniformity migrations", () => {
+  it("routes Daily Oracle through the evidence-ranked decision engine and canonical widget primitives", () => {
+    expect(dailyOracleSource).toContain("buildAIBrainContextSnapshot")
+    expect(dailyOracleSource).toContain("buildCreatorGrowthContext")
+    expect(dailyOracleSource).toContain("buildDailyOraclePlan")
+    expect(dailyOracleSource).toContain("<WidgetHeaderToggle")
+    expect(dailyOracleSource).toContain("<WidgetScrollArea")
+    expect(dailyOracleSource).toContain("<WidgetSizedButton")
+    expect(dailyOracleSource).toContain("<WidgetIconButton")
+    expect(dailyOracleSource).toContain("daily-oracle-v2__compass")
+    expect(dailyOracleSource).not.toContain('className="vt-button')
+    expect(dailyOracleSource).not.toContain("Strategic Priorities")
+    expect(dailyOracleSource).not.toContain("Upgrade for Oracle AI")
+  })
+
+  it("routes redesigned controls through shared primitives and classes", () => {
+    expect(aiJournalSource).toContain("ai-journal-category-grid")
+    expect(aiJournalSource).toContain("ai-journal-card")
+    expect(aiJournalSource).toContain("<WidgetSizedButton")
+    expect(aiJournalSource).toContain('textFit="adaptive"')
+    expect(aiJournalSource).toContain("<WidgetIconButton")
+    expect(aiJournalSource).not.toContain('className="vt-button')
+    expect(imageGeneratorSource).toContain("headerContent={templateToggle}")
+    expect(imageGeneratorSource).toContain("<WidgetSizedButton")
+    expect(imageGeneratorSource).toContain('textFit="adaptive"')
+    expect(imageGeneratorSource).not.toContain('className="vt-button')
+    expect(imageGeneratorSource).toContain("image-generator-style-grid")
+    expect(imageGeneratorSource).toContain("image-generator-copy-grid")
+    expect(imageGeneratorSource).toContain("image-generator-preview")
+    expect(imageGeneratorSource).toContain('"Cyberpunk"')
+    expect(imageGeneratorSource).toContain('"Spooky"')
+    expect(imageGeneratorSource).toContain('"Vintage"')
+    expect(imageGeneratorSource).not.toContain('"Neon/Cyberpunk"')
+    expect(imageGeneratorSource).not.toContain('"Dark & Moody"')
+    expect(imageGeneratorSource).not.toContain('"Retro/Vintage"')
+    expect(videoManagerSource).toContain("<WidgetVideoSelect")
+    expect(videoManagerSource).toContain("video-manager-package-desk")
+    expect(videoManagerSource).toContain("<WidgetSplitButton")
+    expect(videoUploaderSource).toContain("video-uploader-gantry")
+    expect(videoUploaderSource).toContain("<WidgetMediaUploadFrame")
+    expect(videoUploaderSource).toContain("<WidgetSplitButton")
+    expect(widgetRendererSource).toContain('"data-edit": React.lazy(() => import("./widgets/VideoManagerWidget")')
+    expect(widgetRendererSource).toContain('"video-uploader": React.lazy(() => import("./widgets/VideoUploaderWidget")')
+    expect(widgetRendererSource).not.toContain('"data-edit": React.lazy(() => import("./widgets/DataEditWidget")')
+    expect(widgetRendererSource).not.toContain('"video-uploader": React.lazy(() => import("./widgets/DataEditWidget")')
+    expect(keywordEngineSource).toContain("keyword-engine-bar-fill")
+    expect(widgetRendererSource).toContain("channel-overview-main")
+    expect(commentResponderSource).toContain('enabled={tab === "history"}')
+    expect(commentResponderSource).toContain("comment-responder-footer-actions")
+    expect(dailyOracleSource).toContain("daily-oracle-v2__quick-grid")
+    expect(dailyOracleSource).toContain("<WidgetScrollArea")
+  })
+
+  it("lets dashboard visibility control the About VIEWTUBE widget", () => {
+    // The widget moved out of WidgetRenderer.tsx in Phase 2, so it now resolves
+    // through the lazy map rather than an inline branch. The invariant it is
+    // guarding is unchanged: nothing may gate this widget on account state and
+    // render null, which previously left a visible grid slot empty even after
+    // the user chose Show All Widgets. Visibility is the layout's job alone.
+    expect(widgetRendererSource).toContain('"app-verification-explainer": React.lazy(')
+    expect(widgetRendererSource).not.toContain("if (isConnected) return null")
+    expect(verificationExplainerSource).not.toContain("if (isConnected) return null")
+    expect(verificationExplainerSource).not.toContain("useUnifiedAccount")
+    expect(verificationExplainerSource).toContain("<WidgetShell")
+    expect(verificationExplainerSource).toContain("<WidgetHeaderToggle")
+    expect(verificationExplainerSource).toContain("about-vt__system-map")
+    expect(verificationExplainerSource).toContain("about-vt__trust-map")
+    expect(verificationExplainerSource).toContain("<WidgetScrollArea")
+    expect(verificationExplainerSource).toContain("<WidgetSizedButton")
+  })
+})

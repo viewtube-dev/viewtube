@@ -1,0 +1,1604 @@
+.vt-complete-catalog{display:grid;gap:16px}.vt-complete-catalog *{box-sizing:border-box}.vt-complete-catalog-heading{border:4px solid #000;border-radius:12px;padding:12px;background:#fff;box-shadow:6px 6px 0 color-mix(in srgb,#36e0f6 42%,transparent)}.vt-complete-catalog-heading>div{display:flex;gap:8px;align-items:center}.vt-complete-catalog-heading h2,.vt-catalog-family h3{margin:0;text-transform:uppercase;font-weight:1000;letter-spacing:-.055em;line-height:.9}.vt-complete-catalog-heading p{margin:4px 0 0;font-weight:800}.vt-complete-catalog-heading>strong{display:block;margin-top:8px;font-size:11px}.vt-complete-catalog-grid{display:grid;gap:16px}.vt-catalog-family{border:4px solid #000;border-radius:12px;padding:12px;background:#fff;box-shadow:6px 6px 0 color-mix(in srgb,#4ee4be 42%,transparent)}.vt-catalog-family h3{font-size:22px;display:flex;gap:8px}.vt-catalog-family h3 span{opacity:.45}.vt-catalog-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.vt-catalog-demo{min-width:0;border:3px solid #000;border-radius:8px;padding:8px;background:#fff}.vt-catalog-demo:before{content:attr(data-level);display:block;text-transform:uppercase;font-size:10px;font-weight:1000;margin-bottom:6px}.vt-catalog-demo.is-l0{--h:56px;--stroke:4px;--radius:12px;--fs:24px}.vt-catalog-demo.is-l1{--h:48px;--stroke:3px;--radius:8px;--fs:18px}.vt-catalog-demo.is-l2{--h:32px;--stroke:2px;--radius:6px;--fs:12px}.vt-catalog-button,.vt-catalog-select,.vt-catalog-icon-button,.vt-catalog-split-field,.vt-catalog-stepper,.vt-catalog-segmented,.vt-catalog-disabled-split,.vt-catalog-icon-rail{height:var(--h);border:var(--stroke) solid #000;border-radius:var(--radius);font-size:var(--fs);font-weight:1000;letter-spacing:-.055em;text-transform:uppercase;background:var(--pair-a,#36e0f6);color:#000}.vt-catalog-button{width:100%;display:grid;place-items:center;padding:0 10px;box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 42%,transparent)}.vt-catalog-icon-button{aspect-ratio:1;width:var(--h);padding:0;display:grid;place-items:center}.vt-catalog-icon-button svg{width:54%;height:54%;stroke-width:3}.vt-catalog-select{width:100%;display:grid;grid-template-columns:1fr var(--h);align-items:center;padding-left:10px}.vt-catalog-select svg{justify-self:center}.vt-catalog-split-field{display:grid;grid-template-columns:var(--h) 1fr;overflow:hidden;background:var(--pair-b)}.vt-catalog-split-field>span{display:grid;place-items:center;background:var(--pair-a);border-right:var(--stroke) solid #000}.vt-catalog-split-field input{min-width:0;border:0;outline:0;background:color-mix(in srgb,var(--pair-b) 34%,white);padding:0 10px;font:inherit;text-transform:uppercase;caret-color:var(--pair-a)}.vt-catalog-split-field input:focus{background:#fff;box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)}.vt-catalog-stepper{display:grid;grid-template-columns:var(--h) 1fr var(--h);overflow:hidden;background:var(--pair-b)}.vt-catalog-stepper button{border:0;background:var(--pair-a);display:grid;place-items:center}.vt-catalog-stepper button:first-child{border-right:var(--stroke) solid #000}.vt-catalog-stepper button:last-child{border-left:var(--stroke) solid #000}.vt-catalog-stepper strong{display:grid;place-items:center}.vt-catalog-slider{height:var(--h);position:relative;display:flex;align-items:center;padding:0 calc(var(--h)*.18)}.vt-catalog-slider .track,.vt-catalog-slider .fill{position:absolute;height:calc(var(--h)*.28);border:var(--stroke) solid #000;border-radius:999px;left:8%;right:8%;background:var(--pair-b)}.vt-catalog-slider .fill{right:38%;background:var(--pair-a)}.vt-catalog-slider .handle{position:absolute;left:58%;width:calc(var(--h)*.25);height:calc(var(--h)*.72);border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a)}.vt-catalog-slider.is-range .h1{left:28%}.vt-catalog-slider.is-range .h2{left:68%}.vt-catalog-switch{height:calc(var(--h)*.64);width:calc(var(--h)*1.35);border:0;border-radius:calc(var(--radius)*.72);padding:3px;background:var(--pair-a);display:flex;align-items:center;justify-content:flex-end}.vt-catalog-switch span{height:calc(100% - 2px);aspect-ratio:1;border-radius:calc(var(--radius)*.55);background:var(--pair-b)}.vt-catalog-segmented{display:grid;grid-template-columns:repeat(3,1fr);overflow:hidden}.vt-catalog-segmented button{border:0;border-right:var(--stroke) solid #000;background:var(--pair-b);font:inherit}.vt-catalog-segmented button:first-child{background:var(--pair-a)}.vt-catalog-segmented button:last-child{border-right:0}.vt-catalog-button-group{display:flex;flex-wrap:wrap;gap:4px}.vt-spectrum-tag,.vt-status-badge,.vt-alpha-tag{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:var(--pair-a);font-weight:1000;text-transform:uppercase;letter-spacing:-.035em;padding:3px 4px 3px 9px}.vt-spectrum-tag button{border:0;border-radius:50%;background:var(--pair-b);display:grid;place-items:center;padding:2px}.vt-spectrum-tag svg{width:1em;height:1em;stroke-width:4}.vt-status-badge{padding-right:9px}.vt-status-badge i{width:.72em;height:.72em;border-radius:50%;background:var(--pair-b)}.vt-catalog-progress{height:calc(var(--h)*.5);border:var(--stroke) solid #000;border-radius:999px;overflow:hidden;position:relative;background:var(--pair-b)}.vt-catalog-progress span{display:block;height:100%;background:var(--pair-a)}.vt-catalog-progress b{position:absolute;inset:0;display:grid;place-items:center;font-size:10px}.vt-catalog-stat{border:var(--stroke) solid #000;border-radius:var(--radius);padding:8px;background:var(--pair-b);display:grid;grid-template-columns:1fr auto;gap:2px 8px}.vt-catalog-stat small{font-weight:1000}.vt-catalog-stat strong{font-size:calc(var(--fs)*1.45);line-height:.9}.vt-catalog-stat span{grid-column:2;grid-row:1/3;align-self:center;background:var(--pair-a);border-radius:999px;padding:4px;font-weight:1000}.vt-catalog-metric-strip{display:grid;grid-template-columns:repeat(3,1fr);border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden}.vt-catalog-metric-strip b{padding:7px;background:var(--pair-b);border-right:var(--stroke) solid #000;font-size:11px}.vt-catalog-metric-strip b:nth-child(2){background:var(--pair-a)}.vt-catalog-metric-strip b:last-child{border:0}.vt-catalog-tooltip{display:inline-block;border:var(--stroke) solid #000;border-radius:var(--radius);background:var(--pair-a);padding:6px 9px;font-weight:1000}.vt-catalog-popover,.vt-catalog-disclosure{border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden}.vt-catalog-popover header,.vt-catalog-disclosure header{min-height:var(--h);display:grid;grid-template-columns:var(--h) 1fr var(--h);align-items:center;background:var(--pair-b);border-bottom:var(--stroke) solid #000;font-weight:1000;text-transform:uppercase}.vt-catalog-popover header>svg,.vt-catalog-disclosure header>svg{justify-self:center}.vt-catalog-popover header button{height:100%;border:0;border-left:var(--stroke) solid #000;background:var(--pair-a);display:grid;place-items:center}.vt-catalog-popover p,.vt-catalog-disclosure p{margin:0;padding:10px;font-weight:800}.vt-catalog-divider{border:0;border-top:var(--stroke) solid var(--pair-a);margin:calc(var(--h)*.5) 0}.vt-catalog-hscroll{height:var(--h);display:grid;grid-template-columns:var(--h) 1fr var(--h);align-items:center}.vt-catalog-hscroll button,.vt-catalog-vscroll button{height:100%;border:var(--stroke) solid #000;background:var(--pair-a);display:grid;place-items:center}.vt-catalog-hscroll span,.vt-catalog-vscroll span{height:calc(var(--h)*.34);background:var(--pair-b);border:var(--stroke) solid #000;position:relative}.vt-catalog-hscroll span i{position:absolute;left:20%;width:38%;height:100%;background:var(--pair-a)}.vt-catalog-vscroll{height:calc(var(--h)*3);width:var(--h);display:grid;grid-template-rows:var(--h) 1fr var(--h)}.vt-catalog-vscroll span{height:auto;width:calc(var(--h)*.34);justify-self:center}.vt-catalog-vscroll span i{position:absolute;top:20%;height:38%;width:100%;background:var(--pair-a)}.vt-catalog-button.is-disabled,.vt-catalog-disabled-split{filter:grayscale(1);opacity:.48;box-shadow:none}.vt-catalog-disabled-split{display:grid;grid-template-columns:var(--h) 1fr;overflow:hidden}.vt-catalog-disabled-split span{display:grid;place-items:center;border-right:var(--stroke) solid #000}.vt-catalog-disabled-split b{display:grid;place-items:center}.vt-catalog-upload{min-height:calc(var(--h)*2.4);border:var(--stroke) solid #000;border-radius:var(--radius);background:repeating-linear-gradient(135deg,var(--pair-a) 0 8px,var(--pair-b) 8px 16px);display:grid;place-items:center;align-content:center;gap:5px;text-transform:uppercase}.vt-catalog-pagination{display:flex;gap:4px}.vt-catalog-pagination button{width:var(--h);height:var(--h);border:var(--stroke) solid #000;border-radius:var(--radius);background:var(--pair-a);font-weight:1000}.vt-catalog-asset{border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:#fff}.vt-catalog-asset header,.vt-catalog-asset footer{min-height:calc(var(--h)*.65);display:flex;align-items:center;gap:5px;padding:4px 7px;background:var(--pair-a);font-weight:1000;text-transform:uppercase}.vt-catalog-asset .preview{aspect-ratio:16/9;display:grid;place-items:center;background:var(--pair-b)}.vt-catalog-asset.is-portrait .preview{aspect-ratio:9/16;max-height:180px}.vt-catalog-asset footer{justify-content:space-between;background:#fff}.vt-catalog-asset footer button{border:0;background:var(--pair-b);border-radius:50%;display:grid;place-items:center}.vt-catalog-knob{display:flex;align-items:center;gap:8px}.vt-catalog-knob>span{width:var(--h);height:var(--h);border:var(--stroke) solid #000;border-radius:50%;background:var(--pair-a);position:relative}.vt-catalog-knob i{position:absolute;width:var(--stroke);height:34%;left:50%;top:8%;background:#000;border-radius:999px}.vt-catalog-controller-switch{height:var(--h);border:var(--stroke) solid #000;border-radius:var(--radius);background:var(--pair-b);display:flex;align-items:center;gap:8px;padding:4px 9px;font-weight:1000}.vt-catalog-controller-switch span{height:70%;aspect-ratio:1;border-radius:50%;background:var(--pair-a);border:var(--stroke) solid #000}.vt-catalog-led{display:flex;align-items:center;gap:7px;font-weight:1000}.vt-catalog-led i{width:calc(var(--h)*.42);height:calc(var(--h)*.42);border-radius:50%;background:var(--pair-a);box-shadow:0 0 0 4px color-mix(in srgb,var(--pair-a) 28%,transparent)}.vt-catalog-spectrum-row{display:flex;flex-wrap:wrap;gap:4px}.vt-alpha-tag{--pair-a:var(--alpha);background:color-mix(in srgb,var(--alpha) 28%,white);border:2px solid var(--alpha);color:color-mix(in srgb,var(--alpha) 70%,#000);padding:3px 7px}.vt-catalog-icon-rail{display:grid;grid-template-columns:var(--h) 1fr;overflow:hidden;background:var(--pair-b)}.vt-catalog-icon-rail span{display:grid;place-items:center;background:var(--pair-a);border-right:var(--stroke) solid #000}.vt-catalog-icon-rail b{display:grid;place-items:center}.vt-complete-catalog .vt-subtoolbox-binary,.vt-complete-catalog .vt-subtoolbox-chip{width:max-content;max-width:100%}@media(max-width:900px){.vt-catalog-levels{grid-template-columns:1fr}}@media(max-width:520px){.vt-complete-catalog-heading h2{font-size:20px}.vt-catalog-family{padding:8px}.vt-catalog-family h3{font-size:18px}.vt-catalog-demo{padding:7px}}
+
+/* Certification Wave 01 — buttons 1–5 use the same touch/press motion contract as the mature split controls. */
+.vt-complete-catalog :is(.vt-catalog-button,.vt-catalog-icon-button){
+  --vt-catalog-shadow-x:calc(var(--stroke) + 2px);
+  --vt-catalog-shadow-y:calc(var(--stroke) + 2px);
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform 180ms ease-out,box-shadow 180ms ease-out;
+}
+.vt-complete-catalog .vt-catalog-icon-button{
+  box-shadow:var(--vt-catalog-shadow-x) var(--vt-catalog-shadow-y) 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 42%,transparent);
+}
+@media (hover:hover) and (pointer:fine){
+  .vt-complete-catalog :is(.vt-catalog-button,.vt-catalog-icon-button):hover:not(:disabled){
+    transform:translate(calc(var(--vt-catalog-shadow-x)*.5),calc(var(--vt-catalog-shadow-y)*.5));
+    box-shadow:calc(var(--vt-catalog-shadow-x)*.5) calc(var(--vt-catalog-shadow-y)*.5) 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 42%,transparent);
+  }
+}
+.vt-complete-catalog :is(.vt-catalog-button,.vt-catalog-icon-button):active:not(:disabled){
+  transform:translate(var(--vt-catalog-shadow-x),var(--vt-catalog-shadow-y));
+  box-shadow:0 0 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 0%,transparent);
+  transition-duration:80ms;
+}
+@media (prefers-reduced-motion:reduce){.vt-complete-catalog :is(.vt-catalog-button,.vt-catalog-icon-button){transition:none}}
+
+/* Certification parity: L0 is the large structural control level; L1 and L2 step down. */
+.vt-catalog-demo.is-l0{--h:56px;--stroke:4px;--radius:12px;--fs:24px}
+.vt-catalog-demo.is-l1{--h:48px;--stroke:3px;--radius:8px;--fs:18px}
+.vt-catalog-demo.is-l2{--h:32px;--stroke:2px;--radius:6px;--fs:12px}
+
+/* Certification fields own their state visuals; legacy input focus/glow rules must not leak in. */
+.vt-complete-catalog .vt-catalog-field{
+  box-sizing:border-box!important;width:100%!important;height:var(--h)!important;min-height:var(--h)!important;
+  border:var(--stroke) solid #000!important;border-radius:var(--radius)!important;
+  outline:0!important;padding:0 12px!important;
+  background:color-mix(in srgb,var(--pair-a) 50%,white)!important;
+  color:#000!important;box-shadow:none!important;
+  font-family:var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif))!important;
+  font-size:var(--fs)!important;font-weight:1000!important;letter-spacing:-.055em!important;line-height:.9!important;text-transform:uppercase!important;
+  caret-color:var(--pair-a)!important;
+  transition:background 180ms ease-out,box-shadow 180ms ease-out!important;
+}
+.vt-complete-catalog .vt-catalog-field:focus{
+  background:#fff!important;outline:0!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important;
+}
+.vt-complete-catalog .vt-catalog-textarea{height:calc(var(--h)*1.65)!important;min-height:calc(var(--h)*1.65)!important;padding:12px!important;resize:vertical!important}
+
+/* Loose toggle: no wrapper/module, no border, no shadow. Same opposite-pair logic as standalone authority. */
+.vt-complete-catalog .vt-catalog-toggle{
+  position:relative;display:block;width:calc(var(--h)*1.72);height:var(--h);padding:0;border:0!important;
+  border-radius:999px;background:var(--pair-a);box-shadow:none!important;outline:0;touch-action:manipulation;
+}
+.vt-complete-catalog .vt-catalog-toggle>span{
+  position:absolute;top:8%;left:5%;height:84%;aspect-ratio:1;border-radius:50%;background:var(--pair-b);
+  transform:translateX(0);transition:transform 180ms ease-out;
+}
+.vt-complete-catalog .vt-catalog-toggle.is-on>span{transform:translateX(calc(var(--h)*.72))}
+.vt-complete-catalog .vt-catalog-toggle:focus-visible,.vt-complete-catalog .vt-catalog-switch:focus-visible{outline:3px solid var(--pair-b);outline-offset:3px}
+
+/* Settings switch shares level height but retains its distinct rounded-rectangle anatomy. */
+.vt-complete-catalog .vt-catalog-switch{
+  position:relative;height:var(--h);width:calc(var(--h)*1.72);border:0!important;border-radius:calc(var(--radius)*1.1);
+  padding:0;background:var(--pair-a);box-shadow:none!important;display:block;
+}
+.vt-complete-catalog .vt-catalog-switch span{
+  position:absolute;top:10%;left:7%;height:80%;aspect-ratio:.82;border-radius:calc(var(--radius)*.72);background:var(--pair-b);
+  transform:translateX(0);transition:transform 180ms ease-out;
+}
+.vt-complete-catalog .vt-catalog-switch.is-on span{transform:translateX(calc(var(--h)*.72))}
+
+@media (prefers-reduced-motion:reduce){.vt-complete-catalog .vt-catalog-toggle>span,.vt-complete-catalog .vt-catalog-switch span{transition:none}}
+
+/* Source-faithful parity port from ViewTube Complete UI System V35: 18/19, 41/42, 45. */
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range){
+ display:grid;grid-template-columns:var(--h) minmax(0,1fr) var(--h);height:var(--h);
+ border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:var(--pair-b);
+}
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>.rail{
+ width:var(--h);height:100%;display:grid;place-items:center;padding:0;border:0;border-right:var(--stroke) solid #000;
+ border-radius:0;background:var(--pair-a);box-shadow:none;transform:none;
+}
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>.rail svg{width:48%;height:48%;stroke:#000;stroke-width:3.5}
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>output{
+ height:100%;display:grid;place-items:center;border-left:var(--stroke) solid #000;background:var(--pair-a);
+ font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.055em;white-space:nowrap;min-width:max(var(--h),5ch);
+}
+.vt-complete-catalog .vt-catalog-range{grid-template-columns:var(--h) minmax(0,1fr) max(calc(var(--h)*1.45),5ch)}
+.vt-complete-catalog .slider-center,.vt-complete-catalog .range-center{position:relative;display:grid;align-items:center;min-width:0;padding:0 10px}
+.vt-complete-catalog .vt-catalog-slider input[type=range]{
+ appearance:none;-webkit-appearance:none;width:100%;height:calc(var(--h)*.58);margin:0;background:transparent;touch-action:pan-y;
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-webkit-slider-runnable-track{
+ height:calc(var(--h)*.2);border:var(--stroke) solid #000;border-radius:999px;background:color-mix(in srgb,var(--pair-b) 62%,white);
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-webkit-slider-thumb{
+ -webkit-appearance:none;width:calc(var(--h)*.28);height:calc(var(--h)*.78);margin-top:calc(var(--h)*-.31);
+ border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a);
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-moz-range-track{height:calc(var(--h)*.2);border:var(--stroke) solid #000;border-radius:999px;background:color-mix(in srgb,var(--pair-b) 62%,white)}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-moz-range-thumb{width:calc(var(--h)*.28);height:calc(var(--h)*.78);border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a)}
+.vt-complete-catalog .range-track{position:absolute;left:10px;right:10px;height:calc(var(--h)*.2);border:var(--stroke) solid #000;border-radius:999px;background:color-mix(in srgb,var(--pair-b) 62%,white);overflow:hidden}
+.vt-complete-catalog .range-fill{position:absolute;top:0;bottom:0;background:var(--pair-a)}
+.vt-complete-catalog .range-center input[type=range]{position:absolute;left:10px;right:10px;width:calc(100% - 20px);height:100%;margin:0;appearance:none;-webkit-appearance:none;background:transparent;pointer-events:none}
+.vt-complete-catalog .range-center input[type=range]::-webkit-slider-runnable-track{background:transparent;border:0;height:0}
+.vt-complete-catalog .range-center input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:calc(var(--h)*.28);height:calc(var(--h)*.78);border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a);touch-action:none}
+.vt-complete-catalog .range-center input[type=range]::-moz-range-track{background:transparent;border:0;height:0}
+.vt-complete-catalog .range-center input[type=range]::-moz-range-thumb{pointer-events:auto;width:calc(var(--h)*.28);height:calc(var(--h)*.78);border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a)}
+
+.vt-complete-catalog .vt-catalog-hscroll{
+ display:grid;grid-template-columns:var(--h) 1fr var(--h);height:var(--h);border:var(--stroke) solid #000;
+ border-radius:var(--radius);overflow:hidden;background:var(--pair-b);
+}
+.vt-complete-catalog .vt-catalog-hscroll button{width:var(--h);height:100%;padding:0;border:0;border-radius:0;background:var(--pair-a);box-shadow:none;display:grid;place-items:center}
+.vt-complete-catalog .vt-catalog-hscroll button:first-child{border-right:var(--stroke) solid #000}.vt-complete-catalog .vt-catalog-hscroll button:last-child{border-left:var(--stroke) solid #000}
+.vt-complete-catalog .vt-catalog-hscroll button svg{width:46%;height:46%;stroke:#000;stroke-width:4}
+.vt-complete-catalog .vt-catalog-hscroll>span{position:relative;margin:calc(var(--h)*.23);background:#fff;border-radius:999px}
+.vt-complete-catalog .vt-catalog-hscroll>span>i{position:absolute;top:0;width:42%;height:100%;border-radius:999px;background:var(--pair-a);transition:left 180ms ease-out}
+
+.vt-complete-catalog .vt-catalog-vscroll{
+ display:grid;grid-template-rows:var(--h) calc(var(--h)*3.9) var(--h);width:var(--h);
+ border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:var(--pair-b);
+}
+.vt-complete-catalog .vt-catalog-vscroll button{width:100%;height:var(--h);padding:0;border:0;border-radius:0;background:var(--pair-a);box-shadow:none;display:grid;place-items:center}
+.vt-complete-catalog .vt-catalog-vscroll button:first-child{border-bottom:var(--stroke) solid #000}.vt-complete-catalog .vt-catalog-vscroll button:last-child{border-top:var(--stroke) solid #000}
+.vt-complete-catalog .vt-catalog-vscroll button svg{width:48%;height:48%;stroke:#000;stroke-width:4}.vt-complete-catalog .vt-catalog-vscroll .up{transform:rotate(180deg)}
+.vt-complete-catalog .vt-catalog-vscroll>span{position:relative;margin:calc(var(--h)*.2);background:#fff;border-radius:999px}
+.vt-complete-catalog .vt-catalog-vscroll>span>i{position:absolute;left:0;width:100%;height:42%;border-radius:999px;background:var(--pair-a);transition:top 180ms ease-out}
+
+.vt-complete-catalog .vt-catalog-pagination{display:inline-grid;grid-auto-flow:column;height:var(--h);border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:var(--pair-b)}
+.vt-complete-catalog .vt-catalog-pagination button{min-width:var(--h);height:100%;padding:0 calc(var(--h)*.18);border:0;border-right:var(--stroke) solid #000;border-radius:0;background:var(--pair-b);box-shadow:none;font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))}
+.vt-complete-catalog .vt-catalog-pagination button:last-child{border-right:0}.vt-complete-catalog .vt-catalog-pagination button:first-child,.vt-complete-catalog .vt-catalog-pagination button:last-child,.vt-complete-catalog .vt-catalog-pagination button.is-on{background:var(--pair-a)}
+
+/* V35 parity: Stepper is one continuous three-cell control. */
+.vt-complete-catalog .vt-catalog-stepper{display:grid;grid-template-columns:var(--h) 1fr var(--h);height:var(--h);border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:var(--pair-b)}
+.vt-complete-catalog .vt-catalog-stepper button{width:var(--h);height:100%;padding:0;border:0;border-radius:0;background:var(--pair-a);box-shadow:none;display:grid;place-items:center;font-size:calc(var(--fs)*1.45);font-weight:1000}
+.vt-complete-catalog .vt-catalog-stepper button:first-child{border-right:var(--stroke) solid #000}.vt-complete-catalog .vt-catalog-stepper button:last-child{border-left:var(--stroke) solid #000}
+.vt-complete-catalog .vt-catalog-stepper strong{display:grid;place-items:center;font:1000 calc(var(--fs)*1.25)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.055em}
+
+/* Tooltip: colored V35 surface, black structural stroke/type, palette-only shadow. */
+.vt-complete-catalog .vt-catalog-tooltip-demo{position:relative;display:inline-grid;place-items:center}
+.vt-complete-catalog .vt-catalog-tooltip-demo>button{width:var(--h);height:var(--h);padding:0;border:var(--stroke) solid #000;border-radius:50%;background:var(--pair-a);font-size:var(--fs);font-weight:1000;box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-b) 42%,transparent)}
+.vt-complete-catalog .vt-catalog-tooltip{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);z-index:5;white-space:nowrap;padding:calc(var(--h)*.18) calc(var(--h)*.28);border:var(--stroke) solid #000;border-radius:var(--radius);background:var(--pair-b);color:#000;font:1000 var(--fs)/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.055em;box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent);opacity:0;pointer-events:none;transition:opacity 120ms ease-out}
+.vt-complete-catalog .vt-catalog-tooltip-demo:is(:hover,:focus-within) .vt-catalog-tooltip{opacity:1}
+.vt-complete-catalog .vt-catalog-tooltip:before{content:"";position:absolute;right:100%;top:50%;width:10px;height:10px;background:var(--pair-b);border-left:var(--stroke) solid #000;border-bottom:var(--stroke) solid #000;transform:translate(6px,-50%) rotate(45deg)}
+
+/* Popover: split header icon rail | title | square close rail, with required title divider. */
+.vt-complete-catalog .vt-catalog-popover-demo{position:relative;display:inline-block}
+.vt-complete-catalog .popover-trigger{height:var(--h);display:flex;align-items:center;gap:8px;padding:0 12px;border:var(--stroke) solid #000;border-radius:var(--radius);background:var(--pair-a);font-size:var(--fs);font-weight:1000}
+.vt-complete-catalog .vt-catalog-popover{position:absolute;top:calc(100% + 8px);left:0;z-index:10;width:min(320px,72vw);border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:calc(var(--stroke) + 3px) calc(var(--stroke) + 3px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent)}
+.vt-complete-catalog .vt-catalog-popover header{height:var(--h);display:grid;grid-template-columns:var(--h) 1fr var(--h);align-items:center;background:var(--pair-b);border-bottom:var(--stroke) solid #000}
+.vt-complete-catalog .vt-catalog-popover header>svg{width:52%;height:52%;justify-self:center}.vt-complete-catalog .vt-catalog-popover header>b{padding:0 10px;font-size:var(--fs);letter-spacing:-.055em}
+.vt-complete-catalog .vt-catalog-popover header>button{height:100%;width:var(--h);padding:0;border:0;border-left:var(--stroke) solid #000;border-radius:0;background:var(--pair-a);box-shadow:none;display:grid;place-items:center}
+.vt-complete-catalog .vt-catalog-popover header>button svg{width:48%;height:48%;stroke-width:4}.vt-complete-catalog .vt-catalog-popover p{margin:0;padding:14px;font-weight:900}
+
+/* Disclosure: colored title section with divider; content only exists when expanded. */
+.vt-complete-catalog .vt-catalog-disclosure{border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:#fff}
+.vt-complete-catalog .disclosure-head{width:100%;height:var(--h);display:grid;grid-template-columns:var(--h) 1fr var(--h);align-items:center;padding:0;border:0;border-radius:0;background:var(--pair-b);box-shadow:none;border-bottom:var(--stroke) solid #000}
+.vt-complete-catalog .disclosure-head>svg:first-child{justify-self:center}.vt-complete-catalog .disclosure-head>b{text-align:left;font-size:var(--fs);letter-spacing:-.055em}.vt-complete-catalog .disclosure-head .chevron{justify-self:center;transition:transform 180ms ease-out}.vt-complete-catalog .vt-catalog-disclosure.is-open .chevron{transform:rotate(90deg)}
+.vt-complete-catalog .vt-catalog-disclosure p{margin:0;padding:14px;font-weight:900}
+
+/* V35 parity: 8–11 menus are real selectable controls with detached, fully rounded menus. */
+.vt-complete-catalog .vt-catalog-menu{position:relative;display:inline-block;min-width:min(280px,100%)}
+.vt-complete-catalog .vt-catalog-menu .menu-trigger{height:var(--h);min-width:min(280px,100%);padding:0;border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:var(--pair-b);box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent);font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.055em}
+.vt-complete-catalog .vt-catalog-menu .menu-label{height:100%;display:grid;grid-template-columns:1fr var(--h);align-items:center}.vt-complete-catalog .vt-catalog-menu .menu-label>b{padding-left:12px;text-align:left}.vt-complete-catalog .vt-catalog-menu .menu-label>svg{width:46%;height:46%;justify-self:center;stroke-width:4}
+.vt-complete-catalog .vt-catalog-menu.is-split .menu-trigger{display:grid;grid-template-columns:var(--h) 1fr;padding:0}.vt-complete-catalog .vt-catalog-menu.is-split .menu-rail{height:100%;display:grid;place-items:center;background:var(--pair-a);border-right:var(--stroke) solid #000}.vt-complete-catalog .vt-catalog-menu.is-split .menu-rail svg{width:48%;height:48%;stroke-width:3.5}.vt-complete-catalog .vt-catalog-menu.is-split .menu-label{grid-column:2}
+.vt-complete-catalog .vt-catalog-menu.is-context{min-width:var(--h)}.vt-complete-catalog .vt-catalog-menu.is-context .menu-trigger{min-width:var(--h);width:var(--h);padding:0;display:grid;place-items:center;background:var(--pair-a)}.vt-complete-catalog .vt-catalog-menu.is-context .menu-trigger>svg{width:55%;height:55%;stroke-width:4}
+.vt-complete-catalog .vt-catalog-menu .menu-panel{position:absolute;z-index:30;top:calc(100% + 5px);left:0;min-width:100%;overflow:hidden;border:var(--stroke) solid #000;border-radius:var(--radius);background:#fff;box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent)}
+.vt-complete-catalog .vt-catalog-menu.is-context .menu-panel{min-width:calc(var(--h)*3.4)}
+.vt-complete-catalog .vt-catalog-menu .menu-panel>button{width:100%;min-height:var(--h);padding:0 12px;border:0;border-bottom:var(--stroke) solid #000;border-radius:0;background:#fff;box-shadow:none;text-align:left;font:1000 var(--fs)/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.055em}.vt-complete-catalog .vt-catalog-menu .menu-panel>button:last-child{border-bottom:0}.vt-complete-catalog .vt-catalog-menu .menu-panel>button:is(:hover,:focus-visible,.is-selected){background:var(--pair-b)}
+
+/* Certification Wave 02 — screenshot corrections + production primitive parity. */
+.vt-catalog-demo.is-l0{--radius:8px}
+
+/* Split fields: one structural outline only. Editable body owns focus, matching canonical fields. */
+.vt-complete-catalog .vt-catalog-split-field{box-shadow:none!important}
+.vt-complete-catalog .vt-catalog-split-field>span{height:100%;width:var(--h)}
+.vt-complete-catalog .vt-catalog-split-field input{
+ height:100%;width:100%;box-sizing:border-box;border:0!important;border-radius:0!important;outline:0!important;box-shadow:none!important;
+ background:color-mix(in srgb,var(--pair-b) 50%,white);caret-color:var(--pair-a);
+ transition:background 180ms ease-out,box-shadow 180ms ease-out;
+}
+.vt-complete-catalog .vt-catalog-split-field:focus-within{box-shadow:none!important}
+.vt-complete-catalog .vt-catalog-split-field input:focus{background:#fff!important;box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important}
+
+/* Settings switch: exact symmetric inset at both travel endpoints. */
+.vt-complete-catalog .vt-catalog-switch{--switch-inset:calc(var(--h)*.10);--switch-handle-h:calc(var(--h) - (var(--switch-inset)*2));}
+.vt-complete-catalog .vt-catalog-switch span{
+ top:var(--switch-inset);left:var(--switch-inset);height:var(--switch-handle-h);width:calc(var(--switch-handle-h)*.82);aspect-ratio:auto;
+ transform:translateX(0);
+}
+.vt-complete-catalog .vt-catalog-switch.is-on span{
+ transform:translateX(calc((var(--h)*1.72) - (var(--switch-inset)*2) - (var(--switch-handle-h)*.82)));
+}
+
+/* Loose selection primitives: no label capsule or rectangular wrapper. */
+.vt-complete-catalog .vt-catalog-checkbox,.vt-complete-catalog .vt-catalog-radio{
+ position:relative;width:calc(var(--h)*.62);height:calc(var(--h)*.62);padding:0;border:0;box-shadow:none;background:var(--pair-b);
+ display:grid;place-items:center;touch-action:manipulation;
+}
+.vt-complete-catalog .vt-catalog-checkbox{border-radius:calc(var(--radius)*.42)}
+.vt-complete-catalog .vt-catalog-checkbox span{position:relative;width:62%;height:62%}
+.vt-complete-catalog .vt-catalog-checkbox span:before,.vt-complete-catalog .vt-catalog-checkbox span:after{
+ content:"";position:absolute;left:50%;top:50%;width:112%;height:max(3px,calc(var(--stroke)*1.1));border-radius:999px;background:var(--pair-a);transform-origin:center;
+}
+.vt-complete-catalog .vt-catalog-checkbox span:before{transform:translate(-50%,-50%) rotate(45deg)}
+.vt-complete-catalog .vt-catalog-checkbox span:after{transform:translate(-50%,-50%) rotate(-45deg)}
+.vt-complete-catalog .vt-catalog-radio{border-radius:50%}
+.vt-complete-catalog .vt-catalog-radio span{width:42%;height:42%;border-radius:50%;background:var(--pair-a)}
+
+/* Pagination: continuous outer shell, exact internal dividers, no inter-cell color gaps. */
+.vt-complete-catalog .vt-catalog-pagination{gap:0!important;padding:0!important}
+.vt-complete-catalog .vt-catalog-pagination button{margin:0!important;min-width:var(--h);width:var(--h);padding:0!important}
+.vt-complete-catalog .vt-catalog-pagination button+button{border-left:0}
+
+/* Upload certification now consumes the production Video Publisher Tight Reveal primitive. */
+.vt-complete-catalog .vt-catalog-upload-authority{width:100%;aspect-ratio:16/9;min-height:0}
+.vt-complete-catalog .vt-catalog-upload-authority .vt-subtoolbox-file-target{height:100%!important;min-height:0!important;width:100%;border:0!important;box-shadow:none!important}
+.vt-complete-catalog .vt-catalog-upload-authority .vt-subtoolbox-file-target-button{height:100%;min-height:100%;width:100%}
+.vt-complete-catalog .vt-catalog-upload-authority .vt-upload-tight-reveal-center{font-size:var(--fs);font-weight:1000;letter-spacing:-.055em;text-transform:uppercase}
+.vt-complete-catalog .vt-catalog-upload-authority .vt-subtoolbox-file-target-icon svg{width:calc(var(--h)*.7);height:calc(var(--h)*.7)}
+
+/* V26/V28/V31 canonical variant expansion — variants stay inside shared families. */
+.vt-complete-catalog .vt-variant-stat{width:100%;overflow:hidden;border:var(--stroke) solid #000;border-radius:var(--radius);display:grid;grid-template-rows:minmax(calc(var(--h)*.48),auto) minmax(var(--h),auto) minmax(calc(var(--h)*.42),auto);font-family:var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));font-weight:1000;letter-spacing:-.055em}
+.vt-complete-catalog .vt-variant-stat>*{display:grid;place-items:center;padding:calc(var(--h)*.12);min-width:0}
+.vt-complete-catalog .vt-variant-stat span{font-size:calc(var(--fs)*.72);border-bottom:var(--stroke) solid #000}
+.vt-complete-catalog .vt-variant-stat strong{font-size:calc(var(--fs)*1.7)}
+.vt-complete-catalog .vt-variant-stat small{font-size:calc(var(--fs)*.62);border-top:var(--stroke) solid #000}
+.vt-complete-catalog .vt-stat-two span,.vt-complete-catalog .vt-stat-two small{background:var(--pair-a)}.vt-complete-catalog .vt-stat-two strong{background:var(--pair-b)}
+.vt-complete-catalog .vt-stat-mono{--mono:var(--pair-a)}.vt-complete-catalog .vt-stat-mono span{background:color-mix(in srgb,var(--mono) 38%,white)}.vt-complete-catalog .vt-stat-mono strong{background:color-mix(in srgb,var(--mono) 68%,white)}.vt-complete-catalog .vt-stat-mono small{background:var(--mono)}
+
+.vt-complete-catalog .vt-tiny-stats{display:grid;grid-template-columns:1fr 1fr;width:100%;border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:var(--pair-b)}
+.vt-complete-catalog .vt-tiny-stats>div{min-width:0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px;padding:0 calc(var(--h)*.18);height:var(--h);font-weight:1000;letter-spacing:-.055em}.vt-complete-catalog .vt-tiny-stats>div+div{border-left:var(--stroke) solid #000}.vt-complete-catalog .vt-tiny-stats span{font-size:calc(var(--fs)*.62)}.vt-complete-catalog .vt-tiny-stats strong{font-size:var(--fs);background:var(--pair-a);height:100%;display:grid;place-items:center;padding:0 calc(var(--h)*.14);margin-right:calc(var(--h)*-.18)}
+
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-dark .vt-catalog-tooltip{background:#080808!important;color:#fff!important;border-color:#080808!important;box-shadow:none!important}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-dark .vt-catalog-tooltip:before{background:#080808!important;border-color:#080808!important}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-v31 .vt-catalog-tooltip{background:var(--pair-a)!important;color:#000!important;border:2px solid #000!important;border-radius:6px!important;box-shadow:3px 3px 0 color-mix(in srgb,var(--pair-a) 42%,transparent)!important;font-size:12px!important;letter-spacing:-.035em!important}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-v31 .vt-catalog-tooltip:before{background:var(--pair-a)!important;border-left:2px solid #000!important;border-bottom:2px solid #000!important}
+
+.vt-complete-catalog .vt-dashboard-pill-row{display:flex;flex-wrap:wrap;gap:6px}.vt-complete-catalog .vt-dashboard-pill-row span{display:inline-flex;align-items:center;min-height:calc(var(--h)*.48);padding:0 calc(var(--h)*.2);border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a);font-size:calc(var(--fs)*.62);font-weight:1000;letter-spacing:-.045em}
+.vt-complete-catalog .vt-spectrum-tag{border-radius:999px!important}.vt-complete-catalog .vt-spectrum-tag>button{border-radius:50%!important}
+
+/* Certification Wave 03 — mobile screenshot corrections. */
+/* Canonical control typography is owned by component height, including imported split controls. */
+.vt-complete-catalog .vt-catalog-demo.is-l0{--fs:24px}
+.vt-complete-catalog .vt-catalog-demo.is-l1{--fs:18px}
+.vt-complete-catalog .vt-catalog-demo.is-l2{--fs:12px}
+.vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:var(--fs)!important;line-height:.86!important;letter-spacing:-.055em!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown)>:first-child{box-sizing:border-box;width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important}
+
+/* Every split-left rail is a literal 1:1 square. Remove inherited padding/gap that widens icon bays. */
+.vt-complete-catalog :is(.vt-catalog-split-field,.vt-catalog-stepper,.vt-catalog-hscroll,.vt-catalog-pagination){column-gap:0!important}
+.vt-complete-catalog .vt-catalog-split-field{grid-template-columns:var(--h) minmax(0,1fr)!important}
+.vt-complete-catalog .vt-catalog-split-field>span{box-sizing:border-box;width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;padding:0!important;margin:0!important}
+.vt-complete-catalog .vt-catalog-stepper{grid-template-columns:var(--h) minmax(0,1fr) var(--h)!important}
+.vt-complete-catalog .vt-catalog-stepper button{box-sizing:border-box;min-width:0!important;margin:0!important}
+.vt-complete-catalog .vt-catalog-pagination button{box-sizing:border-box;min-width:var(--h)!important;max-width:var(--h)!important;width:var(--h)!important}
+
+/* Loose checkbox/radio: state is visible, interactive, and never same-color-on-same-color. */
+.vt-complete-catalog .vt-catalog-checkbox,.vt-complete-catalog .vt-catalog-radio{background:color-mix(in srgb,var(--pair-b) 48%,white)!important}
+.vt-complete-catalog .vt-catalog-checkbox{border-radius:0!important}
+.vt-complete-catalog .vt-catalog-checkbox span,.vt-complete-catalog .vt-catalog-radio span{opacity:0;transform:scale(.65);transition:opacity 120ms ease-out,transform 120ms ease-out}
+.vt-complete-catalog .vt-catalog-checkbox.is-on span,.vt-complete-catalog .vt-catalog-radio.is-on span{opacity:1;transform:scale(1)}
+.vt-complete-catalog .vt-catalog-checkbox span{width:72%!important;height:72%!important}
+.vt-complete-catalog .vt-catalog-checkbox span:before,.vt-complete-catalog .vt-catalog-checkbox span:after{width:122%!important;height:max(4px,calc(var(--stroke)*1.55))!important;background:#000!important;border-radius:999px!important}
+.vt-complete-catalog .vt-catalog-radio span{width:48%!important;height:48%!important;background:var(--pair-a)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,#000 20%,transparent)}
+
+/* Filled badges: 18/24px canonical heights, all palette slots rotate independently. */
+.vt-complete-catalog .vt-catalog-fill-badge{display:inline-flex;align-items:center;justify-content:center;height:24px;min-height:24px;padding:0 8px;border:0;border-radius:5px;background:var(--pair-a);color:#fff;font:1000 12px/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.035em;text-transform:uppercase}
+.vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-fill-badge{height:18px;min-height:18px;padding-inline:6px;font-size:9px}
+.vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-fill-badge{height:24px;font-size:12px}
+.vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-fill-badge{height:24px;font-size:12px}
+
+/* Alphabetical tags use a continuous 360° hue wheel: A–Z each gets a unique color. */
+.vt-complete-catalog .vt-alpha-tag{--alpha:hsl(var(--alpha-h) 82% 62%);background:color-mix(in srgb,var(--alpha) 18%,white)!important;border-color:var(--alpha)!important;color:color-mix(in srgb,var(--alpha) 78%,#000)!important;font-size:calc(var(--fs)*.68)!important;line-height:1!important;white-space:nowrap}
+.vt-complete-catalog .vt-catalog-spectrum-row{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
+
+/* Toolbox authority correction: V31 #37 tooltip anatomy and original 22/23 colors. */
+.vt-complete-catalog .vt-catalog-tooltip-demo{position:relative;display:inline-grid;place-items:center;padding-top:calc(var(--h)*1.15)}
+.vt-complete-catalog .vt-catalog-tooltip{left:50%!important;right:auto!important;top:auto!important;bottom:calc(100% - var(--h)*1.02)!important;transform:translateX(-50%)!important;background:var(--pair-b)!important;color:#000!important;border:var(--stroke) solid #000!important;border-radius:var(--radius)!important;box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent)!important}
+.vt-complete-catalog .vt-catalog-tooltip:before{right:auto!important;left:50%!important;top:100%!important;width:calc(var(--h)*.24)!important;height:calc(var(--h)*.24)!important;background:var(--pair-b)!important;border:0!important;border-right:var(--stroke) solid #000!important;border-bottom:var(--stroke) solid #000!important;transform:translate(-50%,-48%) rotate(45deg)!important;box-sizing:border-box}
+.vt-complete-catalog .vt-catalog-checkbox{background:var(--pair-b)!important;border-radius:0!important}
+.vt-complete-catalog .vt-catalog-radio{background:var(--pair-b)!important;border-radius:50%!important}
+.vt-complete-catalog .vt-catalog-checkbox span{width:82%!important;height:82%!important}
+.vt-complete-catalog .vt-catalog-checkbox span:before,.vt-complete-catalog .vt-catalog-checkbox span:after{width:132%!important;height:max(4px,calc(var(--stroke)*1.55))!important;background:#000!important;border-radius:999px!important}
+.vt-complete-catalog .vt-catalog-radio span{background:var(--pair-a)!important}
+
+/* Certification Wave 03 — level typography, centered menus, two-color knob, pure spectrum tags. */
+.vt-complete-catalog .vt-catalog-demo.is-l0{--fs:24px}
+.vt-complete-catalog .vt-catalog-demo.is-l1{--fs:18px}
+.vt-complete-catalog .vt-catalog-demo.is-l2{--fs:12px}
+
+/* Split controls must inherit level DNA rather than their older small primitive defaults. */
+.vt-complete-catalog .vt-catalog-demo.is-l0 :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:24px!important}
+.vt-complete-catalog .vt-catalog-demo.is-l1 :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:18px!important}
+.vt-complete-catalog .vt-catalog-demo.is-l2 :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:12px!important}
+.vt-complete-catalog :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-weight:1000!important;letter-spacing:-.055em!important}
+
+/* Dropdown/select labels are centered while the chevron retains its square tail zone. */
+.vt-complete-catalog .vt-catalog-menu .menu-label{position:relative;display:flex!important;align-items:center!important;justify-content:center!important;padding-inline:var(--h)!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label>b{padding:0!important;text-align:center!important;font-size:var(--fs)!important;line-height:.86!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label>svg{position:absolute;right:0;top:50%;transform:translateY(-50%);width:var(--h)!important;height:46%!important;padding-inline:calc(var(--h)*.28);box-sizing:border-box}
+
+/* KPI type scales with its structural level and uses the available card area. */
+.vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]){font-family:var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important}
+.vt-complete-catalog .vt-catalog-demo.is-l0 :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]) :is(header,small,label,.vt-kpi-label){font-size:24px!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo.is-l0 :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]) :is(strong,.vt-kpi-value){font-size:48px!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo.is-l1 :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]) :is(header,small,label,.vt-kpi-label){font-size:18px!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo.is-l1 :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]) :is(strong,.vt-kpi-value){font-size:38px!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo.is-l2 :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]) :is(header,small,label,.vt-kpi-label){font-size:12px!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo.is-l2 :is(.vt-subtoolbox-kpi,.vt-kpi-card,[data-vt-kpi]) :is(strong,.vt-kpi-value){font-size:28px!important;font-weight:1000!important}
+
+/* Two-color knob: paired outer ring/body + opposite center face, with value integrated into the dial. */
+.vt-complete-catalog .vt-catalog-knob{gap:10px;font-size:var(--fs);font-weight:1000}
+.vt-complete-catalog .vt-catalog-knob .knob-face{width:var(--h);height:var(--h);box-sizing:border-box;border:var(--stroke) solid #000;border-radius:50%;background:var(--pair-b);box-shadow:inset 0 0 0 calc(var(--stroke)*1.35) var(--pair-a);position:relative;display:grid;place-items:center}
+.vt-complete-catalog .vt-catalog-knob .knob-face:after{content:"";position:absolute;inset:calc(var(--stroke)*2.6);border-radius:50%;background:var(--pair-a);z-index:0}
+.vt-complete-catalog .vt-catalog-knob .knob-face i{z-index:2;top:8%;height:28%;background:#000}
+.vt-complete-catalog .vt-catalog-knob .knob-face em{position:relative;z-index:2;font-style:normal;font-size:calc(var(--fs)*.72);font-weight:1000}
+.vt-complete-catalog .vt-catalog-knob .knob-value{font-size:var(--fs);font-weight:1000}
+
+/* Alphabetical spectrum is chromatic only: fill, stroke and text are derived solely from hue + white. */
+.vt-complete-catalog .vt-alpha-tag{
+ --alpha:hsl(var(--alpha-h) 88% 58%);
+ --alpha-deep:hsl(var(--alpha-h) 92% 28%);
+ background:color-mix(in srgb,var(--alpha) 24%,white)!important;
+ border-color:var(--alpha)!important;
+ color:var(--alpha-deep)!important;
+ font-size:calc(var(--fs)*.78)!important;
+ font-weight:1000!important;
+}
+
+/* ==========================================================================
+   COMPONENT LIBRARY CERTIFICATION WAVE 04
+   Source-aligned corrections from the standalone Toolbox library + Widget tag
+   reference. Geometry is level-owned; interactions are real, not static demos.
+   ========================================================================== */
+
+/* 06 / 07 — Split Left + Head/Tail: exact-square rail, level type and icon DNA. */
+.vt-complete-catalog .vt-catalog-split-primitive{
+  width:100%!important;
+  height:var(--h)!important;
+  min-height:var(--h)!important;
+  border-width:var(--stroke)!important;
+  border-radius:var(--radius)!important;
+  font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;
+}
+.vt-complete-catalog .vt-catalog-split-primitive .vt-subtoolbox-split-button-rail{
+  width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;
+  height:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important;
+  border-right-width:var(--stroke)!important;display:grid!important;place-items:center!important;
+}
+.vt-complete-catalog .vt-catalog-split-primitive .vt-subtoolbox-split-button-label{
+  min-width:0!important;display:grid!important;place-items:center!important;
+  padding:0 calc(var(--h)*.16)!important;font:inherit!important;
+}
+.vt-complete-catalog .vt-catalog-split-primitive svg,
+.vt-complete-catalog .vt-catalog-stepper svg,
+.vt-complete-catalog .vt-catalog-pagination svg{
+  width:calc(var(--h)*.55)!important;height:calc(var(--h)*.55)!important;
+  stroke-width:3.25!important;
+}
+.vt-complete-catalog .is-l0.vt-catalog-split-primitive svg,
+.vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-stepper svg,
+.vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-pagination svg{stroke-width:3.75!important}
+.vt-complete-catalog .is-l1.vt-catalog-split-primitive svg,
+.vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-stepper svg,
+.vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-pagination svg{stroke-width:3.4!important}
+.vt-complete-catalog .is-l2.vt-catalog-split-primitive svg,
+.vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-stepper svg,
+.vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-pagination svg{stroke-width:3!important}
+
+/* 08–10 — menus: centered labels/options; split-menu options repeat the split rail. */
+.vt-complete-catalog .vt-catalog-menu .menu-panel button{
+  min-height:var(--h)!important;padding:0!important;
+  display:grid!important;place-items:center!important;text-align:center!important;
+  font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-panel button:not(.is-split-option){
+  grid-template-columns:1fr!important;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-panel .is-split-option{
+  grid-template-columns:var(--h) minmax(0,1fr)!important;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-option-rail{
+  width:var(--h);height:100%;display:grid;place-items:center;
+  background:var(--pair-a);border-right:var(--stroke) solid #000;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-option-rail svg{
+  width:52%;height:52%;stroke-width:3.4;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-option-label{
+  width:100%;height:100%;display:grid;place-items:center;text-align:center;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-label{
+  justify-content:center!important;text-align:center!important;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-label>b{
+  width:100%;padding:0!important;text-align:center!important;
+}
+
+/* 12–17 — one field-state contract.
+   Plain fields use pair-A as the inset/caret color and pair-B as focus glow.
+   Split-left fields invert the body contract: pair-A rail + pair-B field.
+   Rest = 50% tint with a fully opaque inset color.
+   Focus = white interior + retained inset + dense-to-soft opposite-pair glow. */
+.vt-complete-catalog .vt-catalog-field{
+  --field-accent:var(--pair-a);
+  --field-glow:var(--pair-b);
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;text-transform:uppercase;
+  color:#000!important;caret-color:var(--field-accent)!important;
+  background:color-mix(in srgb,var(--field-accent) 50%,white)!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--field-accent)!important;
+}
+.vt-complete-catalog .vt-catalog-field:focus{
+  background:#fff!important;
+  box-shadow:
+    inset 0 0 0 var(--stroke) var(--field-accent),
+    0 0 3px calc(var(--stroke)*.75) color-mix(in srgb,var(--field-glow) 78%,transparent),
+    0 0 calc(var(--h)*.20) calc(var(--stroke)*1.1) color-mix(in srgb,var(--field-glow) 48%,transparent),
+    0 0 calc(var(--h)*.42) calc(var(--stroke)*.25) color-mix(in srgb,var(--field-glow) 24%,transparent)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field{
+  --field-accent:var(--pair-b);
+  --field-glow:var(--pair-a);
+  box-shadow:none!important;
+  background:var(--pair-b)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field>span{
+  background:var(--pair-a)!important;
+  border-right:var(--stroke) solid #000!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input{
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;text-transform:uppercase;
+  color:#000!important;caret-color:var(--field-accent)!important;
+  background:color-mix(in srgb,var(--field-accent) 50%,white)!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--field-accent)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field:focus-within{
+  box-shadow:
+    0 0 3px calc(var(--stroke)*.75) color-mix(in srgb,var(--field-glow) 78%,transparent),
+    0 0 calc(var(--h)*.20) calc(var(--stroke)*1.1) color-mix(in srgb,var(--field-glow) 48%,transparent),
+    0 0 calc(var(--h)*.42) calc(var(--stroke)*.25) color-mix(in srgb,var(--field-glow) 24%,transparent)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input:focus{
+  background:#fff!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--field-accent)!important;
+}
+.vt-complete-catalog :is(.vt-catalog-field,.vt-catalog-split-field input)::placeholder{
+  color:#8b8b8b!important;opacity:1!important;
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;text-transform:uppercase!important;
+}
+.vt-complete-catalog .vt-catalog-split-field>span svg{
+  width:calc(var(--h)*.52);height:calc(var(--h)*.52);stroke-width:3.4;
+}
+.vt-complete-catalog .vt-catalog-stepper button svg{
+  width:calc(var(--h)*.52)!important;height:calc(var(--h)*.52)!important;
+}
+
+/* 18 / 19 — V26 slider authority.
+   Square primary-color rail + opposite-color body + square primary-color value rail.
+   Track is a compact white slot with black inset edge; handles are centered circles
+   with no extra border/shadow. Range reuses the same anatomy with two handles. */
+.vt-complete-catalog .vt-catalog-slider,
+.vt-complete-catalog .vt-catalog-range{
+  --slider-color:var(--pair-a);
+  --slider-opposite:var(--pair-b);
+  --slider-track:max(8px,calc(var(--h)*.208));
+  --slider-thumb:max(16px,calc(var(--h)*.46));
+  --slider-track-stroke:2px;
+  width:100%!important;height:var(--h)!important;
+  display:grid!important;grid-template-columns:var(--h) minmax(0,1fr) var(--h)!important;
+  padding:0!important;border:var(--stroke) solid #000!important;border-radius:var(--radius)!important;
+  overflow:hidden!important;background:var(--slider-opposite)!important;
+  box-shadow:none!important;align-items:stretch!important;
+}
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>.rail,
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>output{
+  width:var(--h)!important;height:100%!important;min-width:var(--h)!important;
+  padding:0!important;border:0!important;border-radius:0!important;
+  background:var(--slider-color)!important;box-shadow:none!important;
+  display:grid!important;place-items:center!important;
+  font:1000 calc(var(--fs)*.72)/.8 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;white-space:nowrap!important;
+}
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>.rail{
+  border-right:var(--stroke) solid #000!important;
+}
+.vt-complete-catalog :is(.vt-catalog-slider,.vt-catalog-range)>output{
+  border-left:var(--stroke) solid #000!important;
+}
+.vt-complete-catalog .vt-catalog-slider .slider-glyph{
+  font:1000 calc(var(--fs)*.78)/.8 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+}
+.vt-complete-catalog :is(.slider-center,.range-center){
+  position:relative!important;min-width:0!important;height:100%!important;
+  display:grid!important;align-items:center!important;
+  padding:0 calc(var(--h)*.18)!important;background:var(--slider-opposite)!important;
+}
+
+/* Single slider: this mirrors the standalone V26 input itself as the slot. */
+.vt-complete-catalog .vt-catalog-slider input[type=range]{
+  appearance:none!important;-webkit-appearance:none!important;
+  width:100%!important;height:var(--slider-track)!important;
+  margin:0!important;padding:0!important;border:0!important;border-radius:999px!important;
+  background:linear-gradient(to right,var(--slider-color) 0 var(--pct),#fff var(--pct) 100%)!important;
+  box-shadow:inset 0 0 0 var(--slider-track-stroke) #000!important;
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-webkit-slider-runnable-track{
+  height:var(--slider-track)!important;background:transparent!important;border:0!important;
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none!important;
+  width:var(--slider-thumb)!important;height:var(--slider-thumb)!important;
+  margin-top:calc((var(--slider-track) - var(--slider-thumb))/2)!important;
+  border:0!important;border-radius:50%!important;background:var(--slider-color)!important;
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-moz-range-track{
+  height:var(--slider-track)!important;background:transparent!important;border:0!important;
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-moz-range-thumb{
+  width:var(--slider-thumb)!important;height:var(--slider-thumb)!important;
+  border:0!important;border-radius:50%!important;background:var(--slider-color)!important;
+  box-shadow:none!important;
+}
+
+/* Dual range: same centered slot and circular handle DNA, two independent thumbs. */
+.vt-complete-catalog .vt-catalog-range .range-track{
+  position:absolute!important;left:calc(var(--h)*.18)!important;right:calc(var(--h)*.18)!important;top:50%!important;
+  height:var(--slider-track)!important;transform:translateY(-50%)!important;
+  border:0!important;border-radius:999px!important;background:#fff!important;
+  box-shadow:inset 0 0 0 var(--slider-track-stroke) #000!important;overflow:hidden!important;
+}
+.vt-complete-catalog .vt-catalog-range .range-track:after{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  box-shadow:inset 0 0 0 var(--slider-track-stroke) #000;pointer-events:none;
+}
+.vt-complete-catalog .vt-catalog-range .range-fill{
+  position:absolute!important;top:0!important;bottom:0!important;background:var(--slider-color)!important;
+}
+.vt-complete-catalog .vt-catalog-range input[type=range]{
+  position:absolute!important;left:calc(var(--h)*.18)!important;right:calc(var(--h)*.18)!important;top:50%!important;
+  width:calc(100% - (var(--h)*.36))!important;height:var(--slider-thumb)!important;
+  transform:translateY(-50%)!important;
+  appearance:none!important;-webkit-appearance:none!important;
+  margin:0!important;padding:0!important;background:transparent!important;pointer-events:none!important;
+}
+.vt-complete-catalog .vt-catalog-range input[type=range]::-webkit-slider-runnable-track{
+  height:var(--slider-track)!important;background:transparent!important;border:0!important;
+}
+.vt-complete-catalog .vt-catalog-range input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none!important;
+  width:var(--slider-thumb)!important;height:var(--slider-thumb)!important;
+  margin-top:calc((var(--slider-track) - var(--slider-thumb))/2)!important;
+  border:0!important;border-radius:50%!important;background:var(--slider-color)!important;
+  box-shadow:none!important;pointer-events:auto!important;
+}
+.vt-complete-catalog .vt-catalog-range input[type=range]::-moz-range-track{
+  height:var(--slider-track)!important;background:transparent!important;border:0!important;
+}
+.vt-complete-catalog .vt-catalog-range input[type=range]::-moz-range-thumb{
+  width:var(--slider-thumb)!important;height:var(--slider-thumb)!important;
+  border:0!important;border-radius:50%!important;background:var(--slider-color)!important;
+  box-shadow:none!important;pointer-events:auto!important;
+}
+
+/* 20 / 21 — OFF state is the same family color at 50% opacity. */
+.vt-complete-catalog .vt-catalog-toggle:not(.is-on),
+.vt-complete-catalog .vt-catalog-switch:not(.is-on){
+  background:color-mix(in srgb,var(--pair-a) 50%,transparent)!important;
+}
+
+/* 22 — exact level-aware checkbox; X uses the opposite pair color. */
+.vt-complete-catalog .vt-catalog-checkbox{
+  width:calc(var(--h)*.68)!important;height:calc(var(--h)*.68)!important;
+  min-width:calc(var(--h)*.68)!important;min-height:calc(var(--h)*.68)!important;
+  background:var(--pair-a)!important;
+}
+.vt-complete-catalog .vt-catalog-checkbox span{
+  width:84%!important;height:84%!important;
+}
+.vt-complete-catalog .vt-catalog-checkbox span:before,
+.vt-complete-catalog .vt-catalog-checkbox span:after{
+  background:var(--pair-b)!important;height:max(4px,calc(var(--stroke)*1.55))!important;border-radius:999px!important;
+}
+
+/* 24 — segmented choices are real toggles. */
+.vt-complete-catalog .vt-catalog-segmented button{
+  background:var(--pair-b)!important;
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+}
+.vt-complete-catalog .vt-catalog-segmented button.is-active{background:var(--pair-a)!important}
+
+/* 25 — grouped actions inherit level height/type instead of primitive defaults. */
+.vt-complete-catalog .vt-catalog-button-group{
+  display:inline-grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;
+}
+.vt-complete-catalog .vt-catalog-button-group button{
+  height:var(--h);min-width:calc(var(--h)*1.5);padding:0 calc(var(--h)*.22);
+  border:var(--stroke) solid #000;border-radius:var(--radius);background:var(--pair-a);
+  font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.055em;
+}
+
+/* 26–29 — level-aware tags and functional tag editor. */
+.vt-complete-catalog :is(.vt-catalog-tag,.vt-spectrum-tag,.vt-catalog-selectable-tag){
+  --tag-h:calc(var(--h)*.58);min-height:var(--tag-h);height:var(--tag-h);
+  display:inline-flex;align-items:center;justify-content:center;gap:calc(var(--tag-h)*.12);
+  padding:0 calc(var(--tag-h)*.34);border:var(--stroke) solid var(--pair-a);
+  border-radius:999px;background:color-mix(in srgb,var(--pair-a) 34%,white);
+  color:var(--pair-a);font:1000 calc(var(--fs)*.72)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.035em;text-transform:uppercase;
+}
+.vt-complete-catalog .vt-spectrum-tag{padding-right:calc(var(--tag-h)*.10)}
+.vt-complete-catalog .vt-spectrum-tag button{
+  width:calc(var(--tag-h)*.72);height:calc(var(--tag-h)*.72);padding:0;
+  border:0;border-radius:50%;background:var(--pair-b);display:grid;place-items:center;
+}
+.vt-complete-catalog .vt-spectrum-tag button svg{width:62%;height:62%;stroke-width:4}
+.vt-complete-catalog .vt-catalog-selectable-tag{
+  cursor:pointer;background:color-mix(in srgb,var(--pair-b) 30%,white);border-color:var(--pair-b);color:var(--pair-b);
+}
+.vt-complete-catalog .vt-catalog-selectable-tag.is-selected{
+  background:var(--pair-a);border-color:var(--pair-a);color:var(--pair-b);
+}
+.vt-complete-catalog .vt-catalog-selectable-tag svg{width:calc(var(--tag-h)*.5);height:calc(var(--tag-h)*.5);stroke-width:4}
+.vt-complete-catalog .vt-catalog-tag-editor{
+  min-height:var(--h);display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+  padding:4px;border:var(--stroke) solid #000;border-radius:var(--radius);
+  background:color-mix(in srgb,var(--pair-b) 20%,white);
+}
+.vt-complete-catalog .tag-editor-tags{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.vt-complete-catalog .vt-catalog-tag-editor>input{
+  min-width:6ch;flex:1 1 90px;height:calc(var(--h)*.68);border:var(--stroke) solid #000;border-radius:calc(var(--radius)*.65);
+  background:color-mix(in srgb,var(--pair-a) 50%,white);box-shadow:inset 0 0 0 var(--stroke) var(--pair-a);
+  padding:0 8px;outline:0;caret-color:var(--pair-a);
+  font:1000 calc(var(--fs)*.78)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));text-transform:uppercase;
+}
+.vt-complete-catalog .vt-catalog-tag-editor>input:focus{
+  background:#fff;box-shadow:inset 0 0 0 var(--stroke) var(--pair-a),0 0 calc(var(--h)*.22) color-mix(in srgb,var(--pair-b) 62%,transparent);
+}
+.vt-complete-catalog .vt-catalog-tag-editor>.add,
+.vt-complete-catalog .vt-catalog-tag-editor>.submit{
+  width:calc(var(--h)*.68);height:calc(var(--h)*.68);padding:0;border:var(--stroke) solid #000;border-radius:calc(var(--radius)*.65);
+  display:grid;place-items:center;background:var(--pair-a);
+}
+.vt-complete-catalog .vt-catalog-tag-editor>.submit{background:var(--pair-b)}
+.vt-complete-catalog .vt-catalog-tag-editor>:is(.add,.submit) svg{width:55%;height:55%;stroke-width:4}
+
+
+/* Preserve the previous solid removable/editor tag face while retaining the
+   new level sizing and editor behavior. */
+.vt-complete-catalog .vt-spectrum-tag{
+  border:0!important;
+  background:var(--pair-a)!important;
+  color:#000!important;
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-spectrum-tag button{
+  background:var(--pair-b)!important;
+}
+/* 30 / 31 — distinct badge DNA at each level. */
+.vt-complete-catalog .vt-catalog-fill-badge,
+.vt-complete-catalog .vt-status-badge{
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  padding:0 8px;border-radius:5px;font-weight:1000;text-transform:uppercase;letter-spacing:-.035em;
+}
+.vt-complete-catalog .vt-catalog-demo.is-l0 :is(.vt-catalog-fill-badge,.vt-status-badge){height:28px;font-size:14px}
+.vt-complete-catalog .vt-catalog-demo.is-l1 :is(.vt-catalog-fill-badge,.vt-status-badge){height:24px;font-size:12px}
+.vt-complete-catalog .vt-catalog-demo.is-l2 :is(.vt-catalog-fill-badge,.vt-status-badge){height:18px;font-size:9px}
+
+/* 32 — both rounded and rectangular progress anatomy. */
+.vt-complete-catalog .vt-catalog-progress-stack{display:grid;gap:7px;width:100%}
+.vt-complete-catalog .vt-catalog-progress{
+  width:100%;height:calc(var(--h)*.42);border:var(--stroke) solid #000;overflow:hidden;background:var(--pair-b);
+}
+.vt-complete-catalog .vt-catalog-progress.is-rounded{border-radius:999px}
+.vt-complete-catalog .vt-catalog-progress.is-rect{border-radius:calc(var(--radius)*.4)}
+.vt-complete-catalog .vt-catalog-progress span{height:100%;display:block;background:var(--pair-a)}
+
+/* 33 — standalone-library progress + value composition. */
+.vt-complete-catalog .vt-catalog-progress-value{
+  width:100%;height:var(--h);display:grid;grid-template-columns:minmax(0,1fr) max(var(--h),4.5ch);
+  border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;background:#fff;
+}
+.vt-complete-catalog .vt-catalog-progress-value .bar{
+  padding:calc(var(--h)*.17);display:flex;align-items:center;background:#fff;
+}
+.vt-complete-catalog .vt-catalog-progress-value .bar:before{
+  content:"";position:absolute;
+}
+.vt-complete-catalog .vt-catalog-progress-value .bar span{
+  width:68%;height:calc(var(--h)*.30);border:var(--stroke) solid #000;border-radius:999px;background:var(--pair-a);
+}
+.vt-complete-catalog .vt-catalog-progress-value output{
+  border-left:var(--stroke) solid #000;background:var(--pair-b);display:grid;place-items:center;
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+}
+
+/* 34 — KPI card fills its white canvas and scales by level. */
+.vt-complete-catalog .vt-catalog-kpi{
+  width:100%;border:var(--stroke) solid #000;border-radius:var(--radius);overflow:hidden;
+  box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-b) 42%,transparent);
+}
+.vt-complete-catalog .vt-catalog-kpi>header{
+  height:var(--h);display:grid;place-items:center;background:var(--pair-a);
+  border-bottom:var(--stroke) solid #000;
+  font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.055em;
+}
+.vt-complete-catalog .vt-catalog-kpi .kpi-canvas{
+  min-height:calc(var(--h)*1.65);display:grid;place-items:center;background:#fff;
+}
+.vt-complete-catalog .vt-catalog-kpi .kpi-canvas strong{
+  font:1000 calc(var(--fs)*2.35)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.065em;
+}
+
+/* 37 / 61 — correct connected-spout tooltip anatomy above the trigger. */
+.vt-complete-catalog .vt-catalog-tooltip-demo{
+  position:relative;display:inline-grid;place-items:center;padding-top:calc(var(--h)*1.48)!important;
+}
+.vt-complete-catalog .vt-catalog-tooltip-demo>button{
+  width:var(--h);height:var(--h);padding:0;border:0;border-radius:calc(var(--radius)*.75);
+  background:var(--pair-a);display:grid;place-items:center;
+  font:1000 calc(var(--fs)*1.15)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+}
+.vt-complete-catalog .vt-catalog-tooltip{
+  position:absolute!important;left:50%!important;bottom:calc(var(--h) + calc(var(--h)*.26))!important;top:auto!important;
+  transform:translateX(-50%)!important;
+  min-width:max-content;padding:calc(var(--h)*.18) calc(var(--h)*.30)!important;
+  border:var(--stroke) solid #000!important;border-radius:var(--radius)!important;
+  background:var(--pair-b)!important;color:#000!important;
+  font:1000 var(--fs)/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;
+  box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent)!important;
+}
+.vt-complete-catalog .vt-catalog-tooltip:before,
+.vt-complete-catalog .vt-catalog-tooltip:after{
+  content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
+  width:0;height:0;pointer-events:none;
+}
+.vt-complete-catalog .vt-catalog-tooltip:before{
+  border-left:calc(var(--h)*.18) solid transparent;
+  border-right:calc(var(--h)*.18) solid transparent;
+  border-top:calc(var(--h)*.18) solid #000;
+}
+.vt-complete-catalog .vt-catalog-tooltip:after{
+  margin-top:calc(var(--stroke)*-1);
+  border-left:calc(var(--h)*.13) solid transparent;
+  border-right:calc(var(--h)*.13) solid transparent;
+  border-top:calc(var(--h)*.13) solid var(--pair-b);
+}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-v31 .vt-catalog-tooltip{
+  background:var(--pair-a)!important;
+  box-shadow:3px 3px 0 color-mix(in srgb,var(--pair-b) 42%,transparent)!important;
+}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-v31 .vt-catalog-tooltip:after{border-top-color:var(--pair-a)}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-dark .vt-catalog-tooltip{
+  background:#080808!important;color:#fff!important;border-color:#080808!important;box-shadow:none!important;
+}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-dark .vt-catalog-tooltip:before{border-top-color:#080808}
+.vt-complete-catalog .vt-catalog-tooltip-demo.is-dark .vt-catalog-tooltip:after{border-top-color:#080808}
+
+/* 39 — disclosure level type + no doubled bottom seam when collapsed. */
+.vt-complete-catalog .vt-catalog-disclosure .disclosure-head{
+  height:var(--h);font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.055em;
+}
+.vt-complete-catalog .vt-catalog-disclosure:not(.is-open) .disclosure-head{border-bottom:0!important}
+.vt-complete-catalog .vt-catalog-disclosure .disclosure-head svg{
+  width:calc(var(--h)*.5);height:calc(var(--h)*.5);stroke-width:3.4;
+}
+
+/* 47 — centered, level-scaled pagination arrows. */
+.vt-complete-catalog .vt-catalog-pagination button{
+  display:grid!important;place-items:center!important;padding:0!important;
+  min-width:var(--h)!important;width:var(--h)!important;height:var(--h)!important;
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+}
+.vt-complete-catalog .vt-catalog-pagination button svg{
+  width:calc(var(--h)*.58)!important;height:calc(var(--h)*.58)!important;
+}
+
+/* 54 — active LED radiates a transparent pulse ring. */
+.vt-complete-catalog .vt-catalog-led i{
+  position:relative;isolation:isolate;
+}
+.vt-complete-catalog .vt-catalog-led.is-active i:before{
+  content:"";position:absolute;inset:-2px;border-radius:50%;
+  background:color-mix(in srgb,var(--pair-a) 42%,transparent);
+  z-index:-1;animation:vt-led-pulse 1.8s ease-out infinite;
+}
+@keyframes vt-led-pulse{
+  0%{transform:scale(.9);opacity:.78}
+  70%,100%{transform:scale(2.35);opacity:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .vt-complete-catalog .vt-catalog-led.is-active i:before{animation:none;opacity:.28;transform:scale(1.45)}
+}
+
+/* 55 — three-color chromatic tag recipe: stroke / fill / text are all
+   different hues; none is mixed with black. Widget-library reference uses
+   chromatic stroke + translucent fill, extended here with a separate text hue. */
+.vt-complete-catalog .vt-alpha-tag{
+  --tag-stroke:hsl(var(--alpha-h) 88% 58%);
+  --tag-fill-base:hsl(calc(var(--alpha-h) + 28) 88% 64%);
+  --tag-text:hsl(calc(var(--alpha-h) + 326) 92% 38%);
+  border-color:var(--tag-stroke)!important;
+  background:color-mix(in srgb,var(--tag-fill-base) 35%,white)!important;
+  color:var(--tag-text)!important;
+  font-size:calc(var(--fs)*.78)!important;font-weight:1000!important;
+}
+
+
+/* Hardcoded exact Tooltip baseline.
+   Intentionally duplicates the approved standalone Tooltip appearance so the
+   frozen comparison toolbox does not depend on production primitive CSS. */
+.vt-complete-catalog .vt-hardcoded-tooltip{
+  position:relative;display:inline-grid;place-items:center;
+  padding-top:0;isolation:isolate;
+}
+.vt-complete-catalog .vt-hardcoded-tooltip>button{
+  width:var(--h);height:var(--h);padding:0;border:0;border-radius:calc(var(--radius)*.75);
+  background:var(--pair-a);color:#000;display:grid;place-items:center;cursor:help;
+  font:1000 calc(var(--fs)*1.15)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.055em;
+}
+.vt-complete-catalog .vt-hardcoded-tooltip-bubble{
+  position:absolute;left:50%;bottom:calc(var(--h) + var(--h)*.26);z-index:30;transform:translateX(-50%);
+  min-width:max-content;padding:calc(var(--h)*.18) calc(var(--h)*.30);
+  border:var(--stroke) solid #000;border-radius:var(--radius);
+  background:var(--pair-a);color:#000;
+  font:1000 var(--fs)/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
+  letter-spacing:-.055em;text-transform:uppercase;
+  box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 35%,transparent);
+}
+.vt-complete-catalog .vt-hardcoded-tooltip-bubble:before,
+.vt-complete-catalog .vt-hardcoded-tooltip-bubble:after{
+  content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);width:0;height:0;
+}
+.vt-complete-catalog .vt-hardcoded-tooltip-bubble:before{
+  border-left:calc(var(--h)*.18) solid transparent;border-right:calc(var(--h)*.18) solid transparent;border-top:calc(var(--h)*.18) solid #000;
+}
+.vt-complete-catalog .vt-hardcoded-tooltip-bubble:after{
+  margin-top:calc(var(--stroke)*-1);
+  border-left:calc(var(--h)*.13) solid transparent;border-right:calc(var(--h)*.13) solid transparent;border-top:calc(var(--h)*.13) solid var(--pair-a);
+}
+
+
+/* ==========================================================================
+   USER-CERTIFIED CORRECTIONS — tooltip, knob, alphabetical tags.
+   ========================================================================== */
+
+/* #37 Tooltip keeps the approved standalone shape, but is closed by default.
+   Hover and keyboard focus reveal it; the tooltip does not reserve open-state
+   interaction or pointer events when hidden. */
+.vt-complete-catalog .vt-hardcoded-tooltip-bubble{
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 120ms ease-out,visibility 120ms ease-out;
+}
+.vt-complete-catalog .vt-hardcoded-tooltip:is(:hover,:focus-within) .vt-hardcoded-tooltip-bubble{
+  opacity:1;visibility:visible;
+}
+
+/* #52 Knob Dial: larger two-colour dial with a real native range input layered
+   over the circular face. Mouse/touch drag and keyboard arrows all update it. */
+.vt-complete-catalog .vt-catalog-knob{
+  --knob-size:calc(var(--h)*1.9);
+  display:inline-grid!important;justify-items:center!important;gap:calc(var(--h)*.14)!important;
+  min-width:calc(var(--knob-size) + var(--stroke)*2)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face{
+  width:var(--knob-size)!important;height:var(--knob-size)!important;
+  border:var(--stroke) solid #000!important;border-radius:50%!important;
+  background:conic-gradient(from 225deg,color-mix(in srgb,var(--pair-a) 22%,white) 0 75%,#fff 75% 100%)!important;
+  box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-a) 38%,transparent)!important;
+  position:relative!important;display:grid!important;place-items:center!important;overflow:visible!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:before{
+  content:"";position:absolute;inset:calc(var(--stroke)*1.7);border-radius:50%;
+  background:var(--pair-a);box-shadow:inset 0 0 0 calc(var(--stroke)*1.25) color-mix(in srgb,var(--pair-b) 72%,white);
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:after{
+  content:"";position:absolute;inset:16%;border-radius:50%;background:var(--pair-b);z-index:1;
+  box-shadow:inset 0 0 0 var(--stroke) #000;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face i{
+  position:absolute!important;z-index:3!important;left:50%!important;top:19%!important;
+  width:max(4px,calc(var(--stroke)*1.25))!important;height:22%!important;border-radius:999px!important;background:#000!important;
+  transform-origin:50% 141%!important;transform:translateX(-50%) rotate(var(--vt-knob-angle))!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face em{
+  position:relative!important;z-index:3!important;font-style:normal!important;
+  font-size:calc(var(--fs)*1.35)!important;font-weight:1000!important;letter-spacing:-.06em!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face input[type=range]{
+  position:absolute;inset:0;z-index:5;width:100%;height:100%;margin:0;opacity:0;cursor:grab;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face input[type=range]:active{cursor:grabbing}
+.vt-complete-catalog .vt-catalog-knob .knob-face:focus-within{
+  outline:calc(var(--stroke)*.75) solid var(--pair-b);outline-offset:4px;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-value{
+  font-size:calc(var(--fs)*.72)!important;font-weight:1000!important;letter-spacing:.04em!important;text-transform:uppercase!important;
+}
+
+/* #55 Alphabetical spectrum tags use the canonical twelve palette slots.
+   Stroke and text are the exact slot colour; the fill is its 35% tint. */
+.vt-complete-catalog .vt-alpha-tag{
+  background:color-mix(in srgb,var(--alpha) 35%,white)!important;
+  border-color:var(--alpha)!important;
+  color:var(--alpha)!important;
+  font-size:calc(var(--fs)*.72)!important;font-weight:1000!important;
+  line-height:1!important;white-space:nowrap!important;
+}
+
+
+/* ==========================================================================
+   USER CORRECTION WAVE — baseline parity for #14 / #16 / #29 / #33 / #52.
+   These stay hardcoded on purpose so the top toolbox remains an independent
+   comparison target for the primitive implementations.
+   ========================================================================== */
+
+.vt-complete-catalog .vt-catalog-split-field{
+  display:grid!important;width:100%!important;height:var(--h)!important;overflow:hidden!important;
+  border:var(--stroke) solid #000!important;border-radius:var(--radius)!important;background:var(--pair-b)!important
+}
+.vt-complete-catalog .vt-catalog-split-field.is-search{grid-template-columns:var(--h) minmax(0,1fr) var(--h)!important}
+.vt-complete-catalog .vt-catalog-split-field.is-action{grid-template-columns:minmax(0,1fr) var(--h)!important}
+.vt-complete-catalog .vt-catalog-split-field>span{
+  width:var(--h)!important;height:100%!important;display:grid!important;place-items:center!important;
+  background:var(--pair-a)!important;border-right:var(--stroke) solid #000!important
+}
+.vt-complete-catalog .vt-catalog-split-field>span svg,
+.vt-complete-catalog .vt-catalog-split-field .field-action svg{
+  width:48%!important;height:48%!important;stroke-width:3.5!important
+}
+.vt-complete-catalog .vt-catalog-split-field input{
+  min-width:0!important;height:100%!important;padding:0 10px!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:inset 0 0 0 var(--stroke) var(--pair-b)!important;
+  color:#000!important;caret-color:var(--pair-a)!important;
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;text-transform:uppercase!important
+}
+.vt-complete-catalog .vt-catalog-split-field input:focus{
+  outline:0!important;background:#fff!important;box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important
+}
+.vt-complete-catalog .vt-catalog-split-field .field-action{
+  width:var(--h)!important;height:100%!important;padding:0!important;border:0!important;border-left:var(--stroke) solid #000!important;
+  border-radius:0!important;background:var(--pair-a)!important;box-shadow:none!important;display:grid!important;place-items:center!important;color:#000!important
+}
+.vt-complete-catalog .vt-catalog-split-field.is-action .field-action{background:var(--pair-b)!important}
+
+.vt-complete-catalog .vt-catalog-tag-editor{
+  display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important;
+  gap:calc(var(--h)*.12)!important;min-height:var(--h)!important;padding:calc(var(--h)*.10)!important;
+  background:#fff!important
+}
+.vt-complete-catalog .vt-catalog-tag-editor.is-editing{grid-template-rows:auto auto!important}
+.vt-complete-catalog .tag-editor-label{
+  align-self:stretch!important;display:flex!important;align-items:center!important;
+  padding:0 calc(var(--h)*.14)!important;border-right:var(--stroke) solid #000!important;
+  font:1000 calc(var(--fs)*.62)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:.05em!important;text-transform:uppercase!important
+}
+.vt-complete-catalog .tag-editor-tags{min-width:0!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important}
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag{
+  --tag-h:calc(var(--h)*.58);
+  min-height:var(--tag-h)!important;height:var(--tag-h)!important;padding:0 calc(var(--tag-h)*.10) 0 calc(var(--tag-h)*.30)!important;
+  border:var(--stroke) solid var(--tag-color)!important;border-radius:999px!important;
+  background:color-mix(in srgb,var(--tag-color) 35%,white)!important;color:var(--tag-color)!important;
+  font:1000 calc(var(--fs)*.68)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important
+}
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag>button{
+  width:calc(var(--tag-h)*.72)!important;height:calc(var(--tag-h)*.72)!important;
+  border:0!important;border-radius:50%!important;background:var(--tag-color)!important;color:#000!important
+}
+.vt-complete-catalog .vt-catalog-tag-editor .add,
+.vt-complete-catalog .vt-catalog-tag-editor .submit{
+  width:calc(var(--h)*.62)!important;height:calc(var(--h)*.62)!important;padding:0!important;
+  border:var(--stroke) solid #000!important;border-radius:calc(var(--radius)*.64)!important;
+  display:grid!important;place-items:center!important;background:#3FEE56!important
+}
+.vt-complete-catalog .vt-catalog-tag-editor .submit{background:var(--pair-b)!important}
+.vt-complete-catalog .tag-editor-entry{
+  grid-column:2!important;display:grid!important;grid-template-columns:minmax(0,1fr) calc(var(--h)*.62)!important;
+  gap:6px!important;align-items:center!important;margin-top:calc(var(--h)*.08)!important
+}
+.vt-complete-catalog .tag-editor-entry>input{
+  min-width:0!important;height:calc(var(--h)*.62)!important;padding:0 9px!important;
+  border:var(--stroke) solid #000!important;border-radius:calc(var(--radius)*.64)!important;
+  background:transparent!important;box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important;
+  font:1000 calc(var(--fs)*.68)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;text-transform:uppercase!important
+}
+.vt-complete-catalog .tag-editor-entry>input:focus{
+  outline:0!important;background:#fff!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a),0 0 calc(var(--h)*.22) color-mix(in srgb,var(--pair-b) 60%,transparent)!important
+}
+
+.vt-complete-catalog .vt-catalog-progress-value{
+  grid-template-columns:minmax(0,1fr) max(var(--h),4.7ch)!important;background:color-mix(in srgb,var(--pair-b) 22%,white)!important
+}
+.vt-complete-catalog .vt-catalog-progress-value .bar{
+  position:relative!important;overflow:hidden!important;padding:0!important;background:color-mix(in srgb,var(--pair-b) 22%,white)!important
+}
+.vt-complete-catalog .vt-catalog-progress-value .bar .fill{
+  position:absolute!important;inset:0 auto 0 0!important;height:100%!important;border:0!important;border-radius:0!important;background:var(--pair-a)!important
+}
+.vt-complete-catalog .vt-catalog-progress-value .bar strong{
+  position:relative!important;z-index:1!important;display:flex!important;align-items:center!important;height:100%!important;
+  padding:0 calc(var(--h)*.18)!important;color:#000!important;
+  font:1000 calc(var(--fs)*.64)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:.02em!important;text-transform:uppercase!important
+}
+.vt-complete-catalog .vt-catalog-progress-value output{
+  background:var(--pair-b)!important;font-size:calc(var(--fs)*.92)!important
+}
+
+.vt-complete-catalog .vt-catalog-knob{
+  --knob-size:calc(var(--h)*2.45);display:inline-grid!important;justify-items:center!important;
+  gap:calc(var(--h)*.16)!important;min-width:calc(var(--knob-size) + var(--stroke)*3)!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face{
+  position:relative!important;width:var(--knob-size)!important;height:var(--knob-size)!important;
+  border:var(--stroke) solid #000!important;border-radius:50%!important;display:grid!important;place-items:center!important;
+  touch-action:none!important;cursor:grab!important;outline:none!important;
+  background:conic-gradient(from 225deg,var(--pair-a) 0 var(--vt-knob-sweep),color-mix(in srgb,var(--pair-a) 18%,white) var(--vt-knob-sweep) 75%,transparent 75% 100%)!important;
+  box-shadow:calc(var(--stroke) + 3px) calc(var(--stroke) + 3px) 0 color-mix(in srgb,var(--pair-a) 42%,transparent)!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:before{
+  content:"";position:absolute;inset:calc(var(--stroke)*2.1);border-radius:50%;background:#fff!important;
+  box-shadow:inset 0 0 0 var(--stroke) #000!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-arc{
+  position:absolute;inset:calc(var(--stroke)*3.4);z-index:1;border-radius:50%;background:var(--pair-b);
+  box-shadow:inset 0 0 0 var(--stroke) #000
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face i{
+  position:absolute!important;z-index:3!important;left:50%!important;top:18%!important;
+  width:max(4px,calc(var(--stroke)*1.25))!important;height:22%!important;border-radius:999px!important;background:#000!important;
+  transform-origin:50% 145%!important;transform:translateX(-50%) rotate(var(--vt-knob-angle))!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face em{
+  position:relative!important;z-index:3!important;font-style:normal!important;
+  font:1000 calc(var(--fs)*1.60)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;letter-spacing:-.06em!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:focus-visible{
+  outline:calc(var(--stroke)*.9) solid var(--pair-b)!important;outline-offset:5px!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-controls{
+  width:var(--knob-size)!important;display:grid!important;grid-template-columns:calc(var(--h)*.62) minmax(0,1fr) calc(var(--h)*.62)!important;
+  gap:6px!important;align-items:center!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-controls>button{
+  width:100%!important;height:calc(var(--h)*.62)!important;padding:0!important;border:var(--stroke) solid #000!important;
+  border-radius:calc(var(--radius)*.64)!important;background:var(--pair-a)!important;color:#000!important;
+  display:grid!important;place-items:center!important;font-size:calc(var(--fs)*.98)!important;font-weight:1000!important
+}
+.vt-complete-catalog .vt-catalog-knob .knob-controls>button:last-child{background:var(--pair-b)!important}
+.vt-complete-catalog .vt-catalog-knob .knob-value{
+  text-align:center!important;font-size:calc(var(--fs)*.70)!important;font-weight:1000!important;letter-spacing:.06em!important;text-transform:uppercase!important
+}
+
+
+/* ==========================================================================
+   USER CORRECTION WAVE — split-left parity, borderless control-tags,
+   textarea field-state parity, simplified dial.
+   ========================================================================== */
+
+/* Split Left Button uses the same exact square left rail as Split Menu. */
+.vt-complete-catalog .vt-catalog-split-primitive{
+  grid-template-columns:var(--h) minmax(0,1fr)!important;
+}
+.vt-complete-catalog .vt-catalog-split-primitive .vt-subtoolbox-split-button-rail{
+  width:var(--h)!important;
+  min-width:var(--h)!important;
+  max-width:var(--h)!important;
+  height:var(--h)!important;
+  min-height:var(--h)!important;
+  aspect-ratio:1/1!important;
+  padding:0!important;
+  place-self:stretch!important;
+  box-sizing:border-box!important;
+}
+
+/* Split Search + Input Action match Textarea/Text Input default + focus states. */
+.vt-complete-catalog .vt-catalog-split-field input{
+  background:color-mix(in srgb,var(--pair-a) 50%,white)!important;
+  color:#000!important;
+  caret-color:var(--pair-a)!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input:focus{
+  background:#fff!important;
+  outline:0!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important;
+}
+
+/* Removable/selectable/editor tags are fill-defined. No outline stroke. */
+.vt-complete-catalog .vt-spectrum-tag:has(button),
+.vt-complete-catalog .vt-catalog-selectable-tag{
+  border:0!important;
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-spectrum-tag:has(button)>button,
+.vt-complete-catalog .vt-catalog-selectable-tag{
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag{
+  border:0!important;
+  background:color-mix(in srgb,var(--tag-color) 35%,white)!important;
+  color:var(--tag-color)!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag>button{
+  border:0!important;
+  background:var(--tag-color)!important;
+}
+.vt-complete-catalog .vt-catalog-selectable-tag{
+  background:color-mix(in srgb,var(--pair-b) 30%,white)!important;
+  color:var(--pair-b)!important;
+}
+.vt-complete-catalog .vt-catalog-selectable-tag.is-selected{
+  background:color-mix(in srgb,var(--pair-a) 38%,white)!important;
+  color:var(--pair-a)!important;
+}
+
+/* Knob Dial — one readable instrument instead of stacked concentric rings. */
+.vt-complete-catalog .vt-catalog-knob{
+  --knob-size:calc(var(--h)*2.25)!important;
+  gap:calc(var(--h)*.12)!important;
+  min-width:var(--knob-size)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face{
+  width:var(--knob-size)!important;
+  height:var(--knob-size)!important;
+  border:var(--stroke) solid #000!important;
+  border-radius:50%!important;
+  background:
+    conic-gradient(from 225deg,
+      var(--pair-a) 0 var(--vt-knob-sweep),
+      color-mix(in srgb,var(--pair-a) 16%,white) var(--vt-knob-sweep) 75%,
+      #fff 75% 100%)!important;
+  box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-b) 42%,transparent)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:before{
+  inset:13%!important;
+  background:var(--pair-b)!important;
+  box-shadow:inset 0 0 0 var(--stroke) #000!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-arc{display:none!important}
+.vt-complete-catalog .vt-catalog-knob .knob-face em{
+  z-index:4!important;
+  width:54%!important;height:54%!important;
+  display:grid!important;place-items:center!important;
+  border-radius:50%!important;background:#fff!important;
+  box-shadow:none!important;
+  font-size:calc(var(--fs)*1.48)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face i{
+  z-index:5!important;
+  left:50%!important;top:50%!important;
+  width:max(4px,calc(var(--stroke)*1.15))!important;
+  height:45%!important;
+  transform-origin:50% 100%!important;
+  transform:translate(-50%,-100%) rotate(var(--vt-knob-angle))!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-controls{
+  width:var(--knob-size)!important;
+  grid-template-columns:calc(var(--h)*.52) minmax(0,1fr) calc(var(--h)*.52)!important;
+  gap:calc(var(--h)*.10)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-controls>button{
+  height:calc(var(--h)*.52)!important;
+  border:0!important;
+  border-radius:calc(var(--radius)*.58)!important;
+  box-shadow:none!important;
+  font-size:calc(var(--fs)*.82)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-value{
+  font-size:calc(var(--fs)*.66)!important;
+  letter-spacing:.045em!important;
+}
+
+
+/* ==========================================================================
+   USER CORRECTION V2 — exact field parity + borderless action tags + dial V2.
+   ========================================================================== */
+
+/* Split Search and Input Action match the hardcoded Text Input/Textarea states:
+   tinted default, white focus, colored inset focus stroke. */
+.vt-complete-catalog .vt-catalog-split-field input{
+  background:color-mix(in srgb,var(--pair-a) 50%,white)!important;
+  color:#000!important;
+  caret-color:var(--pair-a)!important;
+  box-shadow:none!important;
+  font:1000 var(--fs)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  letter-spacing:-.055em!important;
+  text-transform:uppercase!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input::placeholder{
+  color:#8b8b8b!important;opacity:1!important;font:inherit!important;text-transform:uppercase!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input:focus{
+  background:#fff!important;
+  outline:0!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important;
+}
+
+/* Any tag whose body is itself actionable or contains an action is borderless. */
+.vt-complete-catalog .vt-spectrum-tag:has(button),
+.vt-complete-catalog .vt-catalog-selectable-tag,
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-spectrum-tag:has(button)>button,
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag>button{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+/* Knob Dial V2 — one colored body, one needle, one compact value readout. */
+.vt-complete-catalog .vt-catalog-knob{
+  --knob-size:calc(var(--h)*2.15)!important;
+  display:inline-grid!important;
+  justify-items:center!important;
+  gap:calc(var(--h)*.14)!important;
+  min-width:var(--knob-size)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face{
+  position:relative!important;
+  width:var(--knob-size)!important;
+  height:var(--knob-size)!important;
+  border:var(--stroke) solid #000!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  touch-action:none!important;
+  cursor:grab!important;
+  outline:none!important;
+  background:
+    conic-gradient(from 225deg,
+      var(--pair-a) 0 var(--vt-knob-sweep),
+      color-mix(in srgb,var(--pair-a) 20%,white) var(--vt-knob-sweep) 75%,
+      #fff 75% 100%)!important;
+  box-shadow:calc(var(--stroke) + 2px) calc(var(--stroke) + 2px) 0 color-mix(in srgb,var(--pair-b) 42%,transparent)!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:before{
+  content:"";
+  position:absolute!important;
+  inset:16%!important;
+  border-radius:50%!important;
+  background:var(--pair-b)!important;
+  box-shadow:inset 0 0 0 var(--stroke) #000!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:after{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  width:calc(var(--h)*.18);height:calc(var(--h)*.18);
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:#000;
+  z-index:5;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-arc{display:none!important}
+.vt-complete-catalog .vt-catalog-knob .knob-face em{display:none!important}
+.vt-complete-catalog .vt-catalog-knob .knob-face i{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:max(4px,calc(var(--stroke)*1.1))!important;
+  height:42%!important;
+  border-radius:999px!important;
+  background:#000!important;
+  transform-origin:50% 100%!important;
+  transform:translate(-50%,-100%) rotate(var(--vt-knob-angle))!important;
+  z-index:4!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-face:focus-visible{
+  outline:calc(var(--stroke)*.9) solid var(--pair-b)!important;
+  outline-offset:5px!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-readout{
+  width:var(--knob-size)!important;
+  min-height:calc(var(--h)*.62)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  border:var(--stroke) solid #000!important;
+  border-radius:calc(var(--radius)*.72)!important;
+  background:#fff!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-value{
+  padding:0 calc(var(--h)*.15)!important;
+  text-align:left!important;
+  font-size:calc(var(--fs)*.64)!important;
+  font-weight:1000!important;
+  letter-spacing:.045em!important;
+  text-transform:uppercase!important;
+}
+.vt-complete-catalog .vt-catalog-knob .knob-readout output{
+  height:100%!important;
+  min-width:calc(var(--h)*.76)!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0 calc(var(--h)*.12)!important;
+  border-left:var(--stroke) solid #000!important;
+  background:var(--pair-a)!important;
+  font:1000 calc(var(--fs)*.82)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+}
+
+
+/* ==========================================================================
+   USER CORRECTION V4 — groups 18 / 19 / 21 / 22 / 23 baseline parity.
+   ========================================================================== */
+
+/* 18 / 19 — visible structural stroke around every slider handle. */
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-webkit-slider-thumb,
+.vt-complete-catalog .vt-catalog-range input[type=range]::-webkit-slider-thumb{
+  box-sizing:border-box!important;
+  border:var(--stroke) solid #000!important;
+}
+.vt-complete-catalog .vt-catalog-slider input[type=range]::-moz-range-thumb,
+.vt-complete-catalog .vt-catalog-range input[type=range]::-moz-range-thumb{
+  box-sizing:border-box!important;
+  border:var(--stroke) solid #000!important;
+}
+
+/* 21 — exact symmetric end positions. */
+.vt-complete-catalog .vt-catalog-switch{
+  --switch-inset:calc(var(--h)*.10)!important;
+  --switch-handle-h:calc(var(--h) - (var(--switch-inset)*2))!important;
+  --switch-handle-w:calc(var(--switch-handle-h)*.82)!important;
+}
+.vt-complete-catalog .vt-catalog-switch span{
+  top:var(--switch-inset)!important;
+  left:var(--switch-inset)!important;
+  width:var(--switch-handle-w)!important;
+  height:var(--switch-handle-h)!important;
+  aspect-ratio:auto!important;
+  transform:translateX(0)!important;
+}
+.vt-complete-catalog .vt-catalog-switch.is-on span{
+  transform:translateX(calc((var(--h)*1.72) - (var(--switch-inset)*2) - var(--switch-handle-w)))!important;
+}
+
+/* 22 / 23 — exact level-owned geometry. */
+.vt-complete-catalog .vt-catalog-checkbox,
+.vt-complete-catalog .vt-catalog-radio{
+  width:var(--h)!important;
+  min-width:var(--h)!important;
+  max-width:var(--h)!important;
+  height:var(--h)!important;
+  min-height:var(--h)!important;
+  max-height:var(--h)!important;
+}
+.vt-complete-catalog .vt-catalog-checkbox{
+  border-radius:var(--radius)!important;
+}
+.vt-complete-catalog .vt-catalog-radio{
+  border-radius:50%!important;
+}
+.vt-complete-catalog .vt-catalog-checkbox span{
+  width:72%!important;
+  height:72%!important;
+}
+.vt-complete-catalog .vt-catalog-radio span{
+  width:48%!important;
+  height:48%!important;
+}
+
+
+/* ==========================================================================
+   USER CORRECTION V5 — restore desired Tag Editor + explicit two-color split
+   fields in the hardcoded comparison library.
+   ========================================================================== */
+
+.vt-complete-catalog .vt-catalog-tag-editor{
+  min-height:var(--h)!important;
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:6px!important;
+  padding:4px!important;
+  border:var(--stroke) solid #000!important;
+  border-radius:var(--radius)!important;
+  background:color-mix(in srgb,var(--pair-b) 20%,white)!important;
+}
+.vt-complete-catalog .tag-editor-label{display:none!important}
+.vt-complete-catalog .tag-editor-tags{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:6px!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag{
+  --tag-h:calc(var(--h)*.68)!important;
+  min-height:var(--tag-h)!important;
+  height:var(--tag-h)!important;
+  padding:0 calc(var(--tag-h)*.10) 0 calc(var(--tag-h)*.30)!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:var(--pair-a)!important;
+  color:#000!important;
+  box-shadow:none!important;
+  font:1000 calc(var(--fs)*.78)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor .vt-spectrum-tag>button{
+  width:calc(var(--tag-h)*.72)!important;
+  height:calc(var(--tag-h)*.72)!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:var(--pair-b)!important;
+  color:#000!important;
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor>.add,
+.vt-complete-catalog .vt-catalog-tag-editor>.submit{
+  width:calc(var(--h)*.68)!important;
+  height:calc(var(--h)*.68)!important;
+  padding:0!important;
+  border:var(--stroke) solid #000!important;
+  border-radius:calc(var(--radius)*.65)!important;
+  display:grid!important;
+  place-items:center!important;
+  background:var(--pair-a)!important;
+  color:#000!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor>.submit{background:var(--pair-b)!important}
+.vt-complete-catalog .vt-catalog-tag-editor>input{
+  min-width:6ch!important;
+  flex:1 1 90px!important;
+  height:calc(var(--h)*.68)!important;
+  border:var(--stroke) solid #000!important;
+  border-radius:calc(var(--radius)*.65)!important;
+  background:color-mix(in srgb,var(--pair-a) 50%,white)!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a)!important;
+  padding:0 8px!important;
+  outline:0!important;
+  caret-color:var(--pair-a)!important;
+  font:1000 calc(var(--fs)*.78)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
+  text-transform:uppercase!important;
+}
+.vt-complete-catalog .vt-catalog-tag-editor>input:focus{
+  background:#fff!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-a),0 0 calc(var(--h)*.22) color-mix(in srgb,var(--pair-b) 62%,transparent)!important;
+}
+
+.vt-complete-catalog .vt-catalog-split-field{
+  background:var(--pair-b)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field>span,
+.vt-complete-catalog .vt-catalog-split-field .field-action{
+  background:var(--pair-a)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input{
+  background:color-mix(in srgb,var(--pair-b) 50%,white)!important;
+  caret-color:var(--pair-b)!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-b)!important;
+}
+.vt-complete-catalog .vt-catalog-split-field input:focus{
+  background:#fff!important;
+  box-shadow:inset 0 0 0 var(--stroke) var(--pair-b)!important;
+}
+
+
+/* Recovered Studio catalog wave4 refinements */
+/* 14 Split Search + 16 Input Action now have distinct anatomies. */
+/* 29 Tag Editor is a labeled tag tray using the canonical A-Z spectrum. */
+/* 33 Progress Value reads as one instrument, not a bar plus detached badge. */
+/* 52 Knob Dial: large radial controller with genuine pointer/keyboard behavior. */
+
+
+/* ==========================================================================
+   COMPONENT LIBRARY PRESENTATION COMPACTION — 2026-09-24
+   Presentation-only. The hardcoded control anatomy remains the frozen
+   certification reference; only the catalog chrome/layout is compacted.
+   ========================================================================== */
+.vt-complete-catalog .vt-catalog-family{
+  border:0!important;
+  border-radius:0!important;
+  padding:4px 0 6px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.vt-complete-catalog .vt-catalog-levels{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,max-content))!important;
+  align-items:start!important;
+  justify-content:start!important;
+  gap:8px 12px!important;
+  margin-top:8px!important;
+}
+.vt-complete-catalog .vt-catalog-demo{
+  --vt-catalog-standard-inline:300px;
+  min-width:0!important;
+  width:max-content!important;
+  max-width:100%!important;
+  padding:2px 3px 4px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+.vt-complete-catalog .vt-catalog-demo.is-l1{--vt-catalog-standard-inline:260px}
+.vt-complete-catalog .vt-catalog-demo.is-l2{--vt-catalog-standard-inline:220px}
+.vt-complete-catalog .vt-catalog-demo:before{
+  width:max-content!important;
+  margin:0 0 4px 1px!important;
+  padding:0!important;
+  line-height:1!important
+}
+.vt-complete-catalog .vt-catalog-demo > *{
+  width:fit-content!important;
+  max-width:100%!important;
+}
+.vt-complete-catalog :is(
+  [data-vt-family="Text Input"],
+  [data-vt-family="Textarea"],
+  [data-vt-family="Split Search"],
+  [data-vt-family="Number Field"],
+  [data-vt-family="Input Action"],
+  [data-vt-family="Slider"],
+  [data-vt-family="Range Slider"],
+  [data-vt-family="Tag Editor"],
+  [data-vt-family="Progress Bar"],
+  [data-vt-family="Progress Value"],
+  [data-vt-family="Surface"],
+  [data-vt-family="State Panel"],
+  [data-vt-family="Output Card"],
+  [data-vt-family="Data Table"],
+  [data-vt-family="Media Card"],
+  [data-vt-family="Selectable List Row"],
+  [data-vt-family="Reorderable Row"],
+  [data-vt-family="Tabs"],
+  [data-vt-family="Alert"],
+  [data-vt-family="Step Indicator"],
+  [data-vt-family="Dialog"],
+  [data-vt-family="Drawer"],
+  [data-vt-family="Skeleton"],
+  [data-vt-family="Toast"],
+  [data-vt-family="Disclosure"],
+  [data-vt-family="Meter"],
+  [data-vt-family="Name Value List"],
+  [data-vt-family="Carousel"],
+  [data-vt-family="Command Palette"],
+  [data-vt-family="Metric Strip"],
+  [data-vt-family="Horizontal Scrollbar"],
+  [data-vt-family="Data Stats Module"],
+  [data-vt-family="Upload Frame"],
+  [data-vt-family^="Vault "],
+  [data-vt-family="Tree View"],
+  [data-vt-family="Aspect Ratio Frame"],
+  [data-vt-family="Toolbar"]
+) .vt-catalog-demo > *{
+  width:var(--vt-catalog-standard-inline)!important;
+  max-width:100%!important;
+}
+.vt-complete-catalog [data-vt-family="Calendar"] .vt-catalog-levels{
+  grid-template-columns:minmax(0,max-content)!important;
+}
+@media(max-width:520px) and (orientation:portrait){
+  .vt-complete-catalog .vt-catalog-levels{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px 8px!important;
+  }
+  .vt-complete-catalog .vt-catalog-demo{
+    width:100%!important;
+    max-width:100%!important;
+    padding:2px 1px 3px!important;
+  }
+  .vt-complete-catalog :is(
+    [data-vt-family="Data Table"],
+    [data-vt-family="Media Card"],
+    [data-vt-family="Calendar"],
+    [data-vt-family="Upload Frame"],
+    [data-vt-family^="Vault "],
+    [data-vt-family="Tree View"],
+    [data-vt-family="Aspect Ratio Frame"],
+    [data-vt-family="Toolbar"]
+  ) .vt-catalog-demo{
+    grid-column:1/-1!important;
+    width:min(100%,var(--vt-catalog-standard-inline))!important;
+  }
+  .vt-complete-catalog [data-vt-family="Calendar"] .vt-catalog-levels{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@media(max-height:520px) and (orientation:landscape){
+  .vt-complete-catalog .vt-catalog-levels{
+    grid-template-columns:repeat(3,minmax(0,max-content))!important;
+    gap:8px!important;
+  }
+}

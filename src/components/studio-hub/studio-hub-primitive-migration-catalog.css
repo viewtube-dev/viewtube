@@ -1,0 +1,113 @@
+/* Layout-only shell for the imported Studio Hub primitive catalog.
+   IMPORTANT: this stylesheet owns placement only. It must not rewrite the
+   width or internal anatomy of production controls. Component geometry lives
+   in SubToolboxPrimitives / SubToolboxSplitPrimitives and shared tokens. */
+
+.vt-primitive-migration-catalog{display:grid;gap:16px}
+.vt-primitive-migration-catalog *{box-sizing:border-box}
+.vt-primitive-migration-catalog .vt-complete-catalog-heading{
+  border:4px solid #000;border-radius:12px;padding:12px;background:#fff;
+  box-shadow:6px 6px 0 color-mix(in srgb,#36e0f6 42%,transparent)
+}
+.vt-primitive-migration-catalog .vt-complete-catalog-heading>div{display:flex;gap:8px;align-items:center}
+.vt-primitive-migration-catalog .vt-complete-catalog-heading h2{
+  margin:0;text-transform:uppercase;font-weight:1000;letter-spacing:-.055em;line-height:.9
+}
+.vt-primitive-migration-catalog .vt-complete-catalog-heading p{margin:4px 0 0;font-weight:800}
+.vt-primitive-migration-catalog .vt-complete-catalog-heading>strong{display:block;margin-top:8px;font-size:11px}
+.vt-primitive-migration-catalog .vt-complete-catalog-grid{display:grid;gap:16px}
+.vt-primitive-migration-catalog .vt-primitive-migration-family{min-width:0}
+
+/* Component Library only: family SubToolboxes keep the colored header but do
+   not draw a second heavy card around the comparison examples. */
+.vt-primitive-migration-catalog .vt-primitive-migration-family [data-vt-subtoolbox="true"]{
+  box-shadow:none!important;
+}
+.vt-primitive-migration-catalog .vt-primitive-migration-family [data-vt-subtoolbox="true"] > div:first-child{
+  border:0!important;
+}
+
+/* The comparison grid owns placement. The primitive owns its own width. */
+.vt-primitive-migration-catalog .vt-catalog-levels{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,max-content));
+  align-items:start;
+  justify-content:start;
+  gap:8px 12px;
+  margin-top:8px;
+  max-width:100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-demo{
+  --vt-catalog-level-height:56px;
+  --vt-catalog-inline-units:1;
+  min-width:0;
+  width:max-content;
+  max-width:100%;
+  padding:2px 3px 4px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.vt-primitive-migration-catalog .vt-catalog-demo.is-l1{--vt-catalog-level-height:48px}
+.vt-primitive-migration-catalog .vt-catalog-demo.is-l2{--vt-catalog-level-height:32px}
+.vt-primitive-migration-catalog .vt-catalog-demo:before{
+  content:attr(data-level);
+  display:block;
+  width:max-content;
+  margin:0 0 4px 1px;
+  padding:0;
+  text-transform:uppercase;
+  font-size:10px;
+  font-weight:1000;
+  line-height:1;
+}
+
+/* Field/compound/canvas examples receive an explicit preview slot whose width
+   is expressed as a multiple of the canonical component height. Children are
+   not coerced to fit-content or to a catalog-owned pixel width. */
+.vt-primitive-migration-catalog .vt-catalog-demo:is(
+  [data-vt-preview-mode="compound"],
+  [data-vt-preview-mode="field"],
+  [data-vt-preview-mode="canvas"]
+){
+  width:calc(var(--vt-catalog-level-height)*var(--vt-catalog-inline-units));
+}
+
+/* Fixed and intrinsic families shrink-wrap naturally. */
+.vt-primitive-migration-catalog .vt-catalog-demo:is(
+  [data-vt-preview-mode="fixed"],
+  [data-vt-preview-mode="intrinsic"]
+){
+  width:max-content;
+}
+
+/* Portrait keeps compact controls in the two-column comparison layout, but
+   controls with real editing/compound/canvas width requirements stack one
+   level per row. This prevents fixed square rails from stealing text space. */
+@media(max-width:520px) and (orientation:portrait){
+  .vt-primitive-migration-catalog .vt-catalog-levels{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px 8px;
+  }
+  .vt-primitive-migration-catalog .vt-catalog-demo{
+    padding:2px 1px 3px;
+  }
+  .vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-preview-portrait="stack"] .vt-catalog-levels{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-preview-portrait="stack"] .vt-catalog-demo{
+    width:min(100%,calc(var(--vt-catalog-level-height)*var(--vt-catalog-inline-units)));
+    max-width:100%;
+  }
+  .vt-primitive-migration-catalog .vt-complete-catalog-heading h2{font-size:20px}
+}
+
+/* Landscape phones keep the same one-row L0/L1/L2 comparison whenever the
+   family geometry fits. The component itself is never compressed by the
+   catalog shell. */
+@media(max-height:520px) and (orientation:landscape){
+  .vt-primitive-migration-catalog .vt-catalog-levels{
+    grid-template-columns:repeat(3,minmax(0,max-content));
+    gap:8px;
+  }
+}

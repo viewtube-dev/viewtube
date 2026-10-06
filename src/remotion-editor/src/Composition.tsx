@@ -1,0 +1,640 @@
+import React, { useMemo } from 'react';
+import { AssetRenderer } from './assets';
+import { TemplateCanvasRenderer } from '../../editor-design-library/integration/TemplateCanvasRenderer';
+import type { AssetDefinition, AssetVisualProps } from './assets/types';
+import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, useCurrentFrame } from 'remotion';
+import {
+  getShortsCropStyle as getSharedShortsCropStyle,
+  interpolateShortsConfig as interpolateSharedShortsConfig,
+} from '../../shared/vtE1Shorts';
+import { expandCompoundClips } from '../../shared/vtE1CompoundClips.js';
+import { normalizeVtE1TransitionType } from '../../shared/vtE1TransitionCatalog.js';
+import { transitionFrameStyleFor } from '../../shared/vtE1TransitionFrame.js';
+import { buildVtE1Filter, resolveVtE1FxOpacity } from '../../shared/vtE1FxCatalog.js';
+import { resolveVtE1VisualFrame, sortVtE1Tracks, vtE1MediaCropStyle } from '../../shared/vtE1VisualFrame.js';
+import {
+  sourceTimeAtTimelineSec as sharedSourceTimeAtTimelineSec,
+  transitionWindowFor as sharedTransitionWindowFor,
+  validateTransitionSeam as sharedValidateTransitionSeam,
+} from '../../shared/vtE1TimelineContract.js';
+
+type LayerType = 'text' | 'shape' | 'media' | 'audio' | 'svg-overlay' | 'generative-shape' | 'remotion-asset';
+
+type VTLayer = {
+  id: string;
+  type: LayerType;
+  trackId: string;
+  visible?: boolean;
+  payload?: Record<string, unknown>;
+};
+
+type VTClip = {
+  id: string;
+  layerId: string;
+  trackId: string;
+  clipType?: string;
+  remotionAssetId?: AssetDefinition['id'];
+  remotionAssetProps?: Partial<AssetVisualProps>;
+  start: number;
+  end: number;
+  sourceInSec?: number;
+  sourceOutSec?: number;
+  sourceDurationSec?: number;
+  sourceDurationUnknown?: boolean;
+  keyframes?: Array<{
+    offsetSec?: number;
+    values?: Record<string, unknown>;
+    interp?: string;
+  }>;
+};
+
+type VTTransition = {
+  id?: string;
+  leftClipId: string;
+  rightClipId: string;
+  type?: string;
+  durationSec?: number;
+  nominalSeamSec?: number;
+  params?: Record<string, unknown>;
+};
+
+type VTTrack = {
+  id: string;
+  order?: number;
+  visible?: boolean;
+  muted?: boolean;
+  solo?: boolean;
+};
+
+type RenderJob = {
+  compositionMeta?: {
+    fps?: number;
+    width?: number;
+    height?: number;
+  };
+  project?: {
+    meta?: Record<string, unknown>;
+    tracks?: VTTrack[];
+    layers?: VTLayer[];
+    clips?: VTClip[];
+    transitions?: VTTransition[];
+  };
+};
+
+type Props = {
+  renderJob?: RenderJob;
+};
+
+const normalizeRemotionAssetProject = (
+  source: NonNullable<RenderJob['project']>,
+): NonNullable<RenderJob['project']> => {
+  const baseLayers = Array.isArray(source.layers) ? source.layers : [];
+  const knownLayerIds = new Set(baseLayers.map((layer) => layer.id));
+  const synthesizedLayers: VTLayer[] = [];
+
+  const clips = (Array.isArray(source.clips) ? source.clips : []).map((clip) => {
+    if (clip.clipType !== 'remotion-asset' || !clip.remotionAssetId) return clip;
+    const layerId = clip.layerId || `remotion-asset-layer-${clip.id}`;
+    if (!knownLayerIds.has(layerId)) {
+      synthesizedLayers.push({
+        id: layerId,
+        type: 'remotion-asset',
+        trackId: clip.trackId,
+        visible: true,
+        payload: {
+          assetId: clip.remotionAssetId,
+          ...(clip.remotionAssetProps || {}),
+        },
+      });
+      knownLayerIds.add(layerId);
+    }
+    return { ...clip, layerId };
+  });
+
+  return {
+    ...source,
+    layers: [...baseLayers, ...synthesizedLayers],
+    clips,
+  };
+};
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const isVideo = (value: unknown) => /\.(mp4|webm|mov|m4v|ogg)(\?|#|$)/i.test(String(value || ''));
+const isVideoPayload = (payload: Record<string, unknown>) => (
+  payload.mediaKind === 'video'
+  || String(payload.mediaMime || '').toLowerCase().startsWith('video/')
+  || isVideo(payload.mediaUrl)
+  || isVideo(payload.src)
+  || isVideo(payload.url)
+  || isVideo(payload.mediaName)
+);
+const toFrame = (seconds: number, fps: number) => Math.max(0, Math.round(seconds * fps));
+const sortTracks = (tracks: VTTrack[]) => sortVtE1Tracks(tracks);
+const durationOf = (clip: VTClip) => Math.max(0.05, Number(clip.end || 0) - Number(clip.start || 0));
+const transitionWindow = (transition: VTTransition, leftClip: VTClip, rightClip: VTClip) => {
+  return sharedTransitionWindowFor(transition, leftClip, rightClip);
+};
+const sourceTimeForClipAt = (project: NonNullable<RenderJob['project']>, clip: VTClip, sec: number) => {
+  return sharedSourceTimeAtTimelineSec(project, clip, sec);
+};
+const transitionInfluenceAt = (project: NonNullable<RenderJob['project']>, transition: VTTransition | undefined, clip: VTClip, sec: number) => {
+  const neutral = { opacity: 1, transformExtra: '', filterExtra: '', clipPath: '' };
+  if (!transition) return neutral;
+  const left = (project.clips || []).find((entry) => entry.id === transition.leftClipId);
+  const right = (project.clips || []).find((entry) => entry.id === transition.rightClipId);
+  if (!left || !right) return neutral;
+  if (!sharedValidateTransitionSeam(left, right).valid) return neutral;
+  const win = transitionWindow(transition, left, right);
+  if (sec < win.startSec || sec > win.endSec) return neutral;
+  const p = clamp((sec - win.startSec) / win.durationSec, 0, 1);
+  const direction = clip.id === left.id ? 'exiting' : 'entering';
+  const frame = transitionFrameStyleFor(
+    normalizeVtE1TransitionType(transition.type),
+    p,
+    direction,
+    transition.params || {},
+  );
+  return {
+    opacity: frame.opacity,
+    transformExtra: frame.transform ? ` ${frame.transform}` : '',
+    filterExtra: '',
+    clipPath: frame.clipPath || '',
+  };
+};
+const sequenceBoundsForClip = (project: NonNullable<RenderJob['project']>, clip: VTClip) => {
+  let startSec = Number(clip.start || 0);
+  let endSec = Number(clip.end || 0);
+  (project.transitions || []).forEach((transition) => {
+    if (transition.leftClipId !== clip.id && transition.rightClipId !== clip.id) return;
+    const left = (project.clips || []).find((entry) => entry.id === transition.leftClipId);
+    const right = (project.clips || []).find((entry) => entry.id === transition.rightClipId);
+    if (!left || !right) return;
+    const win = transitionWindow(transition, left, right);
+    if (transition.rightClipId === clip.id) startSec = Math.min(startSec, win.startSec);
+    if (transition.leftClipId === clip.id) endSec = Math.max(endSec, win.endSec);
+  });
+  return { startSec: Math.max(0, startSec), endSec: Math.max(startSec + 0.01, endSec) };
+};
+const getShortsRenderConfig = (payload: Record<string, unknown>, sourceSeconds: number) => {
+  const extractor = (payload.shortsExtractor || {}) as Record<string, unknown>;
+  return interpolateSharedShortsConfig(
+    (extractor.config || {}) as Record<string, never>,
+    Array.isArray(extractor.keyframes) ? extractor.keyframes as Array<{ time: number }> : [],
+    sourceSeconds,
+  );
+};
+
+const renderShortsExtractorMedia = (
+  src: string,
+  startFrom: number,
+  payload: Record<string, unknown>,
+  sourceSeconds: number,
+) => {
+  const extractor = (payload.shortsExtractor || {}) as Record<string, unknown>;
+  const source = (extractor.source || {}) as Record<string, unknown>;
+  const sourceAspect = Number(source.aspectRatio || (Number(source.width || 1920) / Math.max(1, Number(source.height || 1080))) || 16 / 9);
+  const config = getShortsRenderConfig(payload, sourceSeconds);
+  const aspectPreset = String(config.aspectPreset || '9:16');
+  const outputAspect = aspectPreset === '1:1' ? 1 : aspectPreset === '4:5' ? 4 / 5 : 9 / 16;
+  const Media = isVideo(src) ? OffthreadVideo : Img;
+  const mediaProps = isVideo(src) ? { startFrom } : {};
+
+  if (String(config.mode || 'single') !== 'split') {
+    return (
+      <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', backgroundColor: '#000' }}>
+        <Media src={src} {...mediaProps} style={getSharedShortsCropStyle(config, sourceAspect, outputAspect)} />
+      </div>
+    );
+  }
+
+  const splitRatio = clamp(Number(config.splitRatio ?? 0.55), 0.15, 0.85);
+  const closeupOnTop = String(config.closeupPosition || 'top') === 'top';
+  const closeupHeight = closeupOnTop ? splitRatio : 1 - splitRatio;
+  const wideHeight = 1 - closeupHeight;
+  const closeupStyle = getSharedShortsCropStyle(config, sourceAspect, outputAspect, closeupHeight, true);
+  const wideStyle: React.CSSProperties = { width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000' };
+  const closeup = (
+    <div style={{ position: 'relative', height: `${closeupHeight * 100}%`, overflow: 'hidden', backgroundColor: '#000' }}>
+      <Media src={src} {...mediaProps} style={closeupStyle} />
+    </div>
+  );
+  const wide = (
+    <div style={{ position: 'relative', height: `${wideHeight * 100}%`, overflow: 'hidden', backgroundColor: '#000' }}>
+      <Media src={src} {...mediaProps} style={wideStyle} />
+    </div>
+  );
+  return (
+    <div style={{ width: '100%', height: '100%', overflow: 'hidden', backgroundColor: '#000' }}>
+      {closeupOnTop ? closeup : wide}
+      {closeupOnTop ? wide : closeup}
+    </div>
+  );
+};
+const svgShortsDefaultPaths = [
+  'M 100 50 A 50 50 0 0 1 150 100',
+  'M 150 100 A 50 50 0 0 1 100 150',
+  'M 100 150 A 50 50 0 0 1 50 100',
+  'M 50 100 A 50 50 0 0 1 100 50',
+  'M 100 70 A 30 30 0 1 0 100 130 A 30 30 0 1 0 100 70',
+  'M 100 30 L 100 60',
+  'M 100 140 L 100 170',
+  'M 30 100 L 60 100',
+  'M 140 100 L 170 100',
+];
+
+const renderShape = (payload: Record<string, unknown>, width: number, height: number) => {
+  const shape = String(payload.shape || 'rect');
+  const strokeWidth = Math.max(0, Number(payload.strokeWidth || 0));
+  const fill = String(payload.fillColor || '#ffffff');
+  const stroke = strokeWidth > 0 ? String(payload.strokeColor || '#111111') : 'transparent';
+  const cornerRadius = Math.max(0, Number(payload.cornerRadius || 0));
+
+  return (
+    <div
+      style={{
+        width,
+        height,
+        borderRadius: shape === 'circle' ? 9999 : cornerRadius,
+        background: fill,
+        border: `${strokeWidth}px solid ${stroke}`,
+      }}
+    />
+  );
+};
+
+const renderSvgOverlay = (
+  payload: Record<string, unknown>,
+  commonStyle: React.CSSProperties,
+  localFrame: number,
+  durationInFrames: number,
+) => {
+  const cfg = (payload.svgOverlayConfig || {}) as Record<string, unknown>;
+  const paths = Array.isArray(cfg.svgPaths) && cfg.svgPaths.length > 0
+    ? cfg.svgPaths.map((entry) => String(entry))
+    : svgShortsDefaultPaths;
+  const strokeColor = String(cfg.strokeColor || payload.strokeColor || '#39FF14');
+  const rotationSpeed = Number(cfg.rotationSpeed || 2);
+  const drawWindow = Math.max(12, Math.min(40, durationInFrames));
+  const drawProgress = interpolate(localFrame, [0, drawWindow], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const rotation = rotationSpeed * (localFrame / 30) * 30;
+  return (
+    <div style={{ ...commonStyle, width: 200, height: 200 }}>
+      <svg viewBox="0 0 200 200" style={{ width: '100%', height: '100%', transform: `rotate(${rotation}deg)` }}>
+        {paths.map((pathValue, index) => (
+          <path
+            key={`${pathValue}_${index}`}
+            d={pathValue}
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray="400"
+            strokeDashoffset={(1 - drawProgress) * 400}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+const renderGenerativeShape = (
+  payload: Record<string, unknown>,
+  commonStyle: React.CSSProperties,
+  localFrame: number,
+  fps: number,
+) => {
+  const cfg = (payload.generativeShapeConfig || {}) as Record<string, unknown>;
+  const colors = Array.isArray(cfg.colors) && cfg.colors.length > 0
+    ? cfg.colors.map((entry) => String(entry))
+    : ['#FF0055', '#00FFCC', '#FFCC00'];
+  const elements = Array.isArray(cfg.elements) ? cfg.elements : [];
+  const blobs = Array.isArray(cfg.blobs) ? cfg.blobs : [];
+
+  if (blobs.length > 0) {
+    return (
+      <div style={{ ...commonStyle, width: 240, height: 240 }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          {blobs.map((rawBlob, index) => {
+            const blob = (rawBlob || {}) as Record<string, unknown>;
+            const entryFrame = Math.max(0, localFrame - Number(blob.delay || index * 5));
+            const blobSpring = spring({
+              frame: entryFrame,
+              fps,
+              config: { damping: 12, stiffness: 120 },
+            });
+            const translateY = Math.sin((localFrame + index * 8) / 10) * 6;
+            const width = Math.max(40, Number(blob.width || 160));
+            const height = Math.max(40, Number(blob.height || 100));
+            return (
+              <div
+                key={`blob_${index}`}
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  width,
+                  height,
+                  marginLeft: width / -2,
+                  marginTop: height / -2,
+                  borderRadius: String(blob.borderRadius || '40% 60% 70% 30% / 40% 50% 60% 50%'),
+                  backgroundColor: String(blob.color || colors[index % colors.length]),
+                  border: '5px solid #111111',
+                  boxShadow: '5px 6px 0 #111111',
+                  transform: `translateY(${translateY}px) scale(${blobSpring}) rotate(${Number(blob.rotate || 0) + Math.sin(localFrame / 16) * 3}deg)`,
+                  opacity: interpolate(entryFrame, [0, 6], [0, 1], {
+                    extrapolateLeft: 'clamp',
+                    extrapolateRight: 'clamp',
+                  }),
+                  zIndex: 10 - index,
+                }}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  const fallbackElements = elements.length > 0 ? elements : [
+    { type: 'circle', attrs: { cx: 100, cy: 100, r: 60 }, behavior: 'pulse' },
+    { type: 'circle', attrs: { cx: 100, cy: 100, r: 40 }, behavior: 'float' },
+    { type: 'rect', attrs: { x: 80, y: 80, width: 40, height: 40, rx: 6 }, behavior: 'rotate' },
+  ];
+
+  return (
+    <div style={{ ...commonStyle, width: 200, height: 200 }}>
+      <svg viewBox="0 0 200 200" style={{ width: '100%', height: '100%' }}>
+        {fallbackElements.map((rawElement, index) => {
+          const element = (rawElement || {}) as Record<string, unknown>;
+          const attrs = (element.attrs || {}) as Record<string, number>;
+          const entryFrame = Math.max(0, localFrame - index * 4);
+          const progress = spring({
+            frame: entryFrame,
+            fps,
+            config: { damping: 10, stiffness: 120 },
+          });
+          let transform = `scale(${progress})`;
+          if (element.behavior === 'pulse') {
+            transform += ` scale(${1 + Math.sin(localFrame / 8) * 0.08})`;
+          } else if (element.behavior === 'float') {
+            transform += ` translateY(${Math.sin(localFrame / 12) * 8}px)`;
+          } else if (element.behavior === 'rotate') {
+            transform += ` rotate(${localFrame * 2}deg)`;
+          }
+          const opacity = interpolate(entryFrame, [0, 6], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const color = colors[index % colors.length];
+
+          if (element.type === 'circle') {
+            const cx = Number(attrs.cx || 100);
+            const cy = Number(attrs.cy || 100);
+            const r = Number(attrs.r || 40);
+            return (
+              <circle
+                key={`shape_${index}`}
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill={color}
+                style={{ transform, opacity, transformOrigin: `${cx}px ${cy}px` }}
+              />
+            );
+          }
+
+          const x = Number(attrs.x || 60);
+          const y = Number(attrs.y || 60);
+          const width = Number(attrs.width || 80);
+          const height = Number(attrs.height || 80);
+          return (
+            <rect
+              key={`shape_${index}`}
+              x={x}
+              y={y}
+              width={width}
+              height={height}
+              rx={Number(attrs.rx || 6)}
+              fill={color}
+              style={{ transform, opacity, transformOrigin: `${x + width / 2}px ${y + height / 2}px` }}
+            />
+          );
+        })}
+      </svg>
+    </div>
+  );
+};
+
+export const MyComposition: React.FC<Props> = ({ renderJob }) => {
+  const frame = useCurrentFrame();
+  const fps = Number(renderJob?.compositionMeta?.fps || 30);
+  const width = Number(renderJob?.compositionMeta?.width || 1280);
+  const height = Number(renderJob?.compositionMeta?.height || 720);
+  const project = useMemo(
+    () => normalizeRemotionAssetProject(
+      renderJob?.project || { meta: {}, tracks: [], layers: [], clips: [], transitions: [] },
+    ),
+    [renderJob?.project],
+  );
+  const background = String(project.meta?.chromaEnabled ? project.meta?.chromaColor || '#00ff00' : '#111111');
+  const tracks = useMemo(() => sortTracks(Array.isArray(project.tracks) ? project.tracks : []), [project]);
+  const orderedTrackIds = tracks.map((track) => track.id);
+  const activeTrackIds = useMemo(() => {
+    if (!tracks.length) return null;
+    const soloTrackIds = tracks.filter((track) => track.solo).map((track) => track.id);
+    const activeTracks = soloTrackIds.length
+      ? tracks.filter((track) => soloTrackIds.includes(track.id))
+      : tracks.filter((track) => !track.muted);
+    return new Set(activeTracks.filter((track) => track.visible !== false).map((track) => track.id));
+  }, [tracks]);
+  const layers = Array.isArray(project.layers) ? project.layers : [];
+  const clips = expandCompoundClips(Array.isArray(project.clips) ? project.clips : []);
+  const currentSec = frame / Math.max(1, fps);
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: background, overflow: 'hidden' }}>
+      {[...clips].sort((a, b) => Number(a.start || 0) - Number(b.start || 0)).map((clip) => {
+        const layer = layers.find((entry) => entry.id === clip.layerId);
+        const bounds = sequenceBoundsForClip(project, clip);
+        const from = toFrame(bounds.startSec, fps);
+        const durationInFrames = Math.max(1, toFrame(Math.max(0, bounds.endSec - bounds.startSec), fps));
+
+        if (String((clip as VTClip & {clipType?:string}).clipType || '') === 'design-template' && (clip as VTClip & {templateDefinition?:unknown}).templateDefinition) {
+          if (activeTrackIds && !activeTrackIds.has(clip.trackId)) return null;
+          const zIndex = Math.max(1, orderedTrackIds.indexOf(clip.trackId) + 1);
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              <div style={{position:'absolute',inset:0,zIndex}}>
+                <TemplateCanvasRenderer clips={[clip as unknown as import('../../shared/vtE1TimelineContract').VtE1Clip]} playheadSec={currentSec}/>
+              </div>
+            </Sequence>
+          );
+        }
+
+        if (!layer || layer.visible === false) return null;
+        if (activeTrackIds && !activeTrackIds.has(layer.trackId)) return null;
+        const basePayload = {
+          ...((layer.payload || {}) as Record<string, unknown>),
+          ...(clip as unknown as Record<string, unknown>),
+        };
+        const localSeconds = Math.max(0, currentSec - Number(clip.start || 0));
+        const localFrame = Math.max(0, toFrame(localSeconds, fps));
+        const visualFrame = resolveVtE1VisualFrame(basePayload, clip, localSeconds, width, height);
+        const payload = visualFrame.payload;
+        const clipTransition = (project.transitions || []).find((entry) => entry.leftClipId === clip.id || entry.rightClipId === clip.id);
+        const transitionFx = transitionInfluenceAt(project, clipTransition, clip, currentSec);
+        const layerWidth = visualFrame.width;
+        const layerHeight = visualFrame.height;
+        const left = (width / 2) + visualFrame.x;
+        const top = (height / 2) + visualFrame.y;
+        const scaleX = visualFrame.scaleX;
+        const scaleY = visualFrame.scaleY;
+        const rotation = visualFrame.rotation;
+        const opacity = resolveVtE1FxOpacity(payload, visualFrame.opacity);
+        const zIndex = Math.max(1, orderedTrackIds.indexOf(layer.trackId) + 1);
+        const commonStyle: React.CSSProperties = {
+          position: 'absolute',
+          left,
+          top,
+          width: layerWidth,
+          height: layerHeight,
+          transform: `translate(-50%, -50%) scale(${scaleX}, ${scaleY}) rotate(${rotation}deg)${transitionFx.transformExtra || ''}`,
+          transformOrigin: 'center center',
+          opacity: opacity * transitionFx.opacity,
+          zIndex,
+          overflow: 'hidden',
+          filter: [buildVtE1Filter(payload), transitionFx.filterExtra].filter(Boolean).join(' '),
+          clipPath: transitionFx.clipPath || undefined,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        };
+
+        if (layer.type === 'audio') {
+          const src = String(payload.mediaUrl || payload.src || payload.url || '');
+          if (!src) return null;
+          const startFrom = toFrame(Math.max(0, sourceTimeForClipAt(project, clip, bounds.startSec)), fps);
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              <Audio
+                src={src}
+                startFrom={startFrom}
+                volume={Boolean(payload.muted) ? 0 : clamp(Number(payload.volume ?? 0.6), 0, 1)}
+              />
+            </Sequence>
+          );
+        }
+
+        if (layer.type === 'text') {
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              <div style={commonStyle}>
+                <div
+                  style={{
+                    width: '100%',
+                    color: String(payload.fillColor || '#ffffff'),
+                    fontSize: Math.max(8, Number(payload.fontSize || 48)),
+                    fontFamily: String(payload.fontFamily || 'Arial Black, Arial, sans-serif'),
+                    fontWeight: 900,
+                    textAlign: String(payload.textAlign || 'center') as React.CSSProperties['textAlign'],
+                    lineHeight: 1.05,
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    WebkitTextStroke: `${Math.max(0, Number(payload.strokeWidth || 0))}px ${String(payload.strokeColor || '#111111')}`,
+                  }}
+                >
+                  {String(payload.text || '')}
+                </div>
+              </div>
+            </Sequence>
+          );
+        }
+
+        if (layer.type === 'shape') {
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              <div style={commonStyle}>{renderShape(payload, layerWidth, layerHeight)}</div>
+            </Sequence>
+          );
+        }
+
+        if (layer.type === 'svg-overlay') {
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              {renderSvgOverlay(payload, commonStyle, localFrame, durationInFrames)}
+            </Sequence>
+          );
+        }
+
+        if (layer.type === 'generative-shape') {
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              {renderGenerativeShape(payload, commonStyle, localFrame, fps)}
+            </Sequence>
+          );
+        }
+
+        if (layer.type === 'remotion-asset') {
+          const assetId = String(payload.assetId || 'static-001') as AssetDefinition['id'];
+          const assetProps = payload as Partial<AssetVisualProps>;
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              <div style={commonStyle}>
+                <AssetRenderer
+                  {...assetProps}
+                  assetId={assetId}
+                  layoutWidth={layerWidth}
+                  layoutHeight={layerHeight}
+                />
+              </div>
+            </Sequence>
+          );
+        }
+
+        if (layer.type === 'media') {
+          const src = String(payload.mediaUrl || payload.src || payload.url || '');
+          if (!src) return null;
+          const startFrom = toFrame(Math.max(0, sourceTimeForClipAt(project, clip, bounds.startSec)), fps);
+          const sourceSeconds = sourceTimeForClipAt(project, clip, currentSec);
+          return (
+            <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
+              <div style={commonStyle}>
+                {payload.shortsExtractor ? (
+                  renderShortsExtractorMedia(src, startFrom, payload, sourceSeconds)
+                ) : isVideoPayload(payload) ? (
+                  <OffthreadVideo
+                    src={src}
+                    startFrom={startFrom}
+                    muted={Boolean(payload.muted)}
+                    volume={Boolean(payload.muted) ? 0 : clamp(Number(payload.volume ?? 1), 0, 1)}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: String(payload.fit || 'cover') as React.CSSProperties['objectFit'],
+                      ...vtE1MediaCropStyle(clip),
+                    }}
+                  />
+                ) : (
+                  <Img
+                    src={src}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: String(payload.fit || 'cover') as React.CSSProperties['objectFit'],
+                      ...vtE1MediaCropStyle(clip),
+                    }}
+                  />
+                )}
+              </div>
+            </Sequence>
+          );
+        }
+
+        return null;
+      })}
+    </AbsoluteFill>
+  );
+};

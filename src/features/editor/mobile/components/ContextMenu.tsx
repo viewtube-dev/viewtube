@@ -1,0 +1,142 @@
+/** Long-press context menu / tool tray. */
+import React,{useEffect,useLayoutEffect,useRef,useState} from 'react';
+
+export interface ContextMenuItem{
+  label:string;
+  icon?:React.ReactNode;
+  swatch?:string;
+  swatches?:Array<{label:string;value:string;onSelect:()=>void}>;
+  onSelect?:()=>void;
+  destructive?:boolean;
+  disabled?:boolean;
+}
+
+export interface ContextMenuProps{
+  items:ContextMenuItem[];
+  at:{x:number;y:number};
+  onDismiss:()=>void;
+  title?:string;
+  layout?:'list'|'tray';
+}
+
+const CYAN='#36E0F6';
+const INK='#248b99';
+
+export const ContextMenu:React.FC<ContextMenuProps>=({items,at,onDismiss,title,layout='list'})=>{
+  const ref=useRef<HTMLDivElement>(null);
+  const[pos,setPos]=useState(at);
+
+  useLayoutEffect(()=>{
+    if(!ref.current)return;
+    const rect=ref.current.getBoundingClientRect();
+    const pad=8,vw=window.innerWidth,vh=window.innerHeight;
+    let x=at.x-rect.width/2;
+    let y=at.y-rect.height-12;
+    if(y<pad)y=at.y+12;
+    if(x+rect.width+pad>vw)x=vw-rect.width-pad;
+    if(x<pad)x=pad;
+    if(y+rect.height+pad>vh)y=vh-rect.height-pad;
+    setPos({x,y});
+  },[at]);
+
+  useEffect(()=>{
+    const onKey=(event:KeyboardEvent)=>{if(event.key==='Escape')onDismiss()};
+    const onDown=(event:PointerEvent)=>{
+      if(ref.current&&!ref.current.contains(event.target as Node))onDismiss();
+    };
+    window.addEventListener('keydown',onKey);
+    window.addEventListener('pointerdown',onDown,{capture:true});
+    return()=>{
+      window.removeEventListener('keydown',onKey);
+      window.removeEventListener('pointerdown',onDown,{capture:true} as EventListenerOptions);
+    };
+  },[onDismiss]);
+
+  return <div
+    ref={ref}
+    role="menu"
+    style={{
+      position:'fixed',top:pos.y,left:pos.x,width:'min(220px,calc(100vw - 16px))',
+      maxHeight:'min(440px,calc(100dvh - 16px))',overflowY:'auto',overflowX:'hidden',
+      background:'#fff',border:`3px solid ${INK}`,borderRadius:7,
+      boxShadow:'4px 4px 0 rgba(54,224,246,.4)',padding:5,zIndex:200,color:'#000',
+    }}
+  >
+    {title?<div style={{
+      padding:'6px 8px',fontSize:9,fontWeight:900,color:'#000',
+      textTransform:'uppercase',letterSpacing:.6,borderBottom:`2px solid ${INK}`,
+      marginBottom:4,background:CYAN,
+    }}>{title}</div>:null}
+    {layout==='tray'?<div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:4}}>
+      {items.map((item,index)=>item.swatches?<div
+        key={`${item.label}-${index}`}
+        role="group"
+        aria-label={item.label}
+        style={{gridColumn:'1/-1',padding:'4px',border:`1.5px solid ${INK}`,borderRadius:4,display:'grid',gridTemplateColumns:`repeat(${item.swatches.length},minmax(0,1fr))`,gap:4}}
+      >
+        {item.swatches.map(option=><button key={option.value} aria-label={`${item.label}: ${option.label}`} title={option.label} onClick={()=>{option.onSelect();onDismiss()}} style={{width:'100%',aspectRatio:'1',border:`2px solid ${INK}`,borderRadius:4,background:option.value,padding:0}}/>)}
+      </div>:<button
+        key={`${item.label}-${index}`}
+        role="menuitem"
+        title={item.label}
+        aria-label={item.label}
+        disabled={item.disabled}
+        onClick={()=>{item.onSelect?.();onDismiss()}}
+        style={{
+          aspectRatio:'1',minWidth:0,border:`1.5px solid ${INK}`,borderRadius:5,
+          background:item.destructive?'#fff0f2':'#fff',color:item.destructive?'#b91c1c':'#111',
+          display:'grid',gridTemplateRows:'20px minmax(0,1fr)',placeItems:'center',
+          padding:'4px 2px',fontSize:6,fontWeight:1000,textTransform:'uppercase',
+          opacity:item.disabled?.35:1,overflow:'hidden',
+        }}
+      >
+        <span style={{display:'grid',placeItems:'center'}}>{item.swatch?<i style={{width:14,height:14,borderRadius:3,background:item.swatch,border:`1.5px solid ${INK}`}}/>:item.icon}</span>
+        <span style={{maxWidth:'100%',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{item.label}</span>
+      </button>)}
+    </div>:items.map((item,index)=>item.swatches?<div
+      key={`${item.label}-${index}`}
+      role="group"
+      aria-label={item.label}
+      style={{
+        width:'100%',padding:'5px',borderRadius:4,border:`1.5px solid ${INK}`,
+        marginTop:index?3:0,background:'#fff',boxSizing:'border-box',
+        display:'grid',gridTemplateColumns:`repeat(${item.swatches.length},minmax(0,1fr))`,gap:4,
+      }}
+    >
+      {item.swatches.map(option=><button
+        key={option.value}
+        type="button"
+        aria-label={`Clip color: ${option.label}`}
+        title={option.label}
+        onClick={()=>{option.onSelect();onDismiss()}}
+        style={{
+          width:'100%',aspectRatio:'1 / 1',minWidth:0,borderRadius:4,
+          border:`2px solid ${INK}`,background:option.value,padding:0,
+          boxSizing:'border-box',touchAction:'manipulation',
+        }}
+      />)}
+    </div>:<button
+      key={`${item.label}-${index}`}
+      role="menuitem"
+      disabled={item.disabled}
+      onClick={()=>{item.onSelect?.();onDismiss()}}
+      style={{
+        display:'grid',gridTemplateColumns:'22px minmax(0,1fr)',alignItems:'center',gap:8,
+        width:'100%',padding:'7px 8px',borderRadius:4,border:`1.5px solid ${INK}`,
+        marginTop:index?3:0,background:'#fff',color:item.destructive?'#b91c1c':'#000',
+        fontSize:10,fontWeight:900,textAlign:'left',cursor:item.disabled?'not-allowed':'pointer',
+        opacity:item.disabled ? .4 : 1,touchAction:'manipulation',boxSizing:'border-box',
+      }}
+      onPointerEnter={event=>{if(!item.disabled)event.currentTarget.style.background=CYAN}}
+      onPointerLeave={event=>{event.currentTarget.style.background='#fff'}}
+    >
+      <span style={{width:20,height:20,display:'grid',placeItems:'center'}}>
+        {item.swatch?<span style={{
+          width:14,height:14,borderRadius:3,background:item.swatch,
+          border:`1.5px solid ${INK}`,boxSizing:'border-box',
+        }}/>:item.icon??null}
+      </span>
+      <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{item.label}</span>
+    </button>)}
+  </div>;
+};

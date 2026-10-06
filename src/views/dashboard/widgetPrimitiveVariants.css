@@ -1,0 +1,1190 @@
+/* ViewTube widget primitive control lattice
+   Heights: 18 / 24 / 32 / 38 px.
+   18px controls are borderless, filled, and shadowless.
+   24px, 32px, and 38px controls use a 2px stroke. */
+
+:root {
+  --vt-control-h-18: 18px;
+  --vt-control-h-24: 24px;
+  --vt-control-h-32: 32px;
+  --vt-control-h-38: 38px;
+  --vt-control-gap: 4px;
+}
+
+.vt-control-height-18,
+.is-height-18 {
+  --vt-primitive-height: var(--vt-control-h-18);
+  --vt-primitive-stroke: 0px;
+  --vt-primitive-radius: 3px;
+  --vt-primitive-font: 8px;
+}
+
+.vt-control-height-24,
+.is-height-24 {
+  --vt-primitive-height: var(--vt-control-h-24);
+  --vt-primitive-stroke: 2px;
+  --vt-primitive-radius: 4px;
+  --vt-primitive-font: 16px;
+}
+
+.vt-control-height-32,
+.is-height-32 {
+  --vt-primitive-height: var(--vt-control-h-32);
+  --vt-primitive-stroke: 2px;
+  --vt-primitive-radius: 6px;
+  --vt-primitive-font: 21px;
+}
+
+.vt-control-height-38,
+.is-height-38 {
+  --vt-primitive-height: var(--vt-control-h-38);
+  --vt-primitive-stroke: 2px;
+  --vt-primitive-radius: 7px;
+  --vt-primitive-font: 26px;
+}
+
+.widget-action.vt-sized-control,
+.widget-split-button.vt-sized-control,
+.widget-select-trigger.vt-sized-control,
+.widget-text-input.vt-sized-control,
+.widget-video-select-trigger.vt-sized-control,
+.vt-button.vt-sized-control {
+  /* Compatibility lattice mirrors widgetPrimitiveSystem.css. This file loads
+     later in the dashboard cascade, so it must never downgrade --vt-primitive-font. */
+  box-sizing: border-box;
+  height: var(--vt-primitive-height, 32px) !important;
+  min-height: var(--vt-primitive-height, 32px) !important;
+  max-height: var(--vt-primitive-height, 32px) !important;
+  border-width: var(--vt-primitive-stroke, 2px) !important;
+  border-style: solid;
+  border-color: var(--widget-border, var(--widget-ink, currentColor));
+  border-radius: var(--vt-primitive-radius, 6px);
+  font-size: var(--vt-primitive-font, 11px);
+  line-height: 1;
+}
+
+.widget-action.vt-sized-control,
+.widget-split-button.vt-sized-control,
+.widget-select-trigger.vt-sized-control,
+.widget-video-select-trigger.vt-sized-control,
+.vt-button.vt-sized-control {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* The text input deliberately carries .vt-input from Community Post.
+   These rules only enforce the shared height lattice and do not replace
+   the canonical Community Post focus treatment. */
+.widget-text-input.vt-sized-control {
+  width: 100%;
+  padding-inline: 9px;
+  color: var(--widget-ink, var(--widget-border, var(--widget-ink, #243247)));
+  caret-color: currentColor;
+}
+
+/* Match the Community Post input focus behavior exactly: widget-color
+   border, 18% widget-color tint, and no browser-native outline. */
+:where(.dashboard-barrier) .widget-text-input.vt-sized-control:focus,
+:where(.dashboard-barrier) .widget-text-input.vt-sized-control:focus-visible {
+  outline: none;
+  border-color: var(--widget-color, #34cdea) !important;
+  background: color-mix(in srgb, var(--widget-color, #fff) 18%, white) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--widget-color, #34cdea) 34%, transparent);
+}
+
+.widget-select-trigger.vt-sized-control:focus-visible,
+.widget-video-select-trigger.vt-sized-control:focus-visible,
+.widget-action.vt-sized-control:focus-visible,
+.widget-split-button.vt-sized-control:focus-visible,
+.vt-button.vt-sized-control:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--widget-color, #34cdea) 72%, white);
+  outline-offset: 2px;
+}
+
+/* 18px is a true micro-control style, not a strokeless 24px control. */
+.widget-action.is-height-18,
+.widget-split-button.is-height-18,
+.widget-select-trigger.is-height-18,
+.widget-text-input.is-height-18,
+.widget-video-select-trigger.is-height-18,
+.vt-button.is-height-18,
+.widget-progress-bar.is-height-18 {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 48%, white) !important;
+  color: var(--widget-ink, var(--widget-border, var(--widget-ink, #243247)));
+}
+
+.widget-text-input.is-height-18::placeholder {
+  color: color-mix(in srgb, var(--widget-ink, #243247) 64%, transparent);
+  opacity: 1;
+}
+
+:where(.dashboard-barrier) .widget-text-input.is-height-18:focus,
+:where(.dashboard-barrier) .widget-text-input.is-height-18:focus-visible {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 68%, white) !important;
+}
+
+/* Community Post-derived split-left anatomy: a dedicated left action/icon bay. */
+.widget-split-button.is-left-split {
+  display: inline-grid;
+  grid-template-columns: var(--vt-primitive-height, 32px) minmax(0, 1fr);
+  align-items: stretch;
+  padding: 0 !important;
+  overflow: hidden;
+  background: #fff;
+  color: var(--widget-ink, var(--widget-border, var(--widget-ink, #243247)));
+}
+
+.widget-split-button.is-left-split .widget-split-button-icon {
+  width: var(--vt-primitive-height, 32px);
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-right: var(--vt-primitive-stroke, 2px) solid var(--vt-tone-stroke, var(--widget-border, var(--widget-ink, #243247)));
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 74%, white);
+}
+
+.widget-split-button.is-left-split.vt-sized-control .widget-split-button-icon svg {
+  width:max(20px,min(var(--vt-primitive-icon,24px),calc(var(--vt-primitive-height,32px) * .72)));
+  height:max(20px,min(var(--vt-primitive-icon,24px),calc(var(--vt-primitive-height,32px) * .72)));
+  stroke-width:2.5;
+}
+
+.widget-split-button.is-left-split .widget-split-button-label {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 9px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: clip;
+  line-height: .9;
+  font-size: max(10px, var(--vt-primitive-font, 11px));
+}
+
+.widget-split-button.is-left-split.is-height-18 {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 42%, white) !important;
+}
+
+.widget-split-button.is-left-split.is-height-18 .widget-split-button-icon {
+  border-right-width: 0;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 78%, white);
+}
+
+.widget-split-button.is-left-split.is-height-18 .widget-split-button-label {
+  padding-inline: 6px;
+}
+
+/* Video Manager-derived video selector. */
+.widget-video-select {
+  position: relative;
+  min-width: 0;
+}
+
+.widget-video-select-trigger {
+  --widget-video-split-bay: calc(var(--vt-primitive-height, 32px) - (var(--vt-primitive-stroke, 2px) * 2));
+  width: 100%;
+  display: grid;
+  grid-template-columns: var(--widget-video-split-bay) minmax(0, 1fr);
+  align-items: stretch;
+  padding: 0 !important;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 58%, white);
+  color: var(--widget-ink, var(--widget-border, #243247));
+  cursor: pointer;
+}
+
+.widget-video-select-trigger-selector {
+  box-sizing: border-box;
+  width: var(--widget-video-split-bay);
+  min-width: var(--widget-video-split-bay);
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  overflow: hidden;
+  border-inline-end: var(--vt-primitive-stroke, 2px) solid var(--vt-tone-stroke, var(--widget-border, #243247));
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 82%, white);
+}
+
+.widget-video-select-trigger-selector > span {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 1px;
+  color: inherit;
+  font-size: max(4px, calc(var(--vt-primitive-font, 11px) * .46));
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.widget-video-select-trigger-selector > span + span {
+  border-block-start: 1.5px solid var(--vt-tone-stroke, var(--widget-border, #243247));
+}
+
+.widget-video-select-trigger-selector svg {
+  width: min(calc(var(--vt-primitive-icon, 18px) * .72), calc(var(--vt-primitive-height, 32px) * .34));
+  height: min(calc(var(--vt-primitive-icon, 18px) * .72), calc(var(--vt-primitive-height, 32px) * .34));
+  stroke-width: var(--vt-primitive-icon-stroke, 2.5);
+}
+
+.widget-video-select-trigger.is-height-18 {
+  --widget-video-split-bay: calc(var(--vt-primitive-height, 18px) - (var(--vt-primitive-stroke, 1px) * 2));
+}
+.widget-video-select-trigger.is-height-18 .widget-video-select-trigger-selector {
+  border-inline-end: 0;
+}
+.widget-video-select-trigger.is-height-18 .widget-video-select-trigger-selector > span + span {
+  border-block-start-width: 1px;
+}
+.widget-video-select-trigger.is-height-24 .widget-video-select-trigger-selector > span:first-child { font-size: 8px; letter-spacing: .02em; }
+.widget-video-select-trigger.is-height-32 .widget-video-select-trigger-selector > span:first-child { font-size: 10px; letter-spacing: .02em; }
+.widget-video-select-trigger.is-height-38 .widget-video-select-trigger-selector > span:first-child { font-size: 12px; letter-spacing: .025em; }
+.widget-video-select-trigger.is-height-24 .widget-video-select-trigger-selector svg { width: 9px; height: 9px; }
+.widget-video-select-trigger.is-height-32 .widget-video-select-trigger-selector svg { width: 12px; height: 12px; }
+.widget-video-select-trigger.is-height-38 .widget-video-select-trigger-selector svg { width: 14px; height: 14px; }
+
+
+.widget-video-select-trigger-copy {
+  min-width: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: calc(var(--vt-primitive-height, 32px) * 1.7778) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+
+.widget-video-select-trigger-copy img {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 0;
+  border-inline-end: 1.5px solid var(--vt-tone-ink, var(--widget-ink, var(--widget-border, #243247)));
+  border-radius: 0;
+  flex: none;
+}
+
+.widget-video-select-trigger-copy > span {
+  min-width: 0;
+  max-height: calc(var(--vt-primitive-height, 32px) - 2px);
+  overflow: hidden;
+  display: grid;
+  align-content: center;
+  padding-inline: max(4px, calc(var(--vt-primitive-height, 32px) * .18));
+  white-space: normal;
+  text-overflow: clip;
+  font-size: max(5px, calc(var(--vt-primitive-font, 11px) * .72));
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.widget-video-select-trigger.is-height-18 .widget-video-select-trigger-copy {
+  gap: 0;
+  padding: 0;
+}
+.widget-video-select-trigger.is-height-18 .widget-video-select-trigger-copy img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.widget-video-select-trigger.is-height-18 .widget-video-select-trigger-copy > span {
+  font-size: 5px;
+  line-height: .88;
+}
+.widget-video-select-trigger.is-height-24 .widget-video-select-trigger-copy > span { font-size: 8px; }
+.widget-video-select-trigger.is-height-32 .widget-video-select-trigger-copy > span { font-size: 10px; }
+.widget-video-select-trigger.is-height-38 .widget-video-select-trigger-copy > span { font-size: 11px; }
+
+.widget-video-select-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 220;
+  display: grid;
+  gap: 6px;
+  max-height: 340px;
+  overflow: auto;
+  padding: 7px;
+  background: var(--vt-tone-bg, #fff);
+  color: var(--vt-tone-ink, var(--widget-ink, #243247));
+  border: var(--vt-primitive-stroke, 2px) solid var(--vt-tone-stroke, var(--widget-border, var(--widget-ink, #243247)));
+  border-radius: var(--vt-primitive-radius, 7px);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--widget-color, #34cdea) 45%, transparent);
+}
+
+.widget-video-select-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--vt-tone-bg, #fff);
+}
+
+.widget-video-select-option {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--vt-primitive-height, 38px);
+  min-height: var(--vt-primitive-height, 38px);
+  max-height: var(--vt-primitive-height, 38px);
+  display: grid;
+  grid-template-columns: calc(var(--vt-primitive-height, 38px) * 1.7778) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  color: var(--vt-tone-ink, var(--widget-ink, var(--widget-border, #243247)));
+  text-align: left;
+  cursor: pointer;
+}
+.widget-video-select-option:nth-child(even) {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 10%, #fff);
+}
+.widget-video-select-option:nth-child(odd) {
+  background: #fff;
+}
+
+/* Portalled selects carry explicit metrics from WidgetSizedSelect because the
+   portal does not inherit the dashboard/widget element's size or palette. */
+.widget-select-content {
+  box-sizing: border-box;
+  height: auto;
+  min-height: 0;
+  max-height: min(70vh, calc(var(--vt-primitive-height, 32px) * 9));
+  overflow: hidden;
+  border-width: var(--vt-primitive-stroke, 2px);
+  border-style: solid;
+  border-color: var(--widget-select-stroke, var(--widget-select-ink, #243247));
+  border-radius: var(--vt-primitive-radius, 7px);
+  background: var(--widget-select-surface, #fff);
+  color: var(--widget-select-ink, #243247);
+  font-family: inherit;
+}
+
+.widget-select-content .widget-select-viewport {
+  max-height: min(70vh, calc(var(--vt-primitive-height, 32px) * 9));
+  overflow-y: auto;
+  padding: 0;
+}
+
+.widget-select-content .widget-select-item {
+  box-sizing: border-box;
+  height: var(--vt-primitive-height, 32px) !important;
+  min-height: var(--vt-primitive-height, 32px) !important;
+  max-height: var(--vt-primitive-height, 32px) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: max(3px, calc(var(--vt-primitive-height, 32px) * .16));
+  padding: 0 max(4px, calc(var(--vt-primitive-height, 32px) * .26));
+  font-family: inherit;
+  font-size: var(--vt-primitive-font, 11px) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.widget-select-trigger svg,
+.widget-select-content .widget-select-item svg {
+  width: var(--vt-primitive-icon, 18px) !important;
+  height: var(--vt-primitive-icon, 18px) !important;
+  min-width: var(--vt-primitive-icon, 18px);
+  stroke-width: var(--vt-primitive-icon-stroke, 2.5) !important;
+  color: currentColor;
+  stroke: currentColor;
+}
+
+.widget-select-content.is-height-18 .widget-select-item {
+  border-bottom-width: 0;
+}
+.widget-select-content.is-height-18 {
+  box-shadow: none;
+}
+
+.widget-video-select-option:hover {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 22%, #fff);
+}
+.widget-video-select-option.is-selected {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 72%, #fff);
+}
+
+.widget-video-select-option-media {
+  position: relative;
+  align-self: stretch;
+  justify-self: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-inline-end: 1.5px solid var(--vt-tone-ink, var(--widget-ink, var(--widget-border, #243247)));
+  border-radius: 0;
+}
+
+.widget-video-select-option img,
+.widget-video-select-option-placeholder {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.widget-video-select-option img {
+  border: 0;
+}
+.widget-video-select-option-placeholder {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 14%, white);
+}
+
+.widget-video-select-duration {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  box-sizing: border-box;
+  height: 14px;
+  min-height: 14px;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: color-mix(in srgb, #fff 86%, var(--widget-color, #34cdea));
+  font-size: 7px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.widget-video-select-option-copy {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  padding: 2px 6px 2px 8px;
+}
+
+.widget-video-select-option-copy strong {
+  display: -webkit-box;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  white-space: normal;
+  text-overflow: clip;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.widget-video-select-views {
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  box-sizing: border-box;
+  height: 14px;
+  min-height: 14px;
+  max-width: 72%;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 58%, white);
+  color: var(--widget-ink, var(--widget-border, #243247));
+  font-size: 7px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: .02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.widget-video-select-option.is-selected .widget-video-select-views {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 88%, #fff);
+}
+
+.widget-video-select-menu.is-height-18 .widget-video-select-option {
+  gap: 3px;
+  padding-inline: 2px;
+}
+.widget-video-select-menu.is-height-18 .widget-video-select-option-copy strong {
+  font-size: 7px;
+  -webkit-line-clamp: 1;
+}
+.widget-video-select-menu.is-height-18 .widget-video-select-duration,
+.widget-video-select-menu.is-height-18 .widget-video-select-views {
+  display: none;
+}
+.widget-video-select-menu.is-height-24 .widget-video-select-option-copy strong {
+  font-size: 11px;
+  -webkit-line-clamp: 2;
+}
+.widget-video-select-menu.is-height-24 .widget-video-select-views {
+  display: none;
+}
+.widget-video-select-menu.is-height-32 .widget-video-select-option-copy strong {
+  font-size: 13px;
+  -webkit-line-clamp: 2;
+}
+.widget-video-select-menu.is-height-38 .widget-video-select-option-copy strong {
+  font-size: 15px;
+  -webkit-line-clamp: 3;
+}
+
+/* Keyword Engine-derived progress bars with copy over the fill. */
+.widget-progress-bar {
+  position: relative;
+  box-sizing: border-box;
+  height: var(--vt-primitive-height, 24px) !important;
+  min-height: var(--vt-primitive-height, 24px) !important;
+  max-height: var(--vt-primitive-height, 24px) !important;
+  overflow: hidden;
+  border: var(--vt-primitive-stroke, 2px) solid var(--widget-border, var(--widget-ink, currentColor)) !important;
+  border-radius: var(--vt-primitive-radius, 4px);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 12%, white);
+  color: var(--widget-ink, var(--widget-border, var(--widget-ink, #243247)));
+}
+
+.widget-progress-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--widget-progress, 0%);
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 68%, white);
+  transition: width 220ms ease;
+}
+
+.widget-progress-bar.is-height-18 .widget-progress-bar-fill {
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 82%, white);
+}
+
+.widget-progress-bar-copy {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-inline: 7px;
+  font-size: var(--vt-primitive-font, 9px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+.widget-progress-bar.is-height-18 .widget-progress-bar-copy {
+  padding-inline: 5px;
+  gap: 5px;
+}
+
+.widget-progress-bar-copy span,
+.widget-progress-bar-copy strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* UI Reference Library comparison grids. Component families own rows;
+   size variants own cells, so mobile never becomes a mixed control stack. */
+.widget-reference-scroll-content {
+  row-gap: 12px;
+  padding-block: 12px;
+}
+
+/* The header extra is intentionally hidden in portrait. Keep every library
+   section reachable from a persistent body control at every widget width. */
+:where(.dashboard-barrier) .vt-widget-body:has(> .widget-reference-navigation) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: stretch;
+}
+
+.widget-reference-navigation {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-block: 5px;
+  min-width: 0;
+}
+
+.widget-reference-navigation > .widget-select-trigger {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.widget-reference-navigation-count {
+  flex: 0 0 auto;
+  color: var(--vt-ink, var(--widget-border));
+  font-size: 10px;
+  font-weight: 1000;
+  white-space: nowrap;
+}
+
+.widget-reference-navigation > .vt-button {
+  flex: 0 0 24px;
+  padding: 0;
+}
+
+.widget-reference-full-width-region {
+  display: grid;
+  gap: 8px;
+  padding-block: 4px 12px;
+  background: transparent;
+}
+
+.widget-reference-full-width-heading {
+  padding-inline: var(--vt-widget-body-inset, var(--widget-content-inset, 10px));
+}
+
+.widget-reference-full-width-stack {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.widget-reference-family {
+  display: grid;
+  gap: 7px;
+  padding-top: 2px;
+}
+
+.widget-reference-family + .widget-reference-family {
+  border-top: 1px solid color-mix(in srgb, var(--widget-color, #34cdea) 28%, transparent);
+  padding-top: 10px;
+}
+
+.widget-reference-family-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--vt-ink, var(--widget-border));
+  font-size: 12px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.widget-reference-family-title small {
+  color: color-mix(in srgb, var(--vt-ink, #243247) 68%, var(--widget-color, #34cdea));
+  font-size: 10px;
+  font-weight: 900;
+  opacity: 1;
+}
+
+
+
+
+/* The reference library demonstrates the canonical primitive palette.
+   Supporting copy is a VT-Ink/widget-color mix, never black/neutral grey. */
+:where(.dashboard-barrier) [data-widget-id="ui-reference-library"] .vt-widget-body,
+:where(.dashboard-barrier) [data-widget-id="ui-reference-library"] .widget-reference-family-title,
+:where(.dashboard-barrier) [data-widget-id="ui-reference-library"] .widget-reference-variant > small {
+  color: var(--vt-ink, #243247);
+}
+
+.widget-reference-family-title small,
+.widget-reference-variant > small {
+  color: color-mix(in srgb, var(--vt-ink, #243247) 68%, var(--widget-color, #34cdea));
+  opacity: 1;
+}
+
+.widget-reference-header-controls {
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.widget-reference-header-controls > .widget-header-toggle:first-child {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.widget-reference-header-controls > .widget-header-toggle:first-child::-webkit-scrollbar {
+  display: none;
+}
+
+.widget-reference-header-controls .widget-header-stepper {
+  flex: none;
+}
+
+.widget-reference-variants {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  align-items: end;
+}
+
+
+/* Square families keep all four canonical sizes on one compact row. */
+.widget-reference-square-variants {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: 6px;
+  align-items: end;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.widget-reference-variant {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.widget-reference-variant > small {
+  color: color-mix(in srgb, var(--vt-ink, #243247) 68%, var(--widget-color, #34cdea));
+  font-size: 10px;
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.widget-reference-variant > *:not(small) {
+  min-width: 0;
+}
+
+@container vt-widget (max-width: 520px) {
+  .widget-reference-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* A phone-width reference widget needs one complete comparison column.
+   Two columns leave less than one control height for split-left label bays. */
+@container vt-widget (max-width: 420px) {
+  .widget-reference-variants {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .widget-reference-navigation-count { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-progress-bar-fill {
+    transition: none;
+  }
+}
+
+
+/* Canonical split-left geometry and readable scale. The icon bay is square
+   inside the outer stroke, while the label uses the canonical type token. */
+.widget-reference-family .widget-split-button.is-left-split {
+  width: 100%;
+  min-width: 0;
+}
+.widget-split-button.is-left-split {
+  grid-template-columns: calc(var(--vt-primitive-height) - 4px) minmax(0, 1fr);
+}
+.widget-split-button.is-left-split .widget-split-button-icon {
+  width: calc(var(--vt-primitive-height) - 4px);
+  min-width: calc(var(--vt-primitive-height) - 4px);
+}
+.widget-split-button.is-left-split.is-height-18 {
+  grid-template-columns: var(--vt-primitive-height) minmax(0, 1fr);
+}
+.widget-split-button.is-left-split.is-height-18 .widget-split-button-icon {
+  width: var(--vt-primitive-height);
+  min-width: var(--vt-primitive-height);
+}
+.widget-split-button.is-left-split .widget-split-button-label {
+  min-width: 0;
+  padding-inline: max(8px, calc(var(--vt-primitive-height) * .3));
+  font-size: var(--vt-primitive-font) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+}
+
+
+.widget-reference-adaptive-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--vt-gap-1, 4px);
+  width: 100%;
+}
+.widget-reference-adaptive-grid > .vt-sized-control {
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* Final adaptive text-fit ownership.
+   This file is unlayered and loads after the base size lattice, so the adaptive
+   variable cannot be reset back to the fixed 16px value by later compatibility
+   rules. Geometry stays 24px; only type/icon/gap/padding compress. */
+.vt-sized-control.is-height-24.vt-text-fit-adaptive {
+  --vt-primitive-font: clamp(10px, 2.8cqi, 16px);
+  --vt-font: var(--vt-primitive-font);
+  --vt-primitive-icon: clamp(12px, 2.8cqi, 18px);
+  --vt-primitive-gap: clamp(1px, .7cqi, 4px);
+  font-size: var(--vt-primitive-font) !important;
+  gap: var(--vt-primitive-gap) !important;
+  padding-inline: clamp(2px, .8cqi, 6px) !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.vt-sized-control.is-height-24.vt-text-fit-adaptive > svg,
+.vt-sized-control.is-height-24.vt-text-fit-adaptive .widget-icon-button-glyph > svg,
+.vt-sized-control.is-height-24.vt-text-fit-adaptive .widget-split-button-icon svg {
+  width: var(--vt-primitive-icon) !important;
+  height: var(--vt-primitive-icon) !important;
+}
+
+.vt-sized-control.is-height-24.vt-text-fit-adaptive :is(
+  span,
+  strong,
+  small,
+  .widget-split-button-label,
+  .widget-split-badge-label,
+  .widget-header-stepper-value
+) {
+  font-size: inherit !important;
+  white-space: nowrap !important;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+
+/* ── UI Reference: size × color page ──────────────────────────
+   Flow mode is deliberately content-width. Grid mode is an explicit visual
+   comparison mode and equalizes the control width into three columns. */
+.widget-reference-size-matrix {
+  display: grid;
+  gap: 14px;
+}
+.widget-reference-size-band {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+}
+.widget-reference-size-band-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block-end: 5px;
+  border-block-end: 2px solid color-mix(in srgb, var(--widget-color, #34cdea) 24%, transparent);
+}
+.widget-reference-size-band-title > strong {
+  font-size: 14px;
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.widget-reference-size-band-title > span,
+.widget-reference-size-tone > small {
+  font-size: 8px;
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: .58;
+}
+.widget-reference-size-tone {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.widget-reference-size-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.widget-reference-size-cell {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+}
+.widget-reference-size-flow:not(.is-grid) .widget-reference-size-cell > * {
+  width: fit-content;
+  max-width: max-content;
+}
+.widget-reference-size-flow:not(.is-grid) .widget-split-button.is-left-split {
+  width: fit-content !important;
+}
+.widget-reference-size-flow:not(.is-grid) .widget-reference-size-video {
+  width: clamp(150px, 24ch, 230px) !important;
+  max-width: min(230px, 72vw) !important;
+}
+.widget-reference-size-flow:not(.is-grid) .widget-reference-natural-progress {
+  width: clamp(96px, 16ch, 140px) !important;
+  max-width: 140px !important;
+}
+
+.widget-reference-size-flow.is-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+}
+.widget-reference-size-flow.is-grid .widget-reference-size-cell {
+  width: 100%;
+  min-width: 0;
+}
+.widget-reference-size-flow.is-grid .widget-reference-size-cell > :is(
+  .vt-button,
+  .widget-split-button,
+  .widget-text-input,
+  .widget-select-trigger,
+  .widget-stepper,
+  .widget-split-counter,
+  .widget-split-badge,
+  .widget-search-input,
+  .widget-live-badge,
+  .widget-video-select,
+  .widget-progress-bar,
+  .widget-toggle-switch
+) {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+.widget-reference-size-flow.is-grid .widget-stepper-value {
+  width: auto;
+  max-width: none;
+  flex: 1 1 auto;
+}
+.widget-reference-size-flow.is-grid .widget-split-counter {
+  grid-template-columns: var(--widget-split-counter-bay) minmax(0, 1fr);
+}
+.widget-reference-size-flow.is-grid .widget-split-counter-value {
+  width: auto;
+  max-width: none;
+}
+.widget-reference-size-flow.is-grid .widget-search-input > input {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+
+/* ── Final video-select menu ownership ────────────────────────
+   Keep this in the canonical variants layer so the open menu cannot regress
+   back to the older padded "module inside a menu" construction. */
+.widget-video-select.is-open > .widget-video-select-menu {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, auto);
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.widget-video-select.is-open > .widget-video-select-menu > .widget-video-select-search {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--vt-tone-bg, #fff);
+}
+
+.widget-video-select.is-open .widget-video-select-menu-search-row {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--widget-color, #34cdea) 12%, #fff);
+}
+.widget-video-select.is-open .widget-video-select-menu-search-row:focus-within {
+  border: 0;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--widget-color, #34cdea) 62%, transparent);
+}
+.widget-video-select.is-open .widget-video-select-menu-search-row .widget-search-input-icon {
+  align-self: stretch;
+  height: var(--vt-primitive-height, 38px);
+  border-block: 0;
+  border-inline-start: 0;
+}
+.widget-video-select.is-open .widget-video-select-menu-search-row > input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  height: var(--vt-primitive-height, 38px);
+}
+
+.widget-video-select.is-open > .widget-video-select-menu > .widget-video-select-options {
+  box-sizing: border-box;
+  display: grid;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  overflow-x: hidden;
+}
+
+.widget-video-select.is-open .widget-video-select-option {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Open-menu thumbnails are full-height media bays; only the right
+   structural divider uses VT ink so the image does not read like an inset card. */
+.widget-video-select.is-open .widget-video-select-option-media {
+  border-inline-end: 1.5px solid var(--vt-tone-ink, var(--widget-ink, var(--widget-border, #243247)));
+}
+.widget-video-select.is-open .widget-video-select-option img {
+  border: 0;
+}
+
+/* Time remains unboxed white-ish copy over the image, inset exactly 2px from
+   the right and 0px from the bottom — one pixel up and one pixel left from
+   the previous placement. */
+.widget-video-select.is-open .widget-video-select-duration {
+  right: 2px;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+
+/* Small allocated widget widths need a second fitting step. Keep the 24px
+   control geometry, but compress text/icon/gap before allowing a label to be
+   cropped. This specifically protects dense action rows such as Image
+   Generator handoffs and five-way mode/lens controls. */
+@container vt-widget (max-width: 430px) {
+  .vt-sized-control.is-height-24.vt-text-fit-adaptive {
+    --vt-primitive-font: 10px;
+    --vt-font: 10px;
+    --vt-primitive-icon: 11px;
+    --vt-primitive-gap: 1px;
+    padding-inline: 2px !important;
+    letter-spacing: -0.02em;
+  }
+}
+
+@container vt-widget (max-width: 360px) {
+  .vt-sized-control.is-height-24.vt-text-fit-adaptive {
+    --vt-primitive-font: 9px;
+    --vt-font: 9px;
+    --vt-primitive-icon: 9px;
+    --vt-primitive-gap: 1px;
+    padding-inline: 1px !important;
+    letter-spacing: -0.03em;
+  }
+}
+
+/* Canonical Community Post field-state tokens. These are inherited by
+   ordinary text fields, textareas, and compound search controls so editable
+   surfaces share one resting/focus language without widget-local overrides. */
+:where(.dashboard-barrier){
+  --widget-field-rest-stroke:color-mix(in srgb,var(--widget-color,#34cdea) 52%,white);
+  --widget-field-focus-border:var(--widget-color,#34cdea);
+  --widget-field-focus-fill:color-mix(in srgb,var(--widget-color,#34cdea) 18%,white);
+  --widget-field-focus-ring:color-mix(in srgb,var(--widget-color,#34cdea) 35%,transparent);
+  --widget-field-focus-glow:color-mix(in srgb,var(--widget-color,#34cdea) 55%,transparent);
+}
+
+/* Canonical textarea mirrors the Community Post input geometry and palette. */
+.widget-text-area{
+  width:100%;
+  box-sizing:border-box;
+  border-width:2px;
+  border-style:solid;
+  border-color:var(--widget-field-rest-stroke,var(--widget-border,var(--widget-ink,currentColor)));
+  border-radius:var(--vt-primitive-radius,6px);
+  background:var(--bg-input,#fff);
+  color:var(--widget-ink,var(--widget-border,#243247));
+  caret-color:var(--widget-color,#34cdea);
+  padding:8px 9px;
+  font:inherit;
+  resize:vertical;
+  outline:none;
+}
+:where(.dashboard-barrier) .widget-text-area:focus,
+:where(.dashboard-barrier) .widget-text-area:focus-visible{
+  border-color:var(--widget-field-focus-border,var(--widget-color,#34cdea));
+  background:var(--widget-field-focus-fill,color-mix(in srgb,var(--widget-color,#34cdea) 18%,white));
+  box-shadow:
+    0 0 0 3px var(--widget-field-focus-ring,color-mix(in srgb,var(--widget-color,#34cdea) 35%,transparent)),
+    0 0 16px 2px var(--widget-field-focus-glow,color-mix(in srgb,var(--widget-color,#34cdea) 55%,transparent));
+}
+
+.widget-split-button.is-left-split .widget-split-button-icon svg{
+  width:72%;
+  height:72%;
+  max-width:28px;
+  max-height:28px;
+  stroke-width:2.6;
+}
+
+/* Final canonical text-field ownership: input and textarea share the same
+   stroke/radius/surface/focus treatment in every widget. */
+:where(.dashboard-barrier) :is(.widget-text-input,.widget-text-area){
+  box-sizing:border-box;
+  width:100%;
+  border:2px solid var(--widget-field-rest-stroke)!important;
+  border-radius:var(--vt-primitive-radius,6px)!important;
+  background:var(--bg-input,#fff)!important;
+  color:var(--widget-ink,var(--widget-border,#243247))!important;
+  caret-color:var(--widget-color,#34cdea)!important;
+  outline:none!important;
+  box-shadow:none;
+}
+:where(.dashboard-barrier) :is(.widget-text-input,.widget-text-area):focus,
+:where(.dashboard-barrier) :is(.widget-text-input,.widget-text-area):focus-visible{
+  border-color:var(--widget-field-focus-border)!important;
+  background:var(--widget-field-focus-fill)!important;
+  box-shadow:
+    0 0 0 3px var(--widget-field-focus-ring),
+    0 0 16px 2px var(--widget-field-focus-glow)!important;
+  position:relative;
+  z-index:2;
+}
