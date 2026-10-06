@@ -524,7 +524,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
                   {packageDraft.warnings.map(warning => <SubToolboxAlert key={warning} level="l2" tone="warning" title="Review" detail={warning} />)}
                 </SubToolboxStack>
               ) : (
-                <SubToolboxStatePanel level="l2" state="success" message="No current package conflicts detected." />
+                <SubToolboxStatePanel level="l2" state="ready" message="No current package conflicts detected." />
               )}
             </SubToolboxOutputCard>
           </SubToolboxGrid>
