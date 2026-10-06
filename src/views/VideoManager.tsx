@@ -24,108 +24,33 @@ import {
  hasGeminiKey,
 } from "../services/gemini"
 import type { TagSuggestion } from "../services/gemini"
+import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import MetadataMaster from "./MetadataMaster"
 import {
  X,
- Plus,
- Tag,
  FileVideo,
- Upload,
- Sparkles,
- Image as ImageIcon,
  AlertCircle,
  CheckCircle,
  Edit,
- Settings,
  Search,
  RefreshCw,
 } from "lucide-react"
 import {
- ThumbnailMiniSubToolbox,
  SubToolboxGridActionButton,
  ToolboxScaffold,
- SubToolbox,
 } from "../components/Toolbox"
-import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
+import { SubToolboxActions } from "../components/subtoolbox/SubToolboxLayouts"
 import { SubToolboxShellAction } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 import {
  SubToolboxAlert,
  SubToolboxButton,
  SubToolboxDataTable,
  SubToolboxIconButton,
- SubToolboxLabeledInput,
- SubToolboxLabeledTextArea,
  SubToolboxLinkButton,
  SubToolboxOutputCard,
- SubToolboxRemovableTag,
- SubToolboxSelectableTag,
  SubToolboxStatePanel,
- SubToolboxSurface,
- SubToolboxTag,
- SubToolboxTagEditor,
- SubToolboxTopTitleDropdown,
  SubToolboxVideoSelector,
 } from "../components/subtoolbox/SubToolboxPrimitives"
-
-const TagBadge: React.FC<{
- tag: string
- analysis?: TagSuggestion
- onRemove?: () => void
- onAdd?: () => void
- isSuggested?: boolean
- isAdded?: boolean
-}> = ({ tag, analysis, onRemove, onAdd, isSuggested, isAdded }) => {
- const getRankColor = (rank?: number) => {
-  if (typeof rank !== "number") return "#36E0F6"
-  if (rank >= 1 && rank <= 10) return "#36E0F6"
-  if (rank >= 11 && rank <= 20) return "#3FEE56"
-  if (rank >= 21 && rank <= 30) return "#FFDA47"
-  if (rank >= 31 && rank <= 40) return "#FFA85C"
-  return "#FA618A"
- }
-
- const rankColor = getRankColor(analysis?.rank)
- const title = analysis
-  ? `SEO score ${analysis.score} · search volume ${analysis.searchVolume.toLocaleString()} · competition ${analysis.competition.toLocaleString()} · rank #${analysis.rank}${analysis.tripleKeyword ? " · triple keyword" : ""}`
-  : undefined
- const label = <>{tag}{analysis ? <span aria-hidden="true"> · #{analysis.rank}</span> : null}</>
- const style = {
-  ["--pair-a" as string]: rankColor,
-  ["--pair-b" as string]: "#ffffff",
- } as React.CSSProperties
-
- if (onRemove) {
-  return (
-   <SubToolboxRemovableTag
-    level="l2"
-    onRemove={onRemove}
-    removeIcon={<X size={12} strokeWidth={3.2} />}
-    style={style}
-    title={title}
-   >
-    {label}
-   </SubToolboxRemovableTag>
-  )
- }
-
- if (isSuggested) {
-  return (
-   <SubToolboxSelectableTag
-    level="l2"
-    selected={Boolean(isAdded)}
-    selectedIcon={<CheckCircle size={12} strokeWidth={3} />}
-    unselectedIcon={<Plus size={12} strokeWidth={3} />}
-    disabled={isAdded}
-    onClick={() => { if (!isAdded) onAdd?.() }}
-    style={style}
-    title={title}
-   >
-    {label}
-   </SubToolboxSelectableTag>
-  )
- }
-
- return <SubToolboxTag level="l2" style={style} title={title}>{label}</SubToolboxTag>
-}
 
 interface VideoManagerProps {
  embedded?: boolean
@@ -165,23 +90,25 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [editTags, setEditTags] = useState("")
  const [editPrivacy, setEditPrivacy] = useState("public")
  const [editCategoryId, setEditCategoryId] = useState("27")
+ const [editAudience, setEditAudience] = useState(false)
+ const [editTimestamps, setEditTimestamps] = useState("")
+ const [editLocation, setEditLocation] = useState("")
+ const [editCommunity, setEditCommunity] = useState(false)
+ const [editAiUse, setEditAiUse] = useState(true)
 
  const [userPlaylists, setUserPlaylists] = useState<Playlist[]>([])
  const [currentPlaylists, setCurrentPlaylists] = useState<PlaylistMembership[]>([])
  const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([])
 
- const [isGeneratingTags, setIsGeneratingTags] = useState(false)
  const [isAnalyzingTags, setIsAnalyzingTags] = useState(false)
- const [suggestedTags, setSuggestedTags] = useState<TagSuggestion[]>([])
  const [existingTagAnalysis, setExistingTagAnalysis] = useState<TagSuggestion[]>([])
  const [showRankDetails, setShowRankDetails] = useState(false)
- const [isTagsExpanded, setIsTagsExpanded] = useState(false)
- const [tagInput, setTagInput] = useState("")
  const fileInputRef = useRef<HTMLInputElement>(null)
  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
  const [isDraggingThumbnail, setIsDraggingThumbnail] = useState(false)
  const [isOpen, setIsOpen] = useState(isOpenInitial)
+ const [viewMode, setViewMode] = useState<"workspace" | "intelligence">("workspace")
  const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false)
  const [videoListLoadState, setVideoListLoadState] = useState<VideoListLoadState>("idle")
  const hasTriggeredInitialLoadRef = useRef(false)
@@ -328,7 +255,6 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    setEditTags(details.tags.join(", "))
    setEditPrivacy(details.privacyStatus)
    setEditCategoryId(details.categoryId)
-   setSuggestedTags([])
 
    try {
     const memberships = await fetchSimpleVideoPlaylistMemberships(videoId, playlistsToUse.map((p) => p.id))
@@ -389,52 +315,14 @@ const VideoManager: React.FC<VideoManagerProps> = ({
 
  const handleGenerateTags = async () => {
   if (!hasGeminiKey()) return
-  setIsGeneratingTags(true)
   try {
    const suggestions = await generateTagSuggestions(editTitle, editDescription)
-   setSuggestedTags([...suggestions].sort((a, b) => b.score - a.score).slice(0, 10))
+   const nextTags = [...suggestions].sort((a, b) => b.score - a.score).slice(0, 10).map((suggestion) => suggestion.tag)
+   const nextValue = nextTags.join(", ")
+   if (nextValue.length <= MAX_TAG_CHARS) setEditTags(nextValue)
   } catch (err) {
    console.error(err)
-  } finally {
-   setIsGeneratingTags(false)
   }
- }
-
- const handleAddTag = (tag: string, analysis?: TagSuggestion) => {
-  const trimmed = tag.trim()
-  if (!trimmed) return
-  const current = editTags.split(",").map((t) => t.trim()).filter(Boolean)
-  if (current.map((t) => t.toLowerCase()).includes(trimmed.toLowerCase())) {
-   setTagInput("")
-   return
-  }
-  const prospective = [...current, trimmed].join(", ")
-  if (prospective.length > MAX_TAG_CHARS) {
-   alert("Character limit exceeded. Tags must be 500 characters or less including spaces.")
-   return
-  }
-  setEditTags(prospective)
-  if (analysis) setExistingTagAnalysis((prev) => [...prev, analysis])
-  setTagInput("")
- }
-
- const handleRemoveTag = (tag: string) => {
-  setEditTags(editTags.split(",").map((t) => t.trim()).filter((t) => t.toLowerCase() !== tag.toLowerCase()).join(", "))
-  setExistingTagAnalysis((prev) => prev.filter((t) => t.tag.toLowerCase() !== tag.toLowerCase()))
- }
-
- const handleManagedTagsChange = (nextTags: string[]) => {
-  const next = nextTags.map((tag) => tag.trim()).filter(Boolean).join(", ")
-  if (next.length > MAX_TAG_CHARS) {
-   alert("Character limit exceeded. Tags must be 500 characters or less including spaces.")
-   return
-  }
-  setEditTags(next)
-  setExistingTagAnalysis((prev) => prev.filter((analysis) => nextTags.some((tag) => tag.toLowerCase() === analysis.tag.toLowerCase())))
- }
-
- const togglePlaylist = (playlistId: string) => {
-  setSelectedPlaylistIds((prev) => prev.includes(playlistId) ? prev.filter((id) => id !== playlistId) : [...prev, playlistId])
  }
 
  const handleThumbnailChange = (file: File) => {
@@ -563,19 +451,27 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    onToggle={() => setIsOpen(!isOpen)}
    embedded={embedded}
    helpText={subtitleHelpRail}
-   headerActions={showHeaderLoadAssetsButton ? (
-    <SubToolboxButton
-     level="l2"
-     size="compact"
-     tone="ink"
-     icon={<RefreshCw aria-hidden="true" size={16} />}
-     className="!w-auto"
-     onClick={(event) => { event.stopPropagation(); lastSearchRef.current = ""; setVideoSearchQuery(""); void loadInitialData(true) }}
-     disabled={loading}
-    >
-     {loading ? "REFRESHING..." : "LOAD SPACE ASSETS"}
-    </SubToolboxButton>
-   ) : null}
+   headerActions={
+    <div className="flex items-center gap-2">
+     <SubToolboxActions columns={2} className="!w-auto">
+      <SubToolboxButton size="micro" selected={viewMode === "workspace"} onClick={() => setViewMode("workspace")}>LIVE EDITOR</SubToolboxButton>
+      <SubToolboxButton size="micro" selected={viewMode === "intelligence"} onClick={() => setViewMode("intelligence")}>INTELLIGENCE</SubToolboxButton>
+     </SubToolboxActions>
+     {showHeaderLoadAssetsButton ? (
+      <SubToolboxButton
+       level="l2"
+       size="compact"
+       tone="ink"
+       icon={<RefreshCw aria-hidden="true" size={16} />}
+       className="!w-auto"
+       onClick={(event) => { event.stopPropagation(); lastSearchRef.current = ""; setVideoSearchQuery(""); void loadInitialData(true) }}
+       disabled={loading}
+      >
+       {loading ? "REFRESHING..." : "LOAD SPACE ASSETS"}
+      </SubToolboxButton>
+     ) : null}
+    </div>
+   }
    shellClassName="animate-fade-in"
    contentClassName={embedded ? "p-0" : "p-8"}>
    <div className="flex flex-col h-full">
@@ -583,6 +479,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     <ViewTubeHandoffReceiver targetToolId="video-manager" onPacket={handleMetadataMasterHandoff} />
     {error && <SubToolboxAlert level="l1" tone="danger" className="mb-6" icon={<AlertCircle size={20} />} title="Video Manager Issue" detail={error} />}
     {saveSuccess && <SubToolboxAlert level="l1" tone="success" className="mb-6" icon={<CheckCircle size={20} />} title="Asset Deployed Successfully" />}
+    {viewMode === "intelligence" ? (
+     <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
+    ) : (
+
 
     {showRankDetails && existingTagAnalysis.length > 0 && (
      <div className="fixed inset-0 z-[110] bg-black/75 backdrop-blur-sm flex items-center justify-center p-6" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setShowRankDetails(false) }}>
@@ -683,145 +583,41 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        </SubToolboxShellAction>
       )}
 
-      <SubToolbox
-       title="Video Details"
-       icon={<Settings size={20} strokeWidth={3} />}
-       collapsible
-       isOpenInitial
-      >
-       <SubToolboxStack density="dense">
-        <SubToolboxLabeledInput
-         id="video-manager-title"
-         level="l1"
-         overlayLabel="TITLE"
-         aria-label="Video title"
-         value={editTitle}
-         onChange={(event) => setEditTitle(event.target.value)}
-         placeholder=" "
-         disabled={!connected || !selectedVideo}
-        />
-
-        <ThumbnailMiniSubToolbox
-         title="Thumbnail"
-         icon={<ImageIcon size={18} strokeWidth={3} />}
-         className="vm-thumbnail-mini"
-         src={thumbnailPreview || selectedVideo?.thumbnail || null}
-         alt={`${editTitle || "Video"} thumbnail`}
-         emptyLabel={catalogLoading ? "LOADING THUMBNAIL" : "SELECT A VIDEO TO LOAD THUMBNAIL"}
-         previewClassName={isDraggingThumbnail ? "is-dragging" : ""}
-         onDragOver={(event) => { if (!connected || !selectedVideo) return; event.preventDefault(); setIsDraggingThumbnail(true) }}
-         onDragLeave={() => setIsDraggingThumbnail(false)}
-         onDrop={(event) => {
-          if (!connected || !selectedVideo) return
-          event.preventDefault()
-          setIsDraggingThumbnail(false)
-          if (event.dataTransfer.files[0]) handleThumbnailChange(event.dataTransfer.files[0])
-         }}
-         actions={(
-          <>
-           <SubToolboxButton
-            level="l2"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={!connected || !selectedVideo}
-           >
-            Upload
-           </SubToolboxButton>
-           <SubToolboxButton
-            level="l2"
-            onClick={() => navigate("/thumbnail-studio", { state: { source: "video-manager", videoId: selectedVideoId, title: editTitle, thumbnail: thumbnailPreview || selectedVideo?.thumbnail || null } })}
-            disabled={!selectedVideoId}
-           >
-            Generate
-           </SubToolboxButton>
-          </>
-         )}
-        />
-
-        <SubToolboxLabeledTextArea
-         level="l1"
-         overlayLabel="DESCRIPTION"
-         aria-label="Video description"
-         value={editDescription}
-         onChange={(event) => setEditDescription(event.target.value)}
-         height="fill"
-         className="vm-description-field"
-         placeholder=" "
-         disabled={!connected || !selectedVideo}
-        />
-
-        <SubToolboxSection label="Publishing Controls">
-         <SubToolboxGrid minItemWidth="compact" className="vm-publishing-grid">
-          <SubToolboxTopTitleDropdown
-           level="l1"
-           label="PRIVACY"
-           value={editPrivacy}
-           options={[{ value: "public", label: "public" }, { value: "unlisted", label: "unlisted" }, { value: "private", label: "private" }]}
-           onValueChange={setEditPrivacy}
-           ariaLabel="Video privacy"
-          />
-          <SubToolboxTopTitleDropdown
-           level="l1"
-           label="CATEGORY"
-           value={selectedCategoryLabel}
-           options={categoryOptions.map((option) => ({ value: option.value, label: option.label }))}
-           onValueChange={setEditCategoryId}
-           ariaLabel="Video category"
-          />
-          <SubToolboxTopTitleDropdown
-           level="l1"
-           label="PLAYLISTS"
-           value={!connected ? "CONNECT CHANNEL" : catalogLoading ? "LOADING..." : selectedPlaylistIds.length === 0 ? "NONE SELECTED" : `${selectedPlaylistIds.length} LINKED`}
-           options={userPlaylists.map((playlist) => ({ value: playlist.id, label: playlist.title }))}
-           onValueChange={togglePlaylist}
-           multiSelect
-           selectedValues={selectedPlaylistIds}
-           ariaLabel="Video playlists"
-          />
-         </SubToolboxGrid>
-        </SubToolboxSection>
-       </SubToolboxStack>
-      </SubToolbox>
-
-      <SubToolbox title="Video Tags" icon={<Tag size={20} strokeWidth={3} />} collapsible isOpen={isTagsExpanded} onToggle={() => setIsTagsExpanded((prev) => !prev)}>
-       <SubToolboxStack density="dense">
-        <SubToolboxTagEditor
-         level="l1"
-         tags={editTags.split(",").map((tag) => tag.trim()).filter(Boolean)}
-         onTagsChange={handleManagedTagsChange}
-         addIcon={<Plus size={18} strokeWidth={3} />}
-         saveIcon={<CheckCircle size={18} strokeWidth={3} />}
-         removeIcon={<X size={13} strokeWidth={3.2} />}
-         label="VIDEO TAGS"
-        />
-        <span className="vm-tag-character-count">{editTags.length}/{MAX_TAG_CHARS}</span>
-
-        <SubToolboxActions columns={2} className="vm-tag-actions">
-         <SubToolboxButton size="action" onClick={handleGenerateTags} disabled={!connected || !selectedVideo || isGeneratingTags || editTags.length >= MAX_TAG_CHARS}>
-          {isGeneratingTags ? "Scanning Market..." : "Generate High Ranking Video Tags"}
-         </SubToolboxButton>
-         <SubToolboxButton type="button" size="action" tone="neutral" onClick={handleRankTags} disabled={!connected || !selectedVideo || isAnalyzingTags || !editTags}>
-          {isAnalyzingTags ? "Ranking..." : existingTagAnalysis.length > 0 ? "View Rankings" : "Rank Tags"}
-         </SubToolboxButton>
-        </SubToolboxActions>
-
-        {suggestedTags.length > 0 ? (
-         <SubToolboxSection label="Ranked Suggestions">
-          <SubToolboxSurface className="flex flex-wrap gap-2">
-           {suggestedTags.map((suggestion) => (
-            <TagBadge
-             key={suggestion.tag}
-             tag={suggestion.tag}
-             isSuggested
-             isAdded={editTags.toLowerCase().includes(suggestion.tag.toLowerCase())}
-             onAdd={() => handleAddTag(suggestion.tag, suggestion)}
-             analysis={suggestion}
-            />
-           ))}
-          </SubToolboxSurface>
-         </SubToolboxSection>
-        ) : null}
-       </SubToolboxStack>
-      </SubToolbox>
+      <CanonicalMetadataSections
+       title={editTitle}
+       description={editDescription}
+       tags={editTags}
+       category={editCategoryId}
+       playlists={selectedPlaylistIds.join(", ")}
+       thumbnailPreview={thumbnailPreview || selectedVideo?.thumbnail || null}
+       visibility={editPrivacy}
+       audience={editAudience}
+       timestamps={editTimestamps}
+       location={editLocation}
+       community={editCommunity}
+       aiUse={editAiUse}
+       onTitleChange={setEditTitle}
+       onDescriptionChange={setEditDescription}
+       onTagsChange={setEditTags}
+       onCategoryChange={setEditCategoryId}
+       onPlaylistsChange={(value) => setSelectedPlaylistIds(value.split(/[\\n,]/).map(item => item.trim()).filter(Boolean))}
+       onVisibilityChange={setEditPrivacy}
+       onAudienceChange={setEditAudience}
+       onTimestampsChange={setEditTimestamps}
+       onLocationChange={setEditLocation}
+       onCommunityChange={setEditCommunity}
+       onAiUseChange={setEditAiUse}
+       onGenerate={(field) => { if (field === "tags") void handleGenerateTags() }}
+       onAnalyze={(field) => { if (field === "tags") void handleRankTags() }}
+       thumbnailActions={
+        <>
+         <SubToolboxButton level="l2" onClick={() => fileInputRef.current?.click()} disabled={!connected || !selectedVideo}>UPLOAD</SubToolboxButton>
+         <SubToolboxButton level="l2" onClick={() => navigate("/thumbnail-studio", { state: { source: "video-manager", videoId: selectedVideoId, title: editTitle, thumbnail: thumbnailPreview || selectedVideo?.thumbnail || null } })} disabled={!selectedVideoId}>GENERATE</SubToolboxButton>
+        </>
+       }
+       categoryOptions={categoryOptions}
+       videoUploadLabel={selectedVideo ? <>{selectedVideo.title}<br />PUBLISHED VIDEO SELECTED</> : "SELECT A PUBLISHED VIDEO ABOVE"}
+      />
 
       <SubToolboxGridActionButton
        onClick={connected ? handleSave : () => auth.login("/video-manager")}
@@ -835,6 +631,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      </div>
     ) : (
      <div className="min-h-[180px] sm:min-h-[320px] lg:h-[500px] flex flex-col items-center justify-center gap-3 sm:gap-5 font-black uppercase text-xl sm:text-2xl lg:text-3xl tracking-tighter text-black/20"><Edit size={100} strokeWidth={1} className="mb-2 opacity-50" />Awaiting Asset Selection</div>
+    )}
+
     )}
 
     <input type="file" ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
