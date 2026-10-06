@@ -26,7 +26,7 @@ import {
 import type { TagSuggestion } from "../services/gemini"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import MetadataMaster from "./MetadataMaster"
-import { EducationTimestampNotes, validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
+import { validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
 import { PublishingControls } from "../components/metadata/PublishingControls"
 import { togglePlaylistSelection } from "../components/metadata/playlistSelection"
 import {
@@ -106,7 +106,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([])
 
  const [isAnalyzingTags, setIsAnalyzingTags] = useState(false)
+ const [isGeneratingTags, setIsGeneratingTags] = useState(false)
  const [existingTagAnalysis, setExistingTagAnalysis] = useState<TagSuggestion[]>([])
+ const [suggestedTags, setSuggestedTags] = useState<TagSuggestion[]>([])
+ const [tagInput, setTagInput] = useState("")
  const [showRankDetails, setShowRankDetails] = useState(false)
  const fileInputRef = useRef<HTMLInputElement>(null)
  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
@@ -260,6 +263,9 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    setEditTags(details.tags.join(", "))
    setEditPrivacy(details.privacyStatus)
    setEditCategoryId(details.categoryId)
+   setExistingTagAnalysis([])
+   setSuggestedTags([])
+   setTagInput("")
 
    try {
     const memberships = await fetchSimpleVideoPlaylistMemberships(videoId, playlistsToUse.map((p) => p.id))
@@ -320,14 +326,42 @@ const VideoManager: React.FC<VideoManagerProps> = ({
 
  const handleGenerateTags = async () => {
   if (!hasGeminiKey()) return
+  setIsGeneratingTags(true)
   try {
    const suggestions = await generateTagSuggestions(editTitle, editDescription)
-   const nextTags = [...suggestions].sort((a, b) => b.score - a.score).slice(0, 10).map((suggestion) => suggestion.tag)
-   const nextValue = nextTags.join(", ")
-   if (nextValue.length <= MAX_TAG_CHARS) setEditTags(nextValue)
+   setSuggestedTags([...suggestions].sort((a, b) => b.score - a.score).slice(0, 10))
   } catch (err) {
    console.error(err)
+  } finally {
+   setIsGeneratingTags(false)
   }
+ }
+
+ const handleAddTag = (tag: string, analysis?: TagSuggestion) => {
+  const trimmed = tag.trim()
+  if (!trimmed) return
+  const current = editTags.split(",").map(t => t.trim()).filter(Boolean)
+  if (current.some(t => t.toLowerCase() === trimmed.toLowerCase())) {
+   setTagInput("")
+   return
+  }
+  const nextValue = [...current, trimmed].join(", ")
+  if (nextValue.length > MAX_TAG_CHARS) {
+   alert("Character limit exceeded. Tags must be 500 characters or less including spaces.")
+   return
+  }
+  setEditTags(nextValue)
+  if (analysis) setExistingTagAnalysis(prev => [...prev.filter(item => item.tag.toLowerCase() !== trimmed.toLowerCase()), analysis])
+  setTagInput("")
+ }
+
+ const handleRemoveTag = (tag: string) => {
+  setEditTags(editTags.split(",").map(t => t.trim()).filter(t => t.toLowerCase() !== tag.toLowerCase()).join(", "))
+  setExistingTagAnalysis(prev => prev.filter(item => item.tag.toLowerCase() !== tag.toLowerCase()))
+ }
+
+ const handleRefineTags = async () => {
+  await handleGenerateTags()
  }
 
  const handleThumbnailChange = (file: File) => {
@@ -416,7 +450,6 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const categoryOptions = [
   { value: "2", label: "Autos & Vehicles" }, { value: "23", label: "Comedy" }, { value: "27", label: "Education" }, { value: "24", label: "Entertainment" }, { value: "1", label: "Film & Animation" }, { value: "20", label: "Gaming" }, { value: "26", label: "Howto & Style" }, { value: "10", label: "Music" }, { value: "25", label: "News & Politics" }, { value: "29", label: "Nonprofits & Activism" }, { value: "22", label: "People & Blogs" }, { value: "15", label: "Pets & Animals" }, { value: "28", label: "Science & Technology" }, { value: "17", label: "Sports" }, { value: "19", label: "Travel & Events" },
  ]
- const selectedCategoryLabel = categoryOptions.find((option) => option.value === editCategoryId)?.label || "Select Category"
  const [subtitleStep, setSubtitleStep] = useState(0)
  const subtitleBase = "Generate titles, descriptions, tags, and everything else you need to publish your video with just a simple click of a button all you need to do is upload the video!"
  const subtitleAdditions = ["If you don't have a video just upload a script!", "And if you don't have that we can create it all from a concept!", "If you don't have a concept, we can still build the whole thing with you.", "If you have no idea what you wanna create we can help with that too."]
@@ -614,20 +647,13 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        onCategoryChange={setEditCategoryId}
        onPlaylistToggle={togglePlaylist}
       />
-      {editCategoryId === "27" ? (
-       <EducationTimestampNotes
-        value={educationNotes}
-        onChange={setEducationNotes}
-        disabled={!connected}
-       />
-      ) : null}
-
       <CanonicalMetadataSections
        title={editTitle}
        description={editDescription}
        tags={editTags}
        category={editCategoryId}
-       playlists={userPlaylists.filter(playlist => selectedPlaylistIds.includes(playlist.id)).map(playlist => playlist.title).join(", ") || selectedPlaylistIds.join(", ")}
+       playlists=""
+       thumbnailFile={thumbnailFile}
        thumbnailPreview={thumbnailPreview || selectedVideo?.thumbnail || null}
        visibility={editPrivacy}
        audience={editAudience}
@@ -639,7 +665,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        onDescriptionChange={setEditDescription}
        onTagsChange={setEditTags}
        onCategoryChange={setEditCategoryId}
-       onPlaylistsChange={(value) => setSelectedPlaylistIds(value.split(/[\\n,]/).map(item => item.trim()).filter(Boolean))}
+       onPlaylistsChange={() => undefined}
+       onThumbnailFileChange={handleThumbnailChange}
        onVisibilityChange={setEditPrivacy}
        onAudienceChange={setEditAudience}
        onTimestampsChange={setEditTimestamps}
@@ -647,17 +674,32 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        onCommunityChange={setEditCommunity}
        onAiUseChange={setEditAiUse}
        onGenerate={(field) => { if (field === "tags") void handleGenerateTags() }}
+       onRefine={(field) => { if (field === "tags") void handleRefineTags() }}
        onAnalyze={(field) => { if (field === "tags") void handleRankTags() }}
+       onRankTags={handleRankTags}
+       tagAnalysis={existingTagAnalysis}
+       suggestedTags={suggestedTags}
+       tagInput={tagInput}
+       onTagInputChange={setTagInput}
+       onAddTag={() => handleAddTag(tagInput)}
+       onRemoveTag={handleRemoveTag}
+       onAddSuggestedTag={handleAddTag}
+       maxTagChars={MAX_TAG_CHARS}
+       isAnalyzingTags={isAnalyzingTags}
+       isGeneratingTags={isGeneratingTags}
+       educationNotes={educationNotes}
+       onEducationNotesChange={setEducationNotes}
+       educationNotesDisabled={!connected}
        thumbnailActions={
         <>
          <SubToolboxButton level="l2" onClick={() => fileInputRef.current?.click()} disabled={!connected || !selectedVideo}>UPLOAD</SubToolboxButton>
          <SubToolboxButton level="l2" onClick={() => navigate("/thumbnail-studio", { state: { source: "video-manager", videoId: selectedVideoId, title: editTitle, thumbnail: thumbnailPreview || selectedVideo?.thumbnail || null } })} disabled={!selectedVideoId}>GENERATE</SubToolboxButton>
         </>
        }
-       categoryOptions={categoryOptions}
-       videoUploadLabel={selectedVideo ? <>{selectedVideo.title}<br />PUBLISHED VIDEO SELECTED</> : "SELECT A PUBLISHED VIDEO ABOVE"}
+       showVideoUpload={false}
+       showPlaylists={false}
+       showCategory={false}
       />
-
       <SubToolboxGridActionButton
        onClick={connected ? handleSave : () => auth.login("/video-manager")}
        disabled={connected ? saving || !selectedVideoId || !educationReady : auth.loading}
