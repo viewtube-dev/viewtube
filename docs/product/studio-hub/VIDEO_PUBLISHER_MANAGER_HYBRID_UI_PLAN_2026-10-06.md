@@ -32,6 +32,29 @@ Primary visual signals:
 - change history;
 - update/apply action.
 
+
+## Canonical metadata section order and hierarchy
+
+Publisher and Manager must use the same fixed metadata section sequence:
+
+1. **Video Upload** — primary
+2. **Title** — primary
+3. **Thumbnail** — primary
+4. **Visibility** — secondary/compact
+5. **Audience** — secondary/compact
+6. **Timestamps** — secondary/compact
+7. **Description** — primary
+8. **Location** — secondary/compact
+9. **Playlists** — primary
+10. **Community** — secondary/compact
+11. **AI Use** — secondary/compact
+12. **Tags** — primary
+13. **Category** — primary
+
+Primary sections receive the full ViewTube metadata-field treatment. Secondary sections are deliberately visually subordinate: compact inline controls, toggles, binary yes/no controls, pills, small selectors, or tiny expandable controls. Secondary status does not mean removable from the canonical sequence; their semantic positions remain fixed even when collapsed, optional, or empty.
+
+No Publisher/Manager mode, Metadata Intelligence view, generation flow, responsive layout, or populated-state optimization may reorder these sections. Advanced AI actions are embedded in the relevant section and never create a second metadata sequence.
+
 ## Shared metadata field component
 
 Every field uses the same primitive family:
