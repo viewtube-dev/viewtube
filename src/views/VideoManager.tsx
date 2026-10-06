@@ -56,67 +56,6 @@ import {
  SubToolboxVideoSelector,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 
-const TagBadge: React.FC<{
- tag: string
- analysis?: TagSuggestion
- onRemove?: () => void
- onAdd?: () => void
- isSuggested?: boolean
- isAdded?: boolean
-}> = ({ tag, analysis, onRemove, onAdd, isSuggested, isAdded }) => {
- const getRankColor = (rank?: number) => {
-  if (typeof rank !== "number") return "#36E0F6"
-  if (rank >= 1 && rank <= 10) return "#36E0F6"
-  if (rank >= 11 && rank <= 20) return "#3FEE56"
-  if (rank >= 21 && rank <= 30) return "#FFDA47"
-  if (rank >= 31 && rank <= 40) return "#FFA85C"
-  return "#FA618A"
- }
-
- const rankColor = getRankColor(analysis?.rank)
- const title = analysis
-  ? `SEO score ${analysis.score} · search volume ${analysis.searchVolume.toLocaleString()} · competition ${analysis.competition.toLocaleString()} · rank #${analysis.rank}${analysis.tripleKeyword ? " · triple keyword" : ""}`
-  : undefined
- const label = <>{tag}{analysis ? <span aria-hidden="true"> · #{analysis.rank}</span> : null}</>
- const style = {
-  ["--pair-a" as string]: rankColor,
-  ["--pair-b" as string]: "#ffffff",
- } as React.CSSProperties
-
- if (onRemove) {
-  return (
-   <SubToolboxRemovableTag
-    level="l2"
-    onRemove={onRemove}
-    removeIcon={<X size={12} strokeWidth={3.2} />}
-    style={style}
-    title={title}
-   >
-    {label}
-   </SubToolboxRemovableTag>
-  )
- }
-
- if (isSuggested) {
-  return (
-   <SubToolboxSelectableTag
-    level="l2"
-    selected={Boolean(isAdded)}
-    selectedIcon={<CheckCircle size={12} strokeWidth={3} />}
-    unselectedIcon={<Plus size={12} strokeWidth={3} />}
-    disabled={isAdded}
-    onClick={() => { if (!isAdded) onAdd?.() }}
-    style={style}
-    title={title}
-   >
-    {label}
-   </SubToolboxSelectableTag>
-  )
- }
-
- return <SubToolboxTag level="l2" style={style} title={title}>{label}</SubToolboxTag>
-}
-
 interface VideoManagerProps {
  embedded?: boolean
  collapsible?: boolean
@@ -165,13 +104,9 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [currentPlaylists, setCurrentPlaylists] = useState<PlaylistMembership[]>([])
  const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([])
 
- const [isGeneratingTags, setIsGeneratingTags] = useState(false)
  const [isAnalyzingTags, setIsAnalyzingTags] = useState(false)
- const [suggestedTags, setSuggestedTags] = useState<TagSuggestion[]>([])
  const [existingTagAnalysis, setExistingTagAnalysis] = useState<TagSuggestion[]>([])
  const [showRankDetails, setShowRankDetails] = useState(false)
- const [isTagsExpanded, setIsTagsExpanded] = useState(false)
- const [tagInput, setTagInput] = useState("")
  const fileInputRef = useRef<HTMLInputElement>(null)
  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
@@ -324,7 +259,6 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    setEditTags(details.tags.join(", "))
    setEditPrivacy(details.privacyStatus)
    setEditCategoryId(details.categoryId)
-   setSuggestedTags([])
 
    try {
     const memberships = await fetchSimpleVideoPlaylistMemberships(videoId, playlistsToUse.map((p) => p.id))
@@ -385,52 +319,14 @@ const VideoManager: React.FC<VideoManagerProps> = ({
 
  const handleGenerateTags = async () => {
   if (!hasGeminiKey()) return
-  setIsGeneratingTags(true)
   try {
    const suggestions = await generateTagSuggestions(editTitle, editDescription)
-   setSuggestedTags([...suggestions].sort((a, b) => b.score - a.score).slice(0, 10))
+   const nextTags = [...suggestions].sort((a, b) => b.score - a.score).slice(0, 10).map((suggestion) => suggestion.tag)
+   const nextValue = nextTags.join(", ")
+   if (nextValue.length <= MAX_TAG_CHARS) setEditTags(nextValue)
   } catch (err) {
    console.error(err)
-  } finally {
-   setIsGeneratingTags(false)
   }
- }
-
- const handleAddTag = (tag: string, analysis?: TagSuggestion) => {
-  const trimmed = tag.trim()
-  if (!trimmed) return
-  const current = editTags.split(",").map((t) => t.trim()).filter(Boolean)
-  if (current.map((t) => t.toLowerCase()).includes(trimmed.toLowerCase())) {
-   setTagInput("")
-   return
-  }
-  const prospective = [...current, trimmed].join(", ")
-  if (prospective.length > MAX_TAG_CHARS) {
-   alert("Character limit exceeded. Tags must be 500 characters or less including spaces.")
-   return
-  }
-  setEditTags(prospective)
-  if (analysis) setExistingTagAnalysis((prev) => [...prev, analysis])
-  setTagInput("")
- }
-
- const handleRemoveTag = (tag: string) => {
-  setEditTags(editTags.split(",").map((t) => t.trim()).filter((t) => t.toLowerCase() !== tag.toLowerCase()).join(", "))
-  setExistingTagAnalysis((prev) => prev.filter((t) => t.tag.toLowerCase() !== tag.toLowerCase()))
- }
-
- const handleManagedTagsChange = (nextTags: string[]) => {
-  const next = nextTags.map((tag) => tag.trim()).filter(Boolean).join(", ")
-  if (next.length > MAX_TAG_CHARS) {
-   alert("Character limit exceeded. Tags must be 500 characters or less including spaces.")
-   return
-  }
-  setEditTags(next)
-  setExistingTagAnalysis((prev) => prev.filter((analysis) => nextTags.some((tag) => tag.toLowerCase() === analysis.tag.toLowerCase())))
- }
-
- const togglePlaylist = (playlistId: string) => {
-  setSelectedPlaylistIds((prev) => prev.includes(playlistId) ? prev.filter((id) => id !== playlistId) : [...prev, playlistId])
  }
 
  const handleThumbnailChange = (file: File) => {
