@@ -183,3 +183,29 @@ The compact Vault asset family now has a dedicated production primitive: `VaultA
 - Each Vault Asset Module represents one single image, video clip, audio file, or document. It is not a project/package/engine container, and higher-level Vault workflow controls must stay outside the compact module unless separately approved.
 - ViewTube palette/font/focus tokens may flow into the module, but generic Toolbox CSS must not change the donor's fixed dimensions or layout.
 
+
+
+## Metadata / Publishing Primitives — 2026-10-06
+
+The Metadata Publisher and Video Manager use the following canonical primitives so library changes propagate to both tools:
+
+- SubToolboxLabeledInput — labeled single-line field with the label rendered in the upper-right overlay.
+- SubToolboxLabeledTextArea — labeled multiline field with the label rendered in the upper-right overlay.
+- SubToolboxTopTitleDropdown — compact top-title dropdown for publishing controls, including multi-select playlist menus.
+- SubToolboxToggle — binary secondary metadata control.
+- SubToolboxStatusBadge — compact validation/state indicator.
+- SubToolboxStack, SubToolboxGrid, and SubToolboxSection — canonical compact composition primitives.
+
+### Publishing control contract
+
+Video Manager's publishing controls are presented as one responsive row of three dropdowns:
+
+1. Privacy — Public, Unlisted, Private.
+2. Category — the YouTube category catalog, including Education (27).
+3. Playlists — populated from the authenticated user's channel playlists and persisted through the existing YouTube playlist API.
+
+### Education metadata contract
+
+When Category is Education, the Education Questions & Phrases component is exposed. Each non-empty line must begin with M:SS or MM:SS followed by text. Invalid lines prevent the video update from being submitted. Valid education notes are included in the video's description when saved.
+
+These are library contracts, not local CSS skins. Production components must import the primitives from src/components/subtoolbox/SubToolboxPrimitives.tsx and must not duplicate their visual implementation.
