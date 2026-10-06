@@ -661,8 +661,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           <PostActionReflection toolId="VIDEO_PUBLISHER" />
         </SubToolboxStack>
       )}
-      )}
         </>
+      )}
     </ToolboxScaffold>
   )
 }
