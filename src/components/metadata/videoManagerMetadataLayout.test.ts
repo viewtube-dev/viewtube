@@ -10,11 +10,13 @@ describe("Video Manager metadata layout contract", () => {
     expect(source).toContain("<SubToolboxLabeledTextArea overlayLabel={descriptionLabel}")
     expect(source).not.toContain('<SubToolboxSection label="TITLE">')
     expect(source).not.toContain('<SubToolboxSection label="DESCRIPTION">')
+    expect(source.match(/<SubToolboxLabeledTextArea overlayLabel=\{descriptionLabel\}/g)?.length).toBe(1)
   })
 
   it("uses the canonical tag editor primitive and keeps ranked tags", () => {
     expect(source).toContain("<SubToolboxTagEditor")
     expect(source).toContain("renderTag={(tag, remove) =>")
+    expect(source).toContain("addIcon={<Plus size={15} />}")
     expect(source).toContain("<TagRankTag")
   })
 
