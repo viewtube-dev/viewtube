@@ -495,6 +495,7 @@ export const useDashboardData = () => {
     // Tools (2-color palette)
     { label: "Video Manager", to: "/studio#video-manager", paletteIndex: 0, icon: "Video", isTool: true },
     { label: "Video Publisher", to: "/studio#video-publisher", paletteIndex: 1, icon: "Upload", isTool: true },
+    { label: "Metadata Master", to: "/studio#metadata-master", paletteIndex: 12, icon: "PackageCheck", isTool: true },
     { label: "Content Analysis", to: "/studio#content-analysis", paletteIndex: 2, icon: "Activity", isTool: true },
     { label: "Thumbnail Studio", to: "/studio#thumbnail-studio", paletteIndex: 3, icon: "Image", isTool: true },
     { label: "Community Posts", to: "/studio#community-posts", paletteIndex: 4, icon: "MessageSquare", isTool: true },
