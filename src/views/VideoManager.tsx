@@ -25,6 +25,7 @@ import {
 } from "../services/gemini"
 import type { TagSuggestion } from "../services/gemini"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import MetadataMaster from "./MetadataMaster"
 import {
  X,
  Plus,
@@ -188,6 +189,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
  const [isDraggingThumbnail, setIsDraggingThumbnail] = useState(false)
  const [isOpen, setIsOpen] = useState(isOpenInitial)
+ const [viewMode, setViewMode] = useState<"workspace" | "intelligence">("workspace")
  const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false)
  const [videoListLoadState, setVideoListLoadState] = useState<VideoListLoadState>("idle")
  const hasTriggeredInitialLoadRef = useRef(false)
@@ -569,7 +571,13 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    onToggle={() => setIsOpen(!isOpen)}
    embedded={embedded}
    helpText={subtitleHelpRail}
-   headerActions={showHeaderLoadAssetsButton ? (
+   headerActions={
+    <div className="flex items-center gap-2">
+     <SubToolboxActions columns={2} className="!w-auto">
+      <SubToolboxButton size="micro" selected={viewMode === "workspace"} onClick={() => setViewMode("workspace")}>LIVE EDITOR</SubToolboxButton>
+      <SubToolboxButton size="micro" selected={viewMode === "intelligence"} onClick={() => setViewMode("intelligence")}>INTELLIGENCE</SubToolboxButton>
+     </SubToolboxActions>
+     <div>showHeaderLoadAssetsButton ? (
     <SubToolboxButton
      level="l2"
      size="compact"
@@ -582,6 +590,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      {loading ? "REFRESHING..." : "LOAD SPACE ASSETS"}
     </SubToolboxButton>
    ) : null}
+</div>
+    </div>
    shellClassName="animate-fade-in"
    contentClassName={embedded ? "p-0" : "p-8"}>
    <div className="flex flex-col h-full">
@@ -589,6 +599,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     <ViewTubeHandoffReceiver targetToolId="video-manager" onPacket={handleMetadataMasterHandoff} />
     {error && <SubToolboxAlert level="l1" tone="danger" className="mb-6" icon={<AlertCircle size={20} />} title="Video Manager Issue" detail={error} />}
     {saveSuccess && <SubToolboxAlert level="l1" tone="success" className="mb-6" icon={<CheckCircle size={20} />} title="Asset Deployed Successfully" />}
+    {viewMode === "intelligence" ? (
+     <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
+    ) : (
+
 
     {showRankDetails && existingTagAnalysis.length > 0 && (
      <div className="fixed inset-0 z-[110] bg-black/75 backdrop-blur-sm flex items-center justify-center p-6" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setShowRankDetails(false) }}>
@@ -737,6 +751,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      </div>
     ) : (
      <div className="min-h-[180px] sm:min-h-[320px] lg:h-[500px] flex flex-col items-center justify-center gap-3 sm:gap-5 font-black uppercase text-xl sm:text-2xl lg:text-3xl tracking-tighter text-black/20"><Edit size={100} strokeWidth={1} className="mb-2 opacity-50" />Awaiting Asset Selection</div>
+    )}
+
     )}
 
     <input type="file" ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
