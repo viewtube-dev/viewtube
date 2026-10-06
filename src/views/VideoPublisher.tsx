@@ -37,6 +37,7 @@ import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import MetadataMaster from "./MetadataMaster"
 import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../components/Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
 import {
@@ -132,6 +133,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [durationStats, setDurationStats] = useState("Avg. Views")
   const [formatMode, setFormatMode] = useState<"longform" | "shorts">("longform")
   const [isOpen, setIsOpen] = useState(isOpenInitial)
+  const [workspaceMode, setWorkspaceMode] = useState<"workspace" | "intelligence">("workspace")
   const [missingFields, setMissingFields] = useState({ concept: false, niche: false })
   const [insightsImported, setInsightsImported] = useState(false)
   const [publishRefresh, setPublishRefresh] = useState(0)
@@ -504,15 +506,33 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         <ToolboxHeaderToggle
           value={formatMode}
           aria-label="Video format"
-          options={[
-            { value: "longform", label: "Longform" },
-            { value: "shorts", label: "Shorts" },
-          ]}
-          onValueChange={(value) => setFormatMode(value === "shorts" ? "shorts" : "longform")}
-        />
+          <div className="flex items-center gap-2">
+            <ToolboxHeaderToggle
+              value={workspaceMode}
+              aria-label="Publisher view"
+              options={[
+                { value: "workspace", label: "Workspace" },
+                { value: "intelligence", label: "Intelligence" },
+              ]}
+              onValueChange={(value) => setWorkspaceMode(value === "intelligence" ? "intelligence" : "workspace")}
+            />
+            <ToolboxHeaderToggle
+              value={formatMode}
+              aria-label="Video format"
+              options={[
+                { value: "longform", label: "Longform" },
+                { value: "shorts", label: "Shorts" },
+              ]}
+              onValueChange={(value) => setFormatMode(value === "shorts" ? "shorts" : "longform")}
+            />
+          </div>
       }
     >
       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
+      {workspaceMode === "intelligence" ? (
+        <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
+      ) : (
+
       {publishState.projection ? (
         <SubToolboxStack density="comfortable">
           <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
@@ -644,6 +664,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           </SubToolbox>
           <PostActionReflection toolId="VIDEO_PUBLISHER" />
         </SubToolboxStack>
+      )}
       )}
     </ToolboxScaffold>
   )
