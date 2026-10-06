@@ -659,7 +659,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        onLoadProject={handleProjectManifestLoad}
        onSaveProject={saveProjectManifestState}
        paletteIndex={basePalette + 1}
-      />\n      <CanonicalMetadataSections
+      />
+      <CanonicalMetadataSections
        title={editTitle}
        description={editDescription}
        tags={editTags}
