@@ -26,7 +26,7 @@ export type ToolboxUiLevel = "toolbox" | "l0" | "l1" | "l2"
 export type ToolboxControlLevel = Exclude<ToolboxUiLevel, "toolbox">
 
 export const COMPONENT_LEVEL_DNA = {
-  l0: { height: 56, stroke: 4, radius: 12, shadowOffset: 6, fontSize: 24 },
+  l0: { height: 56, stroke: 3.5, radius: 9.333333, shadowOffset: 5.833333, fontSize: 24 },
   l1: { height: 48, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 18 },
   l2: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
 } as const satisfies Record<ToolboxControlLevel, {
