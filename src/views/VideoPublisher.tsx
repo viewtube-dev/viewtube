@@ -36,6 +36,7 @@ import BrainLiveToolInbox from "../components/brain/BrainLiveToolInbox"
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
+import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../components/Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
 import {
@@ -145,6 +146,12 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [playlistIds, setPlaylistIds] = useState("")
   const [privacyStatus, setPrivacyStatus] = useState<"public"|"private"|"unlisted">("private")
   const [publishAt, setPublishAt] = useState("")
+  const [publishCategory, setPublishCategory] = useState("22")
+  const [publishAudience, setPublishAudience] = useState(false)
+  const [publishTimestamps, setPublishTimestamps] = useState("")
+  const [publishLocation, setPublishLocation] = useState("")
+  const [publishCommunity, setPublishCommunity] = useState(false)
+  const [publishAiUse, setPublishAiUse] = useState(true)
   const [uploadProgress, setUploadProgress] = useState(0)
 
   const publishState = React.useMemo(() => {
@@ -521,31 +528,40 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 </SubToolboxOutputCard>
               </SubToolboxGrid>
 
-              <SubToolbox title="Publication Files" icon={<Upload size={20} />} collapsible isOpenInitial>
-                <SubToolboxGrid minItemWidth="compact">
-                  <SubToolboxFileTarget label={videoFile ? videoFile.name : <>Final video<br/>Select file</>} icon={<Upload size={24}/>} accept="video/*" minHeight={150} onFiles={files => setVideoFile(files?.[0] || null)} />
-                  <SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : <>Thumbnail<br/>Select image</>} icon={<ImageIcon size={24}/>} accept="image/jpeg,image/png,image/webp" minHeight={150} onFiles={files => setThumbnailFile(files?.[0] || null)} />
-                  <SubToolboxFileTarget label={captionFile ? captionFile.name : <>Captions<br/>VTT / SRT optional</>} icon={<FileText size={24}/>} accept=".vtt,.srt,text/vtt,application/x-subrip,text/plain" minHeight={150} onFiles={files => setCaptionFile(files?.[0] || null)} />
-                </SubToolboxGrid>
-              </SubToolbox>
-
-              <SubToolbox title="YouTube Metadata" icon={<Type size={20}/>} collapsible isOpenInitial>
-                <SubToolboxStack>
-                  <SubToolboxInput value={publishTitle} onChange={event=>setPublishTitle(event.target.value)} placeholder="YouTube title" aria-label="YouTube title" />
-                  <SubToolboxTextArea value={publishDescription} onChange={event=>setPublishDescription(event.target.value)} placeholder="Description" aria-label="YouTube description" />
-                  <SubToolboxInput value={publishTags} onChange={event=>setPublishTags(event.target.value)} placeholder="Tags, comma separated" aria-label="YouTube tags" />
-                  <SubToolboxInput value={playlistIds} onChange={event=>setPlaylistIds(event.target.value)} placeholder="Playlist IDs, comma separated" aria-label="Playlist IDs" />
-                </SubToolboxStack>
-              </SubToolbox>
-
-              <SubToolbox title="Privacy + Schedule" icon={<ShieldCheck size={20}/>} collapsible isOpenInitial>
-                <SubToolboxGrid minItemWidth="compact">
-                  <SubToolboxSelect value={privacyStatus} onChange={event=>setPrivacyStatus(event.target.value as "public"|"private"|"unlisted")} aria-label="Privacy status">
-                    <option value="private">Private</option><option value="unlisted">Unlisted</option><option value="public">Public</option>
-                  </SubToolboxSelect>
-                  <SubToolboxInput type="datetime-local" value={publishAt} onChange={event=>setPublishAt(event.target.value)} aria-label="Scheduled publish time" disabled={privacyStatus !== "private"} />
-                </SubToolboxGrid>
-              </SubToolbox>
+              <CanonicalMetadataSections
+                title={publishTitle}
+                description={publishDescription}
+                tags={publishTags}
+                category={publishCategory}
+                playlists={playlistIds}
+                videoFile={videoFile}
+                thumbnailFile={thumbnailFile}
+                visibility={privacyStatus}
+                audience={publishAudience}
+                timestamps={publishTimestamps}
+                location={publishLocation}
+                community={publishCommunity}
+                aiUse={publishAiUse}
+                onTitleChange={setPublishTitle}
+                onDescriptionChange={setPublishDescription}
+                onTagsChange={setPublishTags}
+                onCategoryChange={setPublishCategory}
+                onPlaylistsChange={setPlaylistIds}
+                onVideoFileChange={setVideoFile}
+                onThumbnailFileChange={setThumbnailFile}
+                onVisibilityChange={(value) => setPrivacyStatus(value as "public" | "private" | "unlisted")}
+                onAudienceChange={setPublishAudience}
+                onTimestampsChange={setPublishTimestamps}
+                onLocationChange={setPublishLocation}
+                onCommunityChange={setPublishCommunity}
+                onAiUseChange={setPublishAiUse}
+                videoUploadLabel={videoFile ? <>{videoFile.name}<br />FINAL VIDEO SELECTED</> : <>DROP FILE OR CLICK<br />UPLOAD FINAL VIDEO</>}
+                thumbnailActions={
+                  <SubToolboxButton level="l2" onClick={() => undefined} disabled={!thumbnailFile}>
+                    SELECTED
+                  </SubToolboxButton>
+                }
+              />
 
               {publishError ? <SubToolboxStatePanel state="error" message={publishError} /> : null}
               {uploadProgress > 0 && uploadProgress < 100 ? <SubToolboxStatePanel state="loading" message={"VIDEO UPLOAD " + Math.round(uploadProgress) + "%"} /> : null}
