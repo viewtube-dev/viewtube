@@ -228,3 +228,17 @@ A concept may graduate toward ViewTube only after:
 - documentation/ADR update.
 
 The lab is successful even when a concept is rejected. Rejection is a design result.
+
+
+## Material Baseline Update — 2026-10-05
+
+The primary external material reference is Liquid Glass Studio:
+- https://github.com/iyinchao/liquid-glass-studio/
+- https://liquid-glass-studio.vercel.app/
+- Research baseline: docs/research/LIQUID_GLASS_STUDIO_SOURCE_AND_MATERIAL_MODEL.md
+
+The lab must not treat glass as a CSS translucency effect. The reference implementation uses a WebGL2/WebGPU multipass pipeline: background -> vertical Gaussian blur -> horizontal Gaussian blur -> main glass composite. Its main shader derives geometry from signed-distance functions and uses surface normals and edge distance to drive refraction, chromatic dispersion, Fresnel response, directional glare, tint, and final compositing.
+
+Before component concepts are promoted, the lab must demonstrate two realistic glass rectangles over an environment. Their controls must visibly affect refraction, thickness, refractive factor, dispersion, Fresnel, glare, tint, blur, shadow/environment, geometry, and motion. A translucent rectangle does not pass this gate.
+
+The first implementation milestone is therefore Reference Material Lab, followed by GlassSurface, then semantic ViewTube components. The material contract remains independent of the semantic component contract and renderer backend.
