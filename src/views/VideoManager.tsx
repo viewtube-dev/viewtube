@@ -653,22 +653,13 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        </SubToolboxShellAction>
       )}
 
-      <ProjectManifestation\n       projects={brain.projects || []}\n       activeProjectId={brain.activeProjectId}\n       onLoadProject={handleProjectManifestLoad}\n       onSaveProject={saveProjectManifestState}\n       paletteIndex={basePalette + 1}\n      />\n      <PublishingControls
-       privacy={editPrivacy}
-       category={editCategoryId}
-       playlistIds={selectedPlaylistIds}
-       privacyOptions={[
-        { value: "public", label: "PUBLIC" },
-        { value: "unlisted", label: "UNLISTED" },
-        { value: "private", label: "PRIVATE" },
-       ]}
-       categoryOptions={categoryOptions}
-       playlistOptions={userPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title }))}
-       onPrivacyChange={setEditPrivacy}
-       onCategoryChange={setEditCategoryId}
-       onPlaylistToggle={togglePlaylist}
-      />
-      <CanonicalMetadataSections
+      <ProjectManifestation
+       projects={brain.projects || []}
+       activeProjectId={brain.activeProjectId}
+       onLoadProject={handleProjectManifestLoad}
+       onSaveProject={saveProjectManifestState}
+       paletteIndex={basePalette + 1}
+      />\n      <CanonicalMetadataSections
        title={editTitle}
        description={editDescription}
        tags={editTags}
@@ -721,6 +712,22 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        showVideoUpload={false}
        showPlaylists={false}
        showCategory={false}
+      />
+
+      <PublishingControls
+       privacy={editPrivacy}
+       category={editCategoryId}
+       playlistIds={selectedPlaylistIds}
+       privacyOptions={[
+        { value: "public", label: "PUBLIC" },
+        { value: "unlisted", label: "UNLISTED" },
+        { value: "private", label: "PRIVATE" },
+       ]}
+       categoryOptions={categoryOptions}
+       playlistOptions={userPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title }))}
+       onPrivacyChange={setEditPrivacy}
+       onCategoryChange={setEditCategoryId}
+       onPlaylistToggle={togglePlaylist}
       />
       <SubToolboxGridActionButton
        onClick={connected ? handleSave : () => auth.login("/video-manager")}
