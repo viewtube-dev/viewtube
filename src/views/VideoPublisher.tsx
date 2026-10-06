@@ -506,7 +506,6 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       }
     >
       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
-      <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
       {publishState.projection ? (
         <SubToolboxStack density="comfortable">
           <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
