@@ -1,4 +1,3 @@
-import       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
 React, { useEffect, useState } from "react"
 import { BarChart3, Check, Copy, FileText, ImageIcon, RefreshCcw, Send, ShieldCheck, Sparkles, Type, Upload, Zap } from "lucide-react"
 import JSZip from "jszip"
@@ -506,6 +505,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         />
       }
     >
+      <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
       {publishState.projection ? (
         <SubToolboxStack density="comfortable">
