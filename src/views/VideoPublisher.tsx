@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { BarChart3, Check, Copy, FileText, ImageIcon, RefreshCcw, Send, ShieldCheck, Sparkles, Type, Upload, Zap } from "lucide-react"
+import { BarChart3, Check, Copy, FileText, RefreshCcw, Send, ShieldCheck, Sparkles, Type, Upload, Zap } from "lucide-react"
 import JSZip from "jszip"
 import { useBrain } from "../context/useBrain"
 import { generateSeoData, hasGeminiKey } from "../services/gemini"
@@ -46,7 +46,6 @@ import {
   SubToolboxInput,
   SubToolboxLinkButton,
   SubToolboxOutputCard,
-  SubToolboxSelect,
   SubToolboxStatePanel,
   SubToolboxTextArea,
   ToolboxHeaderToggle,
