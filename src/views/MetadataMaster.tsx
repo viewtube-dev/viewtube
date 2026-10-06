@@ -33,6 +33,7 @@ import {
 } from "../components/subtoolbox/SubToolboxPrimitives"
 import { useBrain } from "../context/useBrain"
 import { generateSeoData } from "../services/gemini"
+import { resolveWorkspaceContentBuildToolContext } from "../services/asset-engine/ToolContext"
 import {
   createMetadataMasterSet,
   createEmptyMetadataMasterPackage,
@@ -158,6 +159,11 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
     setLastAction("Analyzing context and generating package candidates…")
 
     try {
+      const workspaceContext = resolveWorkspaceContentBuildToolContext(
+        brain,
+        "metadata-master",
+        ["title", "thumbnail", "description", "tags", "category"],
+      )
       const result = await generateSeoData(
         concept,
         niche,
@@ -174,7 +180,9 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       const generated = packageFromSeoResult(result, {
         goal,
         intensity,
-        videoId: publishedVideoId || null,
+        projectId: workspaceContext?.build.legacyProjectId || null,
+        contentBuildId: workspaceContext?.contentBuildId || null,
+        videoId: publishedVideoId || workspaceContext?.build.youtube?.videoId || null,
       })
 
       const candidates = result.titleSets.slice(0, clampSets(setCount)).map((titleSet, index) => {
