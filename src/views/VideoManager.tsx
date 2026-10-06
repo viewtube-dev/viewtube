@@ -446,7 +446,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     thumbnailUrl: thumbnailPreview || undefined,
    })
    setSaveSuccess(true)
-   void handleSelectVideo(selectedVideoId, userPlaylists)\n   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
+   void handleSelectVideo(selectedVideoId, userPlaylists)((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    void loadInitialData()
   } catch (err: any) {
