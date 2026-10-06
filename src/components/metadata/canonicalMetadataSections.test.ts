@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { CANONICAL_METADATA_SECTIONS, PRIMARY_METADATA_SECTIONS, SECONDARY_METADATA_SECTIONS } from "./canonicalMetadataSections"
+import { CANONICAL_METADATA_SECTIONS, PRIMARY_METADATA_SECTIONS, SECONDARY_METADATA_SECTIONS } from "./CanonicalMetadataSections"
 
 describe("canonical metadata section hierarchy", () => {
   it("keeps the required 13 sections in the canonical order", () => {
