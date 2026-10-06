@@ -38,6 +38,7 @@ import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import MetadataMaster from "./MetadataMaster"
+import ProjectManifestation from "../components/projects/ProjectManifestation"
 import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../components/Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
 import {
@@ -116,7 +117,7 @@ interface VideoPublisherProps {
 
 const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, collapsible = false, isOpenInitial = true, paletteIndex }) => {
   const basePalette = paletteIndex ?? 0
-  const { brain, updateBrain, registerProvider, unregisterProvider, setSeoState, authState } = useBrain()
+  const { brain, updateBrain, updateProject, setActiveProject, registerProvider, unregisterProvider, setSeoState, authState } = useBrain()
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<SeoResult | null>(null)
   const [isExporting, setIsExporting] = useState(false)
@@ -154,6 +155,34 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [publishCommunity, setPublishCommunity] = useState(false)
   const [publishAiUse, setPublishAiUse] = useState(true)
   const [uploadProgress, setUploadProgress] = useState(0)
+
+  const handleProjectManifestLoad = (project: typeof brain.projects[number]) => {
+    setActiveProject(project.id)
+    setConcept(project.plan?.concept || project.concept || project.videoTitle || project.name || "")
+    setNiche(project.plan?.niche || project.niche || brain.targetNiche || "")
+    setAudience(project.plan?.targetAudience || "")
+    setScript(project.script || "")
+    setPublishTitle(project.videoTitle || "")
+    setPublishDescription(project.description || "")
+    setPublishTags(project.tags || "")
+    setInsightsImported(true)
+    setPublishRefresh(value => value + 1)
+  }
+
+  const saveProjectManifestState = (project: typeof brain.projects[number]) => {
+    updateProject(project.id, {
+      videoTitle: publishTitle,
+      description: publishDescription,
+      tags: publishTags,
+      script,
+      plan: {
+        concept: project.plan?.concept || concept,
+        niche: project.plan?.niche || niche,
+        ...(project.plan || {}),
+        targetAudience: audience,
+      },
+    })
+  }
 
   const publishState = React.useMemo(() => {
     const videoPackage = listVideoPackages()[0] || null
@@ -525,7 +554,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       }
     >
       <ViewTubeHandoffReceiver targetToolId="video-publisher" onPacket={handleMetadataMasterHandoff} />
-      {workspaceMode === "intelligence" ? (
+      <ProjectManifestation\n       projects={brain.projects || []}\n       activeProjectId={brain.activeProjectId}\n       onLoadProject={handleProjectManifestLoad}\n       onSaveProject={saveProjectManifestState}\n       paletteIndex={basePalette}\n      />\n      {workspaceMode === "intelligence" ? (
         <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
       ) : (
         <>
