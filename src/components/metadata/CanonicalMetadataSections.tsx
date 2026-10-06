@@ -102,7 +102,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
     onGenerate, onRefine, onAnalyze, onHistory, categoryOptions = [], thumbnailActions,
-    videoUploadLabel, titleLabel = "TITLE", className = "",
+    videoUploadLabel, titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
   } = props
 
   return (
@@ -151,7 +151,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
       </SecondaryControl>
 
       <SubToolbox title="07 · DESCRIPTION" icon={<FolderOpen size={20} strokeWidth={3} />} collapsible isOpenInitial>
-        <SubToolboxLabeledTextArea overlayLabel={descriptionLabel || "DESCRIPTION"} value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="Write description manually…" aria-label="Description" height="standard" />
+        <SubToolboxLabeledTextArea overlayLabel={descriptionLabel} value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="Write description manually…" aria-label="Description" height="standard" />
         <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze, onHistory }} />
       </SubToolbox>
 
