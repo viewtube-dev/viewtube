@@ -1,17 +1,17 @@
 import React from "react"
 import { Upload, Image as ImageIcon, Sparkles, History, WandSparkles, Search, MapPin, ListVideo, Users, Clock3, Globe2, MessageSquare, Bot, Tags, FolderOpen } from "lucide-react"
 import { SubToolbox, ThumbnailMiniSubToolbox } from "../Toolbox"
-import { SubToolboxActions } from "../subtoolbox/SubToolboxLayouts"
 import {
   SubToolboxButton,
   SubToolboxFileTarget,
   SubToolboxFieldLabel,
   SubToolboxInput,
+  SubToolboxStatusBadge,
   SubToolboxSelect,
   SubToolboxTextArea,
   SubToolboxToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { SubToolboxSection } from "../subtoolbox/SubToolboxLayouts"
+import { SubToolboxActions, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
 
 export const CANONICAL_METADATA_SECTIONS = [
   "video-upload", "title", "thumbnail", "visibility", "audience", "timestamps",
@@ -90,7 +90,7 @@ const SecondaryControl: React.FC<{ label: string; icon: React.ReactNode; childre
     <SubToolboxFieldLabel className="flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-[.04em] opacity-55">
       {icon}{label}
     </SubToolboxFieldLabel>
-    <div className="min-w-0 flex-1">{children}</div>
+    <SubToolboxStack density="compact" className="min-w-0 flex-1">{children}</SubToolboxStack>
   </SubToolboxSection>
 )
 
@@ -116,7 +116,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
             onFiles={files => onVideoFileChange(files?.[0] || null)}
           />
         ) : (
-          <div className="border-2 border-black/15 bg-black/[.03] p-3 text-xs font-black uppercase">{videoUploadLabel || "PUBLISHED VIDEO SELECTOR"}</div>
+          <SubToolboxStatusBadge level="l1">{videoUploadLabel || "PUBLISHED VIDEO SELECTOR"}</SubToolboxStatusBadge>
         )}
       </SubToolbox>
 
