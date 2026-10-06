@@ -577,21 +577,21 @@ const VideoManager: React.FC<VideoManagerProps> = ({
       <SubToolboxButton size="micro" selected={viewMode === "workspace"} onClick={() => setViewMode("workspace")}>LIVE EDITOR</SubToolboxButton>
       <SubToolboxButton size="micro" selected={viewMode === "intelligence"} onClick={() => setViewMode("intelligence")}>INTELLIGENCE</SubToolboxButton>
      </SubToolboxActions>
-     <div>showHeaderLoadAssetsButton ? (
-    <SubToolboxButton
-     level="l2"
-     size="compact"
-     tone="ink"
-     icon={<RefreshCw aria-hidden="true" size={16} />}
-     className="!w-auto"
-     onClick={(event) => { event.stopPropagation(); lastSearchRef.current = ""; setVideoSearchQuery(""); void loadInitialData(true) }}
-     disabled={loading}
-    >
-     {loading ? "REFRESHING..." : "LOAD SPACE ASSETS"}
-    </SubToolboxButton>
-   ) : null}
-</div>
+     {showHeaderLoadAssetsButton ? (
+      <SubToolboxButton
+       level="l2"
+       size="compact"
+       tone="ink"
+       icon={<RefreshCw aria-hidden="true" size={16} />}
+       className="!w-auto"
+       onClick={(event) => { event.stopPropagation(); lastSearchRef.current = ""; setVideoSearchQuery(""); void loadInitialData(true) }}
+       disabled={loading}
+      >
+       {loading ? "REFRESHING..." : "LOAD SPACE ASSETS"}
+      </SubToolboxButton>
+     ) : null}
     </div>
+   }
    shellClassName="animate-fade-in"
    contentClassName={embedded ? "p-0" : "p-8"}>
    <div className="flex flex-col h-full">
