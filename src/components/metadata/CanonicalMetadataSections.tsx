@@ -1,7 +1,7 @@
 import React from "react"
 import { Upload, Image as ImageIcon, Sparkles, History, WandSparkles, Search, MapPin, ListVideo, Users, Clock3, Globe2, MessageSquare, Bot, Tags, FolderOpen } from "lucide-react"
 import { SubToolbox, ThumbnailMiniSubToolbox } from "../Toolbox"
-import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
+import { SubToolboxActions } from "../subtoolbox/SubToolboxLayouts"
 import {
   SubToolboxButton,
   SubToolboxFileTarget,
@@ -97,8 +97,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
     onGenerate, onRefine, onAnalyze, onHistory, categoryOptions = [], thumbnailActions,
-    videoUploadLabel, titleLabel = "TITLE", descriptionLabel = "DESCRIPTION",
-    tagsLabel = "TAGS", className = "",
+    videoUploadLabel, titleLabel = "TITLE", className = "",
   } = props
 
   return (
