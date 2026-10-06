@@ -83,6 +83,17 @@ Add purpose/style/constraint composition.
 
 **Gate:** every AI result records recipe and version provenance.
 
+
+## UI hierarchy gate — applies to Publisher, Manager, and Intelligence
+
+Before implementation proceeds past the frontend phase, enforce the canonical section order:
+
+**Video Upload → Title → Thumbnail → Visibility → Audience → Timestamps → Description → Location → Playlists → Community → AI Use → Tags → Category**
+
+Treat Video Upload, Title, Thumbnail, Description, Playlists, Tags, and Category as primary sections. Treat Visibility, Audience, Timestamps, Location, Community, and AI Use as secondary/optional sections with compact/tiny UI, especially switches and other binary controls. Their lower visual weight must never change their position or make them disappear from the semantic sequence.
+
+Add automated/component coverage for the ordering and visual hierarchy, plus browser QA for collapsed/empty/populated states and responsive layouts.
+
 ## Phase 5 — Publisher redesign
 
 Preserve the current strong generation workflow.
