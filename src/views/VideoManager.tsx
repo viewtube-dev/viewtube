@@ -446,7 +446,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     thumbnailUrl: thumbnailPreview || undefined,
    })
    setSaveSuccess(true)
-   void handleSelectVideo(selectedVideoId, userPlaylists)\n   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
+   void handleSelectVideo(selectedVideoId, userPlaylists)
+   setAllVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    void loadInitialData()
   } catch (err: any) {
@@ -660,7 +661,14 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        </SubToolboxShellAction>
       )}
 
-      <ProjectManifestation\n       projects={brain.projects || []}\n       activeProjectId={brain.activeProjectId}\n       onLoadProject={handleProjectManifestLoad}\n       onSaveProject={saveProjectManifestState}\n       paletteIndex={basePalette + 1}\n      />\n      <PublishingControls
+      <ProjectManifestation
+       projects={brain.projects || []}
+       activeProjectId={brain.activeProjectId}
+       onLoadProject={handleProjectManifestLoad}
+       onSaveProject={saveProjectManifestState}
+       paletteIndex={basePalette + 1}
+      />
+      <PublishingControls
        privacy={editPrivacy}
        category={editCategoryId}
        playlistIds={selectedPlaylistIds}
