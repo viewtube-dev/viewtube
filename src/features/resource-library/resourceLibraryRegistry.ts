@@ -1,6 +1,6 @@
-import recommendationsMarkdown from "../../../docs/resources/library/how-youtube-recommendations-and-discovery-work.md?raw"
-import metricsGlossaryMarkdown from "../../../docs/resources/library/youtube-metrics-and-dimensions-master-glossary.md?raw"
-import shortsVsLongFormMarkdown from "../../../docs/resources/library/shorts-vs-long-form-different-systems-signals.md?raw"
+import recommendationsMarkdown from "./resources/how-youtube-recommendations-and-discovery-work.md?raw"
+import metricsGlossaryMarkdown from "./resources/youtube-metrics-and-dimensions-master-glossary.md?raw"
+import shortsVsLongFormMarkdown from "./resources/shorts-vs-long-form-different-systems-signals.md?raw"
 
 export type ResourceStatus = "draft" | "published" | "archived"
 export type ResourceFormat = "markdown"
