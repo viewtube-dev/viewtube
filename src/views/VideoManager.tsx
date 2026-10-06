@@ -632,10 +632,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      <div className="min-h-[180px] sm:min-h-[320px] lg:h-[500px] flex flex-col items-center justify-center gap-3 sm:gap-5 font-black uppercase text-xl sm:text-2xl lg:text-3xl tracking-tighter text-black/20"><Edit size={100} strokeWidth={1} className="mb-2 opacity-50" />Awaiting Asset Selection</div>
     )}
 
-    )}
      </>
+    )}
 
-    <input type="file" ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
+    <input type="file ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleThumbnailChange(e.target.files[0])} className="hidden" accept="image/*" />
    </div>
   </ToolboxScaffold>
  )
