@@ -151,6 +151,9 @@ export default defineConfig(() => ({
   },
   preview: {
     host: true,
+    // Render provides the web-service port through PORT. Keep 4173 as the
+    // local fallback, but never bind production preview to a fixed port.
+    port: Number(process.env.PORT) || 4173,
     allowedHosts: [
       'viewtube-project-builder-preview-live.onrender.com',
       'viewtube-pr-429-vault-live.onrender.com',
