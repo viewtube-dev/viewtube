@@ -851,6 +851,7 @@ export interface ThumbnailMiniSubToolboxProps extends Omit<MiniSubToolboxProps, 
   src?: string | null;
   alt?: string;
   emptyLabel?: React.ReactNode;
+  overlayLabel?: React.ReactNode;
   previewClassName?: string;
   onDragOver?: React.DragEventHandler<HTMLDivElement>;
   onDragLeave?: React.DragEventHandler<HTMLDivElement>;
@@ -861,6 +862,7 @@ export const ThumbnailMiniSubToolbox: React.FC<ThumbnailMiniSubToolboxProps> = (
   src,
   alt = "Thumbnail",
   emptyLabel = "SELECT A VIDEO TO LOAD THUMBNAIL",
+  overlayLabel,
   previewClassName = "",
   onDragOver,
   onDragLeave,
@@ -888,6 +890,7 @@ export const ThumbnailMiniSubToolbox: React.FC<ThumbnailMiniSubToolboxProps> = (
           <strong>{emptyLabel}</strong>
         </div>
       )}
+      {overlayLabel ? <span className="vt-thumbnail-mini-overlay-label" aria-hidden="true">{overlayLabel}</span> : null}
     </div>
   </MiniSubToolbox>
 );
