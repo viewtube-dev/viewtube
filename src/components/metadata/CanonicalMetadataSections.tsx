@@ -5,10 +5,13 @@ import { SubToolboxActions } from "../subtoolbox/SubToolboxLayouts"
 import {
   SubToolboxButton,
   SubToolboxFileTarget,
+  SubToolboxFieldLabel,
   SubToolboxInput,
   SubToolboxSelect,
   SubToolboxTextArea,
+  SubToolboxToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
+import { SubToolboxSection } from "../subtoolbox/SubToolboxLayouts"
 
 export const CANONICAL_METADATA_SECTIONS = [
   "video-upload", "title", "thumbnail", "visibility", "audience", "timestamps",
@@ -83,10 +86,12 @@ const FieldActions: React.FC<{
 }
 
 const SecondaryControl: React.FC<{ label: string; icon: React.ReactNode; children: React.ReactNode }> = ({ label, icon, children }) => (
-  <div className="flex min-h-9 items-center gap-2 border-2 border-black/10 bg-white px-2 py-1 text-[10px] font-black uppercase tracking-[.04em]">
-    <span className="flex shrink-0 items-center gap-1 opacity-55">{icon}{label}</span>
+  <SubToolboxSection className="flex min-h-9 items-center gap-2">
+    <SubToolboxFieldLabel className="flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-[.04em] opacity-55">
+      {icon}{label}
+    </SubToolboxFieldLabel>
     <div className="min-w-0 flex-1">{children}</div>
-  </div>
+  </SubToolboxSection>
 )
 
 export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps> = (props) => {
@@ -138,7 +143,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
       </SecondaryControl>
 
       <SecondaryControl label="AUDIENCE" icon={<Users size={13} />}>
-        <SubToolboxButton size="micro" selected={audience} onClick={() => onAudienceChange?.(!audience)}>{audience ? "YES" : "NO"}</SubToolboxButton>
+        <SubToolboxToggle pressed={audience} label={audience ? "YES" : "NO"} onClick={() => onAudienceChange?.(!audience)} />
       </SecondaryControl>
 
       <SecondaryControl label="TIMESTAMPS" icon={<Clock3 size={13} />}>
@@ -160,11 +165,11 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
       </SubToolbox>
 
       <SecondaryControl label="COMMUNITY" icon={<MessageSquare size={13} />}>
-        <SubToolboxButton size="micro" selected={community} onClick={() => onCommunityChange?.(!community)}>{community ? "YES" : "NO"}</SubToolboxButton>
+        <SubToolboxToggle pressed={community} label={community ? "YES" : "NO"} onClick={() => onCommunityChange?.(!community)} />
       </SecondaryControl>
 
       <SecondaryControl label="AI USE" icon={<Bot size={13} />}>
-        <SubToolboxButton size="micro" selected={aiUse} onClick={() => onAiUseChange?.(!aiUse)}>{aiUse ? "YES" : "NO"}</SubToolboxButton>
+        <SubToolboxToggle pressed={aiUse} label={aiUse ? "YES" : "NO"} onClick={() => onAiUseChange?.(!aiUse)} />
       </SecondaryControl>
 
       <SubToolbox title="12 · TAGS" icon={<Tags size={20} strokeWidth={3} />} collapsible isOpenInitial>
