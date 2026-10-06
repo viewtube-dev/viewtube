@@ -121,7 +121,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
       </SubToolbox>
 
       <SubToolbox title={`02 · ${titleLabel}`} icon={<FolderOpen size={20} strokeWidth={3} />} collapsible isOpenInitial>
-        <SubToolboxInput value={title} onChange={e => onTitleChange(e.target.value)} placeholder="Write title manually…" aria-label="Title" />
+        <SubToolboxLabeledInput overlayLabel={titleLabel} value={title} onChange={e => onTitleChange(e.target.value)} placeholder="Write title manually…" aria-label="Title" />
         <FieldActions field="title" {...{ onGenerate, onRefine, onAnalyze, onHistory }} />
       </SubToolbox>
 
@@ -151,7 +151,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
       </SecondaryControl>
 
       <SubToolbox title="07 · DESCRIPTION" icon={<FolderOpen size={20} strokeWidth={3} />} collapsible isOpenInitial>
-        <SubToolboxTextArea value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="Write description manually…" aria-label="Description" height="standard" />
+        <SubToolboxLabeledTextArea overlayLabel={descriptionLabel || "DESCRIPTION"} value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="Write description manually…" aria-label="Description" height="standard" />
         <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze, onHistory }} />
       </SubToolbox>
 
