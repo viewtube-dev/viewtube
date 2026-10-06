@@ -28,7 +28,6 @@ import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetad
 import MetadataMaster from "./MetadataMaster"
 import {
  X,
- Plus,
  FileVideo,
  AlertCircle,
  CheckCircle,
@@ -49,10 +48,7 @@ import {
  SubToolboxIconButton,
  SubToolboxLinkButton,
  SubToolboxOutputCard,
- SubToolboxRemovableTag,
- SubToolboxSelectableTag,
  SubToolboxStatePanel,
- SubToolboxTag,
  SubToolboxVideoSelector,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 
