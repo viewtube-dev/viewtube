@@ -33,6 +33,53 @@ Instead, metadata intelligence becomes a **shared capability integrated into can
 
 Metadata intelligence is therefore a **capability**, not a competing ownership layer.
 
+## Canonical metadata section order
+
+This order is a hard, shared UI contract for Video Publisher, Video Manager, and the integrated Metadata Intelligence view. It must remain unchanged across modes, AI operations, populated/empty states, responsive layouts, and alternate intelligence views.
+
+### Primary sections
+
+1. **Video Upload**
+2. **Title**
+3. **Thumbnail**
+7. **Description**
+9. **Playlists**
+12. **Tags**
+13. **Category**
+
+These receive the full metadata-field treatment and carry the main editing/generation surface.
+
+### Secondary sections
+
+4. **Visibility**
+5. **Audience**
+6. **Timestamps**
+8. **Location**
+10. **Community**
+11. **AI Use**
+
+These are intentionally lower-weight UI elements: compact rows, pills, switches, binary controls, small selectors, or tiny expandable controls. They remain in their exact numbered position even when collapsed or optional.
+
+### Complete invariant order
+
+```text
+Video Upload
+Title
+Thumbnail
+Visibility       ← secondary / compact
+Audience         ← secondary / compact
+Timestamps       ← secondary / compact
+Description
+Location         ← secondary / compact
+Playlists
+Community        ← secondary / compact
+AI Use           ← secondary / compact
+Tags
+Category
+```
+
+AI actions such as Generate, Refine, Alternatives, Analyze, and History may appear within or alongside a primary field, but they must never reorder these sections. Optional/empty secondary controls also must not disappear in a way that changes the semantic order.
+
 ## UX principle
 
 Every metadata field must make these actions immediately accessible:
