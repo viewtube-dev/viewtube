@@ -105,6 +105,18 @@ const ThumbnailStudio: React.FC<ThumbnailStudioProps> = ({
   setIsOpen(true)
  }, [])
 
+ const handleMetadataMasterHandoff = useCallback((packet: ViewTubeActionPacket) => {
+  if (packet.sourceToolId !== "metadata-master") return
+  const payload = packet.payload as { title?: string; thumbnail?: { prompt?: string; text?: string } }
+  const title = payload.title || packet.title
+  const direction = payload.thumbnail?.prompt || ""
+  const text = payload.thumbnail?.text || ""
+  setHookText(title)
+  setPrompt([direction, text ? `Thumbnail text: ${text}` : ""].filter(Boolean).join("\n\n"))
+  setActiveTab("generate")
+  setIsOpen(true)
+ }, [])
+
  useEffect(() => {
   if (videoManagerHandoff?.source !== "video-manager") return
   if (videoManagerHandoff.title) {
@@ -435,6 +447,7 @@ const ThumbnailStudio: React.FC<ThumbnailStudioProps> = ({
     </div>
    }>
    <ViewTubeHandoffReceiver targetToolId="thumbnail-studio" onPacket={handleLongformOptimizerHandoff} />
+   <ViewTubeHandoffReceiver targetToolId="thumbnail-studio" onPacket={handleMetadataMasterHandoff} />
    {/* Generated History Bar */}
    {activeTab === "generate" && history.length > 0 && (
     <div className="w-full mb-2 sm:mb-4 lg:mb-8 flex gap-2 sm:gap-4 lg:gap-6 overflow-x-auto pb-2 sm:pb-4 custom-scrollbar">
