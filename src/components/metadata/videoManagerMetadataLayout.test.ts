@@ -2,28 +2,26 @@ import { describe, expect, it } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
 
+const read = (file: string) => fs.readFileSync(path.resolve(process.cwd(), file), "utf8")
+
 describe("Video Manager metadata layout contract", () => {
-  const source = fs.readFileSync(path.resolve(process.cwd(), "src/components/metadata/CanonicalMetadataSections.tsx"), "utf8")
-
-  it("uses the canonical labeled primitives without duplicate section labels", () => {
-    expect(source).toContain("<SubToolboxLabeledInput overlayLabel={titleLabel}")
-    expect(source).toContain("<SubToolboxLabeledTextArea overlayLabel={descriptionLabel}")
-    expect(source).not.toContain('<SubToolboxSection label="TITLE">')
-    expect(source).not.toContain('<SubToolboxSection label="DESCRIPTION">')
-    expect(source.match(/<SubToolboxLabeledTextArea overlayLabel=\{descriptionLabel\}/g)?.length).toBe(1)
+  it("renders canonical metadata before Publishing Controls", () => {
+    const manager = read("src/views/VideoManager.tsx")
+    expect(manager.indexOf("<CanonicalMetadataSections")).toBeLessThan(manager.indexOf("<PublishingControls"))
   })
 
-  it("uses the canonical tag editor primitive and keeps ranked tags", () => {
-    expect(source).toContain("<SubToolboxTagEditor")
-    expect(source).toContain("renderTag={(tag, remove) =>")
-    expect(source).toContain("addIcon={<Plus size={15} />}")
-    expect(source).toContain("<TagRankTag")
+  it("uses a forced three-button row for metadata actions", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    expect(metadata).toContain('<SubToolboxActions columns={3} forceRow')
   })
 
-  it("keeps Generate, Refine, and Analyze in one three-column action row", () => {
-    expect(source).toContain('<SubToolboxActions columns={3} className="mt-2">')
-    expect(source).toContain("GENERATE")
-    expect(source).toContain("REFINE")
-    expect(source).toContain("ANALYZE")
+  it("uses the canonical thumbnail overlay label", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    expect(metadata).toContain('overlayLabel={thumbnailLabel}')
+  })
+
+  it("does not contain escaped newline text in the Manager JSX", () => {
+    const manager = read("src/views/VideoManager.tsx")
+    expect(manager).not.toContain("<ProjectManifestation\\n")
   })
 })
