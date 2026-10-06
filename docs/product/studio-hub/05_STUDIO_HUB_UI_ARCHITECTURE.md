@@ -195,3 +195,34 @@ Every Studio Hub UI change must answer:
 - Does the UI expose evidence and uncertainty appropriately?
 
 The UI system evolves through the existing ViewTube Reference Library rather than one-off Studio Hub styling.
+
+
+## Metadata Master UI module — ACTIVE
+
+Metadata Master uses the standard Tool Module with a distinctive package-first interior:
+
+~~~text
+METADATA MASTER
+ ├── Context + Optimization Brief
+ ├── Generate + Optimize
+ ├── Publication Package Canvas
+ │    ├── Title
+ │    ├── Thumbnail Direction
+ │    ├── Description
+ │    ├── Tags
+ │    ├── Chapters
+ │    ├── Category
+ │    ├── Playlists
+ │    └── End Screen / Related Video
+ ├── Evaluate + Compare
+ │    ├── Package Score
+ │    ├── Warnings
+ │    └── Package A/B/C
+ ├── Handoff + Publishing Control
+ └── Package History
+~~~
+
+The Package Canvas is the primary workspace. Individual fields remain editable, but the user can generate/refine the whole package or selected components.
+
+The UI preserves the title/thumbnail relationship as one packaging decision rather than treating those assets as unrelated fields.
+
