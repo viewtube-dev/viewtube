@@ -197,7 +197,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           {thumbnailPreview ? (
             <ThumbnailMiniSubToolbox title="THUMBNAIL" icon={<ImageIcon size={18} />} overlayLabel={thumbnailLabel} src={thumbnailPreview} alt="Video thumbnail" actions={thumbnailActions} />
           ) : onThumbnailFileChange ? (
-            <div className="relative"><SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : "SELECT THUMBNAIL"} icon={<ImageIcon size={28} />} accept="image/jpeg,image/png,image/webp" onFiles={files => onThumbnailFileChange(files?.[0] || null)} />
+            <div className="relative"><SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : "SELECT THUMBNAIL"} icon={<ImageIcon size={28} />} accept="image/jpeg,image/png,image/webp" onFiles={files => onThumbnailFileChange(files?.[0] || null)} /><span className="vt-thumbnail-mini-overlay-label" aria-hidden="true">{thumbnailLabel}</span></div>
           ) : <SubToolboxStatusBadge level="l1">THUMBNAIL NOT SELECTED</SubToolboxStatusBadge>}
           {shouldShowActions("thumbnail") ? <FieldActions field="thumbnail" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
