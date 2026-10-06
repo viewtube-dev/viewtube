@@ -155,6 +155,7 @@ export default defineConfig(() => ({
       'viewtube-project-builder-preview-live.onrender.com',
       'viewtube-pr-429-vault-live.onrender.com',
       'viewtube-vault-wave2-live.onrender.com',
+      'viewtube-bsbw.onrender.com',
     ],
   },
   // Pre-bundle the heavy dependency graphs used on first paint so cold dev
