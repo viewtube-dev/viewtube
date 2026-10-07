@@ -14,6 +14,7 @@
 /* Shared subtoolbox shell, primitive, layout and state contract. Loaded after
    legacy performance overrides so this layer remains the visual authority. */
 @import "./styles/subtoolbox-system.css";
+@import "./styles/canonical-component-defaults.css";
 
 /* Canonical Data Visual canvas geometry. Loaded last of the visual layers so
    the viewport boundary is the final authority on canvas geometry for migrated
