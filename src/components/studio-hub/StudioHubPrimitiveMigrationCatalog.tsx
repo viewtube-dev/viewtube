@@ -909,10 +909,10 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Labeled Input") {
-    return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
+    return <SubToolboxLabeledInput level={level} variant="right-label" overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
   }
   if (name === "Labeled Textarea") {
-    return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
+    return <SubToolboxLabeledTextArea level={level} variant="right-label" overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
