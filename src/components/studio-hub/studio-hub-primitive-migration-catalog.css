@@ -111,7 +111,7 @@
    catalog shell. */
 @media(max-height:520px) and (orientation:landscape){
   .vt-primitive-migration-catalog .vt-catalog-levels{
-    grid-template-columns:repeat(4,minmax(0,max-content));
+    grid-template-columns:repeat(3,minmax(0,max-content));
     gap:8px;
   }
 }
