@@ -31,8 +31,8 @@ export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = ({
     className={classes("vt-subtoolbox-split-button", level && "has-component-level", selected && "is-selected", className)}
     aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
     style={{
-      ...style,
       ...(level ? getComponentLevelCssVars(level) : {}),
+      ...style,
     }}
     {...props}
   >
