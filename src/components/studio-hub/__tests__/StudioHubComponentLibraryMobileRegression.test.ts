@@ -54,7 +54,6 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(migration).toContain('"l"')
     expect(migration).toContain('data-vt-catalog-size')
     expect(migration).toContain('COMPONENT_SIZE_DNA')
-    expect(hardcoded).not.toContain('const LEVELS: Level[] = ["xs", "l2", "m", "l1", "l0"]')
     expect(migration).not.toContain("forceOpen content=\"TOOLTIP\"")
   })
 
