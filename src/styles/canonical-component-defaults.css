@@ -180,3 +180,5 @@
 .vt-subtoolbox-scrollbar :is(button,[role="button"]){
   font-weight:1000;
 }
+
+.vt-subtoolbox-settings-switch.is-stroke{border:var(--vt-component-stroke,3px) solid #000;background:#fff}.vt-subtoolbox-settings-switch.is-stroke.is-on{background:var(--pair-a,#36e0f6)}
