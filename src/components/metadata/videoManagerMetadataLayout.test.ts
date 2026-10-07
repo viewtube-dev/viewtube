@@ -19,7 +19,7 @@ describe("Video Manager metadata layout contract", () => {
     const styles = read("src/styles/subtoolbox-system.css")
     expect(styles).toContain(".vt-subtoolbox-labeled-field-overlay{")
     expect(styles).toContain("z-index:3;")
-    expect(styles).toContain("padding-right:52%;")
+    expect(styles).toContain("padding-right:52%!important;")
     expect(styles).not.toContain(".vt-subtoolbox-labeled-field:focus-within .vt-subtoolbox-labeled-field-overlay{")
   })
 
