@@ -33,10 +33,10 @@ export const VIEWTUBE_TYPOGRAPHY = {
 
 /** Four canonical default component sizes used wherever a family supports a size ladder. */
 export const COMPONENT_SIZE_DNA = {
-  xs: { height: 20, fontSize: 10 },
-  s: { height: 32, fontSize: 12 },
-  m: { height: 44, fontSize: 16 },
-  l: { height: 56, fontSize: 24 },
+  xs: { height: 20, stroke: 2, radius: 4, shadowOffset: 2, fontSize: 10 },
+  s: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
+  m: { height: 44, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 16 },
+  l: { height: 56, stroke: 3.5, radius: 9.333333, shadowOffset: 5.833333, fontSize: 24 },
 } as const
 
 export type ComponentSize = keyof typeof COMPONENT_SIZE_DNA
@@ -45,6 +45,9 @@ export const getComponentSizeCssVars = (size: ComponentSize) => {
   const dna = COMPONENT_SIZE_DNA[size]
   return {
     "--vt-component-height": dna.height + "px",
+    "--vt-component-stroke": dna.stroke + "px",
+    "--vt-component-radius": dna.radius + "px",
+    "--vt-component-shadow-offset": dna.shadowOffset + "px",
     "--vt-component-font-size": dna.fontSize + "px",
   } as const
 }
