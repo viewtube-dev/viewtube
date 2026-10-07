@@ -365,7 +365,7 @@ const DemoShell: React.FC<{
 }> = ({ level, size, geometry, children }) => (
   <div
     className={`vt-catalog-demo is-${level} is-size-${size}`}
-    data-level={level} style={sizeStyle}
+    data-level={level}
     data-vt-catalog-size={size}
     data-vt-preview-mode={geometry.mode}
     style={geometry.inlineUnits ? { ["--vt-catalog-inline-units" as string]: geometry.inlineUnits } as React.CSSProperties : undefined}
