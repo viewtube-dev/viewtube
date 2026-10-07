@@ -15,7 +15,7 @@ const withComponentLevelStyle = (
   level: ToolboxControlLevel | undefined,
   style: React.CSSProperties | undefined,
 ): React.CSSProperties | undefined => level
-  ? { ...style, ...getComponentLevelCssVars(level) } as React.CSSProperties
+  ? { ...getComponentLevelCssVars(level), ...style } as React.CSSProperties
   : style
 
 export const SubToolboxFieldLabel: React.FC<React.LabelHTMLAttributes<HTMLLabelElement> & { level?: ToolboxControlLevel }> = ({ level, className, style, ...props }) => <label data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-label", level && "has-component-level", className)} {...props} />
