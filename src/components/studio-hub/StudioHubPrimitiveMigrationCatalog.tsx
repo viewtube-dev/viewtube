@@ -106,6 +106,8 @@ import {
 import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import "./studio-hub-primitive-migration-catalog.css"
+import "../subtoolbox/SubToolboxExtendedPrimitives.css"
+import { SubToolboxCmykMixer, SubToolboxXYJoystick, SubToolboxAspectRatioSelector, SubToolboxBeforeAfterCompare, SubToolboxSpringLoadedToggle, SubToolboxAccordion, SubToolboxOutputInput, SubToolboxPasswordInput, SubToolboxRating, SubToolboxProductionChecklist, SubToolboxNavigation, SubToolboxVideoSelector as ExtendedVideoSelector, SubToolboxTimeline, SubToolboxMediaFrame, SubToolboxColorSwitchToggle, SubToolboxToolboxToggle, SubToolboxProgress, SubToolboxDataGrid } from "../subtoolbox/SubToolboxExtendedPrimitives"
 
 type StudioHubComponentLevel = ToolboxControlLevel
 type CatalogSize = keyof typeof COMPONENT_SIZE_DNA
@@ -254,6 +256,23 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Text + Badge Data Grid",
   "Interactive Checklist Progress",
   "Production Planner Grid",
+  "CMYK Mixer",
+  "XY Joystick",
+  "Aspect Ratio Selector",
+  "Before / After Compare",
+  "Timeline",
+  "Navigation",
+  "Top Navigation",
+  "Spring-Loaded Toggle",
+  "Accordion",
+  "Output Input",
+  "Password Input",
+  "Rating",
+  "Checklist Progress",
+  "Data Grid",
+  "Media Frame",
+  "Color Switching Toggle",
+  "Toolbox Toggle",
 ] as const
 
 type StudioHubMigratedFamily = (typeof STUDIO_HUB_MIGRATED_FAMILIES)[number]
@@ -633,6 +652,24 @@ const PrimitiveMigrationControl: React.FC<{
       {id:"d",title:"Approve sponsor deliverables",detail:"Deadline tomorrow.",badge:"URGENT",badgeTone:"danger",checked:true},
     ]} />
   }
+  if (name === "CMYK Mixer") return <SubToolboxCmykMixer level={level} style={sizeStyle} />
+  if (name === "XY Joystick") return <SubToolboxXYJoystick level={level} style={sizeStyle} />
+  if (name === "Aspect Ratio Selector") return <SubToolboxAspectRatioSelector level={level} style={sizeStyle} />
+  if (name === "Before / After Compare") return <SubToolboxBeforeAfterCompare level={level} style={sizeStyle} />
+  if (name === "Spring-Loaded Toggle") return <SubToolboxSpringLoadedToggle level={level} style={sizeStyle} />
+  if (name === "Accordion") return <SubToolboxAccordion level={level} style={sizeStyle} />
+  if (name === "Output Input") return <SubToolboxOutputInput level={level} style={sizeStyle} />
+  if (name === "Password Input") return <SubToolboxPasswordInput level={level} style={sizeStyle} />
+  if (name === "Rating") return <SubToolboxRating level={level} style={sizeStyle} />
+  if (name === "Checklist Progress") return <SubToolboxProductionChecklist level={level} style={sizeStyle} />
+  if (name === "Data Grid") return <SubToolboxDataGrid level={level} style={sizeStyle} />
+  if (name === "Navigation") return <SubToolboxNavigation level={level} style={sizeStyle} />
+  if (name === "Top Navigation") return <SubToolboxNavigation top level={level} style={sizeStyle} />
+  if (name === "Video Selector") return <ExtendedVideoSelector level={level} style={sizeStyle} />
+  if (name === "Timeline") return <SubToolboxTimeline level={level} style={sizeStyle} />
+  if (name === "Media Frame") return <SubToolboxMediaFrame level={level} style={sizeStyle} />
+  if (name === "Color Switching Toggle") return <SubToolboxColorSwitchToggle level={level} style={sizeStyle} />
+  if (name === "Toolbox Toggle") return <SubToolboxToolboxToggle level={level} style={sizeStyle} />
   if (name === "Production Planner Grid") {
     return <SubToolboxProductionPlannerGrid level={level} style={sizeStyle} days={[
       {id:"mon",label:"MON 20",items:[{id:"research",label:"RESEARCH: AUSTERLITZ",tone:"warning"},{id:"thumb",label:"THUMBNAIL SKETCHES",tone:"info"}]},
