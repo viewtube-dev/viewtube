@@ -42,10 +42,10 @@ describe("canonical component-level DNA", () => {
       controlLineHeight: 0.9,
     })
     expect(COMPONENT_SIZE_DNA).toEqual({
-      xs: { height: 20, fontSize: 10 },
-      s: { height: 32, fontSize: 12 },
-      m: { height: 44, fontSize: 16 },
-      l: { height: 56, fontSize: 24 },
+      xs: { height: 20, stroke: 2, radius: 4, shadowOffset: 2, fontSize: 10 },
+      s: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
+      m: { height: 44, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 16 },
+      l: { height: 56, stroke: 3.5, radius: 9.333333, shadowOffset: 5.833333, fontSize: 24 },
     })
     expect(getComponentSizeCssVars("xs")).toMatchObject({
       "--vt-component-height": "20px",
