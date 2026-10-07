@@ -139,6 +139,18 @@ describe("Toolbox UI Reference Library", () => {
     expect(source).not.toContain("forceOpen content=\"TOOLTIP\"")
   })
 
+  it("exposes the colored right-label field variant on both input primitives", () => {
+    const primitives = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxPrimitives.tsx"), "utf8")
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx"), "utf8")
+
+    expect(primitives).toContain('variant?: "default" | "right-label"')
+    expect(primitives).toContain('rightLabel?: React.ReactNode')
+    expect(primitives).toContain('is-right-label')
+    expect(catalog).toContain('variant="right-label"')
+    expect(catalog).toContain('rightLabel="TITLE"')
+    expect(catalog).toContain('rightLabel="DESCRIPTION"')
+  })
+
   it("consumes the production-owned 80px / 56px shell authority without a local override", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/ToolboxUIReferenceLibrary.tsx"), "utf8")
     const tokens = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/tokens.ts"), "utf8")
