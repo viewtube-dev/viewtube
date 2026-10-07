@@ -30,7 +30,7 @@
 /* The comparison grid owns placement. The primitive owns its own width. */
 .vt-primitive-migration-catalog .vt-catalog-levels{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,max-content));
+  grid-template-columns:repeat(4,minmax(0,max-content));
   align-items:start;
   justify-content:start;
   gap:8px 12px;
@@ -50,8 +50,12 @@
 }
 .vt-primitive-migration-catalog .vt-catalog-demo.is-l1{--vt-catalog-level-height:48px}
 .vt-primitive-migration-catalog .vt-catalog-demo.is-l2{--vt-catalog-level-height:32px}
+.vt-primitive-migration-catalog .vt-catalog-demo.is-size-xs{--vt-catalog-level-height:20px}
+.vt-primitive-migration-catalog .vt-catalog-demo.is-size-s{--vt-catalog-level-height:32px}
+.vt-primitive-migration-catalog .vt-catalog-demo.is-size-m{--vt-catalog-level-height:44px}
+.vt-primitive-migration-catalog .vt-catalog-demo.is-size-l{--vt-catalog-level-height:56px}
 .vt-primitive-migration-catalog .vt-catalog-demo:before{
-  content:attr(data-level);
+  content:attr(data-vt-catalog-size);
   display:block;
   width:max-content;
   margin:0 0 4px 1px;
@@ -107,7 +111,7 @@
    catalog shell. */
 @media(max-height:520px) and (orientation:landscape){
   .vt-primitive-migration-catalog .vt-catalog-levels{
-    grid-template-columns:repeat(3,minmax(0,max-content));
+    grid-template-columns:repeat(4,minmax(0,max-content));
     gap:8px;
   }
 }
