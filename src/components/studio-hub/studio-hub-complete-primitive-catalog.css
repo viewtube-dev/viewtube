@@ -245,6 +245,7 @@
 /* Canonical control typography is owned by component height, including imported split controls. */
 .vt-complete-catalog .vt-catalog-demo.is-l0{--fs:24px}
 .vt-complete-catalog .vt-catalog-demo.is-l1{--fs:18px}
+.vt-complete-catalog .vt-catalog-demo.is-m{--h:44px;--stroke:3px;--radius:8px;--fs:16px}
 .vt-complete-catalog .vt-catalog-demo.is-l2{--fs:12px}
 .vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:var(--fs)!important;line-height:.86!important;letter-spacing:-.055em!important;font-weight:1000!important}
 .vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown)>:first-child{box-sizing:border-box;width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important}
