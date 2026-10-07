@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { COMPONENT_LEVEL_DNA, getComponentLevelCssVars, VIEWTUBE_TYPOGRAPHY, COMPONENT_SIZE_DNA, getComponentSizeCssVars } from "../tokens"
+import { COMPONENT_LEVEL_DNA, getComponentLevelCssVars, VIEWTUBE_TYPOGRAPHY, COMPONENT_SIZE_DNA, getComponentSizeCssVars } from "./tokens"
 
 describe("canonical component-level DNA", () => {
   it("matches the locked 65 geometry for L0/L1/L2", () => {
