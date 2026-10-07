@@ -22,6 +22,33 @@ export const VT_SPECTRUM_PALETTE = [
   "#FF7AC8",
 ] as const
 
+export const VIEWTUBE_TYPOGRAPHY = {
+  family: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
+  controlWeight: 1000,
+  bodyWeight: 900,
+  controlLetterSpacingEm: -0.055,
+  controlLineHeight: 0.9,
+  uppercaseControls: true,
+} as const
+
+/** Four canonical default component sizes used wherever a family supports a size ladder. */
+export const COMPONENT_SIZE_DNA = {
+  xs: { height: 20, fontSize: 10 },
+  s: { height: 32, fontSize: 12 },
+  m: { height: 44, fontSize: 16 },
+  l: { height: 56, fontSize: 24 },
+} as const
+
+export type ComponentSize = keyof typeof COMPONENT_SIZE_DNA
+
+export const getComponentSizeCssVars = (size: ComponentSize) => {
+  const dna = COMPONENT_SIZE_DNA[size]
+  return {
+    "--vt-component-height": dna.height + "px",
+    "--vt-component-font-size": dna.fontSize + "px",
+  } as const
+}
+
 export type ToolboxUiLevel = "toolbox" | "l0" | "l1" | "l2"
 export type ToolboxControlLevel = Exclude<ToolboxUiLevel, "toolbox">
 
@@ -215,6 +242,10 @@ export const SUBTOOLBOX_TOKENS = {
     large: 24,
   },
   controlHeight: {
+    xs: COMPONENT_SIZE_DNA.xs.height,
+    s: COMPONENT_SIZE_DNA.s.height,
+    m: COMPONENT_SIZE_DNA.m.height,
+    l: COMPONENT_SIZE_DNA.l.height,
     l2: TOOLBOX_LEVEL_DNA.l2.height,
     l1: TOOLBOX_LEVEL_DNA.l1.height,
     l0: TOOLBOX_LEVEL_DNA.l0.height,
@@ -224,9 +255,11 @@ export const SUBTOOLBOX_TOKENS = {
     l1: TOOLBOX_LEVEL_DNA.l1.titleSize,
     l0: TOOLBOX_LEVEL_DNA.l0.titleSize,
     toolbox: TOOLBOX_LEVEL_DNA.toolbox.titleSize,
-    weight: 1000,
-    letterSpacingEm: -0.055,
-    uppercaseChrome: true,
+    weight: VIEWTUBE_TYPOGRAPHY.controlWeight,
+    bodyWeight: VIEWTUBE_TYPOGRAPHY.bodyWeight,
+    letterSpacingEm: VIEWTUBE_TYPOGRAPHY.controlLetterSpacingEm,
+    lineHeight: VIEWTUBE_TYPOGRAPHY.controlLineHeight,
+    uppercaseChrome: VIEWTUBE_TYPOGRAPHY.uppercaseControls,
   },
   elevation: {
     shadowOpacity: 0.42,
@@ -271,7 +304,7 @@ export const resolveSubtoolboxMinHeight = (
 /**
  * Control size is a component variant, not a structural level. It names the
  * `.vt-subtoolbox-button.is-*` rules in subtoolbox-system.css, which run
- * micro 26px / compact 32px / standard 48px / action 56px.
+ * micro 20px / compact 32px / standard 44px / action 56px.
  *
  * This was previously aliased to ToolboxControlLevel ("l0" | "l1" | "l2"),
  * which conflated the two ideas: it made the component's own defaults
