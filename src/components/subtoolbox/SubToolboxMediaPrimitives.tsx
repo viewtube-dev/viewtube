@@ -26,7 +26,7 @@ const withLevelStyle = (
   level: ToolboxControlLevel | undefined,
   style: React.CSSProperties | undefined,
 ): React.CSSProperties | undefined => level
-  ? { ...style, ...getComponentLevelCssVars(level) } as React.CSSProperties
+  ? { ...getComponentLevelCssVars(level), ...style } as React.CSSProperties
   : style
 
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value))
