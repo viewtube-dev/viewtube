@@ -223,8 +223,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "SubToolbox Header Help",
   "Toolbox Header Collapse",
   "SubToolbox Header Collapse",
-  "Toolbox Header Toggle",
-  "SubToolbox Header Toggle",
   "LED Dot",
   "Loader Progress",
   "Loader Split",
@@ -273,6 +271,26 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Media Frame",
   "Color Switching Toggle",
   "Toolbox Toggle",
+  "Toolbox Toggle · Black Handle",
+  "Toolbox Toggle · Black Fill",
+  "Section Band · Primary",
+  "Section Band · Secondary",
+  "Checklist Progress · Compact",
+  "Production Planner Grid · Compact",
+  "Avatar · Creator",
+  "Avatar · Compact",
+  "Tooltip · Dark",
+  "Tooltip · Color",
+  "Disabled Button · Colored",
+  "Disabled Split Button · Colored",
+  "Upload Frame · Variant",
+  "Carousel · L2",
+  "LED Light · L1",
+  "Toast · L1",
+  "Calendar · Navigation",
+  "Scrollbar · L1",
+  "Scrollbar · L2",
+  "Range Slider · L2",
 ] as const
 
 type StudioHubMigratedFamily = (typeof STUDIO_HUB_MIGRATED_FAMILIES)[number]
@@ -670,6 +688,26 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Media Frame") return <SubToolboxMediaFrame level={level} style={sizeStyle} />
   if (name === "Color Switching Toggle") return <SubToolboxColorSwitchToggle level={level} style={sizeStyle} />
   if (name === "Toolbox Toggle") return <SubToolboxToolboxToggle level={level} style={sizeStyle} />
+  if (name === "Toolbox Toggle · Black Handle") return <SubToolboxToolboxToggle level={level} style={sizeStyle} variant="pill" />
+  if (name === "Toolbox Toggle · Black Fill") return <SubToolboxToolboxToggle level={level} style={sizeStyle} variant="black-fill" />
+  if (name === "Section Band · Primary") return <SubToolboxSectionBand level={level} style={sizeStyle} tone="primary" label="PRIMARY" />
+  if (name === "Section Band · Secondary") return <SubToolboxSectionBand level={level} style={sizeStyle} tone="secondary" label="SECONDARY" />
+  if (name === "Checklist Progress · Compact") return <SubToolboxInteractiveChecklistProgress level={level} style={sizeStyle} items={[{id:"a",title:"CHECK",detail:"READY",checked:true},{id:"b",title:"REVIEW",detail:"NEXT"}]} />
+  if (name === "Production Planner Grid · Compact") return <SubToolboxProductionPlannerGrid level={level} style={sizeStyle} days={[{id:"a",label:"MON",items:[{id:"x",label:"PLAN",tone:"info"}]},{id:"b",label:"TUE",items:[{id:"y",label:"BUILD",tone:"accent"}]}]} />
+  if (name === "Avatar · Creator") return <SubToolboxAvatar level={level} style={sizeStyle} name="VIEW TUBE" meta="CREATOR" />
+  if (name === "Avatar · Compact") return <SubToolboxAvatar level={level} style={sizeStyle} name="VT" meta="CREATOR" />
+  if (name === "Tooltip · Dark") return <SubToolboxTooltip level={level} style={sizeStyle} content="DARK TOOLTIP" />
+  if (name === "Tooltip · Color") return <SubToolboxLegendTooltip level={level} style={sizeStyle} title="COLOR KEY" triggerLabel="KEY" items={[{label:"READY",detail:"Active",color:"#36E0F6",icon:<Check/>}]} />
+  if (name === "Disabled Button · Colored") return <SubToolboxButton level={level} style={sizeStyle} disabled tone="accent">DISABLED</SubToolboxButton>
+  if (name === "Disabled Split Button · Colored") return <SubToolboxSplitButton level={level} style={sizeStyle} disabled>DISABLED</SubToolboxSplitButton>
+  if (name === "Upload Frame · Variant") return <SubToolboxFileTarget level={level} style={sizeStyle} label="UPLOAD MEDIA" icon={<Upload/>} minHeight={level === "l0" ? 176 : level === "l1" ? 144 : 112} />
+  if (name === "Carousel · L2") return <SubToolboxCarousel level="l2" style={sizeStyle} index={carouselIndex} onIndexChange={setCarouselIndex} items={["ONE","TWO","THREE"].map(x=><span key={x}>{x}</span>)} />
+  if (name === "LED Light · L1") return <SubToolboxLed level="l1" style={sizeStyle} active label="ACTIVE" />
+  if (name === "Toast · L1") return <SubToolboxToast level="l1" style={sizeStyle} tone="success" title="SAVED" detail="Ready." onDismiss={()=>undefined} />
+  if (name === "Calendar · Navigation") return <SubToolboxCalendar level={level} style={sizeStyle} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
+  if (name === "Scrollbar · L1") return <SubToolboxScrollbar level="l1" style={sizeStyle} orientation="horizontal" value={scrollPos} onValueChange={setScrollPos} />
+  if (name === "Scrollbar · L2") return <SubToolboxScrollbar level="l2" style={sizeStyle} orientation="vertical" value={scrollPos} onValueChange={setScrollPos} />
+  if (name === "Range Slider · L2") return <SubToolboxRangeSlider level="l2" style={sizeStyle} low={rangeLow} high={rangeHigh} onLowChange={setRangeLow} onHighChange={setRangeHigh} railIcon={<SlidersHorizontal/>} onReset={()=>{setRangeLow(22);setRangeHigh(76)}} />
   if (name === "Production Planner Grid") {
     return <SubToolboxProductionPlannerGrid level={level} style={sizeStyle} days={[
       {id:"mon",label:"MON 20",items:[{id:"research",label:"RESEARCH: AUSTERLITZ",tone:"warning"},{id:"thumb",label:"THUMBNAIL SKETCHES",tone:"info"}]},
