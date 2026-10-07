@@ -107,7 +107,7 @@ import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } fro
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import "./studio-hub-primitive-migration-catalog.css"
 import "../subtoolbox/SubToolboxExtendedPrimitives.css"
-import { SubToolboxCmykMixer, SubToolboxXYJoystick, SubToolboxAspectRatioSelector, SubToolboxBeforeAfterCompare, SubToolboxSpringLoadedToggle, SubToolboxAccordion, SubToolboxOutputInput, SubToolboxPasswordInput, SubToolboxRating, SubToolboxProductionChecklist, SubToolboxNavigation, SubToolboxVideoSelector as ExtendedVideoSelector, SubToolboxTimeline, SubToolboxMediaFrame, SubToolboxColorSwitchToggle, SubToolboxToolboxToggle, SubToolboxProgress, SubToolboxDataGrid } from "../subtoolbox/SubToolboxExtendedPrimitives"
+import { SubToolboxCmykMixer, SubToolboxXYJoystick, SubToolboxAspectRatioSelector, SubToolboxBeforeAfterCompare, SubToolboxSpringLoadedToggle, SubToolboxAccordion, SubToolboxOutputInput, SubToolboxPasswordInput, SubToolboxRating, SubToolboxProductionChecklist, SubToolboxNavigation, SubToolboxVideoSelector as ExtendedVideoSelector, SubToolboxTimeline, SubToolboxMediaFrame, SubToolboxColorSwitchToggle, SubToolboxToolboxToggle, SubToolboxProgress, SubToolboxDataGrid, SubToolboxSelectAllButtonGroup } from "../subtoolbox/SubToolboxExtendedPrimitives"
 
 type StudioHubComponentLevel = ToolboxControlLevel
 type CatalogSize = keyof typeof COMPONENT_SIZE_DNA
