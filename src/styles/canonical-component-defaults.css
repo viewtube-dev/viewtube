@@ -136,3 +136,47 @@
   .vt-subtoolbox-selectable-tag,
   .vt-subtoolbox-tag-editor>.add{transition:none!important}
 }
+
+/* 66-derived default interaction refinements */
+[data-vt-toolbox] :is(input,textarea),
+[data-vt-subtoolbox] :is(input,textarea){
+  caret-color:var(--pair-a,#36e0f6);
+}
+[data-vt-toolbox] :is(input,textarea):focus,
+[data-vt-subtoolbox] :is(input,textarea):focus{
+  caret-color:var(--pair-a,#36e0f6);
+}
+.vt-subtoolbox-removable-tag button,
+.vt-subtoolbox-tag-editor .remove{
+  color:#fff!important;
+  background:var(--pair-b,#ff7f6b);
+}
+.vt-subtoolbox-toggle-switch.is-stroke,
+.vt-subtoolbox-check-control.is-stroke,
+.vt-subtoolbox-radio-control.is-stroke{
+  border:var(--vt-component-stroke,3px) solid #000;
+}
+.vt-subtoolbox-toggle-switch.is-stroke{background:#fff}
+.vt-subtoolbox-toggle-switch.is-stroke>span{background:#000}
+.vt-subtoolbox-toggle-switch.is-stroke.is-on{background:var(--pair-a,#36e0f6)}
+.vt-subtoolbox-toggle-switch.is-stroke.is-on>span{background:#000}
+.vt-subtoolbox-check-control.is-stroke,.vt-subtoolbox-radio-control.is-stroke{background:#fff}
+.vt-subtoolbox-check-control.is-stroke.is-on,.vt-subtoolbox-radio-control.is-stroke.is-on{background:var(--pair-a,#36e0f6)}
+.vt-subtoolbox-button:disabled,.vt-subtoolbox-split-button:disabled{
+  background:var(--pair-b,#ff7f6b)!important;color:#000!important;border-color:#000!important;opacity:.5;
+}
+.vt-subtoolbox-select option:checked,
+[role="option"][aria-selected="true"],
+.vt-subtoolbox-menu-item[aria-selected="true"],
+.vt-subtoolbox-dropdown-option[aria-selected="true"]{
+  background:var(--pair-a,#36e0f6)!important;color:#000!important;
+}
+.vt-subtoolbox-range input[type="range"]{
+  accent-color:var(--pair-a,#36e0f6);
+}
+.vt-subtoolbox-scrollbar{
+  --vt-scrollbar-accent:var(--pair-a,#36e0f6);
+}
+.vt-subtoolbox-scrollbar :is(button,[role="button"]){
+  font-weight:1000;
+}
