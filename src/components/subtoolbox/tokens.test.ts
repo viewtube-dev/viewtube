@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { COMPONENT_LEVEL_DNA, getComponentLevelCssVars } from "../tokens"
+import { COMPONENT_LEVEL_DNA, getComponentLevelCssVars, VIEWTUBE_TYPOGRAPHY, COMPONENT_SIZE_DNA, getComponentSizeCssVars } from "../tokens"
 
 describe("canonical component-level DNA", () => {
   it("matches the locked 65 geometry for L0/L1/L2", () => {
@@ -31,6 +31,29 @@ describe("canonical component-level DNA", () => {
       "--vt-component-radius": "6px",
       "--vt-component-shadow-offset": "4px",
       "--vt-component-font-size": "12px",
+    })
+  })
+  it("locks the component-library typography and four default control sizes", () => {
+    expect(VIEWTUBE_TYPOGRAPHY).toMatchObject({
+      family: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
+      controlWeight: 1000,
+      bodyWeight: 900,
+      controlLetterSpacingEm: -0.055,
+      controlLineHeight: 0.9,
+    })
+    expect(COMPONENT_SIZE_DNA).toEqual({
+      xs: { height: 20, fontSize: 10 },
+      s: { height: 32, fontSize: 12 },
+      m: { height: 44, fontSize: 16 },
+      l: { height: 56, fontSize: 24 },
+    })
+    expect(getComponentSizeCssVars("xs")).toMatchObject({
+      "--vt-component-height": "20px",
+      "--vt-component-font-size": "10px",
+    })
+    expect(getComponentSizeCssVars("m")).toMatchObject({
+      "--vt-component-height": "44px",
+      "--vt-component-font-size": "16px",
     })
   })
 })
