@@ -699,7 +699,7 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Tooltip · Dark") return <SubToolboxTooltip level={level} style={sizeStyle} content="DARK TOOLTIP" />
   if (name === "Tooltip · Color") return <SubToolboxLegendTooltip level={level} style={sizeStyle} title="COLOR KEY" triggerLabel="KEY" items={[{label:"READY",detail:"Active",color:"#36E0F6",icon:<Check/>}]} />
   if (name === "Disabled Button · Colored") return <SubToolboxButton level={level} style={sizeStyle} disabled tone="accent">DISABLED</SubToolboxButton>
-  if (name === "Disabled Split Button · Colored") return <SubToolboxSplitButton level={level} style={sizeStyle} disabled>DISABLED</SubToolboxSplitButton>
+  if (name === "Disabled Split Button · Colored") return <SubToolboxSplitButton level={level} style={sizeStyle} disabled icon={<ChevronRight/>}>DISABLED</SubToolboxSplitButton>
   if (name === "Upload Frame · Variant") return <SubToolboxFileTarget level={level} style={sizeStyle} label="UPLOAD MEDIA" icon={<Upload/>} minHeight={level === "l0" ? 176 : level === "l1" ? 144 : 112} />
   if (name === "Carousel · L2") return <SubToolboxCarousel level="l2" style={sizeStyle} index={carouselIndex} onIndexChange={setCarouselIndex} items={["ONE","TWO","THREE"].map(x=><span key={x}>{x}</span>)} />
   if (name === "LED Light · L1") return <SubToolboxLed level="l1" style={sizeStyle} active label="ACTIVE" />
