@@ -1,0 +1,138 @@
+/* Canonical component-library defaults.
+ * This layer promotes the proven Toolbox Component Library typography,
+ * four-size ladder, paired-color states, and motion into production defaults.
+ * Component anatomy remains owned by the existing primitive selectors.
+ */
+:root{
+  --vt-studio-toolbox-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --vt-control-weight: 1000;
+  --vt-body-weight: 900;
+  --vt-control-letter-spacing: -0.055em;
+  --vt-control-line-height: .9;
+  --vt-size-xs: 20px;
+  --vt-size-s: 32px;
+  --vt-size-m: 44px;
+  --vt-size-l: 56px;
+}
+
+[data-vt-toolbox],[data-vt-subtoolbox],[data-vt-toolbox="true"]{
+  font-family:var(--vt-studio-toolbox-font);
+}
+
+[data-vt-toolbox] :is(button,input,select,textarea),
+[data-vt-subtoolbox] :is(button,input,select,textarea){
+  font-family:var(--vt-studio-toolbox-font);
+}
+
+[data-vt-toolbox] :is(.vt-subtoolbox-button,.vt-subtoolbox-input,.vt-subtoolbox-textarea,.vt-subtoolbox-select,.vt-subtoolbox-button-group button,.vt-subtoolbox-segmented button),
+[data-vt-subtoolbox] :is(.vt-subtoolbox-button,.vt-subtoolbox-input,.vt-subtoolbox-textarea,.vt-subtoolbox-select,.vt-subtoolbox-button-group button,.vt-subtoolbox-segmented button){
+  font-weight:var(--vt-control-weight);
+  letter-spacing:var(--vt-control-letter-spacing);
+}
+
+[data-vt-toolbox] :is(.vt-subtoolbox-label,.vt-subtoolbox-section-label),
+[data-vt-subtoolbox] :is(.vt-subtoolbox-label,.vt-subtoolbox-section-label){
+  font-family:var(--vt-studio-toolbox-font);
+  font-weight:var(--vt-body-weight);
+}
+
+/* Four default sizes. Families that support the size ladder can opt into these
+   classes without changing their component anatomy. */
+.vt-size-xs{--vt-component-height:20px;--vt-component-font-size:10px}
+.vt-size-s{--vt-component-height:32px;--vt-component-font-size:12px}
+.vt-size-m{--vt-component-height:44px;--vt-component-font-size:16px}
+.vt-size-l{--vt-component-height:56px;--vt-component-font-size:24px}
+
+/* Existing canonical binary controls: preserve their proven geometry while
+   guaranteeing palette, animation and reduced-motion behavior. */
+.vt-subtoolbox-toggle-switch{
+  width:calc(var(--vt-component-height)*1.72);
+  height:var(--vt-component-height);
+  background:color-mix(in srgb,var(--pair-a,#36e0f6) 50%,transparent);
+  border:0;border-radius:999px;outline:0;padding:0;position:relative;
+  transition:background-color .18s ease-out;
+  touch-action:manipulation;
+}
+.vt-subtoolbox-toggle-switch>span{
+  height:84%;aspect-ratio:1;
+  top:8%;left:5%;position:absolute;
+  border-radius:50%;background:var(--pair-b,#ff7f6b);
+  transition:transform .18s ease-out;
+}
+.vt-subtoolbox-toggle-switch.is-on{background:var(--pair-a,#36e0f6)}
+.vt-subtoolbox-toggle-switch.is-on>span{transform:translateX(calc(var(--vt-component-height)*.72))}
+.vt-subtoolbox-toggle-switch:focus-visible{outline:3px solid var(--pair-b,#ff7f6b);outline-offset:3px}
+
+.vt-subtoolbox-check-control,.vt-subtoolbox-radio-control{
+  width:calc(var(--vt-component-height)*.62);
+  height:calc(var(--vt-component-height)*.62);
+  background:var(--pair-b,#ff7f6b);
+  border:var(--vt-component-stroke,3px) solid #000;
+  box-shadow:none;
+}
+.vt-subtoolbox-check-control>span,.vt-subtoolbox-radio-control>span{
+  width:62%;height:62%;opacity:0;transform:scale(.65);
+  background:var(--pair-a,#36e0f6);
+  transition:opacity .12s ease-out,transform .12s ease-out;
+}
+.vt-subtoolbox-check-control.is-on>span,.vt-subtoolbox-radio-control.is-on>span{
+  opacity:1;transform:scale(1);
+}
+.vt-subtoolbox-check-control:focus-visible,.vt-subtoolbox-radio-control:focus-visible{
+  outline:3px solid var(--pair-b,#ff7f6b);outline-offset:3px;
+}
+
+.vt-subtoolbox-removable-tag,.vt-subtoolbox-selectable-tag{
+  --tag-h:calc(var(--vt-component-height)*.58);
+  min-height:var(--tag-h);height:var(--tag-h);
+  justify-content:center;align-items:center;
+  gap:calc(var(--tag-h)*.12);
+  padding:0 calc(var(--tag-h)*.34);
+  border:var(--vt-component-stroke,3px) solid var(--pair-a,#36e0f6);
+  background:color-mix(in srgb,var(--pair-a,#36e0f6) 34%,white);
+  color:var(--pair-a,#36e0f6);
+  font:1000 calc(var(--vt-component-font-size)*.72)/1 var(--vt-studio-toolbox-font);
+  letter-spacing:-.035em;text-transform:uppercase;border-radius:999px;
+  display:inline-flex;box-shadow:none;
+  transition:background .15s,color .15s,border-color .15s,transform .12s ease-out;
+}
+.vt-subtoolbox-removable-tag{padding-right:calc(var(--tag-h)*.1);background:var(--pair-a,#36e0f6);color:#000;border:0}
+.vt-subtoolbox-removable-tag button{
+  width:calc(var(--tag-h)*.72);height:calc(var(--tag-h)*.72);
+  background:var(--pair-b,#ff7f6b);color:#000;border:0;border-radius:50%;
+  place-items:center;padding:0;display:grid;box-shadow:none;
+}
+.vt-subtoolbox-removable-tag button svg{stroke-width:4;width:62%;height:62%}
+.vt-subtoolbox-selectable-tag{cursor:pointer;background:color-mix(in srgb,var(--pair-b,#ff7f6b) 30%,white);border-color:var(--pair-b,#ff7f6b);color:var(--pair-b,#ff7f6b)}
+.vt-subtoolbox-selectable-tag.is-selected,
+.vt-subtoolbox-selectable-tag[aria-pressed="true"]{
+  background:var(--pair-a,#36e0f6);border-color:var(--pair-a,#36e0f6);color:var(--pair-b,#ff7f6b)
+}
+.vt-subtoolbox-selectable-tag:active,.vt-subtoolbox-removable-tag:active{
+  background:var(--pair-b,#ff7f6b);color:var(--pair-a,#36e0f6);transform:translateY(1px)
+}
+.vt-subtoolbox-tag-editor-tags{flex-wrap:wrap;align-items:center;gap:6px;display:flex}
+.vt-subtoolbox-tag-editor>.add{
+  width:calc(var(--vt-component-height)*.68);height:calc(var(--vt-component-height)*.68);
+  border:var(--vt-component-stroke,3px) solid #000;border-radius:calc(var(--vt-component-radius)*.65);
+  background:var(--pair-a,#36e0f6);place-items:center;padding:0;display:grid;
+  transition:transform .12s ease-out,filter .15s ease-out;
+}
+.vt-subtoolbox-tag-editor>.add:active{transform:translateY(1px)}
+.vt-subtoolbox-tag-editor .submit{
+  display:grid;place-items:center;
+  width:calc(var(--vt-component-height)*.68);height:calc(var(--vt-component-height)*.68);
+  border:var(--vt-component-stroke,3px) solid #000;
+  border-radius:calc(var(--vt-component-radius)*.65);
+  background:var(--pair-b,#ff7f6b);
+}
+
+@media(prefers-reduced-motion:reduce){
+  .vt-subtoolbox-toggle-switch,
+  .vt-subtoolbox-toggle-switch>span,
+  .vt-subtoolbox-check-control>span,
+  .vt-subtoolbox-radio-control>span,
+  .vt-subtoolbox-removable-tag,
+  .vt-subtoolbox-selectable-tag,
+  .vt-subtoolbox-tag-editor>.add{transition:none!important}
+}
