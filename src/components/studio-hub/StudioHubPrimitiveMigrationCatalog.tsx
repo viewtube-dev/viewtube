@@ -291,6 +291,12 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Scrollbar · L1",
   "Scrollbar · L2",
   "Range Slider · L2",
+  "Button Group · Select All",
+  "Toggle · Stroke",
+  "Toggle · No Stroke",
+  "Settings Switch · Stroke",
+  "Checkbox · Stroke",
+  "Radio · Stroke",
 ] as const
 
 type StudioHubMigratedFamily = (typeof STUDIO_HUB_MIGRATED_FAMILIES)[number]
@@ -707,6 +713,12 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Calendar · Navigation") return <SubToolboxCalendar level={level} style={sizeStyle} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
   if (name === "Scrollbar · L1") return <SubToolboxScrollbar level="l1" style={sizeStyle} orientation="horizontal" value={scrollPos} onValueChange={setScrollPos} />
   if (name === "Scrollbar · L2") return <SubToolboxScrollbar level="l2" style={sizeStyle} orientation="vertical" value={scrollPos} onValueChange={setScrollPos} />
+  if (name === "Button Group · Select All") return <SubToolboxSelectAllButtonGroup level={level} style={sizeStyle} />
+  if (name === "Toggle · Stroke") return <SubToolboxToggleSwitch level={level} pressed style={sizeStyle} className="is-stroke" aria-label="Stroke toggle" />
+  if (name === "Toggle · No Stroke") return <SubToolboxToggleSwitch level={level} pressed={false} style={sizeStyle} aria-label="No-stroke toggle" />
+  if (name === "Settings Switch · Stroke") return <SubToolboxSettingsSwitch level={level} pressed style={sizeStyle} className="is-stroke" aria-label="Stroke settings switch" />
+  if (name === "Checkbox · Stroke") return <SubToolboxCheckControl level={level} checked style={sizeStyle} className="is-stroke" aria-label="Stroke checkbox" />
+  if (name === "Radio · Stroke") return <SubToolboxRadioControl level={level} checked style={sizeStyle} className="is-stroke" aria-label="Stroke radio" />
   if (name === "Range Slider · L2") return <SubToolboxRangeSlider level="l2" style={sizeStyle} low={rangeLow} high={rangeHigh} onLowChange={setRangeLow} onHighChange={setRangeHigh} railIcon={<SlidersHorizontal/>} onReset={()=>{setRangeLow(22);setRangeHigh(76)}} />
   if (name === "Production Planner Grid") {
     return <SubToolboxProductionPlannerGrid level={level} style={sizeStyle} days={[
