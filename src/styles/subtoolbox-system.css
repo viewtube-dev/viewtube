@@ -3135,7 +3135,6 @@
   text-transform:uppercase;
   white-space:nowrap;
   pointer-events:none;
-  padding-right:52%;
 }
 .vt-subtoolbox-labeled-field.is-textarea .vt-subtoolbox-labeled-field-overlay{
   top:calc(var(--vt-component-height)*.24);
@@ -3145,6 +3144,7 @@
   color:#000!important;
 }
 .vt-subtoolbox-labeled-field>.vt-subtoolbox-labeled-control{
+  padding-right:52%!important;
   color:#000!important;
   caret-color:var(--pair-a,#36e0f6)!important;
 }
