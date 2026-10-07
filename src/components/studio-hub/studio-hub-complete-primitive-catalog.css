@@ -1602,3 +1602,13 @@
     gap:8px!important;
   }
 }
+
+/* Four-size certification ladder. XS is the fourth default; S/M/L retain the
+   existing catalog levels and receive canonical geometry through inline vars. */
+.vt-complete-catalog .vt-catalog-levels{grid-template-columns:repeat(4,minmax(0,1fr))}
+.vt-complete-catalog .vt-catalog-demo.is-xs{--h:20px;--stroke:2px;--radius:4px;--fs:10px}
+.vt-complete-catalog .vt-catalog-demo.is-l2{--h:32px;--stroke:2px;--radius:6px;--fs:12px}
+.vt-complete-catalog .vt-catalog-demo.is-l1{--h:48px;--stroke:3px;--radius:8px;--fs:18px}
+.vt-complete-catalog .vt-catalog-demo.is-l0{--h:56px;--stroke:3.5px;--radius:9.333333px;--fs:24px}
+@media(max-width:1100px){.vt-complete-catalog .vt-catalog-levels{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.vt-complete-catalog .vt-catalog-levels{grid-template-columns:1fr}}
