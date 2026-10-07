@@ -14,8 +14,14 @@ import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styl
 import "./studio-hub-complete-primitive-catalog.css"
 
 export type StudioHubComponentLevel = "l0" | "l1" | "l2"
-type Level = StudioHubComponentLevel
-const LEVELS: Level[] = ["l0", "l1", "l2"]
+type Level = StudioHubComponentLevel | "xs"
+const LEVELS: Level[] = ["xs", "l2", "l1", "l0"]
+const SIZE_VARS: Record<Level, React.CSSProperties> = {
+  xs: { "--vt-component-height": "20px", "--vt-component-stroke": "2px", "--vt-component-radius": "4px", "--vt-component-shadow-offset": "2px", "--vt-component-font-size": "10px" } as React.CSSProperties,
+  l2: { "--vt-component-height": "32px", "--vt-component-stroke": "2px", "--vt-component-radius": "6px", "--vt-component-shadow-offset": "4px", "--vt-component-font-size": "12px" } as React.CSSProperties,
+  l1: { "--vt-component-height": "48px", "--vt-component-stroke": "3px", "--vt-component-radius": "8px", "--vt-component-shadow-offset": "5px", "--vt-component-font-size": "18px" } as React.CSSProperties,
+  l0: { "--vt-component-height": "56px", "--vt-component-stroke": "3.5px", "--vt-component-radius": "9.333333px", "--vt-component-shadow-offset": "5.833333px", "--vt-component-font-size": "24px" } as React.CSSProperties,
+}
 
 /** Frozen hardcoded certification baseline. Do not migrate component anatomy in this file. */
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
@@ -44,7 +50,7 @@ const DemoShell: React.FC<{ level: Level; children: React.ReactNode }> = ({ leve
 )
 
 export const HardcodedGenericControl: React.FC<{ name: string; level: Level; index: number; paletteIndex: number }> = ({ name, level, index, paletteIndex }) => {
-  const levelOffset = level === "l0" ? 0 : level === "l1" ? 2 : 4
+  const levelOffset = level === "l0" ? 0 : level === "l1" ? 2 : level === "l2" ? 4 : 6
   const colors = pair(paletteIndex + levelOffset)
   const [value, setValue] = useState(5)
   const [toggleOn, setToggleOn] = useState(true)
@@ -68,7 +74,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   const [searchQuery, setSearchQuery] = useState("NAPOLEON")
   const [actionDraft, setActionDraft] = useState("NEW ITEM")
   const [knobValue, setKnobValue] = useState(72)
-  const style = { "--pair-a": colors.a, "--pair-b": colors.b } as React.CSSProperties
+  const style = { ...SIZE_VARS[level], "--pair-a": colors.a, "--pair-b": colors.b } as React.CSSProperties
   const icon = <Settings2 aria-hidden="true" />
 
   const updateHardcodedKnobFromPointer = (element: HTMLElement, clientX: number, clientY: number) => {
@@ -181,7 +187,7 @@ export interface StudioHubCompletePrimitiveCatalogProps { paletteIndex?: number 
 export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimitiveCatalogProps> = ({ paletteIndex = 7 }) => (
   <section className="vt-complete-catalog" aria-labelledby="studio-hub-complete-catalog-title" data-palette-index={paletteIndex}>
     <header className="vt-complete-catalog-heading">
-      <div><Lightbulb/><div><h2 id="studio-hub-complete-catalog-title">Complete Component + Primitive Catalog</h2><p>Every reusable Studio Hub family rendered at L0, L1 and L2. Compact is retired.</p></div></div>
+      <div><Lightbulb/><div><h2 id="studio-hub-complete-catalog-title">Complete Component + Primitive Catalog</h2><p>Every reusable Studio Hub family rendered at XS, S, M and L. Compact is retired.</p></div></div>
       <strong>{STUDIO_HUB_COMPONENT_FAMILIES.length} FAMILIES · {STUDIO_HUB_COMPONENT_FAMILIES.length * LEVELS.length} EXAMPLES</strong>
     </header>
     <div className="vt-complete-catalog-grid">
