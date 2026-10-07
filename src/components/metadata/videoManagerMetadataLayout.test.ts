@@ -15,6 +15,14 @@ describe("Video Manager metadata layout contract", () => {
     expect(metadata).toContain('<SubToolboxActions columns={3} forceRow')
   })
 
+  it("keeps the colored right-side labels above the field surface", () => {
+    const styles = read("src/styles/subtoolbox-system.css")
+    expect(styles).toContain(".vt-subtoolbox-labeled-field-overlay{")
+    expect(styles).toContain("z-index:3;")
+    expect(styles).toContain("padding-right:52%;")
+    expect(styles).not.toContain(".vt-subtoolbox-labeled-field:focus-within .vt-subtoolbox-labeled-field-overlay{")
+  })
+
   it("uses the canonical thumbnail overlay label", () => {
     const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
     expect(metadata).toContain('overlayLabel={thumbnailLabel}')
