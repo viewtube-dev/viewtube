@@ -160,6 +160,7 @@ export default defineConfig(() => ({
       'viewtube-vault-wave2-live.onrender.com',
       'viewtube-bsbw.onrender.com',
       'viewtube-canonical-test.onrender.com',
+      'viewtube-1-y36p.onrender.com',
     ],
   },
   // Pre-bundle the heavy dependency graphs used on first paint so cold dev
