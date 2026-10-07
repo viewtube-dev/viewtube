@@ -15,8 +15,9 @@ import "./studio-hub-complete-primitive-catalog.css"
 
 export type StudioHubComponentLevel = "l0" | "l1" | "l2"
 type Level = StudioHubComponentLevel | "xs"
-const LEVELS: Level[] = ["xs", "l2", "l1", "l0"]
+const LEVELS: Level[] = ["xs", "l2", "m", "l1", "l0"]
 const SIZE_VARS: Record<Level, React.CSSProperties> = {
+  m: { "--vt-component-height": "44px", "--vt-component-stroke": "3px", "--vt-component-radius": "8px", "--vt-component-shadow-offset": "5px", "--vt-component-font-size": "16px" } as React.CSSProperties,
   xs: { "--vt-component-height": "20px", "--vt-component-stroke": "2px", "--vt-component-radius": "4px", "--vt-component-shadow-offset": "2px", "--vt-component-font-size": "10px" } as React.CSSProperties,
   l2: { "--vt-component-height": "32px", "--vt-component-stroke": "2px", "--vt-component-radius": "6px", "--vt-component-shadow-offset": "4px", "--vt-component-font-size": "12px" } as React.CSSProperties,
   l1: { "--vt-component-height": "48px", "--vt-component-stroke": "3px", "--vt-component-radius": "8px", "--vt-component-shadow-offset": "5px", "--vt-component-font-size": "18px" } as React.CSSProperties,
@@ -50,7 +51,7 @@ const DemoShell: React.FC<{ level: Level; children: React.ReactNode }> = ({ leve
 )
 
 export const HardcodedGenericControl: React.FC<{ name: string; level: Level; index: number; paletteIndex: number }> = ({ name, level, index, paletteIndex }) => {
-  const levelOffset = level === "l0" ? 0 : level === "l1" ? 2 : level === "l2" ? 4 : 6
+  const levelOffset = level === "l0" ? 0 : level === "l1" ? 2 : level === "l2" ? 4 : level === "m" ? 5 : 6
   const colors = pair(paletteIndex + levelOffset)
   const [value, setValue] = useState(5)
   const [toggleOn, setToggleOn] = useState(true)
@@ -144,7 +145,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   if (name === "Vertical Scrollbar") return <div className={`vt-catalog-vscroll is-${level}`} style={style}><button type="button" aria-label="Scroll up" onClick={() => setScrollPos(v => Math.max(0,v-10))}><ChevronDown className="up"/></button><span><i style={{top:`${scrollPos}%`}}/></span><button type="button" aria-label="Scroll down" onClick={() => setScrollPos(v => Math.min(58,v+10))}><ChevronDown/></button></div>
   if (name === "Disabled Button") return <button disabled className={`vt-catalog-button is-${level} is-disabled`}>Disabled</button>
   if (name === "Disabled Split Button") return <button disabled className={`vt-catalog-disabled-split is-${level}`}><span>{icon}</span><b>Disabled</b></button>
-  if (name === "Upload Frame") return <div className={`vt-catalog-upload-authority is-${level}`} style={style}><SubToolboxFileTarget label="Drop or choose file" icon={<Upload />} minHeight={level === "l0" ? 176 : level === "l1" ? 144 : 112} /></div>
+  if (name === "Upload Frame") return <div className={`vt-catalog-upload-authority is-${level}`} style={style}><SubToolboxFileTarget label="Drop or choose file" icon={<Upload />} minHeight={level === "l0" ? 176 : level === "l1" ? 144 : level === "m" ? 132 : level === "l2" ? 112 : 96} /></div>
   if (name === "Pagination") return <div className={`vt-catalog-pagination is-${level}`} style={style}><button type="button" aria-label="Previous page" onClick={() => setPage(v => Math.max(1,v-1))}><ChevronLeft/></button>{[1,2,3].map(p => <button type="button" key={p} className={page===p ? "is-on" : ""} aria-current={page===p ? "page" : undefined} onClick={() => setPage(p)}>{p}</button>)}<button type="button" aria-label="Next page" onClick={() => setPage(v => Math.min(3,v+1))}><ChevronRight/></button></div>
   if (name.startsWith("Vault ")) {
     const Icon = name.includes("Landscape") || name.includes("Portrait") ? Image : name.includes("Audio") ? Music : FileText
