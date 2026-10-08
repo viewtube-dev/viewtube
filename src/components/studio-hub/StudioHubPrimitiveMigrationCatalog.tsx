@@ -301,6 +301,142 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
 
 type StudioHubMigratedFamily = (typeof STUDIO_HUB_MIGRATED_FAMILIES)[number]
 
+type StudioHubPrimitiveGroup = {
+  label: string
+  families: StudioHubMigratedFamily[]
+}
+
+const PRIMITIVE_GROUP_RULES: Array<{ label: string; families: ReadonlySet<string> }> = [
+  {
+    label: "Buttons",
+    families: new Set([
+      "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
+      "Disabled Button", "Square Icon Button", "Split Left Button", "Head Tail Action",
+      "Disabled Split Button", "Link Button", "Button Group", "Button Group · Select All",
+    ]),
+  },
+  {
+    label: "Switches, Toggles & Binary Controls",
+    families: new Set([
+      "Toggle", "Toggle · Stroke", "Toggle · No Stroke", "Settings Switch", "Settings Switch · Stroke",
+      "Checkbox", "Checkbox · Stroke", "Radio", "Radio · Stroke", "Controller Switch",
+      "Spring-Loaded Toggle", "Color Switching Toggle", "Toolbox Toggle",
+      "Toolbox Toggle · Black Handle", "Toolbox Toggle · Black Fill",
+    ]),
+  },
+  {
+    label: "Tags",
+    families: new Set([
+      "Tag", "Removable Tag", "Selectable Tag", "Tag Editor",
+      "Alphabetical Spectrum Tags", "Dashboard Pill Tags",
+    ]),
+  },
+  {
+    label: "Tooltips",
+    families: new Set(["Tooltip", "Tooltip Dark", "Tooltip Color", "Tooltip · Dark", "Tooltip · Color", "Tooltip Visual Key"]),
+  },
+  {
+    label: "Menus & Selection",
+    families: new Set([
+      "Split Menu", "Dropdown", "Top Title Dropdown", "Select Menu", "Context Menu",
+      "Command Palette", "Popover", "Disclosure", "Accordion", "Combobox", "Multi-Select Chips",
+    ]),
+  },
+  {
+    label: "Fields & Inputs",
+    families: new Set([
+      "Text Input", "Textarea", "Labeled Input", "Labeled Textarea", "Number Field",
+      "Input Action", "Split Search", "Output Input", "Password Input", "OTP Input",
+    ]),
+  },
+  {
+    label: "Sliders & Direct Manipulation",
+    families: new Set([
+      "Stepper", "Slider", "Range Slider", "Range Slider · L2", "Knob Dial",
+      "XY Joystick", "CMYK Mixer", "Aspect Ratio Selector",
+    ]),
+  },
+  {
+    label: "Progress, Loading & Feedback",
+    families: new Set([
+      "Progress Bar", "Progress Value", "Loader", "Loader Progress", "Loader Split",
+      "Loader Orbit", "Loader Bars", "Skeleton", "Skeleton Compact", "Skeleton Media",
+      "Toast", "Toast · L1", "Alert", "Step Indicator",
+    ]),
+  },
+  {
+    label: "Data & Analytics",
+    families: new Set([
+      "KPI", "Stat Card", "Metric", "Metric Strip", "Data Stats Module",
+      "Two Color Data Stats", "Monochrome Data Stats", "Tiny Data Stats",
+      "Data Table", "Text + Badge Data Grid", "Data Grid", "Interactive Checklist Progress",
+      "Checklist Progress", "Checklist Progress · Compact", "Production Planner Grid",
+      "Production Planner Grid · Compact", "Name Value List", "Selectable List Row", "Reorderable Row",
+    ]),
+  },
+  {
+    label: "Media",
+    families: new Set([
+      "Media Card", "Media Control Button", "Media Play Toggle", "Media Seek Bar",
+      "Media Volume Control", "Media Timecode", "Media Duration Badge", "Media Caption Toggle",
+      "Media Speed Control", "Media Poster Frame", "Media Status", "Media Player",
+      "Media Transport Bar", "Media Queue", "Media Inspector", "Media Review Panel",
+      "Video Selector", "Media Frame", "Before / After Compare", "Timeline",
+    ]),
+  },
+  {
+    label: "Navigation & Layout",
+    families: new Set([
+      "Navigation", "Top Navigation", "Tabs", "Breadcrumb", "Pagination", "Carousel",
+      "Carousel · L2", "Horizontal Scrollbar", "Vertical Scrollbar", "Scrollbar · L1",
+      "Scrollbar · L2", "Toolbar", "Full-Width Section Band", "Section Band · Primary",
+      "Section Band · Secondary", "Mini SubToolbox", "Surface", "Divider", "Aspect Ratio Frame",
+      "Calendar", "Calendar · Navigation",
+    ]),
+  },
+  {
+    label: "Overlays & Panels",
+    families: new Set(["State Panel", "Output Card", "Dialog", "Drawer", "Hover Card"]),
+  },
+  {
+    label: "Status & Identity",
+    families: new Set([
+      "Badge", "Status Badge", "Avatar", "Avatar · Creator", "Avatar · Compact",
+      "LED Light", "LED Light · L1", "LED Dot", "Meter", "Rating",
+    ]),
+  },
+  {
+    label: "Assets & Vault",
+    families: new Set([
+      "Upload Frame", "Upload Frame · Variant", "Vault Landscape Asset",
+      "Vault Landscape Swapped Asset", "Vault Portrait Asset", "Vault Portrait Double Asset",
+      "Vault Audio Asset", "Vault Document Asset", "Tree View",
+    ]),
+  },
+  {
+    label: "Headers & Toolbox Chrome",
+    families: new Set([
+      "Toolbox Header Icon Rail", "SubToolbox Header Icon Rail", "Toolbox Header Title",
+      "SubToolbox Header Title", "Toolbox Header Help", "SubToolbox Header Help",
+      "Toolbox Header Collapse", "SubToolbox Header Collapse",
+    ]),
+  },
+  {
+    label: "Other Components",
+    families: new Set(),
+  },
+]
+
+const getPrimitiveGroupLabel = (name: StudioHubMigratedFamily) =>
+  PRIMITIVE_GROUP_RULES.find((rule) => rule.families.has(name))?.label ?? "Other Components"
+
+export const STUDIO_HUB_PRIMITIVE_GROUPS: StudioHubPrimitiveGroup[] =
+  PRIMITIVE_GROUP_RULES.map((rule) => ({
+    label: rule.label,
+    families: STUDIO_HUB_MIGRATED_FAMILIES.filter((name) => getPrimitiveGroupLabel(name) === rule.label),
+  })).filter((group) => group.families.length > 0)
+
+
 type CatalogPreviewMode = "intrinsic" | "fixed" | "compound" | "field" | "canvas"
 
 type CatalogPreviewGeometry = {
@@ -429,7 +565,7 @@ const PrimitiveMigrationControl: React.FC<{
   const [checkboxOn, setCheckboxOn] = React.useState(true)
   const [radioOn, setRadioOn] = React.useState(true)
   const [segmentChoice, setSegmentChoice] = React.useState("A")
-  const [groupChoice, setGroupChoice] = React.useState("ONE")
+  const [groupChoices, setGroupChoices] = React.useState<string[]>(["ONE"])
   const [menuChoice, setMenuChoice] = React.useState("OPTION 1")
   const [sliderValue, setSliderValue] = React.useState(62)
   const [rangeLow, setRangeLow] = React.useState(22)
@@ -526,7 +662,7 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Dropdown" || name === "Select Menu" || name === "Context Menu") {
-    return <SubToolboxMenu level={level} style={sizeStyle} variant={name === "Context Menu" ? "context" : name === "Select Menu" ? "select" : "dropdown"} value={menuChoice} options={["OPTION 1","OPTION 2","OPTION 3"].map((option) => ({ value: option, label: option }))} onValueChange={setMenuChoice} triggerLabel={name === "Dropdown" ? "MENU" : menuChoice} triggerIcon={<MoreHorizontal />} chevronIcon={<ChevronDown />} ariaLabel={name} />
+    return <SubToolboxMenu level={level} style={sizeStyle} variant={name === "Context Menu" ? "context" : name === "Select Menu" ? "select" : "dropdown"} value={menuChoice} options={["OPTION 1","OPTION 2","OPTION 3"].map((option, optionIndex) => ({ value: option, label: option, icon: [<Settings2 />, <SlidersHorizontal />, <MoreHorizontal />][optionIndex] }))} onValueChange={setMenuChoice} triggerLabel={name === "Dropdown" ? "MENU" : menuChoice} triggerIcon={<MoreHorizontal />} chevronIcon={<ChevronDown />} ariaLabel={name} />
   }
   if (name === "Top Title Dropdown") {
     return <SubToolboxTopTitleDropdown
@@ -558,13 +694,13 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxSettingsSwitch level={level} style={sizeStyle} pressed={settingsOn} aria-label="Settings switch" onClick={() => setSettingsOn((value) => !value)} />
   }
   if (name === "Button Group") {
-    return <SubToolboxButtonGroup level={level} style={sizeStyle} items={[{ value: "ONE", label: "ONE" }, { value: "TWO", label: "TWO" }]} value={groupChoice} onValueChange={setGroupChoice} />
+    return <SubToolboxButtonGroup level={level} style={sizeStyle} items={[{ value: "ONE", label: "ONE" }, { value: "TWO", label: "TWO" }]} selectionMode="multiple" values={groupChoices} onValuesChange={setGroupChoices} />
   }
   if (name === "Removable Tag") {
     return <SubToolboxRemovableTag level={level} style={sizeStyle} removeIcon={<X />}>NAPOLEON</SubToolboxRemovableTag>
   }
   if (name === "Selectable Tag") {
-    return <SubToolboxSelectableTag level={level} style={sizeStyle} selected={selectableTagOn} selectedIcon={<Check />} unselectedIcon={<Plus />} onClick={() => setSelectableTagOn((value) => !value)}>{selectableTagOn ? "SELECTED" : "SELECT"}</SubToolboxSelectableTag>
+    return <SubToolboxSelectableTag level={level} style={sizeStyle} selected={selectableTagOn} selectedIcon={<X />} unselectedIcon={<Plus />} onClick={() => setSelectableTagOn((value) => !value)}>{selectableTagOn ? "SELECTED" : "SELECT"}</SubToolboxSelectableTag>
   }
   if (name === "Tag Editor") {
     return <SubToolboxTagEditor level={level} style={sizeStyle} tags={editorTags} onTagsChange={setEditorTags} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
@@ -1116,37 +1252,51 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
         <Lightbulb />
         <div>
           <h2 id="studio-hub-primitive-migration-catalog-title">Complete Component + Primitive Catalog</h2>
-          <p>Only production primitives are rendered here. Unmigrated hardcoded families stay exclusively in the baseline toolbox.</p>
+          <p>Only production primitives are rendered here. Related component variants stay together in one SubToolbox group.</p>
         </div>
       </div>
-      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} PRIMITIVE FAMILIES · {STUDIO_HUB_MIGRATED_FAMILIES.length * CATALOG_SIZES.length} SIZE EXAMPLES</strong>
+      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} PRIMITIVE FAMILIES · {STUDIO_HUB_PRIMITIVE_GROUPS.length} SUBTOOLBOX GROUPS · {STUDIO_HUB_MIGRATED_FAMILIES.length * CATALOG_SIZES.length} SIZE EXAMPLES</strong>
     </header>
 
     <div className="vt-complete-catalog-grid">
-      {STUDIO_HUB_MIGRATED_FAMILIES.map((name, index) => (
-        <div
-          className="vt-primitive-migration-family"
-          key={name}
-          data-vt-family={name}
-          data-vt-migration-state="primitive"
-          data-vt-preview-mode={getCatalogPreviewGeometry(name).mode}
-          data-vt-preview-portrait={getCatalogPreviewGeometry(name).portraitStack ? "stack" : "grid"}
-        >
+      {STUDIO_HUB_PRIMITIVE_GROUPS.map((group, groupIndex) => (
+        <div className="vt-primitive-migration-group" key={group.label} data-vt-group={group.label}>
           <SubToolbox
-            title={`${String(index + 1).padStart(2, "0")} ${name}`}
+            title={`${String(groupIndex + 1).padStart(2, "0")} ${group.label}`}
             icon={<Settings2 />}
-            paletteIndex={paletteIndex + index}
+            paletteIndex={paletteIndex + groupIndex}
             collapsible
             isOpenInitial
             overflowVisible
             contentClassName="p-3"
           >
-            <div className="vt-catalog-levels">
-              {CATALOG_SIZES.map(({ size, level }) => (
-                <DemoShell level={level} size={size} geometry={getCatalogPreviewGeometry(name)} key={size}>
-                  <PrimitiveMigrationControl name={name} level={level} size={size} />
-                </DemoShell>
-              ))}            </div>
+            <div className="vt-catalog-group-families">
+              {group.families.map((name) => {
+                const familyIndex = STUDIO_HUB_MIGRATED_FAMILIES.indexOf(name) + 1
+                const geometry = getCatalogPreviewGeometry(name)
+                return (
+                  <section
+                    className="vt-primitive-migration-family"
+                    key={name}
+                    data-vt-family={name}
+                    data-vt-migration-state="primitive"
+                    data-vt-preview-mode={geometry.mode}
+                    data-vt-preview-portrait={geometry.portraitStack ? "stack" : "grid"}
+                  >
+                    <h3 className="vt-catalog-family-title">
+                      <span>{String(familyIndex).padStart(2, "0")}</span> {name}
+                    </h3>
+                    <div className="vt-catalog-levels">
+                      {CATALOG_SIZES.map(({ size, level }) => (
+                        <DemoShell level={level} size={size} geometry={geometry} key={size}>
+                          <PrimitiveMigrationControl name={name} level={level} size={size} />
+                        </DemoShell>
+                      ))}
+                    </div>
+                  </section>
+                )
+              })}
+            </div>
           </SubToolbox>
         </div>
       ))}
