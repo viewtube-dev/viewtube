@@ -1295,6 +1295,12 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
             contentClassName="p-3"
           >
             <div className="vt-catalog-group-families">
+              <div className="vt-catalog-family-index" aria-label={`${group.label} component list`}>
+                {group.families.map((name) => {
+                  const familyIndex = STUDIO_HUB_MIGRATED_FAMILIES.indexOf(name) + 1
+                  return <span key={name}>{String(familyIndex).padStart(2, "0")} {name}</span>
+                })}
+              </div>
               {CATALOG_SIZES.map(({ size }) => {
                 const familiesForSize = group.families.filter((name) =>
                   getFamilyCatalogSizes(name).some((entry) => entry.size === size)
@@ -1305,29 +1311,22 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
                     <h3 className="vt-catalog-size-lane-title">{size.toUpperCase()}</h3>
                     <div className="vt-catalog-size-lane-grid">
                       {familiesForSize.map((name) => {
-                        const familyIndex = STUDIO_HUB_MIGRATED_FAMILIES.indexOf(name) + 1
                         const geometry = getCatalogPreviewGeometry(name)
                         const familySize = getFamilyCatalogSizes(name).find((entry) => entry.size === size)
                         if (!familySize) return null
                         return (
-                          <article className="vt-primitive-migration-family" key={name} data-vt-family={name} data-vt-migration-state="primitive" data-vt-preview-mode={geometry.mode}>
-                            <h4 className="vt-catalog-family-title">
-                              <span>{String(familyIndex).padStart(2, "0")}</span> {name}
-                            </h4>
-                            <div className="vt-catalog-levels">
-                              <DemoShell level={familySize.level} size={familySize.size} geometry={geometry}>
-                                <PrimitiveMigrationControl name={name} level={familySize.level} size={familySize.size} />
-                              </DemoShell>
-                            </div>
-                          </article>
+                          <div className="vt-catalog-component" key={name} data-vt-family={name}>
+                            <DemoShell level={familySize.level} size={familySize.size} geometry={geometry}>
+                              <PrimitiveMigrationControl name={name} level={familySize.level} size={familySize.size} />
+                            </DemoShell>
+                          </div>
                         )
                       })}
                     </div>
                   </section>
                 )
               })}
-            </div>
-          </SubToolbox>
+            </div>         </SubToolbox>
         </div>
       ))}
     </div>
