@@ -182,3 +182,253 @@
 }
 
 .vt-subtoolbox-settings-switch.is-stroke{border:var(--vt-component-stroke,3px) solid #000;background:#fff}.vt-subtoolbox-settings-switch.is-stroke.is-on{background:var(--pair-a,#36e0f6)}
+
+
+/* ==========================================================================
+   Large-format / split-anatomy correction wave
+   Canonical 65 geometry supplies the dimensions; 66 supplies the placement
+   anatomy. These rules normalize square rails, optical centering, large icons,
+   field states, menus, and L-size binary controls without inventing a second
+   component system.
+   ========================================================================== */
+
+/* Square regions use the full component height and a larger icon footprint. */
+.vt-subtoolbox-icon-button svg,
+.vt-subtoolbox-split-button-rail svg,
+.vt-subtoolbox-split-field-rail svg,
+.vt-subtoolbox-split-field-action svg,
+.vt-subtoolbox-slider-rail svg,
+.vt-subtoolbox-menu-context-icon svg,
+.vt-subtoolbox-menu-context-option-icon svg{
+  width:68%!important;
+  height:68%!important;
+  max-width:none;
+  max-height:none;
+  stroke-width:3.6;
+}
+.vt-subtoolbox-split-button-rail,
+.vt-subtoolbox-split-field-rail,
+.vt-subtoolbox-split-field-action,
+.vt-subtoolbox-slider-rail{
+  display:grid!important;
+  place-items:center!important;
+  align-content:center!important;
+}
+
+/* Split-left text is centered against the actual rail/body anatomy. */
+.vt-subtoolbox-split-button-label{
+  display:grid!important;
+  place-items:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  align-content:center!important;
+  text-align:center!important;
+  line-height:.9!important;
+  transform:none!important;
+}
+
+/* Search and action fields: both square ends are structural split regions. */
+.vt-subtoolbox-split-field.has-action{
+  grid-template-columns:minmax(0,1fr) var(--vt-component-height)!important;
+}
+.vt-subtoolbox-split-field.is-search{
+  grid-template-columns:var(--vt-component-height) minmax(0,1fr) var(--vt-component-height)!important;
+}
+.vt-subtoolbox-split-field.is-search .vt-subtoolbox-split-field-rail{
+  grid-column:1;
+}
+.vt-subtoolbox-split-field.is-search input{
+  grid-column:2;
+}
+.vt-subtoolbox-split-field.is-search .vt-subtoolbox-split-field-action{
+  grid-column:3;
+}
+.vt-subtoolbox-split-field-action{
+  width:var(--vt-component-height)!important;
+  min-width:var(--vt-component-height)!important;
+}
+
+/* Number fields are deliberately compact: exactly 2× the 65 component height. */
+.vt-subtoolbox-input[type="number"]{
+  width:calc(var(--vt-component-height)*2)!important;
+  max-width:100%;
+}
+
+/* Default field text follows the saturated inset ring; focus returns to black. */
+.vt-subtoolbox-input:not(:focus),
+.vt-subtoolbox-textarea:not(:focus){
+  color:var(--pair-a,#36e0f6)!important;
+}
+.vt-subtoolbox-input:focus,
+.vt-subtoolbox-textarea:focus{
+  color:#000!important;
+}
+
+/* Stepper/slider/range ends are split-left regions. */
+.vt-subtoolbox-stepper button,
+.vt-subtoolbox-slider-rail,
+.vt-subtoolbox-slider>output,
+.vt-subtoolbox-range>output{
+  display:grid!important;
+  place-items:center!important;
+  align-content:center!important;
+  justify-items:center!important;
+  text-align:center!important;
+}
+.vt-subtoolbox-slider>output{
+  background:var(--slider-color,var(--pair-a,#36e0f6))!important;
+}
+.vt-subtoolbox-range{
+  grid-template-columns:var(--vt-component-height) minmax(0,1fr) calc(var(--vt-component-height)*1.25)!important;
+}
+.vt-subtoolbox-range>output{
+  width:calc(var(--vt-component-height)*1.25)!important;
+  min-width:calc(var(--vt-component-height)*1.25)!important;
+  background:var(--slider-opposite,var(--pair-b,#ff7f6b))!important;
+  border-left:var(--vt-component-stroke) solid #000!important;
+}
+
+/* L-size binary controls occupy the same square geometry as other L controls. */
+[data-vt-control-level="l0"] .vt-subtoolbox-check-control,
+[data-vt-control-level="l0"] .vt-subtoolbox-radio-control{
+  width:var(--vt-component-height)!important;
+  height:var(--vt-component-height)!important;
+}
+[data-vt-control-level="l0"] .vt-subtoolbox-check-control>span{
+  width:58%!important;
+  height:58%!important;
+}
+[data-vt-control-level="l0"] .vt-subtoolbox-radio-control>span{
+  width:48%!important;
+  height:48%!important;
+}
+
+/* Segments size to their contents instead of three oversized equal columns. */
+.vt-subtoolbox-segmented{
+  width:max-content!important;
+  max-width:100%;
+  display:flex!important;
+}
+.vt-subtoolbox-segmented button{
+  flex:0 0 auto!important;
+  width:max-content!important;
+  min-width:0!important;
+  padding:0 calc(var(--vt-component-height)*.22)!important;
+}
+
+/* Button groups remain compact while allowing independent multiple selection. */
+.vt-subtoolbox-button-group.is-multiple button{
+  flex:0 0 auto;
+}
+.vt-subtoolbox-button-group.is-multiple{
+  grid-template-columns:none;
+  grid-auto-flow:column;
+}
+
+/* Normal dropdown rows match the closed control height exactly. */
+.vt-subtoolbox-menu-panel>button{
+  height:var(--vt-component-height)!important;
+  min-height:var(--vt-component-height)!important;
+  display:grid!important;
+  place-items:center!important;
+  align-content:center!important;
+  text-align:center!important;
+  padding:0 calc(var(--vt-component-height)*.18)!important;
+}
+
+/* Context menus expand to the right as a row of square icon actions. */
+.vt-subtoolbox-menu.is-context .vt-subtoolbox-menu-panel{
+  top:0!important;
+  left:calc(100% + 5px)!important;
+  min-width:0!important;
+  width:max-content!important;
+  display:flex!important;
+  gap:4px!important;
+  overflow:visible!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.vt-subtoolbox-menu.is-context .vt-subtoolbox-menu-panel>button{
+  width:var(--vt-component-height)!important;
+  min-width:var(--vt-component-height)!important;
+  height:var(--vt-component-height)!important;
+  padding:0!important;
+  border:var(--vt-component-stroke) solid #000!important;
+  border-radius:var(--vt-component-radius)!important;
+  background:var(--pair-a,#36e0f6)!important;
+  box-shadow:var(--vt-component-shadow-offset) var(--vt-component-shadow-offset) 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 42%,transparent)!important;
+}
+.vt-subtoolbox-menu-context-option-icon{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+}
+
+/* Top-title dropdown has its own two-row centering contract. */
+.vt-subtoolbox-top-title-dropdown-value{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  align-items:center!important;
+  justify-items:center!important;
+  padding:0 calc(var(--vt-component-height)*.7) 0 calc(var(--vt-component-height)*.18)!important;
+}
+.vt-subtoolbox-top-title-dropdown-value>b{
+  width:100%;
+  text-align:center!important;
+}
+.vt-subtoolbox-top-title-dropdown-chevron{
+  position:absolute!important;
+  right:0;
+  top:0;
+  width:calc(var(--vt-component-height)*.7);
+  display:grid!important;
+  place-items:center!important;
+  transform:none!important;
+}
+.vt-subtoolbox-top-title-dropdown-chevron svg{
+  width:58%!important;
+  height:58%!important;
+  stroke-width:4;
+}
+.vt-subtoolbox-top-title-dropdown.is-open .vt-subtoolbox-top-title-dropdown-chevron{
+  transform:rotate(180deg)!important;
+}
+.vt-subtoolbox-top-title-dropdown-panel>button{
+  min-height:var(--vt-component-height)!important;
+  height:var(--vt-component-height)!important;
+  display:grid!important;
+  place-items:center!important;
+  text-align:center!important;
+  padding:0 calc(var(--vt-component-height)*.2)!important;
+}
+
+/* Selectable Tag: the icon itself performs the plus ↔ X spin. */
+.vt-subtoolbox-selectable-tag > span:first-child{
+  width:calc(var(--tag-h)*.62);
+  height:calc(var(--tag-h)*.62);
+  display:grid;
+  place-items:center;
+  transform-origin:center;
+  transition:transform 260ms cubic-bezier(.22,.8,.24,1);
+}
+.vt-subtoolbox-selectable-tag > span:first-child svg{
+  width:100%;
+  height:100%;
+  stroke-width:4;
+}
+.vt-subtoolbox-selectable-tag[aria-pressed="true"] > span:first-child{
+  transform:rotate(180deg);
+}
+@keyframes vt-selectable-tag-spin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(180deg)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .vt-subtoolbox-selectable-tag > span:first-child{
+    transition:none!important;
+  }
+}
