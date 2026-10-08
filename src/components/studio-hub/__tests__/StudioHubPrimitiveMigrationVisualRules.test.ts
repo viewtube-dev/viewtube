@@ -45,4 +45,15 @@ describe("Studio Hub primitive visual rules", () => {
     expect(css).toContain("@keyframes vt-selectable-tag-spin")
     expect(css).toContain("prefers-reduced-motion:reduce")
   })
+
+  it("assigns the requested families one canonical size and groups catalog rows by size", () => {
+    const source = read("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+    expect(source).toContain("STUDIO_HUB_SINGLE_SIZE_FAMILIES")
+    expect(source).toContain('"Upload Frame · Variant": "l"')
+    expect(source).toContain('"Stat Card": "m"')
+    expect(source).toContain('"Dialog": "l"')
+    expect(source).toContain('"XY Joystick": "m"')
+    expect(source).toContain("data-vt-catalog-size-lane")
+    expect(source).toContain("getFamilyCatalogSizes")
+  })
 })
