@@ -13,6 +13,7 @@ describe("canonical primitive CSS ownership", () => {
     expect(existsSync(legacyDefaults)).toBe(false)
     expect(indexCss).not.toContain('./styles/canonical-component-defaults.css')
     expect(indexCss).not.toContain('./styles/subtoolbox-system.css')
+    expect(indexCss).toContain('./styles/toolbox-entry.css')
     expect(primitiveCss).toContain("--vt-control-weight:1000")
     expect(primitiveCss).toContain("--vt-size-xs:20px")
   })
