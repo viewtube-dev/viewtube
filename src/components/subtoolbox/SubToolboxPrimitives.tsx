@@ -1,6 +1,6 @@
 import React from "react"
 import { createPortal } from "react-dom"
-import { CircleQuestionMark } from "lucide-react"
+import { ChevronDown, CircleQuestionMark } from "lucide-react"
 import "../../styles/toolbox-entry.css"
 import { getComponentLevelCssVars } from "./tokens"
 import type { SubToolboxControlSize, SubToolboxState, ToolboxControlLevel } from "./tokens"
@@ -627,7 +627,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
         <span className="vt-subtoolbox-top-title-dropdown-title">{label}</span>
         <span className="vt-subtoolbox-top-title-dropdown-value">
           <b>{value}</b>
-          <span className="vt-subtoolbox-top-title-dropdown-chevron" aria-hidden="true">⌄</span>
+          <span className="vt-subtoolbox-top-title-dropdown-chevron" aria-hidden="true"><ChevronDown /></span>
         </span>
       </button>
       {open && menuRect ? createPortal(
@@ -868,6 +868,7 @@ export const SubToolboxVideoSelector: React.FC<SubToolboxVideoSelectorProps> = (
 export interface SubToolboxMenuOption {
   value: string
   label: React.ReactNode
+  icon?: React.ReactNode
   disabled?: boolean
 }
 export interface SubToolboxMenuProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
@@ -905,8 +906,8 @@ export const SubToolboxMenu: React.FC<SubToolboxMenuProps> = ({
       {open ? (
         <div className="vt-subtoolbox-menu-panel" role="menu" aria-label={ariaLabel}>
           {options.map((option) => (
-            <button type="button" role="menuitem" key={option.value} disabled={option.disabled} className={value === option.value ? "is-selected" : ""} onClick={() => { if (!option.disabled) { onValueChange?.(option.value); setOpen(false) } }}>
-              {option.label}
+            <button type="button" role="menuitem" key={option.value} disabled={option.disabled} className={value === option.value ? "is-selected" : ""} aria-label={typeof option.label === "string" ? option.label : undefined} onClick={() => { if (!option.disabled) { onValueChange?.(option.value); setOpen(false) } }}>
+              {variant === "context" ? <span className="vt-subtoolbox-menu-context-option-icon" aria-hidden="true">{option.icon ?? option.label}</span> : option.label}
             </button>
           ))}
         </div>
@@ -994,10 +995,44 @@ export interface SubToolboxButtonGroupProps extends React.HTMLAttributes<HTMLDiv
   items: Array<{ value: string; label: React.ReactNode }>
   value?: string
   onValueChange?: (value: string) => void
+  selectionMode?: "single" | "multiple"
+  values?: string[]
+  onValuesChange?: (values: string[]) => void
 }
-export const SubToolboxButtonGroup: React.FC<SubToolboxButtonGroupProps> = ({ level = "l0", items, value, onValueChange, className, style, ...props }) => (
-  <div className={classes("vt-subtoolbox-button-group", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
-    {items.map((item) => <button type="button" key={item.value} className={value === item.value ? "is-active" : ""} aria-pressed={value === item.value} onClick={() => onValueChange?.(item.value)}>{item.label}</button>)}
+export const SubToolboxButtonGroup: React.FC<SubToolboxButtonGroupProps> = ({
+  level = "l0",
+  items,
+  value,
+  onValueChange,
+  selectionMode = "single",
+  values = [],
+  onValuesChange,
+  className,
+  style,
+  ...props
+}) => (
+  <div className={classes("vt-subtoolbox-button-group", selectionMode === "multiple" && "is-multiple", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
+    {items.map((item) => {
+      const active = selectionMode === "multiple" ? values.includes(item.value) : value === item.value
+      return (
+        <button
+          type="button"
+          key={item.value}
+          className={active ? "is-active" : ""}
+          aria-pressed={active}
+          onClick={() => {
+            if (selectionMode === "multiple") {
+              const next = active ? values.filter((selected) => selected !== item.value) : [...values, item.value]
+              onValuesChange?.(next)
+            } else {
+              onValueChange?.(item.value)
+            }
+          }}
+        >
+          {item.label}
+        </button>
+      )
+    })}
   </div>
 )
 
