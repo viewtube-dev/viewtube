@@ -301,6 +301,29 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
 
 type StudioHubMigratedFamily = (typeof STUDIO_HUB_MIGRATED_FAMILIES)[number]
 
+type CatalogSingleSize = "m" | "l"
+
+export const STUDIO_HUB_SINGLE_SIZE_FAMILIES: Readonly<Record<string, CatalogSingleSize>> = {
+  "Upload Frame · Variant": "l", "Tree View": "l", "Vault Document Asset": "l", "Vault Audio Asset": "l",
+  "Vault Portrait Double Asset": "l", "Vault Portrait Asset": "l", "Vault Landscape Swapped Asset": "l", "Vault Landscape Asset": "l",
+  "Upload Frame": "l", "Rating": "m", "Hover Card": "m", "Drawer": "l", "Dialog": "l", "Output Card": "l", "State Panel": "l",
+  "Scrollbar · L2": "m", "Scrollbar · L1": "m", "Calendar · Navigation": "l", "Section Band · Secondary": "l",
+  "Navigation": "m", "Full-Width Section Band": "l", "Mini SubToolbox": "l", "Toolbar": "l", "Aspect Ratio Frame": "l",
+  "Vertical Scrollbar": "m", "Horizontal Scrollbar": "m", "Carousel": "l", "Breadcrumb": "m", "Calendar": "l",
+  "Before / After Compare": "l", "Video Selector": "l", "Media Review Panel": "l", "Media Inspector": "l", "Media Queue": "l",
+  "Media Transport Bar": "l", "Media Player": "l", "Media Status": "m", "Media Poster Frame": "l", "Media Card": "l",
+  "Production Planner Grid · Compact": "l", "Checklist Progress · Compact": "m", "Data Grid": "l", "Production Planner Grid": "l",
+  "Interactive Checklist Progress": "m", "Text + Badge Data Grid": "l", "Data Table": "l", "Stat Card": "m",
+  "Skeleton Compact": "m", "Toast": "m", "Skeleton": "m", "XY Joystick": "m", "CMYK Mixer": "m", "Command Palette": "l",
+}
+
+export const getFamilyCatalogSizes = (name: StudioHubMigratedFamily): ReadonlyArray<{ size: CatalogSize; level: StudioHubComponentLevel }> => {
+  const singleSize = STUDIO_HUB_SINGLE_SIZE_FAMILIES[name]
+  if (singleSize) return CATALOG_SIZES.filter(({ size }) => size === singleSize)
+  return CATALOG_SIZES
+}
+
+
 type StudioHubPrimitiveGroup = {
   label: string
   families: StudioHubMigratedFamily[]
@@ -1272,27 +1295,33 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
             contentClassName="p-3"
           >
             <div className="vt-catalog-group-families">
-              {group.families.map((name) => {
-                const familyIndex = STUDIO_HUB_MIGRATED_FAMILIES.indexOf(name) + 1
-                const geometry = getCatalogPreviewGeometry(name)
+              {CATALOG_SIZES.map(({ size }) => {
+                const familiesForSize = group.families.filter((name) =>
+                  getFamilyCatalogSizes(name).some((entry) => entry.size === size)
+                )
+                if (!familiesForSize.length) return null
                 return (
-                  <section
-                    className="vt-primitive-migration-family"
-                    key={name}
-                    data-vt-family={name}
-                    data-vt-migration-state="primitive"
-                    data-vt-preview-mode={geometry.mode}
-                    data-vt-preview-portrait={geometry.portraitStack ? "stack" : "grid"}
-                  >
-                    <h3 className="vt-catalog-family-title">
-                      <span>{String(familyIndex).padStart(2, "0")}</span> {name}
-                    </h3>
-                    <div className="vt-catalog-levels">
-                      {CATALOG_SIZES.map(({ size, level }) => (
-                        <DemoShell level={level} size={size} geometry={geometry} key={size}>
-                          <PrimitiveMigrationControl name={name} level={level} size={size} />
-                        </DemoShell>
-                      ))}
+                  <section className="vt-catalog-size-lane" key={size} data-vt-catalog-size-lane={size}>
+                    <h3 className="vt-catalog-size-lane-title">{size.toUpperCase()}</h3>
+                    <div className="vt-catalog-size-lane-grid">
+                      {familiesForSize.map((name) => {
+                        const familyIndex = STUDIO_HUB_MIGRATED_FAMILIES.indexOf(name) + 1
+                        const geometry = getCatalogPreviewGeometry(name)
+                        const familySize = getFamilyCatalogSizes(name).find((entry) => entry.size === size)
+                        if (!familySize) return null
+                        return (
+                          <article className="vt-primitive-migration-family" key={name} data-vt-family={name} data-vt-migration-state="primitive" data-vt-preview-mode={geometry.mode}>
+                            <h4 className="vt-catalog-family-title">
+                              <span>{String(familyIndex).padStart(2, "0")}</span> {name}
+                            </h4>
+                            <div className="vt-catalog-levels">
+                              <DemoShell level={familySize.level} size={familySize.size} geometry={geometry}>
+                                <PrimitiveMigrationControl name={name} level={familySize.level} size={familySize.size} />
+                              </DemoShell>
+                            </div>
+                          </article>
+                        )
+                      })}
                     </div>
                   </section>
                 )
