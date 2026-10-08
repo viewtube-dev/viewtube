@@ -9,15 +9,15 @@
 
 .vt-subtoolbox-split-button {
   width: 100%;
-  height: var(--vt-subtoolbox-control-standard, 48px);
+  height: var(--vt-control-height,var(--vt-subtoolbox-control-standard, 44px));
   min-width: 0;
   display: grid;
-  grid-template-columns: var(--vt-subtoolbox-control-standard, 48px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-control-height,var(--vt-subtoolbox-control-standard, 44px)) minmax(0, 1fr);
   align-items: stretch;
   overflow: hidden;
   padding: 0;
-  border: var(--vt-subtoolbox-inner-stroke, 3px) solid #000;
-  border-radius: var(--vt-subtoolbox-inner-radius, 8px);
+  border: var(--vt-control-stroke,var(--vt-subtoolbox-inner-stroke, 3px)) solid #000;
+  border-radius: var(--vt-control-radius,var(--vt-subtoolbox-inner-radius, 8px));
   background: var(--vt-split-label);
   color: #000;
   cursor: pointer;
@@ -38,7 +38,7 @@
   place-items: center;
   padding: 4px 10px;
   overflow: hidden;
-  font-size: 14px;
+  font-size: var(--vt-control-font-size, 16px);
   line-height: 1;
   font-weight: 1000;
   letter-spacing: -.04em;
@@ -58,14 +58,14 @@
 .vt-subtoolbox-split-dropdown { position: relative; min-width: 0; }
 .vt-subtoolbox-split-dropdown-trigger {
   width: 100%;
-  height: var(--vt-subtoolbox-control-standard, 48px);
+  height: var(--vt-control-height,var(--vt-subtoolbox-control-standard, 44px));
   display: grid;
-  grid-template-columns: var(--vt-subtoolbox-control-standard, 48px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-control-height,var(--vt-subtoolbox-control-standard, 44px)) minmax(0, 1fr);
   align-items: stretch;
   overflow: hidden;
   padding: 0;
-  border: var(--vt-subtoolbox-inner-stroke, 3px) solid #000;
-  border-radius: var(--vt-subtoolbox-inner-radius, 8px);
+  border: var(--vt-control-stroke,var(--vt-subtoolbox-inner-stroke, 3px)) solid #000;
+  border-radius: var(--vt-control-radius,var(--vt-subtoolbox-inner-radius, 8px));
   background: var(--vt-split-label);
   color: #000;
   cursor: pointer;
@@ -106,7 +106,7 @@
   place-items: center;
   padding: 4px 8px;
   overflow: hidden;
-  font-size: 14px;
+  font-size: var(--vt-control-font-size, 16px);
   font-weight: 1000;
   line-height: 1;
   letter-spacing: -.04em;
@@ -125,16 +125,16 @@
   max-height: min(420px, 55vh);
   overflow: auto;
   overscroll-behavior: contain;
-  border: var(--vt-subtoolbox-inner-stroke, 3px) solid #000;
-  border-radius: var(--vt-subtoolbox-inner-radius, 8px);
+  border: var(--vt-control-stroke,var(--vt-subtoolbox-inner-stroke, 3px)) solid #000;
+  border-radius: var(--vt-control-radius,var(--vt-subtoolbox-inner-radius, 8px));
   background: #f2f2ee;
   filter: drop-shadow(var(--vt-subtoolbox-inner-shadow, 4px) var(--vt-subtoolbox-inner-shadow, 4px) 0 var(--vt-split-shadow));
 }
 .vt-subtoolbox-split-dropdown-option {
   width: 100%;
-  min-height: var(--vt-subtoolbox-control-standard, 48px);
+  min-height: var(--vt-control-height,var(--vt-subtoolbox-control-standard, 44px));
   display: grid;
-  grid-template-columns: var(--vt-subtoolbox-control-standard, 48px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-control-height,var(--vt-subtoolbox-control-standard, 44px)) minmax(0, 1fr);
   align-items: stretch;
   padding: 0;
   border: 0;
@@ -157,8 +157,8 @@
   --vt-kpi-rail: var(--pair-b, #4ee4be);
   min-width: 0;
   overflow: hidden;
-  border: var(--vt-subtoolbox-inner-stroke, 3px) solid #000;
-  border-radius: var(--vt-subtoolbox-inner-radius, 8px);
+  border: var(--vt-control-stroke,var(--vt-subtoolbox-inner-stroke, 3px)) solid #000;
+  border-radius: var(--vt-control-radius,var(--vt-subtoolbox-inner-radius, 8px));
   background: #fff;
   box-shadow: var(--vt-subtoolbox-inner-shadow, 4px) var(--vt-subtoolbox-inner-shadow, 4px) 0 color-mix(in srgb, var(--vt-kpi-accent) 42%, transparent);
 }
