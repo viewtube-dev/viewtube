@@ -1279,7 +1279,7 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
           <p>Only production primitives are rendered here. Related component variants stay together in one SubToolbox group.</p>
         </div>
       </div>
-      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} PRIMITIVE FAMILIES · {STUDIO_HUB_PRIMITIVE_GROUPS.length} SUBTOOLBOX GROUPS · {STUDIO_HUB_MIGRATED_FAMILIES.length * CATALOG_SIZES.length} SIZE EXAMPLES</strong>
+      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} PRIMITIVE FAMILIES · {STUDIO_HUB_PRIMITIVE_GROUPS.length} SUBTOOLBOX GROUPS · {STUDIO_HUB_MIGRATED_FAMILIES.reduce((count, name) => count + getFamilyCatalogSizes(name).length, 0)} SIZE EXAMPLES</strong>
     </header>
 
     <div className="vt-complete-catalog-grid">
