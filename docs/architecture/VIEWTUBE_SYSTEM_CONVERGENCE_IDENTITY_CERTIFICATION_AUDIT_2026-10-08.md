@@ -149,6 +149,50 @@ The purpose is to prove identity survival, not to add product features.
 - [ ] Evidence IDs survive analytics → evaluation.
 - [ ] Learning promotion requires evidence/outcome provenance.
 
+## 7A. Publication-package certification extensions
+
+The convergence slice must certify package-level decision lineage in addition to individual metadata or asset lineage. The following capabilities are now explicit certification targets:
+
+| Contract | Certification requirement |
+|---|---|
+| Package identity | A complete publication package can be identified and tied to its Project/ContentBuild. |
+| Package alternatives | Generated, compared, selected, and published package options remain distinguishable. |
+| Selected package attribution | The exact package used for publication is attributable to the publication snapshot. |
+| Component lineage | Title, thumbnail, description, tags, and other package components retain their own asset/version lineage inside the package. |
+| Recommendation provenance | Consequential recommendations can point back to evidence, context, goals, and generation/analysis provenance. |
+| Recommendation effectiveness | Recommendation → decision → implementation → outcome can be evaluated without assuming causality. |
+| Optimization intent | Optimization intensity and creator goal are retained as decision context where used. |
+| Package readiness | Readiness/blockers are evaluated against the same package that is approved/published. |
+| Package-level outcome | Analytics/evaluation can assess the package as a whole while preserving component-level attribution. |
+| Metadata → Thumbnail handoff | A metadata-generated thumbnail brief/reference can transfer context without moving thumbnail ownership out of Thumbnail Studio. |
+
+### Required package proof
+
+The vertical proof should be able to demonstrate:
+
+```text
+Project
+  ↓
+ContentBuild
+  ↓
+Package alternatives
+  ↓
+Selected package
+  ↓
+Approved Publish Snapshot
+  ↓
+Published package
+  ↓
+Analytics checkpoints
+  ↓
+Package outcome / evaluation
+  ↓
+Component + package learning candidates
+```
+
+The system must not conclude that a component caused an outcome merely because it was part of the selected package. Package-level attribution and component-level attribution must remain separate evidence questions.
+
+
 ## 8. Architectural rule
 
 Do not respond to these gaps by creating another Project store, ContentBuild store, asset store, generic operation ledger, analytics truth store, generic outcome database, Brain, or handoff framework.
