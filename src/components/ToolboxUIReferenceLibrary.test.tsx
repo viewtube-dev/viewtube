@@ -69,7 +69,7 @@ describe("Toolbox UI Reference Library", () => {
     ]) expect(source).toContain(`"${family}"`)
     expect(source).not.toContain("HardcodedGenericControl")
     expect(source).not.toContain("hardcoded-fallback")
-    expect(source).toContain("STUDIO_HUB_MIGRATED_FAMILIES.map")
+    expect(source).toContain("STUDIO_HUB_PRIMITIVE_GROUPS.map")
     expect(source).toContain("<SubToolboxSplitButton")
     expect(source).toContain("<SubToolboxSplitDropdown")
     expect(source).toContain("<SubToolboxMenu")
