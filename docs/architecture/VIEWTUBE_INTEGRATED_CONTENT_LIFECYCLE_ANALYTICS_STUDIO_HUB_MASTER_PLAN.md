@@ -1031,3 +1031,10 @@ This document is an integration and implementation map, not permission to overri
 **Connect first. Measure second. Learn third. Expand tools fourth.**
 
 The objective is one ViewTube content lifecycle—not a collection of disconnected tools that happen to share a UI.
+
+
+## Branch consolidation — 2026-10-08
+
+A source-level review of every branch named for Studio Hub or Metadata Master found four relevant branches. Their useful Metadata Master planning and implementation are already present in current `main`; the branch-only Video Manager/Video Publisher revisions are older hybrid UI paths and are intentionally not reintroduced. The detailed disposition is recorded in `docs/architecture/VIEWTUBE_STUDIO_HUB_METADATA_BRANCH_CONSOLIDATION_2026-10-08.md`.
+
+This establishes a recovery rule for future work: **consolidate architectural knowledge and still-valid code, not branch history blindly.** Current canonical primitives, Project Manifestation, Metadata Master ownership, Publishing Package boundaries, ActionPacket/Handoff contracts, and analytics/Brain lineage remain authoritative.
