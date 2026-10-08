@@ -482,6 +482,91 @@ The system must never silently promote a single correlation, creator preference,
 
 ---
 
+## 14A. Publication-package intelligence and decision learning
+
+The branch review surfaced several useful capabilities that should be explicitly included in the integrated lifecycle model. These are extensions of existing systems, not new canonical stores or standalone metadata products.
+
+### Complete publication-package evaluation
+
+Evaluate the publication decision as a package when appropriate, while preserving component-level lineage:
+
+```text
+Title + Thumbnail + Description + Tags + Audience/Goal + Other Publish Settings
+                              ↓
+                    Selected Package Option
+                              ↓
+                         Publication
+                              ↓
+                         Analytics
+                              ↓
+                         Evaluation
+```
+
+The system must retain both the package-level decision/outcome and the individual title, thumbnail, metadata, and asset lineage inside that package.
+
+### Package alternatives
+
+Metadata and publishing workflows may produce multiple complete package options. The lifecycle must distinguish:
+
+```text
+Generated options → compared options → selected option → published option → measured outcome
+```
+
+The selected package, not merely the generated candidates, becomes the attributable publication decision.
+
+### Optimization intensity
+
+Creator-controlled optimization intensity should be supported where optimization is consequential:
+- Conservative — preserve creator intent unless evidence strongly supports a change.
+- Balanced — make evidence-supported improvements while preserving intent.
+- Aggressive — allow broader optimization when the creator explicitly requests it.
+
+This is a control on recommendation/action behavior, not a new metadata ownership system.
+
+### Package readiness / quality
+
+Publishing readiness should be able to evaluate the complete package for completeness, conflicts, evidence quality, metadata quality, asset availability, publication blockers, and optimization opportunities.
+
+This belongs with Publishing Package readiness rather than becoming a separate quality system.
+
+### Title + thumbnail relationship analysis
+
+When relevant, evaluate title and thumbnail together because they form a shared viewer-facing package. Individual asset lineage remains intact, but package analysis may identify interaction effects that isolated field analysis cannot represent.
+
+### Recommendation provenance and effectiveness
+
+Every consequential recommendation should retain its provenance where available: Brain/context inputs, analytics evidence, creator preferences/goals, historical performance, analysis findings, and generation/model/prompt context.
+
+Then track:
+
+```text
+Recommendation → Creator decision → Implementation → Publication → Outcome → Evaluation
+```
+
+This enables recommendation-effectiveness analysis without assuming that acceptance or temporal sequence proves causality.
+
+### Optimization conflicts and warnings
+
+The system should surface conflicts among creator intent, evidence, existing metadata, package constraints, other recommendations, and publication goals. A conflict should become an explicit decision point rather than being silently resolved by AI.
+
+### Goal-aware optimization
+
+Optimization may be conditioned on the creator's explicit publication goal, such as discovery/search, suggested traffic, audience conversion, education, or promotion. The goal becomes part of recommendation and evaluation context.
+
+### Metadata → Thumbnail handoff
+
+Metadata work may produce a thumbnail brief, concept, or reference based on the selected publication package. Thumbnail Studio remains the canonical owner of thumbnail creation and selection.
+
+### Package-level learning rule
+
+The strongest learning unit for consequential publishing decisions is often:
+
+**Decision → Complete package → Exposure → Outcome → Evaluation → Learning**
+
+while preserving component-level attribution for title, thumbnail, metadata, and other assets. This gives ViewTube enough information to learn from combinations without losing the ability to evaluate individual decisions.
+
+These additions must use the existing Project/ContentBuild, Asset Engine, Operation, Handoff, Publishing Package, Analytics, Outcome/Evaluation, Evidence, and Brain authorities.
+
 # 14. New integrated functions to plan
 
 These are capabilities to integrate into existing systems, not automatically separate products.
