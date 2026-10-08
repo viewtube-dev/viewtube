@@ -158,3 +158,41 @@
   .vt-primitive-migration-catalog .vt-catalog-group-families{gap:11px}
   .vt-primitive-migration-catalog .vt-catalog-family-title{font-size:13px}
 }
+
+/* Size lanes: every SubToolbox presents matching-size primitives together.
+   Families wrap naturally to the next row when the available width is used. */
+.vt-primitive-migration-catalog .vt-catalog-size-lane{
+  display:grid;
+  gap:7px;
+  padding-top:10px;
+  border-top:2px solid color-mix(in srgb,#000 16%,transparent);
+}
+.vt-primitive-migration-catalog .vt-catalog-size-lane:first-child{
+  padding-top:0;
+  border-top:0;
+}
+.vt-primitive-migration-catalog .vt-catalog-size-lane-title{
+  margin:0;
+  font:1000 11px/.9 var(--vt-studio-toolbox-font,Inter,ui-sans-serif,system-ui);
+  letter-spacing:-.04em;
+  text-transform:uppercase;
+  opacity:.58;
+}
+.vt-primitive-migration-catalog .vt-catalog-size-lane-grid{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  align-content:flex-start;
+  gap:12px 16px;
+  min-width:0;
+}
+.vt-primitive-migration-catalog .vt-catalog-size-lane-grid .vt-primitive-migration-family{
+  flex:0 1 auto;
+  min-width:0;
+}
+.vt-primitive-migration-catalog .vt-catalog-size-lane-grid .vt-catalog-family-title{
+  max-width:100%;
+}
+@media(max-width:520px){
+  .vt-primitive-migration-catalog .vt-catalog-size-lane-grid{gap:10px 10px}
+}
