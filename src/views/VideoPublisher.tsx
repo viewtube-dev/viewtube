@@ -16,7 +16,7 @@ import {
  recordToolReceipt,
 } from "../services/asset-engine/GenerationWorkflow"
 import { nexusSyncService } from "../services/nexusSyncService"
-import { listVideoPackages } from "../services/video-package/VideoPackageRepository"
+import { findVideoPackageByProject } from "../services/video-package/VideoPackageRepository"
 import { projectPublishingPackage } from "../services/asset-engine/PublishingPackageProjection"
 import {
   applyPublishCaptions,
@@ -242,7 +242,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   }
 
   const publishState = React.useMemo(() => {
-    const videoPackage = listVideoPackages()[0] || null
+    const videoPackage = brain.activeProjectId
+      ? findVideoPackageByProject(brain.activeProjectId, brain.projects?.find(project => project.id === brain.activeProjectId)?.contentBuildId || null)
+      : null
     if (!videoPackage) return { videoPackage: null, projection: null, transaction: null }
     try {
       const projection = projectPublishingPackage(videoPackage)
@@ -654,52 +656,6 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                   </SubToolboxButton>
                 }
               />
-
-
-          <SubToolboxActions columns={2} forceRow>
-            <SubToolboxButton
-              tone="success"
-              disabled={projectSaveBusy || !brain.activeProjectId}
-              onClick={() => {
-                const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
-                if (project) void persistPublisherProject(project, "current").catch(() => undefined)
-              }}
-            >
-              {projectSaveBusy ? "SAVING…" : "SAVE TO PROJECT"}
-            </SubToolboxButton>
-            <SubToolboxButton
-              tone="neutral"
-              disabled={projectSaveBusy || !brain.activeProjectId}
-              onClick={() => {
-                const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
-                if (project) void persistPublisherProject(project, "option").catch(() => undefined)
-              }}
-            >
-              SAVE AS OPTION
-            </SubToolboxButton>
-          </SubToolboxActions>
-          {projectSaveStatus ? <SubToolboxStatePanel state={projectSaveStatus.includes("saved") ? "ready" : "error"} message={projectSaveStatus} /> : null}
-        </>
-      ) : null}
-      {workspaceMode === "intelligence" ? (
-        <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
-      ) : (
-        <>
-      {publishState.projection ? (
-        <SubToolboxStack density="comfortable">
-          <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
-            <SubToolboxStack density="comfortable">
-              <SubToolboxGrid minItemWidth="compact">
-                <SubToolboxOutputCard title="PREFLIGHT" icon={<ShieldCheck size={18} />}>
-                  <div className="text-xl font-black">{publishState.projection.ready ? "READY" : publishState.projection.missing.length + " MISSING"}</div>
-                  <div>{publishState.projection.ready ? "Canonical package approved." : publishState.projection.missing.join(" · ")}</div>
-                </SubToolboxOutputCard>
-                <SubToolboxOutputCard title="TRANSACTION" icon={<RefreshCcw size={18} />}>
-                  <div className="text-xl font-black">{publishState.transaction?.status.toUpperCase() || "NOT STARTED"}</div>
-                  <div>{publishState.transaction ? Object.values(publishState.transaction.steps).filter(step => step?.status === "completed").length + "/10 STEPS COMPLETE" : "Start only after preflight is ready."}</div>
-                </SubToolboxOutputCard>
-              </SubToolboxGrid>
-
               <SubToolboxActions columns={2} forceRow>
                 <SubToolboxButton
                   tone="success"
@@ -723,6 +679,27 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 </SubToolboxButton>
               </SubToolboxActions>
               {projectSaveStatus ? <SubToolboxStatePanel state={projectSaveStatus.includes("saved") ? "ready" : "error"} message={projectSaveStatus} /> : null}
+
+        </>
+      ) : null}
+      {workspaceMode === "intelligence" ? (
+        <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
+      ) : (
+        <>
+      {publishState.projection ? (
+        <SubToolboxStack density="comfortable">
+          <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
+            <SubToolboxStack density="comfortable">
+              <SubToolboxGrid minItemWidth="compact">
+                <SubToolboxOutputCard title="PREFLIGHT" icon={<ShieldCheck size={18} />}>
+                  <div className="text-xl font-black">{publishState.projection.ready ? "READY" : publishState.projection.missing.length + " MISSING"}</div>
+                  <div>{publishState.projection.ready ? "Canonical package approved." : publishState.projection.missing.join(" · ")}</div>
+                </SubToolboxOutputCard>
+                <SubToolboxOutputCard title="TRANSACTION" icon={<RefreshCcw size={18} />}>
+                  <div className="text-xl font-black">{publishState.transaction?.status.toUpperCase() || "NOT STARTED"}</div>
+                  <div>{publishState.transaction ? Object.values(publishState.transaction.steps).filter(step => step?.status === "completed").length + "/10 STEPS COMPLETE" : "Start only after preflight is ready."}</div>
+                </SubToolboxOutputCard>
+              </SubToolboxGrid>
 
               {publishError ? <SubToolboxStatePanel state="error" message={publishError} /> : null}
               {uploadProgress > 0 && uploadProgress < 100 ? <SubToolboxStatePanel state="loading" message={"VIDEO UPLOAD " + Math.round(uploadProgress) + "%"} /> : null}
