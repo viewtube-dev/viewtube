@@ -31,7 +31,13 @@ export const VIEWTUBE_TYPOGRAPHY = {
   uppercaseControls: true,
 } as const
 
-/** Four canonical default component sizes used wherever a family supports a size ladder. */
+/**
+ * Four canonical default component sizes used wherever a family supports a size ladder.
+ *
+ * This is deliberately independent from COMPONENT_LEVEL_DNA below:
+ * M is 44px while structural L1 is 48px. A component size is a family-level
+ * presentation choice; L0/L1/L2 are the 65 structural geometry hierarchy.
+ */
 export const COMPONENT_SIZE_DNA = {
   xs: { height: 20, stroke: 2, radius: 4, shadowOffset: 2, fontSize: 10 },
   s: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
@@ -343,20 +349,6 @@ export const getControlSizeCssVars = (size: SubToolboxControlSize) => {
 }
 
 
-/**
- * Bridge structural levels to the legacy size-class names used by the primitive
- * stylesheet. Geometry authority lives in TOOLBOX_LEVEL_DNA; callers should not
- * infer pixel height from the legacy size label.
- *
- * Callers previously passed a level straight through as a size. It typechecked,
- * because the two types were aliased, and rendered `is-l0` — a class the
- * stylesheet does not define — so those controls shipped unstyled.
- */
-export const CONTROL_SIZE_FOR_LEVEL: Record<ToolboxControlLevel, SubToolboxControlSize> = {
-  l0: "standard",
-  l1: "compact",
-  l2: "micro",
-}
 export type SubToolboxLayoutDensity = "dense" | "standard" | "comfortable"
 /**
  * The state list is a runtime value, not just a union, so a gate can iterate it.
