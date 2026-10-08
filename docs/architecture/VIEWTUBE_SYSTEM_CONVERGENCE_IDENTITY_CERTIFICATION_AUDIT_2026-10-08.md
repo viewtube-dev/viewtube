@@ -193,6 +193,73 @@ Component + package learning candidates
 The system must not conclude that a component caused an outcome merely because it was part of the selected package. Package-level attribution and component-level attribution must remain separate evidence questions.
 
 
+## 7B. Current implementation evidence from the first vertical slice
+
+The first source inspection confirms that several capabilities previously identified as future requirements already exist in usable form and should be certified/migrated rather than rebuilt.
+
+### Project → ContentBuild → Video Package
+
+src/services/projects/ProjectContentIdentityService.ts establishes a single initialization transaction that:
+- resolves/synchronizes the Project to a ContentBuild;
+- initializes a Video Package against that ContentBuild when channel scope is available;
+- rejects a mismatched Video Package ContentBuild ID.
+
+src/services/projects/ProjectContentIdentityService.test.ts already proves creation, repeated resolution/idempotency, preservation of an explicit ContentBuild ID, and the no-channel case.
+
+### Asset / version / option lineage
+
+src/services/asset-engine/ContentBuildRepository.ts already contains canonical operations for:
+- attaching assets;
+- selecting/finalizing assets;
+- creating asset versions;
+- creating variant groups;
+- adding variants;
+- selecting/finalizing a variant;
+- recording ContentBuild events;
+- binding a YouTube video;
+- preserving generation/evidence/trace references on events.
+
+This materially reduces the amount of new infrastructure required for the first certification slice.
+
+### Package-level Metadata Master capabilities
+
+src/services/metadataMaster.ts already contains:
+- MetadataMasterPackage as a complete package object;
+- creator goal;
+- optimization intensity (light, balanced, aggressive);
+- package versions and ContentBuild/Project/video identity references;
+- locked/applied slots;
+- warnings;
+- deterministic package scoring;
+- provenance;
+- thumbnail prompt/text inside the package;
+- package alternatives through MetadataMasterSet;
+- a transport-safe handoff payload.
+
+This means the newly identified package-intelligence ideas are primarily a contract and lineage certification task. They should not become another Metadata Master store.
+
+### Analytics checkpoint seam
+
+src/services/longformOptimizationComparison.ts already records a ContentBuild analytics.checkpoint event containing the comparison result, evidence reference, video/content identity, time windows, and status. This proves that a post-publication analytics checkpoint can be attached to ContentBuild today.
+
+### Current limitation that must not be hidden
+
+src/services/asset-engine/ContentBuildRepository.ts currently persists the browser-facing ContentBuild/event repository through localStorage with an in-memory test fallback. This is useful as a compatibility seam and testable canonical shape, but it is not yet sufficient evidence of durable server authority for cross-device, recovery, or publication-boundary certification.
+
+Therefore the first slice should certify the contract and lineage locally first, then explicitly close the server-authority/reconciliation gap rather than treating browser persistence as production certification.
+
+## 7C. First vertical certification proof target
+
+The immediate proof target is now narrowed to the smallest existing path that exercises the canonical contracts:
+
+Project → ContentBuild → Asset/Option → Video Package → Published Video binding → Analytics checkpoint → Outcome/Evaluation
+
+The preferred tool path remains:
+
+Project → Script Architect → Thumbnail Studio → Video Publisher → Publishing Package → post-publish analytics
+
+Certification should record exact IDs and state transitions at each boundary. Only after this proof is green should we widen the same contract to the remaining Studio Hub tools.
+
 ## 8. Architectural rule
 
 Do not respond to these gaps by creating another Project store, ContentBuild store, asset store, generic operation ledger, analytics truth store, generic outcome database, Brain, or handoff framework.
