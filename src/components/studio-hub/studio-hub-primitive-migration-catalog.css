@@ -196,3 +196,36 @@
 @media(max-width:520px){
   .vt-primitive-migration-catalog .vt-catalog-size-lane-grid{gap:10px 10px}
 }
+
+/* Family index belongs to the SubToolbox, not to each individual component.
+   Components below remain visually standalone and unlabeled. */
+.vt-primitive-migration-catalog .vt-catalog-family-index{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:3px 10px;
+  margin:0 0 10px;
+  padding:6px 8px;
+  border:2px solid color-mix(in srgb,#000 18%,transparent);
+  background:color-mix(in srgb,#fff 72%,transparent);
+  font:1000 10px/.95 var(--vt-studio-toolbox-font,Inter,ui-sans-serif,system-ui);
+  letter-spacing:-.035em;
+  text-transform:uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-index span{
+  white-space:nowrap;
+}
+.vt-primitive-migration-catalog .vt-catalog-size-lane-title{
+  margin-bottom:1px;
+}
+.vt-primitive-migration-catalog .vt-catalog-component{
+  display:flex;
+  flex:0 0 auto;
+  align-items:flex-start;
+}
+.vt-primitive-migration-catalog .vt-catalog-component .vt-catalog-demo{
+  margin:0;
+}
+.vt-primitive-migration-catalog .vt-catalog-component .vt-catalog-demo::before{
+  display:none;
+}
