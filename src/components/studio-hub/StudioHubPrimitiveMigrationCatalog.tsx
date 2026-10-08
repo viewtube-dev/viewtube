@@ -339,7 +339,7 @@ const PRIMITIVE_GROUP_RULES: Array<{ label: string; families: ReadonlySet<string
     label: "Menus & Selection",
     families: new Set([
       "Split Menu", "Dropdown", "Top Title Dropdown", "Select Menu", "Context Menu",
-      "Command Palette", "Popover", "Disclosure", "Accordion", "Segmented Choice", "Combobox", "Multi-Select Chips",
+      "Command Palette", "Popover", "Disclosure", "Accordion", "Segmented Choice",
     ]),
   },
   {
