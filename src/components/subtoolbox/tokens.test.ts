@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { COMPONENT_LEVEL_DNA, getComponentLevelCssVars, VIEWTUBE_TYPOGRAPHY, COMPONENT_SIZE_DNA, getComponentSizeCssVars } from "./tokens"
+import { COMPONENT_LEVEL_DNA, getComponentLevelCssVars, VIEWTUBE_TYPOGRAPHY, COMPONENT_SIZE_DNA, getComponentSizeCssVars, SUBTOOLBOX_CONTROL_SIZE_DNA, getControlSizeCssVars } from "./tokens"
 
 describe("canonical component-level DNA", () => {
   it("matches the locked 65 geometry for L0/L1/L2", () => {
@@ -55,5 +55,23 @@ describe("canonical component-level DNA", () => {
       "--vt-component-height": "44px",
       "--vt-component-font-size": "16px",
     })
+  })
+
+  it("locks primitive control-size DNA separately from structural levels", () => {
+    expect(SUBTOOLBOX_CONTROL_SIZE_DNA).toEqual({
+      micro: { height: 20, stroke: 2, radius: 4, shadowOffset: 2, fontSize: 10 },
+      compact: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
+      standard: { height: 44, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 16 },
+      action: { height: 56, stroke: 3.5, radius: 9.333333, shadowOffset: 5.833333, fontSize: 24 },
+    })
+    expect(getControlSizeCssVars("micro")).toMatchObject({
+      "--vt-control-height": "20px",
+      "--vt-control-font-size": "10px",
+    })
+    expect(getControlSizeCssVars("standard")).toMatchObject({
+      "--vt-control-height": "44px",
+      "--vt-control-font-size": "16px",
+    })
+    expect(COMPONENT_LEVEL_DNA.l1.height).toBe(48)
   })
 })
