@@ -115,3 +115,46 @@
     gap:8px;
   }
 }
+
+
+/* Grouped primitive catalog presentation. Related variants share one SubToolbox. */
+.vt-primitive-migration-catalog .vt-primitive-migration-group{min-width:0}
+.vt-primitive-migration-catalog .vt-catalog-group-families{
+  display:grid;
+  gap:14px;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-title{
+  margin:0;
+  display:flex;
+  align-items:baseline;
+  gap:7px;
+  font:1000 15px/.95 var(--vt-studio-toolbox-font,Inter,ui-sans-serif,system-ui);
+  letter-spacing:-.055em;
+  text-transform:uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-title span{
+  opacity:.48;
+  min-width:2.1ch;
+}
+.vt-primitive-migration-catalog .vt-catalog-icon-button svg{
+  width:68%!important;
+  height:68%!important;
+}
+.vt-primitive-migration-catalog .vt-catalog-split-primitive{
+  display:grid!important;
+  place-items:stretch!important;
+  align-items:stretch!important;
+}
+.vt-primitive-migration-catalog .vt-catalog-split-primitive > span{
+  display:grid!important;
+  place-items:center!important;
+  align-items:center!important;
+}
+.vt-primitive-migration-catalog .vt-catalog-split-primitive > span svg{
+  width:68%!important;
+  height:68%!important;
+}
+@media(max-width:520px){
+  .vt-primitive-migration-catalog .vt-catalog-group-families{gap:11px}
+  .vt-primitive-migration-catalog .vt-catalog-family-title{font-size:13px}
+}
