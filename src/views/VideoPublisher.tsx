@@ -37,6 +37,7 @@ import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import { savePublisherMetadataToProject } from "../services/publisherMetadataProjectPersistence"
 import MetadataMaster from "./MetadataMaster"
 import ProjectManifestation from "../components/projects/ProjectManifestation"
 import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../components/Toolbox"
@@ -155,6 +156,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [publishCommunity, setPublishCommunity] = useState(false)
   const [publishAiUse, setPublishAiUse] = useState(true)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const [projectSaveStatus, setProjectSaveStatus] = useState<string | null>(null)
+  const [projectSaveBusy, setProjectSaveBusy] = useState(false)
 
   const handleProjectManifestLoad = (project: typeof brain.projects[number]) => {
     setActiveProject(project.id)
@@ -169,19 +172,73 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     setPublishRefresh(value => value + 1)
   }
 
+  const persistPublisherProject = async (
+    project: typeof brain.projects[number],
+    mode: "current" | "option" = "current",
+  ) => {
+    const channelId = (authState as any)?.channelId || null
+    if (!channelId) {
+      setProjectSaveStatus("Connect YouTube before saving a publishing package.")
+      return
+    }
+    setProjectSaveBusy(true)
+    setProjectSaveStatus(null)
+    try {
+      const result = savePublisherMetadataToProject(project, channelId, {
+        title: publishTitle,
+        description: publishDescription,
+        tags: publishTags,
+        category: publishCategory,
+        visibility: privacyStatus,
+        audience: publishAudience,
+        timestamps: publishTimestamps,
+        location: publishLocation,
+        community: publishCommunity,
+        aiUse: publishAiUse,
+        playlistIds,
+        finalVideoAssetId: publishState.projection?.finalRenderAssetId || null,
+      }, { mode, sourceToolId: "video-publisher" })
+      updateProject(project.id, {
+        videoTitle: publishTitle,
+        description: publishDescription,
+        tags: publishTags,
+        script,
+        thumbnailUrl: publishState.videoPackage?.packaging.thumbnailVariants.find(
+          item => item.id === publishState.videoPackage?.packaging.selectedThumbnailId,
+        )?.metadata?.previewUrl as string | undefined || project.thumbnailUrl,
+        plan: {
+          concept: project.plan?.concept || concept,
+          niche: project.plan?.niche || niche,
+          ...(project.plan || {}),
+          targetAudience: audience,
+          publishingMetadata: {
+            category: publishCategory,
+            visibility: privacyStatus,
+            audience: publishAudience,
+            timestamps: publishTimestamps,
+            location: publishLocation,
+            community: publishCommunity,
+            aiUse: publishAiUse,
+            playlistIds,
+          },
+        },
+      })
+      setActiveProject(project.id)
+      setProjectSaveStatus(mode === "option"
+        ? "Metadata option saved to this Project."
+        : "Metadata saved to this Project.")
+      setPublishRefresh(value => value + 1)
+      return result
+    } catch (error) {
+      setProjectSaveStatus(error instanceof Error ? error.message : String(error))
+      throw error
+    } finally {
+      setProjectSaveBusy(false)
+    }
+  }
+
   const saveProjectManifestState = (project: typeof brain.projects[number]) => {
-    updateProject(project.id, {
-      videoTitle: publishTitle,
-      description: publishDescription,
-      tags: publishTags,
-      script,
-      plan: {
-        concept: project.plan?.concept || concept,
-        niche: project.plan?.niche || niche,
-        ...(project.plan || {}),
-        targetAudience: audience,
-      },
-    })
+    void persistPublisherProject(project, "current").catch(() => undefined)
   }
 
   const publishState = React.useMemo(() => {
@@ -614,6 +671,30 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                   </SubToolboxButton>
                 }
               />
+
+              <SubToolboxActions columns={2} forceRow>
+                <SubToolboxButton
+                  tone="success"
+                  disabled={projectSaveBusy || !brain.activeProjectId}
+                  onClick={() => {
+                    const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
+                    if (project) void persistPublisherProject(project, "current").catch(() => undefined)
+                  }}
+                >
+                  {projectSaveBusy ? "SAVING…" : "SAVE TO PROJECT"}
+                </SubToolboxButton>
+                <SubToolboxButton
+                  tone="neutral"
+                  disabled={projectSaveBusy || !brain.activeProjectId}
+                  onClick={() => {
+                    const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
+                    if (project) void persistPublisherProject(project, "option").catch(() => undefined)
+                  }}
+                >
+                  SAVE AS OPTION
+                </SubToolboxButton>
+              </SubToolboxActions>
+              {projectSaveStatus ? <SubToolboxStatePanel state={projectSaveStatus.includes("saved") ? "ready" : "error"} message={projectSaveStatus} /> : null}
 
               {publishError ? <SubToolboxStatePanel state="error" message={publishError} /> : null}
               {uploadProgress > 0 && uploadProgress < 100 ? <SubToolboxStatePanel state="loading" message={"VIDEO UPLOAD " + Math.round(uploadProgress) + "%"} /> : null}
