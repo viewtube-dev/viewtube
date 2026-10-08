@@ -1,7 +1,7 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox } from "../Toolbox"
-import { COMPONENT_SIZE_DNA, getComponentSizeCssVars, getControlSizeCssVars } from "../subtoolbox/tokens"
+import { COMPONENT_SIZE_DNA, getComponentLevelCssVars, getComponentSizeCssVars, getControlSizeCssVars } from "../subtoolbox/tokens"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -113,6 +113,7 @@ type StudioHubComponentLevel = ToolboxControlLevel
 type CatalogSize = keyof typeof COMPONENT_SIZE_DNA
 
 export const CATALOG_SIZES: ReadonlyArray<{ size: CatalogSize; compatibilityLevel: StudioHubComponentLevel }> = [
+  { size: "l1", compatibilityLevel: "l1" },
   { size: "xs", compatibilityLevel: "l2" },
   { size: "s", compatibilityLevel: "l2" },
   { size: "m", compatibilityLevel: "l1" },
@@ -303,6 +304,21 @@ type StudioHubMigratedFamily = (typeof STUDIO_HUB_MIGRATED_FAMILIES)[number]
 
 type CatalogSingleSize = "m" | "l"
 
+export const STUDIO_HUB_L1_ONLY_FAMILIES: ReadonlySet<string> = new Set([
+  "Dropdown",
+  "Top Title Dropdown",
+  "Select Menu",
+  "Context Menu",
+  "Stepper",
+  "Slider",
+  "Range Slider",
+  "Toggle",
+  "Settings Switch",
+  "Checkbox",
+  "Radio",
+  "Segmented Choice",
+])
+
 export const STUDIO_HUB_SINGLE_SIZE_FAMILIES: Readonly<Record<string, CatalogSingleSize>> = {
   "Upload Frame · Variant": "l", "Tree View": "l", "Vault Document Asset": "l", "Vault Audio Asset": "l",
   "Vault Portrait Double Asset": "l", "Vault Portrait Asset": "l", "Vault Landscape Swapped Asset": "l", "Vault Landscape Asset": "l",
@@ -318,6 +334,7 @@ export const STUDIO_HUB_SINGLE_SIZE_FAMILIES: Readonly<Record<string, CatalogSin
 }
 
 export const getFamilyCatalogSizes = (name: StudioHubMigratedFamily): ReadonlyArray<{ size: CatalogSize; compatibilityLevel: StudioHubComponentLevel }> => {
+  if (STUDIO_HUB_L1_ONLY_FAMILIES.has(name)) return [{ size: "l1", compatibilityLevel: "l1" }]
   const singleSize = STUDIO_HUB_SINGLE_SIZE_FAMILIES[name]
   if (singleSize) return CATALOG_SIZES.filter(({ size }) => size === singleSize)
   return CATALOG_SIZES
@@ -582,10 +599,15 @@ const PrimitiveMigrationControl: React.FC<{
   level: StudioHubComponentLevel
   size: CatalogSize
 }> = ({ name, level, size }) => {
-  const sizeStyle = {
-    ...getComponentSizeCssVars(size),
-    ...getControlSizeCssVars(size === "xs" ? "micro" : size === "s" ? "compact" : size === "m" ? "standard" : "action"),
-  } as React.CSSProperties
+  const sizeStyle = size === "l1"
+    ? {
+        ...getControlSizeCssVars("standard"),
+        ...getComponentLevelCssVars("l1"),
+      }
+    : {
+        ...getComponentSizeCssVars(size),
+        ...getControlSizeCssVars(size === "xs" ? "micro" : size === "s" ? "compact" : size === "m" ? "standard" : "action"),
+      } as React.CSSProperties
   const [stepperValue, setStepperValue] = React.useState(5)
   const [toggleOn, setToggleOn] = React.useState(true)
   const [settingsOn, setSettingsOn] = React.useState(true)
