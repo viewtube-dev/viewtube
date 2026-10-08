@@ -1,7 +1,7 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox } from "../Toolbox"
-import { COMPONENT_SIZE_DNA, getComponentSizeCssVars } from "../subtoolbox/tokens"
+import { COMPONENT_SIZE_DNA, getComponentSizeCssVars, getControlSizeCssVars } from "../subtoolbox/tokens"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -112,11 +112,11 @@ import { SubToolboxCmykMixer, SubToolboxXYJoystick, SubToolboxAspectRatioSelecto
 type StudioHubComponentLevel = ToolboxControlLevel
 type CatalogSize = keyof typeof COMPONENT_SIZE_DNA
 
-export const CATALOG_SIZES: ReadonlyArray<{ size: CatalogSize; level: StudioHubComponentLevel }> = [
-  { size: "xs", level: "l2" },
-  { size: "s", level: "l2" },
-  { size: "m", level: "l1" },
-  { size: "l", level: "l0" },
+export const CATALOG_SIZES: ReadonlyArray<{ size: CatalogSize; compatibilityLevel: StudioHubComponentLevel }> = [
+  { size: "xs", compatibilityLevel: "l2" },
+  { size: "s", compatibilityLevel: "l2" },
+  { size: "m", compatibilityLevel: "l1" },
+  { size: "l", compatibilityLevel: "l0" },
 ]
 
 export const STUDIO_HUB_MIGRATED_FAMILIES = [
@@ -317,7 +317,7 @@ export const STUDIO_HUB_SINGLE_SIZE_FAMILIES: Readonly<Record<string, CatalogSin
   "Skeleton Compact": "m", "Toast": "m", "Skeleton": "m", "XY Joystick": "m", "CMYK Mixer": "m", "Command Palette": "l",
 }
 
-export const getFamilyCatalogSizes = (name: StudioHubMigratedFamily): ReadonlyArray<{ size: CatalogSize; level: StudioHubComponentLevel }> => {
+export const getFamilyCatalogSizes = (name: StudioHubMigratedFamily): ReadonlyArray<{ size: CatalogSize; compatibilityLevel: StudioHubComponentLevel }> => {
   const singleSize = STUDIO_HUB_SINGLE_SIZE_FAMILIES[name]
   if (singleSize) return CATALOG_SIZES.filter(({ size }) => size === singleSize)
   return CATALOG_SIZES
@@ -582,7 +582,10 @@ const PrimitiveMigrationControl: React.FC<{
   level: StudioHubComponentLevel
   size: CatalogSize
 }> = ({ name, level, size }) => {
-  const sizeStyle = getComponentSizeCssVars(size) as React.CSSProperties
+  const sizeStyle = {
+    ...getComponentSizeCssVars(size),
+    ...getControlSizeCssVars(size === "xs" ? "micro" : size === "s" ? "compact" : size === "m" ? "standard" : "action"),
+  } as React.CSSProperties
   const [stepperValue, setStepperValue] = React.useState(5)
   const [toggleOn, setToggleOn] = React.useState(true)
   const [settingsOn, setSettingsOn] = React.useState(true)
@@ -1316,8 +1319,8 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
                         if (!familySize) return null
                         return (
                           <div className="vt-catalog-component" key={name} data-vt-family={name}>
-                            <DemoShell level={familySize.level} size={familySize.size} geometry={geometry}>
-                              <PrimitiveMigrationControl name={name} level={familySize.level} size={familySize.size} />
+                            <DemoShell level={familySize.compatibilityLevel} size={familySize.size} geometry={geometry}>
+                              <PrimitiveMigrationControl name={name} level={familySize.compatibilityLevel} size={familySize.size} />
                             </DemoShell>
                           </div>
                         )
