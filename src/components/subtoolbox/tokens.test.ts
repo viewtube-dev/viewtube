@@ -73,5 +73,7 @@ describe("canonical component-level DNA", () => {
       "--vt-control-font-size": "16px",
     })
     expect(COMPONENT_LEVEL_DNA.l1.height).toBe(48)
+    expect(COMPONENT_SIZE_DNA.m.height).toBe(44)
+    expect(COMPONENT_SIZE_DNA.m.height).not.toBe(COMPONENT_LEVEL_DNA.l1.height)
   })
 })
