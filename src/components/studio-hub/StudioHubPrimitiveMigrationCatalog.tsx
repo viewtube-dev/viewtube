@@ -311,8 +311,8 @@ const PRIMITIVE_GROUP_RULES: Array<{ label: string; families: ReadonlySet<string
     label: "Buttons",
     families: new Set([
       "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
-      "Disabled Button", "Square Icon Button", "Split Left Button", "Head Tail Action",
-      "Disabled Split Button", "Link Button", "Button Group", "Button Group · Select All",
+      "Disabled Button", "Disabled Button · Colored", "Square Icon Button", "Split Left Button", "Head Tail Action",
+      "Disabled Split Button", "Disabled Split Button · Colored", "Link Button", "Button Group", "Button Group · Select All",
     ]),
   },
   {
@@ -339,7 +339,7 @@ const PRIMITIVE_GROUP_RULES: Array<{ label: string; families: ReadonlySet<string
     label: "Menus & Selection",
     families: new Set([
       "Split Menu", "Dropdown", "Top Title Dropdown", "Select Menu", "Context Menu",
-      "Command Palette", "Popover", "Disclosure", "Accordion", "Combobox", "Multi-Select Chips",
+      "Command Palette", "Popover", "Disclosure", "Accordion", "Segmented Choice", "Combobox", "Multi-Select Chips",
     ]),
   },
   {
@@ -347,6 +347,7 @@ const PRIMITIVE_GROUP_RULES: Array<{ label: string; families: ReadonlySet<string
     families: new Set([
       "Text Input", "Textarea", "Labeled Input", "Labeled Textarea", "Number Field",
       "Input Action", "Split Search", "Output Input", "Password Input", "OTP Input",
+      "Field Label", "Color Picker",
     ]),
   },
   {
@@ -387,7 +388,7 @@ const PRIMITIVE_GROUP_RULES: Array<{ label: string; families: ReadonlySet<string
   {
     label: "Navigation & Layout",
     families: new Set([
-      "Navigation", "Top Navigation", "Tabs", "Breadcrumb", "Pagination", "Carousel",
+      "Navigation", "Top Navigation", "Tabs", "Breadcrumb", "Pagination", "Carousel", "Icon Rail Control",
       "Carousel · L2", "Horizontal Scrollbar", "Vertical Scrollbar", "Scrollbar · L1",
       "Scrollbar · L2", "Toolbar", "Full-Width Section Band", "Section Band · Primary",
       "Section Band · Secondary", "Mini SubToolbox", "Surface", "Divider", "Aspect Ratio Frame",
