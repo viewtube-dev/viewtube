@@ -44,6 +44,7 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
                 badge={option.selected ? "SELECTED" : "OPTION " + (index + 1)}
               >
                 <SubToolboxStack density="dense">
+                  {option.payload.thumbnailPreviewUrl ? <img src={option.payload.thumbnailPreviewUrl} alt={`Thumbnail for ${title}`} className="max-h-36 w-full rounded border-2 border-black object-contain" /> : null}
                   <div className="font-black text-base">{title}</div>
                   <div className="text-sm font-semibold opacity-70 line-clamp-2">{description}</div>
                   <div className="text-xs font-bold opacity-60 line-clamp-2">{tags}</div>
