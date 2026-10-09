@@ -133,7 +133,7 @@ export const selectPublisherMetadataPackageOption = (
         label: asset.name,
         sourceToolId: toolId,
         vaultAssetId: asset.id,
-        createdAt: asset.createdAt || new Date().toISOString(),
+        createdAt: typeof asset.createdAt === "number" ? new Date(asset.createdAt).toISOString() : asset.createdAt || new Date().toISOString(),
         metadata: {
           url: asset.url || null,
           previewUrl: asset.previewUrl || asset.url || null,
