@@ -645,7 +645,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 categoryOptions={YOUTUBE_CATEGORY_OPTIONS.map(option => ({ value: option.value, label: option.label }))}
                 playlists={playlistIds}
                 playlistOptions={channelPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title, disabled: false }))}
-                selectedPlaylistIds={playlistIds.split(/[\\n,]/).map(value => value.trim()).filter(id => channelPlaylists.some(playlist => playlist.id === id))}
+                playlistLoading={channelPlaylistsLoading}
+                selectedPlaylistIds={playlistIds.split(/[\n,]/).map(value => value.trim()).filter(id => channelPlaylists.some(playlist => playlist.id === id))}
                 onPlaylistToggle={(playlistId) => setPlaylistIds(current => {
                   const ids = current.split(/[\\n,]/).map(value => value.trim()).filter(Boolean)
                   return (ids.includes(playlistId) ? ids.filter(id => id !== playlistId) : [...ids, playlistId]).join(",")
