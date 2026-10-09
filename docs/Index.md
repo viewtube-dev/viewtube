@@ -72,3 +72,9 @@ Do not create a new document for an existing subject. Update or consolidate its 
 
 - [Publisher metadata persistence plan](plans/VIEWTUBE_PUBLISHER_METADATA_PROJECT_PACKAGE_PERSISTENCE_PLAN_2026-10-08.md) — current implementation state and remaining verification gates.
 - [Publisher metadata and Render conversation record](recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md) — decisions, implementation summary, deployment evidence, known blockers, and next steps.
+
+
+## Current implementation / conversation records
+
+- [Publisher metadata persistence plan](plans/VIEWTUBE_PUBLISHER_METADATA_PROJECT_PACKAGE_PERSISTENCE_PLAN_2026-10-08.md) — current implementation state and remaining verification gates.
+- [Publisher metadata and Render conversation record](recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md) — decisions, implementation summary, deployment evidence, known blockers, and next steps.
