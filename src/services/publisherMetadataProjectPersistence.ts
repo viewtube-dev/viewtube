@@ -220,7 +220,7 @@ export const savePublisherMetadataToProject = (
     contentBuildRevision: current.revision,
     identity: {
       ...videoPackage.identity,
-      workingTitle: state.title || videoPackage.identity.workingTitle,
+      workingTitle: mode === "current" ? state.title || videoPackage.identity.workingTitle : videoPackage.identity.workingTitle,
       updatedAt: now,
     },
     packaging: {
