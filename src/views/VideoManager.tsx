@@ -25,7 +25,7 @@ import {
  hasGeminiKey,
 } from "../services/gemini"
 import type { TagSuggestion } from "../services/gemini"
-import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import { CanonicalMetadataSections, YOUTUBE_CATEGORY_OPTIONS } from "../components/metadata/CanonicalMetadataSections"
 import MetadataMaster from "./MetadataMaster"
 import { validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
 import ProjectManifestation from "../components/projects/ProjectManifestation"
@@ -426,7 +426,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      tags: editTags.split(",").map((t) => t.trim()).filter(Boolean),
      categoryId: editCategoryId,
     },
-    status: { privacyStatus: editPrivacy },
+    status: { privacyStatus: editPrivacy, selfDeclaredMadeForKids: editAudience },
+    ...(editLocation.trim() ? { recordingDetails: { locationDescription: editLocation.trim() } } : {}),
    })
    if (thumbnailFile) {
     await setSimpleVideoThumbnail(selectedVideoId, thumbnailFile)
@@ -443,6 +444,20 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     description: editDescription,
     tags: editTags,
     thumbnailUrl: thumbnailPreview || undefined,
+    plan: {
+     ...(brain.projects.find(project => project.id === brain.activeProjectId)?.plan || {}),
+     publishingMetadata: {
+      ...(brain.projects.find(project => project.id === brain.activeProjectId)?.plan?.publishingMetadata || {}),
+      category: editCategoryId,
+      visibility: editPrivacy,
+      audience: editAudience,
+      timestamps: editTimestamps,
+      location: editLocation,
+      community: editCommunity,
+      aiUse: editAiUse,
+      playlistIds: selectedPlaylistIds.join(","),
+     },
+    },
    })
    setSaveSuccess(true)
    void handleSelectVideo(selectedVideoId, userPlaylists)((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
@@ -671,6 +686,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        description={editDescription}
        tags={editTags}
        category={editCategoryId}
+       categoryOptions={YOUTUBE_CATEGORY_OPTIONS.map(option => ({ value: option.value, label: option.label }))}
        playlists={selectedPlaylistIds.join(",")}
        playlistOptions={userPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title }))}
        selectedPlaylistIds={selectedPlaylistIds}
