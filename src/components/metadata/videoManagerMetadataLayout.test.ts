@@ -5,9 +5,21 @@ import path from "node:path"
 const read = (file: string) => fs.readFileSync(path.resolve(process.cwd(), file), "utf8")
 
 describe("Video Manager metadata layout contract", () => {
-  it("renders canonical metadata before Publishing Controls", () => {
+  it("uses the canonical metadata component as the single Manager controls surface", () => {
     const manager = read("src/views/VideoManager.tsx")
-    expect(manager.indexOf("<CanonicalMetadataSections")).toBeLessThan(manager.indexOf("<PublishingControls"))
+    expect(manager).toContain("<CanonicalMetadataSections")
+    expect(manager).not.toContain("<PublishingControls")
+    expect(manager).toContain("playlistOptions={userPlaylists.map")
+    expect(manager).toContain("selectedPlaylistIds={selectedPlaylistIds}")
+  })
+
+  it("maps channel playlists, category dropdowns, and audience semantics in the shared metadata component", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    expect(metadata).toContain("CHANNEL PLAYLISTS")
+    expect(metadata).toContain("YOUTUBE_CATEGORY_OPTIONS")
+    expect(metadata).toContain("IS IT MADE FOR KIDS?")
+    expect(metadata).toContain("AI USE")
+    expect(metadata).toContain("locationSuggestions.map")
   })
 
   it("uses a forced three-button row for metadata actions", () => {
