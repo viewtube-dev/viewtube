@@ -2,7 +2,7 @@
 
 Date: 2026-10-08
 Branch: audit/system-convergence-identity-certification
-Status: Planned — implementation intentionally not started
+Status: IMPLEMENTATION IN PROGRESS — saved-set persistence authored; build/test and browser workflow verification pending
 
 ## 1. Decision
 
@@ -488,3 +488,12 @@ Next: obtain a build/test run outside the rate-limited Vercel deployment path, f
 The existing Creator Vault import path is reusable for metadata extraction, hashing, duplicate checks, preview generation, tags, and project association. However, `createImportedVaultAsset` currently records a Vault asset envelope with optional `url`/`previewUrl` and metadata; the import staging model itself holds the browser `File` only during the active workflow. This does **not** prove that original video/image bytes are durably uploaded to a server-backed store.
 
 Therefore the Publisher should not claim a selected local thumbnail/video is durably attached just because a Vault record or preview exists. The next implementation step must identify or add the canonical byte-storage transport behind Vault (for example, the existing connected storage integration if supported), then return a stable stored URL/asset reference before committing it to the Project/ContentBuild/Video Package. Do not serialize raw file bytes into localStorage as a shortcut.
+
+
+## Current status correction — 2026-10-09
+
+The original header above has been superseded by implementation. Publisher persistence and saved metadata-set files are present on `audit/system-convergence-identity-certification`. Current scope includes current-set save, alternative-set save, saved-set listing/comparison/selection, restoring fields into Publisher, and updating the existing ContentBuild/Video Package. This work must not be described as fully verified until the focused tests and build/typecheck have actually run and the Publisher interaction has been checked.
+
+Render service `viewtube-system-convergence` (`srv-db3tf87lot8c73bvpalg`) currently reports a live deploy for branch-head commit `a93728f2b138a7860357ba74ffea43d57c283e35`. Live deployment status is not a substitute for test output or saved-set interaction verification.
+
+The current conversation synthesis and continuation checklist is recorded in [Conversation-Publisher-Metadata-Render-2026-10-09.md](../recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md).
