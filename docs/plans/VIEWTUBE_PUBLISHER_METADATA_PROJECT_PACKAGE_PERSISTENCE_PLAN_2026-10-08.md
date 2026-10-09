@@ -442,3 +442,24 @@ The creator should never have to understand that a metadata edit passed through 
 - What actually got published?
 - How did it perform?
 - What should I do differently next time?
+
+## Implementation checkpoint — saved metadata sets
+
+Completed on the convergence branch after the original persistence slice:
+
+- Added a canonical saved-set reader over the existing ContentBuild variant group and Vault assets.
+- Added selection behavior that updates the selected metadata-package variant, restores the set's title/description/tags/thumbnail/final-render selections, and updates the existing Project Video Package's selected title/description/tags/thumbnail artifacts where those assets exist.
+- Wired **Saved Metadata Sets** into Video Publisher. Selecting a set restores the metadata fields into the active Publisher form and updates the active Project's publishing metadata.
+- Replaced the URL-query placeholder for **Compare** with an in-tool side-by-side comparison for title, description, tags, category, visibility, and playlists.
+- The selection and save paths reuse the same ContentBuild and Project Video Package; they do not intentionally create a second project/package.
+
+### Verification status
+
+The changes are committed to `audit/system-convergence-identity-certification`. They have **not yet been confirmed by a successful TypeScript build, automated test run, or live Publisher interaction test**. Those remain the next verification gate. If type/build verification reveals repository-shape mismatches, fix them before treating this slice as complete.
+
+### Remaining in this slice
+
+- Verify that selected-set thumbnail preview is reflected in the Publisher UI (the set restores canonical thumbnail selection, but the current local file picker is separate).
+- Test repeated save/select cycles for duplicate package artifacts and ensure selection labels remain clear.
+- Integrate thumbnail/video byte ingestion with the existing Vault/Asset Engine upload boundary; do not persist raw browser `File` objects in localStorage or create a parallel asset store.
+
