@@ -38,6 +38,7 @@ import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import { savePublisherMetadataToProject } from "../services/publisherMetadataProjectPersistence"
+import PublisherMetadataPackageOptions from "../components/PublisherMetadataPackageOptions"
 import MetadataMaster from "./MetadataMaster"
 import ProjectManifestation from "../components/projects/ProjectManifestation"
 import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../components/Toolbox"
@@ -679,6 +680,47 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 </SubToolboxButton>
               </SubToolboxActions>
               {projectSaveStatus ? <SubToolboxStatePanel state={projectSaveStatus.includes("saved") ? "ready" : "error"} message={projectSaveStatus} /> : null}
+
+              <PublisherMetadataPackageOptions
+                contentBuildId={(brain.projects || []).find(item => item.id === brain.activeProjectId)?.contentBuildId || null}
+                onSelected={(option) => {
+                  const payload = option.payload
+                  setPublishTitle(payload.title || "")
+                  setPublishDescription(payload.description || "")
+                  setPublishTags(payload.tags || "")
+                  setPublishCategory(payload.category || "22")
+                  setPrivacyStatus((payload.visibility === "public" || payload.visibility === "unlisted" ? payload.visibility : "private"))
+                  setPublishAudience(Boolean(payload.audience))
+                  setPublishTimestamps(payload.timestamps || "")
+                  setPublishLocation(payload.location || "")
+                  setPublishCommunity(Boolean(payload.community))
+                  setPublishAiUse(payload.aiUse !== false)
+                  setPlaylistIds(payload.playlistIds || "")
+                  const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
+                  if (project) {
+                    updateProject(project.id, {
+                      videoTitle: payload.title || "",
+                      description: payload.description || "",
+                      tags: payload.tags || "",
+                      plan: {
+                        ...(project.plan || {}),
+                        publishingMetadata: {
+                          category: payload.category || "22",
+                          visibility: payload.visibility || "private",
+                          audience: Boolean(payload.audience),
+                          timestamps: payload.timestamps || "",
+                          location: payload.location || "",
+                          community: Boolean(payload.community),
+                          aiUse: payload.aiUse !== false,
+                          playlistIds: payload.playlistIds || "",
+                        },
+                      },
+                    })
+                  }
+                  setProjectSaveStatus("Metadata set selected. Review the fields before publishing.")
+                  setPublishRefresh(value => value + 1)
+                }}
+              />
 
         </>
       ) : null}
