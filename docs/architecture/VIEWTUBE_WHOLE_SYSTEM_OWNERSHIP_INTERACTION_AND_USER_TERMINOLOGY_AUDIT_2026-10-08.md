@@ -936,3 +936,72 @@ Project identity → ContentBuild → assets → versions → tools → handoffs
 That is the central UX objective:
 
 **One piece of content. One continuous journey. Many specialized tools. No duplicated worlds.**
+
+## 14. Binding ownership decision — Video Publisher, Video Manager, Metadata Master
+
+The three tools have become too similar at the visible feature level. The correction is **shared metadata capabilities with distinct lifecycle ownership**, not three independent metadata implementations and not one tool that absorbs the others.
+
+### 14.1 The boundary in one table
+
+| Capability | Video Publisher (VP) | Video Manager (VM) | Metadata Master (MM) |
+|---|---|---|---|
+| Primary object | Unpublished Project / content in production | Already-published YouTube video | Metadata package or proposed update set |
+| Primary question | “Prepare this project for publication.” | “Manage and improve this published video.” | “What metadata should we use, and why?” |
+| Generate full publishing package from rough input | **Owns**: phrase, concept, script, rough edit/video, or fuller project context | No; may request a focused refresh for an existing published video | Can construct/optimize a full metadata set for a project when the user supplies a project/package and goal |
+| Edit metadata manually | Yes, before publication | Yes, after publication | Can edit/compose a proposed set; it is not the final lifecycle editor |
+| Title, description, tags, thumbnail | Owns pre-publication preparation and selected package | Owns post-publication changes to the live video | Generates, compares, scores, and recommends candidate values/sets |
+| Publish / upload workflow | **Owns** unpublished publishing workflow and final publish action | Never uploads or publishes an unpublished project | Never publishes; returns proposed metadata/assets to the owning workflow |
+| Existing published video metadata update | Not its default responsibility | **Owns** live-video edits and update execution | Can prepare a proposed update set for VM to review/apply |
+| Analytics-aware goals and optimization | May use project/channel goals to prepare the initial package | Uses performance context for a targeted post-publication refinement | **Owns the deep optimization workspace**: goal-aware package generation, analytics interpretation inputs, candidate comparison, ranking and recommendations |
+| Tag ranking and custom field adjustments | Basic generation and direct edits appropriate to pre-publication setup | **Owns** practical live-video metadata controls, including tag ranking and custom adjustments | Can recommend/rank alternatives; does not replace VM's direct controls |
+| Saved alternatives / history | Project/package alternatives before publication | Versioned change history for published metadata | Comparative candidate sets, optimization rationale and recommendation provenance |
+| Final source of truth | Current Project + ContentBuild + Video/Publishing Package until publication | Current published-video record plus canonical change/version history after publication | No independent truth store; candidate/recommendation workspace over canonical project, package, asset and analytics data |
+
+### 14.2 Lifecycle rules
+
+1. **VP owns the pre-publication lifecycle.** It accepts as little or as much source material as the creator has: one-sentence idea, concept, script, rough cut, final video, or a substantially complete project. It can generate a complete publishing package, let the creator manually edit it, save alternatives, select the final set, and publish. Its main output is a Project-linked, publication-ready package.
+2. **VM owns the post-publication lifecycle.** It works on videos that are already published. It provides direct, field-level metadata controls; custom adjustments; tag ordering/ranking; current-versus-proposed comparisons; and controlled update execution. It must not show unpublished-project upload/publish controls.
+3. **MM owns metadata intelligence, not video lifecycle execution.** It consumes a Project/ContentBuild, current Video/Publishing Package, relevant user input/goals, and—when updating published content—available analytics/performance context. It creates proposed full metadata sets or focused update sets, generates associated candidate assets when requested, compares and ranks alternatives, explains recommendations, and hands the result back to VP or VM.
+4. **MM may serve both lifecycle stages without becoming a third editor.** For an unpublished project, its result is a proposed package/option for VP to review and select. For a published video, its result is a proposed update set for VM to review and apply. MM itself does not publish and does not silently overwrite current metadata.
+5. **Shared fields do not imply shared ownership.** Title, thumbnail, tags, and description should use shared canonical field contracts, primitives, validation, and asset references. VP and VM must not implement separate competing metadata schemas or write to separate stores.
+6. **The selected values remain owned by the active lifecycle object.** Before publication, the active Project/ContentBuild and package are authoritative. After publication, the published-video metadata state and its canonical change/version history are authoritative. MM candidates are alternatives until explicitly selected/applied.
+7. **Every change has a reason and a record.** Preserve the distinction: a Decision records why a candidate/change was chosen; a Change records what field/value/asset changed. Record source (manual, VP generation, MM recommendation, analytics-informed refinement), prior/current value, timestamp, and related package/project/video identity through existing canonical records.
+8. **No duplicated “Metadata Master inside Manager/Publisher.”** Embed contextual MM actions/results where useful, but keep the full optimization workspace distinct. A handoff must carry references to the same Project/ContentBuild/package/video and candidate assets, not clone the project or create a competing metadata store.
+
+### 14.3 Canonical workflows
+
+**Unpublished project**
+
+`Project / ContentBuild → VP source input and context → MM optional package generation/optimization → candidate metadata/assets → VP review/edit/compare/select → Publishing Package → publish → published-video identity`
+
+VP can generate a package without MM. MM is an optional intelligence pass, not a required gate. A user can also invoke MM directly for a full package, then hand the proposed set into VP.
+
+**Published video**
+
+`Published video + current metadata + analytics window + user goal → VM direct controls and/or MM optimization → proposed field/set changes → compare/rank/review → explicit apply in VM → recorded metadata change → subsequent analytics evaluation`
+
+VM can edit and refine without MM. MM is optional and must not block ordinary manual edits.
+
+### 14.4 UI and navigation rules
+
+- Keep one shared metadata field contract and the canonical section order; lifecycle-specific sections/actions may differ.
+- VP labels should emphasize **Prepare package**, **Generate package**, **Save to Project**, **Save as Option**, **Select package**, and **Publish**.
+- VM labels should emphasize **Edit published video**, **Rank tags**, **Refine metadata**, **Apply changes**, and **Change history**.
+- MM labels should emphasize **Generate set**, **Optimize**, **Compare**, **Rank options**, **Why this recommendation?**, and **Send to Publisher / Send to Manager**.
+- MM's analytics-goal and optimization-intensity controls belong in MM. VP and VM can expose compact goal/context inputs without reproducing the full MM control surface.
+- Never place a video upload/publish action in VM. Never make MM's generated option appear already applied. Never require MM for routine VP/VM edits.
+- A single shared primitive may render in all three tools, but labels, available actions, and data source must be explicitly supplied by the owning workflow rather than inferred from duplicated local state.
+
+### 14.5 Acceptance tests for the boundary
+
+- VP can generate/save/select a package from a one-phrase idea with no MM interaction.
+- VP can accept script/rough-cut context and create a full package; selection remains attached to the active Project/ContentBuild.
+- MM can create a full unpublished-project metadata set and return it to VP as an alternative, without changing the selected set until the creator chooses it.
+- VM can edit a published video's title, description, thumbnail and tags without opening MM.
+- VM can rank/reorder tags and apply a manual refinement without invoking AI.
+- MM can analyze analytics and goals for a published video, produce ranked proposed changes, and hand them to VM; the live metadata changes only after explicit apply.
+- Applying a proposal records the exact fields/assets changed and links the reason/recommendation to the same video identity.
+- The same metadata field, selected asset, and package are not stored independently in VP, VM, and MM.
+- Project/unpublished actions cannot accidentally update a published video's metadata; published-video actions cannot accidentally mutate an unrelated active Project.
+- All three tools reuse the canonical metadata components/primitives while keeping lifecycle-specific actions separate.
+
