@@ -12,7 +12,7 @@ This conversation continued the Publisher-to-Project metadata persistence slice.
 
 The conversation also rechecked deployment status and began consolidating important decisions and implementation findings into GitHub documentation at the user's explicit request.
 
-The current branch head at the time of this record is `a93728f2b138a7860357ba74ffea43d57c283e35` (`docs: integrate Publisher Manager Metadata Master ownership`). Render reports the matching branch deployment as **live**. This confirms Render's deployment state, not yet the complete browser-level Publisher workflow. The public Render page is being checked separately.
+The current branch head at the time of this record is `a93728f2b138a7860357ba74ffea43d57c283e35` (`docs: integrate Publisher Manager Metadata Master ownership`). Render reports the matching branch deployment as **live**. This confirms Render's deployment state, not yet the complete browser-level Publisher workflow. The public Render page was checked read-only after this record was first drafted.
 
 ## 2. Decisions that must remain stable
 
@@ -133,3 +133,18 @@ Earlier in this conversation, a preview was blocked by a Vercel login redirect a
 ## 7. Continuation handoff
 
 Continue on `audit/system-convergence-identity-certification`. Do not restart planning from scratch and do not create duplicate systems. First inspect the current branch and deployment, then test/fix the existing saved-set slice, then proceed to durable asset ingestion. Record any newly discovered decisions in the relevant canonical document and append an operation receipt to `docs/recovery/History.md`.
+
+
+## 8. Public Render page check — completed
+
+Read-only browser inspection completed on 2026-10-09 UTC:
+
+- Homepage loads: https://viewtube-system-convergence.onrender.com/
+- Studio route loads: https://viewtube-system-convergence.onrender.com/studio
+- Video Publisher route loads without a sign-in redirect: https://viewtube-system-convergence.onrender.com/video-publisher
+- Settings route loads: https://viewtube-system-convergence.onrender.com/settings
+- No visible build/runtime/application error was found on the inspected pages.
+- The public Publisher route currently shows **“NO CANONICAL PUBLISHING PACKAGE IS AVAILABLE”** and **“No projects available.”** This is an empty-project/package state, not a runtime failure; the check did not sign in, submit forms, upload files, or mutate data.
+- The served JavaScript bundle reports version `0.0.0`, commit `a93728f2b138`, built at `2026-10-09T19:02:08.389Z`: https://viewtube-system-convergence.onrender.com/assets/index-Bq9KrwWw.js
+
+This proves the public page/route loads for the served build. It does **not** prove saved metadata persistence works with a populated project, and it does not substitute for running the authored automated tests. Because documentation commits also trigger Render auto-deploy, recheck the latest deployment status after this documentation batch settles.
