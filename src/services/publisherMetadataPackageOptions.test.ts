@@ -43,6 +43,9 @@ describe("Publisher metadata package options", () => {
     savePublisherMetadataToProject(project, "channel-options", {
       title: "Current", description: "Current description", tags: "current",
     }, { mode: "current" })
+    const current = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Current", description: "Current description", tags: "current",
+    }, { mode: "current" })
     const alternative = savePublisherMetadataToProject(project, "channel-options", {
       title: "Alternative", description: "Alternative description", tags: "alternative",
     }, { mode: "option" })
@@ -51,5 +54,15 @@ describe("Publisher metadata package options", () => {
     const build = getContentBuild(project.contentBuildId)!
     expect(build.selections["metadata-package"]).toBe(alternative.packageOptionAssetId)
     expect(build.variantGroups.find(group => group.slot === "metadata-package")?.members).toHaveLength(2)
+    const selectedOption = listPublisherMetadataPackageOptions(project.contentBuildId).find(option => option.assetId === alternative.packageOptionAssetId)!
+    expect(build.selections.title).toBe(selectedOption.payload.titleAssetId)
+    expect(build.selections.description).toBe(selectedOption.payload.descriptionAssetId)
+    expect(build.selections.tags).toBe(selectedOption.payload.tagsAssetId)
+    const packageBeforeRepeat = JSON.stringify(build)
+    selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
+    const afterRepeat = getContentBuild(project.contentBuildId)!
+    expect(afterRepeat.variantGroups.find(group => group.slot === "metadata-package")?.members).toHaveLength(2)
+    expect(afterRepeat.id).toBe(build.id)
+    expect(JSON.parse(packageBeforeRepeat).id).toBe(afterRepeat.id)
   })
 })
