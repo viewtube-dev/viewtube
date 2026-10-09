@@ -463,3 +463,21 @@ The changes are committed to `audit/system-convergence-identity-certification`. 
 - Test repeated save/select cycles for duplicate package artifacts and ensure selection labels remain clear.
 - Integrate thumbnail/video byte ingestion with the existing Vault/Asset Engine upload boundary; do not persist raw browser `File` objects in localStorage or create a parallel asset store.
 
+
+
+## Follow-up correction checkpoint — alternative isolation and selection restore
+
+Additional fixes committed after the saved-set UI work:
+
+- Saving in **Save as Option** mode now leaves current ContentBuild field selections and the current Video Package title/description/tags untouched; the option payload records the new option's own title/description/tag asset IDs.
+- Selecting an option restores those saved asset IDs to the canonical ContentBuild selections and the existing Video Package, with stable artifact IDs and deduplicated selection provenance.
+- Saved-set cards can show the selected set's thumbnail preview URL when the Vault asset exposes one; selecting a set updates the main Publisher thumbnail preview. Choosing a new local thumbnail clears the saved preview.
+- Added regression assertions for preserving current selections when an alternative is saved, restoring the alternative's field selections, and avoiding duplicate package provenance on repeat selection.
+
+## Current verification and deployment blocker
+
+- The Vercel preview URL was checked in a browser, but it redirects to Vercel login, so the app and Publisher route could not be visually verified in that session.
+- GitHub status reports that the latest branch commits' Vercel deployments are **rate limited, retry in 24 hours**. This is a deployment quota failure, not evidence of a TypeScript or runtime failure.
+- The regression tests have been updated but have **not been executed in a local build/test environment**. Do not call this slice verified until tests and typecheck/build can run, and a permitted preview can be opened.
+
+Next: obtain a build/test run outside the rate-limited Vercel deployment path, fix any reported type/test errors, then resume durable image/video ingestion through the existing Vault/Asset Engine upload boundary.
