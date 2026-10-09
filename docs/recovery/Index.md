@@ -107,3 +107,8 @@ The system optimizes for **clarity, reuse, low duplication, and easy agent navig
 - [Handoff-Tool-Copy-Knowledge.md](Handoff-Tool-Copy-Knowledge.md) — Round 1 recovery of the tool/widget copy workstream, contextual ? / Learn More model, inventory correction, historical artifacts, findings, and unresolved reconciliation work.
 
 - [Handoff-Widget-UI-Governance-2026-10-04.md](Handoff-Widget-UI-Governance-2026-10-04.md) — preserves the Widget UI Reference Library, default-size, audit-classification, and implementation-routing decisions from the 2026-10-04 conversation.
+
+
+## Recent conversation records
+
+- [Publisher metadata and Render conversation record](Conversation-Publisher-Metadata-Render-2026-10-09.md) — saved metadata sets, ownership decisions, deployment status, and next steps.
