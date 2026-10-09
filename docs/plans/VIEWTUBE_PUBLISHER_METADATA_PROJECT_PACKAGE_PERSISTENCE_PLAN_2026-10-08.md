@@ -497,3 +497,12 @@ The original header above has been superseded by implementation. Publisher persi
 Render service `viewtube-system-convergence` (`srv-db3tf87lot8c73bvpalg`) currently reports a live deploy for branch-head commit `a93728f2b138a7860357ba74ffea43d57c283e35`. Live deployment status is not a substitute for test output or saved-set interaction verification.
 
 The current conversation synthesis and continuation checklist is recorded in [Conversation-Publisher-Metadata-Render-2026-10-09.md](../recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md).
+
+
+## Current status correction — 2026-10-09
+
+The original header above has been superseded by implementation. Publisher persistence and saved metadata-set files are present on `audit/system-convergence-identity-certification`. Current scope includes current-set save, alternative-set save, saved-set listing/comparison/selection, restoring fields into Publisher, and updating the existing ContentBuild/Video Package. This work must not be described as fully verified until the focused tests and build/typecheck have actually run and the Publisher interaction has been checked.
+
+Render service `viewtube-system-convergence` (`srv-db3tf87lot8c73bvpalg`) currently reports a live deploy for branch-head commit `a93728f2b138a7860357ba74ffea43d57c283e35`. Live deployment status is not a substitute for test output or saved-set interaction verification.
+
+The current conversation synthesis and continuation checklist is recorded in [Conversation-Publisher-Metadata-Render-2026-10-09.md](../recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md).
