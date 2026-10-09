@@ -481,3 +481,10 @@ Additional fixes committed after the saved-set UI work:
 - The regression tests have been updated but have **not been executed in a local build/test environment**. Do not call this slice verified until tests and typecheck/build can run, and a permitted preview can be opened.
 
 Next: obtain a build/test run outside the rate-limited Vercel deployment path, fix any reported type/test errors, then resume durable image/video ingestion through the existing Vault/Asset Engine upload boundary.
+
+
+## Asset-ingestion boundary inspection
+
+The existing Creator Vault import path is reusable for metadata extraction, hashing, duplicate checks, preview generation, tags, and project association. However, `createImportedVaultAsset` currently records a Vault asset envelope with optional `url`/`previewUrl` and metadata; the import staging model itself holds the browser `File` only during the active workflow. This does **not** prove that original video/image bytes are durably uploaded to a server-backed store.
+
+Therefore the Publisher should not claim a selected local thumbnail/video is durably attached just because a Vault record or preview exists. The next implementation step must identify or add the canonical byte-storage transport behind Vault (for example, the existing connected storage integration if supported), then return a stable stored URL/asset reference before committing it to the Project/ContentBuild/Video Package. Do not serialize raw file bytes into localStorage as a shortcut.
