@@ -1123,3 +1123,18 @@ The objective is one ViewTube content lifecycle—not a collection of disconnect
 A source-level review of every branch named for Studio Hub or Metadata Master found four relevant branches. Their useful Metadata Master planning and implementation are already present in current `main`; the branch-only Video Manager/Video Publisher revisions are older hybrid UI paths and are intentionally not reintroduced. The detailed disposition is recorded in `docs/architecture/VIEWTUBE_STUDIO_HUB_METADATA_BRANCH_CONSOLIDATION_2026-10-08.md`.
 
 This establishes a recovery rule for future work: **consolidate architectural knowledge and still-valid code, not branch history blindly.** Current canonical primitives, Project Manifestation, Metadata Master ownership, Publishing Package boundaries, ActionPacket/Handoff contracts, and analytics/Brain lineage remain authoritative.
+
+## 12. Binding Studio Hub boundary: Video Publisher, Video Manager, Metadata Master
+
+The detailed, binding ownership contract is recorded in `VIEWTUBE_WHOLE_SYSTEM_OWNERSHIP_INTERACTION_AND_USER_TERMINOLOGY_AUDIT_2026-10-08.md` §14. The implementation must follow this boundary:
+
+- **Video Publisher = pre-publication preparation and execution.** Takes minimal-to-rich project inputs (idea, phrase, script, rough cut/video, or full project), creates and edits a complete publication package, saves/selects Project-linked options, and owns upload/publish. It can work without Metadata Master.
+- **Video Manager = post-publication management and execution.** Edits metadata for already-published videos, supports direct manual field changes, custom refinements, tag ranking/reordering, and controlled application/version history. It can work without Metadata Master and must not expose unpublished upload/publish controls.
+- **Metadata Master = cross-lifecycle metadata intelligence.** Uses the current Project/ContentBuild/package or published video, user goals, supplied context, and available analytics to generate candidate metadata sets and requested supporting assets; compares, scores, ranks, and explains options. It hands candidates to Publisher or Manager. It does not publish, silently apply proposals, or become a parallel metadata editor/store.
+- **Shared primitives/schema, distinct ownership.** VP and VM share canonical title/description/tags/thumbnail field contracts, validation and asset references, but the active lifecycle owner controls edits. MM options remain proposals until explicit selection/application.
+- **Two-stage optionality.** VP/VM manual and basic generation/refinement workflows must remain complete without MM. MM is an optional intelligence pass; its absence cannot block normal work.
+- **Analytics-aware updates.** MM may use performance windows and creator goals to propose post-publication metadata changes; VM performs the explicit apply, and later analytics evaluate the result.
+- **Lineage.** Reuse existing Project/ContentBuild, package, asset, change/decision, and analytics identities. Record what changed separately from why it was chosen. Do not create tool-specific parallel metadata histories.
+
+Implementation order: first restore the three tools' UI/action boundaries and shared field contract; next connect MM output to VP/VM through reference-based handoffs; then test lifecycle isolation and provenance before extending analytics-informed refinement.
+
