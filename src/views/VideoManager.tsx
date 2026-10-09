@@ -28,7 +28,6 @@ import type { TagSuggestion } from "../services/gemini"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
 import MetadataMaster from "./MetadataMaster"
 import { validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
-import { PublishingControls } from "../components/metadata/PublishingControls"
 import ProjectManifestation from "../components/projects/ProjectManifestation"
 import { togglePlaylistSelection } from "../components/metadata/playlistSelection"
 import {
@@ -672,7 +671,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        description={editDescription}
        tags={editTags}
        category={editCategoryId}
-       playlists=""
+       playlists={selectedPlaylistIds.join(",")}
+       playlistOptions={userPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title }))}
+       selectedPlaylistIds={selectedPlaylistIds}
+       onPlaylistToggle={togglePlaylist}
        thumbnailFile={thumbnailFile}
        thumbnailPreview={thumbnailPreview || selectedVideo?.thumbnail || null}
        visibility={editPrivacy}
@@ -718,24 +720,8 @@ const VideoManager: React.FC<VideoManagerProps> = ({
         </>
        }
        showVideoUpload={false}
-       showPlaylists={false}
-       showCategory={false}
-      />
-
-      <PublishingControls
-       privacy={editPrivacy}
-       category={editCategoryId}
-       playlistIds={selectedPlaylistIds}
-       privacyOptions={[
-        { value: "public", label: "PUBLIC" },
-        { value: "unlisted", label: "UNLISTED" },
-        { value: "private", label: "PRIVATE" },
-       ]}
-       categoryOptions={categoryOptions}
-       playlistOptions={userPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title }))}
-       onPrivacyChange={setEditPrivacy}
-       onCategoryChange={setEditCategoryId}
-       onPlaylistToggle={togglePlaylist}
+       showPlaylists={true}
+       showCategory={true}
       />
       <SubToolboxGridActionButton
        onClick={connected ? handleSave : () => auth.login("/video-manager")}
