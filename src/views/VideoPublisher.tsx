@@ -345,6 +345,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     else await skipOptionalPublishStep(transaction.id, "apply-routing", "No playlists selected.")
   })
   const applySchedule = () => runPublishAction(async () => {
+    if (publishAt && new Date(publishAt).getTime() <= Date.now()) throw new Error("Choose a future publication date and time.")
     await applyPublishSchedulePrivacy(requireTransaction().id, {
       title: publishTitle,
       description: publishDescription,
