@@ -37,6 +37,7 @@ import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import { fetchSimplePlaylists, type SimplePlaylist } from "../services/simpleYouTubeApi"
 import { savePublisherMetadataToProject } from "../services/publisherMetadataProjectPersistence"
 import PublisherMetadataPackageOptions from "../components/PublisherMetadataPackageOptions"
 import MetadataMaster from "./MetadataMaster"
@@ -149,6 +150,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [publishDescription, setPublishDescription] = useState("")
   const [publishTags, setPublishTags] = useState("")
   const [playlistIds, setPlaylistIds] = useState("")
+  const [channelPlaylists, setChannelPlaylists] = useState<SimplePlaylist[]>([])
+  const [channelPlaylistsLoading, setChannelPlaylistsLoading] = useState(false)
   const [privacyStatus, setPrivacyStatus] = useState<"public"|"private"|"unlisted">("private")
   const [publishAt, setPublishAt] = useState("")
   const [publishCategory, setPublishCategory] = useState("22")
@@ -259,6 +262,16 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   useEffect(() => {
     if (!publishTitle && publishState.videoPackage?.identity.workingTitle) setPublishTitle(publishState.videoPackage.identity.workingTitle)
   }, [publishState.videoPackage?.id])
+
+  useEffect(() => {
+    let active = true
+    setChannelPlaylistsLoading(true)
+    fetchSimplePlaylists()
+      .then(items => { if (active) setChannelPlaylists(items) })
+      .catch(() => { if (active) setChannelPlaylists([]) })
+      .finally(() => { if (active) setChannelPlaylistsLoading(false) })
+    return () => { active = false }
+  }, [authState])
 
   useEffect(() => {
     if (!result) return
@@ -630,6 +643,12 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 tags={publishTags}
                 category={publishCategory}
                 playlists={playlistIds}
+                playlistOptions={channelPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title, disabled: false }))}
+                selectedPlaylistIds={playlistIds.split(/[\\n,]/).map(value => value.trim()).filter(id => channelPlaylists.some(playlist => playlist.id === id))}
+                onPlaylistToggle={(playlistId) => setPlaylistIds(current => {
+                  const ids = current.split(/[\\n,]/).map(value => value.trim()).filter(Boolean)
+                  return (ids.includes(playlistId) ? ids.filter(id => id !== playlistId) : [...ids, playlistId]).join(",")
+                })}
                 videoFile={videoFile}
                 thumbnailFile={thumbnailFile}
                 thumbnailPreview={savedThumbnailPreview}
