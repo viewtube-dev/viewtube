@@ -254,7 +254,7 @@ export const getOwnedVideo = async ({ req, videoId }) => {
 export const patchOwnedVideo = async ({ req, videoId }) => {
   const userId = await requireUser(req);
   const body = await readJsonBody(req);
-  const currentParams = new URLSearchParams({ part: "snippet,status", id: videoId });
+  const currentParams = new URLSearchParams({ part: "snippet,status,recordingDetails", id: videoId });
   const currentPage = await googleJson(userId, `${BASE}/videos?${currentParams.toString()}`);
   const current = currentPage?.items?.[0];
   if (!current) {
@@ -265,8 +265,11 @@ export const patchOwnedVideo = async ({ req, videoId }) => {
 
   const allowedSnippet = ["title","description","tags","categoryId","defaultLanguage","defaultAudioLanguage"];
   const allowedStatus = ["privacyStatus","selfDeclaredMadeForKids"];
+  const allowedRecordingDetails = ["locationDescription", "location"];
   const snippetPatch = body?.snippet && typeof body.snippet === "object" ? body.snippet : {};
   const statusPatch = body?.status && typeof body.status === "object" ? body.status : {};
+  const recordingDetailsPatch = body?.recordingDetails && typeof body.recordingDetails === "object" ? body.recordingDetails : {};
+  const nextRecordingDetails = { ...(current.recordingDetails || {}) };
   const nextSnippet = { ...(current.snippet || {}) };
   const nextStatus = { ...(current.status || {}) };
 
@@ -275,6 +278,9 @@ export const patchOwnedVideo = async ({ req, videoId }) => {
   }
   for (const key of allowedStatus) {
     if (Object.prototype.hasOwnProperty.call(statusPatch, key)) nextStatus[key] = statusPatch[key];
+  }
+  for (const key of allowedRecordingDetails) {
+    if (Object.prototype.hasOwnProperty.call(recordingDetailsPatch, key)) nextRecordingDetails[key] = recordingDetailsPatch[key];
   }
 
   const parts = [];
@@ -286,6 +292,10 @@ export const patchOwnedVideo = async ({ req, videoId }) => {
   if (Object.keys(statusPatch).some((key) => allowedStatus.includes(key))) {
     parts.push("status");
     updateBody.status = nextStatus;
+  }
+  if (Object.keys(recordingDetailsPatch).some((key) => allowedRecordingDetails.includes(key))) {
+    parts.push("recordingDetails");
+    updateBody.recordingDetails = nextRecordingDetails;
   }
   if (!parts.length) {
     const error = new Error("No supported video fields were supplied.");
