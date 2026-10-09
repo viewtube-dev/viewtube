@@ -1,13 +1,13 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { Check, GitCompare, RotateCcw } from "lucide-react"
-import { listPublisherMetadataPackageOptions, selectPublisherMetadataPackageOption } from "../services/publisherMetadataPackageOptions"
+import { listPublisherMetadataPackageOptions, selectPublisherMetadataPackageOption, type PublisherMetadataPackageOption } from "../services/publisherMetadataPackageOptions"
 import { SubToolbox } from "./Toolbox"
 import { SubToolboxActions, SubToolboxStack } from "./subtoolbox/SubToolboxLayouts"
 import { SubToolboxButton, SubToolboxOutputCard, SubToolboxStatePanel } from "./subtoolbox/SubToolboxPrimitives"
 
 export interface PublisherMetadataPackageOptionsProps {
   contentBuildId: string | null
-  onSelected?: (assetId: string) => void
+  onSelected?: (option: PublisherMetadataPackageOption) => void
   sourceToolId?: string
 }
 
@@ -16,10 +16,14 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
   onSelected,
   sourceToolId = "video-publisher",
 }) => {
+  const [refreshKey, setRefreshKey] = useState(0)
+  const [compareAssetId, setCompareAssetId] = useState<string | null>(null)
   const options = useMemo(
     () => contentBuildId ? listPublisherMetadataPackageOptions(contentBuildId) : [],
-    [contentBuildId],
+    [contentBuildId, refreshKey],
   )
+  const compareOption = options.find(option => option.assetId === compareAssetId) || null
+  const selectedOption = options.find(option => option.selected) || null
 
   if (!contentBuildId) return null
 
@@ -51,21 +55,17 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
                       onClick={() => {
                         if (!contentBuildId || option.selected) return
                         selectPublisherMetadataPackageOption(contentBuildId, option.assetId, { sourceToolId })
-                        onSelected?.(option.assetId)
+                        setRefreshKey(value => value + 1)
+                        onSelected?.(option)
                       }}
                     >
                       {option.selected ? "CURRENT" : "USE THIS"}
                     </SubToolboxButton>
                     <SubToolboxButton
-                      tone="ink"
-                      onClick={() => {
-                        if (!contentBuildId) return
-                        const url = new URL(window.location.href)
-                        url.searchParams.set("metadataOption", option.assetId)
-                        window.history.replaceState({}, "", url.toString())
-                      }}
+                      tone={compareAssetId === option.assetId ? "success" : "ink"}
+                      onClick={() => setCompareAssetId(current => current === option.assetId ? null : option.assetId)}
                     >
-                      COMPARE
+                      {compareAssetId === option.assetId ? "CLOSE COMPARE" : "COMPARE"}
                     </SubToolboxButton>
                   </SubToolboxActions>
                 </SubToolboxStack>
@@ -74,6 +74,18 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
           })}
         </SubToolboxStack>
       )}
+      {compareOption ? (
+        <SubToolboxOutputCard title="METADATA COMPARISON" badge="SIDE BY SIDE">
+          <SubToolboxStack density="dense">
+            {(["title", "description", "tags", "category", "visibility", "playlistIds"] as const).map(field => (
+              <div key={field} className="grid grid-cols-2 gap-2 border-b-2 border-black/10 pb-2 last:border-0">
+                <div className="min-w-0"><div className="text-[10px] font-black opacity-60">CURRENT · {field.toUpperCase()}</div><div className="whitespace-pre-wrap break-words text-sm font-bold">{String(selectedOption?.payload[field] ?? "—")}</div></div>
+                <div className="min-w-0"><div className="text-[10px] font-black opacity-60">COMPARE · {field.toUpperCase()}</div><div className="whitespace-pre-wrap break-words text-sm font-bold">{String(compareOption.payload[field] ?? "—")}</div></div>
+              </div>
+            ))}
+          </SubToolboxStack>
+        </SubToolboxOutputCard>
+      ) : null}
     </SubToolbox>
   )
 }
