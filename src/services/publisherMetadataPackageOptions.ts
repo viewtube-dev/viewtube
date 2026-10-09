@@ -20,6 +20,7 @@ export type PublisherMetadataPackageOption = {
     tags?: string
     category?: string
     visibility?: string
+    publishAt?: string | null
     audience?: boolean
     timestamps?: string
     location?: string
