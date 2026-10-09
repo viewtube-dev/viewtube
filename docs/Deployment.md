@@ -43,3 +43,15 @@ Do not reconstruct Toolbox implementation from memory.
 Live Render production success remains **UNVERIFIED**.
 
 **Primary source:** `docs/recovery/VIEWTUBE_DEPLOYMENT_AND_TOOLBOX_RECOVERY_SOURCE_2026-10-04.md`.
+
+
+## 2026-10-09 — Convergence branch public check
+
+The separate Render service `viewtube-system-convergence` (`srv-db3tf87lot8c73bvpalg`) tracks `audit/system-convergence-identity-certification`, not `main`. Its public homepage, Studio route, Settings route, and `/video-publisher` route were inspected read-only on 2026-10-09 UTC.
+
+- Homepage and Publisher route loaded without visible build/runtime errors.
+- Publisher was publicly reachable without a sign-in redirect and showed an empty Project/package state (“No projects available” / “NO CANONICAL PUBLISHING PACKAGE IS AVAILABLE”).
+- The served app bundle reported commit prefix `a93728f2b138` and build time `2026-10-09T19:02:08.389Z`.
+- Public check links: [homepage](https://viewtube-system-convergence.onrender.com/), [Studio](https://viewtube-system-convergence.onrender.com/studio), [Video Publisher](https://viewtube-system-convergence.onrender.com/video-publisher), [Settings](https://viewtube-system-convergence.onrender.com/settings), [served app bundle](https://viewtube-system-convergence.onrender.com/assets/index-Bq9KrwWw.js).
+
+This is a branch-preview page-load check only. It does not certify `main`/production, populated-project persistence, saved metadata option behavior, upload durability, or automated tests. Documentation commits triggered new Render auto-deploys after the observed build, so the latest deployment must be checked again before calling the current HEAD live.
