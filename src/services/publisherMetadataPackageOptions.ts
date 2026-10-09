@@ -31,6 +31,7 @@ export type PublisherMetadataPackageOption = {
     descriptionAssetId?: string | null
     tagsAssetId?: string | null
     finalVideoAssetId?: string | null
+    thumbnailPreviewUrl?: string | null
     createdAt?: string
   }
 }
@@ -59,7 +60,12 @@ export const listPublisherMetadataPackageOptions = (
       selected: group.selectedAssetId === member.assetId || build.selections[OPTION_SLOT] === member.assetId,
       status: member.status,
       createdAt: member.createdAt,
-      payload: payload && typeof payload === "object" ? payload as PublisherMetadataPackageOption["payload"] : {},
+      payload: payload && typeof payload === "object" ? {
+        ...(payload as PublisherMetadataPackageOption["payload"]),
+        thumbnailPreviewUrl: (assets.get((payload as PublisherMetadataPackageOption["payload"]).thumbnailAssetId || "")?.previewUrl
+          || assets.get((payload as PublisherMetadataPackageOption["payload"]).thumbnailAssetId || "")?.url
+          || null),
+      } : {},
     }
   })
 }
@@ -95,7 +101,8 @@ export const selectPublisherMetadataPackageOption = (
   // Restore the selected set into canonical ContentBuild field selections and the
   // existing Project Video Package; selecting an option must not create a parallel package.
   const assets = new Map(listAssets().map(asset => [asset.id, asset]))
-  const payload = (assets.get(assetId)?.metadata?.payload || {}) as PublisherMetadataPackageOption["payload"]
+  const optionAsset = assets.get(assetId)
+  const payload = (optionAsset?.metadata?.payload || {}) as PublisherMetadataPackageOption["payload"]
   const selectedBuild = getContentBuild(contentBuildId)!
   const projectId = selectedBuild.legacyProjectId
   const videoPackage = projectId ? findVideoPackageByProject(projectId, contentBuildId) : null
@@ -160,17 +167,16 @@ export const selectPublisherMetadataPackageOption = (
         tags: tagsArtifact || videoPackage.packaging.tags,
       },
       contentBuildRevision: getContentBuild(contentBuildId)?.revision || videoPackage.contentBuildRevision,
-      provenance: [
-        ...videoPackage.provenance,
-        {
-          id: `${videoPackage.id}:metadata-option-selected:${assetId}`,
-          action: "metadata_option_selected",
-          sourceToolId: toolId,
-          artifactIds: [assetId, ...[payload.titleAssetId, payload.descriptionAssetId, payload.tagsAssetId, payload.thumbnailAssetId].filter((value): value is string => Boolean(value))],
-          evidenceIds: [],
-          createdAt: new Date().toISOString(),
-        },
-      ],
+      provenance: videoPackage.provenance.some(entry => entry.id === `${videoPackage.id}:metadata-option-selected:${assetId}`)
+        ? videoPackage.provenance
+        : [...videoPackage.provenance, {
+            id: `${videoPackage.id}:metadata-option-selected:${assetId}`,
+            action: "metadata_option_selected",
+            sourceToolId: toolId,
+            artifactIds: [assetId, ...[payload.titleAssetId, payload.descriptionAssetId, payload.tagsAssetId, payload.thumbnailAssetId].filter((value): value is string => Boolean(value))],
+            evidenceIds: [],
+            createdAt: new Date().toISOString(),
+          }],
     })
   }
   return selected
