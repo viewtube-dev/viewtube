@@ -180,7 +180,7 @@ const SecondaryControls: React.FC<{
 
 export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps> = (props) => {
   const {
-    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, playlistLoading = false, onPlaylistToggle, locationSuggestions = [], showScheduledVisibility, publishAt, onPublishAtChange, videoFile, thumbnailFile, thumbnailPreview,
+    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, playlistLoading = false, onPlaylistToggle, locationSuggestions = [], showScheduledVisibility, publishAt, videoFile, thumbnailFile, thumbnailPreview,
     visibility, audience = false, timestamps = "", location = "", community = false, aiUse = true,
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
