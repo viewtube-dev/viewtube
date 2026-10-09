@@ -40,9 +40,6 @@ describe("Publisher metadata package options", () => {
 
   it("selects an alternative without creating a new Project or ContentBuild", () => {
     ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
-    savePublisherMetadataToProject(project, "channel-options", {
-      title: "Current", description: "Current description", tags: "current",
-    }, { mode: "current" })
     const current = savePublisherMetadataToProject(project, "channel-options", {
       title: "Current", description: "Current description", tags: "current",
     }, { mode: "current" })
