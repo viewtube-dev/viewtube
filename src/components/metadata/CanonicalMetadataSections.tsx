@@ -41,7 +41,6 @@ export const YOUTUBE_CATEGORY_OPTIONS = [
   { value: "25", label: "News & Politics" }, { value: "26", label: "Howto & Style" },
   { value: "27", label: "Education" }, { value: "28", label: "Science & Technology" },
   { value: "29", label: "Nonprofits & Activism" }, { value: "30", label: "Movies" },
-  { value: "_PLAYLIST", label: "Other" },
 ] as const
 
 export interface CanonicalMetadataSectionsProps {
