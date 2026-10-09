@@ -50,6 +50,7 @@ describe("Publisher metadata project persistence", () => {
       tags: "current",
     }, { mode: "current" })
 
+    const currentTitleAssetId = getContentBuild(project.contentBuildId)?.selections.title
     const option = savePublisherMetadataToProject(project, "channel-1", {
       title: "Alternative title",
       description: "Alternative description",
@@ -60,5 +61,6 @@ describe("Publisher metadata project persistence", () => {
     expect(option.packageOptionAssetId).not.toBe(current.packageOptionAssetId)
     expect(build.selections["metadata-package"]).toBe(current.packageOptionAssetId)
     expect(build.variantGroups.find(group => group.slot === "metadata-package")?.members.length).toBe(2)
+    expect(build.selections.title).toBe(currentTitleAssetId)
   })
 })
