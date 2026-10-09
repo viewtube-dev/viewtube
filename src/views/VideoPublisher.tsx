@@ -194,7 +194,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         description: publishDescription,
         tags: publishTags,
         category: publishCategory,
-        visibility: privacyStatus,
+        visibility: publishAt ? "scheduled" : privacyStatus,
+        publishAt: publishAt || null,
         audience: publishAudience,
         timestamps: publishTimestamps,
         location: publishLocation,
@@ -218,7 +219,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           targetAudience: audience,
           publishingMetadata: {
             category: publishCategory,
-            visibility: privacyStatus,
+            visibility: publishAt ? "scheduled" : privacyStatus,
+            publishAt: publishAt || null,
             audience: publishAudience,
             timestamps: publishTimestamps,
             location: publishLocation,
@@ -654,7 +656,10 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 videoFile={videoFile}
                 thumbnailFile={thumbnailFile}
                 thumbnailPreview={savedThumbnailPreview}
-                visibility={privacyStatus}
+                visibility={publishAt ? "scheduled" : privacyStatus}
+                showScheduledVisibility
+                publishAt={publishAt}
+                onPublishAtChange={setPublishAt}
                 audience={publishAudience}
                 timestamps={publishTimestamps}
                 location={publishLocation}
@@ -667,7 +672,15 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 onPlaylistsChange={setPlaylistIds}
                 onVideoFileChange={setVideoFile}
                 onThumbnailFileChange={(file) => { setThumbnailFile(file); if (file) setSavedThumbnailPreview(null) }}
-                onVisibilityChange={(value) => setPrivacyStatus(value as "public" | "private" | "unlisted")}
+                onVisibilityChange={(value) => {
+                  if (value === "scheduled") {
+                    setPrivacyStatus("private")
+                    setPublishAt(current => current || new Date(Date.now() + 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, 16))
+                  } else {
+                    setPrivacyStatus(value as "public" | "private" | "unlisted")
+                    setPublishAt("")
+                  }
+                }}
                 onAudienceChange={setPublishAudience}
                 onTimestampsChange={setPublishTimestamps}
                 onLocationChange={setPublishLocation}
@@ -713,6 +726,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                   setPublishTags(payload.tags || "")
                   setPublishCategory(payload.category || "22")
                   setPrivacyStatus((payload.visibility === "public" || payload.visibility === "unlisted" ? payload.visibility : "private"))
+                  setPublishAt(payload.publishAt || "")
                   setPublishAudience(Boolean(payload.audience))
                   setPublishTimestamps(payload.timestamps || "")
                   setPublishLocation(payload.location || "")
