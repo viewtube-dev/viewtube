@@ -6,11 +6,11 @@ import {
   getContentBuild,
   selectContentBuildVariant,
   setContentBuildSelection,
-} from "../asset-engine/ContentBuildRepository"
-import { createVersionedAsset } from "../assetEngine"
-import { ensureVideoPackageForProject } from "../video-package/ProjectVideoPackageBridge"
-import { findVideoPackageByProject, saveVideoPackage } from "../video-package/VideoPackageRepository"
-import type { PackageArtifactRef } from "../video-package/contracts"
+} from "./asset-engine/ContentBuildRepository"
+import { createVersionedAsset } from "./assetEngine"
+import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
+import { findVideoPackageByProject, saveVideoPackage } from "./video-package/VideoPackageRepository"
+import type { PackageArtifactRef } from "./video-package/contracts"
 
 export type PublisherMetadataSaveMode = "current" | "option"
 
