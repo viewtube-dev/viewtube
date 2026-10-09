@@ -136,15 +136,13 @@ export const savePublisherMetadataToProject = (
     ? createMetadataAsset(project, contentBuild.id, sourceToolId, "tags", "Publisher tags", { tags: state.tags }, previous.tags)
     : null
 
-  if (titleAsset) setContentBuildSelection(contentBuild.id, "title", titleAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-  if (descriptionAsset) setContentBuildSelection(contentBuild.id, "description", descriptionAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-  if (tagsAsset) setContentBuildSelection(contentBuild.id, "tags", tagsAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-
-  if (input.thumbnailAsset) {
-    setContentBuildSelection(contentBuild.id, "thumbnail", input.thumbnailAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-  }
-  if (input.finalVideoAsset) {
-    setContentBuildSelection(contentBuild.id, "final-render", input.finalVideoAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+  // An alternative is stored without changing the currently selected ContentBuild fields.
+  if (mode === "current") {
+    if (titleAsset) setContentBuildSelection(contentBuild.id, "title", titleAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    if (descriptionAsset) setContentBuildSelection(contentBuild.id, "description", descriptionAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    if (tagsAsset) setContentBuildSelection(contentBuild.id, "tags", tagsAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    if (input.thumbnailAsset) setContentBuildSelection(contentBuild.id, "thumbnail", input.thumbnailAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    if (input.finalVideoAsset) setContentBuildSelection(contentBuild.id, "final-render", input.finalVideoAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
   }
 
   const refreshed = getContentBuild(contentBuild.id)!
@@ -160,11 +158,11 @@ export const savePublisherMetadataToProject = (
     community: Boolean(state.community),
     aiUse: state.aiUse !== false,
     playlistIds: state.playlistIds || "",
-    titleAssetId: refreshed.selections.title || null,
-    thumbnailAssetId: refreshed.selections.thumbnail || null,
-    descriptionAssetId: refreshed.selections.description || null,
-    tagsAssetId: refreshed.selections.tags || null,
-    finalVideoAssetId: refreshed.selections["final-render"] || null,
+    titleAssetId: titleAsset?.asset.id || refreshed.selections.title || null,
+    thumbnailAssetId: input.thumbnailAsset?.id || refreshed.selections.thumbnail || null,
+    descriptionAssetId: descriptionAsset?.asset.id || refreshed.selections.description || null,
+    tagsAssetId: tagsAsset?.asset.id || refreshed.selections.tags || null,
+    finalVideoAssetId: input.finalVideoAsset?.id || refreshed.selections["final-render"] || null,
     createdAt: now,
   }
 
@@ -227,18 +225,18 @@ export const savePublisherMetadataToProject = (
     },
     packaging: {
       ...videoPackage.packaging,
-      titleVariants: titleArtifact
+      titleVariants: titleArtifact && !videoPackage.packaging.titleVariants.some(item => item.id === titleArtifact.id)
         ? [...videoPackage.packaging.titleVariants, titleArtifact]
         : videoPackage.packaging.titleVariants,
       selectedTitleId: mode === "current" && titleArtifact ? titleArtifact.id : videoPackage.packaging.selectedTitleId || null,
-      thumbnailVariants: input.thumbnailAsset
+      thumbnailVariants: input.thumbnailAsset && !videoPackage.packaging.thumbnailVariants.some(item => item.id === `publisher:thumbnail:${input.thumbnailAsset!.id}`)
         ? [...videoPackage.packaging.thumbnailVariants, artifactFor(input.thumbnailAsset, "thumbnail", sourceToolId, now)]
         : videoPackage.packaging.thumbnailVariants,
       selectedThumbnailId: mode === "current" && input.thumbnailAsset
         ? artifactFor(input.thumbnailAsset, "thumbnail", sourceToolId, now).id
         : videoPackage.packaging.selectedThumbnailId || null,
-      description: descriptionArtifact || videoPackage.packaging.description,
-      tags: tagsArtifact || videoPackage.packaging.tags,
+      description: mode === "current" ? descriptionArtifact || videoPackage.packaging.description : videoPackage.packaging.description,
+      tags: mode === "current" ? tagsArtifact || videoPackage.packaging.tags : videoPackage.packaging.tags,
     },
     production: {
       ...videoPackage.production,
