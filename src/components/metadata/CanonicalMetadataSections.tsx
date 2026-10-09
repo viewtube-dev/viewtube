@@ -54,6 +54,9 @@ export interface CanonicalMetadataSectionsProps {
   playlistLoading?: boolean
   onPlaylistToggle?: (playlistId: string) => void
   locationSuggestions?: string[]
+  showScheduledVisibility?: boolean
+  publishAt?: string
+  onPublishAtChange?: (value: string) => void
   videoFile?: File | null
   thumbnailFile?: File | null
   thumbnailPreview?: string | null
@@ -139,18 +142,22 @@ const SecondaryControls: React.FC<{
   onTimestampsChange?: (value: string) => void
   onLocationChange?: (value: string) => void
   locationSuggestions?: string[]
+  showScheduledVisibility?: boolean
+  publishAt?: string
+  onPublishAtChange?: (value: string) => void
   onCommunityChange?: (value: boolean) => void
   onAiUseChange?: (value: boolean) => void
 }> = ({
-  visibility, audience, timestamps, location, community, aiUse, locationSuggestions = [],
-  onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange,
+  visibility, audience, timestamps, location, community, aiUse, locationSuggestions = [], showScheduledVisibility = false, publishAt = "",
+  onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onPublishAtChange,
   onCommunityChange, onAiUseChange,
 }) => (
   <SubToolboxGrid minItemWidth="compact" density="dense" className="grid-cols-2 lg:grid-cols-6">
     <SubToolboxSection label={<span className="flex items-center gap-1"><Globe2 size={11} /> VISIBILITY</span>}>
       <SubToolboxSelect controlSize="micro" value={visibility} onChange={e => onVisibilityChange(e.target.value)} aria-label="Visibility">
-        <option value="public">PUBLIC</option><option value="unlisted">UNLISTED</option><option value="private">PRIVATE</option>
+        <option value="public">PUBLIC</option><option value="unlisted">UNLISTED</option><option value="private">PRIVATE</option>{showScheduledVisibility ? <option value="scheduled">SCHEDULED</option> : null}
       </SubToolboxSelect>
+      {showScheduledVisibility && visibility === "scheduled" ? <SubToolboxInput controlSize="micro" type="datetime-local" value={publishAt} onChange={e => onPublishAtChange?.(e.target.value)} aria-label="Scheduled publication date and time" /> : null}
     </SubToolboxSection>
     <SubToolboxSection label={<span className="flex items-center gap-1"><Users size={11} /> IS IT MADE FOR KIDS?</span>}>
       <SubToolboxToggle pressed={audience} label={audience ? "YES" : "NO"} aria-label="Is it made for kids?" onClick={() => onAudienceChange?.(!audience)} />
@@ -173,11 +180,11 @@ const SecondaryControls: React.FC<{
 
 export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps> = (props) => {
   const {
-    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, playlistLoading = false, onPlaylistToggle, locationSuggestions = [], videoFile, thumbnailFile, thumbnailPreview,
+    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, playlistLoading = false, onPlaylistToggle, locationSuggestions = [], showScheduledVisibility, publishAt, onPublishAtChange, videoFile, thumbnailFile, thumbnailPreview,
     visibility, audience = false, timestamps = "", location = "", community = false, aiUse = true,
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
-    onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
+    onTimestampsChange, onLocationChange, onPublishAtChange, onCommunityChange, onAiUseChange,
     onGenerate, onRefine, onAnalyze, actionFields, categoryOptions = YOUTUBE_CATEGORY_OPTIONS, thumbnailActions,
     videoUploadLabel, thumbnailLabel = "THUMBNAIL", titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
     showVideoUpload = true, showPlaylists = true, showCategory = true,
@@ -226,7 +233,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           {shouldShowActions("description") ? <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
-        <SecondaryControls {...{ visibility, audience, timestamps, location, community, aiUse, locationSuggestions, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange }} />
+        <SecondaryControls {...{ visibility, audience, timestamps, location, community, aiUse, locationSuggestions, showScheduledVisibility, publishAt, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onPublishAtChange, onCommunityChange, onAiUseChange }} />
 
         {category === "27" && onEducationNotesChange ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><Tags size={12} /> EDUCATION QUESTIONS & PHRASES</span>}>
