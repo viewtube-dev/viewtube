@@ -93,7 +93,7 @@ export const fetchSimpleOwnedVideo = async (videoId: string) => {
 
 export const patchSimpleOwnedVideo = async (
   videoId: string,
-  patch: { snippet?: Record<string, unknown>; status?: Record<string, unknown> },
+  patch: { snippet?: Record<string, unknown>; status?: Record<string, unknown>; recordingDetails?: Record<string, unknown> },
 ) => {
   const response = await fetch(`/api/youtube/videos/${encodeURIComponent(videoId)}`, {
     method: "PATCH",
