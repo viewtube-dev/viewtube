@@ -36,7 +36,7 @@ import BrainLiveToolInbox from "../components/brain/BrainLiveToolInbox"
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import { PostActionReflection } from "../components/PostActionReflection"
-import { CanonicalMetadataSections } from "../components/metadata/CanonicalMetadataSections"
+import { CanonicalMetadataSections, YOUTUBE_CATEGORY_OPTIONS } from "../components/metadata/CanonicalMetadataSections"
 import { fetchSimplePlaylists, type SimplePlaylist } from "../services/simpleYouTubeApi"
 import { savePublisherMetadataToProject } from "../services/publisherMetadataProjectPersistence"
 import PublisherMetadataPackageOptions from "../components/PublisherMetadataPackageOptions"
@@ -271,7 +271,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       .catch(() => { if (active) setChannelPlaylists([]) })
       .finally(() => { if (active) setChannelPlaylistsLoading(false) })
     return () => { active = false }
-  }, [authState])
+  }, [(authState as any)?.channelId])
 
   useEffect(() => {
     if (!result) return
@@ -642,6 +642,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 description={publishDescription}
                 tags={publishTags}
                 category={publishCategory}
+                categoryOptions={YOUTUBE_CATEGORY_OPTIONS.map(option => ({ value: option.value, label: option.label }))}
                 playlists={playlistIds}
                 playlistOptions={channelPlaylists.map(playlist => ({ value: playlist.id, label: playlist.title, disabled: false }))}
                 selectedPlaylistIds={playlistIds.split(/[\\n,]/).map(value => value.trim()).filter(id => channelPlaylists.some(playlist => playlist.id === id))}
