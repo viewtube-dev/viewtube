@@ -250,7 +250,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           <SubToolboxSection label={<span className="flex items-center gap-1"><ListVideo size={12} /> PLAYLISTS</span>}>
             {playlistOptions.length > 0 && onPlaylistToggle ? (
               <SubToolboxTopTitleDropdown level="l1" label="CHANNEL PLAYLISTS" value={playlistLoading ? "LOADING PLAYLISTS…" : selectedPlaylistIds?.length ? `${selectedPlaylistIds.length} SELECTED` : "SELECT PLAYLISTS"} options={playlistOptions} multiSelect selectedValues={selectedPlaylistIds || []} onValueChange={onPlaylistToggle} ariaLabel="Select channel playlists" />
-            ) : <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder="CONNECT YOUTUBE TO LOAD PLAYLISTS" aria-label="Playlists" disabled />}
+            ) : <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder={playlistLoading ? "LOADING CHANNEL PLAYLISTS…" : "CONNECT YOUTUBE TO LOAD PLAYLISTS"} aria-label="Playlists" disabled />}
             {shouldShowActions("playlists") ? <FieldActions field="playlists" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
           </SubToolboxSection>
         ) : null}
