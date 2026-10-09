@@ -51,6 +51,7 @@ export interface CanonicalMetadataSectionsProps {
   playlists: string
   playlistOptions?: { value: string; label: React.ReactNode; disabled?: boolean }[]
   selectedPlaylistIds?: string[]
+  playlistLoading?: boolean
   onPlaylistToggle?: (playlistId: string) => void
   locationSuggestions?: string[]
   videoFile?: File | null
@@ -172,7 +173,7 @@ const SecondaryControls: React.FC<{
 
 export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps> = (props) => {
   const {
-    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, onPlaylistToggle, locationSuggestions = [], videoFile, thumbnailFile, thumbnailPreview,
+    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, playlistLoading = false, onPlaylistToggle, locationSuggestions = [], videoFile, thumbnailFile, thumbnailPreview,
     visibility, audience = false, timestamps = "", location = "", community = false, aiUse = true,
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
@@ -241,7 +242,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         {showPlaylists ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><ListVideo size={12} /> PLAYLISTS</span>}>
             {playlistOptions.length > 0 && onPlaylistToggle ? (
-              <SubToolboxTopTitleDropdown level="l1" label="CHANNEL PLAYLISTS" value={selectedPlaylistIds?.length ? `${selectedPlaylistIds.length} SELECTED` : "SELECT PLAYLISTS"} options={playlistOptions} multiSelect selectedValues={selectedPlaylistIds || []} onValueChange={onPlaylistToggle} ariaLabel="Select channel playlists" />
+              <SubToolboxTopTitleDropdown level="l1" label="CHANNEL PLAYLISTS" value={playlistLoading ? "LOADING PLAYLISTS…" : selectedPlaylistIds?.length ? `${selectedPlaylistIds.length} SELECTED` : "SELECT PLAYLISTS"} options={playlistOptions} multiSelect selectedValues={selectedPlaylistIds || []} onValueChange={onPlaylistToggle} ariaLabel="Select channel playlists" />
             ) : <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder="CONNECT YOUTUBE TO LOAD PLAYLISTS" aria-label="Playlists" disabled />}
             {shouldShowActions("playlists") ? <FieldActions field="playlists" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
           </SubToolboxSection>
