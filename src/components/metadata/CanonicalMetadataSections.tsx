@@ -249,7 +249,28 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         {showPlaylists ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><ListVideo size={12} /> PLAYLISTS</span>}>
             {playlistOptions.length > 0 && onPlaylistToggle ? (
-              <SubToolboxTopTitleDropdown level="l1" label="CHANNEL PLAYLISTS" value={playlistLoading ? "LOADING PLAYLISTS…" : selectedPlaylistIds?.length ? `${selectedPlaylistIds.length} SELECTED` : "SELECT PLAYLISTS"} options={playlistOptions} multiSelect selectedValues={selectedPlaylistIds || []} onValueChange={onPlaylistToggle} ariaLabel="Select channel playlists" />
+              <SubToolboxSelect
+                controlSize="standard"
+                value={selectedPlaylistIds?.[0] || ""}
+                onChange={event => {
+                  const nextId = event.target.value
+                  if (!nextId) {
+                    ;(selectedPlaylistIds || []).forEach(onPlaylistToggle)
+                    return
+                  }
+                  ;(selectedPlaylistIds || []).filter(id => id !== nextId).forEach(onPlaylistToggle)
+                  if (!(selectedPlaylistIds || []).includes(nextId)) onPlaylistToggle(nextId)
+                }}
+                aria-label="Channel playlist"
+                disabled={playlistLoading}
+              >
+                <option value="">{playlistLoading ? "LOADING CHANNEL PLAYLISTS…" : "SELECT A CHANNEL PLAYLIST"}</option>
+                {playlistOptions.map(option => (
+                  <option key={option.value} value={option.value} disabled={option.disabled}>
+                    {typeof option.label === "string" || typeof option.label === "number" ? option.label : option.value}
+                  </option>
+                ))}
+              </SubToolboxSelect>
             ) : <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder={playlistLoading ? "LOADING CHANNEL PLAYLISTS…" : "CONNECT YOUTUBE TO LOAD PLAYLISTS"} aria-label="Playlists" disabled />}
             {shouldShowActions("playlists") ? <FieldActions field="playlists" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
           </SubToolboxSection>
