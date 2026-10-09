@@ -62,7 +62,6 @@ export interface CanonicalMetadataSectionsProps {
   onAudienceChange?: (value: boolean) => void
   onTimestampsChange?: (value: string) => void
   onLocationChange?: (value: string) => void
-  locationSuggestions?: string[]
   onCommunityChange?: (value: boolean) => void
   onAiUseChange?: (value: boolean) => void
   onGenerate?: (field: string) => void
@@ -127,10 +126,11 @@ const SecondaryControls: React.FC<{
   onAudienceChange?: (value: boolean) => void
   onTimestampsChange?: (value: string) => void
   onLocationChange?: (value: string) => void
+  locationSuggestions?: string[]
   onCommunityChange?: (value: boolean) => void
   onAiUseChange?: (value: boolean) => void
 }> = ({
-  visibility, audience, timestamps, location, community, aiUse,
+  visibility, audience, timestamps, location, community, aiUse, locationSuggestions = [],
   onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange,
   onCommunityChange, onAiUseChange,
 }) => (
