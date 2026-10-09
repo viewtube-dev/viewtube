@@ -143,6 +143,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [publishError, setPublishError] = useState<string | null>(null)
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+  const [savedThumbnailPreview, setSavedThumbnailPreview] = useState<string | null>(null)
   const [captionFile, setCaptionFile] = useState<File | null>(null)
   const [publishTitle, setPublishTitle] = useState("")
   const [publishDescription, setPublishDescription] = useState("")
@@ -631,6 +632,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 playlists={playlistIds}
                 videoFile={videoFile}
                 thumbnailFile={thumbnailFile}
+                thumbnailPreview={savedThumbnailPreview}
                 visibility={privacyStatus}
                 audience={publishAudience}
                 timestamps={publishTimestamps}
@@ -643,7 +645,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 onCategoryChange={setPublishCategory}
                 onPlaylistsChange={setPlaylistIds}
                 onVideoFileChange={setVideoFile}
-                onThumbnailFileChange={setThumbnailFile}
+                onThumbnailFileChange={(file) => { setThumbnailFile(file); if (file) setSavedThumbnailPreview(null) }}
                 onVisibilityChange={(value) => setPrivacyStatus(value as "public" | "private" | "unlisted")}
                 onAudienceChange={setPublishAudience}
                 onTimestampsChange={setPublishTimestamps}
@@ -696,6 +698,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                   setPublishCommunity(Boolean(payload.community))
                   setPublishAiUse(payload.aiUse !== false)
                   setPlaylistIds(payload.playlistIds || "")
+                  setSavedThumbnailPreview(payload.thumbnailPreviewUrl || null)
+                  setThumbnailFile(null)
                   const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
                   if (project) {
                     updateProject(project.id, {
