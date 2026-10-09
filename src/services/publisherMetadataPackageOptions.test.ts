@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
 import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
-import { resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
+import { findVideoPackageByProject, resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
 import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
 import { listPublisherMetadataPackageOptions, selectPublisherMetadataPackageOption } from "./publisherMetadataPackageOptions"
 
@@ -47,6 +47,7 @@ describe("Publisher metadata package options", () => {
       title: "Alternative", description: "Alternative description", tags: "alternative",
     }, { mode: "option" })
 
+    expect(getContentBuild(project.contentBuildId)?.selections["metadata-package"]).toBe(current.packageOptionAssetId)
     selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
     const build = getContentBuild(project.contentBuildId)!
     expect(build.selections["metadata-package"]).toBe(alternative.packageOptionAssetId)
@@ -55,11 +56,13 @@ describe("Publisher metadata package options", () => {
     expect(build.selections.title).toBe(selectedOption.payload.titleAssetId)
     expect(build.selections.description).toBe(selectedOption.payload.descriptionAssetId)
     expect(build.selections.tags).toBe(selectedOption.payload.tagsAssetId)
-    const packageBeforeRepeat = JSON.stringify(build)
+    const packageBeforeRepeat = findVideoPackageByProject(project.id, project.contentBuildId)!
+    const provenanceCountBeforeRepeat = packageBeforeRepeat.provenance.length
     selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
     const afterRepeat = getContentBuild(project.contentBuildId)!
+    const packageAfterRepeat = findVideoPackageByProject(project.id, project.contentBuildId)!
     expect(afterRepeat.variantGroups.find(group => group.slot === "metadata-package")?.members).toHaveLength(2)
     expect(afterRepeat.id).toBe(build.id)
-    expect(JSON.parse(packageBeforeRepeat).id).toBe(afterRepeat.id)
+    expect(packageAfterRepeat.provenance).toHaveLength(provenanceCountBeforeRepeat)
   })
 })
