@@ -3,7 +3,7 @@
 **Date:** 2026-10-09  
 **Repository:** `viewtube-dev/viewtube`  
 **Working branch:** `audit/system-convergence-identity-certification`  
-**Status:** SPECIFICATION ADDED — implementation and verification pending  
+**Status:** PARTIAL IMPLEMENTATION COMMITTED — local verification and Maps autocomplete integration pending  
 **Parent continuation record:** [Conversation-Publisher-Metadata-Render-2026-10-09.md](../recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md)  
 **Canonical persistence plan:** [VIEWTUBE_PUBLISHER_METADATA_PROJECT_PACKAGE_PERSISTENCE_PLAN_2026-10-08.md](VIEWTUBE_PUBLISHER_METADATA_PROJECT_PACKAGE_PERSISTENCE_PLAN_2026-10-08.md)
 
@@ -204,4 +204,4 @@ Verify current API support, authorization scopes, quota costs, writable fields, 
 
 Implement in small test-first slices. First inspect current code and existing API/auth/provider patterns; do not presume integrations are missing just because the canonical UI is incomplete. Write/extend tests before changing components. Keep changes scoped and commit-ready. Run adversarial review for the API mapping, ownership boundaries, and persistence compatibility before merging. If an external location provider or secret/configuration is required, document the exact dependency and configuration gate rather than shipping a client-side key.
 
-**Next action:** execute Slice A on this branch, while continuing the existing saved-set verification and durable Vault/Asset Engine ingestion work from the parent recovery record. Do not deploy until relevant tests and build pass.
+**Current implementation receipt (2026-10-09):** CanonicalMetadataSections now owns Manager privacy/category/playlist controls instead of duplicating them in PublishingControls; channel playlist options are sourced through the existing authenticated `fetchSimplePlaylists` API in both tools; Publisher has a Scheduled workflow state and datetime input with future-time validation; audience is labelled “IS IT MADE FOR KIDS?”; Manager sends the supported self-declared audience field and recording location through its server API; community and AI Use values are persisted into project publishingMetadata. Shared YouTube category options and focused layout contract tests were updated. **Not yet complete:** provider-backed Maps/Places autocomplete and spelling-tolerant suggestions are not wired because no existing provider/service was found in the branch; audience unset-state migration and full Publisher API mapping still need review; tests/typecheck/build have not been run in this environment. Next: inspect the available secure Maps provider/configuration, implement its server-backed autocomplete and place normalization, then run the focused tests, typecheck, full tests, and production build before deployment.
