@@ -11,6 +11,7 @@ import {
   SubToolboxStatusBadge,
   SubToolboxToggle,
   SubToolboxTagEditor,
+  SubToolboxTopTitleDropdown,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
 import { SubToolboxSplitButton } from "../subtoolbox/SubToolboxSplitPrimitives"
@@ -37,6 +38,10 @@ export interface CanonicalMetadataSectionsProps {
   tags: string
   category: string
   playlists: string
+  playlistOptions?: { value: string; label: React.ReactNode; disabled?: boolean }[]
+  selectedPlaylistIds?: string[]
+  onPlaylistToggle?: (playlistId: string) => void
+  locationSuggestions?: string[]
   videoFile?: File | null
   thumbnailFile?: File | null
   thumbnailPreview?: string | null
@@ -57,6 +62,7 @@ export interface CanonicalMetadataSectionsProps {
   onAudienceChange?: (value: boolean) => void
   onTimestampsChange?: (value: string) => void
   onLocationChange?: (value: string) => void
+  locationSuggestions?: string[]
   onCommunityChange?: (value: boolean) => void
   onAiUseChange?: (value: boolean) => void
   onGenerate?: (field: string) => void
@@ -134,14 +140,15 @@ const SecondaryControls: React.FC<{
         <option value="public">PUBLIC</option><option value="unlisted">UNLISTED</option><option value="private">PRIVATE</option>
       </SubToolboxSelect>
     </SubToolboxSection>
-    <SubToolboxSection label={<span className="flex items-center gap-1"><Users size={11} /> AUDIENCE</span>}>
-      <SubToolboxToggle pressed={audience} label={audience ? "YES" : "NO"} onClick={() => onAudienceChange?.(!audience)} />
+    <SubToolboxSection label={<span className="flex items-center gap-1"><Users size={11} /> IS IT MADE FOR KIDS?</span>}>
+      <SubToolboxToggle pressed={audience} label={audience ? "YES" : "NO"} aria-label="Is it made for kids?" onClick={() => onAudienceChange?.(!audience)} />
     </SubToolboxSection>
     <SubToolboxSection label={<span className="flex items-center gap-1"><Clock3 size={11} /> TIMESTAMPS</span>}>
       <SubToolboxInput controlSize="micro" value={timestamps} onChange={e => onTimestampsChange?.(e.target.value)} placeholder="OPTIONAL" aria-label="Timestamps" />
     </SubToolboxSection>
     <SubToolboxSection label={<span className="flex items-center gap-1"><MapPin size={11} /> LOCATION</span>}>
-      <SubToolboxInput controlSize="micro" value={location} onChange={e => onLocationChange?.(e.target.value)} placeholder="OPTIONAL" aria-label="Location" />
+      <SubToolboxInput controlSize="micro" list="vt-metadata-location-suggestions" value={location} onChange={e => onLocationChange?.(e.target.value)} placeholder="SEARCH OR ENTER LOCATION" aria-label="Location" autoComplete="off" />
+      <datalist id="vt-metadata-location-suggestions">{locationSuggestions.map(value => <option key={value} value={value} />)}</datalist>
     </SubToolboxSection>
     <SubToolboxSection label={<span className="flex items-center gap-1"><MessageSquare size={11} /> COMMUNITY</span>}>
       <SubToolboxToggle pressed={community} label={community ? "YES" : "NO"} onClick={() => onCommunityChange?.(!community)} />
@@ -154,7 +161,7 @@ const SecondaryControls: React.FC<{
 
 export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps> = (props) => {
   const {
-    title, description, tags, category, playlists, videoFile, thumbnailFile, thumbnailPreview,
+    title, description, tags, category, playlists, playlistOptions = [], selectedPlaylistIds, onPlaylistToggle, locationSuggestions = [], videoFile, thumbnailFile, thumbnailPreview,
     visibility, audience = false, timestamps = "", location = "", community = false, aiUse = true,
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
@@ -207,7 +214,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           {shouldShowActions("description") ? <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
-        <SecondaryControls {...{ visibility, audience, timestamps, location, community, aiUse, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange }} />
+        <SecondaryControls {...{ visibility, audience, timestamps, location, community, aiUse, locationSuggestions, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange }} />
 
         {category === "27" && onEducationNotesChange ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><Tags size={12} /> EDUCATION QUESTIONS & PHRASES</span>}>
@@ -222,7 +229,9 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
 
         {showPlaylists ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><ListVideo size={12} /> PLAYLISTS</span>}>
-            <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder="PLAYLIST IDS / NAMES" aria-label="Playlists" />
+            {playlistOptions.length > 0 && onPlaylistToggle ? (
+              <SubToolboxTopTitleDropdown level="l1" label="CHANNEL PLAYLISTS" value={selectedPlaylistIds?.length ? `${selectedPlaylistIds.length} SELECTED` : "SELECT PLAYLISTS"} options={playlistOptions} multiSelect selectedValues={selectedPlaylistIds || []} onValueChange={onPlaylistToggle} ariaLabel="Select channel playlists" />
+            ) : <SubToolboxInput value={playlists} onChange={e => onPlaylistsChange(e.target.value)} placeholder="CONNECT YOUTUBE TO LOAD PLAYLISTS" aria-label="Playlists" disabled />}
             {shouldShowActions("playlists") ? <FieldActions field="playlists" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
           </SubToolboxSection>
         ) : null}
