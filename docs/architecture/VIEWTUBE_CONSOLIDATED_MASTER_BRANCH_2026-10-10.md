@@ -96,3 +96,35 @@ The selective persistence work now on master must also be validated on this bran
 - `docs/plans/VIEWTUBE_VIDEO_PUBLISHER_WRITE_CREATE_IMPLEMENTATION_PLAN_2026-10-09.md`
 - `docs/ui/STUDIO_HUB_COMPONENT_FOUNDATION_PHASE_1_SOURCE_AUDIT_2026-10-10.md`
 - `docs/superpowers/plans/2026-10-08-viewtube-primitive-system-stabilization.md`
+
+## Studio Hub / Metadata / Project branch and PR reconciliation — 2026-10-10
+
+This section records the explicit reconciliation of the relevant branch and pull-request families against this integration branch. “Integrated” means the important behavior is represented in the current branch; it does not mean every historical commit from the source branch was merged.
+
+### Metadata Master branches and PRs
+
+- `feat/metadata-master-studio-hub` / PR #10: **selective reconciliation, not a wholesale merge**. The current integration branch already contains `src/views/MetadataMaster.tsx`, `src/services/metadataMaster.ts`, its service/contract tests, and the implementation plan. The source branch is substantially behind the current integration tree, so replacing current files with its versions would roll back newer work. Reuse any genuinely unique package comparison, locks, scoring, generation, and handoff behavior only after comparing it against the current implementations and adding regression tests.
+- `feat/metadata-master-studio-hub-v2`: treated as an alternative iteration of the same Metadata Master work, not an additional independent implementation. Do not merge it wholesale on top of PR #10.
+- PR #9: historical/stale-base predecessor to PR #10; not a separate source of truth.
+- `docs/integrated-metadata-system-plan-2026-10-06`, `feat/integrated-metadata-system-execution-2026-10-06`, and PR #11: historical architecture/plan material. The branch comparisons show no unique file changes against the current integration head for the two named branches; retain useful decisions in the canonical plans instead of importing stale snapshots.
+
+### Publisher / Manager metadata layout
+
+- PR #13 / `feature/studio-hub-component-foundation-audit`: the canonical metadata section component and its order contract are already present on this branch. Keep the canonical order and existing callback/data wiring. Its supporting source-audit and reconciliation-plan documents are also included.
+- PR #12: its integrated Publisher/Manager direction is represented through the current shared metadata section work and system-convergence plans. Do not add a second competing “Metadata Intelligence” publishing owner or replace the current Publisher/Manager responsibilities with the older branch snapshot.
+- PR #14 / `integration/publisher-metadata-package-persistence`: the persistence service, saved metadata options, and focused service tests are already present on this branch. PR #14 is therefore a redundant parallel proposal for the same scope, not a separate merge source. Keep its behavior in the consolidated branch and do not merge that PR back to `main`.
+
+### Studio Hub frontend and project-related work
+
+- `feature/studio-hub-frontend-layout-plan`: its frontend component-layout plan is included.
+- `feature/studio-hub-component-foundation-audit`: its component foundation audit, metadata layout, and regression test are included. The older branch is behind this integration head; do not replace current primitives or CSS with the entire older tree.
+- `audit/system-convergence-identity-certification`: selected as the base convergence line. Its system ownership, project/package lifecycle, recovery, and cross-tool plans are already represented; no additional file differences were reported when comparing that branch to the current integration head.
+- Project/publishing persistence must continue to use the canonical project, ContentBuild, Video Package, and Asset Engine owners. Do not introduce parallel project stores or duplicate asset repositories.
+
+### Explicit branch exclusion
+
+- `visual-test/canonical-default-system-65-66` is the **canonical UI branch** and is explicitly excluded from branch/PR merges. Only previously authorized, individually selected primitive ideas documented in this manifest (right-label fields, component-size tokens, and multiple-selection button-group behavior) may be retained as selective ports; do not merge the branch or overwrite canonical UI files/CSS from it.
+
+### Validation boundary
+
+This reconciliation is based on GitHub branch comparisons and file presence. It is not a claim that every feature is runtime-verified. Continue using the validation checklist, record the exact tested commit, and keep all integration work on `master/consolidated-feature-integration`. Do not merge to `main` without explicit user approval.
