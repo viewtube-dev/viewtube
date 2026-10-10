@@ -136,7 +136,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [durationStats, setDurationStats] = useState("Avg. Views")
   const [formatMode, setFormatMode] = useState<"longform" | "shorts">("longform")
   const [isOpen, setIsOpen] = useState(isOpenInitial)
-  const [workspaceMode, setWorkspaceMode] = useState<"workspace" | "intelligence">("workspace")
+  const [workspaceMode, setWorkspaceMode] = useState<"write" | "create">("write")
   const [missingFields, setMissingFields] = useState({ concept: false, niche: false })
   const [insightsImported, setInsightsImported] = useState(false)
   const [publishRefresh, setPublishRefresh] = useState(0)
@@ -275,12 +275,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     return () => { active = false }
   }, [(authState as any)?.channelId])
 
-  useEffect(() => {
-    if (!result) return
-    setPublishTitle(result.titleSets[0]?.title || publishTitle)
-    setPublishDescription(result.description || "")
-    setPublishTags(result.tags || "")
-  }, [result])
+  // Generated results remain candidates in Create / Generate. They never overwrite Write inputs automatically.
 
 
   const beginOrResumePublishing = () => {
@@ -611,12 +606,12 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         <div className="flex items-center gap-2">
           <ToolboxHeaderToggle
             value={workspaceMode}
-            aria-label="Publisher view"
+            aria-label="Video Publisher page"
             options={[
-              { value: "workspace", label: "Workspace" },
-              { value: "intelligence", label: "Intelligence" },
+              { value: "write", label: "Write" },
+              { value: "create", label: "Create / Generate" },
             ]}
-            onValueChange={(value) => setWorkspaceMode(value === "intelligence" ? "intelligence" : "workspace")}
+            onValueChange={(value) => setWorkspaceMode(value === "create" ? "create" : "write")}
           />
           <ToolboxHeaderToggle
             value={formatMode}
@@ -638,7 +633,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
        onSaveProject={saveProjectManifestState}
        paletteIndex={basePalette}
       />
-      {workspaceMode === "workspace" ? (
+      {workspaceMode === "write" ? (
         <>
               <CanonicalMetadataSections
                 title={publishTitle}
@@ -764,55 +759,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
 
         </>
       ) : null}
-      {workspaceMode === "intelligence" ? (
-        <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
-      ) : (
+      {workspaceMode === "create" ? (
         <>
-      {publishState.projection ? (
-        <SubToolboxStack density="comfortable">
-          <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
-            <SubToolboxStack density="comfortable">
-              <SubToolboxGrid minItemWidth="compact">
-                <SubToolboxOutputCard title="PREFLIGHT" icon={<ShieldCheck size={18} />}>
-                  <div className="text-xl font-black">{publishState.projection.ready ? "READY" : publishState.projection.missing.length + " MISSING"}</div>
-                  <div>{publishState.projection.ready ? "Canonical package approved." : publishState.projection.missing.join(" · ")}</div>
-                </SubToolboxOutputCard>
-                <SubToolboxOutputCard title="TRANSACTION" icon={<RefreshCcw size={18} />}>
-                  <div className="text-xl font-black">{publishState.transaction?.status.toUpperCase() || "NOT STARTED"}</div>
-                  <div>{publishState.transaction ? Object.values(publishState.transaction.steps).filter(step => step?.status === "completed").length + "/10 STEPS COMPLETE" : "Start only after preflight is ready."}</div>
-                </SubToolboxOutputCard>
-              </SubToolboxGrid>
-
-              {publishError ? <SubToolboxStatePanel state="error" message={publishError} /> : null}
-              {uploadProgress > 0 && uploadProgress < 100 ? <SubToolboxStatePanel state="loading" message={"VIDEO UPLOAD " + Math.round(uploadProgress) + "%"} /> : null}
-
-              <SubToolbox title="10-Step Transaction" icon={<RefreshCcw size={20}/>} collapsible isOpenInitial>
-                <SubToolboxGrid minItemWidth="compact" density="dense" aria-label="Publishing transaction progress">
-                  {(["validate-package","creator-approval","upload-video","bind-youtube","apply-metadata","apply-thumbnail","apply-captions","apply-routing","apply-schedule-privacy","verify-remote-state"] as const).map((step,index) => (
-                    <SubToolboxOutputCard key={step} title={(index+1).toString().padStart(2,"0")+" · "+step.replaceAll("-"," ").toUpperCase()}>
-                      <strong>{publishState.transaction?.steps[step]?.status?.toUpperCase() || "PENDING"}</strong>
-                    </SubToolboxOutputCard>
-                  ))}
-                </SubToolboxGrid>
-              </SubToolbox>
-
-              <SubToolboxActions columns={3}>
-                <SubToolboxButton tone={publishState.projection.ready ? "success" : "warning"} disabled={!publishState.projection.ready || publishBusy} onClick={beginOrResumePublishing}>{publishState.transaction ? "RESUME" : "START"}</SubToolboxButton>
-                <SubToolboxButton disabled={!publishState.transaction || publishBusy} onClick={()=>void uploadVideo()}>{publishState.transaction?.youtubeVideoId ? "VIDEO BOUND" : "UPLOAD VIDEO"}</SubToolboxButton>
-                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyMetadata()}>APPLY METADATA</SubToolboxButton>
-                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyThumbnail()}>THUMBNAIL</SubToolboxButton>
-                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyCaptions()}>{captionFile ? "CAPTIONS" : "SKIP CAPTIONS"}</SubToolboxButton>
-                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyRouting()}>{playlistIds.trim() ? "PLAYLISTS" : "SKIP ROUTING"}</SubToolboxButton>
-                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applySchedule()}>PRIVACY / SCHEDULE</SubToolboxButton>
-                <SubToolboxButton tone="success" disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={() => void verifyAndCompletePublishing()}>{publishBusy ? "WORKING…" : "VERIFY + COMPLETE"}</SubToolboxButton>
-                <SubToolboxButton tone="neutral" onClick={() => setPublishRefresh(value => value + 1)}>REFRESH</SubToolboxButton>
-              </SubToolboxActions>
-            </SubToolboxStack>
-          </SubToolbox>
-        </SubToolboxStack>
-      ) : (
-        <SubToolboxStatePanel state="empty" message="No canonical Publishing Package is available. Finish the active Project package before publishing." />
-      )}
       {!result ? (
         <SubToolboxStack density="comfortable">
           <BrainLiveToolInbox destinationToolId="video-publisher" channelId={(authState as any)?.channelId ?? null} onPrefill={applyPrefill} />
@@ -865,8 +813,62 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           <PostActionReflection toolId="VIDEO_PUBLISHER" />
         </SubToolboxStack>
       )}
+
+          <SubToolbox title="ADVANCED METADATA INTELLIGENCE" icon={<Sparkles size={20} strokeWidth={3} />} paletteIndex={basePalette + 2} collapsible isOpenInitial={false}>
+            <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 2} />
+          </SubToolbox>
         </>
+      ) : null}
+      {workspaceMode === "write" ? (
+        <>
+      {publishState.projection ? (
+        <SubToolboxStack density="comfortable">
+          <SubToolbox title="Publishing Control" icon={<Send size={20} strokeWidth={3} />} paletteIndex={basePalette + 1} collapsible isOpenInitial>
+            <SubToolboxStack density="comfortable">
+              <SubToolboxGrid minItemWidth="compact">
+                <SubToolboxOutputCard title="PREFLIGHT" icon={<ShieldCheck size={18} />}>
+                  <div className="text-xl font-black">{publishState.projection.ready ? "READY" : publishState.projection.missing.length + " MISSING"}</div>
+                  <div>{publishState.projection.ready ? "Canonical package approved." : publishState.projection.missing.join(" · ")}</div>
+                </SubToolboxOutputCard>
+                <SubToolboxOutputCard title="TRANSACTION" icon={<RefreshCcw size={18} />}>
+                  <div className="text-xl font-black">{publishState.transaction?.status.toUpperCase() || "NOT STARTED"}</div>
+                  <div>{publishState.transaction ? Object.values(publishState.transaction.steps).filter(step => step?.status === "completed").length + "/10 STEPS COMPLETE" : "Start only after preflight is ready."}</div>
+                </SubToolboxOutputCard>
+              </SubToolboxGrid>
+
+              {publishError ? <SubToolboxStatePanel state="error" message={publishError} /> : null}
+              {uploadProgress > 0 && uploadProgress < 100 ? <SubToolboxStatePanel state="loading" message={"VIDEO UPLOAD " + Math.round(uploadProgress) + "%"} /> : null}
+
+              <SubToolbox title="10-Step Transaction" icon={<RefreshCcw size={20}/>} collapsible isOpenInitial>
+                <SubToolboxGrid minItemWidth="compact" density="dense" aria-label="Publishing transaction progress">
+                  {(["validate-package","creator-approval","upload-video","bind-youtube","apply-metadata","apply-thumbnail","apply-captions","apply-routing","apply-schedule-privacy","verify-remote-state"] as const).map((step,index) => (
+                    <SubToolboxOutputCard key={step} title={(index+1).toString().padStart(2,"0")+" · "+step.replaceAll("-"," ").toUpperCase()}>
+                      <strong>{publishState.transaction?.steps[step]?.status?.toUpperCase() || "PENDING"}</strong>
+                    </SubToolboxOutputCard>
+                  ))}
+                </SubToolboxGrid>
+              </SubToolbox>
+
+              <SubToolboxActions columns={3}>
+                <SubToolboxButton tone={publishState.projection.ready ? "success" : "warning"} disabled={!publishState.projection.ready || publishBusy} onClick={beginOrResumePublishing}>{publishState.transaction ? "RESUME" : "START"}</SubToolboxButton>
+                <SubToolboxButton disabled={!publishState.transaction || publishBusy} onClick={()=>void uploadVideo()}>{publishState.transaction?.youtubeVideoId ? "VIDEO BOUND" : "UPLOAD VIDEO"}</SubToolboxButton>
+                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyMetadata()}>APPLY METADATA</SubToolboxButton>
+                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyThumbnail()}>THUMBNAIL</SubToolboxButton>
+                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyCaptions()}>{captionFile ? "CAPTIONS" : "SKIP CAPTIONS"}</SubToolboxButton>
+                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applyRouting()}>{playlistIds.trim() ? "PLAYLISTS" : "SKIP ROUTING"}</SubToolboxButton>
+                <SubToolboxButton disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={()=>void applySchedule()}>PRIVACY / SCHEDULE</SubToolboxButton>
+                <SubToolboxButton tone="success" disabled={!publishState.transaction?.youtubeVideoId || publishBusy} onClick={() => void verifyAndCompletePublishing()}>{publishBusy ? "WORKING…" : "VERIFY + COMPLETE"}</SubToolboxButton>
+                <SubToolboxButton tone="neutral" onClick={() => setPublishRefresh(value => value + 1)}>REFRESH</SubToolboxButton>
+              </SubToolboxActions>
+            </SubToolboxStack>
+          </SubToolbox>
+        </SubToolboxStack>
+      ) : (
+        <SubToolboxStatePanel state="empty" message="No canonical Publishing Package is available. Finish the active Project package before publishing." />
       )}
+
+        </>
+      ) : null}
     </ToolboxScaffold>
   )
 }
