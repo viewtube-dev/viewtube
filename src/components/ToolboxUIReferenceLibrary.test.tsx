@@ -158,4 +158,17 @@ describe("Toolbox UI Reference Library", () => {
     expect(studioHub).toContain("<ToolboxUIReferenceLibrary collapsible isOpenInitial={false} paletteIndex={7} />")
     expect(studioHub.match(/<ToolboxUIReferenceLibrary/g)).toHaveLength(1)
   })
+
+  it("exposes independent 44px component-size DNA without changing structural L1", () => {
+    const tokens = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/tokens.ts"), "utf8")
+    expect(tokens).toContain('m: { height: 44, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 16 }')
+    expect(tokens).toContain('l1: { height: 48, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 18 }')
+  })
+
+  it("exposes a right-label variant for both canonical text field primitives", () => {
+    const primitives = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxPrimitives.tsx"), "utf8")
+    expect(primitives.match(/variant\\?: "default" \\| "right-label"/g)?.length).toBeGreaterThanOrEqual(3)
+    expect(primitives).toContain('variant = "right-label"')
+    expect(primitives).toContain('data-vt-input-variant={variant}')
+  })
 })
