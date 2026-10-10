@@ -991,13 +991,42 @@ export const SubToolboxSettingsSwitch: React.FC<SubToolboxSettingsSwitchProps> =
 
 export interface SubToolboxButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   level?: ToolboxControlLevel
-  items: Array<{ value: string; label: React.ReactNode }>
+  items: Array<{ value: string; label: React.ReactNode; disabled?: boolean }>
+  /** Single-select mode preserves the original value/onValueChange contract. */
   value?: string
   onValueChange?: (value: string) => void
+  /** Multiple-select mode supports independently toggling any number of options. */
+  selectionMode?: "single" | "multiple"
+  values?: string[]
+  onValuesChange?: (values: string[]) => void
 }
-export const SubToolboxButtonGroup: React.FC<SubToolboxButtonGroupProps> = ({ level = "l0", items, value, onValueChange, className, style, ...props }) => (
-  <div className={classes("vt-subtoolbox-button-group", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
-    {items.map((item) => <button type="button" key={item.value} className={value === item.value ? "is-active" : ""} aria-pressed={value === item.value} onClick={() => onValueChange?.(item.value)}>{item.label}</button>)}
+export const SubToolboxButtonGroup: React.FC<SubToolboxButtonGroupProps> = ({
+  level = "l0", items, value, onValueChange, selectionMode = "single", values = [], onValuesChange, className, style, ...props
+}) => (
+  <div className={classes("vt-subtoolbox-button-group", selectionMode === "multiple" && "is-multiple", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
+    {items.map((item) => {
+      const active = selectionMode === "multiple" ? values.includes(item.value) : value === item.value
+      return (
+        <button
+          type="button"
+          key={item.value}
+          disabled={item.disabled}
+          className={active ? "is-active" : ""}
+          aria-pressed={active}
+          onClick={() => {
+            if (item.disabled) return
+            if (selectionMode === "multiple") {
+              const nextValues = active ? values.filter(selected => selected !== item.value) : [...values, item.value]
+              onValuesChange?.(nextValues)
+            } else {
+              onValueChange?.(item.value)
+            }
+          }}
+        >
+          {item.label}
+        </button>
+      )
+    })}
   </div>
 )
 
