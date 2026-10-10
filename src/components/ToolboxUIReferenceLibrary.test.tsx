@@ -171,4 +171,12 @@ describe("Toolbox UI Reference Library", () => {
     expect(primitives).toContain('variant = "right-label"')
     expect(primitives).toContain('data-vt-input-variant={variant}')
   })
+
+  it("supports independently toggling multiple buttons in the canonical button group", () => {
+    const primitives = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxPrimitives.tsx"), "utf8")
+    expect(primitives).toContain('selectionMode?: "single" | "multiple"')
+    expect(primitives).toContain("onValuesChange?: (values: string[]) => void")
+    expect(primitives).toContain('selectionMode === "multiple"')
+    expect(primitives).toContain("values.filter(selected => selected !== item.value)")
+  })
 })
