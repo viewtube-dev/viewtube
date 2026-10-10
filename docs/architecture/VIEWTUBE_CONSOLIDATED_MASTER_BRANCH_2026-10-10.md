@@ -128,3 +128,23 @@ This section records the explicit reconciliation of the relevant branch and pull
 ### Validation boundary
 
 This reconciliation is based on GitHub branch comparisons and file presence. It is not a claim that every feature is runtime-verified. Continue using the validation checklist, record the exact tested commit, and keep all integration work on `master/consolidated-feature-integration`. Do not merge to `main` without explicit user approval.
+
+
+## Metadata Master variant comparison result — 2026-10-10
+
+Compared `src/views/MetadataMaster.tsx`, `src/services/metadataMaster.ts`, `src/views/MetadataMaster.contract.test.ts`, `src/services/metadataMaster.test.ts`, and `src/services/viewTubeToolChains.ts` on the current integration branch against both `feat/metadata-master-studio-hub` and `feat/metadata-master-studio-hub-v2`.
+
+- The v2 view file is identical to the current integration view file in this comparison.
+- The service, contract test, service test, and tool-chain files are identical across the current integration branch and both older Metadata Master variants.
+- The older `feat/metadata-master-studio-hub` view differs in one meaningful area: the current integration version resolves active workspace ContentBuild context through `resolveWorkspaceContentBuildToolContext` and attaches the available project ID, ContentBuild ID, and YouTube video ID to generated packages. The older view omits that context integration.
+- No uniquely missing package-comparison, slot-locking, applied-slot, readiness scoring, package history, or handoff behavior was identified in these compared files that justifies porting the older snapshots.
+
+Decision: **do not merge either Metadata Master variant and do not overwrite current files**. Keep the current workspace-aware implementation as the source of truth. The next work is validation of the exact integration head and fixing verified failures, not speculative feature copying.
+
+### Validation status snapshot
+
+- Integration branch head observed: `3b26ccd46e48601aa9d3d9897229c08d6207b3de`.
+- Compare to `main`: 97 commits ahead, 0 behind (branch relationship only).
+- GitHub combined status reported Vercel check failures for `viewtube-nyas`, `viewtube`, and `viewtube-x`, with target URL indicating a Vercel build-rate limit. These statuses do **not** prove the source compiles or fails to compile.
+- No pull-request-triggered GitHub Actions workflow runs were returned for this head in the queried endpoint.
+- No local build, typecheck, or test execution has been completed as part of this audit. Do not mark the validation checklist as passed until those commands are actually run and their results recorded.
