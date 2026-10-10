@@ -92,3 +92,14 @@ This is the first-pass inventory, not a complete per-file certification.
 - [Existing full primitive audit](../ui/STUDIO_HUB_FULL_UI_PRIMITIVE_AUDIT_2026-10-06.md)
 - [Component Library source of truth](../ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md)
 - [Studio Hub frontend layout implementation plan](./VIEWTUBE_STUDIO_HUB_FRONTEND_COMPONENT_LAYOUT_IMPLEMENTATION_PLAN_2026-10-10.md)
+
+
+## Follow-up source check: inside-field labels already exist
+
+A targeted inspection of `src/components/subtoolbox/SubToolboxPrimitives.tsx` found both `SubToolboxLabeledInput` and `SubToolboxLabeledTextArea`, each accepting an `overlayLabel` and rendering the canonical input/textarea primitive beneath it. The matching CSS lives in `src/styles/subtoolbox-system.css` under `.vt-subtoolbox-labeled-field` and `.vt-subtoolbox-labeled-field-overlay`; it places the label on the right side of the field and positions it near the top for a textarea.
+
+**Decision:** Do not create a duplicate label primitive. The remaining audit task is to verify these existing variants are registered and shown correctly in the component reference library, inspect their actual sizing/contrast/placeholder behavior at each supported level, and check their use in Video Manager and Video Publisher. If a missing requirement is only a styling or size issue, correct the canonical variant and its tests rather than adding feature-local markup.
+
+Source evidence:
+- [SubToolbox primitives](../../src/components/subtoolbox/SubToolboxPrimitives.tsx)
+- [SubToolbox system CSS](../../src/styles/subtoolbox-system.css)
