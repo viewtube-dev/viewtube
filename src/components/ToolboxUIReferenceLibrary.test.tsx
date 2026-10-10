@@ -167,7 +167,7 @@ describe("Toolbox UI Reference Library", () => {
 
   it("exposes a right-label variant for both canonical text field primitives", () => {
     const primitives = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxPrimitives.tsx"), "utf8")
-    expect(primitives.match(/variant\\?: "default" \\| "right-label"/g)?.length).toBeGreaterThanOrEqual(3)
+    expect(primitives.match(/variant\?: "default" \| "right-label"/g)?.length).toBeGreaterThanOrEqual(3)
     expect(primitives).toContain('variant = "right-label"')
     expect(primitives).toContain('data-vt-input-variant={variant}')
   })
