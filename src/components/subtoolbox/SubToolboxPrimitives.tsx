@@ -1,6 +1,6 @@
 import React from "react"
 import { createPortal } from "react-dom"
-import { CircleQuestionMark } from "lucide-react"
+import { ChevronDown, CircleQuestionMark } from "lucide-react"
 import "../../styles/toolbox-entry.css"
 import { getComponentLevelCssVars } from "./tokens"
 import type { SubToolboxControlSize, SubToolboxState, ToolboxControlLevel } from "./tokens"
@@ -23,19 +23,21 @@ export const SubToolboxFieldLabel: React.FC<React.LabelHTMLAttributes<HTMLLabelE
 export interface SubToolboxInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   controlSize?: "micro" | "standard"
   level?: ToolboxControlLevel
+  variant?: "default" | "right-label"
 }
-export const SubToolboxInput = React.forwardRef<HTMLInputElement, SubToolboxInputProps>(({ className, controlSize = "standard", level, style, ...props }, ref) => <input ref={ref} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", `is-${controlSize}`, level && "has-component-level", className)} {...props} />)
+export const SubToolboxInput = React.forwardRef<HTMLInputElement, SubToolboxInputProps>(({ className, controlSize = "standard", level, variant = "default", style, ...props }, ref) => <input ref={ref} data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", `is-${controlSize}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
 SubToolboxInput.displayName = "SubToolboxInput"
 
-export const SubToolboxTextArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { height?: "compact" | "standard" | "fill"; level?: ToolboxControlLevel }>(({ className, height = "standard", level, style, ...props }, ref) => <textarea ref={ref} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", "vt-subtoolbox-textarea", `is-${height}`, level && "has-component-level", className)} {...props} />)
+export const SubToolboxTextArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { height?: "compact" | "standard" | "fill"; level?: ToolboxControlLevel; variant?: "default" | "right-label" }>(({ className, height = "standard", level, variant = "default", style, ...props }, ref) => <textarea ref={ref} data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", "vt-subtoolbox-textarea", `is-${height}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
 SubToolboxTextArea.displayName = "SubToolboxTextArea"
 
 export interface SubToolboxLabeledInputProps extends SubToolboxInputProps {
   overlayLabel: React.ReactNode
+  variant?: "default" | "right-label"
 }
-export const SubToolboxLabeledInput = React.forwardRef<HTMLInputElement, SubToolboxLabeledInputProps>(({ overlayLabel, className, level = "l1", style, ...props }, ref) => (
-  <label className="vt-subtoolbox-labeled-field" data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
-    <SubToolboxInput ref={ref} level={level} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
+export const SubToolboxLabeledInput = React.forwardRef<HTMLInputElement, SubToolboxLabeledInputProps>(({ overlayLabel, className, level = "l1", variant = "right-label", style, ...props }, ref) => (
+  <label className={classes("vt-subtoolbox-labeled-field", `is-${variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
+    <SubToolboxInput ref={ref} level={level} variant={variant} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
     <span className="vt-subtoolbox-labeled-field-overlay" aria-hidden="true">{overlayLabel}</span>
   </label>
 ))
@@ -45,10 +47,11 @@ export interface SubToolboxLabeledTextAreaProps extends React.TextareaHTMLAttrib
   overlayLabel: React.ReactNode
   height?: "compact" | "standard" | "fill"
   level?: ToolboxControlLevel
+  variant?: "default" | "right-label"
 }
-export const SubToolboxLabeledTextArea = React.forwardRef<HTMLTextAreaElement, SubToolboxLabeledTextAreaProps>(({ overlayLabel, className, height = "standard", level = "l1", style, ...props }, ref) => (
-  <label className="vt-subtoolbox-labeled-field is-textarea" data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
-    <SubToolboxTextArea ref={ref} level={level} height={height} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
+export const SubToolboxLabeledTextArea = React.forwardRef<HTMLTextAreaElement, SubToolboxLabeledTextAreaProps>(({ overlayLabel, className, height = "standard", level = "l1", variant = "right-label", style, ...props }, ref) => (
+  <label className={classes("vt-subtoolbox-labeled-field", "is-textarea", `is-${variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
+    <SubToolboxTextArea ref={ref} level={level} variant={variant} height={height} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
     <span className="vt-subtoolbox-labeled-field-overlay" aria-hidden="true">{overlayLabel}</span>
   </label>
 ))
