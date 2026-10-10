@@ -1,6 +1,6 @@
 import React from "react"
 import { createPortal } from "react-dom"
-import { ChevronDown, CircleQuestionMark } from "lucide-react"
+import { CircleQuestionMark } from "lucide-react"
 import "../../styles/toolbox-entry.css"
 import { getComponentLevelCssVars } from "./tokens"
 import type { SubToolboxControlSize, SubToolboxState, ToolboxControlLevel } from "./tokens"
