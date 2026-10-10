@@ -103,3 +103,28 @@ A targeted inspection of `src/components/subtoolbox/SubToolboxPrimitives.tsx` fo
 Source evidence:
 - [SubToolbox primitives](../../src/components/subtoolbox/SubToolboxPrimitives.tsx)
 - [SubToolbox system CSS](../../src/styles/subtoolbox-system.css)
+
+
+## Follow-up source check: catalog split and first migration targets
+
+### Canonical baseline versus primitive-backed catalog
+
+A second targeted inspection confirms the two catalog tracks have different roles:
+
+- `StudioHubCompletePrimitiveCatalog.tsx` labels its examples as a **frozen hardcoded certification baseline** and currently lists generic `Text Input` and `Textarea` families. It does not import or render `SubToolboxLabeledInput` or `SubToolboxLabeledTextArea`.
+- `StudioHubPrimitiveMigrationCatalog.tsx` does import and render both labeled-field primitives. Therefore the variants are represented in the primitive migration track, but not as separately named families in the complete catalog's frozen hardcoded baseline.
+- Keep the baseline frozen as intended. Do not insert primitive-backed implementations into the hardcoded baseline, because that would erase the comparison. The safe next change is to make sure the migration/certification surface names these as explicit field variants and records their L0/L1/L2 behavior.
+
+### Current usage in first pilot pair
+
+- `VideoPublisher.tsx` imports and uses `SubToolboxInput` and `SubToolboxTextArea`, but does not currently use either labeled-field wrapper by name.
+- `VideoManager.tsx` does not directly import `SubToolboxInput` or `SubToolboxTextArea` in its current source. Its layout uses its own existing implementation patterns, so its field markup and styles need a closer pass before selecting which pieces to migrate.
+- This supports using Publisher/Manager as a **shared primitive migration pair**, but not rewriting either tool wholesale. First compare their current field semantics, save/update actions, data ownership, and styles. Then migrate one field pattern at a time.
+
+### Current source-based next slice
+
+1. Inspect `StudioHubPrimitiveMigrationCatalog.tsx` around the labeled input/textarea demos and the geometry/token mapping.
+2. Inspect Publisher field markup and Manager field markup/styles to identify exact hard-coded geometry and the appropriate canonical component mapping.
+3. Inspect existing tests for SubToolbox primitives and component catalog contracts; add focused coverage for labeled-field variants only if the current suite lacks it.
+4. Make a small implementation commit that improves the canonical primitive-backed certification surface, without changing the frozen baseline or tool behavior.
+5. Run the repository's relevant test/build commands in a real checkout before declaring implementation verified. GitHub source inspection alone cannot establish compilation or browser rendering.
