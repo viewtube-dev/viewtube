@@ -148,3 +148,13 @@ Decision: **do not merge either Metadata Master variant and do not overwrite cur
 - GitHub combined status reported Vercel check failures for `viewtube-nyas`, `viewtube`, and `viewtube-x`, with target URL indicating a Vercel build-rate limit. These statuses do **not** prove the source compiles or fails to compile.
 - No pull-request-triggered GitHub Actions workflow runs were returned for this head in the queried endpoint.
 - No local build, typecheck, or test execution has been completed as part of this audit. Do not mark the validation checklist as passed until those commands are actually run and their results recorded.
+
+
+## Render build failure fix — 2026-10-10
+
+Render's build log reported that `VideoPublisher.tsx` and `VideoManager.tsx` imported `YOUTUBE_CATEGORY_OPTIONS` from `CanonicalMetadataSections.tsx`, but the export was missing.
+
+- Fixed by exporting the shared canonical YouTube category list from `src/components/metadata/CanonicalMetadataSections.tsx`, preserving the existing category IDs and labels used by the Manager.
+- Added a regression contract to `src/components/metadata/videoManagerMetadataLayout.test.ts` asserting that the export and representative category entries remain present.
+- This change is committed only to `master/consolidated-feature-integration`; no change was made to `main` or `visual-test/canonical-default-system-65-66`.
+- Status: source-level fix committed. A new Render build and actual test execution are still required to verify the fix end-to-end; do not mark the build or tests as passing until results are observed.
