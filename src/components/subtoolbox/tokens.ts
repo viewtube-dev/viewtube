@@ -22,6 +22,42 @@ export const VT_SPECTRUM_PALETTE = [
   "#FF7AC8",
 ] as const
 
+
+/**
+ * Family-level component sizes are separate from the structural L0/L1/L2
+ * hierarchy. In particular, the M default is 44px while structural L1 remains
+ * 48px. Use these for catalog/reference families that specify their own size
+ * ladder; do not silently resize structural SubToolbox controls.
+ */
+export const VIEWTUBE_TYPOGRAPHY = {
+  family: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
+  controlWeight: 1000,
+  bodyWeight: 900,
+  controlLetterSpacingEm: -0.055,
+  controlLineHeight: 0.9,
+  uppercaseControls: true,
+} as const
+
+export const COMPONENT_SIZE_DNA = {
+  xs: { height: 20, stroke: 2, radius: 4, shadowOffset: 2, fontSize: 10 },
+  s: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
+  m: { height: 44, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 16 },
+  l: { height: 56, stroke: 3.5, radius: 9.333333, shadowOffset: 5.833333, fontSize: 24 },
+} as const
+
+export type ComponentSize = keyof typeof COMPONENT_SIZE_DNA
+
+export const getComponentSizeCssVars = (size: ComponentSize) => {
+  const dna = COMPONENT_SIZE_DNA[size]
+  return {
+    "--vt-component-height": `${dna.height}px`,
+    "--vt-component-stroke": `${dna.stroke}px`,
+    "--vt-component-radius": `${dna.radius}px`,
+    "--vt-component-shadow-offset": `${dna.shadowOffset}px`,
+    "--vt-component-font-size": `${dna.fontSize}px`,
+  } as const
+}
+
 export type ToolboxUiLevel = "toolbox" | "l0" | "l1" | "l2"
 export type ToolboxControlLevel = Exclude<ToolboxUiLevel, "toolbox">
 
