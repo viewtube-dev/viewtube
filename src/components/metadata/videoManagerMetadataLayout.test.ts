@@ -32,4 +32,23 @@ describe("Video Manager metadata layout contract", () => {
     const manager = read("src/views/VideoManager.tsx")
     expect(manager).not.toContain("<ProjectManifestation\\n")
   })
+  it("renders publishing fields in the canonical visual order", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    const renderedLayout = metadata.slice(metadata.indexOf("export const CanonicalMetadataSections"))
+    const markers = [
+      'overlayLabel={titleLabel}',
+      'overlayLabel={thumbnailLabel}',
+      'placement="pre-description"',
+      'overlayLabel={descriptionLabel}',
+      'placement="post-description"',
+      'PLAYLISTS',
+      'placement="post-playlists"',
+      'TAGS',
+      'label="CATEGORY"',
+    ]
+    const positions = markers.map(marker => renderedLayout.indexOf(marker))
+    expect(positions.every(position => position >= 0)).toBe(true)
+    expect(positions).toEqual([...positions].sort((a, b) => a - b))
+  })
+
 })
