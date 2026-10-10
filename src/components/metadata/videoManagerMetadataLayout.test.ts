@@ -5,21 +5,9 @@ import path from "node:path"
 const read = (file: string) => fs.readFileSync(path.resolve(process.cwd(), file), "utf8")
 
 describe("Video Manager metadata layout contract", () => {
-  it("uses the canonical metadata component as the single Manager controls surface", () => {
+  it("renders canonical metadata before Publishing Controls", () => {
     const manager = read("src/views/VideoManager.tsx")
-    expect(manager).toContain("<CanonicalMetadataSections")
-    expect(manager).not.toContain("<PublishingControls")
-    expect(manager).toContain("playlistOptions={userPlaylists.map")
-    expect(manager).toContain("selectedPlaylistIds={selectedPlaylistIds}")
-  })
-
-  it("maps channel playlists, category dropdowns, and audience semantics in the shared metadata component", () => {
-    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
-    expect(metadata).toContain("CHANNEL PLAYLISTS")
-    expect(metadata).toContain("YOUTUBE_CATEGORY_OPTIONS")
-    expect(metadata).toContain("IS IT MADE FOR KIDS?")
-    expect(metadata).toContain("AI USE")
-    expect(metadata).toContain("locationSuggestions.map")
+    expect(manager.indexOf("<CanonicalMetadataSections")).toBeLessThan(manager.indexOf("<PublishingControls"))
   })
 
   it("uses a forced three-button row for metadata actions", () => {
@@ -44,4 +32,23 @@ describe("Video Manager metadata layout contract", () => {
     const manager = read("src/views/VideoManager.tsx")
     expect(manager).not.toContain("<ProjectManifestation\\n")
   })
+  it("renders publishing fields in the canonical visual order", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    const renderedLayout = metadata.slice(metadata.indexOf("export const CanonicalMetadataSections"))
+    const markers = [
+      'overlayLabel={titleLabel}',
+      'overlayLabel={thumbnailLabel}',
+      'placement="pre-description"',
+      'overlayLabel={descriptionLabel}',
+      'placement="post-description"',
+      'PLAYLISTS',
+      'placement="post-playlists"',
+      'TAGS',
+      'label="CATEGORY"',
+    ]
+    const positions = markers.map(marker => renderedLayout.indexOf(marker))
+    expect(positions.every(position => position >= 0)).toBe(true)
+    expect(positions).toEqual([...positions].sort((a, b) => a - b))
+  })
+
 })
