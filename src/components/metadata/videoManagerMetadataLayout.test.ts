@@ -51,4 +51,13 @@ describe("Video Manager metadata layout contract", () => {
     expect(positions).toEqual([...positions].sort((a, b) => a - b))
   })
 
+
+  it("exports the shared YouTube category options imported by Publisher and Manager", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    expect(metadata).toContain("export const YOUTUBE_CATEGORY_OPTIONS = [")
+    expect(metadata).toContain('{ value: "27", label: "Education" }')
+    expect(metadata).toContain('{ value: "22", label: "People & Blogs" }')
+    expect(metadata).toContain('{ value: "28", label: "Science & Technology" }')
+  })
+
 })
