@@ -16,7 +16,7 @@
 
 ## Verification state
 
-This is an implementation checkpoint, not a verified release. The test and source edits have been committed to this branch, but no local TypeScript check, Vitest run, production build, or live-browser test has yet been executed from this branch. Vercel's recent preview deployments were rate-limited, and Render's connector did not return deployment status in the prior check.
+This is an implementation checkpoint, not a verified release. The test and source edits have been committed to this branch, but no local TypeScript check, Vitest run, production build, or live-browser test has yet been executed from this branch. Vercel's recent preview deployments were rate-limited. Render status was subsequently retrieved: service `viewtube-system-convergence` is live on commit `f7b6ecb93abd0f322f54d88f2a53fa309f505da1` from `audit/system-convergence-identity-certification`, not this child branch.
 
 ## Acceptance gate
 
