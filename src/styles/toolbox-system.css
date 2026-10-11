@@ -310,6 +310,11 @@
   max-width: min(32vw, 220px);
   gap: 4px;
 }
+.vt-toolbox-header-extras.is-header-placement {
+  max-width: none;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+}
 .vt-toolbox-header-secondary-actions {
   display: none;
 }
