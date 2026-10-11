@@ -10,9 +10,14 @@ describe("Video Manager metadata layout contract", () => {
     expect(manager.indexOf("<CanonicalMetadataSections")).toBeLessThan(manager.indexOf("<PublishingControls"))
   })
 
-  it("uses a forced three-button row for metadata actions", () => {
+  it("uses a responsive three-button row for metadata actions", () => {
     const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
-    expect(metadata).toContain('<SubToolboxActions columns={3} forceRow')
+    const styles = read("src/styles/subtoolbox-system.css")
+    expect(metadata).toContain('<SubToolboxActions columns={3} className="vt-metadata-field-actions mt-2">')
+    expect(metadata).not.toContain('<SubToolboxActions columns={3} forceRow')
+    expect(styles).toContain(".vt-metadata-field-actions{")
+    expect(styles).toContain("--vt-component-stroke:3px!important")
+    expect(styles).toContain("@media(max-width:420px){.vt-metadata-field-actions{grid-template-columns:minmax(0,1fr)}}")
   })
 
   it("keeps the colored right-side labels above the field surface", () => {
@@ -73,4 +78,15 @@ describe("Video Manager metadata layout contract", () => {
     expect(metadata).toContain('{ value: "28", label: "Science & Technology" }')
   })
 
+
+  it("keeps Manager and Publisher mode toggles inside the shared toolbox header", () => {
+    const toolbox = read("src/components/Toolbox.tsx")
+    const manager = read("src/views/VideoManager.tsx")
+    const publisher = read("src/views/VideoPublisher.tsx")
+    expect(toolbox).toContain('headerActionsPlacement?: "header" | "below"')
+    expect(toolbox).toContain('headerActionsPlacement === "below"')
+    expect(manager).toContain('headerActionsPlacement="header"')
+    expect(publisher).toContain('headerActionsPlacement="header"')
+    expect(manager).toContain('label: "Live Editor"')
+  })
 })
