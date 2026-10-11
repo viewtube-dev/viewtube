@@ -212,6 +212,9 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(migration).toContain("SubToolboxDropdownControl")
     expect(migration).toContain("TagRankTag")
     expect(migration).toContain("EducationTimestampNotes")
+    const compound = read("src/components/subtoolbox/SubToolboxCompoundPrimitives.tsx")
+    expect(compound).toContain("export const SubToolboxNestedSquareChoice")
+    expect(compound).toContain("export const SubToolboxTagActionRow")
   })
 
 })
