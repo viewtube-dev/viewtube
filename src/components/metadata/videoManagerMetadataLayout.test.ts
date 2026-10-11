@@ -15,6 +15,8 @@ describe("Video Manager metadata layout contract", () => {
     const styles = read("src/styles/subtoolbox-system.css")
     expect(metadata).toContain('<SubToolboxActions columns={3} className="vt-metadata-field-actions mt-2">')
     expect(metadata).not.toContain('<SubToolboxActions columns={3} forceRow')
+    expect(metadata).toContain('componentLevel="l1"')
+    expect(metadata).toContain('"--vt-component-height": "44px"')
     expect(styles).toContain(".vt-metadata-field-actions{")
     expect(styles).toContain("--vt-component-stroke:3px!important")
     expect(styles).toContain("@media(max-width:420px){.vt-metadata-field-actions{grid-template-columns:minmax(0,1fr)}}")
