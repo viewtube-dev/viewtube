@@ -2678,12 +2678,12 @@
 .vt-toolbox-header-title.is-toolbox {
   font-size:var(--vt-toolbox-title-size,26px);
   font-weight:1000;
-  line-height:.82;
+  line-height:.92;
 }
 .vt-toolbox-header-title.is-subtoolbox {
   font-size:var(--vt-subtoolbox-title-size,20px);
   font-weight:1000;
-  line-height:.82;
+  line-height:.92;
 }
 .vt-toolbox-header-control {
   display:flex;
@@ -3677,3 +3677,9 @@
 
 /* Empty upload frames keep the call-to-action legible over the soft color wash. */
 .vt-upload-tight-reveal-label { color: #000 !important; }
+
+/* Keep glyph boxes aligned to the visual center rather than a compressed baseline. */
+.vt-toolbox-header-title { line-height: .92 !important; }
+.vt-toolbox-header-control,
+.vt-toolbox-header-toggle { transform: none !important; }
+.vt-toolbox-header-control svg { display: block; vertical-align: middle; }
