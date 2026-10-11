@@ -44,6 +44,7 @@ import {
  ToolboxScaffold,
 } from "../components/Toolbox"
 import { SubToolboxActions } from "../components/subtoolbox/SubToolboxLayouts"
+import { ToolboxHeaderToggle } from "../components/subtoolbox/SubToolboxPrimitives"
 import { SubToolboxShellAction } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 import {
  SubToolboxAlert,
@@ -119,6 +120,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [isDraggingThumbnail, setIsDraggingThumbnail] = useState(false)
  const [isOpen, setIsOpen] = useState(isOpenInitial)
  const [viewMode, setViewMode] = useState<"workspace" | "intelligence">("workspace")
+ const [showFieldActions, setShowFieldActions] = useState(true)
  const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false)
  const [videoListLoadState, setVideoListLoadState] = useState<VideoListLoadState>("idle")
  const hasTriggeredInitialLoadRef = useRef(false)
@@ -545,6 +547,15 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    helpText={subtitleHelpRail}
    headerActions={
     <div className="flex items-center gap-2">
+     <ToolboxHeaderToggle
+      value={showFieldActions ? "shown" : "hidden"}
+      aria-label="Show or hide field actions"
+      options={[
+       { value: "shown", label: "Show Actions" },
+       { value: "hidden", label: "Hide Actions" },
+      ]}
+      onValueChange={(value) => setShowFieldActions(value === "shown")}
+     />
      <SubToolboxActions columns={2} className="!w-auto">
       <SubToolboxButton size="micro" selected={viewMode === "workspace"} onClick={() => setViewMode("workspace")}>LIVE EDITOR</SubToolboxButton>
       <SubToolboxButton size="micro" selected={viewMode === "intelligence"} onClick={() => setViewMode("intelligence")}>INTELLIGENCE</SubToolboxButton>
@@ -682,6 +693,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        paletteIndex={basePalette + 1}
       />
       <CanonicalMetadataSections
+       showFieldActions={showFieldActions}
        title={editTitle}
        description={editDescription}
        tags={editTags}
