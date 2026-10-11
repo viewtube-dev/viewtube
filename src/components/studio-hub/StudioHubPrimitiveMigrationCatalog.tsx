@@ -105,6 +105,8 @@ import {
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
+import { TagRankTag } from "../metadata/TagRankTag"
+import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -126,6 +128,8 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Nested Square Choice",
   "Tag-Adjacent Split Action Row",
   "Multi-Section Script Bar",
+  "Ranked Metadata Tag",
+  "Education Timestamp Notes",
   "Select Menu",
   "Context Menu",
   "Text Input",
@@ -286,6 +290,8 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Nested Square Choice": { mode: "compound", inlineUnits: 4.8, portraitStack: true },
   "Tag-Adjacent Split Action Row": { mode: "compound", inlineUnits: 6.2, portraitStack: true },
   "Multi-Section Script Bar": { mode: "compound", inlineUnits: 7.0, portraitStack: true },
+  "Ranked Metadata Tag": { mode: "compound", inlineUnits: 4.5, portraitStack: true },
+  "Education Timestamp Notes": { mode: "field", inlineUnits: 6.2, portraitStack: true },
   "Split Search": { mode: "compound", inlineUnits: 5.15, portraitStack: true },
   "Input Action": { mode: "compound", inlineUnits: 4.7, portraitStack: true },
   "Stepper": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
@@ -388,6 +394,7 @@ const PrimitiveMigrationControl: React.FC<{
   const [menuChoice, setMenuChoice] = React.useState("OPTION 1")
   const [toneChoice, setToneChoice] = React.useState("CINEMATIC")
   const [nestedChoice, setNestedChoice] = React.useState("HOOK")
+  const [educationNotes, setEducationNotes] = React.useState("0:00 Open with the central question\n1:25 Explain the key evidence")
   const [sliderValue, setSliderValue] = React.useState(62)
   const [rangeLow, setRangeLow] = React.useState(22)
   const [rangeHigh, setRangeHigh] = React.useState(76)
@@ -529,6 +536,15 @@ const PrimitiveMigrationControl: React.FC<{
         { id: "cta", label: "CTA", minutes: 0.5, words: 60, durationLabel: "0:30", color: "#FF77D6" },
       ]}
     />
+  }
+  if (name === "Ranked Metadata Tag") {
+    return <div className="flex flex-wrap items-center gap-1">
+      <TagRankTag tag="NAPOLEON" analysis={{ tag: "NAPOLEON", score: 92, searchVolume: 18400, competition: 4100, rank: 4, tripleKeyword: false }} componentLevel={level === "l0" ? "l1" : level} onRemove={() => undefined} />
+      <TagRankTag tag="CAMPAIGN" analysis={{ tag: "CAMPAIGN", score: 74, searchVolume: 8200, competition: 3900, rank: 18, tripleKeyword: true }} componentLevel={level === "l0" ? "l1" : level} />
+    </div>
+  }
+  if (name === "Education Timestamp Notes") {
+    return <EducationTimestampNotes embedded value={educationNotes} onChange={setEducationNotes} />
   }
   if (name === "Top Title Dropdown") {
     return <SubToolboxTopTitleDropdown
