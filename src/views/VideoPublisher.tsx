@@ -137,7 +137,6 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [formatMode, setFormatMode] = useState<"longform" | "shorts">("longform")
   const [isOpen, setIsOpen] = useState(isOpenInitial)
   const [workspaceMode, setWorkspaceMode] = useState<"workspace" | "intelligence">("workspace")
-  const [showFieldActions, setShowFieldActions] = useState(true)
   const [missingFields, setMissingFields] = useState({ concept: false, niche: false })
   const [insightsImported, setInsightsImported] = useState(false)
   const [publishRefresh, setPublishRefresh] = useState(0)
@@ -164,6 +163,33 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [uploadProgress, setUploadProgress] = useState(0)
   const [projectSaveStatus, setProjectSaveStatus] = useState<string | null>(null)
   const [projectSaveBusy, setProjectSaveBusy] = useState(false)
+
+  const handleVideoFileChange = (file: File | null) => {
+    setVideoFile(file)
+    if (!file) {
+      setFormatMode("longform")
+      return
+    }
+
+    // Infer Shorts from the actual uploaded media, not a user-facing mode toggle.
+    // YouTube Shorts can be square or portrait and this tool's requested limit is < 3:00.
+    const objectUrl = URL.createObjectURL(file)
+    const media = document.createElement("video")
+    media.preload = "metadata"
+    const cleanup = () => URL.revokeObjectURL(objectUrl)
+    media.onloadedmetadata = () => {
+      const isShort = Number.isFinite(media.duration)
+        && media.duration < 180
+        && media.videoHeight >= media.videoWidth
+      setFormatMode(isShort ? "shorts" : "longform")
+      cleanup()
+    }
+    media.onerror = () => {
+      setFormatMode("longform")
+      cleanup()
+    }
+    media.src = objectUrl
+  }
 
   const handleProjectManifestLoad = (project: typeof brain.projects[number]) => {
     setActiveProject(project.id)
@@ -612,31 +638,13 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       headerActions={
         <div className="flex flex-wrap items-center justify-end gap-2 max-w-full">
           <ToolboxHeaderToggle
-            value={workspaceMode}
-            aria-label="Publisher view"
+            value={workspaceMode === "intelligence" ? "generate" : "publish"}
+            aria-label="Publisher mode"
             options={[
-              { value: "workspace", label: "Workspace" },
-              { value: "intelligence", label: "Intelligence" },
+              { value: "publish", label: "Publish" },
+              { value: "generate", label: "Generate" },
             ]}
-            onValueChange={(value) => setWorkspaceMode(value === "intelligence" ? "intelligence" : "workspace")}
-          />
-          <ToolboxHeaderToggle
-            value={showFieldActions ? "shown" : "hidden"}
-            aria-label="Show or hide field actions"
-            options={[
-              { value: "shown", label: "Show Actions" },
-              { value: "hidden", label: "Hide Actions" },
-            ]}
-            onValueChange={(value) => setShowFieldActions(value === "shown")}
-          />
-          <ToolboxHeaderToggle
-            value={formatMode}
-            aria-label="Video format"
-            options={[
-              { value: "longform", label: "Longform" },
-              { value: "shorts", label: "Shorts" },
-            ]}
-            onValueChange={(value) => setFormatMode(value === "shorts" ? "shorts" : "longform")}
+            onValueChange={(value) => setWorkspaceMode(value === "generate" ? "intelligence" : "workspace")}
           />
         </div>
       }
@@ -652,7 +660,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       {workspaceMode === "workspace" ? (
         <>
               <CanonicalMetadataSections
-                showFieldActions={showFieldActions}
+                showFieldActions={true}
                 title={publishTitle}
                 description={publishDescription}
                 tags={publishTags}
@@ -683,7 +691,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 onTagsChange={setPublishTags}
                 onCategoryChange={setPublishCategory}
                 onPlaylistsChange={setPlaylistIds}
-                onVideoFileChange={setVideoFile}
+                onVideoFileChange={handleVideoFileChange}
                 onThumbnailFileChange={(file) => { setThumbnailFile(file); if (file) setSavedThumbnailPreview(null) }}
                 onVisibilityChange={(value) => {
                   if (value === "scheduled") {
@@ -831,7 +839,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           {insightsImported ? <SubToolboxStatePanel state="ready" message="Incoming Brain/tool context loaded. Review before generating or publishing." /> : null}
           <SubToolboxGrid minItemWidth="wide">
             <SubToolbox title="Video Upload" icon={<Upload size={20} strokeWidth={3} />} collapsible isOpenInitial>
-              <SubToolboxFileTarget label={videoFile ? <>{videoFile.name}<br />Final video selected</> : <>Drop files or click to upload<br />Upload video</>} icon={<Upload size={28} strokeWidth={3} />} accept="video/*" onFiles={files => setVideoFile(files?.[0] || null)} />
+              <SubToolboxFileTarget label={videoFile ? <>{videoFile.name}<br />Final video selected</> : <>Drop files or click to upload<br />Upload video</>} icon={<Upload size={28} strokeWidth={3} />} accept="video/*" onFiles={files => handleVideoFileChange(files?.[0] || null)} />
             </SubToolbox>
             <SubToolbox title="Video Script" icon={<FileText size={20} strokeWidth={3} />} collapsible isOpenInitial>
               <SubToolboxTextArea aria-label="Video script" value={script} onChange={(event) => setScript(event.target.value)} placeholder="Paste your script here..." height="standard" className="text-base" />
