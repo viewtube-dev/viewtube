@@ -59,7 +59,7 @@ describe("Video Manager metadata layout contract", () => {
   })
 
 
-  it("supports a visibility-only global toggle for metadata field actions", () => {
+  it("keeps metadata field actions visible without a show/hide header toggle", () => {
     const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
     const publisher = read("src/views/VideoPublisher.tsx")
     const manager = read("src/views/VideoManager.tsx")
@@ -111,7 +111,7 @@ describe("Video Manager metadata layout contract", () => {
   })
 
 
-  it("keeps header-placement toggles visible on mobile and uses the owning toolbox palette pair", () => {
+  it("keeps mode toggles inline in the colored header and uses the owning toolbox palette pair", () => {
     const toolbox = read("src/components/Toolbox.tsx")
     const styles = read("src/styles/toolbox-system.css")
     const primitiveStyles = read("src/styles/subtoolbox-system.css")
@@ -119,7 +119,10 @@ describe("Video Manager metadata layout contract", () => {
     expect(toolbox).toContain('vt-toolbox-header-secondary-actions is-mobile-header-fallback')
     expect(toolbox).toContain('["--pair-a" as string]: palette.header')
     expect(toolbox).toContain('["--pair-b" as string]: palette.icon')
-    expect(styles).toContain('.vt-toolbox-header-actions.is-toolbox .vt-toolbox-header-extras')
+    expect(styles).toContain('.vt-toolbox-header-extras.is-header-placement')
+    expect(styles).toContain('display: flex !important;')
+    expect(styles).toContain('.vt-toolbox-header-secondary-actions')
+    expect(styles).toContain('display: none !important;')
     expect(primitiveStyles).toContain('background:color-mix(in srgb,var(--pair-a,#20f13e) 55%,transparent)')
     expect(primitiveStyles).toContain('background:var(--pair-b,#f276c5)')
   })
