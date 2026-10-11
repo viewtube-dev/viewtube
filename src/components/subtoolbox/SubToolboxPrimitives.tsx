@@ -2223,7 +2223,7 @@ export const SubToolboxScriptBar: React.FC<SubToolboxScriptBarProps> = ({
   <div
     className={classes("vt-subtoolbox-script-bar", "flex w-full min-w-0 overflow-hidden rounded-xl border-[3px] border-black bg-white", className)}
     data-vt-control-level={level}
-    role="group"
+    role={onSegmentSelect ? "group" : "list"}
     aria-label={props["aria-label"] || "Script section timeline"}
     style={withComponentLevelStyle(level, style)}
     {...props}
@@ -2254,7 +2254,7 @@ export const SubToolboxScriptBar: React.FC<SubToolboxScriptBarProps> = ({
           onClick={() => onSegmentSelect(segment.id)}
         >{content}</button>
       ) : (
-        <div key={segment.id} className={sharedClass} style={sharedStyle} title={label} aria-label={label}>{content}</div>
+        <div key={segment.id} role="listitem" className={sharedClass} style={sharedStyle} title={label}>{content}</div>
       )
     })}
   </div>
