@@ -608,8 +608,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       helpText="Create a full metadata package for your video. Generate titles, descriptions, tags, and packaging prompts from your concept."
       shellClassName="animate-fade-in"
       contentClassName={embedded ? "p-0" : "p-8"}
+      headerActionsPlacement="header"
       headerActions={
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2 max-w-full">
           <ToolboxHeaderToggle
             value={workspaceMode}
             aria-label="Publisher view"
