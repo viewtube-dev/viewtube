@@ -539,7 +539,7 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Ranked Metadata Tag") {
     return <div className="flex flex-wrap items-center gap-1">
-      <TagRankTag tag="NAPOLEON" analysis={{ tag: "NAPOLEON", score: 92, searchVolume: 18400, competition: 4100, rank: 4, tripleKeyword: false }} componentLevel={level === "l0" ? "l1" : level} onRemove={() => undefined} />
+      <TagRankTag tag="NAPOLEON" analysis={{ tag: "NAPOLEON", score: 92, searchVolume: 18400, competition: 4100, rank: 4, tripleKeyword: false }} componentLevel={level === "l0" ? "l1" : level} />
       <TagRankTag tag="CAMPAIGN" analysis={{ tag: "CAMPAIGN", score: 74, searchVolume: 8200, competition: 3900, rank: 18, tripleKeyword: true }} componentLevel={level === "l0" ? "l1" : level} />
     </div>
   }
