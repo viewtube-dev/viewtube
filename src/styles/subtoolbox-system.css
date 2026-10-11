@@ -3531,3 +3531,15 @@
     min-height:clamp(140px,44vw,var(--vt-upload-target-min-height,220px))!important;
   }
 }
+
+
+/* Metadata field-action rows use component-level geometry and wrap cleanly on phones. */
+.vt-metadata-field-actions{width:100%;min-width:0;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.vt-metadata-field-actions [data-vt-control-level]{--vt-component-height:44px!important;--vt-component-stroke:3px!important;--vt-component-radius:8px!important;--vt-component-font-size:14px!important;min-width:0;width:100%;max-width:100%}
+.vt-metadata-field-actions .vt-subtoolbox-split-action{width:100%;min-width:0;max-width:100%;overflow:hidden}
+.vt-metadata-field-actions .vt-subtoolbox-split-action-title{min-width:0;white-space:nowrap;font-size:clamp(10px,1.4vw,14px);padding-inline:6px}
+.vt-metadata-tag-editor{display:flex!important;flex-wrap:wrap;align-items:center;width:100%;min-width:0;gap:6px}
+.vt-metadata-tag-editor .vt-subtoolbox-tag-editor-tags{display:flex;flex:1 1 100%;flex-wrap:wrap;min-width:0;gap:6px}
+.vt-metadata-tag-editor .vt-subtoolbox-tag-editor-entry{grid-column:1/-1;width:100%;min-width:0}
+@container vt-subtoolbox (max-width:420px){.vt-metadata-field-actions.has-3-columns{grid-template-columns:minmax(0,1fr)}.vt-metadata-field-actions .vt-subtoolbox-split-action-title{font-size:14px}}
+@media(max-width:420px){.vt-metadata-field-actions{grid-template-columns:minmax(0,1fr)}.vt-metadata-field-actions .vt-subtoolbox-split-action-title{font-size:14px}}
