@@ -1907,21 +1907,69 @@ export const SubToolboxMetric: React.FC<{ label: React.ReactNode; value: React.R
 
 export const SubToolboxOutputCard: React.FC<Omit<React.HTMLAttributes<HTMLElement>, "title"> & { title: React.ReactNode; icon?: React.ReactNode; badge?: React.ReactNode; action?: React.ReactNode; scroll?: boolean; children: React.ReactNode; level?: ToolboxControlLevel }> = ({ title, icon, badge, action, scroll = false, level, className, children, style, ...props }) => <article data-vt-control-level={level} className={classes("vt-subtoolbox-output", scroll && "is-scroll", level && "has-component-level", className)} style={withComponentLevelStyle(level, style)} {...props}><header className="vt-subtoolbox-output-header"><div className="vt-subtoolbox-output-title">{icon ? <span aria-hidden="true">{icon}</span> : null}<span>{title}</span></div>{action ?? (badge ? <span className="vt-subtoolbox-output-badge">{badge}</span> : null)}</header><div className="vt-subtoolbox-output-body">{children}</div></article>
 
-/* Canonical Toolbox upload primitive: Tight Reveal (#05).
- * Seven flush nested bands replace the legacy dashed drop-zone treatment. */
-export const SubToolboxFileTarget: React.FC<{ label: React.ReactNode; icon?: React.ReactNode; accept?: string; multiple?: boolean; minHeight?: number; onFiles?: (files: FileList | null) => void; className?: string; level?: ToolboxControlLevel; style?: React.CSSProperties }> = ({ label, icon, accept, multiple = false, minHeight = 220, onFiles, className, level, style }) => {
+/* Canonical image/video upload frame.
+ * The same primitive owns the double color stroke, inline preview, drag/drop,
+ * upload affordance and concise tooltip for both image and video assets. */
+export const SubToolboxFileTarget: React.FC<{
+  label: React.ReactNode
+  icon?: React.ReactNode
+  accept?: string
+  multiple?: boolean
+  minHeight?: number
+  onFiles?: (files: FileList | null) => void
+  className?: string
+  level?: ToolboxControlLevel
+  style?: React.CSSProperties
+  preview?: string | null
+  file?: File | null
+  tooltip?: string
+  previewAlt?: string
+}> = ({
+  label, icon, accept, multiple = false, minHeight = 220, onFiles,
+  className, level, style, preview, file, tooltip = "Click or drop a file to upload or change it.",
+  previewAlt = "Uploaded file preview",
+}) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = React.useState(false)
+  const [localPreview, setLocalPreview] = React.useState<string | null>(null)
+  React.useEffect(() => {
+    if (!file) { setLocalPreview(null); return }
+    const url = URL.createObjectURL(file)
+    setLocalPreview(url)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
+  const resolvedPreview = preview || localPreview
+  const isVideo = Boolean(file?.type.startsWith("video/") || accept?.includes("video"))
   const choose = () => inputRef.current?.click()
+  const iconNode = icon || <Upload size={28} strokeWidth={3} />
   return <SubToolboxSurface
     level={level}
-    className={classes("vt-subtoolbox-file-target", "vt-upload-tight-reveal", dragging && "is-dragging", className)}
-    style={{ ...style, ["--vt-upload-target-min-height" as string]: `${minHeight}px`, border: 0 } as React.CSSProperties}
+    className={classes("vt-subtoolbox-file-target", "vt-upload-tight-reveal", resolvedPreview && "has-preview", dragging && "is-dragging", className)}
+    style={{ ...style, ["--vt-upload-target-min-height" as string]: `${minHeight}px` } as React.CSSProperties}
   >
     <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={(event) => onFiles?.(event.target.files)} />
-    <button type="button" className="vt-subtoolbox-file-target-button" onClick={choose} onDragEnter={(e) => { e.preventDefault(); setDragging(true) }} onDragOver={(e) => { e.preventDefault(); setDragging(true) }} onDragLeave={(e) => { e.preventDefault(); setDragging(false) }} onDrop={(e) => { e.preventDefault(); setDragging(false); onFiles?.(e.dataTransfer.files) }}>
+    <button
+      type="button"
+      className="vt-subtoolbox-file-target-button"
+      title={tooltip}
+      aria-label={typeof label === "string" ? `${label}. ${tooltip}` : tooltip}
+      onClick={choose}
+      onDragEnter={(e) => { e.preventDefault(); setDragging(true) }}
+      onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+      onDragLeave={(e) => { e.preventDefault(); setDragging(false) }}
+      onDrop={(e) => { e.preventDefault(); setDragging(false); if (e.dataTransfer.files.length) onFiles?.(e.dataTransfer.files) }}
+    >
       <span className="vt-upload-tight-reveal-layers" aria-hidden="true">{[7,6,5,4,3,2,1].map((layer) => <span key={layer} className={`vt-upload-tight-reveal-layer is-l${layer}`} />)}</span>
-      <span className="vt-upload-tight-reveal-center"><span className="vt-subtoolbox-file-target-icon" aria-hidden="true">{icon}</span><span className="vt-upload-tight-reveal-label">{label}</span></span>
+      {resolvedPreview ? (
+        <span className="vt-upload-preview-frame" aria-hidden="true">
+          {isVideo ? <video src={resolvedPreview} muted playsInline preload="metadata" onLoadedMetadata={event => { try { event.currentTarget.currentTime = 0.1 } catch { /* Browser may not seek until data is ready. */ } }} /> : <img src={resolvedPreview} alt="" />}
+        </span>
+      ) : null}
+      <span className={classes("vt-upload-tight-reveal-center", resolvedPreview && "has-preview")}>
+        <span className="vt-subtoolbox-file-target-icon" aria-hidden="true">{iconNode}</span>
+        {!resolvedPreview ? <span className="vt-upload-tight-reveal-label">{label}</span> : null}
+      </span>
+      <span className="vt-upload-target-tooltip" role="tooltip">{tooltip}</span>
     </button>
   </SubToolboxSurface>
 }
