@@ -294,4 +294,21 @@ describe("Subtoolbox Primitive System", () => {
     expect(html).toContain("vt-subtoolbox-aspect-frame")
     expect(html).toContain("vt-subtoolbox-toolbar")
   })
+  it("renders the canonical upload frame with an inline media preview and accessible change hint", () => {
+    const markup = renderToStaticMarkup(
+      <SubToolboxFileTarget
+        label="Click or drop an image"
+        accept="image/*"
+        preview="data:image/png;base64,AA=="
+        tooltip="Click or drop an image to upload or change the thumbnail."
+      />,
+    )
+    expect(markup).toContain("vt-upload-tight-reveal")
+    expect(markup).toContain("vt-upload-preview-frame")
+    expect(markup).toContain("<img")
+    expect(markup).toContain("vt-subtoolbox-file-target-icon")
+    expect(markup).toContain("Click or drop an image to upload or change the thumbnail.")
+    expect(markup).toContain('role="tooltip"')
+  })
+
 })
