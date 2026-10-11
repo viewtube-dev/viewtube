@@ -137,6 +137,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [formatMode, setFormatMode] = useState<"longform" | "shorts">("longform")
   const [isOpen, setIsOpen] = useState(isOpenInitial)
   const [workspaceMode, setWorkspaceMode] = useState<"workspace" | "intelligence">("workspace")
+  const [showFieldActions, setShowFieldActions] = useState(true)
   const [missingFields, setMissingFields] = useState({ concept: false, niche: false })
   const [insightsImported, setInsightsImported] = useState(false)
   const [publishRefresh, setPublishRefresh] = useState(0)
@@ -619,6 +620,15 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
             onValueChange={(value) => setWorkspaceMode(value === "intelligence" ? "intelligence" : "workspace")}
           />
           <ToolboxHeaderToggle
+            value={showFieldActions ? "shown" : "hidden"}
+            aria-label="Show or hide field actions"
+            options={[
+              { value: "shown", label: "Show Actions" },
+              { value: "hidden", label: "Hide Actions" },
+            ]}
+            onValueChange={(value) => setShowFieldActions(value === "shown")}
+          />
+          <ToolboxHeaderToggle
             value={formatMode}
             aria-label="Video format"
             options={[
@@ -641,6 +651,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       {workspaceMode === "workspace" ? (
         <>
               <CanonicalMetadataSections
+                showFieldActions={showFieldActions}
                 title={publishTitle}
                 description={publishDescription}
                 tags={publishTags}
