@@ -381,27 +381,47 @@
    geometry is declared once in the Mobile Density Authority below.
    -------------------------------------------------------------------------- */
 @media (max-width: 767px) {
-  .vt-toolbox-header-actions.is-toolbox .vt-toolbox-header-extras {
-    display: none !important;
+  /* Keep header actions beside the title in the colored header. Do not move
+     them into a second white strip on phones. Compact the controls so the
+     title, actions and structural header buttons share the same header row. */
+  .vt-toolbox-header-actions.is-toolbox {
+    flex: 0 1 auto;
+    min-width: 0;
+    gap: 3px;
+    padding-right: 4px;
+  }
+
+  .vt-toolbox-header-actions.is-toolbox .vt-toolbox-header-extras,
+  .vt-toolbox-header-extras.is-header-placement {
+    display: flex !important;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: none;
+    flex-wrap: nowrap;
+    gap: 3px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .vt-toolbox-header-extras.is-header-placement::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vt-toolbox-header-toggle {
+    flex: 0 0 auto;
+    height: 34px !important;
+    min-height: 34px !important;
+    max-width: 100%;
+  }
+
+  .vt-toolbox-header-toggle > button {
+    padding-inline: 5px !important;
+    font-size: 9px !important;
+    letter-spacing: -.035em;
   }
 
   .vt-toolbox-header-secondary-actions {
-    display: flex !important;
-    align-items: center;
-    justify-content: flex-end;
-    min-height: 56px;
-    padding: 6px 8px 8px;
-    gap: 8px;
-    background: #fff;
-    border-bottom: var(--vt-toolbox-stroke, 5px) solid #000;
-  }
-
-  .vt-toolbox-header-secondary-actions .vt-toolbox-header-toggle {
-    height: 44px;
-    min-height: 44px;
-    width: max-content;
-    min-width: 0;
-    max-width: 100%;
+    display: none !important;
   }
 
   [data-vt-toolbox-level="sub"] {
