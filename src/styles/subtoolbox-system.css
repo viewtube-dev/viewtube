@@ -3106,25 +3106,34 @@
    ========================================================================== */
 .vt-subtoolbox-labeled-field{
   position:relative;
+  isolation:isolate;
   display:block;
   width:100%;
   min-width:0;
   border-radius:var(--vt-component-radius);
   background:color-mix(in srgb,var(--pair-a,#36e0f6) 50%,white);
 }
+/* The field name is a visual underlay, not a second layout column.
+   Keep the editable control full-width with normal padding so typed text,
+   selection, caret and wrapping can use the entire component. */
 .vt-subtoolbox-labeled-field>.vt-subtoolbox-labeled-control{
   position:relative;
   z-index:2;
+  display:block;
   width:100%;
-  background:color-mix(in srgb,var(--pair-a,#36e0f6) 50%,white)!important;
+  max-width:100%;
+  min-width:0;
+  background:transparent!important;
+  color:#000!important;
+  caret-color:var(--pair-a,#36e0f6)!important;
 }
 .vt-subtoolbox-labeled-field-overlay{
   position:absolute;
-  z-index:3;
+  z-index:1;
   top:50%;
   right:calc(var(--vt-component-height)*.20);
   transform:translateY(-50%);
-  max-width:48%;
+  max-width:calc(100% - 2 * var(--vt-component-height)*.20);
   overflow:hidden;
   color:color-mix(in srgb,var(--pair-a,#36e0f6) 65%,transparent);
   font-size:calc(var(--vt-component-font-size)*.90);
@@ -3135,18 +3144,11 @@
   text-transform:uppercase;
   white-space:nowrap;
   pointer-events:none;
+  user-select:none;
 }
 .vt-subtoolbox-labeled-field.is-textarea .vt-subtoolbox-labeled-field-overlay{
   top:calc(var(--vt-component-height)*.24);
   transform:none;
-}
-.vt-subtoolbox-labeled-field>.vt-subtoolbox-labeled-control:not(:placeholder-shown){
-  color:#000!important;
-}
-.vt-subtoolbox-labeled-field>.vt-subtoolbox-labeled-control{
-  padding-right:52%!important;
-  color:#000!important;
-  caret-color:var(--pair-a,#36e0f6)!important;
 }
 .vt-subtoolbox-labeled-field>.vt-subtoolbox-labeled-control::placeholder{
   color:transparent!important;
