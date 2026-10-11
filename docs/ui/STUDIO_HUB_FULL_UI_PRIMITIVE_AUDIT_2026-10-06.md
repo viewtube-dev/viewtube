@@ -1610,3 +1610,16 @@ After that, the Studio Hub can be systematically updated tool-by-tool without lo
 6. **Polish** — final production pass.
 
 **Important:** this document is an audit and planning artifact. It intentionally does not silently modify the Studio Hub while performing the audit.
+
+## Follow-up fix — right-side overlay labels no longer reserve text width
+
+Implemented on the convergence branch in `src/styles/subtoolbox-system.css`, used by the canonical `SubToolboxLabeledInput` and `SubToolboxLabeledTextArea` primitives and the shared `CanonicalMetadataSections` Title/Description fields.
+
+- The right-side label is now an absolute underlay at z-index 1; the editable input/textarea is at z-index 2.
+- The editable control stays full-width and keeps its normal padding. The former `padding-right: 52%` rule was removed, so typed content can use the right side and wrap across the full field.
+- The input/textarea background is transparent over the field surface, allowing the label underlay to remain visible without covering typed text.
+- The label is positioned with left/right insets and right-aligned, so it no longer reserves a layout column or imposes a width limit on text.
+- The shared primitive fix applies to Publisher/Manager title and description fields that use the canonical labeled controls; no duplicate per-page CSS was added.
+
+Verification: source change is committed, but a successful build and live visual test are still pending. Render service lookup also requires selecting a Render workspace before its deployment state can be checked.
+
