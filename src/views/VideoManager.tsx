@@ -120,7 +120,6 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const [isDraggingThumbnail, setIsDraggingThumbnail] = useState(false)
  const [isOpen, setIsOpen] = useState(isOpenInitial)
  const [viewMode, setViewMode] = useState<"workspace" | "intelligence">("workspace")
- const [showFieldActions, setShowFieldActions] = useState(true)
  const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false)
  const [videoListLoadState, setVideoListLoadState] = useState<VideoListLoadState>("idle")
  const hasTriggeredInitialLoadRef = useRef(false)
@@ -549,22 +548,13 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    headerActions={
     <div className="flex flex-wrap items-center justify-end gap-2 max-w-full">
      <ToolboxHeaderToggle
-      value={showFieldActions ? "shown" : "hidden"}
-      aria-label="Show or hide field actions"
+      value={viewMode === "intelligence" ? "generate" : "manage"}
+      aria-label="Manager mode"
       options={[
-       { value: "shown", label: "Show Actions" },
-       { value: "hidden", label: "Hide Actions" },
+       { value: "manage", label: "Manage" },
+       { value: "generate", label: "Generate" },
       ]}
-      onValueChange={(value) => setShowFieldActions(value === "shown")}
-     />
-     <ToolboxHeaderToggle
-      value={viewMode}
-      aria-label="Manager view"
-      options={[
-       { value: "workspace", label: "Live Editor" },
-       { value: "intelligence", label: "Intelligence" },
-      ]}
-      onValueChange={(value) => setViewMode(value === "intelligence" ? "intelligence" : "workspace")}
+      onValueChange={(value) => setViewMode(value === "generate" ? "intelligence" : "workspace")}
      />
      {showHeaderLoadAssetsButton ? (
       <SubToolboxButton
@@ -699,7 +689,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        paletteIndex={basePalette + 1}
       />
       <CanonicalMetadataSections
-       showFieldActions={showFieldActions}
+       showFieldActions={true}
        title={editTitle}
        description={editDescription}
        tags={editTags}
