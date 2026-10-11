@@ -84,6 +84,7 @@ interface ToolboxProps {
   onToggle?: () => void;
   unmountWhenClosed?: boolean;
   headerActions?: React.ReactNode;
+  headerActionsPlacement?: "header" | "below";
   indicator?: ToolboxIndicator;
   outerClassName?: string;
   shellClassName?: string;
@@ -128,6 +129,7 @@ export const Toolbox: React.FC<ToolboxProps> = ({
   onToggle,
   unmountWhenClosed = true,
   headerActions,
+  headerActionsPlacement = "below",
   indicator = 'symbols',
   outerClassName = '',
   shellClassName = '',
@@ -332,7 +334,7 @@ export const Toolbox: React.FC<ToolboxProps> = ({
           </div>
         </header>
 
-        {headerActions && variant !== "accordion" ? (
+        {headerActions && headerActionsPlacement === "below" && variant !== "accordion" ? (
           <div
             className="vt-toolbox-header-secondary-actions"
             onClick={(event) => event.stopPropagation()}
@@ -487,6 +489,7 @@ interface ToolboxScaffoldProps {
   contentClassName?: string;
   disableCollapseAnimation?: boolean;
   headerActions?: React.ReactNode;
+  headerActionsPlacement?: "header" | "below";
   children: React.ReactNode;
   helpTitle?: string;
   helpText?: React.ReactNode;
@@ -517,6 +520,7 @@ export const ToolboxScaffold: React.FC<ToolboxScaffoldProps> = ({
   contentClassName = "",
   disableCollapseAnimation = false,
   headerActions,
+  headerActionsPlacement = "below",
   children,
   helpTitle,
   helpText,
@@ -546,6 +550,7 @@ export const ToolboxScaffold: React.FC<ToolboxScaffoldProps> = ({
     shellClassName={shellClassName}
     contentClassName={contentClassName || (embedded ? "p-0" : "p-1 flex flex-col gap-1")}
     headerActions={headerActions}
+    headerActionsPlacement={headerActionsPlacement}
     indicator={collapsible ? "symbols" : "none"}
     disableCollapseAnimation={disableCollapseAnimation}
     helpTitle={helpTitle}
