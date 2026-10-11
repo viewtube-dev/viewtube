@@ -91,4 +91,16 @@ describe("Video Manager metadata layout contract", () => {
     expect(publisher).toContain('headerActionsPlacement="header"')
     expect(manager).toContain('label: "Live Editor"')
   })
+
+  it("uses the intrinsic-width word-toggle primitive with a pink selected handle", () => {
+    const primitives = read("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const styles = read("src/styles/subtoolbox-system.css")
+    expect(primitives).toContain('data-vt-header-toggle-primitive="word-toggle"')
+    expect(primitives).toContain("has-noninitial-selection")
+    expect(primitives).toContain("aria-pressed={option.value === value}")
+    expect(styles).toContain(".vt-toolbox-header-toggle.is-word-toggle")
+    expect(styles).toContain(".vt-toolbox-header-toggle.is-word-toggle.has-noninitial-selection .vt-word-toggle-handle{background:#f276c5}")
+    expect(styles).toContain("@media(max-width:767px)")
+  })
+
 })
