@@ -23,6 +23,7 @@ interface TagRankTagProps {
   onAdd?: () => void
   isSuggested?: boolean
   isAdded?: boolean
+  componentLevel?: "l1" | "l2"
 }
 
 export const TagRankTag: React.FC<TagRankTagProps> = ({
@@ -32,6 +33,7 @@ export const TagRankTag: React.FC<TagRankTagProps> = ({
   onAdd,
   isSuggested = false,
   isAdded = false,
+  componentLevel = "l2",
 }) => {
   const rankColor = getTagRankColor(analysis?.rank)
   const title = analysis
@@ -46,12 +48,18 @@ export const TagRankTag: React.FC<TagRankTagProps> = ({
   const style = {
     ["--pair-a" as string]: rankColor,
     ["--pair-b" as string]: "#ffffff",
+    ...(componentLevel === "l1" ? {
+      ["--vt-component-height" as string]: "44px",
+      ["--vt-component-stroke" as string]: "3px",
+      ["--vt-component-radius" as string]: "8px",
+      ["--vt-component-font-size" as string]: "14px",
+    } : {}),
   } as React.CSSProperties
 
   if (onRemove) {
     return (
       <SubToolboxRemovableTag
-        level="l2"
+        level={componentLevel}
         onRemove={onRemove}
         removeIcon={<X size={12} strokeWidth={3.2} />}
         style={style}
@@ -65,7 +73,7 @@ export const TagRankTag: React.FC<TagRankTagProps> = ({
   if (isSuggested) {
     return (
       <SubToolboxSelectableTag
-        level="l2"
+        level={componentLevel}
         selected={isAdded}
         selectedIcon={<CheckCircle size={12} strokeWidth={3} />}
         unselectedIcon={<Plus size={12} strokeWidth={3} />}
@@ -80,7 +88,7 @@ export const TagRankTag: React.FC<TagRankTagProps> = ({
   }
 
   return (
-    <SubToolboxTag level="l2" style={style} title={title}>
+    <SubToolboxTag level={componentLevel} style={style} title={title}>
       {label}
     </SubToolboxTag>
   )
