@@ -28,15 +28,14 @@ export const SubToolboxNestedSquareChoice: React.FC<SubToolboxNestedSquareChoice
   ariaLabel,
   className = "",
 }) => (
-  <div className={`grid grid-cols-1 gap-2 sm:grid-cols-2 ${className}`} role="radiogroup" aria-label={ariaLabel} data-vt-control-level={level}>
+  <div className={`grid grid-cols-1 gap-2 sm:grid-cols-2 ${className}`} role="group" aria-label={ariaLabel} data-vt-control-level={level}>
     {options.map(option => {
       const selected = option.value === value
       return (
         <button
           key={option.value}
           type="button"
-          role="radio"
-          aria-checked={selected}
+          aria-pressed={selected}
           className={`flex min-w-0 items-center gap-2 rounded-lg border-[3px] border-black p-2 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${selected ? "bg-[var(--pair-a,var(--vt-subtoolbox-fill,#73DEFF))]" : "bg-white"}`}
           onClick={() => onChange(option.value)}
         >
