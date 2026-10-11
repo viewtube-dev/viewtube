@@ -69,3 +69,15 @@ Do not hand-add a family here without adding it to the production registry. The 
 60. Tooltip Dark
 61. Tooltip Color
 62. Dashboard Pill Tags
+
+
+## Additional migrated compound patterns
+
+These patterns are registered in `STUDIO_HUB_MIGRATED_FAMILIES` and rendered on the **Primitive** track. They are deliberately listed separately from the frozen 62-family hardcoded baseline above; the baseline count is not inflated by migration examples.
+
+- Multi-Section Script Bar — reusable weighted timeline segments, extracted from Script Architect and now used by the production view.
+- Nested Square Choice — compact square-choice group for refinement/generation option sets, built from the canonical square check primitive.
+- Tag-Adjacent Split Action Row — ranked/removable tag editing with compact REFINE / GENERATE / ANALYZE split-left actions directly underneath.
+- Tone / Tension / Cinematic Dropdown — arrow-triggered, colored dropdown pattern using the existing Toolbox dropdown primitive.
+- Ranked Metadata Tag — SEO rank/color tag from Video Manager metadata.
+- Education Timestamp Notes — validated timestamp/question field used by the Education category flow.
