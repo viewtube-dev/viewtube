@@ -3558,8 +3558,7 @@
 @media (prefers-reduced-motion: reduce) {
   .vt-toolbox-header-collapse *,
   .vt-toolbox-header-collapse svg {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    transition: none !important;
+    animation: none !important;
   }
 }
