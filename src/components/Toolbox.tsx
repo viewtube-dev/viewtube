@@ -229,7 +229,7 @@ export const Toolbox: React.FC<ToolboxProps> = ({
           >
             {resolvedIcon}
           </div>
-          <h1 className="text-[50px] font-[1000] uppercase tracking-tighter pl-8 leading-none mt-1 select-none pointer-events-none">{title}</h1>
+          <h1 className="text-[50px] font-[1000] uppercase tracking-tighter pl-8 leading-none m-0 select-none pointer-events-none">{title}</h1>
         </div>
         <div className="flex items-center gap-6 pr-6">{headerActions}</div>
       </header>
