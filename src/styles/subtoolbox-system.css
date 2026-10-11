@@ -3606,14 +3606,14 @@
   transform: translateY(4px);
   transition: opacity .16s ease, transform .16s ease;
 }
-.vt-upload-tight-reveal .vt-subtoolbox-file-target-button:hover .vt-upload-target-tooltip,
+.vt-upload-tight-reveal .vt-subtoolbox-file-target-button:has(.vt-subtoolbox-file-target-icon:hover) .vt-upload-target-tooltip,
 .vt-upload-tight-reveal .vt-subtoolbox-file-target-button:focus-visible .vt-upload-target-tooltip {
   opacity: 1;
   transform: translateY(0);
 }
 .vt-upload-tight-reveal.has-preview .vt-upload-target-tooltip {
-  left: 112px;
-  bottom: 30px;
+  left: 18px;
+  bottom: 116px;
 }
 .vt-upload-tight-reveal:not(.has-preview) .vt-upload-target-tooltip {
   bottom: 12px;
@@ -3627,7 +3627,7 @@
   .vt-upload-tight-reveal .vt-upload-tight-reveal-center.has-preview { inset: auto auto 18px 18px; }
   .vt-upload-tight-reveal.has-preview .vt-subtoolbox-file-target-icon { width: 58px; height: 58px; }
   .vt-upload-tight-reveal.has-preview .vt-subtoolbox-file-target-icon svg { width: 28px; height: 28px; }
-  .vt-upload-tight-reveal.has-preview .vt-upload-target-tooltip { left: 84px; bottom: 20px; }
+  .vt-upload-tight-reveal.has-preview .vt-upload-target-tooltip { left: 12px; bottom: 88px; }
 }
 
 /* Header alignment correction: controls and text share the header's true center line. */
