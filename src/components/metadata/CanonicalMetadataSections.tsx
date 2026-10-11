@@ -262,7 +262,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                 saveIcon="✓"
                 removeIcon="×"
                 renderTag={(tag, remove) => (
-                  <TagRankTag key={tag} tag={tag} analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())} onRemove={remove} />
+                  <TagRankTag key={tag} tag={tag} componentLevel="l1" analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())} onRemove={remove} />
                 )}
               />
               <div className="flex justify-end text-[10px] font-black uppercase opacity-50">{tags.length}/{maxTagChars}</div>
