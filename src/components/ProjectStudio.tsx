@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useBrain } from '../context/useBrain';
 import { CustomIcon } from './CustomIcon';
 import { SubToolbox, ToolboxScaffold } from './Toolbox';
+import { ToolboxHeaderToggle } from './subtoolbox/SubToolboxPrimitives';
 import {
     Calendar,
     Plus,
@@ -265,20 +266,16 @@ export const ProjectStudio: React.FC<{ embedded?: boolean }> = ({ embedded = fal
                             START NEW PROJECT
                         </button>
                     ) : (
-                        <div className="flex bg-white border-[4px] border-black p-1 rounded-xl shadow-[3px_3px_0px_0px_black]">
-                            <button
-                                onClick={() => setViewContext('channel')}
-                                className={`px-5 py-2 text-[11px] font-[1000] uppercase tracking-tighter rounded-lg transition-all flex items-center gap-2 ${viewContext === 'channel' ? 'bg-black text-white' : 'text-black/30 hover:text-black'}`}
-                            >
-                                CHANNEL
-                            </button>
-                            <button
-                                onClick={() => setViewContext('projects')}
-                                className={`px-5 py-2 text-[11px] font-[1000] uppercase tracking-tighter rounded-lg transition-all flex items-center gap-2 ${viewContext === 'projects' ? 'bg-black text-white' : 'text-black/30 hover:text-black'}`}
-                            >
-                                PROJECTS
-                            </button>
-                        </div>
+                        <ToolboxHeaderToggle
+                            level="toolbox"
+                            value={viewContext}
+                            onValueChange={value => setViewContext(value as 'channel' | 'projects')}
+                            aria-label="Choose channel or project planning"
+                            options={[
+                                { value: 'channel', label: 'CHANNEL' },
+                                { value: 'projects', label: 'PROJECTS' },
+                            ]}
+                        />
                     )}
         </>
     );
