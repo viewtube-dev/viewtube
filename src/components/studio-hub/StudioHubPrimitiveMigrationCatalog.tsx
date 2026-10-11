@@ -107,6 +107,7 @@ import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } fro
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
+import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -395,6 +396,7 @@ const PrimitiveMigrationControl: React.FC<{
   const [toneChoice, setToneChoice] = React.useState("CINEMATIC")
   const [nestedChoice, setNestedChoice] = React.useState("HOOK")
   const [educationNotes, setEducationNotes] = React.useState("0:00 Open with the central question\n1:25 Explain the key evidence")
+  const [tagActionStatus, setTagActionStatus] = React.useState("")
   const [sliderValue, setSliderValue] = React.useState(62)
   const [rangeLow, setRangeLow] = React.useState(22)
   const [rangeHigh, setRangeHigh] = React.useState(76)
@@ -503,27 +505,26 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Nested Square Choice") {
-    return <div className="grid grid-cols-3 gap-1" role="group" aria-label="Nested square choices">
-      {["HOOK", "PROOF", "CTA"].map((choice) => (
-        <div
-          key={choice}
-          className={`flex min-w-0 items-center gap-1 rounded border-[2px] border-black p-1 text-left text-[9px] font-black uppercase ${nestedChoice === choice ? "bg-[var(--pair-a)]" : "bg-white"}`}
-        >
-          <SubToolboxCheckControl level={level} checked={nestedChoice === choice} aria-label={`Select ${choice}`} onClick={() => setNestedChoice(choice)} />
-          <button type="button" className="min-w-0 flex-1 truncate text-left" aria-pressed={nestedChoice === choice} onClick={() => setNestedChoice(choice)}>{choice}</button>
-        </div>
-      ))}
-    </div>
+    return <SubToolboxNestedSquareChoice
+      level={level}
+      ariaLabel="Refinement target"
+      value={nestedChoice}
+      onChange={setNestedChoice}
+      options={[
+        { value: "HOOK", label: "Hook", description: "Opening / first seconds" },
+        { value: "PROOF", label: "Proof", description: "Evidence / detail" },
+        { value: "CTA", label: "CTA", description: "Next action" },
+      ]}
+    />
   }
   if (name === "Tag-Adjacent Split Action Row") {
-    return <div className="flex min-w-0 flex-col gap-2">
-      <SubToolboxTagEditor level={level} tags={editorTags} onTagsChange={setEditorTags} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
-      <div className="flex min-w-0 flex-nowrap items-center gap-1" aria-label="Tag actions">
-        <SubToolboxSplitButton level={level} icon={<Settings2 />} className="!min-w-0 !flex-1 !px-1 !text-[9px]">REFINE</SubToolboxSplitButton>
-        <SubToolboxSplitButton level={level} icon={<Plus />} className="!min-w-0 !flex-1 !px-1 !text-[9px]">GENERATE</SubToolboxSplitButton>
-        <SubToolboxSplitButton level={level} icon={<Search />} className="!min-w-0 !flex-1 !px-1 !text-[9px]">ANALYZE</SubToolboxSplitButton>
-      </div>
-    </div>
+    return <SubToolboxTagActionRow
+      level={level}
+      tags={editorTags}
+      onTagsChange={setEditorTags}
+      actionStatus={tagActionStatus}
+      onAction={(action) => setTagActionStatus(`${action.toUpperCase()} ACTION SELECTED`)}
+    />
   }
   if (name === "Multi-Section Script Bar") {
     return <SubToolboxScriptBar
