@@ -268,7 +268,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                   </div>
                 </SubToolboxSection>
               ) : null}
-              {shouldShowActions("tags") ? {showFieldActions ? <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} /> : null} : null}
+              {shouldShowActions("tags") ? <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
               {onRankTags ? (
                 <SubToolboxButton level="l2" size="compact" tone="neutral" onClick={onRankTags} disabled={isAnalyzingTags || !tags.trim()}>
                   {isAnalyzingTags ? "RANKING…" : tagAnalysis.length ? "VIEW TAG RANKINGS" : "RANK TAGS"}
@@ -279,7 +279,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           ) : (
             <>
               <SubToolboxInput value={tags} onChange={e => onTagsChange(e.target.value)} placeholder="TAGS, COMMA SEPARATED" aria-label="Tags" />
-              <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} />
+              {shouldShowActions("tags") ? <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
             </>
           )}
         </SubToolboxSection>
