@@ -103,4 +103,18 @@ describe("Video Manager metadata layout contract", () => {
     expect(styles).toContain("@media(max-width:767px)")
   })
 
+
+  it("keeps header-placement toggles visible on mobile and uses the owning toolbox palette pair", () => {
+    const toolbox = read("src/components/Toolbox.tsx")
+    const styles = read("src/styles/toolbox-system.css")
+    const primitiveStyles = read("src/styles/subtoolbox-system.css")
+    expect(toolbox).toContain('headerActionsPlacement === "header" ? "is-header-placement" : ""')
+    expect(toolbox).toContain('vt-toolbox-header-secondary-actions is-mobile-header-fallback')
+    expect(toolbox).toContain('["--pair-a" as string]: palette.header')
+    expect(toolbox).toContain('["--pair-b" as string]: palette.icon')
+    expect(styles).toContain('.vt-toolbox-header-actions.is-toolbox .vt-toolbox-header-extras')
+    expect(primitiveStyles).toContain('background:color-mix(in srgb,var(--pair-a,#20f13e) 55%,transparent)')
+    expect(primitiveStyles).toContain('background:var(--pair-b,#f276c5)')
+  })
+
 })
