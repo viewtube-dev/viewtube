@@ -60,7 +60,7 @@ export interface CanonicalMetadataSectionsProps {
   thumbnailFile?: File | null
   thumbnailPreview?: string | null
   visibility: string
-  audience?: boolean
+  audience?: boolean | null
   timestamps?: string
   location?: string
   community?: boolean
@@ -73,7 +73,7 @@ export interface CanonicalMetadataSectionsProps {
   onVideoFileChange?: (file: File | null) => void
   onThumbnailFileChange?: (file: File | null) => void
   onVisibilityChange: (value: string) => void
-  onAudienceChange?: (value: boolean) => void
+  onAudienceChange?: (value: boolean | null) => void
   onTimestampsChange?: (value: string) => void
   onLocationChange?: (value: string) => void
   onCommunityChange?: (value: boolean) => void
@@ -132,8 +132,8 @@ const FieldActions: React.FC<{
 
 const SecondaryControls: React.FC<{
   placement: "pre-description" | "post-description" | "post-playlists"
-  visibility: string; audience: boolean; timestamps: string; location: string; community: boolean; aiUse: boolean
-  onVisibilityChange: (value: string) => void; onAudienceChange?: (value: boolean) => void
+  visibility: string; audience: boolean | null; timestamps: string; location: string; community: boolean; aiUse: boolean
+  onVisibilityChange: (value: string) => void; onAudienceChange?: (value: boolean | null) => void
   onTimestampsChange?: (value: string) => void; onLocationChange?: (value: string) => void
   onCommunityChange?: (value: boolean) => void; onAiUseChange?: (value: boolean) => void
 }> = ({ placement, visibility, audience, timestamps, location, community, aiUse, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange }) => (
@@ -143,7 +143,7 @@ const SecondaryControls: React.FC<{
         <SubToolboxSelect controlSize="micro" value={visibility} onChange={e => onVisibilityChange(e.target.value)} aria-label="Visibility"><option value="public">PUBLIC</option><option value="unlisted">UNLISTED</option><option value="private">PRIVATE</option></SubToolboxSelect>
       </SubToolboxSection>
       <SubToolboxSection label={<span className="flex items-center gap-1"><Users size={11} /> AUDIENCE</span>}>
-        <SubToolboxToggle pressed={audience} label={audience ? "YES" : "NO"} onClick={() => onAudienceChange?.(!audience)} />
+        <SubToolboxToggle pressed={audience === true} label={audience === null ? "UNSET" : audience ? "YES" : "NO"} onClick={() => onAudienceChange?.(audience === null ? true : audience ? false : null)} />
       </SubToolboxSection>
       <SubToolboxSection label={<span className="flex items-center gap-1"><Clock3 size={11} /> TIMESTAMPS</span>}>
         <SubToolboxInput controlSize="micro" value={timestamps} onChange={e => onTimestampsChange?.(e.target.value)} placeholder="OPTIONAL" aria-label="Timestamps" />
@@ -166,7 +166,7 @@ const SecondaryControls: React.FC<{
 export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps> = (props) => {
   const {
     title, description, tags, category, playlists, videoFile, thumbnailFile, thumbnailPreview,
-    visibility, audience = false, timestamps = "", location = "", community = false, aiUse = true,
+    visibility, audience = null, timestamps = "", location = "", community = false, aiUse = true,
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
