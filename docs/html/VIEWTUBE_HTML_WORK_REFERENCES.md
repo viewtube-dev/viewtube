@@ -15,6 +15,7 @@ The HTML artifacts below were copied from the ChatGPT Library into `docs/html/` 
 - `VIEWTUBE_COMPONENT_VARIANTS_PHASE_01_CORE_CONTROLS_FIXED.html`
 - `VIEWTUBE_COMPONENT_VARIANTS_PHASE_01_CORE_CONTROLS.html`
 - `VIEWTUBE_TOOLBOX_COMPONENT_LIBRARY-7.html`
+- `VIEWTUBE_WORD_TOGGLE_PRIMITIVE.html` — interactive standalone specimen for the canonical word-toggle header primitive, including compact and stacked mobile variants
 - `viewtube-video-manager-toolbox.html`
 - `viewtube-studio-hub-10-standalone-tool-modules.html`
 - `out_assets_viewtube-full-component-library-BJ1dEaPu.html`
