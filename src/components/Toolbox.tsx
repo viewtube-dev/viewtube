@@ -312,9 +312,12 @@ export const Toolbox: React.FC<ToolboxProps> = ({
 
           <div
             className={`vt-toolbox-header-actions ${variant === 'accordion' ? 'is-subtoolbox' : 'is-toolbox'}`}
+            style={{
+              ...(palette ? { ["--pair-a" as string]: palette.header, ["--pair-b" as string]: palette.icon } : {}),
+            }}
             onClick={(event) => event.stopPropagation()}
           >
-            {headerActions ? <div className="vt-toolbox-header-extras">{headerActions}</div> : null}
+            {headerActions ? <div className={`vt-toolbox-header-extras ${headerActionsPlacement === "header" ? "is-header-placement" : ""}`}>{headerActions}</div> : null}
             {isCollapsible && (subtitle || helpText || (helpGuide && helpGuide.length > 0)) && (
               <ToolboxHeaderHelpButton
                 level={variant === "accordion" ? "subtoolbox" : "toolbox"}
@@ -334,6 +337,18 @@ export const Toolbox: React.FC<ToolboxProps> = ({
           </div>
         </header>
 
+        {headerActions && headerActionsPlacement !== "below" && variant !== "accordion" ? (
+          <div
+            className="vt-toolbox-header-secondary-actions is-mobile-header-fallback"
+            style={{
+              ...(palette ? { ["--pair-a" as string]: palette.header, ["--pair-b" as string]: palette.icon } : {}),
+            }}
+            onClick={(event) => event.stopPropagation()}
+            aria-label="Toolbox actions"
+          >
+            {headerActions}
+          </div>
+        ) : null}
         {headerActions && headerActionsPlacement === "below" && variant !== "accordion" ? (
           <div
             className="vt-toolbox-header-secondary-actions"
