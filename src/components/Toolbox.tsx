@@ -154,6 +154,11 @@ export const Toolbox: React.FC<ToolboxProps> = ({
   );
   const [showHelpRail, setShowHelpRail] = useState(false);
   const subPaletteCursorRef = useRef(0);
+  const lastPaletteIndexRef = useRef(paletteIndex);
+  if (lastPaletteIndexRef.current !== paletteIndex) {
+    subPaletteCursorRef.current = 0;
+    lastPaletteIndexRef.current = paletteIndex;
+  }
   const open = controlled ? Boolean(isOpen) : internalOpen;
   const [keepClosingContentMounted, setKeepClosingContentMounted] = useState(open);
 
@@ -610,6 +615,11 @@ export const SubToolbox: React.FC<SubToolboxProps> = ({
 }) => {
   const paletteCycle = React.useContext(PaletteCycleContext);
   const allocatedPaletteRef = useRef<number | null>(null);
+  const allocatedPaletteBaseRef = useRef<number | null>(paletteCycle.mainPaletteIndex);
+  if (allocatedPaletteBaseRef.current !== paletteCycle.mainPaletteIndex) {
+    allocatedPaletteRef.current = null;
+    allocatedPaletteBaseRef.current = paletteCycle.mainPaletteIndex;
+  }
   if (allocatedPaletteRef.current === null && paletteCycle.mainPaletteIndex !== null) {
     allocatedPaletteRef.current = paletteCycle.allocateSubPaletteIndex();
   } else if (allocatedPaletteRef.current === null && (paletteIndex === undefined || paletteIndex === null)) {
