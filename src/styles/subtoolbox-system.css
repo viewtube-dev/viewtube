@@ -3531,3 +3531,34 @@
     min-height:clamp(140px,44vw,var(--vt-upload-target-min-height,220px))!important;
   }
 }
+
+
+/* Toolbox collapse controls: preserve the animated Expand/Shrink glyph without
+   giving the icon its own white button tile. The header already supplies the
+   visual frame; the control is a transparent, borderless hit target. */
+.vt-toolbox-header-collapse,
+.vt-toolbox-header-collapse:hover,
+.vt-toolbox-header-collapse:active {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.vt-toolbox-header-collapse {
+  overflow: visible !important;
+}
+.vt-toolbox-header-collapse svg {
+  max-width: none !important;
+  max-height: none !important;
+  transform-origin: center;
+}
+.vt-toolbox-header-collapse:focus-visible {
+  outline: 3px solid var(--pair-b, var(--pair-a, #36e0f6)) !important;
+  outline-offset: 2px !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-toolbox-header-collapse *,
+  .vt-toolbox-header-collapse svg {
+    transition: none !important;
+    animation: none !important;
+  }
+}
