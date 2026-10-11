@@ -197,7 +197,7 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
   return (
     <div
       ref={rootRef}
-      className={classes("vt-toolbox-header-toggle", "is-word-toggle", level === "subtoolbox" && "is-subtoolbox", className)}
+      className={classes("vt-toolbox-header-toggle", "is-word-toggle", options.findIndex((option) => option.value === value) > 0 && "has-noninitial-selection", level === "subtoolbox" && "is-subtoolbox", className)}
       data-vt-header-toggle={level}
       data-vt-header-toggle-primitive="word-toggle"
       style={style}
