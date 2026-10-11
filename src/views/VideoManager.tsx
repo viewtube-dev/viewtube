@@ -545,8 +545,9 @@ const VideoManager: React.FC<VideoManagerProps> = ({
    onToggle={() => setIsOpen(!isOpen)}
    embedded={embedded}
    helpText={subtitleHelpRail}
+   headerActionsPlacement="header"
    headerActions={
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center justify-end gap-2 max-w-full">
      <ToolboxHeaderToggle
       value={showFieldActions ? "shown" : "hidden"}
       aria-label="Show or hide field actions"
@@ -556,10 +557,15 @@ const VideoManager: React.FC<VideoManagerProps> = ({
       ]}
       onValueChange={(value) => setShowFieldActions(value === "shown")}
      />
-     <SubToolboxActions columns={2} className="!w-auto">
-      <SubToolboxButton size="micro" selected={viewMode === "workspace"} onClick={() => setViewMode("workspace")}>LIVE EDITOR</SubToolboxButton>
-      <SubToolboxButton size="micro" selected={viewMode === "intelligence"} onClick={() => setViewMode("intelligence")}>INTELLIGENCE</SubToolboxButton>
-     </SubToolboxActions>
+     <ToolboxHeaderToggle
+      value={viewMode}
+      aria-label="Manager view"
+      options={[
+       { value: "workspace", label: "Live Editor" },
+       { value: "intelligence", label: "Intelligence" },
+      ]}
+      onValueChange={(value) => setViewMode(value === "intelligence" ? "intelligence" : "workspace")}
+     />
      {showHeaderLoadAssetsButton ? (
       <SubToolboxButton
        level="l2"
