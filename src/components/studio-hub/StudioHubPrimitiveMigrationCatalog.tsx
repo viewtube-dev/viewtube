@@ -496,18 +496,15 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Nested Square Choice") {
-    return <div className="grid grid-cols-3 gap-1">
+    return <div className="grid grid-cols-3 gap-1" role="group" aria-label="Nested square choices">
       {["HOOK", "PROOF", "CTA"].map((choice) => (
-        <button
+        <div
           key={choice}
-          type="button"
-          onClick={() => setNestedChoice(choice)}
-          aria-pressed={nestedChoice === choice}
           className={`flex min-w-0 items-center gap-1 rounded border-[2px] border-black p-1 text-left text-[9px] font-black uppercase ${nestedChoice === choice ? "bg-[var(--pair-a)]" : "bg-white"}`}
         >
-          <SubToolboxCheckControl level={level} checked={nestedChoice === choice} aria-label={`Select ${choice}`} onClick={(event) => { event.stopPropagation(); setNestedChoice(choice) }} />
-          <span className="truncate">{choice}</span>
-        </button>
+          <SubToolboxCheckControl level={level} checked={nestedChoice === choice} aria-label={`Select ${choice}`} onClick={() => setNestedChoice(choice)} />
+          <button type="button" className="min-w-0 flex-1 truncate text-left" aria-pressed={nestedChoice === choice} onClick={() => setNestedChoice(choice)}>{choice}</button>
+        </div>
       ))}
     </div>
   }
