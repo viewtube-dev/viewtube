@@ -21,7 +21,7 @@ export type PublisherMetadataPackageOption = {
     category?: string
     visibility?: string
     publishAt?: string | null
-    audience?: boolean
+    audience?: boolean | null
     timestamps?: string
     location?: string
     community?: boolean
