@@ -205,9 +205,12 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           <SubToolboxSection label="VIDEO UPLOAD">
             {onVideoFileChange ? (
               <SubToolboxFileTarget
-                label={videoFile ? <>{videoFile.name}<br />VIDEO SELECTED</> : videoUploadLabel || <>DROP FILE OR CLICK<br />UPLOAD VIDEO</>}
+                label={videoFile ? videoFile.name : videoUploadLabel || "Click or drop a video to upload"}
                 icon={<Upload size={28} strokeWidth={3} />}
                 accept="video/*"
+                file={videoFile}
+                tooltip="Click or drop a video to upload or change it."
+                previewAlt="Selected video preview"
                 onFiles={files => onVideoFileChange(files?.[0] || null)}
               />
             ) : <SubToolboxStatusBadge level="l1">{videoUploadLabel || "VIDEO SELECTED"}</SubToolboxStatusBadge>}
@@ -220,10 +223,20 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         </SubToolboxSection>
 
         <SubToolboxSection>
-          {thumbnailPreview ? (
+          {onThumbnailFileChange ? (
+            <SubToolboxFileTarget
+              label={thumbnailFile ? thumbnailFile.name : "Click or drop an image"}
+              icon={<Upload size={28} strokeWidth={3} />}
+              accept="image/jpeg,image/png,image/webp"
+              file={thumbnailFile}
+              preview={thumbnailPreview}
+              tooltip="Click or drop an image to upload or change the thumbnail."
+              previewAlt="Selected thumbnail"
+              onFiles={files => onThumbnailFileChange(files?.[0] || null)}
+              className="vt-thumbnail-upload-target"
+            />
+          ) : thumbnailPreview ? (
             <ThumbnailMiniSubToolbox title="THUMBNAIL" icon={<ImageIcon size={18} />} overlayLabel={thumbnailLabel} src={thumbnailPreview} alt="Video thumbnail" actions={thumbnailActions} />
-          ) : onThumbnailFileChange ? (
-            <div className="relative"><SubToolboxFileTarget label={thumbnailFile ? thumbnailFile.name : "SELECT THUMBNAIL"} icon={<ImageIcon size={28} />} accept="image/jpeg,image/png,image/webp" onFiles={files => onThumbnailFileChange(files?.[0] || null)} /><span className="vt-thumbnail-mini-overlay-label" aria-hidden="true">{thumbnailLabel}</span></div>
           ) : <SubToolboxStatusBadge level="l1">THUMBNAIL NOT SELECTED</SubToolboxStatusBadge>}
           {shouldShowActions("thumbnail") ? <FieldActions field="thumbnail" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
