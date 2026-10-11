@@ -1908,8 +1908,7 @@ export const SubToolboxMetric: React.FC<{ label: React.ReactNode; value: React.R
 export const SubToolboxOutputCard: React.FC<Omit<React.HTMLAttributes<HTMLElement>, "title"> & { title: React.ReactNode; icon?: React.ReactNode; badge?: React.ReactNode; action?: React.ReactNode; scroll?: boolean; children: React.ReactNode; level?: ToolboxControlLevel }> = ({ title, icon, badge, action, scroll = false, level, className, children, style, ...props }) => <article data-vt-control-level={level} className={classes("vt-subtoolbox-output", scroll && "is-scroll", level && "has-component-level", className)} style={withComponentLevelStyle(level, style)} {...props}><header className="vt-subtoolbox-output-header"><div className="vt-subtoolbox-output-title">{icon ? <span aria-hidden="true">{icon}</span> : null}<span>{title}</span></div>{action ?? (badge ? <span className="vt-subtoolbox-output-badge">{badge}</span> : null)}</header><div className="vt-subtoolbox-output-body">{children}</div></article>
 
 /* Canonical image/video upload frame.
- * The same primitive owns the double color stroke, inline preview, drag/drop,
- * upload affordance and concise tooltip for both image and video assets. */
+ * The same primitive owns preview, drag/drop, paired color strokes and tooltip. */
 export const SubToolboxFileTarget: React.FC<{
   label: React.ReactNode
   icon?: React.ReactNode
@@ -1931,15 +1930,25 @@ export const SubToolboxFileTarget: React.FC<{
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = React.useState(false)
+  const [internalFile, setInternalFile] = React.useState<File | null>(null)
+  const effectiveFile = file === undefined ? internalFile : file
   const [localPreview, setLocalPreview] = React.useState<string | null>(null)
   React.useEffect(() => {
-    if (!file) { setLocalPreview(null); return }
-    const url = URL.createObjectURL(file)
+    if (!effectiveFile || !(effectiveFile.type.startsWith("image/") || effectiveFile.type.startsWith("video/"))) {
+      setLocalPreview(null)
+      return
+    }
+    const url = URL.createObjectURL(effectiveFile)
     setLocalPreview(url)
     return () => URL.revokeObjectURL(url)
-  }, [file])
+  }, [effectiveFile])
   const resolvedPreview = preview || localPreview
-  const isVideo = Boolean(file?.type.startsWith("video/") || accept?.includes("video"))
+  const isVideo = Boolean(effectiveFile?.type.startsWith("video/") || (!effectiveFile && accept?.includes("video")))
+  const handleFiles = (files: FileList | null) => {
+    const first = files?.[0] || null
+    if (file === undefined) setInternalFile(first)
+    onFiles?.(files)
+  }
   const choose = () => inputRef.current?.click()
   const iconNode = icon || <Upload size={28} strokeWidth={3} />
   return <SubToolboxSurface
@@ -1947,7 +1956,7 @@ export const SubToolboxFileTarget: React.FC<{
     className={classes("vt-subtoolbox-file-target", "vt-upload-tight-reveal", resolvedPreview && "has-preview", dragging && "is-dragging", className)}
     style={{ ...style, ["--vt-upload-target-min-height" as string]: `${minHeight}px` } as React.CSSProperties}
   >
-    <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={(event) => onFiles?.(event.target.files)} />
+    <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={(event) => { handleFiles(event.target.files); event.currentTarget.value = "" }} />
     <button
       type="button"
       className="vt-subtoolbox-file-target-button"
@@ -1957,12 +1966,12 @@ export const SubToolboxFileTarget: React.FC<{
       onDragEnter={(e) => { e.preventDefault(); setDragging(true) }}
       onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
       onDragLeave={(e) => { e.preventDefault(); setDragging(false) }}
-      onDrop={(e) => { e.preventDefault(); setDragging(false); if (e.dataTransfer.files.length) onFiles?.(e.dataTransfer.files) }}
+      onDrop={(e) => { e.preventDefault(); setDragging(false); if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files) }}
     >
       <span className="vt-upload-tight-reveal-layers" aria-hidden="true">{[7,6,5,4,3,2,1].map((layer) => <span key={layer} className={`vt-upload-tight-reveal-layer is-l${layer}`} />)}</span>
       {resolvedPreview ? (
         <span className="vt-upload-preview-frame" aria-hidden="true">
-          {isVideo ? <video src={resolvedPreview} muted playsInline preload="metadata" onLoadedMetadata={event => { try { event.currentTarget.currentTime = 0.1 } catch { /* Browser may not seek until data is ready. */ } }} /> : <img src={resolvedPreview} alt="" />}
+          {isVideo ? <video src={resolvedPreview} muted playsInline preload="metadata" onLoadedMetadata={event => { try { event.currentTarget.currentTime = 0.1 } catch { /* Browser may not seek until data is ready. */ } }} /> : <img src={resolvedPreview} alt={previewAlt} />}
         </span>
       ) : null}
       <span className={classes("vt-upload-tight-reveal-center", resolvedPreview && "has-preview")}>
