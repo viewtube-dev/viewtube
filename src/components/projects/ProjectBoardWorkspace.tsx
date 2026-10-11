@@ -3,7 +3,8 @@ import { CalendarDays, Columns3 } from "lucide-react"
 import EmbeddedProjectKanbanWorkspace from "./EmbeddedProjectKanbanWorkspace"
 import EmbeddedPublishingSchedule from "./EmbeddedPublishingSchedule"
 import { SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxSegmentedToggle, SubToolboxSurface } from "../subtoolbox/SubToolboxPrimitives"
+import { ToolboxHeaderToggle } from "../subtoolbox/SubToolboxPrimitives"
+import { SubToolboxSurface } from "../subtoolbox/SubToolboxPrimitives"
 import { useProjectsWorkspace } from "./ProjectsWorkspaceContext"
 
 const ProjectBoardWorkspace: React.FC = () => {
@@ -11,10 +12,11 @@ const ProjectBoardWorkspace: React.FC = () => {
  return <SubToolboxStack density="comfortable">
   <SubToolboxSurface tone="subtle">
    <SubToolboxSection label="Project Board view">
-    <SubToolboxSegmentedToggle
+    <ToolboxHeaderToggle
+     level="subtoolbox"
      value={boardView}
      onValueChange={value => setBoardView(value as "board" | "calendar")}
-     ariaLabel="Choose Project Board view"
+     aria-label="Choose Project Board view"
      options={[
       { value: "board", label: <span className="inline-flex items-center gap-2"><Columns3 size={14}/> Board</span> },
       { value: "calendar", label: <span className="inline-flex items-center gap-2"><CalendarDays size={14}/> Calendar</span> },
