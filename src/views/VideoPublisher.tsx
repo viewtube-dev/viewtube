@@ -155,7 +155,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [privacyStatus, setPrivacyStatus] = useState<"public"|"private"|"unlisted">("private")
   const [publishAt, setPublishAt] = useState("")
   const [publishCategory, setPublishCategory] = useState("22")
-  const [publishAudience, setPublishAudience] = useState(false)
+  const [publishAudience, setPublishAudience] = useState<boolean | null>(null)
   const [publishTimestamps, setPublishTimestamps] = useState("")
   const [publishLocation, setPublishLocation] = useState("")
   const [publishCommunity, setPublishCommunity] = useState(false)
@@ -748,7 +748,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                   setPublishCategory(payload.category || "22")
                   setPrivacyStatus((payload.visibility === "public" || payload.visibility === "unlisted" ? payload.visibility : "private"))
                   setPublishAt(payload.publishAt || "")
-                  setPublishAudience(Boolean(payload.audience))
+                  setPublishAudience(payload.audience ?? null)
                   setPublishTimestamps(payload.timestamps || "")
                   setPublishLocation(payload.location || "")
                   setPublishCommunity(Boolean(payload.community))
@@ -767,7 +767,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                         publishingMetadata: {
                           category: payload.category || "22",
                           visibility: payload.visibility || "private",
-                          audience: Boolean(payload.audience),
+                          audience: payload.audience ?? null,
                           timestamps: payload.timestamps || "",
                           location: payload.location || "",
                           community: Boolean(payload.community),
