@@ -122,7 +122,7 @@ const FieldActions: React.FC<{
 }> = ({ field, onGenerate, onRefine, onAnalyze }) => {
   if (!onGenerate && !onRefine && !onAnalyze) return null
   return (
-    <SubToolboxActions columns={3} forceRow className="mt-2">
+    <SubToolboxActions columns={3} className="vt-metadata-field-actions mt-2">
       {onGenerate ? <SubToolboxSplitButton level="l2" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SubToolboxSplitButton> : <span />}
       {onRefine ? <SubToolboxSplitButton level="l2" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SubToolboxSplitButton> : <span />}
       {onAnalyze ? <SubToolboxSplitButton level="l2" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SubToolboxSplitButton> : <span />}
@@ -249,6 +249,13 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
             <>
               <SubToolboxTagEditor
                 level="l1"
+                className="vt-metadata-tag-editor"
+                style={{
+                  "--vt-component-height": "44px",
+                  "--vt-component-stroke": "3px",
+                  "--vt-component-radius": "8px",
+                  "--vt-component-font-size": "14px",
+                } as React.CSSProperties}
                 tags={currentTags}
                 onTagsChange={nextTags => onTagsChange(nextTags.join(", "))}
                 addIcon={<Plus size={15} />}
