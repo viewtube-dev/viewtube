@@ -10,6 +10,7 @@
 ## 2026-10-11 — Missing compound patterns
 
 - Added `SubToolboxScriptBar` as a reusable weighted timeline primitive and migrated Script Architect's inline multi-section bar to it.
+- Added reusable `SubToolboxNestedSquareChoice` and `SubToolboxTagActionRow` compound primitives in `SubToolboxCompoundPrimitives.tsx`; both are demonstrated by the production catalog.
 - Registered six missing production-track examples: Tone / Tension / Cinematic Dropdown, Nested Square Choice, Tag-Adjacent Split Action Row, Multi-Section Script Bar, Ranked Metadata Tag, and Education Timestamp Notes.
 - Used existing shared primitives for dropdown, split-left action, checkbox, tag editor, ranked tags, and timestamp field; no parallel styling system was introduced.
 - Extended the component index and mobile-regression source tests. The 62-family frozen hardcoded baseline remains unchanged.
