@@ -1138,3 +1138,77 @@ The detailed, binding ownership contract is recorded in `VIEWTUBE_WHOLE_SYSTEM_O
 
 Implementation order: first restore the three tools' UI/action boundaries and shared field contract; next connect MM output to VP/VM through reference-based handoffs; then test lifecycle isolation and provenance before extending analytics-informed refinement.
 
+
+
+## 18. Metadata sets, goal/outcome categories, and learning loop (planned)
+
+This section is an implementation plan, not a claim that every capability is already wired.
+
+### 18.1 Metadata Set as a versioned package option
+
+A Metadata Set is a named, versioned proposal for the same canonical publishing package, not a new project or a separate asset store. Each set references the existing Project, ContentBuild, Video Package, Publishing Package, channel, and relevant asset/version identities.
+
+Capture a stable set ID, name, timestamps, source tool/actor, status (draft, candidate, selected, applied, superseded, archived), goal(s), target audience, format, constraints, and expected-outcome hypothesis. Store the complete canonical metadata snapshot: title, thumbnail asset/version, description, visibility/schedule where relevant, audience/kids setting, timestamps/chapters, location, playlist IDs, community setting, AI-use disclosure, ranked tags, and category. Preserve per-field provenance: input/context references, prompt/template/model version where available, generation/refinement receipt, user edits, and decision/approval reference. Record evaluation context and evidence windows when analytics informed the set; distinguish observations from predictions.
+
+Required actions: Save Current Set; Save as New Set; rename/describe; compare sets field-by-field; select/restore a set into the existing workspace; duplicate as a new candidate; archive; and explicitly apply selected fields or the full set. Restoring is reversible and does not imply publication or final approval. Selection must be idempotent and must not create duplicate projects, ContentBuilds, package members, assets, or provenance entries. Asset binaries and history remain in the existing Vault/Asset Engine.
+
+### 18.2 Metadata categories by goal and intended outcome
+
+Support multiple goal labels per set, with one primary goal and optional secondary goals. These categories express hypotheses, not guaranteed outcomes.
+
+- **Discovery / reach:** improve eligible impressions and qualified reach. Consider topic/entity clarity, searchable phrasing, category, relevant ranked tags, and title-thumbnail topic match.
+- **Click-through / packaging:** improve CTR on comparable traffic sources. Consider title-thumbnail pairing, promise clarity, visual contrast, and audience expectation alignment.
+- **Watch quality / retention:** improve early retention, average view duration, percentage viewed, and continuation where measurable. Keep title/thumbnail promises aligned with the opening and content.
+- **Search intent / evergreen:** improve relevant search impressions and durable search views over longer windows. Prefer explicit topic phrasing and useful descriptive copy without keyword stuffing.
+- **Audience fit / satisfaction:** improve returning-viewer response, likes relative to views, comment quality, feedback, and lower negative-feedback rates where available.
+- **Engagement / community:** encourage meaningful comments and community interaction while tracking spam/low-quality engagement guardrails.
+- **Session / series continuation:** improve playlist starts/continuation and end-screen/card continuation when source metrics exist; coordinate series naming and playlist membership.
+- **Conversion / action:** support a creator-defined next action only when its event source exists. Do not infer off-platform conversion from views alone.
+- **Accuracy / trust / compliance:** preserve truthful promises, audience suitability, correct disclosures, and policy constraints. Treat these as guardrails, not metrics to trade away for CTR.
+- **Maintenance / refresh:** address stale or declining performance with a documented hypothesis and comparison window; distinguish seasonality and traffic-mix changes from metadata effects.
+
+Every goal definition declares metric(s), desired direction, guardrails, baseline period, evaluation period, minimum evidence/sample requirements where available, known confounders, and decision rule. Support custom goals using the same schema. If data or sample size is unavailable, mark the hypothesis unmeasured or low-confidence rather than fabricating a result.
+
+### 18.3 Set comparison and selection workflow
+
+1. Start from a selected Project/ContentBuild and its canonical package; distinguish the current/applied set from saved candidates.
+2. Generate candidates from user inputs, approved context, and optionally analytics. Never silently replace the current set.
+3. Compare field-level differences, asset previews, goal alignment, evidence, risks/guardrails, and rationale.
+4. Let the user select a set, restore it for editing, cherry-pick fields, or explicitly apply it. Record actor and decision.
+5. Publisher uses selected candidates for pre-publication packages. Manager applies approved changes to already-published videos. Metadata Master proposes and explains; it does not publish or silently apply.
+6. Preserve prior versions and decisions. New sets may supersede but never erase old ones.
+
+### 18.4 Post-publication analytics tracking and attribution
+
+Link every publish event and subsequent metadata-change event to existing ContentBuild, PublishTransaction/receipt, published video ID, exact package snapshot, asset/version, decision, and analytics identities. Do not create a parallel analytics store owned by Metadata Master.
+
+Capture when available: publication/change timestamps; exact applied package/set and asset versions; changed fields; baseline and post-change windows with timezone and elapsed time; traffic-source mix; impressions, CTR, views, watch time, average view duration, average percentage viewed/retention, likes/comments/shares/subscribers gained, playlist/end-screen/card signals, and revenue/conversion metrics only when truly available. Preserve video/channel context for comparison (format, duration, topic/series, upload age, traffic source, promotion/seasonality), data provenance, fetch time, missing metrics, definitions, and API limitations.
+
+Keep publication effects separate from later metadata-edit effects. Multiple close-together changes are confounded and must be marked so. Compare matched pre/post windows and, when possible, traffic-source-specific results and comparable videos/sets. Record sample size and uncertainty. Never label a simple before/after correlation as causal lift; grade results as descriptive, suggestive, or stronger only when the evidence design supports it. Track intended outcomes and guardrails together (for example, CTR rises while retention falls). Preserve source observations and immutable event history; derived scores are reproducible projections. Feed outcomes to Metadata Master as evidence with confidence and applicability scope; learning must not rewrite history or auto-apply changes.
+
+### 18.5 Delivery sequence and acceptance criteria
+
+**Phase A — durable sets:** formalize schema/status transitions; connect Save Current, Save as Option, compare, and select to existing package persistence; prove idempotent selection and round-trip field/asset restoration on a populated Project.
+
+**Phase B — goal taxonomy:** add extensible goal definitions, custom goals, metric/guardrail mappings, hypothesis text, and transparent field-level rationale. Model scores are not observed performance.
+
+**Phase C — publish/change receipts:** bind the approved exact package snapshot to the publish transaction; record external publication and subsequent metadata updates against the same ContentBuild and published-video identity. Retry/resume is idempotent.
+
+**Phase D — analytics and evaluation:** persist source-attributed observations and comparison windows; expose missing data/confounders; test publication versus metadata-change timelines and guardrail outcomes.
+
+**Phase E — governed learning:** expose evaluated outcomes to future Metadata Master proposals with confidence, scope, and provenance. Require explicit approval for application and retain decisions.
+
+Acceptance gates: no parallel project/package/asset/analytics stores; no silent publication/application; exact applied-set identity recoverable for each event; idempotent selection; visible data gaps; no causal claims without suitable evidence; and tests for Publisher/Manager/Metadata Master boundaries.
+
+## 19. Toolbox header toggles — visibility regression and deployment gate
+
+Video Manager and Video Publisher pass their toggle groups through `headerActions` with `headerActionsPlacement="header"`. The shared `Toolbox`/ `ToolboxScaffold` source contract renders these inside `.vt-toolbox-header-extras` when this source is deployed. Source inspection alone does not prove that the live Render app has this code or that CSS leaves it visible.
+
+Investigate in order:
+1. Verify the Render service's repository, configured branch, latest successful deploy commit, and build timestamp against `master/consolidated-feature-integration`. Confirm the live URL is the intended service, not the older system-convergence service.
+2. Inspect DOM/computed styles for `.vt-toolbox-header-actions`, `.vt-toolbox-header-extras`, `.vt-toolbox-header-secondary-actions`, and `ToolboxHeaderToggle`. Check clipping, flex shrink, responsive breakpoints, stacking, and header overflow.
+3. Confirm `ToolboxScaffoldProps` declares `headerActionsPlacement`, forwards it to `Toolbox`, and the deployed bundle includes the header markup.
+4. Add a regression test that both Publisher and Manager toggle groups are children of the main toolbox header and that the below-header strip is absent when placement is `header`.
+5. Verify mobile portrait, mobile landscape, and desktop. Controls must remain visible/operable, wrap rather than clip, and use the same canonical `ToolboxHeaderToggle` primitive. Do not add a second toggle primitive or duplicate row as a workaround.
+
+Do not mark this resolved until the intended Render service's deployed commit is verified and the live header is checked. Keep source fixes on `master/consolidated-feature-integration`; do not merge into `main` without explicit approval.
