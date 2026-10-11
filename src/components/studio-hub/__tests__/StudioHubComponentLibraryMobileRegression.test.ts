@@ -191,4 +191,27 @@ describe("Studio Hub Component Library mobile regression", () => {
       "Vault Portrait Asset", "Vault Audio Asset", "Vault Document Asset",
     ]) expect(catalog).toContain(`\"${family}\"`)
   })
+
+  it("registers the missing Script Architect and metadata compound patterns in the production library", () => {
+    const primitives = read("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const scriptArchitect = read("src/views/ScriptArchitect.tsx")
+    const migration = read("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+    for (const family of [
+      "Tone / Tension / Cinematic Dropdown",
+      "Nested Square Choice",
+      "Tag-Adjacent Split Action Row",
+      "Multi-Section Script Bar",
+      "Ranked Metadata Tag",
+      "Education Timestamp Notes",
+    ]) {
+      expect(migration).toContain(`"${family}"`)
+    }
+    expect(primitives).toContain("export const SubToolboxScriptBar")
+    expect(scriptArchitect).toContain("<SubToolboxScriptBar")
+    expect(scriptArchitect).not.toContain("budget.sections.map((section, index) => (")
+    expect(migration).toContain("SubToolboxDropdownControl")
+    expect(migration).toContain("TagRankTag")
+    expect(migration).toContain("EducationTimestampNotes")
+  })
+
 })
