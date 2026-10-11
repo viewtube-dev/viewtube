@@ -23,3 +23,10 @@ Branch: `audit/system-convergence-identity-certification`
 ## Notes
 
 The preview is an ephemeral browser object URL for local feedback only. It is not a substitute for the canonical Vault/Asset Engine ingestion path and does not persist media bytes. Durable storage must continue through the existing asset boundary.
+
+## Deployment follow-up
+
+- Render's configured `npm install && npm run build` completed successfully for commit `a3d1385f85a421e7e7f783c122647d4f1ac0e0c1`; public checks then confirmed `/studio`, `/projects`, and `/video-publisher` rendered without visible errors.
+- The subsequent header glyph alignment commit `fd3853ad038150f46eab90cc37dc1bd5ad8ee4e3` also completed its Render build and reached **live** status.
+- A read-only public-route check for the `fd3853a` deployment is underway. The earlier route check was against `a3d1385`, not the newest commit.
+- The configured Render build does not run `tsc -b` or Vitest. Those checks remain unverified even though the Vite production build succeeded.
