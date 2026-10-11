@@ -1,6 +1,6 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
-import { MiniSubToolbox, SubToolbox } from "../Toolbox"
+import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -71,6 +71,7 @@ import {
   SubToolboxSelectableTag,
   SubToolboxSkeleton,
   SubToolboxSettingsSwitch,
+  SubToolboxScriptBar,
   SubToolboxSlider,
   SubToolboxControllerSwitch,
   SubToolboxSplitField,
@@ -121,6 +122,10 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Split Menu",
   "Dropdown",
   "Top Title Dropdown",
+  "Tone / Tension / Cinematic Dropdown",
+  "Nested Square Choice",
+  "Tag-Adjacent Split Action Row",
+  "Multi-Section Script Bar",
   "Select Menu",
   "Context Menu",
   "Text Input",
@@ -277,6 +282,10 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Dropdown": { mode: "compound", inlineUnits: 4.75, portraitStack: true },
   "Select Menu": { mode: "compound", inlineUnits: 4.75, portraitStack: true },
   "Top Title Dropdown": { mode: "compound", inlineUnits: 4.9, portraitStack: true },
+  "Tone / Tension / Cinematic Dropdown": { mode: "compound", inlineUnits: 5.0, portraitStack: true },
+  "Nested Square Choice": { mode: "compound", inlineUnits: 4.8, portraitStack: true },
+  "Tag-Adjacent Split Action Row": { mode: "compound", inlineUnits: 6.2, portraitStack: true },
+  "Multi-Section Script Bar": { mode: "compound", inlineUnits: 7.0, portraitStack: true },
   "Split Search": { mode: "compound", inlineUnits: 5.15, portraitStack: true },
   "Input Action": { mode: "compound", inlineUnits: 4.7, portraitStack: true },
   "Stepper": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
@@ -377,6 +386,8 @@ const PrimitiveMigrationControl: React.FC<{
   const [segmentChoice, setSegmentChoice] = React.useState("A")
   const [groupChoice, setGroupChoice] = React.useState("ONE")
   const [menuChoice, setMenuChoice] = React.useState("OPTION 1")
+  const [toneChoice, setToneChoice] = React.useState("CINEMATIC")
+  const [nestedChoice, setNestedChoice] = React.useState("HOOK")
   const [sliderValue, setSliderValue] = React.useState(62)
   const [rangeLow, setRangeLow] = React.useState(22)
   const [rangeHigh, setRangeHigh] = React.useState(76)
@@ -473,6 +484,54 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Dropdown" || name === "Select Menu" || name === "Context Menu") {
     return <SubToolboxMenu level={level} variant={name === "Context Menu" ? "context" : name === "Select Menu" ? "select" : "dropdown"} value={menuChoice} options={["OPTION 1","OPTION 2","OPTION 3"].map((option) => ({ value: option, label: option }))} onValueChange={setMenuChoice} triggerLabel={name === "Dropdown" ? "MENU" : menuChoice} triggerIcon={<MoreHorizontal />} chevronIcon={<ChevronDown />} ariaLabel={name} />
+  }
+  if (name === "Tone / Tension / Cinematic Dropdown") {
+    return <SubToolboxDropdownControl
+      label="TONE / TENSION / STYLE"
+      value={toneChoice}
+      options={["TONE", "TENSION", "CINEMATIC"]}
+      onChange={setToneChoice}
+      tone="pink"
+      className="w-full"
+    />
+  }
+  if (name === "Nested Square Choice") {
+    return <div className="grid grid-cols-3 gap-1">
+      {["HOOK", "PROOF", "CTA"].map((choice) => (
+        <button
+          key={choice}
+          type="button"
+          onClick={() => setNestedChoice(choice)}
+          aria-pressed={nestedChoice === choice}
+          className={`flex min-w-0 items-center gap-1 rounded border-[2px] border-black p-1 text-left text-[9px] font-black uppercase ${nestedChoice === choice ? "bg-[var(--pair-a)]" : "bg-white"}`}
+        >
+          <SubToolboxCheckControl level={level} checked={nestedChoice === choice} aria-label={`Select ${choice}`} onClick={(event) => { event.stopPropagation(); setNestedChoice(choice) }} />
+          <span className="truncate">{choice}</span>
+        </button>
+      ))}
+    </div>
+  }
+  if (name === "Tag-Adjacent Split Action Row") {
+    return <div className="flex min-w-0 flex-col gap-2">
+      <SubToolboxTagEditor level={level} tags={editorTags} onTagsChange={setEditorTags} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
+      <div className="flex min-w-0 flex-nowrap items-center gap-1" aria-label="Tag actions">
+        <SubToolboxSplitButton level={level} icon={<Settings2 />} className="!min-w-0 !flex-1 !px-1 !text-[9px]">REFINE</SubToolboxSplitButton>
+        <SubToolboxSplitButton level={level} icon={<Plus />} className="!min-w-0 !flex-1 !px-1 !text-[9px]">GENERATE</SubToolboxSplitButton>
+        <SubToolboxSplitButton level={level} icon={<Search />} className="!min-w-0 !flex-1 !px-1 !text-[9px]">ANALYZE</SubToolboxSplitButton>
+      </div>
+    </div>
+  }
+  if (name === "Multi-Section Script Bar") {
+    return <SubToolboxScriptBar
+      level={level}
+      aria-label="Example script section timeline"
+      segments={[
+        { id: "hook", label: "HOOK", minutes: 0.5, words: 65, durationLabel: "0:30", color: "var(--pair-a)" },
+        { id: "proof", label: "PROOF", minutes: 1.2, words: 160, durationLabel: "1:12", color: "var(--pair-b)" },
+        { id: "story", label: "STORY", minutes: 1.8, words: 240, durationLabel: "1:48", color: "#CCFF00" },
+        { id: "cta", label: "CTA", minutes: 0.5, words: 60, durationLabel: "0:30", color: "#FF77D6" },
+      ]}
+    />
   }
   if (name === "Top Title Dropdown") {
     return <SubToolboxTopTitleDropdown
