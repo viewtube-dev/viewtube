@@ -2193,3 +2193,69 @@ export const SubToolboxToolbar: React.FC<SubToolboxToolbarProps> = ({ level = "l
 export * from "./SubToolboxMediaPrimitives"
 
 export * from "./SubToolboxWorkflowPrimitives"
+
+/** A weighted, multi-section timeline used by Script Architect and reusable in other editors. */
+export interface SubToolboxScriptBarSegment {
+  id: string
+  label: string
+  minutes: number
+  words?: number
+  color: string
+  durationLabel?: string
+}
+
+export interface SubToolboxScriptBarProps extends React.HTMLAttributes<HTMLDivElement> {
+  segments: SubToolboxScriptBarSegment[]
+  level?: ToolboxControlLevel
+  onSegmentSelect?: (segmentId: string) => void
+  selectedSegmentId?: string | null
+}
+
+export const SubToolboxScriptBar: React.FC<SubToolboxScriptBarProps> = ({
+  segments,
+  level = "l1",
+  onSegmentSelect,
+  selectedSegmentId = null,
+  className,
+  style,
+  ...props
+}) => (
+  <div
+    className={classes("vt-subtoolbox-script-bar", "flex w-full min-w-0 overflow-hidden rounded-xl border-[3px] border-black bg-white", className)}
+    data-vt-control-level={level}
+    role="group"
+    aria-label={props["aria-label"] || "Script section timeline"}
+    style={withComponentLevelStyle(level, style)}
+    {...props}
+  >
+    {segments.map((segment, index) => {
+      const content = (
+        <>
+          <span className="block truncate text-[9px] font-black uppercase leading-tight">{segment.label}</span>
+          <span className="block text-[10px] font-black leading-tight">{segment.durationLabel || `${segment.minutes} MIN`}</span>
+        </>
+      )
+      const sharedClass = classes(
+        "flex min-w-0 flex-col justify-center gap-1 border-r-[3px] border-black px-2 py-2 text-left last:border-r-0",
+        selectedSegmentId === segment.id && "ring-2 ring-inset ring-black",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-5px] focus-visible:outline-black",
+      )
+      const sharedStyle = { flex: Math.max(0.4, segment.minutes), backgroundColor: segment.color }
+      const label = `${segment.label}, ${segment.durationLabel || `${segment.minutes} minutes`}${typeof segment.words === "number" ? `, ${segment.words} words` : ""}`
+      return onSegmentSelect ? (
+        <button
+          key={segment.id}
+          type="button"
+          className={sharedClass}
+          style={sharedStyle}
+          title={label}
+          aria-label={label}
+          aria-pressed={selectedSegmentId === segment.id}
+          onClick={() => onSegmentSelect(segment.id)}
+        >{content}</button>
+      ) : (
+        <div key={segment.id} className={sharedClass} style={sharedStyle} title={label} aria-label={label}>{content}</div>
+      )
+    })}
+  </div>
+)
