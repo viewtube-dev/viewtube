@@ -52,6 +52,19 @@ describe("Video Manager metadata layout contract", () => {
   })
 
 
+  it("supports a visibility-only global toggle for metadata field actions", () => {
+    const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
+    const publisher = read("src/views/VideoPublisher.tsx")
+    const manager = read("src/views/VideoManager.tsx")
+    expect(metadata).toContain("showFieldActions?: boolean")
+    expect(metadata).toContain("showFieldActions = true")
+    expect(metadata).toContain("showFieldActions && (!actionFields || actionFields.includes(field))")
+    expect(publisher).toContain('aria-label="Show or hide field actions"')
+    expect(publisher).toContain("showFieldActions={showFieldActions}")
+    expect(manager).toContain('aria-label="Show or hide field actions"')
+    expect(manager).toContain("showFieldActions={showFieldActions}")
+  })
+
   it("exports the shared YouTube category options imported by Publisher and Manager", () => {
     const metadata = read("src/components/metadata/CanonicalMetadataSections.tsx")
     expect(metadata).toContain("export const YOUTUBE_CATEGORY_OPTIONS = [")
