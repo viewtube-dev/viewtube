@@ -3131,9 +3131,9 @@
   position:absolute;
   z-index:1;
   top:50%;
+  left:calc(var(--vt-component-height)*.20);
   right:calc(var(--vt-component-height)*.20);
   transform:translateY(-50%);
-  max-width:calc(100% - 2 * var(--vt-component-height)*.20);
   overflow:hidden;
   color:color-mix(in srgb,var(--pair-a,#36e0f6) 65%,transparent);
   font-size:calc(var(--vt-component-font-size)*.90);
