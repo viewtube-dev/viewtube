@@ -21,7 +21,7 @@ export type PublisherMetadataState = {
   category?: string
   visibility?: string
   publishAt?: string | null
-  audience?: boolean
+  audience?: boolean | null
   timestamps?: string
   location?: string
   community?: boolean
@@ -154,7 +154,7 @@ export const savePublisherMetadataToProject = (
     category: state.category || "",
     visibility: state.visibility || "",
     publishAt: state.publishAt || null,
-    audience: Boolean(state.audience),
+    audience: state.audience ?? null,
     timestamps: state.timestamps || "",
     location: state.location || "",
     community: Boolean(state.community),
