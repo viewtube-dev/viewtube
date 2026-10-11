@@ -3602,6 +3602,7 @@
   -webkit-text-stroke:.35px currentColor;
 }
 .vt-toolbox-header-toggle.is-word-toggle button.is-active{background:transparent;color:#0f172a}
+.vt-toolbox-header-toggle.is-word-toggle.has-noninitial-selection .vt-word-toggle-handle{background:#f276c5}
 .vt-toolbox-header-toggle.is-word-toggle button:focus-visible{outline:2px solid #777;outline-offset:-4px}
 .vt-toolbox-header-toggle.is-word-toggle.is-subtoolbox{
   --vt-header-toggle-height:36px;
