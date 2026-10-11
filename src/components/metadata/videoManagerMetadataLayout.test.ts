@@ -66,10 +66,12 @@ describe("Video Manager metadata layout contract", () => {
     expect(metadata).toContain("showFieldActions?: boolean")
     expect(metadata).toContain("showFieldActions = true")
     expect(metadata).toContain("showFieldActions && (!actionFields || actionFields.includes(field))")
-    expect(publisher).toContain('aria-label="Show or hide field actions"')
-    expect(publisher).toContain("showFieldActions={showFieldActions}")
-    expect(manager).toContain('aria-label="Show or hide field actions"')
-    expect(manager).toContain("showFieldActions={showFieldActions}")
+    expect(publisher).toContain("showFieldActions={true}")
+    expect(manager).toContain("showFieldActions={true}")
+    expect(publisher).not.toContain('label: "Show Actions"')
+    expect(publisher).not.toContain('label: "Hide Actions"')
+    expect(manager).not.toContain('label: "Show Actions"')
+    expect(manager).not.toContain('label: "Hide Actions"')
   })
 
   it("exports the shared YouTube category options imported by Publisher and Manager", () => {
@@ -89,7 +91,12 @@ describe("Video Manager metadata layout contract", () => {
     expect(toolbox).toContain('headerActionsPlacement === "below"')
     expect(manager).toContain('headerActionsPlacement="header"')
     expect(publisher).toContain('headerActionsPlacement="header"')
-    expect(manager).toContain('label: "Live Editor"')
+    expect(manager).toContain('label: "Manage"')
+    expect(manager).toContain('label: "Generate"')
+    expect(publisher).toContain('label: "Publish"')
+    expect(publisher).toContain('label: "Generate"')
+    expect(publisher).toContain('media.duration < 180')
+    expect(publisher).toContain('media.videoHeight >= media.videoWidth')
   })
 
   it("uses the intrinsic-width word-toggle primitive with a pink selected handle", () => {
