@@ -1962,22 +1962,80 @@ export const SubToolboxOutputCard: React.FC<Omit<React.HTMLAttributes<HTMLElemen
 
 /* Canonical Toolbox upload primitive: Tight Reveal (#05).
  * Seven flush nested bands replace the legacy dashed drop-zone treatment. */
-export const SubToolboxFileTarget: React.FC<{ label: React.ReactNode; icon?: React.ReactNode; accept?: string; multiple?: boolean; minHeight?: number; onFiles?: (files: FileList | null) => void; className?: string; level?: ToolboxControlLevel; style?: React.CSSProperties }> = ({ label, icon, accept, multiple = false, minHeight = 220, onFiles, className, level, style }) => {
+export const SubToolboxFileTarget: React.FC<{
+  label: React.ReactNode
+  icon?: React.ReactNode
+  accept?: string
+  multiple?: boolean
+  minHeight?: number
+  onFiles?: (files: FileList | null) => void
+  className?: string
+  level?: ToolboxControlLevel
+  style?: React.CSSProperties
+  preview?: string | null
+  file?: File | null
+  tooltip?: string
+  previewAlt?: string
+}> = ({
+  label, icon, accept, multiple = false, minHeight = 220, onFiles,
+  className, level, style, preview, file, tooltip = "Click or drop a file to upload or change it.",
+  previewAlt = "Uploaded file preview",
+}) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = React.useState(false)
+  const [internalFile, setInternalFile] = React.useState<File | null>(null)
+  const effectiveFile = file === undefined ? internalFile : file
+  const [localPreview, setLocalPreview] = React.useState<string | null>(null)
+  React.useEffect(() => {
+    if (!effectiveFile || !(effectiveFile.type.startsWith("image/") || effectiveFile.type.startsWith("video/"))) {
+      setLocalPreview(null)
+      return
+    }
+    const url = URL.createObjectURL(effectiveFile)
+    setLocalPreview(url)
+    return () => URL.revokeObjectURL(url)
+  }, [effectiveFile])
+  const resolvedPreview = preview || localPreview
+  const isVideo = Boolean(effectiveFile?.type.startsWith("video/") || (!effectiveFile && accept?.includes("video")))
+  const handleFiles = (files: FileList | null) => {
+    const first = files?.[0] || null
+    if (file === undefined) setInternalFile(first)
+    onFiles?.(files)
+  }
   const choose = () => inputRef.current?.click()
+  const iconNode = icon || <Upload size={28} strokeWidth={3} />
   return <SubToolboxSurface
     level={level}
-    className={classes("vt-subtoolbox-file-target", "vt-upload-tight-reveal", dragging && "is-dragging", className)}
-    style={{ ...style, ["--vt-upload-target-min-height" as string]: `${minHeight}px`, border: 0 } as React.CSSProperties}
+    className={classes("vt-subtoolbox-file-target", "vt-upload-tight-reveal", resolvedPreview && "has-preview", dragging && "is-dragging", className)}
+    style={{ ...style, ["--vt-upload-target-min-height" as string]: `${minHeight}px` } as React.CSSProperties}
   >
-    <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={(event) => onFiles?.(event.target.files)} />
-    <button type="button" className="vt-subtoolbox-file-target-button" onClick={choose} onDragEnter={(e) => { e.preventDefault(); setDragging(true) }} onDragOver={(e) => { e.preventDefault(); setDragging(true) }} onDragLeave={(e) => { e.preventDefault(); setDragging(false) }} onDrop={(e) => { e.preventDefault(); setDragging(false); onFiles?.(e.dataTransfer.files) }}>
+    <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={(event) => { handleFiles(event.target.files); event.currentTarget.value = "" }} />
+    <button
+      type="button"
+      className="vt-subtoolbox-file-target-button"
+      title={tooltip}
+      aria-label={typeof label === "string" ? `${label}. ${tooltip}` : tooltip}
+      onClick={choose}
+      onDragEnter={(e) => { e.preventDefault(); setDragging(true) }}
+      onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+      onDragLeave={(e) => { e.preventDefault(); setDragging(false) }}
+      onDrop={(e) => { e.preventDefault(); setDragging(false); if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files) }}
+    >
       <span className="vt-upload-tight-reveal-layers" aria-hidden="true">{[7,6,5,4,3,2,1].map((layer) => <span key={layer} className={`vt-upload-tight-reveal-layer is-l${layer}`} />)}</span>
-      <span className="vt-upload-tight-reveal-center"><span className="vt-subtoolbox-file-target-icon" aria-hidden="true">{icon}</span><span className="vt-upload-tight-reveal-label">{label}</span></span>
+      {resolvedPreview ? (
+        <span className="vt-upload-preview-frame" aria-hidden="true">
+          {isVideo ? <video src={resolvedPreview} muted playsInline preload="metadata" onLoadedMetadata={event => { try { event.currentTarget.currentTime = 0.1 } catch { /* Browser may not seek until data is ready. */ } }} /> : <img src={resolvedPreview} alt={previewAlt} />}
+        </span>
+      ) : null}
+      <span className={classes("vt-upload-tight-reveal-center", resolvedPreview && "has-preview")}>
+        <span className="vt-subtoolbox-file-target-icon" aria-hidden="true">{iconNode}</span>
+        {!resolvedPreview ? <span className="vt-upload-tight-reveal-label">{label}</span> : null}
+      </span>
+      <span className="vt-upload-target-tooltip" role="tooltip">{tooltip}</span>
     </button>
   </SubToolboxSurface>
 }
+
 
 const DEFAULT_STATE_COPY: Record<SubToolboxState, string> = { loading: "Loading…", ready: "Ready.", empty: "Nothing to show yet.", "filtered-empty": "No results match the current filters.", disconnected: "Connect your channel to load this.", blocked: "A required connection is unavailable.", stale: "This information may be out of date.", permission: "You do not have access to this.", error: "This section could not be loaded." }
 export const SubToolboxStatePanel: React.FC<{ state: SubToolboxState; message?: React.ReactNode; action?: React.ReactNode; className?: string; level?: ToolboxControlLevel; style?: React.CSSProperties }> = ({ state, message, action, className, level, style }) => { const urgent = state === "error" || state === "blocked"; return <section className={classes("vt-subtoolbox-state", `is-${state}`, level && "has-component-level", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} data-subtoolbox-state={state} role={urgent ? "alert" : "status"} aria-live={urgent ? "assertive" : "polite"}><p>{message ?? DEFAULT_STATE_COPY[state]}</p>{action}</section> }
