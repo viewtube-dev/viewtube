@@ -70,6 +70,7 @@ export const WidgetStandardUploadFrame: React.FC<WidgetStandardUploadFrameProps>
           --upload-color: var(--widget-color);
           --upload-stroke: var(--widget-border, var(--widget-color));
           position: relative;
+          box-sizing: border-box;
           isolation: isolate;
           display: grid;
           place-items: center;
@@ -77,9 +78,10 @@ export const WidgetStandardUploadFrame: React.FC<WidgetStandardUploadFrameProps>
           min-width: 0;
           padding: 0;
           overflow: hidden;
-          border: 10px solid var(--upload-stroke);
-          outline: 6px solid color-mix(in srgb, var(--upload-color) 22%, transparent);
-          outline-offset: 0;
+          min-height: 0;
+          border: 6px solid var(--upload-stroke);
+          outline: none;
+          box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--upload-color) 38%, transparent);
           border-radius: 4px;
           background: color-mix(in srgb, var(--upload-color) 38%, white);
           color: var(--upload-stroke);
@@ -136,6 +138,33 @@ export const WidgetStandardUploadFrame: React.FC<WidgetStandardUploadFrameProps>
           place-items: center;
           justify-items: center;
           min-width: 0;
+        }
+        .widget-standard-upload__preview {
+          width: 100%;
+          height: 100%;
+          min-width: 0;
+          min-height: 0;
+          overflow: hidden;
+        }
+        .widget-standard-upload__preview > img,
+        .widget-standard-upload__preview > video,
+        .widget-standard-upload__preview > picture,
+        .widget-standard-upload__preview > canvas {
+          display: block;
+          width: 100%;
+          height: 100%;
+          min-width: 0;
+          min-height: 0;
+          object-fit: contain;
+          border: 0 !important;
+          outline: 0 !important;
+          box-shadow: none !important;
+        }
+        /* Preview mode is a stable frame, not an animated stack of nested outlines. */
+        .widget-standard-upload.has-value .widget-standard-upload__band {
+          animation: none !important;
+          opacity: 0 !important;
+          visibility: hidden;
         }
         .widget-standard-upload__content { gap: 10px; text-align: center; }
         .widget-standard-upload__icon {
