@@ -82,6 +82,7 @@ export interface CanonicalMetadataSectionsProps {
   onRefine?: (field: string) => void
   onAnalyze?: (field: string) => void
   actionFields?: string[]
+  showFieldActions?: boolean
   categoryOptions?: { value: string; label: string }[]
   thumbnailActions?: React.ReactNode
   videoUploadLabel?: React.ReactNode
@@ -169,7 +170,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
-    onGenerate, onRefine, onAnalyze, actionFields, categoryOptions = [], thumbnailActions,
+    onGenerate, onRefine, onAnalyze, actionFields, showFieldActions = true, categoryOptions = [], thumbnailActions,
     videoUploadLabel, thumbnailLabel = "THUMBNAIL", titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
     showVideoUpload = true, showPlaylists = true, showCategory = true,
     tagAnalysis = [], suggestedTags = [], tagInput = "", onTagInputChange, onAddTag,
@@ -180,7 +181,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
 
   const hasTagEditor = Boolean(onTagsChange)
   const currentTags = tags.split(",").map(tag => tag.trim()).filter(Boolean)
-  const shouldShowActions = (field: string) => !actionFields || actionFields.includes(field)
+  const shouldShowActions = (field: string) => showFieldActions && (!actionFields || actionFields.includes(field))
 
   return (
     <SubToolbox title="METADATA" icon={<FolderOpen size={20} strokeWidth={3} />} collapsible isOpenInitial className={className}>
@@ -267,7 +268,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                   </div>
                 </SubToolboxSection>
               ) : null}
-              {shouldShowActions("tags") ? <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
+              {shouldShowActions("tags") ? {showFieldActions ? <FieldActions field="tags" {...{ onGenerate, onRefine, onAnalyze }} /> : null} : null}
               {onRankTags ? (
                 <SubToolboxButton level="l2" size="compact" tone="neutral" onClick={onRankTags} disabled={isAnalyzingTags || !tags.trim()}>
                   {isAnalyzingTags ? "RANKING…" : tagAnalysis.length ? "VIEW TAG RANKINGS" : "RANK TAGS"}
