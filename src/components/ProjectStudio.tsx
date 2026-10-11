@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useBrain } from '../context/useBrain';
 import { CustomIcon } from './CustomIcon';
 import { SubToolbox, ToolboxScaffold } from './Toolbox';
+import { ToolboxHeaderToggle } from './subtoolbox/SubToolboxPrimitives';
 import {
     Calendar,
     Plus,
