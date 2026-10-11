@@ -34,7 +34,7 @@
 ### [P2] Keyboard and screen-reader behavior needs live verification
 - **Location:** `src/components/Toolbox.tsx` — `SubToolboxDropdownControl`; `src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx` — nested square choices.
 - **Category:** Accessibility.
-- **Evidence:** These controls are custom components rather than native `select` elements. The new nested-square example exposes a labeled square control and a separate text button, avoiding nested interactive elements. This source review did not exercise focus order, Escape behavior, or screen-reader announcements.
+- **Evidence:** These controls are custom components rather than native `select` elements. The new nested-square example uses a labeled button group with pressed state and avoids nested interactive elements. This source review did not exercise focus order, Escape behavior, or screen-reader announcements.
 - **Impact:** If keyboard focus or expanded/selected state is not announced correctly, keyboard and assistive-technology users may have difficulty selecting options.
 - **Recommendation:** Verify Tab/Shift+Tab, Enter/Space, Escape, visible focus, and selected/expanded announcements with keyboard and a screen reader. Repair only confirmed failures.
 
