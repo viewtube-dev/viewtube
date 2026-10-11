@@ -12,9 +12,9 @@
 - [x] Reviewed the donor's system-convergence protocol, TODO list, classification registry, and shared-upload/header/palette correction note in the prior audit pass.
 - [ ] Inspect each changed file at both refs and reconcile symbols/behavior against the target's newer implementation.
 - [ ] Produce a file-by-file port/keep/reject ledger with exact commit and dependency references.
-- [ ] Port low-risk UI changes selectively.
+- [x] Port low-risk UI changes selectively on child branch `fix/ui-color-order-toolbox-alignment-2026-10-11` (shared upload preview, palette reset, header alignment, canonical metadata wiring).
 - [ ] Run targeted tests, typecheck, full tests, build, and browser smoke on the resulting target head.
-- [ ] Update PR #16 with the verified integration summary and evidence.
+- [ ] Update PR #16 with the verified integration summary and evidence after checks run.
 
 **Latest compare snapshot (2026-10-11):** GitHub reports the donor branch as **19 commits ahead / 72 behind** the target, status `diverged`, with merge base `5ebdf48c02f87a96ce31a338622a7f131dc3cb30`; compared target head `b856b2157088fa06cb70ff51dab6dee768e0f384`. This is a snapshot, not a permanent branch fact. The donor is not to be merged wholesale.
 
@@ -145,3 +145,10 @@ Keep work on `master/consolidated-feature-integration` and use the existing draf
 ## Immediate next action
 
 Fetch both refs for all nine changed paths, plus the relevant donor commit list; produce the file-by-file disposition ledger. Start with `SubToolboxPrimitives.tsx`, `subtoolbox-system.css`, and `Toolbox.tsx` because they affect multiple tools, then validate metadata and project workspace integrations. Only after that should the convergence backend be ported domain-by-domain.
+
+
+## Child-branch implementation update — 2026-10-11
+
+The selective UI correction pass is now implemented on `fix/ui-color-order-toolbox-alignment-2026-10-11`, based on this target branch. Changes include controlled/uncontrolled preview support in the existing `SubToolboxFileTarget`, wiring to canonical metadata upload fields, palette-allocation resets, shared header alignment rules, and a focused static-render regression test. The target's measured word-toggle and existing header-action palette propagation were preserved.
+
+The new note `docs/ui/VIEWTUBE_SHARED_UPLOAD_HEADER_PALETTE_CORRECTION_2026-10-11.md` records the exact scope. No test/build/runtime success is claimed: the focused test, typecheck, production build, and browser check still need to run. Do not merge this child branch until that gate is satisfied.

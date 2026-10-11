@@ -3619,3 +3619,38 @@
 @media(prefers-reduced-motion:reduce){
   .vt-toolbox-header-toggle.is-word-toggle .vt-word-toggle-handle{transition:none}
 }
+
+
+/* Shared upload frame: preview, change affordance, and accessible hint. */
+.vt-subtoolbox-file-target.vt-upload-tight-reveal { border:0!important; background:color-mix(in srgb,var(--vt-subtoolbox-fill,#36e0f6) 10%,#fff); }
+.vt-upload-tight-reveal .vt-subtoolbox-file-target-button { position:relative; display:grid; width:100%; min-height:var(--vt-upload-target-min-height,220px); place-items:center; overflow:hidden; isolation:isolate; }
+.vt-upload-tight-reveal .vt-upload-preview-frame { position:absolute; z-index:2; inset:16px; display:block; overflow:hidden; border:4px solid var(--vt-subtoolbox-fill,#36e0f6); border-radius:4px; background:#111; box-shadow:0 0 0 5px color-mix(in srgb,var(--vt-subtoolbox-fill,#36e0f6) 16%,transparent); }
+.vt-upload-tight-reveal .vt-upload-preview-frame>img,.vt-upload-tight-reveal .vt-upload-preview-frame>video { display:block; width:100%; height:100%; object-fit:contain; object-position:center; }
+.vt-upload-tight-reveal .vt-upload-tight-reveal-center.has-preview { position:absolute; z-index:5; inset:auto auto 24px 24px; display:block; padding:0; }
+.vt-upload-tight-reveal.has-preview .vt-subtoolbox-file-target-icon { width:78px; height:78px; border:3px solid #fff; border-radius:50%; background:var(--vt-subtoolbox-fill,#36e0f6); color:#fff; box-shadow:0 0 0 4px color-mix(in srgb,var(--vt-subtoolbox-fill,#36e0f6) 16%,transparent),3px 3px 0 rgb(0 0 0 / 72%); }
+.vt-upload-tight-reveal.has-preview .vt-subtoolbox-file-target-icon svg { width:36px; height:36px; stroke:#fff; }
+.vt-upload-target-tooltip { position:absolute; z-index:8; left:18px; bottom:18px; max-width:min(320px,calc(100% - 36px)); padding:8px 10px; border:2px solid #000; border-radius:5px; background:#fff; color:#000; box-shadow:3px 3px 0 #000; font-size:11px; font-weight:900; line-height:1.1; text-align:left; text-transform:none; opacity:0; pointer-events:none; transform:translateY(4px); transition:opacity .16s ease,transform .16s ease; }
+.vt-upload-tight-reveal .vt-subtoolbox-file-target-button:focus-visible .vt-upload-target-tooltip { opacity:1; transform:translateY(0); }
+.vt-upload-tight-reveal.has-preview .vt-upload-target-tooltip { left:18px; bottom:116px; }
+.vt-upload-tight-reveal:not(.has-preview) .vt-upload-target-tooltip { bottom:12px; left:12px; }
+.vt-upload-tight-reveal .vt-upload-tight-reveal-center:not(.has-preview) { z-index:4; }
+.vt-upload-tight-reveal-label { color:#000!important; }
+@media(max-width:767px) {
+  .vt-subtoolbox-file-target.vt-upload-tight-reveal { min-height:clamp(140px,44vw,var(--vt-upload-target-min-height,220px))!important; }
+  .vt-upload-tight-reveal .vt-upload-preview-frame { inset:12px; }
+  .vt-upload-tight-reveal .vt-upload-tight-reveal-center.has-preview { inset:auto auto 18px 18px; }
+  .vt-upload-tight-reveal.has-preview .vt-subtoolbox-file-target-icon { width:58px; height:58px; }
+  .vt-upload-tight-reveal.has-preview .vt-subtoolbox-file-target-icon svg { width:28px; height:28px; }
+  .vt-upload-tight-reveal.has-preview .vt-upload-target-tooltip { left:12px; bottom:88px; }
+}
+/* Keep header identity, title, toggles, help, and collapse controls on one center line. */
+[data-vt-toolbox]>header,[data-vt-toolbox]>div>header { align-items:center; }
+.vt-toolbox-header-identity,.vt-toolbox-header-icon-rail,.vt-toolbox-header-title-slot,.vt-toolbox-header-actions,.vt-toolbox-header-extras,.vt-toolbox-header-control,.vt-toolbox-header-toggle { align-self:center; margin-block:0; }
+.vt-toolbox-header-title-slot>*,.vt-toolbox-header-title-slot h1,.vt-toolbox-header-title-slot h2,.vt-toolbox-header-title-slot h3 { margin-block:0!important; transform:none!important; }
+.vt-toolbox-header-collapse,.vt-toolbox-header-help,.vt-toolbox-header-toggle>button { display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; }
+.vt-toolbox-header-collapse .vt-animated-toggle-icon { display:grid; place-items:center; }
+.vt-toolbox-header-collapse { background:transparent!important; border:0!important; box-shadow:none!important; border-radius:0!important; }
+.vt-toolbox-header-collapse:hover,.vt-toolbox-header-collapse:focus-visible { background:transparent!important; }
+.vt-toolbox-header-title { line-height:.92!important; }
+.vt-toolbox-header-control,.vt-toolbox-header-toggle { transform:none!important; }
+.vt-toolbox-header-control svg { display:block; vertical-align:middle; }
