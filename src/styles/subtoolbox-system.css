@@ -3674,3 +3674,6 @@
 .vt-toolbox-header-collapse:focus-visible {
   background: transparent !important;
 }
+
+/* Empty upload frames keep the call-to-action legible over the soft color wash. */
+.vt-upload-tight-reveal-label { color: #000 !important; }
