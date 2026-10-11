@@ -23,7 +23,7 @@ import {
  ToolboxScaffold,
 } from "../components/Toolbox"
 import { PostActionReflection } from "../components/PostActionReflection"
-import { SubToolboxButton, SubToolboxInput, SubToolboxTextArea } from "../components/subtoolbox/SubToolboxPrimitives"
+import { SubToolboxButton, SubToolboxInput, SubToolboxTextArea, SubToolboxScriptBar } from "../components/subtoolbox/SubToolboxPrimitives"
 import { formatClock } from "../services/scriptBudget"
 import {
  FRAGMENT_MODES,
@@ -543,18 +543,18 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
       isOpenInitial>
       <div className="space-y-4">
        <div>
-        <div className="flex w-full border-[3px] border-black rounded-xl overflow-hidden shadow-[3px_3px_0_0_black]">
-         {budget.sections.map((section, index) => (
-          <div
-           key={section.id}
-           className="min-w-0 px-2 py-3 border-r-[3px] border-black last:border-r-0 flex flex-col gap-0.5"
-           style={{ flex: Math.max(0.4, section.minutes), backgroundColor: segmentColor(index) }}
-           title={`${section.label} · ${section.words} words`}>
-           <span className="text-[9px] font-black uppercase truncate">{section.label}</span>
-           <span className="text-[10px] font-black">{formatClock(section.minutes)}</span>
-          </div>
-         ))}
-        </div>
+        <SubToolboxScriptBar
+         aria-label="Script section timeline"
+         segments={budget.sections.map((section, index) => ({
+          id: section.id,
+          label: section.label,
+          minutes: section.minutes,
+          words: section.words,
+          color: segmentColor(index),
+          durationLabel: formatClock(section.minutes),
+         }))}
+         className="shadow-[3px_3px_0_0_black]"
+        />
         <div className="flex justify-between mt-2 text-[9px] font-black uppercase tracking-widest text-black/50">
          <span>Allocated · {formatClock(budget.allocatedMinutes)}</span>
          <span>
