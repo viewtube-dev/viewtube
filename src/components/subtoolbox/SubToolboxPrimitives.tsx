@@ -170,36 +170,57 @@ export interface ToolboxHeaderToggleProps extends Omit<React.HTMLAttributes<HTML
   level?: "toolbox" | "subtoolbox"
 }
 export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
-  value,
-  options,
-  onValueChange,
-  level = "toolbox",
-  className,
-  style,
-  ...props
-}) => (
-  <div
-    className={classes("vt-toolbox-header-toggle", level === "subtoolbox" && "is-subtoolbox", className)}
-    data-vt-header-toggle={level}
-    data-vt-header-toggle-primitive="v38-95"
-    style={style}
-    role="group"
-    {...props}
-  >
-    {options.map((option) => (
-      <button
-        key={option.value}
-        type="button"
-        className={classes(option.value === value && "is-active")}
-        aria-pressed={option.value === value}
-        aria-label={option.ariaLabel}
-        onClick={() => onValueChange?.(option.value)}
-      >
-        {option.label}
-      </button>
-    ))}
-  </div>
-)
+  value, options, onValueChange, level = "toolbox", className, style, ...props
+}) => {
+  const rootRef = React.useRef<HTMLDivElement>(null)
+  const optionRefs = React.useRef<Record<string, HTMLButtonElement | null>>({})
+  const [handle, setHandle] = React.useState({ left: 3, width: 24 })
+  React.useEffect(() => {
+    const measure = () => {
+      const root = rootRef.current
+      const target = optionRefs.current[value]
+      if (!root || !target) return
+      const rootRect = root.getBoundingClientRect()
+      const targetRect = target.getBoundingClientRect()
+      const inset = level === "subtoolbox" ? 2 : 2.75
+      setHandle({ left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 16) })
+    }
+    measure()
+    const root = rootRef.current
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(measure) : null
+    if (root && observer) observer.observe(root)
+    window.addEventListener("resize", measure)
+    const fonts = document.fonts
+    fonts?.ready?.then(measure)
+    return () => { observer?.disconnect(); window.removeEventListener("resize", measure) }
+  }, [value, options, level])
+  return (
+    <div
+      ref={rootRef}
+      className={classes("vt-toolbox-header-toggle", "is-word-toggle", level === "subtoolbox" && "is-subtoolbox", className)}
+      data-vt-header-toggle={level}
+      data-vt-header-toggle-primitive="word-toggle"
+      style={style}
+      role="group"
+      {...props}
+    >
+      <span className="vt-word-toggle-handle" aria-hidden="true" style={{ left: handle.left, width: handle.width }} />
+      {options.map((option) => (
+        <button
+          key={option.value}
+          ref={(node) => { optionRefs.current[option.value] = node }}
+          type="button"
+          className={classes(option.value === value && "is-active")}
+          aria-pressed={option.value === value}
+          aria-label={option.ariaLabel}
+          onClick={() => onValueChange?.(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 export interface SubToolboxToggleSwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   level?: ToolboxControlLevel
