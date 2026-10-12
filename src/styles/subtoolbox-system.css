@@ -3678,3 +3678,8 @@
   }
 }
 
+
+/* Keep the collapse/expand glyph transition visible even when nested SVG utility transforms are overridden. */
+.vt-toolbox-header-collapse .vt-animated-toggle-icon { transition:transform var(--vt-subtoolbox-motion-control,600ms) ease-out; transform:rotate(0deg); transform-origin:center; }
+.vt-toolbox-header-collapse .vt-animated-toggle-icon.is-open { transform:rotate(180deg); }
+.vt-toolbox-header-collapse .vt-animated-toggle-icon.is-closed { transform:rotate(0deg); }
