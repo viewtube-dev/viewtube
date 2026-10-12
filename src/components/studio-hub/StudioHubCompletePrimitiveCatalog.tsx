@@ -5,7 +5,7 @@ import {
   Upload, Video, X,
 } from "lucide-react"
 import {
-  SubToolboxFileTarget, SubToolboxInput, SubToolboxTextArea,
+  SubToolboxFileTarget, SubToolboxInput, SubToolboxTextArea, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
 import {
   SubToolboxSplitButton,
@@ -124,7 +124,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
     {tagEditorOpen ? <div className="tag-editor-entry"><input autoFocus aria-label="New tag" value={tagDraft} placeholder="ADD TAG" onChange={e => setTagDraft(e.target.value.toUpperCase())} onKeyDown={e => { if (e.key === "Enter" && tagDraft.trim()) { if (!editorTags.includes(tagDraft.trim())) setEditorTags(tags => [...tags, tagDraft.trim()]); setTagDraft(""); setTagEditorOpen(false) } if (e.key === "Escape") { setTagDraft(""); setTagEditorOpen(false) } }} /><button type="button" className="submit" aria-label="Save tag" onClick={() => { if (tagDraft.trim() && !editorTags.includes(tagDraft.trim())) setEditorTags(tags => [...tags, tagDraft.trim()]); setTagDraft(""); setTagEditorOpen(false) }}><Check /></button></div> : null}
   </div>
   if (name === "Badge") return <span className={`vt-catalog-fill-badge is-${level}`} style={style}>BADGE</span>
-  if (name === "Status Badge") return <span className={`vt-status-badge is-${level}`} style={style}><i/>Ready</span>
+  if (name === "Status Badge") return <SubToolboxStatusBadge level={level === "l0" ? "l0" : level === "l1" ? "l1" : "l2"}>Ready</SubToolboxStatusBadge>
   if (name === "Progress Bar") return <div className={`vt-catalog-progress-stack is-${level}`} style={style}><div className="vt-catalog-progress is-rounded"><span style={{width:"68%"}} /></div><div className="vt-catalog-progress is-rect"><span style={{width:"68%"}} /></div></div>
   if (name === "Progress Value") return <div className={`vt-catalog-progress-value is-${level}`} style={style} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={68}><div className="bar"><span className="fill" style={{width:"68%"}} /><strong>SYNC</strong></div><output>68%</output></div>
   if (name === "KPI") return <div className={`vt-catalog-kpi is-${level}`} style={style}><header>VIEWS</header><div className="kpi-canvas"><strong>12.4K</strong></div></div>
