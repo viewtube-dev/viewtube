@@ -138,9 +138,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
       <div className="vt-project-planner-calendar__shell">
           <section className="vt-project-planner-calendar__detail" aria-label="Selected date details">
             <header className="vt-project-planner-calendar__detail-head">
-              <div className="flex items-center gap-2"><CalendarDays size={15} /><strong className="text-[10px] font-black uppercase">Selected date</strong></div>
-              <div className="mt-1 text-[11px] font-black uppercase">{dateLabel(parseDate(selectedDate) || new Date())}</div>
-              <div className="mt-1 text-[8px] font-bold uppercase">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"}</div>
+              <div className="vt-project-planner-calendar__selected-label"><CalendarDays size={17} /><strong>Selected date</strong></div>
+              <h2 className="vt-project-planner-calendar__selected-date">{dateLabel(parseDate(selectedDate) || new Date())}</h2>
+              <div className="vt-project-planner-calendar__selected-count">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"}</div>
             </header>
 
             <div>
@@ -148,8 +148,8 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                 <div key={project.id} className="vt-project-planner-calendar__project-row">
                   <div className="mt-1 h-3 w-3 shrink-0 border border-black" style={{ backgroundColor: project.color || "var(--pair-a, #FF4FD8)" }} aria-hidden="true" />
                   <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
-                    <span className="block truncate text-[10px] font-black uppercase">{projectTitle(project)}</span>
-                    <span className="mt-1 block text-[8px] font-bold uppercase text-black/55">{project.status || "Project"} · Open project</span>
+                    <span className="vt-project-planner-calendar__project-title">{projectTitle(project)}</span>
+                    <span className="vt-project-planner-calendar__project-meta">{project.status || "Project"} · Open project</span>
                   </button>
                   <SubToolboxIconButton level="l1" icon={<X size={12} />} ariaLabel={`Unschedule ${projectTitle(project)}`} onClick={() => clearSchedule(project.id)} />
                 </div>
