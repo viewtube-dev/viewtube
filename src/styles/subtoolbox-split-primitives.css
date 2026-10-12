@@ -590,3 +590,26 @@
   box-shadow:calc(var(--vt-component-shadow-offset) - 2px) calc(var(--vt-component-shadow-offset) - 2px) 0 color-mix(in srgb,var(--pair-a,#36e0f6) 42%,transparent);
 }
 .vt-subtoolbox-shell-action:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* Metadata Generate / Refine / Analyze actions share the full available row. */
+.vt-metadata-field-actions {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(4px, 1vw, 8px);
+}
+.vt-metadata-field-actions > .vt-subtoolbox-split-button {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 420px) {
+  .vt-metadata-field-actions .vt-subtoolbox-split-button {
+    grid-template-columns: clamp(32px, 12vw, 44px) minmax(0, 1fr);
+  }
+  .vt-metadata-field-actions .vt-subtoolbox-split-button-label {
+    padding: 2px;
+    font-size: clamp(10px, 2.8vw, 13px);
+    letter-spacing: -.035em;
+  }
+}

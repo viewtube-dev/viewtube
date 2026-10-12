@@ -13,3 +13,19 @@
 .vt-project-manifestation-slot span{font-size:.62rem;font-weight:800;opacity:.55;text-transform:uppercase}
 @media (min-width:700px){.vt-project-manifestation-load{grid-template-columns:minmax(0,1fr) auto;align-items:center}}
 @media (max-width:699px){.vt-project-manifestation-hero{grid-template-columns:1fr}.vt-project-manifestation-hero .vt-subtoolbox-media-poster{max-width:420px}}
+
+/* Keep the three project actions on one shared, fluid row at every viewport width. */
+.vt-project-manifestation-actions {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(4px, 1vw, 8px);
+}
+.vt-project-manifestation-actions > .vt-subtoolbox-button.has-component-level {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0;
+  gap: 4px;
+  padding-inline: clamp(2px, .8vw, 8px) !important;
+}
+.vt-project-manifestation-project-dropdown { width: 100%; min-width: 0; }

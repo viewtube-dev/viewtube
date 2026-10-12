@@ -6,10 +6,10 @@ import { setContentBuildSelection } from "../../services/asset-engine/ContentBui
 import { buildProjectManifest, getManifestPackageForProject, type ProjectManifestation } from "./projectManifestation"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
+import { SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import {
   SubToolboxButton,
   SubToolboxMediaPoster,
-  SubToolboxSelect,
   SubToolboxStatusBadge,
   SubToolboxTag,
   SubToolboxOutputCard,
@@ -102,19 +102,21 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
         <SubToolboxGrid minItemWidth="wide" density="dense">
           <SubToolboxSection label="PROJECT LOAD / SWAP">
             <div className="vt-project-manifestation-load">
-              <SubToolboxSelect
+              <SubToolboxSplitDropdown
+                level="l2"
                 value={selectedProjectId}
-                onChange={event => {
-                  setSelectedProjectId(event.target.value)
+                options={projects.length
+                  ? projects.map(project => ({ value: project.id, label: project.name, icon: <FolderOpen size={15} /> }))
+                  : [{ value: "", label: "NO PROJECTS AVAILABLE", icon: <FolderOpen size={15} />, disabled: true }]}
+                onChange={value => {
+                  setSelectedProjectId(value)
                   setSwapState("idle")
                 }}
-                aria-label="Project to load or swap"
-              >
-                {projects.length ? projects.map(project => (
-                  <option key={project.id} value={project.id}>{project.name}</option>
-                )) : <option value="">No projects available</option>}
-              </SubToolboxSelect>
-              <SubToolboxActions columns={3}>
+                icon={<FolderOpen size={16} />}
+                ariaLabel="Choose project to load or swap"
+                className="vt-project-manifestation-project-dropdown"
+              />
+              <SubToolboxActions columns={3} forceRow className="vt-project-manifestation-actions">
                 <SubToolboxButton level="l2" icon={<FolderOpen size={15} />} onClick={loadSelected} disabled={!selectedProject}>
                   LOAD
                 </SubToolboxButton>
