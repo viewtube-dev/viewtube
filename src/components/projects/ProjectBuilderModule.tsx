@@ -3,7 +3,7 @@ import { FolderKanban, Plus } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
 import { VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import { SubToolboxActions } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxButton, SubToolboxSegmentedToggle } from "../subtoolbox/SubToolboxPrimitives"
+import { SubToolboxButton, ToolboxHeaderToggle } from "../subtoolbox/SubToolboxPrimitives"
 import ProjectsToolboxModule from "./ProjectsToolboxModule"
 import ProjectBuilder from "./ProjectBuilder"
 import ProjectCreationDialog from "./ProjectCreationDialog"
@@ -21,8 +21,8 @@ const ProjectBuilderModule: React.FC = () => {
 
   const headerActions = (
     <SubToolboxActions className="flex-wrap">
-      <SubToolboxSegmentedToggle
-        level="l1"
+      <ToolboxHeaderToggle
+        level="toolbox"
         value={builderScope}
         onValueChange={(value) => setBuilderScope(value as "channel" | "project")}
         ariaLabel="Choose Project Builder scope"
