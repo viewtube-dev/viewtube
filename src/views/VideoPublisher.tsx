@@ -321,14 +321,6 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     return () => { active = false }
   }, [(authState as any)?.channelId])
 
-  useEffect(() => {
-    if (!result) return
-    setPublishTitle(result.titleSets[0]?.title || publishTitle)
-    setPublishDescription(result.description || "")
-    setPublishTags(result.tags || "")
-  }, [result])
-
-
   const beginOrResumePublishing = () => {
     if (!publishState.projection) return
     try {
