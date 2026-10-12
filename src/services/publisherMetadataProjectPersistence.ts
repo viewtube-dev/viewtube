@@ -158,10 +158,10 @@ export const savePublisherMetadataToProject = (
     aiUse: state.aiUse !== false,
     playlistIds: state.playlistIds || "",
     titleAssetId: titleAsset.asset.id,
-    thumbnailAssetId: input.thumbnailAsset?.id || (mode === "current" ? refreshed.selections.thumbnail : null) || null,
+    thumbnailAssetId: input.thumbnailAsset?.id || state.thumbnailAssetId || (mode === "current" ? refreshed.selections.thumbnail : null) || null,
     descriptionAssetId: descriptionAsset.asset.id,
     tagsAssetId: tagsAsset.asset.id,
-    finalVideoAssetId: input.finalVideoAsset?.id || refreshed.selections["final-render"] || null,
+    finalVideoAssetId: input.finalVideoAsset?.id || state.finalVideoAssetId || (mode === "current" ? refreshed.selections["final-render"] : null) || null,
     createdAt: now,
   }
 
