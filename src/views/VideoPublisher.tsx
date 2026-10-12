@@ -783,6 +783,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                       tags: payload.tags || "",
                       plan: {
                         ...(project.plan || {}),
+                        concept: project.plan?.concept || "",
+                        niche: project.plan?.niche || "",
                         publishingMetadata: {
                           category: payload.category || "22",
                           visibility: payload.visibility || "private",
