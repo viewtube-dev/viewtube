@@ -1323,7 +1323,7 @@ type SubToolboxRefineButtonStyleProps = {
   borderWidth: 3 | 4;
 };
 
-const SubToolboxRefineButtonBase: React.FC<SubToolboxRefineButtonStyleProps> = ({
+export const SubToolboxRefineButtonBase: React.FC<SubToolboxRefineButtonStyleProps> = ({
   label,
   iconName = "zap",
   showIconSection = false,
