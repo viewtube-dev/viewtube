@@ -387,7 +387,12 @@ const VideoManager: React.FC<VideoManagerProps> = ({
   await handleGenerateTags()
  }
 
- const handleThumbnailChange = (file: File) => {
+ const handleThumbnailChange = (file: File | null) => {
+  if (!file) {
+   setThumbnailFile(null)
+   setThumbnailPreview(null)
+   return
+  }
   if (file.size > 2 * 1024 * 1024) {
    alert("Image size must be under 2MB")
    return
@@ -461,8 +466,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     },
    })
    setSaveSuccess(true)
-   void handleSelectVideo(selectedVideoId, userPlaylists)((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
-   setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
+    setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    void loadInitialData()
   } catch (err: any) {
    setError("Save failed: " + err.message)
