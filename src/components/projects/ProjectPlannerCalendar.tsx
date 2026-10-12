@@ -122,9 +122,16 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         }
         .vt-project-planner-calendar__main { min-width: 0; }
         .vt-project-planner-calendar__weekdays, .vt-project-planner-calendar__days {
-          display:grid; width:100%; min-width:0; grid-template-columns:repeat(7,minmax(0,1fr)); gap:0; margin:0; padding:0;
+          display:grid; box-sizing:border-box; width:100%; min-width:0; max-width:none;
+          grid-template-columns:repeat(7,minmax(0,1fr)); grid-auto-columns:minmax(0,1fr);
+          grid-auto-flow:row; column-gap:0; row-gap:0; gap:0; margin:0; padding:0;
         }
-        .vt-project-planner-calendar__day-wrap { display:flex; min-width:0; width:100%; margin:0; padding:0; }
+        .vt-project-planner-calendar__days > .vt-project-planner-calendar__day-wrap {
+          display:flex; box-sizing:border-box; min-width:0; width:auto; max-width:none; margin:0; padding:0;
+        }
+        .vt-project-planner-calendar__day-wrap > .vt-project-planner-calendar__day {
+          display:block; flex:1 1 0; box-sizing:border-box; width:100%; min-width:0; max-width:none; margin:0;
+        }
         .vt-project-planner-calendar__weekdays { background: #000; color: #fff; }
         .vt-project-planner-calendar__weekday { padding: 7px 1px; text-align: center; font: 900 9px/1 var(--vt-font, inherit); text-transform: uppercase; }
         .vt-project-planner-calendar__day {
