@@ -31,7 +31,7 @@ const dateKey = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
 const parseDate = (value?: string) => {
   if (!value) return null
-  const match = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(value)
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value)
   if (!match) return null
   const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
   return Number.isNaN(parsed.getTime()) ? null : startOfDay(parsed)
@@ -59,7 +59,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
     [projects],
   )
   const projectsForDate = (key: string) =>
-    scheduledProjects.filter(project => project.publishDate?.slice(0, 10) === key)
+    scheduledProjects.filter(project => { const date = parseDate(project.publishDate); return date ? dateKey(date) === key : false })
   const selectedProjects = useMemo(
     () => projectsForDate(selectedDate),
     [scheduledProjects, selectedDate],
@@ -71,7 +71,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   }, [cursor])
 
   const scheduleSelectedProject = () => {
-    if (!quickAddProjectId) return
+    if (!quickAddProjectId || !parseDate(selectedDate)) return
     updateProject(quickAddProjectId, { publishDate: selectedDate } as Partial<Project>)
     setQuickAddProjectId("")
   }
@@ -81,9 +81,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   return (
     <SubToolboxStack density="comfortable" className="vt-project-planner-calendar">
       <style>{`
-        .vt-project-planner-calendar { width:100%; min-width:0; align-self:stretch; color:var(--vt-ink,var(--vt-text,#000)); }
+        .vt-project-planner-calendar { display:block; width:100%; min-width:0; max-width:none; margin:0; padding:0; align-self:stretch; color:var(--vt-ink,var(--vt-text,#000)); }
         .vt-project-planner-calendar__shell {
-          width:100%; min-width:0; overflow:hidden; border:0; border-radius:0; background:var(--vt-surface,#fff); box-shadow:none;
+          display:block; width:100%; min-width:0; max-width:none; margin:0; padding:0; overflow:hidden; border:0; border-radius:0; background:var(--vt-surface,#fff); box-shadow:none;
         }
         .vt-project-planner-calendar__toolbar {
           display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
@@ -97,13 +97,14 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         }
         .vt-project-planner-calendar__main { min-width: 0; }
         .vt-project-planner-calendar__weekdays, .vt-project-planner-calendar__days {
-          display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+          display:grid; width:100%; min-width:0; grid-template-columns:repeat(7,minmax(0,1fr)); gap:0; margin:0; padding:0;
         }
+        .vt-project-planner-calendar__day-wrap { display:flex; min-width:0; width:100%; margin:0; padding:0; }
         .vt-project-planner-calendar__weekdays { background: #000; color: #fff; }
         .vt-project-planner-calendar__weekday { padding: 7px 1px; text-align: center; font: 900 9px/1 var(--vt-font, inherit); text-transform: uppercase; }
         .vt-project-planner-calendar__day {
-          min-width: 0; min-height: 92px; padding: 4px; border: 0; border-right: 1px solid #000;
-          border-bottom: 1px solid #000; background: #fff; text-align: left; cursor: pointer;
+          display:block; box-sizing:border-box; width:100%; max-width:100%; min-width:0; min-height:92px; margin:0; padding:4px; border:0; border-right:1px solid var(--vt-border,#000);
+          border-bottom:1px solid var(--vt-border,#000); background:var(--vt-surface,#fff); text-align:left; cursor:pointer;
         }
         .vt-project-planner-calendar__day:nth-child(7n) { border-right: 0; }
         .vt-project-planner-calendar__day.is-muted { background: #f5f5f5; color: #777; }
