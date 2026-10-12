@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import { FolderKanban, Plus } from "lucide-react"
+import { FolderKanban } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
 import { VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import { SubToolboxActions } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxButton, ToolboxHeaderToggle } from "../subtoolbox/SubToolboxPrimitives"
+import { ToolboxHeaderToggle } from "../subtoolbox/SubToolboxPrimitives"
 import ProjectsToolboxModule from "./ProjectsToolboxModule"
 import ProjectBuilder from "./ProjectBuilder"
 import ProjectCreationDialog from "./ProjectCreationDialog"
@@ -31,15 +31,6 @@ const ProjectBuilderModule: React.FC = () => {
           { value: "project", label: "Project" },
         ]}
       />
-      <SubToolboxButton
-        level="l1"
-        size="compact"
-        tone="accent"
-        icon={<Plus size={14} />}
-        onClick={() => setShowCreate(true)}
-      >
-        New Project
-      </SubToolboxButton>
     </SubToolboxActions>
   )
 
