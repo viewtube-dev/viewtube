@@ -81,11 +81,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   return (
     <SubToolboxStack density="comfortable" className="vt-project-planner-calendar">
       <style>{`
-        .vt-project-planner-calendar { min-width: 0; color: var(--vt-ink, #000); }
+        .vt-project-planner-calendar { width:100%; min-width:0; align-self:stretch; color:var(--vt-ink,var(--vt-text,#000)); }
         .vt-project-planner-calendar__shell {
-          min-width: 0; overflow: hidden; border: var(--vt-stroke, 3px) solid #000;
-          border-radius: var(--vt-radius, 8px); background: #fff;
-          box-shadow: var(--vt-shadow, 4px 4px 0) var(--pair-b, #36E0F6);
+          width:100%; min-width:0; overflow:hidden; border:0; border-radius:0; background:var(--vt-surface,#fff); box-shadow:none;
         }
         .vt-project-planner-calendar__toolbar {
           display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
@@ -93,9 +91,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
           background: color-mix(in srgb, var(--pair-a, #FF4FD8) 22%, #fff);
         }
         .vt-project-planner-calendar__month-nav { display: flex; align-items: center; gap: 8px; min-width: 0; }
-        .vt-project-planner-calendar__month-title { font: 1000 13px/1.1 var(--vt-font, inherit); text-transform: uppercase; }
+        .vt-project-planner-calendar__month-title { font:900 16px/1.15 var(--vt-font,inherit); text-transform: uppercase; }
         .vt-project-planner-calendar__body {
-          display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 260px); min-width: 0;
+          display:grid; grid-template-columns:minmax(0,1fr); min-width:0;
         }
         .vt-project-planner-calendar__main { min-width: 0; }
         .vt-project-planner-calendar__weekdays, .vt-project-planner-calendar__days {
@@ -113,15 +111,11 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         .vt-project-planner-calendar__day-number { display: inline-flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: 5px; font: 1000 10px/1 var(--vt-font, inherit); }
         .vt-project-planner-calendar__day-number.is-today { background: #000; color: #fff; }
         .vt-project-planner-calendar__markers { display: grid; gap: 3px; margin-top: 4px; }
-        .vt-project-planner-calendar__marker {
-          display: block; width: 100%; overflow: hidden; border-left: 3px solid var(--pair-b, #36E0F6);
-          padding: 3px 3px; background: #f0f0f0; color: #000; font: 800 8px/1.2 var(--vt-font, inherit);
-          text-overflow: ellipsis; white-space: nowrap; text-align: left;
-        }
+        .vt-project-planner-calendar__marker { display:block; width:100%; max-width:100%; overflow:hidden; justify-content:flex-start; font-size:9px; font-weight:800; text-transform:none; text-overflow:ellipsis; white-space:nowrap; }
         .vt-project-planner-calendar__detail {
-          min-width: 0; border-left: 2px solid #000; background: #f8f8f8;
+          min-width:0; border-left:0; border-bottom:var(--vt-subtoolbox-inner-stroke,3px) solid var(--vt-border,#000); background:var(--vt-surface,#fff);
         }
-        .vt-project-planner-calendar__detail-head { padding: 10px; border-bottom: 2px solid #000; background: var(--pair-b, #36E0F6); }
+        .vt-project-planner-calendar__detail-head { padding:clamp(10px,2vw,18px); border-bottom:1px solid var(--vt-border,#000); background:var(--pair-b,#36E0F6); }
         .vt-project-planner-calendar__project-row { display: flex; min-width: 0; gap: 7px; align-items: flex-start; padding: 9px; border-bottom: 1px solid #000; background: #fff; }
         .vt-project-planner-calendar__project-open { min-width: 0; flex: 1; text-align: left; }
         .vt-project-planner-calendar__quick-add { display: grid; gap: 7px; padding: 10px; border-top: 2px solid #000; }
@@ -129,19 +123,51 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         .vt-project-planner-calendar__footer { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 9px 10px; border-top: 2px solid #000; background: #fff; font: 900 9px/1.3 var(--vt-font, inherit); text-transform: uppercase; }
         @media (max-width: 760px) {
           .vt-project-planner-calendar__body { grid-template-columns: minmax(0, 1fr); }
-          .vt-project-planner-calendar__detail { border-left: 0; border-top: 2px solid #000; }
+          .vt-project-planner-calendar__detail { border-left:0; border-top:0; }
           .vt-project-planner-calendar__day { min-height: 72px; padding: 2px; }
           .vt-project-planner-calendar__day-number { width: 21px; height: 21px; }
-          .vt-project-planner-calendar__marker { padding: 2px; font-size: 7px; }
+          .vt-project-planner-calendar__marker { font-size:8px; }
         }
         @media (max-width: 420px) {
           .vt-project-planner-calendar__weekday { font-size: 8px; }
           .vt-project-planner-calendar__day { min-height: 58px; }
-          .vt-project-planner-calendar__marker { height: 5px; padding: 0; font-size: 0; }
+          .vt-project-planner-calendar__marker { height:14px; min-height:14px; font-size:8px; }
         }
       `}</style>
 
       <div className="vt-project-planner-calendar__shell">
+          <section className="vt-project-planner-calendar__detail" aria-label="Selected date details">
+            <header className="vt-project-planner-calendar__detail-head">
+              <div className="flex items-center gap-2"><CalendarDays size={15} /><strong className="text-[10px] font-black uppercase">Selected date</strong></div>
+              <div className="mt-1 text-[11px] font-black uppercase">{dateLabel(parseDate(selectedDate) || new Date())}</div>
+              <div className="mt-1 text-[8px] font-bold uppercase">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"}</div>
+            </header>
+
+            <div>
+              {selectedProjects.length ? selectedProjects.map(project => (
+                <div key={project.id} className="vt-project-planner-calendar__project-row">
+                  <div className="mt-1 h-3 w-3 shrink-0 border border-black" style={{ backgroundColor: project.color || "var(--pair-a, #FF4FD8)" }} aria-hidden="true" />
+                  <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
+                    <span className="block truncate text-[10px] font-black uppercase">{projectTitle(project)}</span>
+                    <span className="mt-1 block text-[8px] font-bold uppercase text-black/55">{project.status || "Project"} · Open project</span>
+                  </button>
+                  <SubToolboxIconButton level="l1" icon={<X size={12} />} ariaLabel={`Unschedule ${projectTitle(project)}`} onClick={() => clearSchedule(project.id)} />
+                </div>
+              )) : <div className="vt-project-planner-calendar__empty">No projects scheduled for this date</div>}
+            </div>
+
+            <div className="vt-project-planner-calendar__quick-add">
+              <SubToolboxSection label="Quick schedule project">
+                <SubToolboxSelect value={quickAddProjectId} onChange={event => setQuickAddProjectId(event.target.value)} aria-label="Choose unscheduled project">
+                  <option value="">Choose an unscheduled project</option>
+                  {unscheduledProjects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}
+                </SubToolboxSelect>
+              </SubToolboxSection>
+              <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>Schedule on selected date</SubToolboxButton>
+              {!unscheduledProjects.length ? <SubToolboxStatusBadge level="l1">All projects have a publish date</SubToolboxStatusBadge> : null}
+            </div>
+          </section>
+
         <header className="vt-project-planner-calendar__toolbar">
           <div className="vt-project-planner-calendar__month-nav">
             <SubToolboxIconButton level="l1" icon={<ChevronLeft size={15} />} ariaLabel="Previous month" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() - 1, 1))} />
@@ -173,7 +199,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                       <span className={`vt-project-planner-calendar__day-number ${key === todayKey ? "is-today" : ""}`}>{day.getDate()}</span>
                       <span className="vt-project-planner-calendar__markers" aria-hidden="true">
                         {dayProjects.slice(0, 2).map(project => (
-                          <span key={project.id} className="vt-project-planner-calendar__marker" title={projectTitle(project)}>{projectTitle(project)}</span>
+                          <SubToolboxStatusBadge key={project.id} level="l2" className="is-dense vt-project-planner-calendar__marker" title={projectTitle(project)} style={{ "--pair-a": project.color || "var(--pair-a,#FF4FD8)" } as React.CSSProperties}>{projectTitle(project)}</SubToolboxStatusBadge>
                         ))}
                         {dayProjects.length > 2 ? <span className="vt-project-planner-calendar__marker">+{dayProjects.length - 2} more</span> : null}
                       </span>
@@ -184,37 +210,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             </div>
           </main>
 
-          <aside className="vt-project-planner-calendar__detail" aria-label="Selected date details">
-            <header className="vt-project-planner-calendar__detail-head">
-              <div className="flex items-center gap-2"><CalendarDays size={15} /><strong className="text-[10px] font-black uppercase">Selected date</strong></div>
-              <div className="mt-1 text-[11px] font-black uppercase">{dateLabel(parseDate(selectedDate) || new Date())}</div>
-              <div className="mt-1 text-[8px] font-bold uppercase">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"}</div>
-            </header>
 
-            <div>
-              {selectedProjects.length ? selectedProjects.map(project => (
-                <div key={project.id} className="vt-project-planner-calendar__project-row">
-                  <div className="mt-1 h-3 w-3 shrink-0 border border-black" style={{ backgroundColor: project.color || "var(--pair-a, #FF4FD8)" }} aria-hidden="true" />
-                  <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
-                    <span className="block truncate text-[10px] font-black uppercase">{projectTitle(project)}</span>
-                    <span className="mt-1 block text-[8px] font-bold uppercase text-black/55">{project.status || "Project"} · Open project</span>
-                  </button>
-                  <SubToolboxIconButton level="l1" icon={<X size={12} />} ariaLabel={`Unschedule ${projectTitle(project)}`} onClick={() => clearSchedule(project.id)} />
-                </div>
-              )) : <div className="vt-project-planner-calendar__empty">No projects scheduled for this date</div>}
-            </div>
-
-            <div className="vt-project-planner-calendar__quick-add">
-              <SubToolboxSection label="Quick schedule project">
-                <SubToolboxSelect value={quickAddProjectId} onChange={event => setQuickAddProjectId(event.target.value)} aria-label="Choose unscheduled project">
-                  <option value="">Choose an unscheduled project</option>
-                  {unscheduledProjects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}
-                </SubToolboxSelect>
-              </SubToolboxSection>
-              <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>Schedule on selected date</SubToolboxButton>
-              {!unscheduledProjects.length ? <SubToolboxStatusBadge level="l1">All projects have a publish date</SubToolboxStatusBadge> : null}
-            </div>
-          </aside>
         </div>
 
         <footer className="vt-project-planner-calendar__footer">
