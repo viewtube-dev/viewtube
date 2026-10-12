@@ -5,6 +5,7 @@ import { SubToolboxIconButton } from "./subtoolbox/SubToolboxPrimitives"
 import { getToolboxPaletteColors } from "../styles/toolboxPalette"
 import { StudioHubCompletePrimitiveCatalog } from "./studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubPrimitiveMigrationCatalog } from "./studio-hub/StudioHubPrimitiveMigrationCatalog"
+import { StudioHubProductionButtonCatalog } from "./studio-hub/StudioHubProductionButtonCatalog"
 
 const PALETTE_NAMES = [
   "Rose", "Coral", "Orange", "Yellow", "Lime", "Green",
@@ -93,7 +94,7 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
       >
         {isHardcoded
           ? <StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />
-          : <StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} />}
+          : <><StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} /><StudioHubProductionButtonCatalog paletteIndex={paletteIndex} /></>}
       </ToolboxScaffold>
     </div>
   )
