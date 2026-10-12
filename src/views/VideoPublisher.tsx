@@ -216,6 +216,18 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     setProjectSaveBusy(true)
     setProjectSaveStatus(null)
     try {
+      const selectedThumbnail = publishState.videoPackage?.packaging.thumbnailVariants.find(
+        item => item.id === publishState.videoPackage?.packaging.selectedThumbnailId,
+      ) || null
+      const selectedThumbnailAsset = !thumbnailFile && selectedThumbnail?.vaultAssetId
+        ? {
+            id: selectedThumbnail.vaultAssetId,
+            name: selectedThumbnail.label,
+            url: typeof selectedThumbnail.metadata?.url === "string" ? selectedThumbnail.metadata.url : null,
+            previewUrl: typeof selectedThumbnail.metadata?.previewUrl === "string" ? selectedThumbnail.metadata.previewUrl : null,
+            mimeType: typeof selectedThumbnail.metadata?.mimeType === "string" ? selectedThumbnail.metadata.mimeType : null,
+          }
+        : null
       const result = savePublisherMetadataToProject(project, channelId, {
         title: publishTitle,
         description: publishDescription,
@@ -229,8 +241,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         community: publishCommunity,
         aiUse: publishAiUse,
         playlistIds,
+        thumbnailAssetId: thumbnailFile ? null : selectedThumbnailAsset?.id || null,
         finalVideoAssetId: publishState.projection?.finalRenderAssetId || null,
-      }, { mode, sourceToolId: "video-publisher" })
+      }, { mode, sourceToolId: "video-publisher", thumbnailAsset: selectedThumbnailAsset })
       if (mode === "current") {
         updateProject(project.id, {
         videoTitle: publishTitle,
@@ -260,9 +273,13 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         })
         setActiveProject(project.id)
       }
-      setProjectSaveStatus(mode === "option"
-        ? "Metadata option saved to this Project."
-        : "Metadata saved to this Project.")
+      setProjectSaveStatus(thumbnailFile
+        ? (mode === "option"
+          ? "Metadata option saved. The newly selected thumbnail file is still local and is not yet attached to the saved package."
+          : "Metadata saved. The newly selected thumbnail file is still local and is not yet attached to the saved package.")
+        : mode === "option"
+          ? "Metadata option saved to this Project."
+          : "Metadata saved to this Project.")
       setPublishRefresh(value => value + 1)
       return result
     } catch (error) {
