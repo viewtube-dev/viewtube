@@ -25,7 +25,7 @@ const ProjectCalendarPage: React.FC = () => (
     subtitle="Move projects through the production pipeline and schedule publishing"
     icon={<Columns3 />}
     paletteIndex={7}
-    headerActions={<ProjectBoardViewToggle />}
+    headerActions={<ProjectBoardViewToggle />}\n    headerActionsPlacement="header"
    >
     <ProjectBoardWorkspace />
    </ProjectsToolboxModule>
