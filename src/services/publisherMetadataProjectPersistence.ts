@@ -135,12 +135,21 @@ export const savePublisherMetadataToProject = (
   const tagsAsset = createMetadataAsset(project, contentBuild.id, sourceToolId, "tags", "Publisher tags", { tags: state.tags }, previous.tags)
 
   // An alternative is stored without changing the currently selected ContentBuild fields.
+  const thumbnailAssetId = input.thumbnailAsset?.id
+    ?? (state.thumbnailAssetId !== undefined
+      ? state.thumbnailAssetId
+      : (mode === "current" ? contentBuild.selections.thumbnail || null : null))
+  const finalVideoAssetId = input.finalVideoAsset?.id
+    ?? (state.finalVideoAssetId !== undefined
+      ? state.finalVideoAssetId
+      : (mode === "current" ? contentBuild.selections["final-render"] || null : null))
+
   if (mode === "current") {
     setContentBuildSelection(contentBuild.id, "title", titleAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
     setContentBuildSelection(contentBuild.id, "description", descriptionAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
     setContentBuildSelection(contentBuild.id, "tags", tagsAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-    if (input.thumbnailAsset) setContentBuildSelection(contentBuild.id, "thumbnail", input.thumbnailAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-    if (input.finalVideoAsset) setContentBuildSelection(contentBuild.id, "final-render", input.finalVideoAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    setContentBuildSelection(contentBuild.id, "thumbnail", thumbnailAssetId, { toolId: sourceToolId, actorType: "creator", final: false })
+    setContentBuildSelection(contentBuild.id, "final-render", finalVideoAssetId, { toolId: sourceToolId, actorType: "creator", final: false })
   }
 
   const refreshed = getContentBuild(contentBuild.id)!
@@ -158,10 +167,10 @@ export const savePublisherMetadataToProject = (
     aiUse: state.aiUse !== false,
     playlistIds: state.playlistIds || "",
     titleAssetId: titleAsset.asset.id,
-    thumbnailAssetId: input.thumbnailAsset?.id || state.thumbnailAssetId || (mode === "current" ? refreshed.selections.thumbnail : null) || null,
+    thumbnailAssetId,
     descriptionAssetId: descriptionAsset.asset.id,
     tagsAssetId: tagsAsset.asset.id,
-    finalVideoAssetId: input.finalVideoAsset?.id || state.finalVideoAssetId || (mode === "current" ? refreshed.selections["final-render"] : null) || null,
+    finalVideoAssetId,
     createdAt: now,
   }
 
@@ -231,8 +240,12 @@ export const savePublisherMetadataToProject = (
       thumbnailVariants: input.thumbnailAsset && !videoPackage.packaging.thumbnailVariants.some(item => item.id === `publisher:thumbnail:${input.thumbnailAsset!.id}`)
         ? [...videoPackage.packaging.thumbnailVariants, artifactFor(input.thumbnailAsset, "thumbnail", sourceToolId, now)]
         : videoPackage.packaging.thumbnailVariants,
-      selectedThumbnailId: mode === "current" && input.thumbnailAsset
-        ? artifactFor(input.thumbnailAsset, "thumbnail", sourceToolId, now).id
+      selectedThumbnailId: mode === "current"
+        ? (thumbnailAssetId
+          ? input.thumbnailAsset
+            ? artifactFor(input.thumbnailAsset, "thumbnail", sourceToolId, now).id
+            : videoPackage.packaging.thumbnailVariants.find(item => item.vaultAssetId === thumbnailAssetId)?.id || null
+          : null)
         : videoPackage.packaging.selectedThumbnailId || null,
       description: mode === "current" ? descriptionArtifact || videoPackage.packaging.description : videoPackage.packaging.description,
       tags: mode === "current" ? tagsArtifact || videoPackage.packaging.tags : videoPackage.packaging.tags,
