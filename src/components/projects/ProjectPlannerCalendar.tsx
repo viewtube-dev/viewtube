@@ -66,6 +66,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   const [cursor, setCursor] = useState(() => startOfDay(new Date()))
   const [selectedDate, setSelectedDate] = useState(() => dateKey(new Date()))
   const [quickAddProjectId, setQuickAddProjectId] = useState("")
+  const [scheduleFeedback, setScheduleFeedback] = useState("")
   const todayKey = dateKey(new Date())
 
   const scheduledProjects = useMemo(
@@ -96,12 +97,24 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   }, [cursor])
 
   const scheduleSelectedProject = () => {
-    if (!quickAddProjectId || !parseDate(selectedDate)) return
-    updateProject(quickAddProjectId, { publishDate: selectedDate } as Partial<Project>)
+    const project = projects.find(item => item.id === quickAddProjectId)
+    const scheduledDate = parseDate(selectedDate)
+    if (!project || !scheduledDate) {
+      setScheduleFeedback("Choose a project and a valid date before scheduling.")
+      return
+    }
+
+    // Keep workflow status (active/completed/archived) independent from schedule status.
+    updateProject(project.id, { publishDate: selectedDate, updatedAt: Date.now() })
+    setCursor(new Date(scheduledDate.getFullYear(), scheduledDate.getMonth(), 1))
+    setScheduleFeedback(projectTitle(project) + " scheduled for " + dateLabel(scheduledDate))
     setQuickAddProjectId("")
   }
-  const clearSchedule = (projectId: string) =>
-    updateProject(projectId, { publishDate: "" } as Partial<Project>)
+  const clearSchedule = (projectId: string) => {
+    updateProject(projectId, { publishDate: "", updatedAt: Date.now() })
+    const project = projects.find(item => item.id === projectId)
+    setScheduleFeedback(project ? projectTitle(project) + " removed from the publishing calendar." : "Schedule cleared.")
+  }
 
   return (
     <SubToolboxStack density="comfortable" className="vt-project-planner-calendar">
@@ -213,6 +226,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                 </SubToolboxSelect>
               </SubToolboxSection>
               <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>Schedule on selected date</SubToolboxButton>
+              {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__project-meta">{scheduleFeedback}</div> : null}
               {!unscheduledProjects.length ? <SubToolboxStatusBadge level="l1">All projects have a publish date</SubToolboxStatusBadge> : null}
             </div>
           </section>
