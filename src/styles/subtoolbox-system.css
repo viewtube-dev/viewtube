@@ -3683,3 +3683,40 @@
 .vt-toolbox-header-collapse .vt-animated-toggle-icon { transition:transform var(--vt-subtoolbox-motion-control,600ms) ease-out; transform:rotate(0deg); transform-origin:center; }
 .vt-toolbox-header-collapse .vt-animated-toggle-icon.is-open { transform:rotate(180deg); }
 .vt-toolbox-header-collapse .vt-animated-toggle-icon.is-closed { transform:rotate(0deg); }
+
+
+/* Analytics sync-controller status/result badges: monochromatic outlined treatment. */
+.vt-subtoolbox-status-badge.is-outlined {
+  --vt-status-badge-color: var(--vt-status-badge-tone, var(--vt-pair-a, #36e0f6));
+  box-sizing: border-box;
+  border: 2px solid var(--vt-status-badge-color);
+  background: color-mix(in srgb, var(--vt-status-badge-color) 16%, transparent);
+  color: var(--vt-status-badge-color);
+  box-shadow: none;
+}
+.vt-subtoolbox-status-badge.is-outlined i { background: currentColor; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="blue"] { --vt-status-badge-color: #5b8def; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="cyan"] { --vt-status-badge-color: #35cfe3; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="green"] { --vt-status-badge-color: #57d6a0; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="pink"] { --vt-status-badge-color: #fa618a; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="orange"] { --vt-status-badge-color: #ffad52; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="yellow"] { --vt-status-badge-color: #ffda47; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="purple"] { --vt-status-badge-color: #b45cff; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="neutral"] { --vt-status-badge-color: #8f96a0; }
+.vt-subtoolbox-status-badge.is-outlined.is-dense {
+  height: 14px;
+  min-height: 14px;
+  padding: 0 4px;
+  gap: 3px;
+  border-width: 1px;
+  border-radius: 3px;
+  font-size: inherit;
+  line-height: 1;
+  letter-spacing: -.025em;
+  white-space: nowrap;
+}
+.vt-subtoolbox-status-badge.is-outlined.is-dense i {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+}
