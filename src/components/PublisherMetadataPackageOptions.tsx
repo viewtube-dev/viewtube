@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { Check, GitCompare, RotateCcw } from "lucide-react"
 import { listPublisherMetadataPackageOptions, selectPublisherMetadataPackageOption, type PublisherMetadataPackageOption } from "../services/publisherMetadataPackageOptions"
 import { SubToolbox } from "./Toolbox"
@@ -18,12 +18,23 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
 }) => {
   const [refreshKey, setRefreshKey] = useState(0)
   const [compareAssetId, setCompareAssetId] = useState<string | null>(null)
+  const onSelectedRef = useRef(onSelected)
+
+  useEffect(() => {
+    onSelectedRef.current = onSelected
+  }, [onSelected])
   const options = useMemo(
     () => contentBuildId ? listPublisherMetadataPackageOptions(contentBuildId) : [],
     [contentBuildId, refreshKey],
   )
   const compareOption = options.find(option => option.assetId === compareAssetId) || null
   const selectedOption = options.find(option => option.selected) || null
+
+  // Hydrate the active saved set when a project is opened or the selected option changes.
+  // Keep the callback in a ref so parent renders do not repeatedly overwrite user edits.
+  useEffect(() => {
+    if (selectedOption) onSelectedRef.current?.(selectedOption)
+  }, [contentBuildId, refreshKey, selectedOption?.assetId])
 
   if (!contentBuildId) return null
 
@@ -57,7 +68,6 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
                         if (!contentBuildId || option.selected) return
                         selectPublisherMetadataPackageOption(contentBuildId, option.assetId, { sourceToolId })
                         setRefreshKey(value => value + 1)
-                        onSelected?.(option)
                       }}
                     >
                       {option.selected ? "CURRENT" : "USE THIS"}
