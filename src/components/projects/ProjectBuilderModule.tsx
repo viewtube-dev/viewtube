@@ -51,6 +51,7 @@ const ProjectBuilderModule: React.FC = () => {
         icon={<FolderKanban />}
         paletteIndex={paletteIndex}
         headerActions={headerActions}
+        headerActionsPlacement="header"
       >
         <ProjectBuilder onCreateProject={() => setShowCreate(true)} />
       </ProjectsToolboxModule>
