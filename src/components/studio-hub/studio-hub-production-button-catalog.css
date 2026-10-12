@@ -1,0 +1,46 @@
+/* Catalog layout only; button anatomy is supplied by production primitives. */
+.vt-production-button-catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 8px;
+}
+.vt-production-button-sample {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px;
+  border: 2px solid #111;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.16);
+}
+.vt-production-button-sample > header strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.vt-production-button-sample > header p {
+  margin: 5px 0 0;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+  color: #444;
+}
+.vt-production-button-preview {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+  padding: 4px 2px 6px;
+}
+.vt-production-button-preview > * { max-width: 100%; }
+.vt-production-button-preview .vt-subtoolbox-actions { width: 100%; }
+@media (max-width: 560px) {
+  .vt-production-button-catalog { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 6px; }
+  .vt-production-button-sample { padding: 10px; }
+}

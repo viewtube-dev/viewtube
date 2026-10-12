@@ -9,8 +9,10 @@ describe("Studio Hub Component Library mobile regression", () => {
     const library = read("src/components/ToolboxUIReferenceLibrary.tsx")
     expect(library).toContain('import { StudioHubCompletePrimitiveCatalog }')
     expect(library).toContain('import { StudioHubPrimitiveMigrationCatalog }')
+    expect(library).toContain('import { StudioHubProductionButtonCatalog }')
     expect(library).toContain("<StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />")
     expect(library).toContain("<StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} />")
+    expect(library).toContain("<StudioHubProductionButtonCatalog paletteIndex={paletteIndex} />")
     expect(library).toContain('data-vt-library-track={track}')
   })
 
@@ -215,6 +217,21 @@ describe("Studio Hub Component Library mobile regression", () => {
     const compound = read("src/components/subtoolbox/SubToolboxCompoundPrimitives.tsx")
     expect(compound).toContain("export const SubToolboxNestedSquareChoice")
     expect(compound).toContain("export const SubToolboxTagActionRow")
+  })
+
+  it("registers the requested production button families as live component-library examples", () => {
+    const catalog = read("src/components/studio-hub/StudioHubProductionButtonCatalog.tsx")
+    const primitives = read("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const toolbox = read("src/components/Toolbox.tsx")
+    for (const family of [
+      "SubToolboxButton", "SubToolboxIconButton", "SubToolboxIconTextButton",
+      "SubToolboxSplitButton", "StudioSplitLeftButton", "StudioButton",
+      "SubToolboxSelectableTag", "SubToolboxInnerActionButton", "SubToolboxActions",
+      "SubToolboxRefineButtonBase", "SubToolboxGridActionButton",
+    ]) expect(catalog).toContain(family)
+    expect(primitives).toContain("export const SubToolboxIconTextButton")
+    expect(toolbox).toContain("export const SubToolboxRefineButtonBase")
+    expect(catalog).toContain('data-vt-production-button-catalog="true"')
   })
 
 })
