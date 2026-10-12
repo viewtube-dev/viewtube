@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
 import { getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
 import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
+import { createVersionedAsset } from "./assetEngine"
 import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
 
 const project = {
@@ -39,6 +40,69 @@ describe("Publisher metadata project persistence", () => {
     expect(build?.selections.description).toBeTruthy()
     expect(build?.selections.tags).toBeTruthy()
     expect(build?.selections["metadata-package"]).toBe(result.packageOptionAssetId)
+  })
+
+  it("round-trips canonical thumbnail and final-video asset references into the selected package", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-1", sourceToolId: "video-publisher" })
+    const context = {
+      contentBuildId: project.contentBuildId,
+      projectId: project.id,
+      projectName: project.name,
+      stage: "metadata" as const,
+    }
+    const thumbnail = createVersionedAsset({
+      sourceToolId: "video-publisher",
+      sourceKind: "studio-tool",
+      payloadKind: "metadata",
+      name: "Canonical thumbnail",
+      summary: "Test thumbnail asset",
+      kind: "image",
+      url: "https://example.test/thumbnail.png",
+      mimeType: "image/png",
+      slot: "thumbnail",
+      context,
+    }).asset
+    const finalVideo = createVersionedAsset({
+      sourceToolId: "video-publisher",
+      sourceKind: "studio-tool",
+      payloadKind: "metadata",
+      name: "Final video",
+      summary: "Test final video asset",
+      kind: "video",
+      url: "https://example.test/final.mp4",
+      mimeType: "video/mp4",
+      slot: "final-render",
+      context,
+    }).asset
+
+    const saved = savePublisherMetadataToProject(project, "channel-1", {
+      title: "Media round-trip",
+      description: "Keep canonical asset identities",
+      tags: "media, round-trip",
+      thumbnailAssetId: thumbnail.id,
+      finalVideoAssetId: finalVideo.id,
+    }, {
+      mode: "current",
+      thumbnailAsset: {
+        id: thumbnail.id,
+        name: thumbnail.name,
+        url: thumbnail.url,
+        previewUrl: thumbnail.previewUrl,
+        mimeType: thumbnail.mimeType,
+      },
+      finalVideoAsset: {
+        id: finalVideo.id,
+        name: finalVideo.name,
+        url: finalVideo.url,
+        previewUrl: finalVideo.previewUrl,
+        mimeType: finalVideo.mimeType,
+      },
+    })
+
+    const build = getContentBuild(project.contentBuildId)!
+    expect(build.selections.thumbnail).toBe(thumbnail.id)
+    expect(build.selections["final-render"]).toBe(finalVideo.id)
+    expect(build.selections["metadata-package"]).toBe(saved.packageOptionAssetId)
   })
 
   it("saves an option without replacing the currently selected package option", () => {
