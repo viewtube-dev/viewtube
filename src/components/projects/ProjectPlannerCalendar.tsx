@@ -116,6 +116,11 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
           min-width:0; border-left:0; border-bottom:var(--vt-subtoolbox-inner-stroke,3px) solid var(--vt-border,#000); background:var(--vt-surface,#fff);
         }
         .vt-project-planner-calendar__detail-head { padding:clamp(10px,2vw,18px); border-bottom:1px solid var(--vt-border,#000); background:var(--pair-b,#36E0F6); }
+        .vt-project-planner-calendar__selected-label { display:flex; align-items:center; gap:7px; margin-bottom:5px; font-size:11px; font-weight:900; letter-spacing:.035em; text-transform:uppercase; }
+        .vt-project-planner-calendar__selected-date { margin:0; font-size:clamp(18px,3.5vw,28px); font-weight:1000; line-height:1.12; text-transform:uppercase; overflow-wrap:anywhere; }
+        .vt-project-planner-calendar__selected-count { margin-top:6px; font-size:12px; font-weight:800; text-transform:uppercase; }
+        .vt-project-planner-calendar__project-title { display:block; overflow:hidden; font-size:11px; font-weight:900; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; }
+        .vt-project-planner-calendar__project-meta { display:block; margin-top:3px; color:var(--vt-text-muted,#555); font-size:9px; font-weight:800; text-transform:uppercase; }
         .vt-project-planner-calendar__project-row { display: flex; min-width: 0; gap: 7px; align-items: flex-start; padding: 9px; border-bottom: 1px solid #000; background: #fff; }
         .vt-project-planner-calendar__project-open { min-width: 0; flex: 1; text-align: left; }
         .vt-project-planner-calendar__quick-add { display: grid; gap: 7px; padding: 10px; border-top: 2px solid #000; }
