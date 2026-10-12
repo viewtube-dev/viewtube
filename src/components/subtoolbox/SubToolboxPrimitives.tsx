@@ -93,7 +93,7 @@ export const ToolboxHeaderIconRail: React.FC<ToolboxHeaderIconRailProps> = ({
   <div
     data-vt-header-icon-rail={level}
     className={classes("vt-toolbox-header-icon-rail", `is-${level}`, className)}
-    style={{ ...style, backgroundColor }}
+    style={{ ...style, backgroundColor: backgroundColor ?? style?.backgroundColor }}
     {...props}
   >
     {children}
