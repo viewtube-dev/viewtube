@@ -718,7 +718,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
        onPlaylistsChange={() => undefined}
        onThumbnailFileChange={handleThumbnailChange}
        onVisibilityChange={setEditPrivacy}
-       onAudienceChange={setEditAudience}
+       onAudienceChange={(value) => { if (value !== null) setEditAudience(value) }}
        onTimestampsChange={setEditTimestamps}
        onLocationChange={setEditLocation}
        onCommunityChange={setEditCommunity}
