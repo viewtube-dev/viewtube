@@ -231,7 +231,8 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         playlistIds,
         finalVideoAssetId: publishState.projection?.finalRenderAssetId || null,
       }, { mode, sourceToolId: "video-publisher" })
-      updateProject(project.id, {
+      if (mode === "current") {
+        updateProject(project.id, {
         videoTitle: publishTitle,
         description: publishDescription,
         tags: publishTags,
@@ -256,8 +257,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
             playlistIds,
           },
         },
-      })
-      setActiveProject(project.id)
+        })
+        setActiveProject(project.id)
+      }
       setProjectSaveStatus(mode === "option"
         ? "Metadata option saved to this Project."
         : "Metadata saved to this Project.")
