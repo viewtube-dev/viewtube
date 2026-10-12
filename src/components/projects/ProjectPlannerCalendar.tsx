@@ -29,12 +29,30 @@ const addDays = (date: Date, amount: number) => {
 }
 const dateKey = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-const parseDate = (value?: string) => {
-  if (!value) return null
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value)
-  if (!match) return null
-  const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
-  return Number.isNaN(parsed.getTime()) ? null : startOfDay(parsed)
+const parseDate = (value?: string | Date | number | null) => {
+  if (value == null || value === "") return null
+  // Prefer local calendar parsing for date-only ISO strings so timezone offsets
+  // cannot shift a scheduled publish date to the previous/next day.
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : startOfDay(value)
+  }
+  if (typeof value === "number") {
+    const parsed = new Date(value)
+    return Number.isNaN(parsed.getTime()) ? null : startOfDay(parsed)
+  }
+  const match = /^(\d{4})-(\d{2})-(\d{2})(?:$|T)/.exec(value.trim())
+  if (match) {
+    const year = Number(match[1])
+    const month = Number(match[2])
+    const day = Number(match[3])
+    const parsed = new Date(year, month - 1, day)
+    // Reject impossible dates rather than silently normalizing them.
+    if (parsed.getFullYear() !== year || parsed.getMonth() !== month - 1 || parsed.getDate() !== day) return null
+    return startOfDay(parsed)
+  }
+  // Legacy project records may contain parseable date strings in a display format.
+  const fallback = new Date(value)
+  return Number.isNaN(fallback.getTime()) ? null : startOfDay(fallback)
 }
 const dateLabel = (date: Date) =>
   date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" })
