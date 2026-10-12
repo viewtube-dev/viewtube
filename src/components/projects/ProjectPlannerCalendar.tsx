@@ -262,7 +262,13 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                       className={`vt-project-planner-calendar__day ${currentMonth ? "" : "is-muted"} ${selectedDate === key ? "is-selected" : ""}`}
                       aria-label={dateLabel(day)}
                       aria-pressed={selectedDate === key}
-                      onClick={() => setSelectedDate(key)}
+                      onClick={() => {
+                        setSelectedDate(key)
+                        // Keep the month heading and selected date in sync when a
+                        // user chooses a leading/trailing day from the adjacent month.
+                        if (!currentMonth) setCursor(new Date(day.getFullYear(), day.getMonth(), 1))
+                        setScheduleFeedback("")
+                      }}
                     >
                       <span className={`vt-project-planner-calendar__day-number ${key === todayKey ? "is-today" : ""}`}>{day.getDate()}</span>
                       <span className="vt-project-planner-calendar__markers" aria-hidden="true">
