@@ -246,11 +246,17 @@ export const SubToolboxRadioControl: React.FC<SubToolboxRadioControlProps> = ({ 
   <button type={type} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-radio-control", checked && "is-on", className)} aria-pressed={checked} {...props}><span aria-hidden="true" /></button>
 )
 
+export type SubToolboxStatusBadgeTone = "blue" | "cyan" | "green" | "pink" | "orange" | "yellow" | "purple" | "neutral"
 export interface SubToolboxStatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   level?: ToolboxControlLevel
+  /** Monochromatic outlined status/result badge, matching Analytics sync-controller rows. */
+  variant?: "default" | "outlined"
+  tone?: SubToolboxStatusBadgeTone
+  /** Compact, low-height variant for calendar cells and dense metadata rows. */
+  dense?: boolean
 }
-export const SubToolboxStatusBadge: React.FC<SubToolboxStatusBadgeProps> = ({ level = "l0", className, style, children, ...props }) => (
-  <span data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-status-badge", className)} {...props}><i aria-hidden="true" />{children}</span>
+export const SubToolboxStatusBadge: React.FC<SubToolboxStatusBadgeProps> = ({ level = "l0", variant = "default", tone = "cyan", dense = false, className, style, children, ...props }) => (
+  <span data-vt-control-level={level} data-vt-badge-variant={variant} data-vt-badge-tone={tone} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-status-badge", variant === "outlined" && "is-outlined", dense && "is-dense", className)} {...props}><i aria-hidden="true" />{children}</span>
 )
 
 export const SubToolboxLinkButton: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement> & { size?: SubToolboxControlSize; tone?: PrimitiveTone; icon?: React.ReactNode; level?: ToolboxControlLevel }> = ({ className, size = "action", tone = "accent", icon, children, level, style, ...props }) => <a data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-button", `is-${size}`, `is-${tone}`, level && "has-component-level", className)} {...props}>{icon ? <span className="vt-subtoolbox-button-icon" aria-hidden="true">{icon}</span> : null}<span className="vt-subtoolbox-button-label">{children}</span></a>
