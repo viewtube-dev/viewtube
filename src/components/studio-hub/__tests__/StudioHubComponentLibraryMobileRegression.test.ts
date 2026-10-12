@@ -11,6 +11,8 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(library).toContain('import { StudioHubPrimitiveMigrationCatalog }')
     expect(library).toContain("<StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />")
     expect(library).toContain("<StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} />")
+    expect(library).toContain('import { StudioHubProductionButtonCatalog }')
+    expect(library).toContain("<StudioHubProductionButtonCatalog paletteIndex={paletteIndex} />")
     expect(library).toContain('data-vt-library-track={track}')
   })
 
@@ -191,4 +193,19 @@ describe("Studio Hub Component Library mobile regression", () => {
       "Vault Portrait Asset", "Vault Audio Asset", "Vault Document Asset",
     ]) expect(catalog).toContain(`\"${family}\"`)
   })
+  it("registers every requested production button primitive as a live library example", () => {
+    const catalog = read("src/components/studio-hub/StudioHubProductionButtonCatalog.tsx")
+    const primitive = read("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const toolbox = read("src/components/Toolbox.tsx")
+    for (const family of [
+      "SubToolboxButton", "SubToolboxIconButton", "SubToolboxIconTextButton",
+      "SubToolboxSplitButton", "StudioSplitLeftButton", "StudioButton",
+      "SubToolboxSelectableTag", "SubToolboxInnerActionButton", "SubToolboxActions",
+      "SubToolboxRefineButtonBase", "SubToolboxGridActionButton",
+    ]) expect(catalog).toContain(family)
+    expect(primitive).toContain("export const SubToolboxIconTextButton")
+    expect(toolbox).toContain("export const SubToolboxRefineButtonBase")
+    expect(catalog).toContain('data-vt-production-button-catalog="true"')
+  })
+
 })
