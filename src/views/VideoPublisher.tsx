@@ -850,12 +850,12 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       ) : (
         <SubToolboxStatePanel state="empty" message="No canonical Publishing Package is available. Finish the active Project package before publishing." />
       )}
-      {!result ? (
-        <SubToolboxStack density="comfortable">
-                  </>
+        </>
       ) : null}
       {workspaceMode === "create" ? (
         <>
+      {!result ? (
+        <SubToolboxStack density="comfortable">
       <BrainLiveToolInbox destinationToolId="video-publisher" channelId={(authState as any)?.channelId ?? null} onPrefill={applyPrefill} />
           {insightsImported ? <SubToolboxStatePanel state="ready" message="Incoming Brain/tool context loaded. Review before generating or publishing." /> : null}
           <SubToolboxGrid minItemWidth="wide">
