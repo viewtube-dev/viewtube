@@ -110,11 +110,12 @@ export const selectPublisherMetadataPackageOption = (
   const toolId = input.sourceToolId || "video-publisher"
 
   const selectPayloadAsset = (slot: string, payloadAssetId?: string | null) => {
-    if (payloadAssetId && assets.has(payloadAssetId)) {
-      setContentBuildSelection(contentBuildId, slot, payloadAssetId, {
-        toolId, actorType: "creator", final: Boolean(input.final),
-      })
-    }
+    // A missing asset is meaningful: the chosen set intentionally has no asset
+    // in this slot, so clear the previous option instead of retaining stale state.
+    const resolvedAssetId = payloadAssetId && assets.has(payloadAssetId) ? payloadAssetId : null
+    setContentBuildSelection(contentBuildId, slot, resolvedAssetId, {
+      toolId, actorType: "creator", final: Boolean(input.final),
+    })
   }
   selectPayloadAsset("title", payload.titleAssetId)
   selectPayloadAsset("description", payload.descriptionAssetId)
@@ -153,7 +154,7 @@ export const selectPublisherMetadataPackageOption = (
       version: videoPackage.version + 1,
       identity: {
         ...videoPackage.identity,
-        workingTitle: payload.title || videoPackage.identity.workingTitle,
+        workingTitle: payload.title ?? videoPackage.identity.workingTitle,
         updatedAt: new Date().toISOString(),
       },
       packaging: {
@@ -163,7 +164,7 @@ export const selectPublisherMetadataPackageOption = (
         selectedTitleId: titleArtifact?.id || videoPackage.packaging.selectedTitleId || null,
         thumbnailVariants: thumbnailArtifact && !hasArtifact(videoPackage.packaging.thumbnailVariants, thumbnailArtifact)
           ? [...videoPackage.packaging.thumbnailVariants, thumbnailArtifact] : videoPackage.packaging.thumbnailVariants,
-        selectedThumbnailId: thumbnailArtifact?.id || videoPackage.packaging.selectedThumbnailId || null,
+        selectedThumbnailId: thumbnailArtifact?.id || null,
         description: descriptionArtifact || videoPackage.packaging.description,
         tags: tagsArtifact || videoPackage.packaging.tags,
       },
