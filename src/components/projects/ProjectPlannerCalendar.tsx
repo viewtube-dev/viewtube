@@ -4,7 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock3,
-  ExternalLink,
   X,
 } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
@@ -149,7 +148,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             <div className="vt-project-planner-calendar__month-title" aria-live="polite">{monthLabel(cursor)}</div>
             <SubToolboxIconButton level="l1" icon={<ChevronRight size={15} />} ariaLabel="Next month" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() + 1, 1))} />
           </div>
-          <SubToolboxButton size="compact" tone="neutral" onClick={() => { const today = startOfDay(new Date()); setCursor(today); setSelectedDate(dateKey(today)) }}>Today</SubToolboxButton>
+          <SubToolboxButton tone="neutral" onClick={() => { const today = startOfDay(new Date()); setCursor(today); setSelectedDate(dateKey(today)) }}>Today</SubToolboxButton>
         </header>
 
         <div className="vt-project-planner-calendar__body">
