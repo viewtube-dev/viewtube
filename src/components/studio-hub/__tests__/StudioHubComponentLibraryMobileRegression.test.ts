@@ -234,4 +234,17 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(catalog).toContain('data-vt-production-button-catalog="true"')
   })
 
+  it("uses a menu dropdown and full-width responsive action rows in Project Manifestation", () => {
+    const manifestation = read("src/components/projects/ProjectManifestation.tsx")
+    const projectCss = read("src/styles/project-manifestation.css")
+    const metadataCss = read("src/styles/subtoolbox-split-primitives.css")
+    expect(manifestation).toContain("<SubToolboxSplitDropdown")
+    expect(manifestation).not.toContain("<SubToolboxSelect")
+    expect(manifestation).toContain('className="vt-project-manifestation-actions"')
+    expect(projectCss).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))")
+    expect(projectCss).toContain("width: 100% !important")
+    expect(metadataCss).toContain(".vt-metadata-field-actions")
+    expect(metadataCss).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))")
+  })
+
 })
