@@ -228,9 +228,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                       <span className={`vt-project-planner-calendar__day-number ${key === todayKey ? "is-today" : ""}`}>{day.getDate()}</span>
                       <span className="vt-project-planner-calendar__markers" aria-hidden="true">
                         {dayItems.slice(0, 2).map(item => (
-                          <SubToolboxStatusBadge key={item.id} level="l2" className="is-dense vt-project-planner-calendar__marker" title={item.label} style={item.color ? { "--pair-a": item.color } as React.CSSProperties : undefined}>{item.label}</SubToolboxStatusBadge>
+                          <SubToolboxStatusBadge key={item.id} level="l2" variant="outlined" tone={item.type === "project" ? "blue" : "green"} dense className="vt-project-planner-calendar__marker" title={item.label}>{item.label}</SubToolboxStatusBadge>
                         ))}
-                        {dayItems.length > 2 ? <SubToolboxStatusBadge level="l2" className="is-dense vt-project-planner-calendar__marker">+{dayItems.length - 2} MORE</SubToolboxStatusBadge> : null}
+                        {dayItems.length > 2 ? <SubToolboxStatusBadge level="l2" variant="outlined" tone="neutral" dense className="vt-project-planner-calendar__marker">+{dayItems.length - 2} MORE</SubToolboxStatusBadge> : null}
                       </span>
                     </button>
                   </section>
