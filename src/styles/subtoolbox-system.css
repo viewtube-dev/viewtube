@@ -3720,3 +3720,47 @@
   height: 5px;
   flex: 0 0 5px;
 }
+
+
+/* Match Analytics sync-controller spectrum tags: uppercase, heavy studio font,
+   full-strength monochromatic outline, and compact but legible type. */
+.vt-subtoolbox-status-badge.is-outlined {
+  --vt-status-badge-color: var(--vt-alpha-color, var(--vt-pair-a, #36e0f6));
+  box-sizing: border-box;
+  min-width: 0;
+  border: var(--vt-component-stroke, 2px) solid var(--vt-status-badge-color);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vt-status-badge-color) 24%, white);
+  color: var(--vt-status-badge-color);
+  font-family: var(--vt-studio-toolbox-font, var(--font-sans, ui-sans-serif, system-ui));
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: -.035em;
+  line-height: 1;
+  box-shadow: none;
+}
+.vt-subtoolbox-status-badge.is-outlined i { background: currentColor; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="blue"] { --vt-status-badge-color: #5b8def; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="cyan"] { --vt-status-badge-color: #35cfe3; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="green"] { --vt-status-badge-color: #24a875; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="pink"] { --vt-status-badge-color: #fa618a; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="orange"] { --vt-status-badge-color: #e88a24; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="yellow"] { --vt-status-badge-color: #a77b00; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="purple"] { --vt-status-badge-color: #9a48d4; }
+.vt-subtoolbox-status-badge.is-outlined[data-vt-badge-tone="neutral"] { --vt-status-badge-color: #59616b; }
+.vt-subtoolbox-status-badge.is-outlined.is-dense {
+  height: 18px;
+  min-height: 18px;
+  padding: 0 5px;
+  gap: 3px;
+  border-width: 2px;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+.vt-subtoolbox-status-badge.is-outlined.is-dense i {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+}
