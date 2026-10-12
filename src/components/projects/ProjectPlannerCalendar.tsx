@@ -7,7 +7,7 @@ import {
   X,
 } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
-import type { Project } from "../../types"
+import type { DayTask, Project } from "../../types"
 import {
   SubToolboxButton,
   SubToolboxIconButton,
@@ -31,7 +31,7 @@ const dateKey = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
 const parseDate = (value?: string) => {
   if (!value) return null
-  const match = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(value)
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value)
   if (!match) return null
   const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
   return Number.isNaN(parsed.getTime()) ? null : startOfDay(parsed)
@@ -59,11 +59,18 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
     [projects],
   )
   const projectsForDate = (key: string) =>
-    scheduledProjects.filter(project => project.publishDate?.slice(0, 10) === key)
+    scheduledProjects.filter(project => { const date = parseDate(project.publishDate); return date ? dateKey(date) === key : false })
+  const tasksForDate = (key: string) => projects.flatMap(project =>
+    (project.tasks || []).filter((task: DayTask) => {
+      const due = parseDate(task.dueDate)
+      return Boolean(due && dateKey(due) === key)
+    }).map((task: DayTask) => ({ ...task, projectId: project.id, projectTitle: projectTitle(project) }))
+  )
   const selectedProjects = useMemo(
     () => projectsForDate(selectedDate),
     [scheduledProjects, selectedDate],
   )
+  const selectedTasks = useMemo(() => tasksForDate(selectedDate), [projects, selectedDate])
   const days = useMemo(() => {
     const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1)
     const gridStart = addDays(first, -first.getDay())
@@ -71,7 +78,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   }, [cursor])
 
   const scheduleSelectedProject = () => {
-    if (!quickAddProjectId) return
+    if (!quickAddProjectId || !parseDate(selectedDate)) return
     updateProject(quickAddProjectId, { publishDate: selectedDate } as Partial<Project>)
     setQuickAddProjectId("")
   }
@@ -81,9 +88,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   return (
     <SubToolboxStack density="comfortable" className="vt-project-planner-calendar">
       <style>{`
-        .vt-project-planner-calendar { width:100%; min-width:0; align-self:stretch; color:var(--vt-ink,var(--vt-text,#000)); }
+        .vt-project-planner-calendar { display:block; width:100%; min-width:0; max-width:none; margin:0; padding:0; align-self:stretch; color:var(--vt-ink,var(--vt-text,#000)); }
         .vt-project-planner-calendar__shell {
-          width:100%; min-width:0; overflow:hidden; border:0; border-radius:0; background:var(--vt-surface,#fff); box-shadow:none;
+          display:block; width:100%; min-width:0; max-width:none; margin:0; padding:0; overflow:hidden; border:0; border-radius:0; background:var(--vt-surface,#fff); box-shadow:none;
         }
         .vt-project-planner-calendar__toolbar {
           display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
@@ -97,13 +104,14 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         }
         .vt-project-planner-calendar__main { min-width: 0; }
         .vt-project-planner-calendar__weekdays, .vt-project-planner-calendar__days {
-          display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+          display:grid; width:100%; min-width:0; grid-template-columns:repeat(7,minmax(0,1fr)); gap:0; margin:0; padding:0;
         }
+        .vt-project-planner-calendar__day-wrap { display:flex; min-width:0; width:100%; margin:0; padding:0; }
         .vt-project-planner-calendar__weekdays { background: #000; color: #fff; }
         .vt-project-planner-calendar__weekday { padding: 7px 1px; text-align: center; font: 900 9px/1 var(--vt-font, inherit); text-transform: uppercase; }
         .vt-project-planner-calendar__day {
-          min-width: 0; min-height: 92px; padding: 4px; border: 0; border-right: 1px solid #000;
-          border-bottom: 1px solid #000; background: #fff; text-align: left; cursor: pointer;
+          display:block; box-sizing:border-box; width:100%; max-width:100%; min-width:0; min-height:92px; margin:0; padding:4px; border:0; border-right:1px solid var(--vt-border,#000);
+          border-bottom:1px solid var(--vt-border,#000); background:var(--vt-surface,#fff); text-align:left; cursor:pointer;
         }
         .vt-project-planner-calendar__day:nth-child(7n) { border-right: 0; }
         .vt-project-planner-calendar__day.is-muted { background: #f5f5f5; color: #777; }
@@ -145,7 +153,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             <header className="vt-project-planner-calendar__detail-head">
               <div className="vt-project-planner-calendar__selected-label"><CalendarDays size={17} /><strong>Selected date</strong></div>
               <h2 className="vt-project-planner-calendar__selected-date">{dateLabel(parseDate(selectedDate) || new Date())}</h2>
-              <div className="vt-project-planner-calendar__selected-count">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"}</div>
+              <div className="vt-project-planner-calendar__selected-count">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"} · {selectedTasks.length} task{selectedTasks.length === 1 ? "" : "s"}</div>
             </header>
 
             <div>
@@ -158,7 +166,18 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                   </button>
                   <SubToolboxIconButton level="l1" icon={<X size={12} />} ariaLabel={`Unschedule ${projectTitle(project)}`} onClick={() => clearSchedule(project.id)} />
                 </div>
-              )) : <div className="vt-project-planner-calendar__empty">No projects scheduled for this date</div>}
+              )) : null}
+              {selectedTasks.map(task => (
+                <div key={`${task.projectId}-${task.id}`} className="vt-project-planner-calendar__project-row">
+                  <SubToolboxStatusBadge level="l2" className="is-dense" title={task.projectTitle}>TASK</SubToolboxStatusBadge>
+                  <div className="vt-project-planner-calendar__project-open">
+                    <span className="vt-project-planner-calendar__project-title">{task.text}</span>
+                    <span className="vt-project-planner-calendar__project-meta">{task.projectTitle} · {task.completed ? "Complete" : "Open task"}</span>
+                  </div>
+                  <SubToolboxStatusBadge level="l2" className="is-dense">{task.completed ? "DONE" : "OPEN"}</SubToolboxStatusBadge>
+                </div>
+              ))}
+              {!selectedProjects.length && !selectedTasks.length ? <div className="vt-project-planner-calendar__empty">No projects or tasks scheduled for this date</div> : null}
             </div>
 
             <div className="vt-project-planner-calendar__quick-add">
@@ -191,6 +210,11 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
               {days.map(day => {
                 const key = dateKey(day)
                 const dayProjects = projectsForDate(key)
+                const dayTasks = tasksForDate(key)
+                const dayItems = [
+                  ...dayProjects.map(project => ({ id: project.id, label: projectTitle(project), type: "project" as const, color: project.color })),
+                  ...dayTasks.map(task => ({ id: `${task.projectId}-${task.id}`, label: `TASK · ${task.text}`, type: "task" as const, color: undefined })),
+                ]
                 const currentMonth = day.getMonth() === cursor.getMonth()
                 return (
                   <section key={key} className={`vt-project-planner-calendar__day-wrap`} style={{ minWidth: 0 }}>
@@ -203,10 +227,10 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                     >
                       <span className={`vt-project-planner-calendar__day-number ${key === todayKey ? "is-today" : ""}`}>{day.getDate()}</span>
                       <span className="vt-project-planner-calendar__markers" aria-hidden="true">
-                        {dayProjects.slice(0, 2).map(project => (
-                          <SubToolboxStatusBadge key={project.id} level="l2" className="is-dense vt-project-planner-calendar__marker" title={projectTitle(project)} style={{ "--pair-a": project.color || "var(--pair-a,#FF4FD8)" } as React.CSSProperties}>{projectTitle(project)}</SubToolboxStatusBadge>
+                        {dayItems.slice(0, 2).map(item => (
+                          <SubToolboxStatusBadge key={item.id} level="l2" className="is-dense vt-project-planner-calendar__marker" title={item.label} style={item.color ? { "--pair-a": item.color } as React.CSSProperties : undefined}>{item.label}</SubToolboxStatusBadge>
                         ))}
-                        {dayProjects.length > 2 ? <span className="vt-project-planner-calendar__marker">+{dayProjects.length - 2} more</span> : null}
+                        {dayItems.length > 2 ? <SubToolboxStatusBadge level="l2" className="is-dense vt-project-planner-calendar__marker">+{dayItems.length - 2} MORE</SubToolboxStatusBadge> : null}
                       </span>
                     </button>
                   </section>

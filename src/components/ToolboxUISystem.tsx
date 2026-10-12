@@ -410,7 +410,7 @@ export const AnimatedToggleIcon: React.FC<{ open: boolean; size?: number }> = ({
 }) => {
  return (
   <div
-   className="vt-animated-toggle-icon relative group flex items-center justify-center shrink-0 cursor-pointer"
+   className={`vt-animated-toggle-icon relative group flex items-center justify-center shrink-0 cursor-pointer ${open ? "is-open" : "is-closed"}`}
    style={{ width: size, height: size }}>
    <div
     className={`absolute inset-0 w-full h-full transition-all duration-[600ms] ease-out rotate-45 ${open ? "scale-90" : "scale-100"} group-hover:scale-110 group-active:scale-95`}>

@@ -9,6 +9,7 @@ type ProjectsToolboxModuleProps = {
  children: React.ReactNode
  isOpenInitial?: boolean
  headerActions?: React.ReactNode
+ headerActionsPlacement?: "header" | "below"
 }
 
 /** Canonical level-0 Projects toolbox: one exterior shell, then subtoolboxes/components. */
@@ -20,6 +21,7 @@ const ProjectsToolboxModule: React.FC<ProjectsToolboxModuleProps> = ({
  children,
  isOpenInitial = true,
  headerActions,
+ headerActionsPlacement = "below",
 }) => (
  <Toolbox
   variant="scaffold"
@@ -30,6 +32,7 @@ const ProjectsToolboxModule: React.FC<ProjectsToolboxModuleProps> = ({
   collapsible
   isOpenInitial={isOpenInitial}
   headerActions={headerActions}
+  headerActionsPlacement={headerActionsPlacement}
   contentClassName="bg-white p-0"
   outerClassName="w-full"
  >

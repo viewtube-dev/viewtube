@@ -32,7 +32,7 @@ import {
  SubToolboxButton,
  SubToolboxFileTarget,
  SubToolboxIconButton,
- SubToolboxSegmentedToggle,
+ ToolboxHeaderToggle,
  SubToolboxSelect,
  SubToolboxSelectableListRow,
  SubToolboxSelectableTag,
@@ -432,10 +432,11 @@ const ThumbnailStudio: React.FC<ThumbnailStudioProps> = ({
   helpText="Build strong thumbnail ideas fast. Get overlay text, visual direction, and composition prompts in one place."
   shellClassName="animate-fade-in"
    contentClassName={embedded ? "p-0" : "p-2 sm:p-4 lg:p-8 min-h-0 lg:min-h-[600px] relative bg-white"}
+   headerActionsPlacement="header"
    headerActions={
     <div className="mr-2 my-auto" onClick={(event) => event.stopPropagation()}>
-     <SubToolboxSegmentedToggle
-      level="l1"
+     <ToolboxHeaderToggle
+      level="toolbox"
       ariaLabel="Thumbnail Studio mode"
       value={activeTab}
       options={[
