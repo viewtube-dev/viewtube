@@ -32,7 +32,7 @@ export const PublishingControls: React.FC<PublishingControlsProps> = ({
 
   return (
     <SubToolbox title="PUBLISHING CONTROLS" icon={<Tags size={20} strokeWidth={3} />} collapsible isOpenInitial>
-      <SubToolboxGrid minItemWidth="compact" density="compact" className="grid-cols-1 md:grid-cols-3">
+      <SubToolboxGrid minItemWidth="compact" density="dense" className="grid-cols-1 md:grid-cols-3">
         <SubToolboxTopTitleDropdown
           level="l1"
           label={<><LockKeyhole size={13} aria-hidden="true" /> PRIVACY</>}
