@@ -254,9 +254,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           item => item.id === publishState.videoPackage?.packaging.selectedThumbnailId,
         )?.metadata?.previewUrl as string | undefined || project.thumbnailUrl,
         plan: {
+          ...(project.plan || {}),
           concept: project.plan?.concept || concept,
           niche: project.plan?.niche || niche,
-          ...(project.plan || {}),
           targetAudience: audience,
           publishingMetadata: {
             category: publishCategory,
