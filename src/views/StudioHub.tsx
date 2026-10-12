@@ -43,12 +43,12 @@ const StudioHub: React.FC = () => {
    {/* Accordion Modules */}
    <div className="space-y-2 sm:space-y-4 lg:space-y-6">
     <React.Suspense fallback={null}>
-     <ToolboxUIReferenceLibrary collapsible isOpenInitial={false} paletteIndex={7} />
+     <ToolboxUIReferenceLibrary collapsible isOpenInitial={false} paletteIndex={8} />
     </React.Suspense>
 
     {/* Natively Supported Tools */}
-    <VideoManager collapsible isOpenInitial={true} paletteIndex={0} />
-    <ConceptSceneStudio collapsible isOpenInitial={false} paletteIndex={11} />
+    <VideoManager collapsible isOpenInitial={true} paletteIndex={9} />
+    <ConceptSceneStudio collapsible isOpenInitial={false} paletteIndex={10} />
     <React.Suspense fallback={null}>
      <VideoDirector collapsible isOpenInitial={false} paletteIndex={11} />
     </React.Suspense>
