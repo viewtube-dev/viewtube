@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Check, ChevronRight, FileText, Layers3, Plus, Settings2, Sparkles, WandSparkles, Zap } from "lucide-react"
+import { Check, FileText, Layers3, Plus, Settings2, Sparkles } from "lucide-react"
 import { SubToolbox } from "../Toolbox"
 import {
   SubToolboxButton,
@@ -100,7 +100,7 @@ export const StudioHubProductionButtonCatalog: React.FC<StudioHubProductionButto
         </ButtonSample>
 
         <ButtonSample name="SubToolboxGridActionButton" description="Four-pixel subtoolbox grid action with its split icon rail enabled by default.">
-          <SubToolboxGridActionButton label={`REFINE ${gridActionCount}`} iconName="sparkles" tone="pink" onClick={() => setGridActionCount(value => value + 1} />
+          <SubToolboxGridActionButton label={`REFINE ${gridActionCount}`} iconName="sparkles" tone="pink" onClick={() => setGridActionCount(value => value + 1)} />
         </ButtonSample>
       </div>
     </SubToolbox>
