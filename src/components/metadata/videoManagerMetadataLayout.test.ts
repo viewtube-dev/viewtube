@@ -19,7 +19,7 @@ describe("Video Manager metadata layout contract", () => {
     expect(metadata).toContain('"--vt-component-height": "44px"')
     expect(styles).toContain(".vt-metadata-field-actions{")
     expect(styles).toContain("--vt-component-stroke:3px!important")
-    expect(styles).toContain("@media(max-width:420px){.vt-metadata-field-actions{grid-template-columns:minmax(0,1fr)}}")
+    expect(styles).toContain(".vt-metadata-field-actions{grid-template-columns:minmax(0,1fr)}")
   })
 
   it("keeps the colored right-side labels above the field surface", () => {
@@ -93,8 +93,8 @@ describe("Video Manager metadata layout contract", () => {
     expect(publisher).toContain('headerActionsPlacement="header"')
     expect(manager).toContain('label: "Manage"')
     expect(manager).toContain('label: "Generate"')
-    expect(publisher).toContain('label: "Publish"')
-    expect(publisher).toContain('label: "Generate"')
+    expect(publisher).toContain('{ value: "write", label: "Write" }')
+    expect(publisher).toContain('{ value: "create", label: "Create / Generate" }')
     expect(publisher).toContain('media.duration < 180')
     expect(publisher).toContain('media.videoHeight >= media.videoWidth')
   })
@@ -106,7 +106,7 @@ describe("Video Manager metadata layout contract", () => {
     expect(primitives).toContain("has-noninitial-selection")
     expect(primitives).toContain("aria-pressed={option.value === value}")
     expect(styles).toContain(".vt-toolbox-header-toggle.is-word-toggle")
-    expect(styles).toContain(".vt-toolbox-header-toggle.is-word-toggle.has-noninitial-selection .vt-word-toggle-handle{background:#f276c5}")
+    expect(styles).toContain(".vt-toolbox-header-toggle.is-word-toggle.has-noninitial-selection .vt-word-toggle-handle{background:var(--pair-b,#f276c5)}")
     expect(styles).toContain("@media(max-width:767px)")
   })
 
