@@ -34,7 +34,7 @@ const PublisherMetadataPackageOptions: React.FC<PublisherMetadataPackageOptionsP
   // Keep the callback in a ref so parent renders do not repeatedly overwrite user edits.
   useEffect(() => {
     if (selectedOption) onSelectedRef.current?.(selectedOption)
-  }, [contentBuildId, refreshKey, selectedOption?.assetId])
+  }, [contentBuildId, refreshKey, selectedOption])
 
   if (!contentBuildId) return null
 
