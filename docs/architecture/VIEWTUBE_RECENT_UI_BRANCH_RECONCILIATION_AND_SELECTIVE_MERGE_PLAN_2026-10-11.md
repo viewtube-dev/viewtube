@@ -93,8 +93,9 @@ Disposition: **compare with the newer convergence branch before porting**. This 
 
 ### 6. Candidate: Studio Hub primitive library and compound components
 
-Branch: `audit/system-convergence-identity-certification` and its merged UI child branch; related source/docs:
+Branch: `audit/system-convergence-identity-certification` (compared with consolidated master: 21 commits ahead / 95 behind at the inventory snapshot; diverged, so treat this as a file-level comparison, not a merge recommendation) and its merged UI child branch; related source/docs:
 - `src/components/subtoolbox/SubToolboxCompoundPrimitives.tsx`
+- `src/views/dashboard/WidgetStandardUploadFrame.tsx` (candidate shared upload frame; compare with `SubToolboxFileTarget` to avoid maintaining two upload primitives)
 - `src/components/subtoolbox/SubToolboxPrimitives.tsx`
 - `src/components/subtoolbox/tokens.ts`
 - `src/styles/subtoolbox-system.css`
@@ -114,7 +115,7 @@ Patterns/features found in the audit:
 - Compound primitive exports intended to replace one-off copies.
 - Component-library source audit and mobile regression contract.
 
-Disposition: **inspect target source before any port**. The audit reports these patterns on the target production Primitive track, so most may already be present; treat the branch as evidence for coverage and missing deltas, not as an instruction to duplicate the components. Keep the frozen hardcoded catalog unchanged. Measure/verify performance, mobile layout, keyboard, and screen-reader behavior before further changes.
+Disposition: **inspect target source before any port**. The audit reports these patterns on the target production Primitive track, so most may already be present; treat the branch as evidence for coverage and missing deltas, not as an instruction to duplicate the components. In the diverged audit comparison, also inspect `ProjectStudio.tsx`, `ProjectBoardWorkspace.tsx`, `Toolbox.tsx`, `CanonicalMetadataSections.tsx`, `SubToolboxPrimitives.tsx`, `SubToolboxPrimitiveSystem.test.tsx`, `subtoolbox-system.css`, and `vite.config.ts` against the target. The already-merged UI child branch contains overlapping changes, so only donor-specific behavior proven absent from target should be ported. Keep the frozen hardcoded catalog unchanged. Measure/verify performance, mobile layout, keyboard, and screen-reader behavior before further changes.
 
 ### 7. Candidate: Metadata Master v2
 
@@ -184,6 +185,7 @@ Disposition: plans and audits may be reconciled as docs; tests are candidates af
 - [x] Created a dedicated feature branch from consolidated master.
 - [x] Identified the branch containing the color order, toolbox alignment, shared upload preview, and palette reset corrections; these changes are already merged to consolidated master via PR #18.
 - [x] Listed candidate branches and their major recent UI changes.
+- [x] Compared the current convergence branch against consolidated master and added its overlapping source paths to the selective review ledger.
 - [ ] File-by-file source comparison and selective code ports.
 - [ ] Focused tests, typecheck, full tests, build.
 - [ ] Live browser verification.
