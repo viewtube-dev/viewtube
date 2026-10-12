@@ -241,6 +241,7 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(manifestation).toContain("<SubToolboxSplitDropdown")
     expect(manifestation).not.toContain("<SubToolboxSelect")
     expect(manifestation).toContain('className="vt-project-manifestation-actions"')
+    expect(read("src/components/metadata/CanonicalMetadataSections.tsx")).toContain('<SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">')
     expect(projectCss).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))")
     expect(projectCss).toContain("width: 100% !important")
     expect(metadataCss).toContain(".vt-metadata-field-actions")
