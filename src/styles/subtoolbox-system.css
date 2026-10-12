@@ -3654,3 +3654,23 @@
 .vt-toolbox-header-title { line-height:.92!important; }
 .vt-toolbox-header-control,.vt-toolbox-header-toggle { transform:none!important; }
 .vt-toolbox-header-control svg { display:block; vertical-align:middle; }
+
+/* Selective port from fix/toolbox-collapse-icon-chrome:
+   preserve the animated glyph, remove the button tile, and respect reduced motion.
+   The transparent border/background/shadow reset is already established above. */
+.vt-toolbox-header-collapse {
+  overflow: visible !important;
+}
+.vt-toolbox-header-collapse svg {
+  max-width: none !important;
+  max-height: none !important;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-toolbox-header-collapse *,
+  .vt-toolbox-header-collapse svg {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
