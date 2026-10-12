@@ -7,7 +7,7 @@ import {
   X,
 } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
-import type { Project } from "../../types"
+import type { DayTask, Project } from "../../types"
 import {
   SubToolboxButton,
   SubToolboxIconButton,
@@ -60,10 +60,17 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   )
   const projectsForDate = (key: string) =>
     scheduledProjects.filter(project => { const date = parseDate(project.publishDate); return date ? dateKey(date) === key : false })
+  const tasksForDate = (key: string) => projects.flatMap(project =>
+    (project.tasks || []).filter((task: DayTask) => {
+      const due = parseDate(task.dueDate)
+      return Boolean(due && dateKey(due) === key)
+    }).map((task: DayTask) => ({ ...task, projectId: project.id, projectTitle: projectTitle(project) }))
+  )
   const selectedProjects = useMemo(
     () => projectsForDate(selectedDate),
     [scheduledProjects, selectedDate],
   )
+  const selectedTasks = useMemo(() => tasksForDate(selectedDate), [projects, selectedDate])
   const days = useMemo(() => {
     const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1)
     const gridStart = addDays(first, -first.getDay())
@@ -146,7 +153,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             <header className="vt-project-planner-calendar__detail-head">
               <div className="vt-project-planner-calendar__selected-label"><CalendarDays size={17} /><strong>Selected date</strong></div>
               <h2 className="vt-project-planner-calendar__selected-date">{dateLabel(parseDate(selectedDate) || new Date())}</h2>
-              <div className="vt-project-planner-calendar__selected-count">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"}</div>
+              <div className="vt-project-planner-calendar__selected-count">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"} · {selectedTasks.length} task{selectedTasks.length === 1 ? "" : "s"}</div>
             </header>
 
             <div>
@@ -159,7 +166,18 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                   </button>
                   <SubToolboxIconButton level="l1" icon={<X size={12} />} ariaLabel={`Unschedule ${projectTitle(project)}`} onClick={() => clearSchedule(project.id)} />
                 </div>
-              )) : <div className="vt-project-planner-calendar__empty">No projects scheduled for this date</div>}
+              )) : null}
+              {selectedTasks.map(task => (
+                <div key={`${task.projectId}-${task.id}`} className="vt-project-planner-calendar__project-row">
+                  <SubToolboxStatusBadge level="l2" className="is-dense" title={task.projectTitle}>TASK</SubToolboxStatusBadge>
+                  <div className="vt-project-planner-calendar__project-open">
+                    <span className="vt-project-planner-calendar__project-title">{task.text}</span>
+                    <span className="vt-project-planner-calendar__project-meta">{task.projectTitle} · {task.completed ? "Complete" : "Open task"}</span>
+                  </div>
+                  <SubToolboxStatusBadge level="l2" className="is-dense">{task.completed ? "DONE" : "OPEN"}</SubToolboxStatusBadge>
+                </div>
+              ))}
+              {!selectedProjects.length && !selectedTasks.length ? <div className="vt-project-planner-calendar__empty">No projects or tasks scheduled for this date</div> : null}
             </div>
 
             <div className="vt-project-planner-calendar__quick-add">
@@ -192,6 +210,11 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
               {days.map(day => {
                 const key = dateKey(day)
                 const dayProjects = projectsForDate(key)
+                const dayTasks = tasksForDate(key)
+                const dayItems = [
+                  ...dayProjects.map(project => ({ id: project.id, label: projectTitle(project), type: "project" as const, color: project.color })),
+                  ...dayTasks.map(task => ({ id: `${task.projectId}-${task.id}`, label: `TASK · ${task.text}`, type: "task" as const, color: undefined })),
+                ]
                 const currentMonth = day.getMonth() === cursor.getMonth()
                 return (
                   <section key={key} className={`vt-project-planner-calendar__day-wrap`} style={{ minWidth: 0 }}>
@@ -204,10 +227,10 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                     >
                       <span className={`vt-project-planner-calendar__day-number ${key === todayKey ? "is-today" : ""}`}>{day.getDate()}</span>
                       <span className="vt-project-planner-calendar__markers" aria-hidden="true">
-                        {dayProjects.slice(0, 2).map(project => (
-                          <SubToolboxStatusBadge key={project.id} level="l2" className="is-dense vt-project-planner-calendar__marker" title={projectTitle(project)} style={{ "--pair-a": project.color || "var(--pair-a,#FF4FD8)" } as React.CSSProperties}>{projectTitle(project)}</SubToolboxStatusBadge>
+                        {dayItems.slice(0, 2).map(item => (
+                          <SubToolboxStatusBadge key={item.id} level="l2" className="is-dense vt-project-planner-calendar__marker" title={item.label} style={item.color ? { "--pair-a": item.color } as React.CSSProperties : undefined}>{item.label}</SubToolboxStatusBadge>
                         ))}
-                        {dayProjects.length > 2 ? <span className="vt-project-planner-calendar__marker">+{dayProjects.length - 2} more</span> : null}
+                        {dayItems.length > 2 ? <SubToolboxStatusBadge level="l2" className="is-dense vt-project-planner-calendar__marker">+{dayItems.length - 2} MORE</SubToolboxStatusBadge> : null}
                       </span>
                     </button>
                   </section>
