@@ -38,6 +38,38 @@ describe("Publisher metadata package options", () => {
     expect(options.some(option => option.payload.title === "Alternative")).toBe(true)
   })
 
+  it("restores intentionally blank fields without retaining the previous option's asset selections", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const current = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Current title",
+      description: "Current description",
+      tags: "current",
+    }, { mode: "current" })
+    const currentBuild = getContentBuild(project.contentBuildId)!
+    const currentTitleAssetId = currentBuild.selections.title
+
+    const blank = savePublisherMetadataToProject(project, "channel-options", {
+      title: "",
+      description: "",
+      tags: "",
+    }, { mode: "option" })
+    const blankOption = listPublisherMetadataPackageOptions(project.contentBuildId)
+      .find(option => option.assetId === blank.packageOptionAssetId)!
+    expect(blankOption.payload.title).toBe("")
+    expect(blankOption.payload.description).toBe("")
+    expect(blankOption.payload.tags).toBe("")
+    expect(blankOption.payload.titleAssetId).toBeTruthy()
+    expect(blankOption.payload.titleAssetId).not.toBe(currentTitleAssetId)
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, blank.packageOptionAssetId)
+    const restoredBuild = getContentBuild(project.contentBuildId)!
+    expect(restoredBuild.selections["metadata-package"]).toBe(blank.packageOptionAssetId)
+    expect(restoredBuild.selections.title).toBe(blankOption.payload.titleAssetId)
+    expect(restoredBuild.selections.description).toBe(blankOption.payload.descriptionAssetId)
+    expect(restoredBuild.selections.tags).toBe(blankOption.payload.tagsAssetId)
+    expect(blank.packageOptionAssetId).not.toBe(current.packageOptionAssetId)
+  })
+
   it("selects an alternative without creating a new Project or ContentBuild", () => {
     ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
     const current = savePublisherMetadataToProject(project, "channel-options", {
