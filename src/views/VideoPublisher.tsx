@@ -136,7 +136,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [durationStats, setDurationStats] = useState("Avg. Views")
   const [formatMode, setFormatMode] = useState<"longform" | "shorts">("longform")
   const [isOpen, setIsOpen] = useState(isOpenInitial)
-  const [workspaceMode, setWorkspaceMode] = useState<"workspace" | "intelligence">("workspace")
+  const [workspaceMode, setWorkspaceMode] = useState<"write" | "create">("write")
   const [missingFields, setMissingFields] = useState({ concept: false, niche: false })
   const [insightsImported, setInsightsImported] = useState(false)
   const [publishRefresh, setPublishRefresh] = useState(0)
@@ -657,13 +657,13 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       headerActions={
         <div className="flex flex-wrap items-center justify-end gap-2 max-w-full">
           <ToolboxHeaderToggle
-            value={workspaceMode === "intelligence" ? "generate" : "publish"}
-            aria-label="Publisher mode"
+            value={workspaceMode}
+            aria-label="Video Publisher page"
             options={[
-              { value: "publish", label: "Publish" },
-              { value: "generate", label: "Generate" },
+              { value: "write", label: "Write" },
+              { value: "create", label: "Create / Generate" },
             ]}
-            onValueChange={(value) => setWorkspaceMode(value === "generate" ? "intelligence" : "workspace")}
+            onValueChange={(value) => setWorkspaceMode(value === "create" ? "create" : "write")}
           />
         </div>
       }
@@ -676,7 +676,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
        onSaveProject={saveProjectManifestState}
        paletteIndex={basePalette}
       />
-      {workspaceMode === "workspace" ? (
+      {workspaceMode === "write" ? (
         <>
               <CanonicalMetadataSections
                 showFieldActions={true}
@@ -803,9 +803,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
 
         </>
       ) : null}
-      {workspaceMode === "intelligence" ? (
-        <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 1} />
-      ) : (
+      {workspaceMode === "write" ? (
         <>
       {publishState.projection ? (
         <SubToolboxStack density="comfortable">
@@ -854,7 +852,11 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       )}
       {!result ? (
         <SubToolboxStack density="comfortable">
-          <BrainLiveToolInbox destinationToolId="video-publisher" channelId={(authState as any)?.channelId ?? null} onPrefill={applyPrefill} />
+                  </>
+      ) : null}
+      {workspaceMode === "create" ? (
+        <>
+      <BrainLiveToolInbox destinationToolId="video-publisher" channelId={(authState as any)?.channelId ?? null} onPrefill={applyPrefill} />
           {insightsImported ? <SubToolboxStatePanel state="ready" message="Incoming Brain/tool context loaded. Review before generating or publishing." /> : null}
           <SubToolboxGrid minItemWidth="wide">
             <SubToolbox title="Video Upload" icon={<Upload size={20} strokeWidth={3} />} collapsible isOpenInitial>
@@ -904,8 +906,11 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           <PostActionReflection toolId="VIDEO_PUBLISHER" />
         </SubToolboxStack>
       )}
+          <SubToolbox title="ADVANCED METADATA INTELLIGENCE" icon={<Sparkles size={20} strokeWidth={3} />} paletteIndex={basePalette + 2} collapsible isOpenInitial={false}>
+            <MetadataMaster embedded collapsible={false} paletteIndex={basePalette + 2} />
+          </SubToolbox>
         </>
-      )}
+      ) : null}
     </ToolboxScaffold>
   )
 }
