@@ -1,7 +1,7 @@
 import React from "react"
 import { Columns3, PanelsTopLeft } from "lucide-react"
 import ProjectBuilderModule from "../components/projects/ProjectBuilderModule"
-import ProjectBoardWorkspace from "../components/projects/ProjectBoardWorkspace"
+import ProjectBoardWorkspace, { ProjectBoardViewToggle } from "../components/projects/ProjectBoardWorkspace"
 import ProjectsToolboxModule from "../components/projects/ProjectsToolboxModule"
 import StoryboardStudio from "./StoryboardStudio"
 import { ProjectsWorkspaceProvider } from "../components/projects/ProjectsWorkspaceContext"
@@ -25,6 +25,7 @@ const ProjectCalendarPage: React.FC = () => (
     subtitle="Move projects through the production pipeline and schedule publishing"
     icon={<Columns3 />}
     paletteIndex={7}
+    headerActions={<ProjectBoardViewToggle />}
    >
     <ProjectBoardWorkspace />
    </ProjectsToolboxModule>
