@@ -127,21 +127,18 @@ export const savePublisherMetadataToProject = (
     tags: contentBuild.selections.tags,
   }
 
-  const titleAsset = state.title.trim()
-    ? createMetadataAsset(project, contentBuild.id, sourceToolId, "title", "Publisher title", state.title, previous.title)
-    : null
-  const descriptionAsset = state.description.trim()
-    ? createMetadataAsset(project, contentBuild.id, sourceToolId, "description", "Publisher description", { description: state.description }, previous.description)
-    : null
-  const tagsAsset = state.tags.trim()
-    ? createMetadataAsset(project, contentBuild.id, sourceToolId, "tags", "Publisher tags", { tags: state.tags }, previous.tags)
-    : null
+  // Create an explicit version even for an intentionally blank field. Without a
+  // blank-value asset, selecting an option with an empty field can leave the prior
+  // option's ContentBuild selection active.
+  const titleAsset = createMetadataAsset(project, contentBuild.id, sourceToolId, "title", "Publisher title", state.title, previous.title)
+  const descriptionAsset = createMetadataAsset(project, contentBuild.id, sourceToolId, "description", "Publisher description", { description: state.description }, previous.description)
+  const tagsAsset = createMetadataAsset(project, contentBuild.id, sourceToolId, "tags", "Publisher tags", { tags: state.tags }, previous.tags)
 
   // An alternative is stored without changing the currently selected ContentBuild fields.
   if (mode === "current") {
-    if (titleAsset) setContentBuildSelection(contentBuild.id, "title", titleAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-    if (descriptionAsset) setContentBuildSelection(contentBuild.id, "description", descriptionAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
-    if (tagsAsset) setContentBuildSelection(contentBuild.id, "tags", tagsAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    setContentBuildSelection(contentBuild.id, "title", titleAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    setContentBuildSelection(contentBuild.id, "description", descriptionAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
+    setContentBuildSelection(contentBuild.id, "tags", tagsAsset.asset.id, { toolId: sourceToolId, actorType: "creator", final: false })
     if (input.thumbnailAsset) setContentBuildSelection(contentBuild.id, "thumbnail", input.thumbnailAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
     if (input.finalVideoAsset) setContentBuildSelection(contentBuild.id, "final-render", input.finalVideoAsset.id, { toolId: sourceToolId, actorType: "creator", final: false })
   }
@@ -160,10 +157,10 @@ export const savePublisherMetadataToProject = (
     community: Boolean(state.community),
     aiUse: state.aiUse !== false,
     playlistIds: state.playlistIds || "",
-    titleAssetId: titleAsset?.asset.id || refreshed.selections.title || null,
-    thumbnailAssetId: input.thumbnailAsset?.id || refreshed.selections.thumbnail || null,
-    descriptionAssetId: descriptionAsset?.asset.id || refreshed.selections.description || null,
-    tagsAssetId: tagsAsset?.asset.id || refreshed.selections.tags || null,
+    titleAssetId: titleAsset.asset.id,
+    thumbnailAssetId: input.thumbnailAsset?.id || (mode === "current" ? refreshed.selections.thumbnail : null) || null,
+    descriptionAssetId: descriptionAsset.asset.id,
+    tagsAssetId: tagsAsset.asset.id,
     finalVideoAssetId: input.finalVideoAsset?.id || refreshed.selections["final-render"] || null,
     createdAt: now,
   }
