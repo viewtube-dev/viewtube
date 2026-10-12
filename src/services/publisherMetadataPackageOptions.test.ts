@@ -23,6 +23,20 @@ describe("Publisher metadata package options", () => {
     resetContentBuildRepositoryForTests()
   })
 
+  it("preserves an explicitly unset Audience value in a saved metadata option", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const saved = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Audience state test",
+      description: "Audience must remain unset",
+      tags: "audience",
+      audience: null,
+    }, { mode: "option" })
+
+    const option = listPublisherMetadataPackageOptions(project.contentBuildId)
+      .find(item => item.assetId === saved.packageOptionAssetId)
+    expect(option?.payload.audience).toBeNull()
+  })
+
   it("lists saved current and alternative metadata sets from the canonical variant group", () => {
     ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
     const current = savePublisherMetadataToProject(project, "channel-options", {
