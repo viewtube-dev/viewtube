@@ -1,4 +1,6 @@
 import React from "react"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { StudioDropdown } from "./primitives/StudioDropdown"
@@ -19,6 +21,15 @@ describe("Studio Hub canonical controls", () => {
     expect(html).toContain('data-icon-only="true"')
     expect(html).toContain('data-split-left="true"')
     expect(html).toContain("data-vt-studio-split-rail")
+  })
+
+  it("centers split-left icon rails and labels against the full control height", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-rail]')
+    expect(css).toContain("height: 100%")
+    expect(css).toContain("place-items: center")
+    expect(css).toContain('button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-label]')
+    expect(css).toContain("align-items: center")
   })
 
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
