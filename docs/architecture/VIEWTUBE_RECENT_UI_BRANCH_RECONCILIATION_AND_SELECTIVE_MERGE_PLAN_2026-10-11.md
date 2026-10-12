@@ -190,3 +190,23 @@ Disposition: plans and audits may be reconciled as docs; tests are candidates af
 - [ ] Focused tests, typecheck, full tests, build.
 - [ ] Live browser verification.
 - [ ] PR to consolidated master after evidence is available.
+## Integration checkpoint — 2026-10-12
+
+Selective ports completed into `master/consolidated-feature-integration`:
+
+- **PR #18 — color order, toolbox alignment, shared upload preview, and palette reset:** already merged; do not re-merge `fix/ui-color-order-toolbox-alignment-2026-10-11`.
+- **PR #20 — reconciliation plan:** merged the remaining UI consolidation plan document. The source branch's code was already represented in the target; this was a documentation-only delta.
+- **PR #21 — toolbox collapse chrome:** merged a selective CSS port from `fix/toolbox-collapse-icon-chrome`. Preserved the target stylesheet and added only the missing overflow/transform-origin and reduced-motion declarations.
+- **PR #22 — Publisher Write/Create and shared metadata controls:** merged a selective port from `feature/video-publisher-write-create-workspaces`. Publisher now separates Write (metadata and publishing transaction) from Create/Generate (idea/script/asset generation), keeps generated candidates from automatically overwriting Write inputs, supports channel-playlist dropdowns and scheduled visibility in the canonical metadata component, and retains the target's saved metadata/package persistence implementation. Related ProjectPlan and shared-control typing issues were corrected.
+
+### Verification state after these merges
+
+- The production build, local smoke check, focused contracts, and source-governance checks passed on the preceding PR #22 implementation commit. The final follow-up removed the generated-result auto-copy effect and updated source-contract assertions; those final edits did not receive a fresh full CI run.
+- Static quality/typecheck and the full test suite were **not green** on the preceding run. Remaining failures span unrelated existing areas including `CrownLiveBrain`, Project Manifestation contracts, `StudioHubPrimitiveMigrationCatalog`, media primitives, editor-design-library templates, and Creator Vault. Full-suite failures also include stale source-contract expectations and runtime registry errors. These must be handled as a separate system-wide stabilization pass; do not attribute all failures to the selective ports.
+- Vercel reported deployment rate limits, so the merged UI has not yet been visually verified through a fresh preview.
+
+### Remaining selective merge candidates
+
+- The primitive-library files referenced in the system-convergence audit are already represented in the consolidated target; continue file-level comparisons and do not wholesale-merge the diverged audit branch.
+- The old Metadata Master and publisher-metadata persistence branches remain comparison sources only. Keep one canonical saved-set service/component and preserve the current ContentBuild/Video Package identity owners.
+- Next verification gate: resolve the remaining typecheck/runtime/test failures, rerun the full CI suite, then inspect the merged Render/preview UI at desktop and mobile widths.
