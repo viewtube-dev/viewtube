@@ -471,7 +471,13 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxBadge level={level}>BADGE</SubToolboxBadge>
   }
   if (name === "Status Badge") {
-    return <SubToolboxStatusBadge level={level}>READY</SubToolboxStatusBadge>
+    return (
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, minWidth: 0 }}>
+        <SubToolboxStatusBadge level={level} variant="outlined" tone="blue" dense>STATUS: NEVER</SubToolboxStatusBadge>
+        <SubToolboxStatusBadge level={level} variant="outlined" tone="cyan" dense>RESULT: 0 RECORDS</SubToolboxStatusBadge>
+        <SubToolboxStatusBadge level={level} variant="outlined" tone="green" dense>OPTIONS: METADATA</SubToolboxStatusBadge>
+      </div>
+    )
   }
   if (name === "Split Left Button" || name === "Head Tail Action") {
     return <SubToolboxSplitButton level={level} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SubToolboxSplitButton>
