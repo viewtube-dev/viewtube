@@ -1,4 +1,4 @@
-import type { Project } from "../../types"
+import type { Project } from "../../../types"
 import { resolveCreatorContext, type CreatorContextEnvelope } from "../CreatorContextResolver"
 import { defaultBrainModelGateway, type BrainModelGateway } from "./BrainModelGateway"
 
