@@ -2108,6 +2108,25 @@ const CreatorVaultOS: React.FC = () => {
           <SubToolboxInnerActionButton label="Tag" iconName="tag" tone="pink" onClick={() => setAssetOperationsMode("batch")} />
           <SubToolboxInnerActionButton label="Batch" iconName="edit" tone="orange" onClick={() => setAssetOperationsMode("batch")} />
           <SubToolboxInnerActionButton label="Group" iconName="collection" tone="green" onClick={() => setAssetOperationsMode("groups")} />
+           <div className="flex min-w-[220px] flex-1 items-center gap-1">
+            <SubToolboxSelect
+             value={targetCollectionId}
+             aria-label="Quick add selected assets to collection"
+             onChange={(event) => setTargetCollectionId(event.target.value)}
+            >
+             <option value="">ADD TO COLLECTION…</option>
+             {manualCollections.map((collection) => (
+              <option key={collection.id} value={collection.id}>{collection.name}</option>
+             ))}
+            </SubToolboxSelect>
+            <SubToolboxInnerActionButton
+             label="Add"
+             iconName="plus"
+             tone="green"
+             onClick={addSelectionToCollection}
+             disabled={!targetCollectionId || !selectedAssetIds.length}
+            />
+           </div>
           <SubToolboxInnerActionButton
            label="Compare"
            iconName="layers"
@@ -2311,7 +2330,7 @@ const CreatorVaultOS: React.FC = () => {
        isOpenInitial={Boolean(comparePair || selectedVersionStack.length)}
        persistenceId="vault-compare-versions"
       >
-       <div data-vault-compare-versions className="flex flex-col gap-3">
+       <div ref={compareVersionsRef} tabIndex={-1} data-vault-compare-versions className="flex flex-col gap-3">
          {comparePair ? (
           <div>
            <div className="mb-2 text-xs font-black uppercase opacity-60">Compare Selection</div>
@@ -2438,7 +2457,7 @@ const CreatorVaultOS: React.FC = () => {
                key={version.id}
                label={`V${version.version} · ${version.label || asset?.name || version.assetId}`}
                iconName="layers"
-               tone={version.assetId === selectedAsset.id ? "pink" : "cyan"}
+               tone={version.assetId === selectedAsset?.id ? "pink" : "cyan"}
                onClick={() => setSelectedAssetIds([version.assetId])}
               />
              )
