@@ -12,6 +12,14 @@ type SplitActionVariant = "head" | "tail"
 
 const classes = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
 
+/** Strip legacy field classes that can override canonical Studio Controls defaults. */
+const canonicalStudioFieldClasses = (className?: string) => classes(
+  ...(className ?? "").split(/\s+/).filter((token) => token && ![
+    "vt-subtoolbox-input", "vt-subtoolbox-textarea", "has-component-level",
+    "is-standard", "is-compact", "is-micro", "is-fill",
+  ].includes(token)),
+)
+
 const withComponentLevelStyle = (
   level: ToolboxControlLevel | undefined,
   style: React.CSSProperties | undefined,
@@ -35,8 +43,8 @@ export const SubToolboxInput20 = React.forwardRef<HTMLInputElement, SubToolboxIn
     data-vt-primitive-id="20"
     data-vt-control-level={level}
     data-vt-input-variant={variant}
-    style={withComponentLevelStyle(level, style)}
-    className={classes(level && "has-component-level", className)}
+    style={style}
+    className={canonicalStudioFieldClasses(className)}
     {...props}
   />
 ))
@@ -55,8 +63,8 @@ export const SubToolboxTextArea21 = React.forwardRef<HTMLTextAreaElement, React.
     data-vt-primitive-id="21"
     data-vt-control-level={level}
     data-vt-input-variant={variant}
-    style={withComponentLevelStyle(level, height === "fill" ? { ...style, minHeight: "100%", resize: "none" } : style)}
-    className={classes(level && "has-component-level", className)}
+    style={height === "fill" ? { ...style, minHeight: "100%", resize: "none" } : style}
+    className={canonicalStudioFieldClasses(className)}
     {...props}
   />
 ))
