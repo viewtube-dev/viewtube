@@ -224,3 +224,25 @@ The remaining branch refs were compared with `master/consolidated-feature-integr
 - The `visual-test/canonical-default-system-65-66` ref still needs an individual compare and provenance review. Its reference-only role means it is protected even if it has no unique commits.
 - No branches were deleted, and no donor branch was merged wholesale during this pass.
 - The next actionable review is content-level comparison of the highest-risk donor groups: metadata package persistence, Publisher Write/Create, action/legend primitives, component-library/catalog, split-left defaults, toolbox collapse motion, status badges, and the system-convergence audit. For each, check whether the target already contains the intended behavior, tests, and docs before proposing a port.
+
+
+## Content-level spot checks — 2026-10-13
+
+These spot checks were performed after the ancestry sweep to distinguish commit ancestry from actual file state.
+
+### Confirmed already-present / newer target content
+
+- **Resource library:** `src/features/resource-library/resourceLibraryRegistry.ts` has the same blob SHA on the integration target, the dedicated 15-guide branch, and `main` (`805011e8d81329937c340bc55068f9116e693254`). The guide `comments-community-and-audience-feedback-playbook.md` is also identical between target and main (`7b5cf0c73cbd79f54499e3693158d932a4f43569`). This is strong evidence that the resource-library registry/guide work is already represented; do not re-merge the donor branch wholesale. The other resource documentation differences between target and main still need per-file review.
+- **Publisher package persistence:** target versions of `publisherMetadataProjectPersistence.ts` and `publisherMetadataPackageOptions.ts` differ from the dedicated donor branch and include later handling for intentionally blank metadata assets and nullable audience values. The donor must not overwrite the newer target implementation. Compare associated tests before proposing any port.
+- **Canonical metadata/actions:** `CanonicalMetadataSections.tsx` and `ProjectManifestation.tsx` differ materially between target and `feat/canonical-action-and-legend-primitives`. The target has newer metadata props and selected-project resolution behavior; the old donor must not replace target files wholesale.
+- **Target vs main CSS:** `src/styles/subtoolbox-system.css` differs substantially. The target declares a 44px standard component control and canonical 1000-weight / -0.035em / 0.86-line-height button defaults; `main` retains 48px standard controls and older 14px/800-weight button/input defaults in the inspected rules. The target also contains canonical split/dropdown and definitive-catalog rules not present at the same locations in main. Do not merge `main` CSS wholesale into the integration target; only review isolated additions against current target tokens and tests.
+- **Status badge donor:** the donor branch uses a 14px dense badge with a 1px border, while the target's outlined dense badge uses an 18px height and 2px border. Preserve target styling unless a newer approved design contract explicitly supersedes it.
+- **System-convergence audit docs:** the full UI audit and shared-upload/palette audit already exist on the target, but the donor audit has supplemental sections documenting the right-side overlay-label fix and upload/header/palette work. These sections should be reconciled into the target's durable audit docs with their original unverified/verified status preserved, not copied as claims of current runtime certification.
+
+### Immediate donor decisions
+
+- Resource library branch: registry and sampled guide already represented; finish review of README/handoff and all changed guide bodies, then mark the branch content as represented if they match.
+- Publisher persistence branch: retain target code; run focused round-trip/saved-set tests before declaring the behavior verified.
+- Action/legend branch: retain target code; use donor only as historical source for requirements/tests.
+- `main`: selectively review useful documentation and isolated behavior; no wholesale merge due to branch divergence and incompatible CSS defaults.
+- Status-badge donor: do not port its stale dimensions over target.
