@@ -16,7 +16,7 @@ function makeCta(id: string, name: string, headline: string, body: string, butto
     responsive: true,
     customizable: true,
     style: {
-      colors: {primary: color, background: color, foreground: VIEWTUBE_INK, border: VIEWTUBE_INK, shadow: VIEWTUBE_INK},
+      colors: {primary: color, secondary: color, accent: color, background: color, foreground: VIEWTUBE_INK, border: VIEWTUBE_INK, shadow: VIEWTUBE_INK},
     },
     entrance: {preset: 'spring', durationFrames: 20, easing: 'back.out(1.7)'},
     emphasis: {preset: 'pop', startFrame: 42, durationFrames: 12},
