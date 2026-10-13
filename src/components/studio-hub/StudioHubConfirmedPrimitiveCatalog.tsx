@@ -5,6 +5,8 @@ import "./studio-hub-confirmed-primitive-catalog.css"
 
 type Size = "44px" | "28px"
 
+const sizeClass = (size: Size) => size === "44px" ? "is-large" : "is-compact"
+
 const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens: string; imports: string[] }> = ({ primitive, tsx, css, tokens, imports }) => (
   <div className="vt-confirmed-provenance">
     <div><strong>{primitive}</strong></div>
