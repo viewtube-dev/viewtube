@@ -80,6 +80,14 @@ button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
   -webkit-text-stroke: inherit;
 }
 
+
+button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"],
+button.vt-subtoolbox-split-button.is-selected,
+button.vt-subtoolbox-split-button[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px #000, 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--vt-split-rail, var(--pair-b, #ff7f6b))) 65%, transparent);
+}
+
 @media (max-width: 520px) and (orientation: portrait) {
   button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
   button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
