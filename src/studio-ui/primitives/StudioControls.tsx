@@ -151,3 +151,35 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
   ),
 )
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
+
+
+export interface StudioLabeledDropdownOption {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
+export interface StudioLabeledDropdownProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "size"> {
+  label: React.ReactNode
+  options: StudioLabeledDropdownOption[]
+  sizeVariant?: "compact" | "standard"
+  level?: "l0" | "l1" | "l2"
+}
+
+/** Canonical labeled dropdown. The select remains controlled by its caller and inherits the active module's pair A/B. */
+export const StudioLabeledDropdown = React.forwardRef<HTMLSelectElement, StudioLabeledDropdownProps>(
+  ({ label, options, sizeVariant = "standard", level = "l1", className, ...props }, ref) => (
+    <label
+      data-vt-primitive-id="139"
+      data-vt-studio-field="labeled-dropdown"
+      data-vt-control-level={level}
+      className={["vt-studio-labeled-dropdown", `is-${sizeVariant}`, className].filter(Boolean).join(" ")}
+    >
+      <span className="vt-studio-labeled-dropdown-label">{label}</span>
+      <StudioSelect ref={ref} sizeVariant={sizeVariant} {...props}>
+        {options.map(option => <option key={option.value} value={option.value} disabled={option.disabled}>{option.label}</option>)}
+      </StudioSelect>
+    </label>
+  ),
+)
+StudioLabeledDropdown.displayName = "StudioLabeledDropdown"
