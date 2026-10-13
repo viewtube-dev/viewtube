@@ -905,3 +905,62 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
   outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 3px;
 }
+
+/* Legend Multi final size/type authority. Retires earlier 22px compact and
+   36px standard overrides so trigger, rows, and clear action share one scale. */
+.vt-studio-legend-multi {
+  width: 100%;
+  min-width: 0;
+  --vt-legend-height: var(--vt-studio-44-height, 44px);
+  --vt-legend-stroke: var(--vt-studio-44-stroke, 3px);
+}
+.vt-studio-legend-multi[data-size="compact"] {
+  --vt-legend-height: var(--vt-studio-28-height, 28px);
+  --vt-legend-stroke: var(--vt-studio-28-stroke, 2px);
+}
+.vt-studio-legend-multi .vt-studio-legend-trigger {
+  width: 100%;
+  min-height: var(--vt-legend-height);
+  height: var(--vt-legend-height);
+  border-width: var(--vt-legend-stroke);
+  font-size: var(--vt-studio-44-font-size, 32px) !important;
+  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
+  line-height: .86;
+  letter-spacing: -.035em;
+  box-shadow: none;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger {
+  font-size: var(--vt-studio-28-font-size, 14px) !important;
+  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
+  line-height: .9;
+  letter-spacing: -.02em;
+  border-radius: 5px;
+}
+.vt-studio-legend-multi .vt-studio-legend-option {
+  min-height: var(--vt-legend-height);
+  border-width: var(--vt-legend-stroke);
+  font-size: var(--vt-studio-44-font-size, 32px) !important;
+  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
+  line-height: .86;
+  letter-spacing: -.035em;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option {
+  font-size: var(--vt-studio-28-font-size, 14px) !important;
+  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
+  line-height: .9;
+  letter-spacing: -.02em;
+}
+.vt-studio-legend-multi .vt-studio-legend-clear {
+  min-height: var(--vt-legend-height);
+  border-width: var(--vt-legend-stroke);
+  font-size: var(--vt-studio-44-font-size, 32px) !important;
+  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
+  line-height: .86;
+  letter-spacing: -.035em;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
+  font-size: var(--vt-studio-28-font-size, 14px) !important;
+  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
+  line-height: .9;
+  letter-spacing: -.02em;
+}
