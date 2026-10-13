@@ -70,22 +70,19 @@ button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
   padding: 0 10px;
   overflow: hidden;
   color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 20px;
-  font-weight: 1000;
-  line-height: .9;
-  letter-spacing: -.035em;
+  /* Typography comes from StudioButton; the label must not define a second type scale. */
+  font: inherit;
+  letter-spacing: inherit;
   text-align: left;
   text-transform: uppercase;
   text-overflow: ellipsis;
   white-space: nowrap;
-  -webkit-text-stroke: .5px currentColor;
+  -webkit-text-stroke: inherit;
 }
 
 @media (max-width: 520px) and (orientation: portrait) {
   button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
   button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
     padding-inline: 7px;
-    font-size: 16px;
   }
 }
