@@ -4,6 +4,7 @@ import { SubToolbox } from "../components/Toolbox"
 import { SubToolboxSection, SubToolboxStack, SubToolboxGrid } from "../components/subtoolbox/SubToolboxLayouts"
 import { SubToolboxFieldLabel, SubToolboxSurface } from "../components/subtoolbox/SubToolboxPrimitives"
 import { StudioDropdown } from "./primitives/StudioDropdown"
+import { SplitLeftButton } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 import {
   StudioButton,
   StudioIconButton,
