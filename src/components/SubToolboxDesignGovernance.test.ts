@@ -519,4 +519,17 @@ describe("subtoolbox design governance", () => {
   expect(studioCss).toContain("letter-spacing: -.035em")
  })
 
+
+ it("uses the canonical inverse-color split-left toggle for community post types", () => {
+  const community = source("src/components/CommunityPostGenerator.tsx")
+  const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+
+  expect(community).toContain("SplitLeftButton")
+  expect(community).not.toContain("StudioSplitLeftButton")
+  expect(splitCss).toContain('.vt-subtoolbox-split-button[aria-pressed="true"] .vt-subtoolbox-split-button-rail')
+  expect(splitCss).toContain("background: var(--vt-split-label)")
+  expect(splitCss).toContain("height: var(--vt-subtoolbox-control-standard, 44px)")
+  expect(splitCss).toContain("font-size: 32px")
+ })
+
 })
