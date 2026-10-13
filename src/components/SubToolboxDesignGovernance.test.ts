@@ -378,6 +378,8 @@ describe("subtoolbox design governance", () => {
   const palette = source("src/styles/toolboxPalette.ts")
   const toolboxSource = source("src/components/Toolbox.tsx")
   const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+  const videoDirector = source("src/views/VideoDirector.tsx")
+  const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
   expect(palette).toContain("export const VT_SPECTRUM_PALETTE_06 = [")
   expect(palette).toContain("header: getPaletteColor(index)")
@@ -526,6 +528,8 @@ describe("subtoolbox design governance", () => {
 
   expect(community).toContain("SplitLeftButton")
   expect(community).not.toContain("StudioSplitLeftButton")
+  expect(videoDirector).not.toContain("StudioSplitLeftButton")
+  expect(certification).not.toContain("StudioSplitLeftButton")
   expect(splitCss).toContain('.vt-subtoolbox-split-button[aria-pressed="true"] .vt-subtoolbox-split-button-rail')
   expect(splitCss).toContain("background: var(--vt-split-label)")
   expect(splitCss).toContain("height: var(--vt-subtoolbox-control-standard, 44px)")
