@@ -701,7 +701,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
       {open && menuRect ? createPortal(
         <div
           ref={panelRef}
-          className="vt-subtoolbox-top-title-dropdown-panel"
+          className={classes("vt-subtoolbox-top-title-dropdown-panel", isLegendMultiDropdown && "vt-legend-multi-dropdown-panel")}
           role="menu"
           aria-label={ariaLabel}
           data-vt-control-level={level}
