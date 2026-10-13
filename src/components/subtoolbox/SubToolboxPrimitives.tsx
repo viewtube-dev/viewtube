@@ -5,6 +5,7 @@ import "../../styles/toolbox-entry.css"
 import { getComponentLevelCssVars } from "./tokens"
 import type { SubToolboxControlSize, SubToolboxState, ToolboxControlLevel } from "./tokens"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
+import { StudioInput as CanonicalStudioInput, StudioTextArea as CanonicalStudioTextArea, StudioFloatingLabelInput as CanonicalStudioFloatingLabelInput, StudioFloatingLabelTextArea as CanonicalStudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
 
 type PrimitiveTone = "accent" | "neutral" | "ink" | "danger" | "warning" | "success"
 type SplitActionVariant = "head" | "tail"
@@ -25,19 +26,43 @@ export interface SubToolboxInputProps extends React.InputHTMLAttributes<HTMLInpu
   level?: ToolboxControlLevel
   variant?: "default" | "right-label" | "floating-label"
 }
-/** Primitive 20: canonical plain text input. Floating labels must be composed by primitive 137. */
-export const SubToolboxInput20 = React.forwardRef<HTMLInputElement, SubToolboxInputProps>(({ className, controlSize = "standard", level, variant = "default", style, ...props }, ref) => <input ref={ref} data-vt-primitive-id="20" data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", `is-${controlSize}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
+/** Compatibility API for primitive 20; rendering and visual ownership live in Studio Controls. */
+export const SubToolboxInput20 = React.forwardRef<HTMLInputElement, SubToolboxInputProps>(({ className, controlSize = "standard", level, variant = "default", style, ...props }, ref) => (
+  <CanonicalStudioInput
+    ref={ref}
+    sizeVariant={controlSize === "standard" ? "standard" : "compact"}
+    data-size={controlSize === "micro" ? "micro" : controlSize === "compact" ? "compact" : "standard"}
+    data-vt-primitive-id="20"
+    data-vt-control-level={level}
+    data-vt-input-variant={variant}
+    style={withComponentLevelStyle(level, style)}
+    className={classes(level && "has-component-level", className)}
+    {...props}
+  />
+))
 SubToolboxInput20.displayName = "SubToolboxInput20"
 
-/** Compatibility name; production fields continue to resolve to primitive 20. */
+/** Backwards-compatible name; implementation and styling are owned by Studio Controls. */
 export const SubToolboxInput = SubToolboxInput20
 SubToolboxInput.displayName = "SubToolboxInput"
 
-/** Primitive 21: canonical plain textarea. Floating labels must be composed by primitive 138. */
-export const SubToolboxTextArea21 = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { height?: "compact" | "standard" | "fill"; level?: ToolboxControlLevel; variant?: "default" | "right-label" | "floating-label" }>(({ className, height = "standard", level, variant = "default", style, ...props }, ref) => <textarea ref={ref} data-vt-primitive-id="21" data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", "vt-subtoolbox-textarea", `is-${height}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
+/** Compatibility API for primitive 21; textarea styling is owned by Studio Controls. */
+export const SubToolboxTextArea21 = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { height?: "compact" | "standard" | "fill"; level?: ToolboxControlLevel; variant?: "default" | "right-label" | "floating-label" }>(({ className, height = "standard", level, variant = "default", style, ...props }, ref) => (
+  <CanonicalStudioTextArea
+    ref={ref}
+    sizeVariant={height === "compact" ? "compact" : "standard"}
+    data-size={height === "compact" ? "compact" : "standard"}
+    data-vt-primitive-id="21"
+    data-vt-control-level={level}
+    data-vt-input-variant={variant}
+    style={withComponentLevelStyle(level, height === "fill" ? { ...style, minHeight: "100%", resize: "none" } : style)}
+    className={classes(level && "has-component-level", className)}
+    {...props}
+  />
+))
 SubToolboxTextArea21.displayName = "SubToolboxTextArea21"
 
-/** Compatibility name; production text areas continue to resolve to primitive 21. */
+/** Backwards-compatible name; implementation and styling are owned by Studio Controls. */
 export const SubToolboxTextArea = SubToolboxTextArea21
 SubToolboxTextArea.displayName = "SubToolboxTextArea"
 
@@ -45,12 +70,19 @@ export interface SubToolboxLabeledInputProps extends SubToolboxInputProps {
   overlayLabel: React.ReactNode
   variant?: "default" | "right-label" | "floating-label"
 }
-/** Primitive 137: primitive 20 plus the canonical floating-label overlay. */
-export const SubToolboxLabeledInput = React.forwardRef<HTMLInputElement, SubToolboxLabeledInputProps>(({ overlayLabel, className, level = "l1", variant = "floating-label", style, ...props }, ref) => (
-  <label data-vt-primitive-id="137" className={classes("vt-subtoolbox-labeled-field", `is-${variant === "right-label" ? "floating-label" : variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
-    <SubToolboxInput20 ref={ref} level={level} variant={variant} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
-    <span className="vt-subtoolbox-labeled-field-overlay">{overlayLabel}</span>
-  </label>
+/** Compatibility API for primitive 137; floating-label geometry lives in Studio Controls. */
+export const SubToolboxLabeledInput = React.forwardRef<HTMLInputElement, SubToolboxLabeledInputProps>(({ overlayLabel, className, level = "l1", variant = "floating-label", style, controlSize = "standard", ...props }, ref) => (
+  <CanonicalStudioFloatingLabelInput
+    ref={ref}
+    data-vt-primitive-id="137"
+    level={level}
+    sizeVariant={controlSize === "standard" ? "standard" : "compact"}
+    overlayLabel={overlayLabel}
+    data-vt-input-variant={variant}
+    style={withComponentLevelStyle(level, style)}
+    className={className}
+    {...props}
+  />
 ))
 SubToolboxLabeledInput.displayName = "SubToolboxLabeledInput"
 
@@ -60,12 +92,19 @@ export interface SubToolboxLabeledTextAreaProps extends React.TextareaHTMLAttrib
   level?: ToolboxControlLevel
   variant?: "default" | "right-label" | "floating-label"
 }
-/** Primitive 138: primitive 21 plus the canonical floating-label overlay. */
+/** Compatibility API for primitive 138; floating-label geometry lives in Studio Controls. */
 export const SubToolboxLabeledTextArea = React.forwardRef<HTMLTextAreaElement, SubToolboxLabeledTextAreaProps>(({ overlayLabel, className, height = "standard", level = "l1", variant = "floating-label", style, ...props }, ref) => (
-  <label data-vt-primitive-id="138" className={classes("vt-subtoolbox-labeled-field", "is-textarea", `is-${variant === "right-label" ? "floating-label" : variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
-    <SubToolboxTextArea21 ref={ref} level={level} variant={variant} height={height} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
-    <span className="vt-subtoolbox-labeled-field-overlay">{overlayLabel}</span>
-  </label>
+  <CanonicalStudioFloatingLabelTextArea
+    ref={ref}
+    data-vt-primitive-id="138"
+    level={level}
+    sizeVariant={height === "compact" ? "compact" : "standard"}
+    overlayLabel={overlayLabel}
+    data-vt-input-variant={variant}
+    style={withComponentLevelStyle(level, height === "fill" ? { ...style, minHeight: "100%", resize: "none" } : style)}
+    className={className}
+    {...props}
+  />
 ))
 SubToolboxLabeledTextArea.displayName = "SubToolboxLabeledTextArea"
 
