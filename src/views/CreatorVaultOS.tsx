@@ -2808,7 +2808,7 @@ const CreatorVaultOS: React.FC = () => {
         ref={inspectorRef}
         tabIndex={-1}
         data-vault-mobile-sheet="inspector"
-        className={`${mobileInspectorOpen ? "fixed inset-x-2 bottom-16 z-30 max-h-[65vh] overflow-y-auto" : "hidden"} xl:static xl:block xl:max-h-none xl:overflow-visible`}
+        className={`${mobileInspectorOpen ? "fixed inset-x-2 bottom-16 z-30 max-h-[65vh] overflow-y-auto" : "block"} xl:static xl:block xl:max-h-none xl:overflow-visible`}
        >
        <SubToolbox
        style={moduleStyle("inspector" as VaultWorkspaceModuleId)}
