@@ -3852,7 +3852,7 @@
 .vt-subtoolbox-input.is-simple-text{
   box-sizing:border-box;width:100%;height:var(--vt-component-height,44px);min-height:var(--vt-component-height,44px);
   padding:0 12px;border:var(--vt-component-stroke,3px) solid var(--pair-a,#36e0f6);border-radius:var(--vt-component-radius,8px);
-  background:transparent;color:var(--pair-a,#36e0f6);-webkit-text-stroke:1px var(--pair-a,#36e0f6);
+  background:color-mix(in srgb,var(--pair-a,#36e0f6) 10%,transparent);color:var(--pair-a,#36e0f6);-webkit-text-stroke:1px var(--pair-a,#36e0f6);cursor:text;
   font-family:var(--vt-studio-toolbox-font,var(--font-sans,Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif));
   font-size:var(--vt-component-font-size,32px);font-weight:1000;line-height:.86;letter-spacing:-.035em;text-transform:uppercase;
   outline:0;box-shadow:none;caret-color:var(--pair-a,#36e0f6);caret-shape:block;
