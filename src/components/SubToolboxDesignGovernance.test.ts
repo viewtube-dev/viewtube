@@ -578,6 +578,8 @@ describe("subtoolbox design governance", () => {
   const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
 
   expect(primitives).toContain("export const LegendMultiDropdown")
+  expect(primitives).toContain("onClear?: () => void")
+  expect(primitives).toContain("vt-legend-multi-dropdown-clear")
   expect(primitives).toContain("vt-legend-multi-dropdown")
   expect(catalog).toContain('"Legend Multi Dropdown"')
   expect(catalog).toContain("<LegendMultiDropdown")
