@@ -6,6 +6,12 @@ import "../../styles/studio-control-system.css"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
+/** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
+export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
+  standard: { height: 44, stroke: 3, fontSize: 32, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3 },
+  compact: { height: 28, stroke: 2, fontSize: 14, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5 },
+} as const
+
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
   "data-vt-studio-control": "true",
   "data-size": size,
@@ -151,38 +157,6 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
   ),
 )
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
-
-
-export interface StudioLabeledDropdownOption {
-  value: string
-  label: string
-  disabled?: boolean
-}
-
-export interface StudioLabeledDropdownProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "size"> {
-  label: React.ReactNode
-  options: StudioLabeledDropdownOption[]
-  sizeVariant?: "compact" | "standard"
-  level?: "l0" | "l1" | "l2"
-}
-
-/** Canonical labeled dropdown. The select remains controlled by its caller and inherits the active module's pair A/B. */
-export const StudioLabeledDropdown = React.forwardRef<HTMLSelectElement, StudioLabeledDropdownProps>(
-  ({ label, options, sizeVariant = "standard", level = "l1", className, ...props }, ref) => (
-    <label
-      data-vt-primitive-id="139"
-      data-vt-studio-field="labeled-dropdown"
-      data-vt-control-level={level}
-      className={["vt-studio-labeled-dropdown", `is-${sizeVariant}`, className].filter(Boolean).join(" ")}
-    >
-      <span className="vt-studio-labeled-dropdown-label">{label}</span>
-      <StudioSelect ref={ref} sizeVariant={sizeVariant} {...props}>
-        {options.map(option => <option key={option.value} value={option.value} disabled={option.disabled}>{option.label}</option>)}
-      </StudioSelect>
-    </label>
-  ),
-)
-StudioLabeledDropdown.displayName = "StudioLabeledDropdown"
 
 
 export interface StudioLegendMultiDropdownProps {
