@@ -53,3 +53,8 @@ export const runBrainTask = async (
   runtime: buildBrainRuntimeMetadata(input),
  }
 }
+
+
+// Specialist structured-output tasks share the public BrainRuntime entry module.
+export { runBrainJsonTask } from "./BrainJsonTask"
+export type { BrainJsonTaskRequest, BrainJsonTaskResult } from "./BrainJsonTask"
