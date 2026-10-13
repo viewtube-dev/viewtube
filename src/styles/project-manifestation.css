@@ -29,3 +29,61 @@
   padding-inline: clamp(2px, .8vw, 8px) !important;
 }
 .vt-project-manifestation-project-dropdown { width: 100%; min-width: 0; }
+
+
+/* Project Load / Swap / Refresh: compact 28px controls with a non-overlapping
+   three-column grid at phone and desktop widths. */
+.vt-project-manifestation-actions {
+  display: grid !important;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch;
+  gap: 6px !important;
+}
+.vt-project-manifestation-actions > .vt-subtoolbox-split-button,
+.vt-project-manifestation-actions > button,
+.vt-project-manifestation-actions .vt-subtoolbox-split-button {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  grid-template-columns: 24px minmax(0, 1fr) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+.vt-project-manifestation-actions .vt-subtoolbox-split-button-rail {
+  width: 24px;
+  min-width: 24px;
+  height: 100%;
+}
+.vt-project-manifestation-actions .vt-subtoolbox-split-button-label {
+  min-width: 0;
+  padding: 0 2px !important;
+  font-size: clamp(9px, 2.5vw, 11px) !important;
+  line-height: .9 !important;
+  letter-spacing: -.045em !important;
+  white-space: nowrap;
+  text-align: center;
+}
+.vt-project-manifestation-actions .vt-subtoolbox-split-button svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+@media (max-width: 360px) {
+  .vt-project-manifestation-actions { gap: 4px !important; }
+  .vt-project-manifestation-actions .vt-subtoolbox-split-button {
+    grid-template-columns: 20px minmax(0, 1fr) !important;
+  }
+  .vt-project-manifestation-actions .vt-subtoolbox-split-button-rail {
+    width: 20px;
+    min-width: 20px;
+  }
+  .vt-project-manifestation-actions .vt-subtoolbox-split-button-label {
+    font-size: 9px !important;
+    letter-spacing: -.055em !important;
+  }
+}
