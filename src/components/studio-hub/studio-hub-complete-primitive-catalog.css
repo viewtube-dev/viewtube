@@ -1735,3 +1735,26 @@
 .vt-complete-catalog .vt-catalog-menu .menu-label>b{align-self:stretch!important;display:flex!important;align-items:center!important;padding:0!important;margin:0!important;line-height:1!important;letter-spacing:-.055em!important}
 .vt-complete-catalog .vt-catalog-menu .menu-label>svg{width:18px!important;height:18px!important;flex:0 0 18px!important;aspect-ratio:1/1;stroke-width:3.5!important}
 
+/* New canonical control families use one horizontal row of specimens. */
+.vt-complete-catalog [data-vt-family="44px Switches"],
+.vt-complete-catalog [data-vt-family="44px Radio + Checkbox"],
+.vt-complete-catalog [data-vt-family="Word Toggles"]{grid-column:1/-1!important}
+.vt-complete-catalog .vt-catalog-canonical-controls{display:flex;align-items:flex-start;gap:12px;flex-wrap:nowrap;overflow-x:auto;padding:4px 0 6px}
+.vt-complete-catalog .vt-catalog-control-variant{display:flex;flex:1 0 max-content;min-width:0;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px}
+.vt-complete-catalog .vt-catalog-control-variant>small,
+.vt-complete-catalog .vt-catalog-word-toggle-size>small{display:block;font-size:8px!important;line-height:1.1;font-weight:900;letter-spacing:.025em;text-align:center;text-transform:uppercase;white-space:nowrap}
+.vt-complete-catalog .vt-catalog-canonical-controls .vt-subtoolbox-44-switch,
+.vt-complete-catalog .vt-catalog-canonical-controls .vt-subtoolbox-44-choice{flex:none}
+.vt-complete-catalog .vt-catalog-word-toggle-families{display:grid;gap:10px}
+.vt-complete-catalog .vt-catalog-word-toggle-size{display:grid;gap:3px;min-width:0}
+.vt-complete-catalog .vt-catalog-word-toggle-size .vt-catalog-canonical-controls{justify-content:space-between}
+.vt-complete-catalog .vt-catalog-word-toggle-size .vt-catalog-control-variant{flex:1 0 max-content}
+.vt-complete-catalog .vt-catalog-word-toggle-size .vt-subtoolbox-44-word-toggle{max-width:100%}
+.vt-complete-catalog .vt-catalog-family:has(.vt-catalog-size-defaults){padding:5px 7px}
+.vt-complete-catalog .vt-catalog-family:has(.vt-catalog-size-defaults)>h3{font-size:11px!important;line-height:1.05!important;margin:0 0 4px}
+.vt-complete-catalog .vt-catalog-family:has(.vt-catalog-size-defaults) .vt-catalog-levels{margin-top:0;gap:4px}
+@media(max-width:520px){
+ .vt-complete-catalog .vt-catalog-canonical-controls{gap:10px}
+ .vt-complete-catalog .vt-catalog-control-variant{flex:0 0 max-content}
+}
+
