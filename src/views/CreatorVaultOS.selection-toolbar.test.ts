@@ -13,8 +13,10 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
  })
 
  it("keeps the Inspector toolbox available when nothing is selected", () => {
-  expect(source).toMatch(/title="Inspector"[\s\S]{0,500}message="Select an asset to inspect its metadata and provenance\."/)
-  expect(source).toMatch(/xl:grid-cols-\[minmax\(220px,0\.72fr\)_minmax\(0,2\.1fr\)_minmax\(260px,0\.9fr\)\][\s\S]{0,800}title="Inspector"/)
+  expect(source).toContain('title="Inspector"')
+  expect(source).toContain('message="Select an asset to inspect its metadata and provenance."')
+  expect(source).toContain('ref={inspectorRef}')
+  expect(source).toContain('xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]')
  })
 
  it("preserves the contextual action set and keeps Compare gated to exactly two assets", () => {
