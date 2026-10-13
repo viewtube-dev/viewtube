@@ -3,7 +3,7 @@ import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { createRoot } from "react-dom/client"
 import { act } from "react"
-globalThis.IS_REACT_ACT_ENVIRONMENT = true
+;(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
 import { describe, expect, it } from "vitest"
 import { Settings } from "lucide-react"
 import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
