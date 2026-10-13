@@ -174,3 +174,24 @@ The current branch source inspected after the implementation commits already con
 - [ ] Browser behavior and deployed artifact verified.
 - [ ] Load vs. Swap In semantics confirmed with acceptance tests.
 - [ ] Full Project → ContentBuild → assets → package → publication → analytics workflow verified.
+
+
+## 10. Execution log — 2026-10-13
+
+### Completed on the feature branch
+- Added a regression contract to `src/components/metadata/videoManagerMetadataLayout.test.ts` requiring Video Manager guidance to describe published-video management and rejecting the old upload/script/concept-creation copy.
+- Updated `src/views/VideoManager.tsx` so the heading describes managing published YouTube videos and the helper rail tells the creator to select a published video to review or update metadata.
+- Source refresh also shows `ProjectManifestation` now imports `useEffect`, `useRef`, and `resolveSelectedProjectId` and synchronizes its selected project when the parent active-project identity changes. The helper test file covers active-project selection, manual selection preservation, and fallback when a selected project disappears. This is recorded as source evidence, not as a test result from this session.
+
+Relevant commits authored in this execution:
+- Test: `d9ca637398dbd7986e6a764e5ead843c442eb0b7` — [published-video boundary regression test](https://github.com/viewtube-dev/viewtube/commit/d9ca637398dbd7986e6a764e5ead843c442eb0b7)
+- Fix: `2437c21e553edc620d2e8cdd90d8b0da8d2b8711` — [Video Manager help copy alignment](https://github.com/viewtube-dev/viewtube/commit/2437c21e553edc620d2e8cdd90d8b0da8d2b8711)
+
+### Verification state
+- GitHub source readback confirms the updated help copy and the new regression test are present.
+- GitHub commit statuses for the inspected commit report three Vercel checks as **failure**, all linking to the Vercel build-rate-limit page. These are deployment-provider failures, not evidence that application tests passed or failed.
+- The GitHub Actions workflow-run lookup returned no associated runs for the inspected audit commit.
+- No local checkout or executable test runner is available in this session, so Vitest, typecheck, lint, architecture checks, and production build remain **not run**. Do not mark the branch green until those commands run in a checkout or a CI environment and their actual results are captured.
+
+### Next small, safe step
+Use an executable checkout/CI runner to run the focused Manager layout test and Project Manifestation test first. Then run typecheck and architecture/CSS checks before full tests and build. Only after that, investigate the still-ambiguous LOAD vs SWAP IN behavior and the durability requirements for local-first publish transaction storage.
