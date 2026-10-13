@@ -131,6 +131,48 @@ describe("Publisher metadata package options", () => {
     expect(videoPackage.packaging.thumbnailVariants.some(item => item.vaultAssetId === thumbnail.id)).toBe(true)
   })
 
+  it("restores the saved final-video reference into the existing Video Package", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const finalVideo = createVersionedAsset({
+      sourceToolId: "video-publisher",
+      sourceKind: "studio-tool",
+      payloadKind: "video",
+      name: "Final render",
+      summary: "Publisher final render round-trip",
+      kind: "video",
+      url: "https://example.test/final.mp4",
+      mimeType: "video/mp4",
+      slot: "final-render",
+      context: {
+        contentBuildId: project.contentBuildId,
+        projectId: project.id,
+        projectName: project.name,
+        stage: "production",
+      },
+    }).asset
+    const saved = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Final video option",
+      description: "The render reference must survive option selection",
+      tags: "render",
+      finalVideoAssetId: finalVideo.id,
+    }, {
+      mode: "option",
+      finalVideoAsset: {
+        id: finalVideo.id,
+        name: finalVideo.name,
+        url: finalVideo.url,
+        previewUrl: finalVideo.previewUrl,
+        mimeType: finalVideo.mimeType,
+      },
+    })
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, saved.packageOptionAssetId)
+    const build = getContentBuild(project.contentBuildId)!
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)!
+    expect(build.selections["final-render"]).toBe(finalVideo.id)
+    expect(videoPackage.production.renderIds).toContain(finalVideo.id)
+  })
+
   it("selects an alternative without creating a new Project or ContentBuild", () => {
     ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
     const current = savePublisherMetadataToProject(project, "channel-options", {
