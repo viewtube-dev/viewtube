@@ -159,9 +159,15 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
 
 
+export interface StudioLegendMultiDropdownOption {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
 export interface StudioLegendMultiDropdownProps {
   label: React.ReactNode
-  options: StudioLabeledDropdownOption[]
+  options: StudioLegendMultiDropdownOption[]
   value?: string[]
   defaultValue?: string[]
   onChange?: (values: string[]) => void
