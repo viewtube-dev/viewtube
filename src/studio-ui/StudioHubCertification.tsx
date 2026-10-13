@@ -4,12 +4,12 @@ import { SubToolbox } from "../components/Toolbox"
 import { SubToolboxSection, SubToolboxStack, SubToolboxGrid } from "../components/subtoolbox/SubToolboxLayouts"
 import { SubToolboxFieldLabel, SubToolboxSurface } from "../components/subtoolbox/SubToolboxPrimitives"
 import { StudioDropdown } from "./primitives/StudioDropdown"
-import { SplitLeftButton } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 import {
   StudioButton,
   StudioIconButton,
   StudioInput,
   StudioSearchInput,
+  StudioSplitLeftButton,
   StudioTextArea,
 } from "./primitives/StudioControls"
 import { STUDIO_PALETTE } from "./palette"
@@ -84,7 +84,7 @@ export const StudioHubCertification: React.FC = () => {
               <StudioIconButton label="Search" icon={<Search size={18} />} />
               <StudioIconButton label="Confirm" tone="success" icon={<Check size={18} />} />
             </div>
-            <SplitLeftButton level="l1" icon={<Sparkles size={22} />}>Generate</SplitLeftButton>
+            <StudioSplitLeftButton data-vt-control-level="l1" icon={<Sparkles size={22} />}>Generate</StudioSplitLeftButton>
             <SplitLeftButton level="l1" tone="success" icon={<Link2 size={22} />}>Connect Channel</SplitLeftButton>
           </SubToolboxGrid>
         </SubToolboxSection>
