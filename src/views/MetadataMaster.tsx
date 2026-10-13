@@ -38,6 +38,8 @@ import { resolveWorkspaceContentBuildToolContext } from "../services/asset-engin
 import {
   buildMetadataStrategyBrief,
   createMetadataMasterSet,
+  getMetadataCandidateStyles,
+  metadataStrategyForStyle,
   createEmptyMetadataMasterPackage,
   finalizeMetadataMasterPackage,
   listMetadataMasterPackages,
@@ -199,9 +201,12 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         videoId: publishedVideoId || workspaceContext?.build.youtube?.videoId || null,
       })
 
+      const candidateStyles = getMetadataCandidateStyles(style)
       const candidates = result.titleSets.slice(0, clampSets(setCount)).map((titleSet, index) => {
+        const candidateStyle = candidateStyles[index] ?? style
         const candidate = finalizeMetadataMasterPackage({
           ...generated,
+          style: candidateStyle,
           id: crypto.randomUUID(),
           version: index + 1,
           title: titleSet.title || generated.title,
@@ -211,9 +216,8 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           appliedSlots,
           provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master"],
         })
-        const strategy: MetadataMasterSet["strategy"] =
-          index === 0 ? "search" : index === 1 ? "curiosity" : index === 2 ? "authority" : "channel-fit"
-        return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, style)
+        const strategy = metadataStrategyForStyle(candidateStyle)
+        return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, candidateStyle)
       })
 
       const primary = candidates[0]?.package ?? generated
