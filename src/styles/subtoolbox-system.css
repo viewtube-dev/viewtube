@@ -3802,3 +3802,71 @@
   height: 5px;
   flex: 0 0 5px;
 }
+
+
+/* Floating-label refinement: compact labels, visible above field/module edges,
+   and right-aligned overlay text so empty-field guidance never obscures entry. */
+.vt-subtoolbox-labeled-field {
+  position: relative;
+  z-index: 4;
+  overflow: visible !important;
+  isolation: isolate;
+}
+.vt-subtoolbox-labeled-field > .vt-subtoolbox-labeled-control {
+  position: relative;
+  z-index: 1;
+}
+.vt-subtoolbox-labeled-field-overlay {
+  z-index: 6 !important;
+  left: auto !important;
+  right: 12px !important;
+  max-width: calc(100% - 24px) !important;
+  text-align: right !important;
+  transform-origin: right center !important;
+  font-size: calc(var(--vt-component-font-size, 18px) * .9) !important;
+  line-height: .9 !important;
+}
+.vt-subtoolbox-labeled-field.is-textarea .vt-subtoolbox-labeled-field-overlay {
+  left: auto !important;
+  right: 12px !important;
+  top: 12px !important;
+  text-align: right !important;
+  transform-origin: right top !important;
+}
+.vt-subtoolbox-labeled-field.is-floating-label:focus-within .vt-subtoolbox-labeled-field-overlay,
+.vt-subtoolbox-labeled-field.is-floating-label > .vt-subtoolbox-labeled-control:not(:placeholder-shown) + .vt-subtoolbox-labeled-field-overlay {
+  top: 0 !important;
+  right: 10px !important;
+  left: auto !important;
+  transform: translateY(-65%) scale(.63) !important;
+  transform-origin: right center !important;
+  z-index: 8 !important;
+  padding: 2px 7px !important;
+  max-width: calc(100% - 20px) !important;
+}
+.vt-subtoolbox-labeled-field.is-textarea.is-floating-label:focus-within .vt-subtoolbox-labeled-field-overlay,
+.vt-subtoolbox-labeled-field.is-textarea.is-floating-label > .vt-subtoolbox-labeled-control:not(:placeholder-shown) + .vt-subtoolbox-labeled-field-overlay {
+  top: 0 !important;
+  right: 10px !important;
+  transform: translateY(-65%) scale(.63) !important;
+  transform-origin: right top !important;
+}
+/* Allow labels to cross section and module tops without being cropped. */
+.vt-subtoolbox-section,
+.vt-subtoolbox-stack,
+.vt-subtoolbox-content,
+[data-vt-toolbox] [data-vt-toolbox-level="sub"] {
+  overflow: visible;
+}
+@media (max-width: 767px) {
+  .vt-subtoolbox-labeled-field-overlay {
+    right: 10px !important;
+    max-width: calc(100% - 20px) !important;
+  }
+  .vt-subtoolbox-labeled-field.is-floating-label:focus-within .vt-subtoolbox-labeled-field-overlay,
+  .vt-subtoolbox-labeled-field.is-floating-label > .vt-subtoolbox-labeled-control:not(:placeholder-shown) + .vt-subtoolbox-labeled-field-overlay,
+  .vt-subtoolbox-labeled-field.is-textarea.is-floating-label:focus-within .vt-subtoolbox-labeled-field-overlay,
+  .vt-subtoolbox-labeled-field.is-textarea.is-floating-label > .vt-subtoolbox-labeled-control:not(:placeholder-shown) + .vt-subtoolbox-labeled-field-overlay {
+    transform: translateY(-65%) scale(.63) !important;
+  }
+}
