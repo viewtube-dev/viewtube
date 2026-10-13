@@ -106,3 +106,37 @@ Confirm these paths and run them in the target checkout; listing a test file her
 ## 8. Scope and limitations of this pass
 
 This is a source/document baseline, not a complete code audit. GitHub search excerpts and selected files were used to identify concrete implementation anchors. No local checkout was available to execute commands, inspect all files systematically, capture browser screenshots, verify secrets/environment configuration, or confirm the currently deployed Render/Vercel artifact. Those items remain open and must not be reported as complete.
+
+
+## 9. Concrete source-level follow-up candidates
+
+These items are grounded in the inspected source, but still need targeted tests or runtime confirmation before being called user-visible defects.
+
+### Candidate A — Project Manifestation can drift from the active project
+- Source: `src/components/projects/ProjectManifestation.tsx`.
+- The selected project state is initialized from `activeProjectId` only when the component mounts: `useState(activeProjectId || projects[0]?.id || "")`.
+- No synchronization effect was present in the inspected component range. If the parent changes `activeProjectId` after mount, the selector may continue showing the previously selected project.
+- **Next:** add a focused component/state regression test for active-project changes; decide whether user-selected project state should follow external active-project changes or only do so on explicit load/swap. Then fix only after the intended contract is explicit.
+
+### Candidate B — LOAD and SWAP IN currently share the same handler
+- Source: `src/components/projects/ProjectManifestation.tsx`.
+- The top-row `LOAD` and `SWAP IN` split-left buttons both invoke `loadSelected`; asset-slot `SWAP` actions separately update ContentBuild selection.
+- This may be intentional naming overlap, but the UI implies distinct actions. Verify the intended meaning of “swap in” and ensure it does not suggest an operation different from the one actually performed.
+- **Next:** define acceptance behavior and test each action; do not invent a second persistence path if both controls are intentionally aliases.
+
+### Candidate C — publish snapshot/transaction persistence is browser-local
+- Sources: `src/services/asset-engine/ApprovedPublishSnapshot.ts` and `src/services/asset-engine/PublishTransaction.ts`.
+- Both repositories use browser `localStorage` when available, in-memory fallback otherwise, and their write helpers catch storage errors without surfacing a durable-write failure.
+- This can be acceptable for a local-first prototype, but it does not by itself establish server-authoritative, cross-device, or crash-safe publishing state.
+- **Next:** inspect the deployed product's persistence/security model and recovery requirements. If server durability is required, plan a compatible repository adapter/migration and failure tests rather than assuming the current browser store is durable.
+
+### Candidate D — Video Manager's helper copy describes upload as the starting action
+- Source: `src/views/VideoManager.tsx`, `subtitleBase` / `subtitleHelpRail`.
+- The helper text says users need to “upload the video” and offers progressive copy about uploading a script or creating from a concept. The inspected Manager view itself is built around loading the user's YouTube video catalog and editing published-video metadata.
+- This is at least a product-boundary/copy mismatch with the rule that Video Manager manages published videos and has no upload workflow. The inspected range does not establish that an upload control is rendered.
+- **Next:** replace misleading Manager help copy with published-video management guidance, while keeping unpublished creation/generation guidance in Video Publisher's separate Create/Write experiences. Add a regression check that Manager does not render an upload action.
+
+### Candidate E — Current UI and lifecycle certification remains unproven
+- Source shows a shared Board/Calendar toggle backed by `useProjectsWorkspace()`, and the publisher imports the package projection, publish transaction, YouTube bridge, and project metadata persistence service.
+- These are positive integration anchors, not proof that reload/recovery, all metadata fields, remote publication, or analytics lineage work end to end.
+- **Next:** use one test project to exercise Board ↔ Calendar, Manager ↔ Publisher package continuity, reload/reopen, publish transaction recovery, and analytics binding; record observed results against the acceptance gates above.
