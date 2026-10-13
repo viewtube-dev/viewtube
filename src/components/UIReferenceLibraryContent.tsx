@@ -179,14 +179,15 @@ const ColorPaletteSelector = () => {
        EDIT
       </div>
      </div>
-     <input
+     <SubToolboxInput20
+      controlSize="compact"
       value={c}
       onChange={(e) => {
        const n = [...colors]
        n[i] = e.target.value
        setColors(n)
       }}
-      className="w-full bg-white border-[3px] border-black rounded-lg p-2 text-xs font-black text-center uppercase shadow-[2px_2px_0px_0px_black]"
+      className="w-full bg-white p-2 text-xs font-black text-center uppercase"
    />
   </div>
  ))}
