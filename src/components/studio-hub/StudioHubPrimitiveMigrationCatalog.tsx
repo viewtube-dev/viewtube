@@ -12,7 +12,6 @@ import {
   SubToolboxCommandPalette,
   SubToolboxBadge,
   PrimaryButton,
-  SubToolboxButton,
   SubToolboxButtonGroup,
   SubToolboxCheckControl,
   SubToolboxColorPicker,
@@ -104,7 +103,7 @@ import {
   ToolboxHeaderTitle,
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { SubToolboxKpiCard, SplitLeftButton, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { SubToolboxKpiCard, SplitLeftButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -439,7 +438,7 @@ const PrimitiveMigrationControl: React.FC<{
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
-    return <PrimaryButton level={level}>{name.replace(" Button", "")}</PrimaryButton>
+    return <PrimaryButton level={level} tone={name === "Destructive Button" ? "danger" : name === "Neutral Button" || name === "Secondary Button" ? "neutral" : "accent"}>{name.replace(" Button", "")}</PrimaryButton>
   }
   if (name === "Square Icon Button") {
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
@@ -481,7 +480,7 @@ const PrimitiveMigrationControl: React.FC<{
     )
   }
   if (name === "Split Left Button" || name === "Head Tail Action") {
-    return <SplitLeftButton level={level} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SplitLeftButton>
+    return <SplitLeftButton level={level} tone={name === "Head Tail Action" ? "neutral" : "accent"} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SplitLeftButton>
   }
   if (name === "Split Menu") {
     return <SubToolboxSplitDropdown
@@ -593,7 +592,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxSelectableTag level={level} selected={selectableTagOn} selectedIcon={<Check />} unselectedIcon={<Plus />} onClick={() => setSelectableTagOn((value) => !value)}>{selectableTagOn ? "SELECTED" : "SELECT"}</SubToolboxSelectableTag>
   }
   if (name === "Tag Editor") {
-    return <SubToolboxTagEditor level={level} tags={editorTags} onTagsChange={setEditorTags} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
+    return <SubToolboxTagEditor level={level} label="TAGS" tags={editorTags} onTagsChange={setEditorTags} spectrum tagLevel={level} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
   }
   if (name === "Progress Bar") {
     return <SubToolboxProgressBar level={level} value={68} />
@@ -740,7 +739,7 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Toast") {
     return toastVisible
       ? <SubToolboxToast level={level} tone="success" title="SAVED" detail="Changes are ready." onDismiss={() => setToastVisible(false)} />
-      : <SubToolboxButton level={level} onClick={() => setToastVisible(true)}>SHOW TOAST</SubToolboxButton>
+      : <PrimaryButton level={level} onClick={() => setToastVisible(true)}>SHOW TOAST</PrimaryButton>
   }
   if (name === "Popover") {
     return <SubToolboxPopover level={level} trigger="OPTIONS" title="OPTIONS"><strong>Popover content</strong></SubToolboxPopover>
@@ -989,10 +988,10 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Labeled Input") {
-    return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
+    return <SubToolboxLabeledInput level={level} variant="floating-label" overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
   }
   if (name === "Labeled Textarea") {
-    return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
+    return <SubToolboxLabeledTextArea level={level} variant="floating-label" overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
@@ -1011,16 +1010,16 @@ const PrimitiveMigrationControl: React.FC<{
     return <MiniSubToolbox
       title="Thumbnail"
       icon={<Image size={18} strokeWidth={3} />}
-      actions={<><SubToolboxButton level="l2">Upload</SubToolboxButton><SubToolboxButton level="l2">Generate</SubToolboxButton></>}
+      actions={<><PrimaryButton level="l2">Upload</PrimaryButton><PrimaryButton level="l2">Generate</PrimaryButton></>}
     >
       <SubToolboxAspectRatioFrame level={level} ratio="16:9"><Image /></SubToolboxAspectRatioFrame>
     </MiniSubToolbox>
   }
   if (name === "Disabled Button") {
-    return <SubToolboxButton level={level} disabled>DISABLED</SubToolboxButton>
+    return <PrimaryButton level={level} disabled>DISABLED</PrimaryButton>
   }
   if (name === "Disabled Split Button") {
-    return <SubToolboxSplitButton level={level} icon={<Settings2 />} disabled>DISABLED</SubToolboxSplitButton>
+    return <SplitLeftButton level={level} icon={<Settings2 />} disabled>DISABLED</SplitLeftButton>
   }
   if (name === "Two Color Data Stats") {
     return <SubToolboxDataStats level={level} label="VIEWS" value="128K" delta="+12%" variant="two-color" />
@@ -1044,7 +1043,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxAspectRatioFrame level={level} ratio="16:9" label="16:9"><Image /></SubToolboxAspectRatioFrame>
   }
   if (name === "Toolbar") {
-    return <SubToolboxToolbar level={level} leading={<strong>TOOLS</strong>} trailing={<SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Toolbar settings" />}><SubToolboxButton level={level}>EDIT</SubToolboxButton><SubToolboxButton level={level}>SAVE</SubToolboxButton></SubToolboxToolbar>
+    return <SubToolboxToolbar level={level} leading={<strong>TOOLS</strong>} trailing={<SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Toolbar settings" />}><PrimaryButton level={level}>EDIT</PrimaryButton><PrimaryButton level={level}>SAVE</PrimaryButton></SubToolboxToolbar>
   }
   if (name === "Toolbox Header Icon Rail") {
     return <div style={{ height: 80, display: "flex" }}><ToolboxHeaderIconRail level="toolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div>
