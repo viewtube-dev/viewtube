@@ -195,41 +195,6 @@ export const recordMetadataPackageVersion = (
   return buildMetadataHistoryEvents(input).map(event => appendContentBuildEvent(event))
 }
 
-export const recordMetadataPublicationEvent = (input: {
-  contentBuildId: string
-  projectId?: string | null
-  videoId: string
-  metadataPackageId: string
-  packageVersion: number
-  publishedAt?: string
-  actorId?: string | null
-  toolId?: "video-publisher" | "video-manager"
-  publicationState?: string
-  analyticsReference?: string | null
-  operationId?: string
-}): ContentBuildEvent | null => {
-  if (!input.contentBuildId || !input.videoId) return null
-  return appendContentBuildEvent({
-    contentBuildId: input.contentBuildId,
-    eventType: "package.published",
-    entityType: "metadata-publication",
-    entityId: input.videoId,
-    actorType: "youtube",
-    actorId: input.actorId ?? null,
-    toolId: input.toolId || "video-publisher",
-    timestamp: input.publishedAt,
-    metadata: {
-      projectId: input.projectId ?? null,
-      videoId: input.videoId,
-      metadataPackageId: input.metadataPackageId,
-      packageVersion: input.packageVersion,
-      publicationState: input.publicationState ?? "published",
-      analyticsReference: input.analyticsReference ?? null,
-      operationId: input.operationId || makeOperationId(),
-    },
-  })
-}
-
 export const buildPublishedMetadataSettingsEvent = (input: {
   contentBuildId: string
   videoId: string
