@@ -921,4 +921,49 @@ button.vt-studio-44-switch:not(.is-on),
 button.vt-studio-44-choice:not(.is-on) {
   background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 38%, white);
 }
-
+ 
+/* UI audit correction: switch/choice anatomy must not inherit generic action-button strokes. */
+button[data-vt-studio-control="true"].vt-studio-44-switch,
+button[data-vt-studio-control="true"].vt-studio-44-choice {
+  box-sizing: border-box !important;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  filter: none;
+  transform: none !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+button[data-vt-studio-control="true"].vt-studio-44-switch:focus-visible,
+button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
+  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 3px;
+}
+/* Word toggles keep their intentional 3px/2px frame, but size to their own
+   labels and stay inside the module instead of inheriting action-button layout. */
+[data-vt-studio-control="true"].vt-studio-44-word-toggle {
+  position: relative !important;
+  inset-inline: auto !important;
+  display: inline-flex !important;
+  flex: 0 1 auto !important;
+  align-self: flex-start;
+  justify-self: start;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  transform: none !important;
+  box-shadow: none !important;
+  vertical-align: middle;
+}
+[data-vt-studio-control="true"].vt-studio-44-word-toggle > button {
+  box-sizing: border-box;
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  transform: none !important;
+  box-shadow: none !important;
+}
