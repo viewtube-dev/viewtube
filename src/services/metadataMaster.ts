@@ -64,7 +64,7 @@ export const buildMetadataStrategyBrief = (
     `OPTIMIZATION INTENSITY (${intensity}): ${intensityGuidance[intensity]}.`,
     `Create distinct titleSet alternatives in this style order: ${getMetadataCandidateStyles(style).join(", ")}. The first candidate should lead with the selected style; subsequent candidates should be meaningfully different, not superficial rewrites.`,
     "Keep title, thumbnail message, description, and tags coherent as one package. Do not invent facts, results, credentials, or claims absent from the supplied content.",
-  ].join("\\n")
+  ].join("\n")
 }
 
 export type MetadataMasterSlot =
