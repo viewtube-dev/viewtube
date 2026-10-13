@@ -497,28 +497,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const categoryOptions = [
   { value: "2", label: "Autos & Vehicles" }, { value: "23", label: "Comedy" }, { value: "27", label: "Education" }, { value: "24", label: "Entertainment" }, { value: "1", label: "Film & Animation" }, { value: "20", label: "Gaming" }, { value: "26", label: "Howto & Style" }, { value: "10", label: "Music" }, { value: "25", label: "News & Politics" }, { value: "29", label: "Nonprofits & Activism" }, { value: "22", label: "People & Blogs" }, { value: "15", label: "Pets & Animals" }, { value: "28", label: "Science & Technology" }, { value: "17", label: "Sports" }, { value: "19", label: "Travel & Events" },
  ]
- const [subtitleStep, setSubtitleStep] = useState(0)
- const subtitleBase = "Generate titles, descriptions, tags, and everything else you need to publish your video with just a simple click of a button all you need to do is upload the video!"
- const subtitleAdditions = ["If you don't have a video just upload a script!", "And if you don't have that we can create it all from a concept!", "If you don't have a concept, we can still build the whole thing with you.", "If you have no idea what you wanna create we can help with that too."]
- const subtitleButtonLabels = ["don't have a video?", "don't have a script?", "don't have a concept?"]
+ const subtitleBase = "Manage your published YouTube videos: refine titles, thumbnails, descriptions, tags, and publishing metadata."
  const subtitleHelpRail = (
   <div className="flex flex-wrap items-center gap-2">
-   <span className="uppercase tracking-[0.12em]">{subtitleBase}</span>
-   {subtitleStep > 0 && <span className="uppercase tracking-[0.12em]">{subtitleAdditions[0]}</span>}
-   {subtitleStep > 1 && <span className="uppercase tracking-[0.12em]">{subtitleAdditions[1]}</span>}
-   {subtitleStep > 2 && <span className="uppercase tracking-[0.12em]">{subtitleAdditions[2]}</span>}
-   {subtitleStep > 3 && <span className="uppercase tracking-[0.12em]">{subtitleAdditions[3]}</span>}
-   {subtitleStep < subtitleButtonLabels.length && (
-    <SubToolboxButton
-     level="l2"
-     size="compact"
-     tone="neutral"
-     className="!w-auto"
-     onClick={(event) => { event.stopPropagation(); setSubtitleStep((prev) => Math.min(prev + 1, subtitleButtonLabels.length + 1)) }}
-    >
-     {subtitleButtonLabels[subtitleStep]}
-    </SubToolboxButton>
-   )}
+   <span className="uppercase tracking-[0.12em]">Choose a published video to review or update its metadata.</span>
   </div>
  )
 
