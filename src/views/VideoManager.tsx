@@ -80,6 +80,18 @@ const VideoManager: React.FC<VideoManagerProps> = ({
  const canManageVideos = auth.session.status === "ready" && auth.session.capabilities.youtubeWrite
  const navigate = useNavigate()
  const basePalette = paletteIndex ?? 0
+ const [aiFeaturesEnabled, setAiFeaturesEnabled] = useState(() => {
+  try { return window.localStorage.getItem("viewtube.video-manager.ai-features") !== "false" } catch { return true }
+ })
+ const [showAiButtons, setShowAiButtons] = useState(() => {
+  try { return window.localStorage.getItem("viewtube.video-manager.show-ai-buttons") !== "false" } catch { return true }
+ })
+ useEffect(() => {
+  try {
+   window.localStorage.setItem("viewtube.video-manager.ai-features", String(aiFeaturesEnabled))
+   window.localStorage.setItem("viewtube.video-manager.show-ai-buttons", String(showAiButtons))
+  } catch { /* Storage may be unavailable; settings still work for this session. */ }
+ }, [aiFeaturesEnabled, showAiButtons])
  const [allVideos, setAllVideos] = useState<VideoSnippet[]>([])
  const [videos, setVideos] = useState<VideoSnippet[]>([])
  const [videoSearchQuery, setVideoSearchQuery] = useState("")
@@ -694,6 +706,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
       />
       <CanonicalMetadataSections
        showFieldActions={true}
+       aiFeaturesEnabled={aiFeaturesEnabled}
+       onAiFeaturesEnabledChange={setAiFeaturesEnabled}
+       showAiButtons={showAiButtons}
+       onShowAiButtonsChange={setShowAiButtons}
        title={editTitle}
        description={editDescription}
        tags={editTags}
