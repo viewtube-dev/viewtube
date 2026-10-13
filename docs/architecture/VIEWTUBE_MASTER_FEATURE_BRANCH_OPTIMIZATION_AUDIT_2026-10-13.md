@@ -221,6 +221,11 @@ The typecheck reported 42 errors across existing application areas. The touched 
 
 ### Follow-up in progress
 - `81482cf` adds optional chaining for optional Content/Production sections in Project Manifestation, completes the package test fixture, moves the ProjectPlan concept/niche fallback into Video Manager's save payload, and keeps ref updates out of the React state updater.
-- The next fix defers dashboard widget registry traversal until `listAssistantIntelligenceSystems()` is called, preventing import-time evaluation of a registry that participates in a component/Brain dependency cycle. A regression test is added in `src/services/assistantIntelligenceSystem.test.ts`.
+- The next fix defers dashboard widget registry traversal until `listAssistantIntelligenceSystems()` is called, preventing import-time evaluation of a registry that participates in a component/Brain dependency cycle. The existing `src/services/__tests__/assistantIntelligenceSystem.test.ts` already covers Brain/super-tool/dashboard-widget enumeration and routing, so no duplicate-basename test file should be added.
 
 Do not call the branch green based on the successful build or smoke test alone. Remaining typecheck and full-suite failures are still release blockers until corrected or explicitly dispositioned.
+
+
+### CI governance correction
+- The first run after the lazy registry change surfaced the repository's duplicate-service-test-basename guard because an additional `assistantIntelligenceSystem.test.ts` was created beside the existing `src/services/__tests__/assistantIntelligenceSystem.test.ts`.
+- The redundant new file is being removed; the existing canonical test file already covers the relevant registry behavior. Keep one test home per service basename.
