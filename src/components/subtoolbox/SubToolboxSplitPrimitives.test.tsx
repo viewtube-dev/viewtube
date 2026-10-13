@@ -23,8 +23,8 @@ describe("SubToolbox split-left primitives", () => {
       </div>,
     )
     expect(html.match(/data-vt-studio-split-rail/g)).toHaveLength(2)
-    expect(html).toContain("Generate</span>").toBeTruthy()
-    expect(html).toContain("Analyze</span>").toBeTruthy()
+    expect(html).toContain("Generate</span>")
+    expect(html).toContain("Analyze</span>")
   })
 
   it("renders the split-left button with separate rail and label surfaces", () => {
