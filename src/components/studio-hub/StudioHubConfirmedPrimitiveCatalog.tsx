@@ -1,6 +1,6 @@
 import React from "react"
 import { Check, Settings2, Sparkles } from "lucide-react"
-import { StudioButton, StudioLabeledDropdown, StudioSplitLeftButton } from "../../studio-ui"
+import { StudioButton, StudioLabeledDropdown, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import "./studio-hub-confirmed-primitive-catalog.css"
 
 type Size = "44px" | "28px"
@@ -121,6 +121,57 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           label="STYLE"
           sizeVariant="compact"
           defaultValue="cinematic"
+          options={[
+            { value: "default", label: "Default" },
+            { value: "bold", label: "Bold" },
+            { value: "minimal", label: "Minimal" },
+            { value: "cinematic", label: "Cinematic" },
+            { value: "educational", label: "Educational" },
+            { value: "documentary", label: "Documentary" },
+            { value: "tutorial", label: "Tutorial" },
+            { value: "storytelling", label: "Storytelling" },
+            { value: "review", label: "Review" },
+            { value: "commentary", label: "Commentary" },
+            { value: "shorts", label: "Shorts" },
+          ]}
+        />
+      </div>
+    </Family>
+
+    <Family
+      title="StudioLegendMultiDropdown · 09/V2"
+      provenance={<Provenance
+        primitive="StudioLegendMultiDropdown · 140"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
+        tokens="Pair A trigger/menu · pair B floating legend, selected checkbox and CLEAR ALL · 44px / 28px heights · 3px black stroke · 8px / 6px radius · 4px / 3px offset shadow · selected-count badge · scrollable custom menu"
+        imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-variant">
+        <span>44px · custom open menu · multiselect</span>
+        <StudioLegendMultiDropdown
+          label="FILTERS"
+          defaultValue={["videos", "shorts"]}
+          options={[
+            { value: "videos", label: "Videos" },
+            { value: "shorts", label: "Shorts" },
+            { value: "live", label: "Live" },
+            { value: "playlists", label: "Playlists" },
+            { value: "podcasts", label: "Podcasts" },
+            { value: "music", label: "Music" },
+            { value: "gaming", label: "Gaming" },
+            { value: "news", label: "News" },
+            { value: "sports", label: "Sports" },
+          ]}
+        />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact · module pair tokens</span>
+        <StudioLegendMultiDropdown
+          label="STYLE"
+          sizeVariant="compact"
+          placeholder="ANY STYLE"
           options={[
             { value: "default", label: "Default" },
             { value: "bold", label: "Bold" },
