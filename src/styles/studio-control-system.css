@@ -118,7 +118,7 @@ button[data-vt-studio-control][data-height-variant="28"] {
   padding: 0 8px;
   border-radius: 4px;
   font-size: 22px !important;
-  font-weight: 900;
+  font-weight: 1000;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -137,11 +137,15 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
   height: 28px;
   border-right-width: 3px;
 }
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-label],
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-label] {
+  font-size: 36px;
+  font-weight: 1000;
+  line-height: .86;
+}
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1;
+  font-size: 22px;
+  font-weight: 1000;
+  line-height: .86;
 }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
   padding: 0 8px;
