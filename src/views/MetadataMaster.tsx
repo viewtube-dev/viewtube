@@ -36,6 +36,7 @@ import { useBrain } from "../context/useBrain"
 import { generateSeoData } from "../services/gemini"
 import { resolveWorkspaceContentBuildToolContext } from "../services/asset-engine/ToolContext"
 import {
+  applyMetadataSetVariant,
   buildMetadataStrategyBrief,
   createMetadataMasterSet,
   getMetadataCandidateStyles,
@@ -205,16 +206,12 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       const candidates = result.titleSets.slice(0, clampSets(setCount)).map((titleSet, index) => {
         const candidateStyle = candidateStyles[index] ?? style
         const candidate = finalizeMetadataMasterPackage({
-          ...generated,
-          style: candidateStyle,
+          ...applyMetadataSetVariant(generated, titleSet, candidateStyle),
           id: crypto.randomUUID(),
           version: index + 1,
-          title: titleSet.title || generated.title,
-          thumbnailPrompt: titleSet.thumbnailPrompt || generated.thumbnailPrompt,
-          thumbnailText: titleSet.thumbnailText || generated.thumbnailText,
           lockedSlots,
           appliedSlots,
-          provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master"],
+          provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master", `Style: ${candidateStyle}`, `Goal: ${goal}`],
         })
         const strategy = metadataStrategyForStyle(candidateStyle)
         return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, candidateStyle)
