@@ -93,7 +93,6 @@ import {
   SubToolboxTagEditor,
   SubToolboxTextArea,
   SubToolboxTopTitleDropdown,
-  LegendMultiDropdown,
   SubToolboxToast,
   SubToolboxToggleSwitch,
   SubToolboxTooltip,
@@ -107,7 +106,7 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioLegendMultiDropdown } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -582,16 +581,16 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Legend Multi Dropdown") {
     const options = ["VIDEOS", "SHORTS", "LIVE", "PLAYLISTS", "PODCASTS", "MUSIC"].map((option) => ({ value: option, label: option }))
-    return <LegendMultiDropdown
+    return <StudioLegendMultiDropdown
       level={level}
       label="FILTERS"
-      value={legendFilters.length ? `${legendFilters.length} SELECTED` : "ANY"}
       options={options}
-      multiSelect
-      selectedValues={legendFilters}
-      onValueChange={(value) => setLegendFilters((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value])}
-      onClear={() => setLegendFilters([])}
-      ariaLabel="Legend multi filters"
+      value={legendFilters}
+      onChange={setLegendFilters}
+      sizeVariant={level === "l0" ? "standard" : "compact"}
+      placeholder="ANY"
+      clearLabel="CLEAR ALL"
+      aria-label="Legend multi filters"
     />
   }
   if (name === "Split Search") {
