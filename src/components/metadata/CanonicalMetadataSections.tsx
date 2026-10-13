@@ -11,10 +11,10 @@ import {
   SubToolboxStatusBadge,
   SubToolboxToggle,
   SubToolboxTagEditor,
-  SubToolboxTopTitleDropdown,
+  LegendMultiDropdown,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxSplitButton } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { SplitLeftButton } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { TagRankTag } from "./TagRankTag"
 import { EducationTimestampNotes } from "./EducationTimestampNotes"
 import type { TagSuggestion } from "../../services/gemini"
@@ -133,7 +133,7 @@ const FieldActions: React.FC<{
   if (!onGenerate && !onRefine && !onAnalyze) return null
   return (
     <SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">
-      {onGenerate ? <SubToolboxSplitButton level="l2" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SubToolboxSplitButton> : <span />}
+      {onGenerate ? <SplitLeftButton level="l1" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SplitLeftButton> : <span />}
       {onRefine ? <SubToolboxSplitButton level="l2" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SubToolboxSplitButton> : <span />}
       {onAnalyze ? <SubToolboxSplitButton level="l2" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SubToolboxSplitButton> : <span />}
     </SubToolboxActions>
@@ -263,7 +263,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         {showPlaylists ? (
           <SubToolboxSection label={<span className="flex items-center gap-1"><ListVideo size={12} /> PLAYLISTS</span>}>
             {playlistOptions && onPlaylistToggle ? (
-              <SubToolboxTopTitleDropdown
+              <LegendMultiDropdown
                 level="l1"
                 label={<><ListVideo size={13} aria-hidden="true" /> CHANNEL PLAYLISTS</>}
                 value={playlistLoading ? "Loading playlists…" : selectedPlaylistIds.length ? `${selectedPlaylistIds.length} selected` : "Select playlists"}
