@@ -91,7 +91,7 @@ describe("Project Manifestation selection synchronization", () => {
       { ...project, id: "project-2", name: "Second Video" },
     ]
 
-    expect(resolveSelectedProjectId("project-2", projects as never, "project-1")).toBe("project-2")
+    expect(resolveSelectedProjectId("project-2", projects, "project-1")).toBe("project-2")
   })
 
   it("preserves a valid manual selection when there is no active-project update", () => {
@@ -100,7 +100,16 @@ describe("Project Manifestation selection synchronization", () => {
       { ...project, id: "project-2", name: "Second Video" },
     ]
 
-    expect(resolveSelectedProjectId(null, projects as never, "project-2")).toBe("project-2")
+    expect(resolveSelectedProjectId(null, projects, "project-2")).toBe("project-2")
+  })
+
+  it("preserves a valid manual selection while the active project is not loaded yet", () => {
+    const projects = [
+      { ...project, id: "project-1" },
+      { ...project, id: "project-2", name: "Second Video" },
+    ]
+
+    expect(resolveSelectedProjectId("not-loaded-yet", projects, "project-2")).toBe("project-2")
   })
 
   it("falls back to the first project when the current selection no longer exists", () => {
@@ -109,6 +118,6 @@ describe("Project Manifestation selection synchronization", () => {
       { ...project, id: "project-2", name: "Second Video" },
     ]
 
-    expect(resolveSelectedProjectId(null, projects as never, "removed-project")).toBe("project-1")
+    expect(resolveSelectedProjectId(null, projects, "removed-project")).toBe("project-1")
   })
 })
