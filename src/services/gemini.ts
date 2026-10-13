@@ -933,6 +933,7 @@ export const generateSeoData = async (
  videoFormat: "Longform" | "Shorts",
  plan?: ProjectPlan,
  brain?: any,
+ strategyBrief?: string,
 ): Promise<SeoResult> => {
  const ai = getAiClient()
 
@@ -1060,6 +1061,7 @@ export const generateSeoData = async (
     7. Internal Links: ${internalLinks}
     8. Format: ${videoFormat}
     9. Project Plan: ${planContext}
+    10. Metadata strategy brief: ${strategyBrief || "Use the default balanced optimization strategy."}
   `
 
  let lastError: any
