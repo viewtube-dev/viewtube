@@ -1525,7 +1525,7 @@
   max-width:100%!important;
 }
 .vt-complete-catalog :is(
-  [data-vt-family="Text Input"],
+  :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]),
   [data-vt-family="Textarea"],
   [data-vt-family="Split Search"],
   [data-vt-family="Number Field"],
@@ -1604,7 +1604,7 @@
 }
 
 /* Simple Text Input specimen: primitive 20, sized by the shared component-level DNA. */
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text{
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text{
   --vt-component-height:var(--simple-input-height,44px);--vt-component-stroke:var(--simple-input-stroke,3px);
   --vt-component-radius:var(--simple-input-radius,8px);--vt-component-font-size:var(--simple-input-font-size,32px);
   width:var(--vt-catalog-standard-inline,260px)!important;height:var(--vt-component-height)!important;min-height:var(--vt-component-height)!important;
@@ -1613,24 +1613,24 @@
   font-size:var(--vt-component-font-size)!important;font-weight:1000!important;line-height:.86!important;letter-spacing:-.035em!important;text-transform:uppercase!important;
   caret-color:var(--pair-a,#36e0f6)!important;caret-shape:block;outline:0!important;box-shadow:none!important;padding:0 12px!important;
 }
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text::placeholder{color:var(--pair-a,#36e0f6)!important;-webkit-text-stroke:1px var(--pair-a,#36e0f6)!important;opacity:.72}
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text:focus,.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text:focus-visible{
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text::placeholder{color:var(--pair-a,#36e0f6)!important;-webkit-text-stroke:1px var(--pair-a,#36e0f6)!important;opacity:.72}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text:focus,.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text:focus-visible{
   background:color-mix(in srgb,var(--pair-a,#36e0f6) 20%,white)!important;color:#000!important;-webkit-text-stroke:1px var(--pair-a,#36e0f6)!important;
   outline:var(--vt-component-stroke) solid var(--pair-b,#ff7f6b)!important;outline-offset:0!important;box-shadow:none!important;caret-color:var(--pair-b,#ff7f6b)!important;caret-shape:block;
 }
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l0{--simple-input-height:56px;--simple-input-stroke:4px;--simple-input-radius:12px;--simple-input-font-size:24px}
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l1{--simple-input-height:44px;--simple-input-stroke:3px;--simple-input-radius:8px;--simple-input-font-size:32px}
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l2{--simple-input-height:32px;--simple-input-stroke:2px;--simple-input-radius:6px;--simple-input-font-size:12px}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-demo.is-l0{--simple-input-height:56px;--simple-input-stroke:4px;--simple-input-radius:12px;--simple-input-font-size:24px}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-demo.is-l1{--simple-input-height:44px;--simple-input-stroke:3px;--simple-input-radius:8px;--simple-input-font-size:32px}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-demo.is-l2{--simple-input-height:32px;--simple-input-stroke:2px;--simple-input-radius:6px;--simple-input-font-size:12px}
 
 /* Follow-up correction: text-input primitives are explicit library entries, with
    the requested 38px / 24px text defaults and compact uppercase typography. */
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text{
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text{
   letter-spacing:-.02em!important;
 }
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l0{--simple-input-font-size:38px}
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l1{--simple-input-font-size:38px}
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l2{--simple-input-font-size:24px}
-.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text{
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-demo.is-l0{--simple-input-font-size:38px}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-demo.is-l1{--simple-input-font-size:38px}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-demo.is-l2{--simple-input-font-size:24px}
+.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text{
   font-size:var(--simple-input-font-size)!important;
   letter-spacing:-.02em!important;
 }
