@@ -2,12 +2,15 @@ name: ViewTube release gates
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - master/consolidated-feature-integration
   push:
     branches:
       - main
       - integration/**
       - codex/**
+      - master/consolidated-feature-integration
 
 concurrency:
   group: release-gates-${{ github.ref }}
