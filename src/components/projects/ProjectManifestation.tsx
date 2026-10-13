@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { ArrowLeftRight, Boxes, Check, FolderOpen, Layers3, RefreshCw, Save, Sparkles } from "lucide-react"
 import type { Project } from "../../types"
 import { listVideoPackages } from "../../services/video-package/VideoPackageRepository"
 import { setContentBuildSelection } from "../../services/asset-engine/ContentBuildRepository"
-import { buildProjectManifest, getManifestPackageForProject, type ProjectManifestation } from "./projectManifestation"
+import { buildProjectManifest, getManifestPackageForProject, resolveSelectedProjectId, type ProjectManifestation } from "./projectManifestation"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
 import { SplitLeftButton } from "../subtoolbox/SubToolboxSplitPrimitives"
@@ -41,8 +41,20 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
   isOpenInitial = true,
 }) => {
   const [packages, setPackages] = useState(() => listVideoPackages())
-  const [selectedProjectId, setSelectedProjectId] = useState(activeProjectId || projects[0]?.id || "")
+  const [selectedProjectId, setSelectedProjectId] = useState(() => resolveSelectedProjectId(activeProjectId, projects, ""))
+  const previousActiveProjectId = useRef(activeProjectId)
   const [swapState, setSwapState] = useState<"idle" | "saving" | "saved">("idle")
+
+  useEffect(() => {
+    const activeProjectChanged = previousActiveProjectId.current !== activeProjectId
+    previousActiveProjectId.current = activeProjectId
+    setSelectedProjectId(current => {
+      if (activeProjectChanged && activeProjectId && projects.some(project => project.id === activeProjectId)) {
+        return activeProjectId
+      }
+      return resolveSelectedProjectId(null, projects, current)
+    })
+  }, [activeProjectId, projects])
 
   const selectedProject = useMemo(
     () => projects.find(project => project.id === selectedProjectId) || null,
