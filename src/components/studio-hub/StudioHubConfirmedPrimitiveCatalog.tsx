@@ -1,6 +1,6 @@
 import React from "react"
 import { Check, Settings2, Sparkles } from "lucide-react"
-import { StudioButton, StudioSplitLeftButton } from "../../studio-ui"
+import { StudioButton, StudioLabeledDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import "./studio-hub-confirmed-primitive-catalog.css"
 
 type Size = "44px" | "28px"
@@ -62,7 +62,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         primitive="StudioSplitLeftButton"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="44px / 28px total height · icon rail equals total height · 3px black stroke/divider · 8px radius · 14px uppercase label · weight 900 · line-height 1 · same button shadow and selected outline as StudioButton"
+        tokens="44px / 28px total height · icon rail equals total height · 3px black stroke/divider · 8px / 6px radius · 14px uppercase label · weight 900 · 4px / 3px offset shadow · selected state swaps pair A/B fills only"
         imports={["src/studio-ui/index.ts", "src/studio-ui/StudioHubCertification.tsx", "src/views/VideoDirector.tsx", "src/components/CommunityPostGenerator.tsx"]}
       />}
     >
