@@ -601,4 +601,25 @@ describe("subtoolbox design governance", () => {
   expect(systemCss).toContain(".vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-title")
  })
 
+  it("keeps confirmed Studio controls authored and styled in the canonical system", () => {
+    const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
+    const studioCss = source("src/styles/studio-control-system.css")
+    const publicIndex = source("src/studio-ui/index.ts")
+    const subtoolboxPrimitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const subtoolboxCss = source("src/styles/subtoolbox-system.css")
+
+    for (const primitive of ["Studioinput", "Studioarea", "Studiotoggle", "Studioswitch", "Studioradio", "Studiocheck", "Studioxbox"]) {
+      expect(studioControls).toContain(primitive)
+      expect(publicIndex).toContain(primitive)
+    }
+    expect(studioControls).not.toContain("SubToolboxInput20")
+    expect(studioControls).not.toContain("SubToolboxTextArea21")
+    expect(subtoolboxPrimitives).not.toContain("export const SubToolbox44WordToggle:")
+    expect(subtoolboxCss).not.toContain(".vt-subtoolbox-44-word-toggle{")
+    expect(studioCss).toContain(".vt-studio-44-word-toggle{")
+    expect(studioCss).toContain("--vt-word-font-size:32px")
+    expect(studioCss).toContain("--vt-word-font-size:14px")
+    expect(studioCss).toContain("font-size: var(--vt-studio-44-font-size, 32px) !important")
+  })
+
 })
