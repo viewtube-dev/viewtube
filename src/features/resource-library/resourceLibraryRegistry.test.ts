@@ -26,6 +26,17 @@ flowchart LR
 `
 
 describe("resource library registry", () => {
+  it("registers all fifteen creator-oriented guides with unique stable IDs", () => {
+    expect(RESOURCE_LIBRARY_ENTRIES).toHaveLength(15)
+    expect(new Set(RESOURCE_LIBRARY_ENTRIES.map((resource) => resource.id)).size).toBe(15)
+    for (const resource of RESOURCE_LIBRARY_ENTRIES) {
+      expect(resource.status).toBe("published")
+      expect(resource.format).toBe("markdown")
+      expect(resource.markdown).toContain("resource_id:")
+      expect(resource.markdown).toContain("viewtube_resource: true")
+    }
+  })
+
   it("registers a creator-first YouTube recommendation guide", () => {
     const entry = RESOURCE_LIBRARY_ENTRIES.find(
       (resource) => resource.id === "youtube-recommendations-discovery",
