@@ -230,6 +230,44 @@ export const recordMetadataPublicationEvent = (input: {
   })
 }
 
+export const buildPublishedMetadataSettingsEvent = (input: {
+  contentBuildId: string
+  videoId: string
+  previousSettings: Record<string, unknown>
+  nextSettings: Record<string, unknown>
+  operationId?: string
+  actorType?: ContentBuildEvent["actorType"]
+  actorId?: string | null
+  toolId?: "video-manager" | "video-publisher"
+  timestamp?: string
+}): MetadataHistoryEventInput | null => {
+  if (!input.contentBuildId || sameValue(input.previousSettings, input.nextSettings)) return null
+  return {
+    contentBuildId: input.contentBuildId,
+    eventType: "publishing.settings.changed",
+    entityType: "published-video-settings",
+    entityId: input.videoId,
+    actorType: input.actorType || "creator",
+    actorId: input.actorId ?? null,
+    toolId: input.toolId || "video-manager",
+    previousState: input.previousSettings,
+    resultingState: input.nextSettings,
+    timestamp: input.timestamp || new Date().toISOString(),
+    metadata: {
+      videoId: input.videoId,
+      operation: "manual",
+      operationId: input.operationId || makeOperationId(),
+    },
+  }
+}
+
+export const recordPublishedMetadataSettingsChange = (
+  input: Parameters<typeof buildPublishedMetadataSettingsEvent>[0],
+): ContentBuildEvent | null => {
+  const event = buildPublishedMetadataSettingsEvent(input)
+  return event ? appendContentBuildEvent(event) : null
+}
+
 export const recordPublishedMetadataChange = (input: {
   contentBuildId: string
   projectId?: string | null
@@ -243,6 +281,8 @@ export const recordPublishedMetadataChange = (input: {
   package: MetadataMasterPackage
   timestamp?: string
   analyticsReference?: string | null
+  previousSettings?: Record<string, unknown>
+  nextSettings?: Record<string, unknown>
 }): ContentBuildEvent[] => {
   if (!input.contentBuildId || !input.videoId) return []
   const operationId = input.operationId || makeOperationId()
@@ -286,6 +326,21 @@ export const recordPublishedMetadataChange = (input: {
       timestamp,
       metadata: { ...commonMetadata, field: change.field },
     })
+  }
+
+  if (input.previousSettings && input.nextSettings) {
+    const settingsEvent = buildPublishedMetadataSettingsEvent({
+      contentBuildId: input.contentBuildId,
+      videoId: input.videoId,
+      previousSettings: input.previousSettings,
+      nextSettings: input.nextSettings,
+      operationId,
+      actorType: input.actorType || "creator",
+      actorId: input.actorId ?? null,
+      toolId: "video-manager",
+      timestamp,
+    })
+    if (settingsEvent) events.push(settingsEvent)
   }
 
   return events.map(event => appendContentBuildEvent(event))
