@@ -2016,30 +2016,6 @@ const CreatorVaultOS: React.FC = () => {
      </div>
 
      <div className="flex min-w-0 flex-col gap-4">
-      {selectedAssetIds.length ? (
-       <section
-        aria-label="Vault selection actions"
-        data-vault-mobile-sheet="selection-actions"
-        className="fixed inset-x-2 bottom-2 z-40 flex flex-wrap items-center gap-2 rounded-lg border-[3px] border-current bg-white p-2 shadow-[4px_4px_0_currentColor] xl:sticky xl:inset-x-auto xl:bottom-auto xl:top-2"
-       >
-        <div className="mr-auto text-xs font-black uppercase">{selectedAssetIds.length} Selected</div>
-        <SubToolboxInnerActionButton label="Tag" iconName="tag" tone="pink" onClick={() => setAssetOperationsMode("batch")} />
-        <SubToolboxInnerActionButton label="Batch" iconName="edit" tone="orange" onClick={() => setAssetOperationsMode("batch")} />
-        <SubToolboxInnerActionButton label="Group" iconName="collection" tone="green" onClick={() => setAssetOperationsMode("groups")} />
-        <SubToolboxInnerActionButton
-         label="Compare"
-         iconName="layers"
-         tone="purple"
-         onClick={() => assetLibraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
-         disabled={selectedAssetIds.length !== 2}
-        />
-        <SubToolboxInnerActionButton label="Metadata" iconName="database" tone="cyan" onClick={() => setAssetOperationsMode("tools")} />
-        <SubToolboxInnerActionButton label="Export" iconName="database" tone="yellow" onClick={exportSelectionManifest} />
-        <SubToolboxInnerActionButton label="Send to ViewTube" iconName="link" tone="blue" onClick={() => setAssetOperationsMode("tools")} />
-        <SubToolboxInnerActionButton label="Clear" iconName="x" tone="cyan" onClick={() => setSelectedAssetIds([])} />
-       </section>
-      ) : null}
-
       {selectedAssetIds.length && assetOperationsMode === "batch" ? (
        <section aria-label="Vault batch actions" className="rounded-lg border-[3px] border-current p-3">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -2124,6 +2100,29 @@ const CreatorVaultOS: React.FC = () => {
        persistenceId="vault-asset-library"
       >
        <div className="flex flex-col gap-3">
+        {selectedAssetIds.length ? (
+         <section
+          aria-label="Vault selection actions"
+          data-vault-selection-toolbar
+          className="flex flex-wrap items-center gap-2 rounded-md border-2 border-current bg-white p-2"
+         >
+          <div className="mr-auto min-w-[5.5rem] text-xs font-black uppercase">{selectedAssetIds.length} Selected</div>
+          <SubToolboxInnerActionButton label="Tag" iconName="tag" tone="pink" onClick={() => setAssetOperationsMode("batch")} />
+          <SubToolboxInnerActionButton label="Batch" iconName="edit" tone="orange" onClick={() => setAssetOperationsMode("batch")} />
+          <SubToolboxInnerActionButton label="Group" iconName="collection" tone="green" onClick={() => setAssetOperationsMode("groups")} />
+          <SubToolboxInnerActionButton
+           label="Compare"
+           iconName="layers"
+           tone="purple"
+           onClick={() => assetLibraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+           disabled={selectedAssetIds.length !== 2}
+          />
+          <SubToolboxInnerActionButton label="Metadata" iconName="database" tone="cyan" onClick={() => setAssetOperationsMode("tools")} />
+          <SubToolboxInnerActionButton label="Export" iconName="database" tone="yellow" onClick={exportSelectionManifest} />
+          <SubToolboxInnerActionButton label="Send to ViewTube" iconName="link" tone="blue" onClick={() => setAssetOperationsMode("tools")} />
+          <SubToolboxInnerActionButton label="Clear" iconName="x" tone="cyan" onClick={() => setSelectedAssetIds([])} />
+         </section>
+        ) : null}
         {comparePair ? (
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Compare Selection</div>
@@ -2801,9 +2800,10 @@ const CreatorVaultOS: React.FC = () => {
       </SubToolbox>
 
 
+     </div>
 
-      {selectedAsset ? (
-       <div
+     <div className="flex min-w-0 flex-col gap-4">
+      <div
         ref={inspectorRef}
         tabIndex={-1}
         data-vault-mobile-sheet="inspector"
@@ -2818,7 +2818,8 @@ const CreatorVaultOS: React.FC = () => {
        isOpenInitial
        persistenceId="vault-inspector"
       >
-       <div className="flex flex-col gap-3">
+       {selectedAsset ? (
+        <div className="flex flex-col gap-3">
          <div className="xl:hidden">
           <SubToolboxInnerActionButton
            label="Close Inspector"
@@ -3473,9 +3474,15 @@ const CreatorVaultOS: React.FC = () => {
           <div className="text-sm font-bold">{new Date(selectedAsset.updatedAt).toLocaleString()}</div>
          </div>
         </div>
+       ) : (
+        <SubToolboxStatePanel
+         level="l1"
+         state="empty"
+         message="Select an asset to inspect its metadata and provenance."
+        />
+       )}
       </SubToolbox>
        </div>
-      ) : null}
      </div>
     </div>
    </Toolbox>
