@@ -12,7 +12,6 @@ import {
   SubToolboxCommandPalette,
   SubToolboxBadge,
   PrimaryButton,
-  SubToolboxButton,
   SubToolboxButtonGroup,
   SubToolboxCheckControl,
   SubToolboxColorPicker,
@@ -104,7 +103,7 @@ import {
   ToolboxHeaderTitle,
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { SubToolboxKpiCard, SplitLeftButton, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { SubToolboxKpiCard, SplitLeftButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -740,7 +739,7 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Toast") {
     return toastVisible
       ? <SubToolboxToast level={level} tone="success" title="SAVED" detail="Changes are ready." onDismiss={() => setToastVisible(false)} />
-      : <SubToolboxButton level={level} onClick={() => setToastVisible(true)}>SHOW TOAST</SubToolboxButton>
+      : <PrimaryButton level={level} onClick={() => setToastVisible(true)}>SHOW TOAST</PrimaryButton>
   }
   if (name === "Popover") {
     return <SubToolboxPopover level={level} trigger="OPTIONS" title="OPTIONS"><strong>Popover content</strong></SubToolboxPopover>
@@ -1011,7 +1010,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <MiniSubToolbox
       title="Thumbnail"
       icon={<Image size={18} strokeWidth={3} />}
-      actions={<><SubToolboxButton level="l2">Upload</SubToolboxButton><SubToolboxButton level="l2">Generate</SubToolboxButton></>}
+      actions={<><PrimaryButton level="l2">Upload</PrimaryButton><PrimaryButton level="l2">Generate</PrimaryButton></>}
     >
       <SubToolboxAspectRatioFrame level={level} ratio="16:9"><Image /></SubToolboxAspectRatioFrame>
     </MiniSubToolbox>
@@ -1044,7 +1043,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxAspectRatioFrame level={level} ratio="16:9" label="16:9"><Image /></SubToolboxAspectRatioFrame>
   }
   if (name === "Toolbar") {
-    return <SubToolboxToolbar level={level} leading={<strong>TOOLS</strong>} trailing={<SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Toolbar settings" />}><SubToolboxButton level={level}>EDIT</SubToolboxButton><SubToolboxButton level={level}>SAVE</SubToolboxButton></SubToolboxToolbar>
+    return <SubToolboxToolbar level={level} leading={<strong>TOOLS</strong>} trailing={<SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Toolbar settings" />}><PrimaryButton level={level}>EDIT</PrimaryButton><PrimaryButton level={level}>SAVE</PrimaryButton></SubToolboxToolbar>
   }
   if (name === "Toolbox Header Icon Rail") {
     return <div style={{ height: 80, display: "flex" }}><ToolboxHeaderIconRail level="toolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div>
