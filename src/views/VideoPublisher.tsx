@@ -119,6 +119,18 @@ interface VideoPublisherProps {
 }
 
 const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, collapsible = false, isOpenInitial = true, paletteIndex }) => {
+ const [aiFeaturesEnabled, setAiFeaturesEnabled] = useState(() => {
+  try { return window.localStorage.getItem("viewtube.video-publisher.ai-features") !== "false" } catch { return true }
+ })
+ const [showAiButtons, setShowAiButtons] = useState(() => {
+  try { return window.localStorage.getItem("viewtube.video-publisher.show-ai-buttons") !== "false" } catch { return true }
+ })
+ useEffect(() => {
+  try {
+   window.localStorage.setItem("viewtube.video-publisher.ai-features", String(aiFeaturesEnabled))
+   window.localStorage.setItem("viewtube.video-publisher.show-ai-buttons", String(showAiButtons))
+  } catch { /* Storage may be unavailable; settings still work for this session. */ }
+ }, [aiFeaturesEnabled, showAiButtons])
   const basePalette = paletteIndex ?? 0
   const { brain, updateBrain, updateProject, setActiveProject, registerProvider, unregisterProvider, setSeoState, authState } = useBrain()
   const [loading, setLoading] = useState(false)
@@ -672,6 +684,10 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         <>
               <CanonicalMetadataSections
                 showFieldActions={true}
+                aiFeaturesEnabled={aiFeaturesEnabled}
+                onAiFeaturesEnabledChange={setAiFeaturesEnabled}
+                showAiButtons={showAiButtons}
+                onShowAiButtonsChange={setShowAiButtons}
                 title={publishTitle}
                 description={publishDescription}
                 tags={publishTags}
