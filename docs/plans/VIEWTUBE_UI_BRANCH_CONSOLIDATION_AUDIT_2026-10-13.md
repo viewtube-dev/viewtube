@@ -216,12 +216,12 @@ The remaining branch refs were compared with `master/consolidated-feature-integr
 | `test/consolidated-master-validation` | 1 | 300 | Validation checklist | Compare checklist revision and retain the most complete validated record |
 | `test/consolidated-master-validation-v2` | 1 | 298 | Validation checklist | Compare with prior validation branch and current target; do not merge stale checklist wholesale |
 | `ui/component-library-production-buttons` | 8 | 391 | Production button catalog, Toolbox/library, primitive CSS, mobile regression test | Compare against current definitive library and PR #33; port only missing catalog/test coverage |
-| `visual-test/canonical-default-system-65-66` | Not yet individually compared | Not yet individually compared | Frozen visual baseline/reference | Protect as a reference baseline; not a production source branch |
+| `visual-test/canonical-default-system-65-66` | 88 | 414 | Component catalog, primitive tokens/CSS, tests, Manager/Publisher, vite config | Protected comparison baseline; do not merge wholesale or delete. PR #18 explicitly excluded it, and the user established it is not the source for current UI edits |
 
 ### Compare interpretation
 
 - The compare sweep covers the observed branch list except the integration target itself; `main` was compared separately (19 ahead / 391 behind).
-- The `visual-test/canonical-default-system-65-66` ref still needs an individual compare and provenance review. Its reference-only role means it is protected even if it has no unique commits.
+- The `visual-test/canonical-default-system-65-66` ref was compared: it has 88 commits not shared by the target and is 414 commits behind. It contains extensive primitive/catalog/test/source changes, so it is not a disposable zero-ahead branch. Keep it protected as a comparison/reference donor; review provenance, but do not merge wholesale or use it as the current UI source.
 - No branches were deleted, and no donor branch was merged wholesale during this pass.
 - The next actionable review is content-level comparison of the highest-risk donor groups: metadata package persistence, Publisher Write/Create, action/legend primitives, component-library/catalog, split-left defaults, toolbox collapse motion, status badges, and the system-convergence audit. For each, check whether the target already contains the intended behavior, tests, and docs before proposing a port.
 
@@ -246,3 +246,16 @@ These spot checks were performed after the ancestry sweep to distinguish commit 
 - Action/legend branch: retain target code; use donor only as historical source for requirements/tests.
 - `main`: selectively review useful documentation and isolated behavior; no wholesale merge due to branch divergence and incompatible CSS defaults.
 - Status-badge donor: do not port its stale dimensions over target.
+
+
+## Cleanup and target-content reconciliation checkpoint — 2026-10-13
+
+- PR #38 was merged as documentation/recovery-only into `master/consolidated-feature-integration` at `b00a8527f3c24e7d712334f1f0d940bbe44d17df`. It added the branch audit/checklist, registered the recovered Dashboard/UI + Render handoff, and preserved supplemental UI audit evidence. It did not change production code or `main`.
+- PR #25 (`ui/component-library-production-buttons`) was closed as superseded, not merged. The target's definitive migration catalog already contains canonical button families; the donor's expanded catalog uses legacy SubToolbox APIs and catalog-local CSS. A closure comment explains that missing behavior should be ported only against canonical APIs.
+- PR #19 (`fix/toolbox-collapse-icon-chrome`) was closed as superseded by the selective port in PR #21. Current target CSS contains the relevant reduced-motion, transform-origin, overflow, and chrome-reset rules. A closure comment preserves the rationale.
+- The resource-library registry and sampled guide/readme/handoff files have identical blob SHAs on target and `main`; do not re-merge these just because the branches' commit histories diverge.
+- The sampled Publisher persistence donor is older than the target: target code contains explicit handling for intentionally blank metadata assets and nullable audience values. Keep the target implementation and use tests to verify behavior.
+- The sampled Write/Create donor's `VideoPublisher.tsx` is older and differs from target's current audience state and file-selection workflow. Do not wholesale port it.
+- The production button catalog donor contains more examples than the target's separate `StudioHubProductionButtonCatalog.tsx`, but the definitive `StudioHubPrimitiveMigrationCatalog.tsx` and current regression test already register the canonical production button families and newer metadata/Project Manifestation coverage. Do not restore the donor's parallel legacy catalog; compare individual missing specimens against the canonical migration catalog.
+- The current target CSS includes overlapping historical/canonical split-left rule blocks in both `subtoolbox-split-primitives.css` and `studio-control-system.css`. This confirms the need for a source-level cascade/ownership audit before editing. No CSS refactor was attempted here because the exact computed-style and regression-test baseline is not available through the repository connector.
+- GitHub workflow lookup returned no PR-triggered workflow runs for the recorded integration commit. Build/typecheck/test and live visual certification remain unverified; no passing result is claimed.
