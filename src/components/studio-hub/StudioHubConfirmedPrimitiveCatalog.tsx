@@ -28,77 +28,87 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
-    <section className="vt-confirmed-family vt-confirmed-size-defaults"><h3>Canonical component size defaults</h3><div className="vt-confirmed-variants"><div><strong>44px standard</strong><p>Height {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.height}px · {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.stroke}px stroke · {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontWeight} · button-only shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.buttonShadowX}px × {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.buttonShadowY}px</p></div><div><strong>28px compact</strong><p>Height {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px stroke · {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight} · button-only shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowX}px × {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowY}px</p></div></div></section>
+    <section className="vt-confirmed-family vt-confirmed-size-defaults"><h3>Canonical component size defaults</h3><div className="vt-confirmed-variants"><div><strong>44px standard</strong><p>Height {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.height}px · {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.stroke}px stroke · radius {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.radius}px · font {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontWeight} · button shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.buttonShadowX}px × {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.buttonShadowY}px · hover {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.hoverTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.hoverOffsetPx}px · click {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.clickTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.clickOffsetPx}px · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconStroke}px</p></div><div><strong>28px compact</strong><p>Height {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px stroke · radius {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.radius}px · font {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight} · button shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowX}px × {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowY}px · hover {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.hoverTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.hoverOffsetPx}px · click {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.clickTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.clickOffsetPx}px · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconStroke}px</p></div></div></section>
     <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Default and compact variants share identical typography and selected-state rules.</p>
     <Family
-      title="StudioButton"
+      title="Button"
       provenance={<Provenance
         primitive="StudioButton"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="Shared size tokens: 44px / 28px · 3px / 2px stroke · 32px / 14px font · weight 1000 · button-only 3px / 1.5px shadow offsets"
+        tokens="Button-only shadow; no family-specific geometry overrides."
         imports={["src/studio-ui/index.ts", "src/studio-ui/recipes/index.tsx", "src/studio-ui/StudioHubCertification.tsx", "src/views/ActionableTactics.tsx", "src/components/CommentResponder.tsx", "src/views/VideoDirector.tsx", "src/components/CommunityPostGenerator.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant">
         <span>44px default</span>
-        <StudioButton heightVariant="44">Studio Button</StudioButton>
+        <StudioButton heightVariant="44">button</StudioButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px compact</span>
-        <StudioButton heightVariant="28">Studio Button</StudioButton>
+        <StudioButton heightVariant="28">button</StudioButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>44px selected</span>
-        <StudioButton selected heightVariant="44">Studio Button</StudioButton>
+        <StudioButton selected heightVariant="44">button</StudioButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px selected</span>
-        <StudioButton selected heightVariant="28">Studio Button</StudioButton>
+        <StudioButton selected heightVariant="28">button</StudioButton>
       </div>
     </Family>
     <Family
-      title="StudioSplitLeftButton"
+      title="Split-left"
       provenance={<Provenance
         primitive="StudioSplitLeftButton"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="44px / 28px · 3px / 2px stroke · 32px / 14px weight-1000 text · button-only 3px / 1.5px shadow · selected swaps pair A/B fills only"
+        tokens="Selected state swaps pair-A/pair-B fills; preserves the normal border stroke."
         imports={["src/studio-ui/index.ts", "src/studio-ui/StudioHubCertification.tsx", "src/views/VideoDirector.tsx", "src/components/CommunityPostGenerator.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant">
         <span>44px default</span>
-        <StudioSplitLeftButton icon={<Sparkles size={18} />} heightVariant="44">Generate</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Sparkles size={18} />} heightVariant="44">split-left</StudioSplitLeftButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px compact</span>
-        <StudioSplitLeftButton icon={<Sparkles size={14} />} heightVariant="28">Generate</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Sparkles size={14} />} heightVariant="28">split-left</StudioSplitLeftButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>44px selected</span>
-        <StudioSplitLeftButton icon={<Settings2 size={18} />} selected heightVariant="44">Workspace Action</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Settings2 size={18} />} selected heightVariant="44">split-left</StudioSplitLeftButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px selected</span>
-        <StudioSplitLeftButton icon={<Settings2 size={14} />} selected heightVariant="28">Workspace Action</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Settings2 size={14} />} selected heightVariant="28">split-left</StudioSplitLeftButton>
       </div>
     </Family>
 
     <Family
-      title="StudioLegendMultiDropdown · V2 (replaces V1 labeled dropdown)"
+      title="Text input and textarea"
+      provenance={<Provenance primitive="StudioInput / StudioTextArea · primitives 20 / 21" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea is multiline, content-height, and vertically resizable." imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant"><span>44px text input</span><input data-vt-studio-control="true" data-size="standard" aria-label="Simple text input 44px" placeholder="text input" /></div>
+      <div className="vt-confirmed-variant"><span>28px text input</span><input data-vt-studio-control="true" data-size="compact" aria-label="Simple text input 28px" placeholder="text input" /></div>
+      <div className="vt-confirmed-variant"><span>44px text area</span><textarea data-vt-studio-control="true" data-size="standard" aria-label="Simple text area 44px" placeholder="text area" rows={3} /></div>
+      <div className="vt-confirmed-variant"><span>28px text area</span><textarea data-vt-studio-control="true" data-size="compact" aria-label="Simple text area 28px" placeholder="text area" rows={2} /></div>
+    </Family>
+
+    <Family
+      title="Dropdown"
       provenance={<Provenance
         primitive="StudioLegendMultiDropdown · 140"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="Pair A trigger/menu · pair B floating legend and CLEAR ALL · shared 44px / 28px typography and stroke tokens · custom scrollable multiselect menu"
+        tokens="Custom multiselect menu; floating legend and CLEAR ALL action."
         imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant">
         <span>44px · custom open menu · multiselect</span>
         <StudioLegendMultiDropdown
-          label="FILTERS"
+          label="dropdown"
           defaultValue={["videos", "shorts"]}
           options={[
             { value: "videos", label: "Videos" },
@@ -116,9 +126,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant">
         <span>28px compact · module pair tokens</span>
         <StudioLegendMultiDropdown
-          label="STYLE"
+          label="dropdown"
           sizeVariant="compact"
-          placeholder="ANY STYLE"
+          placeholder="dropdown"
           options={[
             { value: "default", label: "Default" },
             { value: "bold", label: "Bold" },
