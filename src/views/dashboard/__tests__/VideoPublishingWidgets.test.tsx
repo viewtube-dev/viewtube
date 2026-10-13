@@ -90,7 +90,7 @@ describe("split video publishing widgets", () => {
   expect(container.querySelectorAll(".video-uploader-paired-actions .vt-button")).toHaveLength(4)
   expect(container.querySelectorAll(".video-uploader-pages > .vt-button")).toHaveLength(3)
   expect(container.querySelector(".video-uploader-pages > .vt-button")?.className).toContain("is-height-32")
-  expect(container.querySelector(".video-uploader-footer .widget-split-button")?.className).toContain("is-large")
+  expect(container.querySelector(".video-uploader-footer .widget-split-button")?.className).toContain("is-medium")
   expect(container.querySelector(".video-uploader-footer .widget-split-button")?.textContent).toContain("Publish video")
   expect(container.querySelector(".video-manager-widget")).toBeNull()
  })
