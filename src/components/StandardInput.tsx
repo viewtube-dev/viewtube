@@ -1,5 +1,6 @@
 import React from 'react';
 import { UI_CONSTANTS } from './ToolboxUISystem';
+import { SubToolboxInput20 } from './subtoolbox/SubToolboxPrimitives';
 
 interface StandardInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   color?: string;
@@ -14,7 +15,7 @@ export const StandardInput: React.FC<StandardInputProps> = ({
 }) => {
   return (
     <div className="relative w-full">
-      <input
+      <SubToolboxInput20
         className={`w-full bg-white ${UI_CONSTANTS.border} ${UI_CONSTANTS.radius} p-4 font-black uppercase text-sm ${className} ${color}`}
         {...props}
       />
