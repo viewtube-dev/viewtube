@@ -265,3 +265,4 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 - The Dropdown family is placed on a dedicated catalog row with side-by-side specimens on wider screens and a single-column layout on narrow screens. Dropdown trigger and option text uses the same heavy uppercase typography and `-0.02em` spacing.
 - These are catalog/source changes on `feat/canonical-simple-text-input-library`; browser-rendered sizing, build, and automated checks still require verification before merge.
 
+- Added an explicit **28px Dropdown Pair** family entry: two real, keyboard-operable dropdown triggers in their own dedicated row, side by side. Both use uppercase 24px text, heavy weight, and `-0.02em` letter spacing.
