@@ -1,0 +1,113 @@
+/* Confirmed primitive catalog: only size/typography normalization for the real Studio controls. */
+.vt-confirmed-catalog {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.vt-confirmed-intro {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+.vt-confirmed-family {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 3px solid #000;
+  border-radius: 10px;
+  background: #fff;
+}
+.vt-confirmed-family > h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+.vt-confirmed-variants {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.vt-confirmed-variant {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-confirmed-variant > span {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.vt-confirmed-provenance {
+  display: grid;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid #c8c8c8;
+  color: #454545;
+  font-size: 10px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-provenance strong {
+  color: #000;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+.vt-confirmed-provenance code {
+  margin-right: 5px;
+  font-size: 10px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+button.vt-confirmed-button-44[data-vt-studio-control],
+button.vt-confirmed-button-28[data-vt-studio-control] {
+  --vt-studio-control-height: 44px;
+  height: 44px;
+  min-height: 44px;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 0 12px;
+}
+button.vt-confirmed-button-28[data-vt-studio-control] {
+  --vt-studio-control-height: 28px;
+  height: 28px;
+  min-height: 28px;
+  font-size: 14px !important;
+  padding: 0 8px;
+  border-radius: 6px;
+}
+button.vt-confirmed-button-44[data-vt-studio-control][data-split-left="true"],
+button.vt-confirmed-button-28[data-vt-studio-control][data-split-left="true"] {
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
+  padding: 0;
+}
+button.vt-confirmed-button-44[data-vt-studio-control] [data-vt-studio-split-rail] {
+  width: 44px;
+  height: 44px;
+}
+button.vt-confirmed-button-28[data-vt-studio-control] [data-vt-studio-split-rail] {
+  width: 28px;
+  height: 28px;
+  border-right-width: 3px;
+}
+button.vt-confirmed-button-44[data-vt-studio-control] [data-vt-studio-split-label],
+button.vt-confirmed-button-28[data-vt-studio-control] [data-vt-studio-split-label] {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+button.vt-confirmed-button-28[data-vt-studio-control] [data-vt-studio-split-label] {
+  padding: 0 8px;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-variants { grid-template-columns: minmax(0, 1fr); }
+  .vt-confirmed-family { padding: 10px; }
+}
