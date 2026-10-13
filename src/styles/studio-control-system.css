@@ -846,3 +846,62 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
   margin-top: 2px;
   padding: 2px 5px;
 }
+
+
+/* Canonical Studio Controls ownership: migrated switch, choice, and word-toggle primitives. */
+/* Canonical 44px control family — ratios mirror the supplied reference specimen. */
+.vt-studio-44-switch,.vt-studio-44-choice{appearance:none;-webkit-appearance:none;position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;margin:0;padding:0;border:0;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 38%, white);cursor:pointer;touch-action:manipulation;transition:background-color .22s ease-out}
+.vt-studio-44-switch{width:75.68px;height:44px}
+.vt-studio-44-switch.is-round{border-radius:999px}
+.vt-studio-44-switch.is-rect{border-radius:7.333px}
+.vt-studio-44-handle{position:absolute;top:3.667px;left:3.667px;width:36.667px;height:36.667px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:translateX(0);transition:transform .22s cubic-bezier(.4,0,.2,1),background-color .22s ease-out}
+.vt-studio-44-switch.is-round .vt-studio-44-handle{border-radius:50%}
+.vt-studio-44-switch.is-rect .vt-studio-44-handle{border-radius:3.667px}
+.vt-studio-44-switch.is-on .vt-studio-44-handle{transform:translateX(31.68px)}
+.vt-studio-44-choice{width:44px;height:44px}
+.vt-studio-44-choice.is-round{border-radius:50%}
+.vt-studio-44-choice.is-rect{border-radius:7.333px}
+.vt-studio-44-choice .vt-studio-44-dot{display:block;width:33px;height:33px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:scale(0);opacity:0;transition:transform .22s cubic-bezier(.34,1.56,.64,1),opacity .15s ease,background-color .22s ease}
+.vt-studio-44-choice.is-radio.is-round .vt-studio-44-dot{border-radius:50%}
+.vt-studio-44-choice.is-radio.is-rect .vt-studio-44-dot{border-radius:1.833px}
+.vt-studio-44-choice.is-on .vt-studio-44-dot{transform:scale(1);opacity:1}
+.vt-studio-44-choice.is-checkbox svg{width:96%;height:96%;stroke:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;transition:stroke-dashoffset .22s cubic-bezier(.4,0,.2,1),stroke .22s ease}
+.vt-studio-44-choice.is-checkbox.is-on svg{stroke-dashoffset:0}
+.vt-studio-44-switch.is-color-swap.is-on,.vt-studio-44-choice.is-color-swap.is-on{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
+.vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,.vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
+.vt-studio-44-switch.is-black-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-black-indicator .vt-studio-44-dot{background:#000}
+.vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;box-shadow:0 1px 2.75px rgba(0,0,0,.15)}
+.vt-studio-44-switch.is-solid.is-on,.vt-studio-44-choice.is-solid.is-on{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
+.vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));outline-offset:3px}
+.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:32px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:#fff;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000}
+.vt-studio-44-word-toggle.is-size-28{--vt-word-height:28px;--vt-word-font-size:14px;--vt-word-radius:4.667px;border-width:2px}
+.vt-studio-44-word-handle{position:absolute;top:2.75px;bottom:2.75px;left:2.75px;width:calc(50% - 5.5px);border-radius:calc(var(--vt-word-radius)*.5);background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6));transition:left .22s cubic-bezier(.2,.8,.2,1),width .22s cubic-bezier(.2,.8,.2,1),background-color .22s ease-out;pointer-events:none}
+.vt-studio-44-word-toggle.is-size-28 .vt-studio-44-word-handle{top:2px;bottom:2px;left:2px;width:calc(50% - 4px);border-radius:2.3px}
+.vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
+.vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle{background:#000}
+.vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle{background:#fff}
+.vt-studio-44-word-toggle button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:100%;padding:0 14.667px;border:0;background:transparent;color:#000;font:1000 var(--vt-word-font-size)/1 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.055em;text-transform:uppercase;white-space:nowrap;-webkit-text-stroke:1px currentColor}
+.vt-studio-44-word-toggle.is-size-28 button{padding:0 9.333px}
+.vt-studio-44-word-toggle.is-color-swap button.is-active{color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
+.vt-studio-44-word-toggle.is-black-indicator button.is-active{color:#fff}
+.vt-studio-44-word-toggle.is-white-indicator button.is-active{color:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
+@media(prefers-reduced-motion:reduce){.vt-studio-44-switch,.vt-studio-44-handle,.vt-studio-44-choice,.vt-studio-44-choice span,.vt-studio-44-choice svg,.vt-studio-44-word-handle{transition:none!important;animation:none!important}}
+
+
+
+/* Final typography authority: standard fields and word toggles use the Component Library's 44px tokens. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)[data-size="standard"] {
+  font-size: var(--vt-studio-44-font-size, 32px) !important;
+  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
+}
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)[data-size="compact"] {
+  font-size: var(--vt-studio-28-font-size, 14px) !important;
+  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
+}
+.vt-studio-44-word-toggle { --vt-word-font-size: var(--vt-studio-44-font-size, 32px); }
+.vt-studio-44-word-toggle.is-size-28 { --vt-word-font-size: var(--vt-studio-28-font-size, 14px); }
+.vt-studio-44-switch, .vt-studio-44-choice { border: var(--vt-studio-control-stroke, 3px) solid #000; }
+.vt-studio-44-switch:focus-visible, .vt-studio-44-choice:focus-visible, .vt-studio-44-word-toggle button:focus-visible {
+  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 3px;
+}
