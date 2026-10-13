@@ -5,7 +5,7 @@ import {
   Upload, Video, X,
 } from "lucide-react"
 import {
-  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
+  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge, SubToolbox44Switch, SubToolbox44Choice, SubToolbox44WordToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
@@ -28,6 +28,7 @@ export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Disabled Split Button", "Upload Frame", "Pagination", "Vault Landscape Asset",
   "Vault Portrait Asset", "Vault Audio Asset", "Vault Document Asset", "Knob Dial",
   "Controller Switch", "LED Light", "Alphabetical Spectrum Tags", "Icon Rail Control",
+  "44px Switches", "44px Radio + Checkbox", "Word Toggles",
   "Two Color Data Stats", "Monochrome Data Stats", "Tiny Data Stats", "Tooltip Dark",
   "Tooltip Color", "Dashboard Pill Tags",
 ] as const
@@ -180,6 +181,32 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   return <Circle />
 }
 
+
+const CONTROL_SKINS = [
+  { skin: "solid", label: "1 · SOLID" },
+  { skin: "color-swap", label: "3 · COLOR SWAP" },
+  { skin: "black-indicator", label: "4 · BLACK INDICATOR" },
+  { skin: "white-indicator", label: "5 · WHITE INDICATOR" },
+] as const;
+const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> = ({ name, paletteIndex }) => {
+  const [switchValues, setSwitchValues] = useState([false, false, false, false]);
+  const [choiceValues, setChoiceValues] = useState([false, false, false, false, false, false, false, false]);
+  const [wordValues, setWordValues] = useState([false, false, false, false]);
+  const colorStyle = { "--vt-control-base": "#20f13e", "--vt-control-indicator": "#f276c5", "--vt-control-ink": "#0f172a" } as React.CSSProperties;
+  if (name === "44px Switches") return <div className="vt-catalog-canonical-controls" style={colorStyle}>
+    {CONTROL_SKINS.map((variant, i) => <div className="vt-catalog-control-variant" key={variant.skin}><small>{variant.label}</small><SubToolbox44Switch skin={variant.skin} checked={switchValues[i]} aria-label={variant.label} onClick={() => setSwitchValues(v => v.map((n,j) => i === j ? !n : n))} /></div>)}
+  </div>;
+  if (name === "44px Radio + Checkbox") return <div className="vt-catalog-canonical-controls" style={colorStyle}>
+    {CONTROL_SKINS.map((variant, i) => <div className="vt-catalog-control-variant" key={`radio-${variant.skin}`}><small>RADIO · {variant.label}</small><SubToolbox44Choice kind="radio" skin={variant.skin} checked={choiceValues[i]} aria-label={`Radio ${variant.label}`} onClick={() => setChoiceValues(v => v.map((n,j) => j < 4 ? i === j : n))} /></div>)}
+    {CONTROL_SKINS.map((variant, i) => <div className="vt-catalog-control-variant" key={`check-${variant.skin}`}><small>CHECKBOX · {variant.label}</small><SubToolbox44Choice kind="checkbox" shape="rect" skin={variant.skin} checked={choiceValues[i+4]} aria-label={`Checkbox ${variant.label}`} onClick={() => setChoiceValues(v => v.map((n,j) => j === i+4 ? !n : n))} /></div>)}
+  </div>;
+  return <div className="vt-catalog-word-toggle-families" style={colorStyle}>
+    {[{size:"44" as const,label:"44PX DEFAULT"},{size:"28" as const,label:"28PX COMPACT"}].map((variant, i) => <div className="vt-catalog-word-toggle-size" key={variant.size}><small>{variant.label}</small><div className="vt-catalog-canonical-controls">
+      {CONTROL_SKINS.map((skin, j) => <div className="vt-catalog-control-variant" key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={variant.size} skin={skin.skin} value={wordValues[i*2+j]} onValueChange={next => setWordValues(v => v.map((n,k) => k === i*2+j ? next : n))} /></div>)}
+    </div></div>)}
+  </div>;
+};
+
 export interface StudioHubCompletePrimitiveCatalogProps { paletteIndex?: number }
 
 export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimitiveCatalogProps> = ({ paletteIndex = 7 }) => (
@@ -193,7 +220,7 @@ export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimit
         <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state="hardcoded-reference">
           <h3><span>{String(index + 1).padStart(2,"0")}</span>{name}</h3>
           <div className="vt-catalog-levels">
-            {LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
+            {["44px Switches", "44px Radio + Checkbox", "Word Toggles"].includes(name) ? <CanonicalControlFamily name={name} paletteIndex={paletteIndex} /> : LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
           </div>
         </article>
       ))}
