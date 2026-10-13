@@ -53,6 +53,7 @@ import { geminiQueue } from "../utils/RequestQueue"
 import { getVaultKey } from "./keyVault"
 import { budgetToTimeline, type ScriptBudget } from "./scriptBudget"
 import { stitchFullScript } from "./scriptQuality"
+import { buildProjectStrategyPrompt, validateProjectStrategy } from "./brain/projectStrategyPrompt"
 import {
  applyMeterChargeEvent,
  estimateMeterQuote,
@@ -3257,18 +3258,12 @@ export const generateProjectStrategy = async (
   required: ["topic", "description", "length", "audience", "vision", "hook"],
  }
 
- const prompt = `
-    IDENTITY: Elite YouTube Strategist.
-    CREATOR VISION: ${journalContext}
-    TASK: Create a detailed Project Plan for a new video.
-    
-    INPUT:
-    Concept: ${concept}
-    Niche: ${niche}
-    Target Audience: ${targetAudience}
-    
-    Return a JSON object containing the topic, description, estimated length, target audience details, creative vision, and a scroll-stopping hook.
-  `
+ const prompt = buildProjectStrategyPrompt({
+  concept,
+  niche,
+  targetAudience,
+  creatorContext: journalContext,
+ })
 
  return await executeWithRetry(async () => {
   const modelId = getActiveModel("text")
@@ -3286,12 +3281,12 @@ export const generateProjectStrategy = async (
 
   try {
    const jsonStr = cleanJsonString(text)
-   return JSON.parse(jsonStr) as ProjectPlan
+   return validateProjectStrategy(JSON.parse(jsonStr))
   } catch (e) {
    console.warn(
-    "[Gemini] Project Strategy JSON parse failed, attempting self-correction...",
+    "[Gemini] Project Strategy output failed validation; attempting self-correction...",
    )
-   return await selfCorrectJson(text, responseSchema)
+   return validateProjectStrategy(await selfCorrectJson(text, responseSchema))
   }
  })
 }
