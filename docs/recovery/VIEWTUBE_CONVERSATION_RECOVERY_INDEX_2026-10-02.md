@@ -152,3 +152,25 @@ Recovered the beta-critical account/login/Google/YouTube requirements; the accou
 ### Contribution summary
 
 Recovered the Render npm start failure and its current-source fix, the historical Vercel Resource Library unresolved-import failure, the current source-local Resource Library architecture, the user's hard src-only runtime import constraint, Toolbox compatibility-export findings, current main checkpoint evidence, merge-all-work rules, deployment provenance requirements, and the distinction between historical external-repository evidence and canonical viewtube-dev/viewtube state.
+
+
+## Registered Round 1 contribution — Vault Workbench Tools, Capabilities, Plans & Systems Reference — 2026-10-13
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Conversation Agent — Vault Workbench Systems Reference |
+| Round | 1 |
+| Date/time | 2026-10-13 17:32 EDT |
+| Artifact | `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md` |
+| Source | User request; canonical Vault master; Vault overview; Vault/Projects recovery handoff; current recovery governance |
+| Status | VERIFIED IMPLEMENTATION (documentation only; runtime implementation not claimed) |
+| Provenance | Existing canonical master + recovered capability inventory → consolidated master reference |
+| Verification | Updated master re-read from main; Recovery.md, Recovery.yaml, and docs/Vault.md registration/link re-read from main |
+| Commit | `5e70c1e18aee6b00f973e02e72ed5814eee0b4f9` |
+| LOG-ID | `REC-20261013-vault-reference-001` |
+| UPDATE-ID | `UPDATE-20261013-vault-reference-001` |
+| Follow-up | Map every capability to canonical runtime files, tests, UI entry, dependencies, and actual status; preserve historical external implementation claims as unverified until reconciled |
+
+### Contribution summary
+
+Expanded the existing Vault master rather than creating a competing master. The reference now covers adaptive Workbench modes; image, video, audio, document, inspection, search, organization, AI, processing, rights, lineage, compare, and handoff capability families; the Tool Record Contract; shared operation lifecycle; conceptual asset/collection model; integration boundaries; UI/security standards; test and release gates; phased implementation; provenance boundaries; risks; and unresolved questions. The catalog is a target specification, not proof that each capability is implemented.

@@ -898,3 +898,52 @@ latest_conversation_update_widget_source_recovery:
     - "Compare recovered Widget source against canonical main."
     - "Make an explicit canonical-source decision."
     - "Resume four-way Widget audit and implementation only after authority is established."
+
+
+vault_workbench_systems_reference:
+  status: "VERIFIED IMPLEMENTATION"
+  date: "2026-10-13"
+  update_id: "UPDATE-20261013-vault-reference-001"
+  title: "Vault Workbench Tools, Capabilities, Plans and Systems Reference"
+  canonical_document: "docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md"
+  overview_document: "docs/Vault.md"
+  recovery_source: "docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md"
+  commit: "5e70c1e18aee6b00f973e02e72ed5814eee0b4f9"
+  related_commits:
+    - "1fa574fff31b17b18a6dd7b4cd95ff8cc7ff4c39"
+    - "13c7eeeb27919acfc608f8e7cff8fa5a404636d2"
+    - "e151396e62004b709888236a6b34e72ba03048c5"
+    - "0595f8f736890d824def3597b0240689fcf5c850"
+    - "a9702360e226bbee164243d3d91d17b7393c045a"
+  scope:
+    - "Adaptive Workbench modes and capability eligibility"
+    - "Complete capability taxonomy and target inventory"
+    - "Canonical tool record contract"
+    - "Shared operation lifecycle, receipts, retries, and lineage"
+    - "Conceptual asset/collection model with schema-reconciliation warning"
+    - "Projects, ContentBuild, Asset Engine, Resource Library, Brain, Analytics, and account integration"
+    - "Toolbox/SubToolbox reuse and UI interaction standards"
+    - "Security, reliability, testing, and verification matrix"
+    - "Phased implementation plan and exit gates"
+    - "Historical provenance, unresolved questions, and completion governance"
+  implementation_boundary: "Documentation is implemented; runtime capabilities are not claimed complete by inclusion in the catalog."
+  discoveries:
+    - "The existing canonical Vault master was the correct home; a competing master was not created."
+    - "The recovery handoff contains a richer capability inventory and adaptive Workbench decision set than the former master."
+    - "Canonical runtime ownership and per-capability implementation coverage still require source-level verification."
+  optimizations:
+    - "Consolidate capabilities into shared adaptive surfaces rather than separate mini-apps."
+    - "Use one operation contract and link results to lineage/history."
+    - "Preserve one canonical asset identity across Vault, Projects, ContentBuild, Asset Engine, and package handoffs."
+    - "Reuse canonical Toolbox/SubToolbox primitives rather than hard-coded duplicates."
+  verification:
+    - "GitHub accepted the canonical master update."
+    - "Post-write read-back confirmed the canonical master content."
+    - "Recovery.md, Recovery.yaml, docs/Vault.md, and the recovery index were re-read after writes."
+    - "The overview link points to docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md."
+    - "Runtime tests/builds were not run because no runtime code changed."
+  unresolved:
+    - "Canonical runtime source tree and asset service ownership."
+    - "Authorization/recoverability of historical adaptive Workbench donor branch."
+    - "Per-capability runtime/test coverage."
+    - "Current deployment state for the exact canonical commit."

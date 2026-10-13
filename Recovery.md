@@ -795,3 +795,59 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Verification:** Inspected ViewTubeBUILD repository metadata; recursively inspected its main tree; directly fetched key Widget source files and source-map references; re-read updated canonical recovery files after writes. No destructive cleanup performed.
 - **Blockers:** Repository identity/history/deployment provenance and canonical-source ownership are unresolved. A production code migration is therefore not yet authorized by evidence.
 - **Recommended follow-up:** Compare ViewTubeBUILD history and repository identity against viewtube-dev/viewtube, inspect known-good/deployment references, then produce a controlled source diff and canonical-source decision. After that, resume the four-way Widget audit against representative consumers.
+
+
+#### LOG-ID: REC-20261013-vault-reference-001
+
+- **Timestamp:** 2026-10-13 17:32:00 EDT
+- **Agent:** ViewTube Conversation Agent — Vault Workbench Systems Reference
+- **Round:** 1
+- **Category:** VAULT / ASSET WORKBENCH / ARCHITECTURE / TOOL INVENTORY
+- **Action:** Expanded the canonical Vault Asset Workbench master into a complete tools, capabilities, systems, integration, operation-contract, verification, and phased-continuation reference.
+- **Source:** User request to create a complete Vault Workbench tools/capabilities plans and systems reference; existing canonical Vault master; docs/Vault.md; Vault/Projects recovery handoff; repository rebuild planning references.
+- **Evidence:** Direct reads of current canonical main files, including docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md, docs/Vault.md, Recovery.md, Recovery.yaml, and the detailed Vault/Projects recovery handoff.
+- **Status:** VERIFIED IMPLEMENTATION (documentation update only; no runtime capability implementation claimed)
+- **Artifact / file:** docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md
+- **External identifier:** Commit 5e70c1e18aee6b00f973e02e72ed5814eee0b4f9
+- **Dependencies:** Projects, ContentBuild, Asset Engine, Resource Library, Brain/AI, account/workspace authorization, Toolbox/SubToolbox primitives, recovery governance.
+- **Result:** The canonical master now includes the capability taxonomy, adaptive Workbench modes, Tool Record Contract, shared operation lifecycle, conceptual data model, cross-system contracts, UI/security standards, testing matrix, phased implementation plan, provenance warnings, unresolved questions, and completion gates. The external adaptive Workbench implementation remains reported/unverified against canonical main.
+- **Discoveries:** The prior recovery handoff contains a substantially richer capability inventory than the former short master. The right durable home is the existing canonical Vault master, not another competing master document. Canonical runtime ownership and implementation coverage remain to be established from source.
+- **Code discoveries:** No runtime code was changed or verified in this documentation pass. Historical candidate source paths and external PR claims remain non-canonical until independently reconciled.
+- **Optimizations:** Consolidated tools into shared Workbench surfaces; defined a shared operation/receipt/lineage flow; made Project/ContentBuild/Asset Engine/Vault/package boundaries explicit; required reuse of canonical Toolbox/SubToolbox primitives; added test and release gates.
+- **Recommended improvements:** Next inspect the canonical runtime source tree, create an evidence-backed per-capability status map, verify asset identity/service ownership and Toolbox integration, then implement the smallest end-to-end vertical slice using test-first development.
+- **Verification:** GitHub accepted the master update and returned commit SHA above. Post-write read-back and governance/index registration are the remaining verification steps for this update.
+- **Blockers:** Exact current canonical runtime paths, external donor-branch authorization, actual tool coverage, and live deployment status remain UNKNOWN.
+- **Next action:** Verify the updated master and register the artifact in Recovery.yaml; update the short Vault overview to link to the complete master.
+
+#### UPDATE-ID: UPDATE-20261013-vault-reference-001
+
+- **Exact Eastern timestamp:** 2026-10-13 17:32:00 EDT (America/New_York, UTC-04:00)
+- **Conversation title:** UNKNOWN — title not exposed in current conversation context
+- **Main focus:** Create a durable, complete Vault Workbench tools/capabilities/plans/systems reference to continue Vault work.
+- **Files added:** None.
+- **Files edited:** docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md; Recovery.md; Recovery.yaml; docs/Vault.md (overview link).
+- **Commits:** Vault master: 5e70c1e18aee6b00f973e02e72ed5814eee0b4f9; governance and overview commits to be recorded after their writes.
+- **Discoveries:** The existing Vault master was too short to serve as a continuation reference; the detailed recovery handoff contained the broader capability catalog and adaptive Workbench decisions. The existing master was extended instead of creating a competing master.
+- **Code discoveries:** Runtime source ownership and per-capability implementation status remain unverified in this documentation pass.
+- **Optimizations:** One adaptive Workbench, reusable UI primitives, shared operation semantics, explicit lineage, non-duplicated asset identity, and phased verification gates.
+- **Recommended improvements:** Perform source-to-capability inventory and then implement verified gaps in dependency order.
+- **Verification:** Canonical master write accepted by GitHub. Final read-back, Recovery.yaml registration, and overview-link verification pending.
+- **Blockers:** Canonical runtime mapping, donor provenance, and current deployment verification remain unresolved.
+- **Next actions:** Finish structured registration and overview link; re-read all changed files and record final commit identifiers.
+
+
+#### LOG-ID: REC-20261013-vault-reference-verify-001
+
+- **Timestamp:** 2026-10-13 17:35:00 EDT
+- **Agent:** ViewTube Conversation Agent — Vault Workbench Systems Reference
+- **Round:** 1
+- **Category:** VAULT / RECOVERY / VERIFICATION
+- **Action:** Verified the Vault master update, registered the artifact, and linked the concise Vault overview to the canonical continuation reference.
+- **Source:** REC-20261013-vault-reference-001 and UPDATE-20261013-vault-reference-001.
+- **Evidence:** Re-read docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md, Recovery.md, Recovery.yaml, docs/Vault.md, and the recovery index from canonical main after the writes.
+- **Status:** VERIFIED IMPLEMENTATION (documentation changes only)
+- **Artifacts:** docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md; docs/Vault.md; Recovery.md; Recovery.yaml; docs/recovery/VIEWTUBE_CONVERSATION_RECOVERY_INDEX_2026-10-02.md
+- **Commits:** Master 5e70c1e18aee6b00f973e02e72ed5814eee0b4f9; Recovery.md 1fa574fff31b17b18a6dd7b4cd95ff8cc7ff4c39; Recovery.yaml 13c7eeeb27919acfc608f8e7cff8fa5a404636d2; Vault overview e151396e62004b709888236a6b34e72ba03048c5; recovery index 0595f8f736890d824def3597b0240689fcf5c850.
+- **Result:** The complete reference is committed on canonical main, registered in both structured recovery state and the conversation recovery index, and linked from docs/Vault.md.
+- **Next action:** Begin source-level capability inventory and runtime reconciliation before implementation.
+- **Verification:** GitHub read-back confirmed the master has the final section and expected content; Recovery.yaml contains the registration; docs/Vault.md links to the master; the index contains this contribution. Runtime tests/builds were not run because no runtime code changed.

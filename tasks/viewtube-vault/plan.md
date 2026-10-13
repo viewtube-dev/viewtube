@@ -176,3 +176,153 @@ This phase is a UX architecture reset driven by the 2026-09-25 mobile screenshot
 - empty notes/status areas do not reserve card height;
 - asset-card non-media chrome <= 96px in compact mode;
 - desktop, portrait and landscape screenshots pass a single bounded UI audit.
+
+
+---
+
+## Continuation plan — adaptive Vault Workbench (2026-10-13)
+
+**Status:** PROPOSED CONTINUATION PLAN — implementation and runtime status must be reverified before each work slice.  
+**Capability:** `CAP-ASSET-LINEAGE`  
+**Plan family:** `PLAN-FAMILY-ASSET-VAULT`  
+**Canonical capability authority:** `docs/architecture/VIEWTUBE_ASSET_ENGINE_MASTER_RESOURCE.md`  
+**Vault workbench authority:** `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`  
+**Existing work checked:** `tasks/viewtube-vault/plan.md`, `tasks/viewtube-vault/todo.md`, `tasks/viewtube-vault/CAPABILITY-MAP.md`, `tasks/viewtube-vault/SPEC-vault.md`, `docs/handoffs/VIEWTUBE_VAULT_MASTER_HANDOFF_2026-09-26.md`, `docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md`, current `src/views/CreatorVaultOS.tsx`, and `src/services/vaultWorkspaceState.ts`.
+
+**Convergence decision: EXTEND.** Continue the existing Vault implementation and its existing plan family. Do not create a second Vault application, parallel asset store, duplicate service, new Workbench mini-app per tool, or a competing task ledger. The current canonical page source found is `src/views/CreatorVaultOS.tsx`; the previously reported `src/features/vault-workbench/*` host/capability files were not found at the expected paths on `main`, so their existence and ownership remain unverified. Reconcile source paths and runtime ownership before porting or recreating any adaptive host code.
+
+### Objective
+
+Deliver a compact, reliable Vault Asset Workbench where creators can find, preview, inspect, organize, safely transform and reuse assets, while preserving canonical asset identity, versions/derivatives, permissions, lineage, and handoffs to Projects/ContentBuild and other ViewTube tools.
+
+The target remains **one adaptive Workbench, many contextual capabilities, a small number of reusable surfaces**: Browse/View, Inspect, Edit, Compare, Process, Organize and Workflow. These are modes inside the existing Vault experience, not separate applications.
+
+### Non-negotiable architecture and UI rules
+
+1. **Preserve one canonical asset identity.** Extend the existing asset adapter/service/schema after inspecting it. Do not create a second Vault store or duplicate project/collection membership model.
+2. **Keep ownership boundaries explicit.** Vault owns durable asset access and organization; Asset Engine owns cross-workflow asset relationships/versions/derivatives where its current contract says so; Projects/ContentBuild own project intent and lifecycle; BrainRuntime proposes/suggests rather than becoming an asset database; ActionPacket/Handoff routes work between tools.
+3. **Reuse the canonical Toolbox/SubToolbox shells.** For control primitives, use the canonical Studio Controls system: `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`. Do not add new production primitives or copy styles into `src/components/subtoolbox/SubToolboxPrimitives.tsx` / `src/styles/subtoolbox-system.css`. Audit existing usages and migrate confirmed missing primitives/variants through the canonical owner before consuming them in Vault.
+4. **Do not claim capabilities from a catalog alone.** Record each as VERIFIED, PARTIAL, MISSING, BLOCKED or UNKNOWN with source, tests, dependencies and runtime evidence.
+5. **Safe-by-default operations.** Prefer non-destructive derivatives; protect approved/GOLDEN assets; validate permissions and parameters; show preview/confirmation where consequential; preserve source IDs, operation receipts, history and lineage; make retry/cancel/partial failure explicit.
+6. **Keep external destinations as handoffs.** Vault-native actions stay distinct from “Send to ViewTube…” destinations. Reuse existing ActionPacket/handoff contracts.
+7. **Do not promote task states or allocate permanent VT IDs from this plan.** Reconcile proposed tasks through Task Authority and the active Task Index writer before canonical task mutation.
+
+### Phase 0 — Canonical-source and baseline reconciliation (blocking)
+
+**Purpose:** Establish exactly what current `main` implements before changing the architecture.
+
+Tasks:
+- Inventory the live `/vault` route, `CreatorVaultOS`, Vault adapters/services, asset types/schemas, import/task processing, collections, selection, Inspector, operation handoffs, and related tests.
+- Trace the actual asset identity and persistence owner across Vault, Asset Engine, Projects/ContentBuild and ActionPacket. Map each target capability to exact source symbols and tests.
+- Reconcile the existing Vault task ledger with current `main`; retain its historical IDs as local aliases, but route new/changed task state through Task Authority.
+- Capture the baseline build, focused tests, lint/typecheck results and current browser behavior. Distinguish pre-existing failures from new regressions.
+- Locate the current convergence capability home and any active branch/PR/missions before creating or porting implementation work.
+
+**Acceptance / exit gate**
+- A source-backed capability matrix marks implemented, partial, missing, blocked and unknown.
+- No planned capability is credited as implemented without source and relevant test/runtime evidence.
+- The actual route, service/schema owners, primitive APIs and supported media dependencies are identified.
+- Baseline failures are recorded so the work introduces no unexplained new failures.
+
+### Phase 1 — Finish the already-planned compact Vault UX (first implementation wave)
+
+Use the existing **Lane UX — compact Vault information architecture redesign** in `tasks/viewtube-vault/todo.md` as the detailed source list; do not create a competing redesign plan.
+
+Priority order:
+1. Move Workspace/Layout configuration out of normal page flow.
+2. Make the Asset Library the immediate primary surface with a compact toolbar for search, view, sort and core filters.
+3. Consolidate browsing into a contextual drawer/desktop rail; remove duplicate Navigator/Explorer/filter/tag ownership.
+4. Replace the persistent full-page Asset Operations module with a selection-dependent action bar and contextual actions.
+5. Keep Import & Tags together as one independent SubToolbox; keep Text Editor separate and collapsed by default.
+6. Make Inspector contextual on mobile and a right rail only at suitable desktop widths; make Task Center compact while idle.
+7. Redesign cards as media-first, aspect-ratio-aware previews with only essential metadata visible.
+8. Reduce nested border/shadow and secondary-action chrome without inventing page-local primitive geometry.
+
+**Acceptance**
+- The first viewport on a normal return visit shows useful Asset Library content rather than configuration modules.
+- No duplicate owner for search, filtering, tags, selection actions or Inspector.
+- No clipped controls at 320–430 CSS px; desktop, portrait mobile and landscape mobile are reviewed.
+- Saved filters, selection, view/density, scroll and workspace preferences survive navigation/orientation changes where currently supported.
+- Screenshot capture → critique → correction → recapture is completed; keyboard/touch/focus and empty/loading/error states are exercised.
+
+**Checkpoint A:** targeted tests and production build pass with no new failures; responsive screenshot matrix is reviewed before moving to another feature wave.
+
+### Phase 2 — Complete reliable intake and processing jobs
+
+Continue existing Lane C gaps only after Phase 0 verifies their current status:
+- Finish or explicitly block the vision/suggested-tag task unless backed by a real service.
+- Finish arbitrary local-file transcript processing only when a real supported speech-to-text backend exists; preserve the already-existing YouTube-linked acquisition path.
+- Add proxy derivative generation only with a real processor, resource limits, queued/running/succeeded/failed/cancelled states, retry safety and durable lineage.
+- Preserve direct-import vs staged-editable-intake semantics, duplicate preflight, per-item accept/reject, metadata extraction and task-center recovery.
+- Do not present placeholder/mock work as a completed scanner or processor.
+
+**Acceptance**
+- Valid and invalid files, duplicate files, permission failures, processor failures and retry/cancel behavior are tested.
+- Each successful derivative links to its source; partial batch outcomes remain visible; retries do not create duplicate outputs or external side effects.
+- Unsupported services are explicitly marked BLOCKED with a clear UI explanation.
+
+### Phase 3 — Harden the shared operation and adaptive capability contract
+
+Do this by extending current services and UI patterns, not by starting a parallel Workbench subsystem:
+- Define/verify the shared capability record: stable ID, purpose, supported asset types/cardinality, preconditions, permission, parameters, consequence, operation semantics, output, canonical owner, dependencies, error/retry/cancel behavior, provenance, UI surface and tests.
+- Map the seven Workbench modes to the existing page/surface structure and determine which actions should be contextual by selected asset type, selection count, state and permissions.
+- Normalize operations around Validate → Preview/Confirm → Execute → Result → Lineage/History → Optional Handoff.
+- Reuse the existing operation/action envelope and receipts where available; reconcile ActionPacket, generation, Vault task/history and ContentBuild event identifiers rather than adding competing operation IDs.
+- Add capability search/pinning/preferences only after the basic action routing and state preservation are reliable.
+
+**Acceptance**
+- One representative read-only action, metadata mutation and derivative operation each pass through the verified shared contract.
+- Disabled actions explain missing prerequisites where actionable.
+- Creator-approved masters are not silently overwritten; operations preserve source identity and record outputs/provenance.
+- No capability gets its own mini-application solely because it has a distinct label.
+
+### Phase 4 — Finish Projects / ContentBuild handoff and project-workflow gaps
+
+Reconcile each existing Lane D/E item with the actual Projects/ContentBuild owner before implementation:
+- Complete the selected-assets → new/existing Project or ContentBuild path and linked Vault picker.
+- Map the donor's nine-stage creator lanes to the canonical ContentBuild lifecycle; do not create a second project workflow or board.
+- Add only schema-supported fields such as priority, due date, core promise/audience/runtime, storyboard shot records, title drafts/primary choice and phased checklists.
+- Derive progress from checklist/lifecycle state rather than maintaining duplicate counters.
+- Add BrainRuntime project-research handoff through its canonical service, and project/published analytics only where attribution and data contracts exist.
+- Verify manifest/package outputs are projections, not rival canonical stores.
+
+**Acceptance**
+- Asset IDs and project/content identity survive create → reopen → edit → handoff → return.
+- Project/collection relationships are durable and authorization-scoped.
+- No duplicated Projects schema/store, ContentBuild lifecycle, package identity or analytics facts are introduced.
+
+### Phase 5 — Safe media transforms and matching-tool integrations
+
+- Audit the canonical editor/media system (VT_E1) before adding crop, trim, color/LUT, batch transform or overwrite controls.
+- Prefer “Create Derivative”; require explicit confirmation for overwrite and enforce GOLDEN/protected asset guards at the service boundary.
+- Keep media operations in Vault/Asset Engine/Editor according to existing ownership; Vault is not automatically a full nonlinear editor.
+- Harvest End Screen/Packaging, Hook, Video Manager and Analytics donor behaviors only in separate bounded PRs after verifying that the behavior is missing and belongs in that tool.
+- Route generation through BrainRuntime/Video Director where appropriate; generated results return as canonical versioned assets with provenance.
+
+**Acceptance**
+- Every transform produces a real output or is clearly marked unsupported/blocked.
+- Permission, resource/time limits, unsafe input, overwrite, cancellation and failure cases are tested.
+- Adjacent tools retain one owner for each capability.
+
+### Phase 6 — Capability coverage and release certification
+
+- Maintain evidence-backed coverage for every implemented/actively planned capability using the existing master and Tool Record Contract; do not duplicate the inventory into another master.
+- Certify Vault ↔ Asset Engine ↔ Projects/ContentBuild ↔ ActionPacket/Handoff ↔ Publisher where applicable.
+- Verify access boundaries, data integrity, lineage, history, responsive UI and accessibility.
+- Run focused tests, relevant integration tests, typecheck/lint, production build, browser smoke and exact-commit deployment verification where deployment is available.
+- Update the existing canonical Vault and Asset Engine authorities only for durable contract changes; update governed registry metadata in the same PR when an authority is substantively changed. Record actual verification in a receipt/work handoff.
+
+**Final exit gate**
+- The compact Library-first UX is visually certified.
+- Each claimed capability has source/test/runtime evidence and honest status.
+- No new unexplained build/test failures versus baseline.
+- No duplicate asset/project/operation stores or parallel primitive systems.
+- All consequential actions preserve authorization, source identity, history and lineage.
+- The exact merged commit is rechecked after merge; a branch-only success is not production verification.
+
+### Existing-work / convergence findings
+
+- Existing plan family: `PLAN-FAMILY-ASSET-VAULT`; survivor authority: `docs/architecture/VIEWTUBE_ASSET_ENGINE_MASTER_RESOURCE.md`.
+- Existing Vault work plan and task list already contain Lane A–G and UX requirements. This section extends their sequencing; it does not replace their unique donor findings.
+- Current source inspection confirms `src/views/CreatorVaultOS.tsx` and `src/services/vaultWorkspaceState.ts` exist on `main`. The previously reported `src/features/vault-workbench/*` paths were not found at those exact paths, so the adaptive-host implementation must be located or rebuilt by extending the actual canonical owner only after Phase 0.
+- No runtime implementation was performed by this planning update. All phase completion states remain unverified until the work is executed and evidenced.
