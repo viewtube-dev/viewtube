@@ -33,15 +33,15 @@ export const VIEWTUBE_TYPOGRAPHY = {
   family: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
   controlWeight: 1000,
   bodyWeight: 900,
-  controlLetterSpacingEm: -0.055,
-  controlLineHeight: 0.9,
+  controlLetterSpacingEm: -0.035,
+  controlLineHeight: 0.86,
   uppercaseControls: true,
 } as const
 
 export const COMPONENT_SIZE_DNA = {
   xs: { height: 20, stroke: 2, radius: 4, shadowOffset: 2, fontSize: 10 },
   s: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
-  m: { height: 44, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 16 },
+  m: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 },
   l: { height: 56, stroke: 3.5, radius: 9.333333, shadowOffset: 5.833333, fontSize: 24 },
 } as const
 
@@ -63,7 +63,7 @@ export type ToolboxControlLevel = Exclude<ToolboxUiLevel, "toolbox">
 
 export const COMPONENT_LEVEL_DNA = {
   l0: { height: 56, stroke: 4, radius: 12, shadowOffset: 6, fontSize: 24 },
-  l1: { height: 48, stroke: 3, radius: 8, shadowOffset: 5, fontSize: 18 },
+  l1: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 },
   l2: { height: 32, stroke: 2, radius: 6, shadowOffset: 4, fontSize: 12 },
 } as const satisfies Record<ToolboxControlLevel, {
   height: number
