@@ -140,3 +140,37 @@ These items are grounded in the inspected source, but still need targeted tests 
 - Source shows a shared Board/Calendar toggle backed by `useProjectsWorkspace()`, and the publisher imports the package projection, publish transaction, YouTube bridge, and project metadata persistence service.
 - These are positive integration anchors, not proof that reload/recovery, all metadata fields, remote publication, or analytics lineage work end to end.
 - **Next:** use one test project to exercise Board ↔ Calendar, Manager ↔ Publisher package continuity, reload/reopen, publish transaction recovery, and analytics binding; record observed results against the acceptance gates above.
+
+
+## 10. Implementation update — Project Manifestation selection
+
+**Code commits on the target branch:**
+- `fc3ac03` — adds tests for active-project synchronization, preserving a valid manual selection, and fallback when the selected project is removed.
+- `a30b6e1` — adds the pure `resolveSelectedProjectId` selection resolver.
+- `62546a0` — synchronizes Project Manifestation with active-project changes while preserving a manual selection when the active project has not changed.
+- `4569621` — handles the case where the active project ID becomes available in the project list after an initial render.
+
+**Files changed:**
+- `src/components/projects/projectManifestation.test.ts`
+- `src/components/projects/projectManifestation.ts`
+- `src/components/projects/ProjectManifestation.tsx`
+
+**Intended behavior:** a newly active project becomes the selected project; a manual selection is retained when the active project remains unchanged; a removed selection falls back to a valid project; and a delayed project-list load can still resolve the active project.
+
+**Verification status:** not yet executed locally. GitHub reports no check runs for commit `4569621`; the visible commit statuses are Vercel deployment failures stating `Deployment rate limited — retry in 24 hours`. These statuses do not establish whether TypeScript or tests pass. A local or independent CI run is still required before this change can be considered verified.
+
+## 11. Video Manager guidance status
+
+The current branch source inspected after the implementation commits already contains published-video-specific helper copy and no longer contains the earlier upload/script/concept guidance described in Candidate D. That copy issue is therefore **not an outstanding change in the current snapshot**. No new edit was made to that file in this pass.
+
+## 12. Current execution state
+
+- [x] Static audit document committed.
+- [x] Project selection resolver tests committed before implementation.
+- [x] Project selection synchronization implementation committed.
+- [x] Latest GitHub commit status inspected.
+- [ ] Focused tests executed and passing.
+- [ ] Typecheck/build executed and passing.
+- [ ] Browser behavior and deployed artifact verified.
+- [ ] Load vs. Swap In semantics confirmed with acceptance tests.
+- [ ] Full Project → ContentBuild → assets → package → publication → analytics workflow verified.
