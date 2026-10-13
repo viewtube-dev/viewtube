@@ -15,7 +15,7 @@ export { SubToolboxInput20, SubToolboxTextArea21, SubToolboxLabeledInput, SubToo
 export {
   StudioButton,
   StudioIconButton,
-  StudioInput,
+  StudioInput,\n  StudioLabeledDropdown,
   StudioFloatingLabelInput,
   StudioFloatingLabelTextArea,
   StudioNumberInput,
@@ -25,7 +25,7 @@ export {
   StudioTextArea,
 } from "./primitives/StudioControls"
 export type {
-  StudioButtonProps,
+  StudioButtonProps,\n  StudioLabeledDropdownProps,\n  StudioLabeledDropdownOption,
   StudioFloatingLabelInputProps,
   StudioFloatingLabelTextAreaProps,
   StudioControlTone,
