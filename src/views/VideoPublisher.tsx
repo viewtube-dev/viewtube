@@ -39,6 +39,7 @@ import { PostActionReflection } from "../components/PostActionReflection"
 import { CanonicalMetadataSections, YOUTUBE_CATEGORY_OPTIONS } from "../components/metadata/CanonicalMetadataSections"
 import { fetchSimplePlaylists, type SimplePlaylist } from "../services/simpleYouTubeApi"
 import { savePublisherMetadataToProject } from "../services/publisherMetadataProjectPersistence"
+import { listVaultAssets } from "../services/vaultAdapter"
 import PublisherMetadataPackageOptions from "../components/PublisherMetadataPackageOptions"
 import MetadataMaster from "./MetadataMaster"
 import ProjectManifestation from "../components/projects/ProjectManifestation"
@@ -54,6 +55,13 @@ import {
   SubToolboxTextArea,
   ToolboxHeaderToggle,
 } from "../components/subtoolbox/SubToolboxPrimitives"
+
+const fileToDataUrl = (file: File): Promise<string> => new Promise((resolve, reject) => {
+  const reader = new FileReader()
+  reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("Could not read the selected thumbnail file."))
+  reader.onerror = () => reject(reader.error || new Error("Could not read the selected thumbnail file."))
+  reader.readAsDataURL(file)
+})
 
 const CopyBox: React.FC<{
   label: string
@@ -144,6 +152,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [publishError, setPublishError] = useState<string | null>(null)
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+  const [publisherThumbnailAsset, setPublisherThumbnailAsset] = useState<{ id: string; name: string; url?: string | null; previewUrl?: string | null; mimeType?: string | null } | null>(null)
   const [savedThumbnailPreview, setSavedThumbnailPreview] = useState<string | null>(null)
   const [captionFile, setCaptionFile] = useState<File | null>(null)
   const [publishTitle, setPublishTitle] = useState("")
@@ -201,6 +210,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     setPublishDescription(project.description || "")
     setPublishTags(project.tags || "")
     setInsightsImported(true)
+    setPublisherThumbnailAsset(null)
+    setThumbnailFile(null)
+    setSavedThumbnailPreview(null)
     setPublishRefresh(value => value + 1)
   }
 
@@ -219,15 +231,48 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       const selectedThumbnail = publishState.videoPackage?.packaging.thumbnailVariants.find(
         item => item.id === publishState.videoPackage?.packaging.selectedThumbnailId,
       ) || null
-      const selectedThumbnailAsset = !thumbnailFile && selectedThumbnail?.vaultAssetId
-        ? {
-            id: selectedThumbnail.vaultAssetId,
-            name: selectedThumbnail.label,
-            url: typeof selectedThumbnail.metadata?.url === "string" ? selectedThumbnail.metadata.url : null,
-            previewUrl: typeof selectedThumbnail.metadata?.previewUrl === "string" ? selectedThumbnail.metadata.previewUrl : null,
-            mimeType: typeof selectedThumbnail.metadata?.mimeType === "string" ? selectedThumbnail.metadata.mimeType : null,
-          }
-        : null
+      let selectedThumbnailAsset = publisherThumbnailAsset
+      if (thumbnailFile && !selectedThumbnailAsset) {
+        const dataUrl = await fileToDataUrl(thumbnailFile)
+        const created = createVersionedAsset({
+          sourceToolId: "video-publisher",
+          sourceKind: "studio-tool",
+          payloadKind: "thumbnail",
+          name: thumbnailFile.name || "Publisher thumbnail",
+          summary: `Selected publisher thumbnail (${thumbnailFile.type || "image"}, ${thumbnailFile.size} bytes)`,
+          kind: "image",
+          url: dataUrl,
+          mimeType: thumbnailFile.type || "image/*",
+          tags: ["thumbnail", "publishing", "content-build", "publisher"],
+          slot: "thumbnail",
+          label: thumbnailFile.name || "Publisher thumbnail",
+          context: {
+            contentBuildId: project.contentBuildId,
+            projectId: project.id,
+            projectName: project.name,
+            stage: "metadata",
+          },
+          metadata: { fileName: thumbnailFile.name, byteSize: thumbnailFile.size, locallyPersistedDataUrl: true },
+        })
+        selectedThumbnailAsset = {
+          id: created.asset.id,
+          name: created.asset.name,
+          url: created.asset.url || dataUrl,
+          previewUrl: created.asset.previewUrl || created.asset.url || dataUrl,
+          mimeType: created.asset.mimeType || thumbnailFile.type || null,
+        }
+        setPublisherThumbnailAsset(selectedThumbnailAsset)
+        setSavedThumbnailPreview(dataUrl)
+      }
+      if (!selectedThumbnailAsset && selectedThumbnail?.vaultAssetId) {
+        selectedThumbnailAsset = {
+          id: selectedThumbnail.vaultAssetId,
+          name: selectedThumbnail.label,
+          url: typeof selectedThumbnail.metadata?.url === "string" ? selectedThumbnail.metadata.url : null,
+          previewUrl: typeof selectedThumbnail.metadata?.previewUrl === "string" ? selectedThumbnail.metadata.previewUrl : null,
+          mimeType: typeof selectedThumbnail.metadata?.mimeType === "string" ? selectedThumbnail.metadata.mimeType : null,
+        }
+      }
       const result = savePublisherMetadataToProject(project, channelId, {
         title: publishTitle,
         description: publishDescription,
@@ -241,7 +286,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         community: publishCommunity,
         aiUse: publishAiUse,
         playlistIds,
-        thumbnailAssetId: thumbnailFile ? null : selectedThumbnailAsset?.id || null,
+        thumbnailAssetId: selectedThumbnailAsset?.id || null,
         finalVideoAssetId: publishState.projection?.finalRenderAssetId || null,
       }, { mode, sourceToolId: "video-publisher", thumbnailAsset: selectedThumbnailAsset })
       if (mode === "current") {
@@ -273,13 +318,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         })
         setActiveProject(project.id)
       }
-      setProjectSaveStatus(thumbnailFile
-        ? (mode === "option"
-          ? "Metadata option saved. The newly selected thumbnail file is still local and is not yet attached to the saved package."
-          : "Metadata saved. The newly selected thumbnail file is still local and is not yet attached to the saved package.")
-        : mode === "option"
-          ? "Metadata option saved to this Project."
-          : "Metadata saved to this Project.")
+      setProjectSaveStatus(mode === "option"
+        ? "Metadata option saved to this Project, including its canonical thumbnail asset reference."
+        : "Metadata saved to this Project, including its canonical thumbnail asset reference.")
       setPublishRefresh(value => value + 1)
       return result
     } catch (error) {
@@ -703,7 +744,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 onCategoryChange={setPublishCategory}
                 onPlaylistsChange={setPlaylistIds}
                 onVideoFileChange={handleVideoFileChange}
-                onThumbnailFileChange={(file) => { setThumbnailFile(file); if (file) setSavedThumbnailPreview(null) }}
+                onThumbnailFileChange={(file) => { setThumbnailFile(file); setPublisherThumbnailAsset(null); if (file) setSavedThumbnailPreview(null) }}
                 onVisibilityChange={(value) => {
                   if (value === "scheduled") {
                     setPrivacyStatus("private")
@@ -765,7 +806,18 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                   setPublishCommunity(Boolean(payload.community))
                   setPublishAiUse(payload.aiUse !== false)
                   setPlaylistIds(payload.playlistIds || "")
-                  setSavedThumbnailPreview(payload.thumbnailPreviewUrl || null)
+                  const savedThumbnailAsset = payload.thumbnailAssetId
+                    ? listVaultAssets().find(asset => asset.id === payload.thumbnailAssetId) || null
+                    : null
+                  const savedThumbnailUrl = savedThumbnailAsset?.previewUrl || savedThumbnailAsset?.url || payload.thumbnailPreviewUrl || null
+                  setPublisherThumbnailAsset(savedThumbnailAsset ? {
+                    id: savedThumbnailAsset.id,
+                    name: savedThumbnailAsset.name,
+                    url: savedThumbnailAsset.url,
+                    previewUrl: savedThumbnailAsset.previewUrl || savedThumbnailAsset.url,
+                    mimeType: savedThumbnailAsset.mimeType,
+                  } : null)
+                  setSavedThumbnailPreview(savedThumbnailUrl)
                   setThumbnailFile(null)
                   const project = (brain.projects || []).find(item => item.id === brain.activeProjectId)
                   if (project) {
