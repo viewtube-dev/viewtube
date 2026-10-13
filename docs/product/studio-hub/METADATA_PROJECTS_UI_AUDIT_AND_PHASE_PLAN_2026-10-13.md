@@ -143,3 +143,20 @@ The ten items are proposed component/system work, not ten new primitive families
 1. Should the separate history/performance location be a dedicated Metadata History page linked from Analytics, or a section within the existing Analytics tool? Default plan: a distinct route/location with Analytics owning measurements and Content Analysis owning interpretation.
 2. Should the optional guidance preference be global to ViewTube or scoped to Metadata Master? Default plan: scoped to Metadata Master first, using the existing settings/preference pattern.
 3. Should metadata candidate sets be retained as first-class Video Package variants or represented as package versions with linked title/thumbnail variant groups? Phase 1 will inspect the existing contracts and document the best-fit mapping; it will not invent a parallel set store.
+
+
+## 7. Runtime UI inspection — 2026-10-13
+
+Read-only inspection of [Studio Hub](https://viewtube-system-convergence.onrender.com/studio) completed after Render's cold start. The global Analytics navigation points to [Local Analytics](https://viewtube-system-convergence.onrender.com/local-analytics).
+
+Observed on the rendered page:
+
+- Metadata Master is available as a collapsed pink toolbox between Video Publisher and Content Analysis.
+- The six current sections render: Context + Optimization Brief; Generate + Optimize; Publication Package Canvas; Evaluate + Compare; Handoff + Publishing Control; Package History.
+- Empty package readiness is 34/100 (Needs Work), with missing title, description, tags, and thumbnail-direction warnings. This is an empty-state score, not evidence of a generated package's quality.
+- Package History is empty, and no inline analytics panel is present. A separate global Analytics destination is available.
+- Video Manager renders its metadata editing sections and fields; its project area reports no projects available in the inspected session. Publisher reports no canonical publication package ready.
+- Thumbnail Studio and End-Screen Architect show missing AI/API-key prompts.
+- No runtime exception, console error/warning, or broken image was observed during read-only reload. No forms were submitted and no settings or data were changed.
+
+This confirms the source-level findings: the editing flow and handoff controls are present; history is only a short, empty package list; full analytics already has a separate route; and the project/package lifecycle was not populated in the inspected session. Runtime observation is limited to the deployed build at the URLs above, not the proposed branch.
