@@ -2,8 +2,8 @@
    Preserve each owning toolbox's color pair, but normalize anatomy, typography,
    dimensions, border, shadow, and label alignment across all tools. */
 
-:where(button[data-vt-studio-control="true"][data-split-left="true"]),
-:where(button.vt-subtoolbox-split-button) {
+button[data-vt-studio-control="true"][data-split-left="true"],
+button.vt-subtoolbox-split-button {
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
@@ -24,8 +24,8 @@
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--vt-split-rail, var(--pair-b, #ff7f6b))) 65%, transparent);
 }
 
-:where(button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail]),
-:where(button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail) {
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail],
+button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -44,8 +44,8 @@
   overflow: hidden;
 }
 
-:where(button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg),
-:where(button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail > svg) {
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg,
+button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail > svg {
   display: block;
   width: 20px;
   height: 20px;
@@ -56,8 +56,8 @@
   stroke-width: 3;
 }
 
-:where(button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label]),
-:where(button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label) {
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
+button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -83,8 +83,8 @@
 }
 
 @media (max-width: 520px) and (orientation: portrait) {
-  :where(button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label]),
-  :where(button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label) {
+  button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
+  button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
     padding-inline: 7px;
     font-size: 16px;
   }
