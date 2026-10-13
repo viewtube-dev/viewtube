@@ -380,8 +380,6 @@ describe("subtoolbox design governance", () => {
   const splitCss = source("src/styles/subtoolbox-split-primitives.css")
   const videoDirector = source("src/views/VideoDirector.tsx")
   const certification = source("src/studio-ui/StudioHubCertification.tsx")
-  const videoDirector = source("src/views/VideoDirector.tsx")
-  const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
   expect(palette).toContain("export const VT_SPECTRUM_PALETTE_06 = [")
   expect(palette).toContain("header: getPaletteColor(index)")
@@ -527,6 +525,8 @@ describe("subtoolbox design governance", () => {
  it("uses the canonical inverse-color split-left toggle for community post types", () => {
   const community = source("src/components/CommunityPostGenerator.tsx")
   const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+  const videoDirector = source("src/views/VideoDirector.tsx")
+  const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
   expect(community).toContain("SplitLeftButton")
   expect(community).not.toContain("StudioSplitLeftButton")
