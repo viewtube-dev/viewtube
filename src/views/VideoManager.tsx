@@ -45,6 +45,7 @@ import {
 } from "../components/Toolbox"
 import { SubToolboxActions } from "../components/subtoolbox/SubToolboxLayouts"
 import { ToolboxHeaderToggle } from "../components/subtoolbox/SubToolboxPrimitives"
+import { StudioSplitLeftButton } from "../studio-ui"
 import { SubToolboxShellAction } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 import {
  SubToolboxAlert,
@@ -548,17 +549,16 @@ const VideoManager: React.FC<VideoManagerProps> = ({
       onValueChange={(value) => setViewMode(value === "generate" ? "intelligence" : "workspace")}
      />
      {showHeaderLoadAssetsButton ? (
-      <SubToolboxButton
-       level="l2"
-       size="compact"
-       tone="ink"
-       icon={<RefreshCw aria-hidden="true" size={16} />}
+      <StudioSplitLeftButton
+       sizeVariant="action"
+       tone="neutral"
+       icon={<RefreshCw aria-hidden="true" size={18} />}
        className="!w-auto"
        onClick={(event) => { event.stopPropagation(); lastSearchRef.current = ""; setVideoSearchQuery(""); void loadInitialData(true) }}
        disabled={loading}
       >
        {loading ? "REFRESHING..." : "LOAD SPACE ASSETS"}
-      </SubToolboxButton>
+      </StudioSplitLeftButton>
      ) : null}
     </div>
    }
