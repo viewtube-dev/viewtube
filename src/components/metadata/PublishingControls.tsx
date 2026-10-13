@@ -57,7 +57,7 @@ export const PublishingControls: React.FC<PublishingControlsProps> = ({
           multiSelect
           selectedValues={playlistIds}
           onValueChange={onPlaylistToggle}
-          onClear={() => playlistIds.forEach(onPlaylistToggle)
+          onClear={() => playlistIds.forEach(onPlaylistToggle)}
           ariaLabel="Channel playlists"
         />
       </SubToolboxGrid>
