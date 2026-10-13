@@ -301,3 +301,26 @@ Metadata Master is complete only when:
 ## 10. Implementation boundary
 
 This is an additive Studio Hub tool. Existing Video Manager and Video Publisher functionality remains intact. Metadata Master is introduced as the **optimization/package authority between content understanding and publication execution**, with explicit handoffs rather than ownership duplication.
+
+
+## 11. Metadata-set goals and style directions
+
+The generation controls are separate dimensions and must remain separate in the package contract:
+
+- **Goal:** reach, search, browse, subscribers, revenue, or authority.
+- **Intensity:** light, balanced, or aggressive.
+- **Style:** search-first, curiosity-led, authority-led, channel-native, or story-led.
+
+Goal and intensity must be included in the generation instructions, not merely attached to the generated result afterward. Style must likewise affect the prompt and be persisted on the resulting package and handoff payload.
+
+For comparison, generated candidates should follow a deterministic style order: the selected preferred style first, followed by the other four styles. Each set must display its own style and strategy label, and selecting a set must restore that candidate's package style without silently publishing or mutating a live video.
+
+Style guidance is bounded by viewer trust: no fabricated claims, credentials, outcomes, or deceptive clickbait. The selected goal is the optimization priority, not permission to misrepresent the video.
+
+**Focused acceptance checks:**
+- style ordering is deterministic and has no duplicates;
+- every style maps to a clear strategy label;
+- goal/intensity/style guidance is included in the SEO generation prompt;
+- package and handoff payload preserve style, goal, and intensity;
+- generated alternatives retain the same selected goal while varying style;
+- tests and production build pass before the slice is considered complete.

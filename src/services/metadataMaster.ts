@@ -10,6 +10,63 @@ export type MetadataMasterGoal =
 
 export type MetadataMasterIntensity = "light" | "balanced" | "aggressive"
 
+export type MetadataMasterStyle =
+  | "search-first"
+  | "curiosity-led"
+  | "authority-led"
+  | "channel-native"
+  | "story-led"
+
+export const getMetadataCandidateStyles = (preferredStyle: MetadataMasterStyle): MetadataMasterStyle[] => [
+  preferredStyle,
+  ...(["search-first", "curiosity-led", "authority-led", "channel-native", "story-led"] as MetadataMasterStyle[])
+    .filter(style => style !== preferredStyle),
+]
+
+export const metadataStrategyForStyle = (style: MetadataMasterStyle): MetadataMasterSet["strategy"] => {
+  switch (style) {
+    case "search-first": return "search"
+    case "curiosity-led": return "curiosity"
+    case "authority-led": return "authority"
+    case "channel-native": return "channel-fit"
+    case "story-led": return "custom"
+  }
+}
+
+export const buildMetadataStrategyBrief = (
+  goal: MetadataMasterGoal,
+  intensity: MetadataMasterIntensity,
+  style: MetadataMasterStyle,
+) => {
+  const goalGuidance: Record<MetadataMasterGoal, string> = {
+    reach: "maximize broad audience appeal and qualified reach without misleading promises",
+    search: "match explicit search intent with clear keywords and accurate topic coverage",
+    browse: "earn recommendation clicks with a distinctive curiosity gap that the video genuinely resolves",
+    subscribers: "optimize for subscriber conversion, channel promise, and repeat-viewer value",
+    revenue: "fit the intended audience and advertiser-safe commercial context without sacrificing viewer trust",
+    authority: "signal expertise through specificity, evidence, and a credible point of view",
+  }
+  const styleGuidance: Record<MetadataMasterStyle, string> = {
+    "search-first": "lead with the viewer's likely query, plain-language relevance, and search clarity",
+    "curiosity-led": "lead with a specific open loop and compelling contrast; never use deceptive clickbait",
+    "authority-led": "lead with expertise, proof, specificity, and a confident but supportable claim",
+    "channel-native": "match the creator's established voice, audience expectations, and channel identity",
+    "story-led": "frame the metadata around transformation, stakes, and the story payoff",
+  }
+  const intensityGuidance: Record<MetadataMasterIntensity, string> = {
+    light: "make conservative edits and preserve familiar phrasing where it already works",
+    balanced: "balance discovery, clarity, brand fit, and creative distinction",
+    aggressive: "explore more differentiated angles and stronger packaging while keeping every claim accurate",
+  }
+  return [
+    `PRIMARY GOAL: ${goalGuidance[goal]}.`,
+    `STYLE DIRECTION (${style}): ${styleGuidance[style]}.`,
+    `OPTIMIZATION INTENSITY (${intensity}): ${intensityGuidance[intensity]}.`,
+    `Create distinct full metadata packages in this style order: ${getMetadataCandidateStyles(style).join(", ")}. The first candidate uses the selected style. For every candidate, make title, thumbnail prompt/text, description, tags, and category internally coherent with that candidate style and the selected goal; subsequent candidates must be meaningfully different, not superficial rewrites.`,
+    "Keep title, thumbnail message, description, and tags coherent as one package. Do not invent facts, results, credentials, or claims absent from the supplied content.",
+  ].join("\n")
+}
+
 export type MetadataMasterSlot =
   | "title"
   | "thumbnail"
@@ -29,6 +86,7 @@ export interface MetadataMasterPackage {
   videoId?: string | null
   goal: MetadataMasterGoal
   intensity: MetadataMasterIntensity
+  style: MetadataMasterStyle
   title: string
   description: string
   tags: string[]
@@ -52,11 +110,38 @@ export interface MetadataMasterSet {
   id: string
   label: string
   strategy: "search" | "curiosity" | "authority" | "channel-fit" | "custom"
+  style: MetadataMasterStyle
   package: MetadataMasterPackage
   score: number
 }
 
 const PACKAGE_KEY = "viewtube:metadata-master:packages:v1"
+
+export interface MetadataMasterSetVariant {
+  title?: string
+  thumbnailPrompt?: string
+  thumbnailText?: string
+  description?: string
+  tags?: string
+  category?: string
+}
+
+export const applyMetadataSetVariant = (
+  pkg: MetadataMasterPackage,
+  variant: MetadataMasterSetVariant,
+  style: MetadataMasterStyle,
+): MetadataMasterPackage => ({
+  ...pkg,
+  style,
+  title: variant.title?.trim() || pkg.title,
+  thumbnailPrompt: variant.thumbnailPrompt?.trim() || pkg.thumbnailPrompt,
+  thumbnailText: variant.thumbnailText?.trim() || pkg.thumbnailText,
+  description: variant.description?.trim() || pkg.description,
+  tags: variant.tags
+    ? variant.tags.split(",").map(tag => tag.trim()).filter(Boolean)
+    : pkg.tags,
+  category: variant.category?.trim() || pkg.category,
+})
 
 export const createEmptyMetadataMasterPackage = (
   input: Partial<MetadataMasterPackage> = {},
@@ -68,6 +153,7 @@ export const createEmptyMetadataMasterPackage = (
   videoId: input.videoId ?? null,
   goal: input.goal ?? "reach",
   intensity: input.intensity ?? "balanced",
+  style: input.style ?? "channel-native",
   title: input.title ?? "",
   description: input.description ?? "",
   tags: input.tags ?? [],
@@ -92,6 +178,7 @@ export const packageFromSeoResult = (
   input: {
     goal: MetadataMasterGoal
     intensity: MetadataMasterIntensity
+    style?: MetadataMasterStyle
     projectId?: string | null
     contentBuildId?: string | null
     videoId?: string | null
@@ -104,6 +191,7 @@ export const packageFromSeoResult = (
     videoId: input.videoId,
     goal: input.goal,
     intensity: input.intensity,
+    style: input.style ?? "channel-native",
     title: first?.title ?? "",
     description: result.description ?? "",
     tags: (result.tags ?? "").split(",").map(value => value.trim()).filter(Boolean),
@@ -200,6 +288,7 @@ export const packageToHandoffPayload = (pkg: MetadataMasterPackage) => ({
   schedule: pkg.schedule,
   goal: pkg.goal,
   intensity: pkg.intensity,
+  style: pkg.style,
   score: pkg.score,
   warnings: pkg.warnings,
   lockedSlots: pkg.lockedSlots,
@@ -211,10 +300,12 @@ export const createMetadataMasterSet = (
   pkg: MetadataMasterPackage,
   label: string,
   strategy: MetadataMasterSet["strategy"],
+  style: MetadataMasterStyle = pkg.style,
 ): MetadataMasterSet => ({
   id: crypto.randomUUID(),
   label,
   strategy,
-  package: pkg,
+  style,
+  package: { ...pkg, style },
   score: pkg.score,
 })

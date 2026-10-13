@@ -933,6 +933,7 @@ export const generateSeoData = async (
  videoFormat: "Longform" | "Shorts",
  plan?: ProjectPlan,
  brain?: any,
+ strategyBrief?: string,
 ): Promise<SeoResult> => {
  const ai = getAiClient()
 
@@ -978,8 +979,20 @@ export const generateSeoData = async (
        description:
         "A 2-3 word overlay phrase designed to be placed on the thumbnail image.",
       },
+      description: {
+       type: Type.STRING,
+       description: "A complete, style-specific video description coherent with this candidate title and thumbnail, aligned to the selected goal, with no unsupported claims.",
+      },
+      tags: {
+       type: Type.STRING,
+       description: "Comma-separated tags specific to this candidate's style and search/discovery intent.",
+      },
+      category: {
+       type: Type.STRING,
+       description: "The best YouTube category for this candidate package.",
+      },
      },
-     required: ["title", "thumbnailPrompt", "thumbnailText"],
+     required: ["title", "thumbnailPrompt", "thumbnailText", "description", "tags", "category"],
     },
     description:
      "6 sets of titles paired with highly detailed text-to-image prompts for a YouTube thumbnail.",
@@ -1060,6 +1073,7 @@ export const generateSeoData = async (
     7. Internal Links: ${internalLinks}
     8. Format: ${videoFormat}
     9. Project Plan: ${planContext}
+    10. Metadata strategy brief: ${strategyBrief || "Use the default balanced optimization strategy."}
   `
 
  let lastError: any

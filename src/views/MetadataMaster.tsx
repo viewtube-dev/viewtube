@@ -36,7 +36,11 @@ import { useBrain } from "../context/useBrain"
 import { generateSeoData } from "../services/gemini"
 import { resolveWorkspaceContentBuildToolContext } from "../services/asset-engine/ToolContext"
 import {
+  applyMetadataSetVariant,
+  buildMetadataStrategyBrief,
   createMetadataMasterSet,
+  getMetadataCandidateStyles,
+  metadataStrategyForStyle,
   createEmptyMetadataMasterPackage,
   finalizeMetadataMasterPackage,
   listMetadataMasterPackages,
@@ -45,6 +49,7 @@ import {
   saveMetadataMasterPackage,
   type MetadataMasterGoal,
   type MetadataMasterIntensity,
+  type MetadataMasterStyle,
   type MetadataMasterPackage,
   type MetadataMasterSet,
   type MetadataMasterSlot,
@@ -61,13 +66,21 @@ interface MetadataMasterProps {
   paletteIndex?: number
 }
 
-const GOALS: Array<{ value: MetadataMasterGoal; label: string }> = [
-  { value: "reach", label: "Reach" },
-  { value: "search", label: "Search" },
-  { value: "browse", label: "Browse" },
-  { value: "subscribers", label: "Subscribers" },
-  { value: "revenue", label: "Revenue" },
-  { value: "authority", label: "Authority" },
+const GOALS: Array<{ value: MetadataMasterGoal; label: string; description: string }> = [
+  { value: "reach", label: "Reach", description: "Broaden qualified exposure without overstating the video's promise." },
+  { value: "search", label: "Search", description: "Match clear viewer queries and search intent." },
+  { value: "browse", label: "Browse", description: "Earn recommendation clicks with a compelling, honest angle." },
+  { value: "subscribers", label: "Subscribers", description: "Turn the right viewers into subscribers and repeat viewers." },
+  { value: "revenue", label: "Revenue", description: "Align audience fit and monetization context while preserving trust." },
+  { value: "authority", label: "Authority", description: "Emphasize expertise, evidence, and a credible point of view." },
+]
+
+const STYLES: Array<{ value: MetadataMasterStyle; label: string; description: string }> = [
+  { value: "search-first", label: "Search First", description: "Clear query intent and topical relevance" },
+  { value: "curiosity-led", label: "Curiosity Led", description: "A strong open loop with an honest payoff" },
+  { value: "authority-led", label: "Authority Led", description: "Expertise, proof, and specificity" },
+  { value: "channel-native", label: "Channel Native", description: "Creator voice and audience expectations" },
+  { value: "story-led", label: "Story Led", description: "Transformation, stakes, and payoff" },
 ]
 
 const SLOTS: Array<{ id: MetadataMasterSlot; label: string }> = [
@@ -94,6 +107,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
   const [isOpen, setIsOpen] = useState(isOpenInitial)
   const [goal, setGoal] = useState<MetadataMasterGoal>("reach")
   const [intensity, setIntensity] = useState<MetadataMasterIntensity>("balanced")
+  const [style, setStyle] = useState<MetadataMasterStyle>("channel-native")
   const [setCount, setSetCount] = useState(3)
   const [concept, setConcept] = useState(brain.coreConcept || "")
   const [niche, setNiche] = useState(brain.targetNiche || "")
@@ -176,31 +190,31 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         "Longform",
         undefined,
         brain,
+        buildMetadataStrategyBrief(goal, intensity, style),
       )
 
       const generated = packageFromSeoResult(result, {
         goal,
         intensity,
+        style,
         projectId: workspaceContext?.build.legacyProjectId || null,
         contentBuildId: workspaceContext?.contentBuildId || null,
         videoId: publishedVideoId || workspaceContext?.build.youtube?.videoId || null,
       })
 
+      const candidateStyles = getMetadataCandidateStyles(style)
       const candidates = result.titleSets.slice(0, clampSets(setCount)).map((titleSet, index) => {
+        const candidateStyle = candidateStyles[index] ?? style
         const candidate = finalizeMetadataMasterPackage({
-          ...generated,
+          ...applyMetadataSetVariant(generated, titleSet, candidateStyle),
           id: crypto.randomUUID(),
           version: index + 1,
-          title: titleSet.title || generated.title,
-          thumbnailPrompt: titleSet.thumbnailPrompt || generated.thumbnailPrompt,
-          thumbnailText: titleSet.thumbnailText || generated.thumbnailText,
           lockedSlots,
           appliedSlots,
-          provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master"],
+          provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master", `Style: ${candidateStyle}`, `Goal: ${goal}`],
         })
-        const strategy: MetadataMasterSet["strategy"] =
-          index === 0 ? "search" : index === 1 ? "curiosity" : index === 2 ? "authority" : "custom"
-        return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy)
+        const strategy = metadataStrategyForStyle(candidateStyle)
+        return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, candidateStyle)
       })
 
       const primary = candidates[0]?.package ?? generated
@@ -226,6 +240,9 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       appliedSlots,
     }))
     setSelectedSetId(set.id)
+    setStyle(set.style)
+    setGoal(set.package.goal)
+    setIntensity(set.package.intensity)
     setLastAction(`${set.label} selected as the working publication package.`)
   }
 
@@ -276,6 +293,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
     setPackageDraft(createEmptyMetadataMasterPackage({
       goal,
       intensity,
+      style,
       videoId: publishedVideoId || null,
     }))
     setAppliedSlots([])
@@ -329,9 +347,17 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
               <SubToolboxSelect value={goal} onChange={event => setGoal(event.target.value as MetadataMasterGoal)} aria-label="Optimization goal">
                 {GOALS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
               </SubToolboxSelect>
+              <p className="mt-1 text-[11px] font-bold opacity-55">{GOALS.find(option => option.value === goal)?.description}</p>
             </SubToolboxSection>
 
-            <SubToolboxSection label="OPTIMIZATION INTENSITY">
+            <SubToolboxSection label="METADATA STYLE">
+               <SubToolboxSelect value={style} onChange={event => setStyle(event.target.value as MetadataMasterStyle)} aria-label="Metadata style">
+                 {STYLES.map(option => <option key={option.value} value={option.value}>{option.label.toUpperCase()}</option>)}
+               </SubToolboxSelect>
+               <p className="mt-1 text-[11px] font-bold opacity-55">{STYLES.find(option => option.value === style)?.description}</p>
+             </SubToolboxSection>
+
+             <SubToolboxSection label="OPTIMIZATION INTENSITY">
               <SubToolboxActions columns={3} forceRow>
                 {(["light", "balanced", "aggressive"] as MetadataMasterIntensity[]).map(value => (
                   <PrimaryButton key={value} level="l1" selected={intensity === value} onClick={() => setIntensity(value)}>
@@ -552,7 +578,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
                       </SubToolboxButton>
                     }
                   >
-                    <p className="text-xs font-black uppercase opacity-50">{set.strategy} strategy</p>
+                    <p className="text-xs font-black uppercase opacity-50">{set.strategy} · {set.style}</p>
                     <p className="mt-2 text-sm font-black leading-tight">{set.package.title}</p>
                     <p className="mt-2 line-clamp-3 text-[11px] font-bold opacity-60">{set.package.description}</p>
                   </SubToolboxOutputCard>
