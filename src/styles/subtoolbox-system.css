@@ -3846,3 +3846,24 @@
   font-size: 20px;
   font-weight: 1000;
 }
+
+/* Primitive 20 · Simple Text Input — canonical ViewTube pair-color state contract.
+   Geometry follows shared L0/L1/L2 component-level DNA; this variant is opt-in. */
+.vt-subtoolbox-input.is-simple-text{
+  box-sizing:border-box;width:100%;height:var(--vt-component-height,44px);min-height:var(--vt-component-height,44px);
+  padding:0 12px;border:var(--vt-component-stroke,3px) solid var(--pair-a,#36e0f6);border-radius:var(--vt-component-radius,8px);
+  background:transparent;color:var(--pair-a,#36e0f6);-webkit-text-stroke:1px var(--pair-a,#36e0f6);
+  font-family:var(--vt-studio-toolbox-font,var(--font-sans,Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif));
+  font-size:var(--vt-component-font-size,32px);font-weight:1000;line-height:.86;letter-spacing:-.035em;text-transform:uppercase;
+  outline:0;box-shadow:none;caret-color:var(--pair-a,#36e0f6);caret-shape:block;
+  transition:background-color 180ms ease-out,outline-color 180ms ease-out,color 180ms ease-out;
+}
+.vt-subtoolbox-input.is-simple-text::placeholder{color:var(--pair-a,#36e0f6);-webkit-text-stroke:1px var(--pair-a,#36e0f6);opacity:.72}
+.vt-subtoolbox-input.is-simple-text:focus,.vt-subtoolbox-input.is-simple-text:focus-visible{
+  background:color-mix(in srgb,var(--pair-a,#36e0f6) 20%,white);color:#000;-webkit-text-stroke:1px var(--pair-a,#36e0f6);
+  outline:var(--vt-component-stroke,3px) solid var(--pair-b,#ff7f6b);outline-offset:0;box-shadow:none;
+  caret-color:var(--pair-b,#ff7f6b);caret-shape:block;
+}
+.vt-subtoolbox-input.is-simple-text:disabled,.vt-subtoolbox-input.is-simple-text[readonly]{cursor:not-allowed;opacity:.55}
+.vt-subtoolbox-input.is-simple-text:focus-visible{outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.vt-subtoolbox-input.is-simple-text{transition:none}}
