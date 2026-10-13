@@ -1621,3 +1621,70 @@
 .vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l0{--simple-input-height:56px;--simple-input-stroke:4px;--simple-input-radius:12px;--simple-input-font-size:24px}
 .vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l1{--simple-input-height:44px;--simple-input-stroke:3px;--simple-input-radius:8px;--simple-input-font-size:32px}
 .vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l2{--simple-input-height:32px;--simple-input-stroke:2px;--simple-input-radius:6px;--simple-input-font-size:12px}
+
+/* Follow-up correction: text-input primitives are explicit library entries, with
+   the requested 38px / 24px text defaults and compact uppercase typography. */
+.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text{
+  letter-spacing:-.02em!important;
+}
+.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l0{--simple-input-font-size:38px}
+.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l1{--simple-input-font-size:38px}
+.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-demo.is-l2{--simple-input-font-size:24px}
+.vt-complete-catalog [data-vt-family="Text Input"] .vt-catalog-field.is-simple-text{
+  font-size:var(--simple-input-font-size)!important;
+  letter-spacing:-.02em!important;
+}
+
+/* A full-size 44px split rail must not inherit a small icon/viewBox presentation.
+   Enlarge the rendered SVG and preserve its natural viewBox instead of clipping it. */
+.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail] svg{
+  display:block!important;
+  width:72%!important;height:72%!important;max-width:none!important;max-height:none!important;
+  overflow:visible!important;stroke-width:3.5!important;flex:none!important;
+}
+.vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-split-primitive [data-vt-studio-split-rail] svg,
+.vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-split-primitive [data-vt-studio-split-rail] svg{
+  width:76%!important;height:76%!important;stroke-width:3.75!important;
+}
+.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail]{
+  overflow:visible!important;
+}
+
+/* Dropdown specimens occupy a dedicated row with two controls side-by-side.
+   L2 stays 28px high; dropdown text uses the same uppercase heavy type defaults. */
+.vt-complete-catalog [data-vt-family="Dropdown"]{
+  grid-column:1/-1!important;
+}
+.vt-complete-catalog [data-vt-family="Dropdown"] .vt-catalog-levels{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:start!important;
+  gap:12px!important;
+}
+.vt-complete-catalog [data-vt-family="Dropdown"] .vt-catalog-demo{
+  width:100%!important;min-width:0!important;
+}
+.vt-complete-catalog [data-vt-family="Dropdown"] .vt-catalog-demo.is-l2{
+  grid-column:1/-1!important;
+}
+.vt-complete-catalog .vt-catalog-menu .menu-label>b,
+.vt-complete-catalog .vt-catalog-menu .menu-panel button,
+.vt-complete-catalog .vt-catalog-menu .menu-option-label{
+  font-weight:1000!important;
+  text-transform:uppercase!important;
+  letter-spacing:-.02em!important;
+}
+.vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-menu .menu-label>b,
+.vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-menu .menu-panel button{font-size:38px!important}
+.vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-menu .menu-label>b,
+.vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-menu .menu-panel button{font-size:38px!important}
+.vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-menu .menu-label>b,
+.vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-menu .menu-panel button{font-size:24px!important}
+@media(max-width:767px){
+  .vt-complete-catalog [data-vt-family="Dropdown"] .vt-catalog-levels{grid-template-columns:minmax(0,1fr)!important}
+  .vt-complete-catalog [data-vt-family="Dropdown"] .vt-catalog-demo.is-l2{grid-column:auto!important}
+  .vt-complete-catalog .vt-catalog-demo.is-l0 .vt-catalog-menu .menu-label>b,
+  .vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-menu .menu-label>b,
+  .vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-menu .menu-label>b{font-size:24px!important}
+}
+
