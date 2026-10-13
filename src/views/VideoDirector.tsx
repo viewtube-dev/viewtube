@@ -6,6 +6,7 @@ import {
   BookmarkPlus,
   Camera,
   CheckCircle2,
+  CheckSquare,
   CircleGauge,
   Clapperboard,
   Eye,
