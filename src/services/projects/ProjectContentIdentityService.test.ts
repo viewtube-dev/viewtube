@@ -60,12 +60,17 @@ describe("Project Content identity transaction", () => {
     expect(listVideoPackages()[0].contentBuildId).toBe("cb-existing")
   })
 
-  it("creates the canonical ContentBuild even while Video Package channel scope is unavailable", () => {
+  it("creates the canonical ContentBuild and local-draft Video Package without channel auth", () => {
     const result = initializeProjectContentIdentity(seedProject(), { channelId: null })
 
     expect(result.project.contentBuildId).toBe("cb:project:project-a")
-    expect(result.videoPackageId).toBeNull()
+    expect(result.videoPackageId).toBe("vp:project-a:cb:project:project-a")
     expect(listContentBuilds()).toHaveLength(1)
-    expect(listVideoPackages()).toHaveLength(0)
+    expect(listVideoPackages()).toHaveLength(1)
+    expect(listVideoPackages()[0]).toMatchObject({
+      projectId: "project-a",
+      contentBuildId: result.contentBuildId,
+      channelId: "local-draft:project-a",
+    })
   })
 })
