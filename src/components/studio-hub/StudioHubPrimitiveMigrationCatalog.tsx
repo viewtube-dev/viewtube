@@ -144,6 +144,7 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Slider",
   "Range Slider",
   "Toggle",
+  "Vertical Word Toggle",
   "Settings Switch",
   "Checkbox",
   "Radio",
@@ -274,6 +275,7 @@ type CatalogPreviewGeometry = {
 const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogPreviewGeometry>> = {
   "Square Icon Button": { mode: "fixed" },
   "Toggle": { mode: "fixed" },
+  "Vertical Word Toggle": { mode: "compound", inlineUnits: 2.5, portraitStack: true },
   "Settings Switch": { mode: "fixed" },
   "Checkbox": { mode: "fixed" },
   "Radio": { mode: "fixed" },
@@ -457,6 +459,9 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Toggle") {
     return <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />
+  }
+  if (name === "Vertical Word Toggle") {
+    return <SubToolboxSegmentedToggle className="vt-catalog-vertical-word-toggle" level={level} options={[{ value: "show", label: "SHOW" }, { value: "hide", label: "HIDE" }]} value={toggleOn ? "show" : "hide"} onValueChange={(value) => setToggleOn(value === "show")} ariaLabel="Vertical word toggle" />
   }
   if (name === "Checkbox") {
     return <SubToolboxCheckControl level={level} checked={checkboxOn} aria-label="Checkbox" onClick={() => setCheckboxOn((value) => !value)} />
