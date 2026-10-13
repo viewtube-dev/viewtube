@@ -13,6 +13,6 @@ describe("assistant intelligence system registry", () => {
   })
 
   it("continues to resolve creator-intent routing from the assembled registry", () => {
-    expect(inferAssistantTargetTool("help me with my AI Journal")).toBe("brain-os-control-surface")
+    expect(inferAssistantTargetTool("help me with my AI Journal")).toBe("brain-command-center")
   })
 })
