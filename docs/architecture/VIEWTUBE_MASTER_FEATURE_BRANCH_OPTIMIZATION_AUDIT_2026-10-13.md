@@ -204,3 +204,23 @@ Use an executable checkout/CI runner to run the focused Manager layout test and 
 - Latest inspected commit: `304ba42445a8466825957ca9dbaf2d836c30e8cd`.
 - Its GitHub commit status still shows only Vercel deployment checks, all blocked by the reported deployment rate limit. No GitHub Actions check runs were returned for the earlier implementation commit, and no test result is available yet.
 - The selection fix and copy/test updates are committed, but remain **unverified** until a real typecheck, focused test run, full suite, and build can execute. Do not treat deployment-provider rate limiting as evidence that the application code itself failed or passed.
+
+
+## 14. Executable CI baseline and follow-up fixes
+
+The branch's release-gates workflow originally omitted `master/consolidated-feature-integration`. Commit `167a724` added this branch to the push and pull-request filters, which started [GitHub Actions run 38353917026](https://github.com/viewtube-dev/viewtube/actions/runs/38353917026).
+
+### Verified results from run 38353917026
+- **Passed:** production build.
+- **Passed:** focused contracts and account tests.
+- **Passed:** source-governance checks.
+- **Passed:** local browser smoke checks.
+- **Failed:** typecheck and full suite.
+
+The typecheck reported 42 errors across existing application areas. The touched Project Manifestation and Video Manager errors were addressed in commit `81482cf`; the follow-up typecheck still reports 41 errors in unrelated areas (tool registry props, Brain test fixtures, component primitives, editor templates, Creator Vault typing, and Thumbnail Studio). The full suite also reported an import-time crash at `assistantIntelligenceSystem.ts:119` from reading `filter` on an undefined dashboard widget registry, alongside existing source-expectation, localStorage, and Router-context failures.
+
+### Follow-up in progress
+- `81482cf` adds optional chaining for optional Content/Production sections in Project Manifestation, completes the package test fixture, moves the ProjectPlan concept/niche fallback into Video Manager's save payload, and keeps ref updates out of the React state updater.
+- The next fix defers dashboard widget registry traversal until `listAssistantIntelligenceSystems()` is called, preventing import-time evaluation of a registry that participates in a component/Brain dependency cycle. A regression test is added in `src/services/assistantIntelligenceSystem.test.ts`.
+
+Do not call the branch green based on the successful build or smoke test alone. Remaining typecheck and full-suite failures are still release blockers until corrected or explicitly dispositioned.

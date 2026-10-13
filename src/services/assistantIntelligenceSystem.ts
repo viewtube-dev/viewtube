@@ -81,6 +81,12 @@ const targetForWidget = (category: string, id: string): SuperToolId => {
  return "workflow-chain-builder"
 }
 
+/**
+ * Static intelligence systems are defined eagerly. Dashboard widgets are
+ * appended lazily by listAssistantIntelligenceSystems() because importing the
+ * dashboard registry here can form a cycle through widget components and the
+ * AI Brain command interface.
+ */
 export const ASSISTANT_INTELLIGENCE_SYSTEMS: IntelligenceSystemDefinition[] = [
  {
   id: "central-brain-memory",
@@ -116,32 +122,38 @@ export const ASSISTANT_INTELLIGENCE_SYSTEMS: IntelligenceSystemDefinition[] = [
   surface: "brain",
  },
  ...SUPER_TOOLS.map((tool) => toSystemDefinition(tool.id)),
- ...DASHBOARD_WIDGET_REGISTRY.filter((widget) =>
-  ["ai", "analytics", "community", "creation", "system"].includes(widget.category),
- ).map((widget) => {
-  const targetToolId = targetForWidget(widget.category, widget.id)
-  const tool = getSuperTool(targetToolId)
-  return {
-   id: `widget:${widget.id}`,
-   title: widget.title,
-   category:
-    widget.category === "ai" ? "brain"
-    : widget.category === "analytics" ? "analysis"
-    : widget.category === "community" ? "memory"
-    : widget.category === "creation" ? "generation"
-    : "dashboard",
-   route: "/",
-   sourceOfTruth: "src/views/dashboard/WidgetRegistry.ts",
-   assistantAccess: "queue",
-   summary: widget.subtitle,
-   targetToolId,
-   surface: tool?.surface || "brain",
-  } satisfies IntelligenceSystemDefinition
- }),
 ]
 
-export const listAssistantIntelligenceSystems = (): IntelligenceSystemDefinition[] =>
- ASSISTANT_INTELLIGENCE_SYSTEMS
+const listDashboardWidgetSystems = (): IntelligenceSystemDefinition[] => {
+ const widgets = Array.isArray(DASHBOARD_WIDGET_REGISTRY) ? DASHBOARD_WIDGET_REGISTRY : []
+ return widgets
+  .filter((widget) => ["ai", "analytics", "community", "creation", "system"].includes(widget.category))
+  .map((widget) => {
+   const targetToolId = targetForWidget(widget.category, widget.id)
+   const tool = getSuperTool(targetToolId)
+   return {
+    id: `widget:${widget.id}`,
+    title: widget.title,
+    category:
+     widget.category === "ai" ? "brain"
+     : widget.category === "analytics" ? "analysis"
+     : widget.category === "community" ? "memory"
+     : widget.category === "creation" ? "generation"
+     : "dashboard",
+    route: "/",
+    sourceOfTruth: "src/views/dashboard/WidgetRegistry.ts",
+    assistantAccess: "queue",
+    summary: widget.subtitle,
+    targetToolId,
+    surface: tool?.surface || "brain",
+   } satisfies IntelligenceSystemDefinition
+  })
+}
+
+export const listAssistantIntelligenceSystems = (): IntelligenceSystemDefinition[] => [
+ ...ASSISTANT_INTELLIGENCE_SYSTEMS,
+ ...listDashboardWidgetSystems(),
+]
 
 export const inferAssistantTargetTool = (text: string): SuperToolId => {
  const normalizedText = normalize(text)
