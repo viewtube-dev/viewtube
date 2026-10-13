@@ -180,6 +180,8 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
   const optionRefs = React.useRef<Record<string, HTMLButtonElement | null>>({})
   const [handle, setHandle] = React.useState({ left: 3, width: 24 })
   React.useEffect(() => {
+    let disposed = false
+    let frame = 0
     const measure = () => {
       const root = rootRef.current
       const target = optionRefs.current[value]
@@ -187,16 +189,44 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
       const rootRect = root.getBoundingClientRect()
       const targetRect = target.getBoundingClientRect()
       const inset = level === "subtoolbox" ? 2 : 2.75
-      setHandle({ left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 16) })
+      const next = {
+        left: targetRect.left - rootRect.left + inset,
+        width: Math.max(targetRect.width - inset * 2, 16),
+      }
+      setHandle(current =>
+        Math.abs(current.left - next.left) < 0.5 && Math.abs(current.width - next.width) < 0.5
+          ? current
+          : next,
+      )
     }
-    measure()
+    // Wait until React has committed the option labels and the browser has
+    // completed a layout pass; otherwise the active handle can be measured
+    // against stale or zero-width text on first render.
+    const scheduleMeasure = () => {
+      if (disposed) return
+      if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+        window.cancelAnimationFrame(frame)
+        frame = window.requestAnimationFrame(measure)
+      } else {
+        measure()
+      }
+    }
+    scheduleMeasure()
     const root = rootRef.current
-    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(measure) : null
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(scheduleMeasure) : null
     if (root && observer) observer.observe(root)
-    window.addEventListener("resize", measure)
-    const fonts = document.fonts
-    fonts?.ready?.then(measure)
-    return () => { observer?.disconnect(); window.removeEventListener("resize", measure) }
+    Object.values(optionRefs.current).forEach(node => { if (node) observer?.observe(node) })
+    if (typeof window !== "undefined") window.addEventListener("resize", scheduleMeasure)
+    const fonts = typeof document !== "undefined" ? document.fonts : undefined
+    fonts?.ready?.then(scheduleMeasure)
+    return () => {
+      disposed = true
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame)
+        window.removeEventListener("resize", scheduleMeasure)
+      }
+      observer?.disconnect()
+    }
   }, [value, options, level])
   return (
     <div
