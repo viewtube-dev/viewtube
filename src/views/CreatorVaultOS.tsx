@@ -2819,7 +2819,8 @@ const CreatorVaultOS: React.FC = () => {
        isOpenInitial
        persistenceId="vault-inspector"
       >
-       <div className="flex flex-col gap-3">
+       {selectedAsset ? (
+        <div className="flex flex-col gap-3">
          <div className="xl:hidden">
           <SubToolboxInnerActionButton
            label="Close Inspector"
