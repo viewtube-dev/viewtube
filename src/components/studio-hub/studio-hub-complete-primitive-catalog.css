@@ -1688,3 +1688,30 @@
   .vt-complete-catalog .vt-catalog-demo.is-l2 .vt-catalog-menu .menu-label>b{font-size:24px!important}
 }
 
+/* Dedicated paired 28px dropdown row: two real, keyboard-operable triggers. */
+.vt-complete-catalog [data-vt-family="28px Dropdown Pair"]{grid-column:1/-1!important}
+.vt-complete-catalog [data-vt-family="28px Dropdown Pair"] .vt-catalog-levels{
+  display:block!important;width:100%!important;
+}
+.vt-complete-catalog .vt-catalog-dropdown-pair{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;min-width:0;
+}
+.vt-complete-catalog .vt-catalog-dropdown-28{
+  box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:5px;
+  width:100%;height:28px;min-height:28px;min-width:0;padding:0 6px;
+  border:2px solid var(--pair-a,#36e0f6);border-radius:5px;
+  background:color-mix(in srgb,var(--pair-a,#36e0f6) 14%,white);color:#111;
+  font-family:var(--vt-studio-toolbox-font,var(--font-sans,Inter,ui-sans-serif,system-ui));
+  font-size:24px;font-weight:1000;line-height:1;letter-spacing:-.02em;text-transform:uppercase;
+}
+.vt-complete-catalog .vt-catalog-dropdown-28 span{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;
+}
+.vt-complete-catalog .vt-catalog-dropdown-28 svg{
+  flex:0 0 14px;width:14px;height:14px;stroke-width:3;
+}
+.vt-complete-catalog .vt-catalog-dropdown-28:focus-visible{outline:2px solid var(--pair-b,#ff7f6b);outline-offset:2px}
+@media(max-width:767px){
+  .vt-complete-catalog .vt-catalog-dropdown-pair{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
