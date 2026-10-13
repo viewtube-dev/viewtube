@@ -5,8 +5,6 @@ import "./studio-hub-confirmed-primitive-catalog.css"
 
 type Size = "44px" | "28px"
 
-const sizeClass = (size: Size) => size === "44px" ? "vt-confirmed-button-44" : "vt-confirmed-button-28"
-
 const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens: string; imports: string[] }> = ({ primitive, tsx, css, tokens, imports }) => (
   <div className="vt-confirmed-provenance">
     <div><strong>{primitive}</strong></div>
@@ -41,11 +39,11 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <div className="vt-confirmed-variant">
         <span>44px default</span>
-        <StudioButton className={sizeClass("44px")}>Studio Button</StudioButton>
+        <StudioButton heightVariant="44">Studio Button</StudioButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px compact</span>
-        <StudioButton className={sizeClass("28px")}>Studio Button</StudioButton>
+        <StudioButton heightVariant="28">Studio Button</StudioButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>44px selected</span>
