@@ -101,42 +101,52 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]}
       />}
     >
-      <div className="vt-confirmed-variant">
-        <span>44px · custom open menu · multiselect</span>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · open menu · multiselect</span>
         <StudioLegendMultiDropdown
           label="dropdown"
           defaultValue={["videos", "shorts"]}
           options={[
-            { value: "videos", label: "Videos" },
-            { value: "shorts", label: "Shorts" },
-            { value: "live", label: "Live" },
-            { value: "playlists", label: "Playlists" },
-            { value: "podcasts", label: "Podcasts" },
-            { value: "music", label: "Music" },
-            { value: "gaming", label: "Gaming" },
-            { value: "news", label: "News" },
-            { value: "sports", label: "Sports" },
+            { value: "videos", label: "VIDEOS" },
+            { value: "shorts", label: "SHORTS" },
+            { value: "live", label: "LIVE" },
+            { value: "playlists", label: "PLAYLISTS" },
+            { value: "podcasts", label: "PODCASTS" },
+            { value: "music", label: "MUSIC" },
+            { value: "gaming", label: "GAMING" },
+            { value: "news", label: "NEWS" },
+            { value: "sports", label: "SPORTS" },
           ]}
         />
       </div>
       <div className="vt-confirmed-variant">
-        <span>28px compact · module pair tokens</span>
+        <span>28px compact A · menu row ratio</span>
         <StudioLegendMultiDropdown
           label="dropdown"
           sizeVariant="compact"
-          placeholder="dropdown"
+          placeholder="dropdown A"
           options={[
-            { value: "default", label: "Default" },
-            { value: "bold", label: "Bold" },
-            { value: "minimal", label: "Minimal" },
-            { value: "cinematic", label: "Cinematic" },
-            { value: "educational", label: "Educational" },
-            { value: "documentary", label: "Documentary" },
-            { value: "tutorial", label: "Tutorial" },
-            { value: "storytelling", label: "Storytelling" },
-            { value: "review", label: "Review" },
-            { value: "commentary", label: "Commentary" },
-            { value: "shorts", label: "Shorts" },
+            { value: "default", label: "DEFAULT" },
+            { value: "bold", label: "BOLD" },
+            { value: "minimal", label: "MINIMAL" },
+            { value: "cinematic", label: "CINEMATIC" },
+            { value: "educational", label: "EDUCATIONAL" },
+            { value: "documentary", label: "DOCUMENTARY" },
+          ]}
+        />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact B · menu row ratio</span>
+        <StudioLegendMultiDropdown
+          label="dropdown"
+          sizeVariant="compact"
+          placeholder="dropdown B"
+          options={[
+            { value: "tutorial", label: "TUTORIAL" },
+            { value: "storytelling", label: "STORYTELLING" },
+            { value: "review", label: "REVIEW" },
+            { value: "commentary", label: "COMMENTARY" },
+            { value: "shorts", label: "SHORTS" },
           ]}
         />
       </div>
