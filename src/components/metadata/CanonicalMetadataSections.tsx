@@ -271,7 +271,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                 multiSelect
                 selectedValues={selectedPlaylistIds}
                 onValueChange={onPlaylistToggle}
-                onClear={() => selectedPlaylistIds.forEach(onPlaylistToggle)}
+                onClear={() => selectedPlaylistIds.forEach(playlistId => onPlaylistToggle?.(playlistId))}
                 ariaLabel="Channel playlists"
               />
             ) : (
