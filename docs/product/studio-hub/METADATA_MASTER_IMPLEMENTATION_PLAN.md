@@ -325,7 +325,3 @@ Style guidance is bounded by viewer trust: no fabricated claims, credentials, ou
 - generated alternatives retain the same selected goal while varying style;
 - tests and production build pass before the slice is considered complete.
 
-
-## 12. Project metadata UI audit and implementation plan
-
-The broader front-end/backend audit, the creator's low-noise editing preference, the ten proposed compound components, and the dedicated Metadata Intelligence history/analytics boundary are documented in [Project + Metadata Updates — Front-End/Backend Audit and UI Plan](./PROJECT_METADATA_UI_AUDIT_AND_COMPONENT_PLAN_2026-10-13.md). Phase 1 records the current implementation gaps and acceptance criteria; subsequent phases cover persistence safety, quiet editing UI, the separate history/analytics workspace, project/handoff integration, and certification.
