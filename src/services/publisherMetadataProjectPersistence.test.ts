@@ -4,6 +4,7 @@ import { getContentBuild, resetContentBuildRepositoryForTests } from "./asset-en
 import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
 import { createVersionedAsset } from "./assetEngine"
 import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
+import { findVideoPackageByProject } from "./video-package/VideoPackageRepository"
 
 const project = {
   id: "project-publisher-persistence",
@@ -103,6 +104,19 @@ describe("Publisher metadata project persistence", () => {
     expect(build.selections.thumbnail).toBe(thumbnail.id)
     expect(build.selections["final-render"]).toBe(finalVideo.id)
     expect(build.selections["metadata-package"]).toBe(saved.packageOptionAssetId)
+
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)
+    expect(videoPackage?.packaging.selectedThumbnailId).toBe(`publisher:thumbnail:${thumbnail.id}`)
+    expect(videoPackage?.packaging.thumbnailVariants).toContainEqual(expect.objectContaining({
+      id: `publisher:thumbnail:${thumbnail.id}`,
+      vaultAssetId: thumbnail.id,
+      metadata: expect.objectContaining({
+        url: "https://example.test/thumbnail.png",
+        previewUrl: "https://example.test/thumbnail.png",
+        mimeType: "image/png",
+      }),
+    }))
+    expect(videoPackage?.production.renderIds).toContain(finalVideo.id)
   })
 
   it("saves an option without replacing the currently selected package option", () => {
