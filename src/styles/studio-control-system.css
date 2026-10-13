@@ -889,82 +889,6 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
 
 
 
-/* Final typography authority: standard fields and word toggles use the Component Library's 44px tokens. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)[data-size="standard"] {
-  font-size: var(--vt-studio-44-font-size, 32px) !important;
-  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)[data-size="compact"] {
-  font-size: var(--vt-studio-28-font-size, 14px) !important;
-  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
-}
-.vt-studio-44-word-toggle { --vt-word-font-size: var(--vt-studio-44-font-size, 32px); }
-.vt-studio-44-word-toggle.is-size-28 { --vt-word-font-size: var(--vt-studio-28-font-size, 14px); }
-.vt-studio-44-switch, .vt-studio-44-choice { border: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-44-switch:focus-visible, .vt-studio-44-choice:focus-visible, .vt-studio-44-word-toggle button:focus-visible {
-  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 3px;
-}
-
-/* Legend Multi final size/type authority. Retires earlier 22px compact and
-   36px standard overrides so trigger, rows, and clear action share one scale. */
-.vt-studio-legend-multi {
-  width: 100%;
-  min-width: 0;
-  --vt-legend-height: var(--vt-studio-44-height, 44px);
-  --vt-legend-stroke: var(--vt-studio-44-stroke, 3px);
-}
-.vt-studio-legend-multi[data-size="compact"] {
-  --vt-legend-height: var(--vt-studio-28-height, 28px);
-  --vt-legend-stroke: var(--vt-studio-28-stroke, 2px);
-}
-.vt-studio-legend-multi .vt-studio-legend-trigger {
-  width: 100%;
-  min-height: var(--vt-legend-height);
-  height: var(--vt-legend-height);
-  border-width: var(--vt-legend-stroke);
-  font-size: var(--vt-studio-44-font-size, 32px) !important;
-  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
-  line-height: .86;
-  letter-spacing: -.035em;
-  box-shadow: none;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger {
-  font-size: var(--vt-studio-28-font-size, 14px) !important;
-  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
-  line-height: .9;
-  letter-spacing: -.02em;
-  border-radius: 5px;
-}
-.vt-studio-legend-multi .vt-studio-legend-option {
-  min-height: var(--vt-legend-height);
-  border-width: var(--vt-legend-stroke);
-  font-size: var(--vt-studio-44-font-size, 32px) !important;
-  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
-  line-height: .86;
-  letter-spacing: -.035em;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option {
-  font-size: var(--vt-studio-28-font-size, 14px) !important;
-  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
-  line-height: .9;
-  letter-spacing: -.02em;
-}
-.vt-studio-legend-multi .vt-studio-legend-clear {
-  min-height: var(--vt-legend-height);
-  border-width: var(--vt-legend-stroke);
-  font-size: var(--vt-studio-44-font-size, 32px) !important;
-  font-weight: var(--vt-studio-44-font-weight, 1000) !important;
-  line-height: .86;
-  letter-spacing: -.035em;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
-  font-size: var(--vt-studio-28-font-size, 14px) !important;
-  font-weight: var(--vt-studio-28-font-weight, 1000) !important;
-  line-height: .9;
-  letter-spacing: -.02em;
-}
-
 /* The choice family is not a raised action button; keep its square/track geometry flat. */
 button.vt-studio-44-switch,
 button.vt-studio-44-choice {
@@ -982,4 +906,16 @@ button.vt-studio-44-choice:active:not(:disabled) {
 button.vt-studio-44-switch:not(.is-on),
 button.vt-studio-44-choice:not(.is-on) {
   background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 38%, white);
+}
+
+/* Required anatomy for the migrated Studio choice primitives; does not alter shared defaults. */
+.vt-studio-44-switch,
+.vt-studio-44-choice {
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-44-switch:focus-visible,
+.vt-studio-44-choice:focus-visible,
+.vt-studio-44-word-toggle button:focus-visible {
+  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 3px;
 }
