@@ -219,15 +219,24 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             </div>
 
             <div className="vt-project-planner-calendar__quick-add">
-              <SubToolboxSection label="Quick schedule project">
-                <SubToolboxSelect value={quickAddProjectId} onChange={event => setQuickAddProjectId(event.target.value)} aria-label="Choose unscheduled project">
-                  <option value="">Choose an unscheduled project</option>
-                  {unscheduledProjects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}
+              <SubToolboxSection label="Schedule or move a project">
+                <SubToolboxSelect value={quickAddProjectId} onChange={event => { setQuickAddProjectId(event.target.value); setScheduleFeedback("") }} aria-label="Choose project to schedule or move">
+                  <option value="">Choose a project</option>
+                  {projects.map(project => {
+                    const existingDate = parseDate(project.publishDate)
+                    return (
+                      <option key={project.id} value={project.id}>
+                        {project.name}{existingDate ? ` · currently ${dateKey(existingDate)}` : " · unscheduled"}
+                      </option>
+                    )
+                  })}
                 </SubToolboxSelect>
               </SubToolboxSection>
-              <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>Schedule on selected date</SubToolboxButton>
+              <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>
+                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}
+              </SubToolboxButton>
               {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__project-meta">{scheduleFeedback}</div> : null}
-              {!unscheduledProjects.length ? <SubToolboxStatusBadge level="l1">All projects have a publish date</SubToolboxStatusBadge> : null}
+              {!projects.length ? <SubToolboxStatusBadge level="l1">No projects available to schedule</SubToolboxStatusBadge> : null}
             </div>
           </section>
 
