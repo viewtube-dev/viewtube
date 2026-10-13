@@ -1,6 +1,6 @@
 import React from "react"
 import { Check, Settings2, Sparkles } from "lucide-react"
-import { StudioButton, StudioSplitLeftButton } from "../../studio-ui"
+import { StudioButton, StudioLabeledDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import "./studio-hub-confirmed-primitive-catalog.css"
 
 type Size = "44px" | "28px"
@@ -62,7 +62,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         primitive="StudioSplitLeftButton"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="44px / 28px total height · icon rail equals total height · 3px black stroke/divider · 8px radius · 14px uppercase label · weight 900 · line-height 1 · same button shadow and selected outline as StudioButton"
+        tokens="44px / 28px total height · icon rail equals total height · 3px black stroke/divider · 8px / 6px radius · 14px uppercase label · weight 900 · 4px / 3px offset shadow · selected state swaps pair A/B fills only"
         imports={["src/studio-ui/index.ts", "src/studio-ui/StudioHubCertification.tsx", "src/views/VideoDirector.tsx", "src/components/CommunityPostGenerator.tsx"]}
       />}
     >
@@ -81,6 +81,60 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant">
         <span>28px selected</span>
         <StudioSplitLeftButton icon={<Settings2 size={14} />} selected heightVariant="28">Workspace Action</StudioSplitLeftButton>
+      </div>
+    </Family>
+
+    <Family
+      title="StudioLabeledDropdown"
+      provenance={<Provenance
+        primitive="StudioLabeledDropdown · 139"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
+        tokens="44px standard / 28px compact · uppercase label · 3px stroke · 4px / 3px pair-aware shadow · module pair A/B colors"
+        imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-variant">
+        <span>44px standard · 11 styles</span>
+        <StudioLabeledDropdown
+          label="STYLE"
+          sizeVariant="standard"
+          defaultValue="default"
+          options={[
+            { value: "default", label: "Default" },
+            { value: "bold", label: "Bold" },
+            { value: "minimal", label: "Minimal" },
+            { value: "cinematic", label: "Cinematic" },
+            { value: "educational", label: "Educational" },
+            { value: "documentary", label: "Documentary" },
+            { value: "tutorial", label: "Tutorial" },
+            { value: "storytelling", label: "Storytelling" },
+            { value: "review", label: "Review" },
+            { value: "commentary", label: "Commentary" },
+            { value: "shorts", label: "Shorts" },
+          ]}
+        />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact · 11 styles</span>
+        <StudioLabeledDropdown
+          label="STYLE"
+          sizeVariant="compact"
+          defaultValue="cinematic"
+          options={[
+            { value: "default", label: "Default" },
+            { value: "bold", label: "Bold" },
+            { value: "minimal", label: "Minimal" },
+            { value: "cinematic", label: "Cinematic" },
+            { value: "educational", label: "Educational" },
+            { value: "documentary", label: "Documentary" },
+            { value: "tutorial", label: "Tutorial" },
+            { value: "storytelling", label: "Storytelling" },
+            { value: "review", label: "Review" },
+            { value: "commentary", label: "Commentary" },
+            { value: "shorts", label: "Shorts" },
+          ]}
+        />
       </div>
     </Family>
   </div>
