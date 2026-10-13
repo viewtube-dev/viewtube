@@ -134,8 +134,8 @@ const FieldActions: React.FC<{
   return (
     <SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">
       {onGenerate ? <SplitLeftButton level="l1" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SplitLeftButton> : <span />}
-      {onRefine ? <SubToolboxSplitButton level="l2" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SubToolboxSplitButton> : <span />}
-      {onAnalyze ? <SubToolboxSplitButton level="l2" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SubToolboxSplitButton> : <span />}
+      {onRefine ? <SplitLeftButton level="l1" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SplitLeftButton> : <span />}
+      {onAnalyze ? <SplitLeftButton level="l1" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SplitLeftButton> : <span />}
     </SubToolboxActions>
   )
 }
