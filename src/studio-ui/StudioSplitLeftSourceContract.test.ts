@@ -8,12 +8,13 @@ describe("Studio split-left source contract", () => {
   it("does not add a second text stroke or shadow filter to split-left labels", () => {
     const controls = source("src/styles/studio-control-system.css")
     const splitStyles = source("src/styles/subtoolbox-split-primitives.css")
+    const sharedStyles = source("src/styles/studio-split-left-consistency.css")
     const labelRule = controls.slice(controls.indexOf('button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {'))
     expect(labelRule.split("\n}")[0]).not.toContain("-webkit-text-stroke: .5px")
-    const buttonRule = splitStyles.slice(splitStyles.indexOf(".vt-subtoolbox-split-button {"), splitStyles.indexOf(".vt-subtoolbox-split-button.is-neutral"))
-    expect(buttonRule).toContain("filter: none")
-    expect(buttonRule).toContain("box-shadow:")
-    expect(buttonRule).not.toContain("drop-shadow")
+    expect(splitStyles).not.toContain(".vt-subtoolbox-split-button {")
+    expect(sharedStyles).toContain("box-shadow:")
+    expect(sharedStyles).toContain("filter: none !important;")
+    expect(sharedStyles).not.toContain("filter: drop-shadow")
   })
 
   it("routes project load, swap and refresh through StudioSplitLeftButton", () => {

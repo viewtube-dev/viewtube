@@ -6,22 +6,22 @@ import { act } from "react"
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 import { describe, expect, it } from "vitest"
 import { Settings } from "lucide-react"
+import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import {
   SubToolboxKpiCard,
-  SubToolboxSplitButton,
   SubToolboxSplitDropdown,
 } from "./SubToolboxSplitPrimitives"
 
 describe("SubToolbox split-left primitives", () => {
   it("renders the split-left button with separate rail and label surfaces", () => {
     const html = renderToStaticMarkup(
-      <SubToolboxSplitButton icon={<Settings />} selected>
+      <StudioSplitLeftButton icon={<Settings />} selected>
         Settings
-      </SubToolboxSplitButton>,
+      </StudioSplitLeftButton>,
     )
-    expect(html).toContain("vt-subtoolbox-split-button-rail")
-    expect(html).toContain("vt-subtoolbox-split-button-label")
-    expect(html).toContain("is-selected")
+    expect(html).toContain("data-vt-studio-split-rail")
+    expect(html).toContain("data-vt-studio-split-label")
+    expect(html).toContain('data-selected="true"')
   })
 
   it("renders the split menu with a square icon rail and full text/chevron side", () => {

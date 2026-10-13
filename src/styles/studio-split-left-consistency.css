@@ -2,8 +2,7 @@
    Preserve each owning toolbox's color pair, but normalize anatomy, typography,
    dimensions, border, shadow, and label alignment across all tools. */
 
-button[data-vt-studio-control="true"][data-split-left="true"],
-button.vt-subtoolbox-split-button {
+button[data-vt-studio-control="true"][data-split-left="true"] {
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
@@ -30,7 +29,7 @@ button.vt-subtoolbox-split-button {
 }
 
 button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail],
-button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail {
+button[data-vt-studio-control="true"][data-split-left="true"] {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -50,7 +49,7 @@ button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail {
 }
 
 button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg,
-button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail > svg {
+button[data-vt-studio-control="true"][data-split-left="true"] > svg {
   display: block;
   width: 20px;
   height: 20px;
@@ -62,7 +61,7 @@ button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-rail > svg {
 }
 
 button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
-button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
+button[data-vt-studio-control="true"][data-split-left="true"] {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -88,22 +87,22 @@ button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
 
 button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
 button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"],
-button.vt-subtoolbox-split-button.is-selected,
-button.vt-subtoolbox-split-button[aria-pressed="true"] {
+button[data-vt-studio-control="true"][data-split-left="true"].is-selected,
+button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] {
   box-shadow: 0 0 0 3px #000, 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--vt-split-rail, var(--pair-b, #ff7f6b))) 65%, transparent);
 }
 
 @media (max-width: 520px) and (orientation: portrait) {
   button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
-  button.vt-subtoolbox-split-button > .vt-subtoolbox-split-button-label {
+  button[data-vt-studio-control="true"][data-split-left="true"] {
     padding-inline: 7px;
   }
 }
 
 /* Legacy split primitive hover/active filters used to stack a second drop-shadow
    on top of the canonical box-shadow above. Keep the shared shadow single-source. */
-button.vt-subtoolbox-split-button:hover:not(:disabled),
-button.vt-subtoolbox-split-button:active:not(:disabled),
+button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
+button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled),
 button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
 button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled) {
   filter: none !important;

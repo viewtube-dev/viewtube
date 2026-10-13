@@ -246,8 +246,8 @@
 .vt-complete-catalog .vt-catalog-demo.is-l0{--fs:24px}
 .vt-complete-catalog .vt-catalog-demo.is-l1{--fs:18px}
 .vt-complete-catalog .vt-catalog-demo.is-l2{--fs:12px}
-.vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:var(--fs)!important;line-height:.86!important;letter-spacing:-.055em!important;font-weight:1000!important}
-.vt-complete-catalog .vt-catalog-demo :is(.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown)>:first-child{box-sizing:border-box;width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important}
+.vt-complete-catalog .vt-catalog-demo :is(.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-size:var(--fs)!important;line-height:.86!important;letter-spacing:-.055em!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo :is(.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown)>:first-child{box-sizing:border-box;width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important}
 
 /* Every split-left rail is a literal 1:1 square. Remove inherited padding/gap that widens icon bays. */
 .vt-complete-catalog :is(.vt-catalog-split-field,.vt-catalog-stepper,.vt-catalog-hscroll,.vt-catalog-pagination){column-gap:0!important}
@@ -292,10 +292,10 @@
 .vt-complete-catalog .vt-catalog-demo.is-l2{--fs:12px}
 
 /* Split controls must inherit level DNA rather than their older small primitive defaults. */
-.vt-complete-catalog .vt-catalog-demo.is-l0 :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:24px!important}
-.vt-complete-catalog .vt-catalog-demo.is-l1 :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:18px!important}
-.vt-complete-catalog .vt-catalog-demo.is-l2 :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-size:12px!important}
-.vt-complete-catalog :is([data-vt-split-left],.vt-subtoolbox-split-button,.vt-subtoolbox-split-dropdown){font-weight:1000!important;letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-demo.is-l0 :is([data-vt-split-left],.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-size:24px!important}
+.vt-complete-catalog .vt-catalog-demo.is-l1 :is([data-vt-split-left],.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-size:18px!important}
+.vt-complete-catalog .vt-catalog-demo.is-l2 :is([data-vt-split-left],.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-size:12px!important}
+.vt-complete-catalog :is([data-vt-split-left],.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-weight:1000!important;letter-spacing:-.055em!important}
 
 /* Dropdown/select labels are centered while the chevron retains its square tail zone. */
 .vt-complete-catalog .vt-catalog-menu .menu-label{position:relative;display:flex!important;align-items:center!important;justify-content:center!important;padding-inline:var(--h)!important}
@@ -346,12 +346,12 @@
   font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
   letter-spacing:-.055em!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive .vt-subtoolbox-split-button-rail{
+.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail]{
   width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;
   height:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important;
   border-right-width:var(--stroke)!important;display:grid!important;place-items:center!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive .vt-subtoolbox-split-button-label{
+.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-label]{
   min-width:0!important;display:grid!important;place-items:center!important;
   padding:0 calc(var(--h)*.16)!important;font:inherit!important;
 }
@@ -1078,7 +1078,7 @@
 .vt-complete-catalog .vt-catalog-split-primitive{
   grid-template-columns:var(--h) minmax(0,1fr)!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive .vt-subtoolbox-split-button-rail{
+.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail]{
   width:var(--h)!important;
   min-width:var(--h)!important;
   max-width:var(--h)!important;

@@ -7,9 +7,7 @@ import {
 import {
   SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import {
-  SubToolboxSplitButton,
-} from "../subtoolbox/SubToolboxSplitPrimitives"
+import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-complete-primitive-catalog.css"
 
@@ -17,7 +15,7 @@ export type StudioHubComponentLevel = "l0" | "l1" | "l2"
 type Level = StudioHubComponentLevel
 const LEVELS: Level[] = ["l0", "l1", "l2"]
 
-/** Frozen hardcoded certification baseline. Do not migrate component anatomy in this file. */
+/** Legacy comparison catalog; split-left demonstrations now use the canonical production primitive. */
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
@@ -84,7 +82,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button")
     return <button className={`vt-catalog-button is-${level}`} style={style}>{name.replace(" Button", "")}</button>
   if (name === "Square Icon Button") return <button aria-label="Settings" className={`vt-catalog-icon-button is-${level}`} style={style}>{icon}</button>
-  if (name === "Split Left Button" || name === "Head Tail Action") return <SubToolboxSplitButton className={`vt-catalog-split-primitive is-${level}`} style={{ ...style, ["--vt-split-rail" as string]: colors.a, ["--vt-split-label" as string]: colors.b } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</SubToolboxSplitButton>
+  if (name === "Split Left Button" || name === "Head Tail Action") return <StudioSplitLeftButton className={`vt-catalog-split-primitive is-${level}`} heightVariant={level === "l2" ? "28" : "44"} style={{ ...style, ["--vt-studio-control-accent" as string]: colors.b, ["--vt-studio-control-secondary" as string]: colors.a } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
   if (name === "Split Menu" || name === "Dropdown" || name === "Select Menu" || name === "Context Menu") {
     const key = `${name}-${level}-${index}`
     const split = name === "Split Menu"
