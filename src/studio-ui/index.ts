@@ -29,6 +29,7 @@ export {
 export type {
   StudioButtonProps,
   StudioLegendMultiDropdownProps,
+  StudioLegendMultiDropdownOption,
   StudioFloatingLabelInputProps,
   StudioFloatingLabelTextAreaProps,
   StudioControlTone,
