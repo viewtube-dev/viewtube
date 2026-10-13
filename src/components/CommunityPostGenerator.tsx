@@ -8,7 +8,7 @@ import {
  SubToolboxStatePanel,
  SubToolboxSurface,
 } from "./subtoolbox/SubToolboxPrimitives"
-import { SplitLeftButton, StudioButton, StudioInput, StudioSearchInput, StudioTextArea } from "../studio-ui"
+import { StudioSplitLeftButton, StudioButton, StudioInput, StudioSearchInput, StudioTextArea } from "../studio-ui"
 import { useCommunityPostController, useCreatorEngagementContext, type CommunityPostType } from "../features/creator-engagement"
 
 const POST_WORKSPACE_PALETTE_INDEX = 4
@@ -31,14 +31,14 @@ export const CommunityPostGenerator: React.FC = () => {
     <SubToolboxGrid minItemWidth="compact" density="dense" aria-label="Post type">
      {POST_TYPES.map(({ id, label, icon: Icon }) => {
       const active = post.postType === id
-      return <SplitLeftButton
+      return <StudioSplitLeftButton
        key={id}
-       level="l1"
+       sizeVariant="action"
        selected={active}
        aria-pressed={active}
        icon={<Icon size={18} aria-hidden="true" />}
        onClick={() => post.setPostType(id)}
-      >{label}</SplitLeftButton>
+      >{label}</StudioSplitLeftButton>
      })}
     </SubToolboxGrid>
     <SubToolboxActions columns={2} aria-label="Community post mode">
