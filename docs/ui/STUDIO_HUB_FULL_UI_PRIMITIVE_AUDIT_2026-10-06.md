@@ -1610,3 +1610,15 @@ After that, the Studio Hub can be systematically updated tool-by-tool without lo
 6. **Polish** — final production pass.
 
 **Important:** this document is an audit and planning artifact. It intentionally does not silently modify the Studio Hub while performing the audit.
+
+
+## Supplemental recovery evidence — right-side field-label correction (2026-10-11)
+
+The convergence branch recorded a follow-up fix for the shared right-side overlay label used by canonical labeled input/textarea primitives and metadata Title/Description fields:
+
+- The label is an absolute underlay at z-index 1; the editable control is at z-index 2.
+- The former `padding-right: 52%` reservation was removed so entered text can use the full field width and wrap normally.
+- The input/textarea remains full-width with normal padding; transparent control background allows the label underlay to remain visible without covering typed content.
+- The change was intended to apply through shared primitives rather than per-page CSS.
+
+**Historical verification status:** the donor audit stated that the source change was committed but a successful build and live visual test were still pending at the time of that note. This supplemental record preserves the implementation intent; it does not certify the current integration head. Re-check current source, tests, and browser rendering before marking the issue closed.
