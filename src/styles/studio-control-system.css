@@ -5,7 +5,7 @@
 [data-vt-studio-control] {
   --vt-studio-control-height: 44px;
   --vt-studio-control-stroke: 3px;
-  --vt-studio-control-radius: 8px;
+  --vt-studio-control-radius: 6px;
   --vt-studio-control-shadow: 4px;
   --vt-studio-control-accent: var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6));
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
@@ -13,7 +13,7 @@
   box-sizing: border-box;
 }
 
-[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 32px; }
+[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-radius: 4px; }
 [data-vt-studio-control][data-size="small"] { --vt-studio-control-height: 32px; }
 [data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; }
 [data-vt-studio-control][data-size="action"] { --vt-studio-control-height: 56px; }
@@ -31,7 +31,7 @@
   caret-color: var(--vt-studio-control-accent);
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 1000;
   line-height: .86;
   letter-spacing: -.035em;
@@ -105,8 +105,8 @@ button[data-vt-studio-control][data-height-variant="44"] {
   --vt-studio-control-height: 44px;
   height: 44px;
   min-height: 44px;
-  font-size: 14px !important;
-  font-weight: 900;
+  font-size: 36px !important;
+  font-weight: 1000;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -116,8 +116,8 @@ button[data-vt-studio-control][data-height-variant="28"] {
   height: 28px;
   min-height: 28px;
   padding: 0 8px;
-  border-radius: 6px;
-  font-size: 14px !important;
+  border-radius: 4px;
+  font-size: 22px !important;
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0;
@@ -148,7 +148,7 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-l
 }
 
 button[data-vt-studio-control][data-size="action"] { font-size: 20px; padding: 10px 16px; }
-button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translateY(1px); }
+button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px)); box-shadow: calc(var(--vt-studio-control-shadow) / 2) calc(var(--vt-studio-control-shadow) / 2) 0 0 var(--vt-studio-control-shadow-color); }
 button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
 button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 3px; }
 button[data-vt-studio-control]:disabled { cursor: not-allowed; filter: grayscale(.5); opacity: .5; }
@@ -770,3 +770,11 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke: inherit;
 }
+
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] > svg { width:28px !important; height:28px !important; stroke-width:2.5px; }
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] > svg { width:18px !important; height:18px !important; stroke-width:1.65px; }
+.vt-studio-labeled-field { position:relative; display:block; width:100%; min-width:0; }
+.vt-studio-labeled-field-overlay { position:absolute; z-index:1; top:-.48em; right:10px; max-width:calc(100% - 20px); overflow:hidden; padding:0 6px; border:2px solid #000; border-radius:4px; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); color:#000; font:900 10px/1 Inter,ui-sans-serif,system-ui,sans-serif; letter-spacing:.04em; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; pointer-events:none; }
+.vt-studio-labeled-field.is-input:has([data-size="standard"]) .vt-studio-labeled-field-overlay { font-size:12px; padding:2px 8px; border-radius:6px; }
+.vt-studio-labeled-field.is-input:has([data-size="compact"]) .vt-studio-labeled-field-overlay { top:-.42em; right:7px; padding:1px 5px; border-width:1.5px; border-radius:4px; font-size:8px; }
+.vt-studio-labeled-field.is-textarea textarea { min-height:160px; height:auto; padding-top:14px; font-size:22px; line-height:1.15; resize:vertical; }
