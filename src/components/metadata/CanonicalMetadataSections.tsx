@@ -14,7 +14,7 @@ import {
   LegendMultiDropdown,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { SplitLeftButton } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { StudioSplitLeftButton } from "../../studio-ui"
 import { TagRankTag } from "./TagRankTag"
 import { EducationTimestampNotes } from "./EducationTimestampNotes"
 import type { TagSuggestion } from "../../services/gemini"
@@ -133,9 +133,9 @@ const FieldActions: React.FC<{
   if (!onGenerate && !onRefine && !onAnalyze) return null
   return (
     <SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">
-      {onGenerate ? <SplitLeftButton level="l1" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SplitLeftButton> : <span />}
-      {onRefine ? <SplitLeftButton level="l1" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SplitLeftButton> : <span />}
-      {onAnalyze ? <SplitLeftButton level="l1" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SplitLeftButton> : <span />}
+      {onGenerate ? <StudioSplitLeftButton sizeVariant="action" icon={<Sparkles size={18} />} style={{ "--vt-studio-control-accent": ACTION_STYLES.generate["--pair-a"], "--vt-studio-control-secondary": ACTION_STYLES.generate["--pair-b"] } as React.CSSProperties} onClick={() => onGenerate(field)}>GENERATE</StudioSplitLeftButton> : <span />}
+      {onRefine ? <StudioSplitLeftButton sizeVariant="action" icon={<WandSparkles size={18} />} style={{ "--vt-studio-control-accent": ACTION_STYLES.refine["--pair-a"], "--vt-studio-control-secondary": ACTION_STYLES.refine["--pair-b"] } as React.CSSProperties} onClick={() => onRefine(field)}>REFINE</StudioSplitLeftButton> : <span />}
+      {onAnalyze ? <StudioSplitLeftButton sizeVariant="action" icon={<Search size={18} />} style={{ "--vt-studio-control-accent": ACTION_STYLES.analyze["--pair-a"], "--vt-studio-control-secondary": ACTION_STYLES.analyze["--pair-b"] } as React.CSSProperties} onClick={() => onAnalyze(field)}>ANALYZE</StudioSplitLeftButton> : <span />}
     </SubToolboxActions>
   )
 }
