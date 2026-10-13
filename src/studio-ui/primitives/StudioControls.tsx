@@ -20,7 +20,7 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   ...(tone ? { "data-tone": tone } : {}),
 })
 
-/** Public Studio facade over canonical primitive 20; not an independent input implementation. */
+/** Canonical Studio text input; visual rules are owned by studio-control-system.css. */
 export const StudioInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
@@ -29,7 +29,7 @@ export const StudioInput = React.forwardRef<
 ))
 StudioInput.displayName = "StudioInput"
 
-/** Search facade over canonical primitive 20. */
+/** Canonical search input using the shared Studio text-field contract. */
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
@@ -38,7 +38,7 @@ export const StudioSearchInput = React.forwardRef<
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
-/** Number facade over canonical primitive 20. */
+/** Canonical number input using the shared Studio text-field contract. */
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
@@ -47,7 +47,7 @@ export const StudioNumberInput = React.forwardRef<
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
-/** Public Studio facade over canonical primitive 21; not an independent textarea implementation. */
+/** Canonical Studio writing area; visual rules are owned by studio-control-system.css. */
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
@@ -60,7 +60,7 @@ export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttri
   level?: "l0" | "l1" | "l2"
 }
 
-/** Primitive 137 facade: canonical plain input 20 plus the upper-right label overlay. */
+/** Studio input plus the upper-right label overlay. */
 export const StudioFloatingLabelInput = React.forwardRef<HTMLInputElement, StudioFloatingLabelInputProps>(
   ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
     <label data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level}
@@ -78,7 +78,7 @@ export interface StudioFloatingLabelTextAreaProps extends React.TextareaHTMLAttr
   level?: "l0" | "l1" | "l2"
 }
 
-/** Primitive 138 facade: canonical plain textarea 21 plus the upper-right label overlay. */
+/** Studio writing area plus the upper-right label overlay. */
 export const StudioFloatingLabelTextArea = React.forwardRef<HTMLTextAreaElement, StudioFloatingLabelTextAreaProps>(
   ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
     <label data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
