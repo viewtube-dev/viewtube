@@ -293,6 +293,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
     setPackageDraft(createEmptyMetadataMasterPackage({
       goal,
       intensity,
+      style,
       videoId: publishedVideoId || null,
     }))
     setAppliedSlots([])
