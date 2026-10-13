@@ -5,6 +5,7 @@ import {
   type ProjectStrategyPromptInput,
 } from "./projectStrategyPrompt"
 import { runBrainJsonTask } from "./runtime/BrainJsonTask"
+import { prepareGenerationRequest, recordToolReceipt } from "../asset-engine/GenerationWorkflow"
 
 export interface ProjectStrategyGenerationRequest {
   project: Project
@@ -32,13 +33,31 @@ export const generateProjectStrategyWithBrain = async (
     contentBuildId: project.contentBuildId || null,
   }
   const userText = buildProjectStrategyPrompt(promptInput)
+  const prepared = project.contentBuildId
+    ? prepareGenerationRequest({
+        contentBuildId: project.contentBuildId,
+        channelId: request.channelId,
+        projectId: project.id,
+        toolId: "project-studio",
+        operation: "generate-project-strategy",
+        targetSlot: "project.strategy",
+        mode: "create",
+        creatorIntent: promptInput.concept,
+        constraints: { niche: promptInput.niche, targetAudience: promptInput.targetAudience },
+        outputSpec: {
+          promptFamily: "project-strategy",
+          promptVersion: "project-strategy-v1",
+          requiredFields: ["topic", "description", "length", "audience", "vision", "hook"],
+        },
+      })
+    : null
   const generated = await runBrainJsonTask<string | Record<string, unknown>>({
     channelId: request.channelId,
     projectId: project.id,
     project,
     contentBuildId: project.contentBuildId || null,
     surface: request.surface || "project",
-    artifactRefs: request.artifactRefs,
+    artifactRefs: [...(request.artifactRefs || []), ...(prepared ? [prepared.request.id, prepared.contextManifest.id] : [])],
     userText,
     systemInstruction: [
       "You are ViewTube's Project Strategy specialist operating through AI Brain.",
@@ -54,6 +73,23 @@ export const generateProjectStrategyWithBrain = async (
   const plan = parseProjectStrategyJson(raw)
   plan.concept = promptInput.concept
   plan.niche = promptInput.niche
+
+  if (prepared) {
+    recordToolReceipt({
+      request: prepared.request,
+      traceId: prepared.request.id,
+      summary: `Project Strategy generated: ${plan.topic}`,
+      metadata: {
+        promptFamily: generated.runtime.promptFamily,
+        promptVersion: generated.runtime.promptVersion,
+        brainRuntimeVersion: generated.runtime.runtimeVersion,
+        creatorContextVersion: generated.runtime.creatorContextVersion,
+        projectSource: generated.runtime.projectSource,
+        strategyPlan: plan,
+        generatedAt: generated.runtime.generatedAt,
+      },
+    })
+  }
 
   return { plan, runtime: generated.runtime }
 }
