@@ -17,6 +17,22 @@ export type MetadataMasterStyle =
   | "channel-native"
   | "story-led"
 
+export const getMetadataCandidateStyles = (preferredStyle: MetadataMasterStyle): MetadataMasterStyle[] => [
+  preferredStyle,
+  ...(["search-first", "curiosity-led", "authority-led", "channel-native", "story-led"] as MetadataMasterStyle[])
+    .filter(style => style !== preferredStyle),
+]
+
+export const metadataStrategyForStyle = (style: MetadataMasterStyle): MetadataMasterSet["strategy"] => {
+  switch (style) {
+    case "search-first": return "search"
+    case "curiosity-led": return "curiosity"
+    case "authority-led": return "authority"
+    case "channel-native": return "channel-fit"
+    case "story-led": return "custom"
+  }
+}
+
 export const buildMetadataStrategyBrief = (
   goal: MetadataMasterGoal,
   intensity: MetadataMasterIntensity,
@@ -46,6 +62,7 @@ export const buildMetadataStrategyBrief = (
     `PRIMARY GOAL: ${goalGuidance[goal]}.`,
     `STYLE DIRECTION (${style}): ${styleGuidance[style]}.`,
     `OPTIMIZATION INTENSITY (${intensity}): ${intensityGuidance[intensity]}.`,
+    `Create distinct titleSet alternatives in this style order: ${getMetadataCandidateStyles(style).join(", ")}. The first candidate should lead with the selected style; subsequent candidates should be meaningfully different, not superficial rewrites.`,
     "Keep title, thumbnail message, description, and tags coherent as one package. Do not invent facts, results, credentials, or claims absent from the supplied content.",
   ].join("\\n")
 }
