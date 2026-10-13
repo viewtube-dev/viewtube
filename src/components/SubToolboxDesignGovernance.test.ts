@@ -482,4 +482,54 @@ describe("subtoolbox design governance", () => {
   expect(systemCss).toContain(".vt-toolbox-header-help:focus-visible")
  })
 
+
+ it("exposes canonical PrimaryButton and SplitLeftButton and floating-label field styling", () => {
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+  const splitPrimitives = source("src/components/subtoolbox/SubToolboxSplitPrimitives.tsx")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+
+  expect(primitives).toContain("export const PrimaryButton")
+  expect(primitives).toContain("export const SubToolboxButton")
+  expect(splitPrimitives).toContain("export const SplitLeftButton")
+  expect(splitPrimitives).toContain("export const SubToolboxSplitButton")
+  expect(primitives).toContain("floating-label")
+  expect(systemCss).toContain(".vt-subtoolbox-labeled-field.is-floating-label")
+  expect(systemCss).toContain("left:14px")
+  expect(systemCss).not.toContain("padding-right:52%!important")
+  expect(catalog).toContain("PrimaryButton")
+  expect(catalog).toContain("SplitLeftButton")
+ })
+
+
+ it("uses ViewTube Minimal as the canonical default control contract", () => {
+  const tokenSource = source("src/components/subtoolbox/tokens.ts")
+  const subtoolboxCss = source("src/styles/subtoolbox-system.css")
+  const studioCss = source("src/styles/studio-control-system.css")
+
+  expect(tokenSource).toContain("controlLetterSpacingEm: -0.035")
+  expect(tokenSource).toContain("controlLineHeight: 0.86")
+  expect(tokenSource).toContain("m: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 }")
+  expect(tokenSource).toContain("l1: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 }")
+  expect(subtoolboxCss).toContain("--vt-subtoolbox-control-standard:44px")
+  expect(subtoolboxCss).toContain("font-size:32px")
+  expect(subtoolboxCss).toContain("letter-spacing:-.035em")
+  expect(studioCss).toContain("--vt-studio-control-height: 44px")
+  expect(studioCss).toContain("font-size: 32px")
+  expect(studioCss).toContain("letter-spacing: -.035em")
+ })
+
+
+ it("uses the canonical inverse-color split-left toggle for community post types", () => {
+  const community = source("src/components/CommunityPostGenerator.tsx")
+  const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+
+  expect(community).toContain("SplitLeftButton")
+  expect(community).not.toContain("StudioSplitLeftButton")
+  expect(splitCss).toContain('.vt-subtoolbox-split-button[aria-pressed="true"] .vt-subtoolbox-split-button-rail')
+  expect(splitCss).toContain("background: var(--vt-split-label)")
+  expect(splitCss).toContain("height: var(--vt-subtoolbox-control-standard, 44px)")
+  expect(splitCss).toContain("font-size: 32px")
+ })
+
 })

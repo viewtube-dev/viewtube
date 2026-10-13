@@ -7,6 +7,11 @@ export { STUDIO_PALETTE, getStudioPaletteColor, getStudioToolboxPaletteColors } 
 export type { StudioConnectionState, StudioDataState, StudioStateSnapshot } from "./states"
 export { isStudioCapabilityAvailable } from "./states"
 export {
+  PrimaryButton,
+  SubToolboxButton,
+} from "../components/subtoolbox/SubToolboxPrimitives"
+export type { PrimaryButtonProps, SubToolboxButtonProps } from "../components/subtoolbox/SubToolboxPrimitives"
+export {
   StudioButton,
   StudioIconButton,
   StudioInput,
@@ -26,11 +31,13 @@ export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
 export {
   SubToolboxKpiCard,
+  SplitLeftButton,
   SubToolboxSplitButton,
   SubToolboxSplitDropdown,
 } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 export type {
   SubToolboxKpiCardProps,
+  SplitLeftButtonProps,
   SubToolboxSplitButtonProps,
   SubToolboxSplitDropdownOption,
   SubToolboxSplitDropdownProps,

@@ -4,15 +4,15 @@
      its title section. No component chooses an independent palette pair. */
   --vt-split-rail: var(--pair-b, #c0f240);
   --vt-split-label: var(--pair-a, #ff5d8f);
-  --vt-split-shadow: color-mix(in srgb, var(--pair-a, var(--vt-split-label)) 45%, transparent);
+  --vt-split-shadow: color-mix(in srgb, var(--pair-b, var(--vt-split-label)) 65%, transparent);
 }
 
 .vt-subtoolbox-split-button {
   width: 100%;
-  height: var(--vt-subtoolbox-control-standard, 48px);
+  height: var(--vt-subtoolbox-control-standard, 44px);
   min-width: 0;
   display: grid;
-  grid-template-columns: var(--vt-subtoolbox-control-standard, 48px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-subtoolbox-control-standard, 44px) minmax(0, 1fr);
   align-items: stretch;
   overflow: hidden;
   padding: 0;
@@ -38,10 +38,10 @@
   place-items: center;
   padding: 4px 10px;
   overflow: hidden;
-  font-size: 14px;
-  line-height: 1;
+  font-size: 32px;
+  line-height: .86;
   font-weight: 1000;
-  letter-spacing: -.04em;
+  letter-spacing: -.035em;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -58,9 +58,9 @@
 .vt-subtoolbox-split-dropdown { position: relative; min-width: 0; }
 .vt-subtoolbox-split-dropdown-trigger {
   width: 100%;
-  height: var(--vt-subtoolbox-control-standard, 48px);
+  height: var(--vt-subtoolbox-control-standard, 44px);
   display: grid;
-  grid-template-columns: var(--vt-subtoolbox-control-standard, 48px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-subtoolbox-control-standard, 44px) minmax(0, 1fr);
   align-items: stretch;
   overflow: hidden;
   padding: 0;
@@ -106,17 +106,17 @@
   place-items: center;
   padding: 4px 8px;
   overflow: hidden;
-  font-size: 14px;
+  font-size: 32px;
   font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.04em;
+  line-height: .86;
+  letter-spacing: -.035em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .vt-subtoolbox-split-dropdown-menu {
   --vt-split-rail: var(--pair-b, #c0f240);
   --vt-split-label: var(--pair-a, #ff5d8f);
-  --vt-split-shadow: color-mix(in srgb, var(--pair-a, var(--vt-split-label)) 45%, transparent);
+  --vt-split-shadow: color-mix(in srgb, var(--pair-b, var(--vt-split-label)) 65%, transparent);
   position: absolute;
   z-index: 160;
   top: calc(100% + 4px);
@@ -132,9 +132,9 @@
 }
 .vt-subtoolbox-split-dropdown-option {
   width: 100%;
-  min-height: var(--vt-subtoolbox-control-standard, 48px);
+  min-height: var(--vt-subtoolbox-control-standard, 44px);
   display: grid;
-  grid-template-columns: var(--vt-subtoolbox-control-standard, 48px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-subtoolbox-control-standard, 44px) minmax(0, 1fr);
   align-items: stretch;
   padding: 0;
   border: 0;

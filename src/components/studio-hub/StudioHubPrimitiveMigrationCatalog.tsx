@@ -11,6 +11,7 @@ import {
   SubToolboxCarousel,
   SubToolboxCommandPalette,
   SubToolboxBadge,
+  PrimaryButton,
   SubToolboxButton,
   SubToolboxButtonGroup,
   SubToolboxCheckControl,
@@ -103,7 +104,7 @@ import {
   ToolboxHeaderTitle,
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { SubToolboxKpiCard, SplitLeftButton, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -438,7 +439,7 @@ const PrimitiveMigrationControl: React.FC<{
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
-    return <SubToolboxButton level={level}>{name.replace(" Button", "")}</SubToolboxButton>
+    return <PrimaryButton level={level}>{name.replace(" Button", "")}</PrimaryButton>
   }
   if (name === "Square Icon Button") {
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
@@ -480,7 +481,7 @@ const PrimitiveMigrationControl: React.FC<{
     )
   }
   if (name === "Split Left Button" || name === "Head Tail Action") {
-    return <SubToolboxSplitButton level={level} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SubToolboxSplitButton>
+    return <SplitLeftButton level={level} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SplitLeftButton>
   }
   if (name === "Split Menu") {
     return <SubToolboxSplitDropdown
