@@ -3241,6 +3241,7 @@ export const generateProjectStrategy = async (
  niche: string,
  targetAudience: string,
  brain?: any,
+ generationContext?: { projectId?: string | null; contentBuildId?: string | null },
 ): Promise<ProjectPlan> => {
  const ai = getAiClient()
  const journalContext = getJournalKnowledge(brain)
@@ -3263,6 +3264,8 @@ export const generateProjectStrategy = async (
   niche,
   targetAudience,
   creatorContext: journalContext,
+  projectId: generationContext?.projectId,
+  contentBuildId: generationContext?.contentBuildId,
  })
 
  return await executeWithRetry(async () => {
