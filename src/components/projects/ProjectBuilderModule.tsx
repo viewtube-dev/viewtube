@@ -25,7 +25,7 @@ const ProjectBuilderModule: React.FC = () => {
         level="toolbox"
         value={builderScope}
         onValueChange={(value) => setBuilderScope(value as "channel" | "project")}
-        ariaLabel="Choose Project Builder scope"
+        aria-label="Choose Project Builder scope"
         options={[
           { value: "channel", label: "Channel" },
           { value: "project", label: "Project" },
