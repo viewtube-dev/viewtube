@@ -88,12 +88,33 @@ export const failPublishTransaction=(id:string,step:PublishTransactionStep,error
 }
 export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
  const transaction=getPublishTransaction(id);if(!transaction)throw new Error("Unknown publish transaction: "+id)
+ if(transaction.status==="completed")return transaction
  if(!transaction.youtubeVideoId)throw new Error("Cannot complete publishing without a bound YouTube video ID.")
  if(transaction.steps["verify-remote-state"]?.status!=="completed")throw new Error("Cannot complete publishing before remote verification.")
  const timestamp=now(),next=save({...transaction,status:"completed",completedAt:timestamp,updatedAt:timestamp})
  const build=getContentBuild(next.contentBuildId)
- if(build?.youtube?.status==="published")setContentBuildStage(next.contentBuildId,"published",{actorType:"youtube",toolId})
- else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
+ if(build?.youtube?.status==="published"){
+  setContentBuildStage(next.contentBuildId,"published",{actorType:"youtube",toolId})
+  appendContentBuildEvent({
+   contentBuildId:next.contentBuildId,
+   eventType:"package.published",
+   entityType:"publishing-package",
+   entityId:next.videoPackageId,
+   actorType:"youtube",
+   toolId,
+   timestamp,
+   previousState:{status:"approved",approvedSnapshotId:next.approvedSnapshotId},
+   resultingState:{status:"published",videoId:next.youtubeVideoId,completedAt:timestamp},
+   metadata:{
+    videoPackageId:next.videoPackageId,
+    approvedSnapshotId:next.approvedSnapshotId,
+    approvedSnapshotHash:next.approvedSnapshotHash,
+    projectionRevision:next.assetLock.projectionRevision,
+    youtubeVideoId:next.youtubeVideoId,
+    publicationState:"published",
+   },
+  })
+ } else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
  appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.completed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{youtubeVideoId:next.youtubeVideoId}})
  return next
 }
