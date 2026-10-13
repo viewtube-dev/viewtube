@@ -1758,3 +1758,29 @@
  .vt-complete-catalog .vt-catalog-control-variant{flex:0 0 max-content}
 }
 
+/* Canonical control catalog: compact family labels, four variants on each row. */
+.vt-complete-catalog .vt-catalog-control-family,
+.vt-complete-catalog .vt-catalog-word-toggle-families{display:flex;flex-direction:column;gap:9px;width:100%;min-width:0}
+.vt-complete-catalog .vt-catalog-control-row{display:flex;flex-direction:column;gap:4px;min-width:0;width:100%}
+.vt-complete-catalog .vt-catalog-control-row-label{display:block;font-size:9px!important;font-weight:900!important;line-height:1.1!important;letter-spacing:.045em;text-transform:uppercase}
+.vt-complete-catalog .vt-catalog-control-variants{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;align-items:start;width:100%;min-width:0}
+.vt-complete-catalog .vt-catalog-control-variant{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;min-width:0}
+.vt-complete-catalog .vt-catalog-control-variant>small{font-size:8px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:-.015em;text-align:center;text-transform:uppercase;white-space:normal}
+.vt-complete-catalog .vt-catalog-control-variant>button,
+.vt-complete-catalog .vt-catalog-control-variant>.vt-subtoolbox-44-word-toggle{margin-inline:auto}
+.vt-complete-catalog .vt-catalog-control-variant .vt-subtoolbox-44-word-toggle{max-width:100%}
+.vt-complete-catalog .vt-catalog-control-variant .vt-subtoolbox-44-word-toggle button{min-width:0}
+@media(max-width:520px){
+  .vt-complete-catalog .vt-catalog-control-variants{gap:4px}
+  .vt-complete-catalog .vt-catalog-control-variant>small{font-size:7px!important}
+}
+
+/* Equal proportional dropdown typography/icon sizing: 18/28 and 28/44 chevrons. */
+.vt-complete-catalog .vt-catalog-menu .menu-label>svg{width:28px!important;height:28px!important;flex:0 0 28px!important;stroke-width:3.5!important}
+.vt-complete-catalog .vt-catalog-menu.is-28px .menu-label>svg,
+.vt-complete-catalog .vt-catalog-menu[data-size="28"] .menu-label>svg{width:18px!important;height:18px!important;flex:0 0 18px!important}
+.vt-complete-catalog .vt-catalog-dropdown-28 span,
+.vt-complete-catalog .vt-catalog-menu.is-28px .menu-label>b,
+.vt-complete-catalog .vt-catalog-menu[data-size="28"] .menu-label>b{letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label>b{letter-spacing:-.055em!important}
+
