@@ -1784,3 +1784,11 @@
 .vt-complete-catalog .vt-catalog-menu[data-size="28"] .menu-label>b{letter-spacing:-.055em!important}
 .vt-complete-catalog .vt-catalog-menu .menu-label>b{letter-spacing:-.055em!important}
 
+/* Size-specific dropdown geometry: text and chevron share a consistent control ratio. */
+.vt-complete-catalog .vt-catalog-menu.is-l0 .menu-trigger,.vt-complete-catalog .vt-catalog-menu.is-l1 .menu-trigger{min-height:44px!important;height:44px!important}
+.vt-complete-catalog .vt-catalog-menu.is-l0 .menu-label,.vt-complete-catalog .vt-catalog-menu.is-l1 .menu-label{display:flex!important;align-items:center!important;align-self:stretch!important;height:100%!important;min-height:0!important;padding:0!important;line-height:1!important}
+.vt-complete-catalog .vt-catalog-menu.is-l0 .menu-label>b,.vt-complete-catalog .vt-catalog-menu.is-l1 .menu-label>b{display:flex!important;align-items:center!important;align-self:stretch!important;height:100%!important;margin:0!important;padding:0!important;font-size:38px!important;line-height:1!important;letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-menu.is-l2 .menu-label>b{display:flex!important;align-items:center!important;align-self:stretch!important;height:100%!important;margin:0!important;padding:0!important;font-size:24px!important;line-height:1!important;letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-menu.is-l0 .menu-label>svg,.vt-complete-catalog .vt-catalog-menu.is-l1 .menu-label>svg{width:28px!important;height:28px!important;flex:0 0 28px!important}
+.vt-complete-catalog .vt-catalog-menu.is-l2 .menu-label>svg{width:18px!important;height:18px!important;flex:0 0 18px!important}
+
