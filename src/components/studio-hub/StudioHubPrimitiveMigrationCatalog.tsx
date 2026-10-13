@@ -112,7 +112,7 @@ import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
 
-const LEVELS: StudioHubComponentLevel[] = ["l0", "l1", "l2"]
+const STANDARD_LEVEL: StudioHubComponentLevel = "l1"
 
 export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Primary Button",
@@ -1090,18 +1090,27 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
     className="vt-primitive-migration-catalog"
     aria-labelledby="studio-hub-primitive-migration-catalog-title"
     data-palette-index={paletteIndex}
-    data-vt-catalog-track="primitive-migration"
+    data-vt-catalog-track="definitive-component-library"
   >
     <header className="vt-complete-catalog-heading">
       <div>
         <Lightbulb />
         <div>
-          <h2 id="studio-hub-primitive-migration-catalog-title">Complete Component + Primitive Catalog</h2>
-          <p>Only production primitives are rendered here. Unmigrated hardcoded families stay exclusively in the baseline toolbox.</p>
+          <h2 id="studio-hub-primitive-migration-catalog-title">Definitive Component Library</h2>
+          <p>Confirmed canonical production primitives only. Each family is shown once at the standard component size; shared tokens define the uniform default style, while compound components retain their intrinsic geometry.</p>
         </div>
       </div>
-      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} PRIMITIVE FAMILIES · {STUDIO_HUB_MIGRATED_FAMILIES.reduce((total, family) => total + (family === "Calendar" ? 1 : LEVELS.length), 0)} EXAMPLES</strong>
+      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} COMPONENT FAMILIES · ONE STANDARD SIZE EACH</strong>
     </header>
+
+    <div className="vt-definitive-token-strip" aria-label="Confirmed default component tokens">
+      <span><b>HEIGHT</b> 44px</span>
+      <span><b>STROKE</b> 3px</span>
+      <span><b>RADIUS</b> 8px</span>
+      <span><b>SHADOW</b> 4px</span>
+      <span><b>TYPE</b> Inter · 1000</span>
+      <span><b>TEXT</b> Uppercase · −0.035em · 0.86 line</span>
+    </div>
 
     <div className="vt-complete-catalog-grid">
       {STUDIO_HUB_MIGRATED_FAMILIES.map((name, index) => (
@@ -1123,7 +1132,7 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
             contentClassName="p-3"
           >
             <div className="vt-catalog-levels">
-              {(name === "Calendar" ? (["l0"] as StudioHubComponentLevel[]) : LEVELS).map((level) => (
+              {[STANDARD_LEVEL].map((level) => (
                 <DemoShell level={level} geometry={getCatalogPreviewGeometry(name)} key={level}>
                   <PrimitiveMigrationControl name={name} level={level} />
                 </DemoShell>

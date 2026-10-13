@@ -547,4 +547,23 @@ describe("subtoolbox design governance", () => {
   expect(catalog).toContain('<SplitLeftButton level={level} icon={<Settings2 />} disabled>')
  })
 
+ it("keeps the definitive component library to one standard size and confirmed tokens", () => {
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+  const catalogCss = source("src/components/studio-hub/studio-hub-complete-primitive-catalog.css")
+  const tokens = source("src/components/subtoolbox/tokens.ts")
+
+  expect(catalog).toContain('data-vt-catalog-track="definitive-component-library"')
+  expect(catalog).toContain('const STANDARD_LEVEL: StudioHubComponentLevel = "l1"')
+  expect(catalog).toContain('{[STANDARD_LEVEL].map((level) => (')
+  expect(catalog).toContain('aria-label="Confirmed default component tokens"')
+  expect(catalog).not.toContain(' : LEVELS')
+  expect(catalogCss).toContain('grid-template-columns:minmax(0,1fr)')
+  expect(catalogCss).toContain('content:"STANDARD · 44PX"')
+  expect(catalogCss).toContain('--h:44px;--stroke:3px;--radius:8px;--fs:32px')
+  expect(tokens).toContain('l1: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 }')
+  expect(tokens).toContain('controlWeight: 1000')
+  expect(tokens).toContain('controlLetterSpacingEm: -0.035')
+  expect(tokens).toContain('controlLineHeight: 0.86')
+ })
+
 })
