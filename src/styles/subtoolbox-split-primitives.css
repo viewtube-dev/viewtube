@@ -689,3 +689,16 @@
 .vt-project-manifestation-actions .vt-subtoolbox-split-button-label {
   padding-inline: 4px;
 }
+
+
+/* The first thirteen Component Library families share StudioButton typography.
+   Keep source primitives consistent with their library previews. */
+.vt-subtoolbox-split-button.has-component-level .vt-subtoolbox-split-button-label,
+.vt-subtoolbox-split-dropdown.has-component-level .vt-subtoolbox-split-dropdown-label,
+.vt-subtoolbox-split-dropdown-menu.has-component-level .vt-subtoolbox-split-dropdown-option-label {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+}
