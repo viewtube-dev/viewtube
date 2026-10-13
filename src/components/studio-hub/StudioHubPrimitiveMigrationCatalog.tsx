@@ -590,7 +590,6 @@ const PrimitiveMigrationControl: React.FC<{
       sizeVariant={level === "l0" ? "standard" : "compact"}
       placeholder="ANY"
       clearLabel="CLEAR ALL"
-      aria-label="Legend multi filters"
     />
   }
   if (name === "Split Search") {
