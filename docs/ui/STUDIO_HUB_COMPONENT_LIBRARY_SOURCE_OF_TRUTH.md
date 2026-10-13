@@ -256,3 +256,12 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 - Focus state: pair-B outline at component stroke width, pair-A fill lightened with white, black text, and block-shaped caret where supported.
 - caret-shape: block is progressive enhancement; unsupported browsers keep their native caret shape while retaining the pair-color caret.
 - Production styles live in src/styles/subtoolbox-system.css; catalog CSS maps only the catalog's L0/L1/L2 size presentation. The sample uses placeholder text to make empty and focus states easy to review.
+
+## Follow-up catalog correction — 2026-10-13
+
+- The catalog now exposes separate **Text Input**, **20 Simple Text Input**, **Textarea**, and **21 Simple Textarea** entries alongside the plain-input and floating-label primitives. The simple input entries use canonical primitive 20 and its shared state styling; the simple textarea entry uses primitive 21.
+- Text-input specimen defaults are updated to 38px and 24px type sizes, with `letter-spacing: -0.02em` and uppercase text.
+- The 44px split-left icon rail now explicitly sizes the SVG glyph to 72–76% of the rail, allows overflow, and preserves the icon viewBox rather than letting a smaller inherited glyph size constrain its visual weight.
+- The Dropdown family is placed on a dedicated catalog row with side-by-side specimens on wider screens and a single-column layout on narrow screens. Dropdown trigger and option text uses the same heavy uppercase typography and `-0.02em` spacing.
+- These are catalog/source changes on `feat/canonical-simple-text-input-library`; browser-rendered sizing, build, and automated checks still require verification before merge.
+
