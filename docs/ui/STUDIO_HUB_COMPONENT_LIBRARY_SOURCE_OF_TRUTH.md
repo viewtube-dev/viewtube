@@ -256,3 +256,22 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 - Focus state: pair-B outline at component stroke width, pair-A fill lightened with white, black text, and block-shaped caret where supported.
 - caret-shape: block is progressive enhancement; unsupported browsers keep their native caret shape while retaining the pair-color caret.
 - Production styles live in src/styles/subtoolbox-system.css; catalog CSS maps only the catalog's L0/L1/L2 size presentation. The sample uses placeholder text to make empty and focus states easy to review.
+
+## Follow-up catalog correction — 2026-10-13
+
+- The catalog now exposes separate **Text Input**, **20 Simple Text Input**, **Textarea**, and **21 Simple Textarea** entries alongside the plain-input and floating-label primitives. The simple input entries use canonical primitive 20 and its shared state styling; the simple textarea entry uses primitive 21.
+- Text-input specimen defaults are updated to 38px and 24px type sizes, with `letter-spacing: -0.02em` and uppercase text.
+- The 44px split-left icon rail now explicitly sizes the SVG glyph to 72–76% of the rail, allows overflow, and preserves the icon viewBox rather than letting a smaller inherited glyph size constrain its visual weight.
+- The Dropdown family is placed on a dedicated catalog row with side-by-side specimens on wider screens and a single-column layout on narrow screens. Dropdown trigger and option text uses the same heavy uppercase typography and `-0.02em` spacing.
+- These are catalog/source changes on `feat/canonical-simple-text-input-library`; browser-rendered sizing, build, and automated checks still require verification before merge.
+
+- Added an explicit **28px Dropdown Pair** family entry: two real, keyboard-operable dropdown triggers in their own dedicated row, side by side. Both use uppercase 24px text, heavy weight, and `-0.02em` letter spacing.
+
+## 44px control family and dropdown alignment follow-up — 2026-10-13
+
+- Added canonical `SubToolbox44Switch`, `SubToolbox44Choice`, and `SubToolbox44WordToggle` components to the shared primitive code and control styles. The 44px switch retains the reference proportions (75.68 × 44px track, 36.667px handle, 3.667px inset, 31.68px travel); square radio/checkbox controls remain 44 × 44px.
+- The catalog now presents round and rectangular switches in a single family, and circular radio + checkmark checkbox + wide-X checkbox in a second family. It excludes rectangular radios, compact-X checkboxes, and concentric radio animations. Variants shown are 1 (solid), 3 (color swap), 4 (black indicator), and 5 (white indicator).
+- Word toggles are grouped together with 44px and 28px variants, using the default heavy uppercase font and proportional text/padding/radius values. Their active handle continues to measure the selected label so its position and width track the text.
+- Dropdown labels now use centered flex alignment and zero vertical padding/margins to prevent the label sitting above the trigger. Text uses closer tracking, and chevrons are scaled proportionally: 18px at 28px control height and 28px at 44px.
+- The size-default styling has been compacted to a two-column, 9px microtype layout where that settings group is rendered. No browser screenshot, build, or automated test has been run; final visual balance and integration still require verification.
+

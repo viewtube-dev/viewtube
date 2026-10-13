@@ -2396,3 +2396,66 @@ export const SubToolboxScriptBar: React.FC<SubToolboxScriptBarProps> = ({
     })}
   </div>
 )
+
+/** Compact, source-owned 44px control variants used by the component library. */
+export type SubToolboxControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
+export interface SubToolbox44ControlProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  skin?: SubToolboxControlSkin;
+  checked: boolean;
+  shape?: "round" | "rect";
+}
+const controlSkinClass = (skin: SubToolboxControlSkin) => ({
+  "solid": "is-solid",
+  "color-swap": "is-color-swap",
+  "black-indicator": "is-black-indicator",
+  "white-indicator": "is-white-indicator",
+}[skin]);
+export const SubToolbox44Switch: React.FC<SubToolbox44ControlProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role="switch" aria-checked={checked} className={classes("vt-subtoolbox-44-switch", `is-${shape}`, controlSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-subtoolbox-44-handle" aria-hidden="true" /></button>
+);
+export type SubToolbox44ChoiceKind = "radio" | "checkbox";
+export interface SubToolbox44ChoiceProps extends SubToolbox44ControlProps { kind: SubToolbox44ChoiceKind; mark?: "check" | "xwide" }
+export const SubToolbox44Choice: React.FC<SubToolbox44ChoiceProps> = ({ kind, mark = "check", skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role={kind} aria-checked={checked} className={classes("vt-subtoolbox-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, controlSkinClass(skin), checked && "is-on", className)} {...props}>
+    {kind === "radio" ? <span className="vt-subtoolbox-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
+  </button>
+);
+export interface SubToolbox44WordToggleProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: boolean;
+  onValueChange?: (value: boolean) => void;
+  words?: readonly [string, string];
+  size?: "44" | "28";
+  skin?: SubToolboxControlSkin;
+}
+export const SubToolbox44WordToggle: React.FC<SubToolbox44WordToggleProps> = ({ value, onValueChange, words = ["OFF", "ON"], size = "44", skin = "solid", className, ...props }) => {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
+  React.useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      const root = rootRef.current;
+      const target = wordRefs.current[value ? 1 : 0];
+      if (!root || !target) return;
+      const rootRect = root.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const inset = size === "28" ? 2 : 2.75;
+      const next = { left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 12) };
+      setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
+    };
+    const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
+    schedule();
+    const root = rootRef.current;
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
+    if (root) observer?.observe(root);
+    wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
+    if (typeof window !== "undefined") window.addEventListener("resize", schedule);
+    if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
+    return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
+  }, [value, words, size]);
+  return <div ref={rootRef} role="group" data-vt-word-toggle-size={size} className={classes("vt-subtoolbox-44-word-toggle", `is-size-${size}`, controlSkinClass(skin), className)} {...props}>
+    <span className="vt-subtoolbox-44-word-handle" aria-hidden="true" style={{ left: handle.left, width: handle.width }} data-active={value ? "true" : "false"} />
+    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+  </div>;
+};
+

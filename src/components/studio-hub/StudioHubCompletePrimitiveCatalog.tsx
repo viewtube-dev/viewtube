@@ -5,7 +5,7 @@ import {
   Upload, Video, X,
 } from "lucide-react"
 import {
-  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
+  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge, SubToolbox44Switch, SubToolbox44Choice, SubToolbox44WordToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
@@ -19,7 +19,7 @@ const LEVELS: Level[] = ["l0", "l1", "l2"]
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
-  "Dropdown", "Select Menu", "Context Menu", "Text Input", "Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
+  "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
   "Number Field", "Input Action", "Stepper", "Slider", "Range Slider", "Toggle",
   "Settings Switch", "Checkbox", "Radio", "Segmented Choice", "Button Group", "Tag",
   "Removable Tag", "Selectable Tag", "Tag Editor", "Badge", "Status Badge", "Progress Bar",
@@ -28,6 +28,7 @@ export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Disabled Split Button", "Upload Frame", "Pagination", "Vault Landscape Asset",
   "Vault Portrait Asset", "Vault Audio Asset", "Vault Document Asset", "Knob Dial",
   "Controller Switch", "LED Light", "Alphabetical Spectrum Tags", "Icon Rail Control",
+  "44px Switches", "44px Radio + Checkbox", "Word Toggles",
   "Two Color Data Stats", "Monochrome Data Stats", "Tiny Data Stats", "Tooltip Dark",
   "Tooltip Color", "Dashboard Pill Tags",
 ] as const
@@ -83,6 +84,9 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
     return <button className={`vt-catalog-button is-${level}`} style={style}>{name.replace(" Button", "")}</button>
   if (name === "Square Icon Button") return <button aria-label="Settings" className={`vt-catalog-icon-button is-${level}`} style={style}>{icon}</button>
   if (name === "Split Left Button" || name === "Head Tail Action") return <StudioSplitLeftButton className={`vt-catalog-split-primitive is-${level}`} heightVariant={level === "l2" ? "28" : "44"} style={{ ...style, ["--vt-studio-control-accent" as string]: colors.b, ["--vt-studio-control-secondary" as string]: colors.a } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
+  if (name === "28px Dropdown Pair") return <div className="vt-catalog-dropdown-pair" style={style}>
+    {["OPTION 1","OPTION 2"].map((label, i) => <button type="button" key={label} className="vt-catalog-dropdown-28" aria-label={`Choose ${label}`} onClick={() => setMenuChoice(label)}><span>{menuChoice === label ? label : label}</span><ChevronDown aria-hidden="true" /></button>)}
+  </div>
   if (name === "Split Menu" || name === "Dropdown" || name === "Select Menu" || name === "Context Menu") {
     const key = `${name}-${level}-${index}`
     const split = name === "Split Menu"
@@ -97,9 +101,9 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
       </div> : null}
     </div>
   }
-  if (name === "Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
+  if (name === "Text Input" || name === "20 Simple Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
   if (name === "Number Field" || name === "20 Plain Input") return <SubToolboxInput20 className={`vt-catalog-field is-${level}`} style={style} type={name === "Number Field" ? "number" : "text"} defaultValue={name === "Number Field" ? "25" : "TEXT INPUT"} />
-  if (name === "Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
+  if (name === "Textarea" || name === "21 Simple Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
   if (name === "137 Floating Label Input") return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="TEXT INPUT" />
   if (name === "138 Floating Label Text Area") return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
   if (name === "Split Search") return <div className={`vt-catalog-split-field is-search has-action is-${level}`} style={style}><span><Search /></span><SubToolboxInput20 controlSize="compact" aria-label="Search" placeholder="SEARCH" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} /><button type="button" className="field-action" aria-label="Clear search" onClick={() => setSearchQuery("")}><X /></button></div>
@@ -177,6 +181,52 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   return <Circle />
 }
 
+
+const CONTROL_SKINS = [
+  { skin: "solid", label: "1 · SOLID" },
+  { skin: "color-swap", label: "3 · COLOR SWAP" },
+  { skin: "black-indicator", label: "4 · BLACK INDICATOR" },
+  { skin: "white-indicator", label: "5 · WHITE INDICATOR" },
+] as const;
+const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> = ({ name }) => {
+  const [switchValues, setSwitchValues] = useState(Array(8).fill(false) as boolean[]);
+  const [choiceValues, setChoiceValues] = useState(Array(12).fill(false) as boolean[]);
+  const [wordValues, setWordValues] = useState(Array(8).fill(false) as boolean[]);
+  const colorStyle = { "--vt-control-base": "#20f13e", "--vt-control-indicator": "#f276c5", "--vt-control-ink": "#0f172a" } as React.CSSProperties;
+  const toggleValue = (values: boolean[], setValues: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, next?: boolean) =>
+    setValues(current => current.map((value, i) => i === index ? (next ?? !value) : value));
+  if (name === "44px Switches") return <div className="vt-catalog-control-family" style={colorStyle}>
+    {(["round", "rect"] as const).map((shape, shapeIndex) => <div className="vt-catalog-control-row" key={shape}>
+      <small className="vt-catalog-control-row-label">{shape === "round" ? "ROUND SWITCH" : "RECTANGULAR SWITCH"}</small>
+      <div className="vt-catalog-control-variants">
+        {CONTROL_SKINS.map((variant, i) => { const index = shapeIndex * 4 + i; return <div className="vt-catalog-control-variant" key={variant.skin}>
+          <small>{variant.label}</small><SubToolbox44Switch shape={shape} skin={variant.skin} checked={switchValues[index]} aria-label={`${shape} switch ${variant.label}`} onClick={() => toggleValue(switchValues,setSwitchValues,index)} />
+        </div>; })}
+      </div>
+    </div>)}
+  </div>;
+  if (name === "44px Radio + Checkbox") return <div className="vt-catalog-control-family" style={colorStyle}>
+    {([{kind:"radio" as const,label:"CIRCULAR RADIO",mark:"check" as const},{kind:"checkbox" as const,label:"CHECKBOX · CHECKMARK",mark:"check" as const},{kind:"checkbox" as const,label:"CHECKBOX · WIDE X",mark:"xwide" as const}]).map((component, rowIndex) => <div className="vt-catalog-control-row" key={component.label}>
+      <small className="vt-catalog-control-row-label">{component.label}</small>
+      <div className="vt-catalog-control-variants">
+        {CONTROL_SKINS.map((variant, i) => { const index = rowIndex * 4 + i; return <div className="vt-catalog-control-variant" key={variant.skin}>
+          <small>{variant.label}</small><SubToolbox44Choice kind={component.kind} mark={component.mark} shape={component.kind === "radio" ? "round" : "rect"} skin={variant.skin} checked={choiceValues[index]} aria-label={`${component.label} ${variant.label}`} onClick={() => toggleValue(choiceValues,setChoiceValues,index)} />
+        </div>; })}
+      </div>
+    </div>)}
+  </div>;
+  return <div className="vt-catalog-word-toggle-families" style={colorStyle}>
+    {[{size:"44" as const,label:"44PX DEFAULT"},{size:"28" as const,label:"28PX COMPACT"}].map((variant, i) => <div className="vt-catalog-control-row" key={variant.size}>
+      <small className="vt-catalog-control-row-label">{variant.label}</small>
+      <div className="vt-catalog-control-variants">
+        {CONTROL_SKINS.map((skin, j) => { const index = i * 4 + j; return <div className="vt-catalog-control-variant" key={skin.skin}>
+          <small>{skin.label}</small><SubToolbox44WordToggle size={variant.size} skin={skin.skin} value={wordValues[index]} onValueChange={next => toggleValue(wordValues,setWordValues,index,next)} />
+        </div>; })}
+      </div>
+    </div>)}
+  </div>;
+};
+
 export interface StudioHubCompletePrimitiveCatalogProps { paletteIndex?: number }
 
 export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimitiveCatalogProps> = ({ paletteIndex = 7 }) => (
@@ -190,7 +240,7 @@ export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimit
         <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state="hardcoded-reference">
           <h3><span>{String(index + 1).padStart(2,"0")}</span>{name}</h3>
           <div className="vt-catalog-levels">
-            {LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
+            {["44px Switches", "44px Radio + Checkbox", "Word Toggles"].includes(name) ? <CanonicalControlFamily name={name} paletteIndex={paletteIndex} /> : LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
           </div>
         </article>
       ))}
