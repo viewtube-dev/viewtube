@@ -188,7 +188,7 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
                     icon={<Boxes size={16} />}
                     action={
                       slot.assetId
-                        ? <SubToolboxButton size="compact" level="l2" onClick={() => swapAsset(slot.slot, slot.assetId)} icon={swapState === "saved" ? <Check size={14} /> : <ArrowLeftRight size={14} />}>SWAP</SubToolboxButton>
+                        ? <StudioSplitLeftButton icon={swapState === "saved" ? <Check size={20} /> : <ArrowLeftRight size={20} />} onClick={() => swapAsset(slot.slot, slot.assetId)}>SWAP</StudioSplitLeftButton>
                         : undefined
                     }
                   >
@@ -202,9 +202,9 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
             </SubToolboxSection>
 
             <SubToolboxActions columns={2}>
-              <SubToolboxButton tone="accent" icon={<Sparkles size={16} />} onClick={loadSelected}>
+              <StudioSplitLeftButton icon={<Sparkles size={20} />} tone="accent" onClick={loadSelected}>
                 LOAD INTO TOOL
-              </SubToolboxButton>
+              </StudioSplitLeftButton>
               {onSaveProject ? (
                 <SubToolboxButton tone="success" icon={<Save size={16} />} onClick={saveSelected}>
                   {swapState === "saving" ? "SAVING…" : "SAVE PROJECT STATE"}
