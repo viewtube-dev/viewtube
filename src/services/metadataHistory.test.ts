@@ -135,4 +135,30 @@ describe("metadata history foundation", () => {
     expect(events.every(event => event.contentBuildId === "build-3")).toBe(true)
     expect(events.every(event => event.toolId === "metadata-master")).toBe(true)
   })
+  it("records publishing-setting changes separately from metadata field edits", async () => {
+    const { buildPublishedMetadataSettingsEvent } = await import("./metadataHistory")
+    const event = buildPublishedMetadataSettingsEvent({
+      contentBuildId: "build-4",
+      videoId: "video-4",
+      previousSettings: { visibility: "private", playlistIds: ["old-list"] },
+      nextSettings: { visibility: "public", playlistIds: ["new-list"] },
+      operationId: "settings-operation",
+      timestamp: "2026-10-13T22:03:00.000Z",
+    })
+    expect(event).toMatchObject({
+      eventType: "publishing.settings.changed",
+      entityType: "published-video-settings",
+      entityId: "video-4",
+      previousState: { visibility: "private", playlistIds: ["old-list"] },
+      resultingState: { visibility: "public", playlistIds: ["new-list"] },
+      metadata: expect.objectContaining({ operationId: "settings-operation" }),
+    })
+    expect(buildPublishedMetadataSettingsEvent({
+      contentBuildId: "build-4",
+      videoId: "video-4",
+      previousSettings: { visibility: "public" },
+      nextSettings: { visibility: "public" },
+    })).toBeNull()
+  })
+
 })
