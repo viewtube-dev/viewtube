@@ -3846,3 +3846,19 @@
   font-size: 20px;
   font-weight: 1000;
 }
+
+/* Canonical rule: textareas are flat fields, including focus and legacy component selectors. */
+textarea,
+textarea:hover,
+textarea:focus,
+textarea:focus-visible,
+.vt-subtoolbox-textarea,
+.vt-subtoolbox-textarea:hover,
+.vt-subtoolbox-textarea:focus,
+.vt-subtoolbox-textarea:focus-visible,
+.vt-subtoolbox-labeled-control:is(textarea),
+.vt-subtoolbox-labeled-control:is(textarea):focus,
+.vt-subtoolbox-labeled-control:is(textarea):focus-visible {
+  box-shadow: none !important;
+  filter: none !important;
+}
