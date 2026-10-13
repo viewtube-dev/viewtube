@@ -24,6 +24,7 @@ import {
 } from "../components/subtoolbox/SubToolboxLayouts"
 import {
   SubToolboxAlert,
+  PrimaryButton,
   SubToolboxButton,
   SubToolboxInput,
   SubToolboxOutputCard,
@@ -331,11 +332,11 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
             </SubToolboxSection>
 
             <SubToolboxSection label="OPTIMIZATION INTENSITY">
-              <SubToolboxActions columns={3}>
+              <SubToolboxActions columns={3} forceRow>
                 {(["light", "balanced", "aggressive"] as MetadataMasterIntensity[]).map(value => (
-                  <SubToolboxButton key={value} size="compact" selected={intensity === value} onClick={() => setIntensity(value)}>
+                  <PrimaryButton key={value} level="l1" selected={intensity === value} onClick={() => setIntensity(value)}>
                     {value}
-                  </SubToolboxButton>
+                  </PrimaryButton>
                 ))}
               </SubToolboxActions>
             </SubToolboxSection>
@@ -386,10 +387,10 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           </SubToolboxActions>
 
           <SubToolboxSection label="GENERATION SCOPE">
-            <SubToolboxActions columns={3}>
-              <SubToolboxButton size="compact" selected={setCount === 1} onClick={() => setSetCount(1)}>1 SET</SubToolboxButton>
-              <SubToolboxButton size="compact" selected={setCount === 3} onClick={() => setSetCount(3)}>3 SETS</SubToolboxButton>
-              <SubToolboxButton size="compact" selected={setCount === 5} onClick={() => setSetCount(5)}>5 SETS</SubToolboxButton>
+            <SubToolboxActions columns={3} forceRow>
+              <PrimaryButton level="l1" selected={setCount === 1} onClick={() => setSetCount(1)}>1 SET</PrimaryButton>
+              <PrimaryButton level="l1" selected={setCount === 3} onClick={() => setSetCount(3)}>3 SETS</PrimaryButton>
+              <PrimaryButton level="l1" selected={setCount === 5} onClick={() => setSetCount(5)}>5 SETS</PrimaryButton>
             </SubToolboxActions>
           </SubToolboxSection>
 
@@ -492,18 +493,18 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
             </SubToolboxGrid>
 
             <SubToolboxSection label="APPLY TO DOWNSTREAM PACKAGE">
-              <SubToolboxGrid minItemWidth="compact" density="dense">
+              <SubToolboxActions columns={3} forceRow className="vt-metadata-master-downstream-actions">
                 {SLOTS.map(slot => (
-                  <SubToolboxButton
+                  <PrimaryButton
                     key={slot.id}
-                    size="compact"
+                    level="l1"
                     selected={appliedSlots.includes(slot.id)}
                     onClick={() => toggleApply(slot.id)}
                   >
                     {appliedSlots.includes(slot.id) ? "✓ " : ""}{slot.label}
-                  </SubToolboxButton>
+                  </PrimaryButton>
                 ))}
-              </SubToolboxGrid>
+              </SubToolboxActions>
             </SubToolboxSection>
           </SubToolboxStack>
         </SubToolbox>
