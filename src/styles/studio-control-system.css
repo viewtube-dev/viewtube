@@ -14,6 +14,7 @@
 }
 
 [data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 32px; }
+[data-vt-studio-control][data-size="small"] { --vt-studio-control-height: 32px; }
 [data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; }
 [data-vt-studio-control][data-size="action"] { --vt-studio-control-height: 56px; }
 
@@ -26,7 +27,7 @@
   border: var(--vt-studio-control-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
   background: color-mix(in srgb, var(--vt-studio-control-accent) 50%, #fff);
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
+  box-shadow: none;
   caret-color: var(--vt-studio-control-accent);
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -47,11 +48,7 @@
   background: #fff;
   outline: 0;
   caret-color: var(--vt-studio-control-accent);
-  box-shadow:
-    inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent),
-    0 0 3px calc(var(--vt-studio-control-stroke) * .75) color-mix(in srgb, var(--vt-studio-control-secondary) 78%, transparent),
-    0 0 calc(var(--vt-studio-control-height) * .20) calc(var(--vt-studio-control-stroke) * 1.1) color-mix(in srgb, var(--vt-studio-control-secondary) 48%, transparent),
-    0 0 calc(var(--vt-studio-control-height) * .42) calc(var(--vt-studio-control-stroke) * .25) color-mix(in srgb, var(--vt-studio-control-secondary) 24%, transparent);
+  box-shadow: none;
 }
 
 [data-vt-studio-control]:is(input, textarea, select):disabled,
@@ -63,7 +60,10 @@
 textarea[data-vt-studio-control] {
   min-height: 144px;
   resize: vertical;
+  box-shadow: none;
 }
+textarea[data-vt-studio-control][data-size="compact"],
+textarea[data-vt-studio-control][data-size="small"] { min-height: 72px; padding: 8px 10px; font-size: 16px; }
 
 select[data-vt-studio-control] {
   appearance: none;
