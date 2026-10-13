@@ -21,9 +21,10 @@
   background: var(--vt-split-label);
   color: #000;
   cursor: pointer;
-  filter: drop-shadow(var(--vt-subtoolbox-inner-shadow, 4px) var(--vt-subtoolbox-inner-shadow, 4px) 0 var(--vt-split-shadow));
+  filter: none;
+  box-shadow: 4px 4px 0 var(--vt-split-shadow);
   text-transform: uppercase;
-  transition: transform 180ms ease-out, filter 180ms ease-out;
+  transition: transform 180ms ease-out, box-shadow 180ms ease-out;
 }
 .vt-subtoolbox-split-button.is-neutral { --vt-split-label: #fff; }
 .vt-subtoolbox-split-button.is-danger { --vt-split-label: #ff7ac8; }
@@ -43,16 +44,17 @@
   place-items: center;
   padding: 4px 10px;
   overflow: hidden;
-  font-size: 32px;
-  line-height: .86;
-  font-weight: 1000;
-  letter-spacing: -.035em;
+  font: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.vt-subtoolbox-split-button:hover:not(:disabled) { transform: translate(-1px, -1px); filter: drop-shadow(5px 5px 0 var(--vt-split-shadow)); }
-.vt-subtoolbox-split-button:active:not(:disabled) { transform: translate(2px, 2px); filter: drop-shadow(1px 1px 0 var(--vt-split-shadow)); }
+ .vt-subtoolbox-split-button:hover:not(:disabled) { transform: translateY(-1px); filter: none; }
+ .vt-subtoolbox-split-button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; filter: none; }
 .vt-subtoolbox-split-button:focus-visible { outline: var(--vt-subtoolbox-inner-stroke, 3px) solid var(--vt-split-rail); outline-offset: 3px; }
 .vt-subtoolbox-split-button.is-selected,
 .vt-subtoolbox-split-button[aria-pressed="true"] { background: var(--vt-split-rail); }
