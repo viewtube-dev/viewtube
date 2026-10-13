@@ -73,6 +73,7 @@ import { StandardInput } from "./StandardInput"
 import { StandardDropdown } from "./StandardDropdown"
 import { StandardKPI } from "./StandardKPI"
 import { StandardButton } from "./StandardButton"
+import { SubToolboxInput20, SubToolboxTextArea21 } from "./subtoolbox/SubToolboxPrimitives"
 
 interface LibraryManifestEntry {
  group: string
@@ -2351,7 +2352,8 @@ export const UIReferenceLibraryContent: React.FC = () => {
           placeholder="Title..."
           className="w-full bg-white border-4 border-black rounded-xl p-4 font-bold shadow-[4px_4px_0_0_black] outline-none"
          />
-         <textarea
+         <SubToolboxTextArea21
+          height="compact"
           placeholder="Description..."
           className="w-full h-32 bg-white border-4 border-black rounded-xl p-4 font-bold shadow-[4px_4px_0_0_black] outline-none"
          />
@@ -3101,7 +3103,7 @@ export const UIReferenceLibraryContent: React.FC = () => {
          <div className="space-y-3">
           <div className="bg-white border-[3px] border-black rounded-xl p-4 shadow-[4px_4px_0px_0px_black]">
            <div className="text-[10px] font-black uppercase opacity-40 mb-2">Input Field</div>
-           <input type="text" placeholder="Enter title..." className="w-full bg-gray-50 border-[2px] border-black rounded-lg p-2 text-sm font-bold outline-none" />
+           <SubToolboxInput20 aria-label="Input Field" placeholder="ENTER TITLE..." controlSize="compact" />
           </div>
           <button className="w-full bg-[#FF3399] text-white border-[3px] border-black rounded-xl p-3 font-black uppercase text-sm shadow-[4px_4px_0px_0px_black]">
            Generate
