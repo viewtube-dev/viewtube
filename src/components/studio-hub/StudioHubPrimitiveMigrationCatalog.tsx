@@ -1097,7 +1097,7 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
         <Lightbulb />
         <div>
           <h2 id="studio-hub-primitive-migration-catalog-title">Definitive Component Library</h2>
-          <p>Confirmed canonical production primitives only. Each family is shown once at the standard 44px control size; shared tokens define the uniform default style.</p>
+          <p>Confirmed canonical production primitives only. Each family is shown once at the standard component size; shared tokens define the uniform default style, while compound components retain their intrinsic geometry.</p>
         </div>
       </div>
       <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} COMPONENT FAMILIES · ONE STANDARD SIZE EACH</strong>
