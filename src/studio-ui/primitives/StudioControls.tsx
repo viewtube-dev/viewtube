@@ -1,5 +1,6 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
+import "../../styles/studio-split-left-consistency.css"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
