@@ -2414,10 +2414,10 @@ export const SubToolbox44Switch: React.FC<SubToolbox44ControlProps> = ({ skin = 
   <button type={type} role="switch" aria-checked={checked} className={classes("vt-subtoolbox-44-switch", `is-${shape}`, controlSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-subtoolbox-44-handle" aria-hidden="true" /></button>
 );
 export type SubToolbox44ChoiceKind = "radio" | "checkbox";
-export interface SubToolbox44ChoiceProps extends SubToolbox44ControlProps { kind: SubToolbox44ChoiceKind }
-export const SubToolbox44Choice: React.FC<SubToolbox44ChoiceProps> = ({ kind, skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
-  <button type={type} role={kind} aria-checked={checked} className={classes("vt-subtoolbox-44-choice", `is-${kind}`, `is-${shape}`, controlSkinClass(skin), checked && "is-on", className)} {...props}>
-    {kind === "radio" ? <span className="vt-subtoolbox-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d="M 7 26 L 19 39 L 43 11" /></svg>}
+export interface SubToolbox44ChoiceProps extends SubToolbox44ControlProps { kind: SubToolbox44ChoiceKind; mark?: "check" | "xwide" }
+export const SubToolbox44Choice: React.FC<SubToolbox44ChoiceProps> = ({ kind, mark = "check", skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role={kind} aria-checked={checked} className={classes("vt-subtoolbox-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, controlSkinClass(skin), checked && "is-on", className)} {...props}>
+    {kind === "radio" ? <span className="vt-subtoolbox-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
   </button>
 );
 export interface SubToolbox44WordToggleProps extends React.HTMLAttributes<HTMLDivElement> {
