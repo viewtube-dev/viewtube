@@ -52,3 +52,10 @@ Vault provides asset context and provenance. Brain should reason over asset info
 Recovered planning establishes this architecture, but current runtime implementation and exact tool inventory require verification. Planned capabilities must not be presented as implemented.
 
 **Primary sources:** Master System Rebuild Resource Plan; Creator Workspaces Master Tool Context; recovery artifacts.
+
+
+## Complete continuation reference
+
+For the full capability inventory, adaptive Workbench modes, operation and lineage contracts, integrations, security, testing gates, and phased implementation plan, see the canonical [Vault / Asset Workbench — Tools, Capabilities, Plans & Systems Reference](vault/VAULT_ASSET_WORKBENCH_MASTER.md).
+
+This reference defines the target system; individual runtime capabilities must still be verified against canonical source, tests, and runtime behavior.
