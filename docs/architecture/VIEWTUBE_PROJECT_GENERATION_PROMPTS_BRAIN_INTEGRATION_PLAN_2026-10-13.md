@@ -154,6 +154,14 @@ The Project Strategy migration is ready to ship only when:
 - [x] Read the five requested architecture documents on `master/consolidated-feature-integration`.
 - [x] Read the current prompt/Brain authority documents and inspect the Project Strategy caller and generation path.
 - [x] Identify the first concrete legacy seam: Project Strategy calls `src/services/gemini.ts` directly with no explicit Project/ContentBuild identity in the request.
-- [ ] Add tests and establish baseline.
-- [ ] Implement the typed BrainRuntime Project Strategy contract.
-- [ ] Migrate the first caller and verify behavior.
+- [x] Add a versioned `project-strategy-v1` prompt module and typed six-field output validation.
+- [x] Add a provider-neutral `runBrainJsonTask` seam under BrainRuntime using the existing BrainModelGateway.
+- [x] Resolve bounded Creator Context and record context-control/provenance metadata.
+- [x] Migrate both known Project Studio callers away from the legacy direct Gemini generator.
+- [x] Preserve Project/ContentBuild identity and record a ToolReceipt in the canonical ContentBuild workflow when a ContentBuild exists.
+- [x] Add stale-response guards so source edits or project selection changes discard old results.
+- [x] Add focused Vitest coverage for prompt validation and the Brain JSON task seam.
+- [ ] Run focused Vitest and TypeScript checks; connector access has not provided a local test runner.
+- [ ] Review CI results and fix any failures before marking the slice complete.
+
+Branch audit: `docs/architecture/VIEWTUBE_PROJECT_STRATEGY_BRAIN_BRANCH_PORT_AUDIT_2026-10-13.md` on `feat/project-strategy-brain-runtime`.
