@@ -44,6 +44,7 @@ The canonical event owner is `src/services/asset-engine/ContentBuildRepository.t
 - Connected successful Video Manager metadata saves to canonical history for known ContentBuild/video bindings; visibility and playlist changes are recorded separately from field edits.
 - Connected successful, remotely verified publishing transactions to a `package.published` event that references the approved snapshot and canonical Video Package. Repeated completion calls do not duplicate the publication event.
 - Kept the existing package draft persistence intact; it is not used as the history ledger.
+- Collapsed the Context / Optimization Brief, Evaluate / Compare, and Handoff / Publishing Control sections by default. Generation and the working package remain immediately available; saved-package summaries stay separate from the detailed event timeline.
 
 ## Event coverage
 
@@ -104,7 +105,7 @@ Build these only from canonical Studio Controls / toolbox primitives and existin
 5. **Publication transaction integration** — implemented: a verified successful publish writes `package.published` against the canonical ContentBuild event stream and references the approved snapshot/package; repeated completion is idempotent.
 6. **History query/projection** — implemented as a ContentBuild event filter; validate project, ContentBuild, video, package, event-type, and time-range filtering as the UI query contract is added.
 7. **Dedicated History / Analytics location** — next: render the detailed timeline and outcome analysis outside the Video Manager editing workspace.
-8. **Quiet-mode UI settings** — next: keep operational detail collapsed by default and allow users to choose what to show during editing.
+8. **Quiet-mode UI settings** — partially implemented: advanced context, evaluation, and handoff sections are collapsed by default. A persisted user preference to reveal selected detail levels remains next.
 9. **Tests and gates** — focused service tests and publication idempotency coverage added; full suite, typecheck, production build, source governance, and browser checks are running or remain to be verified.
 
 ## Acceptance criteria
