@@ -10,8 +10,8 @@ import {
 describe("Vault corrected tool ownership", () => {
  beforeEach(() => localStorage.clear())
 
- it("uses separate Asset Operations, Import & Tags, and Text Editor modules", () => {
-  expect(DEFAULT_VAULT_MODULE_ORDER).toContain("asset-operations")
+ it("uses canonical Import & Tags, Text Editor, and Compare & Versions modules", () => {
+  expect(DEFAULT_VAULT_MODULE_ORDER).not.toContain("asset-operations")
   expect(DEFAULT_VAULT_MODULE_ORDER).toContain("import-tags")
   expect(DEFAULT_VAULT_MODULE_ORDER).toContain("text-editor")
   expect(DEFAULT_VAULT_MODULE_ORDER).toContain("compare-versions")
@@ -42,9 +42,10 @@ describe("Vault corrected tool ownership", () => {
 
   const state = readVaultWorkspaceState()
   expect(state.assetOperationsMode).toBe("search")
-  expect(state.visibleModules).toContain("asset-operations")
+  expect(state.visibleModules).not.toContain("asset-operations")
   expect(state.visibleModules).toContain("import-tags")
   expect(state.visibleModules).toContain("text-editor")
+  expect(state.moduleOrder).not.toContain("asset-operations")
   expect(state.moduleOrder).toContain("import-tags")
   expect(state.moduleOrder).toContain("text-editor")
  })
@@ -57,7 +58,7 @@ describe("Vault corrected tool ownership", () => {
   }))
 
   const state = readVaultWorkspaceState()
-  expect(state.visibleModules.filter((id) => id === "asset-operations")).toHaveLength(1)
+  expect(state.visibleModules.filter((id) => id === "asset-operations")).toHaveLength(0)
   expect(state.visibleModules.filter((id) => id === "import-tags")).toHaveLength(1)
   expect(state.visibleModules.filter((id) => id === "text-editor")).toHaveLength(1)
   expect(state.visibleModules).not.toContain("spectrum-tags")
