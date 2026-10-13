@@ -618,3 +618,51 @@
     letter-spacing: -.035em;
   }
 }
+
+/* Compact grouped split-left controls: a true 28px rail and wrapping width. */
+.vt-subtoolbox-split-button.is-compact-28 {
+  grid-template-columns: 28px minmax(0, 1fr) !important;
+  width: auto;
+  flex: 1 1 120px;
+}
+.vt-subtoolbox-split-button.is-compact-28 .vt-subtoolbox-split-button-rail {
+  width: 28px;
+  min-width: 28px;
+}
+.vt-subtoolbox-split-button.is-compact-28 .vt-subtoolbox-split-button-label {
+  padding: 2px 5px;
+  font-size: 12px;
+}
+.vt-metadata-field-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-metadata-field-actions > .vt-subtoolbox-split-button {
+  flex: 1 1 110px;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+}
+.vt-metadata-tag-list,
+.vt-metadata-tag-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-metadata-tag-add-row > .vt-subtoolbox-input {
+  flex: 1 1 140px;
+  width: auto;
+  min-width: 0;
+}
+.vt-metadata-tag-add-row > .vt-subtoolbox-button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+}
