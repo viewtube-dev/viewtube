@@ -195,3 +195,12 @@ Relevant commits authored in this execution:
 
 ### Next small, safe step
 Use an executable checkout/CI runner to run the focused Manager layout test and Project Manifestation test first. Then run typecheck and architecture/CSS checks before full tests and build. Only after that, investigate the still-ambiguous LOAD vs SWAP IN behavior and the durability requirements for local-first publish transaction storage.
+
+
+## 13. Latest follow-up
+
+- `304ba42` expands the selection resolver tests to cover an active project that has not yet appeared in the loaded project list, and removes unnecessary test casts.
+- `d9ca637` adds a regression check for the published-video-only Video Manager guidance; `2437c21` updates that guidance.
+- Latest inspected commit: `304ba42445a8466825957ca9dbaf2d836c30e8cd`.
+- Its GitHub commit status still shows only Vercel deployment checks, all blocked by the reported deployment rate limit. No GitHub Actions check runs were returned for the earlier implementation commit, and no test result is available yet.
+- The selection fix and copy/test updates are committed, but remain **unverified** until a real typecheck, focused test run, full suite, and build can execute. Do not treat deployment-provider rate limiting as evidence that the application code itself failed or passed.
