@@ -577,6 +577,7 @@ const PrimitiveMigrationControl: React.FC<{
       multiSelect
       selectedValues={legendFilters}
       onValueChange={(value) => setLegendFilters((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value])}
+      onClear={() => setLegendFilters([])}
       ariaLabel="Legend multi filters"
     />
   }
