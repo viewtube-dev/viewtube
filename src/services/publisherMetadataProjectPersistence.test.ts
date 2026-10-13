@@ -43,6 +43,19 @@ describe("Publisher metadata project persistence", () => {
     expect(build?.selections["metadata-package"]).toBe(result.packageOptionAssetId)
   })
 
+  it("saves Publisher metadata into a local-draft package without a connected channel", () => {
+    const result = savePublisherMetadataToProject(project, null, {
+      title: "Offline test title",
+      description: "Saved without account authentication",
+      tags: "local, testing",
+    }, { mode: "current", now: "2026-10-13T12:00:00.000Z" })
+
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)
+    expect(result.videoPackageId).toBeTruthy()
+    expect(videoPackage?.channelId).toBe(`local-draft:${project.id}`)
+    expect(getContentBuild(project.contentBuildId)?.selections["metadata-package"]).toBe(result.packageOptionAssetId)
+  })
+
   it("round-trips canonical thumbnail and final-video asset references into the selected package", () => {
     ensureVideoPackageForProject(project, { channelId: "channel-1", sourceToolId: "video-publisher" })
     const context = {
