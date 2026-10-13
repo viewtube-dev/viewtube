@@ -54,6 +54,7 @@ import {
   type MetadataMasterSet,
   type MetadataMasterSlot,
 } from "../services/metadataMaster"
+import { recordMetadataPackageVersion } from "../services/metadataHistory"
 import {
   createViewTubeActionPacket,
   persistViewTubeActionPacket,
@@ -217,7 +218,33 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, candidateStyle)
       })
 
+      const generationOperationId = `metadata-generation-${Date.now()}`
+      for (const candidateSet of candidates) {
+        const candidatePackage = candidateSet.package
+        if (!candidatePackage.contentBuildId) continue
+        recordMetadataPackageVersion({
+          contentBuildId: candidatePackage.contentBuildId,
+          projectId: candidatePackage.projectId,
+          videoId: candidatePackage.videoId,
+          operation: "generated",
+          actorType: "brain",
+          operationId: generationOperationId,
+          package: candidatePackage,
+        })
+      }
+
       const primary = candidates[0]?.package ?? generated
+      if (primary.contentBuildId && candidates[0]) {
+        recordMetadataPackageVersion({
+          contentBuildId: primary.contentBuildId,
+          projectId: primary.projectId,
+          videoId: primary.videoId,
+          operation: "selected",
+          actorType: "creator",
+          operationId: generationOperationId,
+          package: primary,
+        })
+      }
       setSets(candidates)
       setSelectedSetId(candidates[0]?.id ?? null)
       setPackageDraft(primary)
@@ -234,6 +261,17 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
   }
 
   const applySelectedSet = (set: MetadataMasterSet) => {
+    if (set.package.contentBuildId) {
+      recordMetadataPackageVersion({
+        contentBuildId: set.package.contentBuildId,
+        projectId: set.package.projectId,
+        videoId: set.package.videoId,
+        operation: "selected",
+        actorType: "creator",
+        operationId: `metadata-select-${set.id}-${Date.now()}`,
+        package: set.package,
+      })
+    }
     setPackageDraft(finalizeMetadataMasterPackage({
       ...set.package,
       lockedSlots,
@@ -253,6 +291,19 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       appliedSlots,
       version: packageDraft.version + 1,
     })
+    const previousPackage = listMetadataMasterPackages().find(item => item.id === finalized.id) ?? null
+    if (finalized.contentBuildId) {
+      recordMetadataPackageVersion({
+        contentBuildId: finalized.contentBuildId,
+        projectId: finalized.projectId,
+        videoId: finalized.videoId,
+        operation: finalized.source === "manual" ? "manual" : "refined",
+        actorType: "creator",
+        operationId: `metadata-save-${finalized.id}-v${finalized.version}`,
+        previousPackage,
+        package: finalized,
+      })
+    }
     setPackageDraft(finalized)
     saveMetadataMasterPackage(finalized)
     setHistory(listMetadataMasterPackages())
