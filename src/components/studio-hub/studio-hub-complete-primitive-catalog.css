@@ -1715,3 +1715,23 @@
   .vt-complete-catalog .vt-catalog-dropdown-pair{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
+/* Compact combined size-default controls: tiny type and minimal vertical footprint. */
+.vt-complete-catalog .vt-catalog-size-defaults{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;padding:5px 7px;margin:0;border:1px solid #d8dee8;border-radius:5px}
+.vt-complete-catalog .vt-catalog-size-defaults .size-defaults-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:0 0 3px;border-bottom:1px solid #d8dee8;font-size:9px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.04em;text-transform:uppercase}
+.vt-complete-catalog .vt-catalog-size-defaults .size-defaults-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 6px}
+.vt-complete-catalog .vt-catalog-size-defaults label,.vt-complete-catalog .vt-catalog-size-defaults small,.vt-complete-catalog .vt-catalog-size-defaults input,.vt-complete-catalog .vt-catalog-size-defaults select{font-size:9px!important;line-height:1.1!important;min-height:16px!important;padding:1px 3px!important}
+.vt-complete-catalog .vt-catalog-size-defaults .size-defaults-section{min-width:0}
+.vt-complete-catalog .vt-catalog-size-defaults .size-defaults-section h4{margin:0 0 3px;font-size:9px!important;line-height:1.1;font-weight:900;letter-spacing:.03em;text-transform:uppercase}
+.vt-complete-catalog .vt-catalog-size-defaults .size-defaults-row{display:flex;align-items:center;gap:4px;min-width:0;margin:2px 0}
+.vt-complete-catalog .vt-catalog-size-defaults .size-defaults-row span{font-size:9px;line-height:1.1}
+@media(max-width:520px){.vt-complete-catalog .vt-catalog-size-defaults{grid-template-columns:minmax(0,1fr)}}
+
+/* 28px dropdown label baseline and equal-ratio icon treatment. */
+.vt-complete-catalog .vt-catalog-dropdown-28{justify-content:space-between!important;gap:3px!important;padding:0 3px!important;line-height:1!important;letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-dropdown-28 span{display:flex;align-items:center;align-self:stretch;line-height:1!important;padding:0!important;margin:0!important;position:static!important;transform:none!important;font-size:24px!important;letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-dropdown-28 svg{display:block;flex:0 0 18px!important;width:18px!important;height:18px!important;aspect-ratio:1/1;stroke-width:3.5!important;overflow:visible}
+.vt-complete-catalog .vt-catalog-menu .menu-trigger{min-height:28px!important;height:28px!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label{height:100%!important;min-height:0!important;align-items:center!important;padding-block:0!important;line-height:1!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label>b{align-self:stretch!important;display:flex!important;align-items:center!important;padding:0!important;margin:0!important;line-height:1!important;letter-spacing:-.055em!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label>svg{width:18px!important;height:18px!important;flex:0 0 18px!important;aspect-ratio:1/1;stroke-width:3.5!important}
+
