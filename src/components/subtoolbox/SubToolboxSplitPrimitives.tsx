@@ -14,6 +14,7 @@ export interface SubToolboxSplitButtonProps extends React.ButtonHTMLAttributes<H
   selected?: boolean
   level?: ToolboxControlLevel
 }
+export type SplitLeftButtonProps = SubToolboxSplitButtonProps
 
 export const SplitLeftButton: React.FC<SubToolboxSplitButtonProps> = ({
   icon,
