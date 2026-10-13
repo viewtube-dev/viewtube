@@ -231,3 +231,18 @@ Current integrations:
 
 Reference architecture:
 `docs/product/studio-hub/VIEWTUBE_PROJECTS_UI_MANIFESTATION_SYSTEM.md`
+
+
+## Confirmed Primitive Toolbox — 2026-10-13
+
+`ToolboxUIReferenceLibrary.tsx` now includes a third, separate **Component Library — Confirmed Primitives** toolbox. This is the certification surface for production components that have been explicitly confirmed; it is not a replacement for the frozen baseline or the broader migration catalog.
+
+Initial certified families:
+- `StudioButton` — production export from `src/studio-ui/primitives/StudioControls.tsx`.
+- `StudioSplitLeftButton` — production export from the same TSX source, composed from `StudioButton`.
+- Both use `src/styles/studio-control-system.css` for production styling.
+- Both expose `heightVariant="44"` and `heightVariant="28"` variants. The split-left default now uses the same 44px standard size as StudioButton, and both share 14px, 900-weight, uppercase typography.
+- The selected state remains the production `selected` prop and its shared bold selection outline; the catalog does not redraw that state.
+- Each family card lists its source TSX/CSS paths, core token geometry, variants, and known import sites in small provenance text.
+
+**Certification rule:** previews must render the actual exported component. Catalog CSS may arrange the examples but must not create a second button implementation. Add additional families here only after their source ownership, default styles, variants, and import sites have been verified.
