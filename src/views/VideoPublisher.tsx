@@ -273,6 +273,10 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           mimeType: typeof selectedThumbnail.metadata?.mimeType === "string" ? selectedThumbnail.metadata.mimeType : null,
         }
       }
+      const finalVideoAssetId = publishState.projection?.finalRenderAssetId || null
+      const finalVideoVaultAsset = finalVideoAssetId
+        ? listVaultAssets().find(asset => asset.id === finalVideoAssetId) || null
+        : null
       const result = savePublisherMetadataToProject(project, channelId, {
         title: publishTitle,
         description: publishDescription,
@@ -288,7 +292,18 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
         playlistIds,
         thumbnailAssetId: selectedThumbnailAsset?.id || null,
         finalVideoAssetId: publishState.projection?.finalRenderAssetId || null,
-      }, { mode, sourceToolId: "video-publisher", thumbnailAsset: selectedThumbnailAsset })
+      }, {
+        mode,
+        sourceToolId: "video-publisher",
+        thumbnailAsset: selectedThumbnailAsset,
+        finalVideoAsset: finalVideoVaultAsset ? {
+          id: finalVideoVaultAsset.id,
+          name: finalVideoVaultAsset.name,
+          url: finalVideoVaultAsset.url,
+          previewUrl: finalVideoVaultAsset.previewUrl,
+          mimeType: finalVideoVaultAsset.mimeType,
+        } : null,
+      })
       if (mode === "current") {
         updateProject(project.id, {
         videoTitle: publishTitle,
