@@ -505,7 +505,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   }, [])
 
   const handleGenerate = async (targetField?: string) => {
-    if (!concept || !niche) {
+    if ((!concept || !niche) && !targetField) {
       setMissingFields({ concept: !concept, niche: !niche })
       return
     }
