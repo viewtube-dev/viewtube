@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest"
 
 const sharedOwners = [
   ["DashboardHeader.tsx", readFileSync(new URL("../DashboardHeader.tsx", import.meta.url), "utf8")],
-  ["WidgetRendererBase.tsx", readFileSync(new URL("../WidgetRendererBase.tsx", import.meta.url), "utf8")],
   ["widgetControlOwnership.css", readFileSync(new URL("../widgetControlOwnership.css", import.meta.url), "utf8")],
 ] as const
 
