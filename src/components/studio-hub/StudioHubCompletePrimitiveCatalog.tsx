@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton } from "../../studio-ui"
+import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-complete-primitive-catalog.css"
 
@@ -15,7 +15,7 @@ export type StudioHubComponentLevel = "l0" | "l1" | "l2"
 type Level = StudioHubComponentLevel
 const LEVELS: Level[] = ["l0", "l1", "l2"]
 
-/** Frozen hardcoded certification baseline. Do not migrate component anatomy in this file. */
+/** Legacy comparison catalog; split-left demonstrations now use the canonical production primitive. */
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
