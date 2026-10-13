@@ -117,17 +117,17 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
                 ariaLabel="Choose project to load or swap"
                 className="vt-project-manifestation-project-dropdown"
               />
-              <SubToolboxActions columns={3} forceRow className="vt-project-manifestation-actions">
-                <SplitLeftButton level="l1" icon={<FolderOpen size={22} />} onClick={loadSelected} disabled={!selectedProject}>
+              <div className="vt-subtoolbox-actions is-wrap-row vt-project-manifestation-actions">
+                <SplitLeftButton level="l2" className="is-compact-28" icon={<FolderOpen size={14} />} onClick={loadSelected} disabled={!selectedProject}>
                   LOAD
                 </SplitLeftButton>
-                <SplitLeftButton level="l1" tone="accent" icon={<ArrowLeftRight size={22} />} onClick={loadSelected} disabled={!selectedProject}>
+                <SplitLeftButton level="l2" className="is-compact-28" tone="accent" icon={<ArrowLeftRight size={14} />} onClick={loadSelected} disabled={!selectedProject}>
                   SWAP IN
                 </SplitLeftButton>
-                <SplitLeftButton level="l1" tone="neutral" icon={<RefreshCw size={22} />} onClick={refreshPackages}>
+                <SplitLeftButton level="l2" className="is-compact-28" tone="neutral" icon={<RefreshCw size={14} />} onClick={refreshPackages}>
                   REFRESH
                 </SplitLeftButton>
-              </SubToolboxActions>
+              </div>
             </div>
           </SubToolboxSection>
         </SubToolboxGrid>
