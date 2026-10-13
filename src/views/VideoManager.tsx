@@ -445,26 +445,31 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     ...toAdd.map((id) => addSimpleVideoToPlaylist(id, selectedVideoId)),
     ...toRemove.map((m) => removeSimpleVideoFromPlaylist(m.playlistItemId)),
    ])
-   if (brain.activeProjectId) updateProject(brain.activeProjectId, {
-    videoTitle: editTitle,
-    description: editDescription,
-    tags: editTags,
-    thumbnailUrl: thumbnailPreview || undefined,
-    plan: {
-     ...(brain.projects.find(project => project.id === brain.activeProjectId)?.plan || {}),
-     publishingMetadata: {
-      ...(brain.projects.find(project => project.id === brain.activeProjectId)?.plan?.publishingMetadata || {}),
-      category: editCategoryId,
-      visibility: editPrivacy,
-      audience: editAudience,
-      timestamps: editTimestamps,
-      location: editLocation,
-      community: editCommunity,
-      aiUse: editAiUse,
-      playlistIds: selectedPlaylistIds.join(","),
+   if (brain.activeProjectId) {
+    const activeProject = brain.projects.find(project => project.id === brain.activeProjectId)
+    updateProject(brain.activeProjectId, {
+     videoTitle: editTitle,
+     description: editDescription,
+     tags: editTags,
+     thumbnailUrl: thumbnailPreview || undefined,
+     plan: {
+      ...(activeProject?.plan || {}),
+      concept: activeProject?.plan?.concept || activeProject?.concept || activeProject?.videoTitle || activeProject?.name || "",
+      niche: activeProject?.plan?.niche || activeProject?.niche || brain.targetNiche || "",
+      publishingMetadata: {
+       ...(activeProject?.plan?.publishingMetadata || {}),
+       category: editCategoryId,
+       visibility: editPrivacy,
+       audience: editAudience,
+       timestamps: editTimestamps,
+       location: editLocation,
+       community: editCommunity,
+       aiUse: editAiUse,
+       playlistIds: selectedPlaylistIds.join(","),
+      },
      },
-    },
-   })
+    })
+   }
    setSaveSuccess(true)
     setVideos((current) => current.map((video) => video.videoId === selectedVideoId ? { ...video, title: editTitle } : video))
    void loadInitialData()

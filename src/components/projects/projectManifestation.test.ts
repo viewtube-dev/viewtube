@@ -42,6 +42,7 @@ const pkg: ProjectManifestationPackageLike = {
       metadata: { imageUrl: "https://example.com/package.jpg" },
     }],
     selectedThumbnailId: "thumb-1",
+    communityAssets: [],
     description: {
       id: "desc-1",
       kind: "description",

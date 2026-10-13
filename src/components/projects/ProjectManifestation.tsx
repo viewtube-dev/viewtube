@@ -46,17 +46,21 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
   const [swapState, setSwapState] = useState<"idle" | "saving" | "saved">("idle")
 
   useEffect(() => {
-    setSelectedProjectId(current => {
-      const activeProjectExists = Boolean(
-        activeProjectId && projects.some(project => project.id === activeProjectId),
-      )
-      if (activeProjectExists && lastAppliedActiveProjectId.current !== activeProjectId) {
-        lastAppliedActiveProjectId.current = activeProjectId
-        return activeProjectId as string
-      }
-      if (!activeProjectId) lastAppliedActiveProjectId.current = activeProjectId
-      return resolveSelectedProjectId(null, projects, current)
-    })
+    const activeProjectExists = Boolean(
+      activeProjectId && projects.some(project => project.id === activeProjectId),
+    )
+    const shouldAdoptActiveProject = Boolean(
+      activeProjectExists && lastAppliedActiveProjectId.current !== activeProjectId,
+    )
+
+    if (activeProjectExists) lastAppliedActiveProjectId.current = activeProjectId
+    else if (!activeProjectId) lastAppliedActiveProjectId.current = activeProjectId
+
+    setSelectedProjectId(current =>
+      shouldAdoptActiveProject && activeProjectId
+        ? activeProjectId
+        : resolveSelectedProjectId(null, projects, current),
+    )
   }, [activeProjectId, projects])
 
   const selectedProject = useMemo(
