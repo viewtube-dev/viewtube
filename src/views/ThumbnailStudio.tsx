@@ -438,7 +438,7 @@ const ThumbnailStudio: React.FC<ThumbnailStudioProps> = ({
     <div className="mr-2 my-auto" onClick={(event) => event.stopPropagation()}>
      <ToolboxHeaderToggle
       level="toolbox"
-      ariaLabel="Thumbnail Studio mode"
+      aria-label="Thumbnail Studio mode"
       value={activeTab}
       options={[
        { value: "generate", label: "Studio" },
