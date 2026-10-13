@@ -19,7 +19,7 @@ const LEVELS: Level[] = ["l0", "l1", "l2"]
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
-  "Dropdown", "Select Menu", "Context Menu", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
+  "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
   "Number Field", "Input Action", "Stepper", "Slider", "Range Slider", "Toggle",
   "Settings Switch", "Checkbox", "Radio", "Segmented Choice", "Button Group", "Tag",
   "Removable Tag", "Selectable Tag", "Tag Editor", "Badge", "Status Badge", "Progress Bar",
@@ -83,6 +83,9 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
     return <button className={`vt-catalog-button is-${level}`} style={style}>{name.replace(" Button", "")}</button>
   if (name === "Square Icon Button") return <button aria-label="Settings" className={`vt-catalog-icon-button is-${level}`} style={style}>{icon}</button>
   if (name === "Split Left Button" || name === "Head Tail Action") return <StudioSplitLeftButton className={`vt-catalog-split-primitive is-${level}`} heightVariant={level === "l2" ? "28" : "44"} style={{ ...style, ["--vt-studio-control-accent" as string]: colors.b, ["--vt-studio-control-secondary" as string]: colors.a } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
+  if (name === "28px Dropdown Pair") return <div className="vt-catalog-dropdown-pair" style={style}>
+    {["OPTION 1","OPTION 2"].map((label, i) => <button type="button" key={label} className="vt-catalog-dropdown-28" aria-label={`Choose ${label}`} onClick={() => setMenuChoice(label)}><span>{menuChoice === label ? label : label}</span><ChevronDown aria-hidden="true" /></button>)}
+  </div>
   if (name === "Split Menu" || name === "Dropdown" || name === "Select Menu" || name === "Context Menu") {
     const key = `${name}-${level}-${index}`
     const split = name === "Split Menu"
