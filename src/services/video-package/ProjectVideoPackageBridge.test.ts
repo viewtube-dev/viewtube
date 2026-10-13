@@ -76,9 +76,30 @@ describe("Project Video Package bridge", () => {
     expect(listVideoPackages()).toHaveLength(1)
   })
 
-  it("defers package creation until a channel scope exists", () => {
-    expect(ensureVideoPackageForProject(project(), { channelId: null })).toBeNull()
-    expect(listVideoPackages()).toHaveLength(0)
+  it("creates a local-draft package without requiring a connected YouTube channel", () => {
+    const localPackage = ensureVideoPackageForProject(project(), { channelId: null })
+
+    expect(localPackage).toMatchObject({
+      id: "vp:project-a:cb-a",
+      projectId: "project-a",
+      contentBuildId: "cb-a",
+      channelId: "local-draft:project-a",
+    })
+    expect(listVideoPackages()).toHaveLength(1)
+  })
+
+  it("binds a local-draft package to the real channel when the user connects later", () => {
+    ensureVideoPackageForProject(project(), { channelId: null })
+    const connected = ensureVideoPackageForProject(project(), {
+      channelId: "channel-a",
+      sourceToolId: "project-builder",
+    })
+
+    expect(connected?.channelId).toBe("channel-a")
+    expect(connected?.provenance).toContainEqual(expect.objectContaining({
+      action: "local_package_bound_to_channel",
+    }))
+    expect(listVideoPackages()).toHaveLength(1)
   })
 
   it("selects a Vault thumbnail into ContentBuild and Video Package without forking identity", () => {
@@ -114,22 +135,22 @@ describe("Project Video Package bridge", () => {
       sourceToolId: "project-builder",
     })
 
-    expect(updated).toBeNull()
+    expect(updated?.channelId).toBe("local-draft:project-a")
     expect(getContentBuild("cb-a")?.selections.thumbnail).toBe("vault-thumb-a")
     const events = listContentBuildEvents("cb-a")
     expect(events.filter(event => event.eventType === "asset.selected" && event.entityId === "thumbnail")).toHaveLength(1)
     expect(events.filter(event => event.eventType === "asset.finalized" && event.entityId === "thumbnail")).toHaveLength(0)
   })
 
-  it("still selects the canonical ContentBuild thumbnail when channel package scope is unavailable", () => {
+  it("selects the canonical ContentBuild thumbnail into a local package before channel connection", () => {
     const updated = selectProjectVideoPackageThumbnail(project(), thumbnailAsset(), {
       channelId: null,
       sourceToolId: "project-builder",
     })
 
-    expect(updated).toBeNull()
+    expect(updated?.channelId).toBe("local-draft:project-a")
     expect(getContentBuild("cb-a")?.selections.thumbnail).toBe("vault-thumb-a")
-    expect(listVideoPackages()).toHaveLength(0)
+    expect(listVideoPackages()).toHaveLength(1)
   })
 
   it("clears package selection and canonical ContentBuild selection without deleting the candidate variant", () => {
