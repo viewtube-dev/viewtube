@@ -246,3 +246,13 @@ Initial certified families:
 - Each family card lists its source TSX/CSS paths, core token geometry, variants, and known import sites in small provenance text.
 
 **Certification rule:** previews must render the actual exported component. Catalog CSS may arrange the examples but must not create a second button implementation. Add additional families here only after their source ownership, default styles, variants, and import sites have been verified.
+
+## Simple Text Input — canonical primitive 20
+
+The Text Input family in the Complete Component + Primitive Catalog now renders SubToolboxInput20 with the opt-in is-simple-text variant. The plain text input remains separate from primitive 137/138 labeled fields, textareas, number fields, and compound search/action inputs.
+
+- Geometry follows shared component-level DNA: L0 56px / 4px / 12px / 24px; L1 standard 44px / 3px / 8px / 32px; L2 32px / 2px / 6px / 12px (height / stroke / radius / font size).
+- Idle state: transparent pair-A fill, pair-A text and 1px inline text stroke, 1000 weight, uppercase typography.
+- Focus state: pair-B outline at component stroke width, pair-A fill lightened with white, black text, and block-shaped caret where supported.
+- caret-shape: block is progressive enhancement; unsupported browsers keep their native caret shape while retaining the pair-color caret.
+- Production styles live in src/styles/subtoolbox-system.css; catalog CSS maps only the catalog's L0/L1/L2 size presentation. The sample uses placeholder text to make empty and focus states easy to review.
