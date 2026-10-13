@@ -139,8 +139,11 @@ const writeStored = (packages: ViewTubeVideoPackage[]) => {
       VIDEO_PACKAGE_STORAGE_KEY,
       JSON.stringify(createStoreEnvelope(packages)),
     )
-  } catch {
-    memoryPackages = packages
+  } catch (error) {
+    // Do not report a durable save when browser storage rejected the write.
+    // An in-memory fallback would disappear on refresh and mask quota/security failures.
+    const detail = error instanceof Error ? error.message : String(error)
+    throw new Error(`Unable to persist Video Packages to browser storage: ${detail}`)
   }
 }
 
