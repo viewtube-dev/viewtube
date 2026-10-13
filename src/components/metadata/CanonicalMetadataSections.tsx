@@ -292,7 +292,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
                     tag={tag}
                     componentLevel="l1"
                     analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())}
-                    onRemove={() => onTagsChange(currentTags.filter(item => item !== tag).join(", "))}
+                    onRemove={() => onTagsChange?.(currentTags.filter(item => item !== tag).join(", "))}
                   />
                 ))}
               </div>
