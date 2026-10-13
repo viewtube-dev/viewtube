@@ -8,11 +8,25 @@ import { describe, expect, it } from "vitest"
 import { Settings } from "lucide-react"
 import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import {
+  SplitLeftButton,
   SubToolboxKpiCard,
+  SubToolboxSplitButton,
   SubToolboxSplitDropdown,
 } from "./SubToolboxSplitPrimitives"
 
 describe("SubToolbox split-left primitives", () => {
+  it("exports the canonical split-left names consumed by production modules", () => {
+    const html = renderToStaticMarkup(
+      <div>
+        <SplitLeftButton icon={<Settings />}>Generate</SplitLeftButton>
+        <SubToolboxSplitButton icon={<Settings />}>Analyze</SubToolboxSplitButton>
+      </div>,
+    )
+    expect(html.match(/vt-subtoolbox-split-button-rail/g)).toHaveLength(2)
+    expect(html).toContain(">Generate</span>")
+    expect(html).toContain(">Analyze</span>")
+  })
+
   it("renders the split-left button with separate rail and label surfaces", () => {
     const html = renderToStaticMarkup(
       <StudioSplitLeftButton icon={<Settings />} selected>
