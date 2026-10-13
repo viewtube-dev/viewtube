@@ -35,8 +35,12 @@ describe("Project Strategy prompt contract", () => {
   })
 
   it("accepts a complete strategy with six non-empty string fields", () => {
-    expect(validateProjectStrategy(validPlan)).toEqual(validPlan)
-    expect(parseProjectStrategyJson(JSON.stringify(validPlan))).toEqual(validPlan)
+    expect(validateProjectStrategy(validPlan, { concept: "Source concept", niche: "Education" })).toEqual({
+      concept: "Source concept",
+      niche: "Education",
+      ...validPlan,
+    })
+    expect(parseProjectStrategyJson(JSON.stringify(validPlan))).toMatchObject(validPlan)
   })
 
   it.each([
