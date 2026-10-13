@@ -10,6 +10,46 @@ export type MetadataMasterGoal =
 
 export type MetadataMasterIntensity = "light" | "balanced" | "aggressive"
 
+export type MetadataMasterStyle =
+  | "search-first"
+  | "curiosity-led"
+  | "authority-led"
+  | "channel-native"
+  | "story-led"
+
+export const buildMetadataStrategyBrief = (
+  goal: MetadataMasterGoal,
+  intensity: MetadataMasterIntensity,
+  style: MetadataMasterStyle,
+) => {
+  const goalGuidance: Record<MetadataMasterGoal, string> = {
+    reach: "maximize broad audience appeal and qualified reach without misleading promises",
+    search: "match explicit search intent with clear keywords and accurate topic coverage",
+    browse: "earn recommendation clicks with a distinctive curiosity gap that the video genuinely resolves",
+    subscribers: "optimize for subscriber conversion, channel promise, and repeat-viewer value",
+    revenue: "fit the intended audience and advertiser-safe commercial context without sacrificing viewer trust",
+    authority: "signal expertise through specificity, evidence, and a credible point of view",
+  }
+  const styleGuidance: Record<MetadataMasterStyle, string> = {
+    "search-first": "lead with the viewer's likely query, plain-language relevance, and search clarity",
+    "curiosity-led": "lead with a specific open loop and compelling contrast; never use deceptive clickbait",
+    "authority-led": "lead with expertise, proof, specificity, and a confident but supportable claim",
+    "channel-native": "match the creator's established voice, audience expectations, and channel identity",
+    "story-led": "frame the metadata around transformation, stakes, and the story payoff",
+  }
+  const intensityGuidance: Record<MetadataMasterIntensity, string> = {
+    light: "make conservative edits and preserve familiar phrasing where it already works",
+    balanced: "balance discovery, clarity, brand fit, and creative distinction",
+    aggressive: "explore more differentiated angles and stronger packaging while keeping every claim accurate",
+  }
+  return [
+    `PRIMARY GOAL: ${goalGuidance[goal]}.`,
+    `STYLE DIRECTION (${style}): ${styleGuidance[style]}.`,
+    `OPTIMIZATION INTENSITY (${intensity}): ${intensityGuidance[intensity]}.`,
+    "Keep title, thumbnail message, description, and tags coherent as one package. Do not invent facts, results, credentials, or claims absent from the supplied content.",
+  ].join("\\n")
+}
+
 export type MetadataMasterSlot =
   | "title"
   | "thumbnail"
