@@ -117,6 +117,32 @@ export interface MetadataMasterSet {
 
 const PACKAGE_KEY = "viewtube:metadata-master:packages:v1"
 
+export interface MetadataMasterSetVariant {
+  title?: string
+  thumbnailPrompt?: string
+  thumbnailText?: string
+  description?: string
+  tags?: string
+  category?: string
+}
+
+export const applyMetadataSetVariant = (
+  pkg: MetadataMasterPackage,
+  variant: MetadataMasterSetVariant,
+  style: MetadataMasterStyle,
+): MetadataMasterPackage => ({
+  ...pkg,
+  style,
+  title: variant.title?.trim() || pkg.title,
+  thumbnailPrompt: variant.thumbnailPrompt?.trim() || pkg.thumbnailPrompt,
+  thumbnailText: variant.thumbnailText?.trim() || pkg.thumbnailText,
+  description: variant.description?.trim() || pkg.description,
+  tags: variant.tags
+    ? variant.tags.split(",").map(tag => tag.trim()).filter(Boolean)
+    : pkg.tags,
+  category: variant.category?.trim() || pkg.category,
+})
+
 export const createEmptyMetadataMasterPackage = (
   input: Partial<MetadataMasterPackage> = {},
 ): MetadataMasterPackage => ({
