@@ -1,8 +1,9 @@
 import React from "react"
 import { Search, Settings2, Sparkles, Plus, Check, X } from "lucide-react"
+import { getComponentLevelCssVars } from "./tokens"
 import type { ToolboxControlLevel } from "./tokens"
 import { SubToolboxTagEditor } from "./SubToolboxPrimitives"
-import { SubToolboxSplitButton } from "./SubToolboxSplitPrimitives"
+import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 
 export interface SubToolboxNestedSquareOption {
   value: string
@@ -82,9 +83,9 @@ export const SubToolboxTagActionRow: React.FC<SubToolboxTagActionRowProps> = ({
       removeIcon={<X />}
     />
     <div className="flex min-w-0 flex-nowrap items-center gap-1" role="group" aria-label="Tag actions">
-      <SubToolboxSplitButton level={level} icon={<Settings2 />} className="!min-w-0 !flex-1 !px-1 !text-[9px]" onClick={() => onAction("refine")}>REFINE</SubToolboxSplitButton>
-      <SubToolboxSplitButton level={level} icon={<Sparkles />} className="!min-w-0 !flex-1 !px-1 !text-[9px]" onClick={() => onAction("generate")}>GENERATE</SubToolboxSplitButton>
-      <SubToolboxSplitButton level={level} icon={<Search />} className="!min-w-0 !flex-1 !px-1 !text-[9px]" onClick={() => onAction("analyze")}>ANALYZE</SubToolboxSplitButton>
+      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level)} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Settings2 />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("refine")}>REFINE</StudioSplitLeftButton>
+      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level)} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Sparkles />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("generate")}>GENERATE</StudioSplitLeftButton>
+      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level)} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Search />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("analyze")}>ANALYZE</StudioSplitLeftButton>
     </div>
     {actionStatus ? <p className="text-[9px] font-black uppercase" role="status">{actionStatus}</p> : null}
   </div>
