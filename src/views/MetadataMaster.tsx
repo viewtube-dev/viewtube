@@ -36,6 +36,7 @@ import { useBrain } from "../context/useBrain"
 import { generateSeoData } from "../services/gemini"
 import { resolveWorkspaceContentBuildToolContext } from "../services/asset-engine/ToolContext"
 import {
+  buildMetadataStrategyBrief,
   createMetadataMasterSet,
   createEmptyMetadataMasterPackage,
   finalizeMetadataMasterPackage,
@@ -45,6 +46,7 @@ import {
   saveMetadataMasterPackage,
   type MetadataMasterGoal,
   type MetadataMasterIntensity,
+  type MetadataMasterStyle,
   type MetadataMasterPackage,
   type MetadataMasterSet,
   type MetadataMasterSlot,
@@ -68,6 +70,14 @@ const GOALS: Array<{ value: MetadataMasterGoal; label: string }> = [
   { value: "subscribers", label: "Subscribers" },
   { value: "revenue", label: "Revenue" },
   { value: "authority", label: "Authority" },
+]
+
+const STYLES: Array<{ value: MetadataMasterStyle; label: string; description: string }> = [
+  { value: "search-first", label: "Search First", description: "Clear query intent and topical relevance" },
+  { value: "curiosity-led", label: "Curiosity Led", description: "A strong open loop with an honest payoff" },
+  { value: "authority-led", label: "Authority Led", description: "Expertise, proof, and specificity" },
+  { value: "channel-native", label: "Channel Native", description: "Creator voice and audience expectations" },
+  { value: "story-led", label: "Story Led", description: "Transformation, stakes, and payoff" },
 ]
 
 const SLOTS: Array<{ id: MetadataMasterSlot; label: string }> = [
@@ -94,6 +104,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
   const [isOpen, setIsOpen] = useState(isOpenInitial)
   const [goal, setGoal] = useState<MetadataMasterGoal>("reach")
   const [intensity, setIntensity] = useState<MetadataMasterIntensity>("balanced")
+  const [style, setStyle] = useState<MetadataMasterStyle>("channel-native")
   const [setCount, setSetCount] = useState(3)
   const [concept, setConcept] = useState(brain.coreConcept || "")
   const [niche, setNiche] = useState(brain.targetNiche || "")
@@ -552,7 +563,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
                       </SubToolboxButton>
                     }
                   >
-                    <p className="text-xs font-black uppercase opacity-50">{set.strategy} strategy</p>
+                    <p className="text-xs font-black uppercase opacity-50">{set.strategy} · {set.style}</p>
                     <p className="mt-2 text-sm font-black leading-tight">{set.package.title}</p>
                     <p className="mt-2 line-clamp-3 text-[11px] font-bold opacity-60">{set.package.description}</p>
                   </SubToolboxOutputCard>
