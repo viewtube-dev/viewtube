@@ -401,13 +401,27 @@ button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-
   overflow: hidden;
 }
 
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg {
+/* Icon size follows the split-left control's declared geometry. The previous
+   fixed 20px rule overrode the 28px standard icon contract, making every 44px
+   split-left icon look undersized. Keep compact controls proportionate. */
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] > [data-vt-studio-split-rail] > svg {
   display: block;
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
-  flex: 0 0 20px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  flex: 0 0 28px;
+  margin: 0;
+  position: static;
+  transform: none;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail] > svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  flex: 0 0 18px;
   margin: 0;
   position: static;
   transform: none;
