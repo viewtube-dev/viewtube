@@ -439,7 +439,7 @@ const PrimitiveMigrationControl: React.FC<{
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
-    return <PrimaryButton level={level}>{name.replace(" Button", "")}</PrimaryButton>
+    return <PrimaryButton level={level} tone={name === "Destructive Button" ? "danger" : name === "Neutral Button" || name === "Secondary Button" ? "neutral" : "accent"}>{name.replace(" Button", "")}</PrimaryButton>
   }
   if (name === "Square Icon Button") {
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
@@ -481,7 +481,7 @@ const PrimitiveMigrationControl: React.FC<{
     )
   }
   if (name === "Split Left Button" || name === "Head Tail Action") {
-    return <SplitLeftButton level={level} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SplitLeftButton>
+    return <SplitLeftButton level={level} tone={name === "Head Tail Action" ? "neutral" : "accent"} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SplitLeftButton>
   }
   if (name === "Split Menu") {
     return <SubToolboxSplitDropdown
@@ -593,7 +593,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxSelectableTag level={level} selected={selectableTagOn} selectedIcon={<Check />} unselectedIcon={<Plus />} onClick={() => setSelectableTagOn((value) => !value)}>{selectableTagOn ? "SELECTED" : "SELECT"}</SubToolboxSelectableTag>
   }
   if (name === "Tag Editor") {
-    return <SubToolboxTagEditor level={level} tags={editorTags} onTagsChange={setEditorTags} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
+    return <SubToolboxTagEditor level={level} label="TAGS" tags={editorTags} onTagsChange={setEditorTags} spectrum tagLevel={level} addIcon={<Plus />} saveIcon={<Check />} removeIcon={<X />} />
   }
   if (name === "Progress Bar") {
     return <SubToolboxProgressBar level={level} value={68} />
@@ -989,10 +989,10 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Labeled Input") {
-    return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
+    return <SubToolboxLabeledInput level={level} variant="floating-label" overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
   }
   if (name === "Labeled Textarea") {
-    return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
+    return <SubToolboxLabeledTextArea level={level} variant="floating-label" overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
@@ -1017,10 +1017,10 @@ const PrimitiveMigrationControl: React.FC<{
     </MiniSubToolbox>
   }
   if (name === "Disabled Button") {
-    return <SubToolboxButton level={level} disabled>DISABLED</SubToolboxButton>
+    return <PrimaryButton level={level} disabled>DISABLED</PrimaryButton>
   }
   if (name === "Disabled Split Button") {
-    return <SubToolboxSplitButton level={level} icon={<Settings2 />} disabled>DISABLED</SubToolboxSplitButton>
+    return <SplitLeftButton level={level} icon={<Settings2 />} disabled>DISABLED</SplitLeftButton>
   }
   if (name === "Two Color Data Stats") {
     return <SubToolboxDataStats level={level} label="VIEWS" value="128K" delta="+12%" variant="two-color" />
