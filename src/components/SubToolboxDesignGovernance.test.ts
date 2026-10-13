@@ -536,4 +536,15 @@ describe("subtoolbox design governance", () => {
   expect(splitCss).toContain("font-size: 32px")
  })
 
+
+ it("renders the canonical production primitives in the migration library", () => {
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+  expect(catalog).toContain('tone={name === "Destructive Button" ? "danger"')
+  expect(catalog).toContain('tone={name === "Head Tail Action" ? "neutral" : "accent"}')
+  expect(catalog).toContain('spectrum tagLevel={level}')
+  expect(catalog).toContain('variant="floating-label"')
+  expect(catalog).toContain('<PrimaryButton level={level} disabled>')
+  expect(catalog).toContain('<SplitLeftButton level={level} icon={<Settings2 />} disabled>')
+ })
+
 })
