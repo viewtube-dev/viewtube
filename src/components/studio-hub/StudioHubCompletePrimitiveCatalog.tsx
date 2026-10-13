@@ -97,7 +97,8 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
       </div> : null}
     </div>
   }
-  if (name === "Text Input" || name === "Number Field" || name === "20 Plain Input") return <SubToolboxInput20 className={`vt-catalog-field is-${level}`} style={style} type={name === "Number Field" ? "number" : "text"} defaultValue={name === "Number Field" ? "25" : "TEXT INPUT"} />
+  if (name === "Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
+  if (name === "Number Field" || name === "20 Plain Input") return <SubToolboxInput20 className={`vt-catalog-field is-${level}`} style={style} type={name === "Number Field" ? "number" : "text"} defaultValue={name === "Number Field" ? "25" : "TEXT INPUT"} />
   if (name === "Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
   if (name === "137 Floating Label Input") return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="TEXT INPUT" />
   if (name === "138 Floating Label Text Area") return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
