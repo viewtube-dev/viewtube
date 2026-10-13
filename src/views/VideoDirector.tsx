@@ -59,7 +59,7 @@ import {
   StudioInput,
   StudioNumberInput,
   StudioSelect,
-  StudioSplitLeftButton
+  StudioSplitLeftButton,
   StudioTextArea,
 } from "../studio-ui"
 import {
