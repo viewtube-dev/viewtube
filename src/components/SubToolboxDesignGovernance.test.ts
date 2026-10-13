@@ -493,12 +493,30 @@ describe("subtoolbox design governance", () => {
   expect(primitives).toContain("export const SubToolboxButton")
   expect(splitPrimitives).toContain("export const SplitLeftButton")
   expect(splitPrimitives).toContain("export const SubToolboxSplitButton")
-  expect(primitives).toContain("is-floating-label")
+  expect(primitives).toContain("floating-label")
   expect(systemCss).toContain(".vt-subtoolbox-labeled-field.is-floating-label")
   expect(systemCss).toContain("left:14px")
   expect(systemCss).not.toContain("padding-right:52%!important")
   expect(catalog).toContain("PrimaryButton")
   expect(catalog).toContain("SplitLeftButton")
+ })
+
+
+ it("uses ViewTube Minimal as the canonical default control contract", () => {
+  const tokenSource = source("src/components/subtoolbox/tokens.ts")
+  const subtoolboxCss = source("src/styles/subtoolbox-system.css")
+  const studioCss = source("src/styles/studio-control-system.css")
+
+  expect(tokenSource).toContain("controlLetterSpacingEm: -0.035")
+  expect(tokenSource).toContain("controlLineHeight: 0.86")
+  expect(tokenSource).toContain("m: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 }")
+  expect(tokenSource).toContain("l1: { height: 44, stroke: 3, radius: 8, shadowOffset: 4, fontSize: 32 }")
+  expect(subtoolboxCss).toContain("--vt-subtoolbox-control-standard:44px")
+  expect(subtoolboxCss).toContain("font-size:32px")
+  expect(subtoolboxCss).toContain("letter-spacing:-.035em")
+  expect(studioCss).toContain("--vt-studio-control-height: 44px")
+  expect(studioCss).toContain("font-size: 32px")
+  expect(studioCss).toContain("letter-spacing: -.035em")
  })
 
 })
