@@ -37,4 +37,22 @@ describe("canonical Studio Hub input primitives", () => {
       expect(library).toContain(id)
     }
   })
+  it("exports Studio plain and floating-label fields with button-matched styles", () => {
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx")
+    const styles = read("src/styles/studio-control-system.css")
+    const index = read("src/studio-ui/index.ts")
+    for (const component of ["StudioInput", "StudioTextArea", "StudioFloatingLabelInput", "StudioFloatingLabelTextArea"]) {
+      expect(controls).toContain(component)
+    }
+    expect(controls).toContain('data-vt-primitive-id="137"')
+    expect(controls).toContain('data-vt-primitive-id="138"')
+    expect(styles).toContain(".vt-studio-labeled-field-overlay")
+    expect(styles).toContain("prefers-reduced-motion")
+    expect(styles).toContain("font-size: 32px")
+    expect(styles).toContain("box-shadow: inset 0 0 0 1px var(--pair-b, #ff7f6b) !important")
+    expect(index).toContain("StudioFloatingLabelInput")
+    expect(index).toContain("StudioFloatingLabelTextArea")
+    expect(controls).not.toContain("sizeClass(")
+  })
+
 })
