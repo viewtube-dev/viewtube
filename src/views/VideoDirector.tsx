@@ -876,7 +876,7 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                   {MODE_OPTIONS.map(({ id, label, icon: Icon }) => (
                     <StudioSplitLeftButton
                       key={id}
-                      level="l1"
+                      data-vt-control-level="l1"
                       selected={project.mode === id}
                       aria-pressed={project.mode === id}
                       icon={<Icon size={17} />}
