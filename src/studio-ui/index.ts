@@ -16,6 +16,8 @@ export {
   StudioButton,
   StudioIconButton,
   StudioInput,
+  StudioFloatingLabelInput,
+  StudioFloatingLabelTextArea,
   StudioNumberInput,
   StudioSearchInput,
   StudioSelect,
@@ -24,6 +26,8 @@ export {
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
+  StudioFloatingLabelInputProps,
+  StudioFloatingLabelTextAreaProps,
   StudioControlTone,
   StudioIconButtonProps,
   StudioSplitLeftButtonProps,
