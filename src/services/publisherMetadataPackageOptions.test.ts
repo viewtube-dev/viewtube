@@ -173,6 +173,34 @@ describe("Publisher metadata package options", () => {
     expect(videoPackage.production.renderIds).toContain(finalVideo.id)
   })
 
+  it("saves and switches metadata options while disconnected from YouTube", () => {
+    const localPackage = ensureVideoPackageForProject(project, {
+      channelId: null,
+      sourceToolId: "video-publisher",
+    })
+    const first = savePublisherMetadataToProject(project, null, {
+      title: "Local draft A",
+      description: "First offline metadata set",
+      tags: "local, first",
+    }, { mode: "current" })
+    const alternative = savePublisherMetadataToProject(project, null, {
+      title: "Local draft B",
+      description: "Second offline metadata set",
+      tags: "local, second",
+    }, { mode: "option" })
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)
+    const build = getContentBuild(project.contentBuildId)!
+
+    expect(localPackage?.channelId).toBe(`local-draft:${project.id}`)
+    expect(first.videoPackageId).toBe(localPackage?.id)
+    expect(alternative.videoPackageId).toBe(localPackage?.id)
+    expect(videoPackage?.channelId).toBe(`local-draft:${project.id}`)
+    expect(build.selections["metadata-package"]).toBe(alternative.packageOptionAssetId)
+    expect(listPublisherMetadataPackageOptions(project.contentBuildId)).toHaveLength(2)
+  })
+
   it("selects an alternative without creating a new Project or ContentBuild", () => {
     ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
     const current = savePublisherMetadataToProject(project, "channel-options", {
