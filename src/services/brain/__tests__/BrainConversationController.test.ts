@@ -47,7 +47,6 @@ const thread: AIBrainConversationThread = {
  id: "thread-1",
  channelId: "channel-1",
  title: "Test",
- summary: "",
  turnIds: [],
  createdAt: "2026-09-12T00:00:00.000Z",
  updatedAt: "2026-09-12T00:00:00.000Z",
