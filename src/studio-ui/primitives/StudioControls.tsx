@@ -183,3 +183,115 @@ export const StudioLabeledDropdown = React.forwardRef<HTMLSelectElement, StudioL
   ),
 )
 StudioLabeledDropdown.displayName = "StudioLabeledDropdown"
+
+
+export interface StudioLegendMultiDropdownProps {
+  label: React.ReactNode
+  options: StudioLabeledDropdownOption[]
+  value?: string[]
+  defaultValue?: string[]
+  onChange?: (values: string[]) => void
+  sizeVariant?: "compact" | "standard"
+  level?: "l0" | "l1" | "l2"
+  placeholder?: string
+  clearLabel?: string
+  maxMenuHeight?: number
+  className?: string
+  disabled?: boolean
+  name?: string
+}
+
+/**
+ * Canonical implementation of component-library 09/V2 "Legend Multi".
+ * Uses the module's pair-A trigger/panel and pair-B floating legend/actions;
+ * selection is multi-valued and never depends on a native browser menu.
+ */
+export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps> = ({
+  label, options, value, defaultValue = [], onChange, sizeVariant = "standard",
+  level = "l1", placeholder = "ANY", clearLabel = "CLEAR ALL",
+  maxMenuHeight = 280, className, disabled = false, name,
+}) => {
+  const [uncontrolled, setUncontrolled] = React.useState<string[]>(defaultValue)
+  const [open, setOpen] = React.useState(false)
+  const selected = value ?? uncontrolled
+  const rootRef = React.useRef<HTMLDivElement>(null)
+  const listId = React.useId()
+  const setSelected = (next: string[]) => {
+    if (value === undefined) setUncontrolled(next)
+    onChange?.(next)
+  }
+  React.useEffect(() => {
+    if (!open) return
+    const onPointerDown = (event: PointerEvent) => {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) setOpen(false)
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("pointerdown", onPointerDown)
+    document.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown)
+      document.removeEventListener("keydown", onKeyDown)
+    }
+  }, [open])
+  const selectedLabels = options.filter(option => selected.includes(option.value)).map(option => option.label)
+  const triggerLabel = selectedLabels.length ? selectedLabels.join(", ") : placeholder
+  return (
+    <div
+      ref={rootRef}
+      data-vt-primitive-id="140"
+      data-vt-studio-field="legend-multi-dropdown"
+      data-vt-control-level={level}
+      data-size={sizeVariant}
+      data-open={open || undefined}
+      className={["vt-studio-legend-multi", className].filter(Boolean).join(" ")}
+    >
+      <div className="vt-studio-legend-anchor">
+        <span className="vt-studio-legend-label">{label}</span>
+        <button
+          type="button"
+          className="vt-studio-legend-trigger"
+          data-vt-studio-control="true"
+          data-size={sizeVariant}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={listId}
+          disabled={disabled}
+          onClick={() => setOpen(current => !current)}
+        >
+          <span className="vt-studio-legend-trigger-text">{triggerLabel}</span>
+          <span className={["vt-studio-legend-count", selected.length ? "is-visible" : ""].filter(Boolean).join(" ")} aria-label={`${selected.length} selected`}>{selected.length}</span>
+          <svg className="vt-studio-legend-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+      </div>
+      {open && !disabled && (
+        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={String(label)} aria-multiselectable="true">
+          <div className="vt-studio-legend-options">
+            {options.map(option => {
+              const isSelected = selected.includes(option.value)
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  disabled={option.disabled}
+                  data-selected={isSelected || undefined}
+                  className="vt-studio-legend-option"
+                  onClick={() => setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])}
+                >
+                  <span className="vt-studio-legend-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></span>
+                  <span className="vt-studio-legend-option-text">{option.label}</span>
+                </button>
+              )
+            })}
+          </div>
+          <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>
+          {name && selected.map(item => <input key={item} type="hidden" name={name} value={item} />)}
+        </div>
+      )}
+    </div>
+  )
+}
+StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
