@@ -16,6 +16,9 @@ import {
 import { useSimpleAuth } from "../auth/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { useBrain } from "../context/useBrain"
+import { listContentBuilds } from "../services/asset-engine/ContentBuildRepository"
+import { createEmptyMetadataMasterPackage } from "../services/metadataMaster"
+import { listMetadataHistory, recordPublishedMetadataChange, recordPublishedMetadataSettingsChange } from "../services/metadataHistory"
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import type { LongformOptimizationHandoffPayload } from "../services/longformOptimization"
@@ -423,19 +426,74 @@ const VideoManager: React.FC<VideoManagerProps> = ({
   setSaving(true)
   setError(null)
   setSaveSuccess(false)
+  const previousPlaylistIds = currentPlaylists.map((membership) => membership.playlistId)
+  const nextDescription = educationNotes.trim() && editCategoryId === "27"
+   ? `${editDescription.trim()}\n\n${educationNotes.trim()}`.trim()
+   : editDescription
   try {
    await patchSimpleOwnedVideo(selectedVideoId, {
     snippet: {
      title: editTitle,
-     description: educationNotes.trim() && editCategoryId === "27"
-      ? `${editDescription.trim()}\n\n${educationNotes.trim()}`.trim()
-      : editDescription,
+     description: nextDescription,
      tags: editTags.split(",").map((t) => t.trim()).filter(Boolean),
      categoryId: editCategoryId,
     },
     status: { privacyStatus: editPrivacy, selfDeclaredMadeForKids: editAudience },
     ...(editLocation.trim() ? { recordingDetails: { locationDescription: editLocation.trim() } } : {}),
    })
+
+   // Record only after YouTube confirms the metadata write. The ContentBuild event
+   // stream remains the history authority; no second manager-history store is used.
+   const historyBuild = listContentBuilds().find(build => build.youtube?.videoId === selectedVideoId)
+   if (historyBuild) {
+    const history = listMetadataHistory(historyBuild.id)
+    const livePackageId = `live-metadata:${selectedVideoId}`
+    const priorVersion = Math.max(0, ...history
+     .filter(event => event.metadata?.metadataPackageId === livePackageId)
+     .map(event => Number(event.metadata?.packageVersion) || 0))
+    const previousPackage = createEmptyMetadataMasterPackage({
+     id: livePackageId,
+     version: priorVersion,
+     projectId: historyBuild.legacyProjectId,
+     contentBuildId: historyBuild.id,
+     videoId: selectedVideoId,
+     title: videoDetails?.title || selectedVideo?.title || "",
+     description: videoDetails?.description || "",
+     tags: videoDetails?.tags || [],
+     category: videoDetails?.categoryId || "",
+     playlistIds: previousPlaylistIds,
+     source: "imported",
+     provenance: ["Video Manager", "Pre-update published metadata"],
+    })
+    const nextPackage = createEmptyMetadataMasterPackage({
+     id: livePackageId,
+     version: priorVersion + 1,
+     projectId: historyBuild.legacyProjectId,
+     contentBuildId: historyBuild.id,
+     videoId: selectedVideoId,
+     title: editTitle,
+     description: nextDescription,
+     tags: editTags.split(",").map(tag => tag.trim()).filter(Boolean),
+     category: editCategoryId,
+     playlistIds: previousPlaylistIds,
+     source: "manual",
+     provenance: ["Video Manager", "Successful published metadata update"],
+    })
+    recordPublishedMetadataChange({
+     contentBuildId: historyBuild.id,
+     projectId: historyBuild.legacyProjectId,
+     videoId: selectedVideoId,
+     operation: "manual",
+     actorType: "creator",
+     operationId: `video-manager-save-${selectedVideoId}-${Date.now()}`,
+     reason: "Creator saved published-video metadata in Video Manager.",
+     previousPackage,
+     package: nextPackage,
+     previousSettings: { visibility: videoDetails?.privacyStatus ?? null },
+     nextSettings: { visibility: editPrivacy },
+    })
+   }
+
    if (thumbnailFile) {
     await setSimpleVideoThumbnail(selectedVideoId, thumbnailFile)
     setThumbnailFile(null)
@@ -446,6 +504,17 @@ const VideoManager: React.FC<VideoManagerProps> = ({
     ...toAdd.map((id) => addSimpleVideoToPlaylist(id, selectedVideoId)),
     ...toRemove.map((m) => removeSimpleVideoFromPlaylist(m.playlistItemId)),
    ])
+   if (historyBuild && JSON.stringify(previousPlaylistIds) !== JSON.stringify(selectedPlaylistIds)) {
+    recordPublishedMetadataSettingsChange({
+     contentBuildId: historyBuild.id,
+     videoId: selectedVideoId,
+     previousSettings: { playlistIds: previousPlaylistIds },
+     nextSettings: { playlistIds: selectedPlaylistIds },
+     operationId: `video-manager-playlists-${selectedVideoId}-${Date.now()}`,
+     actorType: "creator",
+     toolId: "video-manager",
+    })
+   }
    if (brain.activeProjectId) {
     const activeProject = brain.projects.find(project => project.id === brain.activeProjectId)
     updateProject(brain.activeProjectId, {
