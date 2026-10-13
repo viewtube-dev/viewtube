@@ -289,5 +289,16 @@ describe("metadata/project lifecycle certification fixture", () => {
       contentBuildId,
       packageId: savedPackage.id,
     })
+
+    const unavailableEvaluation = evaluateAlgorithmEvent({
+      event: evaluationEvent,
+      observations: [],
+      now,
+    })
+    expect(unavailableEvaluation).toMatchObject({
+      eventId: evaluationEvent.id,
+      status: "insufficient_data",
+      evidenceIds: [],
+    })
   })
 })
