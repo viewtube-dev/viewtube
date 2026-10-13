@@ -65,7 +65,11 @@ Do not create a new document for an existing subject. Update or consolidate its 
 | Conversation synchronization | recovery/Sync.md |
 | Repository document history | recovery/History.md |
 
-**Rule:** substantive knowledge belongs in its canonical subject document; operation history belongs in `docs/recovery/History.md`.
+**Rule:** substantive knowledge belongs in its canonical subject document; operation history belongs in docs/recovery/History.md.
+
+## UI implementation guide
+
+- [Studio Controls Authoring Guide](Studio-Controls-Authoring-Guide.md) — canonical authoring rules for src/studio-ui/primitives/StudioControls.tsx and src/styles/studio-control-system.css, including shared defaults, height variants, non-height-system components, layout safety, and truthful confirmed-library specimens.
 
 ## Current implementation / conversation records
 
