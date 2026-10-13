@@ -8,8 +8,8 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
  it("keeps selection actions in the Asset Library flow instead of a fixed bottom overlay", () => {
   expect(source).not.toMatch(/aria-label="Vault selection actions"[\s\S]{0,240}className="fixed inset-x-2 bottom-2/)
   expect(source).toMatch(/title="Asset Library"[\s\S]{0,1600}aria-label="Vault selection actions"/)
-  expect(source).toContain('label="Selected"')
-  expect(source).toContain('label="Send to ViewTube…"')
+  expect(source).toContain('{selectedAssetIds.length} Selected')
+  expect(source).toContain('label="Send to ViewTube"')
  })
 
  it("keeps the Inspector toolbox available when nothing is selected", () => {
