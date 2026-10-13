@@ -25,6 +25,11 @@
   text-transform: uppercase;
   transition: transform 180ms ease-out, filter 180ms ease-out;
 }
+.vt-subtoolbox-split-button.is-neutral { --vt-split-label: #fff; }
+.vt-subtoolbox-split-button.is-danger { --vt-split-label: #ff7ac8; }
+.vt-subtoolbox-split-button.is-warning { --vt-split-label: #ffda47; }
+.vt-subtoolbox-split-button.is-success { --vt-split-label: #3fee56; }
+
 .vt-subtoolbox-split-button-rail {
   display: grid;
   place-items: center;
