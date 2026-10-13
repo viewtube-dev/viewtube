@@ -64,6 +64,7 @@ export const SubToolboxSelect = React.forwardRef<HTMLSelectElement, SubToolboxSe
 SubToolboxSelect.displayName = "SubToolboxSelect"
 
 export interface SubToolboxButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> { size?: SubToolboxControlSize; tone?: PrimitiveTone; selected?: boolean; icon?: React.ReactNode; level?: ToolboxControlLevel }
+export type PrimaryButtonProps = SubToolboxButtonProps
 export const PrimaryButton: React.FC<SubToolboxButtonProps> = ({ className, size = "standard", tone = "accent", selected = false, icon, children, type = "button", level, style, ...props }) => <button type={type} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-button", `is-${size}`, `is-${tone}`, level && "has-component-level", selected && "is-selected", className)} aria-pressed={props["aria-pressed"] ?? (selected || undefined)} {...props}>{icon ? <span className="vt-subtoolbox-button-icon" aria-hidden="true">{icon}</span> : null}<span className="vt-subtoolbox-button-label">{children}</span></button>
 PrimaryButton.displayName = "PrimaryButton"
 
