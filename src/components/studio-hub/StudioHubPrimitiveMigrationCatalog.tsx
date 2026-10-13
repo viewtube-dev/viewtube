@@ -106,7 +106,8 @@ import {
   ToolboxHeaderTitle,
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { SubToolboxKpiCard, SplitLeftButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { StudioSplitLeftButton } from "../../studio-ui"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -495,7 +496,7 @@ const PrimitiveMigrationControl: React.FC<{
     )
   }
   if (name === "Split Left Button" || name === "Head Tail Action") {
-    return <SplitLeftButton level={level} tone={name === "Head Tail Action" ? "neutral" : "accent"} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</SplitLeftButton>
+    return <StudioSplitLeftButton heightVariant={level === "l2" ? "28" : "44"} tone={name === "Head Tail Action" ? "neutral" : "accent"} icon={name === "Head Tail Action" ? <ChevronRight /> : <Settings2 />}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
   }
   if (name === "Split Menu") {
     return <SubToolboxSplitDropdown
@@ -1052,7 +1053,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <PrimaryButton level={level} disabled>DISABLED</PrimaryButton>
   }
   if (name === "Disabled Split Button") {
-    return <SplitLeftButton level={level} icon={<Settings2 />} disabled>DISABLED</SplitLeftButton>
+    return <StudioSplitLeftButton heightVariant={level === "l2" ? "28" : "44"} icon={<Settings2 />} disabled>DISABLED</StudioSplitLeftButton>
   }
   if (name === "Two Color Data Stats") {
     return <SubToolboxDataStats level={level} label="VIEWS" value="128K" delta="+12%" variant="two-color" />
