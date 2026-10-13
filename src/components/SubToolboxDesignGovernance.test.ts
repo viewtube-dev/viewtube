@@ -380,8 +380,6 @@ describe("subtoolbox design governance", () => {
   const splitCss = source("src/styles/subtoolbox-split-primitives.css")
   const videoDirector = source("src/views/VideoDirector.tsx")
   const certification = source("src/studio-ui/StudioHubCertification.tsx")
-  const videoDirector = source("src/views/VideoDirector.tsx")
-  const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
   expect(palette).toContain("export const VT_SPECTRUM_PALETTE_06 = [")
   expect(palette).toContain("header: getPaletteColor(index)")
@@ -527,6 +525,8 @@ describe("subtoolbox design governance", () => {
  it("uses the canonical inverse-color split-left toggle for community post types", () => {
   const community = source("src/components/CommunityPostGenerator.tsx")
   const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+  const videoDirector = source("src/views/VideoDirector.tsx")
+  const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
   expect(community).toContain("SplitLeftButton")
   expect(community).not.toContain("StudioSplitLeftButton")
@@ -584,7 +584,7 @@ describe("subtoolbox design governance", () => {
   expect(primitives).toContain("vt-legend-multi-dropdown-clear")
   expect(primitives).toContain("vt-legend-multi-dropdown")
   expect(catalog).toContain('"Legend Multi Dropdown"')
-  expect(catalog).toContain("<LegendMultiDropdown")
+  expect(catalog).toContain("<StudioLegendMultiDropdown")
   expect(splitPrimitives).toContain("export const SplitLeftButton")
   expect(project).toContain("SplitLeftButton")
   expect(project).toContain("LegendMultiDropdown")
@@ -599,6 +599,34 @@ describe("subtoolbox design governance", () => {
   expect(publishing).toContain("<LegendMultiDropdown")
   expect(systemCss).toContain(".vt-legend-multi-dropdown")
   expect(systemCss).toContain(".vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-title")
+  const studioCatalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+  const studioCatalogCss = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css")
+  expect(studioCatalog).toContain("<StudioLegendMultiDropdown")
+  expect(studioCatalog).toContain('sizeVariant={level === "l0" ? "standard" : "compact"}')
+  expect(studioCatalogCss).toContain('data-vt-family="Legend Multi Dropdown"')
+  expect(studioCatalogCss).toContain("grid-column: 1 / -1")
+  expect(studioCatalogCss).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))")
  })
+
+  it("keeps confirmed Studio controls authored and styled in the canonical system", () => {
+    const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
+    const studioCss = source("src/styles/studio-control-system.css")
+    const publicIndex = source("src/studio-ui/index.ts")
+    const subtoolboxPrimitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const subtoolboxCss = source("src/styles/subtoolbox-system.css")
+
+    for (const primitive of ["Studioinput", "Studioarea", "Studiotoggle", "Studioswitch", "Studioradio", "Studiocheck", "Studioxbox"]) {
+      expect(studioControls).toContain(primitive)
+      expect(publicIndex).toContain(primitive)
+    }
+    expect(studioControls).not.toContain("SubToolboxInput20")
+    expect(studioControls).not.toContain("SubToolboxTextArea21")
+    expect(subtoolboxPrimitives).not.toContain("export const SubToolbox44WordToggle:")
+    expect(subtoolboxCss).not.toContain(".vt-subtoolbox-44-word-toggle{")
+    expect(studioCss).toContain(".vt-studio-44-word-toggle{")
+    expect(studioCss).toContain("--vt-word-font-size:32px")
+    expect(studioCss).toContain("--vt-word-font-size:14px")
+    expect(studioCss).toContain("font-size: var(--vt-studio-44-font-size, 32px) !important")
+  })
 
 })

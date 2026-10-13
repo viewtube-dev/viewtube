@@ -18,6 +18,15 @@ export {
   StudioButton,
   StudioIconButton,
   StudioInput,
+  Studioinput,
+  StudioTextArea,
+  Studioarea,
+  Studiotoggle,
+  Studioswitch,
+  Studioradio,
+  Studiocheck,
+  Studioxbox,
+  StudioChoice,
   StudioLegendMultiDropdown,
   StudioFloatingLabelInput,
   StudioFloatingLabelTextArea,
@@ -25,7 +34,6 @@ export {
   StudioSearchInput,
   StudioSelect,
   StudioSplitLeftButton,
-  StudioTextArea,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -36,6 +44,11 @@ export type {
   StudioControlTone,
   StudioIconButtonProps,
   StudioSplitLeftButtonProps,
+  StudioControlSkin,
+  StudioControlButtonProps,
+  StudioChoiceKind,
+  StudioChoiceProps,
+  StudioWordToggleProps,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"

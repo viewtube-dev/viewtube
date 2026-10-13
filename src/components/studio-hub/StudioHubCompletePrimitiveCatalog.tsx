@@ -5,9 +5,9 @@ import {
   Upload, Video, X,
 } from "lucide-react"
 import {
-  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge, SubToolbox44Switch, SubToolbox44Choice, SubToolbox44WordToggle,
+  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-complete-primitive-catalog.css"
 
@@ -200,7 +200,7 @@ const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> =
       <small className="vt-catalog-control-row-label">{shape === "round" ? "ROUND SWITCH" : "RECTANGULAR SWITCH"}</small>
       <div className="vt-catalog-control-variants">
         {CONTROL_SKINS.map((variant, i) => { const index = shapeIndex * 4 + i; return <div className="vt-catalog-control-variant" key={variant.skin}>
-          <small>{variant.label}</small><SubToolbox44Switch shape={shape} skin={variant.skin} checked={switchValues[index]} aria-label={`${shape} switch ${variant.label}`} onClick={() => toggleValue(switchValues,setSwitchValues,index)} />
+          <small>{variant.label}</small><StudioSwitch shape={shape} skin={variant.skin} checked={switchValues[index]} aria-label={`${shape} switch ${variant.label}`} onClick={() => toggleValue(switchValues,setSwitchValues,index)} />
         </div>; })}
       </div>
     </div>)}
@@ -210,7 +210,7 @@ const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> =
       <small className="vt-catalog-control-row-label">{component.label}</small>
       <div className="vt-catalog-control-variants">
         {CONTROL_SKINS.map((variant, i) => { const index = rowIndex * 4 + i; return <div className="vt-catalog-control-variant" key={variant.skin}>
-          <small>{variant.label}</small><SubToolbox44Choice kind={component.kind} mark={component.mark} shape={component.kind === "radio" ? "round" : "rect"} skin={variant.skin} checked={choiceValues[index]} aria-label={`${component.label} ${variant.label}`} onClick={() => toggleValue(choiceValues,setChoiceValues,index)} />
+          <small>{variant.label}</small><StudioChoice kind={component.kind} mark={component.mark} shape={component.kind === "radio" ? "round" : "rect"} skin={variant.skin} checked={choiceValues[index]} aria-label={`${component.label} ${variant.label}`} onClick={() => toggleValue(choiceValues,setChoiceValues,index)} />
         </div>; })}
       </div>
     </div>)}
@@ -220,7 +220,7 @@ const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> =
       <small className="vt-catalog-control-row-label">{variant.label}</small>
       <div className="vt-catalog-control-variants">
         {CONTROL_SKINS.map((skin, j) => { const index = i * 4 + j; return <div className="vt-catalog-control-variant" key={skin.skin}>
-          <small>{skin.label}</small><SubToolbox44WordToggle size={variant.size} skin={skin.skin} value={wordValues[index]} onValueChange={next => toggleValue(wordValues,setWordValues,index,next)} />
+          <small>{skin.label}</small><StudioWordToggle size={variant.size} skin={skin.skin} value={wordValues[index]} onValueChange={next => toggleValue(wordValues,setWordValues,index,next)} />
         </div>; })}
       </div>
     </div>)}

@@ -1,6 +1,5 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
-import { SubToolboxInput20, SubToolboxTextArea21 } from "../../components/subtoolbox/SubToolboxPrimitives"
 import "../../styles/studio-split-left-consistency.css"
 import "../../styles/studio-control-system.css"
 
@@ -11,8 +10,8 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = { fontFamily: "Inter, ui-sans-se
 
 /** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
 export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 36, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
-  compact: { height: 28, stroke: 2, radius: 4, fontSize: 22, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 18, iconStroke: 1.65 },
+  standard: { height: 44, stroke: 3, radius: 8, fontSize: 32, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
+  compact: { height: 28, stroke: 2, radius: 5, fontSize: 14, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 18, iconStroke: 1.65 },
 } as const
 
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
@@ -21,38 +20,38 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   ...(tone ? { "data-tone": tone } : {}),
 })
 
-/** Public Studio facade over canonical primitive 20; not an independent input implementation. */
+/** Canonical Studio text input; visual rules are owned by studio-control-system.css. */
 export const StudioInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", ...props }, ref) => (
-  <SubToolboxInput20 ref={ref} controlSize={sizeVariant === "compact" ? "compact" : "standard"} {...withStudioAttrs(sizeVariant)} {...props} />
+  <input ref={ref} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioInput.displayName = "StudioInput"
 
-/** Search facade over canonical primitive 20. */
+/** Canonical search input using the shared Studio text-field contract. */
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", type = "search", ...props }, ref) => (
-  <SubToolboxInput20 ref={ref} controlSize={sizeVariant === "compact" ? "compact" : "standard"} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
-/** Number facade over canonical primitive 20. */
+/** Canonical number input using the shared Studio text-field contract. */
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", type = "number", ...props }, ref) => (
-  <SubToolboxInput20 ref={ref} controlSize={sizeVariant === "compact" ? "compact" : "standard"} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
-/** Public Studio facade over canonical primitive 21; not an independent textarea implementation. */
+/** Canonical Studio writing area; visual rules are owned by studio-control-system.css. */
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", ...props }, ref) => <SubToolboxTextArea21 ref={ref} height={sizeVariant === "compact" ? "compact" : "standard"} {...withStudioAttrs(sizeVariant)} {...props} />)
+>(({ sizeVariant = "standard", ...props }, ref) => <textarea ref={ref} {...withStudioAttrs(sizeVariant)} {...props} />)
 StudioTextArea.displayName = "StudioTextArea"
 
 export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
@@ -61,7 +60,7 @@ export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttri
   level?: "l0" | "l1" | "l2"
 }
 
-/** Primitive 137 facade: canonical plain input 20 plus the upper-right label overlay. */
+/** Studio input plus the upper-right label overlay. */
 export const StudioFloatingLabelInput = React.forwardRef<HTMLInputElement, StudioFloatingLabelInputProps>(
   ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
     <label data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level}
@@ -79,7 +78,7 @@ export interface StudioFloatingLabelTextAreaProps extends React.TextareaHTMLAttr
   level?: "l0" | "l1" | "l2"
 }
 
-/** Primitive 138 facade: canonical plain textarea 21 plus the upper-right label overlay. */
+/** Studio writing area plus the upper-right label overlay. */
 export const StudioFloatingLabelTextArea = React.forwardRef<HTMLTextAreaElement, StudioFloatingLabelTextAreaProps>(
   ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
     <label data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
@@ -91,6 +90,79 @@ export const StudioFloatingLabelTextArea = React.forwardRef<HTMLTextAreaElement,
 )
 StudioFloatingLabelTextArea.displayName = "StudioFloatingLabelTextArea"
 
+
+const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
+/** Canonical Studio 44px / 28px switch, choice, and word-toggle primitives. */
+export type StudioControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
+export interface StudioControlButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  skin?: StudioControlSkin;
+  checked: boolean;
+  shape?: "round" | "rect";
+}
+const studioSkinClass = (skin: StudioControlSkin) => ({
+  "solid": "is-solid",
+  "color-swap": "is-color-swap",
+  "black-indicator": "is-black-indicator",
+  "white-indicator": "is-white-indicator",
+}[skin]);
+export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+);
+export type StudioChoiceKind = "radio" | "checkbox";
+export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
+export const StudioChoice: React.FC<StudioChoiceProps> = ({ kind, mark = "check", skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role={kind} aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, studioSkinClass(skin), checked && "is-on", className)} {...props}>
+    {kind === "radio" ? <span className="vt-studio-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
+  </button>
+);
+export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: boolean;
+  onValueChange?: (value: boolean) => void;
+  words?: readonly [string, string];
+  size?: "44" | "28";
+  skin?: StudioControlSkin;
+}
+export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["OFF", "ON"], size = "44", skin = "solid", className, ...props }) => {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
+  React.useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      const root = rootRef.current;
+      const target = wordRefs.current[value ? 1 : 0];
+      if (!root || !target) return;
+      const rootRect = root.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const inset = size === "28" ? 2 : 2.75;
+      const next = { left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 12) };
+      setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
+    };
+    const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
+    schedule();
+    const root = rootRef.current;
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
+    if (root) observer?.observe(root);
+    wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
+    if (typeof window !== "undefined") window.addEventListener("resize", schedule);
+    if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
+    return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
+  }, [value, words, size]);
+  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} {...props}>
+    <span className="vt-studio-44-word-handle" aria-hidden="true" style={{ left: handle.left, width: handle.width }} data-active={value ? "true" : "false"} />
+    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+  </div>;
+};
+
+
+export const Studioradio: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="radio" />
+Studioradio.displayName = "Studioradio"
+export const Studiocheck: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="check" />
+Studiocheck.displayName = "Studiocheck"
+export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
+Studioxbox.displayName = "Studioxbox"
+export const Studioinput = StudioInput
+export const Studioarea = StudioTextArea
 
 export const StudioSelect = React.forwardRef<
   HTMLSelectElement,

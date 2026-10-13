@@ -3,6 +3,7 @@
 **Status:** Canonical scoped Component Library / primitive-correction authority  
 **Last audited main:** `988098840050f4b658a266e1a7d6fe1c4d939c81`  
 **Scope:** Studio Hub Component Library catalog wiring, catalog presentation, demonstrated primitive families, and named primitive-correction contracts.  
+**Studio Controls authoring guide:** [`STUDIO_CONTROLS_AUTHORING_GUIDE.md`](./STUDIO_CONTROLS_AUTHORING_GUIDE.md).  
 **Related authority:** `../architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md` owns the production Toolbox/Subtoolbox system globally. Production tokens/code/tests win over catalog-only CSS.
 
 `ToolboxUIReferenceLibrary.tsx` is the Studio Hub entry point and shell. It must not maintain an independent subset of component examples.
@@ -208,7 +209,7 @@ Video Manager's publishing controls are presented as one responsive row of three
 
 When Category is Education, the Education Questions & Phrases component is exposed. Each non-empty line must begin with M:SS or MM:SS followed by text. Invalid lines prevent the video update from being submitted. Valid education notes are included in the video's description when saved.
 
-These are library contracts, not local CSS skins. Production components must import the primitives from src/components/subtoolbox/SubToolboxPrimitives.tsx and must not duplicate their visual implementation.
+These are library contracts, not local CSS skins. Toolbox/SubToolbox-only primitives remain owned by `src/components/subtoolbox/SubToolboxPrimitives.tsx` and `src/styles/subtoolbox-system.css`. Studio Hub controls are owned by `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`. Production components and catalog examples must use the correct canonical family and must not duplicate visual implementations.
 
 
 ## Projects UI Manifestation
