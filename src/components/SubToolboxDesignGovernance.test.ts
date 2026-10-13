@@ -584,7 +584,7 @@ describe("subtoolbox design governance", () => {
   expect(primitives).toContain("vt-legend-multi-dropdown-clear")
   expect(primitives).toContain("vt-legend-multi-dropdown")
   expect(catalog).toContain('"Legend Multi Dropdown"')
-  expect(catalog).toContain("<LegendMultiDropdown")
+  expect(catalog).toContain("<StudioLegendMultiDropdown")
   expect(splitPrimitives).toContain("export const SplitLeftButton")
   expect(project).toContain("SplitLeftButton")
   expect(project).toContain("LegendMultiDropdown")
@@ -599,6 +599,13 @@ describe("subtoolbox design governance", () => {
   expect(publishing).toContain("<LegendMultiDropdown")
   expect(systemCss).toContain(".vt-legend-multi-dropdown")
   expect(systemCss).toContain(".vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-title")
+  const studioCatalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+  const studioCatalogCss = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css")
+  expect(studioCatalog).toContain("<StudioLegendMultiDropdown")
+  expect(studioCatalog).toContain('sizeVariant={level === "l0" ? "standard" : "compact"}')
+  expect(studioCatalogCss).toContain('data-vt-family="Legend Multi Dropdown"')
+  expect(studioCatalogCss).toContain("grid-column: 1 / -1")
+  expect(studioCatalogCss).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))")
  })
 
   it("keeps confirmed Studio controls authored and styled in the canonical system", () => {
