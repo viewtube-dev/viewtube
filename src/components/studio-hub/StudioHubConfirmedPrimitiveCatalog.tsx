@@ -47,11 +47,11 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
       <div className="vt-confirmed-variant">
         <span>44px selected</span>
-        <StudioButton selected className={sizeClass("44px")}><Check size={16} /> Selected</StudioButton>
+        <StudioButton selected heightVariant="44"><Check size={16} /> Selected</StudioButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px selected</span>
-        <StudioButton selected className={sizeClass("28px")}><Check size={14} /> Selected</StudioButton>
+        <StudioButton selected heightVariant="28"><Check size={14} /> Selected</StudioButton>
       </div>
     </Family>
     <Family
@@ -66,19 +66,19 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <div className="vt-confirmed-variant">
         <span>44px default</span>
-        <StudioSplitLeftButton icon={<Sparkles size={18} />} className={sizeClass("44px")}>Generate</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Sparkles size={18} />} heightVariant="44">Generate</StudioSplitLeftButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px compact</span>
-        <StudioSplitLeftButton icon={<Sparkles size={14} />} className={sizeClass("28px")}>Generate</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Sparkles size={14} />} heightVariant="28">Generate</StudioSplitLeftButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>44px selected</span>
-        <StudioSplitLeftButton icon={<Settings2 size={18} />} selected className={sizeClass("44px")}>Workspace Action</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Settings2 size={18} />} selected heightVariant="44">Workspace Action</StudioSplitLeftButton>
       </div>
       <div className="vt-confirmed-variant">
         <span>28px selected</span>
-        <StudioSplitLeftButton icon={<Settings2 size={14} />} selected className={sizeClass("28px")}>Workspace Action</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<Settings2 size={14} />} selected heightVariant="28">Workspace Action</StudioSplitLeftButton>
       </div>
     </Family>
   </div>
