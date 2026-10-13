@@ -552,7 +552,7 @@ const CreatorVaultOS: React.FC = () => {
   { key: "size", label: "SIZE" },
   { key: "lifecycle", label: "LIFECYCLE" },
   ...customFields.map((field) => ({
-   key: `custom_${field.id}`,
+   key: `custom_${field.id}` as keyof (typeof finderListRows)[number],
    label: field.name.toUpperCase(),
   })),
   { key: "updated", label: "UPDATED" },
