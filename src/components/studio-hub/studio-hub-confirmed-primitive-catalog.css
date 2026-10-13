@@ -144,23 +144,24 @@
 /* Confirmed plain input/textarea typography and paired stroke behavior.
    Standard and compact text follow the actual 44px / 28px size contracts. */
 .vt-confirmed-catalog .vt-confirmed-simple-input.is-input-44 {
-  --vt-input-font-size: 32px;
+  --vt-input-font-size: 38px;
   height: 44px;
   min-height: 44px;
-  font-size: 32px !important;
+  font-size: 38px !important;
   font-weight: 1000 !important;
   line-height: .86;
-  letter-spacing: -.035em;
+  letter-spacing: -.02em;
   text-transform: uppercase;
   color: var(--pair-a, #36e0f6);
   -webkit-text-stroke: 1px var(--pair-a, #36e0f6);
   border-color: var(--pair-a, #36e0f6);
+  border-radius: 6px;
 }
 .vt-confirmed-catalog .vt-confirmed-simple-input.is-input-28 {
   --vt-input-font-size: 14px;
   height: 28px;
   min-height: 28px;
-  font-size: 14px !important;
+  font-size: 24px !important;
   font-weight: 1000 !important;
   line-height: .9;
   letter-spacing: -.025em;
@@ -168,6 +169,7 @@
   color: var(--pair-a, #36e0f6);
   -webkit-text-stroke: .5px var(--pair-a, #36e0f6);
   border-color: var(--pair-a, #36e0f6);
+  border-radius: 4px;
 }
 .vt-confirmed-catalog .vt-confirmed-simple-input:focus,
 .vt-confirmed-catalog .vt-confirmed-simple-input:focus-visible,
@@ -181,7 +183,7 @@
   box-shadow: 0 0 0 2px var(--pair-b, #ff7f6b) !important;
 }
 .vt-confirmed-catalog .vt-confirmed-simple-textarea {
-  font-size: 14px !important;
+  font-size: 24px !important;
   font-weight: 1000 !important;
   line-height: 1.05;
   letter-spacing: -.02em;
@@ -189,6 +191,7 @@
   color: var(--pair-a, #36e0f6);
   -webkit-text-stroke: .5px var(--pair-a, #36e0f6);
   border-color: var(--pair-a, #36e0f6);
+  border-radius: 6px;
 }
 .vt-confirmed-family:has(.vt-studio-legend-multi) { overflow: visible; position: relative; }
 .vt-confirmed-variants:has(.vt-studio-legend-multi) { overflow: visible; }
