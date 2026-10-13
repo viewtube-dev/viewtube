@@ -59,7 +59,7 @@ import {
   StudioInput,
   StudioNumberInput,
   StudioSelect,
-  StudioSplitLeftButton,
+  SplitLeftButton,
   StudioTextArea,
 } from "../studio-ui"
 import {
@@ -873,16 +873,16 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                 />
                 <SubToolboxGrid minItemWidth="compact" density="dense" aria-label="Video Director mode">
                   {MODE_OPTIONS.map(({ id, label, icon: Icon }) => (
-                    <StudioSplitLeftButton
+                    <SplitLeftButton
                       key={id}
-                      sizeVariant="standard"
+                      level="l1"
                       selected={project.mode === id}
                       aria-pressed={project.mode === id}
                       icon={<Icon size={17} />}
                       onClick={() => mutateProject((draft) => { draft.mode = id })}
                     >
                       {label}
-                    </StudioSplitLeftButton>
+                    </SplitLeftButton>
                   ))}
                 </SubToolboxGrid>
                 <SubToolboxActions columns={2}>
