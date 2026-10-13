@@ -266,11 +266,12 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
               <LegendMultiDropdown
                 level="l1"
                 label={<><ListVideo size={13} aria-hidden="true" /> CHANNEL PLAYLISTS</>}
-                value={playlistLoading ? "Loading playlists…" : selectedPlaylistIds.length ? `${selectedPlaylistIds.length} selected` : "Select playlists"}
+                value={playlistLoading ? "LOADING PLAYLISTS" : selectedPlaylistIds.length ? "PLAYLISTS SELECTED" : "SELECT PLAYLISTS"}
                 options={playlistLoading ? [] : playlistOptions}
                 multiSelect
                 selectedValues={selectedPlaylistIds}
                 onValueChange={onPlaylistToggle}
+                onClear={() => selectedPlaylistIds.forEach(onPlaylistToggle)}
                 ariaLabel="Channel playlists"
               />
             ) : (
