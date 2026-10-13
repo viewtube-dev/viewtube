@@ -276,3 +276,28 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 - Dropdown labels now use centered flex alignment and zero vertical padding/margins to prevent the label sitting above the trigger. Text uses closer tracking, and chevrons are scaled proportionally: 18px at 28px control height and 28px at 44px.
 - The size-default styling has been compacted to a two-column, 9px microtype layout where that settings group is rendered. No browser screenshot, build, or automated test has been run; final visual balance and integration still require verification.
 
+## Canonical Studio Controls — Defaults and Primitive Coverage · 2026-10-13
+
+**Integration authority:** `master/consolidated-feature-integration`. PR #78 is the controlling implementation for text-field ownership and selection-control anatomy. This section documents that merged contract; it must not reintroduce conflicting native-input implementations or duplicate SubToolbox visual primitives.
+
+### Ownership and exports
+- Canonical Studio field implementation and visual styling: `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`.
+- `StudioInput`, `StudioSearchInput`, `StudioNumberInput`, `StudioTextArea`, `StudioSelect`, `StudioFloatingLabelInput`, and `StudioFloatingLabelTextArea` use the Studio Controls field contract.
+- The Component Library must render the actual production exports. Compatibility names may remain as API adapters, but must not own an independent visual implementation.
+- Keep the confirmed 44px/28px switch, choice, and word-toggle primitives from PR #78. Do not replace these button-based components with browser-native checkbox/radio inputs.
+
+### Canonical field defaults
+- Standard: 44px control height and 38px text.
+- Compact: 28px control height and 24px text.
+- Keep the text sizes stable when focused. Focus may change border/fill/indicator treatment, but must not change typography or layout geometry.
+- The TypeScript size contract and production CSS must remain aligned. CSS declarations and token cascade in `studio-control-system.css` are the final rendering authority.
+
+### Selection-control stroke contract — follow PR #78
+- **Word toggles:** 3px solid black border at 44px and 2px solid black border at 28px.
+- **Switches, radio buttons, and checkboxes:** remain borderless as specified in PR #78. Preserve their own component anatomy and keyboard-visible focus indicators; do not apply a generic black border to these families.
+- The 44px switch and choice components are `SubToolbox44Switch` / `SubToolbox44Choice`; the word toggle is `SubToolbox44WordToggle`. Their styles are shared production styles, not ad hoc CSS on the catalog specimens.
+- Any family-level variant must preserve the owning component's anatomy, pair-color behavior, checked/on state, disabled state, and focus visibility.
+
+### Catalog and certification checklist
+For each displayed family, identify the real export, TSX source, CSS owner, supported sizes/variants, default and checked/on states, keyboard/focus behavior, disabled behavior, and color-pair handling. Confirm the rendered catalog uses the production primitive rather than a lookalike. Build/typecheck and browser visual checks remain required before declaring the work certified; source-only checks are not visual certification.
+
