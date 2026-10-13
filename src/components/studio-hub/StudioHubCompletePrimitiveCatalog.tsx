@@ -188,22 +188,42 @@ const CONTROL_SKINS = [
   { skin: "black-indicator", label: "4 · BLACK INDICATOR" },
   { skin: "white-indicator", label: "5 · WHITE INDICATOR" },
 ] as const;
-const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> = ({ name, paletteIndex }) => {
-  const [switchValues, setSwitchValues] = useState([false, false, false, false]);
-  const [choiceValues, setChoiceValues] = useState([false, false, false, false, false, false, false, false]);
-  const [wordValues, setWordValues] = useState([false, false, false, false]);
+const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> = ({ name }) => {
+  const [switchValues, setSwitchValues] = useState(Array(8).fill(false) as boolean[]);
+  const [choiceValues, setChoiceValues] = useState(Array(12).fill(false) as boolean[]);
+  const [wordValues, setWordValues] = useState(Array(8).fill(false) as boolean[]);
   const colorStyle = { "--vt-control-base": "#20f13e", "--vt-control-indicator": "#f276c5", "--vt-control-ink": "#0f172a" } as React.CSSProperties;
-  if (name === "44px Switches") return <div className="vt-catalog-canonical-controls" style={colorStyle}>
-    {CONTROL_SKINS.map((variant, i) => <div className="vt-catalog-control-variant" key={variant.skin}><small>{variant.label}</small><div className="vt-catalog-switch-shapes"><SubToolbox44Switch shape="round" skin={variant.skin} checked={switchValues[i]} aria-label={`Round switch ${variant.label}`} onClick={() => setSwitchValues(v => v.map((n,j) => i === j ? !n : n))} /><SubToolbox44Switch shape="rect" skin={variant.skin} checked={switchValues[i+0]} aria-label={`Rectangular switch ${variant.label}`} onClick={() => setSwitchValues(v => v.map((n,j) => i === j ? !n : n))} /></div></div>)}
+  const toggleValue = (values: boolean[], setValues: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, next?: boolean) =>
+    setValues(current => current.map((value, i) => i === index ? (next ?? !value) : value));
+  if (name === "44px Switches") return <div className="vt-catalog-control-family" style={colorStyle}>
+    {(["round", "rect"] as const).map((shape, shapeIndex) => <div className="vt-catalog-control-row" key={shape}>
+      <small className="vt-catalog-control-row-label">{shape === "round" ? "ROUND SWITCH" : "RECTANGULAR SWITCH"}</small>
+      <div className="vt-catalog-control-variants">
+        {CONTROL_SKINS.map((variant, i) => { const index = shapeIndex * 4 + i; return <div className="vt-catalog-control-variant" key={variant.skin}>
+          <small>{variant.label}</small><SubToolbox44Switch shape={shape} skin={variant.skin} checked={switchValues[index]} aria-label={`${shape} switch ${variant.label}`} onClick={() => toggleValue(switchValues,setSwitchValues,index)} />
+        </div>; })}
+      </div>
+    </div>)}
   </div>;
-  if (name === "44px Radio + Checkbox") return <div className="vt-catalog-canonical-controls" style={colorStyle}>
-    {CONTROL_SKINS.map((variant, i) => <div className="vt-catalog-control-variant" key={`radio-${variant.skin}`}><small>RADIO · {variant.label}</small><SubToolbox44Choice kind="radio" skin={variant.skin} checked={choiceValues[i]} aria-label={`Radio ${variant.label}`} onClick={() => setChoiceValues(v => v.map((n,j) => j < 4 ? i === j : n))} /></div>)}
-    {CONTROL_SKINS.map((variant, i) => <div className="vt-catalog-control-variant" key={`check-${variant.skin}`}><small>CHECKBOX · {variant.label}</small><SubToolbox44Choice kind="checkbox" shape="rect" skin={variant.skin} checked={choiceValues[i+4]} aria-label={`Checkbox ${variant.label}`} onClick={() => setChoiceValues(v => v.map((n,j) => j === i+4 ? !n : n))} /></div>)}
+  if (name === "44px Radio + Checkbox") return <div className="vt-catalog-control-family" style={colorStyle}>
+    {([{kind:"radio" as const,label:"CIRCULAR RADIO",mark:"check" as const},{kind:"checkbox" as const,label:"CHECKBOX · CHECKMARK",mark:"check" as const},{kind:"checkbox" as const,label:"CHECKBOX · WIDE X",mark:"xwide" as const}]).map((component, rowIndex) => <div className="vt-catalog-control-row" key={component.label}>
+      <small className="vt-catalog-control-row-label">{component.label}</small>
+      <div className="vt-catalog-control-variants">
+        {CONTROL_SKINS.map((variant, i) => { const index = rowIndex * 4 + i; return <div className="vt-catalog-control-variant" key={variant.skin}>
+          <small>{variant.label}</small><SubToolbox44Choice kind={component.kind} mark={component.mark} shape={component.kind === "radio" ? "round" : "rect"} skin={variant.skin} checked={choiceValues[index]} aria-label={`${component.label} ${variant.label}`} onClick={() => toggleValue(choiceValues,setChoiceValues,index)} />
+        </div>; })}
+      </div>
+    </div>)}
   </div>;
   return <div className="vt-catalog-word-toggle-families" style={colorStyle}>
-    {[{size:"44" as const,label:"44PX DEFAULT"},{size:"28" as const,label:"28PX COMPACT"}].map((variant, i) => <div className="vt-catalog-word-toggle-size" key={variant.size}><small>{variant.label}</small><div className="vt-catalog-canonical-controls">
-      {CONTROL_SKINS.map((skin, j) => <div className="vt-catalog-control-variant" key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={variant.size} skin={skin.skin} value={wordValues[i*2+j]} onValueChange={next => setWordValues(v => v.map((n,k) => k === i*2+j ? next : n))} /></div>)}
-    </div></div>)}
+    {[{size:"44" as const,label:"44PX DEFAULT"},{size:"28" as const,label:"28PX COMPACT"}].map((variant, i) => <div className="vt-catalog-control-row" key={variant.size}>
+      <small className="vt-catalog-control-row-label">{variant.label}</small>
+      <div className="vt-catalog-control-variants">
+        {CONTROL_SKINS.map((skin, j) => { const index = i * 4 + j; return <div className="vt-catalog-control-variant" key={skin.skin}>
+          <small>{skin.label}</small><SubToolbox44WordToggle size={variant.size} skin={skin.skin} value={wordValues[index]} onValueChange={next => toggleValue(wordValues,setWordValues,index,next)} />
+        </div>; })}
+      </div>
+    </div>)}
   </div>;
 };
 
