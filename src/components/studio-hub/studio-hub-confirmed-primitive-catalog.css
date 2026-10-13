@@ -99,3 +99,43 @@
 .vt-confirmed-control-variants>div{display:grid;justify-items:center;align-content:start;gap:5px;min-width:0}
 .vt-confirmed-control-variants small{font-size:7px;font-weight:900;text-align:center;line-height:1.1}
 @media(max-width:560px){.vt-confirmed-defaults-combined .vt-confirmed-global-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vt-confirmed-control-variants{gap:3px}.vt-confirmed-control-variants small{font-size:6px}.vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle button{padding-inline:5px;font-size:12px}}
+
+/* Prevent canonical switch/radio/checkbox specimens from colliding.
+   Each specimen gets its own intrinsic footprint; rows wrap when four do not fit. */
+.vt-confirmed-control-variants {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px 12px;
+  min-width: 0;
+}
+.vt-confirmed-control-variants > div {
+  display: grid;
+  flex: 0 1 78px;
+  width: 78px;
+  min-width: 0;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+}
+.vt-confirmed-control-variants > div > small {
+  display: block;
+  width: 100%;
+  min-height: 2.2em;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.vt-confirmed-control-variants :is(button, input, [role="switch"], [role="radio"], [role="checkbox"]) {
+  position: relative;
+  flex-shrink: 0;
+  max-width: 100%;
+  margin: 0;
+}
+.vt-confirmed-control-row { min-width: 0; }
+.vt-confirmed-control-row > strong { display: block; }
+@media (max-width: 560px) {
+  .vt-confirmed-control-variants { gap: 9px 8px; }
+  .vt-confirmed-control-variants > div { flex-basis: 70px; width: 70px; }
+  .vt-confirmed-control-variants small { font-size: 7px; }
+}
