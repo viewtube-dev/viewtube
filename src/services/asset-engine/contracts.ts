@@ -205,6 +205,22 @@ export type ContentBuildEventType =
  | "experiment.started"
  | "experiment.completed"
  | "learning.candidate.created"
+ | "metadata.created"
+ | "metadata.refined"
+ | "metadata.replaced"
+ | "metadata.selected"
+ | "package.created"
+ | "package.versioned"
+ | "package.published"
+ | "published.metadata.changed"
+ | "thumbnail.changed"
+ | "title.changed"
+ | "description.changed"
+ | "tags.changed"
+ | "publishing.settings.changed"
+ | "analysis.completed"
+ | "observation.recorded"
+ | "knowledge.promoted"
 
 export interface ContentBuildEvent<T = Record<string, unknown>> {
  id: string

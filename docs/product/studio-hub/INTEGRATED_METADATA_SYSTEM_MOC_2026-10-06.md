@@ -6,6 +6,8 @@
 
 ## Architecture
 
+- [Metadata Project Updates — Phase 2 History Foundation](./METADATA_PROJECT_UPDATES_PHASE_2_2026-10-13.md)
+
 - [History + Analytics](./METADATA_INTELLIGENCE_HISTORY_AND_ANALYTICS_ARCHITECTURE_2026-10-06.md)
 - [Backend + AI Brain](./INTEGRATED_METADATA_BACKEND_AI_BRAIN_PLAN_2026-10-06.md)
 - [Execution Plan](./INTEGRATED_METADATA_SYSTEM_EXECUTION_PLAN_2026-10-06.md)
