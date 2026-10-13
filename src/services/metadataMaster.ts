@@ -69,6 +69,7 @@ export interface MetadataMasterPackage {
   videoId?: string | null
   goal: MetadataMasterGoal
   intensity: MetadataMasterIntensity
+  style: MetadataMasterStyle
   title: string
   description: string
   tags: string[]
@@ -92,6 +93,7 @@ export interface MetadataMasterSet {
   id: string
   label: string
   strategy: "search" | "curiosity" | "authority" | "channel-fit" | "custom"
+  style: MetadataMasterStyle
   package: MetadataMasterPackage
   score: number
 }
@@ -108,6 +110,7 @@ export const createEmptyMetadataMasterPackage = (
   videoId: input.videoId ?? null,
   goal: input.goal ?? "reach",
   intensity: input.intensity ?? "balanced",
+  style: input.style ?? "channel-native",
   title: input.title ?? "",
   description: input.description ?? "",
   tags: input.tags ?? [],
@@ -132,6 +135,7 @@ export const packageFromSeoResult = (
   input: {
     goal: MetadataMasterGoal
     intensity: MetadataMasterIntensity
+    style?: MetadataMasterStyle
     projectId?: string | null
     contentBuildId?: string | null
     videoId?: string | null
@@ -144,6 +148,7 @@ export const packageFromSeoResult = (
     videoId: input.videoId,
     goal: input.goal,
     intensity: input.intensity,
+    style: input.style ?? "channel-native",
     title: first?.title ?? "",
     description: result.description ?? "",
     tags: (result.tags ?? "").split(",").map(value => value.trim()).filter(Boolean),
@@ -240,6 +245,7 @@ export const packageToHandoffPayload = (pkg: MetadataMasterPackage) => ({
   schedule: pkg.schedule,
   goal: pkg.goal,
   intensity: pkg.intensity,
+  style: pkg.style,
   score: pkg.score,
   warnings: pkg.warnings,
   lockedSlots: pkg.lockedSlots,
@@ -251,10 +257,12 @@ export const createMetadataMasterSet = (
   pkg: MetadataMasterPackage,
   label: string,
   strategy: MetadataMasterSet["strategy"],
+  style: MetadataMasterStyle = pkg.style,
 ): MetadataMasterSet => ({
   id: crypto.randomUUID(),
   label,
   strategy,
-  package: pkg,
+  style,
+  package: { ...pkg, style },
   score: pkg.score,
 })
