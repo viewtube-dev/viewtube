@@ -13,10 +13,10 @@ export {
 export type { PrimaryButtonProps, SubToolboxButtonProps } from "../components/subtoolbox/SubToolboxPrimitives"
 export { SubToolboxInput20, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea } from "../components/subtoolbox/SubToolboxPrimitives"
 export {
+  STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
   StudioIconButton,
   StudioInput,
-  StudioLabeledDropdown,
   StudioLegendMultiDropdown,
   StudioFloatingLabelInput,
   StudioFloatingLabelTextArea,
@@ -28,9 +28,8 @@ export {
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
-  StudioLabeledDropdownProps,
   StudioLegendMultiDropdownProps,
-  StudioLabeledDropdownOption,
+  StudioLegendMultiDropdownOption,
   StudioFloatingLabelInputProps,
   StudioFloatingLabelTextAreaProps,
   StudioControlTone,

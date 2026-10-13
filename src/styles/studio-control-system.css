@@ -557,56 +557,6 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
 }
 
 
-/* Primitive 139 — labeled dropdown, with the same uppercase Studio text contract. */
-.vt-studio-labeled-dropdown {
-  display: grid;
-  width: 100%;
-  min-width: 0;
-  gap: 4px;
-  color: #000;
-}
-.vt-studio-labeled-dropdown-label {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 10px;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-  text-overflow: ellipsis;
-}
-.vt-studio-labeled-dropdown > select[data-vt-studio-control="true"] {
-  box-sizing: border-box;
-  width: 100%;
-  height: 44px;
-  min-height: 44px;
-  border: 3px solid #000;
-  border-radius: 8px;
-  background-color: color-mix(in srgb, var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6)) 50%, #fff);
-  box-shadow: 4px 4px 0 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 65%, transparent);
-  color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 14px;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.025em;
-  text-transform: uppercase;
-}
-.vt-studio-labeled-dropdown.is-compact > select[data-vt-studio-control="true"] {
-  height: 28px;
-  min-height: 28px;
-  --vt-studio-control-height: 28px;
-  --vt-studio-control-shadow: 3px;
-  padding: 0 30px 0 8px;
-  border-radius: 6px;
-  box-shadow: 3px 3px 0 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 65%, transparent);
-  font-size: 12px;
-}
-
-
 /* Canonical 09/V2 Legend Multi dropdown, translated into the shared Studio token contract. */
 .vt-studio-legend-multi {
   --vt-legend-a: var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6));
@@ -687,3 +637,54 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
 .vt-studio-legend-clear:disabled { cursor: not-allowed; opacity: .45; }
 @media (max-width: 767px) { .vt-studio-legend-menu { max-height: min(280px, 45vh); } }
 @media (prefers-reduced-motion: reduce) { .vt-studio-legend-menu, .vt-studio-legend-chevron { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+
+/* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
+:root {
+  --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-font-size: 32px; --vt-studio-44-font-weight: 1000;
+  --vt-studio-44-button-shadow-x: 3px; --vt-studio-44-button-shadow-y: 3px;
+  --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-font-size: 14px; --vt-studio-28-font-weight: 1000;
+  --vt-studio-28-button-shadow-x: 1.5px; --vt-studio-28-button-shadow-y: 1.5px;
+}
+/* Button-only shadows; fields remain flat. */
+button[data-vt-studio-control][data-height-variant="44"] {
+ height:var(--vt-studio-44-height); min-height:var(--vt-studio-44-height); border-width:var(--vt-studio-44-stroke);
+ font-size:var(--vt-studio-44-font-size)!important; font-weight:var(--vt-studio-44-font-weight)!important;
+ line-height:.86; letter-spacing:-.035em; padding:0 10px;
+ box-shadow:var(--vt-studio-44-button-shadow-x) var(--vt-studio-44-button-shadow-y) 0 0 var(--vt-studio-control-shadow-color);
+}
+button[data-vt-studio-control][data-height-variant="28"] {
+ height:var(--vt-studio-28-height); min-height:var(--vt-studio-28-height); border-width:var(--vt-studio-28-stroke);
+ font-size:var(--vt-studio-28-font-size)!important; font-weight:var(--vt-studio-28-font-weight)!important;
+ line-height:.86; letter-spacing:-.02em; padding:0 8px; border-radius:6px;
+ box-shadow:var(--vt-studio-28-button-shadow-x) var(--vt-studio-28-button-shadow-y) 0 0 var(--vt-studio-control-shadow-color);
+}
+button[data-vt-studio-control][data-height-variant="44"][data-selected="true"],
+button[data-vt-studio-control][data-height-variant="28"][data-selected="true"] {
+ background:var(--vt-studio-control-secondary);
+ --vt-studio-control-shadow-color:color-mix(in srgb,var(--vt-studio-control-accent) 65%,transparent);
+}
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { background:var(--vt-studio-control-secondary); border-width:var(--vt-studio-control-stroke); }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background:var(--vt-studio-control-secondary)!important; }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background:var(--vt-studio-control-accent)!important; }
+button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"][data-selected="true"] { border-width:var(--vt-studio-28-stroke); }
+[data-vt-studio-control]:is(input,textarea,select)[data-size="standard"] { border-width:var(--vt-studio-44-stroke); font-size:var(--vt-studio-44-font-size); font-weight:var(--vt-studio-44-font-weight); box-shadow:none!important; }
+[data-vt-studio-control]:is(input,textarea,select)[data-size="compact"] { border-width:var(--vt-studio-28-stroke); font-size:var(--vt-studio-28-font-size); font-weight:var(--vt-studio-28-font-weight); box-shadow:none!important; }
+/* V2 Legend Multi: trigger, menu rows and action share the closed trigger's size-specific text/stroke. */
+.vt-studio-legend-multi { --vt-legend-stroke:var(--vt-studio-44-stroke); --vt-legend-height:var(--vt-studio-44-height); --vt-legend-shadow-offset:0px; }
+.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height:var(--vt-studio-28-height); --vt-legend-stroke:var(--vt-studio-28-stroke); --vt-legend-shadow-offset:0px; --vt-legend-radius:6px; }
+.vt-studio-legend-trigger { border-width:var(--vt-legend-stroke); font-size:var(--vt-studio-44-font-size); font-weight:var(--vt-studio-44-font-weight); line-height:.86; letter-spacing:-.035em; box-shadow:none; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size:var(--vt-studio-28-font-size); font-weight:var(--vt-studio-28-font-weight); box-shadow:none; }
+.vt-studio-legend-menu { border-width:var(--vt-legend-stroke); box-shadow:none; padding:3px; }
+.vt-studio-legend-option { min-height:var(--vt-legend-height); padding:2px 8px; border:var(--vt-legend-stroke) solid #000; border-radius:var(--vt-legend-radius); margin-bottom:3px; font-size:var(--vt-studio-44-font-size); font-weight:var(--vt-studio-44-font-weight); line-height:.86; letter-spacing:-.035em; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option { font-size:var(--vt-studio-28-font-size); font-weight:var(--vt-studio-28-font-weight); line-height:.9; letter-spacing:-.02em; }
+.vt-studio-legend-option:last-child { border-bottom:var(--vt-legend-stroke) solid #000; margin-bottom:0; }
+.vt-studio-legend-clear { min-height:var(--vt-legend-height); border-width:var(--vt-legend-stroke); border-radius:var(--vt-legend-radius); font-size:inherit; font-weight:1000; letter-spacing:inherit; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear { font-size:var(--vt-studio-28-font-size); }
+/* Compact catalog specimens sit two across on wider screens. */
+.vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,
+.vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media(max-width:560px) {
+ .vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,
+ .vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:minmax(0,1fr); }
+}
