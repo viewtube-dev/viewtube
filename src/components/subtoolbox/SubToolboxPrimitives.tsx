@@ -1038,7 +1038,7 @@ export const SubToolboxSplitField: React.FC<SubToolboxSplitFieldProps> = ({
 }) => (
   <div className={classes("vt-subtoolbox-split-field", `is-${variant}`, Boolean(actionIcon) && "has-action", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
     {variant === "search" && icon ? <span className="vt-subtoolbox-split-field-rail" aria-hidden="true">{icon}</span> : null}
-    <input ref={inputRef} {...inputProps} />
+    <SubToolboxInput20 ref={inputRef} {...inputProps} />
     {actionIcon ? <button type="button" className="vt-subtoolbox-split-field-action" aria-label={actionLabel} onClick={onAction}>{actionIcon}</button> : null}
   </div>
 )
@@ -1247,7 +1247,8 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
       </div>
       {editing ? (
         <>
-          <input
+          <SubToolboxInput20
+            controlSize="micro"
             autoFocus
             aria-label="New tag"
             value={draft}
@@ -1469,7 +1470,7 @@ export const SubToolboxColorPicker: React.FC<SubToolboxColorPickerProps> = ({ le
       <span className="vt-subtoolbox-color-swatch" style={{ background: value }} aria-hidden="true" />
       <strong>{label}</strong>
     </label>
-    <input className="vt-subtoolbox-color-value" value={value.toUpperCase()} aria-label="Color hex value" onChange={(event) => onValueChange?.(event.target.value)} />
+    <SubToolboxInput20 controlSize="micro" className="vt-subtoolbox-color-value" value={value.toUpperCase()} aria-label="Color hex value" onChange={(event) => onValueChange?.(event.target.value)} />
   </div>
 )
 
@@ -2025,7 +2026,7 @@ export const SubToolboxCommandPalette: React.FC<SubToolboxCommandPaletteProps> =
   const matches = items.filter((item) => !normalized || `${String(item.label)} ${item.keywords ?? ""}`.toLowerCase().includes(normalized))
   return (
     <div className={classes("vt-subtoolbox-command", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
-      <input value={query} placeholder={placeholder} aria-label={placeholder} onChange={(event) => setQuery(event.target.value)} />
+      <SubToolboxInput20 controlSize="micro" value={query} placeholder={placeholder} aria-label={placeholder} onChange={(event) => setQuery(event.target.value)} />
       <div role="listbox" aria-label="Commands">{matches.map((item) => <button type="button" role="option" key={item.id} onClick={() => onSelect?.(item.id)}>{item.label}</button>)}</div>
     </div>
   )
@@ -2232,7 +2233,8 @@ export const SubToolboxVaultAsset: React.FC<SubToolboxVaultAssetProps> = ({
       <header>
         <button type="button" className="select" aria-pressed={selected} aria-label="Select asset" onClick={() => onSelectedChange?.(!selected)}><span /></button>
         {editableTitle ? (
-          <input
+          <SubToolboxInput20
+            controlSize="micro"
             className="vt-subtoolbox-vault-title-input"
             value={titleDraft}
             aria-label={titleAriaLabel ?? `Edit title ${String(title)}`}
