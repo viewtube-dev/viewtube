@@ -2,7 +2,7 @@ import React from "react"
 import { ListVideo, LockKeyhole, Tags } from "lucide-react"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxGrid } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxTopTitleDropdown } from "../subtoolbox/SubToolboxPrimitives"
+import { LegendMultiDropdown, SubToolboxTopTitleDropdown } from "../subtoolbox/SubToolboxPrimitives"
 
 export interface PublishingControlOption {
   value: string
@@ -28,7 +28,7 @@ export const PublishingControls: React.FC<PublishingControlsProps> = ({
 }) => {
   const privacyLabel = privacyOptions.find(option => option.value === privacy)?.label || "Select Privacy"
   const categoryLabel = categoryOptions.find(option => option.value === category)?.label || "Select Category"
-  const playlistLabel = playlistIds.length === 0 ? "No playlists" : `${playlistIds.length} selected`
+  const playlistLabel = playlistIds.length === 0 ? "SELECT PLAYLISTS" : "PLAYLISTS SELECTED"
 
   return (
     <SubToolbox title="PUBLISHING CONTROLS" icon={<Tags size={20} strokeWidth={3} />} collapsible isOpenInitial>
@@ -49,7 +49,7 @@ export const PublishingControls: React.FC<PublishingControlsProps> = ({
           onValueChange={onCategoryChange}
           ariaLabel="Category"
         />
-        <SubToolboxTopTitleDropdown
+        <LegendMultiDropdown
           level="l1"
           label={<><ListVideo size={13} aria-hidden="true" /> PLAYLISTS</>}
           value={playlistLabel}
@@ -57,6 +57,7 @@ export const PublishingControls: React.FC<PublishingControlsProps> = ({
           multiSelect
           selectedValues={playlistIds}
           onValueChange={onPlaylistToggle}
+          onClear={() => playlistIds.forEach(onPlaylistToggle)}
           ariaLabel="Channel playlists"
         />
       </SubToolboxGrid>

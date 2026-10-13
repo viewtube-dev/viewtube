@@ -6,8 +6,9 @@ import { setContentBuildSelection } from "../../services/asset-engine/ContentBui
 import { buildProjectManifest, getManifestPackageForProject, type ProjectManifestation } from "./projectManifestation"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { SplitLeftButton } from "../subtoolbox/SubToolboxSplitPrimitives"
 import {
+  LegendMultiDropdown,
   SubToolboxButton,
   SubToolboxMediaPoster,
   SubToolboxStatusBadge,
@@ -102,30 +103,30 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
         <SubToolboxGrid minItemWidth="wide" density="dense">
           <SubToolboxSection label="PROJECT LOAD / SWAP">
             <div className="vt-project-manifestation-load">
-              <SubToolboxSplitDropdown
-                level="l2"
-                value={selectedProjectId}
+              <LegendMultiDropdown
+                level="l1"
+                label="SELECT PROJECT"
+                value={selectedProject?.name || "NO PROJECT SELECTED"}
                 options={projects.length
-                  ? projects.map(project => ({ value: project.id, label: project.name, icon: <FolderOpen size={15} /> }))
-                  : [{ value: "", label: "NO PROJECTS AVAILABLE", icon: <FolderOpen size={15} />, disabled: true }]}
-                onChange={value => {
+                  ? projects.map(project => ({ value: project.id, label: project.name }))
+                  : [{ value: "", label: "NO PROJECTS AVAILABLE", disabled: true }]}
+                onValueChange={value => {
                   setSelectedProjectId(value)
                   setSwapState("idle")
                 }}
-                icon={<FolderOpen size={16} />}
                 ariaLabel="Choose project to load or swap"
                 className="vt-project-manifestation-project-dropdown"
               />
               <SubToolboxActions columns={3} forceRow className="vt-project-manifestation-actions">
-                <SubToolboxButton level="l2" icon={<FolderOpen size={15} />} onClick={loadSelected} disabled={!selectedProject}>
+                <SplitLeftButton level="l1" icon={<FolderOpen size={22} />} onClick={loadSelected} disabled={!selectedProject}>
                   LOAD
-                </SubToolboxButton>
-                <SubToolboxButton level="l2" tone="accent" icon={<ArrowLeftRight size={15} />} onClick={loadSelected} disabled={!selectedProject}>
+                </SplitLeftButton>
+                <SplitLeftButton level="l1" tone="accent" icon={<ArrowLeftRight size={22} />} onClick={loadSelected} disabled={!selectedProject}>
                   SWAP IN
-                </SubToolboxButton>
-                <SubToolboxButton level="l2" tone="neutral" icon={<RefreshCw size={15} />} onClick={refreshPackages}>
+                </SplitLeftButton>
+                <SplitLeftButton level="l1" tone="neutral" icon={<RefreshCw size={22} />} onClick={refreshPackages}>
                   REFRESH
-                </SubToolboxButton>
+                </SplitLeftButton>
               </SubToolboxActions>
             </div>
           </SubToolboxSection>

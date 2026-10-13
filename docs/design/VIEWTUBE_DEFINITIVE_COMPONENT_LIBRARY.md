@@ -35,6 +35,14 @@ These defaults are sourced from the component-level `l1` DNA and `VIEWTUBE_TYPOG
 6. Any proposed default change must first be implemented in the canonical token/primitive source and covered by a governance test, then reflected in this library.
 7. Keep the frozen hardcoded certification baseline separate and clearly labeled as reference-only. Never copy its hardcoded anatomy into production components.
 
+## Canonical workflow primitives
+
+- `PrimaryButton` is the direct primitive for generation-scope selection, optimization intensity, and downstream-package inclusion choices.
+- `SplitLeftButton` is the direct primitive for Project Manifestation's Load / Swap In / Refresh actions and metadata Generate / Refine / Analyze actions.
+- `LegendMultiDropdown` is the 09 V2 floating-legend multi-select variant. It uses the shared dropdown state/portal implementation, canonical control tokens, selected-count feedback, checkbox state, scrollable options, and Clear All behavior.
+- Channel playlist selection and the Project Load / Swap project selector must use `LegendMultiDropdown`; do not add local one-off dropdown anatomy for those workflows.
+- The definitive catalog renders `Legend Multi Dropdown` from the exported production primitive. Its preview is not a separately hardcoded imitation.
+
 ## Ownership
 
 - Token authority: `src/components/subtoolbox/tokens.ts`

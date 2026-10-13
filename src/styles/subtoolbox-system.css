@@ -2521,6 +2521,55 @@
   outline:none;
 }
 .vt-subtoolbox-top-title-dropdown-panel>button:disabled{opacity:.45;cursor:not-allowed}
+
+/* 09 V2 Legend Multi: floating legend, centered value, count badge. */
+.vt-legend-multi-dropdown{padding-top:14px;z-index:1}
+.vt-legend-multi-dropdown.is-open{z-index:180}
+.vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-trigger{
+  position:relative;height:var(--vt-component-height);min-height:var(--vt-component-height);
+  display:flex;align-items:center;justify-content:center;padding:0 40px 0 12px;
+  overflow:visible;background:var(--pair-a,#36e0f6);
+}
+.vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-title{
+  position:absolute;left:.75em;top:-14px;transform:none;z-index:2;
+  display:inline-flex;width:max-content;max-width:calc(100% - 24px);height:auto;
+  padding:.3em .65em;border:var(--vt-component-stroke) solid #000;border-radius:6px;
+  background:var(--pair-b,#ff7f6b);font-size:11px;font-weight:900;letter-spacing:.14em;
+  line-height:1;color:#000;-webkit-text-stroke:0;
+}
+.vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-value{
+  width:100%;display:flex;align-items:center;justify-content:center;padding:0;min-width:0;
+}
+.vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-value>b{
+  width:100%;padding:0 26px;text-align:center;font-size:var(--vt-component-font-size);letter-spacing:-.035em;
+}
+.vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-chevron{
+  position:absolute;right:2px;top:50%;height:100%;width:36px;transform:translateY(-50%);
+  font-size:28px;
+}
+.vt-legend-multi-dropdown.is-open .vt-subtoolbox-top-title-dropdown-chevron{transform:translateY(-50%) rotate(180deg)}
+.vt-legend-multi-dropdown .vt-legend-multi-dropdown-count{
+  position:absolute;right:36px;top:50%;transform:translateY(-50%);z-index:1;
+  display:none;place-items:center;min-width:1.35em;height:1.35em;padding:0 .35em;
+  border:2px solid #000;border-radius:6px;background:#000;color:#fff;
+  font-size:14px;font-weight:900;letter-spacing:0;line-height:1;-webkit-text-stroke:0;
+}
+.vt-legend-multi-dropdown .vt-legend-multi-dropdown-count.is-active{display:inline-grid}
+.vt-legend-multi-dropdown-panel{
+  border-top:var(--vt-component-stroke) solid #000!important;border-radius:var(--vt-component-radius)!important;
+  max-height:min(55vh,420px);overflow-y:auto;
+}
+.vt-legend-multi-dropdown-panel>button{min-height:var(--vt-component-height);padding:0 10px;}
+.vt-legend-multi-dropdown-panel .vt-subtoolbox-top-title-dropdown-check{
+  border-radius:4px;background:var(--pair-a,#36e0f6);
+}
+.vt-legend-multi-dropdown-panel>.vt-legend-multi-dropdown-clear{
+  min-height:var(--vt-component-height);justify-content:center;background:var(--pair-b,#ff7f6b);
+  border-top:var(--vt-component-stroke) solid #000;border-bottom:0;text-align:center;
+}
+.vt-legend-multi-dropdown-panel>.vt-legend-multi-dropdown-clear:disabled{opacity:.4;cursor:not-allowed}
+
+
 .vt-subtoolbox-top-title-dropdown-check{
   width:calc(var(--vt-component-height)*.5);
   height:calc(var(--vt-component-height)*.5);
