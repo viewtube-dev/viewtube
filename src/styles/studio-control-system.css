@@ -964,3 +964,17 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
   line-height: .9;
   letter-spacing: -.02em;
 }
+
+/* The choice family is not a raised action button; keep its square/track geometry flat. */
+button.vt-studio-44-switch,
+button.vt-studio-44-choice {
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+button.vt-studio-44-switch:hover:not(:disabled),
+button.vt-studio-44-choice:hover:not(:disabled),
+button.vt-studio-44-switch:active:not(:disabled),
+button.vt-studio-44-choice:active:not(:disabled) {
+  transform: none !important;
+  box-shadow: none !important;
+}
