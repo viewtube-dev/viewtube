@@ -13,6 +13,7 @@ export type VaultWorkspaceModuleId =
  | "import-tags"
  | "text-editor"
  | "asset-library"
+ | "compare-versions"
  | "task-center"
  | "inspector"
 
@@ -21,6 +22,7 @@ export const DEFAULT_VAULT_MODULE_ORDER: VaultWorkspaceModuleId[] = [
  "import-tags",
  "text-editor",
  "asset-library",
+ "compare-versions",
  "task-center",
  "inspector",
 ]
