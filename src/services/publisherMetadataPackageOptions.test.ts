@@ -3,6 +3,7 @@ import { getContentBuild, resetContentBuildRepositoryForTests } from "./asset-en
 import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
 import { findVideoPackageByProject, resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
 import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
+import { createVersionedAsset } from "./assetEngine"
 import { listPublisherMetadataPackageOptions, selectPublisherMetadataPackageOption } from "./publisherMetadataPackageOptions"
 
 const project = {
@@ -82,6 +83,52 @@ describe("Publisher metadata package options", () => {
     expect(restoredBuild.selections.description).toBe(blankOption.payload.descriptionAssetId)
     expect(restoredBuild.selections.tags).toBe(blankOption.payload.tagsAssetId)
     expect(blank.packageOptionAssetId).not.toBe(current.packageOptionAssetId)
+  })
+
+  it("restores a canonical thumbnail asset and preview when a saved option is selected", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const thumbnail = createVersionedAsset({
+      sourceToolId: "video-publisher",
+      sourceKind: "studio-tool",
+      payloadKind: "thumbnail",
+      name: "Saved thumbnail",
+      summary: "Publisher thumbnail round-trip",
+      kind: "image",
+      url: "data:image/png;base64,dGVzdA==",
+      mimeType: "image/png",
+      slot: "thumbnail",
+      context: {
+        contentBuildId: project.contentBuildId,
+        projectId: project.id,
+        projectName: project.name,
+        stage: "metadata",
+      },
+    }).asset
+    const saved = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Thumbnail option",
+      description: "A thumbnail must survive selection",
+      tags: "thumbnail",
+      thumbnailAssetId: thumbnail.id,
+    }, {
+      mode: "option",
+      thumbnailAsset: {
+        id: thumbnail.id,
+        name: thumbnail.name,
+        url: thumbnail.url,
+        previewUrl: thumbnail.previewUrl,
+        mimeType: thumbnail.mimeType,
+      },
+    })
+
+    const option = listPublisherMetadataPackageOptions(project.contentBuildId)
+      .find(item => item.assetId === saved.packageOptionAssetId)!
+    expect(option.payload.thumbnailAssetId).toBe(thumbnail.id)
+    expect(option.payload.thumbnailPreviewUrl).toBe("data:image/png;base64,dGVzdA==")
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, saved.packageOptionAssetId)
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)!
+    expect(videoPackage.packaging.selectedThumbnailId).toBe(`publisher:thumbnail:${thumbnail.id}`)
+    expect(videoPackage.packaging.thumbnailVariants.some(item => item.vaultAssetId === thumbnail.id)).toBe(true)
   })
 
   it("selects an alternative without creating a new Project or ContentBuild", () => {
