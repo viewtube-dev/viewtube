@@ -2563,6 +2563,12 @@
 .vt-legend-multi-dropdown-panel .vt-subtoolbox-top-title-dropdown-check{
   border-radius:4px;background:var(--pair-a,#36e0f6);
 }
+.vt-legend-multi-dropdown-panel>.vt-legend-multi-dropdown-clear{
+  min-height:var(--vt-component-height);justify-content:center;background:var(--pair-b,#ff7f6b);
+  border-top:var(--vt-component-stroke) solid #000;border-bottom:0;text-align:center;
+}
+.vt-legend-multi-dropdown-panel>.vt-legend-multi-dropdown-clear:disabled{opacity:.4;cursor:not-allowed}
+
 
 .vt-subtoolbox-top-title-dropdown-check{
   width:calc(var(--vt-component-height)*.5);
