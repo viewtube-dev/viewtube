@@ -117,13 +117,6 @@ export interface CanonicalMetadataSectionsProps {
   educationNotesDisabled?: boolean
 }
 
-type MetadataActionStyle = React.CSSProperties & { "--pair-a": string; "--pair-b": string }
-const ACTION_STYLES: Record<"generate" | "refine" | "analyze", MetadataActionStyle> = {
-  generate: { "--pair-a": "#57F15C", "--pair-b": "#CCFF00" },
-  refine: { "--pair-a": "#FFDA47", "--pair-b": "#FFA85C" },
-  analyze: { "--pair-a": "#45C8E9", "--pair-b": "#36E0F6" },
-}
-
 const FieldActions: React.FC<{
   field: string
   onGenerate?: (field: string) => void
