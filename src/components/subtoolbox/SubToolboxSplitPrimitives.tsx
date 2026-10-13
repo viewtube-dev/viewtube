@@ -12,6 +12,7 @@ export interface SubToolboxSplitButtonProps extends React.ButtonHTMLAttributes<H
   icon: React.ReactNode
   children: React.ReactNode
   selected?: boolean
+  tone?: "accent" | "neutral" | "danger" | "warning" | "success"
   level?: ToolboxControlLevel
 }
 export type SplitLeftButtonProps = SubToolboxSplitButtonProps
@@ -20,6 +21,7 @@ export const SplitLeftButton: React.FC<SubToolboxSplitButtonProps> = ({
   icon,
   children,
   selected = false,
+  tone = "accent",
   level,
   className,
   style,
@@ -29,7 +31,7 @@ export const SplitLeftButton: React.FC<SubToolboxSplitButtonProps> = ({
   <button
     type={type}
     data-vt-control-level={level}
-    className={classes("vt-subtoolbox-split-button", level && "has-component-level", selected && "is-selected", className)}
+    className={classes("vt-subtoolbox-split-button", `is-${tone}`, level && "has-component-level", selected && "is-selected", className)}
     aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
     style={{
       ...style,
