@@ -106,12 +106,12 @@ const studioSkinClass = (skin: StudioControlSkin) => ({
   "white-indicator": "is-white-indicator",
 }[skin]);
 export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
-  <button type={type} role="switch" aria-checked={checked} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
 );
 export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
 export const StudioChoice: React.FC<StudioChoiceProps> = ({ kind, mark = "check", skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
-  <button type={type} role={kind} aria-checked={checked} className={studioClasses("vt-studio-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, studioSkinClass(skin), checked && "is-on", className)} {...props}>
+  <button type={type} role={kind} aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, studioSkinClass(skin), checked && "is-on", className)} {...props}>
     {kind === "radio" ? <span className="vt-studio-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
   </button>
 );
@@ -148,7 +148,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
     return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
   }, [value, words, size]);
-  return <div ref={rootRef} role="group" data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} {...props}>
+  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} {...props}>
     <span className="vt-studio-44-word-handle" aria-hidden="true" style={{ left: handle.left, width: handle.width }} data-active={value ? "true" : "false"} />
     {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
   </div>;
