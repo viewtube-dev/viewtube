@@ -673,6 +673,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
   }, [open, recalcMenuRect])
 
   const mergedStyle = withComponentLevelStyle(level, style)
+  const isLegendMultiDropdown = className?.split(/\\s+/).includes("vt-legend-multi-dropdown") ?? false
 
   return (
     <div
@@ -693,6 +694,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
         <span className="vt-subtoolbox-top-title-dropdown-title">{label}</span>
         <span className="vt-subtoolbox-top-title-dropdown-value">
           <b>{value}</b>
+          {isLegendMultiDropdown && multiSelect ? <span className={classes("vt-legend-multi-dropdown-count", selectedValues.length > 0 && "is-active")} aria-label={`${selectedValues.length} selected`}>{selectedValues.length}</span> : null}
           <span className="vt-subtoolbox-top-title-dropdown-chevron" aria-hidden="true">⌄</span>
         </span>
       </button>
@@ -740,6 +742,12 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
     </div>
   )
 }
+
+/** 09 V2 Legend Multi dropdown. Uses the shared accessible menu/state engine and canonical control tokens. */
+export const LegendMultiDropdown: React.FC<SubToolboxTopTitleDropdownProps> = ({ className, ...props }) => (
+  <SubToolboxTopTitleDropdown {...props} className={classes("vt-legend-multi-dropdown", className)} />
+)
+LegendMultiDropdown.displayName = "LegendMultiDropdown"
 
 export interface SubToolboxVideoSelectorOption {
   value: string
