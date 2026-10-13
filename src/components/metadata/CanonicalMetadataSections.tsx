@@ -140,7 +140,7 @@ const FieldActions: React.FC<{
       {onGenerate ? <SplitLeftButton level="l1" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SplitLeftButton> : <span />}
       {onRefine ? <SplitLeftButton level="l1" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SplitLeftButton> : <span />}
       {onAnalyze ? <SplitLeftButton level="l1" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SplitLeftButton> : <span />}
-    </SubToolboxActions>
+    </div>
   )
 }
 
@@ -212,7 +212,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
           value={aiFeaturesEnabled ? "on" : "off"}
           aria-label="AI Features"
           className="vt-ai-features-header-toggle"
-          options={[{ value: "on", label: "AI FEATURES" }, { value: "off", label: "OFF" }]}
+          options={[{ value: "on", label: "AI ON" }, { value: "off", label: "AI OFF" }]}
           onValueChange={value => onAiFeaturesEnabledChange(value === "on")}
         />
       ) : null}
