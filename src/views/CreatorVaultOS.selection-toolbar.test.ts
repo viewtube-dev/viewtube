@@ -43,5 +43,8 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('aria-label="Quick add selected assets to collection"')
   expect(source).toContain('onClick={addSelectionToCollection}')
   expect(source).toContain('compareVersionsRef.current?.scrollIntoView')
+  expect(source).toContain('aria-label="Quick add selected assets to collection"')
+  expect(source).toContain('onClick={addSelectionToCollection}')
+  expect(source).toContain('compareVersionsRef.current?.scrollIntoView')
  })
 })
