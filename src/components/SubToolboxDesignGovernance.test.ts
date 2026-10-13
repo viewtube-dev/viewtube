@@ -380,6 +380,8 @@ describe("subtoolbox design governance", () => {
   const splitCss = source("src/styles/subtoolbox-split-primitives.css")
   const videoDirector = source("src/views/VideoDirector.tsx")
   const certification = source("src/studio-ui/StudioHubCertification.tsx")
+  const videoDirector = source("src/views/VideoDirector.tsx")
+  const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
   expect(palette).toContain("export const VT_SPECTRUM_PALETTE_06 = [")
   expect(palette).toContain("header: getPaletteColor(index)")
