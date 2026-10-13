@@ -2133,7 +2133,7 @@ const CreatorVaultOS: React.FC = () => {
            label="Compare"
            iconName="layers"
            tone="purple"
-           onClick={() => assetLibraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+           onClick={() => compareVersionsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
            disabled={selectedAssetIds.length !== 2}
           />
           <SubToolboxInnerActionButton label="Metadata" iconName="database" tone="cyan" onClick={openSelectedInspector} disabled={!selectedAsset} />
