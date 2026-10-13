@@ -42,16 +42,19 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
 }) => {
   const [packages, setPackages] = useState(() => listVideoPackages())
   const [selectedProjectId, setSelectedProjectId] = useState(() => resolveSelectedProjectId(activeProjectId, projects, ""))
-  const previousActiveProjectId = useRef(activeProjectId)
+  const lastAppliedActiveProjectId = useRef<string | null | undefined>(undefined)
   const [swapState, setSwapState] = useState<"idle" | "saving" | "saved">("idle")
 
   useEffect(() => {
-    const activeProjectChanged = previousActiveProjectId.current !== activeProjectId
-    previousActiveProjectId.current = activeProjectId
     setSelectedProjectId(current => {
-      if (activeProjectChanged && activeProjectId && projects.some(project => project.id === activeProjectId)) {
-        return activeProjectId
+      const activeProjectExists = Boolean(
+        activeProjectId && projects.some(project => project.id === activeProjectId),
+      )
+      if (activeProjectExists && lastAppliedActiveProjectId.current !== activeProjectId) {
+        lastAppliedActiveProjectId.current = activeProjectId
+        return activeProjectId as string
       }
+      if (!activeProjectId) lastAppliedActiveProjectId.current = activeProjectId
       return resolveSelectedProjectId(null, projects, current)
     })
   }, [activeProjectId, projects])
