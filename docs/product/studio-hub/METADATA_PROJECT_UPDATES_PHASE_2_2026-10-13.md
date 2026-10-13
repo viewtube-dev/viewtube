@@ -41,6 +41,8 @@ The canonical event owner is `src/services/asset-engine/ContentBuildRepository.t
 - Added `src/services/metadataHistory.ts`, which projects package versions, field-level changes, live metadata changes, publication events, and analytics associations into the canonical ContentBuild event stream.
 - Added focused contract tests in `src/services/metadataHistory.test.ts`.
 - Connected Metadata Master generation, default candidate selection, explicit candidate selection, and save operations to the history service when a canonical `contentBuildId` is available.
+- Connected successful Video Manager metadata saves to canonical history for known ContentBuild/video bindings; visibility and playlist changes are recorded separately from field edits.
+- Connected successful, remotely verified publishing transactions to a `package.published` event that references the approved snapshot and canonical Video Package. Repeated completion calls do not duplicate the publication event.
 - Kept the existing package draft persistence intact; it is not used as the history ledger.
 
 ## Event coverage
@@ -98,12 +100,12 @@ Build these only from canonical Studio Controls / toolbox primitives and existin
 1. **Canonical event schema** — done in this branch; validate compatibility against ContentBuild event consumers.
 2. **Package/field event builder** — done in this branch; deterministic diff and event projection covered by focused tests.
 3. **Metadata Master recording hooks** — done in this branch for generated candidates, selected candidate, and package saves when ContentBuild scope is available.
-4. **Live Manager change integration** — next: call the same recorder from the explicit live-save transaction, only after the actual write succeeds; never record a proposed edit as a published change.
-5. **Publication transaction integration** — next: associate the approved package/version with the canonical successful publication event/receipt.
-6. **History query/projection** — validate filters for one project, ContentBuild, video, package, event type, and time range.
-7. **Dedicated History / Analytics location** — render the detailed timeline and outcome analysis outside the Video Manager editing workspace.
-8. **Quiet-mode UI settings** — keep operational detail collapsed by default and allow users to choose what to show during editing.
-9. **Tests and gates** — focused service tests, ContentBuild integration tests, event idempotency checks, full test suite, typecheck, production build, source governance, and browser checks.
+4. **Live Manager change integration** — implemented for successful core metadata writes and visibility/playlist settings when the published video already has a canonical ContentBuild binding. Thumbnail asset lineage and unbound legacy videos remain follow-up cases.
+5. **Publication transaction integration** — implemented: a verified successful publish writes `package.published` against the canonical ContentBuild event stream and references the approved snapshot/package; repeated completion is idempotent.
+6. **History query/projection** — implemented as a ContentBuild event filter; validate project, ContentBuild, video, package, event-type, and time-range filtering as the UI query contract is added.
+7. **Dedicated History / Analytics location** — next: render the detailed timeline and outcome analysis outside the Video Manager editing workspace.
+8. **Quiet-mode UI settings** — next: keep operational detail collapsed by default and allow users to choose what to show during editing.
+9. **Tests and gates** — focused service tests and publication idempotency coverage added; full suite, typecheck, production build, source governance, and browser checks are running or remain to be verified.
 
 ## Acceptance criteria
 
