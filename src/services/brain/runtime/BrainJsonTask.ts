@@ -13,6 +13,7 @@ export interface BrainJsonTaskRequest {
   visibleContext?: Record<string, unknown> | null
   artifactRefs?: string[]
   gateway?: BrainModelGateway
+  requireProjectAccess?: boolean
 }
 
 export interface BrainJsonTaskResult<T = unknown> {
@@ -90,6 +91,13 @@ export const runBrainJsonTask = async <T = unknown>(
     artifactRefs: request.artifactRefs,
     assetType: "project-strategy",
   })
+
+  if (!context.controls.enabled) {
+    throw new Error("AI Brain is disabled for this channel; structured Brain generation was not started.")
+  }
+  if (request.requireProjectAccess && !context.controls.allowProjects) {
+    throw new Error("AI Brain project access is disabled for this channel; Project Strategy generation was not started.")
+  }
 
   const contextBlock = boundedJson(compactContext(context))
   const systemInstruction = [
