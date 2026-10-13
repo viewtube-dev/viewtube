@@ -4,6 +4,8 @@ import {
   createEmptyMetadataMasterPackage,
   createMetadataMasterSet,
   finalizeMetadataMasterPackage,
+  getMetadataCandidateStyles,
+  metadataStrategyForStyle,
   packageToHandoffPayload,
   scoreMetadataMasterPackage,
 } from "./metadataMaster"
@@ -15,6 +17,8 @@ describe("Metadata Master package system", () => {
     expect(set).toMatchObject({ style: "channel-native", package: { goal: "subscribers", intensity: "aggressive", style: "channel-native" } })
     expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("subscriber conversion")
     expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("channel-native")
+    expect(getMetadataCandidateStyles("story-led")).toEqual(["story-led", "search-first", "curiosity-led", "authority-led", "channel-native"])
+    expect(metadataStrategyForStyle("curiosity-led")).toBe("curiosity")
   })
 
   it("scores a complete package and surfaces duplicate-tag hygiene", () => {
