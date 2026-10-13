@@ -2427,10 +2427,35 @@ export interface SubToolbox44WordToggleProps extends React.HTMLAttributes<HTMLDi
   size?: "44" | "28";
   skin?: SubToolboxControlSkin;
 }
-export const SubToolbox44WordToggle: React.FC<SubToolbox44WordToggleProps> = ({ value, onValueChange, words = ["OFF", "ON"], size = "44", skin = "solid", className, ...props }) => (
-  <div role="group" data-vt-word-toggle-size={size} className={classes("vt-subtoolbox-44-word-toggle", `is-size-${size}`, controlSkinClass(skin), className)} {...props}>
-    <span className="vt-subtoolbox-44-word-handle" aria-hidden="true" data-active={value ? "true" : "false"} />
-    {words.map((word, index) => <button key={index} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
-  </div>
-);
+export const SubToolbox44WordToggle: React.FC<SubToolbox44WordToggleProps> = ({ value, onValueChange, words = ["OFF", "ON"], size = "44", skin = "solid", className, ...props }) => {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
+  React.useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      const root = rootRef.current;
+      const target = wordRefs.current[value ? 1 : 0];
+      if (!root || !target) return;
+      const rootRect = root.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const inset = size === "28" ? 2 : 2.75;
+      const next = { left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 12) };
+      setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
+    };
+    const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
+    schedule();
+    const root = rootRef.current;
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
+    if (root) observer?.observe(root);
+    wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
+    if (typeof window !== "undefined") window.addEventListener("resize", schedule);
+    if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
+    return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
+  }, [value, words, size]);
+  return <div ref={rootRef} role="group" data-vt-word-toggle-size={size} className={classes("vt-subtoolbox-44-word-toggle", `is-size-${size}`, controlSkinClass(skin), className)} {...props}>
+    <span className="vt-subtoolbox-44-word-handle" aria-hidden="true" style={{ left: handle.left, width: handle.width }} data-active={value ? "true" : "false"} />
+    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+  </div>;
+};
 
