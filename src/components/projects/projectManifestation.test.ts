@@ -3,6 +3,7 @@ import {
   buildProjectManifest,
   getManifestThumbnailUrl,
   getManifestPackageForProject,
+  resolveSelectedProjectId,
   type ProjectManifestationPackageLike,
 } from "./projectManifestation"
 
@@ -79,5 +80,35 @@ describe("Project Manifestation", () => {
   it("finds a package only inside the same project/content-build scope", () => {
     expect(getManifestPackageForProject([pkg], "project-1", "build-1")).toBe(pkg)
     expect(getManifestPackageForProject([pkg], "project-1", "other-build")).toBeNull()
+  })
+})
+
+
+describe("Project Manifestation selection synchronization", () => {
+  it("follows a newly active project when the parent changes the active project", () => {
+    const projects = [
+      { ...project, id: "project-1" },
+      { ...project, id: "project-2", name: "Second Video" },
+    ]
+
+    expect(resolveSelectedProjectId("project-2", projects as never, "project-1")).toBe("project-2")
+  })
+
+  it("preserves a valid manual selection when there is no active-project update", () => {
+    const projects = [
+      { ...project, id: "project-1" },
+      { ...project, id: "project-2", name: "Second Video" },
+    ]
+
+    expect(resolveSelectedProjectId(null, projects as never, "project-2")).toBe("project-2")
+  })
+
+  it("falls back to the first project when the current selection no longer exists", () => {
+    const projects = [
+      { ...project, id: "project-1" },
+      { ...project, id: "project-2", name: "Second Video" },
+    ]
+
+    expect(resolveSelectedProjectId(null, projects as never, "removed-project")).toBe("project-1")
   })
 })
