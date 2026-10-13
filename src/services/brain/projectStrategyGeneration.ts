@@ -57,6 +57,7 @@ export const generateProjectStrategyWithBrain = async (
     project,
     contentBuildId: project.contentBuildId || null,
     surface: request.surface || "project",
+    requireProjectAccess: true,
     artifactRefs: request.artifactRefs,
     userText,
     systemInstruction: [
