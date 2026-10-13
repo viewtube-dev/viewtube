@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-complete-primitive-catalog.css"
 
@@ -101,11 +101,13 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
       </div> : null}
     </div>
   }
-  if (name === "Text Input" || name === "20 Simple Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
+  if (name === "Text Input") return <StudioInput className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Studio text input" placeholder="TYPE HERE" />
+   if (name === "20 Simple Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Legacy SubToolbox simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
   if (name === "Number Field" || name === "20 Plain Input") return <SubToolboxInput20 className={`vt-catalog-field is-${level}`} style={style} type={name === "Number Field" ? "number" : "text"} defaultValue={name === "Number Field" ? "25" : "TEXT INPUT"} />
-  if (name === "Textarea" || name === "21 Simple Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
-  if (name === "137 Floating Label Input") return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="TEXT INPUT" />
-  if (name === "138 Floating Label Text Area") return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
+  if (name === "Textarea") return <StudioTextArea className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} aria-label="Studio text area" defaultValue="DESCRIPTION" />
+   if (name === "21 Simple Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
+  if (name === "137 Floating Label Input") return <StudioFloatingLabelInput level={level} overlayLabel="TITLE" aria-label="Studio floating-label input" defaultValue="TEXT INPUT" />
+  if (name === "138 Floating Label Text Area") return <StudioFloatingLabelTextArea level={level} overlayLabel="DESCRIPTION" aria-label="Studio floating-label text area" defaultValue="TEXT AREA" />
   if (name === "Split Search") return <div className={`vt-catalog-split-field is-search has-action is-${level}`} style={style}><span><Search /></span><SubToolboxInput20 controlSize="compact" aria-label="Search" placeholder="SEARCH" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} /><button type="button" className="field-action" aria-label="Clear search" onClick={() => setSearchQuery("")}><X /></button></div>
   if (name === "Input Action") return <div className={`vt-catalog-split-field is-action has-action is-${level}`} style={style}><SubToolboxInput20 controlSize="compact" aria-label="Add item" placeholder="ADD ITEM" value={actionDraft} onChange={e => setActionDraft(e.target.value)} /><button type="button" className="field-action" aria-label="Add item" onClick={() => setActionDraft("")}><Plus /></button></div>
   if (name === "Stepper") return <div className={`vt-catalog-stepper is-${level}`} style={style}><button type="button" aria-label="Decrease" onClick={() => setValue(v => v - 1)}><Minus /></button><strong>{value}</strong><button type="button" aria-label="Increase" onClick={() => setValue(v => v + 1)}><Plus /></button></div>

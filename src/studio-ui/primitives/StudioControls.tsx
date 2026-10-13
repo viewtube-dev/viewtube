@@ -10,8 +10,8 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = { fontFamily: "Inter, ui-sans-se
 
 /** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
 export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
-  standard: { height: 44, stroke: 3, radius: 8, fontSize: 32, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
-  compact: { height: 28, stroke: 2, radius: 5, fontSize: 14, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 18, iconStroke: 1.65 },
+  standard: { height: 44, stroke: 3, radius: 8, fontSize: 38, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
+  compact: { height: 28, stroke: 2, radius: 5, fontSize: 24, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 18, iconStroke: 1.65 },
 } as const
 
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
