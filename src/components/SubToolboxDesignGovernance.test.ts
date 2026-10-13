@@ -482,4 +482,23 @@ describe("subtoolbox design governance", () => {
   expect(systemCss).toContain(".vt-toolbox-header-help:focus-visible")
  })
 
+
+ it("exposes canonical PrimaryButton and SplitLeftButton and floating-label field styling", () => {
+  const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+  const splitPrimitives = source("src/components/subtoolbox/SubToolboxSplitPrimitives.tsx")
+  const systemCss = source("src/styles/subtoolbox-system.css")
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
+
+  expect(primitives).toContain("export const PrimaryButton")
+  expect(primitives).toContain("export const SubToolboxButton")
+  expect(splitPrimitives).toContain("export const SplitLeftButton")
+  expect(splitPrimitives).toContain("export const SubToolboxSplitButton")
+  expect(primitives).toContain("is-floating-label")
+  expect(systemCss).toContain(".vt-subtoolbox-labeled-field.is-floating-label")
+  expect(systemCss).toContain("left:14px")
+  expect(systemCss).not.toContain("padding-right:52%!important")
+  expect(catalog).toContain("PrimaryButton")
+  expect(catalog).toContain("SplitLeftButton")
+ })
+
 })
