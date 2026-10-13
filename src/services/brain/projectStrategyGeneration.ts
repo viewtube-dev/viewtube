@@ -6,6 +6,7 @@ import {
 } from "./projectStrategyPrompt"
 import { runBrainJsonTask } from "./runtime/BrainRuntime"
 import { prepareGenerationRequest, recordToolReceipt } from "../asset-engine/GenerationWorkflow"
+import { readBrainUserControls } from "./BrainUserControls"
 
 export interface ProjectStrategyGenerationRequest {
   project: Project
@@ -25,6 +26,13 @@ export const generateProjectStrategyWithBrain = async (
   request: ProjectStrategyGenerationRequest,
 ): Promise<ProjectStrategyGenerationResult> => {
   const project = request.project
+  const controls = readBrainUserControls(request.channelId)
+  if (!controls.enabled) {
+    throw new Error("AI Brain is disabled for this channel; Project Strategy generation was not started.")
+  }
+  if (!controls.allowProjects) {
+    throw new Error("AI Brain project access is disabled for this channel; Project Strategy generation was not started.")
+  }
   const promptInput: ProjectStrategyPromptInput = {
     concept: project.concept || project.name,
     niche: request.niche,
