@@ -267,3 +267,46 @@ button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-l
   align-self: stretch;
   line-height: 1;
 }
+
+
+/* Canonical production buttons: both default to the ViewTube 44px control height. */
+button[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+}
+button[data-vt-studio-control="true"][data-size="standard"] {
+  height: 44px;
+  min-height: 44px;
+}
+button[data-vt-studio-control="true"][data-split-left="true"] {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail] {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 100%;
+  min-width: 44px;
+  border-right: 3px solid #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail] svg {
+  width: 55%;
+  height: 55%;
+  stroke-width: 3;
+}
+button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-label] {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  line-height: .86;
+  white-space: normal;
+}
