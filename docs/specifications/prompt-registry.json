@@ -1007,7 +1007,15 @@
       "id": "generateProjectStrategy",
       "source": "src/services/gemini.ts",
       "kind": "generation_function",
-      "status": "legacy_reachability_and_migration_required"
+      "family": "project-strategy",
+      "promptModule": "src/services/brain/projectStrategyPrompt.ts",
+      "promptVersion": "project-strategy-v1",
+      "outputContract": "ProjectPlan (topic, description, length, audience, vision, hook)",
+      "runtimeService": "src/services/brain/projectStrategyGeneration.ts",
+      "runtimeSeam": "src/services/brain/runtime/BrainJsonTask.ts",
+      "contextResolver": "src/services/brain/CreatorContextResolver.ts",
+      "status": "versioned_prompt_validated_and_routed_through_brain_json_gateway",
+      "notes": "Both ProjectStudio callers use the canonical Brain JSON task seam, resolve bounded Creator Context, and retain prompt/project/ContentBuild provenance in the returned runtime envelope. The legacy Gemini function remains for compatibility and should be deprecated only after a full reachability audit."
     },
     {
       "id": "generateStoryboard",
