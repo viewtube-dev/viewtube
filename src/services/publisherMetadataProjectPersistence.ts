@@ -93,7 +93,7 @@ const createMetadataAsset = (
 
 export const savePublisherMetadataToProject = (
   project: Project,
-  channelId: string,
+  channelId: string | null | undefined,
   state: PublisherMetadataState,
   input: {
     mode?: PublisherMetadataSaveMode
@@ -106,10 +106,9 @@ export const savePublisherMetadataToProject = (
   if (!project.contentBuildId) {
     throw new Error("Publisher cannot save metadata until the Project has a canonical ContentBuild.")
   }
-  if (!channelId.trim()) {
-    throw new Error("Publisher cannot save metadata without a connected channel.")
-  }
-
+  // Saving project work and metadata is available before account connection.
+  // ensureVideoPackageForProject assigns a local-draft scope when channelId is absent.
+  const packageChannelId = channelId?.trim() || null
   const sourceToolId = input.sourceToolId || "video-publisher"
   const mode = input.mode || "current"
   const now = input.now || nowIso()
@@ -118,7 +117,7 @@ export const savePublisherMetadataToProject = (
     throw new Error(`Publisher cannot save metadata: unknown ContentBuild ${project.contentBuildId}.`)
   }
 
-  let videoPackage = ensureVideoPackageForProject(project, { channelId, sourceToolId })
+  let videoPackage = ensureVideoPackageForProject(project, { channelId: packageChannelId, sourceToolId })
   if (!videoPackage) throw new Error("Publisher could not resolve the Project Video Package.")
 
   const previous = {
