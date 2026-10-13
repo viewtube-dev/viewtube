@@ -36,14 +36,10 @@ export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
 export {
   SubToolboxKpiCard,
-  SplitLeftButton,
-  SubToolboxSplitButton,
   SubToolboxSplitDropdown,
 } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 export type {
   SubToolboxKpiCardProps,
-  SplitLeftButtonProps,
-  SubToolboxSplitButtonProps,
   SubToolboxSplitDropdownOption,
   SubToolboxSplitDropdownProps,
 } from "../components/subtoolbox/SubToolboxSplitPrimitives"
