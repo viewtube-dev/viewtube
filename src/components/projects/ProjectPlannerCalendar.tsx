@@ -171,6 +171,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         .vt-project-planner-calendar__project-open { min-width: 0; flex: 1; text-align: left; }
         .vt-project-planner-calendar__quick-add { display: grid; gap: 7px; padding: 10px; border-top: 2px solid #000; }
         .vt-project-planner-calendar__empty { padding: 18px 10px; text-align: center; color: #666; font: 800 9px/1.4 var(--vt-font, inherit); text-transform: uppercase; }
+        .vt-project-planner-calendar__feedback { padding:8px 9px; border:2px solid #000; background:color-mix(in srgb,var(--pair-b,#36E0F6) 28%,#fff); color:#000; font:900 10px/1.35 var(--vt-font,inherit); overflow-wrap:anywhere; }
         .vt-project-planner-calendar__footer { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 9px 10px; border-top: 2px solid #000; background: #fff; font: 900 9px/1.3 var(--vt-font, inherit); text-transform: uppercase; }
         @media (max-width: 760px) {
           .vt-project-planner-calendar__body { grid-template-columns: minmax(0, 1fr); }
@@ -235,7 +236,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
               <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>
                 {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}
               </SubToolboxButton>
-              {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__project-meta">{scheduleFeedback}</div> : null}
+              {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__feedback">{scheduleFeedback}</div> : null}
               {!projects.length ? <SubToolboxStatusBadge level="l1">No projects available to schedule</SubToolboxStatusBadge> : null}
             </div>
           </section>
@@ -246,7 +247,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             <div className="vt-project-planner-calendar__month-title" aria-live="polite">{monthLabel(cursor)}</div>
             <SubToolboxIconButton level="l1" icon={<ChevronRight size={15} />} ariaLabel="Next month" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() + 1, 1))} />
           </div>
-          <SubToolboxButton tone="neutral" onClick={() => { const today = startOfDay(new Date()); setCursor(today); setSelectedDate(dateKey(today)) }}>Today</SubToolboxButton>
+          <SubToolboxButton tone="neutral" onClick={() => { const today = startOfDay(new Date()); setCursor(today); setSelectedDate(dateKey(today)); setScheduleFeedback("") }}>Today</SubToolboxButton>
         </header>
 
         <div className="vt-project-planner-calendar__body">
