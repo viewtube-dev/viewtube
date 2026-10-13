@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { createContentBuild, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
-import { beginPublishTransaction, completePublishStep, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
+import { createContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
+import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 
@@ -42,4 +42,34 @@ describe("PublishTransaction",()=>{
   expect(second.approvedSnapshotId).not.toBe(first.approvedSnapshotId)
   expect(second.assetLock.finalRenderAssetId).toBe("render-v2")
  })
+ it("records the published package against the canonical ContentBuild stream exactly once",()=>{
+  const transaction=beginPublishTransaction(projection())
+  completePublishStep({
+   transactionId:transaction.id,
+   step:"upload-video",
+   youtubeVideoId:"youtube-published",
+   youtubeBinding:{status:"uploaded"},
+  })
+  completePublishStep({
+   transactionId:transaction.id,
+   step:"verify-remote-state",
+   youtubeVideoId:"youtube-published",
+   youtubeBinding:{status:"published",publishedAt:"2026-10-13T22:00:00.000Z"},
+  })
+  completePublishTransaction(transaction.id)
+  completePublishTransaction(transaction.id)
+  const publishedEvents=listContentBuildEvents("cb-publish").filter(event=>event.eventType==="package.published")
+  expect(publishedEvents).toHaveLength(1)
+  expect(publishedEvents[0]).toMatchObject({
+   entityType:"publishing-package",
+   entityId:"vp-a",
+   metadata:expect.objectContaining({
+    videoPackageId:"vp-a",
+    approvedSnapshotId:transaction.approvedSnapshotId,
+    youtubeVideoId:"youtube-published",
+    publicationState:"published",
+   }),
+  })
+ })
+
 })
