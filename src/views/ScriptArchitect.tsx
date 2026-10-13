@@ -34,6 +34,7 @@ import {
 } from "../features/script-architect/useScriptArchitect"
 import { getToolboxPaletteColors } from "../styles/toolboxPalette"
 import type { FragmentMode } from "../types"
+import { StudioSplitLeftButton } from "../studio-ui"
 
 interface ScriptArchitectProps {
  embedded?: boolean
@@ -576,13 +577,13 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
         </div>
        )}
 
-       <SubToolboxGridActionButton
-        label={architect.loading ? "Assembling…" : "Assemble Script"}
-        iconName="sparkles"
-        tone="pink"
+       <StudioSplitLeftButton
+        icon={<Sparkles size={20} aria-hidden="true" />}
+        tone="accent"
+        loading={architect.loading}
         disabled={architect.loading}
         onClick={architect.assemble}
-       />
+       >{architect.loading ? "Assembling…" : "Assemble Script"}</StudioSplitLeftButton>
 
        {architect.error && (
         <div role="alert" className="border-[3px] border-black bg-[#FF9CD8] rounded-xl p-3 text-[10px] font-black uppercase">
