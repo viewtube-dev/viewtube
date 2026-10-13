@@ -3,7 +3,7 @@
 **Status:** Generated production-registry reference  
 **Audited main:** `988098840050f4b658a266e1a7d6fe1c4d939c81`  
 **Source:** `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx` → `STUDIO_HUB_COMPONENT_FAMILIES`  
-**Count:** 62 registered component families
+**Count:** 66 registered component families
 
 Do not hand-add a family here without adding it to the production registry. The Component Library also contains migration/certification examples outside this base family array; keep those separately identified rather than silently inflating this registry count.
 
@@ -18,8 +18,10 @@ Do not hand-add a family here without adding it to the production registry. The 
 9. Dropdown
 10. Select Menu
 11. Context Menu
-12. Text Input
-13. Textarea
+12. Text Input (Primitive 20)
+13. Textarea (Primitive 21)
+14. Floating Label Input (Primitive 137)
+15. Floating Label Textarea (Primitive 138)
 14. Split Search
 15. Number Field
 16. Input Action
