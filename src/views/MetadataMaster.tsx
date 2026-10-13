@@ -66,13 +66,13 @@ interface MetadataMasterProps {
   paletteIndex?: number
 }
 
-const GOALS: Array<{ value: MetadataMasterGoal; label: string }> = [
-  { value: "reach", label: "Reach" },
-  { value: "search", label: "Search" },
-  { value: "browse", label: "Browse" },
-  { value: "subscribers", label: "Subscribers" },
-  { value: "revenue", label: "Revenue" },
-  { value: "authority", label: "Authority" },
+const GOALS: Array<{ value: MetadataMasterGoal; label: string; description: string }> = [
+  { value: "reach", label: "Reach", description: "Broaden qualified exposure without overstating the video's promise." },
+  { value: "search", label: "Search", description: "Match clear viewer queries and search intent." },
+  { value: "browse", label: "Browse", description: "Earn recommendation clicks with a compelling, honest angle." },
+  { value: "subscribers", label: "Subscribers", description: "Turn the right viewers into subscribers and repeat viewers." },
+  { value: "revenue", label: "Revenue", description: "Align audience fit and monetization context while preserving trust." },
+  { value: "authority", label: "Authority", description: "Emphasize expertise, evidence, and a credible point of view." },
 ]
 
 const STYLES: Array<{ value: MetadataMasterStyle; label: string; description: string }> = [
@@ -346,6 +346,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
               <SubToolboxSelect value={goal} onChange={event => setGoal(event.target.value as MetadataMasterGoal)} aria-label="Optimization goal">
                 {GOALS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
               </SubToolboxSelect>
+              <p className="mt-1 text-[11px] font-bold opacity-55">{GOALS.find(option => option.value === goal)?.description}</p>
             </SubToolboxSection>
 
             <SubToolboxSection label="METADATA STYLE">
