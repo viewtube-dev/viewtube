@@ -187,11 +187,13 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         "Longform",
         undefined,
         brain,
+        buildMetadataStrategyBrief(goal, intensity, style),
       )
 
       const generated = packageFromSeoResult(result, {
         goal,
         intensity,
+        style,
         projectId: workspaceContext?.build.legacyProjectId || null,
         contentBuildId: workspaceContext?.contentBuildId || null,
         videoId: publishedVideoId || workspaceContext?.build.youtube?.videoId || null,
@@ -210,8 +212,8 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master"],
         })
         const strategy: MetadataMasterSet["strategy"] =
-          index === 0 ? "search" : index === 1 ? "curiosity" : index === 2 ? "authority" : "custom"
-        return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy)
+          index === 0 ? "search" : index === 1 ? "curiosity" : index === 2 ? "authority" : "channel-fit"
+        return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, style)
       })
 
       const primary = candidates[0]?.package ?? generated
@@ -342,7 +344,14 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
               </SubToolboxSelect>
             </SubToolboxSection>
 
-            <SubToolboxSection label="OPTIMIZATION INTENSITY">
+            <SubToolboxSection label="METADATA STYLE">
+               <SubToolboxSelect value={style} onChange={event => setStyle(event.target.value as MetadataMasterStyle)} aria-label="Metadata style">
+                 {STYLES.map(option => <option key={option.value} value={option.value}>{option.label.toUpperCase()}</option>)}
+               </SubToolboxSelect>
+               <p className="mt-1 text-[11px] font-bold opacity-55">{STYLES.find(option => option.value === style)?.description}</p>
+             </SubToolboxSection>
+
+             <SubToolboxSection label="OPTIMIZATION INTENSITY">
               <SubToolboxActions columns={3} forceRow>
                 {(["light", "balanced", "aggressive"] as MetadataMasterIntensity[]).map(value => (
                   <PrimaryButton key={value} level="l1" selected={intensity === value} onClick={() => setIntensity(value)}>
