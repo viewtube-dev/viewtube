@@ -15,7 +15,7 @@ export interface SubToolboxSplitButtonProps extends React.ButtonHTMLAttributes<H
   level?: ToolboxControlLevel
 }
 
-export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = ({
+export const SplitLeftButton: React.FC<SubToolboxSplitButtonProps> = ({
   icon,
   children,
   selected = false,
@@ -40,6 +40,12 @@ export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = ({
     <span className="vt-subtoolbox-split-button-label">{children}</span>
   </button>
 )
+
+SplitLeftButton.displayName = "SplitLeftButton"
+
+/** Backwards-compatible export for existing consumers. */
+export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = (props) => <SplitLeftButton {...props} />
+
 
 export interface SubToolboxShellActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: React.ReactNode
