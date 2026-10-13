@@ -57,7 +57,7 @@ export const generateProjectStrategyWithBrain = async (
     project,
     contentBuildId: project.contentBuildId || null,
     surface: request.surface || "project",
-    artifactRefs: [...(request.artifactRefs || []), ...(prepared ? [prepared.request.id, prepared.contextManifest.id] : [])],
+    artifactRefs: request.artifactRefs,
     userText,
     systemInstruction: [
       "You are ViewTube's Project Strategy specialist operating through AI Brain.",
