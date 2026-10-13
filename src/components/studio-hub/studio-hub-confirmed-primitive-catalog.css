@@ -196,3 +196,82 @@
 .vt-confirmed-family:has(.vt-studio-legend-multi) { overflow: visible; position: relative; }
 .vt-confirmed-variants:has(.vt-studio-legend-multi) { overflow: visible; }
 .vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) { z-index: 10001; }
+
+
+/* Confirmed library dropdown layout: standard control spans the row, then two compact
+   controls share the next row, matching the button and input component specimens. */
+.vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
+  overflow: visible;
+}
+.vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
+  grid-column: 1 / -1;
+}
+.vt-confirmed-family:has(.vt-studio-legend-multi) {
+  overflow: visible;
+  position: relative;
+  isolation: isolate;
+}
+.vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) {
+  z-index: 10001;
+}
+.vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) .vt-studio-legend-menu {
+  z-index: 10002;
+}
+/* Open-menu rows follow the trigger's 44:28 size ratio and uppercase control typography. */
+.vt-confirmed-catalog .vt-studio-legend-multi:not([data-size="compact"]) .vt-studio-legend-option {
+  min-height: 44px;
+  padding: 4px 10px;
+  font-size: 32px;
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi:not([data-size="compact"]) .vt-studio-legend-clear {
+  min-height: 44px;
+  font-size: 24px;
+  font-weight: 1000;
+  line-height: .9;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option {
+  min-height: 28px;
+  padding: 3px 6px;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+  border-radius: 2px;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check svg {
+  width: 9px;
+  height: 9px;
+  stroke-width: 2;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
+  min-height: 28px;
+  padding: 3px 6px;
+  font-size: 14px;
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
+  }
+}
