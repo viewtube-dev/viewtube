@@ -3284,12 +3284,12 @@ export const generateProjectStrategy = async (
 
   try {
    const jsonStr = cleanJsonString(text)
-   return validateProjectStrategy(JSON.parse(jsonStr))
+   return validateProjectStrategy(JSON.parse(jsonStr), { concept, niche })
   } catch (e) {
    console.warn(
     "[Gemini] Project Strategy output failed validation; attempting self-correction...",
    )
-   return validateProjectStrategy(await selfCorrectJson(text, responseSchema))
+   return validateProjectStrategy(await selfCorrectJson(text, responseSchema), { concept, niche })
   }
  })
 }
