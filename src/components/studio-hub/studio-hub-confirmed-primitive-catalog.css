@@ -64,49 +64,6 @@
   font-weight: 650;
   overflow-wrap: anywhere;
 }
-button.vt-confirmed-button-44[data-vt-studio-control],
-button.vt-confirmed-button-28[data-vt-studio-control] {
-  --vt-studio-control-height: 44px;
-  height: 44px;
-  min-height: 44px;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  padding: 0 12px;
-}
-button.vt-confirmed-button-28[data-vt-studio-control] {
-  --vt-studio-control-height: 28px;
-  height: 28px;
-  min-height: 28px;
-  font-size: 14px !important;
-  padding: 0 8px;
-  border-radius: 6px;
-}
-button.vt-confirmed-button-44[data-vt-studio-control][data-split-left="true"],
-button.vt-confirmed-button-28[data-vt-studio-control][data-split-left="true"] {
-  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
-  padding: 0;
-}
-button.vt-confirmed-button-44[data-vt-studio-control] [data-vt-studio-split-rail] {
-  width: 44px;
-  height: 44px;
-}
-button.vt-confirmed-button-28[data-vt-studio-control] [data-vt-studio-split-rail] {
-  width: 28px;
-  height: 28px;
-  border-right-width: 3px;
-}
-button.vt-confirmed-button-44[data-vt-studio-control] [data-vt-studio-split-label],
-button.vt-confirmed-button-28[data-vt-studio-control] [data-vt-studio-split-label] {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1;
-}
-button.vt-confirmed-button-28[data-vt-studio-control] [data-vt-studio-split-label] {
-  padding: 0 8px;
-}
 @media (max-width: 560px) {
   .vt-confirmed-variants { grid-template-columns: minmax(0, 1fr); }
   .vt-confirmed-family { padding: 10px; }
