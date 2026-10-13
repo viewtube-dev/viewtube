@@ -873,8 +873,8 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
 .vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;box-shadow:0 1px 2.75px rgba(0,0,0,.15)}
 .vt-studio-44-switch.is-solid.is-on,.vt-studio-44-choice.is-solid.is-on{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));outline-offset:3px}
-.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:32px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:0;background:#fff;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000}
-.vt-studio-44-word-toggle.is-size-28{--vt-word-height:28px;--vt-word-font-size:14px;--vt-word-radius:4.667px;border-width:0}
+.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:32px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:#fff;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000}
+.vt-studio-44-word-toggle.is-size-28{--vt-word-height:28px;--vt-word-font-size:14px;--vt-word-radius:4.667px;border-width:2px}
 .vt-studio-44-word-handle{position:absolute;top:2.75px;bottom:2.75px;left:2.75px;width:calc(50% - 5.5px);border-radius:calc(var(--vt-word-radius)*.5);background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6));transition:left .22s cubic-bezier(.2,.8,.2,1),width .22s cubic-bezier(.2,.8,.2,1),background-color .22s ease-out;pointer-events:none}
 .vt-studio-44-word-toggle.is-size-28 .vt-studio-44-word-handle{top:2px;bottom:2px;left:2px;width:calc(50% - 4px);border-radius:2.3px}
 .vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
