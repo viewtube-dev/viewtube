@@ -107,7 +107,7 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton } from "../../studio-ui"
+import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
