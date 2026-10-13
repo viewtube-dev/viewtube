@@ -4,7 +4,7 @@
 **Last edited:** 2026-09-27  
 **Status:** Active living handoff  
 **Owner:** ViewTube Resource Library / Docs / Creator Education  
-**Current series progress:** 3 of 15 creator reference documents authored and registered  
+**Current series progress:** 15 of 15 creator reference documents authored and registered (2026-10-13)  
 **Primary route:** /resources
 
 ---
@@ -49,7 +49,7 @@ The Resource Library is now a real production feature on current main.
 
 Both seed resources were rewritten on 2026-09-26 around a creator-first editorial contract. Resource #1 now teaches the recommendation system through audience fit, discovery surfaces, packaging, watch behavior, satisfaction, catalog relationships and a ViewTube diagnosis workflow. Resource #2 now teaches metrics, dimensions, filters, time windows, traffic sources, audience, retention, revenue, comparisons and question-driven analysis. Resource #3 was added on 2026-09-27 and applies the same contract to Shorts vs long-form, including the August 24, 2026 view-definition change, format-specific choice/watch signals, cross-format audience behavior, and ViewTube diagnosis flows. API/backend detail remains only as optional advanced reference.
 
-### Remaining first-series resources
+### Original first-series resource plan (now completed)
 
 4. Publishing Best Practices and Preflight Checklist  
 5. Thumbnail and Title Packaging Handbook  
@@ -64,7 +64,7 @@ Both seed resources were rewritten on 2026-09-26 around a creator-first editoria
 14. Copyright, Rights, Reuse and AI-Generated Media Reference  
 15. Reading Analytics Correctly: Scope, Windows, Missingness and Statistical Traps
 
-The next logical content task is **Resource #4: Publishing Best Practices and Preflight Checklist**.
+The initial 15-guide creator reference series is now authored and registered. Next: run registry tests, typecheck, production build, and desktop/mobile review; then schedule evidence refreshes for official-source-dependent guides.
 
 ---
 
