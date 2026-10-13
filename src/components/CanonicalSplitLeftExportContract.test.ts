@@ -18,5 +18,8 @@ describe("canonical split-left export contract", () => {
     expect(splitPrimitives).toContain("export const SubToolboxSplitButton = CanonicalSplitLeftAdapter")
     expect(splitPrimitives).toContain("export const SplitLeftButton = CanonicalSplitLeftAdapter")
     expect(splitPrimitives).toContain("StudioSplitLeftButton")
+    expect(splitPrimitives.match(/export const SubToolboxSplitButton\s*=/g) ?? []).toHaveLength(1)
+    expect(splitPrimitives.match(/export const SplitLeftButton\s*=/g) ?? []).toHaveLength(1)
+    expect(splitPrimitives).not.toContain("vt-subtoolbox-split-button-rail")
   })
 })
