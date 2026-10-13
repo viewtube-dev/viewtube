@@ -614,6 +614,7 @@ export interface SubToolboxTopTitleDropdownProps extends Omit<React.HTMLAttribut
   onValueChange?: (value: string) => void
   multiSelect?: boolean
   selectedValues?: string[]
+  onClear?: () => void
   ariaLabel?: string
 }
 
@@ -625,6 +626,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
   onValueChange,
   multiSelect = false,
   selectedValues = [],
+  onClear,
   ariaLabel = "Choose an option",
   className,
   style,
@@ -731,11 +733,21 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
                   if (!multiSelect) setOpen(false)
                 }}
               >
-                {multiSelect ? <span className="vt-subtoolbox-top-title-dropdown-check" aria-hidden="true">{selected ? "×" : ""}</span> : null}
+                {multiSelect ? <span className="vt-subtoolbox-top-title-dropdown-check" aria-hidden="true">{selected ? (isLegendMultiDropdown ? "✓" : "×") : ""}</span> : null}
                 <span>{option.label}</span>
               </button>
             )
           })}
+          {isLegendMultiDropdown && multiSelect ? (
+            <button
+              type="button"
+              className="vt-legend-multi-dropdown-clear"
+              disabled={selectedValues.length === 0}
+              onClick={() => onClear?.()}
+            >
+              CLEAR ALL
+            </button>
+          ) : null}
         </div>,
         document.body,
       ) : null}
