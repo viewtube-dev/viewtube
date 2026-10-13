@@ -164,7 +164,7 @@
   font-size: 24px !important;
   font-weight: 1000 !important;
   line-height: .9;
-  letter-spacing: -.025em;
+  letter-spacing: -.02em;
   text-transform: uppercase;
   color: var(--pair-a, #36e0f6);
   -webkit-text-stroke: .5px var(--pair-a, #36e0f6);
