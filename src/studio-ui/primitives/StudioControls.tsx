@@ -2,6 +2,7 @@ import React from "react"
 import type { StudioControlSize } from "../tokens"
 import { SubToolboxInput20, SubToolboxTextArea21 } from "../../components/subtoolbox/SubToolboxPrimitives"
 import "../../styles/studio-split-left-consistency.css"
+import "../../styles/studio-control-system.css"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -44,6 +45,43 @@ export const StudioTextArea = React.forwardRef<
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", ...props }, ref) => <SubToolboxTextArea21 ref={ref} height={sizeVariant === "compact" ? "compact" : "standard"} {...withStudioAttrs(sizeVariant)} {...props} />)
 StudioTextArea.displayName = "StudioTextArea"
+
+export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+  overlayLabel: React.ReactNode
+  sizeVariant?: Exclude<StudioControlSize, "action">
+  level?: "l0" | "l1" | "l2"
+}
+
+/** Primitive 137 facade: canonical plain input 20 plus the upper-right label overlay. */
+export const StudioFloatingLabelInput = React.forwardRef<HTMLInputElement, StudioFloatingLabelInputProps>(
+  ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
+    <label data-vt-primitive-id="137" data-vt-studio-field="floating-input" data-vt-control-level={level}
+      className={["vt-studio-labeled-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
+      <StudioInput ref={ref} sizeVariant={sizeVariant} {...props} />
+      <span className="vt-studio-labeled-field-overlay">{overlayLabel}</span>
+    </label>
+  ),
+)
+StudioFloatingLabelInput.displayName = "StudioFloatingLabelInput"
+
+export interface StudioFloatingLabelTextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  overlayLabel: React.ReactNode
+  sizeVariant?: Exclude<StudioControlSize, "action">
+  level?: "l0" | "l1" | "l2"
+}
+
+/** Primitive 138 facade: canonical plain textarea 21 plus the upper-right label overlay. */
+export const StudioFloatingLabelTextArea = React.forwardRef<HTMLTextAreaElement, StudioFloatingLabelTextAreaProps>(
+  ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
+    <label data-vt-primitive-id="138" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
+      className={["vt-studio-labeled-field", "is-textarea", className].filter(Boolean).join(" ")} style={style}>
+      <StudioTextArea ref={ref} sizeVariant={sizeVariant} {...props} />
+      <span className="vt-studio-labeled-field-overlay">{overlayLabel}</span>
+    </label>
+  ),
+)
+StudioFloatingLabelTextArea.displayName = "StudioFloatingLabelTextArea"
+
 
 export const StudioSelect = React.forwardRef<
   HTMLSelectElement,
