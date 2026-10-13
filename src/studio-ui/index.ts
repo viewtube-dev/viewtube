@@ -10,7 +10,7 @@ export {
   PrimaryButton,
   SubToolboxButton,
 } from "../components/subtoolbox/SubToolboxPrimitives"
-export type { SubToolboxButtonProps } from "../components/subtoolbox/SubToolboxPrimitives"
+export type { PrimaryButtonProps, SubToolboxButtonProps } from "../components/subtoolbox/SubToolboxPrimitives"
 export {
   StudioButton,
   StudioIconButton,
@@ -37,6 +37,7 @@ export {
 } from "../components/subtoolbox/SubToolboxSplitPrimitives"
 export type {
   SubToolboxKpiCardProps,
+  SplitLeftButtonProps,
   SubToolboxSplitButtonProps,
   SubToolboxSplitDropdownOption,
   SubToolboxSplitDropdownProps,
