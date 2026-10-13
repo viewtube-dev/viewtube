@@ -140,3 +140,34 @@
     min-height: 36px;
   }
 }
+
+
+/* Library typography parity: first thirteen primitive families use the exact
+   StudioButton type voice instead of each demo inheriting a legacy label size. */
+.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(-n+13) {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(-n+13) :is(
+  button, [role="button"], .vt-subtoolbox-split-button-label,
+  .vt-subtoolbox-split-dropdown-label, .vt-subtoolbox-top-title-dropdown-title,
+  .vt-subtoolbox-top-title-dropdown-value b, .vt-subtoolbox-menu-label b
+) {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+}
+.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(11) .vt-subtoolbox-top-title-dropdown-panel {
+  min-width: max-content;
+  max-width: calc(100vw - 16px);
+}
+.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(11) .vt-subtoolbox-top-title-dropdown-panel > button {
+  font-weight: 1000;
+  letter-spacing: -.025em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(11) .vt-subtoolbox-top-title-dropdown-check {
+  font-size: 20px;
+  font-weight: 1000;
+}
