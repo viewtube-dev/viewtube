@@ -78,3 +78,24 @@
 .vt-confirmed-global-grid strong { font-size:11px; font-weight:950; text-transform:uppercase; }
 .vt-confirmed-global-grid p { margin:4px 0 0; font-size:12px; line-height:1.35; }
 @media(max-width:560px){ .vt-confirmed-global-grid { grid-template-columns:1fr; } }
+
+/* Confirmed primitives integration: combined, compact defaults at the top. */
+.vt-confirmed-defaults-combined{gap:5px!important;padding:7px 9px!important;border-width:2px!important;border-radius:6px!important}
+.vt-confirmed-defaults-combined>h3{font-size:10px!important;line-height:1!important;letter-spacing:-.025em}
+.vt-confirmed-size-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.vt-confirmed-size-card{display:grid;gap:2px;min-width:0;padding:4px 5px;border:1px solid #000;border-radius:4px;background:#f7f7f7;font-size:8px;line-height:1.15;overflow-wrap:anywhere}
+.vt-confirmed-size-card strong{font-size:8px;font-weight:950}
+.vt-confirmed-size-card span{font-size:8px;line-height:1.15}
+.vt-confirmed-defaults-combined .vt-confirmed-global-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
+.vt-confirmed-defaults-combined .vt-confirmed-global-grid>div{padding:3px 4px;border-width:1px;border-radius:3px}
+.vt-confirmed-defaults-combined .vt-confirmed-global-grid strong{font-size:7px;line-height:1.05}
+.vt-confirmed-defaults-combined .vt-confirmed-global-grid span{display:block;margin-top:1px;font-size:8px;line-height:1.1;overflow-wrap:anywhere}
+.vt-confirmed-simple-input{--vt-component-height:44px;--vt-component-stroke:3px;--vt-component-radius:8px;--vt-component-font-size:24px;max-width:100%}
+.vt-confirmed-simple-textarea{min-height:44px!important;height:44px!important;resize:vertical;font-size:12px!important;font-weight:900!important;letter-spacing:-.02em;text-transform:uppercase}
+.vt-confirmed-control-family{display:grid;gap:10px}
+.vt-confirmed-control-row{display:grid;gap:5px;min-width:0}
+.vt-confirmed-control-row>strong{font-size:9px;font-weight:950;letter-spacing:-.02em}
+.vt-confirmed-control-variants{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;align-items:start}
+.vt-confirmed-control-variants>div{display:grid;justify-items:center;align-content:start;gap:5px;min-width:0}
+.vt-confirmed-control-variants small{font-size:7px;font-weight:900;text-align:center;line-height:1.1}
+@media(max-width:560px){.vt-confirmed-defaults-combined .vt-confirmed-global-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vt-confirmed-control-variants{gap:3px}.vt-confirmed-control-variants small{font-size:6px}.vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle button{padding-inline:5px;font-size:12px}}
