@@ -160,3 +160,19 @@ Observed on the rendered page:
 - No runtime exception, console error/warning, or broken image was observed during read-only reload. No forms were submitted and no settings or data were changed.
 
 This confirms the source-level findings: the editing flow and handoff controls are present; history is only a short, empty package list; full analytics already has a separate route; and the project/package lifecycle was not populated in the inspected session. Runtime observation is limited to the deployed build at the URLs above, not the proposed branch.
+
+
+## 8. Phase 1 verification record — 2026-10-13
+
+GitHub Actions release-gate run [#337](https://github.com/viewtube-dev/viewtube/actions/runs/38468338790) ran against the Phase 1 lifecycle fixture before the focused-contract script was updated.
+
+- **Lifecycle fixture:** passed in the full-suite log (`MetadataLifecycleCertification.test.ts`, 1 test).
+- **Production build:** passed.
+- **Local smoke:** passed.
+- **Source governance:** passed.
+- **Focused contracts:** passed (the existing focused suite; the lifecycle fixture was not yet included in that job's explicit test list).
+- **Static quality/typecheck:** failed on existing errors in unrelated registry, UI primitive, component, and Video Package files; the lifecycle fixture was not among the reported type errors.
+- **Full suite:** failed on numerous existing unrelated UI/source-contract, Vault, ContentBuild, and Video Package assertions. The new lifecycle fixture itself passed.
+- **Vercel:** deployment status is blocked by the account's build-rate-limit gate; this is not a reported application build failure.
+
+The focused-contracts script now explicitly includes `src/services/projects/MetadataLifecycleCertification.test.ts` so the next run directly certifies this phase's fixture. Re-run CI after this commit and review the new results. Phase 1 is **implemented but not fully certified** until the focused run and repository gates are rechecked; do not claim the whole repository is green.
