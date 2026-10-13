@@ -157,6 +157,7 @@ export const ProjectStudio: React.FC<{ embedded?: boolean }> = ({ embedded = fal
                 activeProject.niche || brain.targetNiche,
                 activeProject.description || "Channel audience",
                 brain,
+                { projectId: activeProject.id, contentBuildId: activeProject.contentBuildId || null },
             );
             updateProject(activeProject.id, { plan });
         } catch (error) {
