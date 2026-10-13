@@ -494,7 +494,7 @@ export type SeoResult = {
  niche?: string
  analysis: string
  filenames: { video: string; thumbnail: string }
- titleSets: { title: string; thumbnailPrompt: string; thumbnailText: string }[]
+ titleSets: { title: string; thumbnailPrompt: string; thumbnailText: string; description?: string; tags?: string; category?: string }[]
  description: string
  tags: string
  category: string
