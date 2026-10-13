@@ -6,6 +6,7 @@ import { getToolboxPaletteColors } from "../styles/toolboxPalette"
 import { StudioHubCompletePrimitiveCatalog } from "./studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubPrimitiveMigrationCatalog } from "./studio-hub/StudioHubPrimitiveMigrationCatalog"
 import { StudioHubProductionButtonCatalog } from "./studio-hub/StudioHubProductionButtonCatalog"
+import { StudioHubConfirmedPrimitiveCatalog } from "./studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
 const PALETTE_NAMES = [
   "Rose", "Coral", "Orange", "Yellow", "Lime", "Green",
@@ -18,7 +19,7 @@ export interface ToolboxUIReferenceLibraryProps {
   paletteIndex?: number
 }
 
-type LibraryTrack = "hardcoded" | "primitive"
+type LibraryTrack = "hardcoded" | "primitive" | "confirmed"
 
 interface ComponentLibraryTrackProps {
   track: LibraryTrack
@@ -41,19 +42,21 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
     ["--vt-subtoolbox-fill" as string]: palette.header,
   } as React.CSSProperties
   const isHardcoded = track === "hardcoded"
+  const isConfirmed = track === "confirmed"
 
   return (
     <div
-      id={isHardcoded ? "toolbox-ui-library-hardcoded" : "toolbox-ui-library-primitive"}
+      id={isHardcoded ? "toolbox-ui-library-hardcoded" : isConfirmed ? "toolbox-ui-library-confirmed" : "toolbox-ui-library-primitive"}
       className="scroll-mt-24 vt-studio-hub-component-library"
       data-vt-library-track={track}
     >
       <ToolboxScaffold
         title={isHardcoded
           ? "Component Library — Hardcoded"
-          : "Component Library — Primitive"}
+          : isConfirmed ? "Component Library — Confirmed Primitives" : "Component Library — Primitive"}
         subtitle={isHardcoded
           ? "Frozen visual baseline. Component anatomy remains hardcoded for comparison."
+          : isConfirmed ? "Certification-only library: confirmed production primitives, exact source paths, token settings, variants, and known importers."
           : "Production-import surface. Every family renders inside the same SubToolbox shell, 12-color title/icon pairing, primitives and shared CSS used by Studio tools."}
         icon={<Layers3 size={40} strokeWidth={3} />}
         paletteIndex={paletteIndex}
@@ -63,6 +66,7 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
         unmountWhenClosed
         helpText={isHardcoded
           ? "Frozen baseline used only to compare visual parity while the production primitive system is migrated."
+          : isConfirmed ? "Only confirmed production primitives belong here. Each card renders the actual exported component; provenance lists source files, token values, variants and known import sites."
           : "Primitive production track. Each family is mounted inside a real SubToolbox; nested components inherit that SubToolbox title/icon color pair and shared production styling instead of choosing local colors."}
         headerActions={
           <div className="flex items-center gap-1" style={primitiveContextStyle}>
@@ -94,6 +98,7 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
       >
         {isHardcoded
           ? <StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />
+          : isConfirmed ? <StudioHubConfirmedPrimitiveCatalog />
           : <><StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} /><StudioHubProductionButtonCatalog paletteIndex={paletteIndex} /></>}
       </ToolboxScaffold>
     </div>
@@ -127,6 +132,13 @@ export const ToolboxUIReferenceLibrary: React.FC<ToolboxUIReferenceLibraryProps>
       />
       <ComponentLibraryTrack
         track="primitive"
+        collapsible={collapsible}
+        isOpenInitial={isOpenInitial}
+        paletteIndex={paletteIndex}
+        onPaletteIndexChange={setPaletteIndex}
+      />
+      <ComponentLibraryTrack
+        track="confirmed"
         collapsible={collapsible}
         isOpenInitial={isOpenInitial}
         paletteIndex={paletteIndex}

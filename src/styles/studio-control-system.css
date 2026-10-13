@@ -99,6 +99,54 @@ button[data-vt-studio-control] {
 }
 
 button[data-vt-studio-control][data-size="compact"] { font-size: 10px; padding: 6px 8px; }
+/* Confirmed StudioButton / StudioSplitLeftButton geometry contract. Both variants
+   share the same typography; only total height and icon rail geometry change. */
+button[data-vt-studio-control][data-height-variant="44"] {
+  --vt-studio-control-height: 44px;
+  height: 44px;
+  min-height: 44px;
+  font-size: 14px !important;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+button[data-vt-studio-control][data-height-variant="28"] {
+  --vt-studio-control-height: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 14px !important;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"],
+button[data-vt-studio-control][data-height-variant="44"][data-split-left="true"] {
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
+  padding: 0;
+}
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] {
+  width: 44px;
+  height: 44px;
+}
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] {
+  width: 28px;
+  height: 28px;
+  border-right-width: 3px;
+}
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-label],
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
+  padding: 0 8px;
+}
+
 button[data-vt-studio-control][data-size="action"] { font-size: 20px; padding: 10px 16px; }
 button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translateY(1px); }
 button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
