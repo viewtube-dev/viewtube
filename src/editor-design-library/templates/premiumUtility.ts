@@ -14,7 +14,7 @@ const clipBehavior = {
   snapToSafeZones: true,
 };
 
-const textEl = (id:string,name:string,x:number,y:number,w:number,h:number,text:string,size:number,role:'headline'|'supporting',token:'colors.foreground'|'colors.accent'='colors.foreground'):TemplateElement => ({
+const textEl = (id:string,name:string,x:number,y:number,w:number,h:number,text:string,size:number,role:'headline'|'supporting',token: 'colors.foreground' | 'colors.accent' | 'colors.background' = 'colors.foreground'):TemplateElement => ({
   id,type:'text',name,x,y,width:w,height:h,text,fontSize:size,fontFamilyToken:role==='headline'?'typography.headingFamily':'typography.bodyFamily',fontWeight:role==='headline'?999:900,fillToken:token,tokenRole:token==='colors.accent'?'accent':'foreground',motionRole:role,editable:true,
   animation:{preset:role==='headline'?'stagger-words':'fade',durationFrames:role==='headline'?18:14,easing:role==='headline'?'power3.out':'power2.out'}
 });
