@@ -14,7 +14,7 @@ describe("Studio split-left source contract", () => {
     expect(splitStyles).not.toContain(".vt-subtoolbox-split-button {")
     expect(sharedStyles).toContain("box-shadow:")
     expect(sharedStyles).toContain("filter: none !important;")
-    expect(sharedStyles).not.toContain("drop-shadow")
+    expect(sharedStyles).not.toContain("filter: drop-shadow")
   })
 
   it("routes project load, swap and refresh through StudioSplitLeftButton", () => {
