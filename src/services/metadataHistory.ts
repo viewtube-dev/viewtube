@@ -192,6 +192,11 @@ export const recordMetadataPackageVersion = (
   input: BuildMetadataHistoryEventsInput,
 ): ContentBuildEvent[] => {
   if (!input.contentBuildId) return []
+  if (
+    input.operation === "manual" &&
+    input.previousPackage &&
+    diffMetadataPackageFields(input.previousPackage, input.package).length === 0
+  ) return []
   return buildMetadataHistoryEvents(input).map(event => appendContentBuildEvent(event))
 }
 
@@ -252,6 +257,14 @@ export const recordPublishedMetadataChange = (input: {
   if (!input.contentBuildId || !input.videoId) return []
   const operationId = input.operationId || makeOperationId()
   const timestamp = input.timestamp || new Date().toISOString()
+  const fieldChanges = diffMetadataPackageFields(input.previousPackage, input.package)
+  const settingsChanged = Boolean(
+    input.previousSettings &&
+    input.nextSettings &&
+    !sameValue(input.previousSettings, input.nextSettings)
+  )
+  if (fieldChanges.length === 0 && !settingsChanged) return []
+
   const commonMetadata = {
     projectId: input.projectId ?? input.package.projectId ?? null,
     videoId: input.videoId,
@@ -277,7 +290,7 @@ export const recordPublishedMetadataChange = (input: {
     metadata: commonMetadata,
   }]
 
-  for (const change of diffMetadataPackageFields(input.previousPackage, input.package)) {
+  for (const change of fieldChanges) {
     events.push({
       contentBuildId: input.contentBuildId,
       eventType: fieldEventType(change.field),
