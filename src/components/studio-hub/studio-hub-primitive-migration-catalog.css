@@ -111,3 +111,32 @@
     gap:8px;
   }
 }
+
+
+/* Vertical word toggle is a real library preview, not a horizontal control
+   squeezed into a portrait card. */
+.vt-primitive-migration-catalog .vt-catalog-vertical-word-toggle {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100%;
+  min-width: 0;
+  gap: 4px;
+}
+.vt-primitive-migration-catalog .vt-catalog-vertical-word-toggle > button {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  text-align: center;
+}
+.vt-primitive-migration-catalog .vt-catalog-demo:has(.vt-catalog-vertical-word-toggle) {
+  width: min(100%, calc(var(--vt-catalog-level-height) * 2.5));
+}
+@media (max-width: 520px) and (orientation: portrait) {
+  .vt-primitive-migration-catalog .vt-catalog-vertical-word-toggle > button {
+    min-height: 36px;
+  }
+}
