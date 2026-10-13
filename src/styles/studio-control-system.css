@@ -310,3 +310,82 @@ button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-sp
   line-height: .86;
   white-space: normal;
 }
+
+
+/* Canonical split-left anatomy: square rail, truly centered icon, readable
+   label type, and no clipping from the generic oversized button typography. */
+button[data-vt-studio-control="true"][data-split-left="true"] {
+  display: grid;
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  justify-items: stretch;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  max-height: var(--vt-studio-control-height, 44px);
+  padding: 0;
+  overflow: hidden;
+  line-height: 1;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  display: flex;
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  align-items: center;
+  justify-content: center;
+  justify-self: stretch;
+  align-self: stretch;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  flex: 0 0 20px;
+  margin: 0;
+  position: static;
+  transform: none;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  padding: 0 10px;
+  overflow: hidden;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.035em;
+  -webkit-text-stroke: .35px currentColor;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) and (orientation: portrait) {
+  button[data-vt-studio-control="true"][data-split-left="true"] {
+    grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
+  }
+  button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+}
