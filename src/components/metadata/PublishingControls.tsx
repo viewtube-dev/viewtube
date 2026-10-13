@@ -2,7 +2,7 @@ import React from "react"
 import { ListVideo, LockKeyhole, Tags } from "lucide-react"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxGrid } from "../subtoolbox/SubToolboxLayouts"
-import { SubToolboxTopTitleDropdown } from "../subtoolbox/SubToolboxPrimitives"
+import { LegendMultiDropdown, SubToolboxTopTitleDropdown } from "../subtoolbox/SubToolboxPrimitives"
 
 export interface PublishingControlOption {
   value: string
@@ -49,7 +49,7 @@ export const PublishingControls: React.FC<PublishingControlsProps> = ({
           onValueChange={onCategoryChange}
           ariaLabel="Category"
         />
-        <SubToolboxTopTitleDropdown
+        <LegendMultiDropdown
           level="l1"
           label={<><ListVideo size={13} aria-hidden="true" /> PLAYLISTS</>}
           value={playlistLabel}
