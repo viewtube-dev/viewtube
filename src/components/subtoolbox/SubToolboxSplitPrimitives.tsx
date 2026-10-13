@@ -2,85 +2,13 @@ import React, { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { getComponentLevelCssVars } from "./tokens"
 import type { ToolboxControlLevel } from "./tokens"
+import { StudioSplitLeftButton, type StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
 import { ChevronDown } from "lucide-react"
 import "../../styles/toolbox-entry.css"
 import "../../styles/subtoolbox-split-primitives.css"
 
 const classes = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
 
-
-export interface SubToolboxSplitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: React.ReactNode
-  children: React.ReactNode
-  selected?: boolean
-  level?: ToolboxControlLevel
-}
-
-/** Canonical split-left button: icon rail and label share one accessible button surface. */
-export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = ({
-  icon,
-  children,
-  selected = false,
-  level,
-  className,
-  style,
-  type = "button",
-  ...props
-}) => (
-  <button
-    type={type}
-    data-vt-control-level={level}
-    className={classes("vt-subtoolbox-split-button", level && "has-component-level", selected && "is-selected", className)}
-    aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
-    style={{
-      ...style,
-      ...(level ? getComponentLevelCssVars(level) : {}),
-    }}
-    {...props}
-  >
-    <span className="vt-subtoolbox-split-button-rail" aria-hidden="true">{icon}</span>
-    <span className="vt-subtoolbox-split-button-label">{children}</span>
-  </button>
-)
-
-export interface SplitLeftButtonProps extends SubToolboxSplitButtonProps {
-  tone?: "accent" | "neutral" | "danger" | "warning" | "success"
-}
-
-/** Compatibility name used by project workflows; keeps the canonical split primitive as its implementation. */
-export const SplitLeftButton: React.FC<SplitLeftButtonProps> = ({ tone, ...props }) => (
-  <SubToolboxSplitButton {...props} data-tone={tone} />
-)
-
-export interface SubToolboxShellActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: React.ReactNode
-  children: React.ReactNode
-  level?: ToolboxControlLevel
-}
-
-export const SubToolboxShellAction: React.FC<SubToolboxShellActionProps> = ({
-  icon,
-  children,
-  level = "l0",
-  className,
-  style,
-  type = "button",
-  ...props
-}) => (
-  <button
-    type={type}
-    data-vt-control-level={level}
-    className={classes("vt-subtoolbox-shell-action", className)}
-    style={{
-      ...getComponentLevelCssVars(level),
-      ...style,
-    }}
-    {...props}
-  >
-    <span className="vt-subtoolbox-shell-action-rail" aria-hidden="true">{icon}</span>
-    <span className="vt-subtoolbox-shell-action-title">{children}</span>
-  </button>
-)
 
 export interface SubToolboxSplitDropdownOption {
   value: string
@@ -313,7 +241,6 @@ export const SubToolboxKpiCard: React.FC<SubToolboxKpiCardProps> = ({
  * render the canonical StudioSplitLeftButton; this module owns no parallel
  * split-left markup or styling.
  */
-import { StudioSplitLeftButton, type StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
 
 export interface SplitLeftButtonProps extends StudioSplitLeftButtonProps {
   level?: ToolboxControlLevel
