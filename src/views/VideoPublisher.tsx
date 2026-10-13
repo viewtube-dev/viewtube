@@ -221,10 +221,6 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     mode: "current" | "option" = "current",
   ) => {
     const channelId = (authState as any)?.channelId || null
-    if (!channelId) {
-      setProjectSaveStatus("Connect YouTube before saving a publishing package.")
-      return
-    }
     setProjectSaveBusy(true)
     setProjectSaveStatus(null)
     try {
