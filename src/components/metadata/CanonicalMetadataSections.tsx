@@ -10,6 +10,7 @@ import {
   SubToolboxSelect,
   SubToolboxStatusBadge,
   SubToolboxToggle,
+  ToolboxHeaderToggle,
   LegendMultiDropdown,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
@@ -90,6 +91,10 @@ export interface CanonicalMetadataSectionsProps {
   onAnalyze?: (field: string) => void
   actionFields?: string[]
   showFieldActions?: boolean
+  aiFeaturesEnabled?: boolean
+  onAiFeaturesEnabledChange?: (enabled: boolean) => void
+  showAiButtons?: boolean
+  onShowAiButtonsChange?: (show: boolean) => void
   categoryOptions?: { value: string; label: string }[]
   thumbnailActions?: React.ReactNode
   videoUploadLabel?: React.ReactNode
@@ -181,7 +186,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
     onTitleChange, onDescriptionChange, onTagsChange, onCategoryChange, onPlaylistsChange,
     onVideoFileChange, onThumbnailFileChange, onVisibilityChange, onAudienceChange,
     onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange,
-    onGenerate, onRefine, onAnalyze, actionFields, showFieldActions = true, categoryOptions = [], thumbnailActions,
+    onGenerate, onRefine, onAnalyze, actionFields, showFieldActions = true, aiFeaturesEnabled = true, onAiFeaturesEnabledChange, showAiButtons = true, onShowAiButtonsChange, categoryOptions = [], thumbnailActions,
     videoUploadLabel, thumbnailLabel = "THUMBNAIL", titleLabel = "TITLE", descriptionLabel = "DESCRIPTION", className = "",
     showVideoUpload = true, showPlaylists = true, showCategory = true,
     tagAnalysis = [], suggestedTags = [], tagInput = "", onTagInputChange, onAddTag,
@@ -192,11 +197,37 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
 
   const hasTagEditor = Boolean(onTagsChange)
   const currentTags = tags.split(",").map(tag => tag.trim()).filter(Boolean)
-  const shouldShowActions = (field: string) => showFieldActions && (!actionFields || actionFields.includes(field))
+  const shouldShowActions = (field: string) => showFieldActions && aiFeaturesEnabled && showAiButtons && (!actionFields || actionFields.includes(field))
 
   return (
-    <SubToolbox title="METADATA" icon={<FolderOpen size={20} strokeWidth={3} />} collapsible isOpenInitial>
+    <SubToolbox
+      title="METADATA"
+      icon={<FolderOpen size={20} strokeWidth={3} />}
+      collapsible
+      isOpenInitial
+      headerActionsPlacement="header"
+      headerActions={onAiFeaturesEnabledChange ? (
+        <ToolboxHeaderToggle
+          level="subtoolbox"
+          value={aiFeaturesEnabled ? "on" : "off"}
+          aria-label="AI Features"
+          className="vt-ai-features-header-toggle"
+          options={[{ value: "on", label: "AI FEATURES" }, { value: "off", label: "OFF" }]}
+          onValueChange={value => onAiFeaturesEnabledChange(value === "on")}
+        />
+      ) : null}
+    >
       <SubToolboxStack density="dense" className={className}>
+        {onShowAiButtonsChange ? (
+          <div className="vt-metadata-ai-button-setting">
+            <span>SHOW AI BUTTONS BENEATH FIELDS</span>
+            <SubToolboxToggle
+              pressed={showAiButtons}
+              label={showAiButtons ? "ON" : "OFF"}
+              onClick={() => onShowAiButtonsChange(!showAiButtons)}
+            />
+          </div>
+        ) : null}
         {showVideoUpload ? (
           <SubToolboxSection label="VIDEO UPLOAD">
             {onVideoFileChange ? (
