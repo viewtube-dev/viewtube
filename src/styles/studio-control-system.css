@@ -708,3 +708,65 @@ button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [
 button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon],button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail]>svg { width:36px;height:36px;display:grid;place-items:center;margin:auto; }
 button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon] svg { width:36px;height:36px;stroke-width:2; }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-button-icon] svg,button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] svg { stroke-width:1.65; }
+
+
+/* Canonical text-field color/focus/caret behavior.
+   Color 1 is the primary module pair; Color 2 is the secondary pair.
+   Keep this after the legacy field rules so these are the effective defaults. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-color-1: var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6));
+  --vt-field-color-2: var(--pair-b, #ff7f6b);
+  --vt-field-stroke: 3px;
+  border: var(--vt-field-stroke) solid #000;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vt-field-color-1) 18%, #fff);
+  color: var(--vt-field-color-1);
+  -webkit-text-fill-color: var(--vt-field-color-1);
+  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-color-1);
+  caret-color: var(--vt-field-color-1);
+  caret-shape: block;
+  box-shadow: none !important;
+  outline: none;
+  transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 300ms ease-out;
+}
+[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-stroke: 3px;
+  min-height: 44px;
+  border-width: 3px;
+  border-radius: 8px;
+}
+[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-stroke: 2px;
+  min-height: 28px;
+  border-width: 2px;
+  border-radius: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 14px;
+}
+textarea[data-vt-studio-control="true"][data-size="standard"] {
+  min-height: 144px;
+  padding: 12px 14px;
+  line-height: 1.05;
+}
+textarea[data-vt-studio-control="true"][data-size="compact"] {
+  min-height: 72px;
+  padding: 8px;
+  line-height: 1.05;
+}
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
+  background: color-mix(in srgb, var(--vt-field-color-1) 12.5%, transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+  border-color: #000;
+  outline: 3px solid var(--vt-field-color-2);
+  outline-offset: 3px;
+  box-shadow: none !important;
+}
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
+  color: color-mix(in srgb, var(--vt-field-color-1) 70%, transparent);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: inherit;
+}
