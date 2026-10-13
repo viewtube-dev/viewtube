@@ -152,7 +152,10 @@ button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); t
 button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
 button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 3px; }
 button[data-vt-studio-control]:disabled { cursor: not-allowed; filter: grayscale(.5); opacity: .5; }
-/* StudioButton has no selected state. Split-left selection swaps the two module-pair fills without changing geometry or adding a thick border. */\nbutton[data-vt-studio-control][data-split-left="true"][data-selected="true"] { box-shadow: var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); }\nbutton[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background: var(--vt-studio-control-accent, var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6))); }\nbutton[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+/* StudioButton has no selected state. Split-left selection swaps the two module-pair fills without changing geometry or adding a thick border. */
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { box-shadow: var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background: var(--vt-studio-control-accent, var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6))); }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
 button[data-vt-studio-control][data-icon-only="true"] { width: var(--vt-studio-control-height); flex: 0 0 var(--vt-studio-control-height); padding: 0; }
 
 [data-vt-studio-button-icon] { display: grid; place-items: center; }
@@ -688,3 +691,20 @@ button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"]
  .vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,
  .vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:minmax(0,1fr); }
 }
+
+
+/* Canonical library defaults: 44px standard / 28px compact. */
+[data-vt-studio-control] { --vt-studio-control-radius:8px; --vt-studio-hover-duration:150ms; --vt-studio-click-duration:300ms; }
+[data-vt-studio-control][data-height-variant="44"],[data-vt-studio-control][data-size="standard"] { --vt-studio-control-radius:8px; }
+[data-vt-studio-control][data-height-variant="28"],[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:5px; }
+button[data-vt-studio-control][data-height-variant="44"] { border-radius:8px; }
+button[data-vt-studio-control][data-height-variant="28"] { border-radius:5px; }
+button[data-vt-studio-control]:hover:not(:disabled) { transform:translateY(1.5px); transition-duration:150ms; }
+button[data-vt-studio-control]:active:not(:disabled) { transform:translate(3px,3px); transition-duration:300ms; }
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] { border-right-width:2px; }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { border-width:var(--vt-studio-control-stroke,3px)!important; border-color:#000!important; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))!important; }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,var(--vt-subtoolbox-fill,#36e0f6)))!important; border-right-width:var(--vt-studio-control-stroke,3px)!important; }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background:transparent!important; }
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon],button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail]>svg { width:36px;height:36px;display:grid;place-items:center;margin:auto; }
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon] svg { width:36px;height:36px;stroke-width:2; }
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-button-icon] svg,button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] svg { stroke-width:1.65; }
