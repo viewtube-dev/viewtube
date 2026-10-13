@@ -6,7 +6,7 @@ import { setContentBuildSelection } from "../../services/asset-engine/ContentBui
 import { buildProjectManifest, getManifestPackageForProject, resolveSelectedProjectId, type ProjectManifestation } from "./projectManifestation"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { SplitLeftButton } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { StudioSplitLeftButton } from "../../studio-ui"
 import {
   LegendMultiDropdown,
   SubToolboxButton,
@@ -137,15 +137,15 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
                 className="vt-project-manifestation-project-dropdown"
               />
               <SubToolboxActions columns={3} forceRow className="vt-project-manifestation-actions">
-                <SplitLeftButton level="l1" icon={<FolderOpen size={22} />} onClick={loadSelected} disabled={!selectedProject}>
+                <StudioSplitLeftButton icon={<FolderOpen size={20} />} onClick={loadSelected} disabled={!selectedProject}>
                   LOAD
-                </SplitLeftButton>
-                <SplitLeftButton level="l1" tone="accent" icon={<ArrowLeftRight size={22} />} onClick={loadSelected} disabled={!selectedProject}>
+                </StudioSplitLeftButton>
+                <StudioSplitLeftButton icon={<ArrowLeftRight size={20} />} tone="accent" onClick={loadSelected} disabled={!selectedProject}>
                   SWAP IN
-                </SplitLeftButton>
-                <SplitLeftButton level="l1" tone="neutral" icon={<RefreshCw size={22} />} onClick={refreshPackages}>
+                </StudioSplitLeftButton>
+                <StudioSplitLeftButton icon={<RefreshCw size={20} />} tone="neutral" onClick={refreshPackages}>
                   REFRESH
-                </SplitLeftButton>
+                </StudioSplitLeftButton>
               </SubToolboxActions>
             </div>
           </SubToolboxSection>
