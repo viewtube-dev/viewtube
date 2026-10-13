@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useBrain } from '../context/useBrain';
 import { CustomIcon } from './CustomIcon';
 import { SubToolbox, ToolboxScaffold } from './Toolbox';
@@ -40,9 +40,13 @@ const PROJECT_COLORS = ['#ff3399', '#ccff00', '#00ccff', '#ffdd00', '#9933FF', '
 
 export const ProjectStudio: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
     const { brain, authState, addProject, updateProject, setChannelHub } = useBrain();
+    const latestProjectsRef = useRef(brain.projects);
+    latestProjectsRef.current = brain.projects;
+    const latestActiveProjectIdRef = useRef<string | null>(null);
     const [isMainToolOpen, setIsMainToolOpen] = useState(true);
     const [viewContext, setViewContext] = useState<'channel' | 'projects'>('channel');
     const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+    latestActiveProjectIdRef.current = activeProjectId;
     const [showNewProjectModal, setShowNewProjectModal] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isGeneratingStoryboard, setIsGeneratingStoryboard] = useState(false);
@@ -153,6 +157,15 @@ export const ProjectStudio: React.FC<{ embedded?: boolean }> = ({ embedded = fal
         if (!activeProject) return;
         setIsGenerating(true);
         try {
+            const sourceSignature = JSON.stringify({
+                id: activeProject.id,
+                name: activeProject.name,
+                concept: activeProject.concept,
+                niche: activeProject.niche,
+                description: activeProject.description,
+                contentBuildId: activeProject.contentBuildId,
+                plan: activeProject.plan,
+            });
             const result = await generateProjectStrategyWithBrain({
                 project: activeProject,
                 channelId: authState.channelId,
@@ -160,6 +173,20 @@ export const ProjectStudio: React.FC<{ embedded?: boolean }> = ({ embedded = fal
                 targetAudience: activeProject.description || "Channel audience",
                 surface: "project-studio",
             });
+            const latest = latestProjectsRef.current.find(project => project.id === activeProject.id);
+            const latestSignature = latest ? JSON.stringify({
+                id: latest.id,
+                name: latest.name,
+                concept: latest.concept,
+                niche: latest.niche,
+                description: latest.description,
+                contentBuildId: latest.contentBuildId,
+                plan: latest.plan,
+            }) : null;
+            if (latestActiveProjectIdRef.current !== activeProject.id || latestSignature !== sourceSignature) {
+                console.info("Project Strategy result discarded because the selected project or its source fields changed during generation.");
+                return;
+            }
             updateProject(activeProject.id, { plan: result.plan });
         } catch (error) {
             console.error('Failed to generate strategy:', error);
