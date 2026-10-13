@@ -869,12 +869,10 @@ const PrimitiveMigrationControl: React.FC<{
         selected={vaultSelected}
         tags={vaultTags}
         sharedTags={["APPLE", "BATTLE", "CAMERA", "HISTORY", "NAPOLEON", "THUMBNAIL", "VIDEO", "YOUTUBE"]}
-        notes={vaultNotes}
         paletteIndex={7}
         onSelectedChange={setVaultSelected}
         onTitleChange={setVaultTitle}
         onTagsChange={setVaultTags}
-        onNotesChange={setVaultNotes}
       />
     )
   }
