@@ -4,7 +4,7 @@ import {
   buildProjectStrategyPrompt,
   type ProjectStrategyPromptInput,
 } from "./projectStrategyPrompt"
-import { runBrainJsonTask } from "./runtime/BrainJsonTask"
+import { runBrainJsonTask } from "./runtime/BrainRuntime"
 import { prepareGenerationRequest, recordToolReceipt } from "../asset-engine/GenerationWorkflow"
 
 export interface ProjectStrategyGenerationRequest {
