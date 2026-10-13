@@ -128,3 +128,14 @@ describe("Video Manager metadata layout contract", () => {
   })
 
 })
+
+
+describe("Video Manager published-video boundary", () => {
+  it("describes management of published videos instead of upload or concept creation", () => {
+    const manager = read("src/views/VideoManager.tsx")
+    expect(manager).toContain('const subtitleBase = "Manage your published YouTube videos')
+    expect(manager).not.toContain('const subtitleBase = "Generate titles, descriptions, tags')
+    expect(manager).not.toContain('const subtitleAdditions = ["If you don\'t have a video just upload a script!"')
+    expect(manager).not.toContain('const subtitleButtonLabels = ["don\'t have a video?"')
+  })
+})
