@@ -14,7 +14,7 @@ const classes = (...values: Array<string | false | null | undefined>) => values.
 
 /** Strip legacy field classes that can override canonical Studio Controls defaults. */
 const canonicalStudioFieldClasses = (className?: string) => classes(
-  ...(className ?? "").split(/\\s+/).filter((token) => token && ![
+  ...(className ?? "").split(/\s+/).filter((token) => token && ![
     "vt-subtoolbox-input", "vt-subtoolbox-textarea", "has-component-level",
     "is-standard", "is-compact", "is-micro", "is-fill",
   ].includes(token)),
