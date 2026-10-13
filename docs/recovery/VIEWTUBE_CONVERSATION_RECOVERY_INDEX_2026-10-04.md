@@ -200,3 +200,18 @@ A separate ViewTube deployment-recovery investigation established:
 | Canonical completion | 0 / 100 |
 | Authority | Recovered executable matrix; reconciliation required |
 | Next | Reconcile and execute QW-001–QW-005 |
+
+
+## Registered recovery contribution — Dashboard/UI + Render investigation — 2026-10-04
+
+| Field | Value |
+|---|---|
+| Agent / conversation | ViewTube Dashboard/UI + Render recovery |
+| Round | 1 |
+| Artifact | `docs/recovery/handoffs/VIEWTUBE_DASHBOARD_UI_RENDER_CONVERSATION_RECOVERY_2026-10-04.md` |
+| Source | Recovery branch `recovery/conversation-2026-10-04-ui-render` |
+| Status | RECOVERED / REPORTED; canonical implementation not established |
+| Provenance | Existing recovery artifact copied without promoting its historical implementation claims |
+| Commit source | Original recovery artifact blob `796d4d37d4fa428e2ccb508a8d99dc3bc0b6e9e1` |
+| Key guardrail | Historical `cbrewsterthegreat/ViewTube` Render evidence is not proof of canonical `viewtube-dev/viewtube` deployment state; `viewtube.live` is explicitly excluded as repository verification |
+| Follow-up | Reconcile the recovered evidence against current canonical source and repository-connected deployment; preserve unverified claims with explicit status |
