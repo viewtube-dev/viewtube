@@ -1,12 +1,22 @@
 import { describe, expect, it } from "vitest"
 import {
+  buildMetadataStrategyBrief,
   createEmptyMetadataMasterPackage,
+  createMetadataMasterSet,
   finalizeMetadataMasterPackage,
   packageToHandoffPayload,
   scoreMetadataMasterPackage,
 } from "./metadataMaster"
 
 describe("Metadata Master package system", () => {
+  it("keeps metadata-set style explicit and creates a goal-aware strategy brief", () => {
+    const pkg = createEmptyMetadataMasterPackage({ goal: "subscribers", intensity: "aggressive" })
+    const set = createMetadataMasterSet(pkg, "PACKAGE A", "channel-fit", "channel-native")
+    expect(set).toMatchObject({ style: "channel-native", package: { goal: "subscribers", intensity: "aggressive" } })
+    expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("subscriber conversion")
+    expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("channel-native")
+  })
+
   it("scores a complete package and surfaces duplicate-tag hygiene", () => {
     const pkg = finalizeMetadataMasterPackage(createEmptyMetadataMasterPackage({
       title: "How to Build a Better YouTube Channel",
