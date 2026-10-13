@@ -111,6 +111,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
+import { StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -455,10 +456,10 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
   }
   if (name === "Text Input") {
-    return <SubToolboxInput level={level} type="text" defaultValue="TEXT INPUT" />
+    return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   }
   if (name === "Textarea") {
-    return <SubToolboxTextArea level={level} defaultValue="DESCRIPTION" />
+    return <StudioTextArea sizeVariant="standard" defaultValue="DESCRIPTION" />
   }
   if (name === "Stepper") {
     return <SubToolboxStepper level={level} value={stepperValue} decreaseIcon={<Minus />} increaseIcon={<Plus />} onDecrease={() => setStepperValue((value) => value - 1)} onIncrease={() => setStepperValue((value) => value + 1)} />
@@ -595,12 +596,12 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Split Search") {
     return <SubToolboxSplitField level={level} variant="search" icon={<Search />} actionIcon={<X />} actionLabel="Clear search" onAction={() => setSearchQuery("")} inputProps={{ "aria-label": "Search", placeholder: "SEARCH", value: searchQuery, onChange: (event) => setSearchQuery(event.target.value) }} />
   }
-  if (name === "20 Plain Input") return <SubToolboxInput20 level={level} defaultValue="TEXT INPUT" />
-  if (name === "21 Plain Text Area") return <SubToolboxTextArea21 level={level} height="compact" defaultValue="TEXT AREA" />
-  if (name === "137 Floating Label Input") return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="TEXT INPUT" />
-  if (name === "138 Floating Label Text Area") return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" height="compact" defaultValue="TEXT AREA" />
+  if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
+  if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
+  if (name === "137 Floating Label Input") return <StudioFloatingLabelInput sizeVariant="standard" overlayLabel="TITLE" defaultValue="TEXT INPUT" />
+  if (name === "138 Floating Label Text Area") return <StudioFloatingLabelTextArea sizeVariant="compact" overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
   if (name === "Number Field") {
-    return <SubToolboxInput20 level={level} type="number" defaultValue="25" />
+    return <StudioInput sizeVariant="standard" type="number" defaultValue="25" />
   }
   if (name === "Input Action") {
     return <SubToolboxSplitField level={level} variant="action" actionIcon={<Plus />} actionLabel="Add item" onAction={() => setActionDraft("")} inputProps={{ "aria-label": "Add item", placeholder: "ADD ITEM", value: actionDraft, onChange: (event) => setActionDraft(event.target.value) }} />
