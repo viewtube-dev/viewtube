@@ -3,12 +3,43 @@ import { createPortal } from "react-dom"
 import { getComponentLevelCssVars } from "./tokens"
 import type { ToolboxControlLevel } from "./tokens"
 import { StudioSplitLeftButton, type StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, type StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
 import { ChevronDown } from "lucide-react"
 import "../../styles/toolbox-entry.css"
 import "../../styles/subtoolbox-split-primitives.css"
 
 const classes = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
 
+
+export interface SubToolboxShellActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: React.ReactNode
+  children: React.ReactNode
+  level?: ToolboxControlLevel
+}
+
+export const SubToolboxShellAction: React.FC<SubToolboxShellActionProps> = ({
+  icon,
+  children,
+  level = "l0",
+  className,
+  style,
+  type = "button",
+  ...props
+}) => (
+  <button
+    type={type}
+    data-vt-control-level={level}
+    className={classes("vt-subtoolbox-shell-action", className)}
+    style={{
+      ...getComponentLevelCssVars(level),
+      ...style,
+    }}
+    {...props}
+  >
+    <span className="vt-subtoolbox-shell-action-rail" aria-hidden="true">{icon}</span>
+    <span className="vt-subtoolbox-shell-action-title">{children}</span>
+  </button>
+)
 
 export interface SubToolboxSplitDropdownOption {
   value: string
@@ -242,6 +273,11 @@ export const SubToolboxKpiCard: React.FC<SubToolboxKpiCardProps> = ({
  * split-left markup or styling.
  */
 
+export interface SubToolboxSplitButtonProps extends StudioSplitLeftButtonProps {
+  selected?: boolean
+  level?: ToolboxControlLevel
+}
+
 export interface SplitLeftButtonProps extends StudioSplitLeftButtonProps {
   level?: ToolboxControlLevel
 }
@@ -249,10 +285,12 @@ export interface SplitLeftButtonProps extends StudioSplitLeftButtonProps {
 const CanonicalSplitLeftAdapter: React.FC<SplitLeftButtonProps> = ({
   level,
   style,
+  selected,
   ...props
 }) => (
   <StudioSplitLeftButton
     {...props}
+    selected={selected}
     data-vt-control-level={level}
     style={{
       ...(level ? getComponentLevelCssVars(level) : {}),
@@ -262,4 +300,6 @@ const CanonicalSplitLeftAdapter: React.FC<SplitLeftButtonProps> = ({
 )
 
 export const SplitLeftButton = CanonicalSplitLeftAdapter
-export const SubToolboxSplitButton = CanonicalSplitLeftAdapter
+export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = (props) => (
+  <CanonicalSplitLeftAdapter {...props} />
+)
