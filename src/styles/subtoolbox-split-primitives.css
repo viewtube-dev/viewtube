@@ -1,5 +1,7 @@
-.vt-subtoolbox-split-button,
-.vt-subtoolbox-split-dropdown {
+.vt-subtoolbox-split-dropdown {vt-subtoolbox-split-button,
+}
+
+
   /* The rail mirrors the owning SubToolbox icon section; the label/body mirrors
      its title section. No component chooses an independent palette pair. */
   --vt-split-rail: var(--pair-b, #c0f240);
