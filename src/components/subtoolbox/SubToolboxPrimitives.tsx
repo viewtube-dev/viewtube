@@ -2396,3 +2396,41 @@ export const SubToolboxScriptBar: React.FC<SubToolboxScriptBarProps> = ({
     })}
   </div>
 )
+
+/** Compact, source-owned 44px control variants used by the component library. */
+export type SubToolboxControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
+export interface SubToolbox44ControlProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  skin?: SubToolboxControlSkin;
+  checked: boolean;
+  shape?: "round" | "rect";
+}
+const controlSkinClass = (skin: SubToolboxControlSkin) => ({
+  "solid": "is-solid",
+  "color-swap": "is-color-swap",
+  "black-indicator": "is-black-indicator",
+  "white-indicator": "is-white-indicator",
+}[skin]);
+export const SubToolbox44Switch: React.FC<SubToolbox44ControlProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role="switch" aria-checked={checked} className={classes("vt-subtoolbox-44-switch", `is-${shape}`, controlSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-subtoolbox-44-handle" aria-hidden="true" /></button>
+);
+export type SubToolbox44ChoiceKind = "radio" | "checkbox";
+export interface SubToolbox44ChoiceProps extends SubToolbox44ControlProps { kind: SubToolbox44ChoiceKind }
+export const SubToolbox44Choice: React.FC<SubToolbox44ChoiceProps> = ({ kind, skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role={kind} aria-checked={checked} className={classes("vt-subtoolbox-44-choice", `is-${kind}`, `is-${shape}`, controlSkinClass(skin), checked && "is-on", className)} {...props}>
+    {kind === "radio" ? <span className="vt-subtoolbox-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d="M 7 26 L 19 39 L 43 11" /></svg>}
+  </button>
+);
+export interface SubToolbox44WordToggleProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: boolean;
+  onValueChange?: (value: boolean) => void;
+  words?: readonly [string, string];
+  size?: "44" | "28";
+  skin?: SubToolboxControlSkin;
+}
+export const SubToolbox44WordToggle: React.FC<SubToolbox44WordToggleProps> = ({ value, onValueChange, words = ["OFF", "ON"], size = "44", skin = "solid", className, ...props }) => (
+  <div role="group" data-vt-word-toggle-size={size} className={classes("vt-subtoolbox-44-word-toggle", `is-size-${size}`, controlSkinClass(skin), className)} {...props}>
+    <span className="vt-subtoolbox-44-word-handle" aria-hidden="true" data-active={value ? "true" : "false"} />
+    {words.map((word, index) => <button key={index} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+  </div>
+);
+
