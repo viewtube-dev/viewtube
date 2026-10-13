@@ -97,9 +97,9 @@ export const CommunityPostGenerator: React.FC = () => {
    </SubToolbox>
 
    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-    <SubToolboxGridActionButton label="Save Draft" iconName="archive" tone="yellow" disabled={!post.content.trim()} onClick={post.saveToVault} />
+    <StudioSplitLeftButton icon={<Archive size={20} aria-hidden="true" />} tone="warning" disabled={!post.content.trim()} onClick={post.saveToVault}>Save Draft</StudioSplitLeftButton>
     <SubToolboxGridActionButton label={post.clipboardStatus === "copied" ? "Copied" : "Copy Post"} iconName={post.clipboardStatus === "copied" ? "check" : "copy"} tone="green" disabled={!post.content.trim()} onClick={post.copyPost} />
-    {post.channelCommunityUrl ? <SubToolboxLinkButton href={post.channelCommunityUrl} target="_blank" rel="noreferrer" icon={<ExternalLink size={19} />}>Go to Channel</SubToolboxLinkButton> : <SubToolboxGridActionButton label="Connect Channel" iconName="link" tone="blue" onClick={context.reconnect} />}
+    {post.channelCommunityUrl ? <SubToolboxLinkButton href={post.channelCommunityUrl} target="_blank" rel="noreferrer" icon={<ExternalLink size={19} />}>Go to Channel</SubToolboxLinkButton> : <StudioSplitLeftButton icon={<ExternalLink size={20} aria-hidden="true" />} tone="success" onClick={context.reconnect}>Connect Channel</StudioSplitLeftButton>}
    </div>
   </div>
  </div>
