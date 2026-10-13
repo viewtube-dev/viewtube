@@ -152,7 +152,7 @@ button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); t
 button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
 button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 3px; }
 button[data-vt-studio-control]:disabled { cursor: not-allowed; filter: grayscale(.5); opacity: .5; }
-button[data-vt-studio-control][data-selected="true"] { box-shadow: 0 0 0 3px #000, var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); }
+/* StudioButton has no selected state. Split-left selection swaps the two module-pair fills without changing geometry or adding a thick border. */\nbutton[data-vt-studio-control][data-split-left="true"][data-selected="true"] { box-shadow: var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); }\nbutton[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background: var(--vt-studio-control-accent, var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6))); }\nbutton[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
 button[data-vt-studio-control][data-icon-only="true"] { width: var(--vt-studio-control-height); flex: 0 0 var(--vt-studio-control-height); padding: 0; }
 
 [data-vt-studio-button-icon] { display: grid; place-items: center; }
@@ -554,4 +554,54 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
 @media (prefers-reduced-motion: reduce) {
   [data-vt-studio-control="true"]:is(input, textarea),
   .vt-studio-labeled-field-overlay { transition-duration: .01ms !important; }
+}
+
+
+/* Primitive 139 — labeled dropdown, with the same uppercase Studio text contract. */
+.vt-studio-labeled-dropdown {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 4px;
+  color: #000;
+}
+.vt-studio-labeled-dropdown-label {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+}
+.vt-studio-labeled-dropdown > select[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6)) 50%, #fff);
+  box-shadow: 4px 4px 0 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 65%, transparent);
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+.vt-studio-labeled-dropdown.is-compact > select[data-vt-studio-control="true"] {
+  height: 28px;
+  min-height: 28px;
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-shadow: 3px;
+  padding: 0 30px 0 8px;
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 65%, transparent);
+  font-size: 12px;
 }
