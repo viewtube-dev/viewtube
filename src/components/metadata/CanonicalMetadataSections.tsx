@@ -117,13 +117,6 @@ export interface CanonicalMetadataSectionsProps {
   educationNotesDisabled?: boolean
 }
 
-type MetadataActionStyle = React.CSSProperties & { "--pair-a": string; "--pair-b": string }
-const ACTION_STYLES: Record<"generate" | "refine" | "analyze", MetadataActionStyle> = {
-  generate: { "--pair-a": "#57F15C", "--pair-b": "#CCFF00" },
-  refine: { "--pair-a": "#FFDA47", "--pair-b": "#FFA85C" },
-  analyze: { "--pair-a": "#45C8E9", "--pair-b": "#36E0F6" },
-}
-
 const FieldActions: React.FC<{
   field: string
   onGenerate?: (field: string) => void
@@ -133,9 +126,9 @@ const FieldActions: React.FC<{
   if (!onGenerate && !onRefine && !onAnalyze) return null
   return (
     <SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">
-      {onGenerate ? <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<Sparkles size={18} />} style={{ "--vt-studio-control-accent": ACTION_STYLES.generate["--pair-a"], "--vt-studio-control-secondary": ACTION_STYLES.generate["--pair-b"] } as React.CSSProperties} onClick={() => onGenerate(field)}>GENERATE</StudioSplitLeftButton> : <span />}
-      {onRefine ? <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<WandSparkles size={18} />} style={{ "--vt-studio-control-accent": ACTION_STYLES.refine["--pair-a"], "--vt-studio-control-secondary": ACTION_STYLES.refine["--pair-b"] } as React.CSSProperties} onClick={() => onRefine(field)}>REFINE</StudioSplitLeftButton> : <span />}
-      {onAnalyze ? <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<Search size={18} />} style={{ "--vt-studio-control-accent": ACTION_STYLES.analyze["--pair-a"], "--vt-studio-control-secondary": ACTION_STYLES.analyze["--pair-b"] } as React.CSSProperties} onClick={() => onAnalyze(field)}>ANALYZE</StudioSplitLeftButton> : <span />}
+      {onGenerate ? <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<Sparkles size={18} />} onClick={() => onGenerate(field)}>GENERATE</StudioSplitLeftButton> : <span />}
+      {onRefine ? <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<WandSparkles size={18} />} onClick={() => onRefine(field)}>REFINE</StudioSplitLeftButton> : <span />}
+      {onAnalyze ? <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<Search size={18} />} onClick={() => onAnalyze(field)}>ANALYZE</StudioSplitLeftButton> : <span />}
     </SubToolboxActions>
   )
 }
