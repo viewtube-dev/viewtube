@@ -9,7 +9,7 @@ import {
   StudioIconButton,
   StudioInput,
   StudioSearchInput,
-  StudioSplitLeftButton,
+  SplitLeftButton,
   StudioTextArea,
 } from "./primitives/StudioControls"
 import { STUDIO_PALETTE } from "./palette"
@@ -84,8 +84,8 @@ export const StudioHubCertification: React.FC = () => {
               <StudioIconButton label="Search" icon={<Search size={18} />} />
               <StudioIconButton label="Confirm" tone="success" icon={<Check size={18} />} />
             </div>
-            <StudioSplitLeftButton icon={<Sparkles size={22} />}>Generate</StudioSplitLeftButton>
-            <StudioSplitLeftButton tone="success" icon={<Link2 size={22} />}>Connect Channel</StudioSplitLeftButton>
+            <SplitLeftButton level="l1" icon={<Sparkles size={22} />}>Generate</SplitLeftButton>
+            <SplitLeftButton level="l1" tone="success" icon={<Link2 size={22} />}>Connect Channel</SplitLeftButton>
           </SubToolboxGrid>
         </SubToolboxSection>
       </SubToolboxStack>
