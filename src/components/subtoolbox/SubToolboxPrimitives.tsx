@@ -25,19 +25,30 @@ export interface SubToolboxInputProps extends React.InputHTMLAttributes<HTMLInpu
   level?: ToolboxControlLevel
   variant?: "default" | "right-label" | "floating-label"
 }
-export const SubToolboxInput = React.forwardRef<HTMLInputElement, SubToolboxInputProps>(({ className, controlSize = "standard", level, variant = "default", style, ...props }, ref) => <input ref={ref} data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", `is-${controlSize}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
+/** Primitive 20: canonical plain text input. Floating labels must be composed by primitive 137. */
+export const SubToolboxInput20 = React.forwardRef<HTMLInputElement, SubToolboxInputProps>(({ className, controlSize = "standard", level, variant = "default", style, ...props }, ref) => <input ref={ref} data-vt-primitive-id="20" data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", `is-${controlSize}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
+SubToolboxInput20.displayName = "SubToolboxInput20"
+
+/** Compatibility name; production fields continue to resolve to primitive 20. */
+export const SubToolboxInput = SubToolboxInput20
 SubToolboxInput.displayName = "SubToolboxInput"
 
-export const SubToolboxTextArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { height?: "compact" | "standard" | "fill"; level?: ToolboxControlLevel; variant?: "default" | "right-label" | "floating-label" }>(({ className, height = "standard", level, variant = "default", style, ...props }, ref) => <textarea ref={ref} data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", "vt-subtoolbox-textarea", `is-${height}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
+/** Primitive 21: canonical plain textarea. Floating labels must be composed by primitive 138. */
+export const SubToolboxTextArea21 = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { height?: "compact" | "standard" | "fill"; level?: ToolboxControlLevel; variant?: "default" | "right-label" | "floating-label" }>(({ className, height = "standard", level, variant = "default", style, ...props }, ref) => <textarea ref={ref} data-vt-primitive-id="21" data-vt-control-level={level} data-vt-input-variant={variant} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-input", "vt-subtoolbox-textarea", `is-${height}`, `is-${variant}`, level && "has-component-level", className)} {...props} />)
+SubToolboxTextArea21.displayName = "SubToolboxTextArea21"
+
+/** Compatibility name; production text areas continue to resolve to primitive 21. */
+export const SubToolboxTextArea = SubToolboxTextArea21
 SubToolboxTextArea.displayName = "SubToolboxTextArea"
 
 export interface SubToolboxLabeledInputProps extends SubToolboxInputProps {
   overlayLabel: React.ReactNode
   variant?: "default" | "right-label" | "floating-label"
 }
+/** Primitive 137: primitive 20 plus the canonical floating-label overlay. */
 export const SubToolboxLabeledInput = React.forwardRef<HTMLInputElement, SubToolboxLabeledInputProps>(({ overlayLabel, className, level = "l1", variant = "floating-label", style, ...props }, ref) => (
-  <label className={classes("vt-subtoolbox-labeled-field", `is-${variant === "right-label" ? "floating-label" : variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
-    <SubToolboxInput ref={ref} level={level} variant={variant} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
+  <label data-vt-primitive-id="137" className={classes("vt-subtoolbox-labeled-field", `is-${variant === "right-label" ? "floating-label" : variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
+    <SubToolboxInput20 ref={ref} level={level} variant={variant} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
     <span className="vt-subtoolbox-labeled-field-overlay">{overlayLabel}</span>
   </label>
 ))
@@ -49,9 +60,10 @@ export interface SubToolboxLabeledTextAreaProps extends React.TextareaHTMLAttrib
   level?: ToolboxControlLevel
   variant?: "default" | "right-label" | "floating-label"
 }
+/** Primitive 138: primitive 21 plus the canonical floating-label overlay. */
 export const SubToolboxLabeledTextArea = React.forwardRef<HTMLTextAreaElement, SubToolboxLabeledTextAreaProps>(({ overlayLabel, className, height = "standard", level = "l1", variant = "floating-label", style, ...props }, ref) => (
-  <label className={classes("vt-subtoolbox-labeled-field", "is-textarea", `is-${variant === "right-label" ? "floating-label" : variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
-    <SubToolboxTextArea ref={ref} level={level} variant={variant} height={height} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
+  <label data-vt-primitive-id="138" className={classes("vt-subtoolbox-labeled-field", "is-textarea", `is-${variant === "right-label" ? "floating-label" : variant}`)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)}>
+    <SubToolboxTextArea21 ref={ref} level={level} variant={variant} height={height} className={classes("vt-subtoolbox-labeled-control", className)} {...props} />
     <span className="vt-subtoolbox-labeled-field-overlay">{overlayLabel}</span>
   </label>
 ))
