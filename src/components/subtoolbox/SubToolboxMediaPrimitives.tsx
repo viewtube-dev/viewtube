@@ -369,7 +369,7 @@ export const SubToolboxMediaTransportBar: React.FC<SubToolboxMediaTransportBarPr
   </div>
 )
 
-export interface SubToolboxMediaPlayerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+export interface SubToolboxMediaPlayerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title" | "onVolumeChange"> {
   level?: ToolboxControlLevel
   src?: string
   poster?: string
