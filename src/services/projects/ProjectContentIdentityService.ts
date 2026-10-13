@@ -13,7 +13,8 @@ export type ProjectContentIdentityResult = {
  *
  * Project remains the creator-facing planning object. ContentBuild is the
  * durable lifecycle identity. Video Package is initialized only against that
- * same ContentBuild and may remain pending while channel scope is unavailable.
+ * same ContentBuild. Before channel connection, it uses a local-draft scope so
+ * project authoring and package persistence can be tested without account auth.
  */
 export const initializeProjectContentIdentity = (
   project: Project,
