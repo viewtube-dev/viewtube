@@ -65,7 +65,11 @@ Do not create a new document for an existing subject. Update or consolidate its 
 | Conversation synchronization | recovery/Sync.md |
 | Repository document history | recovery/History.md |
 
-**Rule:** substantive knowledge belongs in its canonical subject document; operation history belongs in `docs/recovery/History.md`.
+**Rule:** substantive knowledge belongs in its canonical subject document; operation history belongs in docs/recovery/History.md.
+
+## UI implementation guide
+
+- [Studio Controls Authoring Guide](Studio-Controls-Authoring-Guide.md) — how to extend canonical CSS primitives/components, reuse shared defaults, implement height-based variants, handle components outside the height system, prevent control overlap, and represent real component styling in the confirmed primitive library.
 
 ## Current implementation / conversation records
 
