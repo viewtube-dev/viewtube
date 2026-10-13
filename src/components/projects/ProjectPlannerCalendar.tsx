@@ -73,10 +73,6 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
     () => projects.filter(project => Boolean(parseDate(project.publishDate))),
     [projects],
   )
-  const unscheduledProjects = useMemo(
-    () => projects.filter(project => !parseDate(project.publishDate)),
-    [projects],
-  )
   const projectsForDate = (key: string) =>
     scheduledProjects.filter(project => { const date = parseDate(project.publishDate); return date ? dateKey(date) === key : false })
   const tasksForDate = (key: string) => projects.flatMap(project =>
