@@ -25,7 +25,7 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('label="Group"')
   expect(source).toContain('label="Compare"')
   expect(source).toContain('disabled={selectedAssetIds.length !== 2}')
-  expect(source).toContain('label="Metadata"')
+  expect(source).toMatch(/label="Metadata"[^\n]*onClick={openSelectedInspector}/)
   expect(source).toContain('label="Export"')
   expect(source).toContain('label="Clear"')
  })
