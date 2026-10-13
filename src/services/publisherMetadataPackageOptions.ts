@@ -168,6 +168,12 @@ export const selectPublisherMetadataPackageOption = (
         description: descriptionArtifact || videoPackage.packaging.description,
         tags: tagsArtifact || videoPackage.packaging.tags,
       },
+      production: {
+        ...videoPackage.production,
+        renderIds: payload.finalVideoAssetId && assets.has(payload.finalVideoAssetId) && !videoPackage.production.renderIds.includes(payload.finalVideoAssetId)
+          ? [...videoPackage.production.renderIds, payload.finalVideoAssetId]
+          : videoPackage.production.renderIds,
+      },
       contentBuildRevision: getContentBuild(contentBuildId)?.revision || videoPackage.contentBuildRevision,
       provenance: videoPackage.provenance.some(entry => entry.id === `${videoPackage.id}:metadata-option-selected:${assetId}`)
         ? videoPackage.provenance
