@@ -378,7 +378,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           icon={<Target size={22} />}
           paletteIndex={paletteIndex + 1}
           collapsible
-          isOpenInitial
+          isOpenInitial={false}
         >
           <SubToolboxStack density="dense">
             <SubToolboxGrid minItemWidth="standard" density="dense">
@@ -591,7 +591,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           icon={<BarChart3 size={22} />}
           paletteIndex={paletteIndex + 4}
           collapsible
-          isOpenInitial
+          isOpenInitial={false}
         >
           <SubToolboxGrid minItemWidth="standard" density="dense">
             <SubToolboxOutputCard title="PACKAGE SCORE" badge={readinessLabel} icon={<BarChart3 size={18} />}>
@@ -646,7 +646,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           icon={<Send size={22} />}
           paletteIndex={paletteIndex + 5}
           collapsible
-          isOpenInitial
+          isOpenInitial={false}
         >
           <SubToolboxAlert
             level="l1"
@@ -667,7 +667,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         </SubToolbox>
 
         <SubToolbox
-          title="06 PACKAGE HISTORY"
+          title="06 SAVED PACKAGES"
           icon={<RefreshCcw size={22} />}
           paletteIndex={paletteIndex + 6}
           collapsible
@@ -686,7 +686,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
               ))}
             </SubToolboxStack>
           ) : (
-            <SubToolboxStatePanel state="empty" message="Saved publication packages will appear here." />
+            <SubToolboxStatePanel state="empty" message="Saved package drafts appear here. Detailed change history and analytics belong in the separate History / Analytics workspace." />
           )}
         </SubToolbox>
 
