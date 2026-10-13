@@ -10,7 +10,6 @@ import {
   SubToolboxSelect,
   SubToolboxStatusBadge,
   SubToolboxToggle,
-  SubToolboxTagEditor,
   LegendMultiDropdown,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
@@ -132,7 +131,7 @@ const FieldActions: React.FC<{
 }> = ({ field, onGenerate, onRefine, onAnalyze }) => {
   if (!onGenerate && !onRefine && !onAnalyze) return null
   return (
-    <SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">
+    <div className="vt-metadata-field-actions mt-2">
       {onGenerate ? <SplitLeftButton level="l1" icon={<Sparkles size={16} />} style={ACTION_STYLES.generate} onClick={() => onGenerate(field)}>GENERATE</SplitLeftButton> : <span />}
       {onRefine ? <SplitLeftButton level="l1" icon={<WandSparkles size={16} />} style={ACTION_STYLES.refine} onClick={() => onRefine(field)}>REFINE</SplitLeftButton> : <span />}
       {onAnalyze ? <SplitLeftButton level="l1" icon={<Search size={16} />} style={ACTION_STYLES.analyze} onClick={() => onAnalyze(field)}>ANALYZE</SplitLeftButton> : <span />}
@@ -286,24 +285,29 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         <SubToolboxSection label={<span className="flex items-center gap-1"><Tags size={12} /> TAGS</span>}>
           {hasTagEditor ? (
             <>
-              <SubToolboxTagEditor
-                level="l1"
-                className="vt-metadata-tag-editor"
-                style={{
-                  "--vt-component-height": "44px",
-                  "--vt-component-stroke": "3px",
-                  "--vt-component-radius": "8px",
-                  "--vt-component-font-size": "14px",
-                } as React.CSSProperties}
-                tags={currentTags}
-                onTagsChange={nextTags => onTagsChange(nextTags.join(", "))}
-                addIcon={<Plus size={15} />}
-                saveIcon="✓"
-                removeIcon="×"
-                renderTag={(tag, remove) => (
-                  <TagRankTag key={tag} tag={tag} componentLevel="l1" analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())} onRemove={remove} />
-                )}
-              />
+              <div className="vt-metadata-tag-list">
+                {currentTags.map(tag => (
+                  <TagRankTag
+                    key={tag}
+                    tag={tag}
+                    componentLevel="l1"
+                    analysis={tagAnalysis.find(item => item.tag.toLowerCase() === tag.toLowerCase())}
+                    onRemove={() => onTagsChange(currentTags.filter(item => item !== tag).join(", "))}
+                  />
+                ))}
+              </div>
+              <div className="vt-metadata-tag-add-row">
+                <SubToolboxInput
+                  level="l1"
+                  value={tagInput}
+                  onChange={event => onTagInputChange?.(event.target.value)}
+                  placeholder="ADD TAG"
+                  aria-label="Add tag"
+                />
+                <SubToolboxButton level="l1" aria-label="Add tag" onClick={onAddTag} disabled={!tagInput.trim()}>
+                  <Plus size={16} />
+                </SubToolboxButton>
+              </div>
               <div className="flex justify-end text-[10px] font-black uppercase opacity-50">{tags.length}/{maxTagChars}</div>
               {suggestedTags.length > 0 ? (
                 <SubToolboxSection label="RANKED SUGGESTIONS">
