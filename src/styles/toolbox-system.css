@@ -218,9 +218,9 @@
   align-items: stretch;
   overflow: hidden;
   padding: 0 !important;
-  font-size: 20px !important;
-  font-weight: 1000 !important;
-  line-height: .82 !important;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
 }
 [data-vt-split-left] > [data-vt-split-left-rail],
 .vt-split-left-module-action > [data-vt-split-left-rail] {

@@ -3,7 +3,7 @@ import React from "react"
 import { ExternalLink, Link2, Loader2, MessageCircle, MessagesSquare, RefreshCw, Sparkles, ThumbsUp } from "lucide-react"
 import { buildYouTubeCommentUrl } from "../services/youtube/commentHandoff"
 import { SubToolbox, SubToolboxGridActionButton, SubToolboxInnerActionButton } from "./Toolbox"
-import { StudioButton, StudioIconButton, StudioTextArea } from "../studio-ui"
+import { StudioButton, StudioIconButton, StudioSplitLeftButton, StudioTextArea } from "../studio-ui"
 import { useCommentResponderController, useCreatorEngagementContext } from "../features/creator-engagement"
 
 const plainText = (value: string) => {
@@ -87,7 +87,7 @@ export const CommentResponder: React.FC = () => {
    </SubToolbox>
 
    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-    {commentUrl ? <a href={commentUrl} target="_blank" rel="noreferrer" className="min-h-14 border-[4px] border-black rounded-[16px] bg-[#FFC587] shadow-[5px_5px_0_0_#F59E46] font-black uppercase text-lg flex items-center justify-center gap-2 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"><ThumbsUp size={18} aria-hidden="true" />Open on YouTube</a> : <SubToolboxGridActionButton label="Open Comment" iconName="external-link" tone="orange" disabled onClick={() => {}} />}
+    {commentUrl ? <a href={commentUrl} target="_blank" rel="noreferrer" className="min-h-14 border-[4px] border-black rounded-[16px] bg-[#FFC587] shadow-[5px_5px_0_0_#F59E46] font-black uppercase text-lg flex items-center justify-center gap-2 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"><ThumbsUp size={18} aria-hidden="true" />Open on YouTube</a> : <StudioSplitLeftButton icon={<ExternalLink size={20} aria-hidden="true" />} tone="warning" disabled onClick={() => {}}>Open Comment</StudioSplitLeftButton>}
     <SubToolboxGridActionButton label={comments.canPostReply ? "Post Reply" : context.connected ? "Reconnect Channel" : "Connect Channel"} iconName={comments.canPostReply ? "send" : "link"} tone="green" disabled={comments.canPostReply && (!thread || !comments.replyText.trim() || comments.loading)} onClick={comments.canPostReply ? comments.postReply : comments.reconnect} />
    </div>
   </div>

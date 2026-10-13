@@ -6,7 +6,7 @@ import { setContentBuildSelection } from "../../services/asset-engine/ContentBui
 import { buildProjectManifest, getManifestPackageForProject, resolveSelectedProjectId, type ProjectManifestation } from "./projectManifestation"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { SplitLeftButton } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { StudioSplitLeftButton } from "../../studio-ui"
 import {
   LegendMultiDropdown,
   SubToolboxButton,
@@ -137,15 +137,15 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
                 className="vt-project-manifestation-project-dropdown"
               />
               <SubToolboxActions columns={3} forceRow className="vt-project-manifestation-actions">
-                <SplitLeftButton level="l1" icon={<FolderOpen size={22} />} onClick={loadSelected} disabled={!selectedProject}>
+                <StudioSplitLeftButton icon={<FolderOpen size={20} />} onClick={loadSelected} disabled={!selectedProject}>
                   LOAD
-                </SplitLeftButton>
-                <SplitLeftButton level="l1" tone="accent" icon={<ArrowLeftRight size={22} />} onClick={loadSelected} disabled={!selectedProject}>
+                </StudioSplitLeftButton>
+                <StudioSplitLeftButton icon={<ArrowLeftRight size={20} />} tone="accent" onClick={loadSelected} disabled={!selectedProject}>
                   SWAP IN
-                </SplitLeftButton>
-                <SplitLeftButton level="l1" tone="neutral" icon={<RefreshCw size={22} />} onClick={refreshPackages}>
+                </StudioSplitLeftButton>
+                <StudioSplitLeftButton icon={<RefreshCw size={20} />} tone="neutral" onClick={refreshPackages}>
                   REFRESH
-                </SplitLeftButton>
+                </StudioSplitLeftButton>
               </SubToolboxActions>
             </div>
           </SubToolboxSection>
@@ -188,7 +188,7 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
                     icon={<Boxes size={16} />}
                     action={
                       slot.assetId
-                        ? <SubToolboxButton size="compact" level="l2" onClick={() => swapAsset(slot.slot, slot.assetId)} icon={swapState === "saved" ? <Check size={14} /> : <ArrowLeftRight size={14} />}>SWAP</SubToolboxButton>
+                        ? <StudioSplitLeftButton icon={swapState === "saved" ? <Check size={20} /> : <ArrowLeftRight size={20} />} onClick={() => swapAsset(slot.slot, slot.assetId)}>SWAP</StudioSplitLeftButton>
                         : undefined
                     }
                   >
@@ -202,9 +202,9 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
             </SubToolboxSection>
 
             <SubToolboxActions columns={2}>
-              <SubToolboxButton tone="accent" icon={<Sparkles size={16} />} onClick={loadSelected}>
+              <StudioSplitLeftButton icon={<Sparkles size={20} />} tone="accent" onClick={loadSelected}>
                 LOAD INTO TOOL
-              </SubToolboxButton>
+              </StudioSplitLeftButton>
               {onSaveProject ? (
                 <SubToolboxButton tone="success" icon={<Save size={16} />} onClick={saveSelected}>
                   {swapState === "saving" ? "SAVING…" : "SAVE PROJECT STATE"}
