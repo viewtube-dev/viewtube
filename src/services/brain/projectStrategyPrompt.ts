@@ -56,7 +56,10 @@ const REQUIRED_FIELDS = [
   "hook",
 ] as const
 
-export const validateProjectStrategy = (value: unknown): ProjectPlan => {
+export const validateProjectStrategy = (
+  value: unknown,
+  defaults: { concept?: string; niche?: string } = {},
+): ProjectPlan => {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new Error("Project Strategy output must be a JSON object.")
   }
@@ -72,7 +75,11 @@ export const validateProjectStrategy = (value: unknown): ProjectPlan => {
     result[field] = fieldValue.trim()
   }
 
-  return result as unknown as ProjectPlan
+  return {
+    concept: defaults.concept || (typeof candidate.concept === "string" ? candidate.concept : ""),
+    niche: defaults.niche || (typeof candidate.niche === "string" ? candidate.niche : ""),
+    ...result,
+  } as ProjectPlan
 }
 
 export const parseProjectStrategyJson = (raw: string): ProjectPlan => {
