@@ -1007,7 +1007,12 @@
       "id": "generateProjectStrategy",
       "source": "src/services/gemini.ts",
       "kind": "generation_function",
-      "status": "legacy_reachability_and_migration_required"
+      "family": "project-strategy",
+      "promptModule": "src/services/brain/projectStrategyPrompt.ts",
+      "promptVersion": "project-strategy-v1",
+      "outputContract": "ProjectPlan (topic, description, length, audience, vision, hook)",
+      "status": "versioned_prompt_and_validator_added_brain_runtime_migration_pending",
+      "notes": "Both ProjectStudio callers now pass project and ContentBuild identity. Provider orchestration is still the legacy Gemini path and must migrate to BrainRuntime in the next slice."
     },
     {
       "id": "generateStoryboard",
