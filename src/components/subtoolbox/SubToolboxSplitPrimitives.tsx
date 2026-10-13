@@ -307,3 +307,32 @@ export const SubToolboxKpiCard: React.FC<SubToolboxKpiCardProps> = ({
     </div>
   </article>
 )
+
+/**
+ * Compatibility adapter for older imports. Both public names intentionally
+ * render the canonical StudioSplitLeftButton; this module owns no parallel
+ * split-left markup or styling.
+ */
+import { StudioSplitLeftButton, type StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
+
+export interface SplitLeftButtonProps extends StudioSplitLeftButtonProps {
+  level?: ToolboxControlLevel
+}
+
+const CanonicalSplitLeftAdapter: React.FC<SplitLeftButtonProps> = ({
+  level,
+  style,
+  ...props
+}) => (
+  <StudioSplitLeftButton
+    {...props}
+    data-vt-control-level={level}
+    style={{
+      ...(level ? getComponentLevelCssVars(level) : {}),
+      ...style,
+    }}
+  />
+)
+
+export const SplitLeftButton = CanonicalSplitLeftAdapter
+export const SubToolboxSplitButton = CanonicalSplitLeftAdapter
