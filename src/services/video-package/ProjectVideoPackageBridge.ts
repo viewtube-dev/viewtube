@@ -17,11 +17,33 @@ export const ensureVideoPackageForProject = (
   } = {},
 ) => {
   if (!project.contentBuildId) return null
-  const channelId = input.channelId?.trim()
-  if (!channelId) return null
+  // Project/package authoring is local-first. A local-draft scope is deliberately
+  // not a YouTube channel ID; live publishing still requires real account auth.
+  const connectedChannelId = input.channelId?.trim() || null
+  const channelId = connectedChannelId || `local-draft:${project.id}`
 
   const exact = findVideoPackageByProject(project.id, project.contentBuildId)
-  if (exact) return exact
+  if (exact) {
+    // Bind a previously local-only package when a channel is connected later.
+    if (connectedChannelId && exact.channelId.startsWith("local-draft:")) {
+      const now = input.now || new Date().toISOString()
+      return saveVideoPackage({
+        ...exact,
+        version: exact.version + 1,
+        channelId: connectedChannelId,
+        identity: { ...exact.identity, updatedAt: now },
+        provenance: [...exact.provenance, {
+          id: `${exact.id}:channel-bound:${connectedChannelId}:${now}`,
+          action: "local_package_bound_to_channel",
+          sourceToolId: input.sourceToolId || "project-builder",
+          artifactIds: [],
+          evidenceIds: [],
+          createdAt: now,
+        }],
+      })
+    }
+    return exact
+  }
 
   const projectPackage = findVideoPackageByProject(project.id)
   if (projectPackage && projectPackage.contentBuildId !== project.contentBuildId) {
