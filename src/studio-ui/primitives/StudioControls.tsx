@@ -1,5 +1,6 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
+import { SubToolboxInput20, SubToolboxTextArea21 } from "../../components/subtoolbox/SubToolboxPrimitives"
 import "../../styles/studio-split-left-consistency.css"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
@@ -10,34 +11,38 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   ...(tone ? { "data-tone": tone } : {}),
 })
 
+/** Public Studio facade over canonical primitive 20; not an independent input implementation. */
 export const StudioInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", ...props }, ref) => (
-  <input ref={ref} {...withStudioAttrs(sizeVariant)} {...props} />
+  <SubToolboxInput20 ref={ref} controlSize={sizeVariant === "compact" ? "compact" : "standard"} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioInput.displayName = "StudioInput"
 
+/** Search facade over canonical primitive 20. */
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", type = "search", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+  <SubToolboxInput20 ref={ref} controlSize={sizeVariant === "compact" ? "compact" : "standard"} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
+/** Number facade over canonical primitive 20. */
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", type = "number", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+  <SubToolboxInput20 ref={ref} controlSize={sizeVariant === "compact" ? "compact" : "standard"} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
+/** Public Studio facade over canonical primitive 21; not an independent textarea implementation. */
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
->((props, ref) => <textarea ref={ref} {...withStudioAttrs("standard")} {...props} />)
+  React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
+>(({ sizeVariant = "standard", ...props }, ref) => <SubToolboxTextArea21 ref={ref} height={sizeVariant === "compact" ? "compact" : "standard"} {...withStudioAttrs(sizeVariant)} {...props} />)
 StudioTextArea.displayName = "StudioTextArea"
 
 export const StudioSelect = React.forwardRef<

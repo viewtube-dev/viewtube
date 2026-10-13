@@ -25,6 +25,8 @@ import {
   SubToolboxFileTarget,
   SubToolboxIconButton,
   SubToolboxInput,
+  SubToolboxInput20,
+  SubToolboxTextArea21,
   SubToolboxLabeledInput,
   SubToolboxLabeledTextArea,
   SubToolboxKnob,
@@ -137,6 +139,10 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Context Menu",
   "Text Input",
   "Textarea",
+  "20 Plain Input",
+  "21 Plain Text Area",
+  "137 Floating Label Input",
+  "138 Floating Label Text Area",
   "Split Search",
   "Number Field",
   "Input Action",
@@ -589,8 +595,12 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "Split Search") {
     return <SubToolboxSplitField level={level} variant="search" icon={<Search />} actionIcon={<X />} actionLabel="Clear search" onAction={() => setSearchQuery("")} inputProps={{ "aria-label": "Search", placeholder: "SEARCH", value: searchQuery, onChange: (event) => setSearchQuery(event.target.value) }} />
   }
+  if (name === "20 Plain Input") return <SubToolboxInput20 level={level} defaultValue="TEXT INPUT" />
+  if (name === "21 Plain Text Area") return <SubToolboxTextArea21 level={level} height="compact" defaultValue="TEXT AREA" />
+  if (name === "137 Floating Label Input") return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="TEXT INPUT" />
+  if (name === "138 Floating Label Text Area") return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" height="compact" defaultValue="TEXT AREA" />
   if (name === "Number Field") {
-    return <SubToolboxInput level={level} type="number" defaultValue="25" />
+    return <SubToolboxInput20 level={level} type="number" defaultValue="25" />
   }
   if (name === "Input Action") {
     return <SubToolboxSplitField level={level} variant="action" actionIcon={<Plus />} actionLabel="Add item" onAction={() => setActionDraft("")} inputProps={{ "aria-label": "Add item", placeholder: "ADD ITEM", value: actionDraft, onChange: (event) => setActionDraft(event.target.value) }} />

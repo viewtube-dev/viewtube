@@ -11,6 +11,7 @@ export {
   SubToolboxButton,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 export type { PrimaryButtonProps, SubToolboxButtonProps } from "../components/subtoolbox/SubToolboxPrimitives"
+export { SubToolboxInput20, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea } from "../components/subtoolbox/SubToolboxPrimitives"
 export {
   StudioButton,
   StudioIconButton,

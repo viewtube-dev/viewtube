@@ -73,6 +73,7 @@ import { StandardInput } from "./StandardInput"
 import { StandardDropdown } from "./StandardDropdown"
 import { StandardKPI } from "./StandardKPI"
 import { StandardButton } from "./StandardButton"
+import { SubToolboxInput20, SubToolboxTextArea21 } from "./subtoolbox/SubToolboxPrimitives"
 
 interface LibraryManifestEntry {
  group: string
@@ -178,14 +179,15 @@ const ColorPaletteSelector = () => {
        EDIT
       </div>
      </div>
-     <input
+     <SubToolboxInput20
+      controlSize="compact"
       value={c}
       onChange={(e) => {
        const n = [...colors]
        n[i] = e.target.value
        setColors(n)
       }}
-      className="w-full bg-white border-[3px] border-black rounded-lg p-2 text-xs font-black text-center uppercase shadow-[2px_2px_0px_0px_black]"
+      className="w-full bg-white p-2 text-xs font-black text-center uppercase"
    />
   </div>
  ))}
@@ -425,10 +427,9 @@ const InputAndTextFoundry = () => {
      <label className="text-[10px] font-black uppercase tracking-widest text-black/50 ml-2">
       Floating Label Input
      </label>
-     <input
-      type="text"
+     <SubToolboxInput20
       placeholder="FOCUS OUTLINE..."
-      className="w-full bg-white border-[4px] border-black rounded-2xl p-5 font-black uppercase text-lg outline-none focus:ring-4 focus:ring-[#FF3399]/30 transition-all shadow-[6px_6px_0px_0px_black]"
+      className="w-full bg-white p-5 font-black uppercase text-lg outline-none transition-all"
      />
     </div>
     <div className="space-y-2">
@@ -440,10 +441,9 @@ const InputAndTextFoundry = () => {
        className="absolute left-5 top-1/2 -translate-y-1/2 text-black/40"
        size={24}
       />
-      <input
-       type="text"
+      <SubToolboxInput20
        placeholder="QUERY DATABANK..."
-       className="w-full bg-gray-100 border-[4px] border-black rounded-2xl p-5 pl-14 font-black uppercase text-lg outline-none focus:bg-white transition-all shadow-[6px_6px_0px_0px_black]"
+       className="w-full bg-gray-100 p-5 pl-14 font-black uppercase text-lg outline-none transition-all"
       />
      </div>
     </div>
@@ -454,8 +454,8 @@ const InputAndTextFoundry = () => {
       Copy Button Input
      </label>
      <div className="flex bg-white border-[4px] border-black rounded-2xl shadow-[6px_6px_0px_0px_black] p-1 overflow-hidden">
-      <input
-       type="text"
+      <SubToolboxInput20
+       controlSize="compact"
        value="https://viewtube.os/sync/alpha"
        readOnly
        className="flex-1 bg-transparent p-4 font-bold text-sm outline-none text-black/60"
@@ -475,9 +475,10 @@ const InputAndTextFoundry = () => {
       </label>
       <span className="text-[10px] font-black opacity-30">HTML / MD</span>
      </div>
-     <textarea
+     <SubToolboxTextArea21
+      height="compact"
       placeholder="Write documentation here..."
-      className="w-full h-32 bg-[#CCFF00]/10 border-[4px] border-black rounded-2xl p-5 font-medium text-sm outline-none resize-none focus:bg-[#CCFF00]/20 transition-all shadow-[6px_6px_0px_0px_black]"
+      className="w-full h-32 bg-[#CCFF00]/10 p-5 font-medium text-sm outline-none resize-none focus:bg-[#CCFF00]/20 transition-all"
      />
     </div>
    </div>
@@ -947,11 +948,12 @@ export const UIReferenceLibraryContent: React.FC = () => {
        className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
        size={18}
       />
-      <input
+      <SubToolboxInput20
+       controlSize="compact"
        value={librarySearch}
        onChange={(e) => setLibrarySearch(e.target.value)}
        placeholder="Search files, folders, or groups..."
-       className="w-full border-[3px] border-black rounded-2xl py-3 pl-11 pr-4 font-bold text-sm bg-white shadow-[4px_4px_0px_0px_black] outline-none"
+       className="w-full py-3 pl-11 pr-4 font-bold text-sm bg-white outline-none"
       />
      </div>
 
@@ -1996,8 +1998,9 @@ export const UIReferenceLibraryContent: React.FC = () => {
       iconBoxColor="bg-white">
       <div className="space-y-6">
        <div className="relative">
-        <textarea
-         className="w-full h-48 bg-gray-50 border-[4px] border-black rounded-[32px] p-8 font-bold text-xl outline-none focus:bg-white transition-all shadow-[8px_8px_0px_0px_black] placeholder:opacity-20"
+        <SubToolboxTextArea21
+         height="compact"
+         className="w-full h-48 bg-gray-50 p-8 font-bold text-xl outline-none focus:bg-white transition-all placeholder:opacity-20"
          placeholder="Paste your script hook here..."
         />
         <button className="absolute bottom-6 right-6 bg-black text-[#FF7497] border-2 border-black px-6 py-3 rounded-2xl font-black uppercase text-xs shadow-[4px_4px_0px_0px_black] hover:translate-x-1 hover:translate-y-1 transition-all">
@@ -2027,8 +2030,8 @@ export const UIReferenceLibraryContent: React.FC = () => {
          className="absolute left-6 top-1/2 -translate-y-1/2 text-black/20"
          size={24}
         />
-        <input
-         className="w-full bg-white border-[4px] border-black rounded-full p-6 pl-16 font-black uppercase text-lg shadow-[8px_8px_0px_0px_black] outline-none"
+        <SubToolboxInput20
+         className="w-full bg-white p-6 pl-16 font-black uppercase text-lg outline-none"
          placeholder="Search Global Data..."
         />
        </div>
@@ -2346,12 +2349,12 @@ export const UIReferenceLibraryContent: React.FC = () => {
          <Settings2 size={20} /> Inputs
         </h3>
         <div className="space-y-4">
-         <input
-          type="text"
+         <SubToolboxInput20
           placeholder="Title..."
-          className="w-full bg-white border-4 border-black rounded-xl p-4 font-bold shadow-[4px_4px_0_0_black] outline-none"
+          className="w-full bg-white p-4 font-bold outline-none"
          />
-         <textarea
+         <SubToolboxTextArea21
+          height="compact"
           placeholder="Description..."
           className="w-full h-32 bg-white border-4 border-black rounded-xl p-4 font-bold shadow-[4px_4px_0_0_black] outline-none"
          />
@@ -3101,7 +3104,7 @@ export const UIReferenceLibraryContent: React.FC = () => {
          <div className="space-y-3">
           <div className="bg-white border-[3px] border-black rounded-xl p-4 shadow-[4px_4px_0px_0px_black]">
            <div className="text-[10px] font-black uppercase opacity-40 mb-2">Input Field</div>
-           <input type="text" placeholder="Enter title..." className="w-full bg-gray-50 border-[2px] border-black rounded-lg p-2 text-sm font-bold outline-none" />
+           <SubToolboxInput20 aria-label="Input Field" placeholder="ENTER TITLE..." controlSize="compact" />
           </div>
           <button className="w-full bg-[#FF3399] text-white border-[3px] border-black rounded-xl p-3 font-black uppercase text-sm shadow-[4px_4px_0px_0px_black]">
            Generate
