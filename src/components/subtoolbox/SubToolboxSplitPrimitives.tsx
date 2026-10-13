@@ -351,4 +351,7 @@ export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = ({ le
 SubToolboxSplitButton.displayName = "SubToolboxSplitButton"
 
 /** Legacy name retained as a direct alias; no separate styling or DOM implementation. */
-export const SplitLeftButton = StudioSplitLeftButton
+export const SplitLeftButton: React.FC<SubToolboxSplitButtonProps> = ({ level = "l1", ...props }) => (
+  <StudioSplitLeftButton data-vt-control-level={level} {...props} />
+)
+SplitLeftButton.displayName = "SplitLeftButton"
