@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { attachAssetToContentBuild, getContentBuild, resetContentBuildRepositoryForTests } from "../asset-engine/ContentBuildRepository"
 import { createVideoPackage } from "./packageValidation"
 import {
@@ -15,6 +15,10 @@ describe("VideoPackageRepository consolidation", () => {
   beforeEach(() => {
     resetVideoPackageRepositoryForTests()
     resetContentBuildRepositoryForTests()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   it("synchronizes a saved package to the same ContentBuild identity", () => {
@@ -125,6 +129,25 @@ describe("VideoPackageRepository consolidation", () => {
     expect(stored.storeVersion).toBe(VIDEO_PACKAGE_STORE_VERSION)
     expect(stored.packages).toHaveLength(1)
     expect(stored.packages[0].id).toBe("vp-envelope")
+  })
+
+  it("reports a durable-save failure when browser storage rejects the package write", () => {
+    if (typeof localStorage === "undefined") return
+    const videoPackage = createVideoPackage({
+      id: "vp-storage-failure",
+      contentBuildId: "cb-storage-failure",
+      channelId: null,
+      projectId: "project-storage-failure",
+      workingTitle: "Storage failure",
+      format: "long",
+    })
+    const originalSetItem = localStorage.setItem.bind(localStorage)
+    vi.spyOn(localStorage, "setItem").mockImplementation((key, value) => {
+      if (key === VIDEO_PACKAGE_STORAGE_KEY) throw new Error("QuotaExceededError")
+      originalSetItem(key, value)
+    })
+
+    expect(() => saveVideoPackage(videoPackage)).toThrow("Unable to persist Video Packages")
   })
 
   it("migrates the legacy raw-array store in place and preserves the pre-migration payload", () => {
