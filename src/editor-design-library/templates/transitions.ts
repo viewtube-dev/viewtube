@@ -15,7 +15,7 @@ function transition(id: string, name: string, preset: TemplateDefinition['transi
     durationFrames: 30,
     responsive: true,
     customizable: true,
-    style: {colors: {primary: color, background: VIEWTUBE_WHITE, foreground: VIEWTUBE_INK, border: VIEWTUBE_INK, shadow: VIEWTUBE_INK}},
+    style: {colors: {primary: color, secondary: color, accent: color, background: VIEWTUBE_WHITE, foreground: VIEWTUBE_INK, border: VIEWTUBE_INK, shadow: VIEWTUBE_INK}},
     transition: preset,
     elements: [
       {id: `${id}-shape`, type: 'svg', name, x: 0, y: 0, width: c.width, height: c.height, svg, fillToken: 'colors.primary', strokeToken: 'colors.border', strokeWidthToken: 'sizing.strokeWidth', editable: true, animation: preset},
