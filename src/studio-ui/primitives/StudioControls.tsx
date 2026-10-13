@@ -58,14 +58,17 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
+  /** Explicit geometry variant for the confirmed 44px and 28px button family. */
+  heightVariant?: "44" | "28"
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
-  ({ sizeVariant = "standard", tone = "accent", loading = false, selected = false, disabled, children, type = "button", ...props }, ref) => (
+  ({ sizeVariant = "standard", tone = "accent", loading = false, selected = false, heightVariant = "44", disabled, children, type = "button", ...props }, ref) => (
     <button
       ref={ref}
       type={type}
       {...withStudioAttrs(sizeVariant, tone)}
+      data-height-variant={heightVariant}
       data-selected={selected || undefined}
       aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
       aria-busy={loading || undefined}
@@ -97,7 +100,7 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
 }
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
-  ({ icon, children, sizeVariant = "action", ...props }, ref) => (
+  ({ icon, children, sizeVariant = "standard", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" {...props}>
       <span
         aria-hidden="true"
