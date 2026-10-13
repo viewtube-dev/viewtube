@@ -909,6 +909,12 @@ vault_workbench_systems_reference:
   overview_document: "docs/Vault.md"
   recovery_source: "docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md"
   commit: "5e70c1e18aee6b00f973e02e72ed5814eee0b4f9"
+  related_commits:
+    - "1fa574fff31b17b18a6dd7b4cd95ff8cc7ff4c39"
+    - "13c7eeeb27919acfc608f8e7cff8fa5a404636d2"
+    - "e151396e62004b709888236a6b34e72ba03048c5"
+    - "0595f8f736890d824def3597b0240689fcf5c850"
+    - "a9702360e226bbee164243d3d91d17b7393c045a"
   scope:
     - "Adaptive Workbench modes and capability eligibility"
     - "Complete capability taxonomy and target inventory"
@@ -932,7 +938,10 @@ vault_workbench_systems_reference:
     - "Reuse canonical Toolbox/SubToolbox primitives rather than hard-coded duplicates."
   verification:
     - "GitHub accepted the canonical master update."
-    - "Post-write read-back and overview-link verification required."
+    - "Post-write read-back confirmed the canonical master content."
+    - "Recovery.md, Recovery.yaml, docs/Vault.md, and the recovery index were re-read after writes."
+    - "The overview link points to docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md."
+    - "Runtime tests/builds were not run because no runtime code changed."
   unresolved:
     - "Canonical runtime source tree and asset service ownership."
     - "Authorization/recoverability of historical adaptive Workbench donor branch."
