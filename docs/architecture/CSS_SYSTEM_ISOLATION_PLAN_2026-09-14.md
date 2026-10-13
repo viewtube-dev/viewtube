@@ -95,3 +95,10 @@ Delete a rule from the monolith only after its canonical owner exists and contra
 
 ## Immediate next implementation wave
 Run the inventory script, freeze the resulting baseline, then create explicit Dashboard and Toolbox stylesheet entry points. Do not begin deleting legacy CSS until both systems can be loaded independently in tests.
+
+
+## Related component migration reference — Planner Calendar 13B
+
+The standalone **13B Planner Calendar** in `ViewTube-Primitives-Components-Source-6.html` is a reference component for the Project Board calendar replacement. Its integration guide is [`docs/ui/VIEWTUBE_PLANNER_CALENDAR_13B_INTEGRATION_GUIDE.md`](../ui/VIEWTUBE_PLANNER_CALENDAR_13B_INTEGRATION_GUIDE.md).
+
+When porting it, keep calendar-internal selectors in a dedicated calendar stylesheet/module. Do not copy the standalone HTML's global/demo CSS into the app, redefine canonical Toolbox/SubToolbox shell geometry, or introduce Dashboard/Widget selector dependencies. The guide identifies the 13B class/data hooks, demo-only in-memory state, proposed event/callback contract, and Project Board swap checklist. Follow the inventory and acceptance gates in this CSS isolation plan before moving or deleting existing rules.
