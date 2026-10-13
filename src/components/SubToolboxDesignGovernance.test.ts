@@ -575,9 +575,12 @@ describe("subtoolbox design governance", () => {
   const canonicalMetadata = source("src/components/metadata/CanonicalMetadataSections.tsx")
   const publishing = source("src/components/metadata/PublishingControls.tsx")
   const systemCss = source("src/styles/subtoolbox-system.css")
+  const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
 
   expect(primitives).toContain("export const LegendMultiDropdown")
   expect(primitives).toContain("vt-legend-multi-dropdown")
+  expect(catalog).toContain('"Legend Multi Dropdown"')
+  expect(catalog).toContain("<LegendMultiDropdown")
   expect(splitPrimitives).toContain("export const SplitLeftButton")
   expect(project).toContain("SplitLeftButton")
   expect(project).toContain("LegendMultiDropdown")
