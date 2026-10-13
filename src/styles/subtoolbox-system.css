@@ -2531,7 +2531,7 @@
   overflow:visible;background:var(--pair-a,#36e0f6);
 }
 .vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-title{
-  position:absolute;left:.75em;top:0;transform:translateY(-50%);z-index:2;
+  position:absolute;left:.75em;top:-14px;transform:none;z-index:2;
   display:inline-flex;width:max-content;max-width:calc(100% - 24px);height:auto;
   padding:.3em .65em;border:var(--vt-component-stroke) solid #000;border-radius:6px;
   background:var(--pair-b,#ff7f6b);font-size:11px;font-weight:900;letter-spacing:.14em;
@@ -2541,7 +2541,7 @@
   width:100%;display:flex;align-items:center;justify-content:center;padding:0;min-width:0;
 }
 .vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-value>b{
-  width:100%;text-align:center;font-size:var(--vt-component-font-size);letter-spacing:-.035em;
+  width:100%;padding:0 26px;text-align:center;font-size:var(--vt-component-font-size);letter-spacing:-.035em;
 }
 .vt-legend-multi-dropdown .vt-subtoolbox-top-title-dropdown-chevron{
   position:absolute;right:2px;top:50%;height:100%;width:36px;transform:translateY(-50%);
