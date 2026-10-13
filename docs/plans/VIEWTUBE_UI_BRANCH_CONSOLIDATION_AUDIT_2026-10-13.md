@@ -170,3 +170,57 @@ PR search metadata did not reliably expose normalized state for every result. Ve
 - Required audits, regression tests, typecheck, CSS checks, lint, build, and visual/interaction verification have evidence and disposition.
 - Integration head and any deployment SHA are recorded.
 - Obsolete branches are removed only after verification; `main`, the integration target, active deployment refs, and valuable recovery/reference branches are protected unless separately authorized.
+
+
+## Branch compare sweep — 2026-10-13
+
+The remaining branch refs were compared with `master/consolidated-feature-integration` at target SHA `b8da238794dddd87005e48f813d0b44476ddf8bd`. “Ahead” means commits not shared by ancestry; it does **not** prove the source changes are absent from target, because squash/cherry-pick merges can preserve content while changing commit ancestry. File-level comparison and PR/deployment review remain required for every diverged branch.
+
+| Branch | Ahead | Behind | Changed-path signal from comparison | Initial review category |
+|---|---:|---:|---|---|
+| `audit/system-convergence-identity-certification` | 21 | 312 | Toolbox, metadata sections, project board, primitive test/CSS, upload frame, vite config, UI audit docs | High-priority donor review; PR #18 describes selective ports, so inspect current content before further porting |
+| `docs/integrated-metadata-system-plan-2026-10-06` | 0 | 460 | None | Likely superseded ancestry; preserve/verify docs before cleanup |
+| `docs/master-system-rebuild-resource-plan` | 0 | 5383 | None | Very stale docs/history branch; inspect provenance before archival |
+| `docs/recovery-canonical-sync` | 1 | 5361 | Recovery document catalog | Recovery artifact review; do not delete until catalog/history is reconciled |
+| `feat/canonical-action-and-legend-primitives` | 12 | 66 | Metadata sections, Project Manifestation, shared split/system CSS, Manager, Publisher | High-priority selective donor review |
+| `feat/canonical-split-left-followup-clean` | 0 | 101 | None | Likely superseded; verify PR trail |
+| `feat/canonical-viewtube-minimal-primitives` | 7 | 109 | Governance test, split primitive, Studio certification, split CSS, Video Director | Donor review; compare tests and selected-state behavior against current implementation |
+| `feat/integrated-metadata-system-execution-2026-10-06` | 0 | 445 | None | Likely superseded; verify package persistence and PR trail |
+| `feat/metadata-master-studio-hub` | 23 | 479 | Metadata Master service/tests, Studio Hub, Thumbnail Studio, Manager/Publisher, dashboard data, architecture docs | High-risk stale donor; preserve package and tool-boundary behavior, no wholesale merge |
+| `feat/metadata-master-studio-hub-v2` | 17 | 477 | Same core metadata/tool paths and docs as v1 | Compare with v1 and target; choose the best verified implementation, do not merge both blindly |
+| `feat/studio-canonical-input-primitives-20-21` | 1 | 11 | Component-library index documentation | Check docs-only delta after PR #37 |
+| `feature/liquid-glass-lab` | 28 | 5028 | Isolated lab app, tests, docs, skill, and tasks plan | Experimental project; not part of production primitive consolidation unless explicitly adopted |
+| `feature/recent-ui-consolidation-2026-10-11` | 0 | 216 | None | Likely superseded code; preserve/review reconciliation docs before cleanup |
+| `feature/studio-hub-component-foundation-audit` | 6 | 391 | Audit docs, metadata layout/test | Donor/audit review; compare test and docs content before cleanup |
+| `feature/studio-hub-frontend-layout-plan` | 1 | 391 | Frontend component layout plan | Documentation-only reconciliation candidate |
+| `feature/video-publisher-write-create-workspaces` | 4 | 312 | Publisher, workspace tests, implementation plan, vite config | Donor review; compare against current Publisher and PR #22 before porting |
+| `fix/component-library-canonical-replacements` | 0 | 92 | None | Likely superseded code; verify PR/history |
+| `fix/project-dropdown-action-rows-split-alignment` | 0 | 134 | None | Likely superseded code; verify PR #27 and target content |
+| `fix/resource-library-build-imports` | 0 | 478 | None | Likely superseded code; verify resource-library build fix remains present |
+| `fix/studio-split-left-consistency` | 0 | 30 | None | Likely superseded; verify split-left typography/behavior before cleanup |
+| `fix/toolbox-collapse-icon-chrome` | 2 | 391 | Shared toolbox CSS | Donor review; PR #19/#21 describe selective ports, so compare exact reduced-motion/transform rules |
+| `fix/ui-color-order-toolbox-alignment-2026-10-11` | 0 | 221 | None | Likely superseded; PR #21 says its work is already an ancestor of target |
+| `integration/production-button-library-merge` | 0 | 147 | None | Likely superseded; compare with definitive library PRs #32–#34 |
+| `integration/publisher-metadata-package-persistence` | 5 | 391 | Publisher package options and project persistence services/tests | High-priority behavior donor; verify round-trip/saved-set tests and exact target contents |
+| `integration/publisher-write-create-selective-port-2026-10-11` | 0 | 190 | None | Likely superseded; compare current Publisher workspace implementation |
+| `integration/resource-library-15-creator-guides-2026-10-13` | 16 | 29 | Resource registry, guide markdown, registry test and handoff docs | Content-level comparison required; PR #36 describes this contribution as merged, but ancestry diverged |
+| `integration/toolbox-collapse-selective-port-2026-10-11` | 0 | 204 | None | Likely superseded; verify PR #21 |
+| `integration/viewtubebuild-2026-10-05` | 0 | 619 | None | Stale donor; inspect provenance/deployment references before cleanup |
+| `master/analytics-status-badge-primitive-2026-10-12` | 4 | 160 | Calendar, migration catalog, status badge primitive/CSS | Donor review only; target currently has different dense badge geometry, so compare behavior and token contracts rather than copying CSS |
+| `master/calendar-toolbox-status-badges-2026-10-11` | 0 | 162 | None | Likely superseded; verify calendar/status-badge implementation and PR trail |
+| `plan/studio-toolbox-primitives-consolidation` | 0 | 128 | None | Plan likely merged; verify docs are present on target and retain as historical source |
+| `recovery/conversation-2026-10-04-ui-render` | 8 | 5311 | Recovery state, index, catalog, deployment/toolbox source, handoff | Protected recovery source until all records are reconciled and registered |
+| `recovery/pre-document-system-migration-2026-10-04` | 0 | 5249 | None | Protected historical recovery snapshot; archive rather than delete until provenance check |
+| `recovery/round-2-ui-render-reconciliation-2026-10-04` | 0 | 5259 | None | Protected historical recovery snapshot; archive rather than delete until provenance check |
+| `recovery/2026-10-04-account-youtube-round1` | 0 | 5316 | None | Protected historical recovery snapshot; archive rather than delete until provenance check |
+| `test/consolidated-master-validation` | 1 | 300 | Validation checklist | Compare checklist revision and retain the most complete validated record |
+| `test/consolidated-master-validation-v2` | 1 | 298 | Validation checklist | Compare with prior validation branch and current target; do not merge stale checklist wholesale |
+| `ui/component-library-production-buttons` | 8 | 391 | Production button catalog, Toolbox/library, primitive CSS, mobile regression test | Compare against current definitive library and PR #33; port only missing catalog/test coverage |
+| `visual-test/canonical-default-system-65-66` | Not yet individually compared | Not yet individually compared | Frozen visual baseline/reference | Protect as a reference baseline; not a production source branch |
+
+### Compare interpretation
+
+- The compare sweep covers the observed branch list except the integration target itself; `main` was compared separately (19 ahead / 391 behind).
+- The `visual-test/canonical-default-system-65-66` ref still needs an individual compare and provenance review. Its reference-only role means it is protected even if it has no unique commits.
+- No branches were deleted, and no donor branch was merged wholesale during this pass.
+- The next actionable review is content-level comparison of the highest-risk donor groups: metadata package persistence, Publisher Write/Create, action/legend primitives, component-library/catalog, split-left defaults, toolbox collapse motion, status badges, and the system-convergence audit. For each, check whether the target already contains the intended behavior, tests, and docs before proposing a port.
