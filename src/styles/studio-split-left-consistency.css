@@ -1,17 +1,15 @@
-/* Canonical split-left control contract shared by StudioControls and SubToolboxSplitPrimitives.
-   Preserve each owning toolbox's color pair, but normalize anatomy, typography,
-   dimensions, border, shadow, and label alignment across all tools. */
-
+/* Canonical split-left contract. StudioControls owns structure and typography;
+   this file only normalizes shared geometry and state treatment. */
 button[data-vt-studio-control="true"][data-split-left="true"] {
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
   align-items: stretch;
   gap: 0;
   width: 100%;
-  height: 44px;
-  min-height: 44px;
-  max-height: 44px;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  max-height: var(--vt-studio-control-height, 44px);
   padding: 0;
   overflow: hidden;
   border: 3px solid #000;
@@ -25,19 +23,18 @@ button[data-vt-studio-control="true"][data-split-left="true"] {
   text-align: left;
   text-transform: uppercase;
   filter: none !important;
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--vt-split-rail, var(--pair-b, #ff7f6b))) 65%, transparent);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
 }
 
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail],
-button[data-vt-studio-control="true"][data-split-left="true"] {
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   place-self: stretch;
-  width: 44px;
-  min-width: 44px;
-  max-width: 44px;
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  max-width: var(--vt-studio-control-height, 44px);
   height: 100%;
   min-height: 0;
   max-height: 100%;
@@ -48,8 +45,7 @@ button[data-vt-studio-control="true"][data-split-left="true"] {
   overflow: hidden;
 }
 
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg,
-button[data-vt-studio-control="true"][data-split-left="true"] > svg {
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg {
   display: block;
   width: 20px;
   height: 20px;
@@ -60,8 +56,7 @@ button[data-vt-studio-control="true"][data-split-left="true"] > svg {
   stroke-width: 3;
 }
 
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
-button[data-vt-studio-control="true"][data-split-left="true"] {
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -74,7 +69,6 @@ button[data-vt-studio-control="true"][data-split-left="true"] {
   padding: 0 10px;
   overflow: hidden;
   color: #000;
-  /* Typography comes from StudioButton; the label must not define a second type scale. */
   font: inherit;
   letter-spacing: inherit;
   text-align: left;
@@ -84,26 +78,18 @@ button[data-vt-studio-control="true"][data-split-left="true"] {
   -webkit-text-stroke: inherit;
 }
 
-
 button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"],
-button[data-vt-studio-control="true"][data-split-left="true"].is-selected,
 button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] {
-  box-shadow: 0 0 0 3px #000, 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--vt-split-rail, var(--pair-b, #ff7f6b))) 65%, transparent);
+  box-shadow: 0 0 0 3px #000, 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
 }
 
-@media (max-width: 520px) and (orientation: portrait) {
-  button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label],
-  button[data-vt-studio-control="true"][data-split-left="true"] {
-    padding-inline: 7px;
-  }
-}
-
-/* Legacy split primitive hover/active filters used to stack a second drop-shadow
-   on top of the canonical box-shadow above. Keep the shared shadow single-source. */
-button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
-button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled),
 button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
 button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled) {
   filter: none !important;
+}
+
+@media (max-width: 520px) and (orientation: portrait) {
+  button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
+    padding-inline: 8px;
+  }
 }
