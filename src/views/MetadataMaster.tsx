@@ -243,6 +243,9 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       appliedSlots,
     }))
     setSelectedSetId(set.id)
+    setStyle(set.style)
+    setGoal(set.package.goal)
+    setIntensity(set.package.intensity)
     setLastAction(`${set.label} selected as the working publication package.`)
   }
 
