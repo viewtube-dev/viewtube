@@ -6,10 +6,13 @@ import "../../styles/studio-control-system.css"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
+/** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
+export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = { fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif", fontWeight: 1000, strokeColor: "#000000", colorPairSystem: "module pair A/B via --pair-a / --pair-b", backgroundFill: "50% pair-A blended with white for fields; pair-A for buttons", textColor: "#000000", textTransform: "uppercase", letterSpacing: "-0.035em", lineHeight: 0.86, shadowPolicy: "button-only hard offset shadow", focusOutline: "3px module pair-A outline", motionEasing: "ease-out" } as const
+
 /** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
 export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
-  standard: { height: 44, stroke: 3, radius: 8, fontSize: 32, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 36, iconStroke: 2 },
-  compact: { height: 28, stroke: 2, radius: 5, fontSize: 14, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 18, iconStroke: 1.65 },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 36, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
+  compact: { height: 28, stroke: 2, radius: 4, fontSize: 22, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 18, iconStroke: 1.65 },
 } as const
 
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
@@ -61,7 +64,7 @@ export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttri
 /** Primitive 137 facade: canonical plain input 20 plus the upper-right label overlay. */
 export const StudioFloatingLabelInput = React.forwardRef<HTMLInputElement, StudioFloatingLabelInputProps>(
   ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
-    <label data-vt-primitive-id="137" data-vt-studio-field="floating-input" data-vt-control-level={level}
+    <label data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level}
       className={["vt-studio-labeled-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
       <StudioInput ref={ref} sizeVariant={sizeVariant} {...props} />
       <span className="vt-studio-labeled-field-overlay">{overlayLabel}</span>
@@ -79,7 +82,7 @@ export interface StudioFloatingLabelTextAreaProps extends React.TextareaHTMLAttr
 /** Primitive 138 facade: canonical plain textarea 21 plus the upper-right label overlay. */
 export const StudioFloatingLabelTextArea = React.forwardRef<HTMLTextAreaElement, StudioFloatingLabelTextAreaProps>(
   ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
-    <label data-vt-primitive-id="138" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
+    <label data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
       className={["vt-studio-labeled-field", "is-textarea", className].filter(Boolean).join(" ")} style={style}>
       <StudioTextArea ref={ref} sizeVariant={sizeVariant} {...props} />
       <span className="vt-studio-labeled-field-overlay">{overlayLabel}</span>

@@ -5,17 +5,17 @@
 [data-vt-studio-control] {
   --vt-studio-control-height: 44px;
   --vt-studio-control-stroke: 3px;
-  --vt-studio-control-radius: 8px;
-  --vt-studio-control-shadow: 4px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-shadow: 3px;
   --vt-studio-control-accent: var(--pair-a, var(--vt-subtoolbox-fill, #36e0f6));
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
   --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary) 65%, transparent);
   box-sizing: border-box;
 }
 
-[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 32px; }
+[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-radius: 4px; --vt-studio-control-shadow: 1.5px; --vt-studio-control-hover-offset: .75px; --vt-studio-control-font-size: 22px; }
 [data-vt-studio-control][data-size="small"] { --vt-studio-control-height: 32px; }
-[data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; }
+[data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-hover-offset: 1.5px; --vt-studio-control-font-size: 36px; }
 [data-vt-studio-control][data-size="action"] { --vt-studio-control-height: 56px; }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
@@ -31,7 +31,7 @@
   caret-color: var(--vt-studio-control-accent);
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 1000;
   line-height: .86;
   letter-spacing: -.035em;
@@ -63,7 +63,7 @@ textarea[data-vt-studio-control] {
   box-shadow: none !important;
 }
 textarea[data-vt-studio-control][data-size="compact"],
-textarea[data-vt-studio-control][data-size="small"] { min-height: 72px; padding: 8px 10px; font-size: 16px; }
+textarea[data-vt-studio-control][data-size="small"] { min-height: 72px; padding: 8px 10px; font-size: 22px; }
 
 select[data-vt-studio-control] {
   appearance: none;
@@ -105,8 +105,8 @@ button[data-vt-studio-control][data-height-variant="44"] {
   --vt-studio-control-height: 44px;
   height: 44px;
   min-height: 44px;
-  font-size: 14px !important;
-  font-weight: 900;
+  font-size: 36px !important;
+  font-weight: 1000;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -116,9 +116,9 @@ button[data-vt-studio-control][data-height-variant="28"] {
   height: 28px;
   min-height: 28px;
   padding: 0 8px;
-  border-radius: 6px;
-  font-size: 14px !important;
-  font-weight: 900;
+  border-radius: 4px;
+  font-size: 22px !important;
+  font-weight: 1000;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -137,18 +137,22 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
   height: 28px;
   border-right-width: 3px;
 }
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-label],
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-label] {
+  font-size: 36px;
+  font-weight: 1000;
+  line-height: .86;
+}
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1;
+  font-size: 22px;
+  font-weight: 1000;
+  line-height: .86;
 }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
   padding: 0 8px;
 }
 
 button[data-vt-studio-control][data-size="action"] { font-size: 20px; padding: 10px 16px; }
-button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translateY(1px); }
+button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px)); box-shadow: var(--vt-studio-control-hover-offset, 1.5px) var(--vt-studio-control-hover-offset, 1.5px) 0 0 var(--vt-studio-control-shadow-color); }
 button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
 button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 3px; }
 button[data-vt-studio-control]:disabled { cursor: not-allowed; filter: grayscale(.5); opacity: .5; }
@@ -770,3 +774,36 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke: inherit;
 }
+
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] > svg { width:28px !important; height:28px !important; stroke-width:2.5px; }
+button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] > svg { width:18px !important; height:18px !important; stroke-width:1.65px; }
+.vt-studio-labeled-field { position:relative; display:block; width:100%; min-width:0; }
+.vt-studio-labeled-field-overlay { position:absolute; z-index:1; top:-.48em; right:10px; max-width:calc(100% - 20px); overflow:hidden; padding:0 6px; border:2px solid #000; border-radius:4px; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); color:#000; font:900 10px/1 Inter,ui-sans-serif,system-ui,sans-serif; letter-spacing:.04em; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; pointer-events:none; }
+.vt-studio-labeled-field.is-input:has([data-size="standard"]) .vt-studio-labeled-field-overlay { font-size:12px; padding:2px 8px; border-radius:6px; }
+.vt-studio-labeled-field.is-input:has([data-size="compact"]) .vt-studio-labeled-field-overlay { top:-.42em; right:7px; padding:1px 5px; border-width:1.5px; border-radius:4px; font-size:8px; }
+.vt-studio-labeled-field.is-textarea textarea { min-height:160px; height:auto; padding-top:14px; font-size:22px; line-height:1.15; resize:vertical; }
+
+/* Primitives 141/142: faithfully reproduce the second-library floating-label treatment.
+   The label starts centered in the field and moves to the top edge on focus or entered text. */
+.vt-studio-labeled-field { position:relative; display:block; width:100%; min-width:0; border-radius:var(--vt-studio-control-radius,6px); background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) 50%,white); }
+.vt-studio-labeled-field > .vt-studio-labeled-control,
+.vt-studio-labeled-field > input,
+.vt-studio-labeled-field > textarea { position:relative; z-index:2; width:100%; padding-inline:14px!important; color:#000!important; caret-color:var(--vt-studio-control-accent,var(--pair-a,#36e0f6))!important; background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) 50%,white)!important; box-shadow:inset 0 0 0 3px var(--vt-studio-control-accent,var(--pair-a,#36e0f6))!important; }
+.vt-studio-labeled-field > input:focus,
+.vt-studio-labeled-field > input:focus-visible,
+.vt-studio-labeled-field > textarea:focus,
+.vt-studio-labeled-field > textarea:focus-visible { background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) 9%,white)!important; box-shadow:inset 0 0 0 3px var(--vt-studio-control-accent,var(--pair-a,#36e0f6)),0 0 0 3px var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))!important; }
+.vt-studio-labeled-field-overlay { position:absolute; z-index:3; top:50%; left:14px; transform:translateY(-50%); max-width:calc(100% - 28px); padding:0; overflow:hidden; border-radius:6px; background:transparent; color:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:36px; font-weight:1000; line-height:1; letter-spacing:-.035em; text-align:left; text-transform:uppercase; white-space:nowrap; pointer-events:none; transform-origin:left center; transition:top .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.4,0,.2,1),font-size .22s,background .22s,padding .22s,color .22s; }
+.vt-studio-labeled-field.is-input:has([data-size="compact"]) .vt-studio-labeled-field-overlay { font-size:22px; }
+.vt-studio-labeled-field.is-floating-label:focus-within .vt-studio-labeled-field-overlay,
+.vt-studio-labeled-field.is-floating-label > .vt-studio-labeled-control:not(:placeholder-shown) + .vt-studio-labeled-field-overlay,
+.vt-studio-labeled-field.is-input:focus-within .vt-studio-labeled-field-overlay,
+.vt-studio-labeled-field.is-input > input:not(:placeholder-shown) + .vt-studio-labeled-field-overlay { top:-3px; transform:translateY(-50%) scale(.7); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); padding:2px 8px; color:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+.vt-studio-labeled-field.is-textarea .vt-studio-labeled-field-overlay { top:24px; transform:none; font-size:22px; }
+.vt-studio-labeled-field.is-textarea textarea { min-height:160px; height:auto; padding-top:14px; font-size:22px; line-height:1.15; resize:vertical; }
+.vt-studio-labeled-field.is-textarea:focus-within .vt-studio-labeled-field-overlay,
+.vt-studio-labeled-field.is-textarea > textarea:not(:placeholder-shown) + .vt-studio-labeled-field-overlay { top:-3px; transform:translateY(-5px) scale(.7); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); padding:2px 8px; color:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label { left:8px; max-width:calc(100% - 16px); padding:1px 5px; border-width:2px; border-radius:4px; font-size:8px; letter-spacing:.08em; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { padding:0 6px 0 8px; border-radius:4px; font-size:22px; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count { min-width:16px; height:16px; padding:0 3px; border-width:1.5px; border-radius:4px; font-size:9px; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron { width:12px; height:12px; stroke-width:2; }
