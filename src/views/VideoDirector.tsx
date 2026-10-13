@@ -1581,10 +1581,9 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                       setNotice("Video Director draft saved to its ContentBuild.")
                     }}
                   />
-                  <SubToolboxGridActionButton
-                    label={conflictCount ? "Resolve Conflicts" : "Preview Plan"}
-                    iconName={conflictCount ? "checklist" : "eye"}
-                    tone={conflictCount ? "orange" : "green"}
+                  <StudioSplitLeftButton
+                    icon={conflictCount ? <CheckSquare size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
+                    tone={conflictCount ? "warning" : "success"}
                     onClick={() => {
                       const valid = VideoDirectorProjectSchema.safeParse(project)
                       setNotice(
@@ -1593,7 +1592,7 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                           : `Resolve ${conflictCount} conflict${conflictCount === 1 ? "" : "s"} before provider preflight.`,
                       )
                     }}
-                  />
+                  >{conflictCount ? "Resolve Conflicts" : "Preview Plan"}</StudioSplitLeftButton>
                 </SubToolboxActions>
                 <StudioButton sizeVariant="action" tone="accent" disabled title="Provider adapters, cost reservation and persistent generation queue are the next execution layer.">
                   <Sparkles size={19} />Generate — Provider Layer Next
