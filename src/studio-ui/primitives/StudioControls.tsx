@@ -101,12 +101,12 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
-  ({ sizeVariant = "standard", tone = "accent", loading = false, selected = false, heightVariant = "44", disabled, children, type = "button", ...props }, ref) => (
+  ({ sizeVariant = "standard", tone = "accent", loading = false, selected = false, heightVariant, disabled, children, type = "button", ...props }, ref) => (
     <button
       ref={ref}
       type={type}
       {...withStudioAttrs(sizeVariant, tone)}
-      data-height-variant={heightVariant}
+      data-height-variant={heightVariant ?? (sizeVariant === "compact" ? "28" : "44")}
       data-selected={selected || undefined}
       aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
       aria-busy={loading || undefined}
