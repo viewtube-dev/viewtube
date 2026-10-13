@@ -19,7 +19,7 @@ const LEVELS: Level[] = ["l0", "l1", "l2"]
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
-  "Dropdown", "Select Menu", "Context Menu", "Text Input", "Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
+  "Dropdown", "Select Menu", "Context Menu", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
   "Number Field", "Input Action", "Stepper", "Slider", "Range Slider", "Toggle",
   "Settings Switch", "Checkbox", "Radio", "Segmented Choice", "Button Group", "Tag",
   "Removable Tag", "Selectable Tag", "Tag Editor", "Badge", "Status Badge", "Progress Bar",
@@ -97,9 +97,9 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
       </div> : null}
     </div>
   }
-  if (name === "Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
+  if (name === "Text Input" || name === "20 Simple Text Input") return <SubToolboxInput20 className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Simple text input" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
   if (name === "Number Field" || name === "20 Plain Input") return <SubToolboxInput20 className={`vt-catalog-field is-${level}`} style={style} type={name === "Number Field" ? "number" : "text"} defaultValue={name === "Number Field" ? "25" : "TEXT INPUT"} />
-  if (name === "Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
+  if (name === "Textarea" || name === "21 Simple Textarea" || name === "21 Plain Text Area") return <SubToolboxTextArea21 className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} defaultValue="DESCRIPTION" />
   if (name === "137 Floating Label Input") return <SubToolboxLabeledInput level={level} overlayLabel="TITLE" defaultValue="TEXT INPUT" />
   if (name === "138 Floating Label Text Area") return <SubToolboxLabeledTextArea level={level} overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
   if (name === "Split Search") return <div className={`vt-catalog-split-field is-search has-action is-${level}`} style={style}><span><Search /></span><SubToolboxInput20 controlSize="compact" aria-label="Search" placeholder="SEARCH" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} /><button type="button" className="field-action" aria-label="Clear search" onClick={() => setSearchQuery("")}><X /></button></div>
