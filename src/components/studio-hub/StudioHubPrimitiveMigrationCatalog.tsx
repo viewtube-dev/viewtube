@@ -91,6 +91,7 @@ import {
   SubToolboxTagEditor,
   SubToolboxTextArea,
   SubToolboxTopTitleDropdown,
+  LegendMultiDropdown,
   SubToolboxToast,
   SubToolboxToggleSwitch,
   SubToolboxTooltip,
@@ -125,6 +126,7 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Split Menu",
   "Dropdown",
   "Top Title Dropdown",
+  "Legend Multi Dropdown",
   "Tone / Tension / Cinematic Dropdown",
   "Nested Square Choice",
   "Tag-Adjacent Split Action Row",
@@ -393,6 +395,7 @@ const PrimitiveMigrationControl: React.FC<{
   const [segmentChoice, setSegmentChoice] = React.useState("A")
   const [groupChoice, setGroupChoice] = React.useState("ONE")
   const [menuChoice, setMenuChoice] = React.useState("OPTION 1")
+  const [legendFilters, setLegendFilters] = React.useState<string[]>(["VIDEOS"])
   const [toneChoice, setToneChoice] = React.useState("CINEMATIC")
   const [nestedChoice, setNestedChoice] = React.useState("HOOK")
   const [educationNotes, setEducationNotes] = React.useState("0:00 Open with the central question\n1:25 Explain the key evidence")
@@ -562,6 +565,19 @@ const PrimitiveMigrationControl: React.FC<{
       onValueChange={setMenuChoice}
       ariaLabel="Publishing control dropdown"
      
+    />
+  }
+  if (name === "Legend Multi Dropdown") {
+    const options = ["VIDEOS", "SHORTS", "LIVE", "PLAYLISTS", "PODCASTS", "MUSIC"].map((option) => ({ value: option, label: option }))
+    return <LegendMultiDropdown
+      level={level}
+      label="FILTERS"
+      value={legendFilters.length ? `${legendFilters.length} SELECTED` : "ANY"}
+      options={options}
+      multiSelect
+      selectedValues={legendFilters}
+      onValueChange={(value) => setLegendFilters((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value])}
+      ariaLabel="Legend multi filters"
     />
   }
   if (name === "Split Search") {
