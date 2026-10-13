@@ -59,7 +59,7 @@ export const StudioHubCertification: React.FC = () => {
 
         <SubToolboxSection label="Registered button sizes">
           <SubToolboxGrid minItemWidth="compact">
-            <StudioButton sizeVariant="compact">Compact</StudioButton>
+            <StudioButton sizeVariant="compact" heightVariant="28">Compact · 28px</StudioButton>
             <StudioButton sizeVariant="standard">Standard</StudioButton>
             <StudioButton sizeVariant="action">Action</StudioButton>
             <StudioButton sizeVariant="standard" selected>Selected</StudioButton>
@@ -84,7 +84,7 @@ export const StudioHubCertification: React.FC = () => {
               <StudioIconButton label="Search" icon={<Search size={18} />} />
               <StudioIconButton label="Confirm" tone="success" icon={<Check size={18} />} />
             </div>
-            <StudioSplitLeftButton data-vt-control-level="l1" icon={<Sparkles size={22} />}>Generate</StudioSplitLeftButton>
+            <StudioSplitLeftButton data-vt-control-level="l1" sizeVariant="compact" heightVariant="28" icon={<Sparkles size={14} />}>Generate · 28px</StudioSplitLeftButton>
             <SplitLeftButton level="l1" tone="success" icon={<Link2 size={22} />}>Connect Channel</SplitLeftButton>
           </SubToolboxGrid>
         </SubToolboxSection>

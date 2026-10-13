@@ -137,13 +137,13 @@ const ProjectManifestation: React.FC<ProjectManifestationProps> = ({
                 className="vt-project-manifestation-project-dropdown"
               />
               <SubToolboxActions columns={3} forceRow className="vt-project-manifestation-actions">
-                <StudioSplitLeftButton icon={<FolderOpen size={20} />} onClick={loadSelected} disabled={!selectedProject}>
+                <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<FolderOpen size={14} />} onClick={loadSelected} disabled={!selectedProject}>
                   LOAD
                 </StudioSplitLeftButton>
-                <StudioSplitLeftButton icon={<ArrowLeftRight size={20} />} tone="accent" onClick={loadSelected} disabled={!selectedProject}>
+                <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<ArrowLeftRight size={14} />} tone="accent" onClick={loadSelected} disabled={!selectedProject}>
                   SWAP IN
                 </StudioSplitLeftButton>
-                <StudioSplitLeftButton icon={<RefreshCw size={20} />} tone="neutral" onClick={refreshPackages}>
+                <StudioSplitLeftButton sizeVariant="compact" heightVariant="28" icon={<RefreshCw size={14} />} tone="neutral" onClick={refreshPackages}>
                   REFRESH
                 </StudioSplitLeftButton>
               </SubToolboxActions>
