@@ -313,6 +313,7 @@ const CreatorVaultOS: React.FC = () => {
  const selectionProjectInputRef = useRef<HTMLInputElement | null>(null)
  const assetLibraryRef = useRef<HTMLDivElement | null>(null)
  const inspectorRef = useRef<HTMLDivElement | null>(null)
+ const compareVersionsRef = useRef<HTMLDivElement | null>(null)
 
  const allAssets = useMemo(() => listVaultAssets(), [refreshTick])
  const vaultTagLibrary = useMemo(
