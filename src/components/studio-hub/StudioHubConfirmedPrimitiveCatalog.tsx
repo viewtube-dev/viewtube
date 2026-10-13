@@ -45,7 +45,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Text input and textarea"
-      provenance={<Provenance primitive="StudioInput / StudioTextArea · primitives 141 / 142 · reference overlay composition" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea is multiline, content-height, and vertically resizable." imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]} />}
+      provenance={<Provenance primitive="StudioFloatingLabelInput / StudioFloatingLabelTextArea · primitives 141 / 142" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea is multiline, content-height, and vertically resizable." imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row"><span>141 · 44px labeled text input</span><StudioFloatingLabelInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 44px" sizeVariant="standard" /></div>
       <div className="vt-confirmed-variant"><span>141 · 28px labeled input A</span><StudioFloatingLabelInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 28px A" sizeVariant="compact" /></div>
