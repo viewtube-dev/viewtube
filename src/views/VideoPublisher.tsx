@@ -504,7 +504,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     return () => window.removeEventListener("vt_media_analysis_insights_ready", onInsights as EventListener)
   }, [])
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (targetField?: string) => {
     if (!concept || !niche) {
       setMissingFields({ concept: !concept, niche: !niche })
       return
@@ -536,7 +536,10 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           })
         : null
 
-      const data = await generateSeoData(concept, niche, script, "", videoLength, channelHandle, resourceLinks, formatMode === "longform" ? "Longform" : "Shorts", undefined, brain)
+      const data = await generateSeoData(concept || publishTitle || "", niche || "general audience", script || publishDescription, "", videoLength, channelHandle, resourceLinks, formatMode === "longform" ? "Longform" : "Shorts", undefined, brain)
+      if (targetField === "title" && data.titleSets[0]?.title) setPublishTitle(data.titleSets[0].title)
+      if (targetField === "description" && data.description) setPublishDescription(data.description)
+      if (targetField === "tags" && data.tags) setPublishTags(data.tags)
       setResult(data)
       setSeoState({ winningTitle: data.titleSets[0].title, winningKeywords: data.tags.split(",").map((keyword) => keyword.trim()).slice(0, 5), descriptionDraft: data.description })
 
@@ -774,6 +777,10 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 onLocationChange={setPublishLocation}
                 onCommunityChange={setPublishCommunity}
                 onAiUseChange={setPublishAiUse}
+                onGenerate={(field) => { if (["title", "description", "tags"].includes(field)) void handleGenerate(field) }}
+                onRefine={(field) => { if (["title", "description", "tags"].includes(field)) void handleGenerate(field) }}
+                onAnalyze={(field) => { if (field === "tags") void handleGenerate("tags"); else if (field === "title" || field === "description") setSeoState({ winningTitle: publishTitle, winningKeywords: publishTags.split(",").map(tag => tag.trim()).filter(Boolean).slice(0, 5), descriptionDraft: publishDescription }) }}
+                actionFields={["title", "description", "tags"]}
                 videoUploadLabel={videoFile ? <>{videoFile.name}<br />FINAL VIDEO SELECTED</> : <>DROP FILE OR CLICK<br />UPLOAD FINAL VIDEO</>}
                 thumbnailActions={
                   <SubToolboxButton level="l2" onClick={() => undefined} disabled={!thumbnailFile}>
