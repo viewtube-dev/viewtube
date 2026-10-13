@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  applyMetadataSetVariant,
   buildMetadataStrategyBrief,
   createEmptyMetadataMasterPackage,
   createMetadataMasterSet,
@@ -19,6 +20,27 @@ describe("Metadata Master package system", () => {
     expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("channel-native")
     expect(getMetadataCandidateStyles("story-led")).toEqual(["story-led", "search-first", "curiosity-led", "authority-led", "channel-native"])
     expect(metadataStrategyForStyle("curiosity-led")).toBe("curiosity")
+  })
+
+  it("keeps each style candidate's description, tags, and category with its title and thumbnail", () => {
+    const base = createEmptyMetadataMasterPackage({ title: "Base title", tags: ["base"], category: "Education" })
+    const candidate = applyMetadataSetVariant(base, {
+      title: "Story title",
+      thumbnailPrompt: "Story image",
+      thumbnailText: "THE TURN",
+      description: "A story-led description.",
+      tags: "story, transformation, payoff",
+      category: "Entertainment",
+    }, "story-led")
+    expect(candidate).toMatchObject({
+      style: "story-led",
+      title: "Story title",
+      thumbnailPrompt: "Story image",
+      thumbnailText: "THE TURN",
+      description: "A story-led description.",
+      tags: ["story", "transformation", "payoff"],
+      category: "Entertainment",
+    })
   })
 
   it("scores a complete package and surfaces duplicate-tag hygiene", () => {
