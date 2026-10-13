@@ -157,7 +157,7 @@ export const listAssistantIntelligenceSystems = (): IntelligenceSystemDefinition
 
 export const inferAssistantTargetTool = (text: string): SuperToolId => {
  const normalizedText = normalize(text)
- const direct = ASSISTANT_INTELLIGENCE_SYSTEMS.find((system) => {
+ const direct = listAssistantIntelligenceSystems().find((system) => {
   const candidates = [system.id, system.title, system.category, system.summary].map(normalize)
   return candidates.some((candidate) => candidate && normalizedText.includes(candidate))
  })
@@ -178,7 +178,7 @@ export const buildAssistantIntelligenceSnapshot = ({
  const generations = listGenerationRecords().slice(0, 8)
  const workflows = listWorkflowChains().slice(0, 8)
  const commandActions = listBrainCommandActions().slice(0, 8)
- const systems = ASSISTANT_INTELLIGENCE_SYSTEMS.map((system) => ({
+ const systems = listAssistantIntelligenceSystems().map((system) => ({
   id: system.id,
   title: system.title,
   category: system.category,
