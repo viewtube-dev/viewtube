@@ -57,7 +57,7 @@
  .vt-subtoolbox-split-button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; filter: none; }
 .vt-subtoolbox-split-button:focus-visible { outline: var(--vt-subtoolbox-inner-stroke, 3px) solid var(--vt-split-rail); outline-offset: 3px; }
 .vt-subtoolbox-split-button.is-selected,
-.vt-subtoolbox-split-button[aria-pressed="true"] { background: var(--vt-split-rail); }
+.vt-subtoolbox-split-button[aria-pressed="true"] { background: var(--vt-split-rail); box-shadow: 0 0 0 3px #000, 4px 4px 0 var(--vt-split-shadow); }
 .vt-subtoolbox-split-button.is-selected .vt-subtoolbox-split-button-rail,
 .vt-subtoolbox-split-button[aria-pressed="true"] .vt-subtoolbox-split-button-rail { background: var(--vt-split-label); }
 .vt-subtoolbox-split-button:disabled { opacity: .5; cursor: not-allowed; }
