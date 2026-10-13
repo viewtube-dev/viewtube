@@ -21,7 +21,7 @@ const withComponentLevelStyle = (
 export const SubToolboxFieldLabel: React.FC<React.LabelHTMLAttributes<HTMLLabelElement> & { level?: ToolboxControlLevel }> = ({ level, className, style, ...props }) => <label data-vt-control-level={level} style={withComponentLevelStyle(level, style)} className={classes("vt-subtoolbox-label", level && "has-component-level", className)} {...props} />
 
 export interface SubToolboxInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  controlSize?: "micro" | "standard"
+  controlSize?: "micro" | "compact" | "standard"
   level?: ToolboxControlLevel
   variant?: "default" | "right-label" | "floating-label"
 }
