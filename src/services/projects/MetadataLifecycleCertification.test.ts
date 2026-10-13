@@ -161,6 +161,7 @@ describe("metadata/project lifecycle certification fixture", () => {
     }
     const savedPackage = saveVideoPackage(packageToSave)
 
+    expect(savedPackage.id).toBe(videoPackageId)
     expect(savedPackage.projectId).toBe(project.id)
     expect(savedPackage.contentBuildId).toBe(contentBuildId)
     expect(savedPackage.packaging.selectedTitleId).toBe(titleArtifactB.id)
