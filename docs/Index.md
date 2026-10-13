@@ -69,7 +69,7 @@ Do not create a new document for an existing subject. Update or consolidate its 
 
 ## UI implementation guide
 
-- [Studio Controls Authoring Guide](Studio-Controls-Authoring-Guide.md) — how to extend canonical CSS primitives/components, reuse shared defaults, implement height-based variants, handle components outside the height system, prevent control overlap, and represent real component styling in the confirmed primitive library.
+- [Studio Controls Authoring Guide](Studio-Controls-Authoring-Guide.md) — canonical authoring rules for src/studio-ui/primitives/StudioControls.tsx and src/styles/studio-control-system.css, including shared defaults, height variants, non-height-system components, layout safety, and truthful confirmed-library specimens.
 
 ## Current implementation / conversation records
 
