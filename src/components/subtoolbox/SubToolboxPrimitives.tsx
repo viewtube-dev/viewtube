@@ -673,7 +673,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
   }, [open, recalcMenuRect])
 
   const mergedStyle = withComponentLevelStyle(level, style)
-  const isLegendMultiDropdown = className?.split(/\\s+/).includes("vt-legend-multi-dropdown") ?? false
+  const isLegendMultiDropdown = className?.split(/\s+/).includes("vt-legend-multi-dropdown") ?? false
 
   return (
     <div
