@@ -2,7 +2,7 @@ import React from "react"
 import { Link2 } from "lucide-react"
 import { SubToolboxSection, SubToolboxStack } from "../layouts"
 import { StudioDropdown } from "../primitives/StudioDropdown"
-import { StudioButton, StudioInput, StudioSearchInput, StudioTextArea } from "../primitives/StudioControls"
+import { StudioButton, StudioInput, StudioSearchInput, StudioSplitLeftButton, StudioTextArea } from "../primitives/StudioControls"
 
 export const VIDEO_SELECTOR = "VIDEO_SELECTOR"
 export const TEXT_GENERATOR = "TEXT_GENERATOR"
@@ -69,9 +69,9 @@ export const VideoSelectorRecipe: React.FC<VideoSelectorRecipeProps> = ({
         placeholder="Search videos…"
       />
     ) : (
-      <StudioButton sizeVariant="action" onClick={onConnect}>
-        <Link2 size={20} aria-hidden="true" /> Connect Channel
-      </StudioButton>
+      <StudioSplitLeftButton icon={<Link2 size={20} aria-hidden="true" />} tone="success" onClick={onConnect}>
+        Connect Channel
+      </StudioSplitLeftButton>
     )}
   </SubToolboxStack>
 )
