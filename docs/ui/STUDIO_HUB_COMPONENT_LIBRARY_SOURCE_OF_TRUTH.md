@@ -266,3 +266,12 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 - These are catalog/source changes on `feat/canonical-simple-text-input-library`; browser-rendered sizing, build, and automated checks still require verification before merge.
 
 - Added an explicit **28px Dropdown Pair** family entry: two real, keyboard-operable dropdown triggers in their own dedicated row, side by side. Both use uppercase 24px text, heavy weight, and `-0.02em` letter spacing.
+
+## 44px control family and dropdown alignment follow-up — 2026-10-13
+
+- Added canonical `SubToolbox44Switch`, `SubToolbox44Choice`, and `SubToolbox44WordToggle` components to the shared primitive code and control styles. The 44px switch retains the reference proportions (75.68 × 44px track, 36.667px handle, 3.667px inset, 31.68px travel); square radio/checkbox controls remain 44 × 44px.
+- The catalog now presents round and rectangular switches in a single family, and circular radio + checkmark checkbox + wide-X checkbox in a second family. It excludes rectangular radios, compact-X checkboxes, and concentric radio animations. Variants shown are 1 (solid), 3 (color swap), 4 (black indicator), and 5 (white indicator).
+- Word toggles are grouped together with 44px and 28px variants, using the default heavy uppercase font and proportional text/padding/radius values. Their active handle continues to measure the selected label so its position and width track the text.
+- Dropdown labels now use centered flex alignment and zero vertical padding/margins to prevent the label sitting above the trigger. Text uses closer tracking, and chevrons are scaled proportionally: 18px at 28px control height and 28px at 44px.
+- The size-default styling has been compacted to a two-column, 9px microtype layout where that settings group is rendered. No browser screenshot, build, or automated test has been run; final visual balance and integration still require verification.
+
