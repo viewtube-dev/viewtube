@@ -91,7 +91,7 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
 }
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
-  ({ icon, children, sizeVariant = "action", ...props }, ref) => (
+  ({ icon, children, sizeVariant = "standard", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" {...props}>
       <span
         aria-hidden="true"
