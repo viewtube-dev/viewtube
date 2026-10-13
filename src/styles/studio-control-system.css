@@ -807,3 +807,42 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { padding:0 6px 0 8px; border-radius:4px; font-size:22px; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count { min-width:16px; height:16px; padding:0 3px; border-width:1.5px; border-radius:4px; font-size:9px; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron { width:12px; height:12px; stroke-width:2; }
+
+
+/* Dropdown size ratios: preserve the same relative control geometry in both sizes.
+   Compact check marks and row spacing scale with the 28px trigger rather than staying 44px-sized. */
+.vt-studio-legend-multi { min-width: 0; }
+.vt-studio-legend-anchor { min-width: 0; }
+.vt-studio-legend-trigger { box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height); gap: 8px; }
+.vt-studio-legend-menu { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; }
+.vt-studio-legend-option {
+  box-sizing: border-box;
+  min-width: 0;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+.vt-studio-legend-check { box-sizing: border-box; width: 20px; height: 20px; border-width: 2px; }
+.vt-studio-legend-check svg { width: 14px; height: 14px; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option {
+  min-height: 28px;
+  gap: 5px;
+  padding: 2px 5px;
+  margin-bottom: 2px;
+  line-height: .9;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+  border-radius: 2px;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check svg {
+  width: 8px;
+  height: 8px;
+  stroke-width: 2;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
+  min-height: 28px;
+  margin-top: 2px;
+  padding: 2px 5px;
+}
