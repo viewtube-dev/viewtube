@@ -21,7 +21,7 @@ describe("SubToolbox split-left primitives", () => {
     )
     expect(html).toContain("data-vt-studio-split-rail")
     expect(html).toContain("data-vt-studio-split-label")
-    expect(html).toContain("is-selected")
+    expect(html).toContain('data-selected="true"')
   })
 
   it("renders the split menu with a square icon rail and full text/chevron side", () => {
