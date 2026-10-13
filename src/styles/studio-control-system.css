@@ -323,7 +323,7 @@ button[data-vt-studio-control="true"] {
   height: var(--vt-studio-control-height, 44px);
   min-height: var(--vt-studio-control-height, 44px);
 }
-button[data-vt-studio-control="true"][data-size="standard"] {
+button[data-vt-studio-control="true"][data-size="standard"]:not([data-height-variant="28"]) {
   height: 44px;
   min-height: 44px;
 }
