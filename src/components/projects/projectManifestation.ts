@@ -30,6 +30,20 @@ export type ProjectManifestation = {
   slots: ProjectManifestationAssetSlot[]
 }
 
+export const resolveSelectedProjectId = (
+  activeProjectId: string | null | undefined,
+  projects: Pick<Project, "id">[],
+  currentSelectedProjectId: string,
+): string => {
+  if (activeProjectId && projects.some(project => project.id === activeProjectId)) {
+    return activeProjectId
+  }
+  if (currentSelectedProjectId && projects.some(project => project.id === currentSelectedProjectId)) {
+    return currentSelectedProjectId
+  }
+  return projects[0]?.id || ""
+}
+
 const text = (value: unknown) => typeof value === "string" ? value.trim() : ""
 
 const artifactPreviewUrl = (artifact?: PackageArtifactRef | null): string | null => {
