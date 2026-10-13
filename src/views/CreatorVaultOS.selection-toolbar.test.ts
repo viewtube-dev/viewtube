@@ -16,9 +16,19 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('title="Inspector"')
   expect(source).toContain('message="Select an asset to inspect its metadata and provenance."')
   expect(source).toContain('ref={inspectorRef}')
-  expect(source).toMatch(/data-vault-mobile-sheet="inspector"[\s\S]{0,180}className=\{`\$\{mobileInspectorOpen \? "fixed[^"]+" : "block"\}/)
+  expect(source).toContain('data-vault-workbench-module="inspector"')
+  expect(source).not.toContain('data-vault-mobile-sheet="inspector"')
+  expect(source).not.toContain('label="Close Inspector"')
+  expect(source).toMatch(/title="Inspector"[\s\S]{0,180}data-vault-workbench-module="inspector"/)
   expect(source).toMatch(/persistenceId="vault-inspector"[\s\S]{0,300}\{selectedAsset \? \(\s*<div className="flex flex-col gap-3">/)
   expect(source).toContain('xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]')
+ })
+
+ it("renders Compare & Versions as its own configurable SubToolbox module", () => {
+  expect(source).toContain('title="Compare & Versions"')
+  expect(source).toContain('persistenceId="vault-compare-versions"')
+  expect(source).toContain('moduleStyle("compare-versions" as VaultWorkspaceModuleId)')
+  expect(source).toContain('data-vault-compare-versions')
  })
 
  it("preserves the contextual action set and keeps Compare gated to exactly two assets", () => {
