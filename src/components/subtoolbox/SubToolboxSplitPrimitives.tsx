@@ -336,3 +336,19 @@ const CanonicalSplitLeftAdapter: React.FC<SplitLeftButtonProps> = ({
 
 export const SplitLeftButton = CanonicalSplitLeftAdapter
 export const SubToolboxSplitButton = CanonicalSplitLeftAdapter
+
+/**
+ * Compatibility export for older SubToolbox consumers.
+ * Visual and interaction ownership lives in the canonical Studio split-left primitive.
+ */
+import { StudioSplitLeftButton } from "../../studio-ui/primitives/StudioControls"
+import type { StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
+
+export type SubToolboxSplitButtonProps = StudioSplitLeftButtonProps & { level?: ToolboxControlLevel }
+export const SubToolboxSplitButton: React.FC<SubToolboxSplitButtonProps> = ({ level = "l1", ...props }) => (
+  <StudioSplitLeftButton data-vt-control-level={level} {...props} />
+)
+SubToolboxSplitButton.displayName = "SubToolboxSplitButton"
+
+/** Legacy name retained as a direct alias; no separate styling or DOM implementation. */
+export const SplitLeftButton = StudioSplitLeftButton
