@@ -10,7 +10,6 @@ import {
   StudioIconButton,
   StudioInput,
   StudioSearchInput,
-  SplitLeftButton,
   StudioTextArea,
 } from "./primitives/StudioControls"
 import { STUDIO_PALETTE } from "./palette"
