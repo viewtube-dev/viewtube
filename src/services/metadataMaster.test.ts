@@ -12,7 +12,7 @@ describe("Metadata Master package system", () => {
   it("keeps metadata-set style explicit and creates a goal-aware strategy brief", () => {
     const pkg = createEmptyMetadataMasterPackage({ goal: "subscribers", intensity: "aggressive" })
     const set = createMetadataMasterSet(pkg, "PACKAGE A", "channel-fit", "channel-native")
-    expect(set).toMatchObject({ style: "channel-native", package: { goal: "subscribers", intensity: "aggressive" } })
+    expect(set).toMatchObject({ style: "channel-native", package: { goal: "subscribers", intensity: "aggressive", style: "channel-native" } })
     expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("subscriber conversion")
     expect(buildMetadataStrategyBrief("subscribers", "aggressive", "channel-native")).toContain("channel-native")
   })
@@ -45,6 +45,7 @@ describe("Metadata Master package system", () => {
       tags: pkg.tags,
       goal: pkg.goal,
       intensity: pkg.intensity,
+      style: pkg.style,
     })
   })
 
