@@ -2117,7 +2117,7 @@ const CreatorVaultOS: React.FC = () => {
            onClick={() => assetLibraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
            disabled={selectedAssetIds.length !== 2}
           />
-          <SubToolboxInnerActionButton label="Metadata" iconName="database" tone="cyan" onClick={() => setAssetOperationsMode("tools")} />
+          <SubToolboxInnerActionButton label="Metadata" iconName="database" tone="cyan" onClick={openSelectedInspector} disabled={!selectedAsset} />
           <SubToolboxInnerActionButton label="Export" iconName="database" tone="yellow" onClick={exportSelectionManifest} />
           <SubToolboxInnerActionButton label="Send to ViewTube" iconName="link" tone="blue" onClick={() => setAssetOperationsMode("tools")} />
           <SubToolboxInnerActionButton label="Clear" iconName="x" tone="cyan" onClick={() => setSelectedAssetIds([])} />
