@@ -64,6 +64,7 @@ import { extractVaultExifMetadata } from "../services/vaultExif"
 import {
  computeVaultImagePerceptualHash,
  findVaultSimilarAssets,
+ hammingDistanceHex,
 } from "../services/vaultImageSimilarity"
 import { computeVaultImagePalette } from "../services/vaultImagePalette"
 import { getVaultAttentionReasons } from "../services/vaultAttention"
@@ -112,7 +113,7 @@ import {
  attachVaultAssetIdsToProject,
  buildVaultSelectionProjectDraft,
 } from "../services/vaultProjectHandoff"
-import { getVaultAssetUsage } from "../services/vaultUsage"
+import { getVaultAssetUsage, getVaultAssetUsageIndex } from "../services/vaultUsage"
 import {
  createVaultSelectionManifest,
  serializeVaultSelectionManifest,
@@ -173,6 +174,7 @@ const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  "compare-versions": "Compare & Versions",
  "task-center": "Task Center",
  "health-center": "Asset Health",
+ "relationship-review": "Relationships & Duplicates",
  inspector: "Inspector",
 }
 
@@ -363,6 +365,39 @@ const CreatorVaultOS: React.FC = () => {
    ),
   },
  ], [allAssets])
+ const relationshipReview = useMemo(() => {
+  const byHash = new Map<string, VaultAsset[]>()
+  allAssets.forEach((asset) => {
+   const hash = String(asset.metadata?.contentHash || "").trim().toLowerCase()
+   if (!hash) return
+   const group = byHash.get(hash) || []
+   group.push(asset)
+   byHash.set(hash, group)
+  })
+  const exactDuplicateGroups = Array.from(byHash.entries())
+   .filter(([, assets]) => assets.length > 1)
+   .map(([hash, assets]) => ({ hash, assets: [...assets].sort((a, b) => a.name.localeCompare(b.name)) }))
+   .sort((a, b) => b.assets.length - a.assets.length)
+  const indexedImages = allAssets.filter((asset) => asset.kind === "image" && /^[0-9a-f]{16}$/i.test(String(asset.metadata?.perceptualHash || "")))
+  const similarPairs: Array<{ left: VaultAsset; right: VaultAsset; distance: number }> = []
+  for (let leftIndex = 0; leftIndex < indexedImages.length && similarPairs.length < 50; leftIndex += 1) {
+   const left = indexedImages[leftIndex]
+   for (let rightIndex = leftIndex + 1; rightIndex < indexedImages.length && similarPairs.length < 50; rightIndex += 1) {
+    const right = indexedImages[rightIndex]
+    if (String(left.metadata?.contentHash || "") && left.metadata?.contentHash === right.metadata?.contentHash) continue
+    const distance = hammingDistanceHex(String(left.metadata?.perceptualHash || ""), String(right.metadata?.perceptualHash || ""))
+    if (distance > 8) continue
+    similarPairs.push({ left, right, distance })
+   }
+  }
+  similarPairs.sort((a, b) => a.distance - b.distance || a.left.name.localeCompare(b.left.name))
+  const usageIndex = getVaultAssetUsageIndex()
+  const usageReview = allAssets
+   .filter((asset) => !(usageIndex.get(asset.id) || []).length && !asset.metadata?.archivedAt && !asset.metadata?.trashedAt)
+   .map((asset) => ({ asset }))
+   .sort((a, b) => b.asset.updatedAt - a.asset.updatedAt)
+  return { exactDuplicateGroups, similarPairs, usageReview }
+ }, [allAssets, refreshTick])
  const projectReadinessRows = useMemo(() => brain.projects
   .map((project) => ({
    project,
@@ -3062,6 +3097,74 @@ const CreatorVaultOS: React.FC = () => {
         <div className="text-[10px] font-bold opacity-55">
          Health checks are read-only. Select an asset to inspect it; this panel does not alter metadata automatically.
         </div>
+       </div>
+      </SubToolbox>
+      <SubToolbox
+       style={moduleStyle("relationship-review" as VaultWorkspaceModuleId)}
+       title="Relationships & Duplicates"
+       subtitle="Review exact duplicates, visually similar images, and assets with no recorded Content Build usage"
+       icon={<Database />}
+       paletteIndex={9}
+       isOpenInitial={false}
+       persistenceId="vault-relationship-review"
+      >
+       <div className="flex flex-col gap-4" data-vault-relationship-review>
+        <section data-vault-exact-duplicates>
+         <div className="mb-2 flex items-center justify-between gap-2">
+          <div className="text-xs font-black uppercase">Exact Duplicate Groups</div>
+          <span className="text-xs font-black">{relationshipReview.exactDuplicateGroups.length}</span>
+         </div>
+         {relationshipReview.exactDuplicateGroups.length ? (
+          <div className="flex flex-col gap-2">
+           {relationshipReview.exactDuplicateGroups.slice(0, 8).map((group) => (
+            <div key={group.hash} className="border border-current/25 p-3">
+             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-black">{group.assets.length} assets share one SHA-256 hash</span>
+              <SubToolboxInnerActionButton label="Compare Group" iconName="layers" tone="purple" onClick={() => setSelectedAssetIds(group.assets.slice(0, 2).map((asset) => asset.id))} />
+             </div>
+             <div className="flex flex-col gap-1">
+              {group.assets.slice(0, 4).map((asset) => (
+               <button key={asset.id} type="button" className="flex min-w-0 items-center gap-2 text-left text-xs font-bold underline underline-offset-2" onClick={() => { setSelectedAssetIds([asset.id]); inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }) }}>
+                <span className="truncate">{asset.name}</span><span className="shrink-0 opacity-55">{asset.kind}</span>
+               </button>
+              ))}
+              {group.assets.length > 4 ? <div className="text-[10px] font-bold opacity-60">+{group.assets.length - 4} more in this group</div> : null}
+             </div>
+            </div>
+           ))}
+          </div>
+         ) : <SubToolboxStatePanel level="l1" state="empty" message="No exact duplicate hashes are recorded in the current Vault." />}
+        </section>
+        <section data-vault-similar-pairs>
+         <div className="mb-2 flex items-center justify-between gap-2"><div className="text-xs font-black uppercase">Visually Similar Images</div><span className="text-xs font-black">{relationshipReview.similarPairs.length}{relationshipReview.similarPairs.length === 50 ? "+" : ""}</span></div>
+         {relationshipReview.similarPairs.length ? (
+          <div className="flex flex-col gap-2">
+           {relationshipReview.similarPairs.slice(0, 8).map(({ left, right, distance }) => (
+            <div key={left.id + ":" + right.id} className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border border-current/20 p-2">
+             <button type="button" className="truncate text-left text-xs font-bold underline underline-offset-2" title={left.name} onClick={() => { setSelectedAssetIds([left.id]); inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }) }}>{left.name}</button>
+             <span className="text-[10px] font-black opacity-60">D{distance}</span>
+             <button type="button" className="truncate text-left text-xs font-bold underline underline-offset-2" title={right.name} onClick={() => { setSelectedAssetIds([right.id]); inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }) }}>{right.name}</button>
+             <div className="col-span-full flex justify-end"><SubToolboxInnerActionButton label="Compare Pair" iconName="layers" tone="cyan" onClick={() => setSelectedAssetIds([left.id, right.id])} /></div>
+            </div>
+           ))}
+          </div>
+         ) : <SubToolboxStatePanel level="l1" state="empty" message="No similar-image pairs are currently indexed." />}
+        </section>
+        <section data-vault-unreferenced-assets>
+         <div className="mb-2 flex items-center justify-between gap-2"><div className="text-xs font-black uppercase">No Recorded Content Build Usage</div><span className="text-xs font-black">{relationshipReview.usageReview.length}</span></div>
+         <div className="mb-2 text-[10px] font-bold opacity-60">No usage was found in current Content Build snapshots; this does not prove an asset is safe to delete.</div>
+         {relationshipReview.usageReview.length ? (
+          <div className="flex flex-col gap-2">
+           {relationshipReview.usageReview.slice(0, 8).map(({ asset }) => (
+            <div key={asset.id} className="flex min-w-0 items-center justify-between gap-2 border border-current/20 p-2">
+             <button type="button" className="min-w-0 truncate text-left text-xs font-bold underline underline-offset-2" title={asset.name} onClick={() => { setSelectedAssetIds([asset.id]); inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }) }}>{asset.name}</button>
+             <SubToolboxInnerActionButton label="Inspect" iconName="search" tone="cyan" onClick={() => { setSelectedAssetIds([asset.id]); inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }) }} />
+            </div>
+           ))}
+          </div>
+         ) : <SubToolboxStatePanel level="l1" state="empty" message="No candidate assets found, or all assets have recorded usage." />}
+        </section>
+        <div className="text-[10px] font-bold opacity-55">Similarity is a review signal, not proof of duplication. No assets are deleted, merged, or replaced automatically.</div>
        </div>
       </SubToolbox>
       <div

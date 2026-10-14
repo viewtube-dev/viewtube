@@ -31,6 +31,19 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain("failed · open to review")
  })
 
+ it("provides duplicate, similarity, and unreferenced-asset review tools", () => {
+  expect(source).toContain('title="Relationships & Duplicates"')
+  expect(source).toContain('data-vault-relationship-review')
+  expect(source).toContain('data-vault-exact-duplicates')
+  expect(source).toContain('data-vault-similar-pairs')
+  expect(source).toContain('data-vault-unreferenced-assets')
+  expect(source).toContain('hammingDistanceHex(')
+  expect(source).toContain('getVaultAssetUsage(asset.id)')
+  expect(source).toContain('label="Compare Group"')
+  expect(source).toContain('label="Compare Pair"')
+  expect(source).toContain('does not prove an asset is safe to delete')
+ })
+
  it("provides a Vault Asset Health center with actionable issue groups", () => {
   expect(source).toContain('title="Asset Health"')
   expect(source).toContain('data-vault-health-center')
