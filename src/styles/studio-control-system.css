@@ -723,7 +723,7 @@ button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"]
 
 
 /* Canonical library defaults: 44px standard / 28px compact. */
-[data-vt-studio-control] { --vt-studio-control-radius:8px; --vt-studio-hover-duration:150ms; --vt-studio-click-duration:300ms; }
+[data-vt-studio-control] { --vt-studio-control-radius:6px; --vt-studio-hover-duration:150ms; --vt-studio-click-duration:300ms; }
 [data-vt-studio-control][data-height-variant="44"],[data-vt-studio-control][data-size="standard"] { --vt-studio-control-radius:6px; }
 [data-vt-studio-control][data-height-variant="28"],[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; }
 button[data-vt-studio-control][data-height-variant="44"] { border-radius:6px; }
@@ -1505,9 +1505,9 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
 
 
 /* Studio radio/checkbox indicator contrast follows the selected skin. */
-[data-vt-studio-control].is-color-swap :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg) { color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-[data-vt-studio-control].is-black-indicator :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg) { color: #000 !important; stroke: #000 !important; }
-[data-vt-studio-control].is-white-indicator :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg) { color: #fff !important; stroke: #fff !important; }
+[data-vt-studio-control].is-color-swap :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg, svg path) { color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+[data-vt-studio-control].is-black-indicator :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg, svg path) { color: #000 !important; stroke: #000 !important; }
+[data-vt-studio-control].is-white-indicator :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg, svg path) { color: #fff !important; stroke: #fff !important; }
 
 /* Word-toggle handle is measured against each label; retain symmetric interior padding,
    shared Studio typography, stroke, height and radius for both sizes. */
