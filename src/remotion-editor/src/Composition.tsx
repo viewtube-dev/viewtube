@@ -8,6 +8,7 @@ import {
   interpolateShortsConfig as interpolateSharedShortsConfig,
 } from '../../shared/vtE1Shorts';
 import { expandCompoundClips } from '../../shared/vtE1CompoundClips.js';
+import { resolveAudioRenderSettings } from '../../shared/vtE1AudioContract.js';
 import { normalizeVtE1TransitionType } from '../../shared/vtE1TransitionCatalog.js';
 import { transitionFrameStyleFor } from '../../shared/vtE1TransitionFrame.js';
 import { buildVtE1Filter, resolveVtE1FxOpacity } from '../../shared/vtE1FxCatalog.js';
@@ -517,12 +518,17 @@ export const MyComposition: React.FC<Props> = ({ renderJob }) => {
           const src = String(payload.mediaUrl || payload.src || payload.url || '');
           if (!src) return null;
           const startFrom = toFrame(Math.max(0, sourceTimeForClipAt(project, clip, bounds.startSec)), fps);
+          const audioSettings = resolveAudioRenderSettings(
+            clip as unknown as Record<string, unknown>,
+            payload,
+          );
           return (
             <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
               <Audio
                 src={src}
                 startFrom={startFrom}
-                volume={Boolean(payload.muted) ? 0 : clamp(Number(payload.volume ?? 0.6), 0, 1)}
+                volume={audioSettings.muted ? 0 : audioSettings.volume}
+                playbackRate={audioSettings.playbackRate}
               />
             </Sequence>
           );
