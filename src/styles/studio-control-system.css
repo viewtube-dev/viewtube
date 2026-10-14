@@ -15,7 +15,7 @@
 
 [data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-outline-stroke: 1px; --vt-studio-control-radius: 4px; --vt-studio-control-shadow: 1.5px; --vt-studio-control-hover-offset: .75px; --vt-studio-control-font-size: 24px; }
 [data-vt-studio-control][data-size="small"] { --vt-studio-control-height: 32px; }
-[data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-outline-stroke: 1.5px; --vt-studio-control-hover-offset: 1.5px; --vt-studio-control-font-size: 38px; }
+[data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-outline-stroke: 1.5px; --vt-studio-control-hover-offset: 1.5px; --vt-studio-control-font-size: 38px; --vt-studio-control-radius: 6px; }
 [data-vt-studio-control][data-size="action"] { --vt-studio-control-height: 56px; }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
@@ -724,10 +724,10 @@ button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"]
 
 /* Canonical library defaults: 44px standard / 28px compact. */
 [data-vt-studio-control] { --vt-studio-control-radius:8px; --vt-studio-hover-duration:150ms; --vt-studio-click-duration:300ms; }
-[data-vt-studio-control][data-height-variant="44"],[data-vt-studio-control][data-size="standard"] { --vt-studio-control-radius:8px; }
-[data-vt-studio-control][data-height-variant="28"],[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:5px; }
-button[data-vt-studio-control][data-height-variant="44"] { border-radius:8px; }
-button[data-vt-studio-control][data-height-variant="28"] { border-radius:5px; }
+[data-vt-studio-control][data-height-variant="44"],[data-vt-studio-control][data-size="standard"] { --vt-studio-control-radius:6px; }
+[data-vt-studio-control][data-height-variant="28"],[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; }
+button[data-vt-studio-control][data-height-variant="44"] { border-radius:6px; }
+button[data-vt-studio-control][data-height-variant="28"] { border-radius:4px; }
 button[data-vt-studio-control]:hover:not(:disabled) { transform:translateY(1.5px); transition-duration:150ms; }
 button[data-vt-studio-control]:active:not(:disabled) { transform:translate(3px,3px); transition-duration:300ms; }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] { border-right-width:2px; }
@@ -1502,3 +1502,68 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   -webkit-text-stroke: .5px currentColor;
   outline-offset: 0;
 }
+
+
+/* Studio radio/checkbox indicator contrast follows the selected skin. */
+[data-vt-studio-control].is-color-swap :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg) { color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+[data-vt-studio-control].is-black-indicator :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg) { color: #000 !important; stroke: #000 !important; }
+[data-vt-studio-control].is-white-indicator :is([data-vt-studio-choice-mark], .vt-studio-choice-mark, svg) { color: #fff !important; stroke: #fff !important; }
+
+/* Word-toggle handle is measured against each label; retain symmetric interior padding,
+   shared Studio typography, stroke, height and radius for both sizes. */
+.vt-studio-44-word-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: max-content;
+  max-width: 100%;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  padding: 0;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.vt-studio-44-word-toggle.is-size-44 { --vt-studio-control-height: 44px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px; }
+.vt-studio-44-word-toggle.is-size-28 { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-radius: 4px; }
+.vt-studio-44-word-toggle > button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family: inherit;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.vt-studio-44-word-toggle.is-size-28 > button { padding-inline: 6px; font-size: var(--vt-studio-28-font-size, 24px); }
+.vt-studio-44-word-toggle > button.is-active { color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+.vt-studio-44-word-handle {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  border-radius: calc(var(--vt-studio-control-radius, 6px) - var(--vt-studio-control-stroke, 3px));
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  transition: left 180ms ease-out, width 180ms ease-out, background-color 180ms ease-out;
+}
+.vt-studio-44-word-toggle.is-color-swap > button.is-active { color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); }
+.vt-studio-44-word-toggle.is-black-indicator > button.is-active { color: #000; }
+.vt-studio-44-word-toggle.is-solid > button.is-active { color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
