@@ -170,6 +170,7 @@ const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  "import-tags": "Import & Tags",
  "text-editor": "Text Editor",
  "asset-library": "Asset Library",
+ "compare-versions": "Compare & Versions",
  "task-center": "Task Center",
  inspector: "Inspector",
 }
@@ -283,7 +284,6 @@ const CreatorVaultOS: React.FC = () => {
  const [quickLookVolume, setQuickLookVolume] = useState(0.8)
  const [quickLookSpeed, setQuickLookSpeed] = useState(1)
  const [quickLookOpen, setQuickLookOpen] = useState(true)
- const [mobileInspectorOpen, setMobileInspectorOpen] = useState(false)
  const [compareReveal, setCompareReveal] = useState(50)
  const [smartCollectionName, setSmartCollectionName] = useState("")
  const [collectionRefresh, setCollectionRefresh] = useState(0)
@@ -313,6 +313,7 @@ const CreatorVaultOS: React.FC = () => {
  const selectionProjectInputRef = useRef<HTMLInputElement | null>(null)
  const assetLibraryRef = useRef<HTMLDivElement | null>(null)
  const inspectorRef = useRef<HTMLDivElement | null>(null)
+ const compareVersionsRef = useRef<HTMLDivElement | null>(null)
 
  const allAssets = useMemo(() => listVaultAssets(), [refreshTick])
  const vaultTagLibrary = useMemo(
@@ -1051,13 +1052,11 @@ const CreatorVaultOS: React.FC = () => {
   const index = visibleAssets.findIndex((asset) => asset.id === selectedAsset.id)
   setQuickLookCurrent(index >= 0 ? index : 0)
   setQuickLookOpen(true)
-  setMobileInspectorOpen(true)
   inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
  }
 
  const openSelectedInspector = () => {
   if (!selectedAsset) return
-  setMobileInspectorOpen(true)
   inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
   inspectorRef.current?.focus({ preventScroll: true })
  }
@@ -2110,11 +2109,31 @@ const CreatorVaultOS: React.FC = () => {
           <SubToolboxInnerActionButton label="Tag" iconName="tag" tone="pink" onClick={() => setAssetOperationsMode("batch")} />
           <SubToolboxInnerActionButton label="Batch" iconName="edit" tone="orange" onClick={() => setAssetOperationsMode("batch")} />
           <SubToolboxInnerActionButton label="Group" iconName="collection" tone="green" onClick={() => setAssetOperationsMode("groups")} />
+          <div className="flex min-w-[220px] flex-1 items-center gap-1">
+           <SubToolboxSelect
+            value={targetCollectionId}
+            aria-label="Quick add selected assets to collection"
+            onChange={(event) => setTargetCollectionId(event.target.value)}
+           >
+            <option value="">ADD TO COLLECTION…</option>
+            {manualCollections.map((collection) => (
+             <option key={collection.id} value={collection.id}>{collection.name}</option>
+            ))}
+           </SubToolboxSelect>
+           <SubToolboxInnerActionButton
+            label="Add"
+            iconName="plus"
+            tone="green"
+            onClick={addSelectionToCollection}
+            disabled={!targetCollectionId || !selectedAssetIds.length}
+           />
+          </div>
+
           <SubToolboxInnerActionButton
            label="Compare"
            iconName="layers"
            tone="purple"
-           onClick={() => assetLibraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+           onClick={() => compareVersionsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
            disabled={selectedAssetIds.length !== 2}
           />
           <SubToolboxInnerActionButton label="Metadata" iconName="database" tone="cyan" onClick={openSelectedInspector} disabled={!selectedAsset} />
@@ -2122,95 +2141,6 @@ const CreatorVaultOS: React.FC = () => {
           <SubToolboxInnerActionButton label="Send to ViewTube" iconName="link" tone="blue" onClick={() => setAssetOperationsMode("tools")} />
           <SubToolboxInnerActionButton label="Clear" iconName="x" tone="cyan" onClick={() => setSelectedAssetIds([])} />
          </section>
-        ) : null}
-        {comparePair ? (
-         <div>
-          <div className="mb-2 text-xs font-black uppercase opacity-60">Compare Selection</div>
-          <div className="flex gap-3 overflow-x-auto pb-2">
-           {comparePair.map((asset, index) => (
-            <div key={asset.id} className="min-w-[260px] flex-1 border-[3px] border-current p-2">
-             <div className="mb-2 text-xs font-black uppercase opacity-60">
-              {index === 0 ? "A" : "B"} · {asset.kind.toUpperCase()}
-             </div>
-             <div className="text-sm font-black uppercase">{asset.name}</div>
-             <div className="mt-2 aspect-video overflow-hidden border-[3px] border-current">
-              {asset.previewUrl || asset.url ? (
-               <img
-                src={asset.previewUrl || asset.url || undefined}
-                alt=""
-                className="h-full w-full object-cover"
-               />
-              ) : (
-               <div className="flex h-full items-center justify-center">{assetIcon(asset)}</div>
-              )}
-             </div>
-             <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-bold">
-              <div>
-               <div className="font-black uppercase opacity-60">Project</div>
-               <div>{asset.projectName || "UNASSIGNED"}</div>
-              </div>
-              <div>
-               <div className="font-black uppercase opacity-60">Source</div>
-               <div>{asset.source.toUpperCase()}</div>
-              </div>
-              <div>
-               <div className="font-black uppercase opacity-60">Dimensions</div>
-               <div>
-                {typeof asset.metadata?.width === "number" && typeof asset.metadata?.height === "number"
-                 ? `${asset.metadata.width}×${asset.metadata.height}`
-                 : "—"}
-               </div>
-              </div>
-              <div>
-               <div className="font-black uppercase opacity-60">Size</div>
-               <div>
-                {typeof asset.metadata?.byteSize === "number"
-                 ? formatVaultBytes(Number(asset.metadata.byteSize))
-                 : "—"}
-               </div>
-              </div>
-             </div>
-             <div className="mt-2 flex flex-wrap gap-1">
-              {(asset.tags || []).map((tag) => (
-               <SubToolboxAlphabeticalTag key={tag} level="l2" label={tag} spectrumKey={tag} />
-              ))}
-             </div>
-            </div>
-           ))}
-          </div>
-         </div>
-        ) : null}
-        {comparePair
-         && comparePair.every((asset) => asset.kind === "image" && (asset.previewUrl || asset.url)) ? (
-         <div>
-          <div className="mb-2 text-xs font-black uppercase opacity-60">Before / After</div>
-          <div className="relative aspect-video overflow-hidden border-[3px] border-current">
-           <img
-            src={comparePair[0].previewUrl || comparePair[0].url || undefined}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-           />
-           <img
-            src={comparePair[1].previewUrl || comparePair[1].url || undefined}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ clipPath: `inset(0 ${100 - compareReveal}% 0 0)` }}
-           />
-           <div
-            aria-hidden="true"
-            className="absolute inset-y-0 w-[3px] bg-current"
-            style={{ left: `calc(${compareReveal}% - 1px)` }}
-           />
-          </div>
-          <SubToolboxInput
-           type="range"
-           min={0}
-           max={100}
-           value={compareReveal}
-           aria-label="Before after reveal"
-           onChange={(event) => setCompareReveal(Number(event.target.value))}
-          />
-         </div>
         ) : null}
         {viewMode === "lineage" ? (
          <div>
@@ -2375,7 +2305,6 @@ const CreatorVaultOS: React.FC = () => {
              setSelectionAnchorId(asset.id)
              setQuickLookCurrent(assetIndex)
              setQuickLookOpen(true)
-             setMobileInspectorOpen(true)
             }}
            />
           ))}
@@ -2393,6 +2322,169 @@ const CreatorVaultOS: React.FC = () => {
        </div>
       </SubToolbox>
       </div>
+
+      <SubToolbox
+       style={moduleStyle("compare-versions" as VaultWorkspaceModuleId)}
+       title="Compare & Versions"
+       subtitle="Compare selected assets and inspect canonical versions"
+       icon={<Database />}
+       paletteIndex={4}
+       isOpenInitial={Boolean(comparePair || selectedVersionStack.length)}
+       persistenceId="vault-compare-versions"
+      >
+       <div ref={compareVersionsRef} tabIndex={-1} data-vault-compare-versions className="flex flex-col gap-3">
+         {comparePair ? (
+          <div>
+           <div className="mb-2 text-xs font-black uppercase opacity-60">Compare Selection</div>
+           <div className="flex gap-3 overflow-x-auto pb-2">
+            {comparePair.map((asset, index) => (
+             <div key={asset.id} className="min-w-[260px] flex-1 border-[3px] border-current p-2">
+              <div className="mb-2 text-xs font-black uppercase opacity-60">
+               {index === 0 ? "A" : "B"} · {asset.kind.toUpperCase()}
+              </div>
+              <div className="text-sm font-black uppercase">{asset.name}</div>
+              <div className="mt-2 aspect-video overflow-hidden border-[3px] border-current">
+               {asset.previewUrl || asset.url ? (
+                <img
+                 src={asset.previewUrl || asset.url || undefined}
+                 alt=""
+                 className="h-full w-full object-cover"
+                />
+               ) : (
+                <div className="flex h-full items-center justify-center">{assetIcon(asset)}</div>
+               )}
+              </div>
+              <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-bold">
+               <div>
+                <div className="font-black uppercase opacity-60">Project</div>
+                <div>{asset.projectName || "UNASSIGNED"}</div>
+               </div>
+               <div>
+                <div className="font-black uppercase opacity-60">Source</div>
+                <div>{asset.source.toUpperCase()}</div>
+               </div>
+               <div>
+                <div className="font-black uppercase opacity-60">Dimensions</div>
+                <div>
+                 {typeof asset.metadata?.width === "number" && typeof asset.metadata?.height === "number"
+                  ? `${asset.metadata.width}×${asset.metadata.height}`
+                  : "—"}
+                </div>
+               </div>
+               <div>
+                <div className="font-black uppercase opacity-60">Size</div>
+                <div>
+                 {typeof asset.metadata?.byteSize === "number"
+                  ? formatVaultBytes(Number(asset.metadata.byteSize))
+                  : "—"}
+                </div>
+               </div>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1">
+               {(asset.tags || []).map((tag) => (
+                <SubToolboxAlphabeticalTag key={tag} level="l2" label={tag} spectrumKey={tag} />
+               ))}
+              </div>
+             </div>
+            ))}
+           </div>
+          </div>
+         ) : null}
+         {comparePair
+          && comparePair.every((asset) => asset.kind === "image" && (asset.previewUrl || asset.url)) ? (
+          <div>
+           <div className="mb-2 text-xs font-black uppercase opacity-60">Before / After</div>
+           <div className="relative aspect-video overflow-hidden border-[3px] border-current">
+            <img
+             src={comparePair[0].previewUrl || comparePair[0].url || undefined}
+             alt=""
+             className="absolute inset-0 h-full w-full object-cover"
+            />
+            <img
+             src={comparePair[1].previewUrl || comparePair[1].url || undefined}
+             alt=""
+             className="absolute inset-0 h-full w-full object-cover"
+             style={{ clipPath: `inset(0 ${100 - compareReveal}% 0 0)` }}
+            />
+            <div
+             aria-hidden="true"
+             className="absolute inset-y-0 w-[3px] bg-current"
+             style={{ left: `calc(${compareReveal}% - 1px)` }}
+            />
+           </div>
+           <SubToolboxInput
+            type="range"
+            min={0}
+            max={100}
+            value={compareReveal}
+            aria-label="Before after reveal"
+            onChange={(event) => setCompareReveal(Number(event.target.value))}
+           />
+          </div>
+         ) : null}
+
+        {comparePair ? (
+         <section aria-label="Asset comparison differences" className="border-t-[3px] border-current pt-3">
+          <div className="mb-2 text-xs font-black uppercase opacity-60">Differences</div>
+          <div className="flex flex-col gap-1">
+           {([
+            ["Name", comparePair[0].name, comparePair[1].name],
+            ["Type", comparePair[0].kind, comparePair[1].kind],
+            ["Project", comparePair[0].projectName || "Unassigned", comparePair[1].projectName || "Unassigned"],
+            ["Source", comparePair[0].source, comparePair[1].source],
+            ["Dimensions", `${comparePair[0].metadata?.width || "—"} × ${comparePair[0].metadata?.height || "—"}`, `${comparePair[1].metadata?.width || "—"} × ${comparePair[1].metadata?.height || "—"}`],
+            ["File size", typeof comparePair[0].metadata?.byteSize === "number" ? formatVaultBytes(Number(comparePair[0].metadata.byteSize)) : "—", typeof comparePair[1].metadata?.byteSize === "number" ? formatVaultBytes(Number(comparePair[1].metadata.byteSize)) : "—"],
+            ["Tags", (comparePair[0].tags || []).join(", ") || "—", (comparePair[1].tags || []).join(", ") || "—"],
+           ] as Array<[string, string, string]>).map(([label, left, right]) => (
+            <div key={label} className="grid grid-cols-[84px_minmax(0,1fr)_minmax(0,1fr)] gap-2 border-b border-current/20 py-1 text-xs">
+             <span className="font-black uppercase opacity-60">{label}</span>
+             <span className={left === right ? "font-bold" : "font-black"}>{left}</span>
+             <span className={left === right ? "font-bold" : "font-black"}>{right}</span>
+            </div>
+           ))}
+          </div>
+         </section>
+        ) : (
+         <SubToolboxStatePanel level="l1" state="empty" message="Select exactly two assets to compare their previews and metadata differences." />
+        )}
+         <div>
+          <div className="mb-2 text-xs font-black uppercase opacity-60">Versions</div>
+          {selectedVersionStack.length ? (
+           <>
+            <div className="flex gap-2 overflow-x-auto pb-1">
+            {selectedVersionStack.map((version) => {
+             const asset = allAssets.find((candidate) => candidate.id === version.assetId)
+             return (
+              <SubToolboxInnerActionButton
+               key={version.id}
+               label={`V${version.version} · ${version.label || asset?.name || version.assetId}`}
+               iconName="layers"
+               tone={version.assetId === selectedAsset?.id ? "pink" : "cyan"}
+               onClick={() => setSelectedAssetIds([version.assetId])}
+              />
+             )
+            })}
+            </div>
+            {selectedVersionRecord ? (
+             <SubToolboxInnerActionButton
+              label="Detach Version as Independent Asset"
+              iconName="layers"
+              tone="purple"
+              onClick={detachSelectedVersion}
+             />
+            ) : null}
+           </>
+          ) : (
+           <SubToolboxStatePanel
+            level="l1"
+            state="empty"
+            message="No canonical version stack is recorded for this asset."
+           />
+          )}
+         </div>
+
+       </div>
+      </SubToolbox>
 
       <SubToolbox
        style={moduleStyle("import-tags" as VaultWorkspaceModuleId)}
@@ -2807,8 +2899,8 @@ const CreatorVaultOS: React.FC = () => {
       <div
         ref={inspectorRef}
         tabIndex={-1}
-        data-vault-mobile-sheet="inspector"
-        className={`${mobileInspectorOpen ? "fixed inset-x-2 bottom-16 z-30 max-h-[65vh] overflow-y-auto" : "block"} xl:static xl:block xl:max-h-none xl:overflow-visible`}
+        data-vault-workbench-module="inspector"
+        className="min-w-0"
        >
        <SubToolbox
        style={moduleStyle("inspector" as VaultWorkspaceModuleId)}
@@ -2821,14 +2913,6 @@ const CreatorVaultOS: React.FC = () => {
       >
        {selectedAsset ? (
         <div className="flex flex-col gap-3">
-         <div className="xl:hidden">
-          <SubToolboxInnerActionButton
-           label="Close Inspector"
-           iconName="x"
-           tone="pink"
-           onClick={() => setMobileInspectorOpen(false)}
-          />
-         </div>
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Quick Look</div>
           {!quickLookOpen ? (
@@ -3118,41 +3202,6 @@ const CreatorVaultOS: React.FC = () => {
            </div>
           </div>
          ) : null}
-         <div>
-          <div className="mb-2 text-xs font-black uppercase opacity-60">Versions</div>
-          {selectedVersionStack.length ? (
-           <>
-            <div className="flex gap-2 overflow-x-auto pb-1">
-            {selectedVersionStack.map((version) => {
-             const asset = allAssets.find((candidate) => candidate.id === version.assetId)
-             return (
-              <SubToolboxInnerActionButton
-               key={version.id}
-               label={`V${version.version} · ${version.label || asset?.name || version.assetId}`}
-               iconName="layers"
-               tone={version.assetId === selectedAsset.id ? "pink" : "cyan"}
-               onClick={() => setSelectedAssetIds([version.assetId])}
-              />
-             )
-            })}
-            </div>
-            {selectedVersionRecord ? (
-             <SubToolboxInnerActionButton
-              label="Detach Version as Independent Asset"
-              iconName="layers"
-              tone="purple"
-              onClick={detachSelectedVersion}
-             />
-            ) : null}
-           </>
-          ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="empty"
-            message="No canonical version stack is recorded for this asset."
-           />
-          )}
-         </div>
          {selectedAsset.kind === "image" ? (
           <div>
            <div className="mb-2 text-xs font-black uppercase opacity-60">Find Similar</div>

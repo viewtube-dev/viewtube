@@ -11,9 +11,10 @@ describe("Vault corrected tool ownership", () => {
  beforeEach(() => localStorage.clear())
 
  it("uses separate Asset Operations, Import & Tags, and Text Editor modules", () => {
-  expect(DEFAULT_VAULT_MODULE_ORDER).toContain("asset-operations")
+  expect(DEFAULT_VAULT_MODULE_ORDER).not.toContain("asset-operations")
   expect(DEFAULT_VAULT_MODULE_ORDER).toContain("import-tags")
   expect(DEFAULT_VAULT_MODULE_ORDER).toContain("text-editor")
+  expect(DEFAULT_VAULT_MODULE_ORDER).toContain("compare-versions")
   expect(DEFAULT_VAULT_MODULE_ORDER).not.toContain("spectrum-tags")
   expect(DEFAULT_VAULT_MODULE_ORDER).not.toContain("import-station")
   expect(DEFAULT_VAULT_MODULE_ORDER).not.toContain("batch-processor")
