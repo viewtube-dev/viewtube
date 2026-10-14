@@ -84,9 +84,15 @@ For each code slice, run focused tests and the relevant build/type checks when r
 
 Current limitation: this GitHub-only edit pass can commit source/docs and open a PR, but it cannot honestly claim a local build, browser capture, or test run without an execution environment.
 
+## Second implementation slice — rotation controls
+
+The existing Transform inspector now includes clockwise and counterclockwise 90-degree rotation presets plus a rotation-only reset. These actions update only the existing `rotation` field through the same `updateClipTransform` action; scale, position, opacity and crop are preserved. The existing arbitrary-angle field remains available.
+
+Combined with the crop controls above, the inspector now supports quick reversible framing operations without introducing an alternate image/video project model. These controls operate on selected editor clips; they are not yet a general-purpose standalone image file processor.
+
 ## Immediate next sequence
 
-1. Verify this crop-control slice with focused editor tests and responsive visual QA.
+1. Verify crop and rotation controls with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
