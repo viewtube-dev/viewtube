@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioTextInput, StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-complete-primitive-catalog.css"
 
@@ -19,7 +19,7 @@ const LEVELS: Level[] = ["l0", "l1", "l2"]
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
-  "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
+  "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Studio Text Input", "Studio Text Area", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "137 Floating Label Input", "138 Floating Label Text Area", "Split Search",
   "Number Field", "Input Action", "Stepper", "Slider", "Range Slider", "Toggle",
   "Settings Switch", "Checkbox", "Radio", "Segmented Choice", "Button Group", "Tag",
   "Removable Tag", "Selectable Tag", "Tag Editor", "Badge", "Status Badge", "Progress Bar",
@@ -101,6 +101,8 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
       </div> : null}
     </div>
   }
+  if (name === "Studio Text Input") return <StudioTextInput sizeVariant={level === "l2" ? "compact" : "standard"} className={`vt-catalog-field is-simple-text is-${level}`} style={style} aria-label="Canonical Studio text input" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" />
+  if (name === "Studio Text Area") return <StudioTextArea sizeVariant={level === "l2" ? "compact" : "standard"} className={`vt-catalog-field vt-catalog-textarea is-${level}`} style={style} aria-label="Canonical Studio text area" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" />
   if (name === "Text Input") return <StudioInput sizeVariant={level === "l2" ? "compact" : "standard"} className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Studio text input" placeholder="TYPE HERE" />
    if (name === "20 Simple Text Input") return <SubToolboxInput20 controlSize={level === "l2" ? "compact" : "standard"} className={`vt-catalog-field is-simple-text is-${level}`} style={style} type="text" aria-label="Studio Controls text input primitive 20" placeholder="TYPE HERE" data-vt-simple-text-input="true" />
   if (name === "Number Field" || name === "20 Plain Input") return <SubToolboxInput20 className={`vt-catalog-field is-${level}`} style={style} type={name === "Number Field" ? "number" : "text"} defaultValue={name === "Number Field" ? "25" : "TEXT INPUT"} />
