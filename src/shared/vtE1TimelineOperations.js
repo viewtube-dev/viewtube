@@ -35,6 +35,44 @@ export const splitTimelineClip = (clip, cutTimeSec) => {
   };
 };
 
+/**
+ * Trim a clip edge while keeping its source-time window aligned with the timeline.
+ * Returns null when the requested edge would produce an invalid duration or
+ * address source media outside its known duration.
+ */
+export const trimTimelineClip = (clip, side, edgeSec, sourceDurationSec = Number.POSITIVE_INFINITY) => {
+  if (!clip || !['left', 'right'].includes(side)) return null;
+  const start = Number(clip.start);
+  const end = Number(clip.end);
+  const edge = Number(edgeSec);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || !Number.isFinite(edge)) return null;
+  if (side === 'left' && !(edge < end - TIMELINE_MIN_CLIP_DURATION_SEC)) return null;
+  if (side === 'right' && !(edge > start + TIMELINE_MIN_CLIP_DURATION_SEC)) return null;
+
+  const sourceInValue = Number(clip.sourceInSec);
+  const sourceOutValue = Number(clip.sourceOutSec);
+  const hasSourceRange = Number.isFinite(sourceInValue) || Number.isFinite(sourceOutValue);
+  if (!hasSourceRange) {
+    return side === 'left' ? copy(clip, { start: edge }) : copy(clip, { end: edge });
+  }
+
+  const sourceIn = Number.isFinite(sourceInValue) ? sourceInValue : 0;
+  const sourceOut = Number.isFinite(sourceOutValue) ? sourceOutValue : sourceIn + (end - start);
+  const sourcePerTimelineSecond = end > start && Number.isFinite(sourceOut - sourceIn)
+    ? Math.max(0, (sourceOut - sourceIn) / (end - start))
+    : 1;
+  const nextSourceEdge = sourceIn + (edge - start) * sourcePerTimelineSecond;
+  if (!Number.isFinite(nextSourceEdge) || nextSourceEdge < 0) return null;
+
+  if (side === 'left') {
+    return copy(clip, { start: edge, sourceInSec: nextSourceEdge });
+  }
+
+  const knownDuration = Number(sourceDurationSec);
+  if (Number.isFinite(knownDuration) && nextSourceEdge > knownDuration) return null;
+  return copy(clip, { end: edge, sourceOutSec: nextSourceEdge });
+};
+
 export const slipTimelineClip = (clip, deltaSec, sourceDurationSec = Number.POSITIVE_INFINITY) => {
   if (!clip) return null;
   const duration = clipDurationSec(clip);

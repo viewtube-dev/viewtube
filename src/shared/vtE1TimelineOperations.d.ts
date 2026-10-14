@@ -13,6 +13,12 @@ export function splitTimelineClip(
  clip: Partial<VtE1Clip> | null | undefined,
  cutTimeSec: number,
 ): VtE1SplitResult
+export function trimTimelineClip(
+ clip: Partial<VtE1Clip> | null | undefined,
+ side: "left" | "right",
+ edgeSec: number,
+ sourceDurationSec?: number,
+): VtE1Clip | null
 export function slipTimelineClip(
  clip: Partial<VtE1Clip>,
  deltaSec: number,
