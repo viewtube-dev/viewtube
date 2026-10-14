@@ -218,9 +218,9 @@ const CanonicalControlFamily: React.FC<{ name: string; paletteIndex: number }> =
     </div>)}
   </div>;
   return <div className="vt-catalog-word-toggle-families" style={colorStyle}>
-    {[{size:"44" as const,label:"44PX DEFAULT"},{size:"28" as const,label:"28PX COMPACT"}].map((variant, i) => <div className="vt-catalog-control-row" key={variant.size}>
+    {[{size:"44" as const,label:"44PX STANDARD",layout:"one-per-row"},{size:"28" as const,label:"28PX COMPACT",layout:"two-per-row"}].map((variant, i) => <div className={`vt-catalog-control-row vt-catalog-word-toggle-row is-word-toggle-${variant.size}`} key={variant.size}>
       <small className="vt-catalog-control-row-label">{variant.label}</small>
-      <div className="vt-catalog-control-variants">
+      <div className={`vt-catalog-control-variants is-word-toggle-${variant.size}`}>
         {CONTROL_SKINS.map((skin, j) => { const index = i * 4 + j; return <div className="vt-catalog-control-variant" key={skin.skin}>
           <small>{skin.label}</small><StudioWordToggle size={variant.size} skin={skin.skin} value={wordValues[index]} onValueChange={next => toggleValue(wordValues,setWordValues,index,next)} />
         </div>; })}

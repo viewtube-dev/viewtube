@@ -20,14 +20,27 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   ...(tone ? { "data-tone": tone } : {}),
 })
 
-/** Canonical Studio text input; visual rules are owned by studio-control-system.css. */
-export const StudioInput = React.forwardRef<
+/**
+ * Canonical standalone Studio text input.
+ * This component is defined and styled entirely by the Studio Controls system;
+ * it has no import, wrapper, or runtime dependency on SubToolbox primitives.
+ */
+export const StudioTextInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", ...props }, ref) => (
-  <input ref={ref} {...withStudioAttrs(sizeVariant)} {...props} />
+>(({ sizeVariant = "standard", type = "text", ...props }, ref) => (
+  <input
+    ref={ref}
+    type={type}
+    {...withStudioAttrs(sizeVariant)}
+    data-vt-studio-field-kind="text-input"
+    {...props}
+  />
 ))
-StudioInput.displayName = "StudioInput"
+StudioTextInput.displayName = "StudioTextInput"
+
+/** Backwards-compatible canonical name used by existing Studio consumers. */
+export const StudioInput = StudioTextInput
 
 /** Canonical search input using the shared Studio text-field contract. */
 export const StudioSearchInput = React.forwardRef<
@@ -47,11 +60,23 @@ export const StudioNumberInput = React.forwardRef<
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
-/** Canonical Studio writing area; visual rules are owned by studio-control-system.css. */
+/**
+ * Canonical standalone Studio text area.
+ * Size, border, typography, focus, placeholder, and resize behavior are owned by
+ * studio-control-system.css—not by SubToolbox primitive classes or inline styles.
+ */
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", ...props }, ref) => <textarea ref={ref} {...withStudioAttrs(sizeVariant)} {...props} />)
+>(({ sizeVariant = "standard", rows, ...props }, ref) => (
+  <textarea
+    ref={ref}
+    rows={rows ?? 4}
+    {...withStudioAttrs(sizeVariant)}
+    data-vt-studio-field-kind="textarea"
+    {...props}
+  />
+))
 StudioTextArea.displayName = "StudioTextArea"
 
 export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
@@ -161,7 +186,7 @@ export const Studiocheck: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = p
 Studiocheck.displayName = "Studiocheck"
 export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
 Studioxbox.displayName = "Studioxbox"
-export const Studioinput = StudioInput
+export const Studioinput = StudioTextInput
 export const Studioarea = StudioTextArea
 
 export const StudioSelect = React.forwardRef<
