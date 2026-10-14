@@ -2862,6 +2862,20 @@ const CreatorVaultOS: React.FC = () => {
             {task.status.toUpperCase()} · {Math.round(task.progress)}%
             {task.detail ? ` · ${task.detail}` : ""}
            </div>
+           <div
+            role="progressbar"
+            aria-label={`${task.label} progress`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(task.progress)}
+            data-vault-task-progress
+            className="mt-2 h-2 w-full overflow-hidden border border-current/30 bg-black/5"
+           >
+            <div
+             className="h-full bg-current transition-[width] duration-200"
+             style={{ width: `${Math.round(task.progress)}%` }}
+            />
+           </div>
           </div>
           <div className="flex flex-col items-end gap-2">
            <div className="text-xs font-black uppercase">{task.type.replace("-", " ")}</div>
