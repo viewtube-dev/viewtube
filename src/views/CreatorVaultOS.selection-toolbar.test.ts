@@ -58,4 +58,13 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('onClick={addSelectionToCollection}')
   expect(source).toContain('compareVersionsRef.current?.scrollIntoView')
  })
+ 
+ it("exposes task progress as an accessible progress bar in Task Center", () => {
+  expect(source).toContain('role="progressbar"')
+  expect(source).toContain('aria-valuemin={0}')
+  expect(source).toContain('aria-valuemax={100}')
+  expect(source).toContain('aria-valuenow={Math.round(task.progress)}')
+  expect(source).toContain('data-vault-task-progress')
+ })
+
 })
