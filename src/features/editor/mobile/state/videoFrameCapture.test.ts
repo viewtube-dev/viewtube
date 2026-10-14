@@ -6,6 +6,10 @@ describe('sourceFrameTime', () => {
     expect(sourceFrameTime(14, 10, 3, 30)).toBe(7);
   });
 
+  it('supports capturing the first source frame at clip start', () => {
+    expect(sourceFrameTime(10, 10, 0, 30)).toBe(0);
+  });
+
   it('clamps the frame time before the source duration boundary', () => {
     expect(sourceFrameTime(40, 10, 25, 30)).toBe(29.999);
   });
