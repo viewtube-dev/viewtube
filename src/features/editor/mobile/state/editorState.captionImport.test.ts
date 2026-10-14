@@ -55,4 +55,32 @@ describe('importCaptionBatch reducer action', () => {
     expect(next.project.tracks).toEqual([track]);
     expect(next.project.durationSec).toBe(9);
   });
+  it('shifts caption clips together in one undoable step without changing other tracks', () => {
+    const captionTrack = { id: 'caption_1', name: 'Captions', kind: 'caption' as const };
+    const videoTrack = { id: 'video_1', name: 'Video', kind: 'video' as const };
+    const state = {
+      project: {
+        clips: [
+          { id: 'caption_a', trackId: captionTrack.id, start: 1, end: 2, keyframes: [] },
+          { id: 'caption_b', trackId: captionTrack.id, start: 3, end: 4, keyframes: [] },
+          { id: 'video_a', trackId: videoTrack.id, start: 0, end: 10, keyframes: [] },
+        ],
+        transitions: [], tracks: [captionTrack, videoTrack], layers: [], durationSec: 30,
+      },
+      playheadSec: 0, playing: false, playbackRate: 1, zoomPxPerSec: 40,
+      selection: { clipIds: [], trackId: null, transitionId: null }, tool: 'select',
+      panel: { open: false, id: 'select', height: 0.55 }, history: { past: [], future: [] },
+    } as unknown as EditorState;
+
+    const shifted = editorReducer(state, { type: 'shiftCaptionBatch', deltaSec: -2 });
+    expect(shifted.project.clips.map((clip) => [clip.id, clip.start, clip.end])).toEqual([
+      ['caption_a', 0, 1], ['caption_b', 2, 3], ['video_a', 0, 10],
+    ]);
+    expect(shifted.history.past).toHaveLength(1);
+    const undone = editorReducer(shifted, { type: 'undo' });
+    expect(undone.project.clips.map((clip) => [clip.id, clip.start, clip.end])).toEqual([
+      ['caption_a', 1, 2], ['caption_b', 3, 4], ['video_a', 0, 10],
+    ]);
+  });
+
 });
