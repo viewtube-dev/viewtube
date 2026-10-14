@@ -41,6 +41,7 @@ export const runVaultTranscriptTask = async (input: {
     status: "failed",
     progress: 100,
     detail: transcript?.warning || transcript?.error || "No transcript is available for this video.",
+    error: transcript?.warning || transcript?.error || "No transcript is available for this video.",
    }) || task
    return { task, asset: null }
   }
@@ -73,6 +74,9 @@ export const runVaultTranscriptTask = async (input: {
    status: "completed",
    progress: 100,
    detail: `Transcript saved as Vault asset ${transcriptAsset.name}.`,
+   error: null,
+   resultAssetId: transcriptAsset.id,
+   resultAssetName: transcriptAsset.name,
   }) || task
   return { task, asset: transcriptAsset }
  } catch (error) {
@@ -80,6 +84,7 @@ export const runVaultTranscriptTask = async (input: {
    status: "failed",
    progress: 100,
    detail: error instanceof Error ? error.message : "Transcript acquisition failed.",
+   error: error instanceof Error ? error.message : "Transcript acquisition failed.",
   }) || task
   return { task, asset: null }
  }
