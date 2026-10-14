@@ -1582,3 +1582,21 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   border-radius: 4px !important;
   font-size: 13px !important;
 }
+
+
+/* Phase 1: canonical editable text must never inherit decorative button/indicator text strokes. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  -webkit-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+  color: #000 !important;
+  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
+  -webkit-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+  color: #000 !important;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  outline: 1.5px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0 !important;
+}
