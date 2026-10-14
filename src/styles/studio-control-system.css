@@ -1794,3 +1794,32 @@ button[data-vt-studio-control]:active:not(:disabled) {
   left: var(--vt-word-toggle-handle-left, 2.75px);
   width: calc(var(--vt-word-toggle-handle-width, 16px) * var(--vt-word-toggle-handle-width-scale, 1));
 }
+
+
+/* 2026-10-14: Studio text area type size and mobile composition cleanup.
+   These rules are deliberately textarea-only: input typography remains governed
+   by the standard/compact input contract. */
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+  -webkit-text-stroke: 0 !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  caret-color: var(--pair-a, #36e0f6) !important;
+  caret-shape: block;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+/* Chrome/Android can apply native spellcheck/composition decoration while an
+   IME is composing. Disable decoration on the field itself where CSS permits;
+   the component also opts out of spellcheck/autocorrect by default. */
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::spelling-error,
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::grammar-error {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
