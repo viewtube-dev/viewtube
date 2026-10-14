@@ -293,6 +293,7 @@ const CreatorVaultOS: React.FC = () => {
  const [activeCollectionId, setActiveCollectionId] = useState<string | null>(null)
  const [targetCollectionId, setTargetCollectionId] = useState("")
  const [taskRefresh, setTaskRefresh] = useState(0)
+ const [inspectedTaskId, setInspectedTaskId] = useState<string | null>(null)
  const [scratchpadRefresh, setScratchpadRefresh] = useState(0)
  const [scratchpadTitle, setScratchpadTitle] = useState("")
  const [scratchpadContent, setScratchpadContent] = useState("")
@@ -2879,6 +2880,12 @@ const CreatorVaultOS: React.FC = () => {
           </div>
           <div className="flex flex-col items-end gap-2">
            <div className="text-xs font-black uppercase">{task.type.replace("-", " ")}</div>
+           <SubToolboxInnerActionButton
+            label={inspectedTaskId === task.id ? "Hide Details" : "Inspect Task"}
+            iconName="search"
+            tone="cyan"
+            onClick={() => setInspectedTaskId((current) => current === task.id ? null : task.id)}
+           />
            {task.status === "failed" && task.type === "transcript" ? (
             <SubToolboxInnerActionButton
              label="Retry Task"
@@ -2889,6 +2896,35 @@ const CreatorVaultOS: React.FC = () => {
            ) : null}
           </div>
          </div>
+         {inspectedTaskId === task.id ? (
+          <div className="col-span-full mt-1 grid gap-2 border border-current/25 p-3 text-xs" data-vault-task-details={task.id}>
+           <div className="font-black uppercase">Task Details</div>
+           <div><span className="font-bold opacity-60">Task ID:</span> <code className="break-all">{task.id}</code></div>
+           <div><span className="font-bold opacity-60">Target:</span> {task.assetName || "No source asset recorded"}</div>
+           <div><span className="font-bold opacity-60">Created:</span> {new Date(task.createdAt).toLocaleString()}</div>
+           <div><span className="font-bold opacity-60">Last updated:</span> {new Date(task.updatedAt).toLocaleString()}</div>
+           <div><span className="font-bold opacity-60">Retry attempts:</span> {task.retryCount}</div>
+           {task.resultAssetName ? (
+            <div className="flex flex-wrap items-center gap-2">
+             <span><span className="font-bold opacity-60">Result:</span> {task.resultAssetName}</span>
+             {task.resultAssetId ? (
+              <SubToolboxInnerActionButton
+               label="Select Result Asset"
+               iconName="file"
+               tone="green"
+               onClick={() => {
+                setSelectedAssetIds([task.resultAssetId as string])
+                setInspectedTaskId(null)
+                inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+               }}
+              />
+             ) : null}
+            </div>
+           ) : null}
+           {task.error ? <div role="alert" className="break-words font-bold text-red-600">Error: {task.error}</div> : null}
+           <div className="break-words"><span className="font-bold opacity-60">Latest detail:</span> {task.detail || "No additional details recorded."}</div>
+          </div>
+         ) : null}
         )) : (
          <SubToolboxStatePanel level="l1" state="empty" message="No Vault background tasks yet." />
         )}
