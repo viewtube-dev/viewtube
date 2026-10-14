@@ -16,6 +16,9 @@ export type VaultTask = {
  status: VaultTaskStatus
  progress: number
  detail: string
+ error?: string | null
+ resultAssetId?: string | null
+ resultAssetName?: string | null
  createdAt: number
  updatedAt: number
  retryCount: number
@@ -61,6 +64,9 @@ export const createVaultTask = (input: {
   status: "queued",
   progress: 0,
   detail: input.detail || "",
+  error: null,
+  resultAssetId: null,
+  resultAssetName: null,
   createdAt: now,
   updatedAt: now,
   retryCount: 0,
@@ -71,7 +77,7 @@ export const createVaultTask = (input: {
 
 export const updateVaultTask = (
  id: string,
- patch: Partial<Pick<VaultTask, "status" | "progress" | "detail" | "label">>,
+ patch: Partial<Pick<VaultTask, "status" | "progress" | "detail" | "label" | "error" | "resultAssetId" | "resultAssetName">>,
 ): VaultTask | null => {
  const tasks = listVaultTasks()
  const current = tasks.find((task) => task.id === id)
@@ -100,6 +106,9 @@ export const retryVaultTask = (id: string): VaultTask | null => {
   status: "queued",
   progress: 0,
   detail: "Retry queued.",
+  error: null,
+  resultAssetId: null,
+  resultAssetName: null,
   retryCount: (current.retryCount || 0) + 1,
   updatedAt: Date.now(),
  }

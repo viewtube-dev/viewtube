@@ -59,6 +59,16 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('compareVersionsRef.current?.scrollIntoView')
  })
  
+ it("exposes inspectable task details, failure context, retry count, and result-asset navigation", () => {
+  expect(source).toContain('const [inspectedTaskId, setInspectedTaskId] = useState<string | null>(null)')
+  expect(source).toContain('label={inspectedTaskId === task.id ? "Hide Details" : "Inspect Task"}')
+  expect(source).toContain('data-vault-task-details={task.id}')
+  expect(source).toContain('task.error ? <div role="alert"')
+  expect(source).toContain('task.resultAssetName ?')
+  expect(source).toContain('label="Select Result Asset"')
+  expect(source).toContain('Retry attempts:')
+ })
+
  it("exposes task progress as an accessible progress bar in Task Center", () => {
   expect(source).toContain('role="progressbar"')
   expect(source).toContain('aria-valuemin={0}')
