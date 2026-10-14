@@ -14,6 +14,16 @@ describe('VT_E1 timeline operations', () => {
     expect(slipTimelineClip(clip('a', 2, 5), 3, 10)).toMatchObject({ start: 2, end: 5, sourceInSec: 5, sourceOutSec: 8 });
   });
 
+  it('clamps source slip to the available media range while preserving the timeline slot', () => {
+    const sourceWindow = { ...clip('a', 2, 5), sourceInSec: 1, sourceOutSec: 4 };
+    expect(slipTimelineClip(sourceWindow, -10, 12)).toMatchObject({
+      start: 2, end: 5, sourceInSec: 0, sourceOutSec: 3,
+    });
+    expect(slipTimelineClip(sourceWindow, 10, 12)).toMatchObject({
+      start: 2, end: 5, sourceInSec: 9, sourceOutSec: 12,
+    });
+  });
+
   it('slides a contiguous clip by trimming its neighbors', () => {
     const result = slideTimelineClip([clip('a', 0, 3), clip('b', 3, 6), clip('c', 6, 10)], 'b', 1);
     expect(result.appliedDeltaSec).toBe(1);
