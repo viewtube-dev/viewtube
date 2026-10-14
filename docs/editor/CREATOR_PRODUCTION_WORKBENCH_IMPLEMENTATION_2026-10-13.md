@@ -148,6 +148,12 @@ Audited both open proposals against `master/consolidated-feature-integration` be
 
 Both source branches had diverged substantially from the current canonical integration branch. The existing canonical features are the source of truth; this PR adds the missing selected-media inspector integration, standardizes precision/bounds behavior, and records the reconciliation rather than merging stale branch histories.
 
+## Fifth implementation slice — retry failed render formats
+
+The Export/Render panel now retries only selected outputs whose latest job status is failed. A successful MP4 render remains available while a failed MOV or WebM output is retried; retry selection is a pure helper with focused Vitest coverage. Retrying creates a new job for the failed format through the existing render-job client and keeps successful output records in the panel. This is a render-job retry, not server-side cancellation; stopping client polling must not be presented as stopping the render itself.
+
+The retry helper tests have been authored but not executed in this GitHub-only pass. Render server cancellation remains unsupported by the current client/server contract and is not exposed as a fake cancel button.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
