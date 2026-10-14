@@ -4,7 +4,7 @@ import { SubToolboxInput20, SubToolboxTextArea21 } from "../subtoolbox/SubToolbo
 import { Studioswitch as SubToolbox44Switch, StudioChoice as SubToolbox44Choice, Studiotoggle as SubToolbox44WordToggle } from "../../studio-ui"
 import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioFloatingLabelInput, StudioFloatingLabelTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
-import "./studio-hub-confirmed-primitive-catalog.css"
+import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
 
