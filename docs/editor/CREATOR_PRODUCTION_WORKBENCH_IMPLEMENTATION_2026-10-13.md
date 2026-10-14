@@ -132,6 +132,12 @@ Script Architect now exposes **Export TXT** alongside Copy Script and Save Packe
 
 A focused Vitest suite covers filename normalization, empty-name fallback, reserved characters, and length limits. The tests/build and browser download flow remain unverified in this GitHub-only pass.
 
+## Script Architect generation — BrainRuntime integration
+
+Script Architect now has an injectable structured-task path. The hook routes assembly through `runBrainJsonTask` in the canonical BrainRuntime module, carries the existing Script Architect JSON response schema through the provider-neutral gateway, labels the context as a script task, and attaches active-project/ContentBuild context. The existing prompt construction and `normalizeGeneratedScript` output shaping remain in place; callers that do not inject a BrainRuntime task retain the legacy provider fallback for compatibility.
+
+A pure request-envelope helper has focused tests for schema/prompt preservation and projectless draft support. Runtime generation, locked-fragment parity, AI Brain-disabled behavior, and tests/build remain unverified in this GitHub-only pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
