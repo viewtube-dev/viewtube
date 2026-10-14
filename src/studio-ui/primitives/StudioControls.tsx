@@ -15,8 +15,8 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textTransform: "uppercase",
   letterSpacing: "-0.035em",
   lineHeight: 0.86,
-  shadowPolicy: "button-only hard offset shadow; text-field inset stroke uses primary at 100% opacity in default and focus states; focused outline uses secondary",
-  focusOutline: "text fields use secondary outline at half the current border width",
+  shadowPolicy: "Hard offset shadows are button-only; dropdown menus and menu options have no shadows or press-motion transitions; text fields use black outer borders and primary-color inset strokes.",
+  focusOutline: "Text fields use a secondary-color focus outline with no gap; focused text stroke follows the text color.",
   textFieldDefaults: {
     defaultMode: {
       textColor: "primary",
@@ -43,8 +43,8 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
 
 /** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
 export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
-  standard: { height: 44, stroke: 3, radius: 8, fontSize: 38, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
-  compact: { height: 28, stroke: 2, radius: 5, fontSize: 24, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
+  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
 } as const
 
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
@@ -180,7 +180,7 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   size?: "44" | "28";
   skin?: StudioControlSkin;
 }
-export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["OFF", "ON"], size = "44", skin = "solid", className, ...props }) => {
+export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", className, ...props }) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
   const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });

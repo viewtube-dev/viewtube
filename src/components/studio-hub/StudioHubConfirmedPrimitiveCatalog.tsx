@@ -83,7 +83,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>21 · 92px paragraph textarea</span><SubToolboxTextArea21 className="vt-confirmed-simple-textarea" aria-label="Simple paragraph textarea" placeholder="WRITE A PARAGRAPH…" rows={4} /></div>
     </Family>
     <CanonicalControlFamilies />
-    <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Default and compact variants share identical typography and selected-state rules.</p>
+    <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
     <Family title="Button" nonDefaultSettings={["heightVariant=\"28\" selects compact; default is 44px.", "tone=\"neutral\" | \"danger\" | \"warning\" | \"success\" (default: accent).", "selected=true applies the canonical selected state; disabled=true blocks interaction.", "loading=true sets aria-busy and disables the button until loading clears.", "sizeVariant=\"compact\" is the compact alias when heightVariant is not supplied."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/index.ts"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton heightVariant="44">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default A</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · default B</span><StudioButton heightVariant="28">button</StudioButton></div>
@@ -114,7 +114,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         primitive="StudioLegendMultiDropdown · 140"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="Custom multiselect menu; floating legend and CLEAR ALL action."
+        tokens="Fixed floating label; trigger value typography independent of label; 28px/18px chevrons; 44px/28px menu rows; no menu-option shadows or press motion."
         imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]}
       />}
     >
