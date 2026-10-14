@@ -90,7 +90,7 @@ describe("Subtoolbox Primitive System", () => {
 
   it("keeps the corrected split/tag/field/knob visual contracts in canonical CSS", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
-    const splitCss = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-split-primitives.css"), "utf8")
+    const splitCss = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
 
     expect(splitCss).toContain("split-left square parity")
     expect(splitCss).toContain("aspect-ratio:1/1")
