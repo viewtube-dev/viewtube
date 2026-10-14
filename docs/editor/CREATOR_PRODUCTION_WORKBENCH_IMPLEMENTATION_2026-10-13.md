@@ -176,6 +176,10 @@ The selected audio clip inspector now includes an on-demand waveform preview. It
 
 The editor media toolbox now imports standard SRT files into a caption track. Parsing supports multiline text, comma or dot millisecond separators, hour timestamps, BOM-prefixed files, and ignores malformed or empty cues. Caption clips are added as one atomic editor history action, preserving the imported cue timings even when captions overlap. If no caption track exists, the import creates one as part of the same action. The parser and reducer have focused tests; runtime rendering, undo/redo, and visual styling still need verification.
 
+## Image resize export slice
+
+The cropped-image export now offers source-size, 720px, 1080px, and 1920px output-width presets. Output height is calculated from the crop rectangle to preserve aspect ratio, and requested widths are bounded to avoid extreme canvas allocation. The original media and non-destructive crop state remain unchanged. Pixel sizing tests were added; browser export and image-quality verification remain pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
