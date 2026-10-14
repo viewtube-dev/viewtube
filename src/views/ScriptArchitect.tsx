@@ -874,6 +874,13 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
            onClick={architect.downloadScript}
           />
           <SubToolboxGridActionButton
+           label="Export MD"
+           iconName="download"
+           tone="pink"
+           disabled={!result.fullScript}
+           onClick={architect.downloadMarkdown}
+          />
+          <SubToolboxGridActionButton
            label="Save Packet"
            iconName="database"
            tone="yellow"
