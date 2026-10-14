@@ -1346,3 +1346,35 @@ textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05
   top: -3px !important;
   transform: translateY(-50%) scale(.75) !important;
 }
+
+
+/* Canonical text-field stroke contract (reference-matched).
+   Keep text fill/stroke coupled through currentColor, retain the inline accent
+   stroke in both states, and nest the secondary focus ring directly against
+   the black outer border rather than leaving a white offset gap. */
+[data-vt-studio-control]:is(input, textarea, select) {
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke-color: currentColor;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
+}
+
+[data-vt-studio-control]:is(input, textarea, select):focus,
+[data-vt-studio-control]:is(input, textarea, select):focus-visible {
+  color: #000;
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke-color: currentColor;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
+}
+
+/* Textareas must keep the same inline accent stroke as inputs, including focus. */
+textarea[data-vt-studio-control],
+textarea[data-vt-studio-control]:focus,
+textarea[data-vt-studio-control]:focus-visible {
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent) !important;
+}
+
+/* Preserve a visible keyboard focus ring without adding a second shadow ring. */
+[data-vt-studio-control]:is(input, textarea, select):focus-visible {
+  outline-style: solid;
+}
