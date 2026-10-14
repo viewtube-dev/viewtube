@@ -180,10 +180,16 @@ The editor media toolbox now imports standard SRT files into a caption track. Pa
 
 The cropped-image export now offers source-size, 720px, 1080px, and 1920px output-width presets. Output height is calculated from the crop rectangle to preserve aspect ratio, and requested widths are bounded to avoid extreme canvas allocation. The original media and non-destructive crop state remain unchanged. Pixel sizing tests were added; browser export and image-quality verification remain pending.
 
+## Eighth implementation slice — focal-point crop positioning
+
+Added `cropToAspectRatioAtFocalPoint`, a pure helper that preserves the selected aspect ratio while shifting the crop window toward a normalized focal point. The crop window clamps to source boundaries and never invents pixels. Regression cases cover left/right horizontal focus, lower vertical focus, invalid focal points, and aspect ratios that require no crop.
+
+The selected-clip inspector now exposes **Left / Center / Right** focus controls when the project ratio requires horizontal cropping, or **Top / Center / Bottom** when it requires vertical cropping. These controls use the current project portrait/landscape ratio and the existing non-destructive clip transform action. They are hidden when no crop is needed and unavailable without factual source dimensions. Automated tests and preview/final-render visual parity still need to be run.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Continue from the already-integrated ratio-aware crop presets; verify their preview/render parity and add focal-point positioning before broadening file-level image processing.
+2. Verify ratio-aware and focal-point crop preview/render parity, then connect exported image derivatives to durable Asset Engine/Vault provenance.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
