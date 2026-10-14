@@ -154,6 +154,12 @@ The Export/Render panel now retries only selected outputs whose latest job statu
 
 The retry helper tests have been authored but not executed in this GitHub-only pass. Render server cancellation remains unsupported by the current client/server contract and is not exposed as a fake cancel button.
 
+## Video frame capture slice
+
+Added a Capture Frame as Still control for a selected video clip. When the playhead is inside that clip, the editor maps timeline time to source time using the clip's trim and slip values, captures a JPEG, and inserts it through the existing image clip ingest path at the playhead. The original video is unchanged. Capture errors are shown in the inspector.
+
+A pure source-time helper has tests for source offsets, boundary clamping, and invalid metadata. Browser capture, insertion, undo/redo, and visual behavior still need runtime verification.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
