@@ -1,12 +1,14 @@
 import React,{useMemo,useRef,useState} from 'react';
 import {AudioLines,Circle,ImageIcon,LayoutTemplate,RectangleHorizontal,Save,Type,Video} from 'lucide-react';
 import type {EditorLayer,EditorStore} from '../state/editorState';
+import {readClipVisualTransform} from '../state/editorState';
 import type {EditorNavPage} from './EditorNavigationPages';
 import type {VtE1Clip} from '../../../../shared/vtE1TimelineContract';
 import {AcceleratingStepper as HoldStepper,LinkToggle,RotationDial,XYJoystick} from './MobileEditorPrimitives';
 import {ClipEffects} from './EffectsLibrariesPanel';
 import {canSlipSourceWindow,SOURCE_SLIP_STEPS} from '../state/sourceSlipControls';
 import {captureVideoFrameAsFile,sourceFrameTime} from '../state/videoFrameCapture';
+import {exportCroppedImageAsFile} from '../state/imageCropExport';
 
 const BLACK='#111111';
 const MAGENTA='#ff00ff';
@@ -253,6 +255,8 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const[linkedSize,setLinkedSize]=useState(true);
   const[capturingFrame,setCapturingFrame]=useState(false);
   const[frameCaptureError,setFrameCaptureError]=useState('');
+  const[exportingCrop,setExportingCrop]=useState(false);
+  const[cropExportError,setCropExportError]=useState('');
   const[colorScope,setColorScope]=useState<'selected'|'group'|'track'>('selected');
   const[recentColors,setRecentColors]=useState<string[]>(()=>{
     if(typeof window==='undefined')return[];
@@ -288,6 +292,23 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const canSlipSource=(isAudio||(isMedia&&payload.mediaKind==='video'))&&sourceDurationSec>0;
   const canSlip=(deltaSec:number)=>canSlipSource&&canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,deltaSec);
   const slipSource=(deltaSec:number)=>store.dispatch({type:'slipClip',id:clip.id,deltaSec,sourceDurationSec});
+  const isImageMedia=isMedia&&String(payload.mediaKind??'')==='image'&&typeof payload.mediaUrl==='string'&&Boolean(payload.mediaUrl);
+  const exportCroppedImage=async()=>{
+    if(!isImageMedia)return;
+    setExportingCrop(true);setCropExportError('');
+    try{
+      const sourceName=String(payload.mediaName??payload.layerName??'image').replace(/\.[^.]+$/,'').replace(/[^\w.-]+/g,'-')||'image';
+      const file=await exportCroppedImageAsFile(String(payload.mediaUrl),readClipVisualTransform(clip),`${sourceName}-crop.png`);
+      if(!file)throw new Error('The image could not be exported. The source may be unavailable or blocked by browser media permissions.');
+      const url=URL.createObjectURL(file);
+      const anchor=document.createElement('a');
+      anchor.href=url;anchor.download=file.name;anchor.click();
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }catch(reason){
+      setCropExportError(reason instanceof Error?reason.message:'Image export failed.');
+    }finally{setExportingCrop(false)}
+  };
+
   const isVideoMedia=isMedia&&String(payload.mediaKind??'')==='video'&&typeof payload.mediaUrl==='string'&&Boolean(payload.mediaUrl);
   const playheadWithinClip=store.state.playheadSec>=clip.start&&store.state.playheadSec<clip.end;
   const captureFrame=async()=>{
@@ -463,6 +484,8 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
         {['cover','contain'].map(fit=><button key={fit} style={{...miniButton,background:String(payload.fit??'cover')===fit?YELLOW:'#fff'}} onClick={()=>patch({fit})}>{fit}</button>)}
       </div>
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:Boolean(payload.muted)?'#fff':GREEN}} onClick={()=>patch({muted:!Boolean(payload.muted)})}>{Boolean(payload.muted)?'UNMUTE VIDEO':'MUTE VIDEO'}</button>:null}
+      {String(payload.mediaKind??'')==='image'?<button style={{...miniButton,width:'100%',marginTop:4,background:exportingCrop?YELLOW:CYAN,opacity:exportingCrop||!isImageMedia?0.45:1}} disabled={exportingCrop||!isImageMedia} onClick={()=>void exportCroppedImage()}><Save size={12}/>{exportingCrop?'EXPORTING PNG…':'EXPORT CROPPED IMAGE (PNG)'}</button>:null}
+      {cropExportError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{cropExportError}</div>:null}
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||!playheadWithinClip?0.45:1}} disabled={capturingFrame||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}
       {frameCaptureError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameCaptureError}</div>:null}
     </div>:null}
