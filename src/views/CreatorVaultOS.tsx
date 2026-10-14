@@ -172,6 +172,7 @@ const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  "asset-library": "Asset Library",
  "compare-versions": "Compare & Versions",
  "task-center": "Task Center",
+ "health-center": "Asset Health",
  inspector: "Inspector",
 }
 
@@ -334,6 +335,44 @@ const CreatorVaultOS: React.FC = () => {
  const activeVaultTasks = tasks.filter((task) => task.status === "queued" || task.status === "processing")
  const failedVaultTasks = tasks.filter((task) => task.status === "failed")
  const completedVaultTasks = tasks.filter((task) => task.status === "completed").slice(0, 5)
+ const vaultHealthGroups = useMemo(() => [
+  {
+   id: "unassigned",
+   label: "Unassigned assets",
+   description: "Assets without a project connection.",
+   assets: allAssets.filter((asset) => !asset.projectName),
+  },
+  {
+   id: "untagged",
+   label: "Untagged assets",
+   description: "Assets without reusable search and organization tags.",
+   assets: allAssets.filter((asset) => !(asset.tags || []).length),
+  },
+  {
+   id: "flagged",
+   label: "Flagged for review",
+   description: "Assets explicitly marked as needing attention.",
+   assets: allAssets.filter((asset) => asset.metadata?.needsAttention === true),
+  },
+  {
+   id: "missing-preview",
+   label: "Missing preview source",
+   description: "Media assets without a URL or preview URL.",
+   assets: allAssets.filter((asset) =>
+    ["image", "video", "audio"].includes(asset.kind) && !asset.previewUrl && !asset.url,
+   ),
+  },
+ ], [allAssets])
+ const projectReadinessRows = useMemo(() => brain.projects
+  .map((project) => ({
+   project,
+   readiness: getVaultProjectReadiness({
+    project,
+    assets: allAssets.filter((asset) => asset.projectId === project.id),
+   }),
+  }))
+  .sort((left, right) => Number(left.readiness.publishReady) - Number(right.readiness.publishReady)),
+ [brain.projects, allAssets, refreshTick])
  const scratchpads = useMemo(() => listVaultScratchpads(), [scratchpadRefresh])
  const checklistItems = useMemo(() => listVaultChecklistItems(), [checklistRefresh])
  const customFields = useMemo(() => listVaultCustomFields(), [customFieldRefresh])
@@ -2947,6 +2986,84 @@ const CreatorVaultOS: React.FC = () => {
      </div>
 
      <div className="flex min-w-0 flex-col gap-4">
+      <SubToolbox
+       style={moduleStyle("health-center" as VaultWorkspaceModuleId)}
+       title="Asset Health"
+       subtitle="Review organization gaps and media readiness across the Vault"
+       icon={<Database />}
+       paletteIndex={8}
+       isOpenInitial={false}
+       persistenceId="vault-asset-health"
+      >
+       <div className="flex flex-col gap-3" data-vault-health-center>
+        <div className="grid grid-cols-2 gap-2">
+         {vaultHealthGroups.map((group) => (
+          <div key={group.id} className="border border-current/25 p-3" data-vault-health-group={group.id}>
+           <div className="text-xs font-black uppercase">{group.label}</div>
+           <div className="my-1 text-2xl font-black">{group.assets.length}</div>
+           <div className="text-[10px] font-bold opacity-60">{group.description}</div>
+           {group.assets.length ? (
+            <div className="mt-2 flex flex-col gap-2">
+             {group.assets.slice(0, 3).map((asset) => (
+              <SubToolboxInnerActionButton
+               key={asset.id}
+               label={asset.name.length > 28 ? `${asset.name.slice(0, 25)}…` : asset.name}
+               iconName="search"
+               tone="cyan"
+               onClick={() => {
+                setSelectedAssetIds([asset.id])
+                inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                inspectorRef.current?.focus({ preventScroll: true })
+               }}
+              />
+             ))}
+             {group.assets.length > 3 ? (
+              <div className="text-[10px] font-bold opacity-60">Showing 3 of {group.assets.length}; use Explorer filters to narrow the full library.</div>
+             ) : null}
+            </div>
+           ) : (
+            <div className="mt-2 text-[10px] font-black uppercase opacity-55">No issues found</div>
+           )}
+          </div>
+         ))}
+        </div>
+        <div className="border-t-[3px] border-current pt-3" data-vault-project-readiness-center>
+         <div className="mb-2 text-xs font-black uppercase">Project Packaging Readiness</div>
+         <div className="mb-3 text-[10px] font-bold opacity-60">
+          {projectReadinessRows.filter((row) => row.readiness.publishReady).length} publish-ready · {projectReadinessRows.filter((row) => !row.readiness.packageReady).length} missing packaging fields · {projectReadinessRows.filter((row) => row.readiness.packageReady && !row.readiness.publishReady).length} missing final video
+         </div>
+         {projectReadinessRows.length ? (
+          <div className="flex flex-col gap-2">
+           {projectReadinessRows.slice(0, 5).map(({ project, readiness }) => (
+            <div key={project.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border border-current/20 p-2" data-vault-project-readiness={project.id}>
+             <div className="min-w-0">
+              <div className="truncate text-xs font-black uppercase">{project.videoTitle?.trim() || project.id}</div>
+              <div className="text-[10px] font-bold opacity-60">
+               {readiness.publishReady
+                ? "PACKAGE + FINAL VIDEO READY"
+                : readiness.missingPackaging.length
+                 ? `MISSING: ${readiness.missingPackaging.join(", ")}`
+                 : "PACKAGE READY · FINAL VIDEO NOT LINKED"}
+              </div>
+             </div>
+             <SubToolboxInnerActionButton
+              label="Set Active"
+              iconName="folder"
+              tone="purple"
+              onClick={() => setActiveProject(project.id)}
+             />
+            </div>
+           ))}
+          </div>
+         ) : (
+          <SubToolboxStatePanel level="l1" state="empty" message="No projects are available for packaging readiness review." />
+         )}
+        </div>
+        <div className="text-[10px] font-bold opacity-55">
+         Health checks are read-only. Select an asset to inspect it; this panel does not alter metadata automatically.
+        </div>
+       </div>
+      </SubToolbox>
       <div
         ref={inspectorRef}
         tabIndex={-1}

@@ -31,6 +31,20 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain("failed · open to review")
  })
 
+ it("provides a Vault Asset Health center with actionable issue groups", () => {
+  expect(source).toContain('title="Asset Health"')
+  expect(source).toContain('data-vault-health-center')
+  expect(source).toContain('data-vault-health-group={group.id}')
+  expect(source).toContain('id: "unassigned"')
+  expect(source).toContain('id: "untagged"')
+  expect(source).toContain('id: "flagged"')
+  expect(source).toContain('id: "missing-preview"')
+  expect(source).toContain('persistenceId="vault-asset-health"')
+  expect(source).toContain('data-vault-project-readiness-center')
+  expect(source).toContain('getVaultProjectReadiness({')
+  expect(source).toContain('label="Set Active"')
+ })
+
  it("keeps recent completed jobs visible in Task Center history", () => {
   expect(source).toContain('const completedVaultTasks = tasks.filter((task) => task.status === "completed").slice(0, 5)')
   expect(source).toContain('[...failedVaultTasks, ...activeVaultTasks, ...completedVaultTasks].slice(0, 12)')
