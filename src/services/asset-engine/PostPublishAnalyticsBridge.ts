@@ -1,0 +1,269 @@
+import { appendContentBuildEvent, getContentBuild, listContentBuildEvents, bindYouTubeVideo } from "./ContentBuildRepository"
+import { getPublishTransaction } from "./PublishTransaction"
+import { getApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
+import {
+  recordAlgorithmEvaluation,
+  type AlgorithmMetricObservation,
+} from "../brain/AlgorithmEvaluationEngine"
+import {
+  recordAlgorithmIntelligenceEvent,
+  type AlgorithmEvaluationTarget,
+} from "../brain/AlgorithmIntelligenceEventLedger"
+import type { BrainConfidenceLevel } from "../../types"
+import type { ContentBuildEvent, ContentBuildYouTubeBinding } from "./contracts"
+
+export interface PostPublishIdentityInput {
+  transactionId: string
+  videoId: string
+  status?: ContentBuildYouTubeBinding["status"]
+  publishedAt?: string | null
+  correlationId?: string | null
+  toolId?: string
+}
+
+export interface PostPublishIdentityReceipt {
+  event: ContentBuildEvent
+  contentBuildId: string
+  projectId: string
+  videoId: string
+  approvedSnapshotId: string
+  approvedSnapshotHash: string
+  selectedVariantAssetIds: string[]
+}
+
+const required = (value: string | null | undefined, label: string): string => {
+  if (!value || !value.trim()) throw new Error(`Post-publish identity requires ${label}.`)
+  return value.trim()
+}
+
+const selectedAssets = (transaction: NonNullable<ReturnType<typeof getPublishTransaction>>) =>
+  [...new Set([
+    transaction.assetLock.titleAssetId,
+    transaction.assetLock.thumbnailAssetId,
+    transaction.assetLock.finalRenderAssetId,
+    transaction.assetLock.descriptionAssetId,
+    transaction.assetLock.tagsAssetId,
+  ].filter((id): id is string => Boolean(id)))]
+
+const resolvePublishIdentity = (transactionId: string, videoId: string) => {
+  const transaction = getPublishTransaction(required(transactionId, "transactionId"))
+  if (!transaction) throw new Error(`Unknown publish transaction: ${transactionId}`)
+  if (transaction.status !== "completed") {
+    throw new Error("Post-publish identity cannot be recorded before the publish transaction is completed.")
+  }
+  if (transaction.youtubeVideoId !== videoId) {
+    throw new Error("Post-publish video ID does not match the completed publish transaction.")
+  }
+
+  const snapshot = getApprovedPublishSnapshot(transaction.approvedSnapshotId)
+  if (!snapshot || !verifyApprovedPublishSnapshot(snapshot)) {
+    throw new Error("Post-publish identity requires a valid approved publish snapshot.")
+  }
+  if (
+    snapshot.contentBuildId !== transaction.contentBuildId ||
+    snapshot.id !== transaction.approvedSnapshotId ||
+    snapshot.hash !== transaction.approvedSnapshotHash
+  ) {
+    throw new Error("Publish transaction and approved snapshot identity do not match.")
+  }
+
+  const build = getContentBuild(transaction.contentBuildId)
+  if (!build) throw new Error(`Unknown ContentBuild: ${transaction.contentBuildId}`)
+  required(snapshot.projectId, "approved snapshot projectId")
+  if (build.legacyProjectId && build.legacyProjectId !== snapshot.projectId) {
+    throw new Error("Approved snapshot project does not match the source ContentBuild project.")
+  }
+
+  return { transaction, snapshot, build }
+}
+
+/**
+ * Writes the immutable publication-to-ContentBuild link as a receipt on the
+ * existing ContentBuild event stream. The ContentBuild repository remains the
+ * lifecycle owner; this module does not create another event store.
+ */
+export const recordPostPublishIdentity = (
+  input: PostPublishIdentityInput,
+): PostPublishIdentityReceipt => {
+  const videoId = required(input.videoId, "videoId")
+  const { transaction, snapshot, build } = resolvePublishIdentity(input.transactionId, videoId)
+  const assetIds = selectedAssets(transaction)
+  if (build.youtube?.videoId && build.youtube.videoId !== videoId) {
+    throw new Error("ContentBuild is already bound to a different YouTube video; refusing to overwrite lineage.")
+  }
+  const existingReceipt = listContentBuildEvents(build.id).find(event =>
+    event.eventType === "youtube.state.changed" &&
+    event.entityType === "publish-identity-receipt" &&
+    event.entityId === transaction.id &&
+    (event.metadata as Record<string, unknown> | undefined)?.approvedSnapshotHash === snapshot.hash
+  )
+
+  if (existingReceipt) {
+    return {
+      event: existingReceipt,
+      contentBuildId: build.id,
+      projectId: snapshot.projectId,
+      videoId,
+      approvedSnapshotId: snapshot.id,
+      approvedSnapshotHash: snapshot.hash,
+      selectedVariantAssetIds: assetIds,
+    }
+  }
+
+  const binding = bindYouTubeVideo({
+    contentBuildId: build.id,
+    videoId,
+    channelId: build.channelId || null,
+    status: input.status || build.youtube?.status || "published",
+    publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
+    uploadStartedAt: build.youtube?.uploadStartedAt || null,
+    uploadCompletedAt: build.youtube?.uploadCompletedAt || null,
+    scheduledAt: transaction.assetLock.scheduledAt,
+    initialTitleAssetId: transaction.assetLock.titleAssetId,
+    initialThumbnailAssetId: transaction.assetLock.thumbnailAssetId,
+    finalRenderAssetId: transaction.assetLock.finalRenderAssetId,
+    lastVerifiedAt: build.youtube?.lastVerifiedAt || null,
+    toolId: input.toolId || "video-publisher",
+  })
+
+  const event = appendContentBuildEvent({
+    contentBuildId: build.id,
+    eventType: "youtube.state.changed",
+    entityType: "publish-identity-receipt",
+    entityId: transaction.id,
+    actorType: "youtube",
+    toolId: input.toolId || "video-publisher",
+    previousState: build.youtube || null,
+    resultingState: binding.youtube || null,
+    inputAssetIds: assetIds,
+    outputAssetIds: [videoId],
+    timestamp: input.publishedAt || undefined,
+    metadata: {
+      publishTransactionId: transaction.id,
+      operationId: transaction.id,
+      correlationId: input.correlationId || transaction.id,
+      idempotencyKey: transaction.idempotencyKey,
+      contentBuildId: build.id,
+      projectId: snapshot.projectId,
+      videoId,
+      approvedSnapshotId: snapshot.id,
+      approvedSnapshotHash: snapshot.hash,
+      selectedVariantAssetIds: assetIds,
+    },
+  })
+
+  return {
+    event,
+    contentBuildId: build.id,
+    projectId: snapshot.projectId,
+    videoId,
+    approvedSnapshotId: snapshot.id,
+    approvedSnapshotHash: snapshot.hash,
+    selectedVariantAssetIds: assetIds,
+  }
+}
+
+export interface AnalyticsCheckpointBridgeInput extends PostPublishIdentityInput {
+  checkpointId: string
+  checkpointAt: number
+  observations: AlgorithmMetricObservation[]
+  evaluationTargets: AlgorithmEvaluationTarget[]
+  evidenceIds?: string[]
+  confidence?: BrainConfidenceLevel
+  now?: number
+  summary?: string
+}
+
+export const buildPostPublishCheckpointEventId = (input: {
+  contentBuildId: string
+  videoId: string
+  checkpointId: string
+}) => `post-publish-checkpoint:${required(input.contentBuildId, "contentBuildId")}:${required(input.videoId, "videoId")}:${required(input.checkpointId, "checkpointId")}`
+
+/**
+ * Joins one analytics checkpoint to the exact completed publication and sends
+ * it through the existing Algorithm Intelligence evaluation ledger. Metric
+ * comparability remains enforced by AlgorithmEvaluationEngine.
+ */
+export const recordAnalyticsCheckpointForEvaluation = (
+  input: AnalyticsCheckpointBridgeInput,
+) => {
+  const checkpointId = required(input.checkpointId, "checkpointId")
+  if (!Number.isFinite(input.checkpointAt) || input.checkpointAt <= 0) {
+    throw new Error("Analytics checkpoint requires a valid epoch-millisecond checkpointAt.")
+  }
+  const identity = recordPostPublishIdentity(input)
+  const { transaction, snapshot, build } = resolvePublishIdentity(input.transactionId, input.videoId)
+  const eventId = buildPostPublishCheckpointEventId({
+    contentBuildId: identity.contentBuildId,
+    videoId: identity.videoId,
+    checkpointId,
+  })
+  const evidenceIds = [...new Set(input.evidenceIds || input.observations
+    .map(observation => observation.evidenceId)
+    .filter((id): id is string => Boolean(id)))]
+  const metadata = {
+    checkpointId,
+    checkpointAt: input.checkpointAt,
+    contentBuildId: build.id,
+    projectId: snapshot.projectId,
+    videoId: identity.videoId,
+    publishTransactionId: transaction.id,
+    operationId: transaction.id,
+    correlationId: input.correlationId || transaction.id,
+    approvedSnapshotId: snapshot.id,
+    approvedSnapshotHash: snapshot.hash,
+    selectedVariantAssetIds: identity.selectedVariantAssetIds,
+    idempotencyKey: eventId,
+  }
+
+  if (!listContentBuildEvents(build.id).some(event =>
+    event.eventType === "analytics.checkpoint" &&
+    (event.metadata as Record<string, unknown> | undefined)?.checkpointId === checkpointId &&
+    (event.metadata as Record<string, unknown> | undefined)?.videoId === identity.videoId
+  )) {
+    appendContentBuildEvent({
+      contentBuildId: build.id,
+      eventType: "analytics.checkpoint",
+      entityType: "analytics-checkpoint",
+      entityId: eventId,
+      actorType: "analytics",
+      toolId: input.toolId || "analytics-canon",
+      evidenceIds,
+      inputAssetIds: identity.selectedVariantAssetIds,
+      timestamp: new Date(input.checkpointAt).toISOString(),
+      metadata: { ...metadata, observations: input.observations },
+    })
+  }
+
+  const checkpointEvent = recordAlgorithmIntelligenceEvent({
+    id: eventId,
+    channelId: required(build.channelId, "ContentBuild channelId"),
+    projectId: snapshot.projectId,
+    videoId: identity.videoId,
+    kind: "CHECKPOINT_REACHED",
+    sourceSystem: "workflow",
+    sourceId: checkpointId,
+    parentEventIds: [identity.event.id],
+    evidenceIds,
+    confidence: input.confidence || "medium",
+    title: `Publication analytics checkpoint: ${checkpointId}`,
+    summary: input.summary || "Analytics checkpoint linked to the approved publication snapshot and source ContentBuild.",
+    evaluationTargets: input.evaluationTargets,
+    checkpointAt: input.checkpointAt,
+    metadata: { ...metadata, observations: input.observations },
+  })
+
+  const result = recordAlgorithmEvaluation({
+    sourceEventId: checkpointEvent.id,
+    observations: input.observations,
+    now: input.now,
+    metadata: {
+      ...metadata,
+      checkpointEventId: checkpointEvent.id,
+      evaluationBridge: "contentbuild-publication-analytics-v1",
+    },
+  })
+
+  return { identity, checkpointEvent, ...result }
+}
