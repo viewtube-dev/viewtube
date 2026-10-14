@@ -56,6 +56,7 @@ export type EditorAction=
   |{type:'setPanelId';id:Tool}
   |{type:'addClip';clip:VtE1Clip}
   |{type:'addLayerClip';layer:EditorLayer;clip:VtE1Clip}
+  |{type:'importCaptionBatch';track:Track|null;layers:EditorLayer[];clips:VtE1Clip[]}
   |{type:'updateClip';id:string;patch:Partial<VtE1Clip>}
   |{type:'updateLayerPayload';id:string;patch:Record<string,unknown>}
   |{type:'setLayerVisible';id:string;visible:boolean}
@@ -270,6 +271,17 @@ export function editorReducer(state:EditorState,action:EditorAction):EditorState
           durationSec:Math.max(state.project.durationSec,Number(placed.end||0)),
         },
         selection:{...emptySelection,clipIds:[placed.id]},
+      });
+    }
+    case'importCaptionBatch':{
+      const tracks=action.track?[...state.project.tracks,action.track]:state.project.tracks;
+      const clips=[...state.project.clips,...action.clips];
+      const durationSec=action.clips.reduce((maximum,clip)=>Math.max(maximum,clip.end),state.project.durationSec);
+      const lastClip=action.clips.at(-1);
+      return withHistory(state,{
+        ...state,
+        project:{...state.project,tracks,layers:[...state.project.layers,...action.layers],clips,durationSec},
+        selection:lastClip?{...emptySelection,clipIds:[lastClip.id]}:emptySelection,
       });
     }
     case'updateClip':
