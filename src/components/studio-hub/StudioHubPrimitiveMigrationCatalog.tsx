@@ -88,7 +88,6 @@ import {
   SubToolboxTag,
   SubToolboxToolbar,
   SubToolboxTagEditor,
-  SubToolboxTextArea,
   SubToolboxTopTitleDropdown,
   SubToolboxToast,
   SubToolboxToggleSwitch,
