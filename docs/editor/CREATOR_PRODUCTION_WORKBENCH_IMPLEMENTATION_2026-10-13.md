@@ -102,10 +102,22 @@ The editor already had a reducer action for splitting a clip at the current play
 
 Split-button enablement is now a small pure contract in `src/features/editor/mobile/state/splitClipEligibility.ts`. It rejects missing/invalid clip intervals and non-finite playheads, and requires the playhead to be more than 1 ms inside either edge. A focused Vitest file covers interior, boundary/guard-band, and invalid-input cases. The test was added before extracting the helper, but this GitHub-only pass cannot execute it; it must be run in CI or a local checkout before claiming it passes.
 
+## Fourth implementation slice — source slip controls
+
+The existing timeline reducer already supported `slipClip` through the shared `slipTimelineClip` operation, but the Trim tool exposed no UI for it. The panel now has a dedicated **Slip Source** section for clips with known source duration metadata:
+
+- displays the selected clip's source in/out window and total source duration;
+- provides −1s, −0.25s, +0.25s and +1s controls;
+- disables backward/forward movement when the source window is already at the corresponding edge;
+- dispatches the existing `slipClip` action with the known source duration, preserving timeline start/end;
+- explains the difference between timeline trim and source slip.
+
+Added regression coverage for source-window clamping at both ends while preserving the timeline slot. The tests have been authored but not executed in this GitHub-only pass.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
+1. Verify ratio-aware crop, rotation, split-at-playhead, and source-slip controls with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
+2. Trace the real durable image derivative contract and implement one non-destructive image operation end-to-end.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
