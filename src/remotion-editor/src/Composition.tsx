@@ -522,12 +522,20 @@ export const MyComposition: React.FC<Props> = ({ renderJob }) => {
             clip as unknown as Record<string, unknown>,
             payload,
           );
+          const fadeInFrames = toFrame(audioSettings.fadeInSec, fps);
+          const fadeOutFrames = toFrame(audioSettings.fadeOutSec, fps);
           return (
             <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
               <Audio
                 src={src}
                 startFrom={startFrom}
-                volume={audioSettings.muted ? 0 : audioSettings.volume}
+                volume={(frame) => {
+                  const fadeIn = fadeInFrames > 0 ? clamp(frame / fadeInFrames, 0, 1) : 1;
+                  const fadeOut = fadeOutFrames > 0
+                    ? clamp((durationInFrames - frame) / fadeOutFrames, 0, 1)
+                    : 1;
+                  return audioSettings.muted ? 0 : audioSettings.volume * fadeIn * fadeOut;
+                }}
                 playbackRate={audioSettings.playbackRate}
               />
             </Sequence>
