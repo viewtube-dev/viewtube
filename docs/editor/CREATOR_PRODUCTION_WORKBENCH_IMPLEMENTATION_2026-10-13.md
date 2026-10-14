@@ -84,9 +84,17 @@ For each code slice, run focused tests and the relevant build/type checks when r
 
 Current limitation: this GitHub-only edit pass can commit source/docs and open a PR, but it cannot honestly claim a local build, browser capture, or test run without an execution environment.
 
+## Second implementation slice — rotation controls
+
+The existing Transform inspector now includes clockwise and counterclockwise 90-degree rotation presets plus a rotation-only reset. These actions update only the existing `rotation` field through `updateClipTransform`; scale, position, opacity and crop are preserved. The arbitrary-angle field remains available. These controls operate on selected editor clips and are not a standalone image file processor.
+
+## Third implementation slice — split-at-playhead
+
+The editor already had a reducer action for splitting a clip at the current playhead, with history snapshots, but the Split tool was mapped to the Trim panel. It now has a dedicated Split Clip panel that shows the playhead and selected clip interval, enables the action only when the playhead is strictly inside the clip, dispatches the existing `splitClipAtPlayhead` action, and explains undo behavior. This wires an existing operation into the UI rather than creating a second split algorithm.
+
 ## Immediate next sequence
 
-1. Verify this crop-control slice with focused editor tests and responsive visual QA.
+1. Verify crop/rotation and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
