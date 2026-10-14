@@ -15,7 +15,7 @@ describe("canonical widget workflow primitive family", () => {
   })
 
   it("keeps section bands full bleed and the mobile planner a two-column grid", () => {
-    const css = read("src/styles/subtoolbox-workflow-primitives.css")
+    const css = read("src/styles/subtoolbox-system.css")
     expect(css).toContain("width:calc(100% + (2 * var(--vt-workflow-bleed,4px)))")
     expect(css).toContain("grid-template-columns:repeat(2,minmax(0,1fr))")
     expect(css).toContain(".vt-workflow-data-grid{width:100%;min-width:620px")
