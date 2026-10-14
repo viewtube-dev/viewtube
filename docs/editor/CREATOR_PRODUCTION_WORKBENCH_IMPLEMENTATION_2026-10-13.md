@@ -108,6 +108,12 @@ The existing `trimClip` reducer changed only the timeline edge. For video/audio 
 
 Added focused Vitest coverage for left/right source-range updates, source-less overlay clips, and undo. Tests have been authored but were not run in this GitHub-only pass; runtime preview/render verification remains required.
 
+## Current slice — trim edges to the playhead
+
+The Timeline Trim panel now shows the current playhead and provides **Trim Start to Playhead** and **Trim End to Playhead** shortcuts. They are enabled only when the playhead is safely inside the selected clip, preserving a minimum-duration guard band on both sides. Both dispatch the existing `trimClip` reducer action and preserve the shared editor history/undo path.
+
+A focused Vitest file covers valid interior playheads, boundary/guard-band cases, missing clips, invalid ranges, and non-finite values. Tests and browser verification remain pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, and source-aware trimming with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
