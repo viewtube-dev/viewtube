@@ -32,3 +32,21 @@ export function resolveAudioRenderSettings(
     fadeOutSec: Math.max(0, Math.min(10, fadeOutSec)),
   };
 }
+
+/** Deterministic per-frame gain curve used by Remotion and unit tests. */
+export function audioVolumeAtFrame(
+  settings: AudioRenderSettings,
+  frame: number,
+  durationInFrames: number,
+  fps: number,
+): number {
+  if (settings.muted || !Number.isFinite(frame) || !Number.isFinite(durationInFrames) || fps <= 0) return 0;
+  const currentFrame = Math.max(0, Math.min(durationInFrames, frame));
+  const fadeInFrames = Math.max(0, Math.round(settings.fadeInSec * fps));
+  const fadeOutFrames = Math.max(0, Math.round(settings.fadeOutSec * fps));
+  const fadeIn = fadeInFrames > 0 ? Math.min(1, currentFrame / fadeInFrames) : 1;
+  const fadeOut = fadeOutFrames > 0
+    ? Math.min(1, Math.max(0, (durationInFrames - currentFrame) / fadeOutFrames))
+    : 1;
+  return Math.max(0, Math.min(1, settings.volume * fadeIn * fadeOut));
+}
