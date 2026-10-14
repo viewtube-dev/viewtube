@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { rippleDeleteTimelineClips, slideTimelineClip, slipTimelineClip, splitTimelineClip } from './vtE1TimelineOperations.js';
+import { rippleDeleteTimelineClips, slideTimelineClip, slipTimelineClip, splitTimelineClip, trimTimelineClip } from './vtE1TimelineOperations.js';
 
 const clip = (id: string, start: number, end: number) => ({ id, trackId: 'v1', layerId: id, start, end, sourceInSec: start, sourceOutSec: end, keyframes: [] });
 
@@ -8,6 +8,21 @@ describe('VT_E1 timeline operations', () => {
     const result = splitTimelineClip({ ...clip('a', 2, 8), sourceInSec: 10, sourceOutSec: 16 }, 5);
     expect(result?.left).toMatchObject({ start: 2, end: 5, sourceInSec: 10, sourceOutSec: 13 });
     expect(result?.right).toMatchObject({ start: 5, end: 8, sourceInSec: 13, sourceOutSec: 16 });
+  });
+
+  it('trims the source in-point with the left timeline edge', () => {
+    expect(trimTimelineClip({ ...clip('a', 2, 8), sourceInSec: 10, sourceOutSec: 16 }, 'left', 3))
+      .toMatchObject({ start: 3, end: 8, sourceInSec: 11, sourceOutSec: 16 });
+  });
+
+  it('trims the source out-point with the right timeline edge', () => {
+    expect(trimTimelineClip({ ...clip('a', 2, 8), sourceInSec: 10, sourceOutSec: 16 }, 'right', 7, 20))
+      .toMatchObject({ start: 2, end: 7, sourceInSec: 10, sourceOutSec: 15 });
+  });
+
+  it('rejects trims that would address source time before zero or past known duration', () => {
+    expect(trimTimelineClip({ ...clip('a', 2, 8), sourceInSec: 0, sourceOutSec: 6 }, 'left', 1)).toBeNull();
+    expect(trimTimelineClip({ ...clip('a', 2, 8), sourceInSec: 10, sourceOutSec: 16 }, 'right', 5, 12)).toBeNull();
   });
 
   it('slips without changing timeline edges', () => {
