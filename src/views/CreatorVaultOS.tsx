@@ -2930,7 +2930,8 @@ const CreatorVaultOS: React.FC = () => {
       >
        <div className="flex flex-col gap-2">
         {activeVaultTasks.length || failedVaultTasks.length || completedVaultTasks.length ? [...failedVaultTasks, ...activeVaultTasks, ...completedVaultTasks].slice(0, 12).map((task) => (
-         <div key={task.id} data-vault-task-status={task.status} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+         <React.Fragment key={task.id}>
+         <div data-vault-task-status={task.status} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
           <div className="min-w-0">
            <div className="truncate text-sm font-black uppercase">{task.label}</div>
            <div className="text-xs font-bold opacity-60">
@@ -2999,6 +3000,7 @@ const CreatorVaultOS: React.FC = () => {
            <div className="break-words"><span className="font-bold opacity-60">Latest detail:</span> {task.detail || "No additional details recorded."}</div>
           </div>
          ) : null}
+         </React.Fragment>
         )) : (
          <SubToolboxStatePanel level="l1" state="empty" message="No Vault background tasks yet." />
         )}
