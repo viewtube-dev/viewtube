@@ -111,7 +111,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput, StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -138,6 +138,8 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Education Timestamp Notes",
   "Select Menu",
   "Context Menu",
+  "Studio Text Input",
+  "Studio Text Area",
   "Text Input",
   "Textarea",
   "20 Plain Input",
@@ -454,6 +456,12 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Square Icon Button") {
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
+  }
+  if (name === "Studio Text Input") {
+    return <StudioTextInput sizeVariant="standard" aria-label="Canonical Studio text input" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" />
+  }
+  if (name === "Studio Text Area") {
+    return <StudioTextArea sizeVariant="standard" aria-label="Canonical Studio text area" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" />
   }
   if (name === "Text Input") {
     return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
