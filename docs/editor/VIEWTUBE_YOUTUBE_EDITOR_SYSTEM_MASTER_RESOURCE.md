@@ -686,7 +686,10 @@ If this document was not updated, the editor work is not fully handed off.
 
 All proposals preserve the existing project bridge, one editor project model, ContentBuild/asset identity, deterministic render parity, undo/redo and explicit AI approval boundaries. AI UI must not call providers directly. Generated/recommended artifacts enter canonical provenance/asset flows.
 
-### Update Log addition — 2026-09-27
+### Update Log
+
+| 2026-10-14 | Creator production tools — aspect crop + trim-to-playhead batch | PR / feat/creator-workbench-production-controls-batch | started | Added a 4:5 crop preset and removed the duplicate square crop button; added playhead time plus Trim Start/End to Playhead actions guarded by a pure eligibility helper and backed by existing trim/history contracts. | src/features/editor/mobile/components/EditorNavigationPages.tsx; src/features/editor/mobile/components/PanelBodies.tsx; src/features/editor/mobile/state/trimAtPlayhead.ts; src/features/editor/mobile/state/trimAtPlayhead.test.ts; docs/editor/CREATOR_PRODUCTION_WORKBENCH_IMPLEMENTATION_2026-10-13.md | Source reviewed; tests/build, undo/redo, preview/render parity and responsive visual QA pending | canonical cropToAspectRatio + trimClip reducer/source-window contracts | run focused tests/browser QA; then continue with Script Architect BrainRuntime contract migration and captions/timeline integration |
+ addition — 2026-09-27
 
 | Date / time | Agent / conversation | Branch / PR | Status | Work completed / begun / planned | Changed or created paths | Verification / evidence | New references / sources | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
