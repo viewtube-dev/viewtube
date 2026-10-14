@@ -108,6 +108,12 @@ The existing `trimClip` reducer changed only the timeline edge. For video/audio 
 
 Added focused Vitest coverage for left/right source-range updates, source-less overlay clips, and undo. Tests have been authored but were not run in this GitHub-only pass; runtime preview/render verification remains required.
 
+## Current slice — source-aware media trimming contract
+
+The existing Trim reducer already adjusted source-time bounds, but the calculation was embedded in the reducer and did not clamp source edges against the known source duration. This slice extracts that calculation into `trimClipSourceBounds`, uses the shared helper from the reducer, clamps media edge adjustments to the current clip interval, and uses known source duration as the fallback source-out bound. This keeps timeline-only clips on their existing path and keeps media trims reversible through the shared editor history.
+
+Focused Vitest cases cover left/right trimming, non-1× source-to-timeline mapping, timeline-only clips, and source-range limits. They were authored but not executed in this GitHub-only pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, and source-aware trimming with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
