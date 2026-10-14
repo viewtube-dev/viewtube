@@ -84,6 +84,12 @@ For each code slice, run focused tests and the relevant build/type checks when r
 
 Current limitation: this GitHub-only edit pass can commit source/docs and open a PR, but it cannot honestly claim a local build, browser capture, or test run without an execution environment.
 
+## Fourth implementation slice — ratio-aware crop presets
+
+The Crop inspector now adds **Project Ratio** and **Square** presets for selected image/video media clips. The controls read the linked media layer's existing `width`/`height` payload (the current ingest path records dimensions while loading media) and calculate centered crop edges through `cropToAspectRatio`. The project preset uses the editor's existing landscape/portrait project setting. Both controls are disabled when the selected clip lacks supported image/video identity or factual dimensions; they do not guess a ratio or pretend to process a standalone file.
+
+The helper returns null when dimensions or target ratio are invalid, or when the crop would exceed the editor's safe combined-edge limit. Focused Vitest cases cover landscape-to-portrait, portrait-to-landscape, exact-ratio no-op, and invalid/extreme inputs. Tests were authored, but not executed in this GitHub-only pass.
+
 ## Second implementation slice — rotation controls
 
 The existing Transform inspector now includes clockwise and counterclockwise 90-degree rotation presets plus a rotation-only reset. These actions update only the existing `rotation` field through `updateClipTransform`; scale, position, opacity and crop are preserved. The arbitrary-angle field remains available. These controls operate on selected editor clips and are not a standalone image file processor.
@@ -98,7 +104,7 @@ Split-button enablement is now a small pure contract in `src/features/editor/mob
 
 ## Immediate next sequence
 
-1. Verify crop/rotation and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
+1. Verify ratio-aware crop, rotation, and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
