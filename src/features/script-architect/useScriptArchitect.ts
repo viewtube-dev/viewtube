@@ -110,6 +110,8 @@ export interface ScriptArchitectController {
  matchTargetToScript: () => void
  rebalanceWeightsToScript: () => void
  copyScript: () => Promise<void>
+ downloadScript: () => void
+ downloadMarkdown: () => void
  savePacket: () => Promise<void>
  saveDraft: () => void
  loadDraft: (id: string) => void
