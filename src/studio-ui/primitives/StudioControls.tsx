@@ -6,7 +6,38 @@ import "../../styles/studio-control-system.css"
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
-export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = { fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif", fontWeight: 1000, strokeColor: "#000000", colorPairSystem: "module pair A/B via --pair-a / --pair-b", backgroundFill: "50% pair-A blended with white for fields; pair-A for buttons", textColor: "#000000", textTransform: "uppercase", letterSpacing: "-0.035em", lineHeight: 0.86, shadowPolicy: "button-only hard offset shadow", focusOutline: "3px module pair-A outline", motionEasing: "ease-out" } as const
+export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
+  fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
+  fontWeight: 1000,
+  strokeColor: "#000000",
+  colorPairSystem: "primary = --pair-a; secondary = --pair-b",
+  backgroundFill: "buttons use primary; text fields use 50% opacity primary",
+  textColor: "#000000",
+  textTransform: "uppercase",
+  letterSpacing: "-0.035em",
+  lineHeight: 0.86,
+  shadowPolicy: "button-only hard offset shadow; focused text-field outline shadow uses secondary",
+  focusOutline: "text fields use secondary outline at half the current border width",
+  textFieldDefaults: {
+    defaultMode: {
+      textColor: "primary",
+      textStrokeColor: "primary",
+      fill: "primary at 50% opacity",
+      inlineStrokeColor: "primary",
+      inlineStrokeWidth: "same as border width",
+    },
+    focusMode: {
+      fill: "primary at 15% opacity",
+      textColor: "#000000",
+      textStrokeColor: "#000000",
+      outlineStrokeColor: "secondary",
+      outlineStrokeWidth: "half the current border width",
+      outlineShadowColor: "secondary",
+    },
+    caret: { color: "primary", style: "thick block caret" },
+  },
+  motionEasing: "ease-out",
+} as const
 
 /** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
 export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
