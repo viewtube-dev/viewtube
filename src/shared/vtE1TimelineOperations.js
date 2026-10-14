@@ -35,6 +35,39 @@ export const splitTimelineClip = (clip, cutTimeSec) => {
   };
 };
 
+/**
+ * Trim a clip edge while keeping its source-time window aligned with the timeline.
+ * Returns null when the requested edge would produce an invalid duration or
+ * address source media outside its known duration.
+ */
+export const trimTimelineClip = (clip, side, edgeSec, sourceDurationSec = Number.POSITIVE_INFINITY) => {
+  if (!clip || !['left', 'right'].includes(side)) return null;
+  const start = Number(clip.start);
+  const end = Number(clip.end);
+  const edge = Number(edgeSec);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || !Number.isFinite(edge)) return null;
+  if (side === 'left' && !(edge < end - TIMELINE_MIN_CLIP_DURATION_SEC)) return null;
+  if (side === 'right' && !(edge > start + TIMELINE_MIN_CLIP_DURATION_SEC)) return null;
+
+  const sourceIn = Number(clip.sourceInSec);
+  const sourceOut = Number(clip.sourceOutSec);
+  const hasSourceWindow = Number.isFinite(sourceIn) && Number.isFinite(sourceOut);
+  if (!hasSourceWindow) {
+    return side === 'left' ? copy(clip, { start: edge }) : copy(clip, { end: edge });
+  }
+
+  if (side === 'left') {
+    const nextSourceIn = sourceIn + (edge - start);
+    if (nextSourceIn < 0) return null;
+    return copy(clip, { start: edge, sourceInSec: nextSourceIn });
+  }
+
+  const nextSourceOut = sourceIn + (edge - start);
+  const knownDuration = Number(sourceDurationSec);
+  if (Number.isFinite(knownDuration) && nextSourceOut > knownDuration) return null;
+  return copy(clip, { end: edge, sourceOutSec: nextSourceOut });
+};
+
 export const slipTimelineClip = (clip, deltaSec, sourceDurationSec = Number.POSITIVE_INFINITY) => {
   if (!clip) return null;
   const duration = clipDurationSec(clip);
