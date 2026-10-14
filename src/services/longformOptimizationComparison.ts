@@ -8,6 +8,8 @@ import {
   appendContentBuildEvent,
   listContentBuildEvents,
 } from "./asset-engine/ContentBuildRepository"
+import { listPublishTransactions } from "./asset-engine/PublishTransaction"
+import { recordAnalyticsCheckpointForEvaluation } from "./asset-engine/PostPublishAnalyticsBridge"
 
 export type LongformDailyComparisonPhase = "before" | "change" | "after"
 
@@ -252,6 +254,48 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
       comparisonVersion: comparison.version,
     },
   })
+
+  // A completed seven-day window is a measurable checkpoint. Bridge it into
+  // the canonical evaluation ledger only when the source ContentBuild has a
+  // completed transaction for this exact published YouTube video.
+  if (comparison.status === "ready") {
+    const transaction = listPublishTransactions(input.contentBuildId).find(candidate =>
+      candidate.status === "completed" && candidate.youtubeVideoId === input.videoId
+    )
+    if (transaction) {
+      const checkpointAt = new Date(`${comparison.targetEndDate}T23:59:59.999Z`).getTime()
+      const evidenceId = `youtube-analytics:video:${input.videoId}:${comparison.startDate}:${comparison.queryEndDate}`
+      const metrics = [
+        ["views", comparison.before.viewsAverage, comparison.after.viewsAverage],
+        ["watchTimeMinutes", comparison.before.watchTimeMinutesAverage, comparison.after.watchTimeMinutesAverage],
+        ["avp", comparison.before.avpAverage, comparison.after.avpAverage],
+        ["likes", comparison.before.likesAverage, comparison.after.likesAverage],
+        ["comments", comparison.before.commentsAverage, comparison.after.commentsAverage],
+        ["revenue", comparison.before.revenueAverage, comparison.after.revenueAverage],
+      ] as const
+      recordAnalyticsCheckpointForEvaluation({
+        transactionId: transaction.id,
+        videoId: input.videoId,
+        checkpointId: `longform-daily:${input.videoId}:${comparison.changeDate}`,
+        checkpointAt,
+        observations: metrics.map(([metricName, , value]) => ({
+          metric: metricName,
+          value,
+          observedAt: checkpointAt,
+          evidenceId,
+        })),
+        evaluationTargets: metrics.map(([metricName, baselineValue]) => ({
+          metric: metricName,
+          direction: "increase" as const,
+          baselineValue,
+        })),
+        evidenceIds: [evidenceId],
+        now: now.getTime(),
+        summary: `Completed 7+7-day longform optimization comparison for ${input.videoId}.`,
+        toolId: "longform-optimizer",
+      })
+    }
+  }
 
   return {
     ...comparison,

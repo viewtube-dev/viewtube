@@ -30,6 +30,7 @@ import {
   verifyPublishTransactionRemoteState,
 } from "../services/youtube/PublishTransactionYouTubeBridge"
 import { completePublishTransaction, listPublishTransactions } from "../services/asset-engine/PublishTransaction"
+import { recordPostPublishIdentity } from "../services/asset-engine/PostPublishAnalyticsBridge"
 import { sheetsService } from "../services/sheetsService"
 import type { SeoResult } from "../types"
 import BrainLiveToolInbox from "../components/brain/BrainLiveToolInbox"
@@ -450,8 +451,20 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
     setPublishBusy(true)
     try {
       await verifyPublishTransactionRemoteState(publishState.transaction.id)
-      completePublishTransaction(publishState.transaction.id)
+      const completed = completePublishTransaction(publishState.transaction.id)
       setPublishError(null)
+      if (completed.youtubeVideoId) {
+        try {
+          recordPostPublishIdentity({
+            transactionId: completed.id,
+            videoId: completed.youtubeVideoId,
+            correlationId: completed.id,
+          })
+        } catch (identityError) {
+          const message = identityError instanceof Error ? identityError.message : String(identityError)
+          setPublishError(`Publication completed, but ContentBuild lineage receipt failed: ${message}`)
+        }
+      }
       setPublishRefresh(value => value + 1)
     } catch (error) {
       setPublishError(error instanceof Error ? error.message : String(error))
