@@ -540,6 +540,7 @@ For any branch audit, record:
 | Official Remotion skill adoption | partial | agent tooling | source-reviewed/pinned or environment-provided | complete supply-chain audit before vendoring |
 | External skills-lock audit | planned | agent tooling | all editor-relevant external instructions reviewed | inspect hashes/sources and classify retain/replace |
 | Editor donor-branch audit | planned | GitHub | unique-commit matrix for each donor | run branch-level audit |
+| Creator production workbench — crop controls first slice | started | shared VT_E1 editor / mobile inspector | crop state, preview/render parity, undo/redo, desktop/mobile parity | add quick reversible crop presets to the existing clip inspector; continue image, video, script, audio/captions surfaces without a parallel project model |
 
 ## 14. Phased implementation plan
 
