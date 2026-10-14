@@ -202,6 +202,10 @@ Both image crop and video-frame save actions use the same bounded upload client 
 
 Added a deterministic SRT serializer and an **Export SRT Captions** action alongside SRT import. It gathers clips from the editor's caption tracks, preserves their existing timeline start/end times and multiline text, sorts cues by start/end time, rounds to millisecond precision with carry, and skips invalid or empty cues. The export does not guess timing from script prose; it only serializes already-timed caption clips. Focused Vitest cases cover ordering, timestamp rounding, long-hour timestamps, multiline content, and invalid cues. Tests and the browser download flow have not been run in this pass.
 
+## Twelfth implementation slice — caption timing nudges
+
+Added four caption timing nudge controls (**−0.5s**, **−0.1s**, **+0.1s**, **+0.5s**) for existing caption tracks. The reducer shifts all caption clips together as one history action, leaves non-caption tracks untouched, preserves cue durations and overlaps, and extends project duration when needed. Negative shifts clamp once against the earliest caption start so the relative timing of the batch is preserved; the UI reports the applied offset and the operation is undoable. Focused tests cover bounded shift resolution and reducer undo behavior. Tests/build and interactive caption-preview verification remain pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
@@ -209,4 +213,4 @@ Added a deterministic SRT serializer and an **Export SRT Captions** action along
 3. Verify crop/frame uploads, Vault discovery, ContentBuild version/lineage, and persistent storage in a deployed environment.
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
-6. Connect Script Architect sections to captions only through explicit timing inputs; verify SRT import/export, overlap handling, and render parity.
+6. Connect Script Architect sections to captions only through explicit timing inputs; verify SRT import/export, timing nudges, overlap handling, and render parity.
