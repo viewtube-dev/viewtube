@@ -1,6 +1,5 @@
 import React from "react"
 import { Settings2, Sparkles } from "lucide-react"
-import { SubToolboxInput20, SubToolboxTextArea21 } from "../subtoolbox/SubToolboxPrimitives"
 import { Studioswitch as SubToolbox44Switch, StudioChoice as SubToolbox44Choice, Studiotoggle as SubToolbox44WordToggle } from "../../studio-ui"
 import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioFloatingLabelInput, StudioFloatingLabelTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
@@ -11,6 +10,7 @@ type Size = "44px" | "28px"
 const sizeClass = (size: Size) => size === "44px" ? "is-large" : "is-compact"
 
 const CANONICAL_SKINS = [{ skin: "solid" as const, label: "1 · SOLID" }, { skin: "color-swap" as const, label: "3 · COLOR SWAP" }, { skin: "black-indicator" as const, label: "4 · BLACK INDICATOR" }, { skin: "white-indicator" as const, label: "5 · WHITE INDICATOR" }]
+const WORD_TOGGLE_SKINS = CANONICAL_SKINS.filter(({ skin }) => skin !== "white-indicator")
 const CanonicalControlFamilies: React.FC = () => {
   const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
   const [choices, setChoices] = React.useState<boolean[]>(Array(12).fill(false))
@@ -25,7 +25,17 @@ const CanonicalControlFamilies: React.FC = () => {
       <div className="vt-confirmed-control-family" style={colorStyle}>{([{kind:"radio" as const,label:"CIRCULAR RADIO",mark:"check" as const},{kind:"checkbox" as const,label:"CHECKMARK CHECKBOX",mark:"check" as const},{kind:"checkbox" as const,label:"WIDE-X CHECKBOX",mark:"xwide" as const}]).map((item,row) => <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44Choice kind={item.kind} mark={item.mark} shape={item.kind === "radio" ? "round" : "rect"} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div>)}</div>
     </Family>
     <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={["size=\"28\" selects the compact variant; default size is 44px.", "skin=\"color-swap\" | \"black-indicator\" | \"white-indicator\" (default: solid).", "value=true selects the second word; default value is false.", "words={[\"PAUSE\", \"PLAY\"]} customizes the labels; defaults are OFF / ON."]} provenance={<Provenance primitive="Studiotoggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/components/subtoolbox/SubToolboxPrimitives.tsx"]} />}>
-      <div className="vt-confirmed-control-family" style={colorStyle}>{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => <div className="vt-confirmed-control-row" key={item.size}><strong>{item.label}</strong><div className={`vt-confirmed-control-variants ${item.size === "44" ? "is-word-toggle-44" : "is-word-toggle-28"}`}>{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={item.size} skin={skin.skin} value={words[index]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div></div>)}</div>
+      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family" style={colorStyle}>{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => {
+        const variantsClass = item.size === "44" ? "is-word-toggle-44" : "is-word-toggle-28";
+        const solidIndex = row * 3;
+        return <div className="vt-confirmed-control-row" key={item.size}>
+          <strong>{item.label}</strong>
+          <div className={`vt-confirmed-control-variants ${variantsClass} is-word-toggle-solid-row`}>
+            <div><small>1 · SOLID</small><SubToolbox44WordToggle size={item.size} skin="solid" value={words[solidIndex]} words={["OFF","ON"]} onValueChange={value => flip(setWords, solidIndex, value)} /></div>
+          </div>
+          <div className={`vt-confirmed-control-variants ${variantsClass} is-word-toggle-other-row`}>{WORD_TOGGLE_SKINS.filter(({skin}) => skin !== "solid").map((skin,col) => { const index = row * 3 + col + 1; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={item.size} skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
+        </div>
+      })}</div>
     </Family>
   </>
 }
@@ -67,20 +77,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{String(value)}</span></div>)}</div>
     </section>
     <Family title="Studio Text Input · Standalone" nonDefaultSettings={["sizeVariant=\"compact\" selects 28px; default is standard 44px.", "type=\"search\" or type=\"number\" uses the shared Studio field styling.", "disabled=true prevents editing; readOnly=true permits focus and selection without edits.", "placeholder, inputMode, autoComplete, and maxLength can be overridden with native input props."]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native input; standard 44px and compact 28px size variants; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TITLE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant"><span>28px compact · StudioTextInput</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
     </Family>
     <Family title="Studio Text Area · Standalone" nonDefaultSettings={["sizeVariant=\"compact\" selects the 28px control size; default is standard 44px.", "rows={2} or another positive row count changes the initial writing-area height.", "disabled=true prevents editing; readOnly=true allows focus and text selection without edits.", "Native resize behavior remains available unless the consumer overrides resize styling."]} provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native textarea; canonical Studio typography, borders, focus and size variants; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" /></div>
-    </Family>
-    <Family title="Simple Text Inputs · Primitive 20" nonDefaultSettings={["controlSize=\"compact\" selects the 28px variant; default is 44px.", "disabled=true prevents input; readOnly=true allows selection without editing.", "Focused state uses black text/stroke and a Color 2 outline.", "type may be set to search, number, email, or another native input type."]} provenance={<Provenance primitive="SubToolboxInput20" tsx="src/components/subtoolbox/SubToolboxPrimitives.tsx" css="src/styles/subtoolbox-system.css" tokens="44px standard / 28px compact; text uses the canonical size token. Default text and border share Color 1; focus text and border use black with a visible Color 2 outline." imports={["src/components/subtoolbox/SubToolboxPrimitives.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>20 · 44px standard · 38px / 1000 typography</span><SubToolboxInput20 className="is-simple-text vt-confirmed-simple-input is-input-44" aria-label="Simple text input 44px" placeholder="TYPE HERE" /></div>
-      <div className="vt-confirmed-variant"><span>20 · 28px compact A</span><SubToolboxInput20 controlSize="compact" className="is-simple-text vt-confirmed-simple-input is-input-28" aria-label="Simple text input 28px A" placeholder="TYPE HERE" /></div>
-      <div className="vt-confirmed-variant"><span>20 · 28px compact B</span><SubToolboxInput20 controlSize="compact" className="is-simple-text vt-confirmed-simple-input is-input-28" aria-label="Simple text input 28px B" placeholder="TYPE HERE" /></div>
-    </Family>
-    <Family title="Simple Text Area · Primitive 21" nonDefaultSettings={["rows changes the initial number of text lines; the primitive defaults to a 92px writing area.", "disabled=true prevents editing; readOnly=true allows focus and selection without edits.", "resize may be set to none, vertical, horizontal, or both by the consuming field style.", "Focused state uses black text/stroke with the Color 2 focus outline."]} provenance={<Provenance primitive="SubToolboxTextArea21" tsx="src/components/subtoolbox/SubToolboxPrimitives.tsx" css="src/styles/subtoolbox-system.css" tokens="Fixed 92px writing area; intentionally independent of the 28px / 44px height system. Paragraph typography follows the 28px input text size, with 44px input stroke/focus treatment." imports={["src/components/subtoolbox/SubToolboxPrimitives.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>21 · 92px paragraph textarea</span><SubToolboxTextArea21 className="vt-confirmed-simple-textarea" aria-label="Simple paragraph textarea" placeholder="WRITE A PARAGRAPH…" rows={4} /></div>
     </Family>
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
