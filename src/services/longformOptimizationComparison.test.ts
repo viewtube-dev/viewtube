@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
+import * as publishTransactions from "./asset-engine/PublishTransaction"
+import * as analyticsBridge from "./asset-engine/PostPublishAnalyticsBridge"
 import {
   buildLongformDailyComparisonWindow,
   buildLongformOptimizationDailyComparison,
@@ -9,6 +11,7 @@ import {
 
 describe("Longform Optimizer 7+7 daily comparison", () => {
   beforeEach(() => {
+    vi.restoreAllMocks()
     localStorage.clear()
     resetContentBuildRepositoryForTests()
   })
@@ -72,6 +75,32 @@ describe("Longform Optimizer 7+7 daily comparison", () => {
       ],
     })
 
+    vi.spyOn(publishTransactions, "listPublishTransactions").mockReturnValue([{
+      id: "publish-tx-1",
+      contentBuildId: "cb:video:video-1",
+      videoPackageId: "package-1",
+      idempotencyKey: "publish:build-1:snapshot-1",
+      approvedSnapshotId: "snapshot-1",
+      approvedSnapshotHash: "hash-1",
+      status: "completed",
+      steps: {},
+      assetLock: {
+        projectionRevision: 1,
+        titleAssetId: "title-1",
+        thumbnailAssetId: "thumbnail-1",
+        finalRenderAssetId: "render-1",
+        descriptionAssetId: "description-1",
+        tagsAssetId: null,
+        scheduledAt: null,
+        lockedAt: "2026-09-10T00:00:00.000Z",
+      },
+      youtubeVideoId: "video-1",
+      startedAt: "2026-09-10T00:00:00.000Z",
+      updatedAt: "2026-09-19T00:00:00.000Z",
+    }])
+    const evaluationBridge = vi.spyOn(analyticsBridge, "recordAnalyticsCheckpointForEvaluation")
+      .mockReturnValue({} as ReturnType<typeof analyticsBridge.recordAnalyticsCheckpointForEvaluation>)
+
     const result = await fetchAndRecordLongformOptimizationDailyComparison({
       videoId: "video-1",
       contentBuildId: "cb:video:video-1",
@@ -95,5 +124,16 @@ describe("Longform Optimizer 7+7 daily comparison", () => {
     expect(result.after.daysObserved).toBe(7)
     expect(result.after.viewsAverage).toBeGreaterThan(result.before.viewsAverage!)
     expect(result.contentBuildEventId).toBeTruthy()
+    expect(evaluationBridge).toHaveBeenCalledWith(expect.objectContaining({
+      transactionId: "publish-tx-1",
+      videoId: "video-1",
+      checkpointId: "longform-daily:video-1:2026-09-10",
+      evaluationTargets: expect.arrayContaining([
+        expect.objectContaining({ metric: "views", direction: "increase", baselineValue: 130 }),
+      ]),
+      observations: expect.arrayContaining([
+        expect.objectContaining({ metric: "views", value: 250 }),
+      ]),
+    }))
   })
 })
