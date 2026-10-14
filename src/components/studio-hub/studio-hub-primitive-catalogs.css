@@ -2556,3 +2556,16 @@
 .vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-studio-44-word-toggle,
 .vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle { max-width:100%; min-width:0; }
 @media(max-width:560px) { .vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-other-row { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+
+/* Phase 3: catalog split-left specimens preserve compact dimensions when selected. */
+.vt-confirmed-catalog button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"],
+.vt-confirmed-catalog button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][data-selected="true"],
+.vt-confirmed-catalog button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][aria-pressed="true"] {
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+.vt-confirmed-catalog button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-split-rail] {
+  border-right: 2px solid #000 !important;
+}
