@@ -108,9 +108,15 @@ The existing `trimClip` reducer changed only the timeline edge. For video/audio 
 
 Added focused Vitest coverage for left/right source-range updates, source-less overlay clips, and undo. Tests have been authored but were not run in this GitHub-only pass; runtime preview/render verification remains required.
 
+## Sixth implementation slice — audio controls reach the render
+
+The Audio panel previously edited clip-level `volume` and `playbackRate`, while the Remotion Composition read only layer-payload values. That meant the visible clip controls could diverge from final-render behavior, and the volume slider allowed values above the renderer's supported 0–1 range. A shared `resolveAudioRenderSettings` contract now gives clip-level edits precedence and falls back to existing layer payload defaults for older projects. The same resolver is used by the Audio panel and Remotion Composition; the volume control now matches the supported 0–100% range and playback rate is passed to the render Audio component.
+
+Added focused tests for clip overrides, legacy layer-payload fallback, defaults, and clamping. Tests have been authored but not executed in this GitHub-only pass. Fade automation remains separate because the custom Audio primitive's source-offset/frame semantics need an explicit parity audit before extending its volume curve.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, split-at-playhead, and source-aware trimming with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
+1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and clip-level audio rendering with focused tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
