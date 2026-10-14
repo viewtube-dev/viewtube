@@ -42,12 +42,12 @@ export const StudioHubCertification: React.FC = () => {
 
         <SubToolboxSection label="Inputs">
           <SubToolboxGrid minItemWidth="wide">
-            <StudioInput aria-label="Standard input specimen" defaultValue="Standard 48px field" />
+            <StudioInput aria-label="Standard input specimen" defaultValue="title" />
             <StudioSearchInput aria-label="Search input specimen" placeholder="Search videos…" />
             <StudioInput aria-label="Disabled input specimen" value="Disabled" disabled readOnly />
           </SubToolboxGrid>
           <SubToolboxFieldLabel htmlFor="studio-cert-textarea">Textarea</SubToolboxFieldLabel>
-          <StudioTextArea id="studio-cert-textarea" defaultValue="Textarea inherits its SubToolbox title/icon pair: 50% title-color fill and inset at rest; white body, retained inset, colored caret, and icon-color glow on focus." />
+          <StudioTextArea id="studio-cert-textarea" defaultValue="description" />
         </SubToolboxSection>
 
         <SubToolboxSection label="Dropdowns">

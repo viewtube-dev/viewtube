@@ -38,7 +38,7 @@
   letter-spacing: -.035em;
   text-transform: uppercase;
   -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: .5px var(--vt-studio-control-accent);
+  -webkit-text-stroke: .5px currentColor;
   outline: none;
   padding: 0 14px;
   transition: background-color 180ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out, outline-color 180ms ease-out;
@@ -56,7 +56,7 @@
   background-color: color-mix(in srgb, var(--vt-studio-control-accent) 15%, transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: .5px #000;
+  -webkit-text-stroke: .5px currentColor;
   outline: var(--vt-studio-control-outline-stroke, calc(var(--vt-studio-control-stroke) / 2)) solid var(--vt-studio-control-secondary);
   outline-offset: 1px;
   caret-color: var(--vt-studio-control-accent);
@@ -72,7 +72,6 @@
 textarea[data-vt-studio-control] {
   min-height: 144px;
   resize: vertical;
-  box-shadow: none !important;
 }
 textarea[data-vt-studio-control][data-size="compact"],
 textarea[data-vt-studio-control][data-size="small"] { min-height: 72px; padding: 8px 10px; font-size: 24px; }
