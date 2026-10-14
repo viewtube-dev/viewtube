@@ -3,6 +3,7 @@ import { Settings2, Sparkles } from "lucide-react"
 import { SubToolboxInput20, SubToolboxTextArea21 } from "../subtoolbox/SubToolboxPrimitives"
 import { Studioswitch as SubToolbox44Switch, StudioChoice as SubToolbox44Choice, Studiotoggle as SubToolbox44WordToggle } from "../../studio-ui"
 import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioFloatingLabelInput, StudioFloatingLabelTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
+import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-confirmed-primitive-catalog.css"
 
 type Size = "44px" | "28px"
@@ -59,6 +60,14 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
       <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{String(value)}</span></div>)}</div>
     </section>
+    <Family title="Studio Text Input · Standalone" provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native input; standard 44px and compact 28px size variants; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant"><span>28px compact · StudioTextInput</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+    </Family>
+    <Family title="Studio Text Area · Standalone" provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native textarea; canonical Studio typography, borders, focus and size variants; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" /></div>
+      <div className="vt-confirmed-variant"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" /></div>
+    </Family>
     <Family title="Simple Text Inputs · Primitive 20" provenance={<Provenance primitive="SubToolboxInput20" tsx="src/components/subtoolbox/SubToolboxPrimitives.tsx" css="src/styles/subtoolbox-system.css" tokens="44px standard / 28px compact; text uses the canonical size token. Default text and border share Color 1; focus text and border use black with a visible Color 2 outline." imports={["src/components/subtoolbox/SubToolboxPrimitives.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>20 · 44px standard · 38px / 1000 typography</span><SubToolboxInput20 className="is-simple-text vt-confirmed-simple-input is-input-44" aria-label="Simple text input 44px" placeholder="TYPE HERE" /></div>
       <div className="vt-confirmed-variant"><span>20 · 28px compact A</span><SubToolboxInput20 controlSize="compact" className="is-simple-text vt-confirmed-simple-input is-input-28" aria-label="Simple text input 28px A" placeholder="TYPE HERE" /></div>
