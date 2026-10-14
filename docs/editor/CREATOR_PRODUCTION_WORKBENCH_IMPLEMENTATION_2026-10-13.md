@@ -114,6 +114,12 @@ The Audio panel previously edited clip-level `volume` and `playbackRate`, while 
 
 Added focused tests for clip overrides, legacy layer-payload fallback, defaults, and clamping. Tests have been authored but not executed in this GitHub-only pass. Fade automation remains separate because the custom Audio primitive's source-offset/frame semantics need an explicit parity audit before extending its volume curve.
 
+## Current implementation batch — aspect crop and trim-to-playhead
+
+- Added a **4:5 portrait crop preset** alongside the existing 16:9, 1:1, and 9:16 presets. Removed the duplicate square preset from the secondary crop row while retaining project-ratio and manual edge controls.
+- Added **Trim Start to Playhead** and **Trim End to Playhead** in Timeline Trim. A pure eligibility helper keeps these actions disabled unless the playhead is safely inside the selected clip. The buttons dispatch the existing trim reducer, which already uses the shared timeline/source-aware trim contract and undo history.
+- Added focused Vitest coverage for trim-to-playhead eligibility. Tests/build, undo/redo, preview/render parity, and responsive browser verification remain pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and clip-level audio rendering with focused tests, undo/redo, preview/render parity, and responsive visual QA.
