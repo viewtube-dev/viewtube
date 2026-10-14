@@ -1126,3 +1126,135 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   line-height: 1.05;
 }
 
+
+
+/* Final canonical size typography for native Studio text fields.
+   Keep typography and text-stroke proportional to the 44px / 28px component contract. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: 38px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  text-transform: uppercase !important;
+  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
+  padding: 0 14px !important;
+}
+[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  font-size: 38px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  border-width: 3px !important;
+  border-radius: 8px !important;
+  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
+  padding-inline: 14px !important;
+}
+[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  font-size: 24px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  border-width: 2px !important;
+  border-radius: 5px !important;
+  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
+  padding-inline: 8px !important;
+}
+
+/* Standard dropdown menus visually join the trigger and reuse its size's typography. */
+.vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 8px; --vt-dropdown-font-size: 38px; }
+.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 5px; --vt-dropdown-font-size: 24px; }
+.vt-studio-dropdown button[data-dropdown-trigger="true"] {
+  box-sizing: border-box;
+  height: var(--vt-dropdown-height);
+  min-height: var(--vt-dropdown-height);
+  border-width: var(--vt-dropdown-stroke) !important;
+  border-radius: var(--vt-dropdown-radius) !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: var(--vt-dropdown-font-size) !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  -webkit-text-stroke: .5px currentColor;
+  padding: 0 8px 0 14px;
+}
+.vt-studio-dropdown[data-open="true"] button[data-dropdown-trigger="true"] {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  box-shadow: none !important;
+}
+.vt-studio-dropdown-menu {
+  top: 100% !important;
+  max-height: min(280px, 45vh);
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-width: var(--vt-dropdown-stroke, 3px) !important;
+  border-top-width: 0 !important;
+  border-bottom-left-radius: var(--vt-dropdown-radius, 8px) !important;
+  border-bottom-right-radius: var(--vt-dropdown-radius, 8px) !important;
+  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #fff) !important;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
+  padding: 3px !important;
+}
+.vt-studio-dropdown-option {
+  box-sizing: border-box;
+  min-height: var(--vt-dropdown-height, 44px) !important;
+  height: auto;
+  border: var(--vt-dropdown-stroke, 3px) solid #000 !important;
+  border-radius: calc(var(--vt-dropdown-radius, 8px) - 2px) !important;
+  margin: 0 0 3px !important;
+  background: transparent !important;
+  color: #000 !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: var(--vt-dropdown-font-size, 38px) !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  -webkit-text-stroke: .5px currentColor;
+  text-transform: uppercase !important;
+  padding: 3px 8px !important;
+}
+.vt-studio-dropdown-option:last-child { margin-bottom: 0 !important; }
+.vt-studio-dropdown-option[data-active="true"],
+.vt-studio-dropdown-option[data-selected="true"] {
+  background: var(--pair-b, #ff7f6b) !important;
+}
+.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
+  font-size: 24px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  padding: 2px 6px !important;
+}
+.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
+  border-width: 2px !important;
+  border-radius: 3px !important;
+}
+.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
+}
+.vt-studio-dropdown-option:focus-visible { outline: 1.5px solid var(--pair-b, #ff7f6b) !important; outline-offset: -4px !important; }
+
+/* The clear/close action in the multi-dropdown follows the same size contract as its rows. */
+.vt-studio-legend-clear {
+  min-height: var(--vt-legend-height, 44px) !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: var(--vt-studio-44-font-size, 38px) !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  text-transform: uppercase !important;
+  margin-top: 3px !important;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
+  font-size: var(--vt-studio-28-font-size, 24px) !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+}
+
+
+/* Preserve readable paragraph rhythm while textareas share the size-specific font contract. */
+textarea[data-vt-studio-control="true"] { line-height: 1.05 !important; }
+textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05 !important; }

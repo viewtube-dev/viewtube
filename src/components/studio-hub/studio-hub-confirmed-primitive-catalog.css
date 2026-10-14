@@ -357,3 +357,98 @@
     padding: 4px;
   }
 }
+
+
+/* Confirmed Library: all four canonical skins remain visible on one row for
+   radio/checkboxes, switches, and word toggles. Only the specimen cards shrink;
+   the exported controls keep their native 44px / 28px geometry. */
+.vt-confirmed-control-variants,
+.vt-confirmed-control-variants.is-word-toggle-44,
+.vt-confirmed-control-variants.is-word-toggle-28 {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  flex-wrap: initial !important;
+  align-items: start !important;
+  justify-content: stretch !important;
+  width: 100% !important;
+  gap: 6px !important;
+}
+.vt-confirmed-control-variants > div,
+.vt-confirmed-control-variants.is-word-toggle-44 > div,
+.vt-confirmed-control-variants.is-word-toggle-28 > div {
+  display: grid !important;
+  flex: initial !important;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  justify-items: center !important;
+  align-content: start !important;
+  gap: 5px !important;
+  padding: 3px 1px !important;
+  box-sizing: border-box !important;
+}
+.vt-confirmed-control-variants > div > small,
+.vt-confirmed-control-variants.is-word-toggle-44 > div > small,
+.vt-confirmed-control-variants.is-word-toggle-28 > div > small {
+  display: block;
+  width: 100% !important;
+  min-height: 2.2em !important;
+  font-size: clamp(6px, 1.6vw, 7px) !important;
+  line-height: 1.1 !important;
+  overflow-wrap: anywhere !important;
+  text-align: center !important;
+}
+.vt-confirmed-control-variants :is(button, [role="switch"], [role="radio"], [role="checkbox"]) {
+  justify-self: center;
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle,
+.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle {
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle button,
+.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle button {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding-inline: 4px !important;
+}
+
+
+/* Open Legend Multi rows and its close/clear action use the same font sizing as
+   the closed trigger: 38px at 44px, 24px at 28px, weight 1000 and matching stroke. */
+.vt-confirmed-catalog .vt-studio-legend-option,
+.vt-confirmed-catalog .vt-studio-legend-clear {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: 38px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  text-transform: uppercase !important;
+  -webkit-text-stroke: .5px currentColor !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-option {
+  min-height: 44px !important;
+  height: auto !important;
+  padding: 0 8px !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-clear {
+  min-height: 44px !important;
+  padding: 0 8px !important;
+  margin-top: 3px !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option,
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
+  font-size: 24px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+  min-height: 28px !important;
+  padding: 0 6px !important;
+  border-width: 2px !important;
+  -webkit-text-stroke: .5px currentColor !important;
+}
