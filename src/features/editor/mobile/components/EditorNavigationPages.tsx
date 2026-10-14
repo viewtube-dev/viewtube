@@ -46,6 +46,9 @@ const StepperField=({label,value,min=-5000,max=5000,step=.01,defaultValue=0,onCh
 
 function Inspector({store}:{store:EditorStore}){
   const[linkedScale,setLinkedScale]=React.useState(true);
+  const project=store.state.project as Record<string,unknown>;
+  const projectAspectRatio=project.aspect==='landscape'||project.aspectRatio==='16:9'?16/9:9/16;
+  const[cropAspectRatio,setCropAspectRatio]=React.useState<number>(projectAspectRatio);
   const clip=store.selectedClips[0];
   const track=store.state.selection.trackId?store.trackById(store.state.selection.trackId):undefined;
   const transition=store.state.selection.transitionId?(store.state.project.transitions??[]).find((t,i)=>String((t as{id?:unknown}).id??`${t.leftClipId}-${t.rightClipId}-${i}`)===store.state.selection.transitionId):undefined;
@@ -58,14 +61,14 @@ function Inspector({store}:{store:EditorStore}){
   const mediaKind=mediaPayload.mediaKind;
   const sourceWidth=Number(mediaPayload.width??0),sourceHeight=Number(mediaPayload.height??0);
   const hasMediaDimensions=(mediaKind==='image'||mediaKind==='video')&&sourceWidth>0&&sourceHeight>0;
-  const applyAspect=(ratio:number)=>{const crop=cropToAspectRatio(sourceWidth,sourceHeight,ratio);if(crop)set(crop);};
+  const applyAspect=(ratio:number)=>{setCropAspectRatio(ratio);const crop=cropToAspectRatio(sourceWidth,sourceHeight,ratio);if(crop)set(crop);};
   const patchFx=(patch:Record<string,unknown>)=>{if(mediaLayer)store.dispatch({type:'updateLayerPayload',id:mediaLayer.id,patch});};
-  const project=store.state.project as Record<string,unknown>;
-  const projectAspectRatio=project.aspect==='landscape'||project.aspectRatio==='16:9'?16/9:9/16;
   const projectRatioCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,projectAspectRatio):null;
-  const projectCropIsHorizontal=!!projectRatioCrop&&(projectRatioCrop.cropLeft+projectRatioCrop.cropRight>0);
-  const projectCropIsVertical=!!projectRatioCrop&&(projectRatioCrop.cropTop+projectRatioCrop.cropBottom>0);
-  const applyProjectFocal=(x:number,y:number)=>{const crop=cropToAspectRatioAtFocalPoint(sourceWidth,sourceHeight,projectAspectRatio,x,y);if(crop)set(crop);};
+  const activeRatioCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,cropAspectRatio):null;
+  const activeCropIsHorizontal=!!activeRatioCrop&&(activeRatioCrop.cropLeft+activeRatioCrop.cropRight>0);
+  const activeCropIsVertical=!!activeRatioCrop&&(activeRatioCrop.cropTop+activeRatioCrop.cropBottom>0);
+  const applyActiveFocal=(x:number,y:number)=>{const crop=cropToAspectRatioAtFocalPoint(sourceWidth,sourceHeight,cropAspectRatio,x,y);if(crop)set(crop);};
+  const applyProjectRatio=()=>{setCropAspectRatio(projectAspectRatio);if(projectRatioCrop)set(projectRatioCrop);};
   return <>
     <Section name="Clip"><b>{String(clip.id)}</b><div>{clip.start.toFixed(2)}s → {clip.end.toFixed(2)}s · {store.trackById(clip.trackId)?.kind??'clip'}</div></Section>
     <Section name="Transform">
@@ -95,20 +98,20 @@ function Inspector({store}:{store:EditorStore}){
       <Grid cols={3}>
         <button style={button} aria-label="Apply centered 10 percent crop" onClick={()=>set({cropLeft:.1,cropRight:.1,cropTop:.1,cropBottom:.1})}>Center 10%</button>
         <button style={button} aria-label="Apply centered 20 percent crop" onClick={()=>set({cropLeft:.2,cropRight:.2,cropTop:.2,cropBottom:.2})}>Center 20%</button>
-        <button style={{...button,opacity:projectRatioCrop?1:.4}} aria-label="Crop to project aspect ratio" disabled={!projectRatioCrop} onClick={()=>projectRatioCrop&&set(projectRatioCrop)}>Project Ratio</button>
+        <button style={{...button,opacity:projectRatioCrop?1:.4}} aria-label="Crop to project aspect ratio" disabled={!projectRatioCrop} onClick={applyProjectRatio}>Project Ratio</button>
         <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
       </Grid>
-      {(projectCropIsHorizontal||projectCropIsVertical)&&<Section name="Project-Ratio Focal Point">
-        <div style={{fontSize:8,fontWeight:800,opacity:.65,marginBottom:5}}>Shift the crop window toward the subject. Source pixels remain untouched.</div>
-        {projectCropIsHorizontal&&<Grid cols={3}>
-          <button style={button} aria-label="Focus crop left" onClick={()=>applyProjectFocal(.05,.5)}>← Left</button>
-          <button style={button} aria-label="Center crop horizontally" onClick={()=>applyProjectFocal(.5,.5)}>Center</button>
-          <button style={button} aria-label="Focus crop right" onClick={()=>applyProjectFocal(.95,.5)}>Right →</button>
+      {(activeCropIsHorizontal||activeCropIsVertical)&&<Section name="Crop Focus">
+        <div style={{fontSize:8,fontWeight:800,opacity:.65,marginBottom:5}}>Adjust the active aspect preset ({cropAspectRatio.toFixed(3)}). The crop stays inside source bounds.</div>
+        {activeCropIsHorizontal&&<Grid cols={3}>
+          <button style={button} aria-label="Focus crop left" onClick={()=>applyActiveFocal(.05,.5)}>← Left</button>
+          <button style={button} aria-label="Center crop horizontally" onClick={()=>applyActiveFocal(.5,.5)}>Center</button>
+          <button style={button} aria-label="Focus crop right" onClick={()=>applyActiveFocal(.95,.5)}>Right →</button>
         </Grid>}
-        {projectCropIsVertical&&<Grid cols={3}>
-          <button style={button} aria-label="Focus crop top" onClick={()=>applyProjectFocal(.5,.05)}>↑ Top</button>
-          <button style={button} aria-label="Center crop vertically" onClick={()=>applyProjectFocal(.5,.5)}>Center</button>
-          <button style={button} aria-label="Focus crop bottom" onClick={()=>applyProjectFocal(.5,.95)}>Bottom ↓</button>
+        {activeCropIsVertical&&<Grid cols={3}>
+          <button style={button} aria-label="Focus crop top" onClick={()=>applyActiveFocal(.5,.05)}>↑ Top</button>
+          <button style={button} aria-label="Center crop vertically" onClick={()=>applyActiveFocal(.5,.5)}>Center</button>
+          <button style={button} aria-label="Focus crop bottom" onClick={()=>applyActiveFocal(.5,.95)}>Bottom ↓</button>
         </Grid>}
       </Section>}
       <Grid>
