@@ -2,6 +2,7 @@ import React from 'react';
 import {Check,Download,FileVideo2,LoaderCircle} from 'lucide-react';
 import type {EditorStore} from '../state/editorState';
 import {createRenderJobClient,type RenderJob,type RenderOutputFormat} from '../../render/renderJobContract';
+import {retryableRenderFormats} from '../../render/renderJobRetry';
 import {createVersionedAsset,selectContentBuildAsset} from '../../../../services/assetEngine';
 import {getContentBuild} from '../../../../services/asset-engine/ContentBuildRepository';
 
@@ -53,9 +54,9 @@ export const ExportRenderPanel:React.FC<{store:EditorStore}>=({store})=>{
       :[...current,format]);
   };
 
-  const renderAll=async()=>{
+  const renderFormats=async(formats:RenderOutputFormat[])=>{
+    if(!formats.length)return;
     setError('');
-    setJobs({});
     abort.current?.abort();
     abort.current=new AbortController();
     const fps=30;
@@ -69,7 +70,7 @@ export const ExportRenderPanel:React.FC<{store:EditorStore}>=({store})=>{
     const landscape=String(meta.aspectRatio??meta.aspect??'9:16')==='16:9'||meta.aspect==='landscape';
     const width=landscape?1920:1080,height=landscape?1080:1920;
     try{
-      for(const format of selected){
+      for(const format of formats){
         const created=await client.create({
           schemaVersion:'RemotionRenderJobV1',kind:'remotionRender',sourceEditor:'VT_E1',
           renderMode:'remotion-mp4',outputFormat:format,compositionId:'VTE1Renderer',
@@ -119,6 +120,8 @@ export const ExportRenderPanel:React.FC<{store:EditorStore}>=({store})=>{
     }
   };
 
+  const renderAll=()=>renderFormats(selected);
+  const retryable=retryableRenderFormats(selected,jobs);
   const busy=Object.values(jobs).some(job=>job?.status==='queued'||job?.status==='rendering');
   const finished=selected.every(format=>jobs[format]?.status==='succeeded');
 
@@ -147,6 +150,9 @@ export const ExportRenderPanel:React.FC<{store:EditorStore}>=({store})=>{
         {busy?<LoaderCircle size={13}/>:<FileVideo2 size={13}/>}
         {busy?'Rendering':`Render ${selected.map(value=>value.toUpperCase()).join(' + ')}`}
       </button>
+      {retryable.length&&!busy?<button style={{...btn(false),width:'100%',marginTop:5}} onClick={()=>renderFormats(retryable)}>
+        Retry failed: {retryable.map(format=>format.toUpperCase()).join(' + ')}
+      </button>:null}
     </section>
 
     {Object.keys(jobs).length?<section style={card}>
