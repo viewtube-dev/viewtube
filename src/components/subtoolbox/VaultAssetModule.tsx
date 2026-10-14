@@ -170,6 +170,7 @@ export const VaultAssetTagEditor: React.FC<{
                 key={normalized}
                 className={classes("vt-vault-tag-badge", selected === normalized && "is-selected")}
                 data-tag={normalized}
+                aria-pressed={selected === normalized}
                 style={{
                   ["--vt-vault-tag-stroke" as string]: color,
                   ["--vt-vault-tag-fill" as string]: `color-mix(in srgb, ${color} 35%, white)`,
@@ -185,6 +186,7 @@ export const VaultAssetTagEditor: React.FC<{
               type="button"
               className="vt-vault-tag-badge vt-vault-tag-overflow"
               aria-label={expandedTags ? "Collapse asset tags" : `Show ${tags.length - 3} more asset tags`}
+              aria-expanded={expandedTags}
               onClick={() => setExpandedTags((current) => !current)}
             >
               {expandedTags ? "LESS" : `+${tags.length - 3}`}
