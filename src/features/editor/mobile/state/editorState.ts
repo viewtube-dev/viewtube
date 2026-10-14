@@ -3,6 +3,7 @@ import {useCallback,useMemo,useReducer} from 'react';
 import type {VtE1Clip,VtE1Project,VtE1Transition} from '../../../../shared/vtE1TimelineContract';
 import {rippleDeleteTimelineClips,slideTimelineClip,slipTimelineClip,splitTimelineClip} from '../../../../shared/vtE1TimelineOperations.js';
 import {readVtE1ClipVisualTransform,VT_E1_VISUAL_ANIMATED_PROPS} from '../../../../shared/vtE1VisualFrame.js';
+import {trimClipSourceBounds} from './trimClipSourceBounds';
 
 export type TrackKind='video'|'audio'|'overlay'|'caption';
 export interface Track{id:string;name:string;kind:TrackKind;muted?:boolean;locked?:boolean;hidden?:boolean;color?:string}
@@ -441,10 +442,13 @@ export function editorReducer(state:EditorState,action:EditorAction):EditorState
     case'trimClip':{
       const clip=state.project.clips.find(c=>c.id===action.id);
       if(!clip)return state;
-      const edge=clampTrimEdge(state.project.clips,clip,action.side,action.sec,state.project.durationSec);
+      const requestedEdge=clampTrimEdge(state.project.clips,clip,action.side,action.sec,state.project.durationSec);
+      const hasSourceBounds=[clip.sourceInSec,clip.sourceOutSec,clip.sourceDurationSec].some(value=>Number.isFinite(Number(value)));
+      const edge=hasSourceBounds?Math.max(clip.start,Math.min(clip.end,requestedEdge)):requestedEdge;
+      const sourcePatch=hasSourceBounds?trimClipSourceBounds(clip,action.side,edge):{};
       const clips=state.project.clips.map(c=>c.id!==action.id
         ?c
-        :action.side==='left'?{...c,start:edge}:{...c,end:edge}
+        :action.side==='left'?{...c,start:edge,...sourcePatch}:{...c,end:edge,...sourcePatch}
       );
       return withHistory(state,{...state,project:{...state.project,clips}});
     }
