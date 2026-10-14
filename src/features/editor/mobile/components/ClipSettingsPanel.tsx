@@ -9,6 +9,7 @@ import {ClipEffects} from './EffectsLibrariesPanel';
 import {canSlipSourceWindow,SOURCE_SLIP_STEPS} from '../state/sourceSlipControls';
 import {captureVideoFrameAsFile,sourceFrameTime} from '../state/videoFrameCapture';
 import {exportCroppedImageAsFile} from '../state/imageCropExport';
+import {AudioWaveformInspector} from './AudioWaveformInspector';
 
 const BLACK='#111111';
 const MAGENTA='#ff00ff';
@@ -495,6 +496,7 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
       <HoldStepper label="VOLUME" value={audioVolume} min={0} max={1} step={.01} precision={2} onChange={volume=>patch({volume})}/>
       <HoldStepper label="PLAYBACK RATE" value={audioRate} min={.1} max={4} step={.1} precision={1} suffix="×" onChange={playbackRate=>patch({playbackRate})}/>
       <button style={{...miniButton,width:'100%',marginTop:4,background:Boolean(payload.muted)?'#fff':BLUE}} onClick={()=>patch({muted:!Boolean(payload.muted)})}>{Boolean(payload.muted)?'UNMUTE':'MUTE'}</button>
+      {typeof payload.mediaUrl==='string'&&payload.mediaUrl?<AudioWaveformInspector src={payload.mediaUrl}/>:null}
     </div>:null}
 
   </div>;
