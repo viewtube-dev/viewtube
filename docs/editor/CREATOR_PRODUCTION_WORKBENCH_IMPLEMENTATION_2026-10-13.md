@@ -168,6 +168,10 @@ Added Export Cropped Image to the selected image clip inspector. The action conv
 
 Script Architect now offers Export MD alongside the existing TXT export. Markdown output includes the script topic as a heading, available angle/audience/tone metadata, and the assembled script body without rewriting the script prose. The formatter and filename helper have focused Vitest coverage. Browser download and test execution still need verification.
 
+## Audio waveform inspector slice
+
+The selected audio clip inspector now includes an on-demand waveform preview. It decodes the source only when requested, reduces channel samples to a bounded set of peak bars, closes the temporary AudioContext, and reports source/decoder errors. Large files are rejected before decode to limit in-panel memory use. This is a preview aid only; it does not edit audio or create a derivative. The pure peak reducer has focused tests; browser decode and responsive rendering still need verification.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
