@@ -10,6 +10,12 @@ type Size = "44px" | "28px"
 
 const sizeClass = (size: Size) => size === "44px" ? "is-large" : "is-compact"
 
+const formatDefault = (value: unknown): string => {
+  if (value === null || value === undefined) return "—"
+  if (typeof value !== "object") return String(value)
+  return Object.entries(value as Record<string, unknown>).map(([key, nested]) => `${key}: ${formatDefault(nested)}`).join(" · ")
+}
+
 const CANONICAL_SKINS = [{ skin: "solid" as const, label: "1 · SOLID" }, { skin: "color-swap" as const, label: "3 · COLOR SWAP" }, { skin: "black-indicator" as const, label: "4 · BLACK INDICATOR" }, { skin: "white-indicator" as const, label: "5 · WHITE INDICATOR" }]
 const WORD_TOGGLE_SKINS = CANONICAL_SKINS.filter(item => item.skin !== "white-indicator")
 const CanonicalControlFamilies: React.FC = () => {
@@ -65,7 +71,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-size-card"><strong>44PX STANDARD</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontSize}px / {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontWeight}</span><span>Shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.buttonShadowX}×{STUDIO_COMPONENT_SIZE_DEFAULTS.standard.buttonShadowY}px · Hover {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.hoverTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.hoverOffsetPx}px · Click {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.clickTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.clickOffsetPx}px · Icon {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconSize}px / {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconStroke}px</span></div>
         <div className="vt-confirmed-size-card"><strong>28PX COMPACT</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight}</span><span>Shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowX}×{STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowY}px · Hover {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.hoverTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.hoverOffsetPx}px · Click {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.clickTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.clickOffsetPx}px · Icon {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconStroke}px</span></div>
       </div>
-      <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{String(value)}</span></div>)}</div>
+      <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefault(value)}</span></div>)}</div>
     </section>
     <Family title="Studio Text Input · Standalone" nonDefaultSettings={["sizeVariant=\"compact\" selects 28px; default is standard 44px.", "type=\"search\" or type=\"number\" uses the shared Studio field styling.", "disabled=true prevents editing; readOnly=true permits focus and selection without edits.", "placeholder, inputMode, autoComplete, and maxLength can be overridden with native input props."]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native input; standard 44px and compact 28px size variants; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
@@ -84,7 +90,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>21 · 92px paragraph textarea</span><SubToolboxTextArea21 className="vt-confirmed-simple-textarea" aria-label="Simple paragraph textarea" placeholder="WRITE A PARAGRAPH…" rows={4} /></div>
     </Family>
     <CanonicalControlFamilies />
-    <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Default and compact variants share identical typography and selected-state rules.</p>
+    <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
     <Family title="Button" nonDefaultSettings={["heightVariant=\"28\" selects compact; default is 44px.", "tone=\"neutral\" | \"danger\" | \"warning\" | \"success\" (default: accent).", "selected=true applies the canonical selected state; disabled=true blocks interaction.", "loading=true sets aria-busy and disables the button until loading clears.", "sizeVariant=\"compact\" is the compact alias when heightVariant is not supplied."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/index.ts"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton heightVariant="44">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default A</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · default B</span><StudioButton heightVariant="28">button</StudioButton></div>
@@ -115,7 +121,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         primitive="StudioLegendMultiDropdown · 140"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="Custom multiselect menu; floating legend and CLEAR ALL action."
+        tokens="Fixed floating label; trigger value typography independent of label; 28px/18px chevrons; 44px/28px menu rows; no menu-option shadows or press motion."
         imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]}
       />}
     >
