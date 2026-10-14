@@ -9,7 +9,7 @@ import {
 } from "../subtoolbox/SubToolboxPrimitives"
 import { StudioSplitLeftButton, StudioTextInput, StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
-import "./studio-hub-complete-primitive-catalog.css"
+import "./studio-hub-primitive-catalogs.css"
 
 export type StudioHubComponentLevel = "l0" | "l1" | "l2"
 type Level = StudioHubComponentLevel
