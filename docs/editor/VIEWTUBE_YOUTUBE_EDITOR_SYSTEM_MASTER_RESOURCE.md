@@ -540,6 +540,7 @@ For any branch audit, record:
 | Official Remotion skill adoption | partial | agent tooling | source-reviewed/pinned or environment-provided | complete supply-chain audit before vendoring |
 | External skills-lock audit | planned | agent tooling | all editor-relevant external instructions reviewed | inspect hashes/sources and classify retain/replace |
 | Editor donor-branch audit | planned | GitHub | unique-commit matrix for each donor | run branch-level audit |
+| Creator production workbench — crop controls first slice | started | shared VT_E1 editor / mobile inspector | crop state, preview/render parity, undo/redo, desktop/mobile parity | add quick reversible crop presets to the existing clip inspector; continue image, video, script, audio/captions surfaces without a parallel project model |
 
 ## 14. Phased implementation plan
 
@@ -689,4 +690,5 @@ All proposals preserve the existing project bridge, one editor project model, Co
 
 | Date / time | Agent / conversation | Branch / PR | Status | Work completed / begun / planned | Changed or created paths | Verification / evidence | New references / sources | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-13 | Creator production tools — first implementation slice | PR #102 / feat/creator-workbench-image-video-controls | started | Audited the existing VT_E1 crop path and added one-click centered 10%/20% crop presets plus crop-only reset in the existing clip inspector. Edits use the shared updateClipTransform action, preserve editor state/history, and do not modify source assets. | src/features/editor/mobile/components/EditorNavigationPages.tsx; docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md; docs/editor/CREATOR_PRODUCTION_WORKBENCH_IMPLEMENTATION_2026-10-13.md | GitHub diff confirms three changed files; tests/build, undo/redo, and desktop/mobile visual verification remain pending | existing shared crop transform in src/shared/vtE1VisualFrame.js; EditorStore crop contract | run focused editor tests/build, inspect desktop/mobile crop UI and undo/redo, then continue image/video workbench and Script Architect integration |
 | 2026-09-27 | ChatGPT page-feature opportunity integration | docs/page-feature-opportunity-registry-2026-09-27 | planned/cataloged | Added ten Editor feature opportunities and tied them to current editor/Brain/asset/render ownership; no runtime implementation claimed. | editor master + Product Architecture | documentation/code-owner reconciliation only | canonical 80-item page opportunity registry | promote selected \`IDEA-EDIT-*\` items through scoped plans/tasks before implementation |

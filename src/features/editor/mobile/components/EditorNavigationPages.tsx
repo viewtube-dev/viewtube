@@ -54,7 +54,20 @@ function Inspector({store}:{store:EditorStore}){
   return <>
     <Section name="Clip"><b>{String(clip.id)}</b><div>{clip.start.toFixed(2)}s → {clip.end.toFixed(2)}s · {store.trackById(clip.trackId)?.kind??'clip'}</div></Section>
     <Section name="Transform"><Grid><StepperField label="X" value={v.x} step={1} defaultValue={0} onChange={x=>set({x})}/><StepperField label="Y" value={v.y} step={1} defaultValue={0} onChange={y=>set({y})}/><StepperField label="SCALE X" value={v.scaleX} min={.05} max={10} step={.01} defaultValue={1} rightSlot={<LinkToggle linked={linkedScale} onChange={setLinkedScale} label="scale"/>} onChange={scaleX=>set(linkedScale?{scaleX,scaleY:scaleX}:{scaleX})}/><StepperField label="SCALE Y" value={v.scaleY} min={.05} max={10} step={.01} defaultValue={1} onChange={scaleY=>set(linkedScale?{scaleY,scaleX:scaleY}:{scaleY})}/><StepperField label="ROTATION" value={v.rotation} min={-3600} max={3600} step={1} defaultValue={0} onChange={rotation=>set({rotation})}/><StepperField label="OPACITY" value={v.opacity} min={0} max={1} step={.01} defaultValue={1} onChange={opacity=>set({opacity})}/></Grid><button style={{...button,width:'100%',marginTop:5}} onClick={()=>store.dispatch({type:'resetClipTransform',id:clip.id})}>Reset Transform</button></Section>
-    <Section name="Crop"><Grid><StepperField label="LEFT" value={v.cropLeft} min={0} max={.95} step={.01} defaultValue={0} onChange={cropLeft=>set({cropLeft})}/><StepperField label="RIGHT" value={v.cropRight} min={0} max={.95} step={.01} defaultValue={0} onChange={cropRight=>set({cropRight})}/><StepperField label="TOP" value={v.cropTop} min={0} max={.95} step={.01} defaultValue={0} onChange={cropTop=>set({cropTop})}/><StepperField label="BOTTOM" value={v.cropBottom} min={0} max={.95} step={.01} defaultValue={0} onChange={cropBottom=>set({cropBottom})}/></Grid></Section>
+    <Section name="Crop">
+      <Grid cols={3}>
+        <button style={button} aria-label="Apply centered 10 percent crop" onClick={()=>set({cropLeft:.1,cropRight:.1,cropTop:.1,cropBottom:.1})}>Center 10%</button>
+        <button style={button} aria-label="Apply centered 20 percent crop" onClick={()=>set({cropLeft:.2,cropRight:.2,cropTop:.2,cropBottom:.2})}>Center 20%</button>
+        <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
+      </Grid>
+      <Grid>
+        <StepperField label="LEFT" value={v.cropLeft} min={0} max={.95} step={.01} defaultValue={0} onChange={cropLeft=>set({cropLeft})}/>
+        <StepperField label="RIGHT" value={v.cropRight} min={0} max={.95} step={.01} defaultValue={0} onChange={cropRight=>set({cropRight})}/>
+        <StepperField label="TOP" value={v.cropTop} min={0} max={.95} step={.01} defaultValue={0} onChange={cropTop=>set({cropTop})}/>
+        <StepperField label="BOTTOM" value={v.cropBottom} min={0} max={.95} step={.01} defaultValue={0} onChange={cropBottom=>set({cropBottom})}/>
+      </Grid>
+      <div style={{fontSize:8,fontWeight:800,opacity:.65,marginTop:5}}>Non-destructive crop · use edge controls for fine framing. Quick crops preserve the source asset.</div>
+    </Section>
   </>;
 }
 
