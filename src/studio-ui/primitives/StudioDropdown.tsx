@@ -18,6 +18,7 @@ export interface StudioDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
+  sizeVariant?: "standard" | "compact"
 }
 
 export const StudioDropdown: React.FC<StudioDropdownProps> = ({
@@ -31,6 +32,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   className = "",
   id,
   ariaLabel,
+  sizeVariant = "standard",
 }) => {
   const [open, setOpen] = React.useState(false)
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
@@ -93,12 +95,12 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   }
 
   return (
-    <div ref={rootRef} className={`vt-studio-dropdown ${className}`} data-vt-studio-dropdown>
+    <div ref={rootRef} className={`vt-studio-dropdown ${className}`} data-vt-studio-dropdown data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
       <button
         id={id}
         type="button"
         data-vt-studio-control="true"
-        data-size="standard"
+        data-size={sizeVariant}
         data-dropdown-trigger="true"
         aria-label={ariaLabel}
         aria-haspopup="listbox"
@@ -112,7 +114,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         <ChevronDown size={18} strokeWidth={3} aria-hidden="true" />
       </button>
       {open && !disabled ? (
-        <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" aria-label={ariaLabel}>
+        <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
           {options.map((option, index) => (
             <button
               key={option.value}
