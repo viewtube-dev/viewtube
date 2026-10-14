@@ -10,7 +10,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   fontWeight: 1000,
   strokeColor: "#000000",
   colorPairSystem: "primary = --pair-a; secondary = --pair-b",
-  backgroundFill: "buttons use primary; text fields use 50% opacity primary",
+  backgroundFill: "buttons use primary; text fields use primary at 50% opacity",
   textColor: "#000000",
   textTransform: "uppercase",
   letterSpacing: "-0.035em",
@@ -20,15 +20,17 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textFieldDefaults: {
     defaultMode: {
       textColor: "primary",
-      textStrokeColor: "primary",
+      textStrokeColor: "primary at 50% opacity",
       fill: "primary at 50% opacity",
-      inlineStrokeColor: "primary",
+      borderStrokeColor: "primary at 50% opacity",
+      inlineStrokeColor: "primary at 50% opacity",
       inlineStrokeWidth: "same as border width",
     },
     focusMode: {
       fill: "primary at 15% opacity",
       textColor: "#000000",
       textStrokeColor: "#000000",
+      borderStrokeColor: "#000000",
       outlineStrokeColor: "secondary",
       outlineStrokeWidth: "half the current border width",
       outlineShadowColor: "secondary",
