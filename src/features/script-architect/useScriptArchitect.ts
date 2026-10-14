@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { generateScript } from "../../services/gemini"
+import { toScriptExportFilename } from "./scriptExport"
 import { createSuperToolActionPacket } from "../../services/superToolActionPackets"
 import { resolveWorkspaceContentBuildToolContext } from "../../services/asset-engine/ToolContext"
 import {
@@ -313,6 +314,27 @@ export const useScriptArchitect = (): ScriptArchitectController => {
   }
  }, [result])
 
+ const downloadScript = useCallback(() => {
+  if (!result?.fullScript) return
+  const filename = toScriptExportFilename(project.topic || draftName)
+  try {
+   const blob = new Blob([result.fullScript], { type: "text/plain;charset=utf-8" })
+   const url = window.URL.createObjectURL(blob)
+   const anchor = window.document.createElement("a")
+   anchor.href = url
+   anchor.download = filename
+   anchor.style.display = "none"
+   window.document.body.appendChild(anchor)
+   anchor.click()
+   anchor.remove()
+   window.setTimeout(() => window.URL.revokeObjectURL(url), 1000)
+   setStatus(`Downloaded "${filename}".`)
+  } catch (error) {
+   console.error("[ScriptArchitect] text export failed", error)
+   setError("Could not export the script. Try copying the script instead.")
+  }
+ }, [result, project.topic, draftName])
+
  const saveDraft = useCallback(() => {
   const next = saveScriptDraft(draftName, project, result)
   setDrafts(next)
@@ -474,6 +496,7 @@ export const useScriptArchitect = (): ScriptArchitectController => {
   matchTargetToScript,
   rebalanceWeightsToScript,
   copyScript,
+  downloadScript,
   savePacket,
   saveDraft,
   loadDraft,
