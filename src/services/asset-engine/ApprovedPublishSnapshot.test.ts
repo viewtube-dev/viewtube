@@ -114,4 +114,10 @@ describe("ApprovedPublishSnapshot", () => {
   }
  })
 
+ it("refuses to overwrite malformed snapshot storage", () => {
+  localStorage.setItem("viewtube_approved_publish_snapshots_v1", "{not-json")
+  expect(() => persistApprovedPublishSnapshot(projection())).toThrow(/stored approved publish snapshots are unreadable/i)
+  expect(localStorage.getItem("viewtube_approved_publish_snapshots_v1")).toBe("{not-json")
+ })
+
 })
