@@ -114,9 +114,13 @@ The Audio panel previously edited clip-level `volume` and `playbackRate`, while 
 
 Added focused tests for clip overrides, legacy layer-payload fallback, defaults, and clamping. Tests have been authored but not executed in this GitHub-only pass. Fade automation remains separate because the custom Audio primitive's source-offset/frame semantics need an explicit parity audit before extending its volume curve.
 
+## Seventh implementation slice — frame-driven audio fades
+
+The Audio panel now exposes **Fade In** and **Fade Out** duration controls (0–10 seconds). The shared audio render contract resolves clip-level fade edits over legacy layer-payload values. A deterministic `audioVolumeAtFrame` helper computes per-frame gain, including overlapping fades and mute behavior; Remotion Composition uses that helper as the Audio volume curve. Unit cases cover fade endpoints, mid-fade gain, overlapping fades, and mute. The tests are authored but have not been executed here, and final audio playback/render verification remains pending.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and clip-level audio rendering with focused tests, undo/redo, preview/render parity, and responsive visual QA.
+1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
