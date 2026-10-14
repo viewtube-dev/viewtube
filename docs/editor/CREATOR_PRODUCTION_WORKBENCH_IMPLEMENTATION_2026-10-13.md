@@ -148,6 +148,12 @@ Audited both open proposals against `master/consolidated-feature-integration` be
 
 Both source branches had diverged substantially from the current canonical integration branch. The existing canonical features are the source of truth; this PR adds the missing selected-media inspector integration, standardizes precision/bounds behavior, and records the reconciliation rather than merging stale branch histories.
 
+## Fourth implementation slice — aspect-ratio crop presets
+
+The selected-clip Crop inspector now includes centered 9:16, 1:1, and 16:9 presets. They read the source width and height from the selected clip's existing layer payload and calculate normalized crop edges using the shared cropToAspectRatio helper. This updates the existing non-destructive clip transform; it does not export a new media file.
+
+The helper's Vitest coverage includes landscape-to-portrait, portrait-to-landscape, matching ratios, and invalid or unsafe input. Tests have been authored but have not been executed in this GitHub-only pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
