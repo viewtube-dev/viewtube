@@ -35,7 +35,7 @@ export async function captureVideoFrameAsFile(
       resolve(file);
     };
     const captureFrame = () => {
-      if (settled || frameStarted || Math.abs(video.currentTime - targetTime) > 0.02) return;
+      if (settled || frameStarted || video.readyState < 2 || Math.abs(video.currentTime - targetTime) > 0.02) return;
       frameStarted = true;
       try {
         const context = canvas.getContext('2d');
