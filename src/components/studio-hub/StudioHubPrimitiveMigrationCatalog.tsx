@@ -103,6 +103,8 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
+import { StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import "../../styles/studio-control-system.css"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import "./studio-hub-primitive-migration-catalog.css"
 
@@ -424,10 +426,10 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
   }
   if (name === "Text Input") {
-    return <SubToolboxInput level={level} type="text" defaultValue="TEXT INPUT" />
+    return <StudioInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue="TEXT INPUT" aria-label="Text input primitive" />
   }
   if (name === "Textarea") {
-    return <SubToolboxTextArea level={level} defaultValue="DESCRIPTION" />
+    return <StudioTextArea defaultValue="DESCRIPTION" aria-label="Textarea primitive" />
   }
   if (name === "Stepper") {
     return <SubToolboxStepper level={level} value={stepperValue} decreaseIcon={<Minus />} increaseIcon={<Plus />} onDecrease={() => setStepperValue((value) => value - 1)} onIncrease={() => setStepperValue((value) => value + 1)} />
@@ -489,7 +491,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxSplitField level={level} variant="search" icon={<Search />} actionIcon={<X />} actionLabel="Clear search" onAction={() => setSearchQuery("")} inputProps={{ "aria-label": "Search", placeholder: "SEARCH", value: searchQuery, onChange: (event) => setSearchQuery(event.target.value) }} />
   }
   if (name === "Number Field") {
-    return <SubToolboxInput level={level} type="number" defaultValue="25" />
+    return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
   if (name === "Input Action") {
     return <SubToolboxSplitField level={level} variant="action" actionIcon={<Plus />} actionLabel="Add item" onAction={() => setActionDraft("")} inputProps={{ "aria-label": "Add item", placeholder: "ADD ITEM", value: actionDraft, onChange: (event) => setActionDraft(event.target.value) }} />
