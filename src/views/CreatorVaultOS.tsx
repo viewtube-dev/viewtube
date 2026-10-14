@@ -113,7 +113,7 @@ import {
  attachVaultAssetIdsToProject,
  buildVaultSelectionProjectDraft,
 } from "../services/vaultProjectHandoff"
-import { getVaultAssetUsage } from "../services/vaultUsage"
+import { getVaultAssetUsage, getVaultAssetUsageIndex } from "../services/vaultUsage"
 import {
  createVaultSelectionManifest,
  serializeVaultSelectionManifest,
@@ -391,9 +391,10 @@ const CreatorVaultOS: React.FC = () => {
    }
   }
   similarPairs.sort((a, b) => a.distance - b.distance || a.left.name.localeCompare(b.left.name))
+  const usageIndex = getVaultAssetUsageIndex()
   const usageReview = allAssets
-   .map((asset) => ({ asset, usage: getVaultAssetUsage(asset.id) }))
-   .filter((entry) => entry.usage.length === 0 && !entry.asset.metadata?.archivedAt && !entry.asset.metadata?.trashedAt)
+   .filter((asset) => !(usageIndex.get(asset.id) || []).length && !asset.metadata?.archivedAt && !asset.metadata?.trashedAt)
+   .map((asset) => ({ asset }))
    .sort((a, b) => b.asset.updatedAt - a.asset.updatedAt)
   return { exactDuplicateGroups, similarPairs, usageReview }
  }, [allAssets, refreshTick])
