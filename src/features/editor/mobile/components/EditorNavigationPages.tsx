@@ -3,7 +3,7 @@ import {AudioLines,Film,FolderKanban,LayoutTemplate,ScanSearch,Settings as Setti
 import type {EditorStore} from '../state/editorState';
 import {readClipVisualTransform} from '../state/editorState';
 import {cropToAspectRatio} from '../state/cropPresets';
-import {cropToAspectRatio} from '../state/cropPresets';
+import {resolveVtE1FxValue,resetVtE1FxPatch} from '../../../../shared/vtE1FxCatalog';
 import {renderPanelBody} from './PanelBodies';
 import {EditorFeatureManifest} from './EditorFeatureManifest';
 import {EditorViewSwitcher} from './EditorViewSwitcher';
@@ -53,14 +53,13 @@ function Inspector({store}:{store:EditorStore}){
   if(transition)return <><Section name="Transition"><b>{transition.leftClipId} → {transition.rightClipId}</b></Section><Section name="Transition Controls"><Grid><button style={button} onClick={()=>store.dispatch({type:'openPanel',id:'transitions'})}>Edit</button><button style={{...button,background:PINK}} onClick={()=>store.dispatch({type:'removeTransition',id:store.state.selection.transitionId!})}>Remove</button></Grid></Section></>;
   if(!clip)return <Section name="Clip Inspector"><div style={{fontSize:10,fontWeight:800,opacity:.6,marginBottom:6}}>Select a clip, track, or transition from the timeline or Clips page.</div><CapabilityGrid category="edit"/></Section>;
   const v=readClipVisualTransform(clip),set=(patch:any)=>store.dispatch({type:'updateClipTransform',id:clip.id,patch});
-  const payload=(store.state.project.layers.find(layer=>layer.id===clip.layerId)?.payload??{}) as Record<string,unknown>;
-  const sourceWidth=Number(payload.width),sourceHeight=Number(payload.height);
-  const applyAspect=(ratio:number)=>{const crop=cropToAspectRatio(sourceWidth,sourceHeight,ratio);if(crop)set(crop);};
   const mediaLayer=clip.layerId?store.layerById(String(clip.layerId)):undefined;
   const mediaPayload=mediaLayer?.payload??{};
   const mediaKind=mediaPayload.mediaKind;
   const sourceWidth=Number(mediaPayload.width??0),sourceHeight=Number(mediaPayload.height??0);
   const hasMediaDimensions=(mediaKind==='image'||mediaKind==='video')&&sourceWidth>0&&sourceHeight>0;
+  const applyAspect=(ratio:number)=>{const crop=cropToAspectRatio(sourceWidth,sourceHeight,ratio);if(crop)set(crop);};
+  const patchFx=(patch:Record<string,unknown>)=>{if(mediaLayer)store.dispatch({type:'updateLayerPayload',id:mediaLayer.id,patch});};
   const project=store.state.project as Record<string,unknown>;
   const projectAspectRatio=project.aspect==='landscape'||project.aspectRatio==='16:9'?16/9:9/16;
   const projectRatioCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,projectAspectRatio):null;
@@ -104,6 +103,19 @@ function Inspector({store}:{store:EditorStore}){
       </Grid>
       <div style={{fontSize:8,fontWeight:800,opacity:.65,marginTop:5}}>Non-destructive crop · use edge controls for fine framing. Quick crops preserve the source asset.</div>
     </Section>
+    {(mediaKind==='image'||mediaKind==='video')&&mediaLayer&&<Section name="Quick Image Adjustments">
+      <Grid>
+        <StepperField label="BRIGHTNESS" value={resolveVtE1FxValue(mediaPayload,'brightness')} min={0} max={3} step={.05} defaultValue={1} onChange={brightness=>patchFx({brightness,fxBypass:false})}/>
+        <StepperField label="CONTRAST" value={resolveVtE1FxValue(mediaPayload,'contrast')} min={0} max={3} step={.05} defaultValue={1} onChange={contrast=>patchFx({contrast,fxBypass:false})}/>
+        <StepperField label="SATURATION" value={resolveVtE1FxValue(mediaPayload,'saturation')} min={0} max={3} step={.05} defaultValue={1} onChange={saturation=>patchFx({saturation,fxBypass:false})}/>
+      </Grid>
+      <Grid cols={3}>
+        <button style={button} onClick={()=>patchFx({brightness:1,contrast:1,saturation:1,fxBypass:false})}>Reset Tone</button>
+        <button style={button} onClick={()=>patchFx(resetVtE1FxPatch())}>Reset All FX</button>
+        <button style={button} onClick={()=>store.dispatch({type:'openPanel',id:'effects'})}>Full FX Panel</button>
+      </Grid>
+      <div style={{fontSize:8,fontWeight:800,opacity:.65,marginTop:5}}>Uses the shared VT_E1 filter contract; edits stay on the selected media layer and remain part of the editor project.</div>
+    </Section>}
   </>;
 }
 
