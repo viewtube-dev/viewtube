@@ -8,6 +8,7 @@ export interface BrainJsonTaskRequest {
   project?: Project | null
   contentBuildId?: string | null
   surface?: string
+  assetType?: string
   userText: string
   systemInstruction: string
   responseSchema?: Record<string, unknown>
@@ -90,7 +91,7 @@ export const runBrainJsonTask = async <T = unknown>(
       ...(request.contentBuildId ? { contentBuildId: request.contentBuildId } : {}),
     },
     artifactRefs: request.artifactRefs,
-    assetType: "project-strategy",
+    assetType: request.assetType || "project-strategy",
   })
 
   if (!context.controls.enabled) {
