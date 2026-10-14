@@ -102,9 +102,15 @@ The editor already had a reducer action for splitting a clip at the current play
 
 Split-button enablement is now a small pure contract in `src/features/editor/mobile/state/splitClipEligibility.ts`. It rejects missing/invalid clip intervals and non-finite playheads, and requires the playhead to be more than 1 ms inside either edge. A focused Vitest file covers interior, boundary/guard-band, and invalid-input cases. The test was added before extracting the helper, but this GitHub-only pass cannot execute it; it must be run in CI or a local checkout before claiming it passes.
 
+## Fifth implementation slice — source-aware video trimming
+
+The existing `trimClip` reducer changed only the timeline edge. For video/audio clips that carry `sourceInSec`/`sourceOutSec`, trimming the left edge therefore left the source in-point unchanged, so playback could begin at the wrong source frame. The reducer now adjusts the corresponding source boundary proportionally to the clip's current source-to-timeline duration ratio. Text/overlay clips without source-range fields remain timeline-only. All changes still pass through the existing reducer history, so undo restores both timeline and source boundaries.
+
+Added focused Vitest coverage for left/right source-range updates, source-less overlay clips, and undo. Tests have been authored but were not run in this GitHub-only pass; runtime preview/render verification remains required.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
+1. Verify ratio-aware crop, rotation, split-at-playhead, and source-aware trimming with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.

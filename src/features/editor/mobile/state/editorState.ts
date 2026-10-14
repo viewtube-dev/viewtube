@@ -442,10 +442,24 @@ export function editorReducer(state:EditorState,action:EditorAction):EditorState
       const clip=state.project.clips.find(c=>c.id===action.id);
       if(!clip)return state;
       const edge=clampTrimEdge(state.project.clips,clip,action.side,action.sec,state.project.durationSec);
-      const clips=state.project.clips.map(c=>c.id!==action.id
-        ?c
-        :action.side==='left'?{...c,start:edge}:{...c,end:edge}
-      );
+      const hasSourceRange=Number.isFinite(Number(clip.sourceInSec))||Number.isFinite(Number(clip.sourceOutSec));
+      const sourceIn=Number.isFinite(Number(clip.sourceInSec))?Number(clip.sourceInSec):0;
+      const sourceOut=Number.isFinite(Number(clip.sourceOutSec))?Number(clip.sourceOutSec):sourceIn+(clip.end-clip.start);
+      const sourcePerTimelineSecond=clip.end>clip.start&&Number.isFinite(sourceOut-sourceIn)
+        ?Math.max(0,(sourceOut-sourceIn)/(clip.end-clip.start)):1;
+      const clips=state.project.clips.map(c=>{
+        if(c.id!==action.id)return c;
+        if(action.side==='left'){
+          const delta=Math.max(0,edge-clip.start);
+          return hasSourceRange
+            ?{...c,start:edge,sourceInSec:sourceIn+delta*sourcePerTimelineSecond}
+            :{...c,start:edge};
+        }
+        const duration=Math.max(0,edge-clip.start);
+        return hasSourceRange
+          ?{...c,end:edge,sourceOutSec:sourceIn+duration*sourcePerTimelineSecond}
+          :{...c,end:edge};
+      });
       return withHistory(state,{...state,project:{...state.project,clips}});
     }
     case'splitClipAtPlayhead':{
