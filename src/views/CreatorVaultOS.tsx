@@ -2846,7 +2846,7 @@ const CreatorVaultOS: React.FC = () => {
       <SubToolbox
        style={moduleStyle("task-center" as VaultWorkspaceModuleId)}
        title="Task Center"
-       subtitle="Ingest and background processing jobs"
+       subtitle={activeVaultTasks.length ? `${activeVaultTasks.length} active · ${failedVaultTasks.length} failed` : failedVaultTasks.length ? `${failedVaultTasks.length} failed · open to review` : tasks.some((task) => task.status === "completed") ? `${tasks.filter((task) => task.status === "completed").length} completed · no active jobs` : "No active jobs"}
        icon={<Database />}
        paletteIndex={2}
        isOpenInitial={Boolean(activeVaultTasks.length || failedVaultTasks.length)}

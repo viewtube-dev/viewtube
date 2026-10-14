@@ -23,6 +23,14 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]')
  })
 
+ it("keeps Task Center compact while idle and exposes a live job summary", () => {
+  expect(source).toContain('title="Task Center"')
+  expect(source).toContain("subtitle={activeVaultTasks.length ?")
+  expect(source).toContain("isOpenInitial={Boolean(activeVaultTasks.length || failedVaultTasks.length)}")
+  expect(source).toContain("No active jobs")
+  expect(source).toContain("failed · open to review")
+ })
+
  it("renders Compare & Versions as its own configurable SubToolbox module", () => {
   expect(source).toContain('title="Compare & Versions"')
   expect(source).toContain('persistenceId="vault-compare-versions"')
