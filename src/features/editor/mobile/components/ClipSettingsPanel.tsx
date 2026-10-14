@@ -280,6 +280,13 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const isAudio=type==='audio';
   const audioVolume=number(payload.volume,.6);
   const audioRate=number(payload.playbackRate,1);
+  const sourceDurationSec=number(clip.sourceDurationSec??payload.sourceDurationSec??payload.mediaDurationSec,0);
+  const sourceInSec=number(clip.sourceInSec,0);
+  const sourceOutSec=number(clip.sourceOutSec,sourceInSec+Math.max(.1,clip.end-clip.start));
+  const sourceRangeDuration=Math.max(.1,clip.end-clip.start);
+  const maxSourceIn=Math.max(0,sourceDurationSec-sourceRangeDuration);
+  const canSlipSource=(isAudio||(isMedia&&payload.mediaKind==='video'))&&sourceDurationSec>0;
+  const slipSource=(deltaSec:number)=>store.dispatch({type:'slipClip',id:clip.id,deltaSec,sourceDurationSec});
   const widthValue=number(payload.width,100),heightValue=number(payload.height,100);
   const xValue=number(payload.x,0),yValue=number(payload.y,0),rotationValue=number(payload.rotation,0);
   const ratio=widthValue>0?heightValue/widthValue:1;
@@ -350,6 +357,17 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
       defaultValue={4}
       onChange={duration=>store.dispatch({type:'trimClip',id:clip.id,side:'right',sec:clip.start+duration})}
     />
+    {canSlipSource&&<div style={{margin:'8px 0 10px',padding:7,border:`2px solid ${BLACK}`,borderRadius:7,background:'#fff'}}>
+      <div style={{fontSize:8,fontWeight:1000,textTransform:'uppercase',marginBottom:3}}>Source Window</div>
+      <div style={{fontSize:8,fontWeight:800,opacity:.7,marginBottom:6}}>{sourceInSec.toFixed(2)}s → {sourceOutSec.toFixed(2)}s / {sourceDurationSec.toFixed(2)}s source</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:4}}>
+        <button style={{...miniButton,width:'100%'}} disabled={sourceInSec<=.001} onClick={()=>slipSource(-1)}>−1s</button>
+        <button style={{...miniButton,width:'100%'}} disabled={sourceInSec<=.001} onClick={()=>slipSource(-.1)}>−0.1s</button>
+        <button style={{...miniButton,width:'100%'}} disabled={sourceInSec>=maxSourceIn-.001} onClick={()=>slipSource(.1)}>+0.1s</button>
+        <button style={{...miniButton,width:'100%'}} disabled={sourceInSec>=maxSourceIn-.001} onClick={()=>slipSource(1)}>+1s</button>
+      </div>
+      <div style={{fontSize:7,fontWeight:800,opacity:.6,marginTop:5}}>Slip shifts the source footage inside the fixed timeline span; clip position and duration stay unchanged.</div>
+    </div>}
 
     <div style={sectionLabel}>TRANSFORM + TIMING</div>
     <div style={{display:'grid',gridTemplateColumns:'92px 76px',gap:8,alignItems:'start',marginBottom:8}}>
