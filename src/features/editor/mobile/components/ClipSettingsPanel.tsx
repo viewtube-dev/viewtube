@@ -180,7 +180,7 @@ function SrtCaptionImportControl({store}:{store:EditorStore}){
       <button type="button" style={{...addButtonBase,background:CYAN,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={exportSrt}><Save size={13}/>EXPORT SRT CAPTIONS</button>
     </div>
     <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:3,marginTop:3}}>
-      {[-0.5,-0.1,0.1,0.5].map(delta=><button key={delta} type="button" style={{...addButtonBase,minWidth:0,padding:'3px 2px',fontSize:8,background:delta<0?PINK:GREEN,color:BLACK}} disabled={busy||!captionClips.length||resolvedShift(delta)===0} onClick={()=>shiftCaptions(delta)}>{delta<0?'−':'+'}{Math.abs(delta).toFixed(1)}s</button>)}
+      {[-0.5,-0.1,0.1,0.5].map(delta=><button key={delta} type="button" style={{...addButtonBase,minWidth:0,padding:'3px 2px',fontSize:8,background:delta<0?MAGENTA:GREEN,color:BLACK}} disabled={busy||!captionClips.length||resolvedShift(delta)===0} onClick={()=>shiftCaptions(delta)}>{delta<0?'−':'+'}{Math.abs(delta).toFixed(1)}s</button>)}
     </div>
     <input ref={inputRef} type="file" accept=".srt,text/plain" hidden onChange={event=>{const file=event.currentTarget.files?.[0];event.currentTarget.value='';if(file)void importFile(file)}}/>
     {message?<div role="status" style={{fontSize:8,fontWeight:800,marginTop:4,overflowWrap:'anywhere'}}>{message}</div>:null}

@@ -226,3 +226,24 @@ The action creates a candidate only; it does not silently select or publish the 
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
 6. Connect Script Architect sections to captions only through explicit timing inputs; verify SRT import/export, timing nudges, overlap handling, and render parity.
+
+
+## Phase 4/5 continuation — shared operation lifecycle foundation (2026-10-14)
+
+### Phase 4 — Audio, captions, and transcript controls
+
+The canonical branch already contains the core audio waveform inspector, render-backed clip volume/rate/fades, SRT import/export, caption timing nudges, and selected-caption text/start/end editing. Those are existing implementation slices, not new claims from this change. Their browser/render and test execution gates remain open.
+
+### Phase 5 — Unified editing controls
+
+Added `src/features/editor/mobile/state/mediaOperationLifecycle.ts` as a pure, provider- and UI-independent lifecycle contract for non-destructive media operations. It defines stable source identity and the common configure → preview → accept/cancel/fail/retry path. Acceptance is rejected unless the preview matches the latest configuration revision and a non-empty output asset ID is supplied. Configuration changes invalidate stale previews; source asset/version identity is retained through retry/cancel; terminal accepted/cancelled sessions reject further mutation.
+
+The lifecycle is deliberately I/O-free: callers must still connect it to real image/video processing, derivative registration, and workflow handoff APIs. It does not claim that every existing crop, audio, caption, or render control is already wired through this new contract.
+
+### Focused regression coverage
+
+Added `mediaOperationLifecycle.test.ts` cases for preview gating, stale-preview invalidation, preserved source identity, cancel/retry, empty output rejection, and terminal-state guards.
+
+### Remaining completion gates
+
+This phase continuation is **not certified complete end-to-end** until the lifecycle is adopted by the real media-operation UI and adapters, and CI runs focused Vitest, typecheck/build, save/reload and undo/redo tests, plus desktop/mobile preview/render parity checks. In particular, script-to-caption association must use explicit timing/acceptance handoffs; no timing is inferred from script prose. This GitHub-only change has not executed tests or deployed a preview.

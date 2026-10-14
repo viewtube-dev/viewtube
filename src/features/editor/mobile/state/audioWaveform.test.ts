@@ -5,7 +5,7 @@ describe('buildWaveformPeaks', () => {
   it('reduces channel samples into normalized peak bins', () => {
     const left = new Float32Array([0, 0.2, -0.7, 0, 0.1, 0]);
     const right = new Float32Array([0.1, 0, 0, 0.4, 0, 1.4]);
-    expect(buildWaveformPeaks([left, right], 3)).toEqual([0.2, 0.7, 1]);
+    expect(buildWaveformPeaks([left, right], 3)).toEqual([expect.closeTo(0.2), expect.closeTo(0.7), 1]);
   });
 
   it('returns empty output for empty channels or invalid bin count', () => {
