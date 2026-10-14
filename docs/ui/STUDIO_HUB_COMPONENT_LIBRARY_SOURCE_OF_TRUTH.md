@@ -191,8 +191,8 @@ The compact Vault asset family now has a dedicated production primitive: `VaultA
 
 The Metadata Publisher and Video Manager use the following canonical primitives so library changes propagate to both tools:
 
-- SubToolboxLabeledInput — labeled single-line field with the label rendered in the upper-right overlay.
-- SubToolboxLabeledTextArea — labeled multiline field with the label rendered in the upper-right overlay.
+- StudioLabeledInput — single-line field with a shared floating label that rises on focus or when populated.
+- StudioLabeledTextArea — multiline field with identical label typography and the same floating-label interaction.
 - SubToolboxTopTitleDropdown — compact top-title dropdown for publishing controls, including multi-select playlist menus.
 - SubToolboxToggle — binary secondary metadata control.
 - SubToolboxStatusBadge — compact validation/state indicator.
@@ -283,7 +283,7 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 
 ### Ownership and exports
 - Canonical Studio field implementation and visual styling: `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`.
-- `StudioInput`, `StudioSearchInput`, `StudioNumberInput`, `StudioTextArea`, `StudioSelect`, `StudioFloatingLabelInput`, and `StudioFloatingLabelTextArea` use the Studio Controls field contract.
+- `StudioInput`, `StudioSearchInput`, `StudioNumberInput`, `StudioTextArea`, `StudioSelect`, `StudioLabeledInput`, and `StudioLabeledTextArea` use the Studio Controls field contract.
 - The Component Library must render the actual production exports. Compatibility names may remain as API adapters, but must not own an independent visual implementation.
 - Keep the confirmed 44px/28px switch, choice, and word-toggle primitives from PR #78. Do not replace these button-based components with browser-native checkbox/radio inputs.
 
