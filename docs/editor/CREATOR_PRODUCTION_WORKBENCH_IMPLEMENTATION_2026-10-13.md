@@ -126,6 +126,12 @@ The Audio panel now exposes **Fade In** and **Fade Out** duration controls (0–
 - Added **Trim Start to Playhead** and **Trim End to Playhead** shortcuts in Timeline Trim. A pure eligibility helper disables them outside the clip interior or inside the minimum-duration guard band; actions use the existing trim reducer/history.
 - Added focused Vitest cases for trim-to-playhead eligibility. Tests/build, undo/redo, preview/render parity, and responsive browser verification remain pending.
 
+## Script Architect handoff — plain-text export
+
+Script Architect now exposes **Export TXT** alongside Copy Script and Save Packet. The export downloads the currently assembled `fullScript` unchanged as UTF-8 plain text, uses a topic/draft-derived filename with reserved filesystem characters normalized and the basename capped at 80 characters, revokes the temporary object URL, and reports failures through the existing error state. It does not change generation, draft persistence, or locked-fragment validation.
+
+A focused Vitest suite covers filename normalization, empty-name fallback, reserved characters, and length limits. The tests/build and browser download flow remain unverified in this GitHub-only pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
