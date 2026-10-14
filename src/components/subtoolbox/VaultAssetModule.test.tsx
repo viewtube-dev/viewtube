@@ -64,6 +64,22 @@ describe("VaultAssetModule", () => {
     expect(html).not.toContain('data-tag="DELTA"')
   })
 
+  it("exposes tag selection and overflow expansion state to assistive technology", () => {
+    const html = renderToStaticMarkup(
+      <VaultAssetModule
+        kind="image"
+        variant="landscape"
+        title="ACCESSIBLE.PNG"
+        tags={["ALPHA", "BRAVO", "CHARLIE", "DELTA"]}
+      />,
+    )
+
+    expect(html).toContain('data-tag="ALPHA"')
+    expect(html).toContain('aria-pressed="false"')
+    expect(html).toContain('aria-label="Show 1 more asset tags"')
+    expect(html).toContain('aria-expanded="false"')
+  })
+
   it("makes image and document media surfaces natural preview targets without permanent action bars", () => {
     const imageHtml = renderToStaticMarkup(
       <VaultAssetModule kind="image" variant="landscape" title="IMAGE.PNG" onPreviewAction={() => {}} />,
