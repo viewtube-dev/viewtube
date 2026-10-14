@@ -1612,3 +1612,114 @@ button[data-vt-studio-control="true"][data-split-left="true"][data-height-varian
   box-shadow: none !important;
 }
 .vt-studio-legend-menu .vt-studio-legend-option:active { filter: none !important; }
+
+
+/* Dropdown label/trigger separation: the floating label is fixed-size and never
+   participates in measuring or scaling the closed trigger's selected value. */
+.vt-studio-legend-multi {
+  --vt-legend-label-height: 20px;
+  --vt-legend-label-font-size: 14px;
+}
+.vt-studio-legend-anchor {
+  position: relative !important;
+  padding-top: 0 !important;
+}
+.vt-studio-legend-multi .vt-studio-legend-label {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: -9px !important;
+  left: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: var(--vt-legend-label-height) !important;
+  min-height: var(--vt-legend-label-height) !important;
+  max-height: var(--vt-legend-label-height) !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border: 3px solid #000 !important;
+  border-radius: 7px !important;
+  background: var(--pair-b, #ff7f6b) !important;
+  color: #000 !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: var(--vt-legend-label-font-size) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  letter-spacing: .055em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  -webkit-text-stroke: .35px currentColor !important;
+  transform: none !important;
+  transition: none !important;
+  pointer-events: none !important;
+}
+.vt-studio-legend-multi[data-size="compact"] {
+  --vt-legend-label-height: 14px;
+  --vt-legend-label-font-size: 9px;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label {
+  top: -6px !important;
+  left: 8px !important;
+  padding-inline: 6px !important;
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  transform: none !important;
+}
+/* The value text stays governed by the control size, regardless of label state. */
+.vt-studio-legend-trigger,
+.vt-studio-legend-trigger:hover,
+.vt-studio-legend-trigger:focus,
+.vt-studio-legend-trigger:focus-visible,
+.vt-studio-legend-trigger:active {
+  transform: none !important;
+  transition: none !important;
+}
+.vt-studio-legend-trigger-text {
+  min-width: 0 !important;
+  font-size: var(--vt-studio-44-font-size, 38px) !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger-text {
+  font-size: var(--vt-studio-28-font-size, 24px) !important;
+}
+.vt-studio-legend-chevron {
+  width: var(--vt-legend-chevron-size, 28px) !important;
+  height: var(--vt-legend-chevron-size, 28px) !important;
+  min-width: var(--vt-legend-chevron-size, 28px) !important;
+  min-height: var(--vt-legend-chevron-size, 28px) !important;
+  flex: 0 0 var(--vt-legend-chevron-size, 28px) !important;
+  stroke-width: 2.5 !important;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron {
+  --vt-legend-chevron-size: 18px;
+  stroke-width: 1.65 !important;
+}
+.vt-studio-legend-count {
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  flex: 0 0 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  font-size: 19px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count {
+  width: 19px !important;
+  height: 19px !important;
+  min-width: 19px !important;
+  min-height: 19px !important;
+  flex-basis: 19px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+}
