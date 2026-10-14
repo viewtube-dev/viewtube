@@ -289,7 +289,7 @@ export function editorReducer(state:EditorState,action:EditorAction):EditorState
     case'shiftCaptionBatch':{
       const captionTrackIds=new Set(state.project.tracks.filter(track=>track.kind==='caption').map(track=>track.id));
       const captionClips=state.project.clips.filter(clip=>captionTrackIds.has(clip.trackId));
-      const deltaSec=resolveCaptionShiftDelta(captionClips,action.deltaSec);
+      const deltaSec=resolveCaptionShiftDelta(captionClips.map(clip=>({startSec:clip.start,endSec:clip.end})),action.deltaSec);
       if(!captionClips.length||deltaSec===0)return state;
       const captionClipIds=new Set(captionClips.map(clip=>clip.id));
       const clips=state.project.clips.map(clip=>captionClipIds.has(clip.id)
