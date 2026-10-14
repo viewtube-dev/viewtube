@@ -65,12 +65,12 @@ export const StudioTextInput = React.forwardRef<
   <input
     ref={ref}
     type={type}
+    {...withStudioAttrs(sizeVariant)}
+    data-vt-studio-field-kind="text-input"
     placeholder={placeholder}
     spellCheck={spellCheck}
     autoCorrect={autoCorrect}
     autoCapitalize={autoCapitalize}
-    {...withStudioAttrs(sizeVariant)}
-    data-vt-studio-field-kind="text-input"
     {...props}
   />
 ))
@@ -83,8 +83,8 @@ export const StudioInput = StudioTextInput
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "search", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+>(({ sizeVariant = "standard", type = "search", placeholder = "TITLE", ...props }, ref) => (
+  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
@@ -92,8 +92,8 @@ StudioSearchInput.displayName = "StudioSearchInput"
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "number", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+>(({ sizeVariant = "standard", type = "number", placeholder = "TITLE", ...props }, ref) => (
+  <input ref={ref} type={type} placeholder={placeholder} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
@@ -109,12 +109,12 @@ export const StudioTextArea = React.forwardRef<
   <textarea
     ref={ref}
     rows={rows ?? 4}
+    {...withStudioAttrs(sizeVariant)}
+    data-vt-studio-field-kind="textarea"
     placeholder={placeholder}
     spellCheck={spellCheck}
     autoCorrect={autoCorrect}
     autoCapitalize={autoCapitalize}
-    {...withStudioAttrs(sizeVariant)}
-    data-vt-studio-field-kind="textarea"
     {...props}
   />
 ))
@@ -187,14 +187,16 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   words?: readonly [string, string];
   size?: "44" | "28";
   skin?: StudioControlSkin;
-  /** Extra inset between the measured word bounds and the active handle. */
+  /** Optional fixed handle width in CSS pixels; omitted means measure the active word. */
+  handleWidth?: number;
+  /** Inset between the active word bounds and handle edges; defaults by size. */
   handleInset?: number;
-  /** Scale the measured active-handle width; 1 keeps the text-fit default. */
+  /** Scale the measured active-handle width when a fixed width is not supplied. */
   handleWidthScale?: number;
-  /** Horizontal gap between the two word buttons, in pixels. */
+  /** Horizontal spacing between the two word labels in CSS pixels. */
   wordGap?: number;
 }
-export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
+export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
   const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
@@ -207,7 +209,9 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       const rootRect = root.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
       const inset = handleInset ?? (size === "28" ? 2 : 2.75);
-      const next = { left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 12) };
+      const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
+      const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
+      const next = { left: targetRect.left - rootRect.left + (targetRect.width - nextWidth) / 2, width: nextWidth };
       setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
     };
     const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
@@ -219,7 +223,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     if (typeof window !== "undefined") window.addEventListener("resize", schedule);
     if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
     return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
-  }, [value, words, size]);
+  }, [value, words, size, handleWidth, handleInset, handleWidthScale]);
   return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
     <span className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"} />
     {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
