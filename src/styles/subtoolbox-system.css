@@ -3401,9 +3401,6 @@
   .vm-thumbnail-empty strong{font-size:11px}
 }
 
-.vt-subtoolbox-labeled-field:focus-within>.vt-subtoolbox-labeled-control{
-  background:#fff!important;
-}
 
 
 .vm-publishing-grid{
@@ -3451,8 +3448,7 @@
     scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px);
   }
 
-  .vt-subtoolbox-input,
-  .vt-subtoolbox-labeled-control {
+  .vt-subtoolbox-input {
     font-size:16px!important;
   }
 }
