@@ -890,7 +890,7 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
            />
            <SubToolboxGridActionButton
             label="Import TXT/MD"
-            iconName="file"
+            iconName="layers"
             tone="purple"
             onClick={() => importInputRef.current?.click()}
            />
