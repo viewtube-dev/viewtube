@@ -192,11 +192,17 @@ Added a **Save Derivative to Vault** action beside the existing PNG download con
 
 The upload client rejects non-image files, empty outputs, files over 20 MB, failed worker responses, and URLs outside the render-assets endpoint. A worker error is shown to the user instead of claiming a save succeeded. Durable bytes depend on the render worker being configured with a persistent volume as described in `docs/vt-e1-render-worker.md`; deployment storage configuration and the browser workflow have not been verified in this pass. If the file upload succeeds but Asset Engine registration fails, the UI reports the stored path so it can be recovered rather than silently losing the reference.
 
+## Tenth implementation slice — save captured video frames as Vault derivatives
+
+Added **Save Frame to Vault** beside the existing **Capture Frame as Still** timeline action. It uses the same playhead-to-source-time mapping and JPEG capture path, uploads the frame through the render-worker asset endpoint, and registers it through Asset Engine as an image derivative with source/timeline time, clip identity, media name, and project/ContentBuild context when available. It does not silently insert a second timeline clip; the existing Capture Frame action remains responsible for that separate workflow.
+
+Both image crop and video-frame save actions use the same bounded upload client and same-origin proxy, so the worker shared secret remains server-side. The actual deployment must still have the render worker configured with durable storage. Browser capture, upload, Vault listing, lineage, tests/build, and responsive QA have not been run in this pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Verify ratio-aware and focal-point crop preview/render parity, then connect exported image derivatives to durable Asset Engine/Vault provenance.
-3. Verify the worker-backed crop upload and Asset Engine registration in a deployed environment; then connect captured video frames to the same durable derivative/provenance path.
+3. Verify crop and frame uploads, Vault discovery, ContentBuild version/lineage, and persistent storage in a deployed environment; then connect Script Architect and caption handoffs with explicit timing.
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
 6. Expand audio/caption controls only against verified shared contracts.
