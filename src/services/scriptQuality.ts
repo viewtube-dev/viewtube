@@ -219,7 +219,9 @@ export const weightsFromReconciliation = (
 export const stitchFullScript = (sections: ScriptSectionDraft[]): string =>
  sections
   .filter((section) => section.script.trim())
-  .map((section) => `## ${section.label}\n\n${section.script.trim()}`)
+  .map((section) => section.sectionId === "imported-script"
+   ? section.script
+   : `## ${section.label}\n\n${section.script.trim()}`)
   .join("\n\n")
 
 export const applyGeneratedSections = (
