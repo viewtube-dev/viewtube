@@ -1741,3 +1741,56 @@ button[data-vt-studio-control]:active:not(:disabled) {
   transform: translate(var(--vt-studio-control-shadow, 3px), var(--vt-studio-control-shadow, 3px));
   box-shadow: none;
 }
+
+
+/* 2026-10-14: text-field defaults and Android Chrome composition/caret mitigation. */
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+  -webkit-text-stroke: 0 !important;
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  caret-shape: block;
+  -webkit-appearance: none;
+  appearance: none;
+}
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  -webkit-text-stroke: 0 !important;
+}
+[data-vt-studio-control="true"]:is(input, textarea) {
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  caret-shape: block;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-vt-studio-control="true"]:is(input, textarea):focus,
+[data-vt-studio-control="true"]:is(input, textarea):focus-visible {
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  -webkit-text-stroke: 0 !important;
+  outline-offset: 0 !important;
+}
+/* Public CSS knobs: consumers can tune active-handle inset/width without replacing the primitive. */
+.vt-studio-44-word-toggle {
+  --vt-word-toggle-handle-inset: 2.75px;
+  --vt-word-toggle-handle-width-scale: 1;
+  --vt-word-toggle-word-gap: 0px;
+}
+.vt-studio-44-word-toggle.is-size-28 {
+  --vt-word-toggle-handle-inset: 2px;
+}
+.vt-studio-44-word-toggle > button {
+  margin-inline: calc(var(--vt-word-toggle-word-gap, 0px) / 2);
+}
+.vt-studio-44-word-handle {
+  left: var(--vt-word-toggle-handle-left, 2.75px);
+  width: calc(var(--vt-word-toggle-handle-width, 16px) * var(--vt-word-toggle-handle-width-scale, 1));
+}
