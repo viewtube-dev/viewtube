@@ -2556,3 +2556,38 @@
 .vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-studio-44-word-toggle,
 .vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle { max-width:100%; min-width:0; }
 @media(max-width:560px) { .vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-other-row { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+
+/* Confirmed primitive catalog: word toggles are not mini-module-sized controls. */
+.vt-confirmed-word-toggle-family {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-word-toggle-family > .vt-confirmed-control-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-solid-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-word-toggle-family .is-word-toggle-solid-row > div {
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-word-toggle-family .is-word-toggle-solid-row .vt-studio-44-word-toggle {
+  width: max-content;
+  max-width: 100%;
+  min-width: max-content;
+}
+.vt-confirmed-word-toggle-family .is-word-toggle-solid-row .vt-studio-44-word-toggle button {
+  white-space: nowrap;
+}
+.vt-confirmed-control-family.vt-confirmed-word-toggle-family .vt-confirmed-control-row > strong {
+  grid-column: 1 / -1;
+}

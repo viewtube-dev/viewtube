@@ -31,7 +31,7 @@ const CanonicalControlFamilies: React.FC = () => {
         return <div className="vt-confirmed-control-row" key={item.size}>
           <strong>{item.label}</strong>
           <div className={`vt-confirmed-control-variants ${variantsClass} is-word-toggle-solid-row`}>
-            <div><small>1 · SOLID</small><SubToolbox44WordToggle size={item.size} skin="solid" value={words[solidIndex]} words={["OFF","ON"]} onValueChange={value => flip(setWords, solidIndex, value)} /></div>
+            <div><small>1 · SOLID</small><SubToolbox44WordToggle size={item.size} skin="solid" value={words[solidIndex]} words={item.size === "44" ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, solidIndex, value)} /></div>
           </div>
           <div className={`vt-confirmed-control-variants ${variantsClass} is-word-toggle-other-row`}>{WORD_TOGGLE_SKINS.filter(({skin}) => skin !== "solid").map((skin,col) => { const index = row * 3 + col + 1; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={item.size} skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
         </div>
@@ -82,7 +82,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family title="Studio Text Area · Standalone" nonDefaultSettings={["sizeVariant=\"compact\" selects the 28px control size; default is standard 44px.", "rows={2} or another positive row count changes the initial writing-area height.", "disabled=true prevents editing; readOnly=true allows focus and text selection without edits.", "Native resize behavior remains available unless the consumer overrides resize styling."]} provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native textarea; canonical Studio typography, borders, focus and size variants; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
     </Family>
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
