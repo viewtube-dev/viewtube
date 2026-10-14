@@ -104,7 +104,7 @@ Split-button enablement is now a small pure contract in `src/features/editor/mob
 
 ## Fifth implementation slice — quick media adjustments
 
-The selected image/video clip inspector now exposes quick brightness, contrast, and saturation controls. These are not a parallel filter implementation: values and ranges are read from the shared `vtE1FxCatalog` contract, and changes are written to the existing media layer payload through `updateLayerPayload`. The quick actions also provide **Reset Tone**, **Reset All FX**, and a route to the full existing Effects panel. FX edits are project-layer edits, not destructive source-file processing.
+The selected image/video clip inspector now consolidates its crop controls into one aspect-preset grid: project ratio, 16:9, 9:16, 4:5, 1:1, reset, and centered 10%/20% crops. Presets are disabled if source dimensions are missing or the crop exceeds the helper's safety limit. It also exposes quick brightness, contrast, and saturation controls. These are not a parallel filter implementation: values and ranges are read from the shared `vtE1FxCatalog` contract, and changes are written to the existing media layer payload through `updateLayerPayload`. The quick actions also provide **Reset Tone**, **Reset All FX**, and a route to the full existing Effects panel. FX edits are project-layer edits, not destructive source-file processing.
 
 During this slice, the inspector's duplicate crop-helper import and duplicate source-dimension declarations were also consolidated. The selected media layer is now the single source for stored width/height and FX payload values. This is a source-level repair; typecheck/build and runtime preview/render parity still need execution.
 
