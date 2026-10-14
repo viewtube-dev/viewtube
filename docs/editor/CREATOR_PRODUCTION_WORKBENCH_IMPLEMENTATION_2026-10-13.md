@@ -84,6 +84,17 @@ For each code slice, run focused tests and the relevant build/type checks when r
 
 Current limitation: this GitHub-only edit pass can commit source/docs and open a PR, but it cannot honestly claim a local build, browser capture, or test run without an execution environment.
 
+## Third implementation slice — split-at-playhead
+
+The existing editor already had a reducer action for splitting a clip at the current playhead, with history snapshots. The Split tool was incorrectly mapped to the Trim panel, leaving the action without a dedicated user-facing control. It now has its own Split Clip panel:
+
+- shows the current playhead and selected clip interval;
+- enables **Split at Playhead** only when the playhead is strictly inside the selected clip;
+- dispatches the existing `splitClipAtPlayhead` action;
+- communicates that undo restores the original clip.
+
+This wires an existing timeline operation into the UI rather than implementing a second split algorithm. It remains subject to focused tests and visual verification.
+
 ## Second implementation slice — rotation controls
 
 The existing Transform inspector now includes clockwise and counterclockwise 90-degree rotation presets plus a rotation-only reset. These actions update only the existing `rotation` field through the same `updateClipTransform` action; scale, position, opacity and crop are preserved. The existing arbitrary-angle field remains available.
@@ -92,7 +103,7 @@ Combined with the crop controls above, the inspector now supports quick reversib
 
 ## Immediate next sequence
 
-1. Verify crop and rotation controls with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
+1. Verify crop/rotation and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
 2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
