@@ -8,7 +8,7 @@ import {
   interpolateShortsConfig as interpolateSharedShortsConfig,
 } from '../../shared/vtE1Shorts';
 import { expandCompoundClips } from '../../shared/vtE1CompoundClips.js';
-import { resolveAudioRenderSettings } from '../../shared/vtE1AudioContract.js';
+import { audioVolumeAtFrame, resolveAudioRenderSettings } from '../../shared/vtE1AudioContract.js';
 import { normalizeVtE1TransitionType } from '../../shared/vtE1TransitionCatalog.js';
 import { transitionFrameStyleFor } from '../../shared/vtE1TransitionFrame.js';
 import { buildVtE1Filter, resolveVtE1FxOpacity } from '../../shared/vtE1FxCatalog.js';
@@ -527,7 +527,7 @@ export const MyComposition: React.FC<Props> = ({ renderJob }) => {
               <Audio
                 src={src}
                 startFrom={startFrom}
-                volume={audioSettings.muted ? 0 : audioSettings.volume}
+                volume={(frame) => audioVolumeAtFrame(audioSettings, frame, durationInFrames, fps)}
                 playbackRate={audioSettings.playbackRate}
               />
             </Sequence>
