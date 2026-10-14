@@ -365,7 +365,7 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
     setSavingDerivative(true);setDerivativeSaveError('');setDerivativeSaveMessage('');
     let storedAssetUrl='';
     try{
-      const sourceName=String(payload.mediaName??payload.layerName??'image').replace(/\\.[^.]+$/,'').replace(/[^\\w.-]+/g,'-')||'image';
+      const sourceName=String(payload.mediaName??payload.layerName??'image').replace(/\.[^.]+$/,'').replace(/[^\w.-]+/g,'-')||'image';
       const suffix=targetWidth?'-'+targetWidth+'px':'';
       const file=await exportCroppedImageAsFile(String(payload.mediaUrl),readClipVisualTransform(clip),sourceName+'-crop'+suffix+'.png',targetWidth);
       if(!file)throw new Error('The image could not be cropped. The source may be unavailable or blocked by browser media permissions.');
