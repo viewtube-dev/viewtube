@@ -866,8 +866,7 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
           })}
          </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <SubToolboxGridActionButton
-           <input
+          <input
             ref={importInputRef}
             type="file"
             accept=".txt,.md,.markdown,text/plain,text/markdown"
@@ -894,6 +893,7 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
             tone="purple"
             onClick={() => importInputRef.current?.click()}
            />
+          <SubToolboxGridActionButton
            label="Copy Script"
            iconName="layers"
            tone="green"
