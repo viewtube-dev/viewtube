@@ -5,6 +5,7 @@ import type {EditorNavPage} from './EditorNavigationPages';
 import type {VtE1Clip} from '../../../../shared/vtE1TimelineContract';
 import {AcceleratingStepper as HoldStepper,LinkToggle,RotationDial,XYJoystick} from './MobileEditorPrimitives';
 import {ClipEffects} from './EffectsLibrariesPanel';
+import {canSlipSourceWindow,SOURCE_SLIP_STEPS} from '../state/sourceSlipControls';
 
 const BLACK='#111111';
 const MAGENTA='#ff00ff';
@@ -278,6 +279,12 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const isShape=type==='shape';
   const isMedia=type==='media';
   const isAudio=type==='audio';
+  const sourceDurationSec=number(clip.sourceDurationSec??payload.sourceDurationSec??payload.mediaDurationSec,0);
+  const sourceInSec=number(clip.sourceInSec,0);
+  const sourceOutSec=number(clip.sourceOutSec,sourceInSec+Math.max(.1,clip.end-clip.start));
+  const canSlipSource=(isAudio||(isMedia&&payload.mediaKind==='video'))&&sourceDurationSec>0;
+  const canSlip=(deltaSec:number)=>canSlipSource&&canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,deltaSec);
+  const slipSource=(deltaSec:number)=>store.dispatch({type:'slipClip',id:clip.id,deltaSec,sourceDurationSec});
   const audioVolume=number(payload.volume,.6);
   const audioRate=number(payload.playbackRate,1);
   const widthValue=number(payload.width,100),heightValue=number(payload.height,100);
@@ -350,6 +357,15 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
       defaultValue={4}
       onChange={duration=>store.dispatch({type:'trimClip',id:clip.id,side:'right',sec:clip.start+duration})}
     />
+
+    {canSlipSource&&<div style={{margin:'8px 0 10px',padding:7,border:`2px solid ${BLACK}`,borderRadius:7,background:'#fff'}}>
+      <div style={{fontSize:8,fontWeight:1000,textTransform:'uppercase',marginBottom:3}}>Source Window</div>
+      <div style={{fontSize:8,fontWeight:800,opacity:.7,marginBottom:6}}>{sourceInSec.toFixed(2)}s → {sourceOutSec.toFixed(2)}s / {sourceDurationSec.toFixed(2)}s source</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:4}}>
+        {SOURCE_SLIP_STEPS.map(step=><button key={step.deltaSec} aria-label={step.ariaLabel} style={{...miniButton,width:'100%',opacity:canSlip(step.deltaSec)?1:.4}} disabled={!canSlip(step.deltaSec)} onClick={()=>slipSource(step.deltaSec)}>{step.label}</button>)}
+      </div>
+      <div style={{fontSize:7,fontWeight:800,opacity:.6,marginTop:5}}>Slip shifts source footage inside the fixed timeline span; clip position and duration stay unchanged.</div>
+    </div>}
 
     <div style={sectionLabel}>TRANSFORM + TIMING</div>
     <div style={{display:'grid',gridTemplateColumns:'92px 76px',gap:8,alignItems:'start',marginBottom:8}}>
