@@ -301,3 +301,18 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 ### Catalog and certification checklist
 For each displayed family, identify the real export, TSX source, CSS owner, supported sizes/variants, default and checked/on states, keyboard/focus behavior, disabled behavior, and color-pair handling. Confirm the rendered catalog uses the production primitive rather than a lookalike. Build/typecheck and browser visual checks remain required before declaring the work certified; source-only checks are not visual certification.
 
+
+
+## Studio Controls text-field contract — 2026-10-13
+
+The canonical owners are `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`. The confirmed primitive catalog must render these production controls, not local lookalikes.
+
+- Standard single-line fields: **44px high**, **38px** type size, weight **1000**.
+- Compact single-line fields: **28px high**, **24px** type size, weight **1000**.
+- Default fill: primary/accent at **50% opacity**; text and text stroke use primary/accent.
+- Focus fill: primary/accent at **15% opacity**; text and text stroke switch to black.
+- Primary/accent inset stroke width matches the field border width.
+- Focus outline: **100% opaque secondary**, half the border stroke (1.5px standard, 1px compact).
+- Caret color: primary/accent.
+
+The catalog's Text Input, Textarea, and Number Field use the canonical Studio Controls components and select the compact variant for L2 examples.
