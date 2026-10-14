@@ -686,7 +686,10 @@ If this document was not updated, the editor work is not fully handed off.
 
 All proposals preserve the existing project bridge, one editor project model, ContentBuild/asset identity, deterministic render parity, undo/redo and explicit AI approval boundaries. AI UI must not call providers directly. Generated/recommended artifacts enter canonical provenance/asset flows.
 
-### Update Log addition — 2026-09-27
+### Update Log
+
+| 2026-10-14 | Creator production tools — trim-to-playhead shortcuts | PR / feat/creator-workbench-trim-to-playhead | started | Added Trim Start to Playhead and Trim End to Playhead actions to Timeline Trim panel, gated by a pure minimum-duration/valid-range predicate and routed through existing trimClip reducer/history. | src/features/editor/mobile/components/PanelBodies.tsx; src/features/editor/mobile/state/trimAtPlayhead.ts; src/features/editor/mobile/state/trimAtPlayhead.test.ts; docs/editor/CREATOR_PRODUCTION_WORKBENCH_IMPLEMENTATION_2026-10-13.md | Source reviewed; tests/build, undo/redo and responsive visual QA pending | existing trimClip action + source-aware trim contract | run focused tests and browser QA; then continue with Script Architect/BrainRuntime integration audit |
+ addition — 2026-09-27
 
 | Date / time | Agent / conversation | Branch / PR | Status | Work completed / begun / planned | Changed or created paths | Verification / evidence | New references / sources | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
