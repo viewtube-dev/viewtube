@@ -146,7 +146,7 @@ Audited both open proposals against `master/consolidated-feature-integration` be
 - **PR #123 — source-slip controls:** the selected-media Trim panel, source-window display, reducer-backed `slipClip` action, and timeline-boundary tests are already present on the canonical base. The old panel exposed quarter-second steps and used broad backward/forward enablement, though. This consolidation retains the one-second actions and replaces quarter-second controls with **±0.1-second precision steps**, with each button independently enabled only when the full source window remains within known media bounds.
 - The source-slip bounds logic now lives in `sourceSlipControls.ts`, with focused Vitest cases for all four step sizes, both source boundaries, and invalid windows.
 
-Both source branches had diverged substantially from the current canonical integration branch. The existing canonical features are the source of truth; this PR carries the missing precision/guard improvement and records the reconciliation rather than merging stale branch histories.
+Both source branches had diverged substantially from the current canonical integration branch. The existing canonical features are the source of truth; this PR adds the missing selected-media inspector integration, standardizes precision/bounds behavior, and records the reconciliation rather than merging stale branch histories.
 
 ## Immediate next sequence
 
