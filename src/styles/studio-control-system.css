@@ -1600,3 +1600,56 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   outline: 1.5px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 0 !important;
 }
+
+
+/* Split-left size/state cascade fix (2026-10-14).
+   The earlier canonical base rule hard-coded standard 3px/8px geometry and the
+   selected rule added a 3px outer ring. Scope dimensions by data-size and use
+   the same compact geometry in default, hover, active and selected states. */
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="standard"],
+button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) {
+  border: 3px solid #000 !important;
+  border-radius: 6px !important;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] {
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="standard"] > [data-vt-studio-split-rail],
+button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) > [data-vt-studio-split-rail] {
+  border-right: 3px solid #000 !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-split-rail],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] > [data-vt-studio-split-rail] {
+  border-right: 2px solid #000 !important;
+}
+/* Selected styling changes state/color only; it must not add a second stroke. */
+button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] {
+  outline: none !important;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][aria-pressed="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"][aria-pressed="true"] {
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  outline: none !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
+button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled) {
+  border-width: var(--vt-split-stroke, 3px) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] {
+  --vt-split-stroke: 2px;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="standard"],
+button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) {
+  --vt-split-stroke: 3px;
+}
