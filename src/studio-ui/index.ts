@@ -11,7 +11,6 @@ export {
   SubToolboxButton,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 export type { PrimaryButtonProps, SubToolboxButtonProps } from "../components/subtoolbox/SubToolboxPrimitives"
-export { SubToolboxInput20, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea } from "../components/subtoolbox/SubToolboxPrimitives"
 export {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -28,8 +27,8 @@ export {
   Studioxbox,
   StudioChoice,
   StudioLegendMultiDropdown,
-  StudioFloatingLabelInput,
-  StudioFloatingLabelTextArea,
+  StudioLabeledInput,
+  StudioLabeledTextArea,
   StudioNumberInput,
   StudioSearchInput,
   StudioSelect,
@@ -39,8 +38,8 @@ export type {
   StudioButtonProps,
   StudioLegendMultiDropdownProps,
   StudioLegendMultiDropdownOption,
-  StudioFloatingLabelInputProps,
-  StudioFloatingLabelTextAreaProps,
+  StudioLabeledInputProps,
+  StudioLabeledTextAreaProps,
   StudioControlTone,
   StudioIconButtonProps,
   StudioSplitLeftButtonProps,
