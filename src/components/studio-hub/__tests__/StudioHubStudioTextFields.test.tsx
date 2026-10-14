@@ -29,4 +29,12 @@ describe("standalone Studio text fields in the UI Reference Library", () => {
     expect(html).toContain('src/studio-ui/primitives/StudioControls.tsx')
     expect(html).toContain('src/styles/studio-control-system.css')
   })
+
+  it("keeps confirmed buttons and word toggles in explicit layout families", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('vt-confirmed-button-family')
+    expect(html).toContain('is-word-toggle-44')
+    expect(html).toContain('is-word-toggle-28')
+  })
+
 })
