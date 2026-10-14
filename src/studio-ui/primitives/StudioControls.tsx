@@ -34,7 +34,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       outlineStrokeWidth: "half the current border width",
       outlineShadowColor: "secondary",
     },
-    caret: { color: "primary", style: "thick block caret" },
+    caret: { color: "primary", style: "native insertion caret" },
   },
   motionEasing: "ease-out",
 } as const

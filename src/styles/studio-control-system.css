@@ -1044,3 +1044,85 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
     text-align:center;
   }
 }
+
+/* Studio text field rendering correction
+   Keep this authoritative block after legacy compatibility rules and labeled-field
+   styles. Earlier wrapper declarations used !important and overrode the field state.
+   Native insertion caret is intentional: experimental block-caret shaping is not interoperable and
+   can render duplicated/wide blocks in some browsers. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-color-1: var(--pair-a, #36e0f6);
+  --vt-field-color-2: var(--pair-b, #ff7f6b);
+  --vt-field-stroke: 3px;
+  --vt-field-outline-stroke: 1.5px;
+  --vt-field-outline-shadow-width: 3px;
+  box-sizing: border-box !important;
+  background-color: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent) !important;
+  background-image: none !important;
+  color: var(--pair-a, #36e0f6) !important;
+  -webkit-text-fill-color: var(--pair-a, #36e0f6) !important;
+  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
+  caret-color: var(--pair-a, #36e0f6) !important;
+  border: 3px solid #000 !important;
+  border-radius: 8px !important;
+  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--pair-a, #36e0f6) !important;
+  outline: none;
+  transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-stroke: 3px;
+  --vt-field-outline-stroke: 1.5px;
+  --vt-field-outline-shadow-width: 3px;
+  min-height: 44px;
+  border-width: 3px !important;
+  border-radius: 8px !important;
+}
+
+[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-stroke: 2px;
+  --vt-field-outline-stroke: 1px;
+  --vt-field-outline-shadow-width: 2px;
+  min-height: 28px;
+  border-width: 2px !important;
+  border-radius: 5px !important;
+  padding-inline: 8px;
+  font-size: 24px;
+  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
+}
+
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
+  background-color: color-mix(in srgb, var(--pair-a, #36e0f6) 15%, transparent) !important;
+  background-image: none !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: .5px #000 !important;
+  border-color: #000 !important;
+  outline: var(--vt-field-outline-stroke) solid var(--pair-b, #ff7f6b) !important;
+  outline-offset: 2px !important;
+  box-shadow:
+    inset 0 0 0 var(--vt-field-stroke) var(--pair-a, #36e0f6),
+    0 0 0 var(--vt-field-outline-shadow-width) color-mix(in srgb, var(--pair-b, #ff7f6b) 30%, transparent) !important;
+  caret-color: var(--pair-a, #36e0f6) !important;
+}
+
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
+  color: color-mix(in srgb, var(--pair-a, #36e0f6) 70%, transparent) !important;
+  -webkit-text-fill-color: currentColor !important;
+  -webkit-text-stroke: inherit !important;
+  opacity: 1;
+}
+
+textarea[data-vt-studio-control="true"][data-size="standard"] {
+  min-height: 144px;
+  padding: 12px 14px;
+  line-height: 1.05;
+}
+
+textarea[data-vt-studio-control="true"][data-size="compact"] {
+  min-height: 72px;
+  padding: 8px;
+  line-height: 1.05;
+}
+
