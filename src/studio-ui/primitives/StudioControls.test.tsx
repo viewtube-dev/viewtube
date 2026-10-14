@@ -32,6 +32,16 @@ describe("standalone Studio text fields", () => {
   })
 })
 
+describe("Studio text field library entries", () => {
+  it("renders the standalone Studio text input and textarea as distinct catalog specimens", () => {
+    const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />);
+    expect(html).toContain('data-vt-library-component="StudioTextInput"');
+    expect(html).toContain('data-vt-library-component="StudioTextArea"');
+    expect(html).toContain('aria-label="Canonical Studio text input"');
+    expect(html).toContain('aria-label="Canonical Studio text area"');
+  });
+});
+
 describe("Studio primitive catalog control layout", () => {
   it("puts standard word toggles one per row and compact word toggles two per row", () => {
     const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />)
