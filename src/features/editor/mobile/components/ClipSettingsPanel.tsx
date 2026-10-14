@@ -13,6 +13,7 @@ import {uploadImageDerivative} from '../state/imageDerivativeStorage';
 import {createVersionedAsset} from '../../../../services/assetEngine';
 import {getContentBuild} from '../../../../services/asset-engine/ContentBuildRepository';
 import {parseSrtCaptions} from '../state/srtCaptionImport';
+import {buildSrtCaptions} from '../state/srtCaptionExport';
 import {AudioWaveformInspector} from './AudioWaveformInspector';
 
 const BLACK='#111111';
@@ -141,8 +142,35 @@ function SrtCaptionImportControl({store}:{store:EditorStore}){
       setMessage(reason instanceof Error?reason.message:'Caption import failed.');
     }finally{setBusy(false)}
   };
+  const exportSrt=()=>{
+    setMessage('');
+    try{
+      const captionTrackIds=new Set(store.state.project.tracks.filter(track=>track.kind==='caption').map(track=>track.id));
+      const cues=store.state.project.clips
+        .filter(clip=>captionTrackIds.has(clip.trackId))
+        .map(clip=>{
+          const layer=clip.layerId?store.layerById(String(clip.layerId)):undefined;
+          return {startSec:clip.start,endSec:clip.end,text:String(layer?.payload?.text??'')};
+        });
+      const content=buildSrtCaptions(cues);
+      if(!content){setMessage('No valid timed caption clips are available to export.');return;}
+      const project=store.state.project as typeof store.state.project&{name?:unknown;title?:unknown};
+      const fileBase=String(project.name??project.title??'viewtube-captions')
+        .replace(/[^\\w.-]+/g,'-').replace(/^-+|-+$/g,'')||'viewtube-captions';
+      const url=URL.createObjectURL(new Blob([content],{type:'application/x-subrip;charset=utf-8'}));
+      const anchor=document.createElement('a');
+      anchor.href=url;anchor.download=fileBase+'.srt';anchor.click();
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+      setMessage('Exported timed caption track as '+fileBase+'.srt.');
+    }catch(reason){
+      setMessage(reason instanceof Error?reason.message:'Caption export failed.');
+    }
+  };
   return <div style={{gridColumn:'1 / -1',minWidth:0}}>
-    <button type="button" style={{...addButtonBase,background:YELLOW,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={()=>inputRef.current?.click()}><FileText size={13}/>{busy?'IMPORTING SRT…':'IMPORT SRT CAPTIONS'}</button>
+    <div style={{display:'grid',gap:3}}>
+      <button type="button" style={{...addButtonBase,background:YELLOW,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={()=>inputRef.current?.click()}><FileText size={13}/>{busy?'IMPORTING SRT…':'IMPORT SRT CAPTIONS'}</button>
+      <button type="button" style={{...addButtonBase,background:CYAN,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={exportSrt}><Save size={13}/>EXPORT SRT CAPTIONS</button>
+    </div>
     <input ref={inputRef} type="file" accept=".srt,text/plain" hidden onChange={event=>{const file=event.currentTarget.files?.[0];event.currentTarget.value='';if(file)void importFile(file)}}/>
     {message?<div role="status" style={{fontSize:8,fontWeight:800,marginTop:4,overflowWrap:'anywhere'}}>{message}</div>:null}
   </div>;
