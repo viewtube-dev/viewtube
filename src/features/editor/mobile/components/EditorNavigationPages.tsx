@@ -2,6 +2,7 @@ import React from 'react';
 import {AudioLines,Film,FolderKanban,LayoutTemplate,ScanSearch,Settings as SettingsIcon,Shuffle,SlidersHorizontal,Type,Upload} from 'lucide-react';
 import type {EditorStore} from '../state/editorState';
 import {readClipVisualTransform} from '../state/editorState';
+import {cropToAspectRatio} from '../state/cropPresets';
 import {renderPanelBody} from './PanelBodies';
 import {EditorFeatureManifest} from './EditorFeatureManifest';
 import {EditorViewSwitcher} from './EditorViewSwitcher';
@@ -51,6 +52,15 @@ function Inspector({store}:{store:EditorStore}){
   if(transition)return <><Section name="Transition"><b>{transition.leftClipId} → {transition.rightClipId}</b></Section><Section name="Transition Controls"><Grid><button style={button} onClick={()=>store.dispatch({type:'openPanel',id:'transitions'})}>Edit</button><button style={{...button,background:PINK}} onClick={()=>store.dispatch({type:'removeTransition',id:store.state.selection.transitionId!})}>Remove</button></Grid></Section></>;
   if(!clip)return <Section name="Clip Inspector"><div style={{fontSize:10,fontWeight:800,opacity:.6,marginBottom:6}}>Select a clip, track, or transition from the timeline or Clips page.</div><CapabilityGrid category="edit"/></Section>;
   const v=readClipVisualTransform(clip),set=(patch:any)=>store.dispatch({type:'updateClipTransform',id:clip.id,patch});
+  const mediaLayer=clip.layerId?store.layerById(String(clip.layerId)):undefined;
+  const mediaPayload=mediaLayer?.payload??{};
+  const mediaKind=mediaPayload.mediaKind;
+  const sourceWidth=Number(mediaPayload.width??0),sourceHeight=Number(mediaPayload.height??0);
+  const hasMediaDimensions=(mediaKind==='image'||mediaKind==='video')&&sourceWidth>0&&sourceHeight>0;
+  const project=store.state.project as Record<string,unknown>;
+  const projectAspectRatio=project.aspect==='landscape'||project.aspectRatio==='16:9'?16/9:9/16;
+  const projectRatioCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,projectAspectRatio):null;
+  const squareCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,1):null;
   return <>
     <Section name="Clip"><b>{String(clip.id)}</b><div>{clip.start.toFixed(2)}s → {clip.end.toFixed(2)}s · {store.trackById(clip.trackId)?.kind??'clip'}</div></Section>
     <Section name="Transform">
@@ -73,6 +83,8 @@ function Inspector({store}:{store:EditorStore}){
       <Grid cols={3}>
         <button style={button} aria-label="Apply centered 10 percent crop" onClick={()=>set({cropLeft:.1,cropRight:.1,cropTop:.1,cropBottom:.1})}>Center 10%</button>
         <button style={button} aria-label="Apply centered 20 percent crop" onClick={()=>set({cropLeft:.2,cropRight:.2,cropTop:.2,cropBottom:.2})}>Center 20%</button>
+        <button style={{...button,opacity:projectRatioCrop?1:.4}} aria-label="Crop to project aspect ratio" disabled={!projectRatioCrop} onClick={()=>projectRatioCrop&&set(projectRatioCrop)}>Project Ratio</button>
+        <button style={{...button,opacity:squareCrop?1:.4}} aria-label="Crop to square aspect ratio" disabled={!squareCrop} onClick={()=>squareCrop&&set(squareCrop)}>Square</button>
         <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
       </Grid>
       <Grid>
