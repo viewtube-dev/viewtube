@@ -160,6 +160,27 @@ describe("Post-publish analytics bridge", () => {
     expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
   })
 
+  it("rejects a snapshot that points to a different source project", () => {
+    mocks.getContentBuild.mockReturnValue({ ...build, legacyProjectId: "other-project" })
+
+    expect(() => recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })).toThrow(/does not match the source ContentBuild project/)
+    expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
+    expect(mocks.appendContentBuildEvent).not.toHaveBeenCalled()
+  })
+
+  it("rejects a publish transaction that has not completed", () => {
+    mocks.getPublishTransaction.mockReturnValue({ ...transaction, status: "running" })
+
+    expect(() => recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })).toThrow(/before the publish transaction is completed/)
+    expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
+  })
+
   it("records a checkpoint on ContentBuild and sends it to canonical evaluation with exact lineage", () => {
     const result = recordAnalyticsCheckpointForEvaluation({
       transactionId: "publish-tx-1",
