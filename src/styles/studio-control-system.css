@@ -1600,3 +1600,88 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   outline: 1.5px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 0 !important;
 }
+
+
+/* Phase 3: split-left buttons must use their own size token in every state. */
+button[data-vt-studio-control="true"][data-split-left="true"] {
+  --vt-split-stroke: 3px;
+  --vt-split-radius: 6px;
+  --vt-split-shadow-x: 4px;
+  --vt-split-shadow-y: 4px;
+  border-width: var(--vt-split-stroke) !important;
+  border-radius: var(--vt-split-radius) !important;
+  box-shadow: var(--vt-split-shadow-x) var(--vt-split-shadow-y) 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] {
+  --vt-split-stroke: 2px;
+  --vt-split-radius: 4px;
+  --vt-split-shadow-x: 1.5px;
+  --vt-split-shadow-y: 1.5px;
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] {
+  border-right-width: var(--vt-split-stroke, 3px) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-split-rail] {
+  border-right-width: 2px !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] {
+  box-shadow: var(--vt-split-shadow-x, 4px) var(--vt-split-shadow-y, 4px) 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][aria-pressed="true"] {
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+
+/* Phase 4: dropdown triggers are flat in default, hover, focus, open and pressed states.
+   Keep the floating label fixed to its anchor rather than selected-value content. */
+.vt-studio-legend-multi .vt-studio-legend-label,
+.vt-confirmed-catalog .vt-studio-legend-label {
+  box-sizing: border-box !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 12px !important;
+  transform: translateY(-50%) !important;
+  transform-origin: top left !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  z-index: 3 !important;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label,
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label {
+  top: 0 !important;
+  left: 8px !important;
+  transform: translateY(-50%) !important;
+  height: 14px !important;
+  min-height: 14px !important;
+  max-height: 14px !important;
+  font-size: 9px !important;
+}
+.vt-studio-legend-trigger,
+.vt-studio-legend-trigger:hover,
+.vt-studio-legend-trigger:focus,
+.vt-studio-legend-trigger:focus-visible,
+.vt-studio-legend-trigger:active,
+.vt-confirmed-catalog .vt-studio-legend-trigger,
+.vt-confirmed-catalog .vt-studio-legend-trigger:hover,
+.vt-confirmed-catalog .vt-studio-legend-trigger:focus,
+.vt-confirmed-catalog .vt-studio-legend-trigger:focus-visible,
+.vt-confirmed-catalog .vt-studio-legend-trigger:active {
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger,
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger:hover,
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger:focus,
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger:focus-visible,
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger:active {
+  box-shadow: none !important;
+}
