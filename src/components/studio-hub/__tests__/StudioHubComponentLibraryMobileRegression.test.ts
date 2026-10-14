@@ -77,7 +77,7 @@ describe("Studio Hub Component Library mobile regression", () => {
     const migration = read("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
     const css = read("src/components/studio-hub/studio-hub-primitive-migration-catalog.css")
     const primitiveCss = read("src/styles/subtoolbox-system.css")
-    const splitCss = read("src/styles/subtoolbox-split-primitives.css")
+    const splitCss = read("src/styles/subtoolbox-system.css")
 
     expect(css).toContain('[data-vt-subtoolbox="true"] > div:first-child')
     expect(css).toContain("border:0!important")
@@ -237,7 +237,7 @@ describe("Studio Hub Component Library mobile regression", () => {
   it("uses a menu dropdown and full-width responsive action rows in Project Manifestation", () => {
     const manifestation = read("src/components/projects/ProjectManifestation.tsx")
     const projectCss = read("src/styles/project-manifestation.css")
-    const metadataCss = read("src/styles/subtoolbox-split-primitives.css")
+    const metadataCss = read("src/styles/subtoolbox-system.css")
     expect(manifestation).toContain("<SubToolboxSplitDropdown")
     expect(manifestation).not.toContain("<SubToolboxSelect")
     expect(manifestation).toContain('className="vt-project-manifestation-actions"')
