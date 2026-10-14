@@ -21,8 +21,8 @@
 | VT-014 | Publishing | Persist immutable ApprovedPublishSnapshot | P0 | NOT_STARTED | VT-002 | exact inputs + approver + hash |
 | VT-015 | Publishing | Bind PublishTransaction to snapshot | P0 | NOT_STARTED | VT-014 | retries cannot observe later edits |
 | VT-016 | Publishing | Retry/recovery/idempotency certification | P0 | NOT_STARTED | VT-005,VT-015 | interrupted publish fixtures |
-| VT-017 | Post-publish | Write YouTube binding/lifecycle checkpoints to ContentBuild | P1 | NOT_STARTED | VT-015 | same identity survives publish |
-| VT-018 | Post-publish | Analytics checkpoint → evaluation bridge | P1 | NOT_STARTED | VT-001,VT-017 | exact used variants |
+| VT-017 | Post-publish | Write YouTube binding/lifecycle checkpoints to ContentBuild | P1 | IN_PROGRESS | VT-015 | Draft PR #132 adds a post-publish identity receipt validated against completed transaction + approved snapshot, retaining project/build/video/snapshot/correlation and exact selected asset IDs. Tests written; executable verification and transaction/recovery E2E pending. |
+| VT-018 | Post-publish | Analytics checkpoint → evaluation bridge | P1 | IN_PROGRESS | VT-001,VT-017 | Draft PR #132 writes checkpoints to the same ContentBuild and existing Algorithm Intelligence/evaluation ledger with deterministic identity, evidence, snapshot and exact variant refs. Tests written; CI/typecheck/build and end-to-end verification pending. |
 | VT-019 | Brain | Classify/fix implicit readBrainUserControls() scope | P1 | READY | — | explicit channel when known |
 | VT-020 | Brain | Migrate Hook Generator through canonical generation/runtime | P1 | NOT_STARTED | — | parity first, then shrink allowlist |
 | VT-021 | Brain | Migrate Script Architect through canonical generation/runtime | P1 | NOT_STARTED | VT-020 | parity first |
