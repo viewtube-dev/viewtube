@@ -118,6 +118,14 @@ Added focused tests for clip overrides, legacy layer-payload fallback, defaults,
 
 The Audio panel now exposes **Fade In** and **Fade Out** duration controls (0–10 seconds). The shared audio render contract resolves clip-level fade edits over legacy layer-payload values. A deterministic `audioVolumeAtFrame` helper computes per-frame gain, including overlapping fades and mute behavior; Remotion Composition uses that helper as the Audio volume curve. Unit cases cover fade endpoints, mid-fade gain, overlapping fades, and mute. The tests are authored but have not been executed here, and final audio playback/render verification remains pending.
 
+## Current implementation — quick media editing controls
+
+- Added a **4:5 portrait crop preset** alongside the existing 16:9, 1:1, and 9:16 presets, removing the duplicate square action from the secondary crop row.
+- Added **Quick Image Adjustments** for selected image/video media layers: brightness, contrast, saturation, Reset Tone, Reset All FX, and a shortcut to the full Effects panel. These controls use `vtE1FxCatalog` normalization and the existing `updateLayerPayload` action rather than creating a second FX vocabulary.
+- Consolidated duplicate crop-helper imports and source-dimension declarations in the selected-clip inspector.
+- Added **Trim Start to Playhead** and **Trim End to Playhead** shortcuts in Timeline Trim. A pure eligibility helper disables them outside the clip interior or inside the minimum-duration guard band; actions use the existing trim reducer/history.
+- Added focused Vitest cases for trim-to-playhead eligibility. Tests/build, undo/redo, preview/render parity, and responsive browser verification remain pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
