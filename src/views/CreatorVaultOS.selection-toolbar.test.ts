@@ -31,6 +31,13 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain("failed · open to review")
  })
 
+ it("keeps recent completed jobs visible in Task Center history", () => {
+  expect(source).toContain('const completedVaultTasks = tasks.filter((task) => task.status === "completed").slice(0, 5)')
+  expect(source).toContain('[...failedVaultTasks, ...activeVaultTasks, ...completedVaultTasks].slice(0, 12)')
+  expect(source).toContain('data-vault-task-status={task.status}')
+  expect(source).toContain('label="Clear Completed"')
+ })
+
  it("renders Compare & Versions as its own configurable SubToolbox module", () => {
   expect(source).toContain('title="Compare & Versions"')
   expect(source).toContain('persistenceId="vault-compare-versions"')

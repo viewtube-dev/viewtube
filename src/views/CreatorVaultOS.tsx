@@ -332,6 +332,7 @@ const CreatorVaultOS: React.FC = () => {
  const tasks = useMemo(() => listVaultTasks(), [taskRefresh])
  const activeVaultTasks = tasks.filter((task) => task.status === "queued" || task.status === "processing")
  const failedVaultTasks = tasks.filter((task) => task.status === "failed")
+ const completedVaultTasks = tasks.filter((task) => task.status === "completed").slice(0, 5)
  const scratchpads = useMemo(() => listVaultScratchpads(), [scratchpadRefresh])
  const checklistItems = useMemo(() => listVaultChecklistItems(), [checklistRefresh])
  const customFields = useMemo(() => listVaultCustomFields(), [customFieldRefresh])
@@ -2853,8 +2854,8 @@ const CreatorVaultOS: React.FC = () => {
        persistenceId="vault-task-center"
       >
        <div className="flex flex-col gap-2">
-        {activeVaultTasks.length || failedVaultTasks.length ? [...failedVaultTasks, ...activeVaultTasks].slice(0, 12).map((task) => (
-         <div key={task.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+        {activeVaultTasks.length || failedVaultTasks.length || completedVaultTasks.length ? [...failedVaultTasks, ...activeVaultTasks, ...completedVaultTasks].slice(0, 12).map((task) => (
+         <div key={task.id} data-vault-task-status={task.status} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
           <div className="min-w-0">
            <div className="truncate text-sm font-black uppercase">{task.label}</div>
            <div className="text-xs font-bold opacity-60">
