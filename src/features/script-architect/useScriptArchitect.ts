@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { generateScript } from "../../services/gemini"
+import { runBrainJsonTask } from "../../services/brain/runtime/BrainRuntime"
+import { buildScriptArchitectBrainTaskRequest } from "./scriptBrainRuntime"
 import { toScriptExportFilename } from "./scriptExport"
 import { createSuperToolActionPacket } from "../../services/superToolActionPackets"
 import { resolveWorkspaceContentBuildToolContext } from "../../services/asset-engine/ToolContext"
@@ -250,7 +252,27 @@ export const useScriptArchitect = (): ScriptArchitectController => {
   setError(null)
   setStatus(null)
   try {
-   const generated = await generateScript(project, budget, brain)
+   const contentContext = resolveWorkspaceContentBuildToolContext(brain, "creator-canvas-os", ["script"])
+   const generated = await generateScript(project, budget, brain, async ({ userText, systemInstruction, responseSchema }) => {
+    const task = buildScriptArchitectBrainTaskRequest({
+     userText,
+     systemInstruction,
+     responseSchema,
+     projectId: brain.activeProjectId || null,
+     contentBuildId: contentContext?.contentBuildId || null,
+     visibleContext: {
+      tool: "script-architect",
+      topic: project.topic,
+      angle: project.angle,
+      niche: project.niche,
+      audience: project.audience,
+      tone: project.tone,
+      contentBuildId: contentContext?.contentBuildId || null,
+     },
+    })
+    const result = await runBrainJsonTask(task)
+    return result.value
+   })
    setResult(generated)
    const checks = verifyLockedFragments(project, generated.sections)
    const broken = checks.filter((entry) => entry.status === "altered").length
