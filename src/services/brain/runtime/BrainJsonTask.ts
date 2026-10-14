@@ -10,6 +10,7 @@ export interface BrainJsonTaskRequest {
   surface?: string
   userText: string
   systemInstruction: string
+  responseSchema?: Record<string, unknown>
   visibleContext?: Record<string, unknown> | null
   artifactRefs?: string[]
   gateway?: BrainModelGateway
@@ -118,6 +119,7 @@ export const runBrainJsonTask = async <T = unknown>(
   const value = await gateway.generateJsonObject({
     userText,
     systemInstruction,
+    responseSchema: request.responseSchema,
     history: [],
   })
 
