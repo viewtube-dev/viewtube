@@ -4916,11 +4916,12 @@ export const generateBrainJsonObject = async (input: {
  userText: string
  systemInstruction: string
  responseSchema?: Record<string, unknown>
+ capability?: "analysis" | "thinking"
  history?: any[]
 }): Promise<unknown> => {
   return executeWithRetry(async () => {
    const response = await getAiClient().models.generateContent({
-    model: getActiveModel("thinking"),
+    model: getActiveModel(input.capability || "thinking"),
     contents: [
      ...(input.history || []).slice(-6),
      { role: "user", parts: [{ text: input.userText }] },
