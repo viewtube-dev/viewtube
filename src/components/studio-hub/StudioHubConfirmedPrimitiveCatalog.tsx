@@ -25,7 +25,7 @@ const CanonicalControlFamilies: React.FC = () => {
       <div className="vt-confirmed-control-family" style={colorStyle}>{([{kind:"radio" as const,label:"CIRCULAR RADIO",mark:"check" as const},{kind:"checkbox" as const,label:"CHECKMARK CHECKBOX",mark:"check" as const},{kind:"checkbox" as const,label:"WIDE-X CHECKBOX",mark:"xwide" as const}]).map((item,row) => <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44Choice kind={item.kind} mark={item.mark} shape={item.kind === "radio" ? "round" : "rect"} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div>)}</div>
     </Family>
     <Family title="Word Toggles · 44px + 28px" provenance={<Provenance primitive="Studiotoggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/components/subtoolbox/SubToolboxPrimitives.tsx"]} />}>
-      <div className="vt-confirmed-control-family" style={colorStyle}>{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => <div className="vt-confirmed-control-row" key={item.size}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={item.size} skin={skin.skin} value={words[index]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div></div>)}</div>
+      <div className="vt-confirmed-control-family" style={colorStyle}>{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => <div className="vt-confirmed-control-row" key={item.size}><strong>{item.label}</strong><div className={`vt-confirmed-control-variants ${item.size === "44" ? "is-word-toggle-44" : "is-word-toggle-28"}`}>{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><SubToolbox44WordToggle size={item.size} skin={skin.skin} value={words[index]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div></div>)}</div>
     </Family>
   </>
 }
@@ -42,7 +42,7 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 )
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode }> = ({ title, children, provenance }) => (
-  <section className="vt-confirmed-family">
+  <section className={`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}>
     <h3>{title}</h3>
     <div className="vt-confirmed-variants">{children}</div>
     {provenance}
