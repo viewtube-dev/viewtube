@@ -13,6 +13,7 @@ export interface BrainJsonGenerationInput {
  userText: string
  systemInstruction: string
  responseSchema?: Record<string, unknown>
+ capability?: "analysis" | "thinking"
  history?: any[]
 }
 
