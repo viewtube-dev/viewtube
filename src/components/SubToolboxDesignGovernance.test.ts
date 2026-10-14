@@ -184,8 +184,8 @@ describe("subtoolbox design governance", () => {
   }
 
   expect(manager).toContain("SubToolboxVideoSelector")
-  expect(manager).toContain("SubToolboxLabeledInput")
-  expect(manager).toContain("SubToolboxLabeledTextArea")
+  expect(manager).toContain("StudioLabeledInput")
+  expect(manager).toContain("StudioLabeledTextArea")
   expect(manager).toContain("MiniSubToolbox")
   expect(manager).toContain("SubToolboxTagEditor")
   expect(manager).not.toContain("SubToolboxMetric")
@@ -212,7 +212,7 @@ describe("subtoolbox design governance", () => {
   expect(toolboxCss).toContain("padding:0!important")
   expect(toolbox).toContain("export const MiniSubToolbox")
   expect(toolbox).toContain('data-vt-toolbox-level="mini"')
-  expect(primitiveCss).toContain(".vt-subtoolbox-labeled-field")
+  expect(systemCss).toContain(".vt-studio-floating-field")
   expect(primitiveCss).toContain(".vt-subtoolbox-video-selector")
   expect(primitiveCss).toContain("text-overflow:clip")
   expect(primitiveCss).toContain(".vm-thumbnail-canvas")
@@ -496,7 +496,7 @@ describe("subtoolbox design governance", () => {
   expect(splitPrimitives).toContain("export const SplitLeftButton")
   expect(splitPrimitives).toContain("export const SubToolboxSplitButton")
   expect(primitives).toContain("floating-label")
-  expect(systemCss).toContain(".vt-subtoolbox-labeled-field.is-floating-label")
+  expect(systemCss).toContain(".vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label")
   expect(systemCss).toContain("left:14px")
   expect(systemCss).not.toContain("padding-right:52%!important")
   expect(catalog).toContain("PrimaryButton")
