@@ -22,30 +22,21 @@ export async function captureVideoFrameAsFile(
     const video = document.createElement('video');
     const canvas = document.createElement('canvas');
     let settled = false;
+    let frameStarted = false;
+    let timeout: number | undefined;
+    let targetTime = 0;
     const finish = (file: File | null) => {
       if (settled) return;
       settled = true;
+      if (timeout !== undefined) window.clearTimeout(timeout);
       video.pause();
       video.removeAttribute('src');
       video.load();
       resolve(file);
     };
-    video.preload = 'auto';
-    video.muted = true;
-    video.playsInline = true;
-    video.crossOrigin = 'anonymous';
-    video.onerror = () => finish(null);
-    video.onloadedmetadata = () => {
-      if (!Number.isFinite(video.duration) || video.duration <= 0 || !video.videoWidth || !video.videoHeight) {
-        finish(null);
-        return;
-      }
-      const target = Math.max(0, Math.min(sourceTimeSec, video.duration - 0.001));
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      video.currentTime = target;
-    };
-    video.onseeked = () => {
+    const captureFrame = () => {
+      if (settled || frameStarted || Math.abs(video.currentTime - targetTime) > 0.02) return;
+      frameStarted = true;
       try {
         const context = canvas.getContext('2d');
         if (!context) return finish(null);
@@ -62,6 +53,26 @@ export async function captureVideoFrameAsFile(
         finish(null);
       }
     };
+    video.preload = 'auto';
+    video.muted = true;
+    video.playsInline = true;
+    video.crossOrigin = 'anonymous';
+    video.onerror = () => finish(null);
+    video.onloadeddata = captureFrame;
+    video.onseeked = captureFrame;
+    video.onloadedmetadata = () => {
+      if (!Number.isFinite(video.duration) || video.duration <= 0 || !video.videoWidth || !video.videoHeight) {
+        finish(null);
+        return;
+      }
+      targetTime = Math.max(0, Math.min(sourceTimeSec, video.duration - 0.001));
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      video.currentTime = targetTime;
+      // Some browsers do not fire seeked when the target is already the current frame.
+      captureFrame();
+    };
+    timeout = window.setTimeout(() => finish(null), 15000);
     video.src = sourceUrl;
     video.load();
   });
