@@ -9,6 +9,7 @@ export interface BrainJsonTaskRequest {
   contentBuildId?: string | null
   surface?: string
   assetType?: string
+  capability?: "analysis" | "thinking"
   userText: string
   systemInstruction: string
   responseSchema?: Record<string, unknown>
@@ -121,6 +122,7 @@ export const runBrainJsonTask = async <T = unknown>(
     userText,
     systemInstruction,
     responseSchema: request.responseSchema,
+    capability: request.capability,
     history: [],
   })
 
