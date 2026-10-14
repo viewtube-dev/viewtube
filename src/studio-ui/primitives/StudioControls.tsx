@@ -41,7 +41,6 @@ StudioTextInput.displayName = "StudioTextInput"
 
 /** Backwards-compatible canonical name used by existing Studio consumers. */
 export const StudioInput = StudioTextInput
-StudioInput.displayName = "StudioInput"
 
 /** Canonical search input using the shared Studio text-field contract. */
 export const StudioSearchInput = React.forwardRef<
