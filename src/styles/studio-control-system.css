@@ -58,7 +58,7 @@
   -webkit-text-fill-color: #000;
   -webkit-text-stroke: .5px currentColor;
   outline: var(--vt-studio-control-outline-stroke, calc(var(--vt-studio-control-stroke) / 2)) solid var(--vt-studio-control-secondary);
-  outline-offset: 1px;
+  outline-offset: 0;
   caret-color: var(--vt-studio-control-accent);
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
 }
@@ -165,7 +165,7 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-l
 button[data-vt-studio-control][data-size="action"] { font-size: 20px; padding: 10px 16px; }
 button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px)); box-shadow: var(--vt-studio-control-hover-offset, 1.5px) var(--vt-studio-control-hover-offset, 1.5px) 0 0 var(--vt-studio-control-shadow-color); }
 button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
-button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 3px; }
+button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 0; }
 button[data-vt-studio-control]:disabled { cursor: not-allowed; filter: grayscale(.5); opacity: .5; }
 /* StudioButton has no selected state. Split-left selection swaps the two module-pair fills without changing geometry or adding a thick border. */
 button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { box-shadow: var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); }
@@ -517,7 +517,7 @@ button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
   outline: 3px solid var(--pair-b, #ff7f6b);
-  outline-offset: 3px;
+  outline-offset: 0;
 }
 [data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea),
 [data-vt-studio-control="true"][data-size="small"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
@@ -731,7 +731,7 @@ button[data-vt-studio-control][data-height-variant="28"] { border-radius:5px; }
 button[data-vt-studio-control]:hover:not(:disabled) { transform:translateY(1.5px); transition-duration:150ms; }
 button[data-vt-studio-control]:active:not(:disabled) { transform:translate(3px,3px); transition-duration:300ms; }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] { border-right-width:2px; }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { border-width:var(--vt-studio-control-stroke,3px)!important; border-color:#000!important; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))!important; }
+button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { border-width:var(--vt-studio-control-stroke,3px)!important; border-color:var(--vt-studio-control-border-color, currentColor)!important; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))!important; }
 button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6))!important; border-right-width:var(--vt-studio-control-stroke,3px)!important; }
 button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background:transparent!important; }
 button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon],button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail]>svg { width:36px;height:36px;display:grid;place-items:center;margin:auto; }
@@ -954,7 +954,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
 button[data-vt-studio-control="true"].vt-studio-44-switch:focus-visible,
 button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 3px;
+  outline-offset: 0;
 }
 /* Word toggles keep their intentional 3px/2px frame, but size to their own
    labels and stay inside the module instead of inheriting action-button layout. */
@@ -1471,4 +1471,34 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
     padding-inline: 8px;
   }
+}
+
+
+/* Confirmed Studio textarea specimen sizes; independent of button height tokens. */
+[data-vt-studio-control].vt-confirmed-studio-textarea-standard {
+  height: 92px;
+  min-height: 92px;
+  font-size: 18px !important;
+  line-height: 1.1;
+}
+[data-vt-studio-control].vt-confirmed-studio-textarea-compact {
+  width: 100%;
+  min-height: 72px;
+  font-size: 14px !important;
+  line-height: 1.1;
+}
+
+/* Canonical text-field geometry: black outer border, full-opacity primary inset,
+   matching text stroke, and no gap between the border and focus outline. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select) {
+  border-color: #000;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  -webkit-text-stroke: .5px currentColor;
+}
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select):focus,
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select):focus-visible {
+  border-color: #000;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  -webkit-text-stroke: .5px currentColor;
+  outline-offset: 0;
 }
