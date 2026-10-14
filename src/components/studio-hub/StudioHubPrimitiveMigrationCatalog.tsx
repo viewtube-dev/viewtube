@@ -111,7 +111,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioTextInput, StudioInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -464,10 +464,10 @@ const PrimitiveMigrationControl: React.FC<{
     return <StudioTextArea sizeVariant="standard" aria-label="Canonical Studio text area" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" />
   }
   if (name === "Text Input") {
-    return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
+    return <StudioInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue="TEXT INPUT" aria-label="Text input primitive" />
   }
   if (name === "Textarea") {
-    return <StudioTextArea sizeVariant="standard" defaultValue="DESCRIPTION" />
+    return <StudioTextArea sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue="DESCRIPTION" aria-label="Textarea primitive" />
   }
   if (name === "Stepper") {
     return <SubToolboxStepper level={level} value={stepperValue} decreaseIcon={<Minus />} increaseIcon={<Plus />} onDecrease={() => setStepperValue((value) => value - 1)} onIncrease={() => setStepperValue((value) => value + 1)} />
@@ -608,7 +608,7 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "137 Floating Label Input") return <StudioFloatingLabelInput sizeVariant="standard" overlayLabel="TITLE" defaultValue="TEXT INPUT" />
   if (name === "138 Floating Label Text Area") return <StudioFloatingLabelTextArea sizeVariant="compact" overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
   if (name === "Number Field") {
-    return <StudioInput sizeVariant="standard" type="number" defaultValue="25" />
+    return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
   if (name === "Input Action") {
     return <SubToolboxSplitField level={level} variant="action" actionIcon={<Plus />} actionLabel="Add item" onAction={() => setActionDraft("")} inputProps={{ "aria-label": "Add item", placeholder: "ADD ITEM", value: actionDraft, onChange: (event) => setActionDraft(event.target.value) }} />
