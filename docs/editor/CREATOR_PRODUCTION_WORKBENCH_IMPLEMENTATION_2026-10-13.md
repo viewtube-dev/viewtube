@@ -172,6 +172,10 @@ Script Architect now offers Export MD alongside the existing TXT export. Markdow
 
 The selected audio clip inspector now includes an on-demand waveform preview. It decodes the source only when requested, reduces channel samples to a bounded set of peak bars, closes the temporary AudioContext, and reports source/decoder errors. Large files are rejected before decode to limit in-panel memory use. This is a preview aid only; it does not edit audio or create a derivative. The pure peak reducer has focused tests; browser decode and responsive rendering still need verification.
 
+## Caption import slice
+
+The editor media toolbox now imports standard SRT files into a caption track. Parsing supports multiline text, comma or dot millisecond separators, hour timestamps, BOM-prefixed files, and ignores malformed or empty cues. Caption clips are added as one atomic editor history action, preserving the imported cue timings even when captions overlap. If no caption track exists, the import creates one as part of the same action. The parser and reducer have focused tests; runtime rendering, undo/redo, and visual styling still need verification.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
