@@ -1253,3 +1253,8 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   line-height: .86 !important;
   letter-spacing: -.035em !important;
 }
+
+
+/* Preserve readable paragraph rhythm while textareas share the size-specific font contract. */
+textarea[data-vt-studio-control="true"] { line-height: 1.05 !important; }
+textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05 !important; }
