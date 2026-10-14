@@ -397,7 +397,7 @@ export const useScriptArchitect = (): ScriptArchitectController => {
    return
   }
 
-  const name = fileName.replace(/\\.[^.]+$/, "").replace(/[_-]+/g, " ").trim() || "Imported Script"
+  const name = fileName.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim() || "Imported Script"
   setResult(imported)
   setProject((prev) => ({ ...prev, topic: prev.topic.trim() ? prev.topic : name }))
   setDraftName(name)
