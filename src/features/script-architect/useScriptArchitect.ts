@@ -113,6 +113,7 @@ export interface ScriptArchitectController {
  copyScript: () => Promise<void>
  downloadScript: () => void
  downloadMarkdown: () => void
+ importScriptText: (source: string, fileName: string) => void
  savePacket: () => Promise<void>
  saveDraft: () => void
  loadDraft: (id: string) => void
@@ -567,6 +568,7 @@ export const useScriptArchitect = (): ScriptArchitectController => {
   copyScript,
   downloadScript,
   downloadMarkdown,
+  importScriptText,
   savePacket,
   saveDraft,
   loadDraft,
