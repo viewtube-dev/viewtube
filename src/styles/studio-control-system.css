@@ -1567,3 +1567,48 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
 .vt-studio-44-word-toggle.is-color-swap > button.is-active { color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); }
 .vt-studio-44-word-toggle.is-black-indicator > button.is-active { color: #000; }
 .vt-studio-44-word-toggle.is-solid > button.is-active { color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+
+
+/* Final canonical split-left size tokens: compact controls use compact geometry throughout. */
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  border-width: 2px !important;
+  border-radius: 4px !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail] {
+  border-right-width: 2px !important;
+  border-radius: 0 !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail] > svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px;
+  min-height: 18px;
+  flex-basis: 18px;
+  stroke-width: 1.65px !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] {
+  --vt-studio-control-height: 44px;
+  --vt-studio-control-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  border-width: 3px !important;
+  border-radius: 6px !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] > [data-vt-studio-split-rail] { border-right-width: 3px !important; }
+
+/* Dropdown option rows are listbox options, not buttons: no shadow or press motion. */
+.vt-studio-legend-menu,
+.vt-studio-legend-menu * { box-shadow: none !important; }
+.vt-studio-legend-menu .vt-studio-legend-option,
+.vt-studio-legend-menu .vt-studio-legend-option:hover,
+.vt-studio-legend-menu .vt-studio-legend-option:active,
+.vt-studio-legend-menu .vt-studio-legend-option:focus,
+.vt-studio-legend-menu .vt-studio-legend-option:focus-visible {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+}
+.vt-studio-legend-menu .vt-studio-legend-option:active { filter: none !important; }
