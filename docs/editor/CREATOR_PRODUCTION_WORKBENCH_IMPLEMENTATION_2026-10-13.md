@@ -138,10 +138,20 @@ Script Architect now has an injectable structured-task path. The hook routes ass
 
 A pure request-envelope helper has focused tests for schema/prompt preservation and projectless draft support. Runtime generation, locked-fragment parity, AI Brain-disabled behavior, and tests/build remain unverified in this GitHub-only pass.
 
+## PR #120 and PR #123 consolidation
+
+Audited both open proposals against `master/consolidated-feature-integration` before carrying their value forward.
+
+- **PR #120 — Script Architect Export TXT:** the useful implementation is already present on the canonical base: `scriptExport.ts` and its filename tests, `downloadScript` in the Script Architect controller, and the Export TXT action beside Copy Script and Save Packet. The download keeps `fullScript` unchanged as UTF-8 text, uses a sanitized topic/draft filename, revokes the object URL, and surfaces export errors. No duplicate implementation was added.
+- **PR #123 — source-slip controls:** the selected-media Trim panel, source-window display, reducer-backed `slipClip` action, and timeline-boundary tests are already present on the canonical base. The old panel exposed quarter-second steps and used broad backward/forward enablement, though. This consolidation retains the one-second actions and replaces quarter-second controls with **±0.1-second precision steps**, with each button independently enabled only when the full source window remains within known media bounds.
+- The source-slip bounds logic now lives in `sourceSlipControls.ts`, with focused Vitest cases for all four step sizes, both source boundaries, and invalid windows.
+
+Both source branches had diverged substantially from the current canonical integration branch. The existing canonical features are the source of truth; this PR carries the missing precision/guard improvement and records the reconciliation rather than merging stale branch histories.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
+2. Continue from the already-integrated ratio-aware crop presets; verify their preview/render parity and add focal-point positioning before broadening file-level image processing.
 3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
