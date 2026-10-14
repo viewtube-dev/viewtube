@@ -102,11 +102,16 @@ The editor already had a reducer action for splitting a clip at the current play
 
 Split-button enablement is now a small pure contract in `src/features/editor/mobile/state/splitClipEligibility.ts`. It rejects missing/invalid clip intervals and non-finite playheads, and requires the playhead to be more than 1 ms inside either edge. A focused Vitest file covers interior, boundary/guard-band, and invalid-input cases. The test was added before extracting the helper, but this GitHub-only pass cannot execute it; it must be run in CI or a local checkout before claiming it passes.
 
+## Fifth implementation slice — quick media adjustments
+
+The selected image/video clip inspector now exposes quick brightness, contrast, and saturation controls. These are not a parallel filter implementation: values and ranges are read from the shared `vtE1FxCatalog` contract, and changes are written to the existing media layer payload through `updateLayerPayload`. The quick actions also provide **Reset Tone**, **Reset All FX**, and a route to the full existing Effects panel. FX edits are project-layer edits, not destructive source-file processing.
+
+During this slice, the inspector's duplicate crop-helper import and duplicate source-dimension declarations were also consolidated. The selected media layer is now the single source for stored width/height and FX payload values. This is a source-level repair; typecheck/build and runtime preview/render parity still need execution.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
-3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
-4. Trace video processing/job APIs and connect the first real operation.
-5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
-6. Expand audio/caption controls only against verified shared contracts.
+1. Run `npm run typecheck`, `npm run build`, the FX catalog tests, and focused editor tests; verify undo/redo and preview/final-render parity for crop, rotation, and quick FX.
+2. Inspect the real image processing/derivative contract before adding source-file resize, conversion, or export operations. Do not label timeline layer transforms as file processing.
+3. Trace video processing/job APIs and connect one real operation end-to-end, including status and error behavior.
+4. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary through the canonical task contract without regressing script assembly or locked-fragment verification.
+5. Expand audio/caption controls only against verified shared contracts and the existing editor project state.
