@@ -133,12 +133,13 @@ These rules apply to the Component Library presentation layer and do **not** cha
 - The opened panel is portaled above shell overflow/stacking contexts and carries the owning pair-A/pair-B values into the portal.
 - Search is the first row of the opened panel and uses the canonical split-left Search field.
 
-### Overlay-labeled fields
-- Labeled Input and Labeled Textarea put the contextual label inside the field on the right instead of consuming a separate line above the control.
-- Resting field tint is 50% pair A. The contextual label uses pair A at 65% strength and weight 1000.
-- Typed/user text is black and visually above the contextual label when their areas overlap.
-- The contextual label disappears while the field has focus.
-- Focus remains the canonical white field + pair-A inset + pair-B glow state.
+### Floating-label fields
+- Labeled Input and Labeled Textarea are compound Studio controls built directly on `StudioTextInput` and `StudioTextArea`.
+- The label begins inside the empty field and rises to the top edge on focus or when a value is present.
+- Both field types use the same label typography, independent of the underlying input/textarea text size.
+- The underlying Studio primitive owns field geometry, border, inset stroke, focus treatment, and text typography.
+- Floating-label wrappers own only label positioning, shared label typography, and label transitions.
+- The Confirmed Primitive Library renders these production components rather than parallel SubToolbox implementations.
 
 ### Video Manager production order
 1. Direct L0 Video Selector.
