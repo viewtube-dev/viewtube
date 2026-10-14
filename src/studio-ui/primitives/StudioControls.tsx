@@ -9,6 +9,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
   fontWeight: 1000,
   strokeColor: "#000000",
+  cornerRadius: "6px standard / 4px compact",
   colorPairSystem: "primary = --pair-a; secondary = --pair-b",
   backgroundFill: "buttons use primary; text fields use primary at 50% opacity",
   textColor: "#000000",
@@ -192,7 +193,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       if (!root || !target) return;
       const rootRect = root.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
-      const inset = size === "28" ? 2 : 2.75;
+      const inset = size === "28" ? 2 : 3;
       const next = { left: targetRect.left - rootRect.left + inset, width: Math.max(targetRect.width - inset * 2, 12) };
       setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
     };
