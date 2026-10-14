@@ -120,41 +120,44 @@ export const StudioTextArea = React.forwardRef<
 ))
 StudioTextArea.displayName = "StudioTextArea"
 
-export interface StudioFloatingLabelInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
-  overlayLabel: React.ReactNode
+export interface StudioLabeledInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "placeholder"> {
+  label: string
   sizeVariant?: Exclude<StudioControlSize, "action">
   level?: "l0" | "l1" | "l2"
 }
-
-/** Studio input plus the upper-right label overlay. */
-export const StudioFloatingLabelInput = React.forwardRef<HTMLInputElement, StudioFloatingLabelInputProps>(
-  ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
-    <label data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level}
-      className={["vt-studio-labeled-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
-      <StudioInput ref={ref} sizeVariant={sizeVariant} {...props} />
-      <span className="vt-studio-labeled-field-overlay">{overlayLabel}</span>
-    </label>
-  ),
+/** Floating-label input composed from the canonical StudioTextInput primitive. */
+export const StudioLabeledInput = React.forwardRef<HTMLInputElement, StudioLabeledInputProps>(
+  ({ label, sizeVariant = "standard", level = "l1", className, style, id, ...props }, ref) => {
+    const generatedId = React.useId()
+    const fieldId = id ?? `studio-labeled-input-${generatedId}`
+    return <div data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level}
+      className={["vt-studio-floating-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
+      <StudioTextInput ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
+      <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
+    </div>
+  },
 )
-StudioFloatingLabelInput.displayName = "StudioFloatingLabelInput"
+StudioLabeledInput.displayName = "StudioLabeledInput"
 
-export interface StudioFloatingLabelTextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  overlayLabel: React.ReactNode
+export interface StudioLabeledTextAreaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "placeholder"> {
+  label: string
   sizeVariant?: Exclude<StudioControlSize, "action">
   level?: "l0" | "l1" | "l2"
 }
-
-/** Studio writing area plus the upper-right label overlay. */
-export const StudioFloatingLabelTextArea = React.forwardRef<HTMLTextAreaElement, StudioFloatingLabelTextAreaProps>(
-  ({ overlayLabel, sizeVariant = "standard", level = "l1", className, style, ...props }, ref) => (
-    <label data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
-      className={["vt-studio-labeled-field", "is-textarea", className].filter(Boolean).join(" ")} style={style}>
-      <StudioTextArea ref={ref} sizeVariant={sizeVariant} {...props} />
-      <span className="vt-studio-labeled-field-overlay">{overlayLabel}</span>
-    </label>
-  ),
+/** Floating-label textarea composed from the canonical StudioTextArea primitive. */
+export const StudioLabeledTextArea = React.forwardRef<HTMLTextAreaElement, StudioLabeledTextAreaProps>(
+  ({ label, sizeVariant = "standard", level = "l1", className, style, id, ...props }, ref) => {
+    const generatedId = React.useId()
+    const fieldId = id ?? `studio-labeled-textarea-${generatedId}`
+    return <div data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
+      className={["vt-studio-floating-field", "is-textarea", className].filter(Boolean).join(" ")} style={style}>
+      <StudioTextArea ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
+      <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
+    </div>
+  },
 )
-StudioFloatingLabelTextArea.displayName = "StudioFloatingLabelTextArea"
+StudioLabeledTextArea.displayName = "StudioLabeledTextArea"
+
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
