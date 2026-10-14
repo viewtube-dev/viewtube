@@ -2913,13 +2913,6 @@ const CreatorVaultOS: React.FC = () => {
       >
        {selectedAsset ? (
         <div className="flex flex-col gap-3">
-         <div className="xl:hidden">
-          <SubToolboxInnerActionButton
-           label="Close Inspector"
-           iconName="x"
-           tone="pink"
-          />
-         </div>
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Quick Look</div>
           {!quickLookOpen ? (
