@@ -3,6 +3,7 @@ import {useCallback,useMemo,useReducer} from 'react';
 import type {VtE1Clip,VtE1Project,VtE1Transition} from '../../../../shared/vtE1TimelineContract';
 import {rippleDeleteTimelineClips,slideTimelineClip,slipTimelineClip,splitTimelineClip,trimTimelineClip} from '../../../../shared/vtE1TimelineOperations.js';
 import {readVtE1ClipVisualTransform,VT_E1_VISUAL_ANIMATED_PROPS} from '../../../../shared/vtE1VisualFrame.js';
+import {resolveCaptionShiftDelta} from './captionTiming';
 
 export type TrackKind='video'|'audio'|'overlay'|'caption';
 export interface Track{id:string;name:string;kind:TrackKind;muted?:boolean;locked?:boolean;hidden?:boolean;color?:string}
@@ -57,6 +58,7 @@ export type EditorAction=
   |{type:'addClip';clip:VtE1Clip}
   |{type:'addLayerClip';layer:EditorLayer;clip:VtE1Clip}
   |{type:'importCaptionBatch';track:Track|null;layers:EditorLayer[];clips:VtE1Clip[]}
+  |{type:'shiftCaptionBatch';deltaSec:number}
   |{type:'updateClip';id:string;patch:Partial<VtE1Clip>}
   |{type:'updateLayerPayload';id:string;patch:Record<string,unknown>}
   |{type:'setLayerVisible';id:string;visible:boolean}
@@ -283,6 +285,18 @@ export function editorReducer(state:EditorState,action:EditorAction):EditorState
         project:{...state.project,tracks,layers:[...state.project.layers,...action.layers],clips,durationSec},
         selection:lastClip?{...emptySelection,clipIds:[lastClip.id]}:emptySelection,
       });
+    }
+    case'shiftCaptionBatch':{
+      const captionTrackIds=new Set(state.project.tracks.filter(track=>track.kind==='caption').map(track=>track.id));
+      const captionClips=state.project.clips.filter(clip=>captionTrackIds.has(clip.trackId));
+      const deltaSec=resolveCaptionShiftDelta(captionClips.map(clip=>({startSec:clip.start,endSec:clip.end})),action.deltaSec);
+      if(!captionClips.length||deltaSec===0)return state;
+      const captionClipIds=new Set(captionClips.map(clip=>clip.id));
+      const clips=state.project.clips.map(clip=>captionClipIds.has(clip.id)
+        ?{...clip,start:clip.start+deltaSec,end:clip.end+deltaSec}
+        :clip);
+      const durationSec=clips.reduce((maximum,clip)=>Number.isFinite(clip.end)?Math.max(maximum,clip.end):maximum,state.project.durationSec);
+      return withHistory(state,{...state,project:{...state.project,clips,durationSec}});
     }
     case'updateClip':
       return withHistory(state,{

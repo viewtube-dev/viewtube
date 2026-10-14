@@ -13,6 +13,8 @@ import {uploadImageDerivative} from '../state/imageDerivativeStorage';
 import {createVersionedAsset} from '../../../../services/assetEngine';
 import {getContentBuild} from '../../../../services/asset-engine/ContentBuildRepository';
 import {parseSrtCaptions} from '../state/srtCaptionImport';
+import {buildSrtCaptions} from '../state/srtCaptionExport';
+import {resolveCaptionShiftDelta} from '../state/captionTiming';
 import {AudioWaveformInspector} from './AudioWaveformInspector';
 
 const BLACK='#111111';
@@ -141,8 +143,45 @@ function SrtCaptionImportControl({store}:{store:EditorStore}){
       setMessage(reason instanceof Error?reason.message:'Caption import failed.');
     }finally{setBusy(false)}
   };
+  const captionTrackIds=new Set(store.state.project.tracks.filter(track=>track.kind==='caption').map(track=>track.id));
+  const captionClips=store.state.project.clips.filter(clip=>captionTrackIds.has(clip.trackId));
+  const captionRanges=captionClips.map(clip=>({startSec:clip.start,endSec:clip.end}));
+  const resolvedShift=(deltaSec:number)=>resolveCaptionShiftDelta(captionRanges,deltaSec);
+  const shiftCaptions=(requestedDeltaSec:number)=>{
+    const deltaSec=resolvedShift(requestedDeltaSec);
+    if(!deltaSec){setMessage('Caption timing cannot shift further without moving a cue before zero.');return;}
+    store.dispatch({type:'shiftCaptionBatch',deltaSec});
+    setMessage('Shifted '+captionClips.length+' caption cues by '+(deltaSec>0?'+':'')+deltaSec.toFixed(3)+'s. Undo restores the previous timing.');
+  };
+  const exportSrt=()=>{
+    setMessage('');
+    try{
+      const cues=captionClips.map(clip=>{
+        const layer=clip.layerId?store.layerById(String(clip.layerId)):undefined;
+        return {startSec:clip.start,endSec:clip.end,text:String(layer?.payload?.text??'')};
+      });
+      const content=buildSrtCaptions(cues);
+      if(!content){setMessage('No valid timed caption clips are available to export.');return;}
+      const project=store.state.project as typeof store.state.project&{name?:unknown;title?:unknown};
+      const fileBase=String(project.name??project.title??'viewtube-captions')
+        .replace(/[^\\w.-]+/g,'-').replace(/^-+|-+$/g,'')||'viewtube-captions';
+      const url=URL.createObjectURL(new Blob([content],{type:'application/x-subrip;charset=utf-8'}));
+      const anchor=document.createElement('a');
+      anchor.href=url;anchor.download=fileBase+'.srt';anchor.click();
+      window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+      setMessage('Exported timed caption track as '+fileBase+'.srt.');
+    }catch(reason){
+      setMessage(reason instanceof Error?reason.message:'Caption export failed.');
+    }
+  };
   return <div style={{gridColumn:'1 / -1',minWidth:0}}>
-    <button type="button" style={{...addButtonBase,background:YELLOW,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={()=>inputRef.current?.click()}><FileText size={13}/>{busy?'IMPORTING SRT…':'IMPORT SRT CAPTIONS'}</button>
+    <div style={{display:'grid',gap:3}}>
+      <button type="button" style={{...addButtonBase,background:YELLOW,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={()=>inputRef.current?.click()}><FileText size={13}/>{busy?'IMPORTING SRT…':'IMPORT SRT CAPTIONS'}</button>
+      <button type="button" style={{...addButtonBase,background:CYAN,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={exportSrt}><Save size={13}/>EXPORT SRT CAPTIONS</button>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:3,marginTop:3}}>
+      {[-0.5,-0.1,0.1,0.5].map(delta=><button key={delta} type="button" style={{...addButtonBase,minWidth:0,padding:'3px 2px',fontSize:8,background:delta<0?PINK:GREEN,color:BLACK}} disabled={busy||!captionClips.length||resolvedShift(delta)===0} onClick={()=>shiftCaptions(delta)}>{delta<0?'−':'+'}{Math.abs(delta).toFixed(1)}s</button>)}
+    </div>
     <input ref={inputRef} type="file" accept=".srt,text/plain" hidden onChange={event=>{const file=event.currentTarget.files?.[0];event.currentTarget.value='';if(file)void importFile(file)}}/>
     {message?<div role="status" style={{fontSize:8,fontWeight:800,marginTop:4,overflowWrap:'anywhere'}}>{message}</div>:null}
   </div>;
