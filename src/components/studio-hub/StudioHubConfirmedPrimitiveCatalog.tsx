@@ -1,7 +1,7 @@
 import React from "react"
 import { Settings2, Sparkles } from "lucide-react"
 import { Studioswitch as SubToolbox44Switch, StudioChoice as SubToolbox44Choice, Studiotoggle as SubToolbox44WordToggle } from "../../studio-ui"
-import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioFloatingLabelInput, StudioFloatingLabelTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
+import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioLabeledInput, StudioLabeledTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
 
@@ -101,12 +101,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <Family
       title="Text input and textarea"
       nonDefaultSettings={["sizeVariant=\"compact\" selects the 28px labeled-input variant; standard 44px is the default.", "level=\"l0\" | \"l2\" changes the declared control level (default: l1).", "overlayLabel accepts custom field context such as TITLE, DESCRIPTION, or TAGS.", "disabled=true and readOnly=true follow native input/textarea behavior.", "Textarea rows controls the initial writing height; textarea remains content-height and vertically resizable by default."]}
-      provenance={<Provenance primitive="StudioFloatingLabelInput / StudioFloatingLabelTextArea · primitives 141 / 142" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea is multiline, content-height, and vertically resizable." imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]} />}
+      provenance={<Provenance primitive="StudioLabeledInput / StudioLabeledTextArea · primitives 141 / 142" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea is multiline, content-height, and vertically resizable." imports={["src/studio-ui/index.ts", "src/views/VideoPublisher.tsx", "src/views/VideoManager.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row"><span>141 · 44px labeled text input</span><StudioFloatingLabelInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 44px" sizeVariant="standard" /></div>
-      <div className="vt-confirmed-variant"><span>141 · 28px labeled input A</span><StudioFloatingLabelInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 28px A" sizeVariant="compact" /></div>
-      <div className="vt-confirmed-variant"><span>141 · 28px labeled input B</span><StudioFloatingLabelInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 28px B" sizeVariant="compact" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>142 · content-height labeled textarea</span><StudioFloatingLabelTextArea overlayLabel="DESCRIPTION" placeholder=" " aria-label="Labeled description textarea" rows={4} /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>141 · 44px labeled text input</span><StudioLabeledInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 44px" sizeVariant="standard" /></div>
+      <div className="vt-confirmed-variant"><span>141 · 28px labeled input A</span><StudioLabeledInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 28px A" sizeVariant="compact" /></div>
+      <div className="vt-confirmed-variant"><span>141 · 28px labeled input B</span><StudioLabeledInput overlayLabel="TITLE" placeholder=" " aria-label="Labeled title input 28px B" sizeVariant="compact" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>142 · content-height labeled textarea</span><StudioLabeledTextArea overlayLabel="DESCRIPTION" placeholder=" " aria-label="Labeled description textarea" rows={4} /></div>
     </Family>
 
     <Family
