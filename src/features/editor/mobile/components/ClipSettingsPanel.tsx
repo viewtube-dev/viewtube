@@ -484,14 +484,14 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
     }finally{setCapturingFrame(false)}
   };
 
-  const saveVideoFrameDerivative=async()=>{
+  const saveVideoFrameDerivative=async(purpose:'still'|'thumbnail'='still')=>{
     if(!isVideoMedia||!playheadWithinClip||savingFrameDerivative)return;
     setSavingFrameDerivative(true);setFrameDerivativeError('');setFrameDerivativeMessage('');
     let storedAssetUrl='';
     try{
       const sourceTime=sourceFrameTime(store.state.playheadSec,clip.start,sourceInSec,sourceDurationSec);
       if(sourceTime===null)throw new Error('Source duration metadata is unavailable for this video.');
-      const frameName='frame-'+sourceTime.toFixed(2).replace('.','-')+'s.jpg';
+      const frameName=(purpose==='thumbnail'?'thumbnail-frame-':'frame-')+sourceTime.toFixed(2).replace('.','-')+'s.jpg';
       const file=await captureVideoFrameAsFile(String(payload.mediaUrl),sourceTime,frameName);
       if(!file)throw new Error('This frame could not be captured. The source may be unavailable or blocked by browser media permissions.');
       const stored=await uploadImageDerivative(file);
@@ -513,12 +513,12 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
         sourceKind:'studio-tool',
         payloadKind:'image',
         name:stored.fileName,
-        summary:'Still frame extracted from video clip '+clip.id+' at source time '+sourceTime.toFixed(2)+'s.',
+        summary:(purpose==='thumbnail'?'Thumbnail candidate':'Still frame')+' extracted from video clip '+clip.id+' at source time '+sourceTime.toFixed(2)+'s.',
         kind:'image',
         url:stored.assetUrl,
         mimeType:stored.mimeType,
-        tags:['editor','video-frame','image-derivative','asset-engine'],
-        slot:'video-frame-still',
+        tags:purpose==='thumbnail'?['editor','video-frame','thumbnail','thumbnail-candidate','asset-engine']:['editor','video-frame','image-derivative','asset-engine'],
+        slot:purpose==='thumbnail'?'thumbnail':'video-frame-still',
         label:stored.fileName,
         parentAssetId:parentAssetId||null,
         context:{
@@ -530,7 +530,8 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
           provenance:['VT_E1 frame capture from clip '+clip.id,'Source time: '+sourceTime.toFixed(3)+'s','Timeline time: '+store.state.playheadSec.toFixed(3)+'s'],
         },
         metadata:{
-          operation:'video-frame-capture',
+          operation:purpose==='thumbnail'?'video-thumbnail-frame-capture':'video-frame-capture',
+          candidatePurpose:purpose,
           parentClipId:clip.id,
           sourceMediaName:String(payload.mediaName??payload.layerName??'unknown'),
           sourceAssetId:parentAssetId||null,
@@ -542,7 +543,7 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
           storage:'vt-e1-render-worker',
         },
       });
-      setFrameDerivativeMessage('Saved '+created.asset.name+' to the Vault asset library.'+(created.version?' Version and lineage recorded.':contentBuildId?'':' No active ContentBuild was linked.'));
+      setFrameDerivativeMessage(purpose==='thumbnail'?'Saved '+created.asset.name+' as a thumbnail candidate in the Vault asset library. It has not been selected for publishing. '+(created.version?'Version and lineage recorded.':contentBuildId?'':'No active ContentBuild was linked.'):'Saved '+created.asset.name+' to the Vault asset library.'+(created.version?' Version and lineage recorded.':contentBuildId?'':' No active ContentBuild was linked.'));
     }catch(reason){
       const message=reason instanceof Error?reason.message:'Frame derivative save failed.';
       setFrameDerivativeError(storedAssetUrl
@@ -718,7 +719,8 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
       {derivativeSaveMessage?<div role='status' style={{fontSize:8,fontWeight:900,border:'1px solid '+INK,padding:5,marginTop:4,overflowWrap:'anywhere',background:GREEN}}>{derivativeSaveMessage}</div>:null}
       {derivativeSaveError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{derivativeSaveError}</div>:null}
       {cropExportError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{cropExportError}</div>:null}
-      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:savingFrameDerivative?YELLOW:GREEN,opacity:savingFrameDerivative||capturingFrame||!playheadWithinClip?0.45:1}} disabled={savingFrameDerivative||capturingFrame||!playheadWithinClip} onClick={()=>void saveVideoFrameDerivative()}><Save size={12}/>{savingFrameDerivative?'SAVING FRAME…':'SAVE FRAME TO VAULT'}</button>:null}
+      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:savingFrameDerivative?YELLOW:GREEN,opacity:savingFrameDerivative||capturingFrame||!playheadWithinClip?0.45:1}} disabled={savingFrameDerivative||capturingFrame||!playheadWithinClip} onClick={()=>void saveVideoFrameDerivative('still')}><Save size={12}/>{savingFrameDerivative?'SAVING FRAME…':'SAVE FRAME TO VAULT'}</button>:null}
+      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:savingFrameDerivative?YELLOW:CYAN,opacity:savingFrameDerivative||capturingFrame||!playheadWithinClip?0.45:1}} disabled={savingFrameDerivative||capturingFrame||!playheadWithinClip} onClick={()=>void saveVideoFrameDerivative('thumbnail')}><ImageIcon size={12}/>{savingFrameDerivative?'SAVING THUMBNAIL…':'SAVE AS THUMBNAIL CANDIDATE'}</button>:null}
       {frameDerivativeMessage?<div role='status' style={{fontSize:8,fontWeight:900,border:'1px solid '+INK,padding:5,marginTop:4,overflowWrap:'anywhere',background:GREEN}}>{frameDerivativeMessage}</div>:null}
       {frameDerivativeError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameDerivativeError}</div>:null}
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||savingFrameDerivative||!playheadWithinClip?0.45:1}} disabled={capturingFrame||savingFrameDerivative||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}

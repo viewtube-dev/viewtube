@@ -212,6 +212,12 @@ Generalized the Crop Focus controls from project-ratio-only to the currently act
 
 This slice reuses the existing crop math and tests rather than introducing another crop model. Runtime verification of aspect switching, undo/redo, preview/render parity, and responsive layouts remains pending.
 
+## 2026-10-14 — save video frames as thumbnail candidates
+
+Added a second save mode to the existing selected-video frame workflow: **Save as Thumbnail Candidate**. It captures the same source-timestamp-correct frame, stores the JPEG through the existing VT_E1 render-worker asset endpoint, and registers it through `createVersionedAsset` in the canonical `thumbnail` slot with project/ContentBuild context, parent asset linkage when available, and source/timeline timestamps in provenance metadata.
+
+The action creates a candidate only; it does not silently select or publish the thumbnail. The original **Save Frame to Vault** path remains unchanged. Focused component tests, storage integration, and end-to-end ContentBuild selection verification remain pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
