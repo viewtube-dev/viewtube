@@ -1767,3 +1767,61 @@
 .vt-complete-catalog .vt-catalog-menu.is-l0 .menu-label>svg,.vt-complete-catalog .vt-catalog-menu.is-l1 .menu-label>svg{width:28px!important;height:28px!important;flex:0 0 28px!important}
 .vt-complete-catalog .vt-catalog-menu.is-l2 .menu-label>svg{width:18px!important;height:18px!important;flex:0 0 18px!important}
 
+
+
+/* Word-toggle layout correction: prevent intrinsic labels from overflowing the
+   four-column switch/choice grid. Standard specimens stack one per row;
+   compact specimens use two columns, with each toggle contained by its card. */
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 .vt-catalog-control-variant,
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 .vt-catalog-control-variant {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 6px;
+  gap: 6px;
+  border: 1px solid #d2d2d2;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 .vt-catalog-control-variant > small,
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 .vt-catalog-control-variant > small {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle,
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle {
+  flex: 0 1 auto;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+}
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle button,
+.vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle button {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 520px) {
+  .vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px;
+  }
+  .vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 .vt-catalog-control-variant,
+  .vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-28 .vt-catalog-control-variant {
+    padding: 4px;
+  }
+}
