@@ -275,3 +275,85 @@
     gap: 12px 10px;
   }
 }
+
+
+/* Library layout correction: button specimens get four desktop columns;
+   controls retain their native full-row spans. On narrow screens use two columns. */
+.vt-confirmed-button-family > .vt-confirmed-variants {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
+  grid-column: 1 / -1;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-button-family > .vt-confirmed-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
+  }
+}
+
+/* Word-toggle layout is size-specific: standard is one specimen per row,
+   compact is two specimens per row. Keep each toggle inside its own card. */
+.vt-confirmed-control-variants.is-word-toggle-44,
+.vt-confirmed-control-variants.is-word-toggle-28 {
+  display: grid !important;
+  flex-wrap: initial;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  gap: 8px;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 {
+  grid-template-columns: minmax(0, 1fr);
+}
+.vt-confirmed-control-variants.is-word-toggle-28 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.vt-confirmed-control-variants.is-word-toggle-44 > div,
+.vt-confirmed-control-variants.is-word-toggle-28 > div {
+  box-sizing: border-box;
+  display: flex;
+  flex: initial;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid #d2d2d2;
+  border-radius: 5px;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 > div > small,
+.vt-confirmed-control-variants.is-word-toggle-28 > div > small {
+  width: 100%;
+  min-height: 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle,
+.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle {
+  flex: 0 1 auto;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle button,
+.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle button {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-control-variants.is-word-toggle-28 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .vt-confirmed-control-variants.is-word-toggle-44 > div,
+  .vt-confirmed-control-variants.is-word-toggle-28 > div {
+    padding: 4px;
+  }
+}
