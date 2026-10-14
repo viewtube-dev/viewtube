@@ -550,7 +550,7 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
   line-height: 1.05;
 }
 /* Shared floating-label fields. Label type is independent of field text size. */
-.vt-studio-floating-field { --vt-studio-floating-label-size: 14px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
+.vt-studio-floating-field { --vt-studio-floating-label-size: 32px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
 .vt-studio-floating-field > [data-vt-studio-control="true"] { display:block; width:100%; }
 .vt-studio-floating-field > .vt-studio-floating-field-label {
   position:absolute; z-index:1; left:14px; top:50%; max-width:calc(100% - 28px);
@@ -565,10 +565,10 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
 .vt-studio-floating-field > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   top:0; left:10px; padding:3px 6px; border-radius:4px;
-  background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000; transform:translateY(-50%);
+  background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000; transform:translateY(-50%) scale(.7); transform-origin:left center;
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-50%); }
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-50%) scale(.7); transform-origin:left center; }
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
 
