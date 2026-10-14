@@ -9,6 +9,9 @@ import {ClipEffects} from './EffectsLibrariesPanel';
 import {canSlipSourceWindow,SOURCE_SLIP_STEPS} from '../state/sourceSlipControls';
 import {captureVideoFrameAsFile,sourceFrameTime} from '../state/videoFrameCapture';
 import {exportCroppedImageAsFile} from '../state/imageCropExport';
+import {uploadImageDerivative} from '../state/imageDerivativeStorage';
+import {createVersionedAsset} from '../../../../services/assetEngine';
+import {getContentBuild} from '../../../../services/asset-engine/ContentBuildRepository';
 import {parseSrtCaptions} from '../state/srtCaptionImport';
 import {AudioWaveformInspector} from './AudioWaveformInspector';
 
@@ -299,8 +302,14 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const[linkedSize,setLinkedSize]=useState(true);
   const[capturingFrame,setCapturingFrame]=useState(false);
   const[frameCaptureError,setFrameCaptureError]=useState('');
+  const[savingFrameDerivative,setSavingFrameDerivative]=useState(false);
+  const[frameDerivativeError,setFrameDerivativeError]=useState('');
+  const[frameDerivativeMessage,setFrameDerivativeMessage]=useState('');
   const[exportingCrop,setExportingCrop]=useState(false);
   const[cropExportError,setCropExportError]=useState('');
+  const[savingDerivative,setSavingDerivative]=useState(false);
+  const[derivativeSaveError,setDerivativeSaveError]=useState('');
+  const[derivativeSaveMessage,setDerivativeSaveMessage]=useState('');
   const[colorScope,setColorScope]=useState<'selected'|'group'|'track'>('selected');
   const[recentColors,setRecentColors]=useState<string[]>(()=>{
     if(typeof window==='undefined')return[];
@@ -354,6 +363,72 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
     }finally{setExportingCrop(false)}
   };
 
+  const saveCroppedImageDerivative=async(targetWidth?:number)=>{
+    if(!isImageMedia||savingDerivative||exportingCrop)return;
+    setSavingDerivative(true);setDerivativeSaveError('');setDerivativeSaveMessage('');
+    let storedAssetUrl='';
+    try{
+      const sourceName=String(payload.mediaName??payload.layerName??'image').replace(/\.[^.]+$/,'').replace(/[^\w.-]+/g,'-')||'image';
+      const suffix=targetWidth?'-'+targetWidth+'px':'';
+      const file=await exportCroppedImageAsFile(String(payload.mediaUrl),readClipVisualTransform(clip),sourceName+'-crop'+suffix+'.png',targetWidth);
+      if(!file)throw new Error('The image could not be cropped. The source may be unavailable or blocked by browser media permissions.');
+      const stored=await uploadImageDerivative(file);
+      storedAssetUrl=stored.assetUrl;
+      const projectScope=store.state.project as typeof store.state.project&{contentBuildId?:string;id?:unknown;name?:unknown;title?:unknown};
+      const meta=(store.state.project.meta??{}) as Record<string,unknown>;
+      const candidateContentBuildId=typeof projectScope.contentBuildId==='string'
+        ?projectScope.contentBuildId
+        :typeof meta.contentBuildId==='string'?meta.contentBuildId:undefined;
+      const contentBuildId=candidateContentBuildId&&getContentBuild(candidateContentBuildId)?candidateContentBuildId:undefined;
+      const projectId=typeof projectScope.id==='string'?projectScope.id:undefined;
+      const projectName=typeof projectScope.name==='string'?projectScope.name
+        :typeof projectScope.title==='string'?projectScope.title
+        :typeof meta.projectName==='string'?meta.projectName:undefined;
+      const rawParentId=payload.sourceAssetId;
+      const parentAssetId=typeof rawParentId==='string'&&rawParentId.trim()?rawParentId.trim():undefined;
+      const transform=readClipVisualTransform(clip);
+      const created=createVersionedAsset({
+        sourceToolId:'vt-e1-editor',
+        sourceKind:'studio-tool',
+        payloadKind:'image',
+        name:stored.fileName,
+        summary:'Cropped PNG derivative from editor clip '+clip.id+'.',
+        kind:'image',
+        url:stored.assetUrl,
+        mimeType:stored.mimeType,
+        tags:['editor','image-derivative','crop','asset-engine'],
+        slot:'image-derivative',
+        label:stored.fileName,
+        parentAssetId:parentAssetId||null,
+        context:{
+          contentBuildId,
+          projectId,
+          projectName,
+          stage:'production',
+          parentAssetIds:parentAssetId?[parentAssetId]:[],
+          provenance:['VT_E1 crop export from clip '+clip.id,'Source media: '+String(payload.mediaName??payload.layerName??'unknown')],
+        },
+        metadata:{
+          operation:'crop-export',
+          parentClipId:clip.id,
+          sourceMediaName:String(payload.mediaName??payload.layerName??'unknown'),
+          sourceAssetId:parentAssetId||null,
+          editorMediaWidth:number(payload.width,0),
+          editorMediaHeight:number(payload.height,0),
+          crop:transform,
+          outputBytes:stored.bytes,
+          storage:'vt-e1-render-worker',
+        },
+      });
+      setDerivativeSaveMessage('Saved '+created.asset.name+' to the Vault asset library.'+(created.version?' Version and lineage recorded.':contentBuildId?'':' No active ContentBuild was linked.'));
+    }catch(reason){
+      const message=reason instanceof Error?reason.message:'Derivative save failed.';
+      setDerivativeSaveError(storedAssetUrl
+        ?'Image file was stored, but Vault registration failed. Stored path: '+storedAssetUrl+'. '+message
+        :message);
+    }finally{setSavingDerivative(false)}
+  };
+
   const isVideoMedia=isMedia&&String(payload.mediaKind??'')==='video'&&typeof payload.mediaUrl==='string'&&Boolean(payload.mediaUrl);
   const playheadWithinClip=store.state.playheadSec>=clip.start&&store.state.playheadSec<clip.end;
   const captureFrame=async()=>{
@@ -368,6 +443,73 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
     }catch(reason){
       setFrameCaptureError(reason instanceof Error?reason.message:'Frame capture failed.');
     }finally{setCapturingFrame(false)}
+  };
+
+  const saveVideoFrameDerivative=async()=>{
+    if(!isVideoMedia||!playheadWithinClip||savingFrameDerivative)return;
+    setSavingFrameDerivative(true);setFrameDerivativeError('');setFrameDerivativeMessage('');
+    let storedAssetUrl='';
+    try{
+      const sourceTime=sourceFrameTime(store.state.playheadSec,clip.start,sourceInSec,sourceDurationSec);
+      if(sourceTime===null)throw new Error('Source duration metadata is unavailable for this video.');
+      const frameName='frame-'+sourceTime.toFixed(2).replace('.','-')+'s.jpg';
+      const file=await captureVideoFrameAsFile(String(payload.mediaUrl),sourceTime,frameName);
+      if(!file)throw new Error('This frame could not be captured. The source may be unavailable or blocked by browser media permissions.');
+      const stored=await uploadImageDerivative(file);
+      storedAssetUrl=stored.assetUrl;
+      const projectScope=store.state.project as typeof store.state.project&{contentBuildId?:string;id?:unknown;name?:unknown;title?:unknown};
+      const meta=(store.state.project.meta??{}) as Record<string,unknown>;
+      const candidateContentBuildId=typeof projectScope.contentBuildId==='string'
+        ?projectScope.contentBuildId
+        :typeof meta.contentBuildId==='string'?meta.contentBuildId:undefined;
+      const contentBuildId=candidateContentBuildId&&getContentBuild(candidateContentBuildId)?candidateContentBuildId:undefined;
+      const projectId=typeof projectScope.id==='string'?projectScope.id:undefined;
+      const projectName=typeof projectScope.name==='string'?projectScope.name
+        :typeof projectScope.title==='string'?projectScope.title
+        :typeof meta.projectName==='string'?meta.projectName:undefined;
+      const rawParentId=payload.sourceAssetId;
+      const parentAssetId=typeof rawParentId==='string'&&rawParentId.trim()?rawParentId.trim():undefined;
+      const created=createVersionedAsset({
+        sourceToolId:'vt-e1-editor',
+        sourceKind:'studio-tool',
+        payloadKind:'image',
+        name:stored.fileName,
+        summary:'Still frame extracted from video clip '+clip.id+' at source time '+sourceTime.toFixed(2)+'s.',
+        kind:'image',
+        url:stored.assetUrl,
+        mimeType:stored.mimeType,
+        tags:['editor','video-frame','image-derivative','asset-engine'],
+        slot:'video-frame-still',
+        label:stored.fileName,
+        parentAssetId:parentAssetId||null,
+        context:{
+          contentBuildId,
+          projectId,
+          projectName,
+          stage:'production',
+          parentAssetIds:parentAssetId?[parentAssetId]:[],
+          provenance:['VT_E1 frame capture from clip '+clip.id,'Source time: '+sourceTime.toFixed(3)+'s','Timeline time: '+store.state.playheadSec.toFixed(3)+'s'],
+        },
+        metadata:{
+          operation:'video-frame-capture',
+          parentClipId:clip.id,
+          sourceMediaName:String(payload.mediaName??payload.layerName??'unknown'),
+          sourceAssetId:parentAssetId||null,
+          sourceTimeSec:sourceTime,
+          timelineTimeSec:store.state.playheadSec,
+          editorMediaWidth:number(payload.width,0),
+          editorMediaHeight:number(payload.height,0),
+          outputBytes:stored.bytes,
+          storage:'vt-e1-render-worker',
+        },
+      });
+      setFrameDerivativeMessage('Saved '+created.asset.name+' to the Vault asset library.'+(created.version?' Version and lineage recorded.':contentBuildId?'':' No active ContentBuild was linked.'));
+    }catch(reason){
+      const message=reason instanceof Error?reason.message:'Frame derivative save failed.';
+      setFrameDerivativeError(storedAssetUrl
+        ?'Frame file was stored, but Vault registration failed. Stored path: '+storedAssetUrl+'. '+message
+        :message);
+    }finally{setSavingFrameDerivative(false)}
   };
 
   const audioVolume=number(payload.volume,.6);
@@ -529,13 +671,19 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
         {['cover','contain'].map(fit=><button key={fit} style={{...miniButton,background:String(payload.fit??'cover')===fit?YELLOW:'#fff'}} onClick={()=>patch({fit})}>{fit}</button>)}
       </div>
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:Boolean(payload.muted)?'#fff':GREEN}} onClick={()=>patch({muted:!Boolean(payload.muted)})}>{Boolean(payload.muted)?'UNMUTE VIDEO':'MUTE VIDEO'}</button>:null}
-      {String(payload.mediaKind??'')==='image'?<button style={{...miniButton,width:'100%',marginTop:4,background:exportingCrop?YELLOW:CYAN,opacity:exportingCrop||!isImageMedia?0.45:1}} disabled={exportingCrop||!isImageMedia} onClick={()=>void exportCroppedImage()}><Save size={12}/>{exportingCrop?'EXPORTING PNG…':'EXPORT CROPPED IMAGE (PNG)'}</button>:null}
+      {String(payload.mediaKind??'')==='image'?<button style={{...miniButton,width:'100%',marginTop:4,background:savingDerivative?YELLOW:GREEN,opacity:savingDerivative||exportingCrop||!isImageMedia?0.45:1}} disabled={savingDerivative||exportingCrop||!isImageMedia} onClick={()=>void saveCroppedImageDerivative()}><Save size={12}/>{savingDerivative?'SAVING DERIVATIVE…':'SAVE DERIVATIVE TO VAULT'}</button>:null}
+      {String(payload.mediaKind??'')==='image'?<button style={{...miniButton,width:'100%',marginTop:4,background:exportingCrop?YELLOW:CYAN,opacity:exportingCrop||savingDerivative||!isImageMedia?0.45:1}} disabled={exportingCrop||savingDerivative||!isImageMedia} onClick={()=>void exportCroppedImage()}><Save size={12}/>{exportingCrop?'EXPORTING PNG…':'DOWNLOAD CROPPED IMAGE (PNG)'}</button>:null}
       {String(payload.mediaKind??'')==='image'?<div style={{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:4,marginTop:4}}>
-        {[720,1080,1920].map(width=><button key={width} style={{...miniButton,minWidth:0,padding:'3px 2px',background:exportingCrop?YELLOW:'#fff',opacity:exportingCrop||!isImageMedia?0.45:1}} disabled={exportingCrop||!isImageMedia} onClick={()=>void exportCroppedImage(width)}>{width}W PNG</button>)}
+        {[720,1080,1920].map(width=><button key={width} style={{...miniButton,minWidth:0,padding:'3px 2px',background:exportingCrop?YELLOW:'#fff',opacity:exportingCrop||savingDerivative||!isImageMedia?0.45:1}} disabled={exportingCrop||savingDerivative||!isImageMedia} onClick={()=>void exportCroppedImage(width)}>{width}W PNG</button>)}
       </div>:null}
-      {cropExportError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{cropExportError}</div>:null}
-      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||!playheadWithinClip?0.45:1}} disabled={capturingFrame||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}
-      {frameCaptureError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameCaptureError}</div>:null}
+      {derivativeSaveMessage?<div role='status' style={{fontSize:8,fontWeight:900,border:'1px solid '+INK,padding:5,marginTop:4,overflowWrap:'anywhere',background:GREEN}}>{derivativeSaveMessage}</div>:null}
+      {derivativeSaveError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{derivativeSaveError}</div>:null}
+      {cropExportError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{cropExportError}</div>:null}
+      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:savingFrameDerivative?YELLOW:GREEN,opacity:savingFrameDerivative||capturingFrame||!playheadWithinClip?0.45:1}} disabled={savingFrameDerivative||capturingFrame||!playheadWithinClip} onClick={()=>void saveVideoFrameDerivative()}><Save size={12}/>{savingFrameDerivative?'SAVING FRAME…':'SAVE FRAME TO VAULT'}</button>:null}
+      {frameDerivativeMessage?<div role='status' style={{fontSize:8,fontWeight:900,border:'1px solid '+INK,padding:5,marginTop:4,overflowWrap:'anywhere',background:GREEN}}>{frameDerivativeMessage}</div>:null}
+      {frameDerivativeError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameDerivativeError}</div>:null}
+      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||savingFrameDerivative||!playheadWithinClip?0.45:1}} disabled={capturingFrame||savingFrameDerivative||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}
+      {frameCaptureError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameCaptureError}</div>:null}
     </div>:null}
 
     {isAudio?<div style={{marginTop:10}}>

@@ -2,7 +2,7 @@ import React from 'react';
 import {AudioLines,Film,FolderKanban,LayoutTemplate,ScanSearch,Settings as SettingsIcon,Shuffle,SlidersHorizontal,Type,Upload} from 'lucide-react';
 import type {EditorStore} from '../state/editorState';
 import {readClipVisualTransform} from '../state/editorState';
-import {cropToAspectRatio} from '../state/cropPresets';
+import {cropToAspectRatio,cropToAspectRatioAtFocalPoint} from '../state/cropPresets';
 import {resolveVtE1FxValue,resetVtE1FxPatch} from '../../../../shared/vtE1FxCatalog';
 import {renderPanelBody} from './PanelBodies';
 import {EditorFeatureManifest} from './EditorFeatureManifest';
@@ -63,6 +63,9 @@ function Inspector({store}:{store:EditorStore}){
   const project=store.state.project as Record<string,unknown>;
   const projectAspectRatio=project.aspect==='landscape'||project.aspectRatio==='16:9'?16/9:9/16;
   const projectRatioCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,projectAspectRatio):null;
+  const projectCropIsHorizontal=!!projectRatioCrop&&(projectRatioCrop.cropLeft+projectRatioCrop.cropRight>0);
+  const projectCropIsVertical=!!projectRatioCrop&&(projectRatioCrop.cropTop+projectRatioCrop.cropBottom>0);
+  const applyProjectFocal=(x:number,y:number)=>{const crop=cropToAspectRatioAtFocalPoint(sourceWidth,sourceHeight,projectAspectRatio,x,y);if(crop)set(crop);};
   return <>
     <Section name="Clip"><b>{String(clip.id)}</b><div>{clip.start.toFixed(2)}s → {clip.end.toFixed(2)}s · {store.trackById(clip.trackId)?.kind??'clip'}</div></Section>
     <Section name="Transform">
@@ -95,6 +98,19 @@ function Inspector({store}:{store:EditorStore}){
         <button style={{...button,opacity:projectRatioCrop?1:.4}} aria-label="Crop to project aspect ratio" disabled={!projectRatioCrop} onClick={()=>projectRatioCrop&&set(projectRatioCrop)}>Project Ratio</button>
         <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
       </Grid>
+      {(projectCropIsHorizontal||projectCropIsVertical)&&<Section name="Project-Ratio Focal Point">
+        <div style={{fontSize:8,fontWeight:800,opacity:.65,marginBottom:5}}>Shift the crop window toward the subject. Source pixels remain untouched.</div>
+        {projectCropIsHorizontal&&<Grid cols={3}>
+          <button style={button} aria-label="Focus crop left" onClick={()=>applyProjectFocal(.05,.5)}>← Left</button>
+          <button style={button} aria-label="Center crop horizontally" onClick={()=>applyProjectFocal(.5,.5)}>Center</button>
+          <button style={button} aria-label="Focus crop right" onClick={()=>applyProjectFocal(.95,.5)}>Right →</button>
+        </Grid>}
+        {projectCropIsVertical&&<Grid cols={3}>
+          <button style={button} aria-label="Focus crop top" onClick={()=>applyProjectFocal(.5,.05)}>↑ Top</button>
+          <button style={button} aria-label="Center crop vertically" onClick={()=>applyProjectFocal(.5,.5)}>Center</button>
+          <button style={button} aria-label="Focus crop bottom" onClick={()=>applyProjectFocal(.5,.95)}>Bottom ↓</button>
+        </Grid>}
+      </Section>}
       <Grid>
         <StepperField label="LEFT" value={v.cropLeft} min={0} max={.95} step={.01} defaultValue={0} onChange={cropLeft=>set({cropLeft})}/>
         <StepperField label="RIGHT" value={v.cropRight} min={0} max={.95} step={.01} defaultValue={0} onChange={cropRight=>set({cropRight})}/>

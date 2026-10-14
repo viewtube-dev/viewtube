@@ -180,11 +180,23 @@ The editor media toolbox now imports standard SRT files into a caption track. Pa
 
 The cropped-image export now offers source-size, 720px, 1080px, and 1920px output-width presets. Output height is calculated from the crop rectangle to preserve aspect ratio, and requested widths are bounded to avoid extreme canvas allocation. The original media and non-destructive crop state remain unchanged. Pixel sizing tests were added; browser export and image-quality verification remain pending.
 
+## Eighth implementation slice — focal-point crop positioning
+
+Added `cropToAspectRatioAtFocalPoint`, a pure helper that preserves the selected aspect ratio while shifting the crop window toward a normalized focal point. The crop window clamps to source boundaries and never invents pixels. Regression cases cover left/right horizontal focus, lower vertical focus, invalid focal points, and aspect ratios that require no crop.
+
+The selected-clip inspector now exposes **Left / Center / Right** focus controls when the project ratio requires horizontal cropping, or **Top / Center / Bottom** when it requires vertical cropping. These controls use the current project portrait/landscape ratio and the existing non-destructive clip transform action. They are hidden when no crop is needed and unavailable without factual source dimensions. Automated tests and preview/final-render visual parity still need to be run.
+
+## Ninth implementation slice — server-backed crop derivative
+
+Added a **Save Derivative to Vault** action beside the existing PNG download controls. It reuses the current non-destructive crop transform, creates the PNG locally, uploads its bytes through the same-origin `POST /api/vt-e1/render/assets` proxy, then registers the returned stable render-asset path through the canonical Asset Engine `createVersionedAsset` flow. The resulting Vault record stores operation metadata, clip/media context, normalized crop values, and project/ContentBuild linkage when the editor has a valid ContentBuild ID. If the selected media payload supplies a canonical `sourceAssetId`, the derivative records that parent relationship; it does not invent one when identity is missing.
+
+The upload client rejects non-image files, empty outputs, files over 20 MB, failed worker responses, and URLs outside the render-assets endpoint. A worker error is shown to the user instead of claiming a save succeeded. Durable bytes depend on the render worker being configured with a persistent volume as described in `docs/vt-e1-render-worker.md`; deployment storage configuration and the browser workflow have not been verified in this pass. If the file upload succeeds but Asset Engine registration fails, the UI reports the stored path so it can be recovered rather than silently losing the reference.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Continue from the already-integrated ratio-aware crop presets; verify their preview/render parity and add focal-point positioning before broadening file-level image processing.
-3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
+2. Verify ratio-aware and focal-point crop preview/render parity, then connect exported image derivatives to durable Asset Engine/Vault provenance.
+3. Verify the worker-backed crop upload and Asset Engine registration in a deployed environment; then connect captured video frames to the same durable derivative/provenance path.
 4. Trace video processing/job APIs and connect the first real operation.
 5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
 6. Expand audio/caption controls only against verified shared contracts.
