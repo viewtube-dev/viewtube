@@ -1048,7 +1048,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 /* Studio text field rendering correction
    Keep this authoritative block after legacy compatibility rules and labeled-field
    styles. Earlier wrapper declarations used !important and overrode the field state.
-   Native insertion caret is intentional: caret-shape:block is not interoperable and
+   Native insertion caret is intentional: experimental block-caret shaping is not interoperable and
    can render duplicated/wide blocks in some browsers. */
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
   --vt-field-color-1: var(--pair-a, #36e0f6);
