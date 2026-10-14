@@ -231,3 +231,21 @@ Current integrations:
 
 Reference architecture:
 `docs/product/studio-hub/VIEWTUBE_PROJECTS_UI_MANIFESTATION_SYSTEM.md`
+
+
+## Studio Controls text-field primitive contract — 2026-10-13
+
+The confirmed Studio Hub primitive catalog's plain **Text Input**, **Number Field**, and **Textarea** examples use the shared Studio Controls implementation rather than recreating their styling in catalog CSS.
+
+- TSX owner: `src/studio-ui/primitives/StudioControls.tsx`
+- CSS owner: `src/styles/studio-control-system.css`
+- Standard single-line control height: **44px**; default text: **14px / weight 800**.
+- Compact single-line control height: **28px**; compact text: **10px / weight 800**.
+- Default field fill: **50% primary/accent color opacity**.
+- Focus field fill: **15% primary/accent color opacity**.
+- Focus outline: **100% opaque secondary color**, with stroke width equal to half the field border stroke (1.5px for the 3px standard border; 1px for the 2px compact border).
+- Caret: primary/accent color.
+- Text remains black; text-stroke is not added.
+- Focus retains the primary/accent inset stroke but does not add the former oversized translucent secondary glow.
+
+These styles belong to the Studio Controls CSS system. The catalog imports and renders the production controls; it must not substitute local lookalikes for these examples.
