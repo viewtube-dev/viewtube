@@ -686,7 +686,10 @@ If this document was not updated, the editor work is not fully handed off.
 
 All proposals preserve the existing project bridge, one editor project model, ContentBuild/asset identity, deterministic render parity, undo/redo and explicit AI approval boundaries. AI UI must not call providers directly. Generated/recommended artifacts enter canonical provenance/asset flows.
 
-### Update Log addition — 2026-09-27
+### Update Log
+
+| 2026-10-13 | Creator production tools — common aspect-ratio crop presets | PR / feat/creator-workbench-ratio-presets-followup | started | Wired project ratio, 16:9, 9:16, 4:5, and 1:1 centered crop presets into the selected media clip inspector using the existing cropToAspectRatio helper and updateClipTransform action. Source media is unchanged; presets are disabled if source dimensions are unavailable or the crop exceeds the helper safety limit. | src/features/editor/mobile/components/EditorNavigationPages.tsx; docs/editor/CREATOR_PRODUCTION_WORKBENCH_IMPLEMENTATION_2026-10-13.md | Source reviewed; tests/build, undo/redo, preview/render parity, and responsive visual QA pending | canonical cropPresets.ts + media layer width/height metadata | run crop helper tests and editor tests, verify preview/render parity, then audit durable derivative/job contracts before implementing file-level processing |
+ addition — 2026-09-27
 
 | Date / time | Agent / conversation | Branch / PR | Status | Work completed / begun / planned | Changed or created paths | Verification / evidence | New references / sources | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
