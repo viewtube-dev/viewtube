@@ -4,6 +4,7 @@ import { runBrainJsonTask } from "../../services/brain/runtime/BrainRuntime"
 import { buildScriptArchitectBrainTaskRequest } from "./scriptBrainRuntime"
 import { toScriptExportFilename } from "./scriptExport"
 import { formatScriptMarkdown, toScriptMarkdownFilename } from "./scriptMarkdownExport"
+import { buildImportedScript } from "./scriptImport"
 import { createSuperToolActionPacket } from "../../services/superToolActionPackets"
 import { resolveWorkspaceContentBuildToolContext } from "../../services/asset-engine/ToolContext"
 import {
@@ -387,6 +388,21 @@ export const useScriptArchitect = (): ScriptArchitectController => {
    setError("Could not export Markdown. Try copying the script instead.")
   }
  }, [result, project.topic, project.angle, project.audience, project.tone, draftName])
+
+ const importScriptText = useCallback((source: string, fileName: string) => {
+  const imported = buildImportedScript(source, fileName)
+  if (!imported) {
+   setError("The selected file is empty or contains only whitespace.")
+   return
+  }
+
+  const name = fileName.replace(/\\.[^.]+$/, "").replace(/[_-]+/g, " ").trim() || "Imported Script"
+  setResult(imported)
+  setProject((prev) => ({ ...prev, topic: prev.topic.trim() ? prev.topic : name }))
+  setDraftName(name)
+  setError(null)
+  setStatus('Imported "' + fileName + '" as one editable section. No scene or caption timing was inferred.')
+ }, [])
 
  const saveDraft = useCallback(() => {
   const next = saveScriptDraft(draftName, project, result)
