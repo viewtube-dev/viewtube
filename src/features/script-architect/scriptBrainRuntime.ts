@@ -12,6 +12,7 @@ export function buildScriptArchitectBrainTaskRequest(input: {
   return {
     surface: "studio-tool",
     assetType: "script",
+    capability: "analysis",
     projectId: input.projectId || null,
     contentBuildId: input.contentBuildId || null,
     userText: input.userText,
