@@ -16,6 +16,17 @@ describe('resolveAudioRenderSettings', () => {
     )).toEqual({ volume: 0.6, playbackRate: 1.25, muted: true });
   });
 
+  it('resolves fade durations from clip edits or legacy payload defaults', () => {
+    expect(resolveAudioRenderSettings(
+      { fadeInSec: 0.5, fadeOutSec: 1.25 },
+      { fadeInSec: 0.2, fadeOutSec: 0.8 },
+    )).toMatchObject({ fadeInSec: 0.5, fadeOutSec: 1.25 });
+    expect(resolveAudioRenderSettings(
+      {},
+      { fadeInSec: 0.2, fadeOutSec: 0.8 },
+    )).toMatchObject({ fadeInSec: 0.2, fadeOutSec: 0.8 });
+  });
+
   it('uses safe defaults and clamps values to renderer-supported bounds', () => {
     expect(resolveAudioRenderSettings(
       { volume: 4, playbackRate: 99 },
