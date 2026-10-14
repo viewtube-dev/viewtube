@@ -18,5 +18,6 @@ describe('resolveCaptionShiftDelta', () => {
     expect(resolveCaptionShiftDelta([], 0.5)).toBe(0);
     expect(resolveCaptionShiftDelta(cues, Number.NaN)).toBe(0);
     expect(resolveCaptionShiftDelta([{ startSec: -2, endSec: -1 }], -0.5)).toBe(0);
+    expect(resolveCaptionShiftDelta([{ startSec: 1, endSec: 1 }], 0.5)).toBe(0);
   });
 });
