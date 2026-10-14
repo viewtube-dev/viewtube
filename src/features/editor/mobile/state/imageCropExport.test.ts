@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeCropRectangle } from './imageCropExport';
+import { computeCropOutputDimensions, computeCropRectangle } from './imageCropExport';
 
 describe('computeCropRectangle', () => {
   it('converts normalized edges into source pixels', () => {
@@ -12,6 +12,20 @@ describe('computeCropRectangle', () => {
     expect(computeCropRectangle(1600, 900, {
       cropLeft: 0, cropRight: 0, cropTop: 0, cropBottom: 0,
     })).toEqual({ x: 0, y: 0, width: 1600, height: 900 });
+  });
+
+  it('resizes the crop output while preserving its aspect ratio', () => {
+    const rect = { x: 192, y: 54, width: 1536, height: 972 };
+    expect(computeCropOutputDimensions(rect)).toEqual({ width: 1536, height: 972 });
+    expect(computeCropOutputDimensions(rect, 1080)).toEqual({ width: 1080, height: 683 });
+    expect(computeCropOutputDimensions(rect, 720)).toEqual({ width: 720, height: 455 });
+  });
+
+  it('rejects invalid or excessively large output widths', () => {
+    const rect = { x: 0, y: 0, width: 100, height: 50 };
+    expect(computeCropOutputDimensions(rect, 0)).toBeNull();
+    expect(computeCropOutputDimensions(rect, 9000)).toBeNull();
+    expect(computeCropOutputDimensions({ ...rect, width: 0 }, 720)).toBeNull();
   });
 
   it('rejects invalid dimensions and crop edges outside the safe range', () => {
