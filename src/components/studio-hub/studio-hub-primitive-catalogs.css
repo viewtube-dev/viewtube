@@ -2545,3 +2545,14 @@
   font-size: 8px;
   line-height: 1.2;
 }
+
+
+/* Phase 2: confirmed canonical catalog groups solid toggles on their own row. */
+.vt-confirmed-word-toggle-family .vt-confirmed-control-row { display:flex; flex-direction:column; align-items:stretch; gap:8px; }
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-solid-row { display:grid; grid-template-columns:minmax(0,1fr); }
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-solid-row > div { width:100%; }
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-other-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants > div { min-width:0; }
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-studio-44-word-toggle,
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle { max-width:100%; min-width:0; }
+@media(max-width:560px) { .vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-other-row { grid-template-columns:repeat(2,minmax(0,1fr)); } }
