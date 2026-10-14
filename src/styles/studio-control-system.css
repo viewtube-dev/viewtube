@@ -1653,3 +1653,38 @@ button[data-vt-studio-control="true"][data-split-left="true"][data-size="standar
 button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) {
   --vt-split-stroke: 3px;
 }
+
+
+/* StudioButton emits data-height-variant (not data-size); use the actual DOM contract. */
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] {
+  --vt-split-stroke: 3px;
+  border: 3px solid #000 !important;
+  border-radius: 6px !important;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] {
+  --vt-split-stroke: 2px;
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] > [data-vt-studio-split-rail] {
+  border-right: 3px solid #000 !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail] {
+  border-right: 2px solid #000 !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"][aria-pressed="true"] {
+  border: 3px solid #000 !important;
+  border-radius: 6px !important;
+  outline: none !important;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"][data-selected="true"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"][aria-pressed="true"] {
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  outline: none !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
