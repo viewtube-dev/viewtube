@@ -108,11 +108,16 @@ The existing `trimClip` reducer changed only the timeline edge. For video/audio 
 
 Added focused Vitest coverage for left/right source-range updates, source-less overlay clips, and undo. Tests have been authored but were not run in this GitHub-only pass; runtime preview/render verification remains required.
 
+## Sixth implementation slice — Script Architect text export
+
+Script Architect now exposes **Export TXT** beside Copy Script and Save Packet. It downloads the current assembled `fullScript` as UTF-8 plain text without rewriting, reformatting, or replacing the in-editor draft. The filename is derived from the topic (falling back to the draft name), normalized for filesystem portability, and capped at 80 characters. Download errors surface in the existing Script Architect error/status area; Copy Script remains available as the fallback.
+
+The filename policy lives in a pure helper with focused Vitest coverage for readable names, reserved characters, empty names, and length limits. These tests were authored but not run in this GitHub-only pass.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, split-at-playhead, and source-aware trimming with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
-3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
-4. Trace video processing/job APIs and connect the first real operation.
-5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
-6. Expand audio/caption controls only against verified shared contracts.
+1. Run `npm run typecheck`, `npm run build`, the crop/FX/script-export unit tests, and focused editor tests; verify undo/redo and preview/final-render parity.
+2. Inspect the actual image processing/derivative contract before adding source-file resize, conversion, or export operations. Timeline transforms must not be misrepresented as source-file processing.
+3. Trace video processing/job APIs and connect one real operation end-to-end, including status and error behavior.
+4. Map Script Architect's existing state/handoffs and migrate generation through BrainRuntime only after its prompt/schema/context/locked-fragment contracts can be preserved and tested.
+5. Expand audio/caption controls only against verified shared contracts and the existing editor project state.
