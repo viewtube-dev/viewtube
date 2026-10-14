@@ -118,6 +118,8 @@ Added focused tests for clip overrides, legacy layer-payload fallback, defaults,
 
 - Added a **4:5 portrait crop preset** alongside the existing 16:9, 1:1, and 9:16 presets. Removed the duplicate square preset from the secondary crop row while retaining project-ratio and manual edge controls.
 - Added **Trim Start to Playhead** and **Trim End to Playhead** in Timeline Trim. A pure eligibility helper keeps these actions disabled unless the playhead is safely inside the selected clip. The buttons dispatch the existing trim reducer, which already uses the shared timeline/source-aware trim contract and undo history.
+- Added **Quick Image Adjustments** for selected image/video media layers: brightness, contrast, saturation, Reset Tone, Reset All FX, and a shortcut to the full Effects panel. Controls use `vtE1FxCatalog` normalization and the existing `updateLayerPayload` action; no parallel FX vocabulary is introduced.
+- Removed duplicate crop-helper imports and consolidated source dimension lookup so the inspector has one canonical media-dimension source.
 - Added focused Vitest coverage for trim-to-playhead eligibility. Tests/build, undo/redo, preview/render parity, and responsive browser verification remain pending.
 
 ## Immediate next sequence
