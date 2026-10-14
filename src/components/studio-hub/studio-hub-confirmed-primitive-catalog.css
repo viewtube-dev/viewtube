@@ -526,3 +526,64 @@
   .vt-confirmed-control-variants.is-word-toggle-44 { grid-template-columns: minmax(0, 1fr); }
   .vt-confirmed-control-variants.is-word-toggle-28 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Confirmed primitive family footers: make non-default prop/state contracts
+   inspectable at the bottom of every family module, before source provenance. */
+.vt-confirmed-nondefault-settings {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 1px solid #b9b9b9;
+  border-radius: 5px;
+  background: #f5f5f5;
+}
+.vt-confirmed-nondefault-settings > strong {
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 1000;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.vt-confirmed-nondefault-settings > ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vt-confirmed-nondefault-settings > ul > li {
+  position: relative;
+  min-width: 0;
+  padding-left: 10px;
+  font-size: 10px;
+  line-height: 1.35;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-nondefault-settings > ul > li::before {
+  position: absolute;
+  top: .42em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+  content: "";
+}
+.vt-confirmed-nondefault-settings + .vt-confirmed-provenance {
+  margin-top: 1px;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-nondefault-settings {
+    padding: 7px;
+  }
+  .vt-confirmed-nondefault-settings > ul {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .vt-confirmed-nondefault-settings > ul > li {
+    font-size: 9px;
+  }
+}
