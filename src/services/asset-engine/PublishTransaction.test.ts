@@ -72,4 +72,22 @@ describe("PublishTransaction",()=>{
   })
  })
 
+ it("refuses to resume a transaction whose approved snapshot is missing", () => {
+  const first = beginPublishTransaction(projection())
+  resetApprovedPublishSnapshotRepositoryForTests()
+  expect(() => beginPublishTransaction(projection())).toThrow(/approved snapshot.*(missing|integrity|binding)/i)
+  expect(first.approvedSnapshotId).toBeTruthy()
+ })
+
+ it("refuses to complete a transaction whose locked assets do not match its approved snapshot", () => {
+  const transaction = beginPublishTransaction(projection())
+  const stored = localStorage.getItem("viewtube_content_build_publish_transactions_v2")
+  expect(stored).toBeTruthy()
+  const parsed = JSON.parse(stored as string)
+  parsed[0].assetLock.titleAssetId = "tampered-title"
+  localStorage.setItem("viewtube_content_build_publish_transactions_v2", JSON.stringify(parsed))
+  expect(() => completePublishStep({ transactionId: transaction.id, step: "apply-metadata" }))
+   .toThrow(/approved snapshot.*(integrity|binding|locked assets)/i)
+ })
+
 })
