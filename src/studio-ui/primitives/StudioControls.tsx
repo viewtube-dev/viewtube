@@ -61,12 +61,16 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
 export const StudioTextInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "text", ...props }, ref) => (
+>(({ sizeVariant = "standard", type = "text", placeholder = "TITLE", ...props }, ref) => (
   <input
     ref={ref}
     type={type}
     {...withStudioAttrs(sizeVariant)}
     data-vt-studio-field-kind="text-input"
+    autoCorrect="off"
+    autoCapitalize="off"
+    spellCheck={false}
+    placeholder={placeholder}
     {...props}
   />
 ))
@@ -79,8 +83,8 @@ export const StudioInput = StudioTextInput
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "search", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+>(({ sizeVariant = "standard", type = "search", placeholder = "TITLE", ...props }, ref) => (
+  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
@@ -88,8 +92,8 @@ StudioSearchInput.displayName = "StudioSearchInput"
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "number", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+>(({ sizeVariant = "standard", type = "number", placeholder = "TITLE", ...props }, ref) => (
+  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
@@ -101,12 +105,16 @@ StudioNumberInput.displayName = "StudioNumberInput"
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", rows, ...props }, ref) => (
+>(({ sizeVariant = "standard", rows, placeholder = "DESCRIPTION", ...props }, ref) => (
   <textarea
     ref={ref}
     rows={rows ?? 4}
     {...withStudioAttrs(sizeVariant)}
     data-vt-studio-field-kind="textarea"
+    autoCorrect="off"
+    autoCapitalize="off"
+    spellCheck={false}
+    placeholder={placeholder}
     {...props}
   />
 ))
