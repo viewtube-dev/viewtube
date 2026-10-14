@@ -12,11 +12,13 @@ export function resolveCaptionShiftDelta(
   requestedDeltaSec: number,
 ): number {
   if (!Number.isFinite(requestedDeltaSec) || requestedDeltaSec === 0 || !ranges.length) return 0;
-  const starts = ranges
-    .map((range) => range.startSec)
-    .filter((start) => Number.isFinite(start) && start >= 0);
-  if (!starts.length || starts.length !== ranges.length) return 0;
-  const earliestStart = Math.min(...starts);
+  if (ranges.some((range) =>
+    !Number.isFinite(range.startSec) ||
+    !Number.isFinite(range.endSec) ||
+    range.startSec < 0 ||
+    range.endSec <= range.startSec
+  )) return 0;
+  const earliestStart = Math.min(...ranges.map((range) => range.startSec));
   return requestedDeltaSec < 0
     ? Math.max(requestedDeltaSec, -earliestStart)
     : requestedDeltaSec;
