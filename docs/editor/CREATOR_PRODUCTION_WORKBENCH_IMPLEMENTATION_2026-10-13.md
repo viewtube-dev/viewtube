@@ -102,6 +102,12 @@ The editor already had a reducer action for splitting a clip at the current play
 
 Split-button enablement is now a small pure contract in `src/features/editor/mobile/state/splitClipEligibility.ts`. It rejects missing/invalid clip intervals and non-finite playheads, and requires the playhead to be more than 1 ms inside either edge. A focused Vitest file covers interior, boundary/guard-band, and invalid-input cases. The test was added before extracting the helper, but this GitHub-only pass cannot execute it; it must be run in CI or a local checkout before claiming it passes.
 
+## Fourth implementation slice — aspect-ratio crop presets
+
+The selected media clip's Crop inspector now offers project ratio, 16:9 landscape, 9:16 portrait, 4:5 portrait, and 1:1 square presets. The pure `cropToAspectRatio` helper computes a centered crop from the media layer's stored width/height and applies it through the existing clip transform action. Presets are disabled when source dimensions are unavailable or the required crop would exceed the helper's safety limit. Source media remains unchanged; the crop is stored as a reversible editor transform.
+
+The helper has focused Vitest coverage for landscape-to-portrait, portrait-to-landscape, exact ratio matches, invalid dimensions/ratios, and excessive crops. Tests were authored but not run in this GitHub-only pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
