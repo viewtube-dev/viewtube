@@ -1,10 +1,11 @@
 /** Mobile tool bodies backed by the shared editor store. */
-import React from'react';import{canSplitClipAtPlayhead}from'../state/splitClipEligibility';import{EditorStore,Tool}from'../state/editorState';import{patchClipAudio,readClipAudio}from'../state/audioClip';import type{VtE1Transition}from'../../../../shared/vtE1TimelineContract';import{VT_E1_TRANSITION_CATALOG}from'../../../../shared/vtE1TransitionCatalog.js';import{createRenderJobClient,type RenderJob,type RenderOutputFormat}from'../../render/renderJobContract';
+import React from'react';import{canTrimEdgeToPlayhead}from'../state/trimAtPlayhead';import{canSplitClipAtPlayhead}from'../state/splitClipEligibility';import{EditorStore,Tool}from'../state/editorState';import{patchClipAudio,readClipAudio}from'../state/audioClip';import type{VtE1Transition}from'../../../../shared/vtE1TimelineContract';import{VT_E1_TRANSITION_CATALOG}from'../../../../shared/vtE1TransitionCatalog.js';import{createRenderJobClient,type RenderJob,type RenderOutputFormat}from'../../render/renderJobContract';
 interface PanelProps{store:EditorStore}const INK='#248b99',CYAN='#36E0F6',row:React.CSSProperties={display:'flex',gap:5,marginBottom:6,alignItems:'center'},btn:React.CSSProperties={flex:1,minHeight:30,padding:'5px 8px',borderRadius:5,background:'#fff',border:`2px solid ${INK}`,color:'#000',fontSize:9,fontWeight:900,textTransform:'uppercase'},primary={...btn,background:CYAN},label:React.CSSProperties={fontSize:9,fontWeight:900,textTransform:'uppercase',letterSpacing:.6,marginBottom:5},card:React.CSSProperties={border:`2px solid ${INK}`,borderRadius:6,background:'#fff',padding:8,marginBottom:6,boxShadow:'2px 2px 0 rgba(54,224,246,.22)'};const Card=({name,children}:{name:string;children:React.ReactNode})=><section style={card}><div style={label}>{name}</div>{children}</section>;
 const SelectPanel=({store}:PanelProps)=>store.selectedClips.length?<Card name="Selection">{store.selectedClips.map(c=><div key={c.id} style={row}><b style={{flex:1}}>{String(c.id)}</b><button style={btn} onClick={()=>store.dispatch({type:'duplicateClip',id:c.id})}>Dup</button></div>)}</Card>:<Card name="Selection">Select a clip in the timeline.</Card>;
 const TrimPanel=({store}:PanelProps)=>{
- const c=store.selectedClips[0];
+ const c=store.selectedClips[0],playhead=store.state.playheadSec;
  if(!c)return <Card name="Trim">Select a clip.</Card>;
+ const canTrimToPlayhead=canTrimEdgeToPlayhead(c,playhead);
  const layer=store.state.project.layers.find(item=>item.id===c.layerId);
  const payload=(layer?.payload??{}) as Record<string,unknown>;
  const sourceDurationSec=Number(c.sourceDurationSec??payload.sourceDurationSec??payload.mediaDurationSec??0);
@@ -15,6 +16,11 @@ const TrimPanel=({store}:PanelProps)=>{
  const canSlipForward=hasSourceDuration&&sourceOutSec<sourceDurationSec-0.001;
  const slip=(deltaSec:number)=>store.dispatch({type:'slipClip',id:c.id,deltaSec,sourceDurationSec});
  return <><Card name="Timeline Trim">
+  <div style={label}>Playhead · {playhead.toFixed(2)}s</div>
+  <div style={row}>
+   <button style={{...btn,opacity:canTrimToPlayhead?1:.4}} disabled={!canTrimToPlayhead} onClick={()=>store.dispatch({type:'trimClip',id:c.id,side:'left',sec:playhead})}>Trim Start to Playhead</button>
+   <button style={{...btn,opacity:canTrimToPlayhead?1:.4}} disabled={!canTrimToPlayhead} onClick={()=>store.dispatch({type:'trimClip',id:c.id,side:'right',sec:playhead})}>Trim End to Playhead</button>
+  </div>
   <div style={label}>Start · {c.start.toFixed(2)}s</div>
   <input aria-label="Trim clip start on timeline" type="range" min={0} max={c.end-.1} step={.05} value={c.start} onChange={e=>store.dispatch({type:'trimClip',id:c.id,side:'left',sec:+e.target.value})} style={{width:'100%'}}/>
   <div style={label}>End · {c.end.toFixed(2)}s</div>
