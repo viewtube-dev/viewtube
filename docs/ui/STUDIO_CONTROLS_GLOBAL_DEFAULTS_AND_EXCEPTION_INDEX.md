@@ -243,3 +243,37 @@ The gallery component at `src/components/studio-hub/StudioHubConfirmedPrimitiveC
 **Not yet verified:** final computed style after every consumer stylesheet; every importing consumer across the repository; live desktop/mobile rendering; browser-based hover/active behavior; automated regression checks; build/test outcomes. No finding in this document should be marked “fixed” based on a source edit alone. After remediation, update each row with the verification method and result.
 
 **Governance rule:** An exception is valid only when (1) it has a stable ID, (2) the affected component and size are named, (3) the reason is functional/accessibility-related rather than historical convenience, (4) the exception is represented in the component-library family notes, and (5) a test or rendered check verifies it. All other divergences are defects, not exceptions.
+
+
+## 14. Additional global-policy conflicts confirmed during this pass
+
+These findings extend the exception index; they are source-level observations, not a claim about final computed styles.
+
+| Finding | Source | Conflict | Required correction |
+|---|---|---|---|
+| Global field fill policy is not singular | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.textFieldDefaults` vs early and later field selectors in `studio-control-system.css` | TypeScript describes default primary at 50% opacity and focus primary at 15%; CSS uses both transparent-mixed and white-mixed fills across overlapping selectors. | Keep one canonical default/focus field-state rule and test the computed fill in both sizes. |
+| Global focus says no gap, CSS adds one | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.focusOutline` vs `:focus/:focus-visible` field rule | Policy says no gap; one field focus rule sets `outline-offset: 1px`. | Set the field outline offset to 0 unless a named, indexed variant explicitly needs separation. |
+| Global menu policy contradicts panel styling | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.shadowPolicy` vs `.vt-studio-dropdown-menu` | Policy describes dropdown menus/options as having no shadows, while the menu panel defines a hard offset shadow. Options and panel are different surfaces but the policy does not clearly distinguish them. | Clarify the contract: menu options have no button shadow or press-motion; explicitly decide whether the floating panel may have a stationary panel shadow. Record the decision in the dropdown exception row and library. |
+| Focus and inset strokes are not fully size-driven | Text-field base and later canonical field selectors | Multiple selectors define inset width, outer stroke, outline width and outline offset; some use literals and one uses `!important`. | Express outer stroke and inset stroke with separate named size tokens; avoid duplicate state selectors and unnecessary `!important`. |
+| Catalog style must not be read as primitive geometry | `studio-hub-primitive-catalogs.css` | Reference cards/headings have their own frame border, radius and shadow values, distinct from the production control under test. | Keep card styles scoped to catalog wrappers; identify them as reference framing and never include them in primitive compliance measurements. |
+
+### Global-default completeness checklist
+
+For both **standard (44px)** and **compact (28px)**, the executable contract and library must expose all of the following—not only height:
+
+- Typography: font family, text size, weight, transform, tracking, line-height and text stroke.
+- Geometry: height, box-sizing, outer border width/color, corner radius, padding and icon rail/label layout.
+- Icons: width/height and stroke width.
+- Color: primary/secondary pair mapping, default/selected/hover/pressed fills, text/indicator colors and disabled treatment.
+- Shadow: X/Y offset, shadow color/opacity, stable anchor, hover travel and pressed travel.
+- Motion: hover duration, click duration, easing and reduced-motion fallback.
+- Focus: focus-visible ring color, stroke width, offset, and whether it changes layout (it must not).
+- Fields: default/focus fill opacity, outer border, inset stroke, caret, placeholder and text stroke.
+- State invariants: selected/default geometry match; disabled controls do not press; hover/active never thicken a border or divider.
+- Exceptions: component, variant, affected size, property, reason, owner/source, library entry and verification evidence.
+
+If a value is not defined in the current exported constants (for example, shadow opacity, field inset stroke by size, or focus offset by size), mark it **undefined / needs contract decision** rather than inventing a default. The correction phase must add it to the contract before styling it.
+
+### Change note — 2026-10-14
+
+This pass reuses this existing canonical document rather than creating a competing duplicate. The document is linked from `docs/UI.md`; `docs/Index.md` already links to this path. The global contract remains a declared baseline, and the exceptions remain open until CSS is reconciled and browser/test evidence is recorded.
