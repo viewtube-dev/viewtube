@@ -49,23 +49,28 @@ export const trimTimelineClip = (clip, side, edgeSec, sourceDurationSec = Number
   if (side === 'left' && !(edge < end - TIMELINE_MIN_CLIP_DURATION_SEC)) return null;
   if (side === 'right' && !(edge > start + TIMELINE_MIN_CLIP_DURATION_SEC)) return null;
 
-  const sourceIn = Number(clip.sourceInSec);
-  const sourceOut = Number(clip.sourceOutSec);
-  const hasSourceWindow = Number.isFinite(sourceIn) && Number.isFinite(sourceOut);
-  if (!hasSourceWindow) {
+  const sourceInValue = Number(clip.sourceInSec);
+  const sourceOutValue = Number(clip.sourceOutSec);
+  const hasSourceRange = Number.isFinite(sourceInValue) || Number.isFinite(sourceOutValue);
+  if (!hasSourceRange) {
     return side === 'left' ? copy(clip, { start: edge }) : copy(clip, { end: edge });
   }
 
+  const sourceIn = Number.isFinite(sourceInValue) ? sourceInValue : 0;
+  const sourceOut = Number.isFinite(sourceOutValue) ? sourceOutValue : sourceIn + (end - start);
+  const sourcePerTimelineSecond = end > start && Number.isFinite(sourceOut - sourceIn)
+    ? Math.max(0, (sourceOut - sourceIn) / (end - start))
+    : 1;
+  const nextSourceEdge = sourceIn + (edge - start) * sourcePerTimelineSecond;
+  if (!Number.isFinite(nextSourceEdge) || nextSourceEdge < 0) return null;
+
   if (side === 'left') {
-    const nextSourceIn = sourceIn + (edge - start);
-    if (nextSourceIn < 0) return null;
-    return copy(clip, { start: edge, sourceInSec: nextSourceIn });
+    return copy(clip, { start: edge, sourceInSec: nextSourceEdge });
   }
 
-  const nextSourceOut = sourceIn + (edge - start);
   const knownDuration = Number(sourceDurationSec);
-  if (Number.isFinite(knownDuration) && nextSourceOut > knownDuration) return null;
-  return copy(clip, { end: edge, sourceOutSec: nextSourceOut });
+  if (Number.isFinite(knownDuration) && nextSourceEdge > knownDuration) return null;
+  return copy(clip, { end: edge, sourceOutSec: nextSourceEdge });
 };
 
 export const slipTimelineClip = (clip, deltaSec, sourceDurationSec = Number.POSITIVE_INFINITY) => {
