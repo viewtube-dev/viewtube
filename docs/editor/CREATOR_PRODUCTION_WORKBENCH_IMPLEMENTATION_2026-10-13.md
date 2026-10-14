@@ -118,11 +118,16 @@ Added focused tests for clip overrides, legacy layer-payload fallback, defaults,
 
 The Audio panel now exposes **Fade In** and **Fade Out** duration controls (0–10 seconds). The shared audio render contract resolves clip-level fade edits over legacy layer-payload values. A deterministic `audioVolumeAtFrame` helper computes per-frame gain, including overlapping fades and mute behavior; Remotion Composition uses that helper as the Audio volume curve. Unit cases cover fade endpoints, mid-fade gain, overlapping fades, and mute. The tests are authored but have not been executed here, and final audio playback/render verification remains pending.
 
+## Seventh implementation slice — source-slip controls
+
+The existing reducer already supported `slipClip` through `slipTimelineClip`, which shifts source in/out points while preserving the timeline start/end and duration. The selected media inspector now exposes compact `−1s`, `−0.1s`, `+0.1s`, and `+1s` source-slip controls for video and audio clips with known source duration. It shows the current source window and disables movement at the available source boundaries.
+
+The controls dispatch the existing reducer action and pass the known source duration, so source-window limits and undo history remain owned by the existing editor state/operation contract. Existing timeline-operation tests cover slip behavior; this UI wiring still needs runtime testing and typecheck/build.
+
 ## Immediate next sequence
 
-1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
-2. Add ratio-aware crop presets once source/output dimensions are traced from the actual project contract.
-3. Audit image processing and derivative APIs; implement one real image operation end-to-end.
-4. Trace video processing/job APIs and connect the first real operation.
-5. Map Script Architect's existing state/handoffs and resolve its BrainRuntime boundary without regressing script assembly.
-6. Expand audio/caption controls only against verified shared contracts.
+1. Run typecheck/build and focused editor/timeline tests; verify slip, trim, split, crop, FX, undo/redo, and preview/final-render parity.
+2. Inspect the actual image processing/derivative contract before adding source-file resize, conversion, or export operations.
+3. Trace video processing/job APIs and connect one real operation end-to-end, including status and error behavior.
+4. Map Script Architect's existing state/handoffs and migrate generation through BrainRuntime only after prompt/schema/context/locked-fragment contracts can be preserved and tested.
+5. Expand audio/caption controls only against verified shared contracts and the existing editor project state.
