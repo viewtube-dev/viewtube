@@ -337,12 +337,13 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const canSlip=(deltaSec:number)=>canSlipSource&&canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,deltaSec);
   const slipSource=(deltaSec:number)=>store.dispatch({type:'slipClip',id:clip.id,deltaSec,sourceDurationSec});
   const isImageMedia=isMedia&&String(payload.mediaKind??'')==='image'&&typeof payload.mediaUrl==='string'&&Boolean(payload.mediaUrl);
-  const exportCroppedImage=async()=>{
+  const exportCroppedImage=async(targetWidth?:number)=>{
     if(!isImageMedia)return;
     setExportingCrop(true);setCropExportError('');
     try{
       const sourceName=String(payload.mediaName??payload.layerName??'image').replace(/\.[^.]+$/,'').replace(/[^\w.-]+/g,'-')||'image';
-      const file=await exportCroppedImageAsFile(String(payload.mediaUrl),readClipVisualTransform(clip),`${sourceName}-crop.png`);
+      const suffix=targetWidth?`-${targetWidth}px`:'';
+      const file=await exportCroppedImageAsFile(String(payload.mediaUrl),readClipVisualTransform(clip),`${sourceName}-crop${suffix}.png`,targetWidth);
       if(!file)throw new Error('The image could not be exported. The source may be unavailable or blocked by browser media permissions.');
       const url=URL.createObjectURL(file);
       const anchor=document.createElement('a');
@@ -529,6 +530,9 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
       </div>
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:Boolean(payload.muted)?'#fff':GREEN}} onClick={()=>patch({muted:!Boolean(payload.muted)})}>{Boolean(payload.muted)?'UNMUTE VIDEO':'MUTE VIDEO'}</button>:null}
       {String(payload.mediaKind??'')==='image'?<button style={{...miniButton,width:'100%',marginTop:4,background:exportingCrop?YELLOW:CYAN,opacity:exportingCrop||!isImageMedia?0.45:1}} disabled={exportingCrop||!isImageMedia} onClick={()=>void exportCroppedImage()}><Save size={12}/>{exportingCrop?'EXPORTING PNG…':'EXPORT CROPPED IMAGE (PNG)'}</button>:null}
+      {String(payload.mediaKind??'')==='image'?<div style={{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:4,marginTop:4}}>
+        {[720,1080,1920].map(width=><button key={width} style={{...miniButton,minWidth:0,padding:'3px 2px',background:exportingCrop?YELLOW:'#fff',opacity:exportingCrop||!isImageMedia?0.45:1}} disabled={exportingCrop||!isImageMedia} onClick={()=>void exportCroppedImage(width)}>{width}W PNG</button>)}
+      </div>:null}
       {cropExportError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{cropExportError}</div>:null}
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||!playheadWithinClip?0.45:1}} disabled={capturingFrame||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}
       {frameCaptureError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameCaptureError}</div>:null}
