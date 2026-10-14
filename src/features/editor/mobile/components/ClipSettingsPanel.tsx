@@ -6,6 +6,7 @@ import type {VtE1Clip} from '../../../../shared/vtE1TimelineContract';
 import {AcceleratingStepper as HoldStepper,LinkToggle,RotationDial,XYJoystick} from './MobileEditorPrimitives';
 import {ClipEffects} from './EffectsLibrariesPanel';
 import {canSlipSourceWindow,SOURCE_SLIP_STEPS} from '../state/sourceSlipControls';
+import {captureVideoFrameAsFile,sourceFrameTime} from '../state/videoFrameCapture';
 
 const BLACK='#111111';
 const MAGENTA='#ff00ff';
@@ -250,6 +251,8 @@ const ColorControl:React.FC<{
 
 function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:(page:EditorNavPage)=>void}){
   const[linkedSize,setLinkedSize]=useState(true);
+  const[capturingFrame,setCapturingFrame]=useState(false);
+  const[frameCaptureError,setFrameCaptureError]=useState('');
   const[colorScope,setColorScope]=useState<'selected'|'group'|'track'>('selected');
   const[recentColors,setRecentColors]=useState<string[]>(()=>{
     if(typeof window==='undefined')return[];
@@ -285,6 +288,22 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
   const canSlipSource=(isAudio||(isMedia&&payload.mediaKind==='video'))&&sourceDurationSec>0;
   const canSlip=(deltaSec:number)=>canSlipSource&&canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,deltaSec);
   const slipSource=(deltaSec:number)=>store.dispatch({type:'slipClip',id:clip.id,deltaSec,sourceDurationSec});
+  const isVideoMedia=isMedia&&String(payload.mediaKind??'')==='video'&&typeof payload.mediaUrl==='string'&&Boolean(payload.mediaUrl);
+  const playheadWithinClip=store.state.playheadSec>=clip.start&&store.state.playheadSec<clip.end;
+  const captureFrame=async()=>{
+    if(!isVideoMedia||!playheadWithinClip)return;
+    setCapturingFrame(true);setFrameCaptureError('');
+    try{
+      const sourceTime=sourceFrameTime(store.state.playheadSec,clip.start,sourceInSec,sourceDurationSec);
+      if(sourceTime===null)throw new Error('Source duration metadata is unavailable for this video.');
+      const file=await captureVideoFrameAsFile(String(payload.mediaUrl),sourceTime,`frame-${sourceTime.toFixed(2).replace('.','-')}s.jpg`);
+      if(!file)throw new Error('This frame could not be captured. The source may be unavailable or blocked by browser media permissions.');
+      await addFileClip(store,file,'image');
+    }catch(reason){
+      setFrameCaptureError(reason instanceof Error?reason.message:'Frame capture failed.');
+    }finally{setCapturingFrame(false)}
+  };
+
   const audioVolume=number(payload.volume,.6);
   const audioRate=number(payload.playbackRate,1);
   const widthValue=number(payload.width,100),heightValue=number(payload.height,100);
@@ -444,6 +463,8 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
         {['cover','contain'].map(fit=><button key={fit} style={{...miniButton,background:String(payload.fit??'cover')===fit?YELLOW:'#fff'}} onClick={()=>patch({fit})}>{fit}</button>)}
       </div>
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:Boolean(payload.muted)?'#fff':GREEN}} onClick={()=>patch({muted:!Boolean(payload.muted)})}>{Boolean(payload.muted)?'UNMUTE VIDEO':'MUTE VIDEO'}</button>:null}
+      {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||!playheadWithinClip?0.45:1}} disabled={capturingFrame||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}
+      {frameCaptureError?<div role="alert" style={{fontSize:8,fontWeight:900,border:`1px solid ${MAGENTA}`,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameCaptureError}</div>:null}
     </div>:null}
 
     {isAudio?<div style={{marginTop:10}}>
