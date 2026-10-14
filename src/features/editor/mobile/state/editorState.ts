@@ -1,7 +1,7 @@
 /** Shared mobile-editor state. Both layouts mount this reducer. */
 import {useCallback,useMemo,useReducer} from 'react';
 import type {VtE1Clip,VtE1Project,VtE1Transition} from '../../../../shared/vtE1TimelineContract';
-import {rippleDeleteTimelineClips,slideTimelineClip,slipTimelineClip,splitTimelineClip} from '../../../../shared/vtE1TimelineOperations.js';
+import {rippleDeleteTimelineClips,slideTimelineClip,slipTimelineClip,splitTimelineClip,trimTimelineClip} from '../../../../shared/vtE1TimelineOperations.js';
 import {readVtE1ClipVisualTransform,VT_E1_VISUAL_ANIMATED_PROPS} from '../../../../shared/vtE1VisualFrame.js';
 
 export type TrackKind='video'|'audio'|'overlay'|'caption';
@@ -132,12 +132,22 @@ function clampClipMoveStart(clips:VtE1Clip[],clip:VtE1Clip,desiredStart:number,p
   return Math.max(minStart,Math.min(desiredStart,maxStart));
 }
 
-function clampTrimEdge(clips:VtE1Clip[],clip:VtE1Clip,side:'left'|'right',desired:number,projectDuration:number){
+function clampTrimEdge(clips:VtE1Clip[],clip:VtE1Clip,side:'left'|'right',desired:number,projectDuration:number,sourceDurationSec=Number.POSITIVE_INFINITY){
   const{before,after}=orderedNeighbors(clips,clip);
+  const sourceInValue=Number(clip.sourceInSec);
+  const sourceOutValue=Number(clip.sourceOutSec);
+  const hasSourceRange=Number.isFinite(sourceInValue)||Number.isFinite(sourceOutValue);
+  const sourceIn=Number.isFinite(sourceInValue)?sourceInValue:0;
+  const sourceOut=Number.isFinite(sourceOutValue)?sourceOutValue:sourceIn+(clip.end-clip.start);
+  const sourcePerTimelineSecond=clip.end>clip.start&&Number.isFinite(sourceOut-sourceIn)
+    ?Math.max(0,(sourceOut-sourceIn)/(clip.end-clip.start)):1;
   if(side==='left'){
-    return Math.max(before?.end??0,Math.min(desired,clip.end-MIN_CLIP_DURATION));
+    const sourceMinimum=hasSourceRange&&sourcePerTimelineSecond>0?clip.start-sourceIn/sourcePerTimelineSecond:0;
+    return Math.max(before?.end??0,sourceMinimum,Math.min(desired,clip.end-MIN_CLIP_DURATION));
   }
-  return Math.min(after?.start??projectDuration,Math.max(desired,clip.start+MIN_CLIP_DURATION));
+  const sourceMaximum=hasSourceRange&&Number.isFinite(sourceDurationSec)&&sourcePerTimelineSecond>0
+    ?clip.start+(sourceDurationSec-sourceIn)/sourcePerTimelineSecond:projectDuration;
+  return Math.min(after?.start??projectDuration,sourceMaximum,Math.max(desired,clip.start+MIN_CLIP_DURATION));
 }
 
 function placeClipAfterCollisions(clips:VtE1Clip[],clip:VtE1Clip){
@@ -441,25 +451,14 @@ export function editorReducer(state:EditorState,action:EditorAction):EditorState
     case'trimClip':{
       const clip=state.project.clips.find(c=>c.id===action.id);
       if(!clip)return state;
-      const edge=clampTrimEdge(state.project.clips,clip,action.side,action.sec,state.project.durationSec);
-      const hasSourceRange=Number.isFinite(Number(clip.sourceInSec))||Number.isFinite(Number(clip.sourceOutSec));
-      const sourceIn=Number.isFinite(Number(clip.sourceInSec))?Number(clip.sourceInSec):0;
-      const sourceOut=Number.isFinite(Number(clip.sourceOutSec))?Number(clip.sourceOutSec):sourceIn+(clip.end-clip.start);
-      const sourcePerTimelineSecond=clip.end>clip.start&&Number.isFinite(sourceOut-sourceIn)
-        ?Math.max(0,(sourceOut-sourceIn)/(clip.end-clip.start)):1;
-      const clips=state.project.clips.map(c=>{
-        if(c.id!==action.id)return c;
-        if(action.side==='left'){
-          const delta=Math.max(0,edge-clip.start);
-          return hasSourceRange
-            ?{...c,start:edge,sourceInSec:sourceIn+delta*sourcePerTimelineSecond}
-            :{...c,start:edge};
-        }
-        const duration=Math.max(0,edge-clip.start);
-        return hasSourceRange
-          ?{...c,end:edge,sourceOutSec:sourceIn+duration*sourcePerTimelineSecond}
-          :{...c,end:edge};
-      });
+      const layer=state.project.layers.find(item=>item.id===clip.layerId);
+      const payload=layer?.payload??{};
+      const durationValue=Number(clip.sourceDurationSec??payload.sourceDurationSec??payload.mediaDurationSec??0);
+      const sourceDurationSec=Number.isFinite(durationValue)&&durationValue>0?durationValue:Number.POSITIVE_INFINITY;
+      const edge=clampTrimEdge(state.project.clips,clip,action.side,action.sec,state.project.durationSec,sourceDurationSec);
+      const trimmed=trimTimelineClip(clip,action.side,edge,sourceDurationSec);
+      if(!trimmed)return state;
+      const clips=state.project.clips.map(c=>c.id===action.id?trimmed:c);
       return withHistory(state,{...state,project:{...state.project,clips}});
     }
     case'splitClipAtPlayhead':{
