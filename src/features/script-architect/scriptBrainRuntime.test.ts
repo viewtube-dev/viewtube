@@ -16,6 +16,7 @@ describe("buildScriptArchitectBrainTaskRequest", () => {
     expect(request).toMatchObject({
       surface: "studio-tool",
       assetType: "script",
+      capability: "analysis",
       projectId: "project-123",
       contentBuildId: "build-456",
       userText: "Script prompt",
@@ -35,5 +36,6 @@ describe("buildScriptArchitectBrainTaskRequest", () => {
     expect(request.projectId).toBeNull();
     expect(request.contentBuildId).toBeNull();
     expect(request.assetType).toBe("script");
+    expect(request.capability).toBe("analysis");
   });
 });
