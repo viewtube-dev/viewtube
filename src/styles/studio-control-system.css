@@ -62,7 +62,6 @@
 [data-vt-studio-control]:is(input, textarea, select):focus-visible {
   border-color: #000;
   background-color: color-mix(in srgb, var(--vt-studio-control-accent) 15%, transparent);
-  background-image: none;
   outline: var(--vt-studio-control-outline-stroke) solid var(--vt-studio-control-secondary);
   outline-offset: 1px;
   caret-color: var(--vt-studio-control-accent);
