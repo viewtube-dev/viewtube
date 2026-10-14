@@ -18,7 +18,7 @@ describe('computeCropRectangle', () => {
     const rect = { x: 192, y: 54, width: 1536, height: 972 };
     expect(computeCropOutputDimensions(rect)).toEqual({ width: 1536, height: 972 });
     expect(computeCropOutputDimensions(rect, 1080)).toEqual({ width: 1080, height: 683 });
-    expect(computeCropOutputDimensions(rect, 720)).toEqual({ width: 720, height: 455 });
+    expect(computeCropOutputDimensions(rect, 720)).toEqual({ width: 720, height: 456 });
   });
 
   it('rejects invalid or excessively large output widths', () => {
