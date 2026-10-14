@@ -69,9 +69,7 @@ const resolvePublishIdentity = (transactionId: string, videoId: string) => {
 
   const build = getContentBuild(transaction.contentBuildId)
   if (!build) throw new Error(`Unknown ContentBuild: ${transaction.contentBuildId}`)
-  if (build.channelId && snapshot.projectId && transaction.contentBuildId !== build.id) {
-    throw new Error("ContentBuild identity mismatch.")
-  }
+  required(snapshot.projectId, "approved snapshot projectId")
 
   return { transaction, snapshot, build }
 }
@@ -87,6 +85,9 @@ export const recordPostPublishIdentity = (
   const videoId = required(input.videoId, "videoId")
   const { transaction, snapshot, build } = resolvePublishIdentity(input.transactionId, videoId)
   const assetIds = selectedAssets(transaction)
+  if (build.youtube?.videoId && build.youtube.videoId !== videoId) {
+    throw new Error("ContentBuild is already bound to a different YouTube video; refusing to overwrite lineage.")
+  }
   const existingReceipt = listContentBuildEvents(build.id).find(event =>
     event.eventType === "youtube.state.changed" &&
     event.entityType === "publish-identity-receipt" &&
@@ -104,11 +105,6 @@ export const recordPostPublishIdentity = (
       approvedSnapshotHash: snapshot.hash,
       selectedVariantAssetIds: assetIds,
     }
-  }
-
-  const priorVideoId = build.youtube?.videoId
-  if (priorVideoId && priorVideoId !== videoId) {
-    throw new Error("ContentBuild is already bound to a different YouTube video; refusing to overwrite lineage.")
   }
 
   const binding = bindYouTubeVideo({
@@ -190,6 +186,9 @@ export const recordAnalyticsCheckpointForEvaluation = (
   input: AnalyticsCheckpointBridgeInput,
 ) => {
   const checkpointId = required(input.checkpointId, "checkpointId")
+  if (!Number.isFinite(input.checkpointAt) || input.checkpointAt <= 0) {
+    throw new Error("Analytics checkpoint requires a valid epoch-millisecond checkpointAt.")
+  }
   const identity = recordPostPublishIdentity(input)
   const { transaction, snapshot, build } = resolvePublishIdentity(input.transactionId, input.videoId)
   const eventId = buildPostPublishCheckpointEventId({
