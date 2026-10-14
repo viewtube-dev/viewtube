@@ -1,4 +1,5 @@
 import React from 'react';
+import { cropToAspectRatio } from '../state/cropPresets';
 import {AudioLines,Film,FolderKanban,LayoutTemplate,ScanSearch,Settings as SettingsIcon,Shuffle,SlidersHorizontal,Type,Upload} from 'lucide-react';
 import type {EditorStore} from '../state/editorState';
 import {readClipVisualTransform} from '../state/editorState';
@@ -52,6 +53,11 @@ function Inspector({store}:{store:EditorStore}){
   if(transition)return <><Section name="Transition"><b>{transition.leftClipId} → {transition.rightClipId}</b></Section><Section name="Transition Controls"><Grid><button style={button} onClick={()=>store.dispatch({type:'openPanel',id:'transitions'})}>Edit</button><button style={{...button,background:PINK}} onClick={()=>store.dispatch({type:'removeTransition',id:store.state.selection.transitionId!})}>Remove</button></Grid></Section></>;
   if(!clip)return <Section name="Clip Inspector"><div style={{fontSize:10,fontWeight:800,opacity:.6,marginBottom:6}}>Select a clip, track, or transition from the timeline or Clips page.</div><CapabilityGrid category="edit"/></Section>;
   const v=readClipVisualTransform(clip),set=(patch:any)=>store.dispatch({type:'updateClipTransform',id:clip.id,patch});
+  const layer=store.state.project.layers.find(item=>item.id===clip.layerId);
+  const mediaWidth=Number(layer?.payload?.width);
+  const mediaHeight=Number(layer?.payload?.height);
+  const applyAspectCrop=(ratio:number)=>{const crop=cropToAspectRatio(mediaWidth,mediaHeight,ratio);if(crop)set(crop);};
+
   const mediaLayer=clip.layerId?store.layerById(String(clip.layerId)):undefined;
   const mediaPayload=mediaLayer?.payload??{};
   const mediaKind=mediaPayload.mediaKind;
@@ -92,6 +98,9 @@ function Inspector({store}:{store:EditorStore}){
         <button style={{...button,opacity:portrait45Crop?1:.4}} aria-label="Crop to 4 by 5 portrait" disabled={!portrait45Crop} onClick={()=>portrait45Crop&&set(portrait45Crop)}>4:5</button>
         <button style={{...button,opacity:squareCrop?1:.4}} aria-label="Crop to square aspect ratio" disabled={!squareCrop} onClick={()=>squareCrop&&set(squareCrop)}>1:1</button>
         <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
+        <button style={button} aria-label="Crop to portrait 9 by 16" disabled={!mediaWidth||!mediaHeight} onClick={()=>applyAspectCrop(9/16)}>9:16</button>
+        <button style={button} aria-label="Crop to square 1 by 1" disabled={!mediaWidth||!mediaHeight} onClick={()=>applyAspectCrop(1)}>1:1</button>
+        <button style={button} aria-label="Crop to landscape 16 by 9" disabled={!mediaWidth||!mediaHeight} onClick={()=>applyAspectCrop(16/9)}>16:9</button>
         <button style={button} aria-label="Apply centered 10 percent crop" onClick={()=>set({cropLeft:.1,cropRight:.1,cropTop:.1,cropBottom:.1})}>Center 10%</button>
         <button style={button} aria-label="Apply centered 20 percent crop" onClick={()=>set({cropLeft:.2,cropRight:.2,cropTop:.2,cropBottom:.2})}>Center 20%</button>
       </Grid>
