@@ -32,3 +32,24 @@ test("standard and compact text fields keep 3px/2px borders and 1.5px/1px focus 
   assert.match(correction, /data-size="standard"[^\{]*\{[\s\S]*?--vt-field-stroke:\s*3px[\s\S]*?--vt-field-outline-stroke:\s*1\.5px/);
   assert.match(correction, /data-size="compact"[^\{]*\{[\s\S]*?--vt-field-stroke:\s*2px[\s\S]*?--vt-field-outline-stroke:\s*1px/);
 });
+
+test("canonical field typography matches standard and compact size contracts", () => {
+  assert.match(correction, /font-size:\s*38px\s*!important/);
+  assert.match(correction, /font-size:\s*24px\s*!important/);
+  assert.match(correction, /font-weight:\s*1000\s*!important/);
+  assert.match(correction, /text-transform:\s*uppercase\s*!important/);
+});
+
+test("dropdown menus attach to triggers and inherit the 44px/28px typography", async () => {
+  const dropdownCss = await fs.readFile("src/styles/studio-control-system.css", "utf8");
+  const dropdownTsx = await fs.readFile("src/studio-ui/primitives/StudioDropdown.tsx", "utf8");
+  assert.match(dropdownCss, /\.vt-studio-dropdown-menu\s*\{[\s\S]*?top:\s*100%\s*!important/);
+  assert.match(dropdownCss, /\.vt-studio-dropdown-option\s*\{[\s\S]*?font-size:\s*var\(--vt-dropdown-font-size, 38px\)\s*!important/);
+  assert.match(dropdownTsx, /sizeVariant\?:\s*"standard"\s*\|\s*"compact"/);
+  assert.match(dropdownTsx, /data-open=\{open \? "true" : "false"\}/);
+});
+
+test("confirmed library lays four control skins out in a single row", async () => {
+  const catalogCss = await fs.readFile("src/components/studio-hub/studio-hub-confirmed-primitive-catalog.css", "utf8");
+  assert.match(catalogCss, /\.vt-confirmed-control-variants,[\s\S]*?grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)\s*!important/);
+});
