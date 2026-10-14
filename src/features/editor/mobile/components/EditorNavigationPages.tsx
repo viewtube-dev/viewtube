@@ -53,7 +53,22 @@ function Inspector({store}:{store:EditorStore}){
   const v=readClipVisualTransform(clip),set=(patch:any)=>store.dispatch({type:'updateClipTransform',id:clip.id,patch});
   return <>
     <Section name="Clip"><b>{String(clip.id)}</b><div>{clip.start.toFixed(2)}s → {clip.end.toFixed(2)}s · {store.trackById(clip.trackId)?.kind??'clip'}</div></Section>
-    <Section name="Transform"><Grid><StepperField label="X" value={v.x} step={1} defaultValue={0} onChange={x=>set({x})}/><StepperField label="Y" value={v.y} step={1} defaultValue={0} onChange={y=>set({y})}/><StepperField label="SCALE X" value={v.scaleX} min={.05} max={10} step={.01} defaultValue={1} rightSlot={<LinkToggle linked={linkedScale} onChange={setLinkedScale} label="scale"/>} onChange={scaleX=>set(linkedScale?{scaleX,scaleY:scaleX}:{scaleX})}/><StepperField label="SCALE Y" value={v.scaleY} min={.05} max={10} step={.01} defaultValue={1} onChange={scaleY=>set(linkedScale?{scaleY,scaleX:scaleY}:{scaleY})}/><StepperField label="ROTATION" value={v.rotation} min={-3600} max={3600} step={1} defaultValue={0} onChange={rotation=>set({rotation})}/><StepperField label="OPACITY" value={v.opacity} min={0} max={1} step={.01} defaultValue={1} onChange={opacity=>set({opacity})}/></Grid><button style={{...button,width:'100%',marginTop:5}} onClick={()=>store.dispatch({type:'resetClipTransform',id:clip.id})}>Reset Transform</button></Section>
+    <Section name="Transform">
+      <Grid cols={3}>
+        <button style={button} aria-label="Rotate clockwise 90 degrees" onClick={()=>set({rotation:v.rotation+90})}>Rotate +90°</button>
+        <button style={button} aria-label="Rotate counterclockwise 90 degrees" onClick={()=>set({rotation:v.rotation-90})}>Rotate −90°</button>
+        <button style={button} aria-label="Reset rotation only" onClick={()=>set({rotation:0})}>Reset Rotation</button>
+      </Grid>
+      <Grid>
+        <StepperField label="X" value={v.x} step={1} defaultValue={0} onChange={x=>set({x})}/>
+        <StepperField label="Y" value={v.y} step={1} defaultValue={0} onChange={y=>set({y})}/>
+        <StepperField label="SCALE X" value={v.scaleX} min={.05} max={10} step={.01} defaultValue={1} rightSlot={<LinkToggle linked={linkedScale} onChange={setLinkedScale} label="scale"/>} onChange={scaleX=>set(linkedScale?{scaleX,scaleY:scaleX}:{scaleX})}/>
+        <StepperField label="SCALE Y" value={v.scaleY} min={.05} max={10} step={.01} defaultValue={1} onChange={scaleY=>set(linkedScale?{scaleY,scaleX:scaleY}:{scaleY})}/>
+        <StepperField label="ROTATION" value={v.rotation} min={-3600} max={3600} step={1} defaultValue={0} onChange={rotation=>set({rotation})}/>
+        <StepperField label="OPACITY" value={v.opacity} min={0} max={1} step={.01} defaultValue={1} onChange={opacity=>set({opacity})}/>
+      </Grid>
+      <button style={{...button,width:'100%',marginTop:5}} onClick={()=>store.dispatch({type:'resetClipTransform',id:clip.id})}>Reset Transform</button>
+    </Section>
     <Section name="Crop">
       <Grid cols={3}>
         <button style={button} aria-label="Apply centered 10 percent crop" onClick={()=>set({cropLeft:.1,cropRight:.1,cropTop:.1,cropBottom:.1})}>Center 10%</button>
