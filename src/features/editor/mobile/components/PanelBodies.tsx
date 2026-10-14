@@ -1,5 +1,5 @@
 /** Mobile tool bodies backed by the shared editor store. */
-import React from'react';import{canTrimEdgeToPlayhead}from'../state/trimAtPlayhead';import{resolveAudioRenderSettings}from'../../../../shared/vtE1AudioContract';import{canSplitClipAtPlayhead}from'../state/splitClipEligibility';import{EditorStore,Tool}from'../state/editorState';import{patchClipAudio,readClipAudio}from'../state/audioClip';import type{VtE1Transition}from'../../../../shared/vtE1TimelineContract';import{VT_E1_TRANSITION_CATALOG}from'../../../../shared/vtE1TransitionCatalog.js';import{createRenderJobClient,type RenderJob,type RenderOutputFormat}from'../../render/renderJobContract';
+import React from'react';import{canTrimEdgeToPlayhead}from'../state/trimAtPlayhead';import{resolveAudioRenderSettings}from'../../../../shared/vtE1AudioContract';import{canSplitClipAtPlayhead}from'../state/splitClipEligibility';import{canSlipSourceWindow,SOURCE_SLIP_STEPS}from'../state/sourceSlipControls';import{EditorStore,Tool}from'../state/editorState';import{patchClipAudio,readClipAudio}from'../state/audioClip';import type{VtE1Transition}from'../../../../shared/vtE1TimelineContract';import{VT_E1_TRANSITION_CATALOG}from'../../../../shared/vtE1TransitionCatalog.js';import{createRenderJobClient,type RenderJob,type RenderOutputFormat}from'../../render/renderJobContract';
 interface PanelProps{store:EditorStore}const INK='#248b99',CYAN='#36E0F6',row:React.CSSProperties={display:'flex',gap:5,marginBottom:6,alignItems:'center'},btn:React.CSSProperties={flex:1,minHeight:30,padding:'5px 8px',borderRadius:5,background:'#fff',border:`2px solid ${INK}`,color:'#000',fontSize:9,fontWeight:900,textTransform:'uppercase'},primary={...btn,background:CYAN},label:React.CSSProperties={fontSize:9,fontWeight:900,textTransform:'uppercase',letterSpacing:.6,marginBottom:5},card:React.CSSProperties={border:`2px solid ${INK}`,borderRadius:6,background:'#fff',padding:8,marginBottom:6,boxShadow:'2px 2px 0 rgba(54,224,246,.22)'};const Card=({name,children}:{name:string;children:React.ReactNode})=><section style={card}><div style={label}>{name}</div>{children}</section>;
 const SelectPanel=({store}:PanelProps)=>store.selectedClips.length?<Card name="Selection">{store.selectedClips.map(c=><div key={c.id} style={row}><b style={{flex:1}}>{String(c.id)}</b><button style={btn} onClick={()=>store.dispatch({type:'duplicateClip',id:c.id})}>Dup</button></div>)}</Card>:<Card name="Selection">Select a clip in the timeline.</Card>;
 const TrimPanel=({store}:PanelProps)=>{
@@ -30,11 +30,8 @@ const TrimPanel=({store}:PanelProps)=>{
  <Card name="Slip Source">
   {hasSourceDuration?<><div style={label}>Source window · {sourceInSec.toFixed(2)}s – {sourceOutSec.toFixed(2)}s of {sourceDurationSec.toFixed(2)}s</div>
    <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:5}}>
-    <button style={btn} disabled={!canSlipBack} aria-label="Slip source backward one second" onClick={()=>slip(-1)}>−1s</button>
-    <button style={btn} disabled={!canSlipBack} aria-label="Slip source backward a quarter second" onClick={()=>slip(-.25)}>−.25s</button>
-    <button style={btn} disabled={!canSlipForward} aria-label="Slip source forward a quarter second" onClick={()=>slip(.25)}>+.25s</button>
-    <button style={btn} disabled={!canSlipForward} aria-label="Slip source forward one second" onClick={()=>slip(1)}>+1s</button>
-   </div>
+     {SOURCE_SLIP_STEPS.map(step=><button key={step.deltaSec} style={{...btn,opacity:canSlip(step.deltaSec)?1:.4}} disabled={!canSlip(step.deltaSec)} aria-label={step.ariaLabel} onClick={()=>slip(step.deltaSec)}>{step.label}</button>)}
+    </div>
    <div style={{fontSize:9,fontWeight:800,opacity:.7,marginTop:6}}>Moves the footage inside the existing timeline slot; the clip start and end stay fixed. Undo restores the previous source window.</div>
   </>:<div style={{fontSize:9,fontWeight:800,opacity:.7}}>Source slipping is available when this clip has known media duration metadata.</div>}
  </Card></>;
