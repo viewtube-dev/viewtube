@@ -1741,3 +1741,54 @@ button[data-vt-studio-control]:active:not(:disabled) {
   transform: translate(var(--vt-studio-control-shadow, 3px), var(--vt-studio-control-shadow, 3px));
   box-shadow: none;
 }
+
+
+/* 2026-10-14 typing + toggle-control follow-up.
+   Text areas intentionally use writing-size typography, distinct from single-line inputs. */
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+  font-weight: 1000 !important;
+  -webkit-text-stroke: .5px currentColor !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  -webkit-text-stroke: .5px currentColor !important;
+}
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  font-weight: 1000 !important;
+  -webkit-text-stroke: .5px currentColor !important;
+  opacity: 1 !important;
+}
+/* Disable browser spell-check decorations for the canonical editor primitives.
+   Mobile IME composition underlines are controlled by the keyboard/browser and
+   cannot be reliably removed by CSS; spellCheck=false is also set in React. */
+[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"],
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  -webkit-text-decoration: none !important;
+  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+/* Native caret width is not exposed as a standard CSS property. Keep the caret
+   high-contrast and consistent in both sizes; do not fake it with text strokes. */
+[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"]:focus,
+[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:focus {
+  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+/* Word-toggle measurement controls: width is auto-measured unless handleWidth is passed;
+   wordGap controls the space between labels; handleInset controls measured padding. */
+.vt-studio-44-word-toggle {
+  column-gap: var(--vt-word-toggle-gap, 0px);
+}
+.vt-studio-44-word-toggle > button {
+  min-width: 0;
+  flex: 0 0 auto;
+}
