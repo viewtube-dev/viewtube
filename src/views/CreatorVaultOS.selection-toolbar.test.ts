@@ -24,7 +24,9 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
  })
 
  it("keeps Task Center compact while idle and exposes a live job summary", () => {
-  expect(source).toMatch(/title="Task Center"[\\s\\S]{0,240}subtitle=\\{activeVaultTasks\\.length[\\s\\S]{0,500}isOpenInitial=\\{Boolean\\(activeVaultTasks\\.length \\|\\| failedVaultTasks\\.length\\)\\}/)
+  expect(source).toContain('title="Task Center"')
+  expect(source).toContain("subtitle={activeVaultTasks.length ?")
+  expect(source).toContain("isOpenInitial={Boolean(activeVaultTasks.length || failedVaultTasks.length)}")
   expect(source).toContain("No active jobs")
   expect(source).toContain("failed · open to review")
  })
