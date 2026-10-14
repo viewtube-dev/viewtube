@@ -3,6 +3,7 @@ import { generateScript } from "../../services/gemini"
 import { runBrainJsonTask } from "../../services/brain/runtime/BrainRuntime"
 import { buildScriptArchitectBrainTaskRequest } from "./scriptBrainRuntime"
 import { toScriptExportFilename } from "./scriptExport"
+import { formatScriptMarkdown, toScriptMarkdownFilename } from "./scriptMarkdownExport"
 import { createSuperToolActionPacket } from "../../services/superToolActionPackets"
 import { resolveWorkspaceContentBuildToolContext } from "../../services/asset-engine/ToolContext"
 import {
@@ -357,6 +358,34 @@ export const useScriptArchitect = (): ScriptArchitectController => {
   }
  }, [result, project.topic, draftName])
 
+ const downloadMarkdown = useCallback(() => {
+  if (!result?.fullScript) return
+  const filename = toScriptMarkdownFilename(project.topic || draftName)
+  try {
+   const markdown = formatScriptMarkdown({
+    title: project.topic || draftName,
+    angle: project.angle,
+    audience: project.audience,
+    tone: project.tone,
+    script: result.fullScript,
+   })
+   const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" })
+   const url = window.URL.createObjectURL(blob)
+   const anchor = window.document.createElement("a")
+   anchor.href = url
+   anchor.download = filename
+   anchor.style.display = "none"
+   window.document.body.appendChild(anchor)
+   anchor.click()
+   anchor.remove()
+   window.setTimeout(() => window.URL.revokeObjectURL(url), 1000)
+   setStatus(`Downloaded "${filename}".`)
+  } catch (error) {
+   console.error("[ScriptArchitect] Markdown export failed", error)
+   setError("Could not export Markdown. Try copying the script instead.")
+  }
+ }, [result, project.topic, project.angle, project.audience, project.tone, draftName])
+
  const saveDraft = useCallback(() => {
   const next = saveScriptDraft(draftName, project, result)
   setDrafts(next)
@@ -519,6 +548,7 @@ export const useScriptArchitect = (): ScriptArchitectController => {
   rebalanceWeightsToScript,
   copyScript,
   downloadScript,
+  downloadMarkdown,
   savePacket,
   saveDraft,
   loadDraft,
