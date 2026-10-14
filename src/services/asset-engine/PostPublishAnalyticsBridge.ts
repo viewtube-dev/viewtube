@@ -70,6 +70,9 @@ const resolvePublishIdentity = (transactionId: string, videoId: string) => {
   const build = getContentBuild(transaction.contentBuildId)
   if (!build) throw new Error(`Unknown ContentBuild: ${transaction.contentBuildId}`)
   required(snapshot.projectId, "approved snapshot projectId")
+  if (build.legacyProjectId && build.legacyProjectId !== snapshot.projectId) {
+    throw new Error("Approved snapshot project does not match the source ContentBuild project.")
+  }
 
   return { transaction, snapshot, build }
 }
