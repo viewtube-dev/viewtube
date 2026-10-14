@@ -28,11 +28,24 @@ export function computeCropRectangle(
   return { x, y, width, height };
 }
 
+export function computeCropOutputDimensions(
+  rect: CropRectangle,
+  targetWidth?: number,
+): { width: number; height: number } | null {
+  if (!Number.isFinite(rect.width) || !Number.isFinite(rect.height) || rect.width < 1 || rect.height < 1) return null;
+  if (targetWidth === undefined) return { width: rect.width, height: rect.height };
+  if (!Number.isFinite(targetWidth) || targetWidth < 1 || targetWidth > 8192) return null;
+  const width = Math.round(targetWidth);
+  const height = Math.max(1, Math.round((rect.height / rect.width) * width));
+  return { width, height };
+}
+
 /** Export a browser-accessible image URL as a cropped PNG file without changing the source. */
 export async function exportCroppedImageAsFile(
   sourceUrl: string,
   crop: NormalizedCropEdges,
   fileName = 'cropped-image.png',
+  targetWidth?: number,
 ): Promise<File | null> {
   if (!sourceUrl || typeof document === 'undefined') return null;
   return new Promise((resolve) => {
@@ -52,13 +65,15 @@ export async function exportCroppedImageAsFile(
     image.onload = () => {
       const rect = computeCropRectangle(image.naturalWidth, image.naturalHeight, crop);
       if (!rect) return finish(null);
+      const output = computeCropOutputDimensions(rect, targetWidth);
+      if (!output) return finish(null);
       try {
         const canvas = document.createElement('canvas');
-        canvas.width = rect.width;
-        canvas.height = rect.height;
+        canvas.width = output.width;
+        canvas.height = output.height;
         const context = canvas.getContext('2d');
         if (!context) return finish(null);
-        context.drawImage(image, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
+        context.drawImage(image, rect.x, rect.y, rect.width, rect.height, 0, 0, output.width, output.height);
         canvas.toBlob((blob) => {
           if (!blob) return finish(null);
           try {
