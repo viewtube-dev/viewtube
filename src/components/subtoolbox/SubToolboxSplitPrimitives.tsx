@@ -5,7 +5,7 @@ import type { ToolboxControlLevel } from "./tokens"
 import { ChevronDown } from "lucide-react"
 import { StudioSplitLeftButton, type StudioSplitLeftButtonProps } from "../../studio-ui/primitives/StudioControls"
 import "../../styles/toolbox-entry.css"
-import "../../styles/subtoolbox-split-primitives.css"
+import "../../styles/subtoolbox-system.css"
 
 const classes = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
 

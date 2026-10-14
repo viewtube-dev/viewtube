@@ -377,7 +377,7 @@ describe("subtoolbox design governance", () => {
  it("derives every SubToolbox component pair from the canonical 12-color title/icon pattern", () => {
   const palette = source("src/styles/toolboxPalette.ts")
   const toolboxSource = source("src/components/Toolbox.tsx")
-  const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+  const splitCss = source("src/styles/subtoolbox-system.css")
   const videoDirector = source("src/views/VideoDirector.tsx")
   const certification = source("src/studio-ui/StudioHubCertification.tsx")
 
@@ -524,7 +524,7 @@ describe("subtoolbox design governance", () => {
 
  it("uses the canonical inverse-color split-left toggle for community post types", () => {
   const community = source("src/components/CommunityPostGenerator.tsx")
-  const splitCss = source("src/styles/subtoolbox-split-primitives.css")
+  const splitCss = source("src/styles/subtoolbox-system.css")
   const videoDirector = source("src/views/VideoDirector.tsx")
   const certification = source("src/studio-ui/StudioHubCertification.tsx")
 

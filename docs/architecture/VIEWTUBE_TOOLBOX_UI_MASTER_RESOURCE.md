@@ -204,7 +204,7 @@ Use canonical layout recipes before page-local grid templates. Preferred spacing
 | `src/components/subtoolbox/tokens.ts` | geometry/type/spacing/motion authority |
 | `src/components/subtoolbox/SubToolboxPrimitives.tsx` | reusable controls/surfaces/states |
 | `src/components/subtoolbox/SubToolboxSplitPrimitives.tsx` | split-left button/dropdown and KPI anatomy |
-| `src/styles/subtoolbox-split-primitives.css` | split-left/KPI visual implementation |
+| `src/styles/subtoolbox-system.css` | canonical SubToolbox styles, including split dropdowns, split-button compatibility, KPI, and workflow primitives |
 | `src/components/subtoolbox/SubToolboxLayouts.tsx` | reusable composition recipes |
 | `src/components/subtoolbox/registry.ts` | recipe/migration mapping |
 | `src/components/ToolboxUIReferenceLibrary.tsx` | visual certification surface |
