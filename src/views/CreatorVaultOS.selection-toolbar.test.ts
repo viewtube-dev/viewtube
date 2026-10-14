@@ -40,6 +40,9 @@ describe("CreatorVaultOS selection toolbar and Inspector layout", () => {
   expect(source).toContain('id: "flagged"')
   expect(source).toContain('id: "missing-preview"')
   expect(source).toContain('persistenceId="vault-asset-health"')
+  expect(source).toContain('data-vault-project-readiness-center')
+  expect(source).toContain('getVaultProjectReadiness({')
+  expect(source).toContain('label="Set Active"')
  })
 
  it("keeps recent completed jobs visible in Task Center history", () => {
