@@ -71,6 +71,10 @@ export const StudioTextInput = React.forwardRef<
     autoCapitalize={autoCapitalize}
     {...withStudioAttrs(sizeVariant)}
     data-vt-studio-field-kind="text-input"
+    autoCorrect="off"
+    autoCapitalize="off"
+    spellCheck={false}
+    placeholder={placeholder}
     {...props}
   />
 ))
@@ -83,8 +87,8 @@ export const StudioInput = StudioTextInput
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "search", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
+>(({ sizeVariant = "standard", type = "search", placeholder = "TITLE", ...props }, ref) => (
+  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
@@ -92,7 +96,7 @@ StudioSearchInput.displayName = "StudioSearchInput"
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
->(({ sizeVariant = "standard", type = "number", ...props }, ref) => (
+>(({ sizeVariant = "standard", type = "number", placeholder = "TITLE", ...props }, ref) => (
   <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} {...props} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
@@ -115,6 +119,10 @@ export const StudioTextArea = React.forwardRef<
     autoCapitalize={autoCapitalize}
     {...withStudioAttrs(sizeVariant)}
     data-vt-studio-field-kind="textarea"
+    autoCorrect="off"
+    autoCapitalize="off"
+    spellCheck={false}
+    placeholder={placeholder}
     {...props}
   />
 ))
