@@ -8,7 +8,7 @@ import {
   interpolateShortsConfig as interpolateSharedShortsConfig,
 } from '../../shared/vtE1Shorts';
 import { expandCompoundClips } from '../../shared/vtE1CompoundClips.js';
-import { resolveAudioRenderSettings } from '../../shared/vtE1AudioContract.js';
+import { audioVolumeAtFrame, resolveAudioRenderSettings } from '../../shared/vtE1AudioContract.js';
 import { normalizeVtE1TransitionType } from '../../shared/vtE1TransitionCatalog.js';
 import { transitionFrameStyleFor } from '../../shared/vtE1TransitionFrame.js';
 import { buildVtE1Filter, resolveVtE1FxOpacity } from '../../shared/vtE1FxCatalog.js';
@@ -522,20 +522,12 @@ export const MyComposition: React.FC<Props> = ({ renderJob }) => {
             clip as unknown as Record<string, unknown>,
             payload,
           );
-          const fadeInFrames = toFrame(audioSettings.fadeInSec, fps);
-          const fadeOutFrames = toFrame(audioSettings.fadeOutSec, fps);
           return (
             <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
               <Audio
                 src={src}
                 startFrom={startFrom}
-                volume={(frame) => {
-                  const fadeIn = fadeInFrames > 0 ? clamp(frame / fadeInFrames, 0, 1) : 1;
-                  const fadeOut = fadeOutFrames > 0
-                    ? clamp((durationInFrames - frame) / fadeOutFrames, 0, 1)
-                    : 1;
-                  return audioSettings.muted ? 0 : audioSettings.volume * fadeIn * fadeOut;
-                }}
+                volume={(frame) => audioVolumeAtFrame(audioSettings, frame, durationInFrames, fps)}
                 playbackRate={audioSettings.playbackRate}
               />
             </Sequence>
