@@ -1,7 +1,7 @@
 import React from "react"
 import type { ToolboxControlLevel } from "./tokens"
 import { getComponentLevelCssVars } from "./tokens"
-import "../../styles/subtoolbox-workflow-primitives.css"
+import "../../styles/subtoolbox-system.css"
 
 const classes = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
 const levelStyle = (level: ToolboxControlLevel, style?: React.CSSProperties) =>
