@@ -10,6 +10,7 @@ export interface BrainJsonTaskRequest {
   surface?: string
   userText: string
   systemInstruction: string
+  responseSchema?: Record<string, unknown>
   visibleContext?: Record<string, unknown> | null
   artifactRefs?: string[]
   gateway?: BrainModelGateway
@@ -119,6 +120,7 @@ export const runBrainJsonTask = async <T = unknown>(
     userText,
     systemInstruction,
     history: [],
+    responseSchema: request.responseSchema,
   })
 
   const promptFamilyMatch = request.userText.match(/PROMPT FAMILY:\s*([^\n]+)/)
