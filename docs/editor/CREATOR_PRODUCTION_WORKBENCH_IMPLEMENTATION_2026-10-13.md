@@ -206,6 +206,12 @@ Added a deterministic SRT serializer and an **Export SRT Captions** action along
 
 Added four caption timing nudge controls (**−0.5s**, **−0.1s**, **+0.1s**, **+0.5s**) for existing caption tracks. The reducer shifts all caption clips together as one history action, leaves non-caption tracks untouched, preserves cue durations and overlaps, and extends project duration when needed. Negative shifts clamp once against the earliest caption start so the relative timing of the batch is preserved; the UI reports the applied offset and the operation is undoable. Focused tests cover bounded shift resolution and reducer undo behavior. Tests/build and interactive caption-preview verification remain pending.
 
+## 2026-10-14 — focal-point controls for every crop preset
+
+Generalized the Crop Focus controls from project-ratio-only to the currently active aspect preset. Selecting 16:9, 1:1, 9:16, 4:5, or Project Ratio updates the active ratio used by the focal-point controls. Horizontal crops expose left/center/right focus; vertical crops expose top/center/bottom focus. The shared `cropToAspectRatioAtFocalPoint` helper still clamps the crop window to source bounds, and all adjustments remain non-destructive clip-transform patches.
+
+This slice reuses the existing crop math and tests rather than introducing another crop model. Runtime verification of aspect switching, undo/redo, preview/render parity, and responsive layouts remains pending.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
