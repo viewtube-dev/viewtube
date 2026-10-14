@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import {
  createApprovedPublishSnapshot,
  getApprovedPublishSnapshot,
@@ -103,4 +103,15 @@ describe("ApprovedPublishSnapshot", () => {
   expect(getApprovedPublishSnapshot(saved.id)?.assets.titleAssetId).toBe("title-final")
   expect(getApprovedPublishSnapshot(saved.id)?.contentBuildRevision).toBe(7)
  })
+ it("fails closed when browser storage refuses to persist an approved snapshot", () => {
+  const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+   throw new Error("quota exceeded")
+  })
+  try {
+   expect(() => persistApprovedPublishSnapshot(projection())).toThrow(/could not persist/i)
+  } finally {
+   setItem.mockRestore()
+  }
+ })
+
 })
