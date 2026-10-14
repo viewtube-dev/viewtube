@@ -63,6 +63,9 @@ function Inspector({store}:{store:EditorStore}){
   const project=store.state.project as Record<string,unknown>;
   const projectAspectRatio=project.aspect==='landscape'||project.aspectRatio==='16:9'?16/9:9/16;
   const projectRatioCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,projectAspectRatio):null;
+  const landscapeCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,16/9):null;
+  const portraitCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,9/16):null;
+  const portrait45Crop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,4/5):null;
   const squareCrop=hasMediaDimensions?cropToAspectRatio(sourceWidth,sourceHeight,1):null;
   return <>
     <Section name="Clip"><b>{String(clip.id)}</b><div>{clip.start.toFixed(2)}s → {clip.end.toFixed(2)}s · {store.trackById(clip.trackId)?.kind??'clip'}</div></Section>
@@ -83,18 +86,16 @@ function Inspector({store}:{store:EditorStore}){
       <button style={{...button,width:'100%',marginTop:5}} onClick={()=>store.dispatch({type:'resetClipTransform',id:clip.id})}>Reset Transform</button>
     </Section>
     <Section name="Crop">
+      <div style={{fontSize:8,fontWeight:800,opacity:.65,marginBottom:5}}>Centered aspect crops use stored source dimensions; all crop edits remain non-destructive.</div>
       <Grid cols={3}>
-        <button style={button} disabled={!cropToAspectRatio(sourceWidth,sourceHeight,16/9)} aria-label="Crop to landscape 16 by 9" onClick={()=>applyAspect(16/9)}>16:9</button>
-        <button style={button} disabled={!cropToAspectRatio(sourceWidth,sourceHeight,1)} aria-label="Crop to square 1 by 1" onClick={()=>applyAspect(1)}>1:1</button>
-        <button style={button} disabled={!cropToAspectRatio(sourceWidth,sourceHeight,9/16)} aria-label="Crop to portrait 9 by 16" onClick={()=>applyAspect(9/16)}>9:16</button>
-      </Grid>
-      <div style={{fontSize:8,fontWeight:800,opacity:.65,marginBottom:5}}>Aspect presets use source dimensions when available and apply a centered, non-destructive crop.</div>
-      <Grid cols={3}>
+        <button style={{...button,opacity:projectRatioCrop?1:.4}} aria-label="Crop to project aspect ratio" disabled={!projectRatioCrop} onClick={()=>projectRatioCrop&&set(projectRatioCrop)}>Project Ratio</button>
+        <button style={{...button,opacity:landscapeCrop?1:.4}} aria-label="Crop to landscape 16 by 9" disabled={!landscapeCrop} onClick={()=>applyAspect(16/9)}>16:9</button>
+        <button style={{...button,opacity:portraitCrop?1:.4}} aria-label="Crop to portrait 9 by 16" disabled={!portraitCrop} onClick={()=>applyAspect(9/16)}>9:16</button>
+        <button style={{...button,opacity:portrait45Crop?1:.4}} aria-label="Crop to portrait 4 by 5" disabled={!portrait45Crop} onClick={()=>applyAspect(4/5)}>4:5</button>
+        <button style={{...button,opacity:squareCrop?1:.4}} aria-label="Crop to square 1 by 1" disabled={!squareCrop} onClick={()=>applyAspect(1)}>1:1</button>
+        <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
         <button style={button} aria-label="Apply centered 10 percent crop" onClick={()=>set({cropLeft:.1,cropRight:.1,cropTop:.1,cropBottom:.1})}>Center 10%</button>
         <button style={button} aria-label="Apply centered 20 percent crop" onClick={()=>set({cropLeft:.2,cropRight:.2,cropTop:.2,cropBottom:.2})}>Center 20%</button>
-        <button style={{...button,opacity:projectRatioCrop?1:.4}} aria-label="Crop to project aspect ratio" disabled={!projectRatioCrop} onClick={()=>projectRatioCrop&&set(projectRatioCrop)}>Project Ratio</button>
-        <button style={{...button,opacity:squareCrop?1:.4}} aria-label="Crop to square aspect ratio" disabled={!squareCrop} onClick={()=>squareCrop&&set(squareCrop)}>Square</button>
-        <button style={button} aria-label="Reset crop only" onClick={()=>set({cropLeft:0,cropRight:0,cropTop:0,cropBottom:0})}>Reset Crop</button>
       </Grid>
       <Grid>
         <StepperField label="LEFT" value={v.cropLeft} min={0} max={.95} step={.01} defaultValue={0} onChange={cropLeft=>set({cropLeft})}/>
