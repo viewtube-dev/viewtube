@@ -1,4 +1,5 @@
 import React from 'react';
+import { cropToAspectRatio } from '../state/cropPresets';
 import {AudioLines,Film,FolderKanban,LayoutTemplate,ScanSearch,Settings as SettingsIcon,Shuffle,SlidersHorizontal,Type,Upload} from 'lucide-react';
 import type {EditorStore} from '../state/editorState';
 import {readClipVisualTransform} from '../state/editorState';
@@ -53,6 +54,11 @@ function Inspector({store}:{store:EditorStore}){
   if(transition)return <><Section name="Transition"><b>{transition.leftClipId} → {transition.rightClipId}</b></Section><Section name="Transition Controls"><Grid><button style={button} onClick={()=>store.dispatch({type:'openPanel',id:'transitions'})}>Edit</button><button style={{...button,background:PINK}} onClick={()=>store.dispatch({type:'removeTransition',id:store.state.selection.transitionId!})}>Remove</button></Grid></Section></>;
   if(!clip)return <Section name="Clip Inspector"><div style={{fontSize:10,fontWeight:800,opacity:.6,marginBottom:6}}>Select a clip, track, or transition from the timeline or Clips page.</div><CapabilityGrid category="edit"/></Section>;
   const v=readClipVisualTransform(clip),set=(patch:any)=>store.dispatch({type:'updateClipTransform',id:clip.id,patch});
+  const layer=store.state.project.layers.find(item=>item.id===clip.layerId);
+  const mediaWidth=Number(layer?.payload?.width);
+  const mediaHeight=Number(layer?.payload?.height);
+  const applyAspectCrop=(ratio:number)=>{const crop=cropToAspectRatio(mediaWidth,mediaHeight,ratio);if(crop)set(crop);};
+
   const mediaLayer=clip.layerId?store.layerById(String(clip.layerId)):undefined;
   const mediaPayload=mediaLayer?.payload??{};
   const mediaKind=mediaPayload.mediaKind;
