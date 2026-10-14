@@ -858,13 +858,20 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
            )
           })}
          </div>
-         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <SubToolboxGridActionButton
            label="Copy Script"
            iconName="layers"
            tone="green"
            disabled={!result.fullScript}
            onClick={architect.copyScript}
+          />
+          <SubToolboxGridActionButton
+           label="Export TXT"
+           iconName="download"
+           tone="cyan"
+           disabled={!result.fullScript}
+           onClick={architect.downloadScript}
           />
           <SubToolboxGridActionButton
            label="Save Packet"
