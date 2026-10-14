@@ -102,6 +102,12 @@ The editor already had a reducer action for splitting a clip at the current play
 
 Split-button enablement is now a small pure contract in `src/features/editor/mobile/state/splitClipEligibility.ts`. It rejects missing/invalid clip intervals and non-finite playheads, and requires the playhead to be more than 1 ms inside either edge. A focused Vitest file covers interior, boundary/guard-band, and invalid-input cases. The test was added before extracting the helper, but this GitHub-only pass cannot execute it; it must be run in CI or a local checkout before claiming it passes.
 
+## Next slice — source-aware video/audio trimming
+
+The Trim panel's existing reducer action changed only timeline `start`/`end`, leaving `sourceInSec` and `sourceOutSec` stale. For media clips with source-bound metadata, the reducer now updates source bounds proportionally when an edge is trimmed, preserving the source-time mapping and playback rate. Media trims are constrained to the clip's current timeline interval so the UI cannot invent footage beyond the known source range; timeline-only clips keep their existing behavior. All edits still use the shared reducer history, so they remain undoable.
+
+A pure `trimClipSourceBounds` helper and focused Vitest cases cover left/right trims, non-1× source-to-timeline mapping, timeline-only clips, and source-edge limits. The tests were authored but not executed in this GitHub-only pass.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, and split-at-playhead with focused editor tests, undo/redo, preview/render parity, and responsive visual QA.
