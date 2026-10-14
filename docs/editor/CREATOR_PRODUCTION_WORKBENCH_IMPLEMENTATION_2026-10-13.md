@@ -164,6 +164,10 @@ A pure source-time helper has tests for source offsets, boundary clamping, and i
 
 Added Export Cropped Image to the selected image clip inspector. The action converts the existing crop edges into a validated pixel rectangle and downloads a PNG without changing the source image or the project's crop settings. A pure helper has tests for standard crops, full-image export, invalid dimensions, and unsafe edge combinations. Browser export and cross-origin behavior still need runtime verification. The downloaded file is not yet registered as a Vault or Asset Engine derivative.
 
+## Script Architect export slice
+
+Script Architect now offers Export MD alongside the existing TXT export. Markdown output includes the script topic as a heading, available angle/audience/tone metadata, and the assembled script body without rewriting the script prose. The formatter and filename helper have focused Vitest coverage. Browser download and test execution still need verification.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
