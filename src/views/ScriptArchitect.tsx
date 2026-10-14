@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import {
  AlertTriangle,
  ArrowDown,
@@ -58,6 +58,8 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
  paletteIndex,
 }) => {
  const architect = useScriptArchitect()
+ const importInputRef = useRef<HTMLInputElement>(null)
+ const [importError, setImportError] = useState<string | null>(null)
  const [isOpen, setIsOpen] = useState(isOpenInitial)
  const { project, budget, result } = architect
 
@@ -590,6 +592,11 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
          {architect.error}
         </div>
        )}
+       {importError && (
+        <div role="alert" className="border-[3px] border-black bg-[#FF9CD8] rounded-xl p-3 text-[10px] font-black uppercase">
+         {importError}
+        </div>
+       )}
        <div role="status" aria-live="polite" className="min-h-4 text-[10px] font-black uppercase text-black/60">
         {architect.status || ""}
        </div>
@@ -859,6 +866,33 @@ const ScriptArchitect: React.FC<ScriptArchitectProps> = ({
           })}
          </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input
+            ref={importInputRef}
+            type="file"
+            accept=".txt,.md,.markdown,text/plain,text/markdown"
+            aria-label="Choose a script text file to import"
+            className="hidden"
+            onChange={async (event) => {
+             const input = event.currentTarget
+             const file = input.files?.[0]
+             input.value = ""
+             if (!file) return
+             if (result?.fullScript && !window.confirm("Replace the current assembled script with imported text? Saved drafts remain available.")) return
+             try {
+              const source = await file.text()
+              architect.importScriptText(source, file.name)
+              setImportError(null)
+             } catch {
+              setImportError("Could not read this file. Choose a plain-text .txt or .md document.")
+             }
+            }}
+           />
+           <SubToolboxGridActionButton
+            label="Import TXT/MD"
+            iconName="layers"
+            tone="purple"
+            onClick={() => importInputRef.current?.click()}
+           />
           <SubToolboxGridActionButton
            label="Copy Script"
            iconName="layers"
