@@ -452,3 +452,77 @@
   border-width: 2px !important;
   -webkit-text-stroke: .5px currentColor !important;
 }
+
+
+/* Confirmed Primitive Library: control families use the full module width.
+   Remove the generic two-column specimen wrapper that left-pinned these families. */
+.vt-confirmed-family:has(.vt-confirmed-control-family) > .vt-confirmed-variants {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-family:has(.vt-confirmed-control-family) > .vt-confirmed-variants > .vt-confirmed-control-family {
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-control-family {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  gap: 14px;
+}
+.vt-confirmed-control-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-control-variants {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  min-width: 0;
+  align-items: start;
+  justify-items: stretch;
+  gap: 8px;
+}
+.vt-confirmed-control-variants > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-content: start;
+  width: auto;
+  min-width: 0;
+  flex: initial;
+  gap: 6px;
+}
+.vt-confirmed-control-variants > div > small {
+  width: 100%;
+  min-height: 2.2em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 {
+  grid-template-columns: minmax(0, 1fr);
+}
+.vt-confirmed-control-variants.is-word-toggle-44 > div {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: stretch;
+}
+.vt-confirmed-control-variants.is-word-toggle-44 .vt-subtoolbox-44-word-toggle,
+.vt-confirmed-control-variants.is-word-toggle-44 .vt-subtoolbox-44-word-toggle button {
+  justify-self: center;
+  max-width: 100%;
+}
+.vt-confirmed-control-variants.is-word-toggle-28 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.vt-confirmed-control-variants.is-word-toggle-28 > div {
+  min-width: 0;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-control-variants { gap: 8px 5px; }
+  .vt-confirmed-control-variants > div > small { font-size: 7px; }
+  .vt-confirmed-control-variants.is-word-toggle-44 { grid-template-columns: minmax(0, 1fr); }
+  .vt-confirmed-control-variants.is-word-toggle-28 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
