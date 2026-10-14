@@ -2421,3 +2421,128 @@
     font-size: 9px;
   }
 }
+
+
+/* Confirmed Primitive Library — dropdown specimens mirror the canonical global
+   defaults without letting the floating legend resize or reposition the trigger. */
+.vt-confirmed-catalog .vt-studio-legend-multi {
+  --vt-legend-label-height: 20px;
+  --vt-legend-label-font-size: 14px;
+}
+.vt-confirmed-catalog .vt-studio-legend-anchor {
+  position: relative !important;
+  padding-top: 0 !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-label {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: -9px !important;
+  left: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: max-content !important;
+  height: var(--vt-legend-label-height) !important;
+  min-height: var(--vt-legend-label-height) !important;
+  max-height: var(--vt-legend-label-height) !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border: 3px solid #000 !important;
+  border-radius: 7px !important;
+  background: var(--pair-b, #ff7f6b) !important;
+  color: #000 !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: var(--vt-legend-label-font-size) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+  letter-spacing: .055em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  -webkit-text-stroke: .35px currentColor !important;
+  transform: none !important;
+  transition: none !important;
+  pointer-events: none !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] {
+  --vt-legend-label-height: 14px;
+  --vt-legend-label-font-size: 9px;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label {
+  top: -6px !important;
+  left: 8px !important;
+  padding-inline: 6px !important;
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  transform: none !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-trigger,
+.vt-confirmed-catalog .vt-studio-legend-trigger:hover,
+.vt-confirmed-catalog .vt-studio-legend-trigger:focus,
+.vt-confirmed-catalog .vt-studio-legend-trigger:focus-visible,
+.vt-confirmed-catalog .vt-studio-legend-trigger:active {
+  transform: none !important;
+  transition: none !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-trigger-text {
+  min-width: 0 !important;
+  font-size: 38px !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.035em !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger-text {
+  font-size: 24px !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-chevron {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  flex: 0 0 28px !important;
+  stroke-width: 2.5 !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  flex-basis: 18px !important;
+  stroke-width: 1.65 !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-count {
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  flex: 0 0 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  font-size: 19px !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+}
+.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count {
+  width: 19px !important;
+  height: 19px !important;
+  min-width: 19px !important;
+  min-height: 19px !important;
+  flex-basis: 19px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+}
+/* The catalog's nested default objects are rendered as readable key/value copy. */
+.vt-confirmed-global-grid > div > span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-defaults-combined .vt-confirmed-global-grid > div > span {
+  font-size: 8px;
+  line-height: 1.2;
+}
