@@ -686,7 +686,10 @@ If this document was not updated, the editor work is not fully handed off.
 
 All proposals preserve the existing project bridge, one editor project model, ContentBuild/asset identity, deterministic render parity, undo/redo and explicit AI approval boundaries. AI UI must not call providers directly. Generated/recommended artifacts enter canonical provenance/asset flows.
 
-### Update Log addition — 2026-09-27
+### Update Log
+
+| 2026-10-14 | Creator production tools — source-aware trim contract | PR / feat/creator-workbench-source-aware-trimming-v2 | started | Extracted source-time trimming into trimClipSourceBounds, clamps media trims to the current clip interval, and respects sourceDurationSec when deriving source-out. Adds focused Vitest coverage while preserving timeline-only clips and shared undo history. | src/features/editor/mobile/state/editorState.ts; src/features/editor/mobile/state/trimClipSourceBounds.ts; src/features/editor/mobile/state/trimClipSourceBounds.test.ts; docs/editor/CREATOR_PRODUCTION_WORKBENCH_IMPLEMENTATION_2026-10-13.md | Source reviewed; tests/build, undo/redo, and rendered trim parity remain pending | existing VtE1Clip source range + shared editor history | run focused tests and verify rendered trim behavior before adding durable media derivative operations |
+ addition — 2026-09-27
 
 | Date / time | Agent / conversation | Branch / PR | Status | Work completed / begun / planned | Changed or created paths | Verification / evidence | New references / sources | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
