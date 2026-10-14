@@ -1,7 +1,8 @@
 import React from "react"
 import { BookOpenCheck, CheckCircle2 } from "lucide-react"
 import { SubToolbox } from "../Toolbox"
-import { SubToolboxStatusBadge, SubToolboxLabeledTextArea } from "../subtoolbox/SubToolboxPrimitives"
+import { SubToolboxStatusBadge } from "../subtoolbox/SubToolboxPrimitives"
+import { StudioLabeledTextArea } from "../../studio-ui/primitives/StudioControls"
 
 export const EDUCATION_TIMESTAMP_PATTERN = /^\d{1,2}:\d{2}(?:\s+.+)$/
 
@@ -34,14 +35,14 @@ export const EducationTimestampNotes: React.FC<EducationTimestampNotesProps> = (
         </SubToolboxStatusBadge>
         {valid && hasContent ? <CheckCircle2 size={16} aria-label="Timestamp format valid" /> : null}
       </div>
-      <SubToolboxLabeledTextArea
+      <StudioLabeledTextArea
         level="l1"
-        overlayLabel="QUESTIONS / PHRASES"
+        label="QUESTIONS / PHRASES"
         value={value}
         onChange={event => onChange(event.target.value)}
         disabled={disabled}
-        height="standard"
-        placeholder={"0:00 Question or phrase\n1:25 Another question or phrase"}
+        sizeVariant="standard"
+        
         aria-label="Education timestamp questions and phrases"
         aria-invalid={!valid}
       />
@@ -58,14 +59,14 @@ export const EducationTimestampNotes: React.FC<EducationTimestampNotesProps> = (
         </SubToolboxStatusBadge>
         {valid && hasContent ? <CheckCircle2 size={16} aria-label="Timestamp format valid" /> : null}
       </div>
-      <SubToolboxLabeledTextArea
+      <StudioLabeledTextArea
         level="l1"
-        overlayLabel="QUESTIONS / PHRASES"
+        label="QUESTIONS / PHRASES"
         value={value}
         onChange={event => onChange(event.target.value)}
         disabled={disabled}
-        height="standard"
-        placeholder={"0:00 Question or phrase\n1:25 Another question or phrase"}
+        sizeVariant="standard"
+        
         aria-label="Education timestamp questions and phrases"
         aria-invalid={!valid}
       />

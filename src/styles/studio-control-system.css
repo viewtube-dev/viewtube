@@ -549,44 +549,29 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
   padding: 8px 10px;
   line-height: 1.05;
 }
-.vt-studio-labeled-field {
-  position: relative;
-  display: block;
-  width: 100%;
-  min-width: 0;
+/* Shared floating-label fields. Label type is independent of field text size. */
+.vt-studio-floating-field { --vt-studio-floating-label-size: 32px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
+.vt-studio-floating-field > [data-vt-studio-control="true"] { display:block; width:100%; }
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  position:absolute; z-index:1; left:14px; top:50%; max-width:calc(100% - 28px);
+  padding:0; overflow:hidden; color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:var(--vt-studio-floating-label-size); font-weight:1000; line-height:1;
+  letter-spacing:-.035em; text-transform:uppercase; white-space:nowrap; text-overflow:ellipsis;
+  pointer-events:none; transform:translateY(-50%); transform-origin:left center;
+  transition:top 180ms ease-out, transform 180ms ease-out, padding 180ms ease-out, color 180ms ease-out, background-color 180ms ease-out;
 }
-.vt-studio-labeled-field > [data-vt-studio-control="true"] { display: block; width: 100%; }
-.vt-studio-labeled-field-overlay {
-  position: absolute;
-  z-index: 1;
-  top: 7px;
-  right: 10px;
-  max-width: calc(100% - 20px);
-  padding: 1px 5px;
-  border: 2px solid #000;
-  border-radius: 4px;
-  background: var(--pair-b, #ff7f6b);
-  color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 10px;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-  pointer-events: none;
-  transition: opacity 180ms ease-out, transform 180ms ease-out, background-color 180ms ease-out;
+.vt-studio-floating-field.is-textarea > .vt-studio-floating-field-label { top:18px; transform:none; }
+.vt-studio-floating-field > :is(input, textarea):focus + .vt-studio-floating-field-label,
+.vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+  top:0; left:10px; padding:3px 6px; border-radius:4px;
+  background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000; transform:translateY(-50%) scale(.7); transform-origin:left center;
 }
-.vt-studio-labeled-field.is-textarea > .vt-studio-labeled-field-overlay { top: 9px; }
-.vt-studio-labeled-field:focus-within > .vt-studio-labeled-field-overlay,
-.vt-studio-labeled-field > [data-vt-studio-control="true"]:not(:placeholder-shown) + .vt-studio-labeled-field-overlay {
-  opacity: .9;
-  transform: translateY(-2px);
-  background: var(--pair-a, #36e0f6);
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-vt-studio-control="true"]:is(input, textarea),
-  .vt-studio-labeled-field-overlay { transition-duration: .01ms !important; }
-}
+.vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-50%) scale(.7); transform-origin:left center; }
+.vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
+@media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
+
 
 
 /* Canonical 09/V2 Legend Multi dropdown, translated into the shared Studio token contract. */
@@ -807,32 +792,6 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
 
 button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] > svg { width:28px !important; height:28px !important; stroke-width:2.5px; }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] > svg { width:18px !important; height:18px !important; stroke-width:1.65px; }
-.vt-studio-labeled-field { position:relative; display:block; width:100%; min-width:0; }
-.vt-studio-labeled-field-overlay { position:absolute; z-index:1; top:-.48em; right:10px; max-width:calc(100% - 20px); overflow:hidden; padding:0 6px; border:2px solid #000; border-radius:4px; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); color:#000; font:900 10px/1 Inter,ui-sans-serif,system-ui,sans-serif; letter-spacing:.04em; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; pointer-events:none; }
-.vt-studio-labeled-field.is-input:has([data-size="standard"]) .vt-studio-labeled-field-overlay { font-size:12px; padding:2px 8px; border-radius:6px; }
-.vt-studio-labeled-field.is-input:has([data-size="compact"]) .vt-studio-labeled-field-overlay { top:-.42em; right:7px; padding:1px 5px; border-width:1.5px; border-radius:4px; font-size:8px; }
-.vt-studio-labeled-field.is-textarea textarea { min-height:160px; height:auto; padding-top:14px; font-size:22px; line-height:1.15; resize:vertical; }
-
-/* Primitives 141/142: faithfully reproduce the second-library floating-label treatment.
-   The label starts centered in the field and moves to the top edge on focus or entered text. */
-.vt-studio-labeled-field { position:relative; display:block; width:100%; min-width:0; border-radius:var(--vt-studio-control-radius,6px); background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) 50%,white); }
-.vt-studio-labeled-field > .vt-studio-labeled-control,
-.vt-studio-labeled-field > input,
-.vt-studio-labeled-field > textarea { position:relative; z-index:2; width:100%; padding-inline:14px!important; color:#000!important; caret-color:var(--vt-studio-control-accent,var(--pair-a,#36e0f6))!important; background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) 50%,white)!important; box-shadow:inset 0 0 0 3px var(--vt-studio-control-accent,var(--pair-a,#36e0f6))!important; }
-.vt-studio-labeled-field > input:focus,
-.vt-studio-labeled-field > input:focus-visible,
-.vt-studio-labeled-field > textarea:focus,
-.vt-studio-labeled-field > textarea:focus-visible { background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) 9%,white)!important; box-shadow:inset 0 0 0 3px var(--vt-studio-control-accent,var(--pair-a,#36e0f6)),0 0 0 3px var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))!important; }
-.vt-studio-labeled-field-overlay { position:absolute; z-index:3; top:50%; left:14px; transform:translateY(-50%); max-width:calc(100% - 28px); padding:0; overflow:hidden; border-radius:6px; background:transparent; color:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:36px; font-weight:1000; line-height:1; letter-spacing:-.035em; text-align:left; text-transform:uppercase; white-space:nowrap; pointer-events:none; transform-origin:left center; transition:top .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.4,0,.2,1),font-size .22s,background .22s,padding .22s,color .22s; }
-.vt-studio-labeled-field.is-input:has([data-size="compact"]) .vt-studio-labeled-field-overlay { font-size:22px; }
-.vt-studio-labeled-field.is-floating-label:focus-within .vt-studio-labeled-field-overlay,
-.vt-studio-labeled-field.is-floating-label > .vt-studio-labeled-control:not(:placeholder-shown) + .vt-studio-labeled-field-overlay,
-.vt-studio-labeled-field.is-input:focus-within .vt-studio-labeled-field-overlay,
-.vt-studio-labeled-field.is-input > input:not(:placeholder-shown) + .vt-studio-labeled-field-overlay { top:-3px; transform:translateY(-50%) scale(.7); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); padding:2px 8px; color:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
-.vt-studio-labeled-field.is-textarea .vt-studio-labeled-field-overlay { top:24px; transform:none; font-size:22px; }
-.vt-studio-labeled-field.is-textarea textarea { min-height:160px; height:auto; padding-top:14px; font-size:22px; line-height:1.15; resize:vertical; }
-.vt-studio-labeled-field.is-textarea:focus-within .vt-studio-labeled-field-overlay,
-.vt-studio-labeled-field.is-textarea > textarea:not(:placeholder-shown) + .vt-studio-labeled-field-overlay { top:-3px; transform:translateY(-5px) scale(.7); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); padding:2px 8px; color:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label { left:8px; max-width:calc(100% - 16px); padding:1px 5px; border-width:2px; border-radius:4px; font-size:8px; letter-spacing:.08em; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { padding:0 6px 0 8px; border-radius:4px; font-size:22px; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count { min-width:16px; height:16px; padding:0 3px; border-width:1.5px; border-radius:4px; font-size:9px; }

@@ -5,7 +5,7 @@ import "../../styles/toolbox-entry.css"
 import { getComponentLevelCssVars } from "./tokens"
 import type { SubToolboxControlSize, SubToolboxState, ToolboxControlLevel } from "./tokens"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { StudioInput as CanonicalStudioInput, StudioTextArea as CanonicalStudioTextArea, StudioFloatingLabelInput as CanonicalStudioFloatingLabelInput, StudioFloatingLabelTextArea as CanonicalStudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioInput as CanonicalStudioInput, StudioTextArea as CanonicalStudioTextArea } from "../../studio-ui/primitives/StudioControls"
 
 type PrimitiveTone = "accent" | "neutral" | "ink" | "danger" | "warning" | "success"
 type SplitActionVariant = "head" | "tail"
@@ -73,48 +73,6 @@ SubToolboxTextArea21.displayName = "SubToolboxTextArea21"
 /** Backwards-compatible name; implementation and styling are owned by Studio Controls. */
 export const SubToolboxTextArea = SubToolboxTextArea21
 SubToolboxTextArea.displayName = "SubToolboxTextArea"
-
-export interface SubToolboxLabeledInputProps extends SubToolboxInputProps {
-  overlayLabel: React.ReactNode
-  variant?: "default" | "right-label" | "floating-label"
-}
-/** Compatibility API for primitive 137; floating-label geometry lives in Studio Controls. */
-export const SubToolboxLabeledInput = React.forwardRef<HTMLInputElement, SubToolboxLabeledInputProps>(({ overlayLabel, className, level = "l1", variant = "floating-label", style, controlSize = "standard", ...props }, ref) => (
-  <CanonicalStudioFloatingLabelInput
-    ref={ref}
-    data-vt-primitive-id="137"
-    level={level}
-    sizeVariant={controlSize === "standard" ? "standard" : "compact"}
-    overlayLabel={overlayLabel}
-    data-vt-input-variant={variant}
-    style={withComponentLevelStyle(level, style)}
-    className={className}
-    {...props}
-  />
-))
-SubToolboxLabeledInput.displayName = "SubToolboxLabeledInput"
-
-export interface SubToolboxLabeledTextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  overlayLabel: React.ReactNode
-  height?: "compact" | "standard" | "fill"
-  level?: ToolboxControlLevel
-  variant?: "default" | "right-label" | "floating-label"
-}
-/** Compatibility API for primitive 138; floating-label geometry lives in Studio Controls. */
-export const SubToolboxLabeledTextArea = React.forwardRef<HTMLTextAreaElement, SubToolboxLabeledTextAreaProps>(({ overlayLabel, className, height = "standard", level = "l1", variant = "floating-label", style, ...props }, ref) => (
-  <CanonicalStudioFloatingLabelTextArea
-    ref={ref}
-    data-vt-primitive-id="138"
-    level={level}
-    sizeVariant={height === "compact" ? "compact" : "standard"}
-    overlayLabel={overlayLabel}
-    data-vt-input-variant={variant}
-    style={withComponentLevelStyle(level, height === "fill" ? { ...style, minHeight: "100%", resize: "none" } : style)}
-    className={className}
-    {...props}
-  />
-))
-SubToolboxLabeledTextArea.displayName = "SubToolboxLabeledTextArea"
 
 export interface SubToolboxSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   controlSize?: "micro" | "standard"

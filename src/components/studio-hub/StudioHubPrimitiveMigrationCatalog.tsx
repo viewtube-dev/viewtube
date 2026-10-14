@@ -27,8 +27,6 @@ import {
   SubToolboxInput,
   SubToolboxInput20,
   SubToolboxTextArea21,
-  SubToolboxLabeledInput,
-  SubToolboxLabeledTextArea,
   SubToolboxKnob,
   SubToolboxLinkButton,
   SubToolboxLoader,
@@ -111,7 +109,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea, StudioFloatingLabelInput, StudioFloatingLabelTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea, StudioLabeledInput, StudioLabeledTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -605,8 +603,8 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
-  if (name === "137 Floating Label Input") return <StudioFloatingLabelInput sizeVariant="standard" overlayLabel="TITLE" defaultValue="TEXT INPUT" />
-  if (name === "138 Floating Label Text Area") return <StudioFloatingLabelTextArea sizeVariant="compact" overlayLabel="DESCRIPTION" defaultValue="TEXT AREA" />
+  if (name === "137 Floating Label Input") return <StudioLabeledInput sizeVariant="standard" label="TITLE" aria-label="Title" />
+  if (name === "138 Floating Label Text Area") return <StudioLabeledTextArea sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
   if (name === "Number Field") {
     return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
@@ -1026,10 +1024,10 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Labeled Input") {
-    return <SubToolboxLabeledInput level={level} variant="floating-label" overlayLabel="TITLE" defaultValue="EGYPT PART CLASH COPY" placeholder=" " aria-label="Labeled title input" />
+    return <StudioLabeledInput level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
   }
   if (name === "Labeled Textarea") {
-    return <SubToolboxLabeledTextArea level={level} variant="floating-label" overlayLabel="DESCRIPTION" defaultValue="A long-form video description fills the field while its contextual label remains behind the text until focus." placeholder=" " aria-label="Labeled description textarea" />
+    return <StudioLabeledTextArea level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector

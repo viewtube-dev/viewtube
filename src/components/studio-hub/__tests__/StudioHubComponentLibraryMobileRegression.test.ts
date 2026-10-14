@@ -149,12 +149,12 @@ describe("Studio Hub Component Library mobile regression", () => {
     for (const family of ["Labeled Input", "Labeled Textarea", "Video Selector", "Mini SubToolbox"]) {
       expect(migration).toContain(`"${family}"`)
     }
-    expect(primitives).toContain("SubToolboxLabeledInput")
-    expect(primitives).toContain("SubToolboxLabeledTextArea")
+    expect(migration).toContain("StudioLabeledInput")
+    expect(migration).toContain("StudioLabeledTextArea")
     expect(primitives).toContain("SubToolboxVideoSelector")
     expect(toolbox).toContain("MiniSubToolbox")
     expect(css).toContain(".vt-subtoolbox-video-selector")
-    expect(css).toContain(".vt-subtoolbox-labeled-field")
+    expect(css).toContain(".vt-studio-floating-field")
     expect(toolboxCss).toContain(".vt-mini-subtoolbox")
   })
 
