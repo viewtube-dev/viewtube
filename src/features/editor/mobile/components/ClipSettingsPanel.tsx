@@ -1,5 +1,5 @@
 import React,{useMemo,useRef,useState} from 'react';
-import {AudioLines,Circle,ImageIcon,LayoutTemplate,RectangleHorizontal,Save,Type,Video} from 'lucide-react';
+import {AudioLines,Circle,FileText,ImageIcon,LayoutTemplate,RectangleHorizontal,Save,Type,Video} from 'lucide-react';
 import type {EditorLayer,EditorStore} from '../state/editorState';
 import {readClipVisualTransform} from '../state/editorState';
 import type {EditorNavPage} from './EditorNavigationPages';
@@ -9,6 +9,7 @@ import {ClipEffects} from './EffectsLibrariesPanel';
 import {canSlipSourceWindow,SOURCE_SLIP_STEPS} from '../state/sourceSlipControls';
 import {captureVideoFrameAsFile,sourceFrameTime} from '../state/videoFrameCapture';
 import {exportCroppedImageAsFile} from '../state/imageCropExport';
+import {parseSrtCaptions} from '../state/srtCaptionImport';
 import {AudioWaveformInspector} from './AudioWaveformInspector';
 
 const BLACK='#111111';
@@ -100,6 +101,48 @@ function fitMediaSize(width:number,height:number){
   const w=Math.max(1,width),h=Math.max(1,height);
   const scale=Math.min(960/w,540/h,1);
   return{width:Math.max(1,Math.round(w*scale)),height:Math.max(1,Math.round(h*scale))};
+}
+
+function SrtCaptionImportControl({store}:{store:EditorStore}){
+  const inputRef=useRef<HTMLInputElement>(null);
+  const[busy,setBusy]=useState(false);
+  const[message,setMessage]=useState('');
+  const importFile=async(file:File)=>{
+    setBusy(true);setMessage('');
+    try{
+      if(file.size>5*1024*1024)throw new Error('SRT files must be 5 MB or smaller.');
+      const cues=parseSrtCaptions(await file.text());
+      if(!cues.length)throw new Error('No valid timed captions were found in this SRT file.');
+      const existingTrack=store.state.project.tracks.find(track=>track.kind==='caption');
+      const track=existingTrack??{id:uid('track_caption'),name:'Captions',kind:'caption' as const};
+      const trackId=track.id;
+      const meta=(store.state.project.meta??{}) as Record<string,unknown>;
+      const landscape=String(meta.aspectRatio??meta.aspect??'9:16')==='16:9'||meta.aspect==='landscape';
+      const layers:EditorLayer[]=cues.map((cue,index)=>({
+        id:uid('caption_layer'),trackId,type:'text',visible:true,
+        payload:{
+          ...defaultPayload('text',store.state.project.layers.length+index),
+          layerName:`Caption ${index+1}`,text:cue.text,fontSize:40,
+          width:960,height:120,y:landscape?350:650,
+          fillColor:'#ffffff',strokeColor:'#111111',strokeWidth:2,textAlign:'center',
+          captionSource:file.name,captionIndex:index+1,
+        },
+      }));
+      const clips:VtE1Clip[]=cues.map((cue,index)=>({
+        id:uid('caption_clip'),trackId,layerId:layers[index].id,
+        start:cue.startSec,end:cue.endSec,keyframes:[],
+      }));
+      store.dispatch({type:'importCaptionBatch',track:existingTrack?null:track,layers,clips});
+      setMessage(`Imported ${cues.length} captions from ${file.name}. Undo removes the batch.`);
+    }catch(reason){
+      setMessage(reason instanceof Error?reason.message:'Caption import failed.');
+    }finally{setBusy(false)}
+  };
+  return <div style={{gridColumn:'1 / -1',minWidth:0}}>
+    <button type="button" style={{...addButtonBase,background:YELLOW,color:BLACK,width:'100%',minWidth:0,padding:'4px'}} disabled={busy} onClick={()=>inputRef.current?.click()}><FileText size={13}/>{busy?'IMPORTING SRT…':'IMPORT SRT CAPTIONS'}</button>
+    <input ref={inputRef} type="file" accept=".srt,text/plain" hidden onChange={event=>{const file=event.currentTarget.files?.[0];event.currentTarget.value='';if(file)void importFile(file)}}/>
+    {message?<div role="status" style={{fontSize:8,fontWeight:800,marginTop:4,overflowWrap:'anywhere'}}>{message}</div>:null}
+  </div>;
 }
 
 async function addFileClip(store:EditorStore,file:File,kind:'image'|'video'|'audio'){
@@ -519,6 +562,7 @@ export const ClipSettingsPanel:React.FC<{store:EditorStore;onNavigate?:(page:Edi
         <button style={{...addButtonBase,background:GREEN,width:'100%',minWidth:0,padding:'4px'}} onClick={()=>videoRef.current?.click()}><Video size={13}/>VIDEO</button>
         <button style={{...addButtonBase,background:BLUE,width:'100%',minWidth:0,padding:'4px'}} onClick={()=>audioRef.current?.click()}><AudioLines size={13}/>AUDIO</button>
         <button style={{...addButtonBase,background:PURPLE,color:'#fff',width:'100%',minWidth:0,padding:'4px'}} onClick={()=>onNavigate?.('templates')}><LayoutTemplate size={13}/>TEMPLATE</button>
+        <SrtCaptionImportControl store={store}/>
       </div>
 
       <input ref={imageRef} type="file" accept="image/*" hidden onChange={e=>{const file=e.target.files?.[0];e.target.value='';if(file)void addFileClip(store,file,'image')}}/>
