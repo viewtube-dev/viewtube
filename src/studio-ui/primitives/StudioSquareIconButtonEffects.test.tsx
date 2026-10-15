@@ -23,8 +23,8 @@ describe("StudioSquareIconButton interaction effects", () => {
       stroke: 2,
       radius: 4,
       iconSize: 24,
-      buttonShadowX: 1,
-      buttonShadowY: 1,
+      buttonShadowX: 1.5,
+      buttonShadowY: 1.5,
     })
   })
 
