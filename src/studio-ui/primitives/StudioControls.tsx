@@ -273,6 +273,53 @@ export const StudioIconButton = React.forwardRef<HTMLButtonElement, StudioIconBu
 )
 StudioIconButton.displayName = "StudioIconButton"
 
+
+export type StudioSquareIconButtonVariant = "v1" | "v2" | "v3" | "v4"
+
+export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "children" | "selected"> {
+  icon: React.ReactNode
+  label: string
+  /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
+   * v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
+  variant?: StudioSquareIconButtonVariant
+  selected?: boolean
+  defaultSelected?: boolean
+  onSelectedChange?: (selected: boolean) => void
+}
+
+/** Square counterpart to the split-left icon rail, sharing its icon sizing and button-face tokens. */
+export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
+  ({ icon, label, variant = "v1", sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, ...props }, ref) => {
+    const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
+    const selectable = variant === "v3"
+    const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      onClick?.(event)
+      if (!selectable || event.defaultPrevented || event.currentTarget.disabled) return
+      const next = !isSelected
+      if (selected === undefined) setUncontrolledSelected(next)
+      onSelectedChange?.(next)
+    }
+    return (
+      <StudioButton
+        ref={ref}
+        {...props}
+        sizeVariant={sizeVariant}
+        aria-label={label}
+        aria-pressed={selectable ? isSelected : undefined}
+        selected={selectable && isSelected}
+        data-vt-studio-icon-button="true"
+        data-icon-variant={variant}
+        data-icon-only="true"
+        onClick={handleClick}
+      >
+        <span aria-hidden="true" data-vt-studio-button-icon>{icon}</span>
+      </StudioButton>
+    )
+  },
+)
+StudioSquareIconButton.displayName = "StudioSquareIconButton"
+
 export interface StudioSplitLeftButtonProps extends StudioButtonProps {
   icon: React.ReactNode
 }
