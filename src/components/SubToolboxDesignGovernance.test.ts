@@ -669,7 +669,7 @@ describe("subtoolbox design governance", () => {
    const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
    const studioCss = source("src/styles/studio-control-system.css")
 
-   for (const component of ["StudioSwitch", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioWordToggle", "StudioTextInput", "StudioTextArea", "StudioButton", "StudioSplitLeftButton", "StudioLegendMultiDropdown"]) {
+   for (const component of ["StudioSwitch", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioWordToggle", "StudioTextInput", "StudioTextArea", "StudioButton", "StudioActionButton", "StudioSplitLeftButton", "StudioLegendMultiDropdown"]) {
      expect(catalog).toContain(component)
    }
    expect(catalog).toContain('from "../../studio-ui/primitives/StudioControls"')
@@ -679,6 +679,9 @@ describe("subtoolbox design governance", () => {
    expect(catalog).not.toContain('src/styles/subtoolbox-system.css')
    expect(catalog).toContain('Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map')
    expect(catalog).toContain('formatDefaultValue(value)')
+   expect(catalog).toContain('PROMINENT ACTION EXCEPTION · SEPARATE FAMILY')
+   expect(catalog).not.toContain('FIX REQUIRED · Field radius')
+   expect(catalog).not.toContain('FIX REQUIRED · Compact split-left divider')
 
    expect(catalog).toContain('const CANONICAL_SKINS =')
    expect(catalog).toContain('const WORD_TOGGLE_SKINS = CANONICAL_SKINS')
