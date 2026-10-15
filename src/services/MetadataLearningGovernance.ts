@@ -1,8 +1,8 @@
 import {
   appendContentBuildEvent,
   listContentBuildEvents,
-  type ContentBuildEvent,
 } from "./asset-engine/ContentBuildRepository"
+import type { ContentBuildEvent } from "./asset-engine/contracts"
 
 export type MetadataLearningMetric = "views" | "watchTimeMinutes" | "averageViewPercentage" | "likes" | "comments" | "revenue"
 export type MetadataLearningDirection = "increase" | "decrease"
