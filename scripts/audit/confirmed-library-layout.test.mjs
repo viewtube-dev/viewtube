@@ -25,8 +25,8 @@ test("all four-skin control families retain a four-column row at every viewport"
 test("standard button specimens span a row and compact A/B share two columns", () => {
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants\s*\{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\) !important/);
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants > \.vt-confirmed-variant\.is-full-row\s*\{\s*grid-column: 1 \/ -1 !important/);
-  assert.ok(catalog.includes('28px compact A · default A'));
-  assert.ok(catalog.includes('28px compact B · default B'));
+  assert.ok(catalog.includes('28px compact · default A'));
+  assert.ok(catalog.includes('28px compact · default B'));
 });
 
 test("standalone text inputs provide standard and compact A/B specimens", () => {
