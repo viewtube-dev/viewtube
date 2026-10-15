@@ -74,6 +74,33 @@ describe("OpportunityEvidenceAdapter", () => {
   expect(result.filter((item) => item.videoId === "video-top")).toHaveLength(1)
  })
 
+ it("preserves missing views as unknown and does not assign confidence without metric coverage", () => {
+  const evidencePack = pack()
+  evidencePack.recentVideos[0].metrics = {
+   views: null,
+   watchTime: null,
+   subscribers: null,
+   revenue: null,
+   ctr: null,
+   averagePercentageViewed: null,
+   likes: null,
+   comments: null,
+  }
+
+  const result = buildOpportunityEvidenceFromBrainPack({
+   channelId: "channel-a",
+   evidencePack,
+   now: new Date("2026-09-25T12:00:00.000Z"),
+  })
+  const recent = result.find((item) => item.videoId === "video-recent")
+
+  expect(recent).toMatchObject({
+   currentValue: null,
+   confidence: 0,
+   evidenceIds: ["ev-recent"],
+  })
+ })
+
  it("refuses cross-channel evidence instead of relabeling it", () => {
   const evidencePack = pack()
   evidencePack.channelId = "channel-b"
