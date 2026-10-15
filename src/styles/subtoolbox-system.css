@@ -4634,3 +4634,48 @@
     padding-block: 8px !important;
   }
 }
+
+/* Vault density audit follow-up: reserve a full row for search, keep the clear
+   action paired with Library, and let the media-type control wrap naturally. */
+[data-vault-search-row] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "library clear" "search search";
+  align-items: center;
+  gap: 8px !important;
+}
+[data-vault-search-row] [data-vault-library-trigger] { grid-area: library; }
+[data-vault-search-row] [data-vault-search-clear] { grid-area: clear; }
+[data-vault-search-row] .vault-library-search-field {
+  grid-area: search;
+  width: 100%;
+  min-width: 0;
+}
+[data-vault-search-row] .vault-library-search-field > input { width: 100%; min-width: 0; }
+.vault-media-type-filter-row {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 44px;
+  align-items: stretch;
+  overflow: visible !important;
+}
+.vault-media-type-filter {
+  display: flex !important;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto !important;
+  min-height: 44px;
+  flex-wrap: wrap;
+  gap: 4px;
+  overflow: visible !important;
+}
+.vault-media-type-filter > button {
+  flex: 1 1 auto;
+  min-width: 44px;
+  min-height: 44px;
+  height: auto !important;
+  white-space: nowrap;
+}
