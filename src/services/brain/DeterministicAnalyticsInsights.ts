@@ -325,6 +325,7 @@ export const buildTrafficSourceContributionInsights = (input: {
  sourceRowCount: number
 }): TrafficContributionResult => {
  const { dataset, metricKey, dimensionKey } = input
+ const aggregation = metricAggregation(metricKey)
  if (dataset.status !== "available") {
   return { insights: [], limitations: [`Dataset ${dataset.datasetId} is not fully available.`] }
  }
@@ -334,7 +335,7 @@ export const buildTrafficSourceContributionInsights = (input: {
  if (dataset.missingMetrics.includes(metricKey)) {
   return { insights: [], limitations: [`Metric ${metricKey} is marked missing by the canonical dataset.`] }
  }
- if (!metricAggregation(metricKey)) {
+ if (!aggregation) {
   return { insights: [], limitations: [`Metric ${metricKey} requires denominator-aware aggregation; source contributions are unsupported for this metric.`] }
  }
  if (dataset.rows.length === 0) {
@@ -366,7 +367,6 @@ export const buildTrafficSourceContributionInsights = (input: {
   `analytics:${dataset.snapshotId}:${dataset.datasetId}:${metricKey}`,
   ...dataset.sources.map((source) => `source:${source}`),
  ])].sort()
- const aggregation = metricAggregation(metricKey)
  const insights = [...grouped.entries()]
   .map(([label, value]) => ({
    id: `analytics-insight:contribution:${slug(dataset.datasetId)}:${slug(metricKey)}:${stableHash([
