@@ -22,6 +22,7 @@
  */
 
 import { recordBrainOutcome, updateBrainOutcomePublicationLineage } from "./BrainOutcomeLedger"
+import { enqueueBrainLearningRecord } from "./BrainLearningPersistence"
 import type { ContentBuildPublicationIdentity } from "../asset-engine/contracts"
 import { getGeneratedAsset, type AssetRecord, type AssetType } from "./AssetGenerator"
 import { compareStyleFeatures, extractStyleFeatures, type StyleFeatures } from "./styleMetrics"
@@ -284,6 +285,7 @@ export const recordAssetOutcome = async (input: {
  }
 
  persist(outcome)
+ void enqueueBrainLearningRecord(outcome.channelId, "assetOutcome", outcome)
 
  const tool = TOOL_FOR_ASSET[asset.assetType] || "creator-canvas-os"
  try {
@@ -355,6 +357,7 @@ export const linkAssetOutcomeToPublication = (input: {
   evidenceIds: [...new Set([...(existing.evidenceIds || []), ...(input.evidenceIds || [])])],
  }
  persistUpdated(linked)
+ void enqueueBrainLearningRecord(linked.channelId, "assetOutcome", linked)
  updateBrainOutcomePublicationLineage({
   channelId: input.channelId,
   sourceRecordId: existing.id,
