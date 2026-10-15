@@ -96,13 +96,13 @@ Comparisons are blocked unless:
 6. metric aggregation semantics are consistent;
 7. the baseline is not silently replaced with zero.
 
-For contribution analysis, use complete canonical dataset rows (not bounded report samples), require a dimension and numeric metric for every included row, and do not report shares when the denominator is zero or invalid.
+For contribution analysis, use complete canonical dataset rows (not bounded report samples), require an explicit matching row count plus a dimension and numeric metric for every included row, and do not report shares when the denominator is zero or invalid. The current summary contract does not provide sufficient denominator metadata for CTR, rates, ratios, RPM/CPM, percentages, or average/duration metrics; the initial engine fails closed for those non-additive metrics rather than averaging or summing them incorrectly.
 
 ## Phase 2 — Deterministic Analytics Insights engine
 
 First supported insight families:
 1. **Reporting-period metric comparison** — compare matching canonical dataset/metric values across explicit non-overlapping periods. Formulas: `delta = current - baseline`; `relativeDeltaPercent = (delta / abs(baseline)) × 100` only when baseline ≠ 0.
-2. **Traffic-source contribution** — group complete traffic rows by canonical traffic-source dimension, sum the chosen metric per source, and calculate `sharePercent = sourceSum / totalSum × 100` only when total > 0.
+2. **Traffic-source contribution** — group complete traffic rows by canonical traffic-source dimension, sum the chosen additive metric per source, and calculate `sharePercent = sourceSum / totalSum × 100` only when total > 0. Require a matching expected row count. Ratio/average metrics remain blocked until the canonical contract exposes the correct denominators/aggregation semantics.
 3. **Material metric change** — emit a threshold-based signal only when the relative change is defined and meets the configured threshold. Label it as threshold-based materiality, not statistical significance.
 4. **Coverage/freshness warnings** — make missingness and evidence fitness explicit; never infer performance from a missing dataset.
 
