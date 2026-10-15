@@ -56,7 +56,8 @@
     "generate:ideas-master": "node scripts/governance/build-ideas-master.mjs",
     "generate:convergence-control-room": "node scripts/governance/build-control-room.mjs",
     "generate:capability-coverage": "node scripts/governance/build-capability-coverage.mjs",
-    "consolidate:ideas": "node scripts/governance/consolidate-ideas.mjs"
+    "consolidate:ideas": "node scripts/governance/consolidate-ideas.mjs",
+    "test:studio-field-style-ownership": "node --test scripts/audit/studio-field-style-ownership.test.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
