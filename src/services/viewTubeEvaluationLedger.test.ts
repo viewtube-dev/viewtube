@@ -1,7 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+const lineageMocks = vi.hoisted(() => ({
+ appendContentBuildEvent: vi.fn(),
+ listContentBuildEvents: vi.fn(),
+ listAssetOutcomes: vi.fn(),
+}))
+
 vi.mock("./viewTubeUserControls", () => ({
  evaluateViewTubeControl: () => ({ allowed: true }),
+}))
+
+vi.mock("./asset-engine/ContentBuildRepository", () => ({
+ appendContentBuildEvent: lineageMocks.appendContentBuildEvent,
+ listContentBuildEvents: lineageMocks.listContentBuildEvents,
+}))
+
+vi.mock("./brain/assetOutcomes", () => ({
+ listAssetOutcomes: lineageMocks.listAssetOutcomes,
 }))
 
 vi.mock("./analytics-canon", () => ({
@@ -36,6 +51,32 @@ const store = new Map<string, string>()
 
 beforeEach(() => {
  store.clear()
+ lineageMocks.appendContentBuildEvent.mockImplementation((input: Record<string, unknown>) => ({
+  id: `event:${String(input.idempotencyKey || "checkpoint")}`,
+  ...input,
+ }))
+ lineageMocks.listContentBuildEvents.mockReturnValue([{
+  id: "publish-receipt-a",
+  contentBuildId: "build-a",
+  eventType: "youtube.state.changed",
+  entityType: "publish-identity-receipt",
+  entityId: "publish-a",
+  metadata: {
+   publishTransactionId: "publish-a",
+   youtubeVideoId: "youtube-1",
+   approvedSnapshotId: "approved-a",
+   approvedSnapshotHash: "hash-a",
+   channelId: "channel-a",
+  },
+ }])
+ lineageMocks.listAssetOutcomes.mockReturnValue([{
+  id: "outcome-a",
+  assetId: "title-a",
+  channelId: "channel-a",
+  kind: "published",
+  publishedVideoId: "youtube-1",
+  traceId: "trace-a",
+ }])
  vi.stubGlobal("window", {
   localStorage: {
    getItem: (key: string) => store.get(key) ?? null,
@@ -85,10 +126,42 @@ describe("outcome evaluation and governed learning lineage", () => {
    comparisonSnapshotId: "snapshot-current",
    selectedWindow: "28d",
    evidenceIds: ["snapshot-current:videos:1"],
+   sourceOutcomeIds: ["outcome-a"],
+   sourceRecordIds: ["outcome-a", "publish-a"],
+   traceIds: ["trace-a"],
+   assetIds: ["title-a"],
+   analyticsCheckpointIds: ["event:analytics-checkpoint:publish-a:snapshot-current:28d"],
    evidenceStatus: "available",
    comparabilityStatus: "comparable",
    outcome: "pending",
   })
+ })
+
+ it("fails closed unless the immutable publication receipt exists in ContentBuild", () => {
+  lineageMocks.listContentBuildEvents.mockReturnValue([])
+  const record = createPublicationEvaluationRecord({
+   publicationIdentity: {
+    schemaVersion: 1,
+    contentBuildId: "build-a",
+    projectId: "project-a",
+    projectAssociationStatus: "verified",
+    videoPackageId: "package-a",
+    publishTransactionId: "publish-a",
+    youtubeVideoId: "youtube-1",
+    channelId: "channel-a",
+    approvedSnapshotId: "approved-a",
+    approvedSnapshotHash: "hash-a",
+    selectedVariantAssetIds: ["title-a", "thumb-a", "render-a"],
+    correlationId: "publish-a",
+    idempotencyKey: "publish:build-a:approved-a",
+    publishedAt: "2026-10-15T10:00:00.000Z",
+   },
+   selectedWindow: "28d",
+   source: "post-publication",
+   recommendation: "Evaluate the published title variant",
+  })
+  expect(record).toBeNull()
+  expect(lineageMocks.appendContentBuildEvent).not.toHaveBeenCalled()
  })
 
  it("keeps evaluation retries idempotent within channel and project scope", () => {
