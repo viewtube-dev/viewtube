@@ -43,7 +43,7 @@ const getResourceWorkflowLinks = (resource: (typeof RESOURCE_LIBRARY_ENTRIES)[nu
     return [{ label: "Open Publisher", href: "/video-publisher" }, { label: "Open Studio", href: "/studio" }]
   }
   if (/community|comments|audience|subscribers|returning-viewers/.test(tags) || resource.category === "Audience") {
-    return [{ label: "Open Studio", href: "/studio" }, { label: "Open AI Brain", href: "/ai-brain" }]
+    return [{ label: "Open Studio", href: "/studio" }, { label: "Apply guide with AI Brain", href: aiBrainHref }]
   }
   return [{ label: "Open Studio", href: "/studio" }, { label: "Open Projects", href: "/projects" }]
 }
