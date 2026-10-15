@@ -14,7 +14,7 @@
 //    the source of truth for TYPES only. It must never re-export runtime
 //    functions from there — those come from selectors.ts and use VT Sync.
 
-import type { AnalyticsWindow } from "../analytics/DataStore"
+import { ANALYTICS_WINDOWS, type AnalyticsWindow } from "../analytics/windows"
 
 export type {
  AnalyticsWindow,
@@ -28,6 +28,8 @@ export type {
  MetricSource,
 } from "../analytics/DataStore"
 
+export type { AnalyticsWindow } from "../analytics/windows"
+
 export type {
  AnalyticsSourceMode,
  WindowTotals,
@@ -40,13 +42,7 @@ export type {
  * The set of analytics windows the canonical selectors accept.
  * Kept as a runtime array so consumers can iterate/validate.
  */
-export const CANONICAL_ANALYTICS_WINDOWS = [
- "7d",
- "28d",
- "90d",
- "365d",
- "lifetime",
-] as const
+export const CANONICAL_ANALYTICS_WINDOWS: readonly AnalyticsWindow[] = [...ANALYTICS_WINDOWS].reverse()
 
 /**
  * Source-of-truth marker: every value returned by an analytics-canon
