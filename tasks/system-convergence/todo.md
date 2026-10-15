@@ -156,3 +156,15 @@
 - [x] Preserve legacy/lifecycle evaluation behavior until those baseline producers gain typed comparison contexts.
 - [x] Prove 7/7 AlgorithmEvaluationEngine tests and 6/6 CanonicalAlgorithmEvaluation tests GREEN.
 - [ ] Extend comparability to experiment and data-visual consumers (VT-024).
+
+## OperationRecord v1 — Phase 2 identity bridge slice (2026-10-15)
+- [x] Add optional `operationId` / `workflowId` fields to `GenerationRecord` without breaking legacy records.
+- [x] Populate those fields for ActionPacket-backed generation records.
+- [x] Carry one operation/workflow pair through GenerationWorkflow requests, ToolReceipts, OperationRecord projections, and ContentBuild input/output event metadata.
+- [x] Allow canonical Asset Engine context to pass operation identity into created assets, generated records, and ActionPacket handoffs.
+- [x] Expose explicit operation/workflow mismatches in BrainRuntime provenance; suppress workflow-based outcome joins when explicit identity conflicts exist.
+- [x] Add focused regression assertions for identity continuity and mismatch detection.
+- [ ] Thread operation identity from every live producer into AssetEngine and AssetGenerator, including existing generation/variant callsites.
+- [ ] Add full parity tests for legacy receipts, missing identity fields, retry/replay and cross-channel isolation.
+- [ ] Execute exact-head GenerationWorkflow, OperationRecord, BrainRuntimeSnapshot and full release-gate tests before marking Phase 2 complete.
+
