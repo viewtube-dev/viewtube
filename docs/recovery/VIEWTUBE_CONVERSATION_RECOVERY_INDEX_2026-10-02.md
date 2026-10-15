@@ -176,23 +176,20 @@ Recovered the Render npm start failure and its current-source fix, the historica
 Expanded the existing Vault master rather than creating a competing master. The reference now covers adaptive Workbench modes; image, video, audio, document, inspection, search, organization, AI, processing, rights, lineage, compare, and handoff capability families; the Tool Record Contract; shared operation lifecycle; conceptual asset/collection model; integration boundaries; UI/security standards; test and release gates; phased implementation; provenance boundaries; risks; and unresolved questions. The catalog is a target specification, not proof that each capability is implemented.
 
 
-## Registered Round 1 contribution — Vault Workbench phases 0–6 implementation — 2026-10-15
+## Registered Round 1 contribution — Vault Workbench phases 0–6 implementation audit and canonical service reconciliation — 2026-10-15
 
 | Field | Value |
 |---|---|
 | Agent / conversation | ViewTube Vault Workbench implementation continuation |
 | Round | 1 |
-| Artifacts | `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md` |
-| Source | Canonical Vault page, adapter, workspace state, capability registry, existing media services, tests, and user-requested phases 0–6 |
-| Status | IMPLEMENTED IN BRANCH / CI VERIFICATION PENDING |
+| Artifact | `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; canonical `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md` |
+| Source | Canonical Vault page, adapter, inspection, operation ledger, media preflight, governance services, tests, and PR #336 |
+| Status | IMPLEMENTATION IN BRANCH / EXACT-HEAD CI VERIFICATION PENDING |
 | Branch / PR | `vault/phases-0-1-2-workbench` → PR #336 targeting `master/consolidated-feature-integration` |
-| Provenance | Canonical source audit → tests authored before implementation → implementation services/UI → documentation/recovery registration |
-| Verification | GitHub read/write accepted; exact latest-head automated tests, typecheck/build, browser runtime, merge, and post-merge read-back remain required |
-| LOG-ID | `REC-20261015-vault-phases-0-6-001` |
-| Follow-up | Review latest PR checks, resolve introduced failures, complete server authorization integration, and merge only after required gates pass |
+| Verification | GitHub read-back confirms redundant experimental services removed and canonical services retained; exact-head CI, build, browser, merge, and post-merge read-back pending |
+| LOG-ID | REC-20261015-vault-phases-0-6-001 |
+| Follow-up | Review current PR checks, fix introduced failures, then merge only after required gates pass |
 
 ### Contribution summary
 
-Phases 0–2 establish canonical source ownership, stable local identity and selection contracts, local protected lifecycle guards, and the adaptive capability host. Phases 3–6 add a read-only inspection projection and Inspector findings; a browser-local operation receipt ledger wired to image/video derivative saves; media preflight (not batch execution); field-level metadata comparison; rights findings; and a protected metadata-suggestion acceptance contract. Existing manual/smart collections, search, duplicate review, specialist media workbenches, and lineage services are reused rather than duplicated.
-
-**Important limits:** the operation ledger is browser-local rather than a server audit log; batch execution is not implemented by the preflight planner; deployed FFmpeg and persistent storage are not runtime-certified; AI proposal acceptance is a contract, not an AI model; server-side account/workspace authorization remains blocked. No merge or release certification is claimed.
+The continuation audit confirmed that phases 3–6 are already represented by canonical `vaultInspection`, `vaultOperationLedger` + Asset Engine lineage, `vaultMediaOperations` preflight, and `vaultReviewGovernance` services and tests. Redundant exploratory queue/operation/comparison/governance services were removed to avoid competing sources of truth. The Vault master and overview now point to the canonical phase audit. Server-side authorization/durability, deployed processor health, and actual AI-provider integration remain explicitly unverified or blocked.
