@@ -23,6 +23,7 @@ import {
 type ScheduleView = "month" | "week" | "agenda"
 
 type PublishingScheduleArchitectProps = {
+ embedded?: boolean
  collapsible?: boolean
  isOpenInitial?: boolean
  paletteIndex?: number
