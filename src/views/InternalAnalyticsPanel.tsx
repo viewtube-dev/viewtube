@@ -2,21 +2,15 @@ import React, { useMemo } from "react"
 import DataDashboard from "../components/DataDashboard"
 import SimpleAnalyticsChart from "../components/SimpleAnalyticsChart"
 import { SystemStatisticsSubToolbox } from "../components/SystemStatisticsSubToolbox"
-import { canonicalRowsToMasterTableRows, getMasterRows } from "../services/analytics/Selectors"
+import { canonicalRowsToMasterTableRows } from "../services/analytics/Selectors"
+import { useCanonicalRows } from "../services/analytics-canon"
 
 const InternalAnalyticsPanel: React.FC = () => {
- const [refreshCount, setRefreshCount] = React.useState(0)
-
+ const canonicalRows = useCanonicalRows("lifetime")
  const masterTableRows = useMemo(
-  () => canonicalRowsToMasterTableRows(getMasterRows("lifetime", "api")),
-  [refreshCount],
+  () => canonicalRowsToMasterTableRows(canonicalRows),
+  [canonicalRows],
  )
-
- React.useEffect(() => {
-  const handleSync = () => setRefreshCount((c) => c + 1)
-  window.addEventListener("yt_analytics_synced", handleSync)
-  return () => window.removeEventListener("yt_analytics_synced", handleSync)
- }, [])
 
  return (
   <div className="max-w-[1500px] mx-auto pb-24 px-4 space-y-6">
