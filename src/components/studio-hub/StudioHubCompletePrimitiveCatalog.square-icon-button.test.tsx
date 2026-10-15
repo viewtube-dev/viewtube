@@ -27,7 +27,7 @@ describe("confirmed Square Icon Button component-library entry", () => {
     expect(html).toContain("is-effect-heart-pop")
     expect(html).toContain("is-effect-bell-ring")
     expect(html).toContain("is-effect-refresh")
-    expect(html).toContain("data-icon-preset=\\"heart\\"")
+    expect(html).toContain('data-icon-preset="heart"')
     expect(html).toContain("is-effect-pop")
     expect(html).toContain('data-vt-square-badge')
     expect(html).toContain('data-vt-square-flip-inner')
