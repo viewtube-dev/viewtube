@@ -63,6 +63,6 @@ This reference defines the target system; individual runtime capabilities must s
 ## Implementation audits
 
 - [Phases 0–2: canonical source, identity/selection, adaptive host](vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md)
-- [Phases 3–6: inspection, operation receipts, media preflight, compare and governance](vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md)
+- [Phases 3–6: inspection, operation receipts, media preflight, compare and governance](vault/VAULT_PHASES_3_6_IMPLEMENTATION_AUDIT.md)
 
 Both audit documents distinguish implemented code from pending CI, runtime, server-authorization, processor-health, durable-operation, and AI-provider verification.
