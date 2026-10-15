@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** PR #189 and PR #191 merged; Confirmed Library phases 1–3 are implemented on `fix/confirmed-library-phases-1-3-layout-defaults`; tests and rendered verification pending  
+**Status:** PR #189 and PR #191 merged; Confirmed Library phases 1–5 are implemented on `fix/confirmed-library-phases-1-3-layout-defaults`; automated execution and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Current work branch:** `fix/confirmed-library-phases-1-3-layout-defaults`  
+**Current work branch:** `fix/confirmed-library-phases-1-3-layout-defaults` (phases 1–5 source implementation; phase 6 verification in progress)  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -428,3 +428,29 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - The gallery-only CSS controls specimen layout and does not redefine production component geometry or interaction behavior.
 
 **Verification boundary:** source changes are recorded; automated checks and live browser review are still required before marking the new layout visually certified. The known compact button wrapper/face width discrepancy must be rechecked against the resulting deployed CSS.
+
+
+## 19. Confirmed Library phases 4–6 — 2026-10-15
+
+### Phase 4 — Natural-language non-default settings
+- Rewrote the visible settings notes for switches, radio/checkbox/X-checkbox controls, word toggles, text inputs, text areas, ordinary buttons, prominent actions, split-left buttons, labeled fields, and the Legend Multi dropdown.
+- Notes now explain what the setting changes, the default state, selected/disabled/loading behavior, and which behavior is shared versus a component-specific exception.
+- Corrected the labeled-field documentation: the actual public prop is `label`; there is no `overlayLabel` prop.
+- The notes distinguish the dropdown trigger from the floating menu panel and its options. Menu options do not use button-press shadows or press motion; any panel shadow is stationary.
+- The wording describes the current source contract; it is not a substitute for checking computed styles in the deployed UI.
+
+### Phase 5 — Floating-label geometry and Compact B focus exception
+- Floating-label type is reduced from 32px to 24px (25% smaller); the lifted label box padding is reduced from 3px / 6px to 2.25px / 4.5px, and its corner radius from 4px to 3px.
+- The lifted label uses `translateY(-75%) scale(.75)`, placing the bottom quarter of the label box across the top edge of the black control border. The field's canonical size, border, and radius are not changed.
+- Labels retain Inter, weight 1000, uppercase treatment, and a 0.5px text stroke matching the current text color.
+- `StudioLabeledInput` now exposes an explicit `variant="a" | "b"` specimen variant. Only the Compact B library specimen uses `variant="b"`; its focused/focus-visible input receives a solid secondary-color outline at the compact 2px focus width and zero offset. The rule is scoped to that variant and does not change Compact A, standard fields, or textarea focus.
+- Reduced-motion handling remains in place for floating-label transitions.
+
+### Phase 6 — Regression and visual verification gate
+- Extended `scripts/audit/confirmed-library-layout.test.mjs` to assert the label geometry, text stroke, explicit Compact B variant, scoped secondary-color focus stroke, and accurate natural-language settings text.
+- Source-level review must also confirm the phase 1–3 four-skin and standard/compact layouts, the real public prop names, and no duplicate catalog borders or production-geometry overrides.
+- Run `npm run test:confirmed-library-layout`, `npm run typecheck`, `npm run check:css`, the relevant/full test suite, and `npm run build`; record each result rather than inferring success from a source diff.
+- Visually inspect standard and compact labeled inputs at rest, focused, populated, disabled, and keyboard focus-visible states; verify Compact B alone gets the solid 2px secondary stroke, the bottom quarter of the label box overlaps the black border, and no clipping, duplicate borders, layout shift, or shadow doubling occurs. Repeat at desktop and narrow portrait/landscape widths and check reduced motion.
+- Recheck the known compact button wrapper/face width discrepancy in a deployed browser. Vercel deployment rate limiting and a failed/cancelled workflow are not visual or build certification.
+
+**Verification boundary:** phases 4–5 source edits are recorded. Phase 6 is not certified until the test/build commands and browser checks above have actual results attached to this work.
