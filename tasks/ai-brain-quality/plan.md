@@ -146,3 +146,10 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+## Current integration status and next execution plan — 2026-10-15
+- PR #269 merged the reconciled publication identity, outcome lineage, canonical evaluation and governed-learning implementation; PR #270 merged the capability evidence mapping follow-up.
+- The latest integration release-gates run is **red**, not certified: production build and local smoke passed, while focused contracts, source governance, full suite and static typecheck failed. Current failures include stale Studio/Vault contract assertions and a BrainChannelScope test that reaches browser-only `localStorage` in Node. Do not treat these as successful gates.
+- The next workstream continues the project-centered creation / communication ingestion / recommendation attribution plan. Its first implementation step is now to surface the existing explicit-ID attribution chain in the Brain Evaluation Inbox. Remaining work is stable-ID propagation, enforced project-stage capability filtering, communication consent/retention guarantees, durable persistence/replay, and live provider-backed end-to-end certification.
+- See `PHASES-10-12-PROJECT-COMMUNICATION-ATTRIBUTION-COMPLETION.md` for the acceptance gates and release boundary.
+
