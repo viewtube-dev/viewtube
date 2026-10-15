@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from "vitest"
-import { classifyCreatorCommunication, recordCreatorCommunicationEvidence } from "./BrainCommunicationIngestion"
+import { classifyCreatorCommunication, recordCreatorCommunicationEvidence, redactLegacyCreatorCommunicationText } from "./BrainCommunicationIngestion"
+import { listAlgorithmIntelligenceEvents, recordAlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
 import { DEFAULT_BRAIN_USER_CONTROLS, writeBrainUserControls } from "./BrainUserControls"
 
 describe("classifyCreatorCommunication", () => {
@@ -62,6 +63,28 @@ describe("recordCreatorCommunicationEvidence privacy and consent", () => {
   expect(result.event.summary).not.toContain(privateText)
   expect(JSON.stringify(result.event)).not.toContain(privateText)
   expect(result.classification.durableMemoryPromoted).toBe(false)
+ })
+
+ it("redacts raw text from legacy events and queues the sanitized record for durable sync", () => {
+  recordAlgorithmIntelligenceEvent({
+   id: "creator-communication:channel-a:legacy-1",
+   channelId: "channel-a",
+   projectId: null,
+   kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+   sourceSystem: "communication",
+   sourceId: "legacy-1",
+   parentEventIds: [],
+   evidenceIds: ["legacy-1"],
+   confidence: "high",
+   title: "Creator communication: instruction",
+   summary: "Always keep the thumbnail text-free.",
+   metadata: { communicationText: "Always keep the thumbnail text-free.", communicationId: "legacy-1" },
+  })
+  expect(redactLegacyCreatorCommunicationText("channel-a")).toBe(1)
+  const event = listAlgorithmIntelligenceEvents({ channelId: "channel-a" }).find((item) => item.id === "creator-communication:channel-a:legacy-1")
+  expect(event?.metadata.communicationText).toBeUndefined()
+  expect(event?.metadata.rawCommunicationTextRetained).toBe(false)
+  expect(event?.summary).not.toContain("Always keep the thumbnail text-free.")
  })
 
  it("keeps retries idempotent and rejects reuse of a communication ID for different text", () => {
