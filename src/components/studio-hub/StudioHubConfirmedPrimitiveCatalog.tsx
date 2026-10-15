@@ -16,6 +16,7 @@ import {
   StudioTextInput,
   StudioWordToggle,
 } from "../../studio-ui/primitives/StudioControls"
+import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"
 import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
@@ -78,6 +79,53 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
     {provenance}
   </section>
 )
+
+const ConfirmedStepperFamily: React.FC = () => {
+  const [standardValue, setStandardValue] = React.useState(5)
+  const [compactValue, setCompactValue] = React.useState(3)
+  return (
+    <Family
+      title="Split Stepper · 44px + 28px"
+      nonDefaultSettings={[
+        "44px standard is the default size; 28px compact uses the shared compact height, stroke, radius, and shadow tokens.",
+        "The left value pane takes two thirds of the width; the right one-third rail is divided into equal up/down chevron buttons.",
+        "Each tap or keyboard activation changes the value by one step; press-and-hold repeats with increasing speed.",
+        "Optional min, max, and step props bound or customize the value. The disabled state prevents changes.",
+        "The value pane uses the primary pair color at 50% opacity; the two right-side controls use the opaque secondary pair with black chevrons."
+      ]}
+      provenance={<Provenance
+        primitive="SubToolboxSplitStepper"
+        tsx="src/components/subtoolbox/SubToolboxSplitStepper.tsx"
+        css="src/components/subtoolbox/subtoolbox-split-stepper.css"
+        tokens="2:1 value/rail geometry; 44px standard and 28px compact; shared Studio size tokens."
+        imports={["src/components/subtoolbox/SubToolboxSplitStepper.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · interactive</span>
+        <SubToolboxSplitStepper
+          value={standardValue}
+          onValueChange={setStandardValue}
+          size="standard"
+          level="l1"
+          ariaLabel="Standard stepper value"
+          data-vt-library-component="SubToolboxSplitStepper"
+        />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px compact · interactive</span>
+        <SubToolboxSplitStepper
+          value={compactValue}
+          onValueChange={setCompactValue}
+          size="compact"
+          level="l1"
+          ariaLabel="Compact stepper value"
+          data-vt-library-component="SubToolboxSplitStepper"
+        />
+      </div>
+    </Family>
+  )
+}
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
@@ -224,6 +272,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         />
       </div>
     </Family>
+    <ConfirmedStepperFamily />
   </div>
 )
 
