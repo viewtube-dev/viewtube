@@ -44,6 +44,7 @@ import {
  subscribeBrainConversationChanges,
 } from "../../../services/brain/BrainConversationController"
 import { runBrainTask } from "../../../services/brain/runtime/BrainRuntime"
+import { recordCreatorCommunicationEvidence } from "../../../services/brain/BrainCommunicationIngestion"
 import {
  readBrainUserControls,
  setActiveBrainControlChannel,
@@ -285,6 +286,21 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
       || brain.projects.find((project) => project.status === "active")
       || null
     : null
+   if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions) {
+    try {
+     recordCreatorCommunicationEvidence({
+      channelId,
+      communicationId: `brain-hub:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`,
+      text,
+      projectId: activeProject?.id || null,
+     })
+    } catch (error) {
+     if (!(error instanceof Error && error.message.includes("does not match a supported classification"))) {
+      console.warn("[BrainHub] Communication evidence capture skipped:", error)
+     }
+    }
+   }
+
    const result = await runBrainTask({
     surface: "brain-hub-widget",
     channelId,
