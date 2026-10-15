@@ -28,6 +28,8 @@ type StudioTextAreaFloatingLabelProps = Omit<
   variant: "floating-label"
   label: string
   level?: "l0" | "l1" | "l2"
+  /** Optional catalog specimen variant; B adds the compact secondary-color focus stroke. */
+  floatingLabelVariant?: "a" | "b"
   /** className/style target the field wrapper in floating-label mode. */
   className?: string
   style?: React.CSSProperties
@@ -67,6 +69,7 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
       variant = "simple",
       label,
       level = "l1",
+      floatingLabelVariant = "a",
       sizeVariant = "standard",
       rows,
       placeholder = "TYPE HERE",
@@ -78,8 +81,8 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
     const fieldId = id ?? `studio-text-area-${generatedId}`
 
     if (variant === "fixed-label") {
-      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
-      void [_variant, _label, _level, _sizeVariant, _placeholder]
+      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
+      void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant, _placeholder]
       return (
         <div
           data-vt-primitive-id="144"
@@ -119,6 +122,7 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
           data-vt-studio-field-variant="floating-label"
           data-size={sizeVariant}
           data-vt-control-level={level}
+          data-vt-floating-variant={floatingLabelVariant}
           className={["vt-studio-floating-field", "is-textarea", className].filter(Boolean).join(" ")}
           style={style}
         >
