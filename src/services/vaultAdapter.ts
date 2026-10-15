@@ -193,17 +193,24 @@ const isProtectedContentMutation = (
  existing: VaultAsset,
  patch: Partial<Omit<VaultAsset, "id" | "createdAt">>,
 ): boolean => {
- if (!isVaultAssetProtected(existing) || patch.metadata?.protected === false) return false
+ if (!isVaultAssetProtected(existing)) return false
  const contentKeys = ["name", "kind", "source", "url", "previewUrl", "mimeType"] as const
  const contentChanged = contentKeys.some((key) => (
   Object.prototype.hasOwnProperty.call(patch, key) && patch[key] !== existing[key]
  ))
- const protectedMetadataKeys = ["lifecycle", "protected", "contentHash"]
+ const protectedMetadataKeys = ["lifecycle", "contentHash"]
  const protectedMetadataChanged = Boolean(patch.metadata && protectedMetadataKeys.some((key) => (
   Object.prototype.hasOwnProperty.call(patch.metadata, key)
   && patch.metadata?.[key] !== existing.metadata?.[key]
  )))
- return contentChanged || protectedMetadataChanged
+ const protectionChanged = Boolean(
+  patch.metadata
+  && Object.prototype.hasOwnProperty.call(patch.metadata, "protected")
+  && patch.metadata.protected !== existing.metadata?.protected
+ )
+ // Unlocking is a distinct operation: it cannot be combined with content or provenance changes.
+ if (patch.metadata?.protected === false && protectionChanged && !contentChanged && !protectedMetadataChanged) return false
+ return contentChanged || protectedMetadataChanged || (protectionChanged && patch.metadata?.protected !== false)
 }
 
 export const updateVaultAsset = (
