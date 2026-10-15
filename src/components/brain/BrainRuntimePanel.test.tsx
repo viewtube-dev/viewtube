@@ -129,6 +129,22 @@ describe("BrainRuntimePanel", () => {
       experimentEventCount: 0,
       learningEventCount: 1,
      },
+     metadataIntelligence: {
+      metadataVersionCount: 2,
+      comparisonCount: 3,
+      readyComparisonCount: 2,
+      learningCandidateCount: 1,
+      promotedKnowledgeCount: 0,
+      latestComparison: {
+       eventId: "comparison-1",
+       metadataVersionId: "metadata-v2",
+       status: "ready",
+       timestamp: "2026-09-24T05:02:00.000Z",
+       evidenceIds: ["evidence-1"],
+       interpretation: "descriptive-association-only",
+       causalConclusion: null,
+      },
+     },
     }}
    />,
   )
@@ -144,6 +160,8 @@ describe("BrainRuntimePanel", () => {
   expect(html).toContain("Video Publisher")
   expect(html).toContain("Gemini 2.5 Pro")
   expect(html).toContain("75%")
+  expect(html).toContain("Metadata versions")
+  expect(html).toContain("Learning candidates")
  })
 
  it("supports the flat embedded composition used by the Brain Hub mobile surface", () => {
@@ -158,6 +176,7 @@ describe("BrainRuntimePanel", () => {
      outcomes: { total: 0, accepted: 0, negative: 0, acceptanceRate: 0, completed: 0, corrected: 0, rejected: 0, abandoned: 0 },
      provenance: { chainCount: 0, unresolvedChainCount: 0, attributedOutcomeChainCount: 0, evaluatedChainCount: 0, learningChainCount: 0, latestChain: null },
      lifecycle: { latestEventType: null, latestEventAt: null, publishEventCount: 0, analyticsCheckpointCount: 0, commentEventCount: 0, experimentEventCount: 0, learningEventCount: 0 },
+     metadataIntelligence: { metadataVersionCount: 0, comparisonCount: 0, readyComparisonCount: 0, learningCandidateCount: 0, promotedKnowledgeCount: 0, latestComparison: null },
     }}
    />,
   )
