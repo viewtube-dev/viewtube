@@ -19,7 +19,7 @@ describe("SubToolboxSplitStepper", () => {
     expect(html).toContain('aria-label="Value"')
     expect(html).toContain('aria-label="Increase Value"')
     expect(html).toContain('aria-label="Decrease Value"')
-    expect(source).not.toContain("StudioNumberInput")
+    expect(source).toContain("StudioNumberInput")
   })
 
   it("uses the split-left field contract with a fixed 2:1 value pane and square rail", () => {
@@ -43,12 +43,12 @@ describe("SubToolboxSplitStepper", () => {
     expect(css).not.toMatch(/\.vt-subtoolbox-split-stepper-rail button \+ button\s*\{[^}]*border-top:/s)
   })
 
-  it("keeps full-component focus for numeric editing but not for a held rail press", () => {
-    expect(source).toContain('inputFocused ? "is-interacting" : ""')
+  it("tracks focused editing and held rail interaction", () => {
+    expect(source).toContain('(inputFocused || held) ? "is-interacting" : ""')
     expect(source).toContain("onFocus={() => setInputFocused(true)}")
     expect(source).toContain("scheduleRepeat()")
     expect(source).toContain("}, 360)")
-    expect(source).not.toContain("const [held, setHeld]")
+    expect(source).toContain("const [held, setHeld]")
     expect(css).toContain(".vt-subtoolbox-split-stepper.is-interacting")
     expect(css).toContain("outline: 2px solid var(--pair-b, #fff);")
   })
