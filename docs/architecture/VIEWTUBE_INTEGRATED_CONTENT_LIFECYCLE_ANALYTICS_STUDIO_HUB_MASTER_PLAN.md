@@ -1248,9 +1248,9 @@ Canonical Analytics Canon evidence
 ### Unfinished integration / release gates
 
 - Populate findings from the live canonical multi-period evidence path and render the presentation model in the Intelligence Hub UI.
-- Bind creator-approved recommendations to real Project/ActionPacket and publish transaction identities.
+- Bind creator-approved recommendations to real Project/ActionPacket and publish transaction identities. Publication checkpoint scheduling must require exact ActionPacket + ContentBuild + verified video identity; project membership or a missing video ID is insufficient.
 - Read real publication/metadata-version lineage and canonical analytics checkpoints into outcome evaluation.
-- Current Algorithm Intelligence event storage remains browser-local; server-durable persistence and cross-device reconciliation are not claimed here.
+- The Algorithm Intelligence ledger now syncs through the authenticated `/api/brain-intelligence` endpoint to the existing PostgreSQL persistence owner, with browser storage retained as an offline recovery cache. The authenticated server round-trip, cross-device hydration/reconciliation, and real-account persistence behavior still require explicit verification; do not treat the implementation path as certification evidence.
 - Run and record the full application golden path, browser/mobile checks, and final-head tests. The service-level golden-path contract test does not certify production UI or persistence.
 
 This addendum updates the integration path only; it does not change ownership boundaries in the Project/ContentBuild, Asset Engine, Publisher, Analytics Canon, or governed learning systems.
