@@ -73,6 +73,15 @@ const METRICS: Array<{ name: HistoricalMetadataMetricName; aliases: string[] }> 
   { name: "revenue", aliases: ["estimatedRevenue", "revenue"] },
 ]
 
+const comparisonFingerprint = (value: unknown) => {
+  const input = JSON.stringify(value)
+  let hash = 2166136261
+  for (let index = 0; index < input.length; index += 1) {
+    hash = Math.imul(hash ^ input.charCodeAt(index), 16777619)
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0")
+}
+
 const dateOnly = (value: Date) => value.toISOString().slice(0, 10)
 const parseDay = (value: string) => {
   const parsed = new Date(`${value}T00:00:00.000Z`)
@@ -310,7 +319,16 @@ export const fetchAndRecordHistoricalMetadataComparison = async (input: {
     now,
   })
   const evidenceId = `youtube-analytics:video:${input.videoId}:${startDate}:${queryEndDate}`
-  const idempotencyKey = `historical-metadata-comparison:${input.contentBuildId}:${input.videoId}:${input.metadataVersionId}:${queryEndDate}:${comparison.status}`
+  const comparisonHash = comparisonFingerprint({
+    metadataVersionId: comparison.metadataVersionId,
+    baselineStartDate: comparison.baselineStartDate,
+    baselineEndDate: comparison.baselineEndDate,
+    followUpStartDate: comparison.followUpStartDate,
+    followUpEndDate: comparison.followUpEndDate,
+    status: comparison.status,
+    metrics: comparison.metrics,
+  })
+  const idempotencyKey = `historical-metadata-comparison:${input.contentBuildId}:${input.videoId}:${input.metadataVersionId}:${queryEndDate}:${comparison.status}:${comparisonHash}`
   const event = appendContentBuildEvent({
     contentBuildId: input.contentBuildId,
     idempotencyKey,
