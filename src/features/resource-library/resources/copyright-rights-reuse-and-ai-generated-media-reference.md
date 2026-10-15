@@ -24,7 +24,7 @@ related_resources: publishing-best-practices-preflight; youtube-revenue-monetiza
 
 A creator's video may contain footage, music, photographs, graphics, fonts, voices, performances, logos, and AI-generated or AI-modified material. Each item can have different rights, license terms, restrictions, and disclosure considerations. Finding a file online—or generating it with a tool—does not automatically mean you may use it in any way you choose.
 
-> **Creator principle:** Record where each asset came from, who controls it, what permission or license applies, and what limits remain. Credit is not a substitute for permission.
+> **Creator takeaway:** Record where each asset came from, who controls it, what permission or license applies, and what limits remain. Credit is not a substitute for permission.
 
 This guide is operational education, not legal advice. Copyright, publicity rights, privacy, contracts, platform policies, and exceptions vary by jurisdiction and circumstance. For a consequential use or dispute, consult a qualified legal professional.
 
