@@ -1,6 +1,7 @@
 import type { BrainConfidenceLevel, SuperToolId } from "../../types"
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
 import type { ContentBuildPublicationIdentity } from "../asset-engine/contracts"
+import { enqueueBrainLearningRecord } from "./BrainLearningPersistence"
 
 const STORAGE_KEY = "vt_brain_outcome_ledger_v1"
 export const BRAIN_OUTCOME_EVENT = "vt_brain_outcome_ledger_changed"
@@ -56,6 +57,17 @@ const write = (records: BrainOutcomeRecord[]) => {
  window.dispatchEvent(new CustomEvent(BRAIN_OUTCOME_EVENT, { detail: records }))
 }
 
+export const hydrateBrainOutcomes = (durableRecords: BrainOutcomeRecord[]) => {
+ const merged = new Map(read().map((record) => [record.id, record]))
+ for (const record of durableRecords || []) {
+  if (!record || typeof record.id !== "string" || !record.id || !record.channelId) continue
+  merged.set(record.id, record)
+ }
+ const records = [...merged.values()].sort((left, right) => right.createdAt - left.createdAt).slice(0, 500)
+ write(records)
+ return records.length
+}
+
 export const listBrainOutcomes = (channelId?: string | null) => {
  const records = read().sort((a, b) => b.createdAt - a.createdAt)
  return channelId ? records.filter((record) => record.channelId === channelId) : records
@@ -64,7 +76,7 @@ export const listBrainOutcomes = (channelId?: string | null) => {
 export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | "createdAt">) => {
  if (input.sourceRecordId) {
   const existing = read().find((record) => record.channelId === input.channelId && record.sourceRecordId === input.sourceRecordId)
-  if (existing) return existing
+  if (existing) { void enqueueBrainLearningRecord(existing.channelId, "brainOutcome", existing); return existing }
  }
  const record: BrainOutcomeRecord = {
   ...input,
@@ -72,6 +84,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
   createdAt: Date.now(),
  }
  write([record, ...read()])
+ void enqueueBrainLearningRecord(record.channelId, "brainOutcome", record)
 
  const positive = input.outcome === "accepted" || input.outcome === "completed"
  const corrective = input.outcome === "corrected" || input.outcome === "rejected"
@@ -145,6 +158,7 @@ export const updateBrainOutcomePublicationLineage = (input: {
   evidenceIds: [...new Set([...(found.evidenceIds || []), ...(input.evidenceIds || [])])],
  }
  write(records.map((record) => record.id === found.id ? next : record))
+ void enqueueBrainLearningRecord(next.channelId, "brainOutcome", next)
  return next
 }
 
