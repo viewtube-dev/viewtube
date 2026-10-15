@@ -107,7 +107,10 @@
 - [x] Make communication identity idempotent and reject conflicting replays.
 - [x] Explicitly prevent automatic durable-memory promotion.
 - [x] Connect Sidebar Copilot, AI Brain, and Brain Hub chat messages behind personalization and learn-from-interactions controls.\n- [ ] Connect non-chat tool feedback, approval/rejection and edit events.
-- [ ] Confirm privacy, consent, retention and durable persistence behavior.
+- [x] Add per-channel communication-capture opt-in (default off) and enforce it inside the ingestion service.
+- [x] Stop storing raw creator text in new events; retain classification, a deterministic fingerprint and a retention-policy marker.
+- [x] Redact legacy raw text during durable history hydration and write sanitized replacements through the existing sync path.
+- [ ] Verify authenticated server replacement and cross-device replay; connect non-chat tool feedback, approval/rejection and edit events.
 
 ## Phase 12 — Recommendation and asset attribution
 
@@ -115,7 +118,7 @@
 - [x] Use explicit event ancestry and exact stable identity fields; reject cross-channel links.
 - [x] Report missing stages without time-based inference.
 - [ ] Complete stable-ID propagation across generation, selected variants, ActionPackets, publish, evaluation and learning writers.
-- [ ] Surface the attribution chain in the live Brain/Studio UI.
+- [ ] Surface the attribution chain in the live Brain/Studio UI (draft implementation in PR #325; merge and current-head verification pending).
 - [ ] Validate against real lifecycle data and run focused tests/typecheck/full suite/build/governance checks.
 
 
@@ -162,3 +165,15 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+
+## Phase 13 — Lifecycle identity, enforceable capability policy, and durable evaluation (new plan, 2026-10-15)
+
+- [ ] Define a versioned identity contract across recommendation, creator decision, generation trace, selected/final asset, ActionPacket, ContentBuild, publish transaction, verified video, analytics checkpoint, evaluation and learning candidate.
+- [ ] Add writer-level tests proving required IDs propagate and cross-channel/conflicting joins fail closed.
+- [ ] Enforce ContentBuild-stage capability allowlists at final tool/action dispatch boundaries; prompt text and UI visibility are not authorization.
+- [ ] Extend authenticated server persistence to Brain outcomes and evaluation records with idempotent keys, conflict detection, schema versions and cross-device replay.
+- [ ] Verify communication consent and retention end-to-end, including server-side legacy redaction and opt-out enforcement.
+- [ ] Run provider-backed lifecycle E2E on fresh channel-scoped canonical evidence and verified publication receipts.
+- [ ] Establish same-commit baselines for existing Studio/Vault/UI test and lint failures; fix regressions without waiving gates.
+- [ ] Certify only with exact-head focused tests, typecheck, runtime lint, full suite, build, source governance/reachability, smoke and lifecycle evidence.
