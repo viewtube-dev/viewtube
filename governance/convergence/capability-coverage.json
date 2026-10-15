@@ -216,19 +216,18 @@
         ".github/workflows/release-gates.yml"
       ],
       "capabilityId": "CAP-OUTCOME-LEARNING",
-      "complete": false,
-      "missing": [
-        "tests"
-      ],
+      "complete": true,
+      "missing": [],
       "covered": [
         "authority",
         "codeOwners",
         "taskRefs",
+        "tests",
         "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.8571428571428571,
+      "coverageRatio": 1,
       "lastAudited": "2026-10-15"
     },
     {
