@@ -145,6 +145,10 @@ export const SidebarChatbot: React.FC = () => {
     sourcesOfTruth: surface.sourceOfTruth,
     blockedCapabilities: surface.blockedCapabilities,
    }
+   const requestedProjectId = selection?.projectId ?? surface.projectId ?? brain.activeProjectId
+   const activeProject = controls.allowProjects && requestedProjectId
+    ? brain.projects.find((project) => project.id === requestedProjectId) || null
+    : null
    const systemPrompt = `${baseSystemPrompt}\n\nCURRENT VIEWTUBE SURFACE CONTEXT\n${JSON.stringify(visibleContext, null, 2)}\nUse this surface context to understand references such as "this chart", "this project", "this comment", "this video", or "this tool". Never use a blocked capability. Treat selected-item context as current UI context, not automatically as durable channel memory.`
 
    if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions) {
@@ -166,6 +170,7 @@ export const SidebarChatbot: React.FC = () => {
    const result = await runBrainTask({
     surface: "sidebar-chatbot",
     projectId: selection?.projectId ?? surface.projectId ?? null,
+    project: activeProject,
     visibleContext,
     channelId,
     userText,
