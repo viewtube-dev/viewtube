@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Confirmed Library phases 1–5 are implemented on `fix/confirmed-library-phases-4-6-2026-10-15`; automated execution and rendered verification pending  
+**Status:** Confirmed Library source-parity audit in progress on `audit/confirmed-library-source-parity-final-2026-10-15`; tests updated, execution and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Current work branch:** `fix/confirmed-library-phases-4-6-2026-10-15` (phase 4–5 implementation; phase 6 verification in progress)  
+**Current work branch:** `audit/confirmed-library-source-parity-final-2026-10-15` (confirmed-catalog fidelity audit and default-style parity)  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -19,6 +19,21 @@ This document is the working reference for the global defaults, size contracts, 
 
 When values conflict, the desired authority is the exported size/global contract plus the canonical CSS implementation. A later selector must not silently redefine a shared default. Exceptions must be listed in code and in the Confirmed Primitive Library.
 
+## 1A. Confirmed Library source-parity pass (2026-10-15)
+
+The Confirmed Primitive Library must describe the production component that actually renders, not an idealized redraw or a stale token snapshot. Catalog specimens import production primitives; catalog CSS should only control specimen layout. The gallery should distinguish declared shared defaults, effective CSS, family-specific exceptions, and examples that are static visual previews rather than live operation outcomes.
+
+| Concern | Current source-aligned representation | Exception / verification boundary |
+|---|---|---|
+| Shared geometry | Standard 44px / compact 28px; 3px / 2px border; 6px / 4px radius for ordinary buttons and fields | 44px switch/choice rectangular corners and standard word-toggle use reference-specific 7.333px radii |
+| Typography | Inter, weight 1000, uppercase, -0.02em tracking, 0.86 baseline line-height | Single-line inputs 38px / 24px; textareas 18px / 14px with multiline padding/line-height |
+| Button shadow and motion | Standard 3px × 3px; compact 1.5px × 1.5px; 180ms general/hover, 80ms active press | Active shadow movement still differs from the stable-shadow target; see Section 7 |
+| Default icon size | Large preset: 38px / 1.9 stroke standard; 24px / 2.0 stroke compact | Current 28px/18px and moderate 34px/22px presets are optional API variants, not default gallery specimens |
+| Dropdown | Legend Multi is a production multi-select; gallery shows closed triggers with initial selection/placeholder | Menu opens only after interaction; this gallery does not depict an initially open menu |
+| Icon effects | Notification count and success state are static gallery previews | They are not real notification counts or live successful operations |
+
+The source regression command is `npm run test:confirmed-library-layout`. Assertions now cover the compact shadow, shared tracking/motion tokens, default icon metrics, actual specimen states, and static-preview labels. **Source assertions are not visual certification.** Test execution, typecheck, CSS parsing, production build, and rendered browser checks remain required.
+
 ## 2. Global defaults shared by both sizes
 
 | Property | Global default / policy | Application |
@@ -26,7 +41,7 @@ When values conflict, the desired authority is the exported size/global contract
 | Font family | `Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif` | All control text |
 | Font weight | `1000` (maximum-heavy emphasis) | All control text unless a documented functional exception applies |
 | Text transform | Uppercase | Buttons, fields, labels, dropdown options |
-| Letter spacing | `-0.035em` | General controls; a component may document a narrower exception |
+| Letter spacing | `-0.02em` | Matches the effective Studio control CSS; a component may document a narrower exception |
 | Line height | `0.86` baseline; component geometry may align a label using a documented equivalent | Text controls and button labels |
 | Primary / secondary color authority | Primary = `--pair-a`; secondary = `--pair-b` | Shared color-pair contract |
 | Text color | Action labels are black; text fields use primary (`--pair-a`) at rest and black only while focused | Component/state dependent |
@@ -36,10 +51,10 @@ When values conflict, the desired authority is the exported size/global contract
 | Border-radius policy | Size-specific: standard 6px; compact 4px | All components unless an explicitly indexed exception is approved |
 | Border-width policy | Size-specific: standard 3px; compact 2px | All components unless an explicitly indexed exception is approved |
 | Shadow / focus policy | Hard offset shadows belong to button faces and stationary dropdown panels. Text fields retain a primary inset stroke and a separate secondary-color focus accent; do not confuse the accent shadow with the computed CSS outline. | Component and state specific |
-| Stable shadow geometry | Shadow anchor/offset stays fixed; button face moves independently | All shadowed buttons |
-| Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | All shadowed buttons |
-| Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | All shadowed buttons |
-| Motion timing | Hover 150ms; click 300ms per current size constants | Buttons; must be reconciled with CSS transition definitions |
+| Stable shadow geometry (target) | Shadow anchor/offset stays fixed; button face moves independently | Target contract; current active-state mismatch is documented in Section 7 and is not certified as fixed |
+| Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | Standard button hover follows this target; the prominent action moves its outer control instead |
+| Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | Current active-state rules still move the outer shell and hide the shadow; see Section 7 |
+| Motion timing | General/hover 180ms; active press 80ms | CSS variables/fallbacks and exported tokens now agree; test and browser verification are pending |
 | Reduced motion | Preserve state feedback while minimizing motion | Must not erase all state hierarchy or affordance |
 
 ## 3. Canonical size contracts
