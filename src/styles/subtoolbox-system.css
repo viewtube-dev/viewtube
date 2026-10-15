@@ -4568,3 +4568,69 @@
   letter-spacing: -.035em;
   text-transform: uppercase;
 }
+
+
+/* Vault density correction: short landscape screens need a true two-column workspace,
+   not a desktop-only three-column breakpoint or a long mobile single-column stack. */
+@media (orientation: landscape) and (min-width: 700px) and (max-height: 500px) {
+  [data-vault-layout-grid] {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.6fr) !important;
+    align-items: start;
+    gap: 8px !important;
+  }
+  [data-vault-layout-grid] > * { min-width: 0; gap: 8px !important; }
+  [data-vault-layout-grid] > :nth-child(3) { grid-column: 1 / -1; }
+  [data-vault-layout-grid] [aria-label="Vault library toolbar"] { gap: 6px !important; }
+  [data-vault-layout-grid] [data-vault-toolbar-secondary] {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 6px !important;
+  }
+  [data-vault-layout-grid] [data-vault-toolbar-secondary] > * {
+    width: 100%;
+    min-width: 0;
+  }
+  [data-vault-layout-grid] [data-vault-first-viewport="library"] { scroll-margin-block-start: 8px; }
+}
+
+/* Keep the library controls compact at narrow portrait widths without shrinking
+   native text-entry controls or the media/editor surfaces. */
+@media (max-width: 480px) {
+  [data-vault-toolbar-secondary] {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 6px !important;
+  }
+  [data-vault-toolbar-secondary] > * { width: 100%; min-width: 0; }
+  [aria-label="Vault library toolbar"] { gap: 6px !important; }
+  [data-vault-layout-grid] { gap: 8px !important; }
+}
+
+
+/* Short-height Vault workspaces: compact shared SubToolbox geometry while
+   retaining 44px interactive controls and full-size multiline editing surfaces. */
+@media (orientation: landscape) and (min-width: 700px) and (max-height: 500px) {
+  [data-vault-layout-grid] [data-vt-toolbox-level="sub"],
+  [data-vault-layout-grid] [data-vt-subtoolbox-module="true"] {
+    --vt-subtoolbox-header-height: 44px;
+    --vt-subtoolbox-gap: 8px;
+    --vt-subtoolbox-section-gap: 8px;
+    --vt-subtoolbox-control-action: 44px;
+  }
+  [data-vault-layout-grid] [data-vault-image-workbench] .grid.grid-cols-1,
+  [data-vault-layout-grid] [data-vault-video-workbench] .grid.grid-cols-1 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  [data-vault-layout-grid] [data-vault-image-workbench],
+  [data-vault-layout-grid] [data-vault-video-workbench] {
+    gap: 8px !important;
+    padding: 8px !important;
+  }
+  [data-vault-layout-grid] [data-vault-first-viewport="library"] .vt-subtoolbox-state-panel {
+    min-height: 0;
+    padding-block: 8px !important;
+  }
+}
