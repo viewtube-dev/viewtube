@@ -196,7 +196,9 @@ export const resolveAlphabeticalSpectrumPosition = (label: string): number => {
   const letters = label.trim().toUpperCase().match(/[A-Z]/g) ?? [];
   if (letters.length === 0) return 0;
 
-  const firstIndex = letters[0].charCodeAt(0) - 65;
+  const firstLetter = letters[0];
+  if (!firstLetter) return 0;
+  const firstIndex = firstLetter.charCodeAt(0) - 65;
   const suffixPosition = letters.slice(1).reduce(
     (position, letter, index) => position + (letter.charCodeAt(0) - 64) / Math.pow(27, index + 1),
     0,
