@@ -83,9 +83,6 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
-import { buildVaultMaintenanceQueue } from "../services/vaultMaintenanceQueue"
-import { executeVaultBatchOperation } from "../services/vaultBatchOperations"
-import { getVaultMediaToolSupport, recommendVaultGovernanceActions } from "../services/vaultMediaGovernance"
 import { isVaultAssetProtected } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
@@ -584,21 +581,12 @@ const CreatorVaultOS: React.FC = () => {
   const textMime = typeof selectedAsset.mimeType === "string" && selectedAsset.mimeType.startsWith("text/")
   return hasTextContent || textMime ? selectedAsset : null
  }, [selectedAsset])
- const maintenanceQueue = useMemo(() => buildVaultMaintenanceQueue(allAssets), [allAssets, refreshTick])
  const attentionReasons = useMemo(
   () => selectedAsset ? getVaultAttentionReasons(selectedAsset) : [],
   [selectedAsset, refreshTick],
  )
  const selectedAssetInspection = useMemo(
   () => selectedAsset ? inspectVaultAsset(selectedAsset) : null,
-  [selectedAsset, refreshTick],
- )
- const selectedMediaToolSupport = useMemo(
-  () => selectedAsset ? getVaultMediaToolSupport(selectedAsset.kind) : [],
-  [selectedAsset],
- )
- const selectedGovernanceRecommendations = useMemo(
-  () => selectedAsset ? recommendVaultGovernanceActions(selectedAsset) : [],
   [selectedAsset, refreshTick],
  )
  const selectedAssetRightsFindings = useMemo(
@@ -1598,45 +1586,25 @@ const CreatorVaultOS: React.FC = () => {
   if (!selectedAssetIds.length) return
   const selected = allAssets.filter((asset) => selectedAssetIds.includes(asset.id))
   const shouldFavorite = selected.some((asset) => asset.metadata?.favorite !== true)
-  void executeVaultBatchOperation({
-   operation: "favorite",
-   assetIds: selectedAssetIds,
-   parameters: { favorite: shouldFavorite },
-   confirmed: window.confirm(`Set favorite state for ${selectedAssetIds.length} selected asset(s)?`),
-  }).then(() => setRefreshTick((value) => value + 1))
+  selected.forEach((asset) => setVaultAssetState(asset.id, { favorite: shouldFavorite }))
+  setRefreshTick((value) => value + 1)
  }
 
  const archiveSelection = () => {
-  if (!selectedAssetIds.length) return
-  void executeVaultBatchOperation({
-   operation: "archive",
-   assetIds: selectedAssetIds,
-   confirmed: window.confirm(`Archive ${selectedAssetIds.length} selected asset(s)? Protected assets will be rejected.`),
-  }).then((receipt) => {
-   if (receipt.status === "completed") setSelectedAssetIds([])
-   setRefreshTick((value) => value + 1)
-  })
+  selectedAssetIds.forEach((id) => setVaultAssetState(id, { archived: true, trashed: false }))
+  setSelectedAssetIds([])
+  setRefreshTick((value) => value + 1)
  }
 
  const trashSelection = () => {
-  if (!selectedAssetIds.length) return
-  void executeVaultBatchOperation({
-   operation: "trash",
-   assetIds: selectedAssetIds,
-   confirmed: window.confirm(`Move ${selectedAssetIds.length} selected asset(s) to trash? Protected assets will be rejected.`),
-  }).then((receipt) => {
-   if (receipt.status === "completed") setSelectedAssetIds([])
-   setRefreshTick((value) => value + 1)
-  })
+  selectedAssetIds.forEach((id) => setVaultAssetState(id, { trashed: true, archived: false }))
+  setSelectedAssetIds([])
+  setRefreshTick((value) => value + 1)
  }
 
  const restoreSelection = () => {
-  if (!selectedAssetIds.length) return
-  void executeVaultBatchOperation({
-   operation: "restore",
-   assetIds: selectedAssetIds,
-   confirmed: window.confirm(`Restore ${selectedAssetIds.length} selected asset(s)?`),
-  }).then(() => setRefreshTick((value) => value + 1))
+  selectedAssetIds.forEach((id) => setVaultAssetState(id, { archived: false, trashed: false }))
+  setRefreshTick((value) => value + 1)
  }
 
  const detachSelectedVersion = () => {
@@ -3387,27 +3355,6 @@ const CreatorVaultOS: React.FC = () => {
          {selectedMediaCapabilities.length ? (
           <VaultAdaptiveWorkbenchHost capabilities={selectedMediaCapabilities} selectionCount={selectedAssetIds.length} />
          ) : null}
-         <section aria-label="Vault maintenance queue" className="border-t-[3px] border-current pt-3" data-vault-maintenance-queue>
-          <div className="mb-2 flex items-center justify-between gap-2">
-           <div className="text-xs font-black uppercase">Maintenance Queue</div>
-           <div className="text-[10px] font-black uppercase">{maintenanceQueue.length} item(s)</div>
-          </div>
-          {maintenanceQueue.length ? (
-           <div className="flex flex-col gap-1">
-            {maintenanceQueue.slice(0, 5).map((item) => (
-             <button key={item.assetId} type="button" onClick={() => setSelectedAssetIds([item.assetId])}
-              className="flex w-full items-start justify-between gap-2 border-2 border-current p-2 text-left"
-              aria-label={`Inspect ${item.assetName}: ${item.reasons.join(", ")}`}>
-              <span className="min-w-0">
-               <span className="block truncate text-xs font-black uppercase">{item.assetName}</span>
-               <span className="block text-[10px] font-bold opacity-70">{item.reasons.slice(0, 2).join(" · ")}</span>
-              </span>
-              <span className="shrink-0 text-[9px] font-black uppercase">{item.protected ? "Protected" : "Review"}</span>
-             </button>
-            ))}
-           </div>
-          ) : <div className="text-xs font-bold opacity-60">No maintenance items detected.</div>}
-         </section>
          <div>
           <div className="text-xs font-black uppercase opacity-60">Name</div>
           <div className="text-lg font-black uppercase">{selectedAsset.name}</div>
@@ -3434,15 +3381,6 @@ const CreatorVaultOS: React.FC = () => {
             <div><div className="font-black uppercase opacity-60">Size</div><div>{selectedAssetInspection.technical.byteSize == null ? "Unknown" : formatVaultBytes(selectedAssetInspection.technical.byteSize)}</div></div>
             <div><div className="font-black uppercase opacity-60">Dimensions</div><div>{selectedAssetInspection.technical.dimensions || "Not recorded"}</div></div>
             <div><div className="font-black uppercase opacity-60">Duration</div><div>{selectedAssetInspection.technical.durationSeconds == null ? "—" : selectedAssetInspection.technical.durationSeconds.toFixed(1) + "s"}</div></div>
-           </div>
-           <div className="mt-2" aria-label="Connected local media tools">
-            <div className="mb-1 text-[10px] font-black uppercase opacity-60">Connected local tools</div>
-            <div className="flex flex-wrap gap-1">
-             {selectedMediaToolSupport.map((tool) => (
-              <span key={tool} className="border border-current px-2 py-1 text-[9px] font-black uppercase" data-media-tool={tool}>{tool}</span>
-             ))}
-            </div>
-            <div className="mt-1 text-[10px] font-bold opacity-60">This list reflects local source-backed support, not a remote worker or server processor.</div>
            </div>
            {selectedAssetInspection.lineage.parentAssetIds.length ? (
             <div className="mt-2 text-xs font-bold"><span className="font-black uppercase opacity-60">Parents · </span>{selectedAssetInspection.lineage.parentAssetIds.join(", ")}</div>
@@ -3987,16 +3925,6 @@ const CreatorVaultOS: React.FC = () => {
              ))}
             </div>
            ) : <div className="text-xs font-black uppercase">Rights fields have no current findings.</div>}
-           {selectedGovernanceRecommendations.length ? (
-            <div className="mt-2 flex flex-col gap-1" aria-label="Governance recommendations">
-             {selectedGovernanceRecommendations.map((item) => (
-              <div key={item.id} data-governance-recommendation={item.id} className="border-2 border-current/40 px-2 py-1 text-xs">
-               <div className="font-black uppercase">{item.label} · {item.status}</div>
-               <div className="font-bold opacity-70">{item.reason}</div>
-              </div>
-             ))}
-            </div>
-           ) : null}
           </div>
          </div>
          {(typeof selectedAsset.metadata?.width === "number"
