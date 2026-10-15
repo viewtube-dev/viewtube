@@ -115,6 +115,21 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
+test("floating labels use default-size resting text, 80% lifted text, 40% border alignment, and matched focus strokes", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*38px/);
+  assert.match(fieldCss, /data-size="compact"\]\s*\{\s*--vt-studio-floating-label-size:\s*24px/);
+  assert.match(fieldCss, /--vt-studio-floating-label-scale:\s*\.8/);
+  assert.match(fieldCss, /transform:translateY\(-40%\) scale\(var\(--vt-studio-floating-label-scale\)\)/);
+  assert.match(fieldCss, /outline:calc\(var\(--vt-studio-control-focus-outline-width,\s*2px\)\s*\/\s*var\(--vt-studio-floating-label-scale\)\) solid var\(--vt-studio-control-secondary/);
+  assert.match(fieldCss, /transition:top 180ms ease-out, transform 180ms ease-out/);
+});
+
+test("circle icon button SVG glyphs render at 80% of their selected canonical size", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /data-vt-studio-circle-icon-button="true"\]\s*\[data-vt-studio-button-icon\]\s*svg\s*\{\s*transform:\s*scale\(\.8\)/);
+});
+
 test("floating-label presentations are variants inside the canonical input and textarea families", () => {
   const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
   const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
