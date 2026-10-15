@@ -94,6 +94,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
         type="number"
         className="vt-subtoolbox-split-stepper-value"
         data-vt-studio-control="true"
+        data-size={size === "compact" ? "compact" : "standard"}
         aria-label={ariaLabel}
         inputMode="decimal"
         value={draft}
