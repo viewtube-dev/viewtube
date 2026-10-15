@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Confirmed Library phases 1–5 are implemented on `fix/confirmed-library-phases-4-6-2026-10-15`; automated execution and rendered verification pending  
+**Status:** Canonical defaults parity pass in progress on `cleanup/remove-icon-size-test-specimens`; source regression tests updated, execution and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Current work branch:** `fix/confirmed-library-phases-4-6-2026-10-15` (phase 4–5 implementation; phase 6 verification in progress)  
+**Current work branch:** `cleanup/remove-icon-size-test-specimens` (confirmed-catalog icon specimen removal plus effective-default parity audit)  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -19,6 +19,21 @@ This document is the working reference for the global defaults, size contracts, 
 
 When values conflict, the desired authority is the exported size/global contract plus the canonical CSS implementation. A later selector must not silently redefine a shared default. Exceptions must be listed in code and in the Confirmed Primitive Library.
 
+## 1A. Confirmed Library fidelity pass (2026-10-15)
+
+The Confirmed Primitive Library must describe the component that actually renders, not an idealized redraw or a stale token snapshot. Specimens import the production components; catalog CSS is limited to specimen layout and labels. Shared defaults are compared against the canonical size contract and effective CSS, while family-specific geometry and behavior are called out as exceptions.
+
+| Concern | Effective/default contract shown in the library | Required exception note |
+|---|---|---|
+| Shared control geometry | Standard 44px / compact 28px; 3px / 2px border; 6px / 4px radius for ordinary buttons and fields | 44px switch/choice rectangular geometry and standard word-toggle use the supplied 7.333px radius; round and pill shapes keep their own geometry |
+| Typography | Inter, weight 1000, uppercase, -0.02em tracking, 0.86 baseline line-height | Single-line inputs are 38px / 24px; textareas are 18px / 14px with multiline line-height and padding |
+| Button shadow / motion | Standard 3px × 3px; compact 1.5px × 1.5px; 150ms general/hover and 300ms click timing | The prominent action is its own fixed 56px family, not a third StudioButton size |
+| Icon size | Icon buttons default to large: 38px / 1.9 stroke standard and 24px / 2.0 stroke compact | Current (28px / 18px) and moderate (34px / 22px) are opt-in icon-size API variants, not the default gallery specimen |
+| Focus | Fields show a separate zero-offset secondary-color accent and CSS outline; the prior live audit measured a 3px / 2px accent shadow and 1px computed outline | Buttons currently use their own visible 3px outline with 3px offset; do not describe button focus as the field focus treatment |
+| Dropdown | Legend Multi is a production multi-select with standard/compact trigger geometry | Menu rows/options are not button-press surfaces; the panel may use its own stationary shadow |
+
+The source regression test `npm run test:confirmed-library-layout` now guards the compact shadow, shared letter-spacing tokens, icon defaults, and documented geometry exceptions. **This is source-level governance, not visual certification.** Typecheck, CSS parsing, CI results, and browser verification of rendered computed styles remain required before the library can be called fully certified.
+
 ## 2. Global defaults shared by both sizes
 
 | Property | Global default / policy | Application |
@@ -26,7 +41,7 @@ When values conflict, the desired authority is the exported size/global contract
 | Font family | `Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif` | All control text |
 | Font weight | `1000` (maximum-heavy emphasis) | All control text unless a documented functional exception applies |
 | Text transform | Uppercase | Buttons, fields, labels, dropdown options |
-| Letter spacing | `-0.035em` | General controls; a component may document a narrower exception |
+| Letter spacing | `-0.02em` | Matches the effective Studio control CSS; a component may document a narrower exception |
 | Line height | `0.86` baseline; component geometry may align a label using a documented equivalent | Text controls and button labels |
 | Primary / secondary color authority | Primary = `--pair-a`; secondary = `--pair-b` | Shared color-pair contract |
 | Text color | Action labels are black; text fields use primary (`--pair-a`) at rest and black only while focused | Component/state dependent |
