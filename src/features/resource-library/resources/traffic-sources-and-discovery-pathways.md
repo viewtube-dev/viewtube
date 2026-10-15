@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; youtube-metrics-dimensions
 
 Traffic sources tell you how viewers arrived at a video under YouTube's reporting categories. They provide context for interpreting performance: someone searching for a specific answer may behave differently from someone who discovers a video while browsing for entertainment.
 
-> **Creator principle:** A traffic source is a pathway, not a quality score. Ask which viewers the pathway brings, what they expect, and what happens after they arrive.
+> **Creator takeaway:** A traffic source is a pathway, not a quality score. Ask which viewers the pathway brings, what they expect, and what happens after they arrive.
 
 ## The Creator Mental Model
 
