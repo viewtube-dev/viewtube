@@ -2670,17 +2670,3 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-
-/* Component Library-only badge placement samples; production badge anatomy remains in StudioControls. */
-.vt-catalog-split-left-badge-family { display: grid; gap: 6px; width: 100%; min-width: 0; }
-.vt-catalog-badge-row { display: grid; min-width: 0; }
-.vt-catalog-badge-row.is-full { grid-template-columns: minmax(0, 1fr); }
-.vt-catalog-badge-row.is-half { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-.vt-catalog-badge-row.is-quarter { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.vt-catalog-badge-row .vt-studio-split-left-badge { width: 100%; min-width: 0; }
-.vt-catalog-badge-micro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 4px; width: 50%; min-width: 0; }
-.vt-catalog-badge-micro > :nth-child(1) { grid-column: 1; }
-.vt-catalog-badge-micro > :nth-child(2) { grid-column: 1; }
-.vt-catalog-badge-micro > :nth-child(3) { grid-column: 1 / span 2; }
-
