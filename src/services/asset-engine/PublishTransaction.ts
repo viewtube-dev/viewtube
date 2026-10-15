@@ -1,6 +1,6 @@
 import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentBuildStage } from "./ContentBuildRepository"
 import type { ContentBuildPublicationIdentity, ContentBuildYouTubeBinding } from "./contracts"
-import { linkAssetOutcomeToPublication } from "../brain/assetOutcomes"
+import { recordAssetOutcome, linkAssetOutcomeToPublication } from "../brain/assetOutcomes"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
 
@@ -186,10 +186,21 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
    },
   })
   if (publicationIdentity?.channelId) {
-   linkAssetOutcomeToPublication({
-    assetId: next.assetLock.finalRenderAssetId,
-    channelId: publicationIdentity.channelId,
-    publicationIdentity,
+   const finalRenderAssetId = next.assetLock.finalRenderAssetId
+   // Record actual exposure (not just creator acceptance) when this render is
+   // known to Asset Engine, then attach the immutable publication identity.
+   void recordAssetOutcome({
+    assetId: finalRenderAssetId,
+    kind: "published",
+    idempotencyKey: `publish:${publicationIdentity.publishTransactionId}:${finalRenderAssetId}`,
+   }).then(() => {
+    linkAssetOutcomeToPublication({
+     assetId: finalRenderAssetId,
+     channelId: publicationIdentity.channelId as string,
+     publicationIdentity,
+    })
+   }).catch((cause) => {
+    console.warn("Publication completed; optional Brain outcome attribution could not be recorded.", cause)
    })
   }
  } else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
