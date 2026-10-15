@@ -319,16 +319,27 @@ declare global {
  }
 }
 
-// Helper to get the AI settings
+// Storage is optional in SSR, Node, and privacy-restricted browser contexts.
+const readBrowserSetting = (key: string): string | null => {
+ try {
+  if (typeof localStorage === "undefined") return null
+  return localStorage.getItem(key)
+ } catch {
+  return null
+ }
+}
+
+// Helper to get the AI settings. Keep key lookup compatible with legacy aliases,
+// but never let unavailable browser storage break non-model Brain workflows.
 const getAiSettings = () => {
  const customKey =
   getVaultKey("gemini") ||
-  localStorage.getItem("yt_api_key") ||
-  localStorage.getItem("vt_gemini_api_key") ||
-  localStorage.getItem("gemini_api_key") ||
-  localStorage.getItem("google_api_key") ||
+  readBrowserSetting("yt_api_key") ||
+  readBrowserSetting("vt_gemini_api_key") ||
+  readBrowserSetting("gemini_api_key") ||
+  readBrowserSetting("google_api_key") ||
   ""
- const modelPreference = localStorage.getItem("vt_ai_model") || "gemini-3.1-flash"
+ const modelPreference = readBrowserSetting("vt_ai_model") || "gemini-3.1-flash"
  return { customKey, modelPreference }
 }
 
