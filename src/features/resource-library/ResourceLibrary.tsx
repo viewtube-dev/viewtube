@@ -1,6 +1,6 @@
 import React from "react"
 import { BookOpenText, FileText, Search, Sparkles } from "lucide-react"
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { SubToolbox, ToolboxScaffold } from "../../components/Toolbox"
 import { VT_SPECTRUM_PALETTE_06, getToolboxPaletteColors } from "../../styles/toolboxPalette"
 import ResourceDocumentRenderer from "./ResourceDocumentRenderer"
@@ -257,7 +257,7 @@ const ResourceLibrary: React.FC = () => {
                   </div>
                   <div className="vt-resource-workflow-link-row">
                     {getResourceWorkflowLinks(selectedResource).map((link) => (
-                      <a key={link.href} href={link.href}>{link.label} <span aria-hidden="true">↗</span></a>
+                      <Link key={link.href} to={link.href}>{link.label} <span aria-hidden="true">↗</span></Link>
                     ))}
                   </div>
                 </section>
