@@ -5,6 +5,8 @@ import {
  type ContentBuildAssetVersion,
  type ContentBuildEvent,
  type ContentBuildEventType,
+ type ContentBuildMetadataHistoryEntry,
+ type ContentBuildMetadataOperation,
  type ContentBuildProfile,
  type ContentBuildRelationType,
  type ContentBuildSnapshot,
@@ -191,6 +193,155 @@ export const listContentBuildEvents = (contentBuildId: string): ContentBuildEven
  readEvents()
   .filter(event => event.contentBuildId === contentBuildId)
   .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+
+export interface RecordContentBuildMetadataChangeInput {
+ contentBuildId: string
+ metadataVersionId: string
+ operationId: string
+ operation: ContentBuildMetadataOperation
+ fields: ContentBuildMetadataHistoryEntry["fields"]
+ actorType?: ContentBuildEvent["actorType"]
+ actorId?: string | null
+ sourceToolId?: string | null
+ generationRecordId?: string | null
+ promptRecipeId?: string | null
+ promptRecipeVersion?: string | null
+ sourceAssetIds?: string[]
+ resultingAssetIds?: string[]
+ publishTransactionId?: string | null
+ approvedSnapshotId?: string | null
+ approvedSnapshotHash?: string | null
+ publishedVideoId?: string | null
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
+ occurredAt?: string
+}
+
+/** Append a reconstructable, provenance-carrying metadata version to ContentBuild's canonical event stream. */
+export const recordContentBuildMetadataChange = (
+ input: RecordContentBuildMetadataChangeInput,
+): ContentBuildMetadataHistoryEntry => {
+ const contentBuildId = input.contentBuildId.trim()
+ const metadataVersionId = input.metadataVersionId.trim()
+ const operationId = input.operationId.trim()
+ if (!contentBuildId || !metadataVersionId || !operationId) {
+  throw new Error("Metadata history requires ContentBuild, metadata version, and operation IDs.")
+ }
+ if (!Array.isArray(input.fields) || input.fields.length === 0) {
+  throw new Error("Metadata history requires at least one field-level change.")
+ }
+ const seen = new Set<string>()
+ const fields = input.fields.map(change => {
+  const field = change.field.trim()
+  if (!field || seen.has(field)) throw new Error("Metadata history field names must be non-empty and unique per version.")
+  seen.add(field)
+  return { field, before: change.before, after: change.after }
+ })
+ const existingVersion = listContentBuildMetadataHistory(contentBuildId)
+  .find(existing => existing.metadataVersionId === metadataVersionId)
+ if (existingVersion) {
+  if (JSON.stringify(existingVersion) !== JSON.stringify({
+   schemaVersion: 1,
+   contentBuildId,
+   metadataVersionId,
+   operationId,
+   operation: input.operation,
+   fields,
+   actorType: input.actorType || "system",
+   actorId: input.actorId || null,
+   sourceToolId: input.sourceToolId || null,
+   generationRecordId: input.generationRecordId || null,
+   promptRecipeId: input.promptRecipeId || null,
+   promptRecipeVersion: input.promptRecipeVersion || null,
+   sourceAssetIds: [...new Set(input.sourceAssetIds || [])],
+   resultingAssetIds: [...new Set(input.resultingAssetIds || [])],
+   publishTransactionId: input.publishTransactionId || null,
+   approvedSnapshotId: input.approvedSnapshotId || null,
+   approvedSnapshotHash: input.approvedSnapshotHash || null,
+   publishedVideoId: input.publishedVideoId || null,
+   analyticsCheckpointIds: [...new Set(input.analyticsCheckpointIds || [])],
+   evidenceIds: [...new Set(input.evidenceIds || [])],
+   occurredAt: input.occurredAt || existingVersion.occurredAt,
+  })) {
+   throw new Error("Metadata version ID was reused with different content; metadata history is immutable.")
+  }
+  return existingVersion
+ }
+ const entry: ContentBuildMetadataHistoryEntry = {
+  schemaVersion: 1,
+  contentBuildId,
+  metadataVersionId,
+  operationId,
+  operation: input.operation,
+  fields,
+  actorType: input.actorType || "system",
+  actorId: input.actorId || null,
+  sourceToolId: input.sourceToolId || null,
+  generationRecordId: input.generationRecordId || null,
+  promptRecipeId: input.promptRecipeId || null,
+  promptRecipeVersion: input.promptRecipeVersion || null,
+  sourceAssetIds: [...new Set(input.sourceAssetIds || [])],
+  resultingAssetIds: [...new Set(input.resultingAssetIds || [])],
+  publishTransactionId: input.publishTransactionId || null,
+  approvedSnapshotId: input.approvedSnapshotId || null,
+  approvedSnapshotHash: input.approvedSnapshotHash || null,
+  publishedVideoId: input.publishedVideoId || null,
+  analyticsCheckpointIds: [...new Set(input.analyticsCheckpointIds || [])],
+  evidenceIds: [...new Set(input.evidenceIds || [])],
+  occurredAt: input.occurredAt || nowIso(),
+ }
+ const eventType: ContentBuildEventType = input.operation === "publish"
+  ? "package.published"
+  : input.operation === "select"
+   ? "metadata.selected"
+   : input.operation === "replace"
+    ? "metadata.replaced"
+    : input.operation === "create"
+     ? "metadata.created"
+     : input.operation === "refine"
+      ? "metadata.refined"
+      : input.operation === "edit" && input.publishedVideoId
+       ? "published.metadata.changed"
+       : fields.length === 1 && fields[0].field.toLowerCase() === "title"
+        ? "title.changed"
+        : fields.length === 1 && fields[0].field.toLowerCase() === "description"
+         ? "description.changed"
+         : fields.length === 1 && fields[0].field.toLowerCase() === "tags"
+          ? "tags.changed"
+          : "metadata.refined"
+ const event = appendContentBuildEvent({
+  contentBuildId,
+  idempotencyKey: `metadata-version:${contentBuildId}:${metadataVersionId}`,
+  eventType,
+  entityType: "metadata-version",
+  entityId: metadataVersionId,
+  actorType: entry.actorType,
+  actorId: entry.actorId,
+  toolId: entry.sourceToolId,
+  previousState: Object.fromEntries(fields.map(field => [field.field, field.before])),
+  resultingState: Object.fromEntries(fields.map(field => [field.field, field.after])),
+  inputAssetIds: entry.sourceAssetIds,
+  outputAssetIds: entry.resultingAssetIds,
+  evidenceIds: entry.evidenceIds,
+  generationRecordId: entry.generationRecordId,
+  timestamp: entry.occurredAt,
+  metadata: { metadataHistory: entry, operationId, idempotencyKey: `metadata-version:${contentBuildId}:${metadataVersionId}` },
+ })
+ const recorded = (event.metadata as Record<string, unknown> | undefined)?.metadataHistory
+ if (recorded && typeof recorded === "object") return recorded as ContentBuildMetadataHistoryEntry
+ return entry
+}
+
+export const listContentBuildMetadataHistory = (
+ contentBuildId: string,
+): ContentBuildMetadataHistoryEntry[] => listContentBuildEvents(contentBuildId)
+ .map(event => (event.metadata as Record<string, unknown> | undefined)?.metadataHistory)
+ .filter((entry): entry is ContentBuildMetadataHistoryEntry =>
+  Boolean(entry) && typeof entry === "object" &&
+  (entry as ContentBuildMetadataHistoryEntry).schemaVersion === 1 &&
+  (entry as ContentBuildMetadataHistoryEntry).contentBuildId === contentBuildId
+ )
+ .sort((left, right) => left.occurredAt.localeCompare(right.occurredAt))
 
 export const createContentBuild = (input: CreateContentBuildInput = {}): ContentBuildSnapshot => {
  const createdAt = input.createdAt || nowIso()
