@@ -138,10 +138,26 @@ describe("recordAssetOutcome", () => {
   await expect(recordAssetOutcome({ assetId: "missing", kind: "accepted" })).resolves.toBeNull()
  })
 
- it("links the outcome back to the generating trace", async () => {
+ it("deduplicates retries when the producer reuses an idempotency key", async () => {
+  const asset = await makeAsset()
+  const first = await recordAssetOutcome({ assetId: asset.id, kind: "published", idempotencyKey: "publish-action-42" })
+  const retry = await recordAssetOutcome({ assetId: asset.id, kind: "published", idempotencyKey: "publish-action-42" })
+  expect(retry?.id).toBe(first?.id)
+  expect(listAssetOutcomes({ assetId: asset.id })).toHaveLength(1)
+  expect(listBrainOutcomes("channel-1").filter((record) => record.sourceRecordId === first?.id)).toHaveLength(1)
+ })
+
+ it("links the outcome back to the generating trace and Brain ledger", async () => {
   const asset = await makeAsset()
   const outcome = await recordAssetOutcome({ assetId: asset.id, kind: "published" })
   expect(outcome?.traceId).toBe(asset.traceId)
+  const brainOutcome = listBrainOutcomes("channel-1")[0]
+  expect(brainOutcome).toMatchObject({
+   sourceRecordId: outcome?.id,
+   traceId: asset.traceId,
+   assetId: asset.id,
+   assetType: asset.assetType,
+  })
  })
 })
 
