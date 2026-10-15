@@ -14,7 +14,7 @@
 | Editorial copies of first three guides | `docs/resources/library/*.md` | Mirrors/historical editorial references; do not independently edit |
 | Historical revisions | Git commit history | Use for provenance and recovery |
 | Donor repository | `themotionvisual/ViewTubeBUILD` | Earlier versions and editorial provenance; not the runtime authority |
-| Unregistered abbreviated drafts | Seven files under runtime resources for topics 9–15 | Research donors, not extra published resources |
+| Unregistered abbreviated drafts | `docs/resources/archive/legacy-drafts/` for topics 9–15 | Preserved historical research donors, not runtime content or extra published resources |
 
 ## Creator-first history in the donor repository
 
@@ -37,7 +37,7 @@ Fifteen resources are registered. The first three are the current detailed bench
 
 ## Seven older unregistered drafts
 
-The following are separate, abbreviated historical drafts. Their full-name counterparts are the registered versions. Compare before archiving or deleting; preserve any unique material.
+The following abbreviated historical drafts have been preserved under `docs/resources/archive/legacy-drafts/`. Their full-name counterparts are the registered versions. Unique material was reviewed and carried into the current guides where useful; the archived files remain for provenance and must not be registered as additional resources.
 
 | Historical draft | Registered counterpart |
 |---|---|
@@ -51,7 +51,7 @@ The following are separate, abbreviated historical drafts. Their full-name count
 
 ## First three duplicate paths
 
-The first three documents also exist under `docs/resources/library/`. The copies were identical to the runtime files at the time of audit. The runtime versions are what the registry imports. The docs copies are retained for editorial/history continuity but are not independent authorities; synchronize them intentionally whenever the corresponding runtime document changes.
+The first three documents also exist under `docs/resources/library/` as editorial mirrors. The registry imports the runtime files under `src/features/resource-library/resources/`. The mirrors were synchronized with those runtime files during this convergence change; future edits must update the runtime source first and deliberately synchronize the mirror.
 
 ## Architecture and evidence boundaries
 
@@ -60,7 +60,7 @@ Resource Library is general creator/platform knowledge. Analytics supplies chann
 ## Required convergence actions
 
 1. Preserve donor history and the creator-first editorial contract.
-2. Compare the seven old drafts with current counterparts; retain unique information and then label/archive them as historical drafts rather than registering them.
+2. The seven old drafts have been compared with current counterparts, useful unique information carried forward, and the original text preserved in `docs/resources/archive/legacy-drafts/` rather than registered as additional resources.
 3. Expand guides 4–15 with examples, diagnostics, action checklists, caveats, ViewTube handoffs and topic-specific sources.
 4. Recalculate read-time metadata from final word counts.
 5. Verify every source link and remove placeholders such as `undefined`.
