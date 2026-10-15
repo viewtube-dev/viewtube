@@ -33,6 +33,7 @@ describe("Vault canonical asset identity", () => {
   it("blocks protected content replacement until the asset is explicitly unlocked", () => {
     const golden = addVaultAsset({ ...assetInput, metadata: { lifecycle: "GOLDEN", protected: true } })
     expect(updateVaultAsset(golden.id, { url: "blob:replacement" })).toBeNull()
+    expect(updateVaultAsset(golden.id, { url: "blob:replacement", metadata: { protected: false } })).toBeNull()
     expect(listVaultAssets()[0].url).toBe("blob:original")
     expect(setVaultAssetProtection(golden.id, false)?.metadata?.protected).toBe(false)
     expect(updateVaultAsset(golden.id, { url: "blob:replacement" })?.url).toBe("blob:replacement")
