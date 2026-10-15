@@ -254,21 +254,44 @@ export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"create
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
  const records = listEvaluationRecords()
  if (input.idempotencyKey) {
-  const existing = records.find((record) =>
-   record.idempotencyKey === input.idempotencyKey &&
-   record.channelId === (input.channelId || null) &&
-   record.projectId === (input.projectId || null)
-  )
-  if (existing) return existing
- }
+   const existing = records.find((record) =>
+    record.idempotencyKey === input.idempotencyKey &&
+    record.channelId === (input.channelId || null) &&
+    record.projectId === (input.projectId || null)
+   )
+   if (existing) {
+    const sameLogicalEvaluation =
+     existing.source === input.source &&
+     existing.recommendation === input.recommendation &&
+     (existing.publishTransactionId || null) === (input.publishTransactionId || null) &&
+     (existing.publishedVideoId || null) === (input.publishedVideoId || null) &&
+     (existing.selectedWindow || null) === (input.selectedWindow || null) &&
+     (existing.comparisonSnapshotId || null) === (input.comparisonSnapshotId || null) &&
+     (existing.approvedSnapshotHash || null) === (input.approvedSnapshotHash || null)
+    if (!sameLogicalEvaluation) throw new Error("Evaluation idempotency key was reused for a different publication or evidence scope.")
+    return existing
+   }
+  }
  const now = Date.now()
  const item: EvaluationRecord = { ...input, channelId: input.channelId || null, projectId: input.projectId || null, id: crypto.randomUUID(), createdAt: now, updatedAt: now, outcome: "pending" }
  write(EVAL_KEY, [item, ...records].slice(0, 5000))
  return item
 }
-export const resolveEvaluationRecord = (id: string, outcome: Exclude<EvaluationOutcome,"pending">, outcomeNote?: string, metricsAfter?: Record<string,number | null>) => {
- const records = listEvaluationRecords(); const found = records.find((r) => r.id === id); if (!found) return null
- const next = { ...found, outcome, outcomeNote, metricsAfter, updatedAt: Date.now() }; write(EVAL_KEY, records.map((r) => r.id === id ? next : r)); return next
+export const resolveEvaluationRecord = (
+ id: string,
+ outcome: Exclude<EvaluationOutcome, "pending">,
+ outcomeNote?: string,
+ metricsAfter?: Record<string, number | null>,
+) => {
+ const records = listEvaluationRecords()
+ const found = records.find((record) => record.id === id)
+ if (!found) return null
+ // A resolved evaluation is immutable; retries are idempotent and contradictory
+ // re-resolution must be represented by a new evaluation record.
+ if (found.outcome !== "pending") return found.outcome === outcome ? found : null
+ const next = { ...found, outcome, outcomeNote, metricsAfter, updatedAt: Date.now() }
+ write(EVAL_KEY, records.map((record) => record.id === id ? next : record))
+ return next
 }
 export const listWorkflowCandidates = () => read<WorkflowCandidate>(CANDIDATE_KEY)
 export const proposeWorkflowCandidate = (input: Omit<WorkflowCandidate,"id"|"createdAt"|"status">) => {
@@ -337,7 +360,8 @@ export const reviewWorkflowCandidate = (
  if (!reviewer) return null
  const values = listWorkflowCandidates()
  const found = values.find((value) => value.id === id)
- if (!found || found.status !== "candidate") return null
+ if (!found) return null
+ if (found.status !== "candidate") return found.status === status && found.reviewedBy === reviewer ? found : null
  const next: WorkflowCandidate = {
   ...found,
   status,
