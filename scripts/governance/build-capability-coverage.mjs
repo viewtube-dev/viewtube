@@ -57,8 +57,11 @@ const records = caps.capabilities.map((capability) => {
     authority: capability.authority,
     home: home?.path || null,
     codeOwners: [...new Set(ownership.flatMap((entry) => entry.patterns || []))],
-    ...references,
+    taskRefs: references.taskRefs,
+    tests: references.tests,
     uiSurfaces: capability.masterTools || [],
+    guideRefs: references.guideRefs,
+    verificationRefs: references.verificationRefs,
   };
   return {
     ...record,
@@ -74,9 +77,17 @@ const generated = JSON.stringify({
   capabilities: records,
 }, null, 2) + '\n';
 
+const sortKeys = (value) => {
+  if (Array.isArray(value)) return value.map(sortKeys);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, sortKeys(value[key])]));
+  }
+  return value;
+};
+
 if (checkOnly) {
   const existing = fs.readFileSync(outputPath, 'utf8');
-  if (existing !== generated) {
+  if (JSON.stringify(sortKeys(JSON.parse(existing))) !== JSON.stringify(sortKeys(JSON.parse(generated)))) {
     throw new Error('Capability coverage report is stale. Run npm run generate:capability-coverage and commit the regenerated report.');
   }
   console.log('Capability coverage report is current; all mapped repository references exist.');
