@@ -114,7 +114,7 @@ export const assessBrainEvidenceScope = (
 }
 
 const claimKey = (claim: BrainEvidenceClaim): string =>
- [claim.channelId || "*", claim.projectId || "*", claim.videoId || "*", claim.metric || claim.claim].join("::")
+ [claim.channelId || "*", claim.projectId || "*", claim.videoId || "*", claim.metric || claim.claim, claim.timeframe?.kind || "*", claim.timeframe?.start || "*", claim.timeframe?.end || "*"].join("::")
 
 export const summarizeBrainEvidenceHealth = (
  claims: BrainEvidenceClaim[],
@@ -142,7 +142,7 @@ export const summarizeBrainEvidenceHealth = (
   && claim.value !== null,
  ).length
  const coverageRatio = claims.length ? usableClaims / claims.length : 0
- const scope = !requested ? "not_requested" : scopeMismatchIds.length ? "mismatch" : "exact"
+ const scope = !requested ? "not_requested" : !claims.length ? "unscoped" : scoped.some((entry) => entry.scope === "mismatch") ? "mismatch" : scoped.some((entry) => entry.scope === "unscoped") ? "unscoped" : "exact"
  const limitations: string[] = []
  if (!claims.length) limitations.push("No evidence claims were supplied.")
  if (missingIds.length) limitations.push("Missing evidence remains unknown; it is not numeric zero.")
