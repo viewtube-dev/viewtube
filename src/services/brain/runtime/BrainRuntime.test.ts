@@ -33,7 +33,9 @@ describe("BrainRuntime assistant continuity adoption", () => {
    },
   } as any)
 
-  const [legacyInput] = mocks.runBrainTurn.mock.calls[0]
+  const firstCall = mocks.runBrainTurn.mock.calls[0]
+  if (!firstCall) throw new Error("Expected BrainRuntime to invoke the canonical orchestrator")
+  const [legacyInput] = firstCall
   expect(legacyInput.visibleContext.assistantContinuityTrace).toMatchObject({
    version: "vt-brain-assistant-trace-v1",
    surface: "sidebar",
