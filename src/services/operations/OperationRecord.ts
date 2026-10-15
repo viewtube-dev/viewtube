@@ -342,8 +342,8 @@ export const operationRecordFromToolReceipt = (
   at?: string
  } = {},
 ): OperationRecord => {
- const operationId = options.operationId || receipt.requestId
- const workflowId = options.workflowId || `workflow:${receipt.contentBuildId}`
+ const operationId = options.operationId || receipt.operationId || receipt.requestId
+ const workflowId = options.workflowId || receipt.workflowId || `workflow:${receipt.contentBuildId}`
  const at = options.at || receipt.completedAt
  return createOperationRecord({
   operationId,
@@ -426,9 +426,9 @@ export const operationRecordFromGenerationRequest = (
   : normalizedOperation.includes("research")
    ? "research"
    : request.mode === "transform" ? "transform" : "generation"
- const workflowId = options.workflowId || `workflow:${request.contentBuildId}`
+ const workflowId = options.workflowId || request.workflowId || `workflow:${request.contentBuildId}`
  return createOperationRecord({
-  operationId: request.id,
+  operationId: request.operationId || request.id,
   workflowId,
   idempotencyKey: null,
   kind,
