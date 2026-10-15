@@ -120,16 +120,8 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
           }
         }}
         onChange={(event) => {
-          const nextDraft = event.currentTarget.value
-          setDraft(nextDraft)
-          if (nextDraft.trim() !== "") {
-            const parsed = Number(nextDraft)
-            if (Number.isFinite(parsed)) {
-              const next = Math.min(max, Math.max(min, parsed))
-              valueRef.current = next
-              onValueChange(next)
-            }
-          }
+          // Keep the draft local while typing so multi-digit values are not reset on each render.
+          setDraft(event.currentTarget.value)
         }}
       />
       <div className="vt-subtoolbox-split-stepper-rail">
