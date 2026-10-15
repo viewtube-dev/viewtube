@@ -83,7 +83,7 @@ const confidenceFor = (input: {
  staleCount: number
  failedCount: number
 }): BrainEvidenceConfidence => {
- if (input.scopeMatch === "mismatch") return "insufficient"
+ if (input.scopeMatch === "mismatch" || input.scopeMatch === "unscoped") return "insufficient"
  if (input.coverageRatio <= 0) return "insufficient"
  if (
   input.coverageRatio >= 0.8
