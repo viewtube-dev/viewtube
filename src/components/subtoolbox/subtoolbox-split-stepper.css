@@ -6,9 +6,9 @@
   --vt-stepper-font-size: 38px;
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
-  min-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
-  max-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
+  width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke));
+  min-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke));
+  max-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke));
   flex: 0 0 auto;
   height: var(--vt-stepper-height);
   min-height: var(--vt-stepper-height);
