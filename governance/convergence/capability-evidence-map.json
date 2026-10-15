@@ -67,9 +67,15 @@
     },
     "CAP-OUTCOME-LEARNING": {
       "taskRefs": [
-        "tasks/system-convergence/todo.md"
+        "tasks/system-convergence/todo.md",
+        "tasks/ai-brain-quality/PHASE-10-OUTCOME-LINEAGE.md",
+        "tasks/ai-brain-quality/PHASE-11-ANALYTICS-EVALUATION-LINEAGE.md",
+        "tasks/ai-brain-quality/PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md"
       ],
-      "tests": [],
+      "tests": [
+        "src/services/brain/__tests__/assetOutcomes.test.ts",
+        "src/services/viewTubeEvaluationLedger.test.ts"
+      ],
       "guideRefs": [
         "docs/capabilities/outcome-learning.md",
         "docs/domains/BRAIN.md"
