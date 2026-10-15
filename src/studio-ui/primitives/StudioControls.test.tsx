@@ -70,7 +70,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
   it("anchors the action shadow while only the face moves", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
-    expect(contract).toContain('button[data-vt-studio-control="true"]::before')
+    expect(contract).toContain('button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before')
     expect(contract).toContain("[data-vt-studio-button-face]")
     expect(contract).toContain("transition: transform 150ms ease-out")
     expect(contract).toContain("transition-duration: 300ms")
