@@ -25,14 +25,15 @@ test("switch and choice skin families retain four-column rows at every viewport"
 test("standard button specimens span a row and compact A/B share two columns", () => {
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants\s*\{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\) !important/);
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants > \.vt-confirmed-variant\.is-full-row\s*\{\s*grid-column: 1 \/ -1 !important/);
-  assert.ok(catalog.includes('28px compact · default A'));
-  assert.ok(catalog.includes('28px compact · default B'));
+  assert.ok(catalog.includes('28px compact · default'));
+  assert.ok(catalog.includes('28px compact · neutral tone'));
 });
 
 test("standalone text inputs provide standard and compact A/B specimens", () => {
   assert.ok(catalog.includes('aria-label="Studio text input 44px"'));
   assert.ok(catalog.includes('aria-label="Studio text input 28px A"'));
-  assert.ok(catalog.includes('aria-label="Studio text input 28px B"'));
+  assert.ok(catalog.includes('aria-label="Studio text input 28px disabled"'));
+  assert.match(catalog, /28px compact · disabled[\s\S]*?sizeVariant="compact"[^>]*disabled/);
 });
 
 test("global defaults distinguish the measured focus shadow from the CSS outline", () => {
@@ -178,6 +179,14 @@ test("compact Studio button shadow and typography tokens match the effective con
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
+});
+
+test("catalog labels dropdown and action specimens according to their actual initial state and CSS", () => {
+  assert.ok(catalog.includes("44px standard · selected values · multiselect trigger"));
+  assert.ok(catalog.includes("28px compact A · closed trigger and count"));
+  assert.ok(catalog.includes("28px compact B · closed trigger and count"));
+  assert.ok(!catalog.includes("open menu · multiselect"));
+  assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
 });
 
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
