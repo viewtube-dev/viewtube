@@ -159,7 +159,8 @@ describe("widget uniformity migrations", () => {
     expect(imageGeneratorSource).not.toContain('"Retro/Vintage"')
     expect(videoManagerSource).toContain("<WidgetVideoSelect")
     expect(videoManagerSource).toContain("video-manager-package-desk")
-    expect(videoManagerSource).toContain("<WidgetSplitButton")
+    expect(videoManagerSource).toContain("<WidgetLeftSplitButton");
+    expect(videoManagerSource).not.toContain("<WidgetSplitButton")
     expect(videoUploaderSource).toContain("video-uploader-gantry")
     expect(videoUploaderSource).toContain("<WidgetMediaUploadFrame")
     expect(videoUploaderSource).toContain("<WidgetSplitButton")
