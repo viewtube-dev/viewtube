@@ -220,7 +220,7 @@ type ActionPacketProjection = {
  provenance?: string[]
  recommendationId?: string | null
  experimentId?: string | null
- contextManifestId?: string
+ contextManifestId?: string | null
  promptRecipeId?: string
  promptRecipeVersion?: string
  intent?: "inspect" | "prepare" | "propose" | "execute"
