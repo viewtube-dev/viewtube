@@ -295,14 +295,12 @@ const ModuleFrame: React.FC<{
   headerColorPair={headerPair}
   heroVisualId={heroVisualId}
   activeContext={normalizedActiveContext}
-  controllerSpec={{
-   width: 220,
-   density: "compact",
-   rows: controllerRows ?? [
-    { type: "number", value: count, bgTone: color, fgTone: "#000000", isBig: false },
-    { type: "label", value: "VIDEOS", bgTone: color, fgTone: "#000000" },
-   ],
-  }}
+  controllerWidth={220}
+  controllerDensity="compact"
+  controllerRows={controllerRows ?? [
+   { type: "number", value: count, bgTone: color, fgTone: "#000000", isBig: false },
+   { type: "label", value: "VIDEOS", bgTone: color, fgTone: "#000000" },
+  ]}
   canvasFitMode={flushShell ? "fillWidth" : "balanced"}
   standard={{
    collapsible,
@@ -6167,7 +6165,7 @@ export const TubeExplorerTitleWordNetwork: React.FC<TubeExplorerVisualProps> = (
      : hovered ? `"${hovered.toUpperCase()}" WORD STATS` : "NETWORK OVERVIEW",
     stats: activeStats,
    }}
-   controllerSpec={{ rows: [
+   controllerRows={[
     {
      type: "number",
      value: wordLimit,
@@ -6188,7 +6186,7 @@ export const TubeExplorerTitleWordNetwork: React.FC<TubeExplorerVisualProps> = (
      },
      bgTone: "#FFEA00",
     },
-   ] }}
+   ]}
    canvasFitMode="balanced"
    standard={{
     collapsible: props.collapsible,
