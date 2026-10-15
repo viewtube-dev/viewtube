@@ -96,3 +96,8 @@ The conversation captured Analytics table surfaces for:
 - revenue and watch sections.
 
 These screenshots are evidence of the conversation's observed UI/data shape, not proof of canonical current-main implementation.
+
+
+## Deterministic Intelligence Hub implementation
+
+The implementation master plan, Phase 0 audit, canonical insight contract, deterministic comparison/contribution formulas, remaining integration phases, and release acceptance gates are tracked in [Analytics Intelligence Hub + Deterministic Evidence — Master Plan](analytics/ANALYTICS_INTELLIGENCE_HUB_DETERMINISTIC_EVIDENCE_MASTER_PLAN_2026-10-15.md). The new deterministic engine must consume canonical evidence, preserve explicit period boundaries and provenance, and never treat missing data as zero. Its runtime integration and release certification remain separate gates.
