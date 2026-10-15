@@ -107,14 +107,14 @@ The registry expands the original Brain-only Prompt System wave to cover legacy 
 - Attached lifecycle resolution to the existing `AlgorithmProjectContext` via `BrainProjectContext`; no second project-stage owner was introduced.
 - Missing canonical ContentBuild state returns `insufficient_context`; the resolver does not guess from route labels or stale visible UI context.
 - Tests specify canonical-stage mapping, stage-scoped capabilities, blockers, audience-promise presence, and fail-closed behavior.
-- Still required: wire these capabilities into the live Brain UI/runtime capability filter and verify every current project screen passes the canonical ContentBuild snapshot.
+- The canonical phase now enters BrainContextBroker's active project context and prompt policy. Still required: enforce the capability list in live UI/tool affordances and verify every project screen passes the canonical ContentBuild snapshot.
 
 ## Phase 11 — Communication ingestion (2026-10-15)
 
 - Added deterministic multi-label classification for instruction, preference, correction, criticism, factual claim, goal, constraint, approval, rejection, experiment note, and style feedback.
 - Added `recordCreatorCommunicationEvidence`, which writes an immutable `CREATOR_COMMUNICATION_CLASSIFIED` event through the existing Brain intelligence ledger, with idempotent communication identity and related event links.
 - Communication events explicitly set `durableMemoryPromoted: false` and `promotionRequiresGovernedReview: true`. Classification does not directly mutate Channel Profile or validated knowledge.
-- Still required: connect live chat, tool feedback, approval/rejection and edit flows to this ingestion API; establish privacy/retention policy and verify server persistence/consent boundaries.
+- Connected the Sidebar Copilot, full AI Brain, and Brain Hub chat send paths; capture is gated by enabled + personalization + learn-from-interactions controls, and neutral text is not classified as a fact. Still required: connect non-chat tool feedback, approval/rejection and edit flows; establish privacy/retention policy and verify server persistence/consent boundaries.
 
 ## Phase 12 — Recommendation and asset attribution (2026-10-15)
 
@@ -126,4 +126,4 @@ The registry expands the original Brain-only Prompt System wave to cover legacy 
 
 ## Phase 10–12 certification gate
 
-The implementation foundation and regression tests are committed on `brain-phases-10-12-project-comms-attribution`. Tests have been authored but not executed in this session. Do not certify complete until focused tests, typecheck, full suite, production build, reachability/governance audits, and browser verification pass on the current integration baseline.
+The implementation and initial live wiring are committed on `brain-phases-10-12-project-comms-attribution`. Regression tests have been authored but not executed in this session. Do not certify complete until focused tests, typecheck, full suite, production build, reachability/governance audits, and browser verification pass on the current integration baseline.
