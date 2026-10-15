@@ -505,3 +505,12 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - **Deployment status:** not yet confirmed for these changes. A merged PR or successful build does not alone prove the hosted deployment has picked up the commit.
 - **Required confirmation:** after PR #222 is reviewed/merged, verify the Render service's deployed commit includes the latest merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact input and textarea computed font sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
 - **Verification boundary:** PR #221's CI reported the production build, focused contracts, local smoke checks, and source governance passing, but TypeScript failed on a duplicate `publishTransactionId` key and the full test suite reported 100 failing tests across 47 files. PR #222 removes that duplicate key; do not describe the full suite as passing until a fresh run confirms it. Do not describe the UI as deployed until the deployed commit and rendered page are confirmed.
+
+
+## 21. Corrected single-line input typography contract — 2026-10-15
+
+- **Studio Text Input and Studio Labeled Input:** follow the global standard/compact typography tokens, **38px standard / 24px compact**, Inter, weight 1000, uppercase, and the global tight line-height/letter spacing. Their 44px/28px size family continues to govern height, border stroke, radius, focus, and caret.
+- **Studio Text Area and Studio Labeled Text Area:** the explicit multiline exception remains **18px standard / 14px compact**, weight 1000, with multiline line-height/padding and a 92px minimum writing surface. The exception does not propagate to single-line inputs.
+- The CSS custom properties for single-line input typography now reference the canonical global 44px/28px font-size variables instead of hard-coding 18px/14px. Textarea variables remain independent at 18px/14px.
+- Regression coverage explicitly asserts that the single-line input token/CSS contract is 38px/24px and that textarea selectors remain 18px/14px.
+- **Deployment gate:** verify computed font sizes on Studio Text Input, Studio Labeled Input, Studio Text Area, and Studio Labeled Text Area at both standard and compact sizes on https://publisher-3n7h.onrender.com/studio after merge; source edits do not prove the deployment has updated.
