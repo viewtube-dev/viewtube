@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import type { ToolboxControlLevel } from "./tokens"
 import { getComponentLevelCssVars } from "./tokens"
-import { StudioNumberInput } from "../../studio-ui/primitives/StudioTextInput"
 import "../../styles/toolbox-entry.css"
 import "./subtoolbox-split-stepper.css"
 
@@ -37,7 +36,6 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   valueRef.current = value
   const [draft, setDraft] = useState(String(value))
   const [inputFocused, setInputFocused] = useState(false)
-  const [held, setHeld] = useState(false)
 
   useEffect(() => { if (!inputFocused) setDraft(String(value)) }, [value, inputFocused])
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -50,7 +48,6 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     if (repeatTimer.current) clearTimeout(repeatTimer.current)
     holdTimer.current = null
     repeatTimer.current = null
-    setHeld(false)
   }, [])
 
   useEffect(() => stopHold, [stopHold])
@@ -78,7 +75,6 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     startedAt.current = Date.now()
     change(direction)
     holdTimer.current = setTimeout(() => {
-      setHeld(true)
       scheduleRepeat()
     }, 360)
   }
@@ -87,17 +83,19 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   return (
     <div
       {...props}
-      className={["vt-subtoolbox-split-stepper", `is-${size}`, (inputFocused || held) ? "is-interacting" : "", className].filter(Boolean).join(" ")}
+      className={["vt-subtoolbox-split-stepper", `is-${size}`, inputFocused ? "is-interacting" : "", className].filter(Boolean).join(" ")}
       data-vt-control-level={level}
       data-stepper-size={size}
       role="group"
       aria-label={ariaLabel}
       style={{ ...levelStyle, ...style } as React.CSSProperties}
     >
-      <StudioNumberInput
+      <input
+        type="number"
         className="vt-subtoolbox-split-stepper-value"
-        sizeVariant={size === "compact" ? "compact" : "standard"}
+        data-vt-studio-control="true"
         aria-label={ariaLabel}
+        inputMode="decimal"
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
         max={Number.isFinite(max) ? max : undefined}
