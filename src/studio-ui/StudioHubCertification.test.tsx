@@ -25,7 +25,7 @@ describe("Studio Hub canonical controls", () => {
 
   it("centers split-left icon rails and labels against the full control height", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-rail]')
+    expect(css).toContain('button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail]')
     expect(css).toContain("height: 100%")
     expect(css).toContain("place-items: center")
     expect(css).toContain('button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-label]')
@@ -45,7 +45,8 @@ describe("Studio Hub canonical controls", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const finalContract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
 
-    expect(finalContract).toContain("-webkit-text-stroke: 0 !important")
+    expect(finalContract).toContain("-webkit-text-stroke: .5px currentColor !important")
+    expect(finalContract).not.toContain("-webkit-text-stroke: 0 !important")
     expect(finalContract).toContain("border-right-width: 2px")
     expect(finalContract).toContain("--vt-studio-control-hover-offset: .75px")
     expect(finalContract).toContain("font-size: 18px !important")
