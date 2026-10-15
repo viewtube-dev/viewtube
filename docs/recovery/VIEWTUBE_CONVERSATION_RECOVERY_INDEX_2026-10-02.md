@@ -182,15 +182,17 @@ Expanded the existing Vault master rather than creating a competing master. The 
 |---|---|
 | Agent / conversation | ViewTube Vault Workbench implementation continuation |
 | Round | 1 |
-| Artifact | `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; `docs/vault/VAULT_PHASES_3_6_IMPLEMENTATION_AUDIT.md` |
+| Artifacts | `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md` |
 | Source | Canonical Vault page, adapter, workspace state, capability registry, existing media services, tests, and user-requested phases 0–6 |
 | Status | IMPLEMENTED IN BRANCH / CI VERIFICATION PENDING |
 | Branch / PR | `vault/phases-0-1-2-workbench` → PR #336 targeting `master/consolidated-feature-integration` |
-| Provenance | Canonical source audit → tests-first additions → implementation services/UI → documentation/recovery registration |
-| Verification | GitHub read/write accepted; exact latest-head CI, local typecheck/build, browser runtime, merge, and post-merge read-back remain required |
-| LOG-ID | REC-20261015-vault-phases-0-6-001 |
-| Follow-up | Review latest PR checks, resolve introduced failures, complete server authorization integration, then merge only after gates pass |
+| Provenance | Canonical source audit → tests authored before implementation → implementation services/UI → documentation/recovery registration |
+| Verification | GitHub read/write accepted; exact latest-head automated tests, typecheck/build, browser runtime, merge, and post-merge read-back remain required |
+| LOG-ID | `REC-20261015-vault-phases-0-6-001` |
+| Follow-up | Review latest PR checks, resolve introduced failures, complete server authorization integration, and merge only after required gates pass |
 
 ### Contribution summary
 
-Phases 0–6 add source inventory, stable local identity/selection and protected lifecycle guards, adaptive capability host, maintenance queue, confirmed batch-operation pipeline and bounded local receipts, explicit local media support registration, field comparison, duplicate candidate grouping, and rights/governance recommendations. The work explicitly does not claim server authorization, durable worker execution, connected LLM assistance, legal clearance, deployment, or merge completion.
+Phases 0–2 establish canonical source ownership, stable local identity and selection contracts, local protected lifecycle guards, and the adaptive capability host. Phases 3–6 add a read-only inspection projection and Inspector findings; a browser-local operation receipt ledger wired to image/video derivative saves; media preflight (not batch execution); field-level metadata comparison; rights findings; and a protected metadata-suggestion acceptance contract. Existing manual/smart collections, search, duplicate review, specialist media workbenches, and lineage services are reused rather than duplicated.
+
+**Important limits:** the operation ledger is browser-local rather than a server audit log; batch execution is not implemented by the preflight planner; deployed FFmpeg and persistent storage are not runtime-certified; AI proposal acceptance is a contract, not an AI model; server-side account/workspace authorization remains blocked. No merge or release certification is claimed.
