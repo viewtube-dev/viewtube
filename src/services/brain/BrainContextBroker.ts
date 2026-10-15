@@ -10,6 +10,7 @@ import { readBrainUserControls } from "./BrainUserControls"
 import type { StatisticsIntelligenceSnapshot } from "./StatisticsIntelligence"
 import type { AudienceIntelligenceSnapshot } from "./AudienceIntelligence"
 import type { BrainEvidenceQualityReport } from "./BrainEvidenceQuality"
+import type { BrainAnalyticsFindingContext } from "./AnalyticsIntelligenceWorkflow"
 import type { CreatorContextEnvelope } from "./CreatorContextResolver"
 import { buildAlgorithmIntelligenceContext, type AlgorithmIntelligencePortfolio } from "./AlgorithmIntelligenceOrchestrator"
 
@@ -25,6 +26,7 @@ export const buildBrainContextPack = (input: {
  currentResearch?: string
  statisticsIntelligence?: StatisticsIntelligenceSnapshot | null
  evidenceQuality?: BrainEvidenceQualityReport | null
+ analyticsFindingContext?: BrainAnalyticsFindingContext | null
  audienceIntelligence?: AudienceIntelligenceSnapshot | null
  algorithmIntelligence?: AlgorithmIntelligencePortfolio | null
  creatorContext?: CreatorContextEnvelope | null
@@ -97,6 +99,14 @@ export const buildBrainContextPack = (input: {
     "Evidence policy: missing/unavailable is not zero; stale evidence is historical, not current; partial evidence supports qualified claims only; separate observed measurements from calculations, estimates and hypotheses.",
     ...(input.evidenceQuality.confidence === "insufficient" ? ["Evidence fitness is insufficient for precise channel-specific metric claims or confident ranking."] : []),
    ].join("\n"), 3200)
+  : ""
+
+ const analyticsFindings = controls.allowAnalytics && !analyticsScopeBlocked && input.analyticsFindingContext?.status === "ready" && input.analyticsFindingContext.findings.length > 0
+  ? clip([
+    ...input.analyticsFindingContext.findings.slice(0, 8).map((finding) =>
+     `id=${finding.id}; kind=${finding.kind}; metric=${finding.metric}; current=${finding.currentValue}; baseline=${finding.baselineValue ?? "not comparable"}; delta=${finding.delta ?? "undefined"}; relativeDeltaPercent=${finding.relativeDeltaPercent ?? "undefined"}; unit=${finding.unit}; formula=${finding.formula}; algorithm=${finding.algorithmVersion}; confidence=${finding.confidence}; snapshots=${finding.sourceSnapshotIds.join(",")}; evidence=${finding.evidenceRefs.join(",")}; limitations=${finding.limitations.join("; ")}`),
+    "Finding policy: these values are deterministic source-linked facts. Do not recalculate, overwrite, or infer missing values. Keep explanation, hypothesis, and recommendation separate from observed/calculated facts.",
+   ].join("\\n"), 2600)
   : ""
 
  const statistics = controls.allowAnalytics && !analyticsScopeBlocked && input.statisticsIntelligence
@@ -184,6 +194,7 @@ export const buildBrainContextPack = (input: {
   "\nCHANNEL EVIDENCE\n" + evidence,
   evidenceQuality ? "\nEVIDENCE QUALITY\n" + evidenceQuality : "",
   statistics ? "\nDETERMINISTIC STATISTICS INTELLIGENCE\n" + statistics : "",
+  analyticsFindings ? "\nDETERMINISTIC ANALYTICS FINDINGS\n" + analyticsFindings : "",
   audience ? "\nAUDIENCE INTELLIGENCE\n" + audience : "",
   algorithm ? "\nALGORITHM / CHANNEL / OPPORTUNITY INTELLIGENCE\n" + algorithm : "",
   channelKnowledge ? "\nCHANNEL KNOWLEDGE\n" + channelKnowledge : "",
@@ -206,7 +217,7 @@ export const buildBrainContextPack = (input: {
   budget: {
    maximumCharacters,
    systemCharacters: system.length,
-   evidenceCharacters: evidence.length + evidenceQuality.length + statistics.length + audience.length + algorithm.length,
+   evidenceCharacters: evidence.length + evidenceQuality.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,
    knowledgeCharacters: knowledge.length + research.length,
    conversationCharacters: clippedConversation.length,
