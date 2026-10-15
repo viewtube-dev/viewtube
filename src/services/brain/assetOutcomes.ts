@@ -153,6 +153,23 @@ const persistUpdated = (outcome: AssetOutcome): void => {
  }
 }
 
+export const hydrateAssetOutcomes = (durableRecords: AssetOutcome[]) => {
+ if (!canUseStorage()) return 0
+ const merged = new Map(readOutcomes().map((outcome) => [outcome.id, outcome]))
+ for (const outcome of durableRecords || []) {
+  if (!outcome || typeof outcome.id !== "string" || !outcome.id || !outcome.channelId) continue
+  merged.set(outcome.id, outcome)
+ }
+ const values = [...merged.values()].sort((left, right) => right.createdAt.localeCompare(left.createdAt)).slice(0, MAXIMUM_RETAINED)
+ try {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(values))
+  window.dispatchEvent(new CustomEvent(ASSET_OUTCOME_EVENT, { detail: values }))
+ } catch {
+  return 0
+ }
+ return values.length
+}
+
 const makeId = (): string =>
  typeof crypto !== "undefined" && "randomUUID" in crypto
   ? `outcome_${crypto.randomUUID()}`
