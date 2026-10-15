@@ -30,7 +30,7 @@ The useful creator question is simpler:
 
 YouTube's current creator guidance describes Search and Discovery as systems that try to match each viewer with videos they are likely to watch and enjoy. Recommendations are personalized, and the same video can perform very differently with different audiences, on different surfaces, and at different times.
 
-> **Creator principle:** The algorithm is not an audience you have to impress. It is a collection of systems trying to predict which viewers may want which videos.
+> **Creator takeaway:** The algorithm is not an audience you have to impress. It is a collection of systems trying to predict which viewers may want which videos.
 
 This guide focuses on the parts creators can actually use: audience fit, topic choice, packaging, discovery surfaces, retention, satisfaction, catalog relationships, and diagnosis inside ViewTube.
 
@@ -148,7 +148,7 @@ A video can also start slowly and later grow because:
 - a future upload creates a new catalog relationship;
 - YouTube finds a better viewer group for it.
 
-> **Do not conclude:** A slow first day does not prove a video is permanently dead, and a fast first hour does not guarantee long-term scale.
+> **Caution:** A slow first day does not prove a video is permanently dead, and a fast first hour does not guarantee long-term scale.
 
 ---
 
