@@ -93,7 +93,7 @@ export const buildAlgorithmEvaluationLifecycleIdentity = (event: AlgorithmIntell
  contentBuildId: typeof event.metadata?.contentBuildId === "string" ? event.metadata.contentBuildId : null,
  videoId: event.videoId || null,
  actionPacketId: event.actionPacketId || null,
- publicationTransactionId: typeof event.metadata?.publicationTransactionId === "string" ? event.metadata.publicationTransactionId : null,
+ publicationTransactionId: typeof event.metadata?.publishTransactionId === "string" ? event.metadata.publishTransactionId : typeof event.metadata?.publicationTransactionId === "string" ? event.metadata.publicationTransactionId : null,
  approvedSnapshotId: typeof event.metadata?.approvedSnapshotId === "string" ? event.metadata.approvedSnapshotId : null,
  metadataVersionIds: Array.isArray(event.metadata?.metadataVersionIds)
   ? event.metadata.metadataVersionIds.filter((value): value is string => typeof value === "string")
