@@ -1063,6 +1063,32 @@ button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-bu
 [data-vt-studio-button-icon] { display:grid; flex:0 0 auto; place-items:center; }
 button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
 
+/* Square icon button variants inherit the split-left rail icon metrics:
+   28px/2.5 standard and 18px/1.65 compact. */
+button[data-vt-studio-icon-button="true"][data-icon-variant="v1"] {
+  --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
+}
+button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] {
+  --vt-studio-control-shadow-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] {
+  --vt-studio-control-shadow-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+button[data-vt-studio-icon-button="true"][data-icon-variant="v4"] > [data-vt-studio-button-face] {
+  background: #000;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-icon-button="true"][data-icon-variant="v4"] [data-vt-studio-button-icon] svg {
+  stroke: currentColor;
+}
+
+
 /* Sole split-left geometry contract: rail equals control height and divider uses the shared stroke token. */
 button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%; padding:0; border:0; outline:0; background:transparent; overflow:visible; }
 button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] { display:grid; box-sizing:border-box; grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr); align-items:stretch; justify-content:stretch; padding:0; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); overflow:hidden; text-align:left; }
