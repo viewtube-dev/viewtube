@@ -270,7 +270,12 @@ export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"create
      (existing.publishedVideoId || null) === (input.publishedVideoId || null) &&
      (existing.selectedWindow || null) === (input.selectedWindow || null) &&
      (existing.comparisonSnapshotId || null) === (input.comparisonSnapshotId || null) &&
-     (existing.approvedSnapshotHash || null) === (input.approvedSnapshotHash || null)
+     (existing.approvedSnapshotHash || null) === (input.approvedSnapshotHash || null) &&
+     (existing.actionPacketId || null) === (input.actionPacketId || null) &&
+     (existing.workflowId || null) === (input.workflowId || null) &&
+     (existing.recommendationId || null) === (input.recommendationId || null) &&
+     (existing.experimentId || null) === (input.experimentId || null) &&
+     [...(existing.evidenceIds || [])].sort().join("|") === [...(input.evidenceIds || [])].sort().join("|")
     if (!sameLogicalEvaluation) throw new Error("Evaluation idempotency key was reused for a different publication or evidence scope.")
     return existing
    }
@@ -387,7 +392,7 @@ export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input
  minimumIndependentEvaluations?: number
 }) => {
  const reviewer = input.reviewedBy.trim()
- if (!reviewer) return null
+ if (!reviewer || !evaluateViewTubeControl("creator-learning").allowed) return null
  const candidate = listWorkflowCandidates().find((value) => value.id === input.candidateId)
  if (
   !candidate ||
