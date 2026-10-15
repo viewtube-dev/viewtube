@@ -23,6 +23,10 @@ export interface BrainPublicationIdentityReceipt {
  publicationStatus: "published"
  publishedAt: string
  projectId: string | null
+ actionPacketId: string | null
+ workflowId: string | null
+ recommendationId: string | null
+ experimentId: string | null
  projectAssociationStatus: "snapshot-only" | "not-provided"
  relatedBrainEventIds: string[]
  lineageAssociationStatus: "exact-identity-match" | "publication-only"
@@ -56,6 +60,10 @@ export const recordBrainPublicationIdentityReceipt = (input: {
    || event.metadata?.videoPackageId === transaction.videoPackageId
    || event.metadata?.approvedSnapshotId === transaction.approvedSnapshotId
    || event.metadata?.publishTransactionId === transaction.id
+   || Boolean(transaction.actionPacketId && (event.actionPacketId === transaction.actionPacketId || event.metadata?.actionPacketId === transaction.actionPacketId))
+   || Boolean(transaction.workflowId && (event.workflowId === transaction.workflowId || event.metadata?.workflowId === transaction.workflowId))
+   || Boolean(transaction.recommendationId && (event.recommendationId === transaction.recommendationId || event.metadata?.recommendationId === transaction.recommendationId))
+   || Boolean(transaction.experimentId && event.metadata?.experimentId === transaction.experimentId)
   )
  const relatedBrainEventIds = relatedEvents.map((event) => event.id)
  const receipt: BrainPublicationIdentityReceipt = {
@@ -79,6 +87,10 @@ export const recordBrainPublicationIdentityReceipt = (input: {
   publicationStatus: "published",
   publishedAt: input.publishedAt || build.youtube.publishedAt || transaction.completedAt || transaction.updatedAt,
   projectId: build.legacyProjectId || null,
+  actionPacketId: transaction.actionPacketId || null,
+  workflowId: transaction.workflowId || null,
+  recommendationId: transaction.recommendationId || null,
+  experimentId: transaction.experimentId || null,
   projectAssociationStatus: build.legacyProjectId ? "snapshot-only" : "not-provided",
   relatedBrainEventIds,
   lineageAssociationStatus: relatedBrainEventIds.length ? "exact-identity-match" : "publication-only",
@@ -88,6 +100,9 @@ export const recordBrainPublicationIdentityReceipt = (input: {
   channelId: build.channelId,
   projectId: build.legacyProjectId || null,
   videoId: transaction.youtubeVideoId,
+  actionPacketId: transaction.actionPacketId || null,
+  workflowId: transaction.workflowId || null,
+  recommendationId: transaction.recommendationId || null,
   kind: "PUBLICATION_CONFIRMED",
   sourceSystem: "workflow",
   sourceId: transaction.id,
@@ -109,6 +124,15 @@ export const recordBrainPublicationIdentityReceipt = (input: {
   evaluationTargets: [],
   metadata: {
    publicationIdentityReceipt: receipt,
+   contentBuildId: transaction.contentBuildId,
+   videoPackageId: transaction.videoPackageId,
+   publishTransactionId: transaction.id,
+   approvedSnapshotId: transaction.approvedSnapshotId,
+   approvedSnapshotHash: transaction.approvedSnapshotHash,
+   actionPacketId: transaction.actionPacketId || null,
+   workflowId: transaction.workflowId || null,
+   recommendationId: transaction.recommendationId || null,
+   experimentId: transaction.experimentId || null,
    performanceEvaluated: false,
    causalAttribution: "not-assessed",
    projectAssociationStatus: receipt.projectAssociationStatus,
