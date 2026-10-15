@@ -6,7 +6,7 @@
   --vt-stepper-font-size: 38px;
   --vt-stepper-inner-height: calc(var(--vt-stepper-height) - (var(--vt-stepper-stroke) * 2));
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, calc(var(--vt-stepper-inner-height) * 2)) var(--vt-stepper-inner-height);
   flex: 0 0 auto;
   width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));
   min-width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));
@@ -85,15 +85,26 @@
   min-width: 0;
   height: 100%;
   min-height: 0;
-  border-left: var(--vt-stepper-stroke) solid #000;
   background: var(--pair-b, #fff);
 }
-/* The rail owns the seam, like the username split-left control. This overlay
-   centers the divider without stealing height from either equal button row. */
-.vt-subtoolbox-split-stepper-rail::before {
+/* Both seam strokes are overlays owned by the rail, matching the canonical
+   split-left field/rail contract without reducing the square rail's layout box. */
+.vt-subtoolbox-split-stepper-rail::after {
   content: "";
   position: absolute;
   z-index: 2;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--vt-stepper-stroke);
+  background: #000;
+}
+/* The horizontal seam is centered without stealing height from either row. */
+.vt-subtoolbox-split-stepper-rail::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
   pointer-events: none;
   left: 0;
   right: 0;
@@ -117,8 +128,6 @@
   color: var(--pair-a, #000);
   cursor: pointer;
   touch-action: none;
-}
-.vt-subtoolbox-split-stepper-rail button + button {
 }
 .vt-subtoolbox-split-stepper-rail svg {
   width: calc(var(--vt-stepper-height) * .68);
