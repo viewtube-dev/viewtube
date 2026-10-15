@@ -31,6 +31,7 @@ import {
 } from "../services/youtube/PublishTransactionYouTubeBridge"
 import { completePublishTransaction, listPublishTransactions } from "../services/asset-engine/PublishTransaction"
 import { recordPostPublishIdentity } from "../services/asset-engine/PostPublishAnalyticsBridge"
+import { recordContentBuildMetadataChange } from "../services/asset-engine/ContentBuildRepository"
 import { sheetsService } from "../services/sheetsService"
 import type { SeoResult } from "../types"
 import BrainLiveToolInbox from "../components/brain/BrainLiveToolInbox"
@@ -455,10 +456,33 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       setPublishError(null)
       if (completed.youtubeVideoId) {
         try {
-          recordPostPublishIdentity({
+          const receipt = recordPostPublishIdentity({
             transactionId: completed.id,
             videoId: completed.youtubeVideoId,
             correlationId: completed.id,
+          })
+          recordContentBuildMetadataChange({
+            contentBuildId: receipt.contentBuildId,
+            metadataVersionId: `published-metadata:${completed.id}`,
+            operationId: `publish-metadata:${completed.id}`,
+            operation: "publish",
+            actorType: "creator",
+            sourceToolId: "video-publisher",
+            sourceAssetIds: receipt.selectedVariantAssetIds,
+            resultingAssetIds: receipt.selectedVariantAssetIds,
+            publishTransactionId: completed.id,
+            approvedSnapshotId: receipt.approvedSnapshotId,
+            approvedSnapshotHash: receipt.approvedSnapshotHash,
+            publishedVideoId: receipt.videoId,
+            analyticsCheckpointIds: [],
+            evidenceIds: [receipt.event.id],
+            fields: [
+              { field: "title", before: null, after: publishTitle },
+              { field: "description", before: null, after: publishDescription },
+              { field: "tags", before: null, after: publishTags.split(",").map(tag => tag.trim()).filter(Boolean) },
+              { field: "category", before: null, after: publishCategory },
+            ],
+            occurredAt: completed.completedAt || new Date().toISOString(),
           })
         } catch (identityError) {
           const message = identityError instanceof Error ? identityError.message : String(identityError)
