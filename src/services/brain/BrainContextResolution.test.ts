@@ -25,6 +25,8 @@ describe("Brain context resolution", () => {
   expect(result.characterCount).toBeLessThanOrEqual(180)
   expect(result.omittedSectionIds.length).toBeGreaterThan(0)
   expect(result.selectedSectionIds).toContain("system_prompt")
+  expect(result.selectedSectionIds).toContain("channel_evidence")
+  expect(result.selectedSectionIds).not.toContain("current_public_research")
  })
 
  it("deduplicates repeated context sections", () => {
