@@ -164,6 +164,14 @@ https://support.google.com/youtube/answer/57792
 **YouTube Help** — Check current channel customization, end-screen and playlist features.  
 https://support.google.com/youtube/
 
+## Field Exercise: Test a Viewer Journey
+
+Choose one audience goal and map the path from a first video to the most useful next item. Open the channel as a new viewer. Check whether playlist names communicate a benefit, descriptions explain what belongs, order makes sense, and the next step is obvious without requiring knowledge of your production plan. Look for duplicated or outdated collections. Ask a few viewers to complete the journey as a qualitative check, then make the smallest change that improves orientation.
+
+## Evidence Boundary: Channel Structure
+
+Playlists and channel organization do not guarantee recommendation, search placement, or watch time. Viewer pathways depend on relevance, individual context, and available surfaces. Analytics may not isolate the effect of a structural change. Treat organization as a usability and content strategy decision, using measured outcomes as supporting evidence rather than proof of a ranking effect.
+
 ## Document Maintenance
 
 | Attribute | Value |
