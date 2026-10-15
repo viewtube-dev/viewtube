@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState, useSyncExternalStore } from "react"
 import { Brain, CheckCircle2, Database, Lightbulb, Network, RefreshCw, ShieldCheck, Workflow, Zap } from "lucide-react"
 import { AssistantCommandContextBanner } from "../components/AssistantCommandContextBanner"
 import SuperToolShell, { type SuperToolMountProps } from "./supertools/SuperToolShell"
@@ -208,12 +208,15 @@ const BrainCommandCenter: React.FC<BrainCommandCenterProps> = (props) => {
  const [selectedAttributionEventId, setSelectedAttributionEventId] = useState<string | null>(null)
  const memory = getBrainMemory()
 
- useEffect(() => {
-  const refreshAttribution = () => setCommandRefresh((value) => value + 1)
-  if (typeof window === "undefined") return
-  window.addEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, refreshAttribution)
-  return () => window.removeEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, refreshAttribution)
+ const subscribeAttributionEvents = useCallback((onStoreChange: () => void) => {
+  if (typeof window === "undefined") return () => {}
+  window.addEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, onStoreChange)
+  return () => window.removeEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, onStoreChange)
  }, [])
+ const getAttributionSnapshot = useCallback(() => channelIdentity.channelId
+  ? listAlgorithmIntelligenceEvents({ channelId: channelIdentity.channelId, kind: "RECOMMENDATION_CREATED" }).map((event) => event.id).join("|")
+  : "", [channelIdentity.channelId])
+ const attributionVersion = useSyncExternalStore(subscribeAttributionEvents, getAttributionSnapshot, () => "")
 
  const tools = useMemo(() => listSuperToolsByIds([...COMMAND_TOOL_IDS]), [])
  const workflows = useMemo(() => listWorkflowChains(), [])
@@ -223,7 +226,7 @@ const BrainCommandCenter: React.FC<BrainCommandCenterProps> = (props) => {
   () => channelIdentity.channelId
    ? listAlgorithmIntelligenceEvents({ channelId: channelIdentity.channelId, kind: "RECOMMENDATION_CREATED" }).slice(0, 6)
    : [],
-  [channelIdentity.channelId, commandRefresh],
+  [channelIdentity.channelId, attributionVersion, commandRefresh],
  )
  const visibleCommandActions = useMemo(
   () => filterBrainCommandActions(commandActions, commandFilter),
