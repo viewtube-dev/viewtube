@@ -118,7 +118,7 @@ describe("Brain generation quality loop", () => {
     const result = await run(generator);
 
     expect(generator).toHaveBeenCalledTimes(2);
-    expect(result.status).toBe("fallback");
+    expect(result.turn.status).toBe("fallback");
     expect(result.generationPath).toBe("basic_guidance");
     expect(result.fallbackReason).toBe("validation_failed");
     expect(result.repairOutcome).toMatchObject({ attempted: true, succeeded: false });
@@ -135,7 +135,7 @@ describe("Brain generation quality loop", () => {
     const result = await run(generator);
 
     expect(generator).toHaveBeenCalledTimes(1);
-    expect(result.status).toBe("fallback");
+    expect(result.turn.status).toBe("fallback");
     expect(result.generationPath).toBe("basic_guidance");
     expect(result.fallbackReason).toBe("provider_error");
     expect(result.repairOutcome).toMatchObject({ attempted: false, succeeded: false });
