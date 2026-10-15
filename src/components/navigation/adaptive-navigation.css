@@ -1669,3 +1669,14 @@
     max-height: min(62dvh, 520px) !important;
   }
 }
+
+/* The minimized global Brain launcher otherwise sits over Vault's lower-right
+   library state panel on short landscape viewports. Keep the launcher available
+   but move it above the page content only on the Vault route. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .vault-landscape-safe-trigger {
+    top: calc(var(--vt-nav-top-height, 85px) + 8px);
+    right: 8px;
+    bottom: auto;
+  }
+}

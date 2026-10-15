@@ -181,4 +181,32 @@ describe("CreatorVaultOS mobile card density", () => {
   expect(css).toContain("[data-vault-toolbar-secondary]")
  })
 
+ it("keeps the search input full-width and clear action beside the Library control", () => {
+  expect(source).toContain('data-vault-search-row')
+  expect(source).toContain('className="vault-library-search-field"')
+  expect(source).toContain('data-vault-library-trigger')
+  expect(source).toContain('data-vault-search-clear')
+  const css = fs.readFileSync(path.resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+  expect(css).toContain('[data-vault-search-row]')
+  expect(css).toContain('grid-template-areas: "library clear" "search search"')
+ })
+
+ it("wraps all five media-type filters without clipping and keeps each target at least 44px high", () => {
+  expect(source).toContain('className="vault-media-type-filter"')
+  const css = fs.readFileSync(path.resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+  expect(css).toContain('.vault-media-type-filter')
+  expect(css).toContain('overflow: visible !important')
+  expect(css).toContain('min-height: 44px')
+ })
+
+ it("moves the minimized Brain launcher clear of Vault content on short landscape screens", () => {
+  const brainSource = fs.readFileSync(path.resolve(process.cwd(), "src/components/brain/GlobalBrainSidecar.tsx"), "utf8")
+  const navigationCss = fs.readFileSync(path.resolve(process.cwd(), "src/components/navigation/adaptive-navigation.css"), "utf8")
+  expect(brainSource).toContain('data-vt-brain-floating-trigger')
+  expect(brainSource).toContain('vault-landscape-safe-trigger')
+  expect(navigationCss).toContain('.vault-landscape-safe-trigger')
+  expect(navigationCss).toContain('@media (orientation: landscape) and (max-height: 500px)')
+ })
+
+
 })
