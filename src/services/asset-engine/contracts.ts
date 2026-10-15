@@ -270,6 +270,40 @@ export interface ContentBuildEvent<T = Record<string, unknown>> {
  metadata?: T
 }
 
+/** Metadata history operations recorded on the canonical ContentBuild event stream. */
+export type ContentBuildMetadataOperation = "create" | "refine" | "edit" | "select" | "replace" | "publish" | "restore"
+
+export interface ContentBuildMetadataHistoryField {
+ field: string
+ before: unknown
+ after: unknown
+}
+
+/** Immutable, reconstructable metadata state with publication and analytics provenance. */
+export interface ContentBuildMetadataHistoryEntry {
+ schemaVersion: 1
+ contentBuildId: string
+ metadataVersionId: string
+ operationId: string
+ operation: ContentBuildMetadataOperation
+ fields: ContentBuildMetadataHistoryField[]
+ actorType: ContentBuildEvent["actorType"]
+ actorId: string | null
+ sourceToolId: string | null
+ generationRecordId: string | null
+ promptRecipeId: string | null
+ promptRecipeVersion: string | null
+ sourceAssetIds: string[]
+ resultingAssetIds: string[]
+ publishTransactionId: string | null
+ approvedSnapshotId: string | null
+ approvedSnapshotHash: string | null
+ publishedVideoId: string | null
+ analyticsCheckpointIds: string[]
+ evidenceIds: string[]
+ occurredAt: string
+}
+
 export interface CreateContentBuildInput {
  id?: string
  channelId?: string | null
