@@ -31,7 +31,7 @@ describe("SubToolboxSplitStepper", () => {
     expect(css).toContain("background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);")
     const inputRule = css.match(/\.vt-subtoolbox-split-stepper input\.vt-subtoolbox-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
     expect(inputRule).toContain("border-radius: 0;")
-    expect(inputRule).toContain("border-right: 0;")
+    expect(inputRule).not.toContain("border-right:")
     expect(inputRule).toContain("inset var(--vt-stepper-stroke) 0 0 0 var(--pair-a, #73deff)")
   })
 
