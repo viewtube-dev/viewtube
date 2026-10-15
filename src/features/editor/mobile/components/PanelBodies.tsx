@@ -30,7 +30,7 @@ const TrimPanel=({store}:PanelProps)=>{
  <Card name="Slip Source">
   {hasSourceDuration?<><div style={label}>Source window · {sourceInSec.toFixed(2)}s – {sourceOutSec.toFixed(2)}s of {sourceDurationSec.toFixed(2)}s</div>
    <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:5}}>
-     {SOURCE_SLIP_STEPS.map(step=><button key={step.deltaSec} style={{...btn,opacity:canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,step.deltaSec)?1:.4}} disabled={!canSlip(step.deltaSec)} aria-label={step.ariaLabel} onClick={()=>slip(step.deltaSec)}>{step.label}</button>)}
+     {SOURCE_SLIP_STEPS.map(step=><button key={step.deltaSec} style={{...btn,opacity:canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,step.deltaSec)?1:.4}} disabled={!canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,step.deltaSec)} aria-label={step.ariaLabel} onClick={()=>slip(step.deltaSec)}>{step.label}</button>)}
     </div>
    <div style={{fontSize:9,fontWeight:800,opacity:.7,marginTop:6}}>Moves the footage inside the existing timeline slot; the clip start and end stay fixed. Undo restores the previous source window.</div>
   </>:<div style={{fontSize:9,fontWeight:800,opacity:.7}}>Source slipping is available when this clip has known media duration metadata.</div>}
