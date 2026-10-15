@@ -109,7 +109,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea, StudioLabeledInput, StudioLabeledTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -603,8 +603,8 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
-  if (name === "137 Floating Label Input") return <StudioLabeledInput sizeVariant="standard" label="TITLE" aria-label="Title" />
-  if (name === "138 Floating Label Text Area") return <StudioLabeledTextArea sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
+  if (name === "137 Floating Label Input") return <StudioTextInput variant="floating-label" sizeVariant="standard" label="TITLE" aria-label="Title" />
+  if (name === "138 Floating Label Text Area") return <StudioTextArea variant="floating-label" sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
   if (name === "Number Field") {
     return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
@@ -1024,10 +1024,10 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Labeled Input") {
-    return <StudioLabeledInput level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
+    return <StudioTextInput variant="floating-label" level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
   }
   if (name === "Labeled Textarea") {
-    return <StudioLabeledTextArea level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
+    return <StudioTextArea variant="floating-label" level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
