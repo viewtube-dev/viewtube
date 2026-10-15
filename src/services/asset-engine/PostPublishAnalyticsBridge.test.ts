@@ -137,6 +137,10 @@ describe("Post-publish analytics bridge", () => {
       transactionId: "publish-tx-1",
       videoId: "youtube-123",
       correlationId: "creator-loop-1",
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
     })
 
     expect(mocks.bindYouTubeVideo).toHaveBeenCalledWith(expect.objectContaining({
@@ -157,6 +161,10 @@ describe("Post-publish analytics bridge", () => {
       approvedSnapshotId: "snapshot-1",
       approvedSnapshotHash: "hash-1",
       idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
     })
     expect(mocks.bindYouTubeVideo).toHaveBeenCalledWith(expect.objectContaining({
       idempotencyKey: "post-publish-binding:publish-tx-1:hash-1",
@@ -186,6 +194,10 @@ describe("Post-publish analytics bridge", () => {
         approvedSnapshotId: "snapshot-1",
         approvedSnapshotHash: "hash-1",
         correlationId: "creator-loop-1",
+        actionPacketId: "action-packet-1",
+        workflowId: "workflow-1",
+        recommendationId: "recommendation-1",
+        experimentId: "experiment-1",
       }),
     }))
   })
