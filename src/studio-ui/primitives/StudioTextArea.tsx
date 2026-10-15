@@ -15,6 +15,7 @@ type StudioTextAreaSimpleProps = StudioTextAreaBaseProps & {
   variant?: "simple"
   label?: never
   level?: never
+  floatingLabelVariant?: never
   fieldClassName?: never
   fieldStyle?: never
 }
@@ -52,6 +53,7 @@ type StudioTextAreaFixedLabelProps = Omit<
   /** Optional direct styling for the native textarea inside the wrapper. */
   fieldClassName?: string
   fieldStyle?: React.CSSProperties
+  floatingLabelVariant?: never
 }
 
 export type StudioTextAreaProps = StudioTextAreaSimpleProps | StudioTextAreaFloatingLabelProps | StudioTextAreaFixedLabelProps
