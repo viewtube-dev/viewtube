@@ -427,7 +427,7 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 .vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
 .vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle{background:#000}
 .vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle{background:#fff}
-.vt-studio-44-word-toggle button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:100%;padding:0 10px;border:0;background:transparent;color:#000;font:1000 var(--vt-word-font-size)/.86 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.035em;text-transform:uppercase;white-space:nowrap;-webkit-text-stroke:.5px currentColor}
+.vt-studio-44-word-toggle button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:100%;padding:0 20px;border:0;background:transparent;color:#000;font:1000 var(--vt-word-font-size)/.86 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.035em;text-transform:uppercase;white-space:nowrap;-webkit-text-stroke:.5px currentColor}
 .vt-studio-44-word-toggle.is-size-28 button{padding:0 6px}
 .vt-studio-44-word-toggle.is-color-swap button.is-active{color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-word-toggle.is-black-indicator button.is-active{color:#fff}

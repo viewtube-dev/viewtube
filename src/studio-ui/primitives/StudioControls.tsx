@@ -124,10 +124,20 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       if (!root || !target) return;
       const rootRect = root.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
-      const inset = handleInset ?? (size === "28" ? 2 : 2.75);
+      // Standard toggles reserve 16px of optical padding inside the active
+      // handle and a fixed 4px gap from either inner container edge. The word
+      // buttons use 20px side padding; the handle is 8px narrower than that
+      // button, leaving 16px between glyph bounds and handle edges.
+      const inset = handleInset ?? (size === "28" ? 2 : 4);
       const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
       const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
-      const next = { left: targetRect.left - rootRect.left + (targetRect.width - nextWidth) / 2, width: nextWidth };
+      // Absolutely positioned children measure from the container's padding
+      // edge, not its outer border edge. Subtract clientLeft so both sides keep
+      // the same 4px inner margin when the active word flips left/right.
+      const next = {
+        left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
+        width: nextWidth,
+      };
       setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
     };
     const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
