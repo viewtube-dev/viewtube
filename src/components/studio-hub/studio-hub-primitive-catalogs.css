@@ -2216,6 +2216,9 @@
 }
 
 
+.vt-confirmed-control-family .vt-confirmed-control-variants {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
 /* Confirmed Library layout contract — phases 1–3 (2026-10-15).
    Four-skin control sets remain in one row; standard specimens occupy one row,
    with compact A/B sharing the next row. These rules affect gallery layout only. */
@@ -2238,6 +2241,7 @@
 .vt-confirmed-defaults-explainer p { margin: 0; }
 .vt-confirmed-defaults-explainer b { font-weight: 1000; }
 @media (max-width: 560px) {
+  .vt-confirmed-control-family .vt-confirmed-control-variants,
   .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"],
   .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"],
   .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] {
