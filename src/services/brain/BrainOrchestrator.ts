@@ -619,6 +619,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     contextBudget: context.budget,
+    repairReasons: [],
+    repairAttempted: false,
+    repairSucceeded: false,
    },
   })
   const turn = await completeAIBrainTurn({
@@ -647,6 +650,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     contentBuildId: input.project?.contentBuildId || null,
     contextBudget: context.budget,
     evaluationId: evaluation.id,
+    repairReasons: [],
     repaired: false,
     repairAttempted: repairOutcome.attempted,
     repairSucceeded: repairOutcome.succeeded,
