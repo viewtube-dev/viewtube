@@ -149,7 +149,7 @@ export const createExportBundle = async (
  const uploadedCsvFiles = readUploadedCsvFiles()
  const apiRows = getCurrentCanonicalRows(analyticsWindow)
  const ownerRows = getMasterRows(analyticsWindow, "csv", uploadedCsvFiles)
- const authoritativeOwnerRows = selectAuthoritativeOwnerRows(ownerRows)
+ const authoritativeOwnerRows = selectAuthoritativeOwnerRows(ownerRows.map((row) => row.__canonical))
  const channelId = ((JSON.parse(ytCacheRaw) as { profile?: { id?: string } }).profile?.id ||
   "channel_unknown") as string
  const unifiedLedger = buildUnifiedLedger({
@@ -161,7 +161,7 @@ export const createExportBundle = async (
  const sourceMode = ingestMode === "import" ? "csv" : ingestMode === "hybrid" ? "hybrid" : "api"
  const projectionRows = sourceMode === "api"
   ? apiRows
-  : getMasterRows(analyticsWindow, sourceMode, uploadedCsvFiles)
+  : getMasterRows(analyticsWindow, sourceMode, uploadedCsvFiles).map((row) => row.__canonical)
  const projection = buildYouTubeStyleProjection(projectionRows, "engagedViews")
 
  zip.file("projections/Table data.csv", rowsToCsv(projection.tableRows))
