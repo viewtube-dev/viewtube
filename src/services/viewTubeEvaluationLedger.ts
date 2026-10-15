@@ -71,6 +71,10 @@ export interface WorkflowCandidate {
  traceIds?: string[]
  assetIds?: string[]
  publishedVideoIds?: string[]
+ supportingEvaluationIds?: string[]
+ contradictingEvaluationIds?: string[]
+ observedEvaluationCount?: number
+ positiveOutcomeRate?: number
  sourceOutcomeIds?: string[]
  evaluationOutcome?: Exclude<EvaluationOutcome, "pending">
  selectedWindow?: string | null
@@ -408,35 +412,49 @@ export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input
  ) return null
 
  const minimum = Math.max(5, Math.floor(input.minimumIndependentEvaluations || 5))
- const eligible = listEvaluationRecords().filter((record) =>
+ const observations = listEvaluationRecords().filter((record) =>
   record.channelId === sourceEvaluation.channelId &&
   (record.projectId || null) === (sourceEvaluation.projectId || null) &&
   record.source === sourceEvaluation.source &&
   record.recommendation === sourceEvaluation.recommendation &&
-  record.outcome === "positive" &&
+  record.outcome !== "pending" &&
   record.evidenceStatus === "available" &&
   record.comparabilityStatus === "comparable" &&
   record.selectedWindow === sourceEvaluation.selectedWindow &&
   Boolean(record.publishedVideoId) &&
   record.evidenceIds.some((id) => typeof id === "string" && id.trim().length > 0)
  )
- const byPublishedVideo = new Map<string, EvaluationRecord>()
- for (const record of eligible) {
-  if (record.publishedVideoId && !byPublishedVideo.has(record.publishedVideoId)) {
-   byPublishedVideo.set(record.publishedVideoId, record)
-  }
+ const observationsByVideo = new Map<string, EvaluationRecord[]>()
+ for (const record of observations) {
+  if (!record.publishedVideoId) continue
+  const rows = observationsByVideo.get(record.publishedVideoId) || []
+  rows.push(record)
+  observationsByVideo.set(record.publishedVideoId, rows)
  }
- const supporting = [...byPublishedVideo.values()]
- if (supporting.length < minimum) return null
- const evaluationRecordIds = supporting.map((record) => record.id)
- const evidenceIds = [...new Set(supporting.flatMap((record) => record.evidenceIds))]
+ const conflictedVideos = [...observationsByVideo.entries()]
+  .filter(([, rows]) => new Set(rows.map((row) => row.outcome)).size > 1)
+ const resolvedByVideo = [...observationsByVideo.entries()]
+  .filter(([, rows]) => new Set(rows.map((row) => row.outcome)).size === 1)
+  .map(([, rows]) => rows.sort((left, right) => right.updatedAt - left.updatedAt)[0])
+ const supporting = resolvedByVideo.filter((record) => record.outcome === "positive")
+ const observedCount = resolvedByVideo.length
+ const positiveOutcomeRate = observedCount ? supporting.length / observedCount : 0
+ const conflictingEvaluationIds = conflictedVideos.flatMap(([, rows]) => rows.map((row) => row.id))
+ if (
+  supporting.length < minimum ||
+  positiveOutcomeRate < 0.8 ||
+  !supporting.some((record) => record.id === sourceEvaluation.id)
+ ) return null
+ const evaluationRecordIds = resolvedByVideo.map((record) => record.id)
+ const supportingEvaluationIds = supporting.map((record) => record.id)
+ const evidenceIds = [...new Set(resolvedByVideo.flatMap((record) => record.evidenceIds))]
  if (evidenceIds.length < minimum) return null
 
  const learningEntry = await captureAIBrainLearningEvent({
   channelId: sourceEvaluation.channelId,
   source: "copilot",
   summary: candidate.title,
-  detail: `Repeated positive post-publication observations for “${sourceEvaluation.recommendation}” across ${supporting.length} distinct published videos. Descriptive association only; no causal conclusion.`,
+  detail: `Positive outcomes in ${supporting.length} of ${observedCount} distinct comparable published videos for “${sourceEvaluation.recommendation}” (${Math.round(positiveOutcomeRate * 100)}% positive). Contradictory outcomes remain attached as evidence. Descriptive association only; no causal conclusion.`,
   category: "analytics_insight",
   confidence: "high",
   evidence: evidenceIds,
@@ -446,7 +464,14 @@ export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input
    reviewedBy: reviewer,
    evaluationLearningCandidateId: candidate.id,
    evaluationRecordIds,
-   publishedVideoIds: supporting.map((record) => record.publishedVideoId),
+   supportingEvaluationIds,
+   contradictingEvaluationIds: [
+    ...resolvedByVideo.filter((record) => record.outcome === "negative" || record.outcome === "neutral").map((record) => record.id),
+    ...conflictingEvaluationIds,
+   ],
+   observedEvaluationCount: observedCount,
+   positiveOutcomeRate,
+   publishedVideoIds: resolvedByVideo.map((record) => record.publishedVideoId),
    actionPacketIds: [...new Set(supporting.map((record) => record.actionPacketId).filter((id): id is string => Boolean(id)))],
    workflowIds: [...new Set(supporting.map((record) => record.workflowId).filter((id): id is string => Boolean(id)))],
    recommendationIds: [...new Set(supporting.map((record) => record.recommendationId).filter((id): id is string => Boolean(id)))],
@@ -470,7 +495,13 @@ export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input
   ...candidate,
   promotedClaimId: promoted.claim.id,
   promotedAt: Date.now(),
-  supportingEvaluationIds: evaluationRecordIds,
+  supportingEvaluationIds,
+  contradictingEvaluationIds: [
+   ...resolvedByVideo.filter((record) => record.outcome === "negative" || record.outcome === "neutral").map((record) => record.id),
+   ...conflictingEvaluationIds,
+  ],
+  observedEvaluationCount: observedCount,
+  positiveOutcomeRate,
  }
  write(CANDIDATE_KEY, listWorkflowCandidates().map((value) =>
   value.id === candidate.id ? updatedCandidate : value
