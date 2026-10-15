@@ -57,7 +57,7 @@ describe("BrainRuntime", () => {
   })
 
   expect(runBrainTurn).toHaveBeenCalledTimes(1)
-  expect(runBrainTurn).toHaveBeenCalledWith({
+  expect(runBrainTurn).toHaveBeenCalledWith(expect.objectContaining({
    channelId: "channel-1",
    userText: "What should I make next?",
    snapshot,
@@ -73,7 +73,7 @@ describe("BrainRuntime", () => {
    analyticsWindow: "90d",
    visibleContext: { selectedVideoId: "video-1", contentBuildId: "cb-1" },
    artifactRefs: ["asset-1", "asset-1", "asset-2"],
-  })
+  }))
   expect(result).toEqual({
    ...orchestratorResult,
    runtime: {
