@@ -477,6 +477,21 @@ Certify Vault ↔ Projects ↔ ContentBuild ↔ Asset Engine ↔ package handoff
 
 **Exit gate:** vertical slice works on canonical main and exact commit is verified.
 
+### Phase 8 — Server trust, durable operations, and storage boundary
+Bind asset reads/writes and operation execution to the authenticated account/workspace contract. Move authoritative operation receipts and queued job state to server-backed persistence with idempotency, cancellation, retry policy, resource limits, and per-workspace authorization. Verify durable media storage configuration. Do not substitute localStorage, UI-only guards, or an unauthenticated endpoint for server trust.
+
+**Exit gate:** authorization tests prove cross-workspace denial; operation/job records survive process restart; retry/cancel/idempotency and storage failure behavior are verified. If the repository's account/workspace contract or production storage is not available, mark this phase BLOCKED rather than inventing a second auth system.
+
+### Phase 9 — Safe batch execution and governed AI assistance
+Run eligible batch items through the canonical operation/Asset Engine path with per-item receipts, partial-failure visibility, bounded concurrency, cancellation, source preservation, and lineage. Connect vision/tag suggestions only through an available approved provider; keep proposals separate from accepted metadata and preserve provenance. Rights findings are advisory and must not be represented as legal approval.
+
+**Exit gate:** real supported processors produce derivatives, every output links to its source and operation, failed items can be retried safely, and AI suggestions are explicitly reviewed before applying.
+
+### Phase 10 — End-to-end certification and release
+Test the canonical lifecycle from asset creation through operation/retry, browser reload, edit, project/ContentBuild handoff, return, package assembly, and publication integration. Verify responsive and keyboard-accessible behavior, empty/error/loading states, logs/network behavior, exact-head tests/typecheck/build, live deployment, and post-merge target read-back. Track pre-existing failures separately but do not waive required gates silently.
+
+**Exit gate:** required checks are green on the exact PR head, representative browser/runtime paths pass against the matching deployed commit, changes are merged, and the target branch is re-read and verified.
+
 Required workflow: SEARCH → INSPECT → TEST → IMPLEMENT → VERIFY → DOCUMENT → MERGE → POST-MERGE VERIFY. Use test-first development for behavior changes. Do not mark work complete based on a plan, passing isolated mock tests, or a deployment unrelated to the verified commit.
 
 ## 13. Prior implementation/recovery evidence and provenance boundaries
