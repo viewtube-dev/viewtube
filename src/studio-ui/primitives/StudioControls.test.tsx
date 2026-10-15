@@ -98,8 +98,10 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
     expect(css).toContain('.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before')
-    expect(css).toContain("right: 1px;")
-    expect(css).toContain("bottom: 1px;")
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] {')
+    expect(css).toContain("box-shadow: none !important;")
+    expect(css).toContain("width: 100%;");
+    expect(css).toContain("height: 100%;")
     expect(css).toContain("letter-spacing: -.02em;")
     expect(controls).toContain('letterSpacing: "-0.02em"')
   })
