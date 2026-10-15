@@ -4,6 +4,7 @@
   --vt-stepper-stroke: 3px;
   --vt-stepper-radius: 6px;
   --vt-stepper-shadow: 3px;
+  --vt-stepper-font-size: 38px;
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   width: 100%;
@@ -23,12 +24,14 @@
   --vt-stepper-stroke: var(--vt-studio-28-stroke, 2px);
   --vt-stepper-radius: var(--vt-studio-28-radius, 4px);
   --vt-stepper-shadow: var(--vt-studio-28-button-shadow-x, 1px);
+  --vt-stepper-font-size: 24px;
 }
 .vt-subtoolbox-split-stepper.is-standard {
   --vt-stepper-height: var(--vt-studio-44-height, 44px);
   --vt-stepper-stroke: var(--vt-studio-44-stroke, 3px);
   --vt-stepper-radius: var(--vt-studio-44-radius, 6px);
   --vt-stepper-shadow: var(--vt-studio-44-button-shadow-x, 3px);
+  --vt-stepper-font-size: 38px;
 }
 .vt-subtoolbox-split-stepper-value {
   display: flex;
@@ -41,7 +44,8 @@
   background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
   color: inherit;
   font: inherit;
-  font-size: var(--vt-component-font-size, 14px);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--vt-stepper-font-size);
   font-weight: 900;
   line-height: 1;
   font-variant-numeric: tabular-nums;
