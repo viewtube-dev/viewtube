@@ -38,3 +38,70 @@ test("learning writes reject unknown types, missing IDs, and mismatched channel 
   });
   assert.equal(count, 0);
 });
+
+test("learning writes reject conflicting stable identity reuse without replacing the canonical record", async () => {
+  const userId = "learning-test-identity-conflict";
+  const channelId = "learning-channel-identity-conflict";
+  const original = {
+    recordType: "brainOutcome",
+    record: {
+      id: "outcome-stable-identity",
+      channelId,
+      sourceRecordId: "asset-outcome-original",
+      traceId: "trace-original",
+      actionPacketId: "action-packet-1",
+      outcome: "completed",
+    },
+  };
+  assert.equal(await upsertPersistedBrainLearningRecords({ userId, channelId, records: [original] }), 1);
+
+  await assert.rejects(
+    upsertPersistedBrainLearningRecords({
+      userId,
+      channelId,
+      records: [{
+        recordType: "brainOutcome",
+        record: {
+          ...original.record,
+          sourceRecordId: "asset-outcome-conflicting",
+          traceId: "trace-conflicting",
+        },
+      }],
+    }),
+    /Brain learning identity conflict.*sourceRecordId/,
+  );
+
+  const rows = await listPersistedBrainLearningRecords({ userId, channelId });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].record.sourceRecordId, "asset-outcome-original");
+  assert.equal(rows[0].record.traceId, "trace-original");
+});
+
+test("learning lifecycle updates may change outcome state while preserving stable evaluation identity", async () => {
+  const userId = "learning-test-lifecycle-update";
+  const channelId = "learning-channel-lifecycle-update";
+  const pending = {
+    recordType: "evaluation",
+    record: {
+      id: "evaluation-lifecycle-update",
+      channelId,
+      projectId: "project-1",
+      publishTransactionId: "publish-1",
+      youtubeVideoId: "video-1",
+      approvedSnapshotHash: "snapshot-hash-1",
+      outcome: "pending",
+      updatedAt: 100,
+    },
+  };
+  const resolved = {
+    ...pending,
+    record: { ...pending.record, outcome: "positive", updatedAt: 200 },
+  };
+
+  assert.equal(await upsertPersistedBrainLearningRecords({ userId, channelId, records: [pending] }), 1);
+  assert.equal(await upsertPersistedBrainLearningRecords({ userId, channelId, records: [resolved] }), 1);
+  const rows = await listPersistedBrainLearningRecords({ userId, channelId });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].record.outcome, "positive");
+  assert.equal(rows[0].record.updatedAt, 200);
+});
