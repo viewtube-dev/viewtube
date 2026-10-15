@@ -21,6 +21,8 @@ import {
 } from "./OpportunityEvidenceAdapter"
 import type { OpportunityEvidence } from "./OpportunityIntelligence"
 import { projectCanonicalEvidenceRecords, type EvidenceRecord } from "./EvidenceRecord"
+import type { DeterministicAnalyticsInsight } from "./DeterministicAnalyticsInsights"
+import { buildBrainAnalyticsFindingContext, type BrainAnalyticsFindingContext } from "./AnalyticsIntelligenceWorkflow"
 
 export const EVIDENCE_INTELLIGENCE_VERSION = "vt-evidence-intelligence-v1" as const
 
@@ -32,6 +34,8 @@ export interface ResolveEvidenceIntelligenceInput {
  sectionIds?: string[]
  includeAudience?: boolean
  includeOpportunities?: boolean
+ /** Optional findings computed by the deterministic analytics layer; never model-authored. */
+ deterministicInsights?: DeterministicAnalyticsInsight[]
  brainEvidencePack?: AIBrainEvidencePack | null
 }
 
@@ -45,6 +49,7 @@ export interface EvidenceIntelligenceEnvelope {
  statisticsIntelligence: StatisticsIntelligenceSnapshot | null
  audienceIntelligence: AudienceIntelligenceSnapshot | null
  opportunityEvidence: OpportunityEvidence[]
+ analyticsFindingContext: BrainAnalyticsFindingContext
  provenance: {
   analyticsOwner: "analytics-canon"
   sourceSnapshotId: string
@@ -125,6 +130,11 @@ export const resolveEvidenceIntelligence = (
   ? dependencies.buildAudience(canonicalEvidence, statisticsIntelligence)
   : null
  const channelId = String(input.channelId || "").trim() || null
+ const analyticsFindingContext = buildBrainAnalyticsFindingContext({
+  expectedChannelId: channelId,
+  canonicalChannelId: canonicalEvidence.channelId,
+  findings: scopeUsable ? (input.deterministicInsights || []) : [],
+ })
  const opportunityPackScopeUsable = Boolean(
   scopeUsable
   && channelId
@@ -150,6 +160,7 @@ export const resolveEvidenceIntelligence = (
   statisticsIntelligence,
   audienceIntelligence,
   opportunityEvidence,
+  analyticsFindingContext,
   provenance: {
    analyticsOwner: "analytics-canon",
    sourceSnapshotId: canonicalEvidence.snapshotId,
