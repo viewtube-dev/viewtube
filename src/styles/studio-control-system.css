@@ -1569,6 +1569,10 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   width: 100%;
   height: 100%;
 }
+button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-stage] svg {
+  width: calc(var(--vt-studio-control-icon-size, 28px) * .8);
+  height: calc(var(--vt-studio-control-icon-size, 28px) * .8);
+}
 
 /* Username Split-Left Input: the root owns the shared outline and inset strokes.
    The left inset stroke is intentionally omitted at the rail/divider seam. */
