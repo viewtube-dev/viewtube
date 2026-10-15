@@ -133,10 +133,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       nonDefaultSettings={["sizeVariant=\"compact\" selects the 28px labeled-input variant; standard 44px is the default.", "level=\"l0\" | \"l2\" changes the declared control level (default: l1).", "overlayLabel accepts custom field context such as TITLE, DESCRIPTION, or TAGS.", "disabled=true and readOnly=true follow native input/textarea behavior.", "Textarea exception: 92px minimum surface; standard 18px or compact 14px text, both weight 1000; other geometry follows the selected 44px or 28px family."]}
       provenance={<Provenance primitive="StudioLabeledInput / StudioLabeledTextArea · primitives 141 / 142" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea is multiline, content-height, and vertically resizable." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row"><span>141 · 44px labeled text input</span><StudioLabeledInput label="TITLE" placeholder=" " aria-label="Labeled title input 44px" sizeVariant="standard" /></div>
-      <div className="vt-confirmed-variant"><span>141 · 28px labeled input A</span><StudioLabeledInput label="TITLE" placeholder=" " aria-label="Labeled title input 28px A" sizeVariant="compact" /></div>
-      <div className="vt-confirmed-variant"><span>141 · 28px labeled input B</span><StudioLabeledInput label="TITLE" placeholder=" " aria-label="Labeled title input 28px B" sizeVariant="compact" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>142 · content-height labeled textarea</span><StudioLabeledTextArea label="DESCRIPTION" placeholder=" " aria-label="Labeled description textarea" rows={4} /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>141 · 44px labeled text input</span><StudioLabeledInput label="TITLE" aria-label="Labeled title input 44px" sizeVariant="standard" /></div>
+      <div className="vt-confirmed-variant"><span>141 · 28px labeled input A</span><StudioLabeledInput label="TITLE" aria-label="Labeled title input 28px A" sizeVariant="compact" /></div>
+      <div className="vt-confirmed-variant"><span>141 · 28px labeled input B</span><StudioLabeledInput label="TITLE" aria-label="Labeled title input 28px B" sizeVariant="compact" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>142 · content-height labeled textarea</span><StudioLabeledTextArea label="DESCRIPTION" aria-label="Labeled description textarea" rows={4} /></div>
     </Family>
 
     <Family
