@@ -107,6 +107,23 @@ An unusual spike or dip may be real, a reporting artifact, a one-time event, or 
 
 When data appears inconsistent, check the source and retrieval date, the metric definition, filters, duplicate rows, date alignment, and whether values are estimates or finalized. Preserve the original evidence and note any transformation applied.
 
+## Less Obvious Statistical Traps
+
+Several traps deserve special attention:
+
+- **Selection bias:** The videos or viewers you can observe may differ from the group you want to understand.
+- **Survivorship bias:** Studying only successful videos hides the attempts and conditions that did not succeed.
+- **Regression to the mean:** An unusually high or low result may move closer to typical performance even without an intervention.
+- **Multiple comparisons:** If you inspect many metrics and segments, some will look unusual by chance.
+- **Simpson's paradox:** A pattern visible in combined totals can reverse or disappear when the data is separated into meaningful groups, often because the groups have different sizes or mixes.
+- **Cherry-picked windows:** Selecting only the dates that support a preferred story can create a misleading conclusion.
+
+These are not reasons to avoid analytics. They are reminders to define the question in advance, preserve context, and check whether the conclusion survives reasonable alternative comparisons.
+
+## Match Evidence to the Question
+
+Direct platform reports are useful for what the platform reports under its definitions. Controlled comparisons can help with causal questions when feasible. Qualitative feedback can reveal confusion, motivations, and failure modes. No single evidence type answers every question. Combine them when useful and be explicit when they point in different directions.
+
 ## A Reliable Diagnosis Template
 
 For each important analytics conclusion, write:
