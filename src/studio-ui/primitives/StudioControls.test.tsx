@@ -296,8 +296,8 @@ describe("shared Studio icon-size comparison contract", () => {
   it("shows production specimens without icon-size testing components and labels real states", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     for (const label of [
-      "44px standard · V1 primary fill",
-      "28px compact · V1",
+      "44px standard · variants 1–4",
+      "28px compact · variants 1–4",
       "44px standard · default",
       "28px compact · neutral tone",
       "44px standard · selected",
