@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { buildAlgorithmProjectContext } from "./BrainProjectContext"
 import type { Project } from "../../types"
-import type { ContentBuildSnapshot } from "../asset-engine/contracts"
+import { CONTENT_BUILD_SCHEMA_VERSION, type ContentBuildSnapshot } from "../asset-engine/contracts"
 
 describe("BrainProjectContext", () => {
  it("preserves Project and ContentBuild identity in the bounded algorithm context", () => {
@@ -38,17 +38,26 @@ describe("BrainProjectContext", () => {
    status: "active",
    plan: { concept: "Project concept", niche: "history" },
   }
-  const contentBuild = {
+  const contentBuild: ContentBuildSnapshot = {
+   schemaVersion: CONTENT_BUILD_SCHEMA_VERSION,
    id: "cb-canonical",
+   revision: 1,
    stage: "package",
-   workflow: { blockerIds: [] },
+   assetIds: [],
+   selections: {},
+   relations: [],
+   versions: [],
+   variantGroups: [],
+   workflow: { completedStepIds: [], blockerIds: [] },
    profile: {
     subject: "Canonical build subject",
     topic: "Canonical build topic",
     format: "long",
     audienceSegments: ["Napoleonic history viewers", "military history viewers"],
    },
-  } as ContentBuildSnapshot
+   createdAt: "2026-10-01T00:00:00.000Z",
+   updatedAt: "2026-10-01T00:00:00.000Z",
+  }
 
   expect(buildAlgorithmProjectContext({
    channelId: "channel-a",
