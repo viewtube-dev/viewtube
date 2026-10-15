@@ -43,8 +43,6 @@ jobs:
       - run: npm run check:privacy-src
       - run: npm run test:ai-systems-governance
       - run: npm run test:ai-systems-herald
-      - run: npm run test:brain-quality-loop-contract
-      - run: npm run test:brain-quality-loop
       - run: npm run test:brain-runtime-snapshot
       - run: npm run audit:ai-systems
       - run: npm run test:convergence-governance
@@ -135,3 +133,16 @@ jobs:
             exit 1
           }
           npm run smoke:local
+
+  brain_quality_loop:
+    name: brain-quality-loop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:brain-quality-loop-contract
+      - run: npm run test:brain-quality-loop
