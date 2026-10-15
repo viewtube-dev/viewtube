@@ -750,7 +750,7 @@ export const SubToolboxTopTitleDropdown: React.FC<SubToolboxTopTitleDropdownProp
                   if (!multiSelect) setOpen(false)
                 }}
               >
-                {multiSelect ? <span className="vt-subtoolbox-top-title-dropdown-check" aria-hidden="true">{selected ? "×" : ""}</span> : null}
+                {multiSelect ? <span className={classes("vt-subtoolbox-top-title-dropdown-check", selected && "is-checked")} aria-hidden="true">{selected ? "✓" : ""}</span> : null}
                 <span>{option.label}</span>
               </button>
             )
