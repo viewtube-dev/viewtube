@@ -388,5 +388,8 @@ const METADATA_HISTORY_EVENT_TYPES = new Set<ContentBuildEventType>([
 
 export const listMetadataHistory = (contentBuildId: string): ContentBuildEvent[] =>
   listContentBuildEvents(contentBuildId)
-    .filter(event => METADATA_HISTORY_EVENT_TYPES.has(event.eventType))
+    .filter(event =>
+      METADATA_HISTORY_EVENT_TYPES.has(event.eventType) ||
+      (event.eventType === "tool.output.recorded" && event.entityType === "metadata-operation")
+    )
     .sort((left, right) => right.timestamp.localeCompare(left.timestamp))
