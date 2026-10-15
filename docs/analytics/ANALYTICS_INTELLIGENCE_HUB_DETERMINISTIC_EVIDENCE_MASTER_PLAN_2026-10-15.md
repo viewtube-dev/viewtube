@@ -3,7 +3,7 @@
 **Status:** Phase 0 audit documented; Phase 1 insight contract and Phase 2 deterministic engine implemented on the feature branch; automated test/typecheck/CI verification and runtime caller integration remain pending.  
 **Date:** 2026-10-15  
 **Implementation branch:** `feat/analytics-intelligence-hub-phases-0-2-2026-10-15`  
-**Pull request:** [#238 — Analytics Intelligence Hub: deterministic insights phases 0–2](https://github.com/viewtube-dev/viewtube/pull/238) (open, draft)  
+**Pull request:** [#238 — Analytics Intelligence Hub: deterministic insights phases 0–2](https://github.com/viewtube-dev/viewtube/pull/238) (open, ready for review; not merged)  
 **Target integration branch:** `master/consolidated-feature-integration`  
 **Scope:** Build the Analytics Intelligence Hub and deterministic analytics findings/evidence without introducing a second analytics store or allowing AI-generated prose to become metric truth.
 
