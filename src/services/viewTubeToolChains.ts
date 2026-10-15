@@ -1,4 +1,5 @@
 import { createGenerationRecord, updateGenerationRecord } from "./generationStore"
+import { operationRecordFromActionPacket } from "./operations/OperationRecord"
 import { ingestGenerationArtifacts } from "./vaultAdapter"
 import { enqueueBrainHandoffs } from "./brainHandoffInbox"
 import {
@@ -101,6 +102,7 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
    approvedSnapshotId: packet.approvedSnapshotId || null,
    approvedSnapshotHash: packet.approvedSnapshotHash || null,
    identityMode: packet.identityMode || "legacy-derived",
+   operationRecord: operationRecordFromActionPacket(packet),
    universalToolHandoff: true,
    handoffInboxIds: inboxItems.map(item => item.id),
   },
@@ -187,6 +189,7 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
      approvedSnapshotId: packet.approvedSnapshotId || null,
      approvedSnapshotHash: packet.approvedSnapshotHash || null,
      identityMode: packet.identityMode || "legacy-derived",
+     operationRecord: operationRecordFromActionPacket(packet),
     },
    })
   }
