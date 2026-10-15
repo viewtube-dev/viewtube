@@ -182,15 +182,15 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
   void import("../brain/AlgorithmIntelligenceEventLedger").then(({ listAlgorithmIntelligenceEvents, recordAlgorithmIntelligenceEvent }) => {
    // Only recommendations explicitly bound to this exact ContentBuild + video
    // receive a due checkpoint. A proposal for another package is never joined.
-   listAlgorithmIntelligenceEvents({ channelId: build.channelId as string, videoId: next.youtubeVideoId as string })
-    .filter((event) => event.kind === "RECOMMENDATION_CREATED" && event.metadata?.contentBuildId === next.contentBuildId && Boolean(event.actionPacketId) && !event.checkpointAt)
+   listAlgorithmIntelligenceEvents({ channelId: build.channelId as string })
+    .filter((event) => event.kind === "RECOMMENDATION_CREATED" && event.metadata?.contentBuildId === next.contentBuildId && (!event.videoId || event.videoId === next.youtubeVideoId) && Boolean(event.actionPacketId) && !event.checkpointAt)
     .forEach((event) => {
      const windowHours = Math.max(1, ...event.evaluationTargets.map((target) => Number(target.windowHours || 0)))
      recordAlgorithmIntelligenceEvent({
       id: event.id,
       channelId: event.channelId,
       projectId: event.projectId,
-      videoId: event.videoId,
+      videoId: next.youtubeVideoId as string,
       kind: event.kind,
       sourceSystem: event.sourceSystem,
       sourceId: event.sourceId,
