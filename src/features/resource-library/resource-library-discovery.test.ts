@@ -47,6 +47,8 @@ describe("Resource Library discovery and learning paths", () => {
       expect(libraryComponent).toContain(route)
     }
     expect(libraryComponent).toContain("Help me apply the Resource Library guide")
+    expect(libraryComponent).toContain("import { Link, useSearchParams } from \"react-router-dom\"")
+    expect(libraryComponent).toContain("<Link key={link.href} to={link.href}>")
     expect(libraryComponent).toContain("they do not automatically copy guide content or change project data")
   })
 
