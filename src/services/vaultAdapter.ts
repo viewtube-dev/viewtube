@@ -1,8 +1,7 @@
 import type { GenerationArtifact, SuperToolId, VaultAsset, VaultAssetKind } from "@/types"
 import { nexusSyncService } from "./nexusSyncService"
 import { getVaultAttentionReasons } from "./vaultAttention"
-import { canMutateVaultAsset } from "./vaultMutationPolicy"
-import { isVaultAssetProtected } from "./vaultMutationPolicy"
+import { canMutateVaultAsset, isVaultAssetProtected } from "./vaultMutationPolicy"
 
 export type VaultAssetLifecycle =
  | "DRAFT"
