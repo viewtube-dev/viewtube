@@ -38,6 +38,8 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(isOpenInitial)
   const palette = getToolboxPaletteColors(paletteIndex)
+  const isHardcoded = track === "hardcoded"
+  const isConfirmed = track === "confirmed"
   const primitiveContextStyle = {
     ["--vt-subtoolbox-fill" as string]: palette.header,
   } as React.CSSProperties
@@ -48,8 +50,6 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
     ["--pair-a" as string]: VT_SPECTRUM_PALETTE_06[((paletteIndex % 12) + 12) % 12],
     ["--pair-b" as string]: VT_SPECTRUM_PALETTE_06[(((paletteIndex + 6) % 12) + 12) % 12],
   } as React.CSSProperties : undefined
-  const isHardcoded = track === "hardcoded"
-  const isConfirmed = track === "confirmed"
 
   return (
     <div
