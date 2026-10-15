@@ -331,12 +331,11 @@ test("composite controls and prop types are exported from the public Studio entr
   }
 });
 
-test("20 spectrum samples cover all 12 canonical palette stops", () => {
+test("50 spectrum samples cover all 26 alphabetic initials", () => {
   const tagGrid = catalog.match(/className="vt-confirmed-spectrum-tag-grid"[^]*?<\/div>/)?.[0] ?? "";
   const labels = [...tagGrid.matchAll(/<StudioSpectrumTag label="([A-Z]+)"/g)].map(match => match[1]);
-  assert.equal(labels.length, 20);
-  const initials = new Set(labels.map(label => label[0]));
-  for (const initial of ["A", "C", "E", "G", "I", "L", "N", "P", "S", "U", "W", "Y"]) {
-    assert.ok(initials.has(initial), `spectrum gallery includes palette-stop sample ${initial}`);
+  assert.equal(labels.length, 50);
+  for (const initial of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+    assert.ok(labels.some(label => label.startsWith(initial)), `spectrum gallery includes initial ${initial}`);
   }
 });
