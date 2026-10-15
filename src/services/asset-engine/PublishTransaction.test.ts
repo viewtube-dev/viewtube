@@ -109,4 +109,13 @@ describe("PublishTransaction",()=>{
   }
  })
 
+ it("refuses to start publishing when only volatile in-memory persistence is available", () => {
+  vi.stubGlobal("localStorage", undefined)
+  try {
+   expect(() => beginPublishTransaction(projection())).toThrow(/persistent browser storage/i)
+  } finally {
+   vi.unstubAllGlobals()
+  }
+ })
+
 })
