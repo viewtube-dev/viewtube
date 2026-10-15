@@ -1872,9 +1872,13 @@
   min-width: 0;
 }
 .vt-confirmed-variant > span {
+  max-width: 40ch;
+  overflow: hidden;
   font-size: 10px;
   font-weight: 800;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .vt-confirmed-provenance {
   display: grid;
