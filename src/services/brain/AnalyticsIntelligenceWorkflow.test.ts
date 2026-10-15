@@ -73,6 +73,8 @@ const measurement = (overrides: Partial<{
   value: number
   snapshotId: string
   observedAt: string
+  periodStartDate: string
+  periodEndDate: string
 }> = {}) => ({
   channelId: "channel-1",
   metric: "views",
@@ -80,6 +82,8 @@ const measurement = (overrides: Partial<{
   value: 100,
   snapshotId: "snapshot-before",
   observedAt: "2026-09-17T00:00:00.000Z",
+  periodStartDate: "2026-08-21",
+  periodEndDate: "2026-09-17",
   ...overrides,
 })
 
@@ -155,6 +159,8 @@ describe("Analytics intelligence workflow phases 5–8", () => {
         value: 12,
         snapshotId: "snapshot-after",
         observedAt: "2026-10-15T00:00:00.000Z",
+        periodStartDate: "2026-09-18",
+        periodEndDate: "2026-10-15",
       }),
     })
     expect(result.status).toBe("evaluated")
