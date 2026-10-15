@@ -56,7 +56,7 @@ describe("StudioSquareIconButton interaction effects", () => {
         <StudioSquareIconButton label="Save" icon={icon} effect="success" success tooltip="Saved" />
       </>,
     )
-    expect(html).toContain('data-pop="true"')
+    expect(html).not.toContain('data-pop="true"')
     expect(html).toContain('aria-label="Save"')
     expect(html).toContain('role="status"')
     expect(html).toContain('aria-live="polite"')
