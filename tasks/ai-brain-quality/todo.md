@@ -115,3 +115,22 @@
 - [ ] Complete stable-ID propagation across generation, selected variants, ActionPackets, publish, evaluation and learning writers.
 - [ ] Surface the attribution chain in the live Brain/Studio UI.
 - [ ] Validate against real lifecycle data and run focused tests/typecheck/full suite/build/governance checks.
+
+
+## Phase 3 — Prompt governance
+
+- [x] Version the prompt registry and declare required provenance/reachability fields.
+- [x] Define prompt/constitution/context-resolver/schema versioning semantics and safe migration gates.
+- [x] Document that registry status is inventory, not proof of runtime reachability or migration.
+- [ ] Populate owner, production callers, prompt family/version, schema/context versions and reachability evidence for every production-reachable prompt/generator.
+- [ ] Prove caller reachability and migrate families incrementally with fixtures and baseline comparisons.
+
+## Phase 4 — Generation and validation loop
+
+- [x] Record canonical task-profile → structured generation → deterministic evaluation → one bounded repair → independent revalidation → safe fallback contract.
+- [x] Add regression coverage for wrong task mode and incomplete audience-task responses.
+- [x] Preserve existing numeric-claim and creative-draft validation coverage.
+- [ ] Test repair success, repair rejection and provider failure/fallback receipts.
+- [ ] Verify generation provenance (prompt/schema/context/model, evidence, Project/ContentBuild and repair metadata) on real caller paths.
+- [ ] Run focused Brain tests and golden suite, typecheck, runtime lint, full test suite, build, source-governance/reachability audit and diff checks.
+- [ ] Attach exact-commit verification evidence before certification.
