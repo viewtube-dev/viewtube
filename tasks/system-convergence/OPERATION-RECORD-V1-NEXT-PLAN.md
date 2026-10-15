@@ -44,9 +44,9 @@ Progress on 2026-10-15:
 - BrainRuntime provenance exposes operation/workflow identity and reports `operation_identity_mismatch` rather than silently joining conflicting explicit IDs.
 - Added regression assertions for request/receipt identity continuity and conflict detection.
 
-1. Add optional operation/workflow identity to GenerationRecord and BrainTrace projections where absent.
+1. [x] Add optional operation/workflow identity to GenerationRecord and confirm BrainTrace exposes the same optional identity fields.
 2. Make the GenerationWorkflow request, ToolReceipt, ActionPacket, BrainTrace, and ContentBuild event agree on the same operationId/workflowId.
-3. Extend BrainRuntimeSnapshot to expose unresolved/mismatched operation links as diagnostics, not fabricated lineage.
+3. [x] Extend BrainRuntimeSnapshot to expose unresolved/mismatched operation links as diagnostics, not fabricated lineage.
 4. Add parity tests for legacy records and records without optional fields.
 5. Inventory production callers before migrating any other writer.
 
