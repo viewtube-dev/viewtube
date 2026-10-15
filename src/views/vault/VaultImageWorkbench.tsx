@@ -1,5 +1,5 @@
 import React from "react"
-import { Download, Image as ImageIcon, RotateCcw, WandSparkles } from "lucide-react"
+import { Image as ImageIcon } from "lucide-react"
 import { SubToolboxInnerActionButton } from "../components/Toolbox"
 import {
   SubToolboxInput,
@@ -7,6 +7,7 @@ import {
   SubToolboxStatePanel,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 import { createImportedVaultAsset } from "../services/vaultAdapter"
+import { computeVaultImagePalette } from "../services/vaultImagePalette"
 import {
   DEFAULT_VAULT_IMAGE_TRANSFORM,
   transformVaultImage,
@@ -43,6 +44,8 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
   const [busy, setBusy] = React.useState(false)
   const [error, setError] = React.useState("")
   const [message, setMessage] = React.useState("")
+  const [palette, setPalette] = React.useState<string[]>([])
+  const [focalPoint, setFocalPoint] = React.useState({ x: 50, y: 50 })
 
   React.useEffect(() => {
     let cancelled = false
@@ -112,8 +115,31 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
     }
   }
 
+  const extractPalette = async () => {
+    setBusy(true)
+    setError("")
+    try {
+      const sourceUrl = asset.url || asset.previewUrl
+      if (!sourceUrl) throw new Error("This image has no readable source URL.")
+      const response = await fetch(sourceUrl)
+      if (!response.ok) throw new Error("Image source returned HTTP " + response.status + ".")
+      const blob = await response.blob()
+      const file = new File([blob], asset.name, { type: blob.type || asset.mimeType || "image/png" })
+      const colors = await computeVaultImagePalette(file, 5)
+      if (!colors.length) throw new Error("Palette extraction returned no colors for this image.")
+      setPalette(colors)
+      setMessage("Palette extracted from the selected image pixels.")
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not extract the image palette.")
+    } finally {
+      setBusy(false)
+    }
+  }
+
   const reset = () => {
     setTransform({ ...DEFAULT_VAULT_IMAGE_TRANSFORM })
+    setFocalPoint({ x: 50, y: 50 })
+    setPalette([])
     setCropEnabled(false)
     setCrop({ x: 0, y: 0, ...sourceDimensions })
     setResult(null)
@@ -164,7 +190,12 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
             preserveAspectRatio: transform.preserveAspectRatio,
             outputFormat: result.mimeType,
             quality: transform.quality,
+            brightness: transform.brightness || 0,
+            contrast: transform.contrast || 0,
+            saturation: transform.saturation || 0,
           },
+          focalPoint,
+          extractedPalette: palette,
           width: result.width,
           height: result.height,
           byteSize: result.byteSize,
@@ -242,6 +273,18 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Brightness (-100 to 100)
+            <SubToolboxInput type="number" min={-100} max={100} value={transform.brightness || 0} onChange={(event) => patchTransform({ brightness: Number(event.target.value) })} />
+          </label>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Contrast (-100 to 100)
+            <SubToolboxInput type="number" min={-100} max={100} value={transform.contrast || 0} onChange={(event) => patchTransform({ contrast: Number(event.target.value) })} />
+          </label>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Saturation (-100 to 100)
+            <SubToolboxInput type="number" min={-100} max={100} value={transform.saturation || 0} onChange={(event) => patchTransform({ saturation: Number(event.target.value) })} />
+          </label>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Resize width
             <SubToolboxInput type="number" min={1} max={16384} placeholder="Original" value={transform.resizeWidth ?? ""} onChange={(event) => patchTransform({ resizeWidth: event.target.value ? Number(event.target.value) : null })} />
           </label>
@@ -255,10 +298,36 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
           </label>
         </div>
 
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Focal point X (%)
+            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.x} onChange={(event) => setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, Number(event.target.value))) }))} />
+          </label>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Focal point Y (%)
+            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.y} onChange={(event) => setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, Number(event.target.value))) }))} />
+          </label>
+          <div className="col-span-2 flex flex-wrap items-end gap-2">
+            <SubToolboxInnerActionButton label="Thumbnail Preset" iconName="image" tone="orange" onClick={() => patchTransform({ resizeWidth: 1280, resizeHeight: 720, preserveAspectRatio: true })} disabled={busy} />
+            <SubToolboxInnerActionButton label="Web Optimize" iconName="refresh" tone="green" onClick={() => patchTransform({ resizeWidth: 1920, resizeHeight: 1080, preserveAspectRatio: true, outputFormat: "image/webp", quality: 0.82 })} disabled={busy} />
+          </div>
+        </div>
         <div className="flex flex-wrap gap-2">
           <SubToolboxInnerActionButton label={busy ? "Processing…" : "Apply & Preview"} iconName="image" tone="cyan" onClick={() => void apply()} disabled={busy} />
+          <SubToolboxInnerActionButton label="Extract Palette" iconName="palette" tone="purple" onClick={() => void extractPalette()} disabled={busy} />
           <SubToolboxInnerActionButton label="Reset" iconName="refresh" tone="yellow" onClick={reset} disabled={busy} />
         </div>
+        {palette.length ? (
+          <div className="flex flex-wrap items-center gap-2" aria-label="Extracted image palette">
+            <span className="text-xs font-black uppercase">Palette</span>
+            {palette.map((color) => (
+              <div key={color} className="flex items-center gap-1 rounded border border-current p-1 text-xs font-black">
+                <span aria-hidden="true" className="inline-block h-5 w-5 rounded-sm border border-black/20" style={{ backgroundColor: color }} />
+                {color}
+              </div>
+            ))}
+          </div>
+        ) : null}
 
         {error ? <SubToolboxStatePanel level="l1" state="error" message={error} /> : null}
         {message ? <SubToolboxStatePanel level="l1" state="ready" message={message} /> : null}
