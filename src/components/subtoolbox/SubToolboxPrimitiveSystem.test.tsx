@@ -147,6 +147,19 @@ describe("Subtoolbox Primitive System", () => {
     expect(css).toContain("--vt-tree-row-opacity")
   })
 
+  it("keeps multiselect menus primary-filled with white rows, secondary selected rows, and an animated solid checkmark", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+    const source = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxPrimitives.tsx"), "utf8")
+
+    expect(css).toContain("background:var(--vt-top-title-title)")
+    expect(css).toContain(".vt-subtoolbox-top-title-dropdown-panel>button.is-selected")
+    expect(css).toContain("background:var(--vt-top-title-body)")
+    expect(css).toContain(".vt-subtoolbox-top-title-dropdown-check.is-checked")
+    expect(css).toContain("@keyframes vt-multiselect-check-in")
+    expect(source).toContain('selected ? "✓" : ""')
+    expect(source).toContain('selected && "is-checked"')
+  })
+
   it("gives every declared subtoolbox state default copy", () => {
     // The Record is typed, but a missing key renders an empty panel rather than
     // failing the build, so assert the rendered output instead of the type.
