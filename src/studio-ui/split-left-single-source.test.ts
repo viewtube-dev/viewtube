@@ -32,7 +32,8 @@ describe("canonical Studio split-left button ownership", () => {
     expect(component).toContain('sizeVariant = "standard"')
     expect(component).toContain('data-split-left="true"')
     expect(component).toContain('heightVariant?: "44" | "28"')
-    expect(css).toContain("filter: none !important")
+    const buttonRule = css.match(/button\[data-vt-studio-button="true"\]\[data-split-left="true"\]\s*\{([^}]*)\}/s)?.[1] ?? ""
     expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]')
+    expect(buttonRule).not.toContain("filter: drop-shadow")
   })
 })
