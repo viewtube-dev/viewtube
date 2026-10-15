@@ -32,4 +32,24 @@ describe('buildImportedScript', () => {
     expect(buildImportedScript('')).toBeNull();
     expect(buildImportedScript('\uFEFF \r\n')).toBeNull();
   });
+
+  it('uses a safe fallback label for a blank filename and estimates duration from words', () => {
+    const imported = buildImportedScript(Array.from({ length: 300 }, () => 'word').join(' '), '   ');
+
+    expect(imported?.outline[0].section).toBe('Imported Script');
+    expect(imported?.timeline[0]).toMatchObject({
+      label: 'Imported Script',
+      wordCount: 300,
+      estMinutes: 2,
+    });
+    expect(imported?.sections[0].label).toBe('Imported Script');
+  });
+
+  it('uses the final extension only when deriving the outline and timeline label', () => {
+    const imported = buildImportedScript('A short draft.', 'episode.notes.md');
+
+    expect(imported?.outline[0].section).toBe('episode.notes');
+    expect(imported?.timeline[0].label).toBe('episode.notes');
+    expect(imported?.sections[0].label).toBe('Imported Script');
+  });
 });
