@@ -1,6 +1,6 @@
 import React from "react"
 import { Settings2, Sparkles } from "lucide-react"
-import { Studioswitch as StudioSwitch, StudioChoice as StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui"
+import { Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui"
 import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioLabeledInput, StudioLabeledTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
 import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
@@ -27,7 +27,6 @@ const CanonicalControlFamilies: React.FC = () => {
     <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={["size=\"28\" selects the compact variant; default size is 44px.", "skin=\"color-swap\" | \"black-indicator\" | \"white-indicator\" (default: solid).", "value=true selects the second word; default value is false.", "words={[\"PAUSE\", \"PLAY\"]} customizes the labels; defaults are OFF / ON."]} provenance={<Provenance primitive="Studiotoggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family" style={colorStyle}>{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => {
         const variantsClass = item.size === "44" ? "is-word-toggle-44" : "is-word-toggle-28";
-        const solidIndex = row * 3;
         return <div className="vt-confirmed-control-row" key={item.size}>
           <strong>{item.label}</strong>
           <div className={`vt-confirmed-control-variants ${variantsClass}`}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioWordToggle size={item.size} skin={skin.skin} value={words[index]} words={item.size === "44" && col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
