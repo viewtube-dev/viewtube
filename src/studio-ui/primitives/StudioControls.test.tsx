@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioSquareIconButton, StudioTextArea, StudioTextInput } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
+import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
 describe("standalone Studio text fields", () => {
   it("renders the standard text input with only canonical Studio field markers", () => {
@@ -59,6 +60,21 @@ describe("Studio text field library entries", () => {
   });
 });
 
+describe("confirmed square icon button library entry", () => {
+  it("registers the actual production square icon primitive with standard, compact, color, selected, and disabled specimens", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain("Square Icon Button")
+    expect(html).toContain('data-vt-library-component="StudioSquareIconButton"')
+    expect(html).toContain('data-icon-variant="v1"')
+    expect(html).toContain('data-icon-variant="v2"')
+    expect(html).toContain('data-icon-variant="v3"')
+    expect(html).toContain('data-icon-variant="v4"')
+    expect(html).toContain('data-size="standard"')
+    expect(html).toContain('data-size="compact"')
+    expect(html).toContain('aria-label="Disabled square icon button"')
+    expect(html).toContain('disabled=""')
+  })
+})
 describe("canonical Studio field, selection, and action contracts", () => {
   it("keeps default and placeholder field typography primary and identical", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
