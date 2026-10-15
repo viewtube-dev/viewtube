@@ -74,7 +74,7 @@ const METRICS: Array<{ name: HistoricalMetadataMetricName; aliases: string[] }> 
 ]
 
 const comparisonFingerprint = (value: unknown) => {
-  const input = JSON.stringify(value)
+  const input = JSON.stringify(value) ?? "undefined"
   let hash = 2166136261
   for (let index = 0; index < input.length; index += 1) {
     hash = Math.imul(hash ^ input.charCodeAt(index), 16777619)
