@@ -12,6 +12,7 @@
 - `AlgorithmMonitoringSchedule.ts` explicitly records checkpoint lineage only; it does not fabricate measured outcomes or increase learning sample size.
 - `AlgorithmAttributionDetail.ts` builds a signal → decision → execution → monitoring → outcome → learning timeline from parent links and stable attribution IDs.
 - `AlgorithmLearningCandidates.ts` and `BrainEvaluationLoop.ts` are the governed learning/evaluation consumers. These remain the owners; no parallel ledger is introduced.
+- Added `src/services/brain/__tests__/AlgorithmOutcomeLineage.test.ts` to assert stable outcome event IDs, parent/source linkage, channel/project/video/recommendation/action/workflow identity, evidence IDs, and missing-observation semantics.
 
 ### Phase-6 disposition
 **Architecture inventory completed; end-to-end lineage certification remains open.** The repository has an algorithmic lineage spine, but this work does not prove that every creator decision, project/ContentBuild, publish transaction, remote video identity, canonical analytics observation, evaluation and promoted learning record joins through one stable identity.
@@ -22,7 +23,7 @@ Acceptance proof still required:
 3. canonical analytics observation IDs and comparison context on measured outcomes;
 4. idempotent retries do not duplicate outcomes or learning samples;
 5. no direct model output can write promoted knowledge without evidence-backed outcome and governed review;
-6. an integration fixture traverses the full chain and verifies each link.
+6. an integration fixture traverses the full chain and verifies each link. The new unit contract is a partial guard, not a substitute for this integration fixture.
 
 ## Phase 7 — capability evidence coverage governance
 
