@@ -68,6 +68,8 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(contract).toContain(".vt-studio-44-choice.is-checkbox.is-black-indicator svg")
     expect(contract).toContain(".vt-studio-44-choice.is-checkbox.is-white-indicator svg")
     expect(contract).toContain(".vt-studio-44-choice.is-checkbox.is-color-swap.is-on svg")
+    expect(contract).toContain(".vt-studio-44-switch.is-black-indicator.is-on")
+    expect(contract).toContain(".vt-studio-44-choice.is-white-indicator.is-on")
   })
 
   it("anchors the action shadow while only the face moves", () => {
