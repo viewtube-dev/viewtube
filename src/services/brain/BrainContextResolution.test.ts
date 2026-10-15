@@ -9,10 +9,10 @@ describe("Brain context resolution", () => {
    "\nCREATOR STYLE\n" + "s".repeat(120),
    "\nACTIVE PROJECT CONTEXT\n" + "p".repeat(120),
    "\nCONTENT GENERATION TASK\nDraft a title.",
-  ], { userText: "Write a title for my video", maximumCharacters: 1200 })
-  expect(result.selectedSectionIds.indexOf("creator_style")).toBeGreaterThan(-1)
-  expect(result.selectedSectionIds.indexOf("creator_style")).toBeLessThan(result.selectedSectionIds.indexOf("channel_evidence"))
-  expect(result.text.indexOf("CHANNEL EVIDENCE")).toBeLessThan(result.text.indexOf("CREATOR STYLE"))
+  ], { userText: "Write a title for my video", maximumCharacters: 400 })
+  expect(result.selectedSectionIds).toContain("creator_style")
+  expect(result.selectedSectionIds).not.toContain("channel_evidence")
+  expect(result.text).toContain("CREATOR STYLE")
  })
 
  it("honors the character budget and reports omissions", () => {
