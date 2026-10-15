@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Brain, CheckCircle2, Database, Lightbulb, Network, RefreshCw, ShieldCheck, Workflow, Zap } from "lucide-react"
 import { AssistantCommandContextBanner } from "../components/AssistantCommandContextBanner"
 import SuperToolShell, { type SuperToolMountProps } from "./supertools/SuperToolShell"
 import { SidebarChatbot } from "../components/SidebarChatbot"
 import { BrainAttributionDetailPanel } from "../components/brain/BrainAttributionDetailPanel"
-import { listAlgorithmIntelligenceEvents } from "../services/brain/AlgorithmIntelligenceEventLedger"
+import { ALGORITHM_INTELLIGENCE_EVENT_CHANGED, listAlgorithmIntelligenceEvents } from "../services/brain/AlgorithmIntelligenceEventLedger"
 import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { useBrain } from "../context/useBrain"
@@ -207,6 +207,13 @@ const BrainCommandCenter: React.FC<BrainCommandCenterProps> = (props) => {
  const [commandFilter, setCommandFilter] = useState<BrainCommandFilter>("all")
  const [selectedAttributionEventId, setSelectedAttributionEventId] = useState<string | null>(null)
  const memory = getBrainMemory()
+
+ useEffect(() => {
+  const refreshAttribution = () => setCommandRefresh((value) => value + 1)
+  if (typeof window === "undefined") return
+  window.addEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, refreshAttribution)
+  return () => window.removeEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, refreshAttribution)
+ }, [])
 
  const tools = useMemo(() => listSuperToolsByIds([...COMMAND_TOOL_IDS]), [])
  const workflows = useMemo(() => listWorkflowChains(), [])
