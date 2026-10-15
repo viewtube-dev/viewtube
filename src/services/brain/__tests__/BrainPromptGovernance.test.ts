@@ -40,7 +40,8 @@ describe("Brain prompt governance", () => {
   })
   expect(validateBrainPromptRunReceipt(receipt)).toEqual(expect.arrayContaining([
    "traceId is required", "outputId is required", "channelId is required",
-   "promptVersion is required", "outputSchemaVersion is required", "repairCount must be a non-negative integer",
+   "promptVersion is required", "constitutionVersion is required", "contextResolverVersion is required",
+   "outputSchemaVersion is required", "repairCount must be a non-negative integer",
    "generatedAt must be a valid timestamp",
   ]))
  })
