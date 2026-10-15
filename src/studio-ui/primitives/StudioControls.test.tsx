@@ -438,8 +438,10 @@ describe("Studio Play/Pause Split-Left Button", () => {
 describe("floating label geometry and circular icon scale", () => {
   it("floats labels at 80% scale with the border crossing the 40% height line", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain("transform:translateY(-32%) scale(.8)")
-    expect(css).toContain("transition:top 180ms ease-out, transform 180ms ease-out")
+    expect(css).toContain("transform: translateY(-40%)")
+    expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
+    expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+    expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
     expect(css).toContain("padding:2.25px 4.5px")
   })
 
@@ -452,7 +454,10 @@ describe("floating label geometry and circular icon scale", () => {
   it("scales circle-button SVG icons to 80% without changing the canonical button size", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-stage] svg')
-    expect(css).toContain("transform: scale(.8)")
+    expect(css).toContain("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
+    expect(css).toContain("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
+    expect(css).toContain("--vt-studio-control-icon-size: 38px")
+    expect(css).toContain("--vt-studio-control-icon-size: 24px")
   })
 })
 
