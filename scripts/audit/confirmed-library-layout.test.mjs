@@ -312,7 +312,7 @@ test("non-default settings and TSX/CSS/import provenance are collapsed by defaul
 });
 
 test("confirmed component and variant labels are visually constrained to one line and 40ch", () => {
-  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap[^}]*text-overflow:\s*ellipsis/s);
+  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
   assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
 });
 
