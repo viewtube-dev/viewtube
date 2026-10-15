@@ -316,6 +316,8 @@ export const operationRecordFromActionPacket = (
 type ToolReceiptProjection = {
  id: string
  requestId: string
+ operationId?: string
+ workflowId?: string
  contentBuildId: string
  projectId: string | null
  toolId: string
@@ -396,6 +398,8 @@ export const operationRecordFromToolReceipt = (
 
 type GenerationRequestProjection = {
  id: string
+ operationId?: string
+ workflowId?: string
  contentBuildId: string
  projectId: string | null
  channelId: string | null
