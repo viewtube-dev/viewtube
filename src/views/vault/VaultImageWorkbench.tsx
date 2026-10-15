@@ -7,7 +7,7 @@ import {
   SubToolboxStatePanel,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 import { createImportedVaultAsset } from "../services/vaultAdapter"
-import { computeVaultImagePalette } from "../services/vaultImagePalette"
+import { computeVaultImagePalette } from "../../services/vaultImagePalette"
 import {
   DEFAULT_VAULT_IMAGE_TRANSFORM,
   transformVaultImage,
@@ -15,7 +15,7 @@ import {
   type VaultImageOutputFormat,
   type VaultImageTransform,
   type VaultImageTransformResult,
-} from "../services/vaultImageWorkbench"
+} from "../../services/vaultImageWorkbench"
 import type { VaultAsset } from "../types"
 
 const MAX_INLINE_VAULT_DERIVATIVE_BYTES = 750 * 1024
