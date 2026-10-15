@@ -64,3 +64,12 @@ Acceptance still outstanding:
 ## Verification
 
 Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+
+
+## Current-base closeout update — 2026-10-15
+
+The current-base follow-up adds governed command-note communication capture to Brain Command Center when channel controls permit it, using the stable command-action ID and preserving the resulting evidence-event ID in the emitted signal. It also exposes recent channel-scoped recommendation events and the existing read-only attribution detail panel in the live Brain Command Center, with explicit empty/incomplete states.
+
+Key-vault reads and writes are now safe when browser storage is missing or blocked, with regression coverage; the Play/Pause primitive test matches the canonical rendered label marker.
+
+These are implementation improvements, not end-to-end certification. Stable ID propagation across every generation/variant/ActionPacket/publication/evaluation/learning writer, project lifecycle enforcement across every creation surface, privacy/retention review, durable replay verification, and exact-head release gates remain open.
