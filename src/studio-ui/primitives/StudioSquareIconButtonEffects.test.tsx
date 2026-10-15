@@ -33,6 +33,36 @@ describe("StudioSquareIconButton interaction effects", () => {
     expect(html).toContain('aria-label="Saved"')
   })
 
+  it("preserves all four visual skins independently from effects", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton label="Skin one" icon={icon} variant="v1" />
+        <StudioSquareIconButton label="Skin two" icon={icon} variant="v2" />
+        <StudioSquareIconButton label="Selectable skin" icon={icon} variant="v3" defaultSelected />
+        <StudioSquareIconButton label="Black skin" icon={icon} variant="v4" />
+      </>,
+    )
+    expect(html).toContain('data-icon-variant="v1"')
+    expect(html).toContain('data-icon-variant="v2"')
+    expect(html).toContain('data-icon-variant="v3"')
+    expect(html).toContain('data-icon-variant="v4"')
+    expect(html).toContain('aria-pressed="true"')
+  })
+
+  it("exposes opt-in pop feedback and announces confirmed success", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton label="Refresh" icon={icon} animate />
+        <StudioSquareIconButton label="Save" icon={icon} effect="success" success tooltip="Saved" />
+      </>,
+    )
+    expect(html).toContain('data-pop="true"')
+    expect(html).toContain('aria-label="Save"')
+    expect(html).toContain('role="status"')
+    expect(html).toContain('aria-live="polite"')
+    expect(html).toContain('aria-atomic="true"')
+  })
+
   it("scopes effect animations and respects reduced motion", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain("@keyframes vt-studio-square-pop")
