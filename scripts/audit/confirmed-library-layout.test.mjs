@@ -168,13 +168,16 @@ test("word toggle library has three skins, one standard toggle per row, and cent
   assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variant > small\s*\{[\s\S]*?text-align:\s*center/);
 });
 
-test("compact Studio button shadow is a symmetric face-sized stationary offset", () => {
+test("compact Studio button shadow and typography tokens match the effective control CSS", () => {
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   assert.match(css, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\][^\n]*--vt-studio-control-shadow-x:\s*1px;[^\n]*--vt-studio-control-shadow-y:\s*1px/);
+  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1\.5px;[^}]*--vt-studio-control-shadow-y:\s*1\.5px/);
+  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1px;[^}]*--vt-studio-control-shadow-y:\s*1px/);
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
-  assert.match(tokens, /compact: \{[^}]*buttonShadowX: 1, buttonShadowY: 1/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
+  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
 });
 
 test("global defaults use a compact collapsed panel with an explicit expand affordance", () => {
