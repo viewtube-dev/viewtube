@@ -1,3 +1,17 @@
+---
+status: archived-historical-draft
+resource_role: research-donor-not-runtime-resource
+superseded_by: src/features/resource-library/resources/live-streaming-operations-handbook.md
+preserved_from: src/features/resource-library/resources/live-streaming-operations.md
+archive_date: 2026-10-15
+---
+
+# Historical Draft Archive Note
+
+This file preserves the short, unregistered draft for provenance and comparison. The registered counterpart is the runtime authority. Unique ideas from this draft were reviewed and carried forward where useful. Do not register this archive as a separate Resource Library entry.
+
+---
+
 # Live Streaming Operations
 
 ## Purpose

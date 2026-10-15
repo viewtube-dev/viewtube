@@ -12,7 +12,7 @@ production_date: 2026-09-26
 last_researched: 2026-09-26
 recommended_review_date: 2026-12-26
 research_status: creator-first and source-grounded
-version: 2.0
+version: 2.1
 official_sources_prioritized: true
 viewtube_resource: true
 tags: analytics, metrics, dimensions, filters, traffic-sources, retention, audience, revenue, shorts, comparisons
@@ -1202,6 +1202,20 @@ ViewTube should hide backend schema complexity while preserving:
 The creator should see one coherent analytics system even when several official APIs are involved underneath.
 
 ---
+
+### Important technical caveats recovered from the earlier glossary
+
+The creator-facing path above is the primary reading experience. These implementation details explain why a Studio number, API response, and stored report may not be interchangeable.
+
+- **YouTube Studio is not a raw-schema browser.** Some creator-facing charts and insights do not have a direct one-to-one public API field. Do not promise that every visible Studio metric can be retrieved through a single API.
+- **Analytics API and Reporting API serve different workflows.** The Analytics API supports targeted queries with documented metric, dimension, filter and date-range combinations. The Reporting API is designed for scheduled bulk reports with predefined schemas. It is not an arbitrary-query version of the same interface.
+- **The Data API is not a performance-analytics substitute.** It provides resource metadata and management capabilities—such as video, channel and playlist information—that may enrich an analytics dataset. It does not provide every performance metric.
+- **Supported combinations matter.** A metric being documented does not mean it can be queried with every dimension. Check the current compatibility documentation before building a report.
+- **Synchronous does not mean instantaneous.** A query returning immediately describes request behavior, not necessarily zero delay in the underlying analytics data. Reporting exports are asynchronous and should be designed to tolerate delayed arrival.
+- **Missing, delayed, anonymized and not-applicable values are different states.** Preserve the distinction rather than converting every absent field to zero. A pipeline should also record the source, retrieval time, reporting window, filters and definition version where available.
+- **Authorization and privacy are part of correctness.** Use the currently documented OAuth and API Services requirements, request only needed scopes, and follow current policies for storing or refreshing YouTube resource metadata. Do not assume service-account access works for a creator's channel data.
+
+These are durable design cautions, but API names, schemas, supported combinations, retention rules and policies can change. Verify current official documentation before implementation.
 
 ## Analytics Myths
 

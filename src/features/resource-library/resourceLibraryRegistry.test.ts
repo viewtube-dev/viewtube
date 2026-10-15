@@ -91,6 +91,23 @@ describe("resource library registry", () => {
     expect(entry?.tags).toContain("format-strategy")
   })
 
+  it("uses runtime Markdown as the source path for every registered resource", () => {
+    for (const resource of RESOURCE_LIBRARY_ENTRIES) {
+      expect(resource.sourcePath).toMatch(/^src\/features\/resource-library\/resources\//)
+    }
+  })
+
+  it("keeps guides 4–15 substantively developed and free of broken placeholders", () => {
+    const followOnGuides = RESOURCE_LIBRARY_ENTRIES.slice(3)
+
+    for (const resource of followOnGuides) {
+      expect(resource.markdown.trim().split(/\s+/).length, resource.id).toBeGreaterThan(1200)
+      expect(resource.markdown, resource.id).not.toContain("undefined")
+      expect(resource.markdown, resource.id).toContain("## Sources and Further Reading")
+      expect(resource.markdown, resource.id).toContain("## Glossary")
+    }
+  })
+
   it("parses canonical Markdown into metadata and SubToolbox-sized sections", () => {
     const parsed = parseResourceDocument(SAMPLE_DOCUMENT)
 
