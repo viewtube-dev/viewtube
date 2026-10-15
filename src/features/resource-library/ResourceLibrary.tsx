@@ -64,7 +64,7 @@ const ResourceLibrary: React.FC = () => {
   }
 
   return (
-    <div className="vt-resource-library-page" style={{ ...canonicalSpectrumStyle, ...getResourcePaletteStyle(8) }}>
+    <div className="vt-resource-library-page" style={{ ...canonicalSpectrumStyle, ...getResourcePaletteStyle(selectedResource?.accentPaletteIndex ?? 8) }}>
       <ToolboxScaffold
         title="RESOURCE LIBRARY"
         subtitle="Source-grounded creator references, guides, playbooks and reusable learning resources."
