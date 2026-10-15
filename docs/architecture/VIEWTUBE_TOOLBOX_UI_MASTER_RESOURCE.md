@@ -225,6 +225,7 @@ Use status vocabulary: `CANONICAL`, `IMPLEMENTED`, `VERIFIED`, `MIGRATE`, `LEGAC
 | --- | --- | --- | --- | --- |
 | Toolbox/Subtoolbox shells | yes | yes | visual required | 80/56 authority implemented on `fix/toolbox-geometry-authority-2026-09-22`; visual certification required before VERIFIED |
 | Standard buttons | yes | yes | required | IMPLEMENTED |
+| Square icon buttons (`StudioSquareIconButton`, v1–v4) | yes | yes — Confirmed Primitives gallery, standard 44×44 and compact 28×28, all four variants + disabled specimen | source regression + visual required | IMPLEMENTED / REFERENCE LIBRARY UPDATED; browser visual certification open |
 | Split-left actions | yes | yes | partial | IMPLEMENTED |
 | Analytics split-left dropdown | yes | yes | static render + controlled interaction/portal test | IMPLEMENTED / TEST-CERTIFIED; visual certification open |
 | Inputs/Textareas | yes | yes | required | IMPLEMENTED |
