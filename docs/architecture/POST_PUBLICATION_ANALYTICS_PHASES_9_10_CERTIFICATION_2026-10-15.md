@@ -55,6 +55,14 @@ Certification is fail-closed. A merged PR, successful build, or reachable page a
 - **Live frontend routes:** home and Studio pass basic HTTP/render checks; Publisher does not remain on a distinct route; no API-backed route can be certified.
 - **Production deployment:** not triggered by this change. Do not deploy or mark production certified while required gates are failing or pending.
 
+### Render API proxy root cause and remediation
+
+The Render service inventory confirms the Publisher service is attached to `viewtube-dev/viewtube` on `master/consolidated-feature-integration`, but its current Start Command is `npm run preview -- --host 0.0.0.0 --port $PORT`. That starts only Vite Preview. The configured Vite proxy forwards `/api/*` and `/billing/*` to `localhost:3000`, but no API process is launched, matching Render's `ECONNREFUSED` logs and HTTP 502 responses.
+
+This follow-up adds `scripts/production-stack.mjs` and `npm run start:production`. The runner starts the API on the private `BILLING_PORT` (default 3000), waits for `/api/release` to become healthy, then starts Vite Preview on Render's public `PORT` and terminates both child processes if either exits. It uses `RENDER_EXTERNAL_URL` as the default billing origin. A focused Node test verifies public/internal port separation, invalid-port rejection and public-origin resolution.
+
+**Required Render dashboard setting:** change the Publisher service Start Command to `npm run start:production`, save, and trigger a deploy after this follow-up is merged. This repository PR alone cannot mutate the existing Render service's Start Command. Do not call the service certified until the new deploy is live, `/api/release` returns release JSON, `/api/account/snapshot` responds with its expected authentication snapshot, and the read-only browser smoke passes.
+
 ### Remaining release blockers
 
 - Resolve every typecheck, focused-test, full-suite, lint, build, or smoke failure from the current release-gates run.
