@@ -85,10 +85,12 @@ describe("Studio Hub canonical controls", () => {
     expect(html).toContain('data-vt-studio-tag-editor="true"')
     expect(html).toContain("TAG ONE")
     expect(html).toContain('aria-label="Add tag"')
+    expect(html).toContain('data-size="compact"')
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain("@keyframes vt-studio-badge-enter")
     expect(css).toContain("@keyframes vt-studio-badge-swap")
     expect(css).toContain(".vt-studio-tag-editor__fly")
+    expect(css).toContain(".vt-studio-closeable-badge.is-fly-destination")
     expect(css).toContain("prefers-reduced-motion: reduce")
   })
 
