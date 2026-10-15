@@ -299,6 +299,33 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
 )
 StudioButton.displayName = "StudioButton"
 
+/**
+ * Separate 56px action family for prominent workflow actions.
+ * It is intentionally not a StudioButton size variant: StudioButton remains 44px/28px only.
+ */
+export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  tone?: StudioControlTone
+  loading?: boolean
+}
+
+export const StudioActionButton = React.forwardRef<HTMLButtonElement, StudioActionButtonProps>(
+  ({ tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
+    <button
+      ref={ref}
+      type={type}
+      {...props}
+      data-vt-studio-control="true"
+      data-vt-studio-action-button="true"
+      data-tone={tone}
+      aria-busy={loading || undefined}
+      disabled={disabled || loading}
+    >
+      <span data-vt-studio-action-face>{children}</span>
+    </button>
+  ),
+)
+StudioActionButton.displayName = "StudioActionButton"
+
 export interface StudioIconButtonProps extends Omit<StudioButtonProps, "children"> {
   icon: React.ReactNode
   label: string
