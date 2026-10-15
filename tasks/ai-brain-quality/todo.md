@@ -162,3 +162,13 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+## Live attribution and project workflow follow-up — 2026-10-15
+- [x] Surface the explicit recommendation-to-learning attribution chain in the Brain Evaluation Inbox; show missing stages and keep lifecycle evidence distinct from performance/causality.
+- [ ] Propagate common stable IDs across generation, selected assets, ActionPackets, publication receipt, analytics checkpoints, evaluation records and learning candidates.
+- [ ] Enforce ContentBuild-stage capability availability in UI/tool affordances, with fail-closed behavior when canonical project/build context is missing.
+- [ ] Specify and verify creator communication consent, raw-text retention, deletion/retention and opt-out behavior.
+- [ ] Make Brain outcome and evaluation persistence server-authoritative with idempotent replay and cross-device reconciliation; do not describe browser-local stores as durable distributed truth.
+- [ ] Run the complete chain against real publication and fresh canonical analytics records, and record exact commit SHA plus focused/typecheck/lint/full-suite/build/governance/smoke evidence.
+- [ ] Triage current integration baseline failures (focused contracts, confirmed-library-layout source governance, full-suite localStorage test, static typecheck) before certification; no release-gate bypass.
+
