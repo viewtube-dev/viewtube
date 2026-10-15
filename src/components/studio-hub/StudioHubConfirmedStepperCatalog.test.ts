@@ -20,20 +20,22 @@ describe("confirmed split stepper primitive family", () => {
   it("uses the confirmed Studio Controls dimensions and typography for both sizes", () => {
     const css = source("src/styles/studio-control-system.css")
 
-    expect(css).toContain("--vt-studio-control-height")
-    expect(css).toContain('data-height-variant="44"')
-    expect(css).toContain('data-height-variant="28"')
-    expect(css).toContain("--vt-studio-control-stroke")
-    expect(css).toContain("--vt-studio-control-radius")
-    expect(css).toContain("--vt-studio-control-radius")
-    expect(css).toContain("--vt-stepper-font-size: 24px")
-    expect(css).toContain("--vt-stepper-font-size: 38px")
+    expect(css).toContain("--vt-stepper-height: var(--vt-studio-28-height, 28px)")
+    expect(css).toContain("--vt-stepper-height: var(--vt-studio-44-height, 44px)")
+    expect(css).toContain("--vt-stepper-stroke: var(--vt-studio-28-stroke, 2px)")
+    expect(css).toContain("--vt-stepper-stroke: var(--vt-studio-44-stroke, 3px)")
+    expect(css).toContain("--vt-stepper-radius: var(--vt-studio-28-radius, 4px)")
+    expect(css).toContain("--vt-stepper-radius: var(--vt-studio-44-radius, 6px)")
+    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px) !important")
+    expect(css).toContain("font-size: var(--vt-studio-control-font-size, 38px) !important")
   })
 
   it("supports pointer hold repeat and keyboard activation without double-stepping pointer clicks", () => {
     const component = source("src/studio-ui/primitives/StudioControls.tsx")
 
-    expect(component).toContain("setTimeout(scheduleRepeat, 360)")
+    expect(component).toContain("setHolding(true)")
+    expect(component).toContain("}, 360)")
+    expect(component).toContain("scheduleRepeat()")
     expect(component).toContain("event.detail === 0")
     expect(component).toContain("onPointerUp={stopHold}")
     expect(component).toContain("onPointerCancel={stopHold}")
