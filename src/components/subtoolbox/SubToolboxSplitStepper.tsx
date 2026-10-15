@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import type { ToolboxControlLevel } from "./tokens"
 import { getComponentLevelCssVars } from "./tokens"
+import { StudioNumberInput } from "../../studio-ui/primitives/StudioTextInput"
 import "../../styles/toolbox-entry.css"
 import "./subtoolbox-split-stepper.css"
 
@@ -34,6 +35,11 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
 }) => {
   const valueRef = useRef(value)
   valueRef.current = value
+  const [draft, setDraft] = useState(String(value))
+  const [inputFocused, setInputFocused] = useState(false)
+  const [held, setHeld] = useState(false)
+
+  useEffect(() => setDraft(String(value)), [value])
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = useRef(0)
@@ -44,6 +50,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     if (repeatTimer.current) clearTimeout(repeatTimer.current)
     holdTimer.current = null
     repeatTimer.current = null
+    setHeld(false)
   }, [])
 
   useEffect(() => stopHold, [stopHold])
@@ -70,21 +77,57 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     heldDirection.current = direction
     startedAt.current = Date.now()
     change(direction)
-    holdTimer.current = setTimeout(scheduleRepeat, 360)
+    holdTimer.current = setTimeout(() => {
+      setHeld(true)
+      scheduleRepeat()
+    }, 360)
   }
 
   const levelStyle = level ? getComponentLevelCssVars(level) : {}
   return (
     <div
       {...props}
-      className={["vt-subtoolbox-split-stepper", `is-${size}`, className].filter(Boolean).join(" ")}
+      className={["vt-subtoolbox-split-stepper", `is-${size}`, (inputFocused || held) ? "is-interacting" : "", className].filter(Boolean).join(" ")}
       data-vt-control-level={level}
       data-stepper-size={size}
       role="group"
       aria-label={ariaLabel}
       style={{ ...levelStyle, ...style } as React.CSSProperties}
     >
-      <output className="vt-subtoolbox-split-stepper-value" aria-live="polite" aria-atomic="true">{value}</output>
+      <StudioNumberInput
+        className="vt-subtoolbox-split-stepper-value"
+        aria-label={ariaLabel}
+        value={draft}
+        min={Number.isFinite(min) ? min : undefined}
+        max={Number.isFinite(max) ? max : undefined}
+        step={step}
+        disabled={disabled}
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => {
+          setInputFocused(false)
+          const parsed = Number(draft)
+          if (!draft.trim() || !Number.isFinite(parsed)) {
+            setDraft(String(valueRef.current))
+          } else {
+            const normalized = Math.min(max, Math.max(min, parsed))
+            setDraft(String(normalized))
+            if (normalized !== valueRef.current) {
+              valueRef.current = normalized
+              onValueChange(normalized)
+            }
+          }
+        }}
+        onChange={(event) => {
+          const nextDraft = event.currentTarget.value
+          setDraft(nextDraft)
+          if (nextDraft.trim() === "") return
+          const parsed = Number(nextDraft)
+          if (!Number.isFinite(parsed)) return
+          const normalized = Math.min(max, Math.max(min, parsed))
+          valueRef.current = normalized
+          onValueChange(normalized)
+        }}
+      />
       <div className="vt-subtoolbox-split-stepper-rail">
         <button
           type="button"
