@@ -5,9 +5,9 @@ import test from "node:test"
 const component = readFileSync("src/components/subtoolbox/SubToolboxSplitStepper.tsx", "utf8")
 const styles = readFileSync("src/components/subtoolbox/subtoolbox-split-stepper.css", "utf8")
 
-test("stepper uses a native numeric input, not a nested Studio input primitive", () => {
-  assert.doesNotMatch(component, /StudioNumberInput/)
-  assert.match(component, /<input[\s\S]*?type="number"/)
+test("stepper uses the canonical Studio numeric input primitive and keeps a native numeric field", () => {
+  assert.match(component, /StudioNumberInput/)
+  assert.match(component, /<StudioNumberInput[\s\S]*?type="number"/)
   assert.match(component, /data-size=\{size === "compact" \? "compact" : "standard"\}/)
 })
 
@@ -25,8 +25,10 @@ test("the horizontal divider is centered across the rail and both rows remain eq
   assert.doesNotMatch(styles, /\.vt-subtoolbox-split-stepper-rail button \+ button\s*\{[^}]*border-top:/s)
 })
 
-test("long press repeats without activating the full-component focus outline", () => {
-  assert.doesNotMatch(component, /\(inputFocused \|\| held\)/)
-  assert.doesNotMatch(component, /const \[held, setHeld\]/)
+test("input focus and held rail interaction activate the shared interaction state", () => {
+  assert.match(component, /\(inputFocused \|\| held\) \? "is-interacting"/)
+  assert.match(component, /const \[held, setHeld\]/)
+  assert.match(component, /onFocus=\{\(\) => setInputFocused\(true\)\}/)
   assert.match(component, /scheduleRepeat\(\)/)
+  assert.match(styles, /\.vt-subtoolbox-split-stepper\.is-interacting/)
 })
