@@ -92,4 +92,27 @@ describe("Studio Hub canonical controls", () => {
     expect(css).toContain("prefers-reduced-motion: reduce")
   })
 
+  it("keeps the simple dropdown single-select and Studio-palette driven", () => {
+    const html = renderToStaticMarkup(
+      <StudioDropdown
+        ariaLabel="Choose one"
+        options={[{ value: "one", label: "Option One" }, { value: "two", label: "Option Two" }]}
+        defaultValue="one"
+      />,
+    )
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const primitive = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioDropdown.tsx"), "utf8")
+
+    expect(html).toContain('aria-haspopup="listbox"')
+    expect(html).not.toContain("aria-multiselectable")
+    expect(html).not.toContain("vt-studio-legend-check")
+    expect(primitive).not.toContain("vt-studio-legend-check")
+    expect(primitive).not.toContain("aria-multiselectable")
+    expect(css).toContain(".vt-studio-dropdown-menu")
+    expect(css).toContain("background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6))")
+    expect(css).toContain("background: #fff")
+    expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
+    expect(css).toContain(".vt-studio-dropdown-option[data-selected=\"true\"]")
+  })
+
 })
