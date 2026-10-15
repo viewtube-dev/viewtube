@@ -99,3 +99,31 @@ The registry expands the original Brain-only Prompt System wave to cover legacy 
 - Added reusable `BrainHealthPanel.tsx` for evidence coverage, stale knowledge, conflicts, overdue evaluations, unattributed outcomes, and learning-review backlog.
 - Missing evidence health yields `insufficient_data`; the view never promotes learning or infers causality.
 - Certification remains blocked until live source adapters feed the health projection, the panel is wired into the canonical Brain surface, focused tests/typecheck/full suite/build and governance checks run green, and the feature branch is reconciled with its target.
+
+
+## Phase 10 — Project-centered creation workflow (2026-10-15)
+
+- Added `BrainProjectLifecycle.ts`, resolving the active phase from the canonical ContentBuild stage, returning only the capabilities relevant to that stage, and preserving workflow blockers.
+- Attached lifecycle resolution to the existing `AlgorithmProjectContext` via `BrainProjectContext`; no second project-stage owner was introduced.
+- Missing canonical ContentBuild state returns `insufficient_context`; the resolver does not guess from route labels or stale visible UI context.
+- Tests specify canonical-stage mapping, stage-scoped capabilities, blockers, audience-promise presence, and fail-closed behavior.
+- Still required: wire these capabilities into the live Brain UI/runtime capability filter and verify every current project screen passes the canonical ContentBuild snapshot.
+
+## Phase 11 — Communication ingestion (2026-10-15)
+
+- Added deterministic multi-label classification for instruction, preference, correction, criticism, factual claim, goal, constraint, approval, rejection, experiment note, and style feedback.
+- Added `recordCreatorCommunicationEvidence`, which writes an immutable `CREATOR_COMMUNICATION_CLASSIFIED` event through the existing Brain intelligence ledger, with idempotent communication identity and related event links.
+- Communication events explicitly set `durableMemoryPromoted: false` and `promotionRequiresGovernedReview: true`. Classification does not directly mutate Channel Profile or validated knowledge.
+- Still required: connect live chat, tool feedback, approval/rejection and edit flows to this ingestion API; establish privacy/retention policy and verify server persistence/consent boundaries.
+
+## Phase 12 — Recommendation and asset attribution (2026-10-15)
+
+- Added `BrainAttributionChain.ts`, a read-only resolver joining recommendation → creator decision → execution → publication → measured outcome → learning candidate by explicit parent/event IDs and exact stable identity fields.
+- The resolver rejects cross-channel joins and never infers causality or joins solely by timestamp or shared project membership.
+- Incomplete chains report missing stages rather than fabricating success. Publication confirmation remains lifecycle evidence, not performance proof.
+- Existing recommendation-decision and publication event contracts remain the writers; the resolver does not create a parallel ledger.
+- Still required: wire all generation/selection/action-packet/publish/evaluation/learning writers to stable common IDs and surface the chain in the live Brain/Studio UI; validate against production lifecycle data.
+
+## Phase 10–12 certification gate
+
+The implementation foundation and regression tests are committed on `brain-phases-10-12-project-comms-attribution`. Tests have been authored but not executed in this session. Do not certify complete until focused tests, typecheck, full suite, production build, reachability/governance audits, and browser verification pass on the current integration baseline.
