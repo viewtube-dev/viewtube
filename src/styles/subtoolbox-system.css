@@ -4607,3 +4607,30 @@
   [aria-label="Vault library toolbar"] { gap: 6px !important; }
   [data-vault-layout-grid] { gap: 8px !important; }
 }
+
+
+/* Short-height Vault workspaces: compact shared SubToolbox geometry while
+   retaining 44px interactive controls and full-size multiline editing surfaces. */
+@media (orientation: landscape) and (min-width: 700px) and (max-height: 500px) {
+  [data-vault-layout-grid] [data-vt-toolbox-level="sub"],
+  [data-vault-layout-grid] [data-vt-subtoolbox-module="true"] {
+    --vt-subtoolbox-header-height: 44px;
+    --vt-subtoolbox-gap: 8px;
+    --vt-subtoolbox-section-gap: 8px;
+    --vt-subtoolbox-control-action: 44px;
+  }
+  [data-vault-layout-grid] [data-vault-image-workbench] .grid.grid-cols-1,
+  [data-vault-layout-grid] [data-vault-video-workbench] .grid.grid-cols-1 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  [data-vault-layout-grid] [data-vault-image-workbench],
+  [data-vault-layout-grid] [data-vault-video-workbench] {
+    gap: 8px !important;
+    padding: 8px !important;
+  }
+  [data-vault-layout-grid] [data-vault-first-viewport="library"] .vt-subtoolbox-state-panel {
+    min-height: 0;
+    padding-block: 8px !important;
+  }
+}
