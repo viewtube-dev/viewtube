@@ -398,6 +398,7 @@ type GenerationRequestProjection = {
  channelId: string | null
  toolId: string
  operation: string
+ targetSlot: string
  mode: "create" | "new-option" | "new-version" | "transform"
  sourceAssetIds: string[]
  evidenceIds: string[]
@@ -472,7 +473,7 @@ export const operationRecordFromGenerationRequest = (
    contextManifestId: request.contextManifestId,
    operation: request.operation,
    mode: request.mode,
-   targetSlot: "unknown",
+   targetSlot: request.targetSlot,
    parentAssetId: request.parentAssetId,
    variantGroupId: request.variantGroupId,
   },
