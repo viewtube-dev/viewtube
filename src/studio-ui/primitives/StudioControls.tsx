@@ -482,7 +482,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
           )}
         </span>
         {(effect === "notification" || effect === "like") && effectiveBadge !== undefined && effectiveBadge !== null && effectiveBadge !== "" ? (
-          <span key={`${String(effectiveBadge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{badge}</span>
+          <span key={`${String(effectiveBadge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{effectiveBadge}</span>
         ) : null}
         {effect === "tooltip" && tooltip ? (
           <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
