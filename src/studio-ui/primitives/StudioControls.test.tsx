@@ -293,7 +293,7 @@ describe("shared Studio icon-size comparison contract", () => {
     expect(css).toContain('--vt-studio-control-stroke:2px')
   })
 
-  it("shows the canonical standard and compact sizes for both square and split-left controls", () => {
+  it("shows canonical production sizes and omits icon-size comparison specimens", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     for (const label of [
       "44px standard · V1 primary fill",
