@@ -1737,6 +1737,12 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
   background: #fff;
   box-shadow: 0 1px 2.75px rgb(0 0 0 / 15%);
 }
+.vt-studio-44-switch.is-black-indicator.is-on,
+.vt-studio-44-choice.is-black-indicator.is-on,
+.vt-studio-44-switch.is-white-indicator.is-on,
+.vt-studio-44-choice.is-white-indicator.is-on {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
 .vt-studio-44-choice.is-checkbox.is-white-indicator svg { stroke: #fff !important; }
 .vt-studio-44-switch:focus-visible,
 .vt-studio-44-choice:focus-visible {
