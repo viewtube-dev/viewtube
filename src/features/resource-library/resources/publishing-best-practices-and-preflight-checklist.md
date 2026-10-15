@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; thumbnail-title-packaging-
 
 Publishing is a handoff from creative work to a public viewer experience. The goal is not to tick every possible box. It is to make sure the video works, the promise is accurate, the right audience can access it, and the creator can verify what actually went live.
 
-> **Creator principle:** A publish button cannot catch every mistake. A repeatable preflight protects the viewer experience and gives you a known point from which to diagnose later performance.
+> **Creator takeaway:** A publish button cannot catch every mistake. A repeatable preflight protects the viewer experience and gives you a known point from which to diagnose later performance.
 
 ## The Creator Mental Model
 
