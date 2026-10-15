@@ -1800,8 +1800,6 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 
 /* The tag editor action squares are 32px donor-defined compound actions, not 28px controls. */
 .vt-studio-tag-editor {
-  --pair-a: var(--pair-a, var(--vt-c-0, #fa618a));
-  --pair-b: var(--pair-b, var(--vt-c-6, #4ee4be));
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1889,6 +1887,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   opacity: 0;
 }
 .vt-studio-tag-editor__fly[data-targeted="false"] { opacity: 1; }
+.vt-studio-closeable-badge.is-fly-destination { opacity: 0; }
 .vt-studio-tag-editor__fly[data-targeted="true"] { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-closeable-badge,
