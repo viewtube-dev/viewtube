@@ -43,6 +43,8 @@ test('capability coverage is reproducible from curated, existing evidence refere
     assert.equal(byId.get(id)?.complete, true, `${id} should be complete only when every required field is mapped`);
   }
 
-  assert.equal(byId.get('CAP-OUTCOME-LEARNING')?.complete, false,
-    'Outcome Learning remains incomplete until its test evidence is mapped');
+  assert.ok(byId.get('CAP-OUTCOME-LEARNING')?.tests.length,
+    'Outcome Learning must map its regression test evidence');
+  assert.equal(byId.get('CAP-OUTCOME-LEARNING')?.complete, true,
+    'Outcome Learning is complete only after all required evidence fields are mapped');
 });
