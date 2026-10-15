@@ -17,7 +17,7 @@ const LEVELS: Level[] = ["l0", "l1", "l2"]
 
 /** Legacy comparison catalog; split-left demonstrations now use the canonical production primitive. */
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
-  "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button", "Split Left Badge",
+  "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
   "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Studio Text Input", "Studio Text Area", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "Studio Text Input · Floating Label Variant", "Studio Text Area · Floating Label Variant", "Split Search",
   "Number Field", "Input Action", "Stepper", "Slider", "Range Slider", "Toggle",
@@ -109,19 +109,6 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
       </div>
     </section>
     <p className="vt-catalog-square-icon-contract">Shared geometry: 44×44 standard / 28×28 compact · 3px / 2px stroke · 28px / 18px icon · inherited palette pair · shared press/focus/disabled behavior.</p>
-  </div>
-  if (name === "Split Left Badge") return <div className={`vt-catalog-split-left-badge-family is-${level}`} style={style} data-vt-library-component="StudioSplitLeftBadge">
-    <div className="vt-catalog-badge-row is-full"><StudioSplitLeftBadge icon={<Check />} sizeVariant="standard">STANDARD · FULL ROW</StudioSplitLeftBadge></div>
-    <div className="vt-catalog-badge-row is-half"><StudioSplitLeftBadge icon={<Check />} sizeVariant="standard">STANDARD · HALF ROW</StudioSplitLeftBadge></div>
-    <div className="vt-catalog-badge-row is-quarter"><StudioSplitLeftBadge icon={<Check />} sizeVariant="standard">STANDARD · QUARTER ROW</StudioSplitLeftBadge></div>
-    <div className="vt-catalog-badge-row is-full"><StudioSplitLeftBadge icon={<Check />} sizeVariant="compact">COMPACT · FULL ROW</StudioSplitLeftBadge></div>
-    <div className="vt-catalog-badge-row is-half"><StudioSplitLeftBadge icon={<Check />} sizeVariant="compact">COMPACT · HALF ROW</StudioSplitLeftBadge></div>
-    <div className="vt-catalog-badge-row is-quarter"><StudioSplitLeftBadge icon={<Check />} sizeVariant="compact">COMPACT · QUARTER ROW</StudioSplitLeftBadge></div>
-    <div className="vt-catalog-badge-micro" aria-label="Micro badges in the left half only">
-      <StudioSplitLeftBadge icon={<Check />} sizeVariant="micro">MICRO 1×1</StudioSplitLeftBadge>
-      <StudioSplitLeftBadge icon={<Check />} sizeVariant="micro">MICRO 2×1</StudioSplitLeftBadge>
-      <StudioSplitLeftBadge icon={<Check />} sizeVariant="micro">MICRO 4×1</StudioSplitLeftBadge>
-    </div>
   </div>
   if (name === "Split Left Button" || name === "Head Tail Action") return <StudioSplitLeftButton className={`vt-catalog-split-primitive is-${level}`} heightVariant={level === "l2" ? "28" : "44"} style={{ ...style, ["--vt-studio-control-accent" as string]: colors.b, ["--vt-studio-control-secondary" as string]: colors.a } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
   if (name === "28px Dropdown Pair") return <div className="vt-catalog-dropdown-pair" style={style}>
