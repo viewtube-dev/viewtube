@@ -608,10 +608,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   letter-spacing: -.035em !important;
 }
 
-/* Preserve readable paragraph rhythm while textareas share the size-specific font contract. */
-textarea[data-vt-studio-control="true"] { line-height: 1.05 !important; }
-textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05 !important; }
-
 /* Keep the library's switch, choice, and word-toggle examples from being
    squeezed into a two-column grid inside narrow toolbox modules. */
 .vt-catalog-control-family .vt-catalog-control-variants,
@@ -974,7 +970,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 }
 
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
-button[data-vt-studio-button="true"] { box-sizing:border-box; display:inline-flex; width:auto; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out,box-shadow 150ms ease-out; }
+button[data-vt-studio-button="true"] { box-sizing:border-box; display:inline-flex; width:auto; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out,box-shadow 150ms ease-out; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
 button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; height:100%; min-height:100%; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
