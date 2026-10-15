@@ -56,4 +56,23 @@ describe("BrainLearningPersistence", () => {
   expect(retried).toMatchObject({ persisted: 1, pending: 0, authenticated: true })
   expect(fetchMock).toHaveBeenCalledTimes(2)
  })
+
+ it("reports a short server acknowledgement as unauthenticated and keeps every unacknowledged record queued", async () => {
+  const storage = makeStorage()
+  vi.stubGlobal("window", { localStorage: storage })
+  vi.stubGlobal("localStorage", storage)
+  vi.stubGlobal("fetch", vi.fn(async () =>
+   new Response(JSON.stringify({ ok: true, learningRecordCount: 0 }), { status: 200 }),
+  ))
+
+  const result = await enqueueBrainLearningRecord("channel-a", "brainOutcome", {
+   id: "outcome-short-ack", channelId: "channel-a", outcome: "completed",
+  })
+
+  expect(result).toMatchObject({ persisted: 0, pending: 1, authenticated: false })
+  const queued = JSON.parse(storage.getItem("vt_brain_learning_persistence_queue_v1") || "[]")
+  expect(queued).toHaveLength(1)
+  expect(queued[0].record.id).toBe("outcome-short-ack")
+ })
+
 })
