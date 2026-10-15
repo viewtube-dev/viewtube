@@ -2,8 +2,8 @@ import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/t
 
 /** Studio shell tokens may reference SubToolbox hierarchy geometry; standalone controls use the independent contract below. */
 export const STUDIO_CONTROL_SIZE_CONTRACT = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
-  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
+  standard: { height: 44, stroke: 3, radius: 8, fontSize: 38, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
+  compact: { height: 28, stroke: 2, radius: 5, fontSize: 24, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
 } as const
 
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
