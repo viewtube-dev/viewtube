@@ -97,7 +97,7 @@ const run = (modelGenerator: (input: unknown) => Promise<StructuredBrainModelOut
 describe("Brain generation quality loop", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(resolveCreatorContext).mockResolvedValue(null);
+    vi.mocked(resolveCreatorContext).mockResolvedValue(null as never);
   });
 
   it("accepts a repaired candidate only after independent validation and records repair provenance", async () => {
