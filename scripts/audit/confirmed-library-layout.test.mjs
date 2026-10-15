@@ -47,7 +47,9 @@ test("floating labels use the reduced overlapping-label geometry and strong text
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /--vt-studio-floating-label-size:\s*24px/);
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
-  assert.match(fieldCss, /translateY\(-75%\) scale\(\.75\)/);
+  assert.match(fieldCss, /translateY\(-60%\) scale\(\.8\)/);
+  assert.match(fieldCss, /--vt-studio-floating-focus-width:\s*3px/);
+  assert.match(fieldCss, /data-size="compact"\]\s*\{\s*--vt-studio-floating-label-size:\s*18px;\s*--vt-studio-floating-focus-width:\s*2px;/);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
@@ -290,6 +292,18 @@ test("44px checkmark and X checkboxes use the canonical 6px corner radius", () =
   assert.match(catalog, /checkmark and X checkboxes use the standard 6px radius/);
 });
 
+
+test("circle icon buttons scale the selected canonical icon preset to 80%", () => {
+  assert.ok(controlStyles.includes('button[data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg'));
+  assert.ok(controlStyles.includes("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)"));
+  assert.ok(controlStyles.includes("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)"));
+});
+
+test("floating-label B focus stroke shares the field size-specific width", () => {
+  assert.ok(controlStyles.includes("--vt-studio-floating-focus-width: 3px"));
+  assert.ok(controlStyles.includes("--vt-studio-floating-focus-width: 2px"));
+  assert.equal(controlStyles.split("outline: var(--vt-studio-floating-focus-width").length - 1, 2);
+});
 
 test("confirmed composite controls are represented in the production catalog", () => {
   for (const name of ["StudioPlayPauseButton", "StudioCircleIconButton", "StudioUsernameInput"]) {
