@@ -67,6 +67,7 @@ const makeDeps = (
  buildStatistics: vi.fn(() => statisticsIntelligence),
  buildAudience: vi.fn(() => audienceIntelligence),
  buildOpportunities: vi.fn(() => opportunities),
+ buildCurrentInsights: vi.fn(() => ({ findings: [], limitations: [], sourceSnapshotId: canonicalEvidence.snapshotId })),
  projectEvidence: vi.fn(() => evidenceRecords),
 })
 
@@ -143,6 +144,55 @@ describe("EvidenceIntelligenceResolver", () => {
   expect(result.analyticsFindingContext.findingIds).toEqual(["finding-1"])
   expect(result.analyticsFindingContext.findings[0].currentValue).toBe(140)
   expect(result.analyticsFindingContext.findings[0].evidenceRefs).toHaveLength(2)
+ })
+
+ it("builds opt-in runtime trend findings only for exact canonical evidence scope", () => {
+  const deps = makeDeps()
+  const trendFinding = {
+   id: "trend-views",
+   kind: "trend",
+   findingType: "trend",
+   label: "views trend increasing",
+   channelId: "channel-1",
+   datasetId: "daily",
+   metric: "views",
+   filters: { metricKey: "views", dateKey: "date" },
+   window: "28d",
+   sourceSnapshotIds: ["snapshot-1"],
+   aggregation: "sum",
+   observedFact: { currentValue: 140, baselineValue: 100, delta: 40, relativeDeltaPercent: 40 },
+   calculation: { formula: "least-squares trend", algorithmVersion: "vt-deterministic-analytics-insights-v1", deterministic: true },
+   validationState: "validated",
+   interpretation: null,
+   recommendation: null,
+   currentValue: 140,
+   baselineValue: 100,
+   delta: 40,
+   relativeDeltaPercent: 40,
+   unit: "source-metric-value",
+   confidence: 0.8,
+   evidenceRefs: ["analytics:snapshot-1:daily:views"],
+   formula: "least-squares trend",
+   algorithmVersion: "vt-deterministic-analytics-insights-v1",
+   deterministic: true,
+   limitations: ["descriptive only"],
+  } as any
+  deps.buildCurrentInsights = vi.fn(() => ({
+   findings: [trendFinding],
+   limitations: [],
+   sourceSnapshotId: "snapshot-1",
+  }))
+
+  const result = resolveEvidenceIntelligence({
+   channelId: "channel-1",
+   includeCurrentTrends: true,
+  }, deps)
+
+  expect(deps.buildCurrentInsights).toHaveBeenCalledWith({
+   channelId: "channel-1",
+   expectedSnapshotId: "snapshot-1",
+  })
+  expect(result.analyticsFindingContext.findingIds).toEqual(["trend-views"])
  })
 
  it("blocks all analytics-derived projections when canonical evidence belongs to another channel", () => {
