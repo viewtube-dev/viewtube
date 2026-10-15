@@ -7,6 +7,7 @@ import {
   SubToolboxStatePanel,
 } from "../../components/subtoolbox/SubToolboxPrimitives"
 import { createImportedVaultAsset } from "../../services/vaultAdapter"
+import { createVaultOperation, transitionVaultOperation } from "../../services/vaultOperationLedger"
 import { computeVaultImagePalette } from "../../services/vaultImagePalette"
 import {
   DEFAULT_VAULT_IMAGE_TRANSFORM,
@@ -176,6 +177,23 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
 
   const saveToVault = async () => {
     if (!result) return
+    const operationRecord = createVaultOperation({
+      type: "image-transform",
+      label: "Image derivative · " + asset.name,
+      inputAssetIds: [asset.id],
+      parameters: {
+        crop: cropEnabled ? crop : null,
+        rotation: transform.rotation,
+        flipHorizontal: transform.flipHorizontal,
+        flipVertical: transform.flipVertical,
+        resizeWidth: transform.resizeWidth,
+        resizeHeight: transform.resizeHeight,
+        outputFormat: result.mimeType,
+        quality: transform.quality,
+      },
+    })
+    transitionVaultOperation(operationRecord.id, "queued")
+    transitionVaultOperation(operationRecord.id, "processing")
     try {
       const dataUrl = await blobToDataUrl(result.blob)
       const outputName = `${asset.name.replace(/\.[^.]+$/, "")}-derivative.${extensionFor(result.mimeType)}`
@@ -193,6 +211,8 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
           derivativeOfAssetId: asset.id,
           sourceAssetId: asset.id,
           derivativeOperation: "image-transform",
+          operationId: operationRecord.id,
+          operationReceipt: "Image derivative created from the original asset; source preserved.",
           transform: {
             crop: cropEnabled ? crop : null,
             rotation: transform.rotation,
@@ -217,10 +237,17 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
         },
       })
       if (!created.id) throw new Error("Vault did not return an asset identity.")
+      transitionVaultOperation(operationRecord.id, "completed", {
+        outputAssetIds: [created.id],
+        receipt: "Derivative " + created.id + " registered; original " + asset.id + " preserved.",
+      })
       setSavedDerivativeId(created.id)
       setMessage("Derivative registered in Vault with its source asset ID and transformation metadata.")
       onDerivativeCreated?.()
     } catch (caught) {
+      transitionVaultOperation(operationRecord.id, "failed", {
+        error: caught instanceof Error ? caught.message : "Could not register this derivative in Vault.",
+      })
       setError(caught instanceof Error ? caught.message : "Could not register this derivative in Vault.")
     }
   }
