@@ -22,7 +22,7 @@ This audit deliberately separates source changes from system guarantees that can
 
 ## Phase 8 — Server trust, durable operations, and storage
 
-**Status: BLOCKED / NOT IMPLEMENTED AS A PRODUCTION GUARANTEE.**
+**Status: PARTIALLY IMPLEMENTED IN BRANCH; persistent runtime configuration and worker execution remain pending.**
 
 Current Vault assets and operation ledger are browser-localStorage-backed; media binaries can use IndexedDB and an optional server storage path. Those are not proof of authenticated per-workspace authorization, an authoritative server audit log, or a durable job queue.
 
@@ -75,7 +75,7 @@ This run predates the newest batch service, tests, and documentation commits; it
 | Phase | Status | Evidence / remaining gate |
 |---|---|---|
 | 7 — cross-system workflow | **PARTIAL** | Canonical Asset Engine and ActionPacket route exist; full vertical slice not runtime-certified |
-| 8 — server trust and durability | **BLOCKED** | Need verified canonical workspace auth contract, server receipt/job store, persistent storage and cross-workspace tests |
+| 8 — server trust and durability | **PARTIAL / DEPLOYMENT CONFIG REQUIRED** | Authenticated owner-scoped durable operation records and tests added; persistent disk configuration, worker execution, race-safe claims and deployed restart test pending |
 | 9 — batch and governed assistance | **IMPLEMENTED IN BRANCH / PARTIAL INTEGRATION** | Planner/runner and tests authored; production processor, ledger, derivative and AI-provider wiring remains |
 | 10 — release certification | **PENDING** | Latest-head CI, browser/deployment check, merge, and post-merge read-back required |
 
