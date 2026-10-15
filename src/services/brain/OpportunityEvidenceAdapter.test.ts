@@ -207,6 +207,25 @@ describe("buildOpportunityEvidenceFromCanonicalBundle", () => {
   })).toEqual([])
  })
 
+ it("degrades opportunity confidence for partial and stale datasets", () => {
+  const makeStatusBundle = (status: "partial" | "stale") => {
+   const bundle = makeBundle()
+   bundle.datasets[0].status = status
+   return bundle
+  }
+  const partial = buildOpportunityEvidenceFromCanonicalBundle({
+   channelId: "channel-1",
+   bundle: makeStatusBundle("partial"),
+  })
+  const stale = buildOpportunityEvidenceFromCanonicalBundle({
+   channelId: "channel-1",
+   bundle: makeStatusBundle("stale"),
+  })
+
+  expect(partial[0].confidence).toBeLessThan(40)
+  expect(stale[0].confidence).toBeLessThan(partial[0].confidence)
+ })
+
  it("does not produce metric opportunities from failed or unavailable video datasets", () => {
   for (const status of ["failed", "unavailable"]) {
    const bundle = makeBundle({
