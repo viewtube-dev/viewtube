@@ -390,6 +390,49 @@ describe("outcome evaluation and governed learning lineage", () => {
   expect(listWorkflowCandidates()).toHaveLength(1)
  })
 
+ it("rejects an idempotency key reused for a different publication scope", () => {
+  const first = createEvaluationRecord({
+   channelId: "channel-a",
+   projectId: "project-a",
+   source: "post-publication",
+   recommendation: "Evaluate title variant B",
+   evidenceIds: ["snapshot-a:videos:1"],
+   publishedVideoId: "youtube-1",
+   comparisonSnapshotId: "snapshot-a",
+   selectedWindow: "28d",
+   idempotencyKey: "evaluation-key",
+  })
+  expect(() => createEvaluationRecord({
+   channelId: "channel-a",
+   projectId: "project-a",
+   source: "post-publication",
+   recommendation: "Evaluate title variant B",
+   evidenceIds: ["snapshot-b:videos:1"],
+   publishedVideoId: "youtube-2",
+   comparisonSnapshotId: "snapshot-b",
+   selectedWindow: "28d",
+   idempotencyKey: "evaluation-key",
+  })).toThrow(/different publication or evidence scope/)
+  expect(listEvaluationRecords()).toHaveLength(1)
+  expect(listEvaluationRecords()[0].id).toBe(first!.id)
+ })
+
+ it("does not rewrite a resolved outcome when a conflicting retry arrives", () => {
+  const evaluation = createEvaluationRecord({
+   channelId: "channel-a",
+   projectId: "project-a",
+   source: "post-publication",
+   recommendation: "Evaluate title variant B",
+   evidenceIds: ["snapshot-a:videos:1"],
+   selectedWindow: "28d",
+   comparabilityStatus: "comparable",
+   evidenceStatus: "available",
+  })!
+  expect(resolveEvaluationRecord(evaluation.id, "positive")?.outcome).toBe("positive")
+  expect(resolveEvaluationRecord(evaluation.id, "negative")).toBeNull()
+  expect(listEvaluationRecords().find((record) => record.id === evaluation.id)?.outcome).toBe("positive")
+ })
+
  it("requires a named creator reviewer before approving a candidate", () => {
   const evaluation = createEvaluationRecord({ channelId: "channel-a", projectId: "project-a", source: "post-publication", recommendation: "Evaluate title variant B", evidenceIds: ["snapshot-a:videos:1"], selectedWindow: "28d", comparabilityStatus: "comparable", evidenceStatus: "available" })
   resolveEvaluationRecord(evaluation!.id, "positive")
