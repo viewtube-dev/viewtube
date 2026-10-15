@@ -12,6 +12,8 @@ describe("Toolbox UI Reference Library", () => {
     )
 
     expect(html).toContain("Studio Hub Component Library — Hardcoded")
+    expect(html).toContain('data-vt-library-track="primitive"')
+    expect(html).toContain('style="--pair-a:#36E0F6;--pair-b:#F55EFC"')
     expect(html).toContain("Studio Hub Component Library — Primitive")
     expect(html.match(/Complete Component \+ Primitive Catalog/g)).toHaveLength(2)
     expect(html).toContain('data-vt-library-track="hardcoded"')
