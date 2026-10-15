@@ -182,7 +182,8 @@ export const buildBrainPromptRunReceipt = (input: Omit<BrainPromptRunReceipt, "s
  evidenceSnapshotIds: [...new Set(input.evidenceSnapshotIds.filter(Boolean))],
  evidenceRefs: [...new Set(input.evidenceRefs.filter(Boolean))],
  creatorConstraints: [...new Set(input.creatorConstraints.filter(Boolean))],
- repairCount: Math.max(0, Math.floor(input.repairCount)),
+ // Preserve the observed count exactly; validation must report malformed provenance, not sanitize it away.
+ repairCount: input.repairCount,
  generatedAt: input.generatedAt || new Date().toISOString(),
 })
 
