@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import type { AIBrainEvidencePack } from "../../types"
-import { buildOpportunityEvidenceFromBrainPack } from "./OpportunityEvidenceAdapter"
+import { buildOpportunityEvidenceFromBrainPack, buildOpportunityEvidenceFromCanonicalBundle } from "./OpportunityEvidenceAdapter"
 
 const pack = (): AIBrainEvidencePack => ({
  promptVersion: "brain-chat-v2",
