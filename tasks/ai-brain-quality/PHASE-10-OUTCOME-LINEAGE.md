@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Asset outcome → Brain ledger lineage, local retry idempotency, and immutable publish-transaction → approved-snapshot → YouTube publication identity are implemented with regression coverage. Cross-system durable persistence and full governed-learning closure remain open.
+**Status:** Phase 10 code path implemented: completed publication emits a typed immutable identity and attempts a retry-safe published outcome → Brain ledger join. Regression coverage covers lineage and fail-closed scope. Latest-head CI and real-account/durable-store certification remain pending.
 
 ## Implementation completed in this slice
 
@@ -18,7 +18,7 @@ Regression coverage in `src/services/brain/__tests__/assetOutcomes.test.ts` veri
 
 ## Remaining end-to-end work — not certified complete
 
-This slice now closes the Asset Engine → AssetOutcome → BrainOutcomeLedger hop and records a typed publication identity on the canonical ContentBuild completion events. It does not yet prove:
+This slice now connects the publisher completion boundary to the canonical publication identity, emits that identity on ContentBuild events, records actual published exposure for a known Asset Engine render, and joins the matching outcome to BrainOutcomeLedger. It also exposes a fail-closed join from publication identity to canonical analytics video-row evidence in Phase 11. It does not yet prove:
 
 1. recommendation/experiment identity survives through the exact ActionPacket or workflow that was executed;
 2. publish transaction and immutable publishing snapshot retain the same Project/ContentBuild/asset/variant identity;
@@ -43,7 +43,8 @@ The earlier release-gates run `38693153891` passed production build, configured 
 - [ ] Verify the new test and capability-coverage check on the latest PR head.
 - [x] Join publish transaction, approved snapshot/hash, ContentBuild, package, YouTube video, selected assets and correlation/idempotency IDs in a typed publication identity.
 - [ ] Join recommendation/action/publish/analytics/evaluation/learning IDs end-to-end across durable producer systems.
-- [ ] Add idempotency and cross-channel/project isolation tests across the full outcome chain.
+- [x] Add local retry-idempotency and channel/selected-asset mismatch regression tests for publication linking.
+- [ ] Add cross-system idempotency and cross-channel/project isolation tests across durable producer systems.
 - [ ] Complete Phase 9 release gates before merge.
 
 
