@@ -1805,10 +1805,11 @@ const CreatorVaultOS: React.FC = () => {
      : "grid grid-cols-1 gap-4 xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]"} data-vault-layout-grid>
      <div className="flex min-w-0 flex-col gap-4">
       <section aria-label="Vault library toolbar" className="flex flex-col gap-2">
-       <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
+       <div data-vault-search-row className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
         <button
          type="button"
          aria-label="Open library navigation"
+         data-vault-library-trigger
          aria-expanded={libraryNavigationOpen}
          className="min-h-9 rounded-md border-2 border-current px-3 text-xs font-black uppercase"
          onClick={() => {
@@ -1821,6 +1822,7 @@ const CreatorVaultOS: React.FC = () => {
         <SubToolboxSplitField
          level="l1"
          variant="search"
+         className="vault-library-search-field"
          icon={<Search />}
          inputRef={searchInputRef}
          inputProps={{
@@ -1833,6 +1835,7 @@ const CreatorVaultOS: React.FC = () => {
         <button
          type="button"
          aria-label="Clear Vault search"
+         data-vault-search-clear
          disabled={!query}
          className="min-h-9 min-w-9 rounded-md border-2 border-current px-2 text-xs font-black uppercase disabled:opacity-30"
          onClick={() => setQuery("")}
@@ -1872,8 +1875,9 @@ const CreatorVaultOS: React.FC = () => {
          options={["active", "recent", "generated", "inbox", "favorites", "archive", "trash"]}
         />
        </div>
-       <div className="flex flex-wrap gap-2">
+       <div className="vault-media-type-filter-row">
         <SubToolboxSegmentedToggle
+         className="vault-media-type-filter"
          level="l1"
          ariaLabel="Vault media type"
          value={filterKind}
