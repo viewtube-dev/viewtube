@@ -146,3 +146,18 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+
+## Current execution sequence — 2026-10-15
+
+The code foundations for Phases 10–12 are present and merged, but live adoption and release certification remain open. The current closeout slice adds governed command-note ingestion to Brain Command Center and a live read-only attribution trace panel, while hardening the key vault for SSR/restricted storage. These additions do not certify end-to-end lineage.
+
+Execution order is now explicit:
+
+1. Finish the Phase 2 gaps recorded in `todo.md`: canonical Project resolution, capability-specific evidence requirements, model-aware context budgets, and cross-surface parity/isolation.
+2. Populate Phase 3 prompt provenance/reachability from actual production callers, and verify Phase 4 provenance receipts on live generation paths.
+3. Finish Phases 10–12: enforce project lifecycle capabilities in all surfaces; ingest non-chat feedback with consent/retention controls; propagate stable IDs end-to-end; validate attribution against actual lifecycle records.
+4. Repair and classify the current integration release-gate failures; run focused tests, typecheck, runtime lint, full suite, production build, source governance/reachability and browser smoke on the exact final SHA.
+5. Then proceed to Wave 5 quality-loop optimization: profile-specific validation depth, deterministic task validators, evidence-backed critique where warranted, package-level title/thumbnail/hook checks, and bounded retry/revision cost.
+
+A passing build alone is not a phase certification. Any remaining cross-device persistence, provider-served-model provenance, live browser behavior, or full-suite failures must stay explicitly open until supported by evidence.
