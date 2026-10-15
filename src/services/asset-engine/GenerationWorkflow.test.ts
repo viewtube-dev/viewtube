@@ -35,6 +35,8 @@ describe("GenerationWorkflow", () => {
   expect(prepared.request.projectId).toBe("project-1")
   expect(prepared.request.channelId).toBe("channel-1")
   expect(prepared.request.contextManifestId).toBe(prepared.contextManifest.id)
+  expect(prepared.request.operationId).toBe(prepared.request.id)
+  expect(prepared.request.workflowId).toBe(`workflow:${build.id}`)
   expect(prepared.request.contextRevision).toBe(build.revision)
   expect(prepared.contextManifest.contentBuildRevision).toBe(build.revision)
   expect(prepared.contextManifest.requestedSlots).toEqual([
@@ -52,6 +54,8 @@ describe("GenerationWorkflow", () => {
   expect(inputEvent?.toolId).toBe("video-publisher")
   expect(inputEvent?.metadata).toMatchObject({
    requestId: prepared.request.id,
+   operationId: prepared.request.operationId,
+   workflowId: prepared.request.workflowId,
    contextManifestId: prepared.contextManifest.id,
    targetSlot: "title",
    mode: "new-option",
@@ -135,6 +139,8 @@ describe("GenerationWorkflow", () => {
   })
 
   expect(receipt.requestId).toBe(prepared.request.id)
+  expect(receipt.operationId).toBe(prepared.request.operationId)
+  expect(receipt.workflowId).toBe(prepared.request.workflowId)
   expect(receipt.contentBuildId).toBe(build.id)
   expect(receipt.projectId).toBe("project-2")
   expect(receipt.toolId).toBe("video-publisher")
@@ -152,6 +158,8 @@ describe("GenerationWorkflow", () => {
   expect(outputEvent?.outputAssetIds).toEqual(["asset-title-1", "asset-title-2"])
   expect(outputEvent?.metadata).toMatchObject({
    requestId: prepared.request.id,
+   operationId: prepared.request.operationId,
+   workflowId: prepared.request.workflowId,
    contextManifestId: prepared.request.contextManifestId,
    versionIds: ["version-1", "version-2"],
    variantGroupId: "variant-group-1",
