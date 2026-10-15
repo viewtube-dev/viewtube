@@ -21,9 +21,13 @@ describe("confirmed Square Icon Button component-library entry", () => {
     for (const variant of ["v1", "v2", "v3", "v4"]) {
       expect(html).toContain(`data-icon-variant="${variant}"`)
     }
-    for (const effect of ["standard", "notification", "rotated-toggle", "flip", "tooltip", "morph", "success"]) {
+    for (const effect of ["standard", "notification", "heart-pop", "bell-ring", "like", "sun-moon", "lock-unlock", "download-success", "refresh", "rotated-toggle", "flip", "tooltip", "morph", "success"]) {
       expect(html).toContain(`data-icon-effect="${effect}"`)
     }
+    expect(html).toContain("is-effect-heart-pop")
+    expect(html).toContain("is-effect-bell-ring")
+    expect(html).toContain("is-effect-refresh")
+    expect(html).toContain("data-icon-preset=\\"heart\\"")
     expect(html).toContain("is-effect-pop")
     expect(html).toContain('data-vt-square-badge')
     expect(html).toContain('data-vt-square-flip-inner')
