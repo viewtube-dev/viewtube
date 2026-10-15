@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from "vitest"
-import { addVaultAsset, listVaultAssets, updateVaultAsset, upsertVaultAsset } from "../vaultAdapter"
+import { addVaultAsset, listVaultAssets, setVaultAssetProtection, updateVaultAsset, upsertVaultAsset } from "../vaultAdapter"
 
 const assetInput = {
   name: "Original",
@@ -28,6 +28,14 @@ describe("Vault canonical asset identity", () => {
     expect(updated?.id).toBe(created.id)
     expect(updated?.createdAt).toBe(created.createdAt)
     expect(updated?.name).toBe("Renamed")
+  })
+
+  it("blocks protected content replacement until the asset is explicitly unlocked", () => {
+    const golden = addVaultAsset({ ...assetInput, metadata: { lifecycle: "GOLDEN", protected: true } })
+    expect(updateVaultAsset(golden.id, { url: "blob:replacement" })).toBeNull()
+    expect(listVaultAssets()[0].url).toBe("blob:original")
+    expect(setVaultAssetProtection(golden.id, false)?.metadata?.protected).toBe(false)
+    expect(updateVaultAsset(golden.id, { url: "blob:replacement" })?.url).toBe("blob:replacement")
   })
 
   it("preserves the matched canonical ID during upsert", () => {
