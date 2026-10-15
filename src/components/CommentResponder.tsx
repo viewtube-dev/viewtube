@@ -3,7 +3,7 @@ import React from "react"
 import { ExternalLink, Link2, Loader2, MessageCircle, MessagesSquare, RefreshCw, Sparkles, ThumbsUp } from "lucide-react"
 import { buildYouTubeCommentUrl } from "../services/youtube/commentHandoff"
 import { SubToolbox, SubToolboxGridActionButton, SubToolboxInnerActionButton } from "./Toolbox"
-import { StudioButton, StudioIconButton, StudioSplitLeftButton, StudioTextArea } from "../studio-ui"
+import { StudioButton, StudioSquareIconButton, StudioSplitLeftButton, StudioTextArea } from "../studio-ui"
 import { useCommentResponderController, useCreatorEngagementContext } from "../features/creator-engagement"
 
 const plainText = (value: string) => {
@@ -46,7 +46,7 @@ export const CommentResponder: React.FC = () => {
       <StudioButton type="button" aria-label="Previous comment" disabled={!context.connected || comments.currentIndex === 0} onClick={() => comments.setCurrentIndex(Math.max(0, comments.currentIndex - 1))} tone="neutral">Previous</StudioButton>
       <StudioButton type="button" aria-label="Next comment" disabled={!context.connected || comments.currentIndex >= comments.displayThreads.length - 1} onClick={() => comments.setCurrentIndex(Math.min(comments.displayThreads.length - 1, comments.currentIndex + 1))} tone="neutral">Next</StudioButton>
      </div>
-     <StudioIconButton type="button" label={context.connected ? "Refresh comments" : "Connect YouTube channel"} icon={context.connected ? <RefreshCw size={17} className={comments.loading ? "animate-spin" : ""} /> : <Link2 size={17} />} onClick={context.connected ? comments.refresh : comments.reconnect} disabled={context.connected && comments.loading} tone="accent" />
+     <StudioSquareIconButton type="button" label={context.connected ? "Refresh comments" : "Connect YouTube channel"} icon={context.connected ? <RefreshCw size={17} className={comments.loading ? "animate-spin" : ""} /> : <Link2 size={17} />} onClick={context.connected ? comments.refresh : comments.reconnect} disabled={context.connected && comments.loading} tone="accent" animate />
     </div>
     <div role="status" aria-live="polite" className="mt-2 sm:mt-3 min-h-5 text-[10px] font-black uppercase">{queueStatus}</div>
     {!context.connected && <div className="mt-2 sm:mt-3"><SubToolboxGridActionButton label="Connect YouTube Channel" iconName="link" tone="green" onClick={comments.reconnect} /></div>}
