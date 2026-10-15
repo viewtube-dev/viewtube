@@ -9,6 +9,7 @@ import {
  buildTrafficSourceContributionInsights,
  buildTrendInsights,
  adaptAnomalyToAnalyticsFinding,
+ adaptAnomaliesToAnalyticsFindings,
  toDerivedSignal,
 } from "../DeterministicAnalyticsInsights"
 import type { ViewTubeAnomaly } from "../../anomaly-intelligence/contracts"
@@ -367,6 +368,8 @@ describe("deterministic analytics insights", () => {
    recommendation: null,
   })
   expect(finding.evidenceRefs).toContain("analytics:snapshot-anomaly:daily:views")
+  expect(adaptAnomaliesToAnalyticsFindings([anomaly, { ...anomaly, id: "daily:all:views:2026-10-13" }]).map((item) => item.id))
+   .toEqual(["analytics-insight:anomaly:daily:7c5b7b0d", "analytics-insight:anomaly:daily:7c5b7b0d"].sort())
  })
 
 })
