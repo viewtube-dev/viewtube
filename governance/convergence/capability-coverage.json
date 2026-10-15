@@ -208,7 +208,8 @@
         "src/services/brain/__tests__/assetOutcomes.test.ts",
         "src/services/viewTubeEvaluationLedger.test.ts",
         "src/services/postPublicationOutcomePipeline.test.ts",
-        "src/services/asset-engine/PostPublishAnalyticsBridge.test.ts"
+        "src/services/asset-engine/PostPublishAnalyticsBridge.test.ts",
+        "src/features/vt-sync-local/adapters/manualImports.test.ts"
       ],
       "uiSurfaces": [
         "Channel Intelligence Hub",
