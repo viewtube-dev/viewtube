@@ -1938,7 +1938,7 @@
 }
 .vt-confirmed-size-card strong { font-size: 8px; font-weight: 950; }
 .vt-confirmed-size-card span { font-size: 8px; line-height: 1.15; }
-.vt-confirmed-textarea-exception,
+.vt-confirmed-field-typography-exception,
 .vt-confirmed-action-exception { grid-column: 1 / -1; }
 .vt-confirmed-action-exception { border-style: dashed; }
 @media (max-width: 560px) {
