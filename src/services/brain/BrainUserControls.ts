@@ -3,6 +3,7 @@ export interface BrainUserControls {
  personalization: boolean
  showEvidence: boolean
  learnFromInteractions: boolean
+ captureCreatorCommunications: boolean
  allowAnalytics: boolean
  allowProjects: boolean
  allowComments: boolean
@@ -20,6 +21,7 @@ export const DEFAULT_BRAIN_USER_CONTROLS: BrainUserControls = {
  personalization: true,
  showEvidence: true,
  learnFromInteractions: true,
+ captureCreatorCommunications: false,
  allowAnalytics: true,
  allowProjects: true,
  allowComments: true,
@@ -128,6 +130,9 @@ export const shouldBrainLearnFromInteraction = (
  controls: BrainUserControls,
  options: { explicitlyExcluded?: boolean } = {},
 ): boolean => controls.enabled && controls.personalization && controls.learnFromInteractions && !options.explicitlyExcluded
+
+export const canCaptureCreatorCommunications = (controls: BrainUserControls): boolean =>
+ controls.enabled && controls.personalization && controls.learnFromInteractions && controls.captureCreatorCommunications
 
 export const canBrainShareResearchData = (
  controls: BrainUserControls,
