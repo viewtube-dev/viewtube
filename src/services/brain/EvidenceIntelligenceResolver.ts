@@ -129,7 +129,8 @@ export const resolveEvidenceIntelligence = (
   expectedChannelId: input.channelId,
  })
  const scopeUsable = Boolean(input.channelId && evidenceQuality.scopeMatch === "exact")
- const projectedRecords = dependencies.projectEvidence(canonicalEvidence)
+ // Do not project raw rows until the channel scope has been verified.
+ const projectedRecords = scopeUsable ? dependencies.projectEvidence(canonicalEvidence) : []
  const allEvidenceClaims = projectEvidenceRecordsToBrainClaims(projectedRecords)
  const sharedEvidenceHealth = summarizeBrainEvidenceHealth(allEvidenceClaims, { channelId: input.channelId })
  const evidenceRecords = scopeUsable ? projectedRecords : []
