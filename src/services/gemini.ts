@@ -328,17 +328,6 @@ const readLocalPreference = (key: string): string | null => {
  }
 }
 
-// Browser settings are optional at SSR/test boundaries and can be blocked by
-// privacy settings. A missing preference must not prevent deterministic Brain fallback.
-const readLocalSetting = (key: string, fallback = ""): string => {
- try {
-  if (typeof localStorage === "undefined") return fallback
-  return localStorage.getItem(key) || fallback
- } catch {
-  return fallback
- }
-}
-
 // Helper to get the AI settings
 const getAiSettings = () => {
  const customKey =
