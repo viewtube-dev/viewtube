@@ -50,6 +50,12 @@ A sustainable plan usually needs more than one kind of video.
 
 The balance depends on your goals, production capacity and audience. Do not treat this as a universal percentage formula. A solo creator with limited time may choose one carefully scoped experiment per month; a news channel may need a much faster cycle.
 
+## Generate and Prioritize Ideas
+
+Useful idea sources include audience questions, Analytics patterns, search demand, related viewing contexts, category observations, content gaps, creator expertise, timely events, reusable assets, and business goals. Treat each source as an input, not a command. A popular request may be outside the channel's promise; an analytics pattern may reflect a one-off event.
+
+For each idea, capture a working title, intended viewer, problem or promise, format, evidence, production effort, dependencies, risks, and intended success criteria. Prioritize by potential value, confidence, effort, timing, and strategic fit. A scoring model can help compare options, but the score should not hide assumptions or create false precision.
+
 ## Write a Useful Hypothesis
 
 A vague goal such as “make the next video go viral” cannot guide a clear decision. A useful hypothesis states the audience, the change, the expected benefit, the reason, and the evidence you will inspect.
