@@ -554,6 +554,7 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
 
   const audioVolume=number(payload.volume,.6);
   const audioRate=number(payload.playbackRate,1);
+  const videoVolume=number(payload.volume,1);
   const widthValue=number(payload.width,100),heightValue=number(payload.height,100);
   const xValue=number(payload.x,0),yValue=number(payload.y,0),rotationValue=number(payload.rotation,0);
   const ratio=widthValue>0?heightValue/widthValue:1;
@@ -725,6 +726,13 @@ function SelectedClipSettings({store,onNavigate}:{store:EditorStore;onNavigate?:
       {frameDerivativeError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameDerivativeError}</div>:null}
       {String(payload.mediaKind??'')==='video'?<button style={{...miniButton,width:'100%',marginTop:4,background:capturingFrame?YELLOW:CYAN,opacity:capturingFrame||savingFrameDerivative||!playheadWithinClip?0.45:1}} disabled={capturingFrame||savingFrameDerivative||!playheadWithinClip} onClick={()=>void captureFrame()}><ImageIcon size={12}/>{capturingFrame?'CAPTURING FRAME…':'CAPTURE FRAME AS STILL'}</button>:null}
       {frameCaptureError?<div role='alert' style={{fontSize:8,fontWeight:900,border:'1px solid '+MAGENTA,padding:5,marginTop:4,overflowWrap:'anywhere'}}>{frameCaptureError}</div>:null}
+    </div>:null}
+
+    {isMedia&&String(payload.mediaKind??'')==='video'?<div style={{marginTop:10}}>
+      <div style={sectionLabel}>VIDEO AUDIO</div>
+      <HoldStepper label="VOLUME" value={videoVolume} min={0} max={1} step={.01} precision={2} onChange={volume=>patch({volume})}/>
+      <button type="button" aria-label={Boolean(payload.muted)?'Unmute video audio':'Mute video audio'} style={{...miniButton,width:'100%',marginTop:4,background:Boolean(payload.muted)?'#fff':BLUE}} onClick={()=>patch({muted:!Boolean(payload.muted)})}>{Boolean(payload.muted)?'UNMUTE VIDEO AUDIO':'MUTE VIDEO AUDIO'}</button>
+      <div style={{fontSize:8,fontWeight:800,opacity:.65,marginTop:4}}>Controls the embedded audio stream during preview and Remotion render. Default video volume is 100%.</div>
     </div>:null}
 
     {isAudio?<div style={{marginTop:10}}>
