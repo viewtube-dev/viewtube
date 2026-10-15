@@ -192,68 +192,82 @@ export const runPostPublicationOutcomePipeline = async (input: {
         })
       } else {
         const checkpointId = `daily:${endDate}`
-        if (hasRecordedCheckpoint(build.id, videoId, checkpointId)) {
-          result.skipped += 1
-        } else {
-          const baselineRows = rows.filter(row => row.day < endDate).slice(-7)
-          const dueRecommendations = recommendationsFor(algorithmEvents, build.id, videoId, nowMs)
-          const recommendationTargets = dueRecommendations.flatMap(event => event.evaluationTargets)
-          const observationMetricNames = [...new Set([
-            ...METRICS.map(({ metric }) => metric),
-            ...recommendationTargets.map(target => target.metric),
-          ])]
-          const observations: AlgorithmMetricObservation[] = observationMetricNames.map(metric => ({
-            metric,
-            value: valueFor(latestRow, aliasesForMetric(metric)),
-            observedAt: Date.parse(`${endDate}T23:59:59.999Z`),
-            evidenceId: `youtube-analytics:video:${videoId}:${endDate}:${metric}`,
-          }))
-          const targets: AlgorithmEvaluationTarget[] = recommendationTargets.length
-            ? recommendationTargets
-            : METRICS.map(({ metric, aliases }) => ({
-                metric,
-                direction: "inspect" as const,
-                baselineValue: average(baselineRows.map(row => valueFor(row, aliases))),
-              }))
-          const checkpoint = recordAnalyticsCheckpointForEvaluation({
-            transactionId: transaction.id,
-            videoId,
-            checkpointId,
-            checkpointAt: Date.parse(`${endDate}T23:59:59.999Z`),
-            observations,
-            evaluationTargets: targets,
-            evidenceIds: observations.flatMap(observation => observation.evidenceId ? [observation.evidenceId] : []),
-            now: nowMs,
-            toolId: "canonical-analytics-sync",
-            summary: `Canonical YouTube analytics synced through ${endDate}; linked to the verified publishing transaction and approved metadata snapshot.`,
-          })
-          result.checkpointsRecorded += 1
+        const checkpointAlreadyRecorded = hasRecordedCheckpoint(build.id, videoId, checkpointId)
+        if (checkpointAlreadyRecorded) result.skipped += 1
 
-          for (const recommendation of dueRecommendations) {
-            const alreadyMeasured = listAlgorithmIntelligenceEvents({
-              channelId: input.channelId,
-              kind: "OUTCOME_MEASURED",
-            }).some(event => event.parentEventIds.includes(recommendation.id))
-            if (alreadyMeasured) continue
-            recordAlgorithmEvaluation({
-              sourceEventId: recommendation.id,
-              observations,
-              now: nowMs,
-              metadata: {
-                contentBuildId: build.id,
-                videoId,
-                publicationTransactionId: transaction.id,
-                approvedSnapshotId: transaction.approvedSnapshotId,
-                approvedSnapshotHash: transaction.approvedSnapshotHash,
-                metadataVersionIds: listContentBuildMetadataHistory(build.id).map(version => version.metadataVersionId),
-                checkpointId,
-                checkpointEventId: checkpoint.checkpointEvent?.id || checkpoint.identity.event.id,
-                interpretation: "descriptive-association-only",
-                causalConclusion: null,
-              },
-            })
-            result.recommendationEvaluations += 1
-          }
+        const baselineRows = rows.filter(row => row.day < endDate).slice(-7)
+        const dueRecommendations = recommendationsFor(algorithmEvents, build.id, videoId, nowMs)
+        const recommendationTargets = dueRecommendations.flatMap(event => event.evaluationTargets)
+        const observationMetricNames = [...new Set([
+          ...METRICS.map(({ metric }) => metric),
+          ...recommendationTargets.map(target => target.metric),
+        ])]
+        const observations: AlgorithmMetricObservation[] = observationMetricNames.map(metric => ({
+          metric,
+          value: valueFor(latestRow, aliasesForMetric(metric)),
+          observedAt: Date.parse(`${endDate}T23:59:59.999Z`),
+          evidenceId: `youtube-analytics:video:${videoId}:${endDate}:${metric}`,
+        }))
+        const targets: AlgorithmEvaluationTarget[] = recommendationTargets.length
+          ? recommendationTargets
+          : METRICS.map(({ metric, aliases }) => ({
+              metric,
+              direction: "inspect" as const,
+              baselineValue: average(baselineRows.map(row => valueFor(row, aliases))),
+            }))
+
+        // Re-enter the idempotent bridge on retries. A checkpoint event may have
+        // committed before its publication evaluation or recommendation outcome,
+        // so the existing checkpoint alone is not proof that lineage is complete.
+        const checkpoint = recordAnalyticsCheckpointForEvaluation({
+          transactionId: transaction.id,
+          videoId,
+          checkpointId,
+          checkpointAt: Date.parse(`${endDate}T23:59:59.999Z`),
+          observations,
+          evaluationTargets: targets,
+          evidenceIds: observations.flatMap(observation => observation.evidenceId ? [observation.evidenceId] : []),
+          now: nowMs,
+          toolId: "canonical-analytics-sync",
+          summary: `Canonical YouTube analytics synced through ${endDate}; linked to the verified publishing transaction and approved metadata snapshot.`,
+        })
+        if (!checkpointAlreadyRecorded) result.checkpointsRecorded += 1
+
+        if (!checkpoint.publicationEvaluation || checkpoint.publicationEvaluationError) {
+          result.failures.push({
+            contentBuildId: build.id,
+            stage: "analytics-checkpoint",
+            code: "canonical-publication-evaluation-unavailable",
+          })
+        }
+
+        // Outcome evaluation is deliberately outside the new-checkpoint branch:
+        // if an earlier attempt wrote the checkpoint and then crashed, a retry
+        // can still finish each recommendation exactly once.
+        for (const recommendation of dueRecommendations) {
+          const alreadyMeasured = listAlgorithmIntelligenceEvents({
+            channelId: input.channelId,
+            kind: "OUTCOME_MEASURED",
+          }).some(event => event.parentEventIds.includes(recommendation.id))
+          if (alreadyMeasured) continue
+          recordAlgorithmEvaluation({
+            sourceEventId: recommendation.id,
+            observations,
+            now: nowMs,
+            metadata: {
+              contentBuildId: build.id,
+              videoId,
+              publicationTransactionId: transaction.id,
+              approvedSnapshotId: transaction.approvedSnapshotId,
+              approvedSnapshotHash: transaction.approvedSnapshotHash,
+              metadataVersionIds: listContentBuildMetadataHistory(build.id).map(version => version.metadataVersionId),
+              checkpointId,
+              checkpointEventId: checkpoint.checkpointEvent?.id || checkpoint.identity.event.id,
+              interpretation: "descriptive-association-only",
+              causalConclusion: null,
+            },
+          })
+          result.recommendationEvaluations += 1
         }
       }
     } catch {
