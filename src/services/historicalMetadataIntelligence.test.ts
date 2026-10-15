@@ -186,6 +186,24 @@ describe("historical metadata intelligence", () => {
       evidenceIds: ["analytics-evidence-1"],
       metadata: { videoId: "video-1", checkpointId: "checkpoint-7d" },
     })
+    appendContentBuildEvent({
+      contentBuildId: "cb-history",
+      eventType: "analysis.completed",
+      entityType: "metadata-performance-comparison",
+      entityId: "metadata-v2",
+      actorType: "analytics",
+      timestamp: "2026-10-11T12:00:00.000Z",
+      evidenceIds: ["comparison-evidence-1"],
+      metadata: { videoId: "video-1", metadataVersionId: "metadata-v2", status: "ready" },
+      resultingState: {
+        status: "ready",
+        metadataVersionId: "metadata-v2",
+        fieldChanges: [{ field: "title", before: "Old title", after: "New title" }],
+        metrics: [{ metric: "views", baselineAverage: 100, followUpAverage: 150, absoluteChange: 50 }],
+        interpretation: "descriptive-association-only",
+        causalConclusion: null,
+      },
+    })
 
     const context = resolveHistoricalMetadataContext({
       contentBuildId: "cb-history",
@@ -194,7 +212,8 @@ describe("historical metadata intelligence", () => {
     })
 
     expect(context.relevantMetadataVersionIds).toEqual(["metadata-v2"])
-    expect(context.analyticsCheckpointEvents).toHaveLength(1)
+    expect(context.analyticsCheckpointEvents).toHaveLength(2)
+    expect(context.analyticsCheckpointEvents.some(event => event.result.status === "ready")).toBe(true)
     expect(context.evidenceIds).toEqual(expect.arrayContaining(["metadata-edit-evidence", "analytics-evidence-1"]))
   })
 })
