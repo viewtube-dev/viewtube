@@ -58,6 +58,7 @@ import {
 import { listMetadataHistory, recordMetadataPackageVersion } from "../services/metadataHistory"
 import type { ContentBuildEvent } from "../services/asset-engine/contracts"
 import { recordMetadataOperationProvenance } from "../services/MetadataOperationProvenance"
+import { listPromotedMetadataLearningCandidates } from "../services/MetadataLearningGovernance"
 import { resolveHistoricalMetadataContext } from "../services/historicalMetadataIntelligence"
 import {
   createViewTubeActionPacket,
@@ -217,9 +218,23 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           ).join("; ")
           return `Status ${String(item.result.status)} · ${String(item.result.baselineStartDate || "")}–${String(item.result.baselineEndDate || "")} vs ${String(item.result.followUpStartDate || "")}–${String(item.result.followUpEndDate || "")}. Changes: ${changeText || "not available"}. Metrics: ${metricText || "incomplete"}.`
         })
-      const historicalEvidenceBrief = historicalComparisons.length
-        ? `HISTORICAL METADATA EVIDENCE (descriptive association only; not causal proof):\n${historicalComparisons.join("\n")}\nDo not infer causation from these comparisons. Treat missing metrics as unknown, note confounders, and use the evidence as context rather than a rule.`
-        : ""
+      const promotedLearning = workspaceContext
+        ? listPromotedMetadataLearningCandidates(workspaceContext.contentBuildId).slice(-5)
+        : []
+      const promotedLearningBrief = promotedLearning.map(event => {
+        const state = event.resultingState && typeof event.resultingState === "object"
+          ? event.resultingState as Record<string, unknown>
+          : {}
+        return `Creator-approved observed association: ${String(state.field || "metadata")} changes were associated with ${String(state.direction || "a change")} in ${String(state.metric || "performance")} across ${String(state.independentComparisonCount || 0)} distinct metadata versions. This is not causal proof; check current context and confounders before applying.`
+      })
+      const historicalEvidenceBrief = [
+        historicalComparisons.length
+          ? `HISTORICAL METADATA EVIDENCE (descriptive association only; not causal proof):\n${historicalComparisons.join("\n")}\nDo not infer causation from these comparisons. Treat missing metrics as unknown, note confounders, and use the evidence as context rather than a rule.`
+          : "",
+        promotedLearningBrief.length
+          ? `CREATOR-APPROVED BRAIN LEARNING (still observational, not causal):\n${promotedLearningBrief.join("\n")}`
+          : "",
+      ].filter(Boolean).join("\n\n")
       const operationStrategyBrief = [
         buildMetadataStrategyBrief(goal, intensity, style),
         historicalEvidenceBrief,
