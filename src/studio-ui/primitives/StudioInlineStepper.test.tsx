@@ -44,7 +44,7 @@ describe("StudioInlineStepper", () => {
 
   it("uses global Studio size tokens and has no SubToolbox style authority", () => {
     const allCss = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = allCss.indexOf(".vt-studio-inline-stepper {")
+    const start = allCss.indexOf(".vt-studio-inline-stepper,")
     const end = allCss.indexOf("/* Canonical Studio Controls Split Stepper.", start)
     const css = allCss.slice(start, end > start ? end : undefined)
     expect(css).toContain("var(--vt-studio-control-height")
@@ -77,7 +77,7 @@ describe("StudioSplitStepper username-input foundation", () => {
     expect(css).toContain(".vt-studio-inline-stepper,\\n.vt-studio-split-stepper {")
     expect(css).toContain("--vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
     expect(css).toContain("background: var(--vt-stepper-secondary);")
-    expect(css).toContain(".vt-studio-inline-stepper,\\n.vt-studio-split-stepper {\\n  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
+    expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {\n  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
     expect(css).toContain("box-shadow: none;")
   })
 })
