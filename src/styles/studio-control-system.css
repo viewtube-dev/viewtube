@@ -1626,3 +1626,10 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
     transition: none !important;
   }
 }
+
+
+/* Checkmark and wide-X checkbox faces follow the standard 44px control radius.
+   Rectangular radios retain their separate reference-specific 7.333px geometry. */
+.vt-studio-44-choice.is-checkbox.is-rect {
+  border-radius: var(--vt-studio-44-radius, 6px) !important;
+}
