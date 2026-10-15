@@ -16,6 +16,7 @@ export interface EvaluationRecord {
  contentBuildId?: string | null
  videoPackageId?: string | null
  publishTransactionId?: string | null
+ approvedSnapshotId?: string | null
  approvedSnapshotHash?: string | null
  projectAssociationStatus?: ContentBuildPublicationIdentity["projectAssociationStatus"]
  selectedVariantAssetIds?: string[]
@@ -25,10 +26,6 @@ export interface EvaluationRecord {
  traceIds?: string[]
  assetIds?: string[]
  publishedVideoId?: string | null
- contentBuildId?: string | null
- publishTransactionId?: string | null
- approvedSnapshotId?: string | null
- approvedSnapshotHash?: string | null
  analyticsCheckpointIds?: string[]
  baselineSnapshotId?: string | null
  comparisonSnapshotId?: string | null
@@ -53,8 +50,6 @@ export interface WorkflowCandidate {
  reason: string
  evidenceRecordIds: string[]
  evaluationRecordId?: string | null
- /** Caller key for idempotent candidate creation within one evaluation/scope. */
- idempotencyKey?: string | null
  sourceOutcomeIds?: string[]
  evaluationOutcome?: Exclude<EvaluationOutcome, "pending">
  selectedWindow?: string | null
