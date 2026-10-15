@@ -92,3 +92,15 @@ Do not invent a direct quotation or imply that a paraphrase is verbatim. Direct 
 ## 10. Editorial release certification
 
 For every guide, verify that the title and registry description match the actual content; the field exercise is topic-specific; evidence limits are explicit; source links are attributable; examples are labeled; reading-time metadata remains aligned with the content; and the guide has no placeholder or unsupported guarantee. Review all fifteen resources as one system for consistency, while preserving topic-specific workflows and examples.
+
+## 11. Search and discovery contract
+
+Search should support creator-language questions, task verbs, metric names, common synonyms, resource tags, descriptions, and the document's canonical Markdown. Keep search deterministic: stable registry order breaks score ties. Category and learning-path filters must compose with search instead of silently replacing one another. An empty query shows the filtered collection; a query with no matches shows a useful reset path. Do not use an opaque model score as the only retrieval rule.
+
+## 12. Learning paths and progress
+
+Learning paths are curated sequences over canonical resource IDs, not copies of resource content. Each path must state its audience level, practical outcome, short description, and ordered resource IDs. Tests must confirm every reference resolves. Completion is a user convenience signal, not a claim that a skill has been certified. Browser-local progress must be normalized against current IDs, deduplicated, and allowed to degrade gracefully when storage is blocked. Never put private channel data or credentials in the progress record.
+
+## 13. ViewTube workflow connections
+
+Resources may link readers into existing Studio, Projects, Publisher, Analytics, Creator Vault, and AI Brain routes when the relationship is clear. Links must target verified routes and communicate that navigation is not the same as data mutation. When a resource is passed to AI Brain through a route prompt, identify the guide by stable ID and title, ask the Brain to use available channel context and state missing evidence, and explicitly avoid implying the guide has already changed project state. Do not duplicate resource Markdown into feature-owned data stores.
