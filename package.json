@@ -63,6 +63,7 @@
     "test:production-stack": "node --test scripts/production-stack.test.mjs",
     "test:studio-controls": "vitest run src/studio-ui/primitives/StudioControls.test.tsx src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx src/components/CommentResponder.contract.test.ts src/studio-ui/StudioHubCertification.test.tsx src/components/subtoolbox/SubToolboxSplitStepper.test.tsx && npm run test:confirmed-library-layout",
     "test:brain-quality-loop-contract": "node --test scripts/audit/brain-quality-loop-contract.test.mjs",
+    "test:brain-quality-loop": "vitest run src/services/brain/__tests__/brainQualityLoop.test.ts",
     "test:prompt-registry-governance": "node --test scripts/audit/prompt-registry-governance.test.mjs"
   },
   "dependencies": {
