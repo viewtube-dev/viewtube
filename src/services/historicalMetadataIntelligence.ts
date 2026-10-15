@@ -58,6 +58,7 @@ export interface HistoricalMetadataContext {
     timestamp: string
     evidenceIds: string[]
     metadata: Record<string, unknown>
+    result: Record<string, unknown>
   }>
   relevantMetadataVersionIds: string[]
   evidenceIds: string[]
@@ -138,7 +139,10 @@ export const resolveHistoricalMetadataContext = (input: {
       (!entry.publishedVideoId || entry.publishedVideoId === input.videoId)
   })
   const analyticsCheckpointEvents = listContentBuildEvents(input.contentBuildId)
-    .filter(event => event.eventType === "analytics.checkpoint")
+    .filter(event =>
+      event.eventType === "analytics.checkpoint" ||
+      (event.eventType === "analysis.completed" && event.entityType === "metadata-performance-comparison")
+    )
     .filter(event => {
       const metadata = event.metadata as Record<string, unknown> | undefined
       const videoId = metadata?.videoId
@@ -153,6 +157,9 @@ export const resolveHistoricalMetadataContext = (input: {
         timestamp: event.timestamp,
         evidenceIds: event.evidenceIds || [],
         metadata,
+        result: (event.resultingState && typeof event.resultingState === "object" && !Array.isArray(event.resultingState))
+          ? event.resultingState as Record<string, unknown>
+          : {},
       }
     })
   return {
