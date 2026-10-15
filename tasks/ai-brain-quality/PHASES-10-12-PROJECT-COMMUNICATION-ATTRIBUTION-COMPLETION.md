@@ -64,3 +64,23 @@ Acceptance still outstanding:
 ## Verification
 
 Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+
+## Current integration continuation — 2026-10-15
+
+### Verified integration status
+- The separate publication/outcome/evaluation/governed-learning implementation from PR #217 was reconciled and merged through PR #269; governance evidence mapping followed in PR #270.
+- The new live attribution panel now uses the existing `buildBrainAttributionChain` resolver in the Brain Evaluation Inbox. It scopes recommendations to the active channel, shows counts for decision/execution/publication/measured outcome/learning, and lists unresolved stages and limitations.
+- The panel explicitly distinguishes publication lifecycle evidence from measured performance and causal attribution.
+- This is a live UI integration step, not end-to-end certification.
+
+### Remaining acceptance gates
+1. Propagate stable IDs through generation/selection, ActionPackets, publish transaction, canonical analytics evaluation, and learning writers; validate every join by explicit identity and channel scope.
+2. Surface project-stage relevant capabilities as enforceable tool/UI policy, not prompt text alone.
+3. Complete privacy/consent/retention review for creator communication evidence. Verify that opt-out disables capture and that raw communication retention follows an explicit policy.
+4. Verify server persistence, replay, and cross-device reconciliation for Brain outcomes and evaluation records; browser-local retry safety is not a distributed transaction.
+5. Run focused tests, typecheck, runtime lint, full suite, production build, source governance and runtime smoke on the exact PR head. The current integration run has known failures in focused contracts, source-governance catalog assertions, full suite, and typecheck; these must be triaged separately rather than waived.
+6. Exercise the complete recommendation → creator decision → immutable publish receipt → canonical analytics checkpoint → evaluation → governed learning chain against real production callers and fresh channel-scoped provider data.
+
+### Release boundary
+Implementation and the first live attribution UI are present. Do not mark the phases certified complete until all gates above have current-head evidence. The current UI is intentionally read-only: it does not manufacture missing events, infer links from timestamps, or promote learning.
+
