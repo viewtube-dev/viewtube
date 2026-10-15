@@ -75,8 +75,16 @@ export const persistBrainIntelligence = async (input: {
  for (const batch of work) {
   const result = await putBatch(input.channelId, batch.events, batch.observations)
   if (!result) return null
-  eventCount += Number(result.eventCount || 0)
-  observationCount += Number(result.observationCount || 0)
+  const expectedEventCount = batch.events.length
+  const expectedObservationCount = batch.observations.length
+  if (
+   Number(result.eventCount) !== expectedEventCount ||
+   Number(result.observationCount) !== expectedObservationCount
+  ) {
+   throw new Error("Brain intelligence persistence acknowledgement mismatch; batch remains unverified.")
+  }
+  eventCount += expectedEventCount
+  observationCount += expectedObservationCount
   batches += 1
  }
  return { ok: true, channelId: input.channelId, eventCount, observationCount, batches }
