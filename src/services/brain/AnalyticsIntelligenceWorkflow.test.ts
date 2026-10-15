@@ -170,7 +170,7 @@ describe("Analytics intelligence workflow phases 5–8", () => {
     const base = evaluateAnalyticsOutcome({
       recommendation: action,
       baseline: measurement(),
-      followUp: measurement({ value: 120, snapshotId: "snapshot-after-1", observedAt: "2026-10-15T00:00:00.000Z" }),
+      followUp: measurement({ value: 120, snapshotId: "snapshot-after-1", periodStartDate: "2026-09-18", periodEndDate: "2026-10-15", observedAt: "2026-10-15T00:00:00.000Z" }),
     })
     const second = { ...base, id: "outcome-2", followUpSnapshotId: "snapshot-after-2", absoluteChange: 15 }
     const third = { ...base, id: "outcome-3", followUpSnapshotId: "snapshot-after-3", absoluteChange: 10 }
