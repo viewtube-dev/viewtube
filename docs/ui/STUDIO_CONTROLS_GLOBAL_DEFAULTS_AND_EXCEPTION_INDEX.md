@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Phases 1–3 implemented on the audit branch; automated checks and rendered verification pending  
+**Status:** Phase 1–3 contract/cascade/field changes prepared on the completion branch; automated checks and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Audit work branch:** `fix/studio-controls-phases-1-3-2026-10-14`  
+**Audit work branch:** `fix/studio-controls-phases-1-3-complete-2026-10-15`  
 **Last reviewed:** 2026-10-14  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -98,7 +98,7 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 | ID | Component / family | Intended exception | Current source behavior / issue | Status |
 |---|---|---|---|---|
 | E-01 | Text inputs, search/number inputs | Native field semantics; primary-color default text and stroke; inset primary stroke; secondary focus outline | Final contract now applies primary default text/fill/stroke, consistent placeholder/value typography, size-specific border/radius, and black focused text | **Implemented; awaiting tests and browser verification** |
-| E-02 | Textareas | Taller writing surface; resize behavior; standard 18px / compact 14px copy; 92px minimum height | Final contract now preserves a 92px minimum height in both sizes, 18px/14px typography, and 900 weight | **Implemented; awaiting tests and browser verification** |
+| E-02 | Textareas | Taller writing surface; resize behavior; standard 18px / compact 14px copy; 92px minimum height | Final contract preserves a 92px minimum height in both sizes, 18px/14px typography, and 1000 weight | **Implemented; awaiting tests and browser verification** |
 | E-03 | Dropdown trigger | Trigger behaves like a button; menu overlays content | Trigger gets a white-mixed background; component class may have separate sizing and state styling | **Review token inheritance and size conformance** |
 | E-04 | Dropdown menu / options | No button shadow and no press-motion on options; menu can use its own panel geometry | `.vt-studio-dropdown-menu` uses 8px fallback radius and shadow fallback 4px; options have fixed 14px font, 40px minimum height and 2px separator, outside the 44/28 control contracts | **Intentional menu exception; document and visually verify** |
 | E-05 | Split-left button rail/divider | Rail is a separate colored icon region; divider matches the declared size stroke | Final contract uses 3px standard and 2px compact dividers and styles rail/label inside the face wrapper | **Implemented; awaiting tests and browser verification** |
@@ -110,7 +110,7 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 | E-11 | Word toggles | 44px default or 28px compact; active handle measures selected word; skin/words/gap/inset may be customized | Dynamic measured handle and inline style are intentional geometry exceptions; CSS/state transitions must be checked for border/radius/motion consistency | **Intentional dynamic-width exception; audit remaining size behavior** |
 | E-12 | Floating-label input/textarea wrappers | Wrapper adds label positioning, not a second editable control | Wrapper classes are separately styled in catalog CSS; ensure they do not change field size/radius/stroke or duplicate focus rings | **Needs cross-file cascade audit** |
 | E-13 | Small/small-size compatibility | CSS defines a `data-size="small"` height of 32px although canonical contract exports only standard/compact | Legacy third size can bypass the two-size rule | **Defect unless a documented migration-only exception is approved** |
-| E-14 | Action-size compatibility | CSS defines `data-size="action"` height 56px and button typography overrides | The canonical exported size map has only standard and compact; action is an undocumented third size relative to this contract | **Defect/compatibility debt: inventory consumers and either migrate or formally document separate non-button layout semantics** |
+| E-14 | Action-size compatibility | CSS defines `data-size="action"` height 56px and button typography overrides | The canonical exported size map exposes only standard and compact; the separate 56px StudioActionButton is a distinct family, not a StudioButton size | **Defect/compatibility debt: inventory consumers and either migrate or formally document separate non-button layout semantics** |
 | E-15 | Focus and reduced motion | Focus needs visible, stable outline; reduced-motion must remain understandable | Focus uses 3px outline / 3px offset on buttons, not size-derived; reduced-motion sets transition duration to .01ms globally, suppressing most motion feedback | **Needs accessibility review and state feedback alternative** |
 | E-16 | Catalog defaults panel | Gallery should expose the real defaults and list every non-default setting | Catalog renders exported global and size constants, but those constants do not reflect every CSS override; per-family non-default lists exist but do not enumerate CSS drift | **Defect: add effective-vs-declared drift and exception status to catalog** |
 
@@ -264,8 +264,8 @@ These findings extend the exception index; they are source-level observations, n
 
 | Finding | Source | Conflict | Required correction |
 |---|---|---|---|
-| Global field fill policy is not singular | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.textFieldDefaults` vs early and later field selectors in `studio-control-system.css` | TypeScript describes default primary at 50% opacity and focus primary at 15%; CSS uses both transparent-mixed and white-mixed fills across overlapping selectors. | Keep one canonical default/focus field-state rule and test the computed fill in both sizes. |
-| Global focus says no gap, CSS adds one | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.focusOutline` vs `:focus/:focus-visible` field rule | Policy says no gap; one field focus rule sets `outline-offset: 1px`. | Set the field outline offset to 0 unless a named, indexed variant explicitly needs separation. |
+| Global field fill policy is centralized in the canonical field rule | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.textFieldDefaults` vs early and later field selectors in `studio-control-system.css` | TypeScript describes default primary at 50% opacity and focus primary at 15%; CSS uses both transparent-mixed and white-mixed fills across overlapping selectors. | Keep one canonical default/focus field-state rule and test the computed fill in both sizes; placeholder typography must match entered text. |
+| Global focus says no gap, CSS adds one | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.focusOutline` vs `:focus/:focus-visible` field rule | Policy says no gap; one field focus rule sets `outline-offset: 1px`. | Set text-input and textarea focus outline offset to 0; standard/compact focus and secondary-outline widths are machine-readable tokens. |
 | Global menu policy contradicts panel styling | `STUDIO_COMPONENT_GLOBAL_DEFAULTS.shadowPolicy` vs `.vt-studio-dropdown-menu` | Policy describes dropdown menus/options as having no shadows, while the menu panel defines a hard offset shadow. Options and panel are different surfaces but the policy does not clearly distinguish them. | Clarify the contract: menu options have no button shadow or press-motion; explicitly decide whether the floating panel may have a stationary panel shadow. Record the decision in the dropdown exception row and library. |
 | Focus and inset strokes are not fully size-driven | Text-field base and later canonical field selectors | Multiple selectors define inset width, outer stroke, outline width and outline offset; some use literals and one uses `!important`. | Express outer stroke and inset stroke with separate named size tokens; avoid duplicate state selectors and unnecessary `!important`. |
 | Catalog style must not be read as primitive geometry | `studio-hub-primitive-catalogs.css` | Reference cards/headings have their own frame border, radius and shadow values, distinct from the production control under test. | Keep card styles scoped to catalog wrappers; identify them as reference framing and never include them in primitive compliance measurements. |
@@ -326,9 +326,9 @@ PR #168 appends a more specific field-only correction with `outline-offset: 0 !i
 
 ### Verified conflict: textarea type-size declarations contradict one another
 
-The integration CSS contains a PR #159 textarea-specific rule using `font-size: 18px !important` for standard textareas and `14px !important` for compact textareas. PR #168 subsequently appends a rule requesting `font-size: 24px` for both sizes without `!important`. Because the earlier 18px/14px declarations are important and the later 24px declarations are not, the later declarations do not override them. The resulting intended textarea typography is unresolved across the merged PR history.
+The integration CSS contains a PR #159 textarea-specific rule using `font-size: 18px !important` for standard textareas and `14px !important` for compact textareas. PR #168 subsequently appends a rule requesting `font-size: 24px` for both sizes without `!important`. Because the earlier 18px/14px declarations are important and the later 24px declarations are not, the later declarations do not override them. The intended textarea typography is resolved here as 18px standard / 14px compact at font weight 1000, matching the multiline exception in the size contract.
 
-**Do not silently change this to 24px or 18px/14px without reconciling the product requirement.** The merged PR descriptions conflict. The 92px minimum-height rule from #168 is important and does override the earlier 144px/72px minimum heights; typography needs a single explicit source-of-truth decision.
+The canonical contract now explicitly selects 18px standard / 14px compact at font weight 1000 and preserves the 92px minimum height. Obsolete competing textarea declarations must be removed or verified not to win.
 
 ### Verified surviving source-level drift
 
