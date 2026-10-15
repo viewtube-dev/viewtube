@@ -91,7 +91,7 @@ export const buildBrainContextPack = (input: {
     ...input.evidenceQuality.missingness.unavailableDatasetIds.slice(0, 10).map((id) => `Missing dataset: ${id}`),
     ...input.evidenceQuality.missingness.failedDatasetIds.slice(0, 10).map((id) => `Failed dataset: ${id}`),
     ...input.evidenceQuality.freshness.staleDatasetIds.slice(0, 10).map((id) => `Stale dataset: ${id}`),
-    ...(input.evidenceQuality.evaluatedDatasetIds.length ? [`Task datasets: ${input.evidenceQuality.evaluatedDatasetIds.join(", ")}`] : []),
+    ...(input.evidenceQuality.evaluatedDatasetIds?.length ? [`Task datasets: ${input.evidenceQuality.evaluatedDatasetIds.join(", ")}`] : []),
     ...input.evidenceQuality.missingness.partialDatasetIds.slice(0, 10).map((id) => `Partial dataset: ${id}`),
     ...input.evidenceQuality.limitations.map((value) => `Limitation: ${value}`),
     "Evidence policy: missing/unavailable is not zero; stale evidence is historical, not current; partial evidence supports qualified claims only; separate observed measurements from calculations, estimates and hypotheses.",
