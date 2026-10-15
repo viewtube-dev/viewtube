@@ -7,29 +7,116 @@ const withStudioAttrs = (size: StudioControlSize) => ({
   "data-size": size,
 })
 
+type StudioTextInputBaseProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  sizeVariant?: StudioControlSize
+}
+
+type StudioTextInputSimpleProps = StudioTextInputBaseProps & {
+  variant?: "simple"
+  label?: never
+  level?: never
+  floatingLabelVariant?: never
+  controlClassName?: never
+  controlStyle?: never
+}
+
+type StudioTextInputFloatingLabelProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "placeholder" | "className" | "style"
+> & {
+  sizeVariant?: StudioControlSize
+  /** Render the canonical input with the shared floating-label treatment. */
+  variant: "floating-label"
+  label: string
+  level?: "l0" | "l1" | "l2"
+  /** Optional catalog specimen variant; B adds the documented compact focus stroke. */
+  floatingLabelVariant?: "a" | "b"
+  /** className/style target the field wrapper in floating-label mode. */
+  className?: string
+  style?: React.CSSProperties
+  /** Optional direct styling for the native input inside the wrapper. */
+  controlClassName?: string
+  controlStyle?: React.CSSProperties
+}
+
+export type StudioTextInputProps = StudioTextInputSimpleProps | StudioTextInputFloatingLabelProps
+
 /**
  * Canonical single-line Studio input family.
- * Standalone, search, number and floating-label inputs share the same size tokens.
+ * Simple and floating-label presentations are variants of this one primitive.
+ * All variants share the same global 38px/24px typography and size geometry.
  */
-export const StudioTextInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "text", placeholder = "TYPE HERE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
-  <input
-    ref={ref}
-    type={type}
-    data-vt-studio-field-kind="text-input"
-    placeholder={placeholder}
-    spellCheck={spellCheck}
-    autoCorrect={autoCorrect}
-    autoCapitalize={autoCapitalize}
-    {...props}
-    {...withStudioAttrs(sizeVariant)}
-  />
-))
+export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInputProps>(
+  (props, ref) => {
+    const generatedId = React.useId()
+    const {
+      variant = "simple",
+      label,
+      level = "l1",
+      floatingLabelVariant = "a",
+      sizeVariant = "standard",
+      type = "text",
+      placeholder = "TYPE HERE",
+      spellCheck = false,
+      autoCorrect = "off",
+      autoCapitalize = "off",
+      id,
+    } = props
+    const fieldId = id ?? `studio-text-input-${generatedId}`
+
+    if (variant === "floating-label") {
+      const { className, style, controlClassName, controlStyle, ...inputProps } = props
+      return (
+        <div
+          data-vt-primitive-id="141"
+          data-vt-studio-field="floating-input"
+          data-vt-studio-field-variant="floating-label"
+          data-vt-control-level={level}
+          data-vt-floating-variant={floatingLabelVariant}
+          className={["vt-studio-floating-field", "is-input", className].filter(Boolean).join(" ")}
+          style={style}
+        >
+          <input
+            ref={ref}
+            id={fieldId}
+            type={type}
+            data-vt-studio-field-kind="text-input"
+            placeholder=" "
+            spellCheck={spellCheck}
+            autoCorrect={autoCorrect}
+            autoCapitalize={autoCapitalize}
+            {...inputProps}
+            className={controlClassName}
+            style={controlStyle}
+            {...withStudioAttrs(sizeVariant)}
+          />
+          <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
+        </div>
+      )
+    }
+
+    const { className, style, ...inputProps } = props
+    return (
+      <input
+        ref={ref}
+        id={id}
+        type={type}
+        data-vt-studio-field-kind="text-input"
+        placeholder={placeholder}
+        spellCheck={spellCheck}
+        autoCorrect={autoCorrect}
+        autoCapitalize={autoCapitalize}
+        {...inputProps}
+        className={className}
+        style={style}
+        {...withStudioAttrs(sizeVariant)}
+      />
+    )
+  },
+)
 StudioTextInput.displayName = "StudioTextInput"
 
-/** Backwards-compatible canonical name used by existing Studio consumers. */
+/** Backwards-compatible canonical names used by existing Studio consumers. */
 export const StudioInput = StudioTextInput
 
 export const StudioSearchInput = React.forwardRef<
@@ -47,25 +134,3 @@ export const StudioNumberInput = React.forwardRef<
   <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
-
-export interface StudioLabeledInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "placeholder"> {
-  label: string
-  sizeVariant?: StudioControlSize
-  level?: "l0" | "l1" | "l2"
-  /** Specimen variant; B adds the documented compact secondary-color focus stroke. */
-  variant?: "a" | "b"
-}
-
-/** Floating-label input composed from the canonical single-line input family. */
-export const StudioLabeledInput = React.forwardRef<HTMLInputElement, StudioLabeledInputProps>(
-  ({ label, sizeVariant = "standard", level = "l1", variant = "a", className, style, id, ...props }, ref) => {
-    const generatedId = React.useId()
-    const fieldId = id ?? `studio-labeled-input-${generatedId}`
-    return <div data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level} data-vt-floating-variant={variant}
-      className={["vt-studio-floating-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
-      <StudioTextInput ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
-      <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
-    </div>
-  },
-)
-StudioLabeledInput.displayName = "StudioLabeledInput"
