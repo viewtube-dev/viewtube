@@ -2361,3 +2361,79 @@ button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="t
   30%, 70% { transform: rotate(12deg); }
   42%, 82% { transform: rotate(-7deg); }
 }
+
+
+/* Canonical feature icon motions; animation stays on inner icon layers. */
+button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"] [data-vt-square-icon-current],
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] [data-vt-square-icon-current] {
+  animation: vt-studio-square-pop 240ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-heart-pop[data-pop="true"] svg path,
+button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-pop-on-activation[data-pop="true"] svg path {
+  animation: vt-studio-heart-fill 520ms ease-out both;
+}
+button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-icon-current] svg {
+  transform-origin: 50% 12%;
+  animation: vt-studio-bell-ring 620ms ease-in-out;
+}
+button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  border-radius: inherit;
+  pointer-events: none;
+  animation: vt-studio-square-ripple 520ms ease-out both;
+}
+button[data-vt-studio-icon-button="true"].is-effect-like[data-pop="true"] [data-vt-square-icon-current] svg {
+  animation: vt-studio-like-pop 280ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"].is-effect-refresh[data-pop="true"] [data-vt-square-icon-current] svg {
+  animation: vt-studio-refresh-spin 460ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"].is-effect-sun-moon [data-vt-square-morph-face],
+button[data-vt-studio-icon-button="true"].is-effect-lock-unlock [data-vt-square-morph-face],
+button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-square-morph-face] {
+  transition: opacity 180ms ease-out, transform 240ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"].is-effect-sun-moon[data-icon-active="true"] [data-vt-square-morph-face="front"],
+button[data-vt-studio-icon-button="true"].is-effect-lock-unlock[data-icon-active="true"] [data-vt-square-morph-face="front"],
+button[data-vt-studio-icon-button="true"].is-effect-download-success[data-icon-active="true"] [data-vt-square-morph-face="front"] {
+  opacity: 0;
+  transform: scale(.65) rotate(-18deg);
+}
+button[data-vt-studio-icon-button="true"].is-effect-sun-moon[data-icon-active="true"] [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-lock-unlock[data-icon-active="true"] [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-download-success[data-icon-active="true"] [data-vt-square-morph-face="back"] {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+button[data-vt-studio-icon-button="true"].is-effect-sun-moon [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-lock-unlock [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-square-morph-face="back"] {
+  opacity: 0;
+  transform: scale(.65) rotate(18deg);
+}
+@keyframes vt-studio-heart-fill {
+  0%, 100% { fill: none; }
+  28%, 72% { fill: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+}
+@keyframes vt-studio-bell-ring {
+  0%, 100% { transform: rotate(0); }
+  15%, 45%, 75% { transform: rotate(12deg); }
+  30%, 60%, 90% { transform: rotate(-12deg); }
+}
+@keyframes vt-studio-square-ripple {
+  from { opacity: .95; transform: scale(.86); border-width: 3px; }
+  to { opacity: 0; transform: scale(1.22); border-width: 1px; }
+}
+@keyframes vt-studio-like-pop {
+  0%, 100% { transform: scale(1); }
+  45% { transform: scale(1.2) rotate(-8deg); }
+  75% { transform: scale(.96) rotate(3deg); }
+}
+@keyframes vt-studio-refresh-spin {
+  from { transform: rotate(0) scale(1); }
+  60% { transform: rotate(300deg) scale(1.08); }
+  to { transform: rotate(360deg) scale(1); }
+}
