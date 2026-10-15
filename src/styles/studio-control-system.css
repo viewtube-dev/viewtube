@@ -228,12 +228,20 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 /* Compact B is an explicit alternate specimen: add a solid secondary-color stroke
    equal to the compact 2px focus width, with no offset or layout movement. */
-.vt-studio-floating-field[data-vt-floating-variant="b"] > input[data-size="compact"]:is(:focus, :focus-visible) {
-  outline:var(--vt-field-focus-outline-width) solid var(--vt-field-secondary);
-  outline-offset:0;
+.vt-studio-floating-field.is-reverse-colors {
+  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
+  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
 }
-.vt-studio-floating-field[data-vt-floating-variant="b"] > input[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
-  outline: var(--vt-field-focus-outline-width) solid var(--vt-field-secondary);
+.vt-studio-floating-field.is-reverse-colors > [data-vt-studio-control="true"] {
+  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
+  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+}
+.vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) {
+  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+.vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
@@ -258,6 +266,15 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-fixed-label-stroke: 2px;
   --vt-studio-control-radius: 4px;
   --vt-studio-control-focus-outline-width: 2px;
+}
+/* B specimens reverse the paired colors without changing label geometry or type. */
+.vt-studio-fixed-label-field.is-reverse-colors {
+  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
+  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+}
+.vt-studio-fixed-label-field.is-reverse-colors > [data-vt-studio-control="true"] {
+  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
+  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
 }
 .vt-studio-fixed-label-field > [data-vt-studio-control="true"] {
   display: block;
