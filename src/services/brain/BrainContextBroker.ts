@@ -194,6 +194,7 @@ export const buildBrainContextPack = (input: {
   "\nCHANNEL EVIDENCE\n" + evidence,
   evidenceQuality ? "\nEVIDENCE QUALITY\n" + evidenceQuality : "",
   statistics ? "\nDETERMINISTIC STATISTICS INTELLIGENCE\n" + statistics : "",
+  analyticsFindings ? "\nDETERMINISTIC ANALYTICS FINDINGS\n" + analyticsFindings : "",
   audience ? "\nAUDIENCE INTELLIGENCE\n" + audience : "",
   algorithm ? "\nALGORITHM / CHANNEL / OPPORTUNITY INTELLIGENCE\n" + algorithm : "",
   channelKnowledge ? "\nCHANNEL KNOWLEDGE\n" + channelKnowledge : "",
