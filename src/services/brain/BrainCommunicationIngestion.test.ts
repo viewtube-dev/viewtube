@@ -24,4 +24,11 @@ describe("classifyCreatorCommunication", () => {
   expect(result.durableMemoryPromoted).toBe(false)
   expect(result.requiresGovernedReview).toBe(true)
  })
+ it("leaves neutral text unclassified instead of inventing a fact", () => {
+  const result = classifyCreatorCommunication("Hello, can you help me?")
+  expect(result.labels).toEqual([])
+  expect(result.confidence).toBe("low")
+  expect(result.rationale[0]).toContain("do not infer a fact")
+ })
+
 })
