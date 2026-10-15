@@ -246,3 +246,27 @@ test("confirmed Square Icon Button family catalogs every interaction effect at s
   assert.match(styles, /@media \(max-width: 520px\)\s*\{[\s\S]*?\.vt-confirmed-square-effect-grid\s*\{\s*grid-template-columns: minmax\(0, 1fr\)/);
   assert.match(controls, /squareIconButtonDefaults:[\s\S]*?rotatedToggle:[\s\S]*?flip:[\s\S]*?tooltip:[\s\S]*?morph:[\s\S]*?success:/);
 });
+
+
+test("confirmed square icon button variants 1–4 are grouped into one standard row and one compact row", () => {
+  assert.match(catalog, /vt-confirmed-square-variant-row[^]*?44px standard · variants 1–4[^]*?variant="v1" sizeVariant="standard"[^]*?variant="v4" sizeVariant="standard"/);
+  assert.match(catalog, /vt-confirmed-square-variant-row[^]*?28px compact · variants 1–4[^]*?variant="v1" sizeVariant="compact"[^]*?variant="v4" sizeVariant="compact"/);
+  assert.match(styles, /\.vt-confirmed-square-variant-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/);
+});
+
+test("square icon interaction effect specimens preserve two effect cards per row", () => {
+  assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /@media\s*\(max-width:\s*520px\)[\s\S]*?\.vt-confirmed-square-effect-grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+});
+
+test("confirmed stepper standard and compact specimens share one comparison row", () => {
+  assert.match(catalog, /vt-confirmed-stepper-row[^]*?44px standard · interactive[^]*?size="standard"[^]*?28px compact · interactive[^]*?size="compact"/);
+  assert.match(styles, /\.vt-confirmed-stepper-row-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+});
+
+test("confirmed spectrum tag gallery shows 20 production tag specimens across the alphabetic spectrum", () => {
+  assert.match(catalog, /vt-confirmed-spectrum-tag-grid[^]*?StudioSpectrumTag label="APPLE"[^]*?StudioSpectrumTag label="TANGERINE"/);
+  const tagGrid = catalog.match(/className="vt-confirmed-spectrum-tag-grid"[^]*?<\/div>/)?.[0] ?? "";
+  assert.equal((tagGrid.match(/<StudioSpectrumTag\s/g) ?? []).length, 20, "expected 20 canonical StudioSpectrumTag specimens");
+  assert.match(styles, /\.vt-confirmed-spectrum-tag-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5, minmax\(0, max-content\)\)/);
+});
