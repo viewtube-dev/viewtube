@@ -8,6 +8,7 @@ import {
 } from "../../components/subtoolbox/SubToolboxPrimitives"
 import { createImportedVaultAsset } from "../../services/vaultAdapter"
 import { createVaultOperation, transitionVaultOperation } from "../../services/vaultOperationLedger"
+import { resolveVaultMediaOperationPlan } from "../../services/vaultMediaOperations"
 import { computeVaultImagePalette } from "../../services/vaultImagePalette"
 import {
   DEFAULT_VAULT_IMAGE_TRANSFORM,
@@ -112,6 +113,16 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
       const response = await fetch(sourceUrl)
       if (!response.ok) throw new Error(`Image source returned HTTP ${response.status}.`)
       const sourceBlob = await response.blob()
+      const plan = resolveVaultMediaOperationPlan({
+        operation: "image-transform",
+        assets: [{
+          id: asset.id,
+          kind: asset.kind,
+          byteSize: sourceBlob.size,
+          protected: asset.metadata?.protected === true || (String(asset.metadata?.lifecycle || "").toUpperCase() === "GOLDEN" && asset.metadata?.protected !== false),
+        }],
+      })
+      if (!plan.allowed) throw new Error(plan.reason || "Image transformation is not available for this asset.")
       const nextTransform = { ...transform, crop: cropEnabled ? crop : null }
       const transformed = await transformVaultImage(sourceBlob, nextTransform)
       setSavedDerivativeId(null)
