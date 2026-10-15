@@ -1067,3 +1067,34 @@ vault_workbench_phases_0_6:
     - "GitHub read-back confirms duplicate files removed and canonical services retained."
     - "Exact-head CI, typecheck/build, browser verification, merge, and post-merge read-back remain pending."
   next_action: "Review the latest PR checks and resolve failures before merging."
+
+
+vault_workbench_phases_7_10:
+  status: "IMPLEMENTED IN BRANCH / EXACT-HEAD VERIFICATION PENDING; PHASE 8 BLOCKED"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phases-7-10-001"
+  title: "Vault Workbench phases 7–10 cross-system, batch and certification continuation"
+  target_branch: "master/consolidated-feature-integration"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  pull_request: 336
+  audit_documents:
+    - "docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md"
+    - "docs/vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md"
+  implementation:
+    - "src/services/vaultBatchOperations.ts"
+    - "src/services/__tests__/vaultBatchOperations.test.ts"
+    - "src/services/assetEngine.ts (existing canonical Asset Engine and ActionPacket handoff path audited, not duplicated)"
+  phase_status:
+    phase_7: "PARTIAL — canonical Asset Engine, ContentBuild and ActionPacket path exists; end-to-end browser flow not certified"
+    phase_8: "BLOCKED — authenticated workspace authorization and durable server-side operation/job contract not verified"
+    phase_9: "IMPLEMENTED IN BRANCH / PARTIAL INTEGRATION — bounded per-item batch planning/execution results and tests; processor/ledger/AI provider integration pending"
+    phase_10: "PENDING — exact-head CI, browser/runtime verification, merge and post-merge read-back"
+  boundaries:
+    - "Client-side guards, localStorage and IndexedDB are not server authorization or cross-device durability."
+    - "The batch runner takes an executor callback and does not itself claim a durable worker or wire every media processor."
+    - "Metadata suggestion contracts are not an AI provider; rights findings are not legal clearance."
+  verification:
+    - "Release-gate run #1503 before these writes passed production build, local smoke and Brain quality loop."
+    - "That run failed typecheck, source governance, focused contracts and full suite; it predates the newest head."
+    - "No exact-head verification, merge, browser certification or deployment is claimed."
+  next_action: "Run and inspect CI for the newest PR head, fix branch-introduced failures, resolve phase 8 prerequisites, complete real processor/lineage wiring and certify post-merge target."
