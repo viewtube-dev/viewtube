@@ -29,12 +29,19 @@ export interface AnalyticsInsightEvidencePeriod {
 export interface DeterministicAnalyticsInsight {
  id: string
  kind: DeterministicAnalyticsInsightKind
+ findingType: DeterministicAnalyticsInsightKind
  label: string
  channelId: string
+ projectId?: string | null
+ entity?: string | null
  datasetId: string
  metric: string
+ /** Flat, explicit calculation filters; no implicit UI state is permitted. */
+ filters: Record<string, string | number | boolean | null>
+ window?: string | null
+ sourceSnapshotIds: string[]
+ sourceObservedAt?: string | null
  aggregation: "sum" | "average"
- findingType: DeterministicAnalyticsInsightKind
  observedFact: {
   currentValue: number
   baselineValue: number | null
@@ -313,6 +320,16 @@ export const buildPeriodComparisonInsights = (input: {
     algorithmVersion: ALGORITHM_VERSION,
     deterministic: true as const,
     findingType: "comparison" as const,
+    filters: {
+     window: currentBundle.selectedWindow,
+     baselineStartDate: baseline.period.startDate,
+     baselineEndDate: baseline.period.endDate,
+     currentStartDate: current.period.startDate,
+     currentEndDate: current.period.endDate,
+    },
+    window: currentBundle.selectedWindow,
+    sourceSnapshotIds: [...new Set([baselineBundle.snapshotId, currentBundle.snapshotId])].sort(),
+    sourceObservedAt: currentBundle.capturedAt,
     observedFact: {
      currentValue,
      baselineValue,
@@ -453,6 +470,10 @@ export const buildTrafficSourceContributionInsights = (input: {
    algorithmVersion: ALGORITHM_VERSION,
    deterministic: true as const,
    findingType: "contribution" as const,
+   entity: label,
+   filters: { metricKey, dimensionKey },
+   sourceSnapshotIds: [dataset.snapshotId],
+   sourceObservedAt: dataset.updatedAt ?? null,
    observedFact: {
     currentValue: value,
     baselineValue: total,
@@ -547,6 +568,10 @@ export const buildTrendInsights = (input: {
    id: `analytics-insight:trend:${slug(dataset.datasetId)}:${slug(metricKey)}:${stableHash([dataset.channelId, dataset.snapshotId, entity, first.date, last.date].join(":"))}`,
    kind: "trend",
    findingType: "trend",
+   entity,
+   filters: { metricKey, dateKey, entityKey: entityKey ?? null, minimumObservations },
+   sourceSnapshotIds: [dataset.snapshotId],
+   sourceObservedAt: dataset.updatedAt ?? null,
    label: `${metricKey} trend for ${entity}: ${direction}`,
    channelId: dataset.channelId,
    datasetId: dataset.datasetId,
@@ -589,6 +614,7 @@ export const toDerivedSignal = (finding: DeterministicAnalyticsInsight): Derived
  id: finding.id,
  kind: finding.findingType === "material-change" ? "comparison" : finding.findingType,
  channelId: finding.channelId,
+ projectId: finding.projectId ?? null,
  label: finding.label,
  metric: finding.metric,
  currentValue: finding.currentValue,
@@ -607,6 +633,11 @@ export const toDerivedSignal = (finding: DeterministicAnalyticsInsight): Derived
  metadata: {
   datasetId: finding.datasetId,
   findingType: finding.findingType,
+  entity: finding.entity ?? null,
+  window: finding.window ?? null,
+  sourceSnapshotIds: finding.sourceSnapshotIds.join(","),
+  sourceObservedAt: finding.sourceObservedAt ?? null,
+  filters: JSON.stringify(finding.filters),
   unit: finding.unit,
   validationState: finding.validationState,
   interpretation: finding.interpretation,
@@ -631,6 +662,10 @@ export const adaptAnomalyToAnalyticsFinding = (anomaly: ViewTubeAnomaly): Determ
   id: `analytics-insight:anomaly:${slug(anomaly.datasetId)}:${stableHash(anomaly.id)}`,
   kind: "anomaly",
   findingType: "anomaly",
+  entity: anomaly.entity ?? null,
+  filters: { family: anomaly.family, anomalyKind: anomaly.kind, detectedAt: anomaly.detectedAt },
+  sourceSnapshotIds: [...new Set(anomaly.evidence.map((evidence) => evidence.snapshotId))].sort(),
+  sourceObservedAt: anomaly.detectedAt,
   label: `${anomaly.metric} ${anomaly.kind.replace(/_/g, " ")}${anomaly.entity ? ` for ${anomaly.entity}` : ""}`,
   channelId: anomaly.channelId || "",
   datasetId: anomaly.datasetId,
