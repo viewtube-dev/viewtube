@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 const styles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8");
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+const completeCatalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8");
 
 test("confirmed library uses the requested four skin names without changing skin values", () => {
   for (const label of ['label: "SOLID"', 'label: "COLOR SWAP"', 'label: "BLACK"', 'label: "WHITE"']) assert.ok(catalog.includes(label), label);
@@ -108,11 +109,17 @@ test("text field families are split into input-plus-label and textarea-plus-labe
 });
 
 test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(catalog, /const WORD_TOGGLE_SKINS = CANONICAL_SKINS\.slice\(0, 3\)/);
   assert.match(catalog, /Array\(6\)\.fill\(false\)/);
   assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="44"\][\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) !important/);
   assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-items:\s*center/);
   assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-self:\s*center !important/);
+  assert.match(completeCatalog, /CONTROL_SKINS\.slice\(0, 3\)/);
+  assert.match(completeCatalog, /Array\(6\)\.fill\(false\)/);
+  assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variants\.is-word-toggle-44\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) !important/);
+  assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variants\.is-word-toggle-28\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\) !important/);
+  assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variant > small\s*\{[\s\S]*?text-align:\s*center/);
 });
 
 test("compact Studio button shadow is a symmetric face-sized stationary offset", () => {
