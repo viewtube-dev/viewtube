@@ -317,3 +317,26 @@ The canonical owners are `src/studio-ui/primitives/StudioControls.tsx` and `src/
 - Caret color: primary/accent.
 
 The catalog's Text Input, Textarea, and Number Field use the canonical Studio Controls components and select the compact variant for L2 examples.
+
+
+## Closeable Badge + Tag Editor — confirmed Studio Controls family
+
+Canonical implementation:
+- TSX: `src/studio-ui/primitives/StudioControls.tsx` exports `StudioCloseableBadge` and `StudioTagEditor`.
+- CSS: `src/styles/studio-control-system.css` owns badge, close-swap, fade, tag-composer, square-action, and fly-to-badge animation rules.
+- Pair ownership: primary is `--pair-a`; secondary is `--pair-b`. Consumers should set the colorway on the containing scope; do not hardcode per-tag color pairs.
+
+### Explicit global-rule exceptions
+
+- **Closeable badge:** 20px tall pill, 16px Inter 1000 uppercase label, primary fill, label color mixed 50% with white, 16px secondary-filled close circle, primary-colored X. These dense metadata chips intentionally do not use the standard 44px / compact 28px control height.
+- **Close animation:** close-circle/X colors swap three times at 180ms per cycle; the badge then fades over 1 second before its owner removes it.
+- **Entry animation:** badges use a 450ms ease-out scale/fade entrance. Reduced-motion preference disables nonessential animation.
+- **Tag editor actions:** plus/check squares are 32px, 3px black stroke, 8px radius, with a 4px secondary-pair offset shadow at 45% opacity. This is a named compound exception rather than a new global control size.
+- **Composer:** opens a compact Studio text input and check action; Enter confirms a non-empty trimmed tag, Escape cancels, and labels normalize to uppercase up to the configured maximum length.
+- **Fly transition:** newly confirmed tag text moves from the composer to its badge label; the badge then uses the canonical badge-entry treatment.
+- **Accessibility:** close/add/confirm actions have accessible names and visible keyboard focus. Reduced-motion mode retains state changes without requiring animation.
+
+Certification requirements:
+- Render the production TSX exports in the Confirmed Primitive Library rather than reproducing them with catalog-only markup.
+- Verify add, Enter-to-confirm, Escape-to-cancel, close-swap/fade/removal, controlled `value` / `onChange`, color-pair inheritance, keyboard focus, and reduced-motion behavior.
+- The 20px badge and 32px composer action sizes are the only deliberate geometry exceptions for this family; all other typography, color and motion should inherit the Studio Controls token/pair system.

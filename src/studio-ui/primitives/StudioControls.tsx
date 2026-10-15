@@ -29,6 +29,28 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     selectedTreatment: "1px upward offset plus four-layer white/color glow",
     rationale: "Asset-module tags are donor-specified dense metadata chips, not ordinary 44px/28px controls.",
   },
+  closeableBadge: {
+    owner: "StudioCloseableBadge",
+    globalRuleException: true,
+    height: 20,
+    radius: 999,
+    fontSize: 16,
+    fontWeight: 1000,
+    textTransform: "uppercase",
+    textColor: "primary mixed 50% with white",
+    closeControl: "16px secondary-filled circle with primary X",
+    motion: "450ms enter scale/fade; 3x 180ms close-color swap; 1s fade removal",
+    rationale: "Closeable metadata tags are intentionally dense 20px pills with a 16px circular close action, not ordinary 44px/28px controls.",
+  },
+  tagEditorAction: {
+    owner: "StudioTagEditor",
+    globalRuleException: true,
+    height: 32,
+    stroke: 3,
+    radius: 8,
+    shadow: "4px offset secondary-color at 45% opacity",
+    rationale: "The plus/check actions belong to the donor-defined 32px tag-composer compound, separate from the global 44px/28px lattice.",
+  },
   textareaTypography: {
     globalRuleException: true,
     standardFontSize: 18,
@@ -788,3 +810,210 @@ StudioSpectrumTag.displayName = "StudioSpectrumTag"
 // First-class stepper family: implementation and styles remain owned by Studio Controls.
 export { StudioSplitStepper } from "./StudioSplitStepper"
 export type { StudioSplitStepperProps, StudioSplitStepperSize } from "./StudioSplitStepper"
+
+
+/** Closeable metadata pill with the shared primary/secondary pair and donor-defined motion. */
+export interface StudioCloseableBadgeProps {
+  label: string;
+  onClose?: () => void;
+  className?: string;
+  entering?: boolean;
+}
+export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
+  label,
+  onClose,
+  className,
+  entering = true,
+}) => {
+  const [swapping, setSwapping] = React.useState(false);
+  const [fading, setFading] = React.useState(false);
+  const [isEntering, setIsEntering] = React.useState(entering);
+  const [removed, setRemoved] = React.useState(false);
+  const busy = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!isEntering) return;
+    const timer = window.setTimeout(() => setIsEntering(false), 460);
+    return () => window.clearTimeout(timer);
+  }, [isEntering]);
+
+  const close = () => {
+    if (busy.current) return;
+    busy.current = true;
+    setSwapping(true);
+    window.setTimeout(() => {
+      setSwapping(false);
+      setFading(true);
+      window.setTimeout(() => { setRemoved(true); onClose?.(); }, 1000);
+    }, 540);
+  };
+
+  const normalized = label.trim().toUpperCase();
+  if (removed) return null;
+  return (
+    <span
+      className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
+      data-vt-studio-badge="true"
+      data-entering={isEntering ? "true" : undefined}
+      data-fading={fading ? "true" : undefined}
+    >
+      <span className="vt-studio-closeable-badge__label">{normalized}</span>
+      <button
+        type="button"
+        className="vt-studio-closeable-badge__close"
+        aria-label={`Remove ${normalized || "tag"}`}
+        title="Remove tag"
+        data-swapping={swapping ? "true" : undefined}
+        onClick={close}
+      >
+        <svg viewBox="0 0 12 12" aria-hidden="true">
+          <line x1="2.5" y1="2.5" x2="9.5" y2="9.5" />
+          <line x1="9.5" y1="2.5" x2="2.5" y2="9.5" />
+        </svg>
+      </button>
+    </span>
+  );
+};
+StudioCloseableBadge.displayName = "StudioCloseableBadge";
+
+export interface StudioTagEditorProps {
+  value?: readonly string[];
+  defaultValue?: readonly string[];
+  onChange?: (tags: string[]) => void;
+  className?: string;
+  ariaLabel?: string;
+  placeholder?: string;
+  maxTagLength?: number;
+}
+
+/** Shared add/remove tag editor; new text flies into its canonical closeable badge. */
+export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
+  value,
+  defaultValue = [],
+  onChange,
+  className,
+  ariaLabel = "Tags",
+  placeholder = "TAG NAME",
+  maxTagLength = 32,
+}) => {
+  const [internalTags, setInternalTags] = React.useState<string[]>(() => [...defaultValue]);
+  const tags = value === undefined ? internalTags : [...value];
+  const [open, setOpen] = React.useState(false);
+  const [draft, setDraft] = React.useState("");
+  const [fly, setFly] = React.useState<{ id: number; label: string; left: number; top: number } | null>(null);
+  const [flyTarget, setFlyTarget] = React.useState<{ left: number; top: number } | null>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const editorRef = React.useRef<HTMLDivElement>(null);
+  const nextId = React.useRef(1);
+
+  const commit = (next: string[]) => {
+    if (value === undefined) setInternalTags(next);
+    onChange?.(next);
+  };
+  const openComposer = () => {
+    setDraft("");
+    setOpen(true);
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+  };
+  const closeComposer = () => {
+    setOpen(false);
+    setDraft("");
+  };
+  const removeTag = (index: number) => commit(tags.filter((_, i) => i !== index));
+  const confirmTag = () => {
+    const label = draft.trim().toUpperCase().slice(0, maxTagLength);
+    if (!label) {
+      inputRef.current?.focus();
+      return;
+    }
+    const inputRect = inputRef.current?.getBoundingClientRect();
+    const id = nextId.current++;
+    if (inputRect) {
+      setFly({ id, label, left: inputRect.left + 12, top: inputRect.top + (inputRect.height - 20) / 2 });
+      setFlyTarget(null);
+    }
+    commit([...tags, label]);
+    setDraft("");
+  };
+
+  React.useEffect(() => {
+    if (!fly) return;
+    const frame = window.requestAnimationFrame(() => {
+      const labels = editorRef.current?.querySelectorAll<HTMLElement>(".vt-studio-closeable-badge__label");
+      const target = labels?.[labels.length - 1];
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        setFlyTarget({ left: rect.left, top: rect.top });
+      }
+    });
+    const timer = window.setTimeout(() => {
+      setFly(null);
+      setFlyTarget(null);
+      closeComposer();
+    }, 850);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [fly, tags]);
+
+  return (
+    <div ref={editorRef} className={["vt-studio-tag-editor", className].filter(Boolean).join(" ")} data-vt-studio-tag-editor="true" role="group" aria-label={ariaLabel}>
+      <div className="vt-studio-tag-editor__list">
+        {tags.map((tag, index) => {
+          return (
+            <StudioCloseableBadge
+              key={`${index}:${tag}`}
+              label={tag}
+              onClose={() => removeTag(index)}
+              entering={Boolean(fly && index === tags.length - 1 && tag === fly.label)}
+              className={fly && index === tags.length - 1 && tag === fly.label ? "is-fly-destination" : undefined}
+            />
+          );
+        })}
+      </div>
+      {!open ? (
+        <button type="button" className="vt-studio-tag-editor__square-action" aria-label="Add tag" title="Add tag" onClick={openComposer}>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><line x1="8" y1="3" x2="8" y2="13" /><line x1="3" y1="8" x2="13" y2="8" /></svg>
+        </button>
+      ) : (
+        <div className={["vt-studio-tag-editor__composer", fly ? "is-fading" : ""].filter(Boolean).join(" ")}>
+          <input
+            ref={inputRef}
+            type="text"
+            data-vt-studio-control="true"
+            data-size="compact"
+            value={draft}
+            placeholder={placeholder}
+            maxLength={maxTagLength}
+            autoComplete="off"
+            spellCheck={false}
+            aria-label="New tag name"
+            onChange={event => setDraft(event.target.value)}
+            onKeyDown={event => {
+              if (event.key === "Enter") { event.preventDefault(); confirmTag(); }
+              if (event.key === "Escape") { event.preventDefault(); closeComposer(); }
+            }}
+          />
+          <button type="button" className="vt-studio-tag-editor__square-action" aria-label="Confirm tag" title="Confirm tag" onClick={confirmTag}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4" /></svg>
+          </button>
+        </div>
+      )}
+      {fly && (
+        <span
+          className="vt-studio-tag-editor__fly"
+          aria-hidden="true"
+          data-targeted={flyTarget ? "true" : "false"}
+          style={{
+            left: flyTarget?.left ?? fly.left,
+            top: flyTarget?.top ?? fly.top,
+          }}
+        >
+          {fly.label}
+        </span>
+      )}
+    </div>
+  );
+};
+StudioTagEditor.displayName = "StudioTagEditor";
