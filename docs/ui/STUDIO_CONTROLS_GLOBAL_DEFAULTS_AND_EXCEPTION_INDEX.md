@@ -467,3 +467,40 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - Split-left outer wrappers now explicitly reset native appearance, border, and background, and remain overflow-visible. The actual face owns the black border and radius and clips the icon rail inside that radius. This removes the extra light wrapper edge and prevents the wrapper from clipping the stationary shadow.
 - Regression coverage was added for stationary shadow ownership, face-only movement, split-left overflow, and wrapper reset.
 - PR #206 merged to `master/consolidated-feature-integration` at `45a4bb8627e6710cc9cb1368a2a05287d76ec645`. Focused Confirmed Library tests, source-governance/CSS checks, focused contracts, production build, and local Playwright smoke passed. Repository-wide typecheck remains blocked by unrelated existing errors; the full suite also fails on an existing `WidgetSplitButton` source-contract assertion. Live Render visual inspection remains outstanding.
+
+
+## 20. Confirmed Library density, text-field typography, and deployment gate — 2026-10-15
+
+### Global defaults panel
+- The default view shows a one-line summary of standard/compact geometry, the shared 18px/14px text-field sizes, and the compact shadow size.
+- The exhaustive size cards, full global token map, exceptions, and explanatory focus notes live inside an accessible collapsed `details/summary` panel. Opening it exposes the full canonical values; leaving it closed avoids making the library page vertically dominated by the global-defaults reference.
+- The expanded global token map uses three columns on wider screens and two on narrow screens.
+
+### Compact button shadow contract
+- Standard buttons retain a symmetric 3px × 3px hard shadow offset.
+- Compact buttons use a symmetric 1px × 1px offset. The shadow is rendered as a stationary, face-sized pseudo-element on the outer button; the bordered face sits above it and owns hover/press translation. This avoids a separately sized box-shadow being painted around a wrapper wider than the visible face.
+- The outer button remains overflow-visible; the split-left face owns the black border and radius and clips only its internal icon rail/content.
+
+### Shared text-field typography and module ownership
+- Source audit found the root cause of the single-line input mismatch: the shared field rule inherited the global control font tokens (38px standard / 24px compact), while only textarea selectors explicitly overrode typography to 18px / 14px. The single-line input selectors had no corresponding font-size override, so standard and compact inputs could look like the same compact size when upstream declarations/cascades applied.
+- The resolved contract is now explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` use 18px standard / 14px compact; `StudioTextArea` and `StudioLabeledTextArea` use the same font sizes. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
+- Related components are grouped in two modules:
+  - `src/studio-ui/primitives/StudioTextInput.tsx`: standalone, search, number, and labeled single-line inputs.
+  - `src/studio-ui/primitives/StudioTextArea.tsx`: standalone and labeled multiline textareas.
+  - `StudioControls.tsx` re-exports these modules for compatibility with existing imports.
+- CSS owns typography explicitly by `data-size` on the native input, with important 18px standard / 14px compact font-size and matching line-height overrides. The labeled components compose those same native primitives instead of maintaining a second style path.
+
+### Word-toggle catalog contract
+- Word toggles show three skins only: SOLID, COLOR SWAP, and BLACK. The fourth WHITE skin remains available to switches/radios/checkboxes but is intentionally omitted from the word-toggle examples.
+- Standard word-toggle specimens each occupy their own row.
+- Compact word-toggle specimens use a centered three-column layout; component alignment and margins are explicitly centered rather than inherited from the global word-toggle left-alignment reset.
+- Both the Confirmed Primitive Library and Complete Primitive Catalog use this contract.
+
+### Commit / PR / deployment confirmation record
+- **Target branch:** `master/consolidated-feature-integration`
+- **Implementation PR:** pending creation; add its URL and merge commit here after review/merge.
+- **Implementation commit:** pending final branch head.
+- **Deployment URL:** https://publisher-3n7h.onrender.com/studio
+- **Deployment status:** not yet confirmed for this change. A merged PR or successful build does not alone prove the hosted deployment has picked up the commit.
+- **Required confirmation:** after merge, verify the Render service's deployed commit includes the merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact input and textarea computed font sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
+- **Verification boundary:** source changes are prepared on a feature branch. Do not describe the changes as deployed until the deployed commit and rendered page are confirmed.
