@@ -114,7 +114,7 @@ export const resolveEvidenceIntelligence = (
  const evidenceQuality = dependencies.buildQuality(canonicalEvidence, {
   expectedChannelId: input.channelId,
  })
- const scopeUsable = evidenceQuality.scopeMatch !== "mismatch"
+ const scopeUsable = evidenceQuality.scopeMatch !== "mismatch" && evidenceQuality.scopeMatch !== "unscoped"
  const evidenceRecords = scopeUsable
   ? dependencies.projectEvidence(canonicalEvidence)
   : []
