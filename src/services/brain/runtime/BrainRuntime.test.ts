@@ -46,6 +46,6 @@ describe("BrainRuntime assistant continuity adoption", () => {
    evidenceIds: ["evidence-1", "evidence-2"],
   })
   expect(legacyInput.systemPrompt).toContain("ASSISTANT CONTINUITY TRACE")
-  expect(legacyInput.systemPrompt).toContain("No")
+  expect(legacyInput.systemPrompt).toContain('"surface": "sidebar"')
  })
 })
