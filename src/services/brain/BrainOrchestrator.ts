@@ -307,7 +307,8 @@ export interface RunBrainTurnInput {
 
 export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> => {
  const taskProfile = resolveBrainTaskProfile(input.userText)
- const requestedModel = input.modelGenerator ? null : getActiveModel("text")
+ // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
+ const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
  const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const pending = await beginAIBrainTurn({
   channelId: input.channelId,
