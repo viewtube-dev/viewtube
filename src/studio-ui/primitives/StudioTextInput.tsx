@@ -39,7 +39,24 @@ type StudioTextInputFloatingLabelProps = Omit<
   controlStyle?: React.CSSProperties
 }
 
-export type StudioTextInputProps = StudioTextInputSimpleProps | StudioTextInputFloatingLabelProps
+type StudioTextInputFixedLabelProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "className" | "style"
+> & {
+  sizeVariant?: StudioControlSize
+  /** Permanent top-left label box matching StudioLegendMultiDropdown. */
+  variant: "fixed-label"
+  label: string
+  level?: "l0" | "l1" | "l2"
+  /** className/style target the field wrapper in fixed-label mode. */
+  className?: string
+  style?: React.CSSProperties
+  /** Optional direct styling for the native input inside the wrapper. */
+  controlClassName?: string
+  controlStyle?: React.CSSProperties
+}
+
+export type StudioTextInputProps = StudioTextInputSimpleProps | StudioTextInputFloatingLabelProps | StudioTextInputFixedLabelProps
 
 /**
  * Canonical single-line Studio input family.
@@ -64,6 +81,38 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
     } = props
     const fieldId = id ?? `studio-text-input-${generatedId}`
 
+    if (variant === "fixed-label") {
+      const { className, style, controlClassName, controlStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, placeholder: _placeholder, ...inputProps } = props
+      void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant, _placeholder]
+      return (
+        <div
+          data-vt-primitive-id="143"
+          data-vt-studio-field="fixed-label-input"
+          data-vt-studio-field-variant="fixed-label"
+          data-vt-control-level={level}
+          data-size={sizeVariant}
+          className={["vt-studio-fixed-label-field", "is-input", className].filter(Boolean).join(" ")}
+          style={style}
+        >
+          <input
+            ref={ref}
+            id={fieldId}
+            type={type}
+            data-vt-studio-field-kind="text-input"
+            placeholder={placeholder === "TYPE HERE" ? " " : placeholder}
+            spellCheck={spellCheck}
+            autoCorrect={autoCorrect}
+            autoCapitalize={autoCapitalize}
+            {...inputProps}
+            className={controlClassName}
+            style={controlStyle}
+            {...withStudioAttrs(sizeVariant)}
+          />
+          <label className="vt-studio-fixed-field-label" htmlFor={fieldId}>{label}</label>
+        </div>
+      )
+    }
+
     if (variant === "floating-label") {
       const { className, style, controlClassName, controlStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, placeholder: _placeholder, ...inputProps } = props
       void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant, _placeholder]
@@ -72,6 +121,7 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
           data-vt-primitive-id="141"
           data-vt-studio-field="floating-input"
           data-vt-studio-field-variant="floating-label"
+          data-size={sizeVariant}
           data-vt-control-level={level}
           data-vt-floating-variant={floatingLabelVariant}
           className={["vt-studio-floating-field", "is-input", className].filter(Boolean).join(" ")}
