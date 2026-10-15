@@ -146,11 +146,11 @@ describe("Studio Hub Component Library mobile regression", () => {
     const css = read("src/styles/subtoolbox-system.css")
     const toolboxCss = read("src/styles/toolbox-system.css")
 
-    for (const family of ["Labeled Input", "Labeled Textarea", "Video Selector", "Mini SubToolbox"]) {
+    for (const family of ["Studio Text Input · Floating Label Variant", "Studio Text Area · Floating Label Variant", "Video Selector", "Mini SubToolbox"]) {
       expect(migration).toContain(`"${family}"`)
     }
-    expect(migration).toContain("StudioLabeledInput")
-    expect(migration).toContain("StudioLabeledTextArea")
+    expect(migration).toContain('variant="floating-label"')
+    expect(migration).toContain("Studio Text Area · Floating Label Variant")
     expect(primitives).toContain("SubToolboxVideoSelector")
     expect(toolbox).toContain("MiniSubToolbox")
     expect(css).toContain(".vt-subtoolbox-video-selector")
