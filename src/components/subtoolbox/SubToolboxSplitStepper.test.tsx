@@ -1,4 +1,6 @@
 import React from "react"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { describe, expect, it, vi } from "vitest"
 import { fireEvent, render, screen, act } from "@testing-library/react"
 import { SubToolboxSplitStepper } from "./SubToolboxSplitStepper"
@@ -53,6 +55,19 @@ describe("SubToolboxSplitStepper", () => {
     } finally {
       vi.useRealTimers()
     }
+  })
+
+
+  it("keeps fixed 2:1 field geometry, square rail, doubled chevrons and no drop shadow", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/subtoolbox-split-stepper.css"), "utf8")
+    expect(css).toContain("flex: 0 0 auto;")
+    expect(css).toContain("width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));")
+    expect(css).toContain("width: var(--vt-stepper-inner-height);")
+    expect(css).toContain("box-shadow: none;")
+    expect(css).toContain("background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);")
+    expect(css).toContain("box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--pair-a, #73deff);")
+    expect(css).toContain("width: calc(var(--vt-stepper-height) * .68);")
+    expect(css).toContain("outline: 2px solid var(--pair-b, #fff);")
   })
 
   it("updates the value from typed input", () => {
