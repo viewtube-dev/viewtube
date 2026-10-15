@@ -35,7 +35,7 @@ The fifteen IDs above are the published collection. The seven shorter, unregiste
 
 ## Editorial status
 
-The first three guides are the current depth and audience benchmark: long-form, creator-facing, plain-language, evidence-aware and organized around real creator questions. Guides 4–15 are undergoing a substantive content-quality pass. Standardized frontmatter and section headings alone do not mean a guide is editorially complete.
+The first three guides remain the long-form creator-facing benchmark. In this branch, guides 4–15 have been expanded to approximately 1,425–1,909 words each, with more practical explanations, worked scenarios, diagnostics, checklists, ViewTube handoffs, and topic-specific caveats. This is a substantive improvement, not a claim of final editorial certification: current official-source links, sensitive platform claims, and rendered desktop/mobile presentation still require verification before merge.
 
 Each guide should help a beginner understand the subject, apply it to a real channel decision, interpret evidence, recognize uncertainty, and decide what to do next. Technical/API material belongs in optional Advanced Reference sections. Reading-time metadata must be based on actual content, not aspirational targets.
 
