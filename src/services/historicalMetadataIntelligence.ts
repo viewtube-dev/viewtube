@@ -4,8 +4,8 @@ import {
   appendContentBuildEvent,
   listContentBuildEvents,
   listContentBuildMetadataHistory,
-  type ContentBuildMetadataHistoryEntry,
 } from "./asset-engine/ContentBuildRepository"
+import type { ContentBuildMetadataHistoryEntry } from "./asset-engine/contracts"
 
 export type HistoricalMetadataMetricName =
   | "views"
