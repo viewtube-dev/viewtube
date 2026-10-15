@@ -1968,7 +1968,7 @@
   font-size: 8px;
   letter-spacing: -.03em;
 }
-.vt-confirmed-control-variants :is(.vt-studio-switch, .vt-studio-radio, .vt-studio-checkbox, .vt-studio-x-checkbox, .vt-studio-44-word-toggle) {
+.vt-confirmed-control-variants :is(.vt-studio-44-switch, .vt-studio-44-choice, .vt-studio-44-word-toggle) {
   max-width: 100%;
   min-width: 0;
 }
