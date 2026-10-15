@@ -64,3 +64,20 @@ Acceptance still outstanding:
 ## Verification
 
 Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+
+
+## Communication consent and retention follow-up — 2026-10-15
+
+Implemented on `feat/brain-communication-consent-retention-2026-10-15`:
+- Added a per-channel `captureCreatorCommunications` control with a default of `false`, surfaced in both Brain Controls interfaces.
+- The ingestion service checks the control itself; caller-side checks are not the only protection.
+- New communication events store a deterministic fingerprint, classification, and retention-policy marker. They do not store the raw message in metadata or the summary.
+- Added a hydration-time migration that redacts raw text from legacy communication events and sends sanitized replacements through the existing durable-sync writer.
+- Added regression tests for default-off consent, opt-in capture, raw-text minimization, replay identity, and legacy redaction.
+- Added Phase 13 plan for stable lifecycle identity, final-boundary capability enforcement, durable outcome/evaluation persistence, live provider-backed verification, and release-gate baseline reconciliation.
+
+Still not certified:
+- Verify server-side upsert replaces existing raw metadata and confirm legacy purge across devices.
+- Verify every non-chat feedback/approval/rejection/edit writer obeys the same consent and identity policy.
+- Verify the full lifecycle on fresh provider-backed evidence.
+- Current repository focused-contract/source-governance/full-suite/runtime-lint failures must be triaged against a same-commit baseline.
