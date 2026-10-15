@@ -118,7 +118,7 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
         endSeconds,
         atSeconds,
       } as const;
-      const processed = await processVaultVideo(new File([source], asset.name, { type: source.type || asset.mimeType || "video/mp4" }), config);
+      const processed = await processVaultVideo(new File([source], asset.name, { type: source.type.startsWith("video/") ? source.type : asset.mimeType?.startsWith("video/") ? asset.mimeType : "video/mp4" }), config);
       setResult(processed);
       setPreviewUrl(URL.createObjectURL(processed.blob));
       setMessage("Processing produced real output bytes. The original asset has not been changed.");
