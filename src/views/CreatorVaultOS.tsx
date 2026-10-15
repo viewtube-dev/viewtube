@@ -547,7 +547,7 @@ const CreatorVaultOS: React.FC = () => {
      ? asset.kind
      : "document"
    ))
-  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: false, audioProcessorAvailable: false })
+  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: true, audioProcessorAvailable: false })
  }, [allAssets, selectedAssetIds])
  const editableTextAsset = useMemo(() => {
   if (!selectedAsset || selectedAsset.kind !== "document") return null
