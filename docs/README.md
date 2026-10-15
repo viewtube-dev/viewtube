@@ -41,6 +41,7 @@ This directory contains ViewTube architecture, implementation plans, migration r
 | Asset Engine | [Asset Engine Master Resource](./architecture/VIEWTUBE_ASSET_ENGINE_MASTER_RESOURCE.md) |
 | Toolbox / Subtoolbox / Studio UI system | [Toolbox UI Master Resource](./architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md) |
 | Dashboard → Toolbox promotion + workflow chains | [Toolbox Promotion + Workflow Chain Specification](./specifications/TOOLBOX_PROMOTION_AND_WORKFLOW_CHAINS.md) |
+| Production handoff spine across Studio, Publisher, Analytics, Prompts and Brain | [Production Handoff Spine](./product/studio-hub/05_PRODUCTION_HANDOFF_SPINE.md) + [Studio Hub Handoff Contracts](./product/studio-hub/04_STUDIO_HUB_INTERACTIONS_WORKFLOWS_HANDOFFS_CONTRACTS.md) |
 | Studio component library / primitive corrections | [Studio Hub Component Library Source of Truth](./ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md) |
 | Dashboard widget production metadata | [WidgetRegistry.ts](../src/views/dashboard/WidgetRegistry.ts) (code authority); [Widget Certification Master](./architecture/WIDGET_SYSTEM_CERTIFICATION_MASTER_2026-09-14.md) tracks certification |
 | Analytics / VT-SYNC architecture + migration | [Analytics / VT-SYNC Master Resource](./analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md) |
