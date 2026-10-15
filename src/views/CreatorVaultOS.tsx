@@ -165,6 +165,9 @@ import {
 import type { VaultAsset, VaultAssetKind } from "../types"
 import { resolveVaultMediaCapabilities, type VaultMediaKind } from "../features/vault-workbench/capabilities"
 import { VaultAdaptiveWorkbenchHost } from "../features/vault-workbench/VaultAdaptiveWorkbenchHost"
+import { inspectVaultAsset } from "../services/vaultInspection"
+import { evaluateVaultRights } from "../services/vaultReviewGovernance"
+import { listVaultOperations } from "../services/vaultOperationLedger"
 import { VaultImageWorkbench } from "./vault/VaultImageWorkbench"
 import { VaultVideoWorkbench } from "./vault/VaultVideoWorkbench"
 
@@ -579,6 +582,22 @@ const CreatorVaultOS: React.FC = () => {
  }, [selectedAsset])
  const attentionReasons = useMemo(
   () => selectedAsset ? getVaultAttentionReasons(selectedAsset) : [],
+  [selectedAsset, refreshTick],
+ )
+ const selectedAssetInspection = useMemo(
+  () => selectedAsset ? inspectVaultAsset(selectedAsset) : null,
+  [selectedAsset, refreshTick],
+ )
+ const selectedAssetRightsFindings = useMemo(
+  () => selectedAsset ? evaluateVaultRights(selectedAsset) : [],
+  [selectedAsset, refreshTick],
+ )
+ const selectedAssetOperations = useMemo(
+  () => selectedAsset
+   ? listVaultOperations().filter((operation) => (
+    operation.inputAssetIds.includes(selectedAsset.id) || operation.outputAssetIds.includes(selectedAsset.id)
+   )).slice(0, 5)
+   : [],
   [selectedAsset, refreshTick],
  )
  const selectedCollectionMemberships = useMemo(
@@ -3352,6 +3371,29 @@ const CreatorVaultOS: React.FC = () => {
           <div className="text-xs font-black uppercase opacity-60">Project</div>
           <div className="text-sm font-black uppercase">{selectedAsset.projectName || "Unassigned"}</div>
          </div>
+         {selectedAssetInspection ? (
+          <section aria-label="Asset inspection summary" className="border-t-[3px] border-current pt-3">
+           <div className="mb-2 text-xs font-black uppercase opacity-60">Inspection & Health</div>
+           <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+            <div><div className="font-black uppercase opacity-60">MIME</div><div>{selectedAssetInspection.technical.mimeType || "Unknown"}</div></div>
+            <div><div className="font-black uppercase opacity-60">Size</div><div>{selectedAssetInspection.technical.byteSize == null ? "Unknown" : formatVaultBytes(selectedAssetInspection.technical.byteSize)}</div></div>
+            <div><div className="font-black uppercase opacity-60">Dimensions</div><div>{selectedAssetInspection.technical.dimensions || "Not recorded"}</div></div>
+            <div><div className="font-black uppercase opacity-60">Duration</div><div>{selectedAssetInspection.technical.durationSeconds == null ? "—" : selectedAssetInspection.technical.durationSeconds.toFixed(1) + "s"}</div></div>
+           </div>
+           {selectedAssetInspection.lineage.parentAssetIds.length ? (
+            <div className="mt-2 text-xs font-bold"><span className="font-black uppercase opacity-60">Parents · </span>{selectedAssetInspection.lineage.parentAssetIds.join(", ")}</div>
+           ) : null}
+           {selectedAssetInspection.findings.length ? (
+            <div className="mt-2 flex flex-col gap-1">
+             {selectedAssetInspection.findings.map((finding) => (
+              <div key={finding.code} data-finding={finding.code} data-severity={finding.severity} className="border border-current/30 px-2 py-1 text-xs font-bold">
+               <span className="font-black uppercase">{finding.severity} · </span>{finding.message}
+              </div>
+             ))}
+            </div>
+           ) : <div className="mt-2 text-xs font-black uppercase">No inspection findings.</div>}
+          </section>
+         ) : null}
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Notes</div>
           <SubToolboxTextArea
@@ -3872,6 +3914,15 @@ const CreatorVaultOS: React.FC = () => {
             aria-label="Asset rights restrictions"
             onBlur={(event) => updateAssetRights(selectedAsset, { rightsRestrictions: event.target.value })}
            />
+           {selectedAssetRightsFindings.length ? (
+            <div className="flex flex-col gap-1" aria-label="Rights review findings">
+             {selectedAssetRightsFindings.map((finding) => (
+              <div key={finding.code} data-rights-finding={finding.code} className="border border-current/30 px-2 py-1 text-xs font-bold">
+               <span className="font-black uppercase">{finding.severity} · </span>{finding.message}
+              </div>
+             ))}
+            </div>
+           ) : <div className="text-xs font-black uppercase">Rights fields have no current findings.</div>}
           </div>
          </div>
          {(typeof selectedAsset.metadata?.width === "number"
@@ -3894,6 +3945,17 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ) : null}
           </div>
+         ) : null}
+         {selectedAssetOperations.length ? (
+          <section aria-label="Recent asset operation receipts" className="border-t-[3px] border-current pt-3">
+           <div className="mb-2 text-xs font-black uppercase opacity-60">Recent Operation Receipts</div>
+           {selectedAssetOperations.map((operation) => (
+            <div key={operation.id} data-operation-status={operation.status} className="mb-1 border border-current/30 px-2 py-1 text-xs">
+             <div className="font-black uppercase">{operation.label} · {operation.status}</div>
+             <div className="opacity-70">{operation.receipt || operation.error || "No completion receipt yet."}</div>
+            </div>
+           ))}
+          </section>
          ) : null}
          <div>
           <div className="text-xs font-black uppercase opacity-60">Updated</div>
