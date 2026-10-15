@@ -18,6 +18,7 @@ export {
   StudioActionButton,
   StudioIconButton,
   StudioInput,
+  StudioTextInput,
   Studioinput,
   StudioTextArea,
   Studioarea,
