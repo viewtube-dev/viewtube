@@ -334,6 +334,8 @@ export const generateAsset = async <TOutput>(input: {
   kind: "asset",
   channelId: request.channelId,
   assetType: request.assetType,
+  operationId: request.operationId,
+  workflowId: request.workflowId,
  })
  trace.setIntent({ intent: "content_generation" })
  trace.recordCapabilities(["content-generation"])
