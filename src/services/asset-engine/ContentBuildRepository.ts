@@ -144,7 +144,12 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
    (event.metadata as Record<string, unknown> | undefined)?.idempotencyKey === idempotencyKey
   )
   if (existing) {
-   if (existing.contentBuildId !== input.contentBuildId || existing.eventType !== input.eventType) {
+   if (
+    existing.contentBuildId !== input.contentBuildId ||
+    existing.eventType !== input.eventType ||
+    (existing.entityType || null) !== (input.entityType || null) ||
+    (input.entityId !== undefined && (existing.entityId || null) !== (input.entityId || null))
+   ) {
     throw new Error("ContentBuild event idempotency key was reused for a different event.")
    }
    return existing as ContentBuildEvent<T>
