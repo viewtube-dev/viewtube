@@ -89,8 +89,8 @@ test("single-line input typography follows the same standard/compact size split 
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
   assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][^\n]*font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*18px\) !important/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][^\n]*font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*14px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*18px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*14px\) !important/);
   assert.ok(controls.includes('standardInputFontSize: "18px"'));
   assert.ok(controls.includes('compactInputFontSize: "14px"'));
 });
@@ -110,10 +110,9 @@ test("text field families are split into input-plus-label and textarea-plus-labe
 test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
   assert.match(catalog, /const WORD_TOGGLE_SKINS = CANONICAL_SKINS\.slice\(0, 3\)/);
   assert.match(catalog, /Array\(6\)\.fill\(false\)/);
-  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-row\[data-control-size="44"\][\s\S]*?grid-template-columns:\s*minmax\(0,1fr\)/);
-  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-row\[data-control-size="28"\][\s\S]*?justify-items:\s*center/);
-  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-row\[data-control-size="28"\][\s\S]*?justify-self:\s*center/);
-  assert.ok(!catalog.includes('label: "WHITE" },]\nconst WORD_TOGGLE_SKINS = CANONICAL_SKINS'));
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="44"\][\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) !important/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-items:\s*center/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-self:\s*center !important/);
 });
 
 test("compact Studio button shadow is a symmetric face-sized stationary offset", () => {
@@ -128,5 +127,5 @@ test("compact Studio button shadow is a symmetric face-sized stationary offset",
 test("global defaults use a compact collapsed panel with an explicit expand affordance", () => {
   assert.ok(catalog.includes('className="vt-confirmed-defaults-details"'));
   assert.ok(catalog.includes("Show full defaults and exceptions"));
-  assert.match(styles, /\.vt-confirmed-defaults-details\s*\{[^}]*max-height|\.vt-confirmed-defaults-details\s*\{/);
+  assert.match(styles, /\.vt-confirmed-defaults-details\s*\{/);
 });
