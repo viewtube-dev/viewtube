@@ -262,6 +262,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
         </div>
 
         {cropEnabled ? (
+          <>
           <div className="flex flex-col gap-1">
             <p className="text-xs font-black uppercase">Drag on the source image to set the crop area</p>
             <div
@@ -297,6 +298,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               </label>
             ))}
           </div>
+          </>
         ) : null}
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
