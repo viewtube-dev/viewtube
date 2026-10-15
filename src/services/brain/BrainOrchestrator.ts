@@ -409,6 +409,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    userText: input.userText,
    statisticsIntelligence,
    evidenceQuality,
+   analyticsFindingContext: evidenceIntelligence?.analyticsFindingContext,
    audienceIntelligence,
    algorithmIntelligence,
    creatorContext,
