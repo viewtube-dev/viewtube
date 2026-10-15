@@ -21,7 +21,7 @@ describe("SubToolboxSplitStepper fixed-ratio input behavior", () => {
     const css = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/subtoolbox-split-stepper.css"), "utf8")
     expect(css).toContain("width: calc(var(--vt-stepper-height) * 3)")
     expect(css).toContain("grid-template-columns: minmax(0, 2fr) minmax(0, 1fr)")
-    expect(css).toContain("grid-template-rows: 1fr 1fr")
+    expect(css).toContain("grid-template-rows: minmax(0, 1fr) minmax(0, 1fr)")
     expect(css).toContain("box-shadow: none")
     expect(css).not.toContain("box-shadow: var(--vt-stepper-shadow)")
   })
