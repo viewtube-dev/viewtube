@@ -179,8 +179,8 @@ test("compact Studio button shadow and typography tokens match the effective con
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
-  assert.match(css, /--vt-studio-motion-button:\s*150ms;\s*--vt-studio-motion-press:\s*300ms/);
-  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*180ms\)|var\(--vt-studio-motion-press,\s*80ms\)/);
+  assert.match(css, /--vt-studio-motion-button:\s*180ms;\s*--vt-studio-motion-press:\s*80ms/);
+  assert.match(tokens, /standard: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);\n  assert.match(tokens, /compact: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);\n  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*150ms\)|var\(--vt-studio-motion-press,\s*300ms\)/);
 });
 
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
