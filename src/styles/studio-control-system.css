@@ -5,17 +5,24 @@
 [data-vt-studio-control] {
   --vt-studio-control-height: 44px;
   --vt-studio-control-stroke: 3px;
-  --vt-studio-control-radius: 8px;
+  --vt-studio-control-radius: 6px;
   --vt-studio-control-font-size: 38px;
   --vt-studio-control-shadow: 3px;
+  --vt-studio-control-default-fill-opacity: 50%;
+  --vt-studio-control-focus-fill-opacity: 15%;
+  --vt-studio-control-focus-outline-width: 3px;
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: 1.5px;
+  --vt-studio-control-icon-size: 28px;
+  --vt-studio-control-icon-stroke: 2.5;
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
   --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary) 65%, transparent);
   box-sizing: border-box;
 }
 
-[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-outline-stroke: 1px; --vt-studio-control-radius: 5px; --vt-studio-control-shadow: 1.5px; --vt-studio-control-hover-offset: .75px; --vt-studio-control-font-size: 24px; }
-[data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-outline-stroke: 1.5px; --vt-studio-control-hover-offset: 1.5px; --vt-studio-control-font-size: 38px; }
+[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-outline-stroke: 1px; --vt-studio-control-radius: 4px; --vt-studio-control-shadow: 1.5px; --vt-studio-control-hover-offset: .75px; --vt-studio-control-font-size: 24px; --vt-studio-control-focus-outline-width: 2px; --vt-studio-control-focus-outline-offset: 0px; --vt-studio-control-secondary-outline-width: 1px; --vt-studio-control-icon-size: 18px; --vt-studio-control-icon-stroke: 1.65; }
+[data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-stroke: 3px; --vt-studio-control-outline-stroke: 1.5px; --vt-studio-control-radius: 6px; --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px; --vt-studio-control-font-size: 38px; --vt-studio-control-focus-outline-width: 3px; --vt-studio-control-focus-outline-offset: 0px; --vt-studio-control-secondary-outline-width: 1.5px; --vt-studio-control-icon-size: 28px; --vt-studio-control-icon-stroke: 2.5; }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
    SubToolboxPrimitives. They are not a second color authority. */
@@ -89,7 +96,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   max-height: 280px;
   overflow-y: auto;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 8px);
+  border-radius: var(--vt-studio-control-radius, 6px);
   background: #fff;
   box-shadow: var(--vt-studio-control-shadow, 4px) var(--vt-studio-control-shadow, 4px) 0 0 var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
   padding: 4px;
@@ -101,7 +108,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   min-height: 40px;
   align-items: center;
   border: 0;
-  border-radius: calc(var(--vt-studio-control-radius, 8px) - 3px);
+  border-radius: calc(var(--vt-studio-control-radius, 6px) - 3px);
   background: #fff;
   color: #000;
   cursor: pointer;
@@ -189,7 +196,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-legend-b: var(--pair-b, #ff7f6b);
   --vt-legend-height: 44px;
   --vt-legend-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-legend-radius: var(--vt-studio-control-radius, 8px);
+  --vt-legend-radius: var(--vt-studio-control-radius, 6px);
   --vt-legend-shadow-offset: var(--vt-studio-control-shadow, 4px);
   --vt-legend-shadow-color: var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
   position: relative;
@@ -272,23 +279,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-28-button-shadow-x: 1.5px; --vt-studio-28-button-shadow-y: 1.5px;
 }
 /* Button-only shadows; fields remain flat. */
-button[data-vt-studio-control][data-height-variant="44"] {
- height:var(--vt-studio-44-height); min-height:var(--vt-studio-44-height); border-width:var(--vt-studio-44-stroke);
- font-size:var(--vt-studio-44-font-size)!important; font-weight:var(--vt-studio-44-font-weight)!important;
- line-height:.86; letter-spacing:-.035em; padding:0 10px;
- box-shadow:var(--vt-studio-44-button-shadow-x) var(--vt-studio-44-button-shadow-y) 0 0 var(--vt-studio-control-shadow-color);
-}
-button[data-vt-studio-control][data-height-variant="28"] {
- height:var(--vt-studio-28-height); min-height:var(--vt-studio-28-height); border-width:var(--vt-studio-28-stroke);
- font-size:var(--vt-studio-28-font-size)!important; font-weight:var(--vt-studio-28-font-weight)!important;
- line-height:.86; letter-spacing:-.02em; padding:0 8px; border-radius:6px;
- box-shadow:var(--vt-studio-28-button-shadow-x) var(--vt-studio-28-button-shadow-y) 0 0 var(--vt-studio-control-shadow-color);
-}
-button[data-vt-studio-control][data-height-variant="44"][data-selected="true"],
-button[data-vt-studio-control][data-height-variant="28"][data-selected="true"] {
- background:var(--vt-studio-control-secondary);
- --vt-studio-control-shadow-color:color-mix(in srgb,var(--vt-studio-control-accent) 65%,transparent);
-}
 /* Split-left selected colors and borders are owned by the single canonical face/rail contract below. */
 
 /* Native select is a field-family control but has no insertion caret. */
@@ -298,7 +288,7 @@ select[data-vt-studio-control="true"] {
   min-width: 0;
   min-height: var(--vt-studio-control-height, 44px);
   border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 8px);
+  border-radius: var(--vt-studio-control-radius, 6px);
   background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
   color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -540,8 +530,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 }
 
 /* Standard dropdown menus visually join the trigger and reuse its size's typography. */
-.vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 8px; --vt-dropdown-font-size: 38px; }
-.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 5px; --vt-dropdown-font-size: 24px; }
+.vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 6px; --vt-dropdown-font-size: 38px; }
+.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 4px; --vt-dropdown-font-size: 24px; }
 .vt-studio-dropdown button[data-dropdown-trigger="true"] {
   box-sizing: border-box;
   height: var(--vt-dropdown-height);
@@ -569,8 +559,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   border-top-right-radius: 0 !important;
   border-width: var(--vt-dropdown-stroke, 3px) !important;
   border-top-width: 0 !important;
-  border-bottom-left-radius: var(--vt-dropdown-radius, 8px) !important;
-  border-bottom-right-radius: var(--vt-dropdown-radius, 8px) !important;
+  border-bottom-left-radius: var(--vt-dropdown-radius, 6px) !important;
+  border-bottom-right-radius: var(--vt-dropdown-radius, 6px) !important;
   background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #fff) !important;
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
   padding: 3px !important;
@@ -580,7 +570,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   min-height: var(--vt-dropdown-height, 44px) !important;
   height: auto;
   border: var(--vt-dropdown-stroke, 3px) solid #000 !important;
-  border-radius: calc(var(--vt-dropdown-radius, 8px) - 2px) !important;
+  border-radius: calc(var(--vt-dropdown-radius, 6px) - 2px) !important;
   margin: 0 0 3px !important;
   background: transparent !important;
   color: #000 !important;
@@ -658,7 +648,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown[data-size="compact"] {
   --vt-dropdown-height: 28px;
   --vt-dropdown-stroke: 2px;
-  --vt-dropdown-radius: 5px;
+  --vt-dropdown-radius: 4px;
   --vt-dropdown-font-size: 24px;
 }
 .vt-studio-dropdown[data-size="compact"] button[data-dropdown-trigger="true"] {
@@ -667,7 +657,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   min-height: 28px !important;
   padding: 0 6px 0 8px !important;
   border-width: 2px !important;
-  border-radius: 5px !important;
+  border-radius: 4px !important;
   align-items: center;
   line-height: .86 !important;
 }
@@ -681,7 +671,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
   border-width: 2px !important;
   border-top-width: 0 !important;
-  border-radius: 0 0 5px 5px !important;
+  border-radius: 0 0 4px 4px !important;
   box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
@@ -824,14 +814,16 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   --vt-field-primary: var(--pair-a, #36e0f6);
   --vt-field-secondary: var(--pair-b, #ff7f6b);
   --vt-field-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-field-outline-stroke: calc(var(--vt-field-stroke) / 2);
+  --vt-field-outline-stroke: var(--vt-studio-control-secondary-outline-width, 1.5px);
+  --vt-field-focus-outline-width: var(--vt-studio-control-focus-outline-width, 3px);
   box-sizing: border-box; width: 100%; min-width: 0;
   border: var(--vt-field-stroke) solid #000;
-  border-radius: var(--vt-studio-control-radius, 8px);
-  background-color: color-mix(in srgb, var(--vt-field-primary) 50%, transparent);
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background-color: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
   background-image: none; color: var(--vt-field-primary);
   -webkit-text-fill-color: var(--vt-field-primary); -webkit-text-stroke: .5px currentColor;
-  caret-color: var(--vt-field-primary); caret-shape: block;
+  caret-color: var(--vt-field-primary);
+  caret-shape: block; /* Native behavior remains the fallback where block caret is unsupported. */
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 1000; text-transform: uppercase; letter-spacing: -.035em; line-height: .86;
   outline: none; appearance: none; -webkit-tap-highlight-color: transparent;
@@ -839,12 +831,12 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 [data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-stroke: 3px; --vt-field-outline-stroke: 1.5px;
-  min-height: 44px; border-radius: var(--vt-studio-control-radius, 8px); padding-inline: 14px; font-size: 38px;
+  --vt-field-stroke: 3px; --vt-field-outline-stroke: 1.5px; --vt-field-focus-outline-width: 3px;
+  min-height: 44px; border-radius: var(--vt-studio-control-radius, 6px); padding-inline: 14px; font-size: 38px;
 }
 [data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-stroke: 2px; --vt-field-outline-stroke: 1px;
-  min-height: 28px; border-radius: var(--vt-studio-control-radius, 5px); padding-inline: 8px; font-size: 24px;
+  --vt-field-stroke: 2px; --vt-field-outline-stroke: 1px; --vt-field-focus-outline-width: 2px;
+  min-height: 28px; border-radius: var(--vt-studio-control-radius, 4px); padding-inline: 8px; font-size: 24px;
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   display: block; min-height: var(--vt-studio-textarea-min-height, 92px); resize: vertical; padding: 10px 12px;
@@ -854,17 +846,18 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   min-height: var(--vt-studio-textarea-min-height, 92px); padding: 8px 10px; font-size: var(--vt-studio-textarea-compact-font-size, 14px); font-weight: var(--vt-studio-textarea-font-weight, 1000); line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
-  color: color-mix(in srgb, var(--vt-field-primary) 70%, transparent);
-  -webkit-text-fill-color: currentColor; -webkit-text-stroke: inherit; font: inherit; opacity: 1;
+  color: var(--vt-field-primary);
+  -webkit-text-fill-color: var(--vt-field-primary); -webkit-text-stroke: .5px currentColor;
+  font: inherit; font-weight: inherit; letter-spacing: inherit; text-transform: inherit; opacity: 1;
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  background-color: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);
+  background-color: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity, 15%), transparent);
   color: #000; -webkit-text-fill-color: #000; -webkit-text-stroke: .5px currentColor;
-  caret-color: var(--vt-field-primary);
-  outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary); outline-offset: 0;
+  outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
   box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-primary),
-    0 0 0 3px color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
+    0 0 0 var(--vt-field-focus-outline-width) color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):disabled,
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)[readonly] {
@@ -995,21 +988,21 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
 button[data-vt-studio-button="true"] { box-sizing:border-box; display:inline-flex; width:auto; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out,box-shadow 150ms ease-out; }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:8px; --vt-studio-control-shadow:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
-button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:5px; --vt-studio-control-shadow:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
 /* Separate prominent action family. Not a StudioButton size variant. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
-  --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 8px;
+  --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
   --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px;
   box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
-  min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 8px; background: transparent;
+  min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 6px; background: transparent;
   box-shadow: 3px 3px 0 var(--vt-studio-control-shadow-color); color: #000;
   transition: transform 150ms ease-out, box-shadow 150ms ease-out;
 }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; min-height: 56px; height: 56px; padding: 10px 16px;
-  border: 3px solid #000; border-radius: 8px;
+  border: 3px solid #000; border-radius: 6px;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 20px; font-weight: 1000; line-height: .95; letter-spacing: -.02em;
@@ -1025,7 +1018,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none; }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; height:100%; min-height:100%; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; height:100%; min-height:100%; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:color-mix(in srgb, var(--vt-studio-control-accent,var(--pair-a,#36e0f6)) var(--vt-studio-control-default-fill-opacity,50%), transparent); color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
 button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] { padding-inline:8px; font-size:24px; }
 button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
 button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-shadow,3px),var(--vt-studio-control-shadow,3px)); transition-duration:300ms; }
