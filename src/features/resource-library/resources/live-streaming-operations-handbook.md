@@ -24,7 +24,7 @@ related_resources: publishing-best-practices-preflight; comments-community-audie
 
 A live stream is both a show and a real-time operation. The audience experiences your content while you are also managing equipment, connection quality, timing, chat, safety, and unexpected interruptions. A simple plan makes it easier to focus on the people watching.
 
-> **Creator principle:** Prepare the experience, test the technical path, assign moderation responsibility, and decide how you will recover before you go live.
+> **Creator takeaway:** Prepare the experience, test the technical path, assign moderation responsibility, and decide how you will recover before you go live.
 
 ## The Creator Mental Model
 
