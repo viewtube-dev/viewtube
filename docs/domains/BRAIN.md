@@ -92,6 +92,14 @@ Brain Runtime coordinates these capabilities; it does not silently become their 
 | Evaluation | evaluation owners | preserve scope/comparability/insufficient-data states |
 | Durable learning | learning governance + Channel Knowledge | no one-shot silent promotion |
 
+## Project phase, communication and attribution contract
+
+- The active creation phase is projected from the canonical ContentBuild stage. Project/Brain surfaces may display or filter capabilities from that projection, but may not create a second lifecycle-stage owner.
+- Creator communication is evidence about what was said. Classification into instruction, preference, correction, criticism, factual claim, goal, constraint, approval, rejection, experiment note or style feedback does not itself make the content a confirmed fact or durable memory.
+- Communication events may be promoted into durable Channel Profile knowledge only through the existing governed review/promotion path; the ingestion writer must never write validated knowledge directly.
+- Recommendation attribution joins recommendation, creator decision, execution, publication, measured outcome and learning only through explicit event ancestry or exact stable identity references. Time proximity and project co-membership are not sufficient.
+- Publication confirmation proves a publication lifecycle event, not that a recommendation caused an outcome. Missing chain stages remain explicit and block complete attribution claims.
+
 ## Evidence and epistemic contract
 
 The Brain must preserve distinctions between:

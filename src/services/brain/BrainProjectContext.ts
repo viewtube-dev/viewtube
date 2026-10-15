@@ -1,6 +1,7 @@
 import type { Project } from "../../types"
 import type { ContentBuildSnapshot } from "../asset-engine/contracts"
 import type { AlgorithmProjectContext } from "./AlgorithmIntelligenceOrchestrator"
+import { resolveBrainProjectLifecycle } from "./BrainProjectLifecycle"
 
 const text = (value: unknown): string | null =>
  typeof value === "string" && value.trim() ? value.trim() : null
@@ -71,5 +72,6 @@ export const buildAlgorithmProjectContext = (input: {
    || text(visible.plannedPublishAt),
   ...(targetAudience.length ? { targetAudience } : {}),
   evidenceIds: Array.from(new Set(input.artifactRefs || [])).slice(0, 50),
+  ...(contentBuild ? { lifecycle: resolveBrainProjectLifecycle({ contentBuild }) } : {}),
  }
 }

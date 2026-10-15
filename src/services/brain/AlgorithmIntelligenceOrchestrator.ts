@@ -17,6 +17,7 @@ import {
  type AlgorithmRecommendation,
  type AlgorithmSignal,
 } from "./AlgorithmStrategyEngine"
+import type { BrainProjectLifecycleResolution } from "./BrainProjectLifecycle"
 
 export interface AlgorithmProjectContext {
  channelId: string
@@ -30,6 +31,7 @@ export interface AlgorithmProjectContext {
  targetAudience?: string[]
  supportingVideoIds?: string[]
  evidenceIds?: string[]
+ lifecycle?: BrainProjectLifecycleResolution
 }
 
 export interface AlgorithmIntelligencePortfolio {
