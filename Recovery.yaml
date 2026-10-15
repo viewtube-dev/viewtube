@@ -947,3 +947,36 @@ vault_workbench_systems_reference:
     - "Authorization/recoverability of historical adaptive Workbench donor branch."
     - "Per-capability runtime/test coverage."
     - "Current deployment state for the exact canonical commit."
+
+
+vault_workbench_phases_0_1_2:
+  status: "IMPLEMENTED / CI VERIFICATION PENDING"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phases-0-1-2-001"
+  title: "Vault Workbench phases 0–2: source audit, identity/selection, adaptive host"
+  target_branch: "master/consolidated-feature-integration"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  audit_document: "docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md"
+  changed_files:
+    - "src/features/vault-workbench/capabilities.ts"
+    - "src/features/vault-workbench/capabilities.test.ts"
+    - "src/features/vault-workbench/VaultAdaptiveWorkbenchHost.tsx"
+    - "src/features/vault-workbench/VaultAdaptiveWorkbenchHost.test.tsx"
+    - "src/views/CreatorVaultOS.tsx"
+    - "src/services/vaultSelection.ts"
+    - "src/services/__tests__/vaultSelection.test.ts"
+    - "src/services/vaultMutationPolicy.ts"
+    - "src/services/__tests__/vaultMutationPolicy.test.ts"
+    - "src/services/__tests__/vaultAdapterIdentity.test.ts"
+  findings:
+    - "VaultAsset.id remains the canonical local asset identity; update/upsert preserve ID and creation time."
+    - "Stale clicked selection IDs are rejected by the selection resolver."
+    - "Protected/GOLDEN and permanent-delete lifecycle eligibility is centralized and tested."
+    - "Video/audio processing is unavailable unless a processor is explicitly verified."
+    - "The reviewed Vault adapter is localStorage-backed and does not establish server-enforced account/workspace authorization."
+  blockers:
+    - "True per-user/per-workspace authorization remains blocked pending canonical server/account authorization integration."
+    - "Focused tests, typecheck, build, browser verification, and PR CI remain pending."
+  verification:
+    - "GitHub accepted source and test writes on the implementation branch."
+    - "No local test/build run is claimed."
