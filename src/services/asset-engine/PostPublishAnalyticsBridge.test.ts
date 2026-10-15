@@ -10,6 +10,9 @@ const mocks = vi.hoisted(() => ({
   verifyApprovedPublishSnapshot: vi.fn(),
   recordAlgorithmEvaluation: vi.fn(),
   recordAlgorithmIntelligenceEvent: vi.fn(),
+  linkAssetOutcomeToPublication: vi.fn(),
+  createPublicationEvaluationRecord: vi.fn(),
+  getCurrentCanonicalIntelligenceEvidence: vi.fn(),
 }))
 
 vi.mock("./ContentBuildRepository", () => ({
@@ -30,6 +33,15 @@ vi.mock("../brain/AlgorithmEvaluationEngine", () => ({
 }))
 vi.mock("../brain/AlgorithmIntelligenceEventLedger", () => ({
   recordAlgorithmIntelligenceEvent: mocks.recordAlgorithmIntelligenceEvent,
+}))
+vi.mock("../brain/assetOutcomes", () => ({
+  linkAssetOutcomeToPublication: mocks.linkAssetOutcomeToPublication,
+}))
+vi.mock("../viewTubeEvaluationLedger", () => ({
+  createPublicationEvaluationRecord: mocks.createPublicationEvaluationRecord,
+}))
+vi.mock("../analytics-canon", () => ({
+  getCurrentCanonicalIntelligenceEvidence: mocks.getCurrentCanonicalIntelligenceEvidence,
 }))
 
 import {
@@ -116,6 +128,8 @@ describe("Post-publish analytics bridge", () => {
     }))
     mocks.recordAlgorithmIntelligenceEvent.mockImplementation((input) => input)
     mocks.recordAlgorithmEvaluation.mockReturnValue({ evaluation: { status: "positive" }, recorded: { id: "outcome-1" } })
+    mocks.getCurrentCanonicalIntelligenceEvidence.mockReturnValue({ selectedWindow: "28d" })
+    mocks.createPublicationEvaluationRecord.mockReturnValue({ id: "publication-evaluation-1" })
   })
 
   it("binds the published video to its exact ContentBuild, approved snapshot and selected assets", () => {
@@ -123,6 +137,10 @@ describe("Post-publish analytics bridge", () => {
       transactionId: "publish-tx-1",
       videoId: "youtube-123",
       correlationId: "creator-loop-1",
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
     })
 
     expect(mocks.bindYouTubeVideo).toHaveBeenCalledWith(expect.objectContaining({
@@ -143,6 +161,10 @@ describe("Post-publish analytics bridge", () => {
       approvedSnapshotId: "snapshot-1",
       approvedSnapshotHash: "hash-1",
       idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
     })
     expect(mocks.bindYouTubeVideo).toHaveBeenCalledWith(expect.objectContaining({
       idempotencyKey: "post-publish-binding:publish-tx-1:hash-1",
@@ -155,6 +177,15 @@ describe("Post-publish analytics bridge", () => {
       approvedSnapshotHash: "hash-1",
       selectedVariantAssetIds: ["title-v3", "thumbnail-v4", "render-v2", "description-v2", "tags-v1"],
     })
+    expect(mocks.linkAssetOutcomeToPublication).toHaveBeenCalledWith(expect.objectContaining({
+      assetId: "title-v3",
+      channelId: "channel-1",
+      publicationIdentity: expect.objectContaining({
+        publishTransactionId: "publish-tx-1",
+        youtubeVideoId: "youtube-123",
+        approvedSnapshotHash: "hash-1",
+      }),
+    }))
     expect(mocks.appendContentBuildEvent).toHaveBeenCalledWith(expect.objectContaining({
       eventType: "youtube.state.changed",
       entityType: "publish-identity-receipt",
@@ -163,6 +194,10 @@ describe("Post-publish analytics bridge", () => {
         approvedSnapshotId: "snapshot-1",
         approvedSnapshotHash: "hash-1",
         correlationId: "creator-loop-1",
+        actionPacketId: "action-packet-1",
+        workflowId: "workflow-1",
+        recommendationId: "recommendation-1",
+        experimentId: "experiment-1",
       }),
     }))
   })
@@ -192,7 +227,7 @@ describe("Post-publish analytics bridge", () => {
       outputAssetIds: ["youtube-123"],
       evidenceIds: [],
       idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
-      metadata: { approvedSnapshotHash: "hash-1" },
+      metadata: { approvedSnapshotHash: "hash-1", actionPacketId: "action-packet-1", workflowId: "workflow-1", recommendationId: "recommendation-1", experimentId: "experiment-1" },
     }
     mocks.listContentBuildEvents.mockReturnValue([existingReceipt])
 
@@ -202,6 +237,12 @@ describe("Post-publish analytics bridge", () => {
     })
 
     expect(result.event.id).toBe("event-existing")
+    expect(result.identity).toMatchObject({
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
+    })
     expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
     expect(mocks.appendContentBuildEvent).not.toHaveBeenCalled()
   })
@@ -280,5 +321,18 @@ describe("Post-publish analytics bridge", () => {
       }),
     }))
     expect(result.evaluation.status).toBe("positive")
+    expect(result.publicationEvaluation).toEqual({ id: "publication-evaluation-1" })
+    expect(mocks.createPublicationEvaluationRecord).toHaveBeenCalledWith(expect.objectContaining({
+      publicationIdentity: expect.objectContaining({
+        contentBuildId: "build-1",
+        publishTransactionId: "publish-tx-1",
+        youtubeVideoId: "youtube-123",
+        approvedSnapshotHash: "hash-1",
+      }),
+      selectedWindow: "28d",
+      source: "post-publication-checkpoint",
+      comparabilityStatus: "unknown",
+      causalAssessment: "insufficient_evidence",
+    }))
   })
 })

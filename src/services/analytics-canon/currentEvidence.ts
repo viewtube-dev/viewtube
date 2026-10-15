@@ -1,11 +1,13 @@
 import { getVtSyncSnapshot } from "../../features/vt-sync-local"
 import type {
- CanonicalIntelligenceEvidenceBundle,
  CanonicalIntelligenceDatasetRows,
+ CanonicalIntelligenceEvidenceBundle,
  IntelligenceEvidenceRequest,
 } from "./contracts"
-import { getCanonicalIntelligenceDatasetRows } from "./intelligenceEvidence"
-import { buildCanonicalIntelligenceEvidence } from "./intelligenceEvidence"
+import {
+ buildCanonicalIntelligenceEvidence,
+ getCanonicalIntelligenceDatasetRows as readCanonicalIntelligenceDatasetRows,
+} from "./intelligenceEvidence"
 
 /**
  * Imperative analytics-canon entry point for non-React consumers such as
@@ -22,15 +24,22 @@ export const getCurrentCanonicalIntelligenceEvidence = (
  })
 }
 
-
 /**
- * Returns full canonical rows for deterministic calculations from the current VT-SYNC
- * snapshot. Unlike the report bundle, this does not truncate rows to a display sample.
- * Callers must still validate dataset status, channel, metric semantics and row completeness.
+ * Read one complete canonical dataset from the current VT-SYNC snapshot.
+ * The snapshot/channel envelope is returned with the dataset so consumers
+ * can verify exact-snapshot and channel identity before joining evidence.
  */
 export const getCurrentCanonicalIntelligenceDatasetRows = (
  datasetId: string,
-): CanonicalIntelligenceDatasetRows | null => {
+): {
+ snapshotId: string
+ channelId: string | null
+ dataset: CanonicalIntelligenceDatasetRows | null
+} => {
  const snapshot = getVtSyncSnapshot()
- return getCanonicalIntelligenceDatasetRows(snapshot, datasetId)
+ return {
+  snapshotId: snapshot.snapshotId,
+  channelId: snapshot.channelId || null,
+  dataset: readCanonicalIntelligenceDatasetRows(snapshot, datasetId),
+ }
 }
