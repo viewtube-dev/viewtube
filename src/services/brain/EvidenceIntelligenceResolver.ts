@@ -88,6 +88,7 @@ export interface EvidenceIntelligenceResolverDependencies {
   bundle: CanonicalIntelligenceEvidenceBundle
   limit?: number
  }) => OpportunityEvidence[]
+ buildCurrentInsights?: (input: { channelId: string | null; expectedSnapshotId: string }) => DeterministicAnalyticsInsight[]
  projectEvidence: (bundle: CanonicalIntelligenceEvidenceBundle) => EvidenceRecord[]
 }
 
@@ -134,7 +135,7 @@ export const resolveEvidenceIntelligence = (
   : null
  const channelId = String(input.channelId || "").trim() || null
  const currentTrends = scopeUsable && input.includeCurrentTrends
-  ? buildCurrentCanonicalAnalyticsInsights({
+  ? (dependencies.buildCurrentInsights || buildCurrentCanonicalAnalyticsInsights)({
    channelId,
    expectedSnapshotId: canonicalEvidence.snapshotId,
   }).findings
