@@ -158,7 +158,9 @@ export const resolveCreatorContext = async (
    ? "canonical_project_content_build" as const
    : canonicalProject
     ? "canonical_project" as const
-    : "visible_context" as const
+    : visibleContextMatchesProject && input.visibleContext
+     ? "visible_context" as const
+     : null
   : null
 
  return {
