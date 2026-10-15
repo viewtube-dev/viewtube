@@ -171,8 +171,8 @@ export const recordPostPublishIdentity = (
     identity.workflowId = identity.workflowId || receiptString("workflowId")
     identity.recommendationId = identity.recommendationId || receiptString("recommendationId")
     identity.experimentId = identity.experimentId || receiptString("experimentId")
-    identity.assetOutcomeRecordIds = [...new Set([...receiptStringArray("assetOutcomeRecordIds"), ...identity.assetOutcomeRecordIds || []])]
-    identity.generationTraceIds = [...new Set([...receiptStringArray("generationTraceIds"), ...identity.generationTraceIds || []])]
+    identity.assetOutcomeRecordIds = [...new Set([...receiptStringArray("assetOutcomeRecordIds"), ...(identity.assetOutcomeRecordIds || [])])]
+    identity.generationTraceIds = [...new Set([...receiptStringArray("generationTraceIds"), ...(identity.generationTraceIds || [])])]
     linkPublishedAssetOutcomes(identity)
     return {
       event: existingReceipt,
