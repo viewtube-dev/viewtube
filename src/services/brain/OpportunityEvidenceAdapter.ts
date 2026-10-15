@@ -85,7 +85,7 @@ export const buildOpportunityEvidenceFromBrainPack = (input: {
     currentValue: views,
     baselineValue: null,
     relativeDelta: null,
-    confidence: Math.round(clamp(coverage * datasetReliability * 100)),
+    confidence: Math.round(clamp(coverage * 100)),
     impactScore: Math.round(clamp(score * 100)),
     evidenceIds: [video.evidenceId],
     _score: score,
@@ -192,7 +192,7 @@ export const buildOpportunityEvidenceFromCanonicalBundle = (input: {
    currentValue: views,
    baselineValue: null,
    relativeDelta: null,
-   confidence: Math.round(clamp(coverage * 100)),
+   confidence: Math.round(clamp(coverage * datasetReliability * 100)),
    impactScore: Math.round(clamp(score * 100)),
    evidenceIds: [evidenceId],
    provenance: {
