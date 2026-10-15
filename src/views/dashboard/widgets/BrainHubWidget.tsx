@@ -286,7 +286,7 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
       || brain.projects.find((project) => project.status === "active")
       || null
     : null
-   if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions) {
+   if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions && controls.captureCreatorCommunications) {
     try {
      recordCreatorCommunicationEvidence({
       channelId,
