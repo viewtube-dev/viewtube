@@ -103,7 +103,9 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(controls.includes('compactInputFontSize: "24px"'));
   assert.ok(inputModule.includes("StudioTextInput"));
   assert.ok(areaModule.includes("StudioTextArea"));
-  assert.match(catalog, /Studio Text Input · Standalone" nonDefaultSettings=\{\["[^"]*44px standard size[^"]*"[^"]*"[^"]*38px standard and 24px compact/);
+  assert.match(catalog, /Studio Text Input · Standalone" nonDefaultSettings=\{\["[^"]*44px standard size/);
+  assert.match(catalog, /Text follows global typography: 38px standard and 24px compact/);
+  assert.match(catalog, /Textareas alone use smaller 18px \/ 14px type/);
   assert.match(catalog, /Text areas are the documented exception: 92px minimum surface, 18px standard or 14px compact text/);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
