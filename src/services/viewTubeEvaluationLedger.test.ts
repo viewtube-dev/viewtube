@@ -4,6 +4,10 @@ const lineageMocks = vi.hoisted(() => ({
  appendContentBuildEvent: vi.fn(),
  listContentBuildEvents: vi.fn(),
  listAssetOutcomes: vi.fn(),
+ captureAIBrainLearningEvent: vi.fn(),
+ promoteBrainClaim: vi.fn(),
+ rebuildAffectedToolContextPacks: vi.fn(),
+ readBrainUserControls: vi.fn(),
 }))
 
 vi.mock("./viewTubeUserControls", () => ({
@@ -18,6 +22,9 @@ vi.mock("./asset-engine/ContentBuildRepository", () => ({
 vi.mock("./brain/assetOutcomes", () => ({
  listAssetOutcomes: lineageMocks.listAssetOutcomes,
 }))
+vi.mock("./aiBrainSelfImprovement", () => ({ captureAIBrainLearningEvent: lineageMocks.captureAIBrainLearningEvent }))
+vi.mock("./brain/BrainMemoryClaims", () => ({ promoteBrainClaim: lineageMocks.promoteBrainClaim, rebuildAffectedToolContextPacks: lineageMocks.rebuildAffectedToolContextPacks }))
+vi.mock("./brain/BrainUserControls", () => ({ readBrainUserControls: lineageMocks.readBrainUserControls }))
 
 vi.mock("./analytics-canon", () => ({
  getCurrentCanonicalIntelligenceEvidence: vi.fn(() => ({
@@ -45,6 +52,8 @@ import {
  proposeEvaluationLearningCandidate,
  listWorkflowCandidates,
  resolveEvaluationRecord,
+ reviewWorkflowCandidate,
+ promoteEvaluationLearningCandidateToChannelKnowledge,
 } from "./viewTubeEvaluationLedger"
 
 const store = new Map<string, string>()
@@ -78,6 +87,10 @@ beforeEach(() => {
   publishTransactionId: "publish-a",
   traceId: "trace-a",
  }])
+ lineageMocks.captureAIBrainLearningEvent.mockImplementation(async (input: Record<string, unknown>) => ({ id: "learning-promoted", channelId: input.channelId, category: input.category, source: input.source, summary: input.summary, detail: input.detail, evidence: input.evidence, confidence: input.confidence, status: "reflected", recurrenceCount: 5, metadata: input.metadata }))
+ lineageMocks.promoteBrainClaim.mockResolvedValue({ claim: { id: "claim-promoted" }, decision: { decision: "promote" } })
+ lineageMocks.rebuildAffectedToolContextPacks.mockResolvedValue(undefined)
+ lineageMocks.readBrainUserControls.mockReturnValue({ enabled: true, personalization: true, learnFromInteractions: true })
  vi.stubGlobal("window", {
   localStorage: {
    getItem: (key: string) => store.get(key) ?? null,
@@ -371,6 +384,31 @@ describe("outcome evaluation and governed learning lineage", () => {
   const retry = proposeEvaluationLearningCandidate(evaluation!.id, input)
   expect(retry?.id).toBe(first?.id)
   expect(listWorkflowCandidates()).toHaveLength(1)
+ })
+
+ it("requires a named creator reviewer before approving a candidate", () => {
+  const evaluation = createEvaluationRecord({ channelId: "channel-a", projectId: "project-a", source: "post-publication", recommendation: "Evaluate title variant B", evidenceIds: ["snapshot-a:videos:1"], selectedWindow: "28d", comparabilityStatus: "comparable", evidenceStatus: "available" })
+  resolveEvaluationRecord(evaluation!.id, "positive")
+  const candidate = proposeEvaluationLearningCandidate(evaluation!.id, { channelId: "channel-a", projectId: "project-a", title: "Title decision", toolIds: ["packaging-lab-pro"], reason: "Evidence-backed decision.", scope: "channel" })
+  expect(reviewWorkflowCandidate(candidate!.id, "approved")).toBeNull()
+  expect(listWorkflowCandidates()[0].status).toBe("candidate")
+ })
+
+ it("promotes only after five independent comparable positive publication evaluations and explicit review", async () => {
+  const evaluationIds: string[] = []
+  for (let index = 1; index <= 5; index += 1) {
+   const evaluation = createEvaluationRecord({ channelId: "channel-a", projectId: "project-a", source: "post-publication", recommendation: "Use the selected title strategy", evidenceIds: [`snapshot-${index}:videos:1`], publishedVideoId: `youtube-${index}`, comparisonSnapshotId: `snapshot-${index}`, selectedWindow: "28d", comparabilityStatus: "comparable", evidenceStatus: "available", causalAssessment: "observed_association" })
+   evaluationIds.push(evaluation!.id)
+   resolveEvaluationRecord(evaluation!.id, "positive")
+  }
+  const candidate = proposeEvaluationLearningCandidate(evaluationIds[0], { channelId: "channel-a", projectId: "project-a", title: "Selected title strategy", toolIds: ["packaging-lab-pro"], reason: "Repeated positive outcomes in comparable windows; descriptive association only.", scope: "channel", idempotencyKey: "candidate:title-strategy" })!
+  expect(await promoteEvaluationLearningCandidateToChannelKnowledge({ candidateId: candidate.id, reviewedBy: "creator-1" })).toBeNull()
+  expect(reviewWorkflowCandidate(candidate.id, "approved", "creator-1")?.status).toBe("approved")
+  const result = await promoteEvaluationLearningCandidateToChannelKnowledge({ candidateId: candidate.id, reviewedBy: "creator-1" })
+  expect(result).toMatchObject({ claim: { id: "claim-promoted" }, candidate: { promotedClaimId: "claim-promoted" } })
+  expect(lineageMocks.captureAIBrainLearningEvent).toHaveBeenCalledWith(expect.objectContaining({ channelId: "channel-a", category: "analytics_insight", confidence: "high", evidence: expect.arrayContaining(["snapshot-1:videos:1", "snapshot-5:videos:1"]), metadata: expect.objectContaining({ creatorInitiated: true, confirmed: true, reviewedBy: "creator-1", evaluationRecordIds: expect.arrayContaining(evaluationIds), causalConclusion: null }) }))
+  expect(lineageMocks.promoteBrainClaim).toHaveBeenCalled()
+  expect(lineageMocks.rebuildAffectedToolContextPacks).toHaveBeenCalledWith(expect.objectContaining({ channelId: "channel-a", affectedContextPacks: ["performance", "analytics_tools"] }))
  })
 
  it("fails closed for non-comparable or cross-channel learning candidates", () => {
