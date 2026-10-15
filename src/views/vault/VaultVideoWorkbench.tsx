@@ -1,5 +1,5 @@
 import React from "react";
-import { Film, Download, HardDrive, Play } from "lucide-react";
+import { Film, HardDrive } from "lucide-react";
 import { SubToolboxInnerActionButton } from "../components/Toolbox";
 import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../components/subtoolbox/SubToolboxPrimitives";
 import { createImportedVaultAsset } from "../services/vaultAdapter";
