@@ -12,6 +12,7 @@ import {
   StudioSearchInput,
   StudioSplitLeftButton,
   StudioTextArea,
+  StudioSquareIconButton,
 } from "./primitives/StudioControls"
 import { STUDIO_PALETTE } from "./palette"
 
@@ -76,6 +77,18 @@ export const StudioHubCertification: React.FC = () => {
             <StudioButton tone="warning">Warning</StudioButton>
             <StudioButton tone="success">Success</StudioButton>
             <StudioButton tone="danger">Danger</StudioButton>
+          </SubToolboxGrid>
+        </SubToolboxSection>
+
+        <SubToolboxSection label="Square icon interaction effects">
+          <SubToolboxGrid minItemWidth="compact">
+            <StudioSquareIconButton label="Standard icon" icon={<Search />} />
+            <StudioSquareIconButton label="Three pending notifications" icon={<Settings2 />} effect="notification" badge={3} sizeVariant="compact" />
+            <StudioSquareIconButton label="Rotated mode" icon={<Sparkles />} effect="rotated-toggle" defaultSelected />
+            <StudioSquareIconButton label="Flip preview state" icon={<Search />} activeIcon={<Check />} effect="flip" defaultSelected />
+            <StudioSquareIconButton label="Morph tool state" icon={<Search />} activeIcon={<Sparkles />} effect="morph" defaultSelected />
+            <StudioSquareIconButton label="Edit item" icon={<Settings2 />} effect="tooltip" tooltip="Edit item" />
+            <StudioSquareIconButton label="Saved" icon={<Settings2 />} effect="success" success tooltip="Saved" />
           </SubToolboxGrid>
         </SubToolboxSection>
 
