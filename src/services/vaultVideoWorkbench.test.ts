@@ -28,9 +28,9 @@ describe("processVaultVideo", () => {
     const result = await processVaultVideo(file, { operation: "trim", startSeconds: 0, endSeconds: 2 }, fetcher);
     expect(result.byteSize).toBeGreaterThan(0);
     expect(result.mimeType).toBe("video/mp4");
-    expect(fetcher).toHaveBeenCalledWith("/api/media/compress-analysis", expect.objectContaining({
+    expect(fetcher).toHaveBeenCalledWith("/api/media/compress-analysis?vaultOperation=1", expect.objectContaining({
       method: "POST",
-      headers: { "X-VT-Vault-Operation": "1" },
+      body: expect.any(FormData),
     }));
   });
 
