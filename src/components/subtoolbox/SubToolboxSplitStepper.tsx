@@ -96,6 +96,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     >
       <StudioNumberInput
         className="vt-subtoolbox-split-stepper-value"
+        sizeVariant={size === "compact" ? "compact" : "standard"}
         aria-label={ariaLabel}
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
