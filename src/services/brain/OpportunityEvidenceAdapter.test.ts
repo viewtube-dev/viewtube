@@ -191,7 +191,8 @@ describe("buildOpportunityEvidenceFromCanonicalBundle", () => {
   expect(result).toHaveLength(2)
   expect(result[0].evidenceIds).toEqual(["snapshot-canonical-1:videos:1"])
   expect(result[0].currentValue).toBe(240)
-  expect(result[0].context).toMatchObject({
+  expect(result[0].provenance).toMatchObject({
+   sourceOwner: "analytics-canon",
    window: "90d",
    sourceSnapshotId: "snapshot-canonical-1",
    datasetId: "videos",
