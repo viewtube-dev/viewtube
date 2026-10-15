@@ -1,8 +1,10 @@
 import { getVtSyncSnapshot } from "../../features/vt-sync-local"
 import type {
  CanonicalIntelligenceEvidenceBundle,
+ CanonicalIntelligenceDatasetRows,
  IntelligenceEvidenceRequest,
 } from "./contracts"
+import { getCanonicalIntelligenceDatasetRows } from "./intelligenceEvidence"
 import { buildCanonicalIntelligenceEvidence } from "./intelligenceEvidence"
 
 /**
@@ -18,4 +20,17 @@ export const getCurrentCanonicalIntelligenceEvidence = (
   ...request,
   window: request.window || snapshot.selectedTimeWindow || "28d",
  })
+}
+
+
+/**
+ * Returns full canonical rows for deterministic calculations from the current VT-SYNC
+ * snapshot. Unlike the report bundle, this does not truncate rows to a display sample.
+ * Callers must still validate dataset status, channel, metric semantics and row completeness.
+ */
+export const getCurrentCanonicalIntelligenceDatasetRows = (
+ datasetId: string,
+): CanonicalIntelligenceDatasetRows | null => {
+ const snapshot = getVtSyncSnapshot()
+ return getCanonicalIntelligenceDatasetRows(snapshot, datasetId)
 }

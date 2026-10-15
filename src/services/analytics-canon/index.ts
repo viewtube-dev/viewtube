@@ -35,6 +35,9 @@ export {
  buildCanonicalIntelligenceEvidence,
 } from "./intelligenceEvidence"
 
-export { getCurrentCanonicalIntelligenceEvidence } from "./currentEvidence"
+export {
+ getCurrentCanonicalIntelligenceEvidence,
+ getCurrentCanonicalIntelligenceDatasetRows,
+} from "./currentEvidence"
 
 export * from "./metricComparability"

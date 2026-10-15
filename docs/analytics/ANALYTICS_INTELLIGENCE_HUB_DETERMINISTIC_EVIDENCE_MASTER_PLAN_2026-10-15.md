@@ -1,9 +1,9 @@
 # Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phases 0–10 Implementation Record
 
-**Status:** Phases 0–4 were merged via PR #241; Phases 5–8 via PR #248; phases 7–10 follow-up via PR #250, all into `master/consolidated-feature-integration`. The merged implementation includes a separated finding projection, optional Brain prompt context, identity-aware recommendation/outcome contracts, bridges into the existing Algorithm Intelligence event ledger, a service-contract golden path, and converged Analytics/lifecycle documentation. A follow-up syntax repair is committed on the target branch. Production UI wiring and durable server-side persistence remain open; final release certification is not green.  
+**Status:** Phases 0–4 merged via PR #241; phases 5–8 via PR #248; phases 7–10 follow-up via PR #250, all into `master/consolidated-feature-integration`. This follow-up adds a live Intelligence Hub deterministic findings panel and opts the conversational Brain runtime into full-canonical-row trend findings. Remaining release gaps are full Project/ActionPacket and publication-checkpoint integration, durable server-side event persistence, full application/browser E2E, and final release certification.  
 **Date:** 2026-10-15  
-**Implementation branch:** Phase 0–4 is on `master/consolidated-feature-integration`; Phase 5–8 workflow implementation is on `feat/analytics-intelligence-phases-5-8-2026-10-15` pending PR #248  
-**Implementation PRs:** [#241 — deterministic findings phases 0–4](https://github.com/viewtube-dev/viewtube/pull/241), [#248 — Intelligence Hub workflow and Brain context phases 5–8](https://github.com/viewtube-dev/viewtube/pull/248), and [#250 — lifecycle outcomes, learning review, and convergence phases 7–10](https://github.com/viewtube-dev/viewtube/pull/250), merged into this integration branch. Follow-up syntax repair commit: `59f446dbe3364e0334e22fdb08bcd1350b031f93`.  
+**Implementation branch:** Phases 0–10 implementation slices are merged into `master/consolidated-feature-integration`; live trend/UI integration is proposed from `feat/analytics-intelligence-live-integration-2026-10-15`  
+**Implementation PRs:** [#241 — deterministic findings phases 0–4](https://github.com/viewtube-dev/viewtube/pull/241), [#248 — Intelligence Hub workflow and Brain context phases 5–8](https://github.com/viewtube-dev/viewtube/pull/248), and [#250 — lifecycle outcomes, learning review, and convergence phases 7–10](https://github.com/viewtube-dev/viewtube/pull/250) are merged. [#251 — live canonical findings integration](https://github.com/viewtube-dev/viewtube/pull/251) adds the live trend/UI seam and is pending review/validation.  
 **Target integration branch:** `master/consolidated-feature-integration`  
 **Scope:** Build the Analytics Intelligence Hub and deterministic analytics findings/evidence without introducing a second analytics store or allowing AI-generated prose to become metric truth.
 
@@ -127,22 +127,22 @@ Route period comparisons through the same comparability guard. Reuse the existin
 ### Phase 5 — Intelligence Hub interpretation
 **Implemented service projection:** `src/services/brain/AnalyticsIntelligenceWorkflow.ts` exposes `presentAnalyticsFindings`, keeping deterministic fact, existing interpretation, hypothesis, and recommendation separate. It carries formula/version, source snapshots, evidence refs, bounded confidence, and limitations; it filters invalid and cross-channel findings and sorts output deterministically.
 
-**Still open:** render this projection in the Intelligence Hub UI, connect it to canonical evidence preflight/report sections, and verify accessible/mobile behavior. The service adapter is not yet a complete Hub UI integration.
+**Implemented follow-up:** `src/components/IntelligenceHub/DeterministicAnalyticsFindingsPanel.tsx` renders validated findings with facts, formula/version, snapshot IDs, evidence refs, confidence heuristic, limitations, and separate interpretation/hypothesis/recommendation slots. It deliberately reports no findings when full canonical rows cannot support a valid series and does not use bounded report samples. Accessible/mobile browser verification remains a release gate.
 
 ### Phase 6 — Brain integration
 **Implemented runtime seam:** `EvidenceIntelligenceResolver` accepts optional deterministic findings and returns an exact-channel guarded `analyticsFindingContext`. `BrainOrchestrator` forwards it through both `BrainContextBroker` builds. The broker adds a bounded `DETERMINISTIC ANALYTICS FINDINGS` prompt section only when analytics access is enabled, scope is usable, and findings exist; instructions explicitly prohibit recalculating or overwriting facts.
 
-**Still open:** the live caller does not yet generate/pass explicit multi-period findings, so the new context is currently empty for ordinary runtime calls. Add caller-level source-period construction and prove it with an end-to-end fixture before claiming complete Brain integration.
+**Implemented follow-up:** `CurrentCanonicalAnalyticsInsights.ts` builds descriptive trends from full canonical `daily` rows (currently supported additive metrics: views, engaged views, watch time, likes, comments, subscribers gained), and `BrainOrchestrator` opts into these findings for statistics/algorithm-intelligence requests. The resolver verifies channel scope and the expected snapshot; the broker keeps the model from overwriting facts. Multi-period comparisons still require explicit canonical period evidence and are not inferred from a single snapshot.
 
 ### Phase 7 — Creator-goal recommendations and Projects
 **Implemented contract:** `buildAnalyticsRecommendationAction` creates a proposed-only, goal-aware action with channel/project identity, finding IDs, evidence refs, metric, baseline, expected direction, canonical evaluation window, baseline snapshot IDs, and a null causal claim. Invalid or cross-channel findings are rejected; proposal does not mean approved or executed.
 
-**Still open:** connect proposals to the existing Project/ActionPacket workflow, preserve owner/status and metadata/publication identity in the canonical domain event owner, and require creator approval in the actual UI. No parallel recommendation or Project store is introduced.
+**Implemented follow-up:** the Intelligence Hub findings panel now accepts a creator goal, proposed action, optional existing Project ID, expected direction, and evaluation window; it records a proposed-only `RECOMMENDATION_CREATED` event through the existing ledger adapter. It explicitly says the action is not approved/executed and does not silently create or modify a Project. **Still open:** a real Project/ActionPacket handoff and creator approval state must be connected to their canonical workflow owners.
 
 ### Phase 8 — Outcome measurement and governed learning
 **Implemented contract:** `evaluateAnalyticsOutcome` requires matching channel, metric and canonical window; distinct snapshots; valid explicit inclusive period dates; non-overlapping chronological equal-window periods; finite values; and a later follow-up timestamp. Missing/incompatible evidence blocks evaluation, zero baseline leaves percent change null, and all outcomes remain descriptive-association-only with `causalConclusion: null`. `buildLearningCandidateReview` requires at least three evaluated outcomes by default and always produces review-required candidates with promotion disabled.
 
-**Still open:** connect recommendation IDs to existing publication transactions, metadata versions, analytics checkpoints and evaluation writers; persist through canonical existing owners; carry confounder context from actual records; and test the full published-video outcome path.
+**Still open:** the service-level evaluation/event adapters are implemented, but live publication transaction and metadata-version identities are not yet sourced automatically from canonical publication/checkpoint writers; the browser UI does not yet perform a complete source-backed follow-up evaluation; server-durable persistence and confounder capture from actual records remain open.
 
 ### Phase 9 — UX, reliability and end-to-end certification
 **Implemented:** a deterministic golden-path contract test now exercises finding presentation → creator-goal recommendation → linked project/ContentBuild/video/publication transaction/metadata versions → three comparable follow-up evaluations → review-only learning candidate. It checks that evidence and identity survive the entire path and that causality/promotion remain disabled.
@@ -164,7 +164,7 @@ Route period comparisons through the same comparability guard. Reuse the existin
 - [ ] Focused tests, typecheck, lint, full suite, production build and relevant browser smoke are run on the final head.
 - [ ] CI and branch/PR conflicts are checked; no merge/deployment claim without evidence.
 
-## Phase 0–8 implementation receipt
+## Phase 0–10 implementation receipt
 
 Code paths, validation results and remaining integration gates are recorded below. Service contracts and prompt plumbing are implemented; the end-to-end creator workflow is not complete until the listed caller/UI/persistence seams are connected.
 
@@ -173,10 +173,10 @@ Code paths, validation results and remaining integration gates are recorded belo
 - Phase 2: period comparisons, threshold-based material-change signals and complete-row traffic-source contributions are implemented. Unsupported denominator-dependent metrics are rejected; zero baselines preserve null relative change; missing/partial rows and zero contribution denominators fail closed. Tests are in `src/services/brain/__tests__/DeterministicAnalyticsInsights.test.ts` and included in `npm run test:focused`.
 - Phase 3: unified finding fields and `toDerivedSignal` adapter are implemented in `src/services/brain/DeterministicAnalyticsInsights.ts`; existing `DerivedSignalKind` now includes `material-change` and `contribution`. No parallel evidence store was added.
 - Phase 4: descriptive linear trends and existing-anomaly adapters are implemented in the same service. Trend calculation rejects invalid/duplicate dates, unsupported metrics, unavailable evidence, incomplete series and too few observations; it never imputes missing dates as zero. Anomaly records retain detector-produced values/scores and source evidence.
-- Runtime integration / release verification: these helpers are implemented but are not yet wired into the live Intelligence Hub/Brain request path. GitHub Actions release-gate runs on earlier heads were cancelled after subsequent commits; latest-head checks must be reviewed. Vercel statuses have reported build-rate-limit failures. Tests, typecheck, full suite, build, and browser verification have not been verified from this session; keep the work un-certified until those gates pass and results are reviewed.
+- Runtime integration / release verification: PR #251 now wires full-row canonical daily trends into the Brain request path and renders them in the Intelligence Hub; the broader follow-up is pending review. On PR #251 head `dfaf8a27c528ad1d9d3423f74162dfdc21672d0b`, focused contracts (including the workflow and resolver tests), TypeScript typecheck, production build, and local smoke passed. The full suite and static-quality jobs were still running at the last check; source-governance failed on unrelated Studio confirmed-library layout assertions (`translateY(-75%) scale(.75)` and the Studio Text Input catalog contract). Do not treat this as final release certification; review latest-head job results and the remaining Project/publication/server-persistence/browser-E2E gates.
 
 
-### Phase 5–8 implementation receipt (work branch pending review/merge)
+### Phase 5–8 implementation receipt (merged via PR #248; extended by PR #250 and pending PR #251)
 
 - Added `src/services/brain/AnalyticsIntelligenceWorkflow.ts`:
   - Phase 5: evidence-linked presentation projection keeps fact, interpretation, hypothesis, and recommendation as separate layers.
@@ -186,7 +186,7 @@ Code paths, validation results and remaining integration gates are recorded belo
 - Added `src/services/brain/AnalyticsIntelligenceWorkflow.test.ts` for layer separation, scope blocking, finding filtering, recommendation provenance, metric mismatch rejection, zero-baseline behavior, and learning-review safeguards.
 - Added the workflow test to `npm run test:focused`.
 - Extended `src/services/brain/EvidenceIntelligenceResolver.ts` with an optional deterministic finding input and scope-guarded context projection. Existing callers may omit it without changing their current behavior.
-- **Not yet certified:** GitHub Actions ran on implementation head `4e6c6a0fe0c290d43351910e8ecb41efeaeb9d19`: `npm run test:focused` passed (including the new workflow and resolver tests), `npm run typecheck` passed, `npm run build` passed, source-governance passed, and local smoke passed. `npm test` failed on the existing untouched dashboard CSS assertion expecting `max-width: 46%` in `src/views/dashboard/__tests__/WidgetPrimitives.test.tsx`; `npm run lint:runtime` failed on broad existing lint errors (2,234 errors / 159 warnings), with reported examples in untouched settings/workbench files. The PR is not release-certified because full-suite/lint are not green and the end-to-end product integration gaps listed above remain. The findings input is optional and the live Brain caller does not yet compute multi-period findings; the Intelligence Hub UI is not yet rendering the projection; action/evaluation records are not yet written into the canonical Project/publication/outcome owners; end-to-end and production persistence checks remain open.
+- **Validation and release boundary:** the PR #248 tested head passed focused contracts, typecheck, build, source governance and local smoke; its full suite failed on an unrelated dashboard CSS assertion and repo-wide lint had existing errors. PR #250 added lifecycle identity and event-ledger adapters. PR #251 now wires current canonical trends and the Hub panel; its focused contracts, typecheck, build and local smoke passed on the tested head, but full-suite/static-quality status was still pending and source-governance failed on unrelated Studio catalog assertions at the last check. Period comparisons still require explicit multi-period canonical evidence; Project/ActionPacket approval, live publication/checkpoint outcome producers, server-durable event persistence and full browser E2E remain open.
 
 
 ### Phase 10 — Documentation convergence receipt
@@ -194,3 +194,14 @@ Code paths, validation results and remaining integration gates are recorded belo
 - `docs/Analytics.md` points to this master plan and now clarifies the implementation/release boundary.
 - `docs/architecture/VIEWTUBE_INTEGRATED_CONTENT_LIFECYCLE_ANALYTICS_STUDIO_HUB_MASTER_PLAN.md` records the analytics recommendation → existing event ledger → comparable outcome → review-only learning path and its open server-durability/runtime gates.
 - This master plan remains the scoped Analytics authority; Projects/ContentBuild, Asset Engine, PublishTransaction, Analytics Canon, Algorithm Intelligence events and governed learning remain their own authorities. No competing database or lifecycle was added.
+
+
+### Live runtime and Intelligence Hub integration follow-up
+
+- Added `getCurrentCanonicalIntelligenceDatasetRows` to the public `analytics-canon` barrel. It returns full rows from the current VT-SYNC snapshot for deterministic consumers; it does not return the report's bounded sample rows.
+- Added `src/services/brain/CurrentCanonicalAnalyticsInsights.ts`. It computes bounded least-squares trend findings from the full canonical `daily` dataset, requiring exact channel and expected-snapshot identity. It does not impute missing dates and only attempts the declared additive metric set.
+- Updated `EvidenceIntelligenceResolver` and `BrainOrchestrator` to opt into those trends for statistics/algorithm-intelligence requests. The existing `BrainContextBroker` prompt section remains scope-gated and bounded.
+- Added `src/components/IntelligenceHub/DeterministicAnalyticsFindingsPanel.tsx` and mounted it in `IntelligenceHub.tsx`. It renders source-linked facts, formula/version, confidence heuristic, limitations and separate interpretation/hypothesis/recommendation layers.
+- Added a creator-goal proposal form to the findings panel. Proposals are recorded via `recordAnalyticsRecommendationEvent` into the existing Algorithm Intelligence event ledger; UI copy explicitly says proposals are not approved/executed and no Project is created or changed automatically.
+- Added a resolver regression test for the opt-in runtime trend path.
+- **Boundaries still open:** period-to-period comparisons are not synthesized from a single snapshot; Project/ActionPacket approval and publication/checkpoint producers are not yet wired to these proposals/evaluations; event ledger storage remains browser-local; full browser E2E and release certification are still required.
