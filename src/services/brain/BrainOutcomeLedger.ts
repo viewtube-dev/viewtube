@@ -76,7 +76,7 @@ export const listBrainOutcomes = (channelId?: string | null) => {
 export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | "createdAt">) => {
  if (input.sourceRecordId) {
   const existing = read().find((record) => record.channelId === input.channelId && record.sourceRecordId === input.sourceRecordId)
-  if (existing) return existing
+  if (existing) { void enqueueBrainLearningRecord(existing.channelId, "brainOutcome", existing); return existing }
  }
  const record: BrainOutcomeRecord = {
   ...input,
