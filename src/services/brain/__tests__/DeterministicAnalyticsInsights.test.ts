@@ -7,7 +7,12 @@ import type {
 import {
  buildPeriodComparisonInsights,
  buildTrafficSourceContributionInsights,
+ buildTrendInsights,
+ adaptAnomalyToAnalyticsFinding,
+ adaptAnomaliesToAnalyticsFindings,
+ toDerivedSignal,
 } from "../DeterministicAnalyticsInsights"
+import type { ViewTubeAnomaly } from "../../anomaly-intelligence/contracts"
 
 const dataset = (
  id: string,
@@ -78,7 +83,7 @@ describe("deterministic analytics insights", () => {
    baselineValue: 100,
    delta: 25,
    relativeDeltaPercent: 25,
-   formula: "delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100",
+   formula: "current=sum; baseline=sum; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0",
    deterministic: true,
    evidenceRefs: expect.arrayContaining([
     "analytics:daily",
@@ -245,4 +250,129 @@ describe("deterministic analytics insights", () => {
    sourceRowCount: 2,
   }).insights).toEqual([])
  })
+ 
+ it("normalizes deterministic insights into the shared finding and derived-signal contract", () => {
+  const result = buildPeriodComparisonInsights({
+   baseline: {
+    bundle: bundle("snapshot-old", { views: { count: 1, sum: 100, average: 100, minimum: 100, maximum: 100 } }),
+    period: period("Previous 28 days", "2026-08-19", "2026-09-15"),
+   },
+   current: {
+    bundle: bundle("snapshot-new", { views: { count: 1, sum: 125, average: 125, minimum: 125, maximum: 125 } }),
+    period: period("Current 28 days", "2026-09-16", "2026-10-13"),
+   },
+  })
+  const finding = result.insights[0]
+  expect(finding).toMatchObject({
+   findingType: "comparison",
+   observedFact: { currentValue: 125, baselineValue: 100, delta: 25 },
+   validationState: "validated",
+   interpretation: null,
+   recommendation: null,
+  })
+  expect(finding.calculation).toMatchObject({
+   deterministic: true,
+   algorithmVersion: "vt-deterministic-analytics-insights-v1",
+  })
+  expect(toDerivedSignal(finding)).toMatchObject({
+   kind: "comparison",
+   currentValue: 125,
+   baselineValue: 100,
+   delta: 25,
+   derivation: { deterministic: true },
+  })
+ })
+
+ it("calculates deterministic trends from complete dated canonical rows", () => {
+  const source: CanonicalIntelligenceDatasetRows = {
+   datasetId: "daily",
+   label: "Daily",
+   status: "available",
+   snapshotId: "snapshot-trend",
+   channelId: "channel-1",
+   updatedAt: "2026-10-14T00:00:00.000Z",
+   sources: ["youtube_analytics_v2"],
+   missingMetrics: [],
+   rows: [
+    { date: "2026-10-01", views: 10 },
+    { date: "2026-10-02", views: 12 },
+    { date: "2026-10-03", views: 14 },
+    { date: "2026-10-04", views: 16 },
+    { date: "2026-10-05", views: 18 },
+   ],
+  }
+  const result = buildTrendInsights({
+   dataset: source,
+   metricKey: "views",
+   dateKey: "date",
+   minimumObservations: 5,
+  })
+  expect(result.limitations).toEqual([])
+  expect(result.insights).toHaveLength(1)
+  expect(result.insights[0]).toMatchObject({
+   findingType: "trend",
+   currentValue: 18,
+   baselineValue: 10,
+   delta: 8,
+   trend: { direction: "increasing", observationCount: 5 },
+   validationState: "validated",
+  })
+  expect(result.insights[0].evidenceRefs).toContain("analytics:snapshot-trend:daily:views")
+ })
+
+ it("fails closed on incomplete trend series instead of interpreting missing rows as zero", () => {
+  const result = buildTrendInsights({
+   dataset: {
+    datasetId: "daily", label: "Daily", status: "available", snapshotId: "snapshot-trend",
+    channelId: "channel-1", sources: ["youtube_analytics_v2"], missingMetrics: [],
+    rows: [
+     { date: "2026-10-01", views: 10 },
+     { date: "2026-10-02", views: 12 },
+     { date: "2026-10-03", views: 14 },
+    ],
+   },
+   metricKey: "views",
+   dateKey: "date",
+   minimumObservations: 5,
+  })
+  expect(result.insights).toEqual([])
+  expect(result.limitations[0]).toContain("at least 5 valid dated observations")
+ })
+
+ it("maps existing anomaly evidence into a finding without recalculating the anomaly", () => {
+  const anomaly: ViewTubeAnomaly = {
+   id: "daily:all:views:2026-10-14",
+   channelId: "channel-1",
+   detectedAt: "2026-10-14",
+   datasetId: "daily",
+   family: "video",
+   kind: "spike",
+   metric: "views",
+   currentValue: 180,
+   baselineValue: 100,
+   relativeDelta: 0.8,
+   surpriseScore: 70,
+   impactScore: 65,
+   confidence: 85,
+   evidence: [{ id: "analytics:snapshot-anomaly:daily:views", datasetId: "daily", source: "youtube_analytics_v2", snapshotId: "snapshot-anomaly" }],
+  }
+  const finding = adaptAnomalyToAnalyticsFinding(anomaly)
+  expect(finding).toMatchObject({
+   findingType: "anomaly",
+   currentValue: 180,
+   baselineValue: 100,
+   delta: 80,
+   relativeDeltaPercent: 80,
+   validationState: "validated",
+   interpretation: null,
+   recommendation: null,
+  })
+  expect(finding.evidenceRefs).toContain("analytics:snapshot-anomaly:daily:views")
+  const anomalies = [anomaly, { ...anomaly, id: "daily:all:views:2026-10-13" }]
+  const batch = adaptAnomaliesToAnalyticsFindings(anomalies)
+  expect(batch).toHaveLength(2)
+  expect(batch.map((item) => item.id)).toEqual([...batch.map((item) => item.id)].sort())
+  expect(batch.map((item) => item.id)).toEqual(adaptAnomaliesToAnalyticsFindings([...anomalies].reverse()).map((item) => item.id))
+ })
+
 })
