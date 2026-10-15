@@ -1067,12 +1067,24 @@ button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:r
    occupy the same inline footprint as the shell that anchors its shadow; otherwise
    the shell shadow exposes the parent width beyond the intrinsic face (often 8px
    per side). Icon-only and split-left variants retain their explicit geometry below. */
-button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] {
+/* Resolve compact button width from its intrinsic content instead of a percentage
+   width whose containing inline-flex shell is itself auto-sized. The previous
+   width:100% + flex-grow combination could shrink the visible face inside the
+   shell by its horizontal padding. Split-left and square controls keep their
+   own explicit full-width / fixed-square geometry below. */
+button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
   box-sizing: border-box;
-  width: 100%;
-  max-width: none;
-  flex: 1 1 auto;
+  width: max-content;
   min-width: 0;
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {
+  box-sizing: border-box;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 1 auto;
   padding-inline: 8px;
   font-size: 24px;
 }

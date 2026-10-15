@@ -61,12 +61,20 @@ describe("Studio text field library entries", () => {
 });
 
 describe("compact Studio button intrinsic sizing", () => {
-  it("keeps compact shadows bounded to the button shell without changing face sizing", () => {
+  it("sizes compact text buttons from intrinsic content instead of a circular 100% face width", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto;')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { padding:0; }')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before {')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {')
+    expect(css).toContain('width: max-content;')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {')
     expect(css).toContain('width: auto;')
+    expect(css).toContain('padding-inline: 8px;')
+  })
+
+  it("preserves explicit full-width split-left and fixed-square icon button geometry", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%;')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height);')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before {')
     expect(css).toContain('height: auto;')
   })
 })
