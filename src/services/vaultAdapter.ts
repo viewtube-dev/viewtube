@@ -2,6 +2,7 @@ import type { GenerationArtifact, SuperToolId, VaultAsset, VaultAssetKind } from
 import { nexusSyncService } from "./nexusSyncService"
 import { getVaultAttentionReasons } from "./vaultAttention"
 import { canMutateVaultAsset } from "./vaultMutationPolicy"
+import { isVaultAssetProtected } from "./vaultMutationPolicy"
 
 export type VaultAssetLifecycle =
  | "DRAFT"
@@ -187,6 +188,24 @@ export const addVaultAsset = (
  return asset
 }
 
+
+const isProtectedContentMutation = (
+ existing: VaultAsset,
+ patch: Partial<Omit<VaultAsset, "id" | "createdAt">>,
+): boolean => {
+ if (!isVaultAssetProtected(existing) || patch.metadata?.protected === false) return false
+ const contentKeys = ["name", "kind", "source", "url", "previewUrl", "mimeType"] as const
+ const contentChanged = contentKeys.some((key) => (
+  Object.prototype.hasOwnProperty.call(patch, key) && patch[key] !== existing[key]
+ ))
+ const protectedMetadataKeys = ["lifecycle", "protected", "contentHash"]
+ const protectedMetadataChanged = Boolean(patch.metadata && protectedMetadataKeys.some((key) => (
+  Object.prototype.hasOwnProperty.call(patch.metadata, key)
+  && patch.metadata?.[key] !== existing.metadata?.[key]
+ )))
+ return contentChanged || protectedMetadataChanged
+}
+
 export const updateVaultAsset = (
  id: string,
  patch: Partial<Omit<VaultAsset, "id" | "createdAt">>,
@@ -194,6 +213,7 @@ export const updateVaultAsset = (
  const assets = readAssets()
  const existing = assets.find((asset) => asset.id === id)
  if (!existing) return null
+ if (isProtectedContentMutation(existing, patch)) return null
  const updated: VaultAsset = {
   ...existing,
   ...patch,
@@ -296,6 +316,7 @@ export const upsertVaultAsset = (
  if (!existing) {
   return addVaultAsset(input)
  }
+ if (isProtectedContentMutation(existing, input)) return existing
  const updated: VaultAsset = {
   ...existing,
   ...input,
