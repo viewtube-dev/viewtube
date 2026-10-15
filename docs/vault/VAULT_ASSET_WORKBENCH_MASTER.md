@@ -9,17 +9,17 @@
 
 ## Current implementation checkpoint — October 15, 2026
 
-The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md) and [Phases 3–6 implementation audit](VAULT_PHASES_3_6_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
+The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md) and [Phases 3–6 implementation audit](VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
 
 - **Phase 0:** canonical source ownership and baseline gaps documented.
-- **Phase 1:** canonical local identity, selection guards, and protected/lifecycle mutation policy improved and covered by tests.
+- **Phase 1:** stable local asset identity, stale-selection guards, and protected/lifecycle mutation policy strengthened with regression tests.
 - **Phase 2:** adaptive mode/capability host integrated; video/audio processing is not advertised without verified processors.
-- **Phase 3:** derived maintenance queue added and surfaced in the selected-asset Workbench.
-- **Phase 4:** confirmed batch operation pipeline, per-item receipts, and bounded local operation history added; existing selection actions use the pipeline.
-- **Phase 5:** local media capability support is explicitly registered; durable video/audio processing remains unavailable.
-- **Phase 6:** field comparison, exact-hash duplicate candidate grouping, and evidence-backed rights/governance recommendations added.
+- **Phase 3:** read-only technical/rights/lineage inspection and actionable findings added while reusing canonical search, collections, custom fields, and metadata services.
+- **Phase 4:** bounded operation ledger with guarded state transitions, input/output lineage, retry/error/receipt fields; derivative flows associate operations and lineage.
+- **Phase 5:** shared media-operation preflight enforces compatible media kind, selection/source limits, protected-source restrictions, and derivative-only behavior.
+- **Phase 6:** field-level comparison, rights/license/source/expiry/restriction findings, and explicit metadata suggestion proposal/acceptance safeguards added.
 
-**Release state:** IMPLEMENTED IN BRANCH / CI VERIFICATION PENDING. The browser `localStorage` adapter and history are not server durability or server authorization. The duplicate resolver suggests candidates only and never deletes/merges automatically. Rights guidance is not legal clearance. Do not merge or certify until the latest-head CI, typecheck/build, focused tests, browser verification, and target-branch read-back are complete.
+**Release state:** IMPLEMENTATION IN BRANCH / EXACT-HEAD CI VERIFICATION PENDING. The browser `localStorage` adapter and operation ledger are not server durability or server authorization. The media preflight contract is not proof a deployed worker is healthy. Metadata suggestions are proposals, not a connected AI model. Rights findings are not legal clearance. Do not merge or certify until the latest-head tests, typecheck/build, browser verification, and target-branch read-back are complete.
 
 ## 1. Purpose and product promise
 
