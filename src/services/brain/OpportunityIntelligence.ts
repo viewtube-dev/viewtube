@@ -24,6 +24,13 @@ export interface OpportunityEvidence {
  impactScore: number
  evidenceIds: string[]
  context?: AlgorithmSignal["context"]
+ provenance?: {
+  sourceOwner: "analytics-canon" | "brain-evidence-pack"
+  sourceSnapshotId?: string
+  datasetId?: string
+  window?: string
+  datasetStatus?: string
+ }
 }
 
 export const opportunityToDerivedSignal = (opportunity: OpportunityEvidence): DerivedSignal => ({
@@ -52,6 +59,7 @@ export const opportunityToDerivedSignal = (opportunity: OpportunityEvidence): De
  },
  metadata: {
   sourceKind: opportunity.kind,
+  ...(opportunity.provenance ? { provenance: { ...opportunity.provenance } } : {}),
  },
 })
 
