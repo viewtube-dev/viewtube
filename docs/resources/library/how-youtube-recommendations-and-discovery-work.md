@@ -649,6 +649,18 @@ Later research described multi-task ranking approaches that model several viewer
 
 These papers are valuable architectural evidence, but they are **not a public blueprint of the exact 2026 production system**.
 
+### What the historical engineering papers add
+
+The 2016 YouTube recommendation paper describes a two-stage architecture. Candidate generation narrows a very large catalog to a manageable set of videos for a viewer and context; ranking then evaluates and orders those candidates using richer information. This is a computationally practical design pattern, not a guarantee that every current surface uses the exact same implementation.
+
+The historical candidate-generation work describes learned embeddings and collaborative-filtering behavior. In plain language, a model can learn relationships from patterns in what people watch, rather than relying only on words in titles. Two videos can be related in viewing behavior even when their metadata looks different. This does not mean a creator can force a relationship by copying a title or placing two videos in a playlist.
+
+The 2016 paper also discusses how historical training data can favor older items simply because they have accumulated more interactions, and describes age-related handling in that system. This is useful evidence that freshness is a real engineering concern, but it is not evidence of the exact freshness mechanism used in current production.
+
+Later research documents multi-task ranking approaches that model multiple viewer outcomes rather than relying only on click prediction. The creator lesson is that raw CTR should not be treated as a complete measure of value. Do not turn historical research into a formula such as CTR multiplied by average view duration and claim that this is YouTube's current score.
+
+**Evidence boundary:** These papers establish that such architectures and techniques were documented in specific research systems. They do not disclose the full current production model, every signal, the relative weight of each signal, or a creator-controlled ranking formula. Use them to understand broad engineering concepts, not to infer exact thresholds.
+
 ### What YouTube does not publish
 
 YouTube does not publicly provide:
