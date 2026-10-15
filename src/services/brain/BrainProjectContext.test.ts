@@ -71,6 +71,14 @@ describe("BrainProjectContext", () => {
    plannedPublishAt: "2026-10-10T18:00:00.000Z",
    targetAudience: ["Napoleonic history viewers", "military history viewers"],
    evidenceIds: ["asset-a"],
+   lifecycle: {
+    status: "resolved",
+    currentPhase: "package",
+    sourceStage: "package",
+    relevantCapabilities: ["title", "thumbnail", "description", "tags", "metadata"],
+    audiencePromisePresent: false,
+    blockers: [],
+   },
   })
  })
 
