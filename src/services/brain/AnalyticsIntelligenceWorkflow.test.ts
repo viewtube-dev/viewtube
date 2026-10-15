@@ -149,13 +149,16 @@ describe("Analytics intelligence workflow phases 5–8", () => {
 
     const outcome = evaluateAnalyticsOutcome({
       recommendation: action,
-      baseline: measurement({ value: 100, snapshotId: "baseline-ledger" }),
+      baseline: measurement({ value: 100, snapshotId: "baseline-ledger", projectId: "project-1", contentBuildId: "content-build-1", publicationTransactionId: "publish-1" }),
       followUp: measurement({
         value: 125,
         snapshotId: "followup-ledger",
         observedAt: "2026-10-15T00:00:00.000Z",
         periodStartDate: "2026-09-18",
         periodEndDate: "2026-10-15",
+        projectId: "project-1",
+        contentBuildId: "content-build-1",
+        publicationTransactionId: "publish-1",
       }),
     })
     const outcomeEvent = recordAnalyticsOutcomeEvent(outcome)
