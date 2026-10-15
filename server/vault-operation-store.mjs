@@ -46,7 +46,7 @@ export const handleVaultOperationStore = async ({ req, res, method, pathname, pa
       const sourceAssetId = typeof body.sourceAssetId === "string" ? body.sourceAssetId.trim().slice(0, 180) : "";
       const operation = typeof body.operation === "string" ? body.operation.trim() : "";
       const key = typeof body.idempotencyKey === "string" ? body.idempotencyKey.trim().slice(0, 180) : "";
-      if (!sourceAssetId || !key || !["image-transform", "video-transform", "compress-analysis", "thumbnail-generate", "metadata-analyze"].includes(operation)) {
+      if (!sourceAssetId || !key || !["image-transform", "video-trim", "video-proxy", "video-transcode", "frame-extract", "audio-extract", "compress-analysis", "thumbnail-generate", "metadata-analyze"].includes(operation)) {
         return json(res, 400, { error: "INVALID_OPERATION", message: "Source asset, supported operation, and idempotency key are required." });
       }
       const names = (await fs.readdir(dir)).filter((name) => name.endsWith(".json"));
