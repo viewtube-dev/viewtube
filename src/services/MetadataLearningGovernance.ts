@@ -169,6 +169,16 @@ export const createMetadataLearningCandidate = (input: {
   })
 }
 
+/** Returns only creator-approved knowledge events for downstream Brain context. */
+export const listPromotedMetadataLearningCandidates = (contentBuildId: string): ContentBuildEvent[] =>
+  listContentBuildEvents(contentBuildId)
+    .filter(event =>
+      event.eventType === "knowledge.promoted" &&
+      event.entityType === "metadata-learning-candidate" &&
+      asRecord(event.resultingState)?.status === "promoted"
+    )
+    .sort((left, right) => left.timestamp.localeCompare(right.timestamp))
+
 /** Explicit creator approval is required; the service only records promotion when five independent comparisons are cited. */
 export const promoteMetadataLearningCandidate = (input: {
   contentBuildId: string
