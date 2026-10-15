@@ -195,9 +195,13 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-legend-a: var(--pair-a, #36e0f6);
   --vt-legend-b: var(--pair-b, #ff7f6b);
   --vt-legend-height: 44px;
-  --vt-legend-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-legend-radius: var(--vt-studio-control-radius, 6px);
-  --vt-legend-shadow-offset: var(--vt-studio-control-shadow, 3px);
+  --vt-legend-stroke: 3px;
+  --vt-legend-radius: 6px;
+  --vt-legend-shadow-offset: 3px;
+  --vt-legend-label-height: 20px;
+  --vt-legend-label-font-size: 14px;
+  --vt-legend-chevron-size: 28px;
+  --vt-legend-count-size: 28px;
   --vt-legend-shadow-color: var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
   position: relative;
   z-index: 0;
@@ -207,33 +211,39 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   text-transform: uppercase;
 }
-.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height: 28px; --vt-legend-stroke: 2px; --vt-legend-shadow-offset: 1.5px; --vt-legend-radius: 4px; }
+.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height: 28px; --vt-legend-stroke: 2px; --vt-legend-shadow-offset: 1.5px; --vt-legend-radius: 4px; --vt-legend-label-height: 14px; --vt-legend-label-font-size: 9px; --vt-legend-chevron-size: 18px; --vt-legend-count-size: 19px; }
 .vt-studio-legend-multi[data-open="true"] { z-index: 600; isolation: isolate; }
-.vt-studio-legend-anchor { position: relative; width: 100%; padding-top: 14px; }
+.vt-studio-legend-anchor { position: relative; width: 100%; min-width: 0; padding-top: 0; }
 .vt-studio-legend-label {
-  position: absolute; z-index: 2; top: 0; left: 12px;
-  width: max-content; max-width: calc(100% - 24px); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  padding: 3px 8px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-studio-control-radius, 6px);
+  position: absolute; z-index: 2; top: -9px; left: 12px;
+  display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box;
+  width: max-content; max-width: calc(100% - 24px); min-width: 0; height: var(--vt-legend-label-height); min-height: var(--vt-legend-label-height); max-height: var(--vt-legend-label-height);
+  padding: 0 10px; margin: 0; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   background: var(--vt-legend-b); color: #000;
-  font-size: 11px; font-weight: 900; line-height: 1; letter-spacing: .14em;
+  font-size: var(--vt-legend-label-font-size); font-weight: 1000; line-height: 1; letter-spacing: .055em;
 }
 .vt-studio-legend-trigger {
-  position: relative; display: flex; align-items: center; gap: 8px; width: 100%;
+  position: relative; display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0;
   height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   padding: 0 8px 0 12px; border: var(--vt-legend-stroke) solid #000;
-  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000;
-  box-shadow: none;
-  cursor: pointer; font: inherit; font-size: 14px; font-weight: 900; letter-spacing: 0;
+  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; box-shadow: none;
+  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.035em; text-transform: uppercase; transform: none; transition: none;
 }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
+.vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active { box-shadow: none; transform: none; transition: none; }
+.vt-studio-legend-trigger:focus-visible { outline: 2px solid var(--vt-legend-b); outline-offset: 0; }
 .vt-studio-legend-trigger:disabled { cursor: not-allowed; opacity: .5; }
 .vt-studio-legend-trigger-text { display: block; min-width: 0; width: 0; max-width: 100%; flex: 1 1 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
 .vt-studio-legend-count {
-  display: none; flex: none; min-width: 22px; height: 22px; place-items: center;
-  padding: 0 5px; border: 2px solid #000; border-radius: 6px;
-  background: #000; color: #fff; font-size: 12px; font-weight: 900;
+  display: none; flex: 0 0 var(--vt-legend-count-size); box-sizing: border-box;
+  width: var(--vt-legend-count-size); height: var(--vt-legend-count-size); min-width: var(--vt-legend-count-size); min-height: var(--vt-legend-count-size);
+  align-items: center; justify-content: center; padding: 0 4px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
+  background: #000; color: #fff; font-size: 19px; font-weight: 1000; line-height: 1;
 }
-.vt-studio-legend-count.is-visible { display: inline-grid; }
-.vt-studio-legend-chevron { flex: none; width: 18px; height: 18px; fill: none; stroke: #000; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; transition: transform 180ms ease-out; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count { font-size: 13px; }
+.vt-studio-legend-count.is-visible { display: inline-flex; }
+.vt-studio-legend-chevron { display: block; flex: 0 0 var(--vt-legend-chevron-size); width: var(--vt-legend-chevron-size); height: var(--vt-legend-chevron-size); min-width: var(--vt-legend-chevron-size); min-height: var(--vt-legend-chevron-size); fill: none; stroke: #000; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 150ms ease-out; }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron { stroke-width: 1.65; }
 .vt-studio-legend-multi[data-open="true"] .vt-studio-legend-chevron { transform: rotate(180deg); }
 .vt-studio-legend-menu {
   position: absolute; z-index: 610; top: calc(100% + 8px); left: 0; right: 0;
@@ -245,11 +255,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 @keyframes vt-legend-menu-open { from { opacity: 0; transform: translateY(-5px) scaleY(.98); } to { opacity: 1; transform: translateY(0) scaleY(1); } }
 .vt-studio-legend-option {
-  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 38px;
-  padding: 6px 10px; border: 0; border-bottom: 2px solid #000; border-radius: 0;
+  display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height);
+  margin-bottom: 3px; padding: 2px 8px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   background: var(--vt-legend-a); color: #000; cursor: pointer; text-align: left;
-  font-size: 13px; font-weight: 900; line-height: 1.1; letter-spacing: .015em;
+  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.035em; text-transform: uppercase;
 }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option { font-size: 24px; margin-bottom: 2px; padding-inline: 6px; }
 .vt-studio-legend-option:last-child { border-bottom: 0; }
 .vt-studio-legend-option:hover:not(:disabled), .vt-studio-legend-option[data-selected="true"] { background: color-mix(in srgb, var(--vt-legend-b) 72%, var(--vt-legend-a)); }
 .vt-studio-legend-option:focus-visible, .vt-studio-legend-clear:focus-visible { outline: 3px solid #000; outline-offset: -4px; }
@@ -263,13 +274,14 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-legend-option[data-selected="true"] .vt-studio-legend-check svg { opacity: 1; }
 .vt-studio-legend-option-text { min-width: 0; overflow-wrap: anywhere; }
 .vt-studio-legend-clear {
-  display: block; width: 100%; min-height: 34px; margin-top: 4px; padding: 6px 8px;
-  border: var(--vt-legend-stroke) solid #000; border-radius: 5px; background: var(--vt-legend-b);
-  color: #000; cursor: pointer; font-size: 12px; font-weight: 900; letter-spacing: .08em; text-align: center;
+  display: block; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height); margin-top: 3px; padding: 2px 8px;
+  border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius); background: var(--vt-legend-b); color: #000; cursor: pointer;
+  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.035em; text-transform: uppercase; text-align: center;
 }
+.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear { font-size: 24px; margin-top: 2px; padding-inline: 6px; }
 .vt-studio-legend-clear:disabled { cursor: not-allowed; opacity: .45; }
 @media (max-width: 767px) { .vt-studio-legend-menu { max-height: min(280px, 45vh); } }
-@media (prefers-reduced-motion: reduce) { .vt-studio-legend-menu, .vt-studio-legend-chevron { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+@media (prefers-reduced-motion: reduce) { .vt-studio-legend-menu, .vt-studio-legend-chevron { animation-duration: .01ms; transition-duration: .01ms; } }
 
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
@@ -309,61 +321,12 @@ select[data-vt-studio-control="true"]:focus-visible {
   outline-offset: 0;
 }
 select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .55; }
-/* V2 Legend Multi: trigger, menu rows and action share the closed trigger's size-specific text/stroke. */
-.vt-studio-legend-multi { --vt-legend-stroke:var(--vt-studio-44-stroke); --vt-legend-height:var(--vt-studio-44-height); --vt-legend-shadow-offset:0px; }
-.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height:var(--vt-studio-28-height); --vt-legend-stroke:var(--vt-studio-28-stroke); --vt-legend-shadow-offset:0px; --vt-legend-radius:6px; }
-.vt-studio-legend-trigger { border-width:var(--vt-legend-stroke); font-size:var(--vt-studio-44-font-size); font-weight:var(--vt-studio-44-font-weight); line-height:.86; letter-spacing:-.035em; box-shadow:none; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size:var(--vt-studio-28-font-size); font-weight:var(--vt-studio-28-font-weight); box-shadow:none; }
-.vt-studio-legend-menu { border-width:var(--vt-legend-stroke); box-shadow:none; padding:3px; }
-.vt-studio-legend-option { min-height:var(--vt-legend-height); padding:2px 8px; border:var(--vt-legend-stroke) solid #000; border-radius:var(--vt-legend-radius); margin-bottom:3px; font-size:var(--vt-studio-44-font-size); font-weight:var(--vt-studio-44-font-weight); line-height:.86; letter-spacing:-.035em; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option { font-size:var(--vt-studio-28-font-size); font-weight:var(--vt-studio-28-font-weight); line-height:.9; letter-spacing:-.02em; }
-.vt-studio-legend-option:last-child { border-bottom:var(--vt-legend-stroke) solid #000; margin-bottom:0; }
-.vt-studio-legend-clear { min-height:var(--vt-legend-height); border-width:var(--vt-legend-stroke); border-radius:var(--vt-legend-radius); font-size:inherit; font-weight:1000; letter-spacing:inherit; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear { font-size:var(--vt-studio-28-font-size); }
 /* Compact catalog specimens sit two across on wider screens. */
 .vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,
 .vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:repeat(2,minmax(0,1fr)); }
 @media(max-width:560px) {
  .vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,
  .vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:minmax(0,1fr); }
-}
-
-/* Dropdown size ratios: preserve the same relative control geometry in both sizes.
-   Compact check marks and row spacing scale with the 28px trigger rather than staying 44px-sized. */
-.vt-studio-legend-multi { min-width: 0; }
-.vt-studio-legend-anchor { min-width: 0; }
-.vt-studio-legend-trigger { box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height); gap: 8px; }
-.vt-studio-legend-menu { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; }
-.vt-studio-legend-option {
-  box-sizing: border-box;
-  min-width: 0;
-  gap: 8px;
-  overflow-wrap: anywhere;
-}
-.vt-studio-legend-check { box-sizing: border-box; width: 20px; height: 20px; border-width: 2px; }
-.vt-studio-legend-check svg { width: 14px; height: 14px; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option {
-  min-height: 28px;
-  gap: 5px;
-  padding: 2px 5px;
-  margin-bottom: 2px;
-  line-height: .9;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check {
-  width: 12px;
-  height: 12px;
-  border-width: 1.5px;
-  border-radius: 2px;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check svg {
-  width: 8px;
-  height: 8px;
-  stroke-width: 2;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
-  min-height: 28px;
-  margin-top: 2px;
-  padding: 2px 5px;
 }
 
 /* Canonical Studio Controls ownership: migrated switch, choice, and word-toggle primitives. */
@@ -684,127 +647,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   line-height: .86 !important;
   letter-spacing: -.035em !important;
 }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label {
-  top: 50% !important;
-  left: 8px !important;
-  transform: translateY(-50%) !important;
-}
-.vt-studio-legend-multi[data-size="compact"]:is([data-open="true"], :focus-within) .vt-studio-legend-label,
-.vt-studio-legend-multi[data-size="compact"]:has(.vt-studio-legend-count.is-visible) .vt-studio-legend-label {
-  top: -3px !important;
-  transform: translateY(-50%) scale(.75) !important;
-}
-
-/* Dropdown label/trigger separation: the floating label is fixed-size and never
-   participates in measuring or scaling the closed trigger's selected value. */
-.vt-studio-legend-multi {
-  --vt-legend-label-height: 20px;
-  --vt-legend-label-font-size: 14px;
-}
-.vt-studio-legend-anchor {
-  position: relative !important;
-  padding-top: 0 !important;
-}
-.vt-studio-legend-multi .vt-studio-legend-label {
-  position: absolute !important;
-  z-index: 3 !important;
-  top: -9px !important;
-  left: 12px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  box-sizing: border-box !important;
-  width: auto !important;
-  min-width: 0 !important;
-  height: var(--vt-legend-label-height) !important;
-  min-height: var(--vt-legend-label-height) !important;
-  max-height: var(--vt-legend-label-height) !important;
-  padding: 0 10px !important;
-  margin: 0 !important;
-  border: 3px solid #000 !important;
-  border-radius: 7px !important;
-  background: var(--pair-b, #ff7f6b) !important;
-  color: #000 !important;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-size: var(--vt-legend-label-font-size) !important;
-  font-weight: 1000 !important;
-  line-height: 1 !important;
-  letter-spacing: .055em !important;
-  text-transform: uppercase !important;
-  white-space: nowrap !important;
-  -webkit-text-stroke: .35px currentColor !important;
-  transform: none !important;
-  transition: none !important;
-  pointer-events: none !important;
-}
-.vt-studio-legend-multi[data-size="compact"] {
-  --vt-legend-label-height: 14px;
-  --vt-legend-label-font-size: 9px;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label {
-  top: -6px !important;
-  left: 8px !important;
-  padding-inline: 6px !important;
-  border-width: 2px !important;
-  border-radius: 4px !important;
-  transform: none !important;
-}
-/* The value text stays governed by the control size, regardless of label state. */
-.vt-studio-legend-trigger,
-.vt-studio-legend-trigger:hover,
-.vt-studio-legend-trigger:focus,
-.vt-studio-legend-trigger:focus-visible,
-.vt-studio-legend-trigger:active {
-  transform: none !important;
-  transition: none !important;
-}
-.vt-studio-legend-trigger-text {
-  min-width: 0 !important;
-  font-size: var(--vt-studio-44-font-size, 38px) !important;
-  font-weight: 1000 !important;
-  line-height: .86 !important;
-  letter-spacing: -.035em !important;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger-text {
-  font-size: var(--vt-studio-28-font-size, 24px) !important;
-}
-.vt-studio-legend-chevron {
-  width: var(--vt-legend-chevron-size, 28px) !important;
-  height: var(--vt-legend-chevron-size, 28px) !important;
-  min-width: var(--vt-legend-chevron-size, 28px) !important;
-  min-height: var(--vt-legend-chevron-size, 28px) !important;
-  flex: 0 0 var(--vt-legend-chevron-size, 28px) !important;
-  stroke-width: 2.5 !important;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron {
-  --vt-legend-chevron-size: 18px;
-  stroke-width: 1.65 !important;
-}
-.vt-studio-legend-count {
-  box-sizing: border-box !important;
-  width: 28px !important;
-  height: 28px !important;
-  min-width: 28px !important;
-  min-height: 28px !important;
-  flex: 0 0 28px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 6px !important;
-  font-size: 19px !important;
-  font-weight: 1000 !important;
-  line-height: 1 !important;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count {
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
-  flex-basis: 19px !important;
-  border-radius: 4px !important;
-  font-size: 13px !important;
-}
-
 /* Canonical Studio Controls contract (single authoritative tail).
    This section is the final authority for fields, 44px selection controls,
    button-face motion, split-left geometry, and configurable word-toggle ratios. */
