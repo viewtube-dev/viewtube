@@ -282,6 +282,14 @@ StudioIconButton.displayName = "StudioIconButton"
 
 
 export type StudioSquareIconButtonVariant = "v1" | "v2" | "v3" | "v4"
+export type StudioSquareIconButtonEffect =
+  | "standard"
+  | "notification"
+  | "rotated-toggle"
+  | "flip"
+  | "tooltip"
+  | "morph"
+  | "success"
 
 export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "children" | "selected"> {
   icon: React.ReactNode
@@ -289,17 +297,33 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
   /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
    * v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
   variant?: StudioSquareIconButtonVariant
+  /** Optional interaction effect. Defaults to standard; visual skin remains controlled by variant. */
+  effect?: StudioSquareIconButtonEffect
+  /** Alternate icon used by flip/morph effects; for success effect, defaults to a checkmark. */
+  activeIcon?: React.ReactNode
+  /** Notification count or short status. Omit to hide the badge. */
+  badge?: number | string
+  /** Floating contextual label; also becomes a supplementary description when supplied. */
+  tooltip?: string
+  /** Outcome-driven success state. Set true only after the associated operation succeeds. */
+  success?: boolean
   selected?: boolean
   defaultSelected?: boolean
   onSelectedChange?: (selected: boolean) => void
 }
 
-/** Square counterpart to the split-left icon rail, sharing its icon sizing and button-face tokens. */
+/** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
 export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
-  ({ icon, label, variant = "v1", sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, ...props }, ref) => {
+  ({
+    icon, label, variant = "v1", effect = "standard", activeIcon, badge, tooltip, success = false,
+    sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
+    disabled, ...props
+  }, ref) => {
     const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
-    const selectable = variant === "v3"
+    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
+    const isSuccess = effect === "success" && success
+    const effectClass = effect === "standard" ? undefined : `is-effect-${effect}`
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
       onClick?.(event)
       if (!selectable || event.defaultPrevented || event.currentTarget.disabled) return
@@ -307,20 +331,58 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
       if (selected === undefined) setUncontrolledSelected(next)
       onSelectedChange?.(next)
     }
+    const fallbackCheck = (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+    )
+    const iconNode = effect === "success" && isSuccess ? (activeIcon ?? fallbackCheck) : icon
+    const alternateNode = activeIcon ?? icon
+    const describedBy = tooltip ? props["aria-describedby"] : props["aria-describedby"]
     return (
       <StudioButton
         ref={ref}
         {...props}
+        className={studioClasses("vt-studio-square-icon-button", effectClass, className)}
+        disabled={disabled}
         sizeVariant={sizeVariant}
         aria-label={label}
+        aria-describedby={describedBy}
         aria-pressed={selectable ? isSelected : undefined}
         selected={selectable && isSelected}
         data-vt-studio-icon-button="true"
         data-icon-variant={variant}
+        data-icon-effect={effect}
         data-icon-only="true"
+        data-icon-active={isSelected || isSuccess ? "true" : "false"}
+        data-success={isSuccess ? "true" : undefined}
+        data-has-badge={badge !== undefined && badge !== null && badge !== "" ? "true" : undefined}
         onClick={handleClick}
       >
-        <span aria-hidden="true" data-vt-studio-button-icon>{icon}</span>
+        <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
+          {effect === "flip" ? (
+            <span data-vt-square-flip-inner>
+              <span data-vt-square-flip-face="front">{icon}</span>
+              <span data-vt-square-flip-face="back">{alternateNode}</span>
+            </span>
+          ) : effect === "morph" ? (
+            <span data-vt-square-morph-inner>
+              <span data-vt-square-morph-face="front">{icon}</span>
+              <span data-vt-square-morph-face="back">{alternateNode}</span>
+            </span>
+          ) : (
+            <span data-vt-square-icon-current>{iconNode}</span>
+          )}
+        </span>
+        {effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? (
+          <span data-vt-square-badge aria-hidden="true">{badge}</span>
+        ) : null}
+        {effect === "tooltip" && tooltip ? (
+          <span role="tooltip" data-vt-square-tooltip>{tooltip}</span>
+        ) : null}
+        {effect === "success" && isSuccess && tooltip ? (
+          <span data-vt-square-success-label aria-hidden="true">{tooltip}</span>
+        ) : null}
       </StudioButton>
     )
   },
