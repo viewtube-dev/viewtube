@@ -4690,3 +4690,16 @@
   .vt-subtoolbox-icon-button,
   .vt-subtoolbox-media-control { transition:none !important; }
 }
+
+
+/* Grid placement owns the width of an action button. The global intrinsic
+   geometry rule above shrink-wraps component-level buttons; inside an action
+   grid, restore stretch-to-cell sizing so each button uses its allocated track
+   (the track count remains controlled independently by .is-compact/.is-wide). */
+.vt-subtoolbox-grid > .vt-subtoolbox-button.has-component-level {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0;
+  max-width: 100%;
+  justify-self: stretch;
+}
