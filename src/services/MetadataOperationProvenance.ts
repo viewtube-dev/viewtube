@@ -1,4 +1,5 @@
-import { appendContentBuildEvent, type ContentBuildEvent } from "./asset-engine/ContentBuildRepository"
+import { appendContentBuildEvent } from "./asset-engine/ContentBuildRepository"
+import type { ContentBuildEvent } from "./asset-engine/contracts"
 
 export type MetadataOperationKind = "generate" | "refine" | "analyze" | "rank" | "compare" | "restore"
 
