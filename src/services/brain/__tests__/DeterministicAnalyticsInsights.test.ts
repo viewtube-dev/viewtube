@@ -61,11 +61,11 @@ describe("deterministic analytics insights", () => {
   const result = buildPeriodComparisonInsights({
    baseline: {
     bundle: bundle("snapshot-old", { views: { count: 1, sum: 100, average: 100, minimum: 100, maximum: 100 } }),
-    period: period("Previous 28 days", "2026-09-01", "2026-09-28"),
+    period: period("Previous 28 days", "2026-08-19", "2026-09-15"),
    },
    current: {
     bundle: bundle("snapshot-new", { views: { count: 1, sum: 125, average: 125, minimum: 125, maximum: 125 } }),
-    period: period("Current 28 days", "2026-09-29", "2026-10-26"),
+    period: period("Current 28 days", "2026-09-16", "2026-10-13"),
    },
   })
 
@@ -90,11 +90,11 @@ describe("deterministic analytics insights", () => {
    buildPeriodComparisonInsights({
     baseline: {
      bundle: bundle("snapshot-old", { views: { count: 1, sum: 100, average: 100, minimum: 100, maximum: 100 } }),
-     period: period("Previous 28 days", "2026-09-01", "2026-09-28"),
+     period: period("Previous 28 days", "2026-08-19", "2026-09-15"),
     },
     current: {
      bundle: bundle("snapshot-new", { views: { count: 1, sum: 125, average: 125, minimum: 125, maximum: 125 } }),
-     period: period("Current 28 days", "2026-09-29", "2026-10-26"),
+     period: period("Current 28 days", "2026-09-16", "2026-10-13"),
     },
    }).insights[0].id,
   )
@@ -104,11 +104,11 @@ describe("deterministic analytics insights", () => {
   const result = buildPeriodComparisonInsights({
    baseline: {
     bundle: bundle("snapshot-old", { views: { count: 1, sum: 0, average: 0, minimum: 0, maximum: 0 } }),
-    period: period("Previous", "2026-09-01", "2026-09-28"),
+    period: period("Previous", "2026-08-19", "2026-09-15"),
    },
    current: {
     bundle: bundle("snapshot-new", { views: { count: 1, sum: 12, average: 12, minimum: 12, maximum: 12 } }),
-    period: period("Current", "2026-09-29", "2026-10-26"),
+    period: period("Current", "2026-09-16", "2026-10-13"),
    },
   })
   expect(result.insights[0].delta).toBe(12)
@@ -120,16 +120,16 @@ describe("deterministic analytics insights", () => {
   const base = bundle("snapshot-old", { views: { count: 1, sum: 100, average: 100, minimum: 100, maximum: 100 } })
   const current = bundle("snapshot-new", { views: { count: 1, sum: 125, average: 125, minimum: 125, maximum: 125 } })
   expect(buildPeriodComparisonInsights({
-   baseline: { bundle: base, period: period("Previous", "2026-09-01", "2026-09-28") },
-   current: { bundle: { ...current, channelId: "channel-other" }, period: period("Current", "2026-09-29", "2026-10-26") },
+   baseline: { bundle: base, period: period("Previous", "2026-08-19", "2026-09-15") },
+   current: { bundle: { ...current, channelId: "channel-other" }, period: period("Current", "2026-09-16", "2026-10-13") },
   }).blockedReasons).toContain("Channel identity does not match.")
   expect(buildPeriodComparisonInsights({
    baseline: { bundle: base, period: period("Previous", "2026-09-01", "2026-09-30") },
-   current: { bundle: current, period: period("Current", "2026-09-29", "2026-10-26") },
+   current: { bundle: current, period: period("Current", "2026-09-16", "2026-10-13") },
   }).blockedReasons).toContain("Comparison periods overlap or are not in chronological order.")
   expect(buildPeriodComparisonInsights({
    baseline: { bundle: base, period: period("Previous", "not-a-date", "2026-09-28") },
-   current: { bundle: current, period: period("Current", "2026-09-29", "2026-10-26") },
+   current: { bundle: current, period: period("Current", "2026-09-16", "2026-10-13") },
   }).blockedReasons).toContain("Period boundaries must be valid YYYY-MM-DD dates.")
  })
 
@@ -140,27 +140,27 @@ describe("deterministic analytics insights", () => {
    datasets: [dataset("daily", oldMetrics, { status: "partial" })],
   })
   expect(buildPeriodComparisonInsights({
-   baseline: { bundle: oldBundle, period: period("Previous", "2026-09-01", "2026-09-28") },
-   current: { bundle: partial, period: period("Current", "2026-09-29", "2026-10-26") },
+   baseline: { bundle: oldBundle, period: period("Previous", "2026-08-19", "2026-09-15") },
+   current: { bundle: partial, period: period("Current", "2026-09-16", "2026-10-13") },
   }).blockedReasons).toContain("Dataset daily is not fully available in both periods.")
   const missing = bundle("snapshot-new", {})
   const missingResult = buildPeriodComparisonInsights({
-   baseline: { bundle: oldBundle, period: period("Previous", "2026-09-01", "2026-09-28") },
-   current: { bundle: missing, period: period("Current", "2026-09-29", "2026-10-26") },
+   baseline: { bundle: oldBundle, period: period("Previous", "2026-08-19", "2026-09-15") },
+   current: { bundle: missing, period: period("Current", "2026-09-16", "2026-10-13") },
   })
   expect(missingResult.insights).toEqual([])
-  expect(missingResult.blockedReasons).toContain("Metric views is missing from the baseline period in dataset daily.")
+  expect(missingResult.blockedReasons).toContain("Metric views is missing from the current period in dataset daily.")
  })
 
  it("emits threshold-based material-change signals but does not call them statistical significance", () => {
   const result = buildPeriodComparisonInsights({
    baseline: {
     bundle: bundle("snapshot-old", { views: { count: 1, sum: 100, average: 100, minimum: 100, maximum: 100 } }),
-    period: period("Previous", "2026-09-01", "2026-09-28"),
+    period: period("Previous", "2026-08-19", "2026-09-15"),
    },
    current: {
     bundle: bundle("snapshot-new", { views: { count: 1, sum: 130, average: 130, minimum: 130, maximum: 130 } }),
-    period: period("Current", "2026-09-29", "2026-10-26"),
+    period: period("Current", "2026-09-16", "2026-10-13"),
    },
    minimumMaterialChangePercent: 20,
   })
