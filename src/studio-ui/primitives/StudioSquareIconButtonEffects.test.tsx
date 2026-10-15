@@ -4,9 +4,29 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { StudioSquareIconButton } from "./StudioControls"
+import { STUDIO_CONTROL_SIZE_CONTRACT } from "../tokens"
 
 describe("StudioSquareIconButton interaction effects", () => {
   const icon = <svg viewBox="0 0 24 24"><path d="M2 2h20v20H2z" /></svg>
+
+  it("inherits the canonical 44px and 28px geometry instead of defining effect-specific sizes", () => {
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.standard).toMatchObject({
+      height: 44,
+      stroke: 3,
+      radius: 6,
+      iconSize: 28,
+      buttonShadowX: 3,
+      buttonShadowY: 3,
+    })
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.compact).toMatchObject({
+      height: 28,
+      stroke: 2,
+      radius: 4,
+      iconSize: 18,
+      buttonShadowX: 1,
+      buttonShadowY: 1,
+    })
+  })
 
   it("preserves canonical square geometry while rendering optional effects", () => {
     const html = renderToStaticMarkup(
