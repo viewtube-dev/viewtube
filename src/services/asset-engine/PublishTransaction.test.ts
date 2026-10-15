@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
+import { listAlgorithmIntelligenceEvents } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 
 const projection=():PublishingPackageProjection=>({
@@ -79,6 +80,15 @@ describe("PublishTransaction",()=>{
     youtubeVideoId:"youtube-published",
     publicationState:"published",
    }),
+  })
+  const receipts = listAlgorithmIntelligenceEvents({ channelId:"channel-a", kind:"PUBLICATION_CONFIRMED" })
+  expect(receipts).toHaveLength(1)
+  expect(receipts[0].metadata.publicationIdentityReceipt).toMatchObject({
+   contentBuildId:"cb-publish",
+   videoPackageId:"vp-a",
+   youtubeVideoId:"youtube-published",
+   approvedSnapshotId:transaction.approvedSnapshotId,
+   approvedSnapshotHash:transaction.approvedSnapshotHash,
   })
  })
 
