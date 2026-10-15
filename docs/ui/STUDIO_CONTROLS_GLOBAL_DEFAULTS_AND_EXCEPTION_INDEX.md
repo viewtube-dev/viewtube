@@ -482,7 +482,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - The outer button remains overflow-visible; the split-left face owns the black border and radius and clips only its internal icon rail/content.
 
 ### Shared text-field typography and module ownership
-- Source audit found the root cause of the single-line input mismatch: the shared field rule inherited the global control font tokens (38px standard / 24px compact), while only textarea selectors explicitly overrode typography to 18px / 14px. The single-line input selectors had no corresponding font-size override, so standard and compact inputs could look like the same compact size when upstream declarations/cascades applied.
+- Source audit found the root cause of the single-line input mismatch: the root `--vt-studio-text-input-*` custom properties were explicitly set to 18px / 14px, overriding the global 38px / 24px size family. The textarea selectors correctly use 18px / 14px as a multiline writing-surface exception; the root input variables and input-specific selectors must instead follow the global tokens.
 - The resolved contract is explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` use global 38px standard / 24px compact typography with the global 0.86 line height; `StudioTextArea` and `StudioLabeledTextArea` alone use the multiline exception of 18px standard / 14px compact. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
 - Related components are grouped in two modules:
   - `src/studio-ui/primitives/StudioTextInput.tsx`: standalone, search, number, and labeled single-line inputs.
