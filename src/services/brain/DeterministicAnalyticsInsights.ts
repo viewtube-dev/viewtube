@@ -280,6 +280,12 @@ export const buildPeriodComparisonInsights = (input: {
     blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} requires denominator-aware aggregation not provided by the canonical summary contract.`)
     continue
    }
+   const currentValue = valueFor(currentDataset, metric, aggregation)
+   const baselineValue = valueFor(baselineDataset, metric, aggregation)
+   if (currentValue === null || baselineValue === null) {
+    blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} has no finite value in both periods.`)
+    continue
+   }
    const evidenceKey = `${currentDataset.id}:${metric}`
    const currentEvidence = currentEvidenceByMetric.get(evidenceKey)
    const baselineEvidence = baselineEvidenceByMetric.get(evidenceKey)
@@ -290,12 +296,6 @@ export const buildPeriodComparisonInsights = (input: {
    const comparability = compareEvidenceRecords(baselineEvidence, currentEvidence)
    if (!comparability.comparable) {
     blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} is not comparable: ${comparability.reasons.join(" ")}`)
-    continue
-   }
-   const currentValue = valueFor(currentDataset, metric, aggregation)
-   const baselineValue = valueFor(baselineDataset, metric, aggregation)
-   if (currentValue === null || baselineValue === null) {
-    blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} has no finite value in both periods.`)
     continue
    }
 
