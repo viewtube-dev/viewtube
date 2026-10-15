@@ -4,11 +4,12 @@
   --vt-stepper-stroke: 3px;
   --vt-stepper-radius: 6px;
   --vt-stepper-font-size: 38px;
+  --vt-stepper-inner-height: calc(var(--vt-stepper-height) - (var(--vt-stepper-stroke) * 2));
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   flex: 0 0 auto;
-  width: calc(var(--vt-stepper-height) * 3);
-  min-width: calc(var(--vt-stepper-height) * 3);
+  width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));
+  min-width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));
   max-width: none;
   height: var(--vt-stepper-height);
   min-height: var(--vt-stepper-height);
@@ -81,7 +82,7 @@
 .vt-subtoolbox-split-stepper-rail {
   display: grid;
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  width: var(--vt-stepper-height);
+  width: var(--vt-stepper-inner-height);
   min-width: 0;
   height: 100%;
   min-height: 0;
