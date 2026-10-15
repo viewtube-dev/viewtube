@@ -46,9 +46,7 @@ export const CommentResponder: React.FC = () => {
       <StudioButton type="button" aria-label="Previous comment" disabled={!context.connected || comments.currentIndex === 0} onClick={() => comments.setCurrentIndex(Math.max(0, comments.currentIndex - 1))} tone="neutral">Previous</StudioButton>
       <StudioButton type="button" aria-label="Next comment" disabled={!context.connected || comments.currentIndex >= comments.displayThreads.length - 1} onClick={() => comments.setCurrentIndex(Math.min(comments.displayThreads.length - 1, comments.currentIndex + 1))} tone="neutral">Next</StudioButton>
      </div>
-     <StudioIconButton type="button" aria-label={context.connected ? "Refresh comments" : "Connect YouTube channel"} onClick={context.connected ? comments.refresh : comments.reconnect} disabled={context.connected && comments.loading} tone="accent">
-      {context.connected ? <RefreshCw size={17} className={comments.loading ? "animate-spin" : ""} aria-hidden="true" /> : <Link2 size={17} aria-hidden="true" />}
-     </StudioIconButton>
+      <StudioIconButton type="button" aria-label={context.connected ? "Refresh comments" : "Connect YouTube channel"} onClick={context.connected ? comments.refresh : comments.reconnect} disabled={context.connected && comments.loading} tone="accent" icon={context.connected ? <RefreshCw size={17} className={comments.loading ? "animate-spin" : ""} aria-hidden="true" /> : <Link2 size={17} aria-hidden="true" />} />
     </div>
     <div role="status" aria-live="polite" className="mt-2 sm:mt-3 min-h-5 text-[10px] font-black uppercase">{queueStatus}</div>
     {!context.connected && <div className="mt-2 sm:mt-3"><SubToolboxGridActionButton label="Connect YouTube Channel" iconName="link" tone="green" onClick={comments.reconnect} /></div>}
