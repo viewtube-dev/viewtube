@@ -2183,3 +2183,34 @@
   letter-spacing: -.055em !important;
   overflow: hidden !important;
 }
+
+
+/* Visual-audit correction 2026-10-15:
+   Standard word-toggle specimens require their intrinsic 44px typography width.
+   Stack those specimens rather than compressing the production control into a
+   two-column card; compact examples may remain in two columns. */
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"],
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"] > div,
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"] > div {
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"] .vt-studio-44-word-toggle,
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"] .vt-studio-44-word-toggle {
+  width: max-content;
+  max-width: 100%;
+  justify-self: center;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"] .vt-studio-44-word-toggle > button,
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"] .vt-studio-44-word-toggle > button {
+  min-width: 0;
+}
+.vt-confirmed-family > h3,
+.vt-confirmed-family h4,
+.vt-confirmed-control-row > strong {
+  scroll-margin-top: 100px;
+}

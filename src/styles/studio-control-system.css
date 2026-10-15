@@ -898,3 +898,27 @@ button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true
   left: var(--vt-word-toggle-handle-left, 2.75px);
   width: calc(var(--vt-word-toggle-handle-width, 16px) * var(--vt-word-toggle-handle-width-scale, 1));
 }
+
+
+/* Visual-audit correction 2026-10-15:
+   Inputs use a border-box height contract; textareas remain the documented
+   multiline exception and never collapse to ordinary control height. */
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  height: 44px;
+  min-height: 44px;
+}
+input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select[data-vt-studio-control="true"][data-size="compact"] {
+  height: 28px;
+  min-height: 28px;
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  box-sizing: border-box;
+  height: auto;
+  min-height: 92px;
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  min-height: 92px;
+}
