@@ -1,10 +1,10 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Phase 1–3 contract/cascade/field changes prepared on the completion branch; automated checks and rendered verification pending  
+**Status:** PR #189 merged; phases 3–5 follow-up changes prepared on a fresh branch from the integration target; rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Audit work branch:** `fix/studio-controls-phases-1-3-complete-2026-10-15`  
-**Last reviewed:** 2026-10-14  
+**Audit work branch:** `fix/studio-controls-phases-3-5-after-pr189-2026-10-15`  
+**Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
@@ -360,3 +360,30 @@ The former PR #168 head branch, `fix/studio-primitive-size-shadow-contracts-2026
 ### Verification boundary
 
 This recovery pass confirms source-level discrepancies. It does not claim that every one of these defects was caused by editing an already-merged PR, nor that any fix has been visually certified. Before calling a finding recovered, compare its original PR/commit patch with the current target branch, apply the correction on a fresh branch from the current integration baseline, inspect the resulting diff, and verify the merged commit. Run available typecheck/tests/build and browser computed-style checks when possible.
+
+
+## 16. Post-PR #189 completion — 2026-10-15
+
+PR #189 is merged. This follow-up starts from the current `master/consolidated-feature-integration` head and does not replay the stale pre-merge branch.
+
+### Phase 3 — Finish canonical field behavior
+- Keep a single primary-colored native insertion-caret declaration in the canonical field block.
+- Preserve the 92px multiline minimum, standard 18px / compact 14px type, and weight 1000.
+- Ensure placeholders inherit the exact value typography and use the primary color.
+- Use size tokens for default/focus fill, border, radius, outline width, secondary focus accent, and zero offset.
+
+### Phase 4 — Complete button, split-left, and dropdown contracts
+- Ordinary buttons are standard/compact only; 56px prominent actions remain a distinct `StudioActionButton` family.
+- Split-left geometry uses shared height/stroke/radius/shadow/icon tokens; selected state swaps pair colors only.
+- Legend Multi's floating label must not participate in trigger sizing; selected-value text is shrinkable and ellipsized rather than pushing the chevron/count outside the control.
+- The trigger has no button shadow or press translation. The floating menu panel is a separate surface and may use its own stationary shadow.
+- Dropdown option typography/row height are explicitly documented menu exceptions.
+
+### Phase 5 — Confirmed Primitive Library and evidence
+- The gallery imports the actual Studio components and names them with their public canonical exports.
+- The global defaults panel formats nested objects recursively; it must never show `[object Object]`.
+- Word-toggle skins 1, 3, 4, and 5 are rendered from a single collection in one four-column variant container per size row.
+- Keep library-only frame styles scoped to catalog wrappers; do not let them redefine the production component.
+- Run source governance, focused Vitest, TypeScript, production build, and rendered desktop/mobile checks. A successful source diff alone is not visual certification.
+
+**Current completion boundary:** source edits are prepared in this follow-up branch. Final completion depends on GitHub Actions and browser/deployment evidence; no live visual pass is claimed before those checks finish.
