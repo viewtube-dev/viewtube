@@ -7,7 +7,7 @@ import {
 } from "./StudioHubCompletePrimitiveCatalog"
 
 describe("confirmed Square Icon Button component-library entry", () => {
-  it("renders the canonical production primitive for all four skins and seven interaction patterns", () => {
+  it("renders the canonical production primitive for all four skins and all registered interaction patterns", () => {
     const html = renderToStaticMarkup(
       <HardcodedGenericControl
         name="Square Icon Button"
