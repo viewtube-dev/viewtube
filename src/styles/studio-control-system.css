@@ -2348,3 +2348,16 @@ button[data-vt-studio-icon-button="true"][data-size="compact"].is-effect-tooltip
     animation: none !important;
   }
 }
+
+button[data-vt-studio-icon-button="true"].is-effect-unlock[data-icon-active="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  transition: background-color 180ms ease-out, color 180ms ease-out;
+}
+@keyframes vt-studio-square-shake {
+  0%, 100% { transform: rotate(0deg); }
+  15%, 55% { transform: rotate(-12deg); }
+  30%, 70% { transform: rotate(12deg); }
+  42%, 82% { transform: rotate(-7deg); }
+}
