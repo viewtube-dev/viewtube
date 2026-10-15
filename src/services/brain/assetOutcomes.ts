@@ -255,7 +255,7 @@ export const recordAssetOutcome = async (input: {
    entry.channelId === asset.channelId &&
    entry.kind === input.kind
   )
-  if (existing) return existing
+  if (existing) { void enqueueBrainLearningRecord(existing.channelId, "assetOutcome", existing); return existing }
  }
 
  const generated = input.generatedText
