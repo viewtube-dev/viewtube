@@ -143,6 +143,7 @@ describe("post-publication analytics and metadata intelligence golden path", () 
       id: "cb-golden",
       channelId: "channel-golden",
       legacyProjectId: "project-golden",
+      stage: "package",
     })
   })
 
