@@ -1,6 +1,6 @@
 # Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–8 Implementation Record
 
-**Status:** Phases 0–4 implementation is present on `master/consolidated-feature-integration`: deterministic period comparisons, contribution calculations, unified finding contract, regression tests, trend calculation, and existing-anomaly adapters are in the target branch. Automated test/typecheck/CI verification remains pending; live Intelligence Hub/Brain caller integration is tracked in the later integration phases.  
+**Status:** Phases 0–4 are merged on `master/consolidated-feature-integration`; Phases 5–10 are in the current review branch/PR #248. Phases 5–8 now include a separated finding projection, optional Brain prompt context, proposed recommendation contracts, identity-aware outcome evaluation, and adapters into the existing Algorithm Intelligence event ledger. Phase 9 has a golden-path contract test. Phase 10 converges Analytics and lifecycle documentation. Production UI wiring and durable server-side persistence remain open; release certification is blocked by unrelated full-suite and lint failures on the current PR head.  
 **Date:** 2026-10-15  
 **Implementation branch:** Phase 0–4 is on `master/consolidated-feature-integration`; Phase 5–8 workflow implementation is on `feat/analytics-intelligence-phases-5-8-2026-10-15` pending PR #248  
 **Implementation PR:** [#241 — Analytics Intelligence Hub: deterministic findings phases 0–4](https://github.com/viewtube-dev/viewtube/pull/241) (merged into this integration branch). This master record is updated on the target branch.  
@@ -145,7 +145,9 @@ Route period comparisons through the same comparability guard. Reuse the existin
 **Still open:** connect recommendation IDs to existing publication transactions, metadata versions, analytics checkpoints and evaluation writers; persist through canonical existing owners; carry confounder context from actual records; and test the full published-video outcome path.
 
 ### Phase 9 — UX, reliability and end-to-end certification
-Add an Analytics fixture golden path from canonical dataset → deterministic finding → Intelligence Hub explanation → Brain response → recommendation → Project/action → follow-up measurement/evaluation. Test repeatability, scope safety, missingness, comparability, evidence links, UI states and mobile/desktop behavior. Record exact SHA and actual commands/results before marking certified.
+**Implemented:** a deterministic golden-path contract test now exercises finding presentation → creator-goal recommendation → linked project/ContentBuild/video/publication transaction/metadata versions → three comparable follow-up evaluations → review-only learning candidate. It checks that evidence and identity survive the entire path and that causality/promotion remain disabled.
+
+**Still required:** extend the fixture through real canonical dataset builders, live Intelligence Hub rendering, Brain request/response, actual Project/ActionPacket handoff, publish transaction and analytics checkpoint producers; add browser assertions for desktop/mobile. This is a service-contract golden path, not yet a full application E2E certification.
 
 ## Acceptance gates
 
@@ -185,3 +187,10 @@ Code paths, validation results and remaining integration gates are recorded belo
 - Added the workflow test to `npm run test:focused`.
 - Extended `src/services/brain/EvidenceIntelligenceResolver.ts` with an optional deterministic finding input and scope-guarded context projection. Existing callers may omit it without changing their current behavior.
 - **Not yet certified:** GitHub Actions ran on implementation head `4e6c6a0fe0c290d43351910e8ecb41efeaeb9d19`: `npm run test:focused` passed (including the new workflow and resolver tests), `npm run typecheck` passed, `npm run build` passed, source-governance passed, and local smoke passed. `npm test` failed on the existing untouched dashboard CSS assertion expecting `max-width: 46%` in `src/views/dashboard/__tests__/WidgetPrimitives.test.tsx`; `npm run lint:runtime` failed on broad existing lint errors (2,234 errors / 159 warnings), with reported examples in untouched settings/workbench files. The PR is not release-certified because full-suite/lint are not green and the end-to-end product integration gaps listed above remain. The findings input is optional and the live Brain caller does not yet compute multi-period findings; the Intelligence Hub UI is not yet rendering the projection; action/evaluation records are not yet written into the canonical Project/publication/outcome owners; end-to-end and production persistence checks remain open.
+
+
+### Phase 10 — Documentation convergence receipt
+
+- `docs/Analytics.md` points to this master plan and now clarifies the implementation/release boundary.
+- `docs/architecture/VIEWTUBE_INTEGRATED_CONTENT_LIFECYCLE_ANALYTICS_STUDIO_HUB_MASTER_PLAN.md` records the analytics recommendation → existing event ledger → comparable outcome → review-only learning path and its open server-durability/runtime gates.
+- This master plan remains the scoped Analytics authority; Projects/ContentBuild, Asset Engine, PublishTransaction, Analytics Canon, Algorithm Intelligence events and governed learning remain their own authorities. No competing database or lifecycle was added.

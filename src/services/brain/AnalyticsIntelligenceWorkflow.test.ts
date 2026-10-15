@@ -6,6 +6,9 @@ import {
   buildLearningCandidateReview,
   evaluateAnalyticsOutcome,
   presentAnalyticsFindings,
+  recordAnalyticsOutcomeEvent,
+  recordAnalyticsRecommendationEvent,
+  recordAnalyticsLearningReviewEvent,
 } from "./AnalyticsIntelligenceWorkflow"
 
 const finding = (overrides: Partial<DeterministicAnalyticsInsight> = {}): DeterministicAnalyticsInsight => ({
@@ -125,6 +128,55 @@ describe("Analytics intelligence workflow phases 5–8", () => {
     expect(context.findings[0].formula).toBe("delta = current - baseline")
   })
 
+  it("bridges recommendation, outcome, and learning review into the existing algorithm event ledger", () => {
+    const action = buildAnalyticsRecommendationAction({
+      id: "recommendation-ledger",
+      creatorGoal: "Increase qualified watch time",
+      action: "Test the opening sequence",
+      channelId: "channel-1",
+      projectId: "project-1",
+      contentBuildId: "content-build-1",
+      publicationTransactionId: "publish-1",
+      metadataVersionIds: ["metadata-v3"],
+      finding: finding(),
+      evaluationWindow: "28d",
+    })!
+    const recommendationEvent = recordAnalyticsRecommendationEvent(action)
+    expect(recommendationEvent.id).toBe("analytics-recommendation:recommendation-ledger")
+    expect(recommendationEvent.kind).toBe("RECOMMENDATION_CREATED")
+    expect(recommendationEvent.evidenceIds).toContain("analytics:snapshot-after:daily:views")
+    expect(recommendationEvent.metadata.contentBuildId).toBe("content-build-1")
+
+    const outcome = evaluateAnalyticsOutcome({
+      recommendation: action,
+      baseline: measurement({ value: 100, snapshotId: "baseline-ledger", projectId: "project-1", contentBuildId: "content-build-1", publicationTransactionId: "publish-1" }),
+      followUp: measurement({
+        value: 125,
+        snapshotId: "followup-ledger",
+        observedAt: "2026-10-15T00:00:00.000Z",
+        periodStartDate: "2026-09-18",
+        periodEndDate: "2026-10-15",
+        projectId: "project-1",
+        contentBuildId: "content-build-1",
+        publicationTransactionId: "publish-1",
+      }),
+    })
+    const outcomeEvent = recordAnalyticsOutcomeEvent(outcome)
+    expect(outcomeEvent.id).toBe(`analytics-outcome:${outcome.id}`)
+    expect(outcomeEvent.kind).toBe("OUTCOME_MEASURED")
+    expect(outcomeEvent.metadata.causalConclusion).toBeNull()
+
+    const candidate = buildLearningCandidateReview({
+      id: "candidate-ledger",
+      recommendation: action,
+      evaluations: [outcome, { ...outcome, id: "outcome-two" }, { ...outcome, id: "outcome-three" }],
+    })!
+    const learningEvent = recordAnalyticsLearningReviewEvent(candidate)
+    expect(learningEvent.id).toBe("analytics-learning-review:candidate-ledger")
+    expect(learningEvent.kind).toBe("LEARNING_CANDIDATE_CREATED")
+    expect(learningEvent.metadata.promotionAllowed).toBe(false)
+  })
+
   it("creates a proposed, goal-aware action with provenance and evaluation criteria", () => {
     const action = recommendation()
     expect(action.status).toBe("proposed")
@@ -186,6 +238,78 @@ describe("Analytics intelligence workflow phases 5–8", () => {
     expect(result.interpretation).toBe("descriptive-association-only")
     expect(result.causalConclusion).toBeNull()
     expect(result.limitations.some((item) => item.includes("baseline is zero"))).toBe(true)
+  })
+
+  it("completes the canonical finding-to-project-to-publication-outcome golden path", () => {
+    const [presented] = presentAnalyticsFindings([finding()], "channel-1")
+    expect(presented.evidenceRefs).toContain("analytics:snapshot-after:daily:views")
+
+    const action = buildAnalyticsRecommendationAction({
+      id: "recommendation-golden",
+      creatorGoal: "Increase qualified watch time",
+      action: "Test a clearer opening sequence",
+      channelId: "channel-1",
+      projectId: "project-golden",
+      contentBuildId: "content-build-golden",
+      videoId: "video-golden",
+      actionPacketId: "action-packet-golden",
+      publicationTransactionId: "publish-transaction-golden",
+      metadataVersionIds: ["metadata-v3"],
+      finding: finding(),
+      evaluationWindow: "28d",
+      expectedDirection: "increase",
+    })!
+    expect(action.status).toBe("proposed")
+    expect(action.contentBuildId).toBe("content-build-golden")
+
+    const evaluate = (suffix: string, baselineStart: string, baselineEnd: string, followStart: string, followEnd: string, before: number, after: number) =>
+      evaluateAnalyticsOutcome({
+        recommendation: action,
+        baseline: measurement({
+          value: before,
+          snapshotId: `baseline-${suffix}`,
+          observedAt: `${baselineEnd}T23:00:00.000Z`,
+          periodStartDate: baselineStart,
+          periodEndDate: baselineEnd,
+          projectId: "project-golden",
+          contentBuildId: "content-build-golden",
+          videoId: "video-golden",
+          publicationTransactionId: "publish-transaction-golden",
+          metadataVersionIds: ["metadata-v2"],
+        }),
+        followUp: measurement({
+          value: after,
+          snapshotId: `followup-${suffix}`,
+          observedAt: `${followEnd}T23:00:00.000Z`,
+          periodStartDate: followStart,
+          periodEndDate: followEnd,
+          projectId: "project-golden",
+          contentBuildId: "content-build-golden",
+          videoId: "video-golden",
+          publicationTransactionId: "publish-transaction-golden",
+          metadataVersionIds: ["metadata-v3"],
+        }),
+      })
+
+    const first = evaluate("one", "2026-01-01", "2026-01-28", "2026-01-29", "2026-02-25", 100, 120)
+    const second = evaluate("two", "2026-02-26", "2026-03-25", "2026-03-26", "2026-04-22", 120, 135)
+    const third = evaluate("three", "2026-04-23", "2026-05-20", "2026-05-21", "2026-06-17", 135, 145)
+    expect([first.status, second.status, third.status]).toEqual(["evaluated", "evaluated", "evaluated"])
+    expect(first.contentBuildId).toBe(action.contentBuildId)
+    expect(first.publicationTransactionId).toBe(action.publicationTransactionId)
+    expect(first.metadataVersionIds).toEqual(["metadata-v2", "metadata-v3"])
+
+    const candidate = buildLearningCandidateReview({
+      id: "candidate-golden",
+      recommendation: action,
+      evaluations: [first, second, third],
+    })
+    expect(candidate?.status).toBe("review-required")
+    expect(candidate?.promotionAllowed).toBe(false)
+    expect(candidate?.contentBuildId).toBe("content-build-golden")
+    expect(candidate?.publicationTransactionId).toBe("publish-transaction-golden")
+    expect(candidate?.metadataVersionIds).toContain("metadata-v3")
+    expect(candidate?.causalConclusion).toBeNull()
   })
 
   it("keeps learning candidates review-only and requires repeated evaluated outcomes", () => {

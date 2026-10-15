@@ -1,4 +1,5 @@
 import type { DeterministicAnalyticsInsight } from "./DeterministicAnalyticsInsights"
+import { recordAlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
 
 export type FindingEpistemicLayer = "deterministic-fact" | "interpretation" | "hypothesis" | "recommendation"
 
@@ -57,6 +58,11 @@ export interface AnalyticsRecommendationAction {
   action: string
   channelId: string
   projectId: string | null
+  contentBuildId: string | null
+  videoId: string | null
+  actionPacketId: string | null
+  publicationTransactionId: string | null
+  metadataVersionIds: string[]
   findingIds: string[]
   evidenceRefs: string[]
   metric: string
@@ -74,6 +80,12 @@ export interface OutcomeMeasurement {
   value: number
   snapshotId: string
   observedAt: string
+  projectId?: string | null
+  contentBuildId?: string | null
+  videoId?: string | null
+  actionPacketId?: string | null
+  publicationTransactionId?: string | null
+  metadataVersionIds?: string[]
   periodStartDate: string
   periodEndDate: string
 }
@@ -83,6 +95,13 @@ export interface OutcomeEvaluation {
   id: string
   status: "evaluated" | "blocked"
   channelId: string
+  projectId: string | null
+  contentBuildId: string | null
+  videoId: string | null
+  actionPacketId: string | null
+  publicationTransactionId: string | null
+  metadataVersionIds: string[]
+  recommendationId: string
   metric: string
   window: string
   baselineValue: number | null
@@ -110,6 +129,12 @@ export interface LearningCandidateReview {
   observedDirection: "increase" | "decrease" | "mixed"
   promotionAllowed: false
   causalConclusion: null
+  projectId: string | null
+  contentBuildId: string | null
+  videoId: string | null
+  actionPacketId: string | null
+  publicationTransactionId: string | null
+  metadataVersionIds: string[]
   requiredReviews: string[]
 }
 
@@ -237,6 +262,11 @@ export const buildAnalyticsRecommendationAction = (input: {
   action: string
   channelId: string
   projectId?: string | null
+  contentBuildId?: string | null
+  videoId?: string | null
+  actionPacketId?: string | null
+  publicationTransactionId?: string | null
+  metadataVersionIds?: string[]
   finding: DeterministicAnalyticsInsight
   expectedDirection?: "increase" | "decrease" | "observe"
   evaluationWindow: "7d" | "28d" | "90d" | "365d"
@@ -251,6 +281,11 @@ export const buildAnalyticsRecommendationAction = (input: {
     action: input.action.trim(),
     channelId: input.channelId,
     projectId: input.projectId || null,
+    contentBuildId: input.contentBuildId || null,
+    videoId: input.videoId || null,
+    actionPacketId: input.actionPacketId || null,
+    publicationTransactionId: input.publicationTransactionId || null,
+    metadataVersionIds: uniqueSorted(input.metadataVersionIds || []),
     findingIds: [input.finding.id],
     evidenceRefs: uniqueSorted(input.finding.evidenceRefs),
     metric: input.finding.metric,
@@ -286,7 +321,7 @@ export const evaluateAnalyticsOutcome = (input: {
     blockedReason = "Baseline and follow-up metric must match the recommendation validation metric."
   } else if (baseline.window !== recommendation.evaluationWindow || followUp.window !== recommendation.evaluationWindow) {
     blockedReason = "Baseline and follow-up must use the recommendation's declared canonical window."
-  } else if (baseline.snapshotId === followUp.snapshotId) {
+  } else if ((recommendation.projectId && baseline.projectId !== recommendation.projectId) || (recommendation.projectId && followUp.projectId !== recommendation.projectId)) {\n    blockedReason = "Baseline and follow-up must preserve the recommendation project identity."\n  } else if ((recommendation.contentBuildId && (baseline.contentBuildId !== recommendation.contentBuildId || followUp.contentBuildId !== recommendation.contentBuildId)) || (recommendation.videoId && (baseline.videoId !== recommendation.videoId || followUp.videoId !== recommendation.videoId))) {\n    blockedReason = "Baseline and follow-up must preserve the recommendation content/video identity."\n  } else if ((recommendation.publicationTransactionId && followUp.publicationTransactionId !== recommendation.publicationTransactionId)) {\n    blockedReason = "Baseline and follow-up must match the linked publication transaction."\n  } else if (baseline.snapshotId === followUp.snapshotId) {
     blockedReason = "Baseline and follow-up must use distinct analytics snapshots."
   } else if (!validPeriodDate(baseline.periodStartDate) || !validPeriodDate(baseline.periodEndDate) || !validPeriodDate(followUp.periodStartDate) || !validPeriodDate(followUp.periodEndDate)) {
     blockedReason = "Baseline and follow-up must have valid explicit YYYY-MM-DD period boundaries."
@@ -318,6 +353,13 @@ export const evaluateAnalyticsOutcome = (input: {
     id: stableId("outcome", identity),
     status: valid ? "evaluated" : "blocked",
     channelId: recommendation.channelId,
+    projectId: recommendation.projectId,
+    contentBuildId: recommendation.contentBuildId,
+    videoId: recommendation.videoId,
+    actionPacketId: recommendation.actionPacketId,
+    publicationTransactionId: recommendation.publicationTransactionId,
+    metadataVersionIds: uniqueSorted([...recommendation.metadataVersionIds, ...(baseline.metadataVersionIds || []), ...(followUp.metadataVersionIds || [])]),
+    recommendationId: recommendation.id,
     metric: recommendation.metric,
     window: recommendation.evaluationWindow,
     baselineValue: valid ? baseline.value : null,
@@ -367,6 +409,12 @@ export const buildLearningCandidateReview = (input: {
     observedDirection,
     promotionAllowed: false,
     causalConclusion: null,
+    projectId: input.recommendation.projectId,
+    contentBuildId: input.recommendation.contentBuildId,
+    videoId: input.recommendation.videoId,
+    actionPacketId: input.recommendation.actionPacketId,
+    publicationTransactionId: input.recommendation.publicationTransactionId,
+    metadataVersionIds: input.recommendation.metadataVersionIds,
     requiredReviews: [
       "Creator approval",
       "Confounder and scope review",
@@ -375,3 +423,117 @@ export const buildLearningCandidateReview = (input: {
     ],
   }
 }
+
+
+/**
+ * Bridge analytics lifecycle records into the existing Algorithm Intelligence event ledger.
+ * This is an adapter, not a new store. The ledger is currently browser-local; the return
+ * value is the canonical event identity, not a claim of server durability.
+ */
+export const recordAnalyticsRecommendationEvent = (recommendation: AnalyticsRecommendationAction) =>
+  recordAlgorithmIntelligenceEvent({
+    id: `analytics-recommendation:${recommendation.id}`,
+    channelId: recommendation.channelId,
+    projectId: recommendation.projectId,
+    videoId: recommendation.videoId,
+    kind: "RECOMMENDATION_CREATED",
+    sourceSystem: "decision",
+    sourceId: recommendation.findingIds[0] || recommendation.id,
+    recommendationId: recommendation.id,
+    actionPacketId: recommendation.actionPacketId,
+    parentEventIds: recommendation.findingIds,
+    evidenceIds: recommendation.evidenceRefs,
+    confidence: "medium",
+    title: "Analytics recommendation proposed",
+    summary: recommendation.action,
+    evaluationTargets: [{
+      metric: recommendation.metric,
+      direction: recommendation.expectedDirection === "observe" ? "inspect" : recommendation.expectedDirection,
+      baselineValue: recommendation.baselineValue,
+      windowHours: Number(recommendation.evaluationWindow.replace("d", "")) * 24,
+    }],
+    metadata: {
+      schemaVersion: recommendation.schemaVersion,
+      status: recommendation.status,
+      creatorGoal: recommendation.creatorGoal,
+      contentBuildId: recommendation.contentBuildId,
+      publicationTransactionId: recommendation.publicationTransactionId,
+      metadataVersionIds: recommendation.metadataVersionIds,
+      baselineSnapshotIds: recommendation.baselineSnapshotIds,
+      formulaProvenance: "DeterministicAnalyticsInsights",
+      causalClaim: null,
+    },
+  })
+
+export const recordAnalyticsOutcomeEvent = (evaluation: OutcomeEvaluation) =>
+  recordAlgorithmIntelligenceEvent({
+    id: `analytics-outcome:${evaluation.id}`,
+    channelId: evaluation.channelId,
+    projectId: evaluation.projectId,
+    videoId: evaluation.videoId,
+    kind: evaluation.status === "evaluated" ? "OUTCOME_MEASURED" : "CHECKPOINT_REACHED",
+    sourceSystem: "evaluation",
+    sourceId: evaluation.recommendationId,
+    recommendationId: evaluation.recommendationId,
+    actionPacketId: evaluation.actionPacketId,
+    parentEventIds: [evaluation.recommendationId],
+    evidenceIds: evaluation.evidenceRefs,
+    confidence: evaluation.status === "evaluated" ? "medium" : "low",
+    title: evaluation.status === "evaluated" ? "Analytics outcome evaluated" : "Analytics outcome blocked",
+    summary: evaluation.blockedReason || `Observed ${evaluation.metric} change: ${evaluation.absoluteChange ?? "unavailable"}.`,
+    evaluationTargets: [{
+      metric: evaluation.metric,
+      direction: "inspect",
+      baselineValue: evaluation.baselineValue,
+      windowHours: Number(evaluation.window.replace("d", "")) * 24,
+    }],
+    metadata: {
+      schemaVersion: evaluation.schemaVersion,
+      status: evaluation.status,
+      contentBuildId: evaluation.contentBuildId,
+      publicationTransactionId: evaluation.publicationTransactionId,
+      metadataVersionIds: evaluation.metadataVersionIds,
+      baselineSnapshotId: evaluation.baselineSnapshotId,
+      followUpSnapshotId: evaluation.followUpSnapshotId,
+      baselineValue: evaluation.baselineValue,
+      followUpValue: evaluation.followUpValue,
+      absoluteChange: evaluation.absoluteChange,
+      percentChange: evaluation.percentChange,
+      interpretation: evaluation.interpretation,
+      causalConclusion: null,
+      limitations: evaluation.limitations,
+    },
+  })
+
+export const recordAnalyticsLearningReviewEvent = (candidate: LearningCandidateReview) =>
+  recordAlgorithmIntelligenceEvent({
+    id: `analytics-learning-review:${candidate.id}`,
+    channelId: candidate.channelId,
+    projectId: candidate.projectId,
+    videoId: candidate.videoId,
+    kind: "LEARNING_CANDIDATE_CREATED",
+    sourceSystem: "learning",
+    sourceId: candidate.id,
+    recommendationId: candidate.recommendationId,
+    actionPacketId: candidate.actionPacketId,
+    parentEventIds: candidate.evaluationIds,
+    evidenceIds: candidate.evidenceRefs,
+    confidence: "low",
+    title: "Analytics learning candidate requires review",
+    summary: `Repeated ${candidate.metric} outcomes observed (${candidate.observedDirection}); review required before any learning promotion.`,
+    evaluationTargets: [{
+      metric: candidate.metric,
+      direction: "inspect",
+    }],
+    metadata: {
+      schemaVersion: candidate.schemaVersion,
+      status: candidate.status,
+      contentBuildId: candidate.contentBuildId,
+      publicationTransactionId: candidate.publicationTransactionId,
+      metadataVersionIds: candidate.metadataVersionIds,
+      evaluationIds: candidate.evaluationIds,
+      requiredReviews: candidate.requiredReviews,
+      promotionAllowed: false,
+      causalConclusion: null,
+    },
+  })
