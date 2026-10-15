@@ -56,6 +56,17 @@ const write = (records: BrainOutcomeRecord[]) => {
  window.dispatchEvent(new CustomEvent(BRAIN_OUTCOME_EVENT, { detail: records }))
 }
 
+export const hydrateBrainOutcomes = (durableRecords: BrainOutcomeRecord[]) => {
+ const merged = new Map(read().map((record) => [record.id, record]))
+ for (const record of durableRecords || []) {
+  if (!record || typeof record.id !== "string" || !record.id || !record.channelId) continue
+  merged.set(record.id, record)
+ }
+ const records = [...merged.values()].sort((left, right) => right.createdAt - left.createdAt).slice(0, 500)
+ write(records)
+ return records.length
+}
+
 export const listBrainOutcomes = (channelId?: string | null) => {
  const records = read().sort((a, b) => b.createdAt - a.createdAt)
  return channelId ? records.filter((record) => record.channelId === channelId) : records
