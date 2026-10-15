@@ -11,6 +11,9 @@ import {
   StudioLegendMultiDropdown,
   StudioSplitLeftButton,
   StudioSquareIconButton,
+  StudioPlayPauseButton,
+  StudioCircleIconButton,
+  StudioUsernameInput,
   StudioSwitch,
   StudioTextArea,
   StudioTextInput,
@@ -233,6 +236,81 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioSplitLeftButton icon={<Sparkles />} tone="neutral" heightVariant="28">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="44">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioSplitLeftButton icon={<Settings2 />} selected disabled heightVariant="28">split-left</StudioSplitLeftButton></div>
+    </Family>
+    <Family
+      title="Play/Pause Split-left Button · 44px + 28px"
+      nonDefaultSettings={[
+        "This is the interactive color-swap split-left variant: activation swaps the icon, label, and selected palette state while keeping the measured label region stable.",
+        "The component is uncontrolled by default; pass playing and onPlayingChange when the parent owns state. aria-pressed reflects the current playing state.",
+        "Standard uses the 44px control contract and compact uses 28px; both use the canonical large split-left icon preset.",
+        "The label width reserves space for both Play and Pause so changing state does not resize the control."
+      ]}
+      provenance={<Provenance primitive="StudioPlayPauseButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Canonical StudioSplitLeftButton composition; stable Play/Pause label geometry; selected-color swap; 44px / 28px sizes." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · click to toggle Play / Pause</span>
+        <StudioPlayPauseButton sizeVariant="standard" data-vt-library-component="StudioPlayPauseButton" />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact · click to toggle</span>
+        <StudioPlayPauseButton sizeVariant="compact" data-vt-library-component="StudioPlayPauseButton" />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact · starts selected</span>
+        <StudioPlayPauseButton sizeVariant="compact" defaultPlaying data-vt-library-component="StudioPlayPauseButton" />
+      </div>
+    </Family>
+    <Family
+      title="Circle Icon Button · 44px + 28px"
+      nonDefaultSettings={[
+        "Circle is a shape variant of StudioSquareIconButton, not a copied button implementation. Palette, icon preset, disabled state, focus, and press behavior remain shared.",
+        "Standard is 44×44px; compact is 28×28px. The default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 compact.",
+        "V1–V4 variants and opt-in square-button effects are inherited from the canonical square icon button."
+      ]}
+      provenance={<Provenance primitive="StudioCircleIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Circular shape wrapper over StudioSquareIconButton; shared V1–V4, sizing, effects, and accessibility contracts." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · variants 1–4</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle icon button V1" variant="v1" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle icon button V2" variant="v2" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Sparkles aria-hidden="true" />} label="Circle icon button V3 toggle" variant="v3" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle icon button V4" variant="v4" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px compact · variants 1–4</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Compact circle icon button V1" variant="v1" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Compact circle icon button V2" variant="v2" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Sparkles aria-hidden="true" />} label="Compact circle icon button V3 toggle" variant="v3" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Compact circle icon button V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant"><span>44px standard · disabled</span><StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled circle icon button" variant="v1" sizeVariant="standard" disabled data-vt-library-component="StudioCircleIconButton" /></div>
+    </Family>
+    <Family
+      title="Username Split-left Input · 44px + 28px"
+      nonDefaultSettings={[
+        "The left icon rail is a non-interactive part of the field, not a button; the component has no button shadow or press movement.",
+        "The rail uses the canonical large icon preset: 38px / 1.9 stroke standard and 24px / 2.0 compact.",
+        "The native editable area reuses StudioTextInput typography, fill, caret, and focus rules. The wrapper owns the complete focus outline and border; no inline stroke appears at the rail divider seam.",
+        "The input forwards native input props and ref; className/style target the composite, while inputClassName/inputStyle target the editable field."
+      ]}
+      provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Composite of canonical StudioTextInput and split-left icon rail; 44px / 28px geometry; no shadow; wrapper focus ring." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · editable username field</span>
+        <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label="Standard username" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact · editable username field</span>
+        <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} sizeVariant="compact" aria-label="Compact username" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" />
+      </div>
+      <div className="vt-confirmed-variant">
+        <span>28px compact · disabled</span>
+        <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} sizeVariant="compact" aria-label="Disabled username" placeholder="USERNAME" disabled data-vt-library-component="StudioUsernameInput" />
+      </div>
     </Family>
     <Family
       title="Dropdown"
