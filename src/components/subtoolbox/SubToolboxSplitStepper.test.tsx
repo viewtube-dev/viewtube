@@ -25,7 +25,7 @@ describe("StudioSplitStepper", () => {
     expect(css).toContain("var(--vt-studio-control-radius, 6px)")
     expect(css).toContain("grid-template-columns: minmax(0, calc(var(--vt-split-stepper-inner) * 2)) var(--vt-split-stepper-inner)")
     expect(css).toContain("box-shadow: none;")
-    const railIconRule = css.match(/\\.vt-studio-split-stepper-rail svg\\s*\\{([^}]*)\\}/)?.[1] ?? ""
+    const railIconRule = css.match(/\.vt-studio-split-stepper-rail svg\s*\{([^}]*)\}/)?.[1] ?? ""
     expect(railIconRule).toContain("width: 70%;")
     expect(railIconRule).toContain("height: 70%;")
     expect(css).toContain("var(--vt-studio-control-default-fill-opacity, 50%)")
