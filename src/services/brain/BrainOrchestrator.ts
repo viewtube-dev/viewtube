@@ -27,6 +27,7 @@ import {
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
 import {
  generateStructuredBrainResponse,
+ getActiveModel,
  groundCurrentNicheResearch,
  type StructuredBrainModelOutput,
 } from "../gemini"
@@ -37,6 +38,7 @@ import {
  shouldUseCurrentGrounding,
 } from "./BrainCapabilityRegistry"
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
+import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence } from "./EvidenceIntelligenceResolver"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
@@ -282,6 +284,7 @@ const withTimeout = async <T>(promise: Promise<T>, milliseconds: number): Promis
 export const BRAIN_MODEL_TIMEOUT_MS = 30_000
 export const BRAIN_REPAIR_TIMEOUT_MS = 20_000
 export const BRAIN_PROMPT_VERSION = "brain-orchestrator-v2"
+export const BRAIN_OUTPUT_SCHEMA_VERSION = "structured-brain-output-v1"
 
 export interface RunBrainTurnInput {
  channelId?: string | null
@@ -304,10 +307,22 @@ export interface RunBrainTurnInput {
 
 export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> => {
  const taskProfile = resolveBrainTaskProfile(input.userText)
+ const requestedModel = input.modelGenerator ? null : getActiveModel("text")
+ const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const pending = await beginAIBrainTurn({
   channelId: input.channelId,
   userText: input.userText,
-  metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION, taskProfileId: taskProfile.id },
+  metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION,
+    contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
+    outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
+    requestedModel,
+    servedModel: null,
+    modelIdentityStatus,
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    channelId: input.channelId || null,
+    projectId: input.projectId || input.project?.id || null,
+    contentBuildId: input.project?.contentBuildId || null,
+    taskProfileId: taskProfile.id },
  })
  const capabilities = selectBrainCapabilities({ channelId: input.channelId, userText: input.userText, snapshot: input.snapshot })
  const capabilityIds = capabilities.map((capability) => capability.id)
@@ -518,7 +533,19 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     generationPath,
     fallbackReason,
     promptVersion: BRAIN_PROMPT_VERSION,
+    contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
+    outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
+    requestedModel,
+    servedModel: null,
+    modelIdentityStatus,
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    channelId: input.channelId || null,
+    projectId: input.projectId || input.project?.id || null,
+    contentBuildId: input.project?.contentBuildId || null,
+    contextBudget: context.budget,
     repairReasons: repairOutcome.reasons,
+    repairAttempted: repairOutcome.attempted,
+    repairSucceeded: repairOutcome.succeeded,
    },
   })
   const turn = await completeAIBrainTurn({
@@ -536,8 +563,20 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     generationPath,
     fallbackReason,
     promptVersion: BRAIN_PROMPT_VERSION,
+    contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
+    outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
+    requestedModel,
+    servedModel: null,
+    modelIdentityStatus,
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    channelId: input.channelId || null,
+    projectId: input.projectId || input.project?.id || null,
+    contentBuildId: input.project?.contentBuildId || null,
+    contextBudget: context.budget,
     evaluationId: evaluation.id,
     repairReasons: repairOutcome.reasons,
+    repairAttempted: repairOutcome.attempted,
+    repairSucceeded: repairOutcome.succeeded,
     repaired: repairOutcome.attempted,
    },
   })
@@ -573,6 +612,19 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     generationPath,
     fallbackReason,
     promptVersion: BRAIN_PROMPT_VERSION,
+    contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
+    outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
+    requestedModel,
+    servedModel: null,
+    modelIdentityStatus,
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    channelId: input.channelId || null,
+    projectId: input.projectId || input.project?.id || null,
+    contentBuildId: input.project?.contentBuildId || null,
+    contextBudget: context.budget,
+    repairReasons: [],
+    repairAttempted: false,
+    repairSucceeded: false,
    },
   })
   const turn = await completeAIBrainTurn({
@@ -590,8 +642,21 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     generationPath,
     fallbackReason,
     promptVersion: BRAIN_PROMPT_VERSION,
+    contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
+    outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
+    requestedModel,
+    servedModel: null,
+    modelIdentityStatus,
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    channelId: input.channelId || null,
+    projectId: input.projectId || input.project?.id || null,
+    contentBuildId: input.project?.contentBuildId || null,
+    contextBudget: context.budget,
     evaluationId: evaluation.id,
+    repairReasons: [],
     repaired: false,
+    repairAttempted: repairOutcome.attempted,
+    repairSucceeded: repairOutcome.succeeded,
    },
   })
   return {

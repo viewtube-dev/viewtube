@@ -10,7 +10,7 @@ describe("resolveBrainProjectLifecycle", () => {
     workflow: { currentStepId: "metadata", completedStepIds: [], blockerIds: [] },
    },
   })
-  expect(result.currentPhase).toBe("packaging")
+  expect(result.currentPhase).toBe("package")
   expect(result.sourceStage).toBe("package")
   expect(result.relevantCapabilities).toContain("thumbnail")
   expect(result.relevantCapabilities).toContain("metadata")
