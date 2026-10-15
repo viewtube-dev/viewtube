@@ -1,6 +1,6 @@
 import type { VaultAsset, VaultAssetKind } from "@/types"
 
-export type VaultMediaTool = "metadata" | "hash" | "preview" | "thumbnail" | "exif" | "transcribe" | "transcode" | "image-transform"
+export type VaultMediaTool = "metadata" | "hash" | "preview" | "thumbnail" | "exif" | "transcribe" | "transcode"
 export interface VaultGovernanceRecommendation {
   id: "confirm-rights" | "review-protected-asset" | "add-provenance" | "verify-metadata"
   label: string
@@ -11,7 +11,7 @@ export interface VaultGovernanceRecommendation {
 /** Lists only currently wired local capabilities; it does not imply server/worker support. */
 export const getVaultMediaToolSupport = (kind: VaultAssetKind): VaultMediaTool[] => {
   const common: VaultMediaTool[] = ["metadata", "hash"]
-  if (kind === "image") return [...common, "preview", "exif", "image-transform"]
+  if (kind === "image") return [...common, "preview", "exif"]
   if (kind === "video") return [...common, "preview", "thumbnail"]
   if (kind === "audio") return [...common, "preview"]
   return common
