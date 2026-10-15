@@ -54,7 +54,7 @@ const finding = (overrides: Partial<DeterministicAnalyticsInsight> = {}): Determ
   ...overrides,
 })
 
-const recommendation = (overrides: Partial<Parameters<typeof buildAnalyticsRecommendationAction>[0]> = {}) =>
+const recommendation = () =>
   buildAnalyticsRecommendationAction({
     id: "recommendation-1",
     creatorGoal: "Increase qualified watch time",
@@ -64,7 +64,6 @@ const recommendation = (overrides: Partial<Parameters<typeof buildAnalyticsRecom
     finding: finding(),
     evaluationWindow: "28d",
     expectedDirection: "increase",
-    ...overrides,
   })!
 
 const measurement = (overrides: Partial<{
