@@ -27,6 +27,7 @@ export interface ResolveCreatorContextInput {
  query: string
  projectId?: string | null
  project?: Project | null
+ projects?: Project[]
  visibleContext?: Record<string, unknown> | null
  artifactRefs?: string[]
  assetType?: string
@@ -127,10 +128,16 @@ export const resolveCreatorContext = async (
  }
 
  const requestedProjectId = cleanId(input.projectId)
- const canonicalProject = input.project
+ const suppliedProject = input.project
   && (!requestedProjectId || input.project.id === requestedProjectId)
   ? input.project
   : null
+ // Resolve by exact ID from the active Brain project index when the caller only
+ // has projectId. Never borrow a neighboring or stale active project.
+ const indexedProject = requestedProjectId
+  ? (input.projects || []).find((project) => project.id === requestedProjectId) || null
+  : null
+ const canonicalProject = suppliedProject || indexedProject
  // Visible UI context must explicitly identify the active project when a project
  // ID is requested; stale or unscoped UI context cannot fill canonical gaps.
  const visibleContextProjectId = cleanId(input.visibleContext?.projectId as string | null | undefined)

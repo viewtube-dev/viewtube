@@ -1598,6 +1598,12 @@ export interface BrainContextBudget {
  knowledgeCharacters: number
  conversationCharacters: number
  omittedSections: string[]
+ /** Estimated input tokens from the conservative character ratio; not provider-reported usage. */
+ estimatedInputTokens?: number
+ /** Present only when a caller supplied an explicit model context-window contract. */
+ modelContextWindowTokens?: number | null
+ reservedOutputTokens?: number
+ contextBudgetSource?: "explicit_model_window" | "character_fallback"
 }
 
 export interface BrainCapabilityDefinition {

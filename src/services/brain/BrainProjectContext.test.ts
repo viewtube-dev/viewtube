@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { buildAlgorithmProjectContext } from "./BrainProjectContext"
 import type { Project } from "../../types"
-import type { ContentBuildSnapshot } from "../asset-engine/contracts"
+import { CONTENT_BUILD_SCHEMA_VERSION, type ContentBuildSnapshot } from "../asset-engine/contracts"
 
 describe("BrainProjectContext", () => {
  it("preserves Project and ContentBuild identity in the bounded algorithm context", () => {
@@ -39,7 +39,7 @@ describe("BrainProjectContext", () => {
    plan: { concept: "Project concept", niche: "history" },
   }
   const contentBuild: ContentBuildSnapshot = {
-   schemaVersion: 1,
+   schemaVersion: CONTENT_BUILD_SCHEMA_VERSION,
    id: "cb-canonical",
    revision: 1,
    channelId: "channel-a",
