@@ -145,6 +145,6 @@
 - [x] Guard canonical ContentBuild phase resolution and governed communication ingestion (Phases 10–11).
 - [x] Guard channel-scoped explicit attribution and unresolved-stage reporting (Phase 12).
 - [ ] Execute `npm run test:brain-quality-loop-contract` in CI and repair any mismatches.
-- [ ] Complete real caller-receipt tests for repair success/rejection/provider failures and full prompt provenance.
+- [x] Add behavioral tests for repair success, repaired-candidate rejection, provider failure, safe fallback and turn receipt fields.\n- [ ] Execute the behavioral tests and verify full prompt/schema/context/model/evidence provenance on real production caller paths.
 - [ ] Finish live UI adoption, server-authoritative persistence/consent/retention, stable-ID propagation and production lifecycle validation noted in the individual phase sections.
 - [ ] Run focused Brain tests, source governance/reachability, typecheck, runtime lint, full suite, build, and browser verification against this exact integration head.
