@@ -102,6 +102,49 @@ describe("EvidenceIntelligenceResolver", () => {
   expect(deps.projectEvidence).toHaveBeenCalledWith(canonicalEvidence)
  })
 
+ it("exposes only exact-scope deterministic finding context to the Brain runtime", () => {
+  const deps = makeDeps()
+  const deterministicFinding = {
+   id: "finding-1",
+   kind: "comparison",
+   findingType: "comparison",
+   label: "Views increased",
+   channelId: "channel-1",
+   datasetId: "daily",
+   metric: "views",
+   filters: {},
+   window: "28d",
+   sourceSnapshotIds: ["snapshot-before", "snapshot-after"],
+   aggregation: "sum",
+   observedFact: { currentValue: 140, baselineValue: 100, delta: 40, relativeDeltaPercent: 40 },
+   calculation: { formula: "current - baseline", algorithmVersion: "vt-deterministic-analytics-insights-v1", deterministic: true },
+   validationState: "validated",
+   interpretation: null,
+   recommendation: null,
+   currentValue: 140,
+   baselineValue: 100,
+   delta: 40,
+   relativeDeltaPercent: 40,
+   unit: "source-metric-value",
+   confidence: 0.8,
+   evidenceRefs: ["analytics:snapshot-before:daily:views", "analytics:snapshot-after:daily:views"],
+   formula: "current - baseline",
+   algorithmVersion: "vt-deterministic-analytics-insights-v1",
+   deterministic: true,
+   limitations: ["descriptive only"],
+  } as any
+
+  const result = resolveEvidenceIntelligence({
+   channelId: "channel-1",
+   deterministicInsights: [deterministicFinding],
+  }, deps)
+
+  expect(result.analyticsFindingContext.status).toBe("ready")
+  expect(result.analyticsFindingContext.findingIds).toEqual(["finding-1"])
+  expect(result.analyticsFindingContext.findings[0].currentValue).toBe(140)
+  expect(result.analyticsFindingContext.findings[0].evidenceRefs).toHaveLength(2)
+ })
+
  it("blocks all analytics-derived projections when canonical evidence belongs to another channel", () => {
   const deps = makeDeps({ ...evidenceQuality, scopeMatch: "mismatch", confidence: "insufficient" } as any)
 
