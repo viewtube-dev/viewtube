@@ -1,5 +1,6 @@
-import type { AnalyticsWindow } from "./analytics/DataStore"
+import type { AnalyticsWindow } from "./analytics-canon"
 import { getMasterRows } from "./analytics/Selectors"
+import { getCurrentCanonicalRows } from "./analytics-canon"
 import { buildDataCoverageInventory, type DataCoverageRow } from "./analytics/MetricRegistry"
 import { getCanonicalAnalyticsCache } from "./analytics/DataStore"
 import {
@@ -181,7 +182,9 @@ export const buildMasterTableBundle = (
  const tables = EMPTY_TABLES()
  const sourceMode = ingestModeToSourceMode(ingestMode)
 
- const masterRows = getMasterRows(window, sourceMode)
+ const masterRows = sourceMode === "api"
+  ? getCurrentCanonicalRows(window)
+  : getMasterRows(window, sourceMode)
  const normalizedMasterRows = masterRows.map((row) => ({
   ...row,
   Format: row.format,
