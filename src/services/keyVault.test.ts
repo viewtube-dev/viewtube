@@ -16,4 +16,15 @@ describe("keyVault without browser storage", () => {
   expect(() => setVaultKey("gemini", "test-key")).not.toThrow()
   expect(() => setVaultSnapshot({ elevenLabs: "test-key", auphonic: "" })).not.toThrow()
  })
+
+ it("tolerates storage implementations that throw", () => {
+  vi.stubGlobal("localStorage", {
+   getItem: () => { throw new Error("storage blocked") },
+   setItem: () => { throw new Error("storage blocked") },
+   removeItem: () => { throw new Error("storage blocked") },
+  })
+  expect(getVaultKey("gemini")).toBe("")
+  expect(() => setVaultKey("gemini", "key")).not.toThrow()
+  expect(() => setVaultKey("gemini", "")).not.toThrow()
+ })
 })
