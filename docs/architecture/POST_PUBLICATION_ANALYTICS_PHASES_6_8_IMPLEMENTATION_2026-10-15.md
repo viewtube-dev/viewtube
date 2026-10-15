@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-15  
 **Implementation branch:** `work/post-publish-phases-2-5-current-integration-2026-10-15`  
-**Pull request:** [#223 — draft, pending verification](https://github.com/viewtube-dev/viewtube/pull/223)  
+**Pull request:** [#231 — draft, pending verification](https://github.com/viewtube-dev/viewtube/pull/231)  
 **Scope:** AI Brain integration and governed learning; metadata-operation/prompt provenance; creator-facing history and performance comparison.
 
 ## Phase 6 — AI Brain integration and governed learning
@@ -68,6 +68,6 @@ Saved package drafts remain a separate list; the new panel surfaces the actual C
 
 - Tests and typecheck/build were **not run in this session**; source and test files were updated through GitHub's contents API.
 - The repository's current Vercel status checks were already failing due to build-rate limits; those failures are not a passing verification signal.
-- PR #223 remains draft until focused tests, typecheck, build and the full publication → history → analytics → comparison → governed-learning golden path pass.
+- PR #231 remains draft until focused tests, typecheck, build and the full publication → history → analytics → comparison → governed-learning golden path pass.
 - A27 server-authoritative persistence and interrupted-reload/remote reconciliation remain open. The current ContentBuild/ApprovedPublishSnapshot/PublishTransaction adapters are browser-storage-backed; this work does not claim cross-device durability.
 - No production deployment or external YouTube mutation was performed by these changes.
