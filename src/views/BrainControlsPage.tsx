@@ -43,6 +43,7 @@ export default function BrainControlsPage(){
      <Toggle checked={policy.enabled} onChange={p("enabled")} label="Brain enabled" detail="Master switch for Brain reasoning and governed capabilities."/>
      <Toggle checked={policy.personalization} onChange={p("personalization")} label="Personalization" detail="Use creator memory, history and learned preferences."/>
      <Toggle checked={policy.learnFromInteractions} onChange={p("learnFromInteractions")} label="Learn from interactions" detail="Allow eligible Brain turns to improve durable creator context."/>
+     <Toggle checked={policy.captureCreatorCommunications} onChange={p("captureCreatorCommunications")} label="Capture creator communications" detail="Explicit opt-in to classify chat text as governed evidence. Raw message text is not retained."/>
      <Toggle checked={policy.showEvidence} onChange={p("showEvidence")} label="Show evidence" detail="Expose evidence, provenance, confidence and caveats with answers."/>
     </Card>
     <Card title="Data Access" icon={Database} color={palette[3]}>
