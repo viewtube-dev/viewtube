@@ -115,7 +115,9 @@ const metric = (row: Record<string, unknown> | undefined, ...keys: string[]) => 
 const summaryFor = (
   days: LongformOptimizationDailyDay[],
 ): LongformOptimizationDailySummary => {
-  const observed = days.filter((day) => !day.pending)
+  const observed = days.filter((day) => !day.pending && [
+    day.views, day.watchTimeMinutes, day.avp, day.likes, day.comments, day.revenue,
+  ].some(value => value != null && Number.isFinite(value)))
   return {
     daysObserved: observed.length,
     viewsAverage: average(observed.map((day) => day.views)),
@@ -171,6 +173,15 @@ export const buildLongformOptimizationDailyComparison = (input: {
   const afterDays = days.filter((day) => day.phase === "after")
   const beforeComplete = beforeDays.every((day) => !day.pending && byDay.has(day.date))
   const afterComplete = afterDays.every((day) => !day.pending && byDay.has(day.date))
+  const hasAdequateMetricCoverage = before.daysObserved >= 5 && after.daysObserved >= 5 &&
+    [
+      [before.viewsAverage, after.viewsAverage],
+      [before.watchTimeMinutesAverage, after.watchTimeMinutesAverage],
+      [before.avpAverage, after.avpAverage],
+      [before.likesAverage, after.likesAverage],
+      [before.commentsAverage, after.commentsAverage],
+      [before.revenueAverage, after.revenueAverage],
+    ].some(([baseline, observed]) => baseline != null && observed != null)
 
   return {
     version: "longform-daily-comparison-v1",
@@ -180,7 +191,7 @@ export const buildLongformOptimizationDailyComparison = (input: {
     capturedAt: now.toISOString(),
     status: window.queryEndDate < window.startDate
       ? "unavailable"
-      : beforeComplete && afterComplete
+      : beforeComplete && afterComplete && hasAdequateMetricCoverage
         ? "ready"
         : "partial",
     days,
