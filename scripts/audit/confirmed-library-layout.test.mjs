@@ -22,17 +22,18 @@ test("switch and choice skin families retain four-column rows at every viewport"
   assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants,[\s\S]*?grid-template-columns: repeat\(4, minmax\(64px, 1fr\)\) !important;[\s\S]*?overflow-x: auto/);
 });
 
-test("standard button specimens span a row and compact A/B share two columns", () => {
+test("standard button specimens span a row and compact default/neutral variants share two columns", () => {
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants\s*\{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\) !important/);
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants > \.vt-confirmed-variant\.is-full-row\s*\{\s*grid-column: 1 \/ -1 !important/);
-  assert.ok(catalog.includes('28px compact · default A'));
-  assert.ok(catalog.includes('28px compact · default B'));
+  assert.ok(catalog.includes('28px compact · default'));
+  assert.ok(catalog.includes('28px compact · neutral tone'));
 });
 
-test("standalone text inputs provide standard and compact A/B specimens", () => {
+test("standalone text inputs provide standard, compact, and disabled specimens", () => {
   assert.ok(catalog.includes('aria-label="Studio text input 44px"'));
   assert.ok(catalog.includes('aria-label="Studio text input 28px A"'));
-  assert.ok(catalog.includes('aria-label="Studio text input 28px B"'));
+  assert.ok(catalog.includes('aria-label="Studio text input 28px disabled"'));
+  assert.match(catalog, /28px compact · disabled[\\s\\S]*?sizeVariant="compact"[^>]*disabled/);
 });
 
 test("global defaults distinguish the measured focus shadow from the CSS outline", () => {
@@ -168,13 +169,57 @@ test("word toggle library has three skins, one standard toggle per row, and cent
   assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variant > small\s*\{[\s\S]*?text-align:\s*center/);
 });
 
-test("compact Studio button shadow is a symmetric face-sized stationary offset", () => {
+test("compact Studio button shadow and typography tokens match the effective control CSS", () => {
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   assert.match(css, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\][^\n]*--vt-studio-control-shadow-x:\s*1px;[^\n]*--vt-studio-control-shadow-y:\s*1px/);
+  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1\.5px;[^}]*--vt-studio-control-shadow-y:\s*1\.5px/);
+  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1px;[^}]*--vt-studio-control-shadow-y:\s*1px/);
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
-  assert.match(tokens, /compact: \{[^}]*buttonShadowX: 1, buttonShadowY: 1/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
+  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(css, /--vt-studio-motion-button:\s*180ms;\s*--vt-studio-motion-press:\s*80ms/);
+  assert.match(tokens, /standard: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
+  assert.match(tokens, /compact: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
+  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*150ms\)|var\(--vt-studio-motion-press,\s*300ms\)/);
+});
+
+test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
+  const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
+  const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(controls, /iconSizeVariant = "large"/);
+  assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
+  assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
+  assert.match(catalog, /1\.5px compact button shadow/);
+  assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
+  assert.match(catalog, /44px switch\/choice rectangular corners and the standard word-toggle use reference-specific 7\.333px radii/);
+  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
+});
+
+test("catalog labels dropdown and action specimens according to their actual initial state and CSS", () => {
+  assert.ok(catalog.includes("44px standard · selected values · multiselect trigger"));
+  assert.ok(catalog.includes("28px compact A · closed trigger and count"));
+  assert.ok(catalog.includes("28px compact B · closed trigger and count"));
+  assert.ok(!catalog.includes("open menu · multiselect"));
+  assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
+});
+
+test("word-toggle settings distinguish displayed words from the boolean value", () => {
+  assert.ok(catalog.includes("The first word is selected when the value is false; selecting the second word changes the value to true."));
+  assert.ok(catalog.includes("Custom words change the displayed labels, not the boolean state contract."));
+});
+
+test("icon-effect examples are clearly static previews, not live outcome claims", () => {
+  const squareStart = catalog.indexOf('<Family title="Square Icon Button · 44px + 28px"');
+  const splitStart = catalog.indexOf('<Family title="Split-left"', squareStart);
+  const squareFamily = catalog.slice(squareStart, splitStart);
+  assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
+  assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
+  assert.ok(squareFamily.includes("badge count and success state below are explicitly static gallery previews"));
+  assert.ok(!squareFamily.includes("SUCCESS · CONFIRMED OUTCOME"));
 });
 
 test("global defaults use a compact collapsed panel with an explicit expand affordance", () => {
