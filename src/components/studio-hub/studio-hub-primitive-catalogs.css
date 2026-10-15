@@ -1970,9 +1970,6 @@
   max-width: 100%;
   min-width: 0;
 }
-.vt-confirmed-control-variants[data-control-size="28"] .vt-studio-44-word-toggle {
-  --vt-word-font-size: 24px;
-}
 .vt-confirmed-word-toggle-family .vt-confirmed-control-row > strong {
   display: block;
   margin-bottom: 2px;
