@@ -24,6 +24,16 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
     v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
     v4: "Black face fill with primary (--pair-a) icon stroke.",
+    effects: {
+      standard: "No additional motion; shared Studio press, hover, focus and disabled behavior only.",
+      notification: "Optional positioned badge; count/status pop and icon shake. Supply badge only when a real count/status exists.",
+      rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and press transform remain unchanged.",
+      flip: "Opt-in two-face 3D flip; provide activeIcon for a meaningful alternate face.",
+      tooltip: "Opt-in contextual label revealed on hover/focus; accessible name remains label.",
+      morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
+      success: "Outcome-driven checkmark and optional tooltip label; set success only after confirmed success.",
+    },
+    motion: "Effects are opt-in and scoped to inner layers; reduced-motion suppresses animation without suppressing state feedback.",
   },
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
