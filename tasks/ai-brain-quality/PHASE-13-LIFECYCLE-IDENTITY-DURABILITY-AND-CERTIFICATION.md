@@ -84,3 +84,16 @@ Phase 13 is complete only when every workstream has acceptance evidence on the s
 Implemented foundations now include typed durable learning-record persistence, user/channel isolation, queue-and-hydrate behavior for outcomes/evaluations/candidates, default-off communication capture consent, legacy raw-text redaction, capability-specific required evidence, conservative context budgeting, exact project-ID resolution, and the attribution detail panel.
 
 Acceptance is still blocked on database-backed integration tests, complete stable-ID propagation through every production writer, browser verification, and the broader release-gates baseline. Do not mark this phase complete from unit tests or build success alone.
+
+## Current-base implementation slice — durable identity conflict guard
+
+A focused Phase 13 implementation now hardens the existing authenticated learning-record store without adding another store or changing the channel/user ownership model.
+
+- Stable identity fields are compared when a record with the same scoped identity (user, channel, record type, and record ID) is written again.
+- Reusing a record ID with a conflicting asserted source/trace/asset, project, ActionPacket, recommendation, publication transaction, video, approved snapshot, or evaluation identity is rejected instead of silently overwriting the prior record.
+- Missing legacy identity fields may be enriched by a later write; two non-empty, conflicting identities may not.
+- Legitimate lifecycle transitions remain supported when immutable identity is preserved, such as an evaluation moving from pending to resolved.
+- PostgreSQL writes serialize by scoped record key using a transaction-scoped advisory lock before reading and updating, so concurrent first-write/retry races are checked against the persisted record.
+- Regression tests cover conflict rejection, preservation of the original record, and an allowed pending-to-positive evaluation update.
+
+This slice is **not Phase 13 certification**. Remaining gates still include current-head CI, server/database-backed integration coverage, full producer-to-learning ancestry, direct action-boundary capability enforcement, consent redaction verification across devices, browser/E2E evidence, and the production-host/served-commit check.
