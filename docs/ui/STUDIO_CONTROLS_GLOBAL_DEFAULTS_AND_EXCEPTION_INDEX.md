@@ -498,8 +498,8 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 
 ### Commit / PR / deployment confirmation record
 - **Target branch:** `master/consolidated-feature-integration`
-- **Implementation PR:** pending creation; add its URL and merge commit here after review/merge.
-- **Implementation commit:** pending final branch head.
+- **Implementation PR:** [#219 — Compact Studio defaults and fix shared text-field typography](https://github.com/viewtube-dev/viewtube/pull/219) — open for review; merge commit pending.
+- **Implementation commit:** final branch head is recorded in PR #219 metadata; record the merge commit SHA here after merge.
 - **Deployment URL:** https://publisher-3n7h.onrender.com/studio
 - **Deployment status:** not yet confirmed for this change. A merged PR or successful build does not alone prove the hosted deployment has picked up the commit.
 - **Required confirmation:** after merge, verify the Render service's deployed commit includes the merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact input and textarea computed font sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
