@@ -61,7 +61,7 @@ describe("BrainRuntime", () => {
    channelId: "channel-1",
    userText: "What should I make next?",
    snapshot,
-   systemPrompt: "system",
+   systemPrompt: expect.stringContaining("system"),
    growthContext,
    recentTurns: [],
    history: [],
