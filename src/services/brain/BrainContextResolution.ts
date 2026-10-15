@@ -33,6 +33,7 @@ const priorityFor = (id: string, intent: string): number => {
   best_video_autopsy_task: 980,
   channel_evidence: 60,
   evidence_quality: 65,
+  shared_evidence_contract: 65,
   deterministic_statistics_intelligence: 65,
   deterministic_analytics_findings: 65,
   audience_intelligence: 60,
@@ -49,14 +50,14 @@ const priorityFor = (id: string, intent: string): number => {
  const analytics = ["analytics", "audience", "revenue"].includes(intent)
  const creation = intent === "content_generation"
  if (analytics) {
-  if (["channel_evidence", "evidence_quality", "deterministic_statistics_intelligence", "deterministic_analytics_findings", "audience_intelligence", "algorithm_channel_opportunity_intelligence"].includes(id)) return base + 40
+  if (["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence", "deterministic_analytics_findings", "audience_intelligence", "algorithm_channel_opportunity_intelligence"].includes(id)) return base + 40
   if (["active_project_context", "channel_knowledge"].includes(id)) return base - 15
  }
  if (creation) {
   if (id === "creator_style") return 160
   if (id === "active_project_context") return 150
   if (id === "channel_knowledge" || id === "confirmed_creator_context") return base + 50
-  if (["channel_evidence", "evidence_quality", "deterministic_statistics_intelligence", "deterministic_analytics_findings", "audience_intelligence", "algorithm_channel_opportunity_intelligence"].includes(id)) return base - 30
+  if (["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence", "deterministic_analytics_findings", "audience_intelligence", "algorithm_channel_opportunity_intelligence"].includes(id)) return base - 30
  }
  if (!analytics && !creation) {
   if (id === "active_project_context" || id === "algorithm_channel_opportunity_intelligence") return base + 35
