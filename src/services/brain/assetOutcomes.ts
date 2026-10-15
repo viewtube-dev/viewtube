@@ -236,6 +236,10 @@ export const recordAssetOutcome = async (input: {
    outcome: BRAIN_OUTCOME_FOR_KIND[input.kind],
    summary: `${asset.assetType} ${input.kind}${input.note ? `: ${input.note}` : ""}`,
    evidence: asset.evidenceRefs,
+   sourceRecordId: outcome.id,
+   traceId: outcome.traceId,
+   assetId: asset.id,
+   assetType: asset.assetType,
    // What the creator did is direct evidence; a style score is an inference about it.
    confidence: input.kind === "edited" || input.kind === "rejected" ? "high" : "medium",
   })
