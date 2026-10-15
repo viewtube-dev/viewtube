@@ -83,6 +83,8 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
+import { buildVaultMaintenanceQueue } from "../services/vaultMaintenanceQueue"
+import { executeVaultBatchOperation } from "../services/vaultBatchOperations"
 import { isVaultAssetProtected } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
@@ -580,6 +582,7 @@ const CreatorVaultOS: React.FC = () => {
   const textMime = typeof selectedAsset.mimeType === "string" && selectedAsset.mimeType.startsWith("text/")
   return hasTextContent || textMime ? selectedAsset : null
  }, [selectedAsset])
+ const maintenanceQueue = useMemo(() => buildVaultMaintenanceQueue(allAssets), [allAssets, refreshTick])
  const attentionReasons = useMemo(
   () => selectedAsset ? getVaultAttentionReasons(selectedAsset) : [],
   [selectedAsset, refreshTick],
@@ -1585,25 +1588,45 @@ const CreatorVaultOS: React.FC = () => {
   if (!selectedAssetIds.length) return
   const selected = allAssets.filter((asset) => selectedAssetIds.includes(asset.id))
   const shouldFavorite = selected.some((asset) => asset.metadata?.favorite !== true)
-  selected.forEach((asset) => setVaultAssetState(asset.id, { favorite: shouldFavorite }))
-  setRefreshTick((value) => value + 1)
+  void executeVaultBatchOperation({
+   operation: "favorite",
+   assetIds: selectedAssetIds,
+   parameters: { favorite: shouldFavorite },
+   confirmed: window.confirm(`Set favorite state for ${selectedAssetIds.length} selected asset(s)?`),
+  }).then(() => setRefreshTick((value) => value + 1))
  }
 
  const archiveSelection = () => {
-  selectedAssetIds.forEach((id) => setVaultAssetState(id, { archived: true, trashed: false }))
-  setSelectedAssetIds([])
-  setRefreshTick((value) => value + 1)
+  if (!selectedAssetIds.length) return
+  void executeVaultBatchOperation({
+   operation: "archive",
+   assetIds: selectedAssetIds,
+   confirmed: window.confirm(`Archive ${selectedAssetIds.length} selected asset(s)? Protected assets will be rejected.`),
+  }).then((receipt) => {
+   if (receipt.status === "completed") setSelectedAssetIds([])
+   setRefreshTick((value) => value + 1)
+  })
  }
 
  const trashSelection = () => {
-  selectedAssetIds.forEach((id) => setVaultAssetState(id, { trashed: true, archived: false }))
-  setSelectedAssetIds([])
-  setRefreshTick((value) => value + 1)
+  if (!selectedAssetIds.length) return
+  void executeVaultBatchOperation({
+   operation: "trash",
+   assetIds: selectedAssetIds,
+   confirmed: window.confirm(`Move ${selectedAssetIds.length} selected asset(s) to trash? Protected assets will be rejected.`),
+  }).then((receipt) => {
+   if (receipt.status === "completed") setSelectedAssetIds([])
+   setRefreshTick((value) => value + 1)
+  })
  }
 
  const restoreSelection = () => {
-  selectedAssetIds.forEach((id) => setVaultAssetState(id, { archived: false, trashed: false }))
-  setRefreshTick((value) => value + 1)
+  if (!selectedAssetIds.length) return
+  void executeVaultBatchOperation({
+   operation: "restore",
+   assetIds: selectedAssetIds,
+   confirmed: window.confirm(`Restore ${selectedAssetIds.length} selected asset(s)?`),
+  }).then(() => setRefreshTick((value) => value + 1))
  }
 
  const detachSelectedVersion = () => {
@@ -3353,6 +3376,27 @@ const CreatorVaultOS: React.FC = () => {
          {selectedMediaCapabilities.length ? (
           <VaultAdaptiveWorkbenchHost capabilities={selectedMediaCapabilities} selectionCount={selectedAssetIds.length} />
          ) : null}
+         <section aria-label="Vault maintenance queue" className="border-t-[3px] border-current pt-3" data-vault-maintenance-queue>
+          <div className="mb-2 flex items-center justify-between gap-2">
+           <div className="text-xs font-black uppercase">Maintenance Queue</div>
+           <div className="text-[10px] font-black uppercase">{maintenanceQueue.length} item(s)</div>
+          </div>
+          {maintenanceQueue.length ? (
+           <div className="flex flex-col gap-1">
+            {maintenanceQueue.slice(0, 5).map((item) => (
+             <button key={item.assetId} type="button" onClick={() => setSelectedAssetIds([item.assetId])}
+              className="flex w-full items-start justify-between gap-2 border-2 border-current p-2 text-left"
+              aria-label={`Inspect ${item.assetName}: ${item.reasons.join(", ")}`}>
+              <span className="min-w-0">
+               <span className="block truncate text-xs font-black uppercase">{item.assetName}</span>
+               <span className="block text-[10px] font-bold opacity-70">{item.reasons.slice(0, 2).join(" · ")}</span>
+              </span>
+              <span className="shrink-0 text-[9px] font-black uppercase">{item.protected ? "Protected" : "Review"}</span>
+             </button>
+            ))}
+           </div>
+          ) : <div className="text-xs font-bold opacity-60">No maintenance items detected.</div>}
+         </section>
          <div>
           <div className="text-xs font-black uppercase opacity-60">Name</div>
           <div className="text-lg font-black uppercase">{selectedAsset.name}</div>
