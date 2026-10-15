@@ -37,6 +37,16 @@ describe("PublishTransaction",()=>{
   expect(getApprovedPublishSnapshot(first.approvedSnapshotId)?.assets.titleAssetId).toBe("title-final")
  })
 
+ it("persists immutable workflow identity on the approved publication transaction",()=>{
+  const identity={workflowId:"workflow-1",operationId:"operation-1",actionPacketId:"packet-1",recommendationId:"recommendation-1",experimentId:"experiment-1"}
+  const transaction=beginPublishTransaction(projection(),"video-publisher",identity)
+  expect(transaction).toMatchObject(identity)
+  const started=listContentBuildEvents("cb-publish").find(event=>event.eventType==="publish.transaction.started")
+  expect(started?.metadata).toMatchObject(identity)
+  expect(beginPublishTransaction(projection(),"video-publisher",identity).id).toBe(transaction.id)
+  expect(()=>beginPublishTransaction(projection(),"video-publisher",{...identity,workflowId:"other-workflow"})).toThrow(/immutable workflowId lineage/i)
+ })
+
  it("resumes a failed transaction instead of creating a duplicate upload transaction",()=>{
   const first=beginPublishTransaction(projection())
   const uploaded=completePublishStep({transactionId:first.id,step:"upload-video",youtubeVideoId:"youtube-123",receipt:{uploaded:true}})

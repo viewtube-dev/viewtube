@@ -1993,6 +1993,21 @@ export interface SuperToolActionPacket {
  projectId?: string | null
  channelId?: string | null
  videoId?: string | null
+ creatorId?: string | null
+ workflowId?: string | null
+ operationId?: string | null
+ promptRecipeId?: string | null
+ promptRecipeVersion?: string | null
+ contextManifestId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
+ intent?: "inspect" | "prepare" | "propose" | "execute"
+ approvalState?: "not-required" | "pending" | "approved" | "rejected"
+ approvedBy?: string | null
+ approvedAt?: string | null
+ approvedSnapshotId?: string | null
+ approvedSnapshotHash?: string | null
+ expectedSnapshotHash?: string | null
  inputs: Record<string, unknown>
  outputs: Record<string, unknown>
  confidence: "low" | "medium" | "high"
