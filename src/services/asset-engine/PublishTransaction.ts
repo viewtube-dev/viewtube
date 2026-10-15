@@ -2,6 +2,7 @@ import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentB
 import type { ContentBuildYouTubeBinding } from "./contracts"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
+import { recordBrainPublicationIdentityReceipt } from "../brain/BrainPublicationOutcomeBridge"
 
 export type PublishTransactionStep =
  | "validate-package" | "creator-approval" | "upload-video" | "bind-youtube"
@@ -126,7 +127,11 @@ export const failPublishTransaction=(id:string,step:PublishTransactionStep,error
 }
 export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
  const transaction=getPublishTransaction(id);if(!transaction)throw new Error("Unknown publish transaction: "+id)
- if(transaction.status==="completed")return transaction
+ if(transaction.status==="completed") {
+  const completedBuild=getContentBuild(transaction.contentBuildId)
+  if(completedBuild?.youtube?.status==="published" && completedBuild.channelId) recordBrainPublicationIdentityReceipt({ transaction, build: completedBuild })
+  return transaction
+ }
  if(!transaction.youtubeVideoId)throw new Error("Cannot complete publishing without a bound YouTube video ID.")
  if(transaction.steps["verify-remote-state"]?.status!=="completed")throw new Error("Cannot complete publishing before remote verification.")
  const timestamp=now(),next=save({...transaction,status:"completed",completedAt:timestamp,updatedAt:timestamp})
@@ -152,6 +157,7 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
     publicationState:"published",
    },
   })
+  if (build.channelId) recordBrainPublicationIdentityReceipt({ transaction: next, build })
  } else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
  appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.completed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{youtubeVideoId:next.youtubeVideoId}})
  return next
