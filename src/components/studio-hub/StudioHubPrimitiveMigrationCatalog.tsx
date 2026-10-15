@@ -84,7 +84,6 @@ import {
   SubToolboxLed,
   SubToolboxLedDot,
   SubToolboxNameValueList,
-  SubToolboxStepper,
   SubToolboxSurface,
   SubToolboxTabs,
   SubToolboxTag,
