@@ -193,12 +193,13 @@ export const buildOpportunityEvidenceFromCanonicalBundle = (input: {
    confidence: Math.round(clamp(coverage * 100)),
    impactScore: Math.round(clamp(score * 100)),
    evidenceIds: [evidenceId],
-   context: {
-    window: input.bundle.selectedWindow,
+   provenance: {
+    sourceOwner: "analytics-canon",
     sourceSnapshotId: input.bundle.snapshotId,
     datasetId: dataset.id,
+    window: input.bundle.selectedWindow,
     datasetStatus: dataset.status,
-   } as OpportunityEvidence["context"],
+   },
    _score: score,
   }
  })
