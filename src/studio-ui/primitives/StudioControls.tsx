@@ -1,6 +1,8 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens"
 import "../../styles/studio-control-system.css"
+import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput, StudioLabeledInput } from "./StudioTextInput"
+import { StudioTextArea, StudioLabeledTextArea } from "./StudioTextArea"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -19,13 +21,13 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
     typography: {
-      standardInputFontSize: "38px",
-      compactInputFontSize: "24px",
+      standardInputFontSize: "18px",
+      compactInputFontSize: "14px",
       standardTextAreaFontSize: "18px",
       compactTextAreaFontSize: "14px",
-      rule: "Single-line inputs inherit the global Studio standard/compact typography (38px/24px). Only textareas use the multiline reading-size exception (18px/14px); input typography is not independently scaled away from the global defaults.",
+      rule: "Single-line inputs and textareas share 18px standard / 14px compact typography. Textareas additionally use multiline line-height, padding, and a 92px minimum writing surface.",
     },
-    sizeFamily: "Inherit global standard/compact height, border stroke, corner radius, font family, font weight, text size (38px/24px), uppercase transform, letter spacing, and line height; textareas override only multiline surface and reading metrics (18px/14px).",
+    sizeFamily: "Use 18px standard / 14px compact typography for all single-line and multiline text fields. Size still selects 44px/28px height, 3px/2px stroke, and 6px/4px radius; textareas additionally use multiline padding, line-height, and a 92px minimum surface.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
@@ -65,108 +67,10 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
  * This component is defined and styled entirely by the Studio Controls system;
  * it has no import, wrapper, or runtime dependency on SubToolbox primitives.
  */
-export const StudioTextInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "text", placeholder = "TYPE HERE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
-  <input
-    ref={ref}
-    type={type}
-    data-vt-studio-field-kind="text-input"
-    placeholder={placeholder}
-    spellCheck={spellCheck}
-    autoCorrect={autoCorrect}
-    autoCapitalize={autoCapitalize}
-    {...props}
-    {...withStudioAttrs(sizeVariant)}
-  />
-))
-StudioTextInput.displayName = "StudioTextInput"
-
-/** Backwards-compatible canonical name used by existing Studio consumers. */
-export const StudioInput = StudioTextInput
-
-/** Canonical search input using the shared Studio text-field contract. */
-export const StudioSearchInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSearchInput.displayName = "StudioSearchInput"
-
-/** Canonical number input using the shared Studio text-field contract. */
-export const StudioNumberInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioNumberInput.displayName = "StudioNumberInput"
-
-/**
- * Canonical standalone Studio text area.
- * Size, border, typography, focus, placeholder, and resize behavior are owned by
- * studio-control-system.css—not by SubToolbox primitive classes or inline styles.
- */
-export const StudioTextArea = React.forwardRef<
-  HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", rows, placeholder = "TYPE HERE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
-  <textarea
-    ref={ref}
-    rows={rows ?? 4}
-    data-vt-studio-field-kind="textarea"
-    placeholder={placeholder}
-    spellCheck={spellCheck}
-    autoCorrect={autoCorrect}
-    autoCapitalize={autoCapitalize}
-    {...props}
-    {...withStudioAttrs(sizeVariant)}
-  />
-))
-StudioTextArea.displayName = "StudioTextArea"
-
-export interface StudioLabeledInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "placeholder"> {
-  label: string
-  sizeVariant?: StudioControlSize
-  level?: "l0" | "l1" | "l2"
-  /** Specimen variant; B adds the documented compact secondary-color focus stroke. */
-  variant?: "a" | "b"
-}
-/** Floating-label input composed from the canonical StudioTextInput primitive. */
-export const StudioLabeledInput = React.forwardRef<HTMLInputElement, StudioLabeledInputProps>(
-  ({ label, sizeVariant = "standard", level = "l1", variant = "a", className, style, id, ...props }, ref) => {
-    const generatedId = React.useId()
-    const fieldId = id ?? `studio-labeled-input-${generatedId}`
-    return <div data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level} data-vt-floating-variant={variant}
-      className={["vt-studio-floating-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
-      <StudioTextInput ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
-      <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
-    </div>
-  },
-)
-StudioLabeledInput.displayName = "StudioLabeledInput"
-
-export interface StudioLabeledTextAreaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "placeholder"> {
-  label: string
-  sizeVariant?: StudioControlSize
-  level?: "l0" | "l1" | "l2"
-}
-/** Floating-label textarea composed from the canonical StudioTextArea primitive. */
-export const StudioLabeledTextArea = React.forwardRef<HTMLTextAreaElement, StudioLabeledTextAreaProps>(
-  ({ label, sizeVariant = "standard", level = "l1", className, style, id, ...props }, ref) => {
-    const generatedId = React.useId()
-    const fieldId = id ?? `studio-labeled-textarea-${generatedId}`
-    return <div data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
-      className={["vt-studio-floating-field", "is-textarea", className].filter(Boolean).join(" ")} style={style}>
-      <StudioTextArea ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
-      <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
-    </div>
-  },
-)
-StudioLabeledTextArea.displayName = "StudioLabeledTextArea"
-
+export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput, StudioLabeledInput }
+export type { StudioLabeledInputProps } from "./StudioTextInput"
+export { StudioTextArea, StudioLabeledTextArea }
+export type { StudioLabeledTextAreaProps } from "./StudioTextArea"
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
