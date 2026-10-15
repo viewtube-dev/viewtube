@@ -317,6 +317,19 @@ const metadataString = (
 const uniqueStrings = (values: Array<string | null | undefined>): string[] =>
  [...new Set(values.filter((value): value is string => Boolean(value)))]
 
+export const resolveBrainOperationIdentity = (input: {
+ operationIds: Array<string | null | undefined>
+ workflowIds: Array<string | null | undefined>
+}) => {
+ const operationIds = uniqueStrings(input.operationIds)
+ const workflowIds = uniqueStrings(input.workflowIds)
+ return {
+  operationId: operationIds[0] || null,
+  workflowId: workflowIds[0] || null,
+  mismatch: operationIds.length > 1 || workflowIds.length > 1,
+ }
+}
+
 const eventExplicitlyMatchesRequest = (
  event: ContentBuildEvent,
  request: GenerationRequest,
@@ -422,7 +435,8 @@ const buildProvenanceChain = (input: {
   metadataString(generationRecord?.metadata, "workflowId"),
   ...relatedEvents.map(event => metadataString(event.metadata, "workflowId")),
  ])
- const operationIdentityMismatch = operationIds.length > 1 || declaredWorkflowIds.length > 1
+ const operationIdentity = resolveBrainOperationIdentity({ operationIds, workflowIds: declaredWorkflowIds })
+ const operationIdentityMismatch = operationIdentity.mismatch
  let workflowIds = operationIdentityMismatch ? [] : declaredWorkflowIds
 
  const matchedOutcomes = input.brainOutcomes
