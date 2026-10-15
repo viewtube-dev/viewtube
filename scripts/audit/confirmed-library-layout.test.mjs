@@ -197,7 +197,7 @@ test("icon-effect examples are clearly static previews, not live outcome claims"
   const squareFamily = catalog.slice(squareStart, splitStart);
   assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
   assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
-  assert.ok(squareFamily.includes("badge and success state below are explicitly static gallery previews"));
+  assert.ok(squareFamily.includes("badge count and success state below are explicitly static gallery previews"));
   assert.ok(!squareFamily.includes("SUCCESS · CONFIRMED OUTCOME"));
 });
 
