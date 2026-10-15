@@ -66,6 +66,7 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
 
     if (variant === "floating-label") {
       const { className, style, controlClassName, controlStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, placeholder: _placeholder, ...inputProps } = props
+      void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant, _placeholder]
       return (
         <div
           data-vt-primitive-id="141"
