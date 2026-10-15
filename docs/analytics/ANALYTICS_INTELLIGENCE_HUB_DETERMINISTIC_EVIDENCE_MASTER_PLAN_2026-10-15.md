@@ -1,6 +1,6 @@
 # Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–2 Execution Record
 
-**Status:** Phase 0 audit complete; Phase 1 shared insight contract established in the implementation branch; Phase 2 deterministic insight engine implementation in progress pending CI verification.  
+**Status:** Phase 0 audit documented; Phase 1 insight contract and Phase 2 deterministic engine implemented on the feature branch; automated test/typecheck/CI verification and runtime caller integration remain pending.  
 **Date:** 2026-10-15  
 **Implementation branch:** `feat/analytics-intelligence-hub-phases-0-2-2026-10-15`  
 **Target integration branch:** `master/consolidated-feature-integration`  
@@ -157,7 +157,7 @@ Add an Analytics fixture golden path from canonical dataset → deterministic fi
 
 This receipt must be updated with actual code paths, commit SHA, CI checks and test commands after implementation. A written plan is not evidence that code or runtime integration is complete.
 
-- Phase 0: audit and ownership reconciliation recorded above.
-- Phase 1: shared period/insight contracts and fail-closed comparability rules are implemented in the deterministic insight service; verify final diff and tests before claiming certified.
-- Phase 2: deterministic comparison, contribution and threshold-based material-change functions are implemented in the service; verify caller reachability and test/CI results before claiming production-certified.
-- Runtime integration / release verification: pending until CI and current-head review confirm it.
+- Phase 0: audit and ownership reconciliation recorded above; existing canonical source, Brain bridge, historical plans, adjacent PR boundaries and validation gaps are documented.
+- Phase 1: `src/services/brain/DeterministicAnalyticsInsights.ts` defines explicit inclusive period bounds, stable source-linked findings, formula/version, confidence and limitations; it fails closed on unknown/mismatched channels, mismatched windows, invalid/overlapping/non-chronological or unequal-length periods, same snapshot IDs, unavailable datasets, missing metrics and non-finite values.
+- Phase 2: the same service implements period comparisons, declared-threshold material-change signals, and complete-row traffic-source contribution calculations. It preserves null relative change for a zero baseline, rejects incomplete/partial rows and zero denominators, sorts output deterministically, and labels materiality as distinct from statistical significance. Regression tests live in `src/services/brain/__tests__/DeterministicAnalyticsInsights.test.ts` and were added to `npm run test:focused`.
+- Runtime integration / release verification: the service is implemented but not yet wired into the Intelligence Hub/Brain request path. Automated test execution, typecheck, full suite, build, CI, and browser verification have not been run from this session; keep the work un-certified until those gates pass.
