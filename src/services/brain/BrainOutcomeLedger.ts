@@ -13,6 +13,12 @@ export interface BrainOutcomeRecord {
  targetToolId: SuperToolId | null
  actionPacketId?: string | null
  workflowId?: string | null
+ /** Stable identity of the producer record that emitted this outcome. */
+ sourceRecordId?: string | null
+ /** Generation trace and asset identity, when this outcome came from Asset Engine. */
+ traceId?: string | null
+ assetId?: string | null
+ assetType?: string | null
  outcome: BrainOutcomeKind
  summary: string
  evidence: string[]
@@ -44,6 +50,12 @@ export const listBrainOutcomes = (channelId?: string | null) => {
 }
 
 export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | "createdAt">) => {
+ if (input.sourceRecordId) {
+  const existing = read().find((record) =>
+   record.channelId === input.channelId && record.sourceRecordId === input.sourceRecordId
+  )
+  if (existing) return existing
+ }
  const record: BrainOutcomeRecord = {
   ...input,
   id: crypto.randomUUID(),
@@ -67,6 +79,10 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    corrective,
    actionPacketId: input.actionPacketId || null,
    workflowId: input.workflowId || null,
+   sourceRecordId: input.sourceRecordId || null,
+   traceId: input.traceId || null,
+   assetId: input.assetId || null,
+   assetType: input.assetType || null,
    sourceToolId: input.sourceToolId,
    targetToolId: input.targetToolId,
   },
