@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { evaluateAlgorithmEvent } from "../AlgorithmEvaluationEngine"
+import { buildAlgorithmEvaluationLifecycleIdentity, evaluateAlgorithmEvent } from "../AlgorithmEvaluationEngine"
 import type { AlgorithmIntelligenceEvent } from "../AlgorithmIntelligenceEventLedger"
 import type { MetricComparisonContext } from "../../analytics-canon"
 
@@ -146,5 +146,48 @@ describe("AlgorithmEvaluationEngine", () => {
    now: 2_000,
   })
   expect(result.status).toBe("mixed")
+ })
+})
+
+
+describe("AlgorithmEvaluationEngine lifecycle identity", () => {
+ it("preserves exact publication, packet, approved snapshot, and metadata-version lineage", () => {
+  const source = event({
+   projectId: "project-1",
+   videoId: "video-1",
+   actionPacketId: "packet-1",
+   metadata: {
+    contentBuildId: "content-build-1",
+    publicationTransactionId: "publish-1",
+    approvedSnapshotId: "snapshot-1",
+    metadataVersionIds: ["metadata-v2", "metadata-v1"],
+    checkpointId: "checkpoint-1",
+   },
+  })
+  expect(buildAlgorithmEvaluationLifecycleIdentity(source)).toEqual({
+   recommendationId: "recommendation-1",
+   projectId: "project-1",
+   contentBuildId: "content-build-1",
+   videoId: "video-1",
+   actionPacketId: "packet-1",
+   publicationTransactionId: "publish-1",
+   approvedSnapshotId: "snapshot-1",
+   metadataVersionIds: ["metadata-v2", "metadata-v1"],
+   checkpointId: "checkpoint-1",
+  })
+ })
+
+ it("does not invent missing lifecycle identities", () => {
+  expect(buildAlgorithmEvaluationLifecycleIdentity(event())).toEqual({
+   recommendationId: "recommendation-1",
+   projectId: null,
+   contentBuildId: null,
+   videoId: null,
+   actionPacketId: null,
+   publicationTransactionId: null,
+   approvedSnapshotId: null,
+   metadataVersionIds: [],
+   checkpointId: null,
+  })
  })
 })
