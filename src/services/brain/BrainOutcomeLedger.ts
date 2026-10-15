@@ -20,6 +20,15 @@ export interface BrainOutcomeRecord {
  traceId?: string | null
  assetId?: string | null
  assetType?: string | null
+ contentBuildId?: string | null
+ projectId?: string | null
+ publishTransactionId?: string | null
+ approvedSnapshotId?: string | null
+ approvedSnapshotHash?: string | null
+ publishedVideoId?: string | null
+ publicationIdentity?: ContentBuildPublicationIdentity | null
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
  outcome: BrainOutcomeKind
  summary: string
  evidence: string[]
