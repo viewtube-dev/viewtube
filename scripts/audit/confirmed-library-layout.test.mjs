@@ -294,7 +294,7 @@ test("44px checkmark and X checkboxes use the canonical 6px corner radius", () =
 
 
 test("circle icon buttons scale the selected canonical icon preset to 80%", () => {
-  assert.ok(controlStyles.includes('button[data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg'));
+  assert.ok(controlStyles.includes('button[data-vt-studio-button="true"][data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg'));
   assert.ok(controlStyles.includes("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)"));
   assert.ok(controlStyles.includes("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)"));
 });
