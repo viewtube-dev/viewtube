@@ -2214,3 +2214,33 @@
 .vt-confirmed-control-row > strong {
   scroll-margin-top: 100px;
 }
+
+
+/* Confirmed Library layout contract — phases 1–3 (2026-10-15).
+   Four-skin control sets remain in one row; standard specimens occupy one row,
+   with compact A/B sharing the next row. These rules affect gallery layout only. */
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"],
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"],
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
+  grid-column: 1 / -1 !important;
+}
+.vt-confirmed-defaults-explainer {
+  display: grid; gap: 5px; padding: 8px 9px; border: 1px solid #000;
+  border-radius: 5px; background: #fff; font-size: 10px; line-height: 1.35;
+}
+.vt-confirmed-defaults-explainer > strong { font-size: 9px; font-weight: 1000; letter-spacing: .035em; text-transform: uppercase; }
+.vt-confirmed-defaults-explainer p { margin: 0; }
+.vt-confirmed-defaults-explainer b { font-weight: 1000; }
+@media (max-width: 560px) {
+  .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"],
+  .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"],
+  .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] {
+    grid-template-columns: repeat(4, minmax(64px, 1fr)) !important;
+  }
+}
