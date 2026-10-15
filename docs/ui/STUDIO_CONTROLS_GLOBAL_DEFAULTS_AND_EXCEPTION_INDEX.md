@@ -1,10 +1,10 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Phase 1–3 contract/cascade/field changes prepared on the completion branch; automated checks and rendered verification pending  
+**Status:** PR #189 merged; phases 3–5 follow-up changes prepared on a fresh branch from the integration target; rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Audit work branch:** `fix/studio-controls-phases-1-3-complete-2026-10-15`  
-**Last reviewed:** 2026-10-14  
+**Audit work branch:** `fix/studio-controls-phases-3-5-after-pr189-2026-10-15`  
+**Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
@@ -100,10 +100,10 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 | E-01 | Text inputs, search/number inputs | Native field semantics; primary-color default text and stroke; inset primary stroke; secondary focus outline | Final contract now applies primary default text/fill/stroke, consistent placeholder/value typography, size-specific border/radius, and black focused text | **Implemented; awaiting tests and browser verification** |
 | E-02 | Textareas | Taller writing surface; resize behavior; standard 18px / compact 14px copy; 92px minimum height | Final contract preserves a 92px minimum height in both sizes, 18px/14px typography, and 1000 weight | **Implemented; awaiting tests and browser verification** |
 | E-03 | Dropdown trigger | Trigger behaves like a button; menu overlays content | Trigger gets a white-mixed background; component class may have separate sizing and state styling | **Review token inheritance and size conformance** |
-| E-04 | Dropdown menu / options | No button shadow and no press-motion on options; menu can use its own panel geometry | `.vt-studio-dropdown-menu` uses 8px fallback radius and shadow fallback 4px; options have fixed 14px font, 40px minimum height and 2px separator, outside the 44/28 control contracts | **Intentional menu exception; document and visually verify** |
+| E-04 | Dropdown menu / options | No button shadow and no press-motion on options; menu can use its own panel geometry | `.vt-studio-dropdown-menu` follows the 6px / 4px size radius and shared 3px / 1.5px stationary panel shadow; options keep 14px typography, 40px minimum height and 2px separator as documented menu-surface exceptions | **Intentional menu exception; document and visually verify** |
 | E-05 | Split-left button rail/divider | Rail is a separate colored icon region; divider matches the declared size stroke | Final contract uses 3px standard and 2px compact dividers and styles rail/label inside the face wrapper | **Implemented; awaiting tests and browser verification** |
 | E-06 | Split-left selected state | Selected state swaps primary/secondary colors only; geometry is unchanged | Final face/rail selectors swap fills without changing border widths, radius, or the stationary shadow | **Implemented; awaiting visual verification** |
-| E-07 | Button typography | Button and split-left labels share the same type contract | The final face layer centralizes typography at 36px standard / 22px compact to preserve the established Studio button-label sizing while removing competing parent-level font and shadow behavior | **Implemented; verify visually** |
+| E-07 | Button typography | Button and split-left labels share the same type contract | The canonical face layer centralizes typography at 38px standard / 24px compact, weight 1000, uppercase and -0.035em tracking, removing the competing parent-level font-size rules | **Implemented; verify visually** |
 | E-08 | Button radius | Standard 6px, compact 4px | Final action face uses 6px standard / 4px compact; 44px switch and choice shapes use the supplied reference-specific 7.333px rectangular radius | **Implemented; verify effective computed styles** |
 | E-09 | Button shadow and transitions | Fixed shadow anchor; face moves half shadow on hover and full shadow on click | Final contract anchors shadow on the outer button and moves only the inner face at 150ms hover / 300ms active | **Implemented; awaiting automated and rendered verification** |
 | E-10 | Switches, radio buttons, checkboxes | Reference-specific 44px geometry and skin variants; selected state changes indicator/fill | Final contract restores 75.68×44 switch tracks, 36.667px handles, 3.667px symmetric insets, 31.68px travel, 44×44 choices, 33×33 radio dots, and explicit black/white/color-swap checkbox marks | **Implemented; awaiting visual verification** |
@@ -360,3 +360,30 @@ The former PR #168 head branch, `fix/studio-primitive-size-shadow-contracts-2026
 ### Verification boundary
 
 This recovery pass confirms source-level discrepancies. It does not claim that every one of these defects was caused by editing an already-merged PR, nor that any fix has been visually certified. Before calling a finding recovered, compare its original PR/commit patch with the current target branch, apply the correction on a fresh branch from the current integration baseline, inspect the resulting diff, and verify the merged commit. Run available typecheck/tests/build and browser computed-style checks when possible.
+
+
+## 16. Post-PR #189 completion — 2026-10-15
+
+PR #189 is merged. This follow-up starts from the current `master/consolidated-feature-integration` head and does not replay the stale pre-merge branch.
+
+### Phase 3 — Finish canonical field behavior
+- Keep a single primary-colored native insertion-caret declaration in the canonical field block.
+- Preserve the 92px multiline minimum, standard 18px / compact 14px type, and weight 1000.
+- Ensure placeholders inherit the exact value typography and use the primary color.
+- Use size tokens for default/focus fill, border, radius, outline width, secondary focus accent, and zero offset.
+
+### Phase 4 — Complete button, split-left, and dropdown contracts
+- Ordinary buttons are standard/compact only; 56px prominent actions remain a distinct `StudioActionButton` family.
+- Split-left geometry uses shared height/stroke/radius/shadow/icon tokens; selected state swaps pair colors only.
+- Legend Multi's floating label must not participate in trigger sizing; selected-value text is shrinkable and ellipsized rather than pushing the chevron/count outside the control.
+- The trigger has no button shadow or press translation. The floating menu panel is a separate surface and may use its own stationary shadow.
+- Dropdown option typography/row height are explicitly documented menu exceptions.
+
+### Phase 5 — Confirmed Primitive Library and evidence
+- The gallery imports the actual Studio components and names them with their public canonical exports.
+- The global defaults panel formats nested objects recursively; it must never show `[object Object]`.
+- Word-toggle skins 1, 3, 4, and 5 are rendered from a single collection in one four-column variant container per size row.
+- Keep library-only frame styles scoped to catalog wrappers; do not let them redefine the production component.
+- Run source governance, focused Vitest, TypeScript, production build, and rendered desktop/mobile checks. A successful source diff alone is not visual certification.
+
+**Current completion boundary:** source changes for phases 3–5 are committed on the follow-up branch. Final completion depends on GitHub Actions and browser/deployment evidence; no live visual pass is claimed before those checks finish.
