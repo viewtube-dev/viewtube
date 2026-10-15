@@ -101,6 +101,9 @@ export interface BrainRuntimeProvenanceChain {
  requestId: string
  requestedAt: string
  contextManifestId: string
+ operationId: string | null
+ workflowId: string | null
+ operationIdentityMismatch: boolean
  receiptId: string | null
  traceId: string | null
  contentBuildId: string
@@ -403,9 +406,24 @@ const buildProvenanceChain = (input: {
   ...relatedEvents.map(event => event.actionPacketId),
   metadataString(generationRecord?.metadata, "actionPacketId"),
  ])
- let workflowIds = uniqueStrings([
-  metadataString(generationRecord?.metadata, "workflowId"),
+ const operationIds = uniqueStrings([
+  input.request.operationId,
+  receipt?.operationId,
+  trace?.operationId,
+  generationRecord?.operationId,
+  metadataString(generationRecord?.metadata, "operationId"),
+  ...relatedEvents.map(event => metadataString(event.metadata, "operationId")),
  ])
+ const declaredWorkflowIds = uniqueStrings([
+  input.request.workflowId,
+  receipt?.workflowId,
+  trace?.workflowId,
+  generationRecord?.workflowId,
+  metadataString(generationRecord?.metadata, "workflowId"),
+  ...relatedEvents.map(event => metadataString(event.metadata, "workflowId")),
+ ])
+ const operationIdentityMismatch = operationIds.length > 1 || declaredWorkflowIds.length > 1
+ let workflowIds = operationIdentityMismatch ? [] : declaredWorkflowIds
 
  const matchedOutcomes = input.brainOutcomes
   .filter(outcome =>
