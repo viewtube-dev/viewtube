@@ -73,15 +73,20 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[] }> = ({ title, children, provenance, nonDefaultSettings = [] }) => (
   <section className={`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}>
-    <h3>{title}</h3>
+    <h3 title={title}>{title}</h3>
     <div className="vt-confirmed-variants">{children}</div>
-    {nonDefaultSettings.length > 0 && (
-      <section className="vt-confirmed-nondefault-settings" aria-label={`${title} non-default settings`}>
-        <strong>NON-DEFAULT SETTINGS</strong>
-        <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
-      </section>
+    {(nonDefaultSettings.length > 0 || provenance) && (
+      <details className="vt-confirmed-source-details">
+        <summary>Settings + source</summary>
+        {nonDefaultSettings.length > 0 && (
+          <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
+            <strong>NON-DEFAULT SETTINGS</strong>
+            <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
+          </section>
+        )}
+        {provenance}
+      </details>
     )}
-    {provenance}
   </section>
 )
 
@@ -187,7 +192,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextArea className="is-reverse-colors" variant="fixed-label" label="DESCRIPTION" aria-label="Studio fixed-label textarea compact B reverse colors" sizeVariant="compact" rows={4} data-vt-library-component="StudioTextArea" /></div>
     </Family>
     <CanonicalControlFamilies />
-    <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
+    <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <Family title="Button" nonDefaultSettings={["The button defaults to 44px; the explicit compact height selects 28px. The older compact size option is used only when no height is supplied.", "Accent is the default tone; neutral, danger, warning, and success communicate alternate action meaning.", "Selected buttons use the secondary module color and expose a pressed state; disabled buttons cannot be activated.", "Loading exposes its busy state and disables activation until loading ends.", "The face owns the visible border; tactile press moves the whole button by its shadow offset while the visible shadow disappears, using the shared 80ms press timing."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton heightVariant="44">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton heightVariant="28" tone="neutral">button</StudioButton></div>
@@ -400,20 +405,20 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           <StudioSpectrumTag label="DRAGONFRUIT" />
           <StudioSpectrumTag label="ELDERBERRY" />
           <StudioSpectrumTag label="FIG" />
-          <StudioSpectrumTag label="GRAPE" />
+          <StudioSpectrumTag label="GUAVA" />
           <StudioSpectrumTag label="HONEYDEW" />
           <StudioSpectrumTag label="INDIGO" />
-          <StudioSpectrumTag label="JASMINE" />
-          <StudioSpectrumTag label="KIWI" />
+          <StudioSpectrumTag label="JACKFRUIT" />
           <StudioSpectrumTag label="LEMON" />
           <StudioSpectrumTag label="MANGO" />
           <StudioSpectrumTag label="NECTARINE" />
           <StudioSpectrumTag label="ORANGE" />
-          <StudioSpectrumTag label="PEACH" />
+          <StudioSpectrumTag label="PAPAYA" />
           <StudioSpectrumTag label="QUINCE" />
-          <StudioSpectrumTag label="RASPBERRY" />
           <StudioSpectrumTag label="STRAWBERRY" />
-          <StudioSpectrumTag label="TANGERINE" />
+          <StudioSpectrumTag label="UMBER" />
+          <StudioSpectrumTag label="WALNUT" />
+          <StudioSpectrumTag label="YUZU" />
         </div>
         <div className="vt-confirmed-spectrum-tag-selected">
           <span>Selected-state treatment</span>
