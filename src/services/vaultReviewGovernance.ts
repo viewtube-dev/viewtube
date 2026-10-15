@@ -3,6 +3,8 @@ export type VaultReviewAsset = {
   name: string
   kind: string
   tags: string[]
+  source?: string | null
+  projectName?: string | null
   metadata?: Record<string, unknown>
 }
 export type VaultMetadataDifference = { field: string; left: unknown; right: unknown }
@@ -22,8 +24,10 @@ export type VaultMetadataSuggestionResult = {
 
 const stable = (value: unknown): string => {
   if (value === undefined) return "undefined"
-  try { return JSON.stringify(value, Object.keys((value && typeof value === "object" && !Array.isArray(value)) ? value as object : {}).sort()) ?? String(value) }
-  catch { return String(value) }
+  if (value === null || typeof value !== "object") return String(value)
+  if (Array.isArray(value)) return "[" + value.map(stable).join(",") + "]"
+  const record = value as Record<string, unknown>
+  return "{" + Object.keys(record).sort().map((key) => JSON.stringify(key) + ":" + stable(record[key])).join(",") + "}"
 }
 
 export const compareVaultAssets = (left: VaultReviewAsset, right: VaultReviewAsset): VaultMetadataDifference[] => {
@@ -33,6 +37,8 @@ export const compareVaultAssets = (left: VaultReviewAsset, right: VaultReviewAss
   }
   compare("name", left.name, right.name)
   compare("kind", left.kind, right.kind)
+  compare("source", left.source || null, right.source || null)
+  compare("project", left.projectName || null, right.projectName || null)
   compare("tags", [...(left.tags || [])].sort(), [...(right.tags || [])].sort())
   const keys = [...new Set([...Object.keys(left.metadata || {}), ...Object.keys(right.metadata || {})])].sort()
   for (const key of keys) compare(`metadata.${key}`, left.metadata?.[key], right.metadata?.[key])
