@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
@@ -88,6 +88,24 @@ describe("PublishTransaction",()=>{
   localStorage.setItem("viewtube_content_build_publish_transactions_v2", JSON.stringify(parsed))
   expect(() => completePublishStep({ transactionId: transaction.id, step: "apply-metadata" }))
    .toThrow(/approved snapshot.*(integrity|binding|locked assets)/i)
+ })
+
+ it("refuses to create a transaction over unreadable transaction storage", () => {
+  localStorage.setItem("viewtube_content_build_publish_transactions_v2", "{not-json")
+  expect(() => beginPublishTransaction(projection())).toThrow(/publish transaction storage is unreadable/i)
+  expect(localStorage.getItem("viewtube_content_build_publish_transactions_v2")).toBe("{not-json")
+ })
+
+ it("surfaces transaction storage write failures instead of returning an unrecorded transaction", () => {
+  const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(function (key, value) {
+   if (key === "viewtube_content_build_publish_transactions_v2") throw new Error("quota exceeded")
+   return Storage.prototype.setItem.call(this, key, value)
+  })
+  try {
+   expect(() => beginPublishTransaction(projection())).toThrow(/could not persist publish transaction/i)
+  } finally {
+   setItem.mockRestore()
+  }
  })
 
 })
