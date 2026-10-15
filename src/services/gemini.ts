@@ -319,16 +319,27 @@ declare global {
  }
 }
 
+// Browser settings are optional at SSR/test boundaries and can be blocked by
+// privacy settings. A missing preference must not prevent deterministic Brain fallback.
+const readLocalSetting = (key: string, fallback = ""): string => {
+ try {
+  if (typeof localStorage === "undefined") return fallback
+  return localStorage.getItem(key) || fallback
+ } catch {
+  return fallback
+ }
+}
+
 // Helper to get the AI settings
 const getAiSettings = () => {
  const customKey =
   getVaultKey("gemini") ||
-  localStorage.getItem("yt_api_key") ||
-  localStorage.getItem("vt_gemini_api_key") ||
-  localStorage.getItem("gemini_api_key") ||
-  localStorage.getItem("google_api_key") ||
+  readLocalSetting("yt_api_key") ||
+  readLocalSetting("vt_gemini_api_key") ||
+  readLocalSetting("gemini_api_key") ||
+  readLocalSetting("google_api_key") ||
   ""
- const modelPreference = localStorage.getItem("vt_ai_model") || "gemini-3.1-flash"
+ const modelPreference = readLocalSetting("vt_ai_model", "gemini-3.1-flash")
  return { customKey, modelPreference }
 }
 
