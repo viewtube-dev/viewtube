@@ -53,7 +53,7 @@ describe("Studio Hub canonical controls", () => {
     expect(finalContract).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
     expect(finalContract).toContain("--vt-studio-control-hover-offset:.75px")
     expect(finalContract).toContain("--vt-studio-control-icon-size:18px")
-    expect(finalContract).toContain("button[data-vt-studio-action-button")
+    expect(finalContract).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button')
   })
 
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
