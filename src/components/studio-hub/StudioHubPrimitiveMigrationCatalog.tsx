@@ -257,8 +257,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Media Queue",
   "Media Inspector",
   "Media Review Panel",
-  "Studio Text Input · Floating Label Variant",
-  "Studio Text Area · Floating Label Variant",
   "Video Selector",
   "Mini SubToolbox",
   "Full-Width Section Band",
@@ -361,8 +359,6 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Media Queue": { mode: "canvas", inlineUnits: 8.1, portraitStack: true },
   "Media Inspector": { mode: "canvas", inlineUnits: 7.6, portraitStack: true },
   "Media Review Panel": { mode: "canvas", inlineUnits: 10.8, portraitStack: true },
-  "Studio Text Input · Floating Label Variant": { mode: "field", inlineUnits: 5.2, portraitStack: true },
-  "Studio Text Area · Floating Label Variant": { mode: "field", inlineUnits: 6.2, portraitStack: true },
   "Video Selector": { mode: "canvas", inlineUnits: 7.4, portraitStack: true },
   "Mini SubToolbox": { mode: "canvas", inlineUnits: 6.4, portraitStack: true },
   "Full-Width Section Band": { mode: "field", inlineUnits: 6.4, portraitStack: true },
@@ -454,10 +450,10 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
   }
   if (name === "Studio Text Input") {
-    return <StudioTextInput sizeVariant="standard" aria-label="Canonical Studio text input" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" />
+    return <div className="flex flex-col gap-2"><StudioTextInput sizeVariant="standard" aria-label="Canonical Studio text input" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /><StudioTextInput variant="floating-label" sizeVariant="standard" label="TITLE" aria-label="Canonical Studio floating-label input" data-vt-library-component="StudioTextInput" /></div>
   }
   if (name === "Studio Text Area") {
-    return <StudioTextArea sizeVariant="standard" aria-label="Canonical Studio text area" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" />
+    return <div className="flex flex-col gap-2"><StudioTextArea sizeVariant="standard" aria-label="Canonical Studio text area" placeholder="TYPE DESCRIPTION" data-vt-library-component="StudioTextArea" /><StudioTextArea variant="floating-label" sizeVariant="standard" label="DESCRIPTION" aria-label="Canonical Studio floating-label textarea" data-vt-library-component="StudioTextArea" /></div>
   }
   if (name === "Text Input") {
     return <StudioInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue="TEXT INPUT" aria-label="Text input primitive" />
@@ -601,8 +597,6 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
-  if (name === "Studio Text Input · Floating Label Variant") return <StudioTextInput variant="floating-label" sizeVariant="standard" label="TITLE" aria-label="Title" />
-  if (name === "Studio Text Area · Floating Label Variant") return <StudioTextArea variant="floating-label" sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
   if (name === "Number Field") {
     return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
@@ -1020,12 +1014,6 @@ const PrimitiveMigrationControl: React.FC<{
       notes={<><strong>REVIEW NOTES</strong><div>Check first 8 seconds, caption timing, and final CTA.</div></>}
       actions={<><SubToolboxMediaControlButton level={level} icon={<Check />} label="Approve" active /><SubToolboxMediaControlButton level={level} icon={<Settings2 />} label="Review settings" /></>}
     />
-  }
-  if (name === "Studio Text Input · Floating Label Variant") {
-    return <StudioTextInput variant="floating-label" level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
-  }
-  if (name === "Studio Text Area · Floating Label Variant") {
-    return <StudioTextArea variant="floating-label" level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
