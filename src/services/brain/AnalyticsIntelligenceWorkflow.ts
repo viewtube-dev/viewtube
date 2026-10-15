@@ -325,7 +325,7 @@ export const buildLearningCandidateReview = (input: {
     && evaluation.evidenceRefs.length > 0
   )
   if (valid.length < minimum || !input.id.trim()) return null
-  const directions = new Set(valid.map((evaluation) =>
+  const directions = new Set<"increase" | "decrease" | "mixed">(valid.map((evaluation) =>
     (evaluation.absoluteChange ?? 0) > 0 ? "increase" : (evaluation.absoluteChange ?? 0) < 0 ? "decrease" : "mixed"
   ))
   const observedDirection = directions.size === 1 ? [...directions][0] : "mixed"
