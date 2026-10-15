@@ -148,6 +148,8 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
  */
 export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
+export { StudioInlineStepper, normalizeStudioInlineStepperValue } from "./StudioInlineStepper"
+export type { StudioInlineStepperProps } from "./StudioInlineStepper"
 export { StudioTextArea }
 export type { StudioTextAreaProps } from "./StudioTextArea"
 
