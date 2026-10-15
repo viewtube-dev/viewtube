@@ -64,3 +64,15 @@ Acceptance still outstanding:
 ## Verification
 
 Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+
+
+## Communication consent and retention follow-up — 2026-10-15
+
+Implemented on `feat/brain-communication-consent-retention-current-base-2026-10-15`:
+- Added per-channel `captureCreatorCommunications` opt-in defaulting to `false`, exposed in both Brain Controls interfaces and enforced inside the ingestion service.
+- New communication events retain classification, deterministic fingerprint and policy marker, not raw message text.
+- Hydration redacts legacy raw text and routes sanitized replacements through the existing durable-sync writer.
+- Added tests for default-off consent, opt-in capture, raw-text minimization, replay conflicts and legacy redaction.
+- Defined Phase 13 in `PHASE-13-LIFECYCLE-IDENTITY-DURABILITY-AND-CERTIFICATION.md`.
+
+Still pending before certification: authenticated server-side replacement and cross-device verification, non-chat feedback ingestion, complete stable-ID propagation, enforceable stage capabilities, provider-backed lifecycle verification, and current-head release gates.
