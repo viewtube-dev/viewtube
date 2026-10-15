@@ -21,4 +21,4 @@
 - Keyboard focus on the rail buttons alone does not trigger the whole-component focus mode.
 
 ## Verification
-Run `npm run test:studio-controls`, `npm run typecheck`, and `npm run build`. Complete rendered browser checks before visual certification.
+Run `npm run test:split-stepper-divider-layout`, `npm run test:studio-controls`, `npm run typecheck`, and `npm run build`. Complete rendered browser checks before visual certification. Regression coverage asserts the native field, canonical size marker, square field edge, rail-owned vertical seam, centered horizontal seam, equal rows, and hold-repeat/focus separation.
