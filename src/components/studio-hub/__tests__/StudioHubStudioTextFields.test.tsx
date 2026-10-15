@@ -30,11 +30,16 @@ describe("standalone Studio text fields in the UI Reference Library", () => {
     expect(html).toContain('src/styles/studio-control-system.css')
   })
 
-  it("keeps confirmed buttons and word toggles in explicit layout families", () => {
+  it("keeps confirmed buttons and word toggles in the shared data-driven layout", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('vt-confirmed-button-family')
-    expect(html).toContain('is-word-toggle-44')
-    expect(html).toContain('is-word-toggle-28')
+    expect(html).toContain('class="vt-confirmed-control-variants" data-control-size="44"')
+    expect(html).toContain('class="vt-confirmed-control-variants" data-control-size="28"')
+    for (const skinLabel of ['1 · SOLID', '3 · COLOR SWAP', '4 · BLACK INDICATOR', '5 · WHITE INDICATOR']) {
+      expect(html).toContain(skinLabel)
+    }
+    expect(html).not.toContain('is-word-toggle-44')
+    expect(html).not.toContain('is-word-toggle-28')
   })
 
 })
