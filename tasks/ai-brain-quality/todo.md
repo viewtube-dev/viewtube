@@ -162,3 +162,16 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+
+## Current-base closeout and next wave — 2026-10-15
+
+- [x] Guard key-vault reads/writes when browser storage is missing or blocked; add regression coverage.
+- [x] Align Studio Play/Pause label marker assertion with rendered markup.
+- [x] Capture Brain Command Center command notes as immutable communication evidence behind enabled + personalization + learn-from-interactions controls, using stable command-action identity.
+- [x] Surface channel-scoped recommendation lineage in Brain Command Center using the existing read-only attribution panel.
+- [ ] Propagate stable IDs through all generation, selected variant, ActionPacket, publish transaction, evaluation and learning writers.
+- [ ] Enforce canonical project lifecycle capabilities across live creation/tool surfaces.
+- [ ] Verify communication consent, privacy/retention, durable server replay and cross-device behavior.
+- [ ] Run exact-head focused Brain/Vault/Studio tests, typecheck, runtime lint, full suite, build, source governance/reachability and browser smoke.
+- [ ] After closeout, proceed to Wave 5 quality-loop optimization: task-profile validation depth, deterministic validators, evidence-backed critique, package-level title/thumbnail/hook evaluation and bounded retry cost.
