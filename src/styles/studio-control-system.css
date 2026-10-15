@@ -1839,3 +1839,42 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   outline-offset: 0 !important;
   box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-color-1) !important;
 }
+
+
+/* Recovery correction — canonical button motion and compact split-rail stroke.
+   Keep the hard shadow anchored at the resting offset. Only the button face
+   moves; hover covers half the shadow and active covers it fully. */
+button[data-vt-studio-control="true"] {
+  --vt-studio-control-motion-shadow-x: var(--vt-studio-control-shadow, 3px);
+  --vt-studio-control-motion-shadow-y: var(--vt-studio-control-shadow, 3px);
+  box-shadow: var(--vt-studio-control-motion-shadow-x) var(--vt-studio-control-motion-shadow-y) 0 0 var(--vt-studio-control-shadow-color) !important;
+  transform: translate(0, 0);
+  transition: filter 150ms ease-out, transform 150ms ease-out, background-color 150ms ease-out;
+}
+
+button[data-vt-studio-control="true"][data-size="compact"] {
+  --vt-studio-control-motion-shadow-x: 1.5px;
+  --vt-studio-control-motion-shadow-y: 1.5px;
+}
+
+button[data-vt-studio-control="true"]:hover:not(:disabled) {
+  transform: translate(
+    calc(var(--vt-studio-control-motion-shadow-x) / 2),
+    calc(var(--vt-studio-control-motion-shadow-y) / 2)
+  ) !important;
+  box-shadow: var(--vt-studio-control-motion-shadow-x) var(--vt-studio-control-motion-shadow-y) 0 0 var(--vt-studio-control-shadow-color) !important;
+  transition-duration: 150ms;
+}
+
+button[data-vt-studio-control="true"]:active:not(:disabled) {
+  transform: translate(
+    var(--vt-studio-control-motion-shadow-x),
+    var(--vt-studio-control-motion-shadow-y)
+  ) !important;
+  box-shadow: var(--vt-studio-control-motion-shadow-x) var(--vt-studio-control-motion-shadow-y) 0 0 var(--vt-studio-control-shadow-color) !important;
+  transition-duration: 300ms;
+}
+
+button[data-vt-studio-control="true"][data-height-variant="28"][data-split-left="true"] [data-vt-studio-split-rail] {
+  border-right-width: var(--vt-studio-control-stroke, 2px) !important;
+}
