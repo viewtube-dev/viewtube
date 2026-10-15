@@ -39,7 +39,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   const [inputFocused, setInputFocused] = useState(false)
   const [held, setHeld] = useState(false)
 
-  useEffect(() => setDraft(String(value)), [value])
+  useEffect(() => { if (!inputFocused) setDraft(String(value)) }, [value, inputFocused])
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = useRef(0)
