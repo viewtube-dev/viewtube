@@ -1,5 +1,6 @@
 import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentBuildStage } from "./ContentBuildRepository"
 import type { ContentBuildPublicationIdentity, ContentBuildYouTubeBinding } from "./contracts"
+import { linkAssetOutcomeToPublication } from "../brain/assetOutcomes"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
 
@@ -162,6 +163,7 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
  const timestamp=now(),next=save({...transaction,status:"completed",completedAt:timestamp,updatedAt:timestamp})
  const build=getContentBuild(next.contentBuildId)
  if(build?.youtube?.status==="published"){
+  const publicationIdentity = getContentBuildPublicationIdentity(next.id)
   setContentBuildStage(next.contentBuildId,"published",{actorType:"youtube",toolId})
   appendContentBuildEvent({
    contentBuildId:next.contentBuildId,
@@ -180,9 +182,16 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
     projectionRevision:next.assetLock.projectionRevision,
     youtubeVideoId:next.youtubeVideoId,
     publicationState:"published",
-    publicationIdentity:getContentBuildPublicationIdentity(next.id),
+    publicationIdentity,
    },
   })
+  if (publicationIdentity?.channelId) {
+   linkAssetOutcomeToPublication({
+    assetId: next.assetLock.finalRenderAssetId,
+    channelId: publicationIdentity.channelId,
+    publicationIdentity,
+   })
+  }
  } else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
  appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.completed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{youtubeVideoId:next.youtubeVideoId,approvedSnapshotId:next.approvedSnapshotId,approvedSnapshotHash:next.approvedSnapshotHash,publicationIdentity:getContentBuildPublicationIdentity(next.id)}})
  return next
