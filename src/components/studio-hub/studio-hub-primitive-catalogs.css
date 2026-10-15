@@ -1969,13 +1969,13 @@
   max-width: 100%;
   margin: 0;
 }
-.vt-confirmed-control-variants:is(.is-word-toggle-44, .is-word-toggle-28) .vt-studio-44-word-toggle {
+.vt-confirmed-control-variants[data-control-size] .vt-studio-44-word-toggle {
   width: max-content;
   max-width: 100%;
   min-width: 0;
   margin-inline: auto;
 }
-.vt-confirmed-control-variants:is(.is-word-toggle-44, .is-word-toggle-28) .vt-studio-44-word-toggle button {
+.vt-confirmed-control-variants[data-control-size] .vt-studio-44-word-toggle button {
   min-width: 0;
   max-width: 100%;
   padding-inline: 4px;
@@ -2320,14 +2320,21 @@
   transition: none !important;
 }
 .vt-confirmed-catalog .vt-studio-legend-trigger-text {
-  min-width: 0 !important;
+  display: block;
+  width: 0;
+  max-width: 100%;
+  min-width: 0;
+  flex: 1 1 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 38px !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
   letter-spacing: -.035em !important;
 }
 .vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger-text {
-  font-size: 24px !important;
+  font-size: 24px;
 }
 .vt-confirmed-catalog .vt-studio-legend-chevron {
   width: 28px !important;
