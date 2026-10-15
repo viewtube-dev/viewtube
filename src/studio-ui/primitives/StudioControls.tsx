@@ -488,7 +488,7 @@ StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
 
 /** Circular shape variant of the canonical square icon button. All icon sizing,
  * palette, selection, effects, focus and disabled behavior remain shared. */
-export interface StudioCircleIconButtonProps extends StudioSquareIconButtonProps {}
+export type StudioCircleIconButtonProps = StudioSquareIconButtonProps
 
 export const StudioCircleIconButton = React.forwardRef<HTMLButtonElement, StudioCircleIconButtonProps>(
   ({ className, ...props }, ref) => (
