@@ -85,7 +85,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family vt-confirmed-defaults-combined">
       <h3>Canonical + Global Defaults · All Component Sizes</h3>
-      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 18px / 14px field text · 1px compact button shadow</p>
+      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 38px / 24px input text · 18px / 14px textarea text · 1px compact button shadow</p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show full defaults and exceptions</summary>
       <div className="vt-confirmed-size-grid">
