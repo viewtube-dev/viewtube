@@ -27,6 +27,7 @@ import {
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
 import {
  generateStructuredBrainResponse,
+ getActiveModel,
  groundCurrentNicheResearch,
  type StructuredBrainModelOutput,
 } from "../gemini"
@@ -306,15 +307,17 @@ export interface RunBrainTurnInput {
 
 export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> => {
  const taskProfile = resolveBrainTaskProfile(input.userText)
+ const requestedModel = input.modelGenerator ? null : getActiveModel("text")
+ const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const pending = await beginAIBrainTurn({
   channelId: input.channelId,
   userText: input.userText,
   metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
-    requestedModel: null,
+    requestedModel,
     servedModel: null,
-    modelIdentityStatus: "not_exposed_by_generator",
+    modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
@@ -532,9 +535,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
-    requestedModel: null,
+    requestedModel,
     servedModel: null,
-    modelIdentityStatus: "not_exposed_by_generator",
+    modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
@@ -562,9 +565,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
-    requestedModel: null,
+    requestedModel,
     servedModel: null,
-    modelIdentityStatus: "not_exposed_by_generator",
+    modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
@@ -611,9 +614,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
-    requestedModel: null,
+    requestedModel,
     servedModel: null,
-    modelIdentityStatus: "not_exposed_by_generator",
+    modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
@@ -641,9 +644,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
-    requestedModel: null,
+    requestedModel,
     servedModel: null,
-    modelIdentityStatus: "not_exposed_by_generator",
+    modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
