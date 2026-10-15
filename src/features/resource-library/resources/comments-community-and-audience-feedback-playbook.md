@@ -78,6 +78,12 @@ Check the claim before acting. Compare the correction with primary sources or re
 
 Capture ideas in a backlog, then assess fit with the channel promise, audience need, feasibility, rights/safety, and opportunity cost. A request is evidence that one person wants something, not a guarantee that the topic will perform.
 
+## A Repeatable Feedback Loop
+
+Collect feedback, cluster themes, estimate their frequency and relevance, verify factual claims independently, convert the strongest themes into hypotheses, and record outcomes. Keep the evidence trail proportionate: a few notes may be enough for a small channel, while a high-volume channel may need tags or a structured backlog.
+
+For material corrections, preserve what was originally stated, what evidence was checked, what changed, and when the correction was made. This is especially useful when a video contains information that can become outdated. The purpose is accountability and learning, not creating bureaucracy for every minor wording change.
+
 ## Establish Community Boundaries
 
 Before a crisis, decide what behavior is acceptable and how you will respond. Use the platform's current moderation and safety controls. Explain community expectations in plain language where appropriate, and apply them consistently rather than escalating arguments.
