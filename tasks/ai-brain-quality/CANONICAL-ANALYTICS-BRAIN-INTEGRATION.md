@@ -151,3 +151,27 @@ See [Phases 6–8 — Lineage, Governance & Verification](./PHASES-6-8-LINEAGE-G
 - Phase 6: existing event/evaluation/learning lineage owners are inventoried; end-to-end recommendation-to-published-outcome-to-learning certification remains open.
 - Phase 7: capability evidence map, path validation in the generator, and regenerated report are committed; latest-head CI verification remains pending.
 - Phase 8: canonical runtime reachability is confirmed for SidebarChatbot and BrainHubWidget, but surface-owned prompt/snapshot composition remains a convergence boundary. Release certification is blocked until latest-head gates pass or existing base-branch failures are proven unchanged.
+
+## Phases 7–12 — Governance, lineage, evaluation and learning continuity
+
+Follow-up implementation: [PR #217](https://github.com/viewtube-dev/viewtube/pull/217).
+
+- **Phase 7 — Capability coverage governance:** curated evidence map, safe repository-reference validation, reproducible report generation, and release-gate `--check`.
+- **Phase 8 — Assistant continuity audit:** SidebarChatbot and BrainHubWidget reach the shared runtime; surface-owned snapshot/prompt composition remains an explicit convergence boundary.
+- **Phase 9 — Release certification:** blocked until current-head focused tests, typecheck, runtime lint, full suite, build, source governance, and smoke are verified. Prior failure results remain failures, not exceptions.
+- **Phase 10 — Outcome lineage:** publication receipts preserve ActionPacket/workflow/recommendation/experiment IDs; selected published AssetOutcomes link to BrainOutcomeLedger with transaction, snapshot, video, trace and checkpoint evidence. Local retry idempotency is implemented; distributed/server durability remains open.
+- **Phase 11 — Analytics evaluation lineage:** the post-publish checkpoint bridge invokes a fail-closed canonical publication evaluator, which requires the immutable receipt and exact channel-scoped video row and records checkpoint/evidence lineage. Direct production caller reachability and fresh-data certification remain unverified.
+- **Phase 12 — Decision effectiveness and governed learning:** candidate creation is separate from approval; named creator review plus five distinct positive, available, comparable published-video evaluations are required before the existing BrainMemoryClaims/Channel Knowledge path can promote a descriptive learning entry. No causal conclusion is inferred.
+
+Detailed contracts:
+- [Phase 10 — Outcome Lineage Continuity](./PHASE-10-OUTCOME-LINEAGE.md)
+- [Phase 11 — Analytics Checkpoints and Before/After Evaluation](./PHASE-11-ANALYTICS-EVALUATION-LINEAGE.md)
+- [Phase 12 — Decision Effectiveness and Governed Learning](./PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md)
+
+**Certification boundary:** the full recommendation → creator decision/action → immutable publish snapshot → canonical analytics checkpoint → evaluation → governed Channel Knowledge chain, cross-system idempotency, and production reachability are not claimed complete until tested against real callers and the latest CI head.
+
+## Phase 10–12 implementation update — 2026-10-15
+
+The current follow-up code now carries ActionPacket/workflow/recommendation/experiment identity through the publication receipt, published AssetOutcome, BrainOutcomeLedger, canonical analytics checkpoint, evaluation record, reviewable candidate, and governed Brain claim. Checkpoint and evaluation writes use deterministic idempotency keys; resolved evaluation outcomes are immutable on retry; a reused evaluation key with a conflicting publication/evidence scope is rejected. Promotion is creator-reviewed and requires five independent comparable positive published-video evaluations in the same channel/project/window.
+
+**Still not certified:** current-head CI, production callsite reachability for the checkpoint bridge, real provider freshness/coverage, cross-device/server durability, and distributed atomicity across browser-local stores. This PR does not claim the end-to-end production lifecycle is certified until those gates pass.
