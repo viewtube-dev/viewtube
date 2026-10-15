@@ -10,6 +10,9 @@ import {
   type AlgorithmEvaluationTarget,
 } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { BrainConfidenceLevel } from "../../types"
+import { linkAssetOutcomeToPublication } from "../brain/assetOutcomes"
+import { createPublicationEvaluationRecord } from "../viewTubeEvaluationLedger"
+import { getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "../analytics-canon"
 import { CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION, type ContentBuildEvent, type ContentBuildPublicationIdentity, type ContentBuildYouTubeBinding } from "./contracts"
 
 export interface PostPublishIdentityInput {
@@ -18,6 +21,10 @@ export interface PostPublishIdentityInput {
   status?: ContentBuildYouTubeBinding["status"]
   publishedAt?: string | null
   correlationId?: string | null
+  actionPacketId?: string | null
+  workflowId?: string | null
+  recommendationId?: string | null
+  experimentId?: string | null
   toolId?: string
 }
 
@@ -45,6 +52,17 @@ const selectedAssets = (transaction: NonNullable<ReturnType<typeof getPublishTra
     transaction.assetLock.descriptionAssetId,
     transaction.assetLock.tagsAssetId,
   ].filter((id): id is string => Boolean(id)))]
+
+const linkPublishedAssetOutcomes = (identity: ContentBuildPublicationIdentity) => {
+  if (!identity.channelId) return
+  for (const assetId of identity.selectedVariantAssetIds) {
+    linkAssetOutcomeToPublication({
+      assetId,
+      channelId: identity.channelId,
+      publicationIdentity: identity,
+    })
+  }
+}
 
 const resolvePublishIdentity = (transactionId: string, videoId: string) => {
   const transaction = getPublishTransaction(required(transactionId, "transactionId"))
@@ -107,6 +125,10 @@ export const recordPostPublishIdentity = (
     approvedSnapshotHash: snapshot.hash,
     selectedVariantAssetIds: assetIds,
     correlationId: input.correlationId || transaction.id,
+    actionPacketId: input.actionPacketId || null,
+    workflowId: input.workflowId || null,
+    recommendationId: input.recommendationId || null,
+    experimentId: input.experimentId || null,
     idempotencyKey: identityKey,
     publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
   }
@@ -120,6 +142,19 @@ export const recordPostPublishIdentity = (
   )
 
   if (existingReceipt) {
+    const receiptMetadata = existingReceipt.metadata as Record<string, unknown> | undefined
+    const decisionIdentityPairs = [
+      ["actionPacketId", input.actionPacketId],
+      ["workflowId", input.workflowId],
+      ["recommendationId", input.recommendationId],
+      ["experimentId", input.experimentId],
+    ] as const
+    for (const [key, requestedValue] of decisionIdentityPairs) {
+      if (requestedValue && receiptMetadata?.[key] !== requestedValue) {
+        throw new Error(`Existing publication receipt conflicts with ${key}; immutable decision lineage cannot be relinked.`)
+      }
+    }
+    linkPublishedAssetOutcomes(identity)
     return {
       event: existingReceipt,
       identity,
@@ -156,6 +191,7 @@ export const recordPostPublishIdentity = (
     entityType: "publish-identity-receipt",
     entityId: transaction.id,
     actorType: "youtube",
+    actionPacketId: identity.actionPacketId || null,
     toolId: input.toolId || "video-publisher",
     previousState: build.youtube || null,
     resultingState: binding.youtube || null,
@@ -169,6 +205,7 @@ export const recordPostPublishIdentity = (
     },
   })
 
+  linkPublishedAssetOutcomes(identity)
   return {
     event,
     identity,
@@ -183,6 +220,7 @@ export const recordPostPublishIdentity = (
 
 export interface AnalyticsCheckpointBridgeInput extends PostPublishIdentityInput {
   checkpointId: string
+  selectedWindow?: AnalyticsWindow
   checkpointAt: number
   observations: AlgorithmMetricObservation[]
   evaluationTargets: AlgorithmEvaluationTarget[]
@@ -284,5 +322,24 @@ export const recordAnalyticsCheckpointForEvaluation = (
     },
   })
 
-  return { identity, checkpointEvent, ...result }
+  let publicationEvaluation = null
+  let publicationEvaluationError: string | null = null
+  try {
+    const canonical = getCurrentCanonicalIntelligenceEvidence({
+      window: input.selectedWindow,
+      sectionIds: ["executive-summary"],
+    })
+    publicationEvaluation = createPublicationEvaluationRecord({
+      publicationIdentity: identity.identity,
+      selectedWindow: input.selectedWindow || canonical.selectedWindow,
+      source: "post-publication-checkpoint",
+      recommendation: input.summary || "Evaluate observed performance for the published variant.",
+      comparabilityStatus: "unknown",
+      causalAssessment: "insufficient_evidence",
+    })
+  } catch (cause) {
+    publicationEvaluationError = cause instanceof Error ? cause.message : String(cause)
+  }
+
+  return { identity, checkpointEvent, ...result, publicationEvaluation, publicationEvaluationError }
 }
