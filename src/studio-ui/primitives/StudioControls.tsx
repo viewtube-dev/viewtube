@@ -15,7 +15,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textTransform: "uppercase",
   letterSpacing: "-0.035em",
   lineHeight: 0.86,
-  shadowPolicy: "Hard offset shadows are button-only; dropdown menus and menu options have no shadows or press-motion transitions; text fields use black outer borders and primary-color inset strokes.",
+  shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
   focusOutline: "Text inputs and text areas use a 3px standard / 2px compact focus outline at 0px offset plus a secondary-color 1.5px / 1px focus accent; focused text stroke follows text color.",
   textFieldDefaults: {
     defaultMode: {
@@ -377,6 +377,8 @@ export interface StudioLegendMultiDropdownOption {
 
 export interface StudioLegendMultiDropdownProps {
   label: React.ReactNode
+  /** Accessible plain-text name when the visible label is rich React content. */
+  accessibleLabel?: string
   options: StudioLegendMultiDropdownOption[]
   value?: string[]
   defaultValue?: string[]
@@ -397,7 +399,7 @@ export interface StudioLegendMultiDropdownProps {
  * selection is multi-valued and never depends on a native browser menu.
  */
 export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps> = ({
-  label, options, value, defaultValue = [], onChange, sizeVariant = "standard",
+  label, accessibleLabel, options, value, defaultValue = [], onChange, sizeVariant = "standard",
   level = "l1", placeholder = "ANY", clearLabel = "CLEAR ALL",
   maxMenuHeight = 280, className, disabled = false, name,
 }) => {
@@ -427,6 +429,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
   }, [open])
   const selectedLabels = options.filter(option => selected.includes(option.value)).map(option => option.label)
   const triggerLabel = selectedLabels.length ? selectedLabels.join(", ") : placeholder
+  const menuAccessibleLabel = accessibleLabel ?? (typeof label === "string" || typeof label === "number" ? String(label) : "Filter options")
   return (
     <div
       ref={rootRef}
@@ -456,7 +459,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
         </button>
       </div>
       {open && !disabled && (
-        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={String(label)} aria-multiselectable="true">
+        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable="true">
           <div className="vt-studio-legend-options">
             {options.map(option => {
               const isSelected = selected.includes(option.value)
