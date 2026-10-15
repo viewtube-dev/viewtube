@@ -1,5 +1,5 @@
 import React from "react"
-import { Check, Settings2, Sparkles } from "lucide-react"
+import { Check, Settings2, Sparkles, UserRound } from "lucide-react"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -73,15 +73,20 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[] }> = ({ title, children, provenance, nonDefaultSettings = [] }) => (
   <section className={`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}>
-    <h3>{title}</h3>
+    <h3 title={title}>{title}</h3>
     <div className="vt-confirmed-variants">{children}</div>
-    {nonDefaultSettings.length > 0 && (
-      <section className="vt-confirmed-nondefault-settings" aria-label={`${title} non-default settings`}>
-        <strong>NON-DEFAULT SETTINGS</strong>
-        <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
-      </section>
+    {(nonDefaultSettings.length > 0 || provenance) && (
+      <details className="vt-confirmed-source-details">
+        <summary>Settings + source</summary>
+        {nonDefaultSettings.length > 0 && (
+          <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
+            <strong>NON-DEFAULT SETTINGS</strong>
+            <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
+          </section>
+        )}
+        {provenance}
+      </details>
     )}
-    {provenance}
   </section>
 )
 
@@ -187,7 +192,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextArea className="is-reverse-colors" variant="fixed-label" label="DESCRIPTION" aria-label="Studio fixed-label textarea compact B reverse colors" sizeVariant="compact" rows={4} data-vt-library-component="StudioTextArea" /></div>
     </Family>
     <CanonicalControlFamilies />
-    <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
+    <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <Family title="Button" nonDefaultSettings={["The button defaults to 44px; the explicit compact height selects 28px. The older compact size option is used only when no height is supplied.", "Accent is the default tone; neutral, danger, warning, and success communicate alternate action meaning.", "Selected buttons use the secondary module color and expose a pressed state; disabled buttons cannot be activated.", "Loading exposes its busy state and disables activation until loading ends.", "The face owns the visible border; tactile press moves the whole button by its shadow offset while the visible shadow disappears, using the shared 80ms press timing."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton heightVariant="44">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton heightVariant="28" tone="neutral">button</StudioButton></div>
@@ -313,6 +318,49 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
+      title="Composite Controls"
+      nonDefaultSettings={[
+        "Play/pause keeps label width stable while icon and selected colors swap.",
+        "Circle icons share square-button sizing, skins, effects, focus, and disabled behavior.",
+        "Username combines an icon rail with the canonical text input.",
+        "Standard uses 44px controls; compact uses 28px controls."
+      ]}
+      provenance={<Provenance primitive="StudioPlayPauseButton · StudioCircleIconButton · StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Canonical split-left, circle-icon, and username composite variants." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-composite-row">
+        <span>Play / pause · both sizes</span>
+        <div className="vt-confirmed-composite-grid">
+          <div className="vt-confirmed-composite-specimen"><small>44px standard</small><StudioPlayPauseButton sizeVariant="standard" playLabel="PLAY" pauseLabel="PAUSE" data-vt-library-component="StudioPlayPauseButton" /></div>
+          <div className="vt-confirmed-composite-specimen"><small>28px compact</small><StudioPlayPauseButton sizeVariant="compact" playLabel="PLAY" pauseLabel="PAUSE" data-vt-library-component="StudioPlayPauseButton" /></div>
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-composite-row">
+        <span>Circle icon · standard V1–V4</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle V1" variant="v1" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle V2" variant="v2" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Sparkles aria-hidden="true" />} label="Circle V3" variant="v3" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle V4" variant="v4" sizeVariant="standard" data-vt-library-component="StudioCircleIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-composite-row">
+        <span>Circle icon · compact V1–V4</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle compact V1" variant="v1" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle compact V2" variant="v2" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Sparkles aria-hidden="true" />} label="Circle compact V3" variant="v3" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+          <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Circle compact V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-composite-row">
+        <span>Username · both sizes</span>
+        <div className="vt-confirmed-username-grid">
+          <div className="vt-confirmed-composite-specimen"><small>44px standard</small><StudioUsernameInput icon={<UserRound size={24} strokeWidth={2} />} sizeVariant="standard" aria-label="Username standard" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" /></div>
+          <div className="vt-confirmed-composite-specimen"><small>28px compact</small><StudioUsernameInput icon={<UserRound size={18} strokeWidth={2} />} sizeVariant="compact" aria-label="Username compact" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" /></div>
+        </div>
+      </div>
+    </Family>
+    <Family
       title="Dropdown"
       nonDefaultSettings={["The dropdown trigger defaults to 44px; compact selects the 28px trigger and matching menu-row family.", "The control level can be l0, l1, or l2; l1 is the default and does not replace the trigger size contract.", "A disabled trigger cannot open the menu. Keyboard focus and selected options remain governed by the production dropdown component.", "Use a controlled value when the parent owns selection; use a default value to initialize selection managed inside the component.", "Placeholder text appears when nothing is selected; the clear label names the clear action, and maximum menu height limits the floating panel.", "Disabled options remain visible for context but cannot be selected. The panel may have a stationary shadow; options have no button-press shadow or motion."]}
       provenance={<Provenance
@@ -400,20 +448,20 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           <StudioSpectrumTag label="DRAGONFRUIT" />
           <StudioSpectrumTag label="ELDERBERRY" />
           <StudioSpectrumTag label="FIG" />
-          <StudioSpectrumTag label="GRAPE" />
+          <StudioSpectrumTag label="GUAVA" />
           <StudioSpectrumTag label="HONEYDEW" />
           <StudioSpectrumTag label="INDIGO" />
-          <StudioSpectrumTag label="JASMINE" />
-          <StudioSpectrumTag label="KIWI" />
+          <StudioSpectrumTag label="JACKFRUIT" />
           <StudioSpectrumTag label="LEMON" />
           <StudioSpectrumTag label="MANGO" />
           <StudioSpectrumTag label="NECTARINE" />
           <StudioSpectrumTag label="ORANGE" />
-          <StudioSpectrumTag label="PEACH" />
+          <StudioSpectrumTag label="PAPAYA" />
           <StudioSpectrumTag label="QUINCE" />
-          <StudioSpectrumTag label="RASPBERRY" />
           <StudioSpectrumTag label="STRAWBERRY" />
-          <StudioSpectrumTag label="TANGERINE" />
+          <StudioSpectrumTag label="UMBER" />
+          <StudioSpectrumTag label="WALNUT" />
+          <StudioSpectrumTag label="YUZU" />
         </div>
         <div className="vt-confirmed-spectrum-tag-selected">
           <span>Selected-state treatment</span>
