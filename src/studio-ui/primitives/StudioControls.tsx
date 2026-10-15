@@ -1,8 +1,8 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens"
 import "../../styles/studio-control-system.css"
-import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput, StudioLabeledInput } from "./StudioTextInput"
-import { StudioTextArea, StudioLabeledTextArea } from "./StudioTextArea"
+import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
+import { StudioTextArea } from "./StudioTextArea"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -67,10 +67,10 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
  * This component is defined and styled entirely by the Studio Controls system;
  * it has no import, wrapper, or runtime dependency on SubToolbox primitives.
  */
-export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput, StudioLabeledInput }
-export type { StudioLabeledInputProps } from "./StudioTextInput"
-export { StudioTextArea, StudioLabeledTextArea }
-export type { StudioLabeledTextAreaProps } from "./StudioTextArea"
+export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput }
+export type { StudioTextInputProps } from "./StudioTextInput"
+export { StudioTextArea }
+export type { StudioTextAreaProps } from "./StudioTextArea"
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
