@@ -198,6 +198,32 @@ export interface ContentBuildSnapshot {
  updatedAt: string
 }
 
+export type ContentBuildMetadataOperation = "create" | "refine" | "edit" | "select" | "replace" | "publish" | "restore"
+
+export interface ContentBuildMetadataHistoryEntry {
+ schemaVersion: 1
+ contentBuildId: string
+ metadataVersionId: string
+ operationId: string
+ operation: ContentBuildMetadataOperation
+ fields: Array<{ field: string; before: unknown; after: unknown }>
+ actorType: ContentBuildEvent["actorType"]
+ actorId: string | null
+ sourceToolId: string | null
+ generationRecordId: string | null
+ promptRecipeId: string | null
+ promptRecipeVersion: string | null
+ sourceAssetIds: string[]
+ resultingAssetIds: string[]
+ publishTransactionId: string | null
+ approvedSnapshotId: string | null
+ approvedSnapshotHash: string | null
+ publishedVideoId: string | null
+ analyticsCheckpointIds: string[]
+ evidenceIds: string[]
+ occurredAt: string
+}
+
 export type ContentBuildEventType =
  | "build.created"
  | "profile.updated"

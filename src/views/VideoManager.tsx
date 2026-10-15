@@ -16,7 +16,7 @@ import {
 import { useSimpleAuth } from "../auth/AuthProvider"
 import { useNavigate } from "react-router-dom"
 import { useBrain } from "../context/useBrain"
-import { listContentBuilds } from "../services/asset-engine/ContentBuildRepository"
+import { listContentBuilds, recordContentBuildMetadataChange } from "../services/asset-engine/ContentBuildRepository"
 import { createEmptyMetadataMasterPackage } from "../services/metadataMaster"
 import { listMetadataHistory, recordPublishedMetadataChange, recordPublishedMetadataSettingsChange } from "../services/metadataHistory"
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
@@ -479,22 +479,45 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      source: "manual",
      provenance: ["Video Manager", "Successful published metadata update"],
     })
+    const metadataOperationId = `video-manager-save-${selectedVideoId}-${Date.now()}`
+    const metadataOccurredAt = new Date().toISOString()
     recordPublishedMetadataChange({
      contentBuildId: historyBuild.id,
      projectId: historyBuild.legacyProjectId,
      videoId: selectedVideoId,
      operation: "manual",
      actorType: "creator",
-     operationId: `video-manager-save-${selectedVideoId}-${Date.now()}`,
+     operationId: metadataOperationId,
+     timestamp: metadataOccurredAt,
      reason: "Creator saved published-video metadata in Video Manager.",
      previousPackage,
      package: nextPackage,
      previousSettings: { visibility: videoDetails?.privacyStatus ?? null },
      nextSettings: { visibility: editPrivacy },
     })
-   }
-
-   if (thumbnailFile) {
+    const metadataFields = (["title", "description", "tags", "category"] as const)
+     .filter(field => JSON.stringify(previousPackage[field]) !== JSON.stringify(nextPackage[field]))
+     .map(field => ({ field, before: previousPackage[field], after: nextPackage[field] }))
+    if (metadataFields.length) {
+     recordContentBuildMetadataChange({
+      contentBuildId: historyBuild.id,
+      metadataVersionId: `live-metadata-version:${selectedVideoId}:${priorVersion + 1}`,
+      operationId: metadataOperationId,
+      operation: "edit",
+      actorType: "creator",
+      sourceToolId: "video-manager",
+      publishedVideoId: selectedVideoId,
+      fields: metadataFields,
+      sourceAssetIds: [
+       historyBuild.selections.title,
+       historyBuild.selections.thumbnail,
+       historyBuild.selections.description,
+       historyBuild.selections.tags,
+      ].filter((value): value is string => Boolean(value)),
+      evidenceIds: [],
+      occurredAt: metadataOccurredAt,
+     })
+    }
     await setSimpleVideoThumbnail(selectedVideoId, thumbnailFile)
     setThumbnailFile(null)
    }

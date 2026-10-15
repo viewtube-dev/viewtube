@@ -257,8 +257,89 @@ describe("readBrainRuntimeSnapshot", () => {
   expect(snapshot.generation.requestCount).toBe(0)
   expect(snapshot.generation.receiptCount).toBe(0)
   expect(snapshot.brain.capabilityCount).toBe(14)
+  expect(snapshot.metadataIntelligence).toMatchObject({
+   metadataVersionCount: 0,
+   comparisonCount: 0,
+   readyComparisonCount: 0,
+   learningCandidateCount: 0,
+   promotedKnowledgeCount: 0,
+   latestComparison: null,
+  })
  })
-})
+
+ it("surfaces metadata comparisons and governed learning counts to Brain", () => {
+  const events = [
+   {
+    id: "metadata-version-event",
+    contentBuildId: build.id,
+    timestamp: "2026-10-10T12:00:00.000Z",
+    eventType: "title.changed",
+    entityType: "metadata-version",
+    entityId: "metadata-v2",
+    actorType: "creator",
+    inputAssetIds: [],
+    outputAssetIds: [],
+    evidenceIds: ["metadata-evidence"],
+    metadata: { metadataHistory: { metadataVersionId: "metadata-v2" } },
+   },
+   {
+    id: "metadata-comparison-event",
+    contentBuildId: build.id,
+    timestamp: "2026-10-11T12:00:00.000Z",
+    eventType: "analysis.completed",
+    entityType: "metadata-performance-comparison",
+    entityId: "metadata-v2",
+    actorType: "analytics",
+    inputAssetIds: [],
+    outputAssetIds: [],
+    evidenceIds: ["analytics-evidence"],
+    metadata: { metadataVersionId: "metadata-v2" },
+    resultingState: { status: "ready", metadataVersionId: "metadata-v2" },
+   },
+   {
+    id: "metadata-candidate-event",
+    contentBuildId: build.id,
+    timestamp: "2026-10-12T12:00:00.000Z",
+    eventType: "learning.candidate.created",
+    entityType: "metadata-learning-candidate",
+    entityId: "candidate-1",
+    actorType: "system",
+    inputAssetIds: [],
+    outputAssetIds: [],
+    evidenceIds: ["analytics-evidence"],
+   },
+  ] as any
+  const snapshot = readBrainRuntimeSnapshot(
+   {
+    channelId: "channel-1",
+    activeProjectId: "project-2",
+    projects: [{ id: "project-2", name: "Austerlitz package", status: "active", contentBuildId: build.id }],
+   },
+   {
+    listContentBuilds: () => [build],
+    listContentBuildEvents: () => events,
+    listBrainTraces: () => [],
+    summarizeBrainOutcomes: () => ({
+     total: 0, accepted: 0, negative: 0, acceptanceRate: 0,
+     completed: 0, corrected: 0, rejected: 0, abandoned: 0,
+    }),
+    capabilityCount: 14,
+   },
+  )
+  expect(snapshot.metadataIntelligence).toMatchObject({
+   metadataVersionCount: 1,
+   comparisonCount: 1,
+   readyComparisonCount: 1,
+   learningCandidateCount: 1,
+   latestComparison: {
+    eventId: "metadata-comparison-event",
+    metadataVersionId: "metadata-v2",
+    status: "ready",
+    interpretation: "descriptive-association-only",
+    causalConclusion: null,
+   },
+  })
+ })
 
 
 it("projects an explicit provenance chain without fuzzy attribution", () => {
