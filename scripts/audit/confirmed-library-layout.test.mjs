@@ -270,3 +270,44 @@ test("confirmed spectrum tag gallery shows 20 production tag specimens across th
   assert.equal((tagGrid.match(/<StudioSpectrumTag\s/g) ?? []).length, 20, "expected 20 canonical StudioSpectrumTag specimens");
   assert.match(styles, /\.vt-confirmed-spectrum-tag-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5, minmax\(0, max-content\)\)/);
 });
+
+
+test("confirmed library includes circle, play-pause, and username composites", () => {
+  assert.match(catalog, /StudioCircleIconButton/);
+  assert.match(catalog, /StudioPlayPauseButton/);
+  assert.match(catalog, /StudioUsernameInput/);
+  assert.match(catalog, /Circle icon · standard V1–V4/);
+  assert.match(catalog, /Circle icon · compact V1–V4/);
+  assert.match(catalog, /Play \/ pause · both sizes/);
+  assert.match(catalog, /Username · both sizes/);
+  assert.match(catalog, /from "lucide-react"/);
+});
+
+test("settings and TSX/CSS/import provenance are collapsed by default", () => {
+  assert.match(catalog, /<details className="vt-confirmed-source-details">\s*<summary>Settings \+ source<\/summary>/);
+  assert.match(catalog, /NON-DEFAULT SETTINGS/);
+  assert.match(catalog, /TSX: <code>/);
+  assert.match(catalog, /CSS: <code>/);
+  assert.match(catalog, /Imports:/);
+  assert.match(styles, /\.vt-confirmed-source-details\s*\{/);
+});
+
+test("confirmed component labels remain one line and visually capped at 40 characters", () => {
+  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap[^}]*text-overflow:\s*ellipsis/s);
+  assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
+});
+
+test("all confirmed-library textareas use full-width rows", () => {
+  assert.match(styles, /\.vt-confirmed-variant:has\(textarea\)[\s\S]*?grid-column:\s*1 \/ -1/);
+  assert.match(styles, /\.vt-confirmed-catalog textarea,[\s\S]*?width:\s*100% !important/);
+});
+
+test("circle and username specimens use canonical production exports", () => {
+  const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  assert.match(controls, /export const StudioCircleIconButton/);
+  assert.match(controls, /export const StudioPlayPauseButton/);
+  assert.match(controls, /export const StudioUsernameInput/);
+  assert.match(catalog, /data-vt-library-component="StudioCircleIconButton"/);
+  assert.match(catalog, /data-vt-library-component="StudioPlayPauseButton"/);
+  assert.match(catalog, /data-vt-library-component="StudioUsernameInput"/);
+});
