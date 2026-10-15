@@ -118,15 +118,31 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(controls).toContain('letterSpacing: "-0.02em"')
   })
 
-  it("anchors the action shadow while only the face moves", () => {
+  it("uses tactile press transitions that remove the shadow and depress the whole Studio button", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    expect(contract).toContain("--vt-studio-motion-button: 180ms")
+    expect(contract).toContain("--vt-studio-motion-press: 80ms")
     expect(contract).toContain('button[data-vt-studio-button="true"]::before')
-    expect(contract).toContain("[data-vt-studio-button-face]")
-    expect(contract).toContain("transition: transform 150ms ease-out")
-    expect(contract).toContain("transition-duration: 300ms")
-    expect(contract).toContain("--vt-studio-control-shadow-x:1px")
-    expect(contract).toContain("button[data-vt-studio-button=\"true\"][data-split-left=\"true\"] [data-vt-studio-split-rail]")
+    expect(contract).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)::before')
+    expect(contract).toContain("opacity: 0")
+    expect(contract).toContain("transform:translate(var(--vt-studio-control-shadow-x")
+    expect(contract).toContain("transition-duration: var(--vt-studio-motion-press)")
+    expect(contract).toContain('button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail]')
+    expect(contract).not.toContain("transition-duration:300ms")
+  })
+
+  it("applies the same physical depression model to SubToolbox and split-action buttons while excluding menu triggers", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+    expect(css).toContain("--vt-subtoolbox-motion-button: 180ms")
+    expect(css).toContain("--vt-subtoolbox-motion-press: 80ms")
+    expect(css).toContain(".vt-subtoolbox-button:active:not(:disabled)")
+    expect(css).toContain("box-shadow:none")
+    expect(css).toContain("translate(var(--vt-subtoolbox-inner-shadow")
+    expect(css).toContain(".vt-subtoolbox-split-action:active:not(:disabled)")
+    expect(css).toContain("translate(var(--vt-subtoolbox-shadow-offset")
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)")
+    expect(css).toContain(".vt-studio-legend-trigger:active")
   })
 })
 
