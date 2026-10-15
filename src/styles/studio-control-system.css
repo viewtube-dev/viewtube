@@ -2493,3 +2493,76 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
     animation: none !important;
   }
 }
+
+
+/* Split-left badge: shares the button's square leading rail and paired palette,
+   but is informational, flat, and completely motionless. */
+.vt-studio-split-left-badge {
+  --vt-studio-badge-height: 44px;
+  --vt-studio-badge-stroke: 3px;
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 0;
+  min-height: var(--vt-studio-badge-height);
+  height: var(--vt-studio-badge-height);
+  overflow: hidden;
+  border: var(--vt-studio-badge-stroke) solid #000;
+  border-radius: 44px;
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
+  color: #000;
+  box-shadow: none !important;
+  cursor: default;
+  transition: none !important;
+  animation: none !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  text-transform: uppercase;
+  line-height: .86;
+  letter-spacing: -.02em;
+}
+.vt-studio-split-left-badge__rail {
+  display: grid;
+  flex: 0 0 var(--vt-studio-badge-height);
+  width: var(--vt-studio-badge-height);
+  height: 100%;
+  place-items: center;
+  border-right: var(--vt-studio-badge-stroke) solid #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-split-left-badge__rail > svg { width: 22px; height: 22px; stroke-width: 2.5; }
+.vt-studio-split-left-badge__label {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  padding: 0 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+.vt-studio-split-left-badge[data-size="compact"] {
+  --vt-studio-badge-height: 28px;
+  --vt-studio-badge-stroke: 2px;
+  border-radius: 44px;
+}
+.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__rail > svg { width: 16px; height: 16px; stroke-width: 2; }
+.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label { padding: 0 7px; font-size: 10px; }
+.vt-studio-split-left-badge[data-size="micro"] {
+  --vt-studio-badge-height: 14px;
+  --vt-studio-badge-stroke: 1px;
+  border-radius: 44px;
+  font-size: 8px;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail { flex-basis: 14px; width: 14px; border-right-width: 1px; }
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail > svg { width: 9px; height: 9px; stroke-width: 2; }
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__label { padding: 0 3px; font-size: 8px; }
+.vt-studio-split-left-badge * { transition: none !important; animation: none !important; }
+
+/* Choice controls must occupy the full 44px standard control height. */
+.vt-studio-44-choice {
+  box-sizing: border-box;
+  height: 44px;
+  min-height: 44px;
+}
+.vt-studio-44-choice.is-checkbox { border-radius: 44px; }
