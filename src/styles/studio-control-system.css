@@ -1004,8 +1004,10 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 }
 
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
-button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:none; overflow:visible; transform:translate(0,0); transition:none; }
-button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); pointer-events:none; }
+/* Canonical tactile motion tokens: 180ms general transition, 80ms press. */
+:root { --vt-studio-motion-button: 180ms; --vt-studio-motion-press: 80ms; }
+button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:none; overflow:visible; transform:translate(0,0); transition:transform var(--vt-studio-motion-button) ease-out; }
+button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); opacity:1; transition:opacity var(--vt-studio-motion-button) ease-out; pointer-events:none; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }
 /* Compact buttons use a single anchored 1px pseudo-element shadow. Never stack
@@ -1028,7 +1030,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   appearance: none; box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
   min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 6px; background: transparent;
   box-shadow: 3px 3px 0 var(--vt-studio-control-shadow-color); overflow: visible; color: #000;
-  transition: box-shadow 150ms ease-out;
+  transition: transform var(--vt-studio-motion-button,180ms) ease-out, box-shadow var(--vt-studio-motion-button,180ms) ease-out;
 }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -1040,8 +1042,9 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
   transition: transform 150ms ease-out, background-color 150ms ease-out;
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) > [data-vt-studio-action-face] { transform: translate(1.5px, 1.5px); }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform: translate(3px, 3px); transition-duration: 300ms; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) { transform: translate(1.5px, 1.5px); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) { box-shadow:none; transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform:none; transition-duration:var(--vt-studio-motion-press,80ms); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; }
 @media (prefers-reduced-motion: reduce) {
@@ -1049,10 +1052,12 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none; }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform var(--vt-studio-motion-button,180ms) ease-out,background-color var(--vt-studio-motion-button,180ms) ease-out; }
 button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] { padding-inline:8px; font-size:24px; }
 button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
-button[data-vt-studio-button="true"]:active:not(:disabled) { transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); transition-duration:var(--vt-studio-motion-press,80ms); }\nbutton[data-vt-studio-button="true"]:active:not(:disabled)::before { opacity:0; transition-duration:var(--vt-studio-motion-press,80ms); }\nbutton[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(0,0); transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-button="true"]:active:not(:disabled) { transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-button="true"]:active:not(:disabled)::before { opacity:0; transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(0,0); transition-duration:var(--vt-studio-motion-press,80ms); }
 button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; }
 /* Selected faces switch to secondary, so their shadow must switch to the opposite primary color. */
