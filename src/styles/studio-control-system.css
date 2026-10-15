@@ -1026,8 +1026,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:none; overflow:visible; transform:translate(0,0); transition:transform var(--vt-studio-motion-button) ease-out; }
 button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); opacity:1; transition:opacity var(--vt-studio-motion-button) ease-out; pointer-events:none; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }
-button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }
-/* Compact buttons use a single anchored 1px pseudo-element shadow. Never stack
+/* Compact buttons use a single anchored 1.5px pseudo-element shadow. Never stack
    a second native box-shadow on the compact button shell or widen its silhouette. */
 button[data-vt-studio-button="true"][data-size="compact"] {
   box-shadow: none !important;
@@ -1038,7 +1037,7 @@ button[data-vt-studio-button="true"][data-size="compact"]::before {
   width: auto;
   height: auto;
   filter: none;
-  transform: translate(var(--vt-studio-control-shadow-x, 1px), var(--vt-studio-control-shadow-y, 1px));
+  transform: translate(var(--vt-studio-control-shadow-x, 1.5px), var(--vt-studio-control-shadow-y, 1.5px));
 }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
@@ -1120,8 +1119,8 @@ button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-bu
 [data-vt-studio-button-icon] { display:grid; flex:0 0 auto; place-items:center; }
 button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
 
-/* Square icon button variants inherit the split-left rail icon metrics:
-   28px/2.5 standard and 18px/1.65 compact. */
+/* Icon buttons default to the large production preset: 38px/1.9 standard and 24px/2 compact.
+   The current (28px/2.5, 18px/1.65) and moderate (34px/2.0588, 22px/1.35) values are opt-in presets. */
 button[data-vt-studio-icon-button="true"][data-icon-variant="v1"] {
   --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
 }

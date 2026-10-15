@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Confirmed Library phases 1–5 are implemented on `fix/confirmed-library-phases-4-6-2026-10-15`; automated execution and rendered verification pending  
+**Status:** Confirmed Library source-parity audit in progress on `reconcile/confirmed-library-and-stepper-2026-10-15`; tests updated, execution and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Current work branch:** `fix/confirmed-library-phases-4-6-2026-10-15` (phase 4–5 implementation; phase 6 verification in progress)  
+**Current work branch:** `reconcile/confirmed-library-and-stepper-2026-10-15` (confirmed-catalog fidelity audit and default-style parity)  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -19,6 +19,21 @@ This document is the working reference for the global defaults, size contracts, 
 
 When values conflict, the desired authority is the exported size/global contract plus the canonical CSS implementation. A later selector must not silently redefine a shared default. Exceptions must be listed in code and in the Confirmed Primitive Library.
 
+## 1A. Confirmed Library source-parity pass (2026-10-15)
+
+The Confirmed Primitive Library must describe the production component that actually renders, not an idealized redraw or a stale token snapshot. Catalog specimens import production primitives; catalog CSS should only control specimen layout. The gallery should distinguish declared shared defaults, effective CSS, family-specific exceptions, and examples that are static visual previews rather than live operation outcomes.
+
+| Concern | Current source-aligned representation | Exception / verification boundary |
+|---|---|---|
+| Shared geometry | Standard 44px / compact 28px; 3px / 2px border; 6px / 4px radius for ordinary buttons and fields | 44px switch/choice rectangular corners and standard word-toggle use reference-specific 7.333px radii |
+| Typography | Inter, weight 1000, uppercase, -0.02em tracking, 0.86 baseline line-height | Single-line inputs 38px / 24px; textareas 18px / 14px with multiline padding/line-height |
+| Button shadow and motion | Standard 3px × 3px; compact 1.5px × 1.5px; 180ms general/hover, 80ms active press | Active shadow movement still differs from the stable-shadow target; see Section 7 |
+| Default icon size | Large preset: 38px / 1.9 stroke standard; 24px / 2.0 stroke compact | Current 28px/18px and moderate 34px/22px presets are optional API variants, not default gallery specimens |
+| Dropdown | Legend Multi is a production multi-select; gallery shows closed triggers with initial selection/placeholder | Menu opens only after interaction; this gallery does not depict an initially open menu |
+| Icon effects | Notification count and success state are static gallery previews | They are not real notification counts or live successful operations |
+
+The source regression command is `npm run test:confirmed-library-layout`. Assertions now cover the compact shadow, shared tracking/motion tokens, default icon metrics, actual specimen states, and static-preview labels. **Source assertions are not visual certification.** Test execution, typecheck, CSS parsing, production build, and rendered browser checks remain required.
+
 ## 2. Global defaults shared by both sizes
 
 | Property | Global default / policy | Application |
@@ -26,7 +41,7 @@ When values conflict, the desired authority is the exported size/global contract
 | Font family | `Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif` | All control text |
 | Font weight | `1000` (maximum-heavy emphasis) | All control text unless a documented functional exception applies |
 | Text transform | Uppercase | Buttons, fields, labels, dropdown options |
-| Letter spacing | `-0.035em` | General controls; a component may document a narrower exception |
+| Letter spacing | `-0.02em` | Matches the effective Studio control CSS; a component may document a narrower exception |
 | Line height | `0.86` baseline; component geometry may align a label using a documented equivalent | Text controls and button labels |
 | Primary / secondary color authority | Primary = `--pair-a`; secondary = `--pair-b` | Shared color-pair contract |
 | Text color | Action labels are black; text fields use primary (`--pair-a`) at rest and black only while focused | Component/state dependent |
@@ -36,10 +51,10 @@ When values conflict, the desired authority is the exported size/global contract
 | Border-radius policy | Size-specific: standard 6px; compact 4px | All components unless an explicitly indexed exception is approved |
 | Border-width policy | Size-specific: standard 3px; compact 2px | All components unless an explicitly indexed exception is approved |
 | Shadow / focus policy | Hard offset shadows belong to button faces and stationary dropdown panels. Text fields retain a primary inset stroke and a separate secondary-color focus accent; do not confuse the accent shadow with the computed CSS outline. | Component and state specific |
-| Stable shadow geometry | Shadow anchor/offset stays fixed; button face moves independently | All shadowed buttons |
-| Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | All shadowed buttons |
-| Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | All shadowed buttons |
-| Motion timing | Hover 150ms; click 300ms per current size constants | Buttons; must be reconciled with CSS transition definitions |
+| Stable shadow geometry (target) | Shadow anchor/offset stays fixed; button face moves independently | Target contract; current active-state mismatch is documented in Section 7 and is not certified as fixed |
+| Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | Standard button hover follows this target; the prominent action moves its outer control instead |
+| Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | Current active-state rules still move the outer shell and hide the shadow; see Section 7 |
+| Motion timing | General/hover 180ms; active press 80ms | CSS variables/fallbacks and exported tokens now agree; test and browser verification are pending |
 | Reduced motion | Preserve state feedback while minimizing motion | Must not erase all state hierarchy or affordance |
 
 ## 3. Canonical size contracts
@@ -54,12 +69,12 @@ These values come from `STUDIO_COMPONENT_SIZE_DEFAULTS` in `StudioControls.tsx`.
 | Text size | 38px | 24px |
 | Font weight | 1000 | 1000 |
 | Button shadow X/Y | 3px / 3px | 1.5px / 1.5px |
-| Hover transition | 150ms | 150ms |
+| General/hover transition | 180ms | 180ms |
 | Hover face movement | 1.5px (half of 3px) | 0.75px (half of 1.5px) |
-| Click transition | 300ms | 300ms |
+| Active press transition | 80ms | 80ms |
 | Click face movement | 3px (full offset; covers shadow) | 1.5px (full offset; covers shadow) |
-| Icon size | 28px | 18px |
-| Icon stroke | 2.5px | 1.65px |
+| Default button icon size | 38px | 24px |
+| Default large button-icon stroke | 1.9px | 2.0px |
 
 **Resolved in this branch:** The final CSS contract now keeps text-field radius/stroke size-specific, uses a 3px standard / 2px compact split-left divider, and gives placeholder/value text the same primary-color typography at rest. The 44px switch/choice family intentionally follows the supplied `viewtube-control-library-44px.html` geometry rather than the generic button/field radius token.
 
@@ -114,41 +129,39 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 | E-15 | Focus and reduced motion | Focus needs visible, stable outline; reduced-motion must remain understandable | Focus uses 3px outline / 3px offset on buttons, not size-derived; reduced-motion sets transition duration to .01ms globally, suppressing most motion feedback | **Needs accessibility review and state feedback alternative** |
 | E-16 | Catalog defaults panel | Gallery should expose the real defaults and list every non-default setting | Catalog renders exported global and size constants, but those constants do not reflect every CSS override; per-family non-default lists exist but do not enumerate CSS drift | **Defect: add effective-vs-declared drift and exception status to catalog** |
 
-## 6. Component family index — what to verify in the Confirmed Primitive Library
+## 6. Component family inventory — represented vs not yet represented
 
-The canonical gallery currently uses production exports (good), and has family-level “NON-DEFAULT SETTINGS” lists. Keep this provenance and extend it with a visible global exception index.
+This inventory separates visible Confirmed Primitive Library specimens from related exports that are not currently demonstrated in the gallery. A related component is not certified by proximity to a similar specimen.
 
-| Family in library | Primary component/source | Required checks |
-|---|---|---|
-| Text Input / Search / Number | `StudioTextInput`, `StudioSearchInput`, `StudioNumberInput` — `StudioControls.tsx` | Standard/compact font, border, radius, fill, focus ring, caret; no stale 8px radius |
-| Text Area | `StudioTextArea` | Control chrome follows size; explicitly document multiline minimum-height/resize exception |
-| Text Input · Floating Label Variant | `StudioTextInput` with `variant="floating-label"` | Wrapper adds label only; global 38px/24px input typography and selected size geometry remain unchanged |
-| Text Area · Floating Label Variant | `StudioTextArea` with `variant="floating-label"` | Wrapper adds label only; textarea 18px/14px typography, 92px minimum surface, multiline padding, and vertical resize remain unchanged |
-| Button | `StudioButton` | 38px/24px text contract, 3px/2px stroke, 6px/4px radius, shadow anchor and press states |
-| Icon Button | `StudioIconButton` | Same button contract; icon 28px/18px; no independent shadow/radius override |
-| Split-left Button | `StudioSplitLeftButton` | Divider 3px/2px; selected/default identical geometry; rail icon 28px/18px; stable shadow |
-| Switch | `Studioswitch` | Track/handle dimensions; radius exception by shape; currently standard-only API |
-| Radio / Checkbox | `StudioChoice` | 44px size, shape/mark variants; selected/default geometry unchanged |
-| Word Toggle | `Studiotoggle` | 44px/28px geometry; measured active handle; documented custom words/gap/inset |
-| Legend Multi Dropdown | `StudioLegendMultiDropdown` | Trigger follows control contract; menu/options documented as a separate non-button-shadow surface |
-| Generic Dropdown | `StudioDropdown` / dropdown trigger and menu CSS | Confirm exported size API and menu geometry exceptions |
-| Dropdown option | `.vt-studio-dropdown-option` | Explicitly approved 14px text, 40px min height, no shadow/motion; keyboard/focus audit |
-| Layout-only containers | `data-vt-studio-layout` rules | Not control primitives; don't misreport their sizing as control exceptions |
+| Family / export | Primary component/source | Confirmed gallery representation | Required checks / boundary |
+|---|---|---|---|
+| Text Input | `StudioTextInput` — `StudioControls.tsx` / `StudioTextInput.tsx` | **Shown:** standard, compact, floating-label, fixed-label, and disabled compact specimen | Search/number input exports are not individually shown here; verify typography, field chrome, focus, caret, and label overlap |
+| Text Area | `StudioTextArea` — `StudioControls.tsx` / `StudioTextArea.tsx` | **Shown:** standard/compact, floating-label, and fixed-label variants | Preserve 18px/14px typography, 92px minimum surface, multiline padding, and vertical resize |
+| Floating-label input/textarea | `StudioTextInput` / `StudioTextArea` variants | **Shown as variants**, not separate native-control families | Wrapper adds label presentation only; field geometry and native semantics stay with the owning component |
+| Button | `StudioButton` | **Shown:** standard/compact, default, neutral, selected, selected+disabled | Text 38px/24px; 3px/2px stroke; 6px/4px radius; active-shadow behavior remains a gap against the stable-shadow target |
+| Prominent Action | `StudioActionButton` | **Shown:** separate fixed 56px action family | 3px border, 6px radius, 20px text; outer-control translation and active shadow suppression are described in the gallery |
+| Generic Icon Button | `StudioIconButton` | **Not separately shown**; square icon specimen is a distinct component | Do not infer this export is gallery-certified from the Square Icon Button family |
+| Square Icon Button | `StudioSquareIconButton` | **Shown:** V1–V4 standard/compact and all seven effects | Default large icon preset: 38px/1.9 standard, 24px/2.0 compact; badge/success specimens are static previews, not live outcomes |
+| Split-left Button | `StudioSplitLeftButton` | **Shown:** standard/compact, default, neutral, selected, selected+disabled | Divider uses 3px/2px stroke; default large icon preset is 38px/24px; active-shadow gap remains documented |
+| Switch | `StudioSwitch` / `Studioswitch` | **Shown:** 44px only, round/rectangular, four skins | Standard-only API; track/handle geometry and state-specific indicator colors are exceptions to ordinary button geometry |
+| Radio / Checkbox / Wide-X Checkbox | `StudioRadio`, `StudioCheckbox`, `StudioXCheckbox` | **Shown:** 44px only, shape/mark and skin variants | Selected state reveals skin-specific marks; browser checks should inspect on/off, disabled, and focus states |
+| Word Toggle | `StudioWordToggle` / `Studiotoggle` | **Shown:** standard/compact and three skins | Standard radius 7.333px is reference-specific; handle width measures the active word and can be customized |
+| Legend Multi Dropdown | `StudioLegendMultiDropdown` | **Shown:** closed standard trigger with selected values and two closed compact triggers | Menu options appear only after user interaction; the gallery does not start with an open-menu specimen |
+| Native Select | `StudioSelect` | **Not separately shown** | Do not treat the Legend Multi multi-select as a substitute or certification for native select |
+| Dropdown option surface | Legend Multi / dropdown CSS | **Not separately shown as an open panel** | Option typography, focus, keyboard operation, stacking, and panel geometry need rendered verification |
+| Layout-only containers | `data-vt-studio-layout` rules | **Not a control primitive** | Do not report container sizing as a control component or family exception |
 
-## 7. Source-level defects already verified
+## 7. Current source-level parity findings (2026-10-15)
 
-These are deterministic source findings from `studio-control-system.css` and `StudioControls.tsx`; they are not claims from a rendered browser inspection.
+These are deterministic source findings; they are not claims from a rendered browser inspection.
 
-1. **Compact split-left divider is too thick:** compact size declares 2px border, but split-left rail rules specify 3px.
-2. **Split-left divider remains thick in selected state:** selected styles change fills, not the divider width; the shared 3px rule remains in force.
-3. **Field corner radius bypasses global size contract:** later field selector forces `border-radius: 8px`.
-4. **Button typography has contradictory sources:** declared 38px/24px, generic button 32px, compact 10px, then height variants 36px/22px with `!important`, plus repeated split-label font sizes.
-5. **Shadow moves instead of staying anchored:** hover changes shadow offset and active state removes it while translating the button.
-6. **Timing constants and CSS disagree:** constants declare hover 150ms and click 300ms; CSS transitions declare 180ms.
-7. **A third `small` size exists only in CSS:** 32px height.
-8. **A third `action` size exists only in CSS:** 56px height.
-9. **Focus geometry is hard-coded:** button focus outline is 3px with 3px offset for both sizes.
-10. **Catalog can overstate compliance:** it prints exported constants rather than calculated effective CSS and has no top-level table of exceptions/known drift.
+1. **Shared defaults reconciled in this pass:** compact button shadow is now 1.5px × 1.5px in tokens and effective CSS; shared tracking is -0.02em; exported motion tokens now match effective CSS at 180ms general/hover and 80ms active press. Regression assertions were added but are not yet executed.
+2. **Button active-state shadow behavior remains a gap:** StudioButton moves its outer shell and hides the pseudo-shadow on active; StudioActionButton moves the outer action on hover/active and suppresses the shadow on active. The gallery now describes the action behavior as implemented. Do not certify stable-shadow click behavior until CSS and component tests are reconciled.
+3. **Button focus is a family-specific exception:** button focus uses a 3px outline with 3px offset for both sizes. Field focus uses a separate secondary-color accent/outline stack; the catalog distinguishes these.
+4. **No implicit third size found in current control CSS:** `data-size="small"` and `data-size="action"` selectors were not found in the audited stylesheet. StudioActionButton remains a separate fixed 56px family, not a third StudioButton size.
+5. **The catalog uses production components and calls out key exceptions:** icon metrics, switch/choice and word-toggle corner geometry, textarea typography, dropdown closed state, and action-button press behavior are described explicitly. The defaults panel still prints exported contract values rather than browser-computed styles; browser inspection is required.
+6. **Icon-size testing specimens are absent from the Confirmed Primitive Library:** production square/split-left specimens use the default large 38px/24px icon preset. Optional current/moderate API presets remain available to callers but are not shown as size-comparison tests in the confirmed gallery.
+7. **Dropdown specimens begin closed:** selected values are shown on the standard trigger; compact examples show closed trigger/count geometry. Their labels no longer imply the menu is already open.
 
 ## 8. Correction plan
 
@@ -210,53 +223,39 @@ These are deterministic source findings from `studio-control-system.css` and `St
 - No runtime screenshots, browser accessibility scan, automated tests, typecheck, or production build were executed as part of creating this document.
 
 
-## 11. Concrete source override index (2026-10-14)
+## 11. Historical source override index and current disposition (2026-10-14 findings, rechecked 2026-10-15)
 
-This section maps each verified conflict to the source declaration pattern responsible for it. Selectors are written as they appear in the stylesheet so a follow-up implementation can find and remove the override without relying on generated line numbers.
+This section preserves historical selector patterns and records whether each remains present. A historical pattern is not a current defect unless the current-status column says it remains unresolved.
 
-| Finding | Source declaration / selector pattern | Why it violates the contract | Required correction |
+| Historical finding | Historical source pattern | Current status (source-level) | Follow-up |
 |---|---|---|---|
-| Compact split divider uses standard stroke | `button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] { border-right-width: 3px; }` | Compact outer stroke is 2px; the divider becomes disproportionately thick. | Remove the local width and set `border-right: var(--vt-studio-control-stroke) solid #000`. |
-| Shared split divider forces 3px | `button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail] { border-right: 3px solid #000; }` | This later/general selector can reintroduce the 3px divider after compact rules. | Use the inherited size token; verify default, selected, hover, active and focus. |
-| Standard/compact font size diverges from exported constants | `button[data-vt-studio-control]` sets 32px; compact sets 10px; height variants set 36px/22px with `!important`; split labels repeat font sizes | The exported contract is 38px standard and 24px compact. The cascade makes the gallery's displayed values misleading. | Delete duplicate font declarations and set one token-driven font size per size. |
-| Text fields get 8px radius | `[data-vt-studio-control="true"]:is(input:not(...), textarea) { border-radius: 8px; }` | Bypasses the 6px standard / 4px compact radius. | Use `var(--vt-studio-control-radius)`; ensure the compact token is applied to all field types. |
-| Text fields get forced 3px border | Same late text-field selector: `border: 3px solid #000` | Compact fields must use 2px outer stroke. | Derive border width from `--vt-studio-control-stroke`; explicitly audit inset/focus stroke separately. |
-| Shadow offset changes on hover | `button[data-vt-studio-control]:hover:not(:disabled)` changes `box-shadow` offsets and `transform` | Shadow moves with the state instead of staying fixed while the face covers it. | Separate shadow from moving face with a stable pseudo-element/layer; hover moves face by half offset only. |
-| Active state hides shadow as a style change | `button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(...); }` | The shadow is removed rather than geometrically covered by the face. | Keep shadow anchored and translate face by full offset on active. |
-| Transition duration contradicts size constants | Button and field rules use `180ms`; constants specify hover 150ms / click 300ms | Behavior cannot be reasoned about from the exported defaults. | Use separate size/state transition tokens: hover 150ms, click 300ms. |
-| Focus outline is not size-derived | `button[data-vt-studio-control]:focus-visible { outline: 3px solid ...; outline-offset: 3px; }` | Compact and standard controls get identical focus geometry without an approved exception. | Define a size-derived focus token or explicitly approve a single focus-ring exception for accessibility. |
-| Third sizes bypass the public size map | `[data-size="small"]` and `[data-size="action"]` selectors | The TSX size map exports only standard/compact. Consumers can silently create undocumented sizes. | Search all consumers; migrate to standard/compact or add a separately reviewed semantic exception with tests. |
-| Menu options intentionally differ | `.vt-studio-dropdown-option`, `.vt-studio-dropdown-menu` | Menu rows are not the same geometry as control buttons and should not inherit button press-shadow behavior. | Retain as a documented exception; ensure menu keyboard focus/selection remains visible and contrast is checked. |
-| Switch and choice APIs are standard-only | `Studioswitch` and `StudioChoice` hard-code `data-size="standard"`; no size prop | The catalog can imply a universal two-size rule where the component API supports only standard geometry. | Either add compact API variants and real CSS or clearly mark standard-only support in the component and library. |
+| Compact split divider used standard stroke | Old split-rail rules hard-coded 3px | **Resolved in current CSS:** rail uses `var(--vt-studio-control-stroke)` for 3px standard / 2px compact | Verify default/selected/focus states in browser |
+| Typography diverged from size tokens | Older generic/compact/height-variant rules used competing font sizes | **Resolved in current CSS:** ordinary button faces use 38px / 24px; stale 32px/10px/36px/22px values were not found in the audited stylesheet | Keep source regression checks |
+| Field radius/stroke overrode size contract | Older field selector used 8px radius and 3px border at both sizes | **Resolved in current CSS:** those override patterns were not found; fields use size-specific 6px/4px radius and 3px/2px stroke tokens | Verify computed styles after consumer CSS |
+| Compact shadow token mismatch | Token used 1px while effective CSS used 1.5px | **Resolved in this pass:** tokens and effective CSS both use 1.5px × 1.5px | Run focused test and browser inspection |
+| Transition duration mismatch | Older tokens used 150ms / 300ms while effective CSS used 180ms / 80ms | **Resolved in this pass:** exported tokens now match effective CSS at 180ms / 80ms | Run focused test and verify motion in browser |
+| Active-state shadow moves/disappears | Active rules translate the outer button and hide its pseudo-shadow | **Still open:** this differs from the stable-shadow target; current gallery text describes behavior rather than claiming it is fixed | Reconcile CSS behavior and component tests before certifying tactile interaction |
+| Button focus geometry is shared across sizes | Button focus uses 3px outline and 3px offset for both sizes | **Known exception / review needed** | Approve/document the common focus ring or define size-derived values without weakening visibility |
+| Implicit third control sizes | Historical `data-size="small"` and `data-size="action"` selectors | **Resolved in current stylesheet:** those selectors were not found; StudioActionButton is a separate fixed 56px component family | Keep 56px family documented separately |
+| Menu options intentionally differ | `.vt-studio-dropdown-option`, `.vt-studio-dropdown-menu` | **Intentional exception**; not a button-press surface | Verify keyboard focus, selection, stacking, and contrast in browser |
+| Switch and choice APIs are standard-only | Switch/choice expose no compact size prop | **Current supported API:** gallery labels these as 44px-only; no compact behavior is implied | Add compact variants only if requested and implemented with tests |
 
 ## 12. Confirmed Primitive Library exception-to-family map
 
-The gallery component at `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` already renders production exports and includes a global defaults card plus a “Global Exceptions & Known Deviations” list. Preserve this production-component provenance; do not replace it with handcrafted preview markup.
+Use the current represented-vs-not-represented inventory in Section 6 as the canonical gallery coverage table. This older map is retained as a pointer so historical component names and sizes are not mistaken for the current library contract.
 
-| Library family | Current source / exception record | Required catalog treatment |
-|---|---|---|
-| Canonical + Global Defaults | `STUDIO_COMPONENT_GLOBAL_DEFAULTS`, `STUDIO_COMPONENT_SIZE_DEFAULTS` | Display both size contracts and the global policy; distinguish declared values from effective CSS values until computed-style checks pass. |
-| Studio Text Input / Search / Number | `StudioTextInput`, `StudioSearchInput`, `StudioNumberInput` | Show standard and compact; record border/radius/focus/caret and text-color policy; remove field radius/stroke overrides. |
-| Studio Text Area | `StudioTextArea` | Show both sizes; separately label multiline minimum height/resize as a functional exception, not a replacement size. |
-| Floating Label Input / Text Area | `StudioLabeledInput`, `StudioLabeledTextArea` | Show wrapper plus underlying field; wrapper may position labels only and must not add a second border/radius/focus ring. |
-| Button | `StudioButton` | Default, selected, hover, active, focus-visible, disabled at both sizes; same radius/stroke/type/shadow geometry contract. |
-| Icon Button | `StudioIconButton` | Both sizes; icon 28px/18px with documented stroke; label and focus accessibility. |
-| Split-left | `StudioSplitLeftButton` | Explicit default and selected compact examples side-by-side; assert divider 2px compact / 3px standard and stable shadow anchor. |
-| Switches | `Studioswitch` | Current 44px standard-only API must be labelled; do not imply compact support until implemented. Document track/handle and shape radius as a component-specific geometry contract. |
-| Radio + Checkbox | `StudioChoice` | Current 44px standard-only API must be labelled; selected state may alter indicator/fill but never outer size or border width. |
-| Word Toggles | `Studiotoggle` | 44px/28px; custom words, handle measurement, inset, scale, gap are intentional exceptions. Verify outer stroke/radius and state transitions. |
-| Legend Multi Dropdown | `StudioLegendMultiDropdown` | Trigger follows size contract; listbox/options are menu-surface exceptions, not buttons. |
-| Generic Dropdown / options | `.vt-studio-dropdown-menu`, `.vt-studio-dropdown-option` | Record menu shadow/radius, option typography/min-height, separators, keyboard focus and selected treatment. |
-| Layout containers | `data-vt-studio-layout` | Exclude from button/field size compliance counts; document layout sizing separately. |
+- The gallery renders production components, not handcrafted lookalikes.
+- Search/number inputs, generic StudioIconButton, native StudioSelect, and open dropdown options are exported/source-level surfaces not individually represented in the Confirmed Primitive Library at this revision.
+- Floating labels are variants of StudioTextInput / StudioTextArea, not separate native-control components.
+- The Square Icon Button notification and success examples are static visual previews, not live outcomes.
 
 ## 13. Evidence status and audit scope
 
-**Verified from source:** exported size/global constants; duplicate CSS rules for split-left rails, button typography, field radius/stroke, hover/active shadow behavior, timing, focus outline, and undeclared `small`/`action` sizes; production catalog renders real component exports and lists known deviations.
+**Verified from current source:** production primitive imports and specimen labels; standard/compact size tokens; compact shadow token/CSS alignment at 1.5px; -0.02em tracking alignment; 180ms / 80ms motion timing alignment; large default icon metrics; component-specific radius and textarea exceptions; dropdown closed initial state; static badge/success preview labeling.
 
-**Not yet verified:** final computed style after every consumer stylesheet; every importing consumer across the repository; live desktop/mobile rendering; browser-based hover/active behavior; automated regression checks; build/test outcomes. No finding in this document should be marked “fixed” based on a source edit alone. After remediation, update each row with the verification method and result.
+**Added but not executed in this session:** source regression assertions in `scripts/audit/confirmed-library-layout.test.mjs`, exposed as `npm run test:confirmed-library-layout`. GitHub Actions, test command, typecheck, CSS parser, and production build results must be checked on the pull request.
 
-**Governance rule:** An exception is valid only when (1) it has a stable ID, (2) the affected component and size are named, (3) the reason is functional/accessibility-related rather than historical convenience, (4) the exception is represented in the component-library family notes, and (5) a test or rendered check verifies it. All other divergences are defects, not exceptions.
-
+**Not yet verified:** final computed style after every consumer stylesheet; live desktop/mobile rendering; browser-based hover/active/focus behavior; keyboard/accessibility behavior; and the remaining stable-shadow click interaction gap. No source edit alone is proof of browser certification.
 
 ## 14. Additional global-policy conflicts confirmed during this pass
 
@@ -466,6 +465,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - PR #206 moved the hard offset shadow from the animated face to the stationary outer button for both 44px/28px Studio buttons and the separate 56px action-button family. Hover/press movement remains on the face, so the shadow no longer travels with the face.
 - Split-left outer wrappers now explicitly reset native appearance, border, and background, and remain overflow-visible. The actual face owns the black border and radius and clips the icon rail inside that radius. This removes the extra light wrapper edge and prevents the wrapper from clipping the stationary shadow.
 - Regression coverage was added for stationary shadow ownership, face-only movement, split-left overflow, and wrapper reset.
+- **Current-source correction (2026-10-15):** the effective active selectors still move the outer StudioButton shell and hide the pseudo-shadow; StudioActionButton also moves the outer shell on hover/active. The earlier note above overstated stable-shadow behavior for active press. Section 7 and the current catalog descriptions are the current source-level status; rendered verification remains outstanding.
 - PR #206 merged to `master/consolidated-feature-integration` at `45a4bb8627e6710cc9cb1368a2a05287d76ec645`. Focused Confirmed Library tests, source-governance/CSS checks, focused contracts, production build, and local Playwright smoke passed. Repository-wide typecheck remains blocked by unrelated existing errors; the full suite also fails on an existing `WidgetSplitButton` source-contract assertion. Live Render visual inspection remains outstanding.
 
 
@@ -478,7 +478,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 
 ### Compact button shadow contract
 - Standard buttons retain a symmetric 3px × 3px hard shadow offset.
-- Compact buttons use a symmetric 1px × 1px offset. The shadow is rendered as a stationary, face-sized pseudo-element on the outer button; the bordered face sits above it and owns hover/press translation. This avoids a separately sized box-shadow being painted around a wrapper wider than the visible face.
+- Compact buttons use a symmetric 1.5px × 1.5px offset, matching the effective CSS and current token contract. Hover moves the inner face by half the offset, but the active rule currently moves the outer StudioButton shell and hides the pseudo-shadow; StudioActionButton also moves its outer shell on hover/active and suppresses its shadow on active. The stable-shadow click behavior remains unresolved and must not be described as fixed.
 - The outer button remains overflow-visible; the split-left face owns the black border and radius and clips only its internal icon rail/content.
 
 ### Shared text-field typography and module ownership
