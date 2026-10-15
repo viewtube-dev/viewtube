@@ -296,6 +296,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
   outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-width: var(--vt-studio-control-focus-outline-width, 2px);
   outline-offset: 0;
 }
 @media (prefers-reduced-motion: reduce) {
