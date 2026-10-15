@@ -1,8 +1,12 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Brain, CheckCircle2, Database, Lightbulb, Network, RefreshCw, ShieldCheck, Workflow, Zap } from "lucide-react"
 import { AssistantCommandContextBanner } from "../components/AssistantCommandContextBanner"
 import SuperToolShell, { type SuperToolMountProps } from "./supertools/SuperToolShell"
 import { SidebarChatbot } from "../components/SidebarChatbot"
+import { BrainAttributionDetailPanel } from "../components/brain/BrainAttributionDetailPanel"
+import { ALGORITHM_INTELLIGENCE_EVENT_CHANGED, listAlgorithmIntelligenceEvents } from "../services/brain/AlgorithmIntelligenceEventLedger"
+import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
+import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { useBrain } from "../context/useBrain"
 import { listGenerationRecords } from "../services/generationStore"
 import { listSuperToolsByIds } from "../services/superToolRegistry"
@@ -201,12 +205,26 @@ const BrainCommandCenter: React.FC<BrainCommandCenterProps> = (props) => {
  const [status, setStatus] = useState<string | null>(null)
  const [commandRefresh, setCommandRefresh] = useState(0)
  const [commandFilter, setCommandFilter] = useState<BrainCommandFilter>("all")
+ const [selectedAttributionEventId, setSelectedAttributionEventId] = useState<string | null>(null)
  const memory = getBrainMemory()
+
+ useEffect(() => {
+  const refreshAttribution = () => setCommandRefresh((value) => value + 1)
+  if (typeof window === "undefined") return
+  window.addEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, refreshAttribution)
+  return () => window.removeEventListener(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, refreshAttribution)
+ }, [])
 
  const tools = useMemo(() => listSuperToolsByIds([...COMMAND_TOOL_IDS]), [])
  const workflows = useMemo(() => listWorkflowChains(), [])
  const generations = useMemo(() => listGenerationRecords(), [])
  const commandActions = useMemo(() => listBrainCommandActions(), [commandRefresh])
+ const recommendationEvents = useMemo(
+  () => channelIdentity.channelId
+   ? listAlgorithmIntelligenceEvents({ channelId: channelIdentity.channelId, kind: "RECOMMENDATION_CREATED" }).slice(0, 6)
+   : [],
+  [channelIdentity.channelId, commandRefresh],
+ )
  const visibleCommandActions = useMemo(
   () => filterBrainCommandActions(commandActions, commandFilter),
   [commandActions, commandFilter],
@@ -292,8 +310,25 @@ const BrainCommandCenter: React.FC<BrainCommandCenterProps> = (props) => {
    ],
    tags: ["brain-command-action", priority, confidence],
   })
+  let communicationEvidenceEventId: string | null = null
+  const communicationControls = readBrainUserControls(channelIdentity.channelId)
+  if (channelIdentity.channelId && communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions) {
+   try {
+    const captured = recordCreatorCommunicationEvidence({
+     channelId: channelIdentity.channelId,
+     communicationId: `brain-command-note:${commandAction.id}`,
+     text: note.trim(),
+    })
+    communicationEvidenceEventId = captured.event.id
+   } catch (error) {
+    if (!(error instanceof Error && error.message.includes("does not match a supported classification"))) {
+     console.warn("[BrainCommandCenter] Communication evidence capture skipped:", error)
+    }
+   }
+  }
   await emitSignal("BRAIN_COMMAND_CENTER", "COMMAND_NOTE", {
    commandActionId: commandAction.id,
+   communicationEvidenceEventId,
    generationId: packetResult.recordId,
    workflowId: packetResult.chain.id,
    note: note.trim(),
@@ -684,6 +719,36 @@ const BrainCommandCenter: React.FC<BrainCommandCenterProps> = (props) => {
       </div>
      )}
     </div>
+   </section>
+
+   <section className="rounded-[22px] border-[4px] border-black bg-white shadow-[8px_8px_0px_0px_black]">
+    <div className="border-b-[4px] border-black bg-[#00F0FF] px-6 py-5">
+     <div className="text-[10px] font-black uppercase tracking-[0.22em] text-black/55">Recommendation → Outcome → Learning</div>
+     <div className="text-3xl font-[1000] uppercase tracking-[-0.05em]">Attribution Trace</div>
+     <p className="mt-2 max-w-3xl text-xs font-bold leading-5 text-black/65">Inspect explicit event lineage. Missing stages remain visible; publication is not proof of performance or causality.</p>
+    </div>
+    <div className="grid gap-3 p-5 md:grid-cols-2">
+     {recommendationEvents.length ? recommendationEvents.map((event) => (
+      <article key={event.id} className="rounded-[14px] border-[3px] border-black bg-[#f8f7f1] p-4">
+       <div className="text-[9px] font-black uppercase tracking-[0.14em] text-black/50">{event.sourceSystem} · {new Date(event.createdAt).toLocaleDateString()}</div>
+       <div className="mt-2 text-sm font-black">{event.title}</div>
+       <p className="mt-1 text-xs font-bold leading-5 text-black/65">{event.summary}</p>
+       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        <code className="text-[9px] font-bold text-black/50">{event.id.slice(0, 28)}</code>
+        <button type="button" onClick={() => setSelectedAttributionEventId(event.id)} className="rounded-[8px] border-[2px] border-black bg-[#CCFF00] px-3 py-2 text-[9px] font-black uppercase tracking-[0.1em]">Inspect lineage</button>
+       </div>
+      </article>
+     )) : (
+      <div className="rounded-[14px] border-[3px] border-dashed border-black/35 p-5 text-xs font-bold leading-5 text-black/55 md:col-span-2">
+       No channel-scoped recommendation events are available yet. This is an empty evidence state, not a successful or failed outcome.
+      </div>
+     )}
+    </div>
+    {selectedAttributionEventId && channelIdentity.channelId ? (
+     <div className="border-t-[3px] border-black p-5">
+      <BrainAttributionDetailPanel channelId={channelIdentity.channelId} eventId={selectedAttributionEventId} onClose={() => setSelectedAttributionEventId(null)} />
+     </div>
+    ) : null}
    </section>
 
    <section className="rounded-[22px] border-[4px] border-black bg-[#f8f7f1] shadow-[8px_8px_0px_0px_black]">
