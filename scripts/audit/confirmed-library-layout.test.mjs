@@ -6,6 +6,8 @@ import { join } from "node:path";
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 const styles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8");
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+const palette = readFileSync("src/styles/toolboxPalette.ts", "utf8");
+const controlStyles = readFileSync("src/styles/studio-control-system.css", "utf8");
 const completeCatalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8");
 
 test("confirmed library uses the requested four skin names without changing skin values", () => {
@@ -264,11 +266,28 @@ test("confirmed stepper standard and compact specimens share one comparison row"
   assert.match(styles, /\.vt-confirmed-stepper-row-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
 });
 
-test("confirmed spectrum tag gallery shows 20 production tag specimens across the alphabetic spectrum", () => {
-  assert.match(catalog, /vt-confirmed-spectrum-tag-grid[^]*?StudioSpectrumTag label="APPLE"[^]*?StudioSpectrumTag label="YUZU"/);
+test("confirmed spectrum tag gallery shows 50 alphabetically sorted production specimens", () => {
+  assert.match(catalog, /50 continuous alphabetical spectrum samples/);
   const tagGrid = catalog.match(/className="vt-confirmed-spectrum-tag-grid"[^]*?<\/div>/)?.[0] ?? "";
-  assert.equal((tagGrid.match(/<StudioSpectrumTag\s/g) ?? []).length, 20, "expected 20 canonical StudioSpectrumTag specimens");
+  const labels = [...tagGrid.matchAll(/<StudioSpectrumTag label="([A-Z]+)"\s*\/>/g)].map(match => match[1]);
+  assert.equal(labels.length, 50, "expected 50 canonical StudioSpectrumTag specimens");
+  assert.deepEqual(labels, [...labels].sort((a, b) => a.localeCompare(b)), "tag labels stay in alphabetical order");
+  assert.equal(new Set(labels).size, 50, "each specimen label is unique");
+  for (const initial of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") assert.ok(labels.some(label => label.startsWith(initial)), `spectrum gallery includes ${initial}`);
   assert.match(styles, /\.vt-confirmed-spectrum-tag-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5, minmax\(0, max-content\)\)/);
+});
+
+test("alphabetical tag colors interpolate continuously between canonical palette stops", () => {
+  assert.match(palette, /export const resolveAlphabeticalSpectrumPosition/);
+  assert.match(palette, /Math\.pow\(27, index \+ 1\)/);
+  assert.match(palette, /const interpolateSpectrumColor = \(position: number\)/);
+  assert.match(palette, /from \+ \(to - from\) \* blend/);
+  assert.match(palette, /interpolateSpectrumColor\(resolveAlphabeticalSpectrumPosition\(label\)\)/);
+});
+
+test("44px checkmark and X checkboxes use the canonical 6px corner radius", () => {
+  assert.match(controlStyles, /\.vt-studio-44-choice\.is-checkbox\.is-rect\s*\{[^}]*border-radius:\s*var\(--vt-studio-44-radius,\s*6px\)\s*!important/s);
+  assert.match(catalog, /checkmark and X checkboxes use the standard 6px radius/);
 });
 
 
