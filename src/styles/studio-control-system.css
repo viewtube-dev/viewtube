@@ -200,34 +200,88 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   [data-vt-studio-control] { transition-duration: .01ms !important; }
 }
 
-/* Shared floating-label fields. The label box is 25% smaller and overlaps the
-   black control border by its bottom quarter when lifted; component geometry stays canonical. */
-.vt-studio-floating-field { --vt-studio-floating-label-size: 24px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
-.vt-studio-floating-field[data-size="compact"] { --vt-studio-floating-label-size: 18px; }
-.vt-studio-floating-field > [data-vt-studio-control="true"] { display:block; width:100%; }
-.vt-studio-floating-field > .vt-studio-floating-field-label {
-  position:absolute; z-index:1; left:14px; top:50%; max-width:calc(100% - 28px);
-  padding:0; overflow:hidden; color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size:var(--vt-studio-floating-label-size); font-weight:1000; line-height:1;
-  letter-spacing:-.02em; text-transform:uppercase; white-space:nowrap; text-overflow:ellipsis;
-  -webkit-text-stroke:.5px currentColor;
-  pointer-events:none; transform:translateY(-50%); transform-origin:left center;
-  transition:top 180ms ease-out, transform 180ms ease-out, padding 180ms ease-out, color 180ms ease-out, background-color 180ms ease-out;
+/* Shared floating-label fields. The resting label matches the field's normal
+   text size; when raised, it eases to 80% and sits 40% above the field border. */
+.vt-studio-floating-field {
+  --vt-studio-floating-label-size: 38px;
+  --vt-studio-floating-label-size-compact: 24px;
+  --vt-studio-control-focus-outline-width: 3px;
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  isolation: isolate;
 }
-.vt-studio-floating-field.is-textarea > .vt-studio-floating-field-label { top:18px; transform:none; }
+.vt-studio-floating-field[data-size="compact"] {
+  --vt-studio-floating-label-size: var(--vt-studio-floating-label-size-compact);
+  --vt-studio-control-focus-outline-width: 2px;
+}
+.vt-studio-floating-field.is-textarea {
+  --vt-studio-floating-label-size: 18px;
+}
+.vt-studio-floating-field.is-textarea[data-size="compact"] {
+  --vt-studio-floating-label-size: 14px;
+}
+.vt-studio-floating-field > [data-vt-studio-control="true"] {
+  display: block;
+  width: 100%;
+}
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  top: 50%;
+  max-width: calc(100% - 28px);
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--vt-studio-floating-label-size);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-text-stroke: .5px currentColor;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  transition: top 180ms ease-out, left 180ms ease-out, transform 180ms ease-out, font-size 180ms ease-out, padding 180ms ease-out, color 180ms ease-out, background-color 180ms ease-out;
+}
+.vt-studio-floating-field.is-textarea > .vt-studio-floating-field-label {
+  top: 18px;
+  transform: none;
+}
 .vt-studio-floating-field > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
-  top:0; left:10px; padding:2.25px 4.5px; border-radius:3px;
-  background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000;
-  -webkit-text-stroke:.5px currentColor;
-  transform:translateY(-75%) scale(.75); transform-origin:left center;
+  top: 0;
+  left: 10px;
+  padding: 2.25px 4.5px;
+  border-radius: 3px;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  font-size: calc(var(--vt-studio-floating-label-size) * .8);
+  -webkit-text-stroke: .5px currentColor;
+  transform: translateY(-40%);
+  transform-origin: left center;
+}
+.vt-studio-floating-field[data-size="compact"]:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
+.vt-studio-floating-field[data-size="compact"]:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+  font-size: calc(var(--vt-studio-floating-label-size-compact) * .8);
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-75%) scale(.75); transform-origin:left center; }
-.vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
-/* Compact B is an explicit alternate specimen: add a solid secondary-color stroke
-   equal to the compact 2px focus width, with no offset or layout movement. */
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+  top: 0;
+  transform: translateY(-40%);
+  transform-origin: left center;
+}
+.vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label {
+  color: #000;
+}
+/* Compact B uses the exact secondary color and focus-outline width for both
+   the input outline and the floating label's matching secondary outline. */
 .vt-studio-floating-field.is-reverse-colors {
   --vt-studio-control-accent: var(--pair-b, #ff7f6b);
   --vt-studio-control-secondary: var(--pair-a, #36e0f6);
@@ -242,9 +296,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
   outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-width: var(--vt-studio-control-focus-outline-width, 2px);
   outline-offset: 0;
 }
-@media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-floating-field-label { transition-duration: .01ms !important; }
+}
 
 /* Permanent label-box variants of the canonical input and textarea families.
    Label-box typography, position, dimensions, padding, border and radius mirror Legend Multi. */
@@ -1485,11 +1542,25 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 
-/* Circle Icon Button is a shape-only extension of the canonical square icon
-   button. Its 44px/28px dimensions, variants, shadows, effects and behavior stay shared. */
+/* Circle Icon Button keeps canonical outer geometry and behavior while its
+   icon uses 80% of the default large preset to preserve comfortable circular inset. */
 button[data-vt-studio-circle-icon-button="true"]::before,
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   border-radius: 9999px !important;
+}
+button[data-vt-studio-circle-icon-button="true"][data-size="standard"] {
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-icon-stroke: 1.9;
+}
+button[data-vt-studio-circle-icon-button="true"][data-size="compact"] {
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-icon-stroke: 2;
+}
+/* Scale the rendered glyph itself, not its full-size stage, so the circular
+   button gets an 80% icon while preserving the canonical stroke preset. */
+button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg {
+  width: calc(var(--vt-studio-control-icon-size, 28px) * .8);
+  height: calc(var(--vt-studio-control-icon-size, 28px) * .8);
 }
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   overflow: hidden;

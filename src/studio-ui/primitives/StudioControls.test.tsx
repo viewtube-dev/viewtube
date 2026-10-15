@@ -435,6 +435,32 @@ describe("Studio Play/Pause Split-Left Button", () => {
   })
 })
 
+describe("floating label geometry and circular icon scale", () => {
+  it("floats labels at 80% scale with the border crossing the 40% height line", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("transform: translateY(-40%)")
+    expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
+    expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+    expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
+    expect(css).toContain("padding: 2.25px 4.5px;")
+  })
+
+  it("matches the floating-label secondary focus stroke width and color to the compact focus outline", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))')
+    expect(css).toContain('outline-width: var(--vt-studio-control-focus-outline-width, 2px)')
+  })
+
+  it("scales circle-button SVG icons to 80% without changing the canonical button size", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-stage] svg')
+    expect(css).toContain("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
+    expect(css).toContain("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
+    expect(css).toContain("--vt-studio-control-icon-size: 38px")
+    expect(css).toContain("--vt-studio-control-icon-size: 24px")
+  })
+})
+
 describe("Studio Circle Icon Button", () => {
   it("reuses the canonical icon button contract and marks the circular shape explicitly", () => {
     const html = renderToStaticMarkup(<StudioCircleIconButton icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>} label="Profile" variant="v3" />)

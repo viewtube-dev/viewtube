@@ -43,14 +43,26 @@ test("global defaults distinguish the measured focus shadow from the CSS outline
   assert.match(catalog, /Focus measurement note:[\s\S]*?These are separate layers/);
 });
 
-test("floating labels use the reduced overlapping-label geometry and strong text stroke", () => {
+test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*24px/);
+  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*38px/);
+  assert.match(fieldCss, /--vt-studio-floating-label-size-compact:\s*24px/);
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
-  assert.match(fieldCss, /translateY\(-75%\) scale\(\.75\)/);
+  assert.match(fieldCss, /translateY\(-40%\)/);
+  assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
+  assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size-compact\)\s*\*\s*\.8\)/);
+  assert.match(fieldCss, /transition:[^;]*font-size/);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
+  assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\+\s*\.vt-studio-floating-field-label\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
+});
+
+test("circle icon buttons scale the rendered SVG to 80% of the canonical icon preset", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="standard"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*38px/s);
+  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*24px/s);
+  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\s*\[data-vt-square-icon-current\]\s*svg\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-icon-size,\s*28px\)\s*\*\s*\.8\);[^}]*height:\s*calc\(var\(--vt-studio-control-icon-size,\s*28px\)\s*\*\s*\.8\)/s);
 });
 
 test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
@@ -64,7 +76,8 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 test("non-default settings explain the real public props in plain language", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
   assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
-  assert.ok(catalog.includes("Floating labels lift when the field is focused or non-empty; the label remains associated with the native input for accessible naming."));
+  assert.ok(catalog.includes("Floating labels match normal input text size in the field area, then smoothly shrink to 80% in the raised label box; the black field border crosses the box at 40% of its height. Labels remain associated with their native input."));
+  assert.ok(catalog.includes("Circle icons use 80% of the default large preset: 30.4px/1.9 stroke standard and 19.2px/2.0 compact; current and moderate presets remain opt-in."));
   assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
@@ -341,5 +354,5 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 });
 
 test("component descriptions above specimens stay on one compact line", () => {
-  assert.match(styles, /\\.vt-confirmed-family > p\\s*\\{[^}]*max-width:\\s*40ch[^}]*text-overflow:\\s*ellipsis[^}]*white-space:\\s*nowrap/s);
+  assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
 });
