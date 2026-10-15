@@ -96,6 +96,11 @@ describe("ContentBuild repository", () => {
    actorType: "creator",
    final: true,
   })
+  setContentBuildSelection("cb-selection", "thumbnail", "thumb-a", {
+   toolId: "thumbnail-studio-retry",
+   actorType: "creator",
+   final: true,
+  })
 
   const events = listContentBuildEvents("cb-selection")
   expect(events.filter(event => event.eventType === "asset.selected" && event.entityId === "thumbnail")).toHaveLength(1)
