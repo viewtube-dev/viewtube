@@ -38,7 +38,8 @@ The earlier release-gates run `38693153891` passed production build, configured 
 - [x] Preserve asset producer record ID and generation trace in the Brain outcome record.
 - [x] Preserve asset ID/type without introducing a new store.
 - [x] Add regression assertion for lineage continuity.
-- [x] Register the regression test in capability coverage.\n- [x] Add optional producer idempotency keys and prevent duplicate Brain ledger events for a repeated source record.
+- [x] Register the regression test in capability coverage.
+- [x] Add optional producer idempotency keys and prevent duplicate Brain ledger events for a repeated source record.
 - [ ] Verify the new test and capability-coverage check on the latest PR head.
 - [ ] Join recommendation/action/publish/analytics/evaluation/learning IDs end-to-end.
 - [ ] Add idempotency and cross-channel/project isolation tests across the full outcome chain.
