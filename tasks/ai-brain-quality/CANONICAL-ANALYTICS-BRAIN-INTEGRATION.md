@@ -1,6 +1,6 @@
 # Canonical Analytics Evidence → Brain Runtime Integration
 
-**Status:** Phases 0–5 implemented; Phase 7 governance map implemented; Phase 6 end-to-end lineage certification and Phase 8 release gates remain open  
+**Status:** Phases 0–5 implemented; Phase 7 generator/map implemented; Phase 8 caller reachability audited with context-centralization boundary open; Phase 9 release certification blocked by CI failures  
 **Owner:** BrainRuntime + analytics-canon  
 **Branch:** `fix/brain-canonical-evidence-missingness-2026-10-15`  
 **Pull request:** [#213](https://github.com/viewtube-dev/viewtube/pull/213)  
@@ -144,10 +144,11 @@ GitHub Actions is the verification authority for this remote branch. A started o
 This document distinguishes implementation from certification: existing files or passing documentation checks alone do not establish full production reachability.
 
 
-## Phase 6–8 continuation
+## Phase 6–9 continuation
 
-See [Phases 6–8 — Lineage, Governance & Verification](./PHASES-6-8-LINEAGE-GOVERNANCE-VERIFICATION.md) for the evidence-backed lineage inventory, capability-evidence generator changes, production-surface caller audit, and exact release-gate blockers.
+See [Phases 7–9 — Governance, Assistant Continuity & Release Certification](./PHASES-7-9-GOVERNANCE-CONTINUITY-RELEASE.md) for the capability evidence map/generator, production-surface caller audit, and release-gate blockers.
 
-- Phase 6: existing event/evaluation/learning lineage owners are inventoried; end-to-end recommendation-to-published-outcome-to-learning certification remains open.
-- Phase 7: capability evidence map, path validation in the generator, and regenerated report are committed; latest-head CI verification remains pending.
-- Phase 8: canonical runtime reachability is confirmed for SidebarChatbot and BrainHubWidget, but surface-owned prompt/snapshot composition remains a convergence boundary. Release certification is blocked by the latest observed typecheck/full-suite failures until rerun and triage.
+- Phase 6: event/evaluation/learning lineage owners are inventoried; end-to-end recommendation → creator action → published outcome → analytics attribution → governed learning certification remains open.
+- Phase 7: the generator now consumes the curated evidence map, validates referenced paths, supports reproducible `--check` mode, and is wired into release-gates source governance.
+- Phase 8: SidebarChatbot and BrainHubWidget production calls to BrainRuntime are confirmed. Their UI-owned snapshot and prompt construction remains a clearly documented convergence boundary rather than being falsely marked centralized.
+- Phase 9: release certification remains blocked until the latest branch head passes focused evidence tests, typecheck, runtime lint, full suite, production build, source governance, and local smoke. The observed run `38693153891` failed typecheck and full suite.
