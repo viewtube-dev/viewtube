@@ -370,7 +370,10 @@ describe("VT-SYNC data visual module registry", () => {
   expect(controllerSource).toContain("colors.middle")
   expect(controllerSource).toContain("colors.previous")
   expect(controllerSource).toContain("colors.next")
-  expect(shellSource).toContain('row.type !== "dropdown"')
+  // Controller rows now render in their authored order; dropdowns are not moved to the end.
+  expect(shellSource).toContain("const rows = controllerRows ?? []")
+  expect(shellSource).toContain("if (!controllerExplanation) return rows.length > 0 ? [...rows] : undefined")
+  expect(shellSource).not.toContain('row.type !== "dropdown"')
   expect(shellSource).toContain('row.type === "metricMultiSelect"')
  expect(unifiedVisualSource).toContain('data-visual-height-policy')
   expect(unifiedVisualSource).toContain("resolveAnalyticsVisualContextBarHeight")
