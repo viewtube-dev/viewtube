@@ -10,6 +10,7 @@ import {
   StudioXCheckbox,
   StudioLegendMultiDropdown,
   StudioInlineStepper,
+  StudioSplitStepper,
   StudioSplitLeftButton,
   StudioSquareIconButton,
   StudioPlayPauseButton,
@@ -25,7 +26,6 @@ import {
   StudioSimpleDropdown,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
-import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"
 import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
@@ -108,10 +108,10 @@ const ConfirmedInlineStepperFamily: React.FC = () => {
       ]}
       provenance={<Provenance
         primitive="StudioInlineStepper"
-        tsx="src/studio-ui/primitives/StudioInlineStepper.tsx"
-        css="src/studio-ui/primitives/studio-inline-stepper.css"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
         tokens="Horizontal 1:2:1 layout · global 44px/28px size lattice · shared Studio color pair and focus treatment."
-        imports={["src/studio-ui/primitives/StudioInlineStepper.tsx"]}
+        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
@@ -145,11 +145,11 @@ const ConfirmedStepperFamily: React.FC = () => {
         "The number input has a primary-color inline stroke, 50% primary fill, and primary-color characters. The component has no shadow; chevrons are double the previous SVG sizing rule."
       ]}
       provenance={<Provenance
-        primitive="SubToolboxSplitStepper"
-        tsx="src/components/subtoolbox/SubToolboxSplitStepper.tsx"
-        css="src/components/subtoolbox/subtoolbox-split-stepper.css"
+        primitive="StudioSplitStepper"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
         tokens="2:1 value/rail geometry; 44px standard and 28px compact; shared Studio size tokens."
-        imports={["src/components/subtoolbox/SubToolboxSplitStepper.tsx"]}
+        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
@@ -157,24 +157,26 @@ const ConfirmedStepperFamily: React.FC = () => {
         <div className="vt-confirmed-stepper-row-grid">
           <div className="vt-confirmed-stepper-specimen">
             <small>44px standard · interactive</small>
-            <SubToolboxSplitStepper
+            <StudioSplitStepper
               value={standardValue}
               onValueChange={setStandardValue}
               size="standard"
-              level="l1"
-              ariaLabel="Standard stepper value"
-              data-vt-library-component="SubToolboxSplitStepper"
+              min={0}
+              max={99}
+              ariaLabel="Standard Studio split stepper value"
+              data-vt-library-component="StudioSplitStepper"
             />
           </div>
           <div className="vt-confirmed-stepper-specimen">
             <small>28px compact · interactive</small>
-            <SubToolboxSplitStepper
+            <StudioSplitStepper
               value={compactValue}
               onValueChange={setCompactValue}
               size="compact"
-              level="l1"
-              ariaLabel="Compact stepper value"
-              data-vt-library-component="SubToolboxSplitStepper"
+              min={0}
+              max={99}
+              ariaLabel="Compact Studio split stepper value"
+              data-vt-library-component="StudioSplitStepper"
             />
           </div>
         </div>
@@ -532,7 +534,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "The closed control and options inherit Studio Controls typography, color-pair tokens, and standard 44px / compact 28px sizing.",
         "Keyboard selection and native select semantics are preserved; disabled options and an optional placeholder are supported."
       ]}
-      provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioSimpleDropdown.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioSimpleDropdown.tsx"]} />}
+      provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
         <span>Standard · single select</span>
