@@ -221,7 +221,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         ? `HISTORICAL METADATA EVIDENCE (descriptive association only; not causal proof):\n${historicalComparisons.join("\n")}\nDo not infer causation from these comparisons. Treat missing metrics as unknown, note confounders, and use the evidence as context rather than a rule.`
         : ""
       const operationStrategyBrief = [
-        operationStrategyBrief,
+        buildMetadataStrategyBrief(goal, intensity, style),
         historicalEvidenceBrief,
       ].filter(Boolean).join("\n\n")
 
@@ -236,7 +236,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         "Longform",
         undefined,
         brain,
-        buildMetadataStrategyBrief(goal, intensity, style),
+        operationStrategyBrief,
       )
 
       const generated = packageFromSeoResult(result, {
