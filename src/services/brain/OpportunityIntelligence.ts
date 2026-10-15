@@ -59,7 +59,11 @@ export const opportunityToDerivedSignal = (opportunity: OpportunityEvidence): De
  },
  metadata: {
   sourceKind: opportunity.kind,
-  ...(opportunity.provenance ? { provenance: { ...opportunity.provenance } } : {}),
+  ...(opportunity.provenance ? { sourceOwner: opportunity.provenance.sourceOwner } : {}),
+  ...(opportunity.provenance?.sourceSnapshotId ? { sourceSnapshotId: opportunity.provenance.sourceSnapshotId } : {}),
+  ...(opportunity.provenance?.datasetId ? { datasetId: opportunity.provenance.datasetId } : {}),
+  ...(opportunity.provenance?.window ? { window: opportunity.provenance.window } : {}),
+  ...(opportunity.provenance?.datasetStatus ? { datasetStatus: opportunity.provenance.datasetStatus } : {}),
  },
 })
 
