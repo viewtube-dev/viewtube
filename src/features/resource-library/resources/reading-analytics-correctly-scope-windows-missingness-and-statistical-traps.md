@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; audience-retention-watch
 
 Analytics can help you make better decisions, but only when you understand what the numbers include and what they leave out. A chart may be accurate and still lead to a wrong conclusion if you compare different time periods, ignore a filter, mistake missing data for zero, or treat correlation as proof of cause.
 
-> **Creator principle:** Before interpreting a number, ask what it counts, which items and period are included, how it was calculated, what may be missing, and what conclusion the evidence can actually support.
+> **Creator takeaway:** Before interpreting a number, ask what it counts, which items and period are included, how it was calculated, what may be missing, and what conclusion the evidence can actually support.
 
 ## The Creator Mental Model
 
