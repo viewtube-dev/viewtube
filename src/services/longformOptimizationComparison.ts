@@ -261,11 +261,13 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
     now,
   })
 
+  const metadataVersionIds = listMetadataVersionIdsForComparison(input.contentBuildId, input.changeAt)
   const comparisonHash = comparisonFingerprint({
     version: comparison.version,
     status: comparison.status,
     before: comparison.before,
     after: comparison.after,
+    metadataVersionIds,
     days: comparison.days.map(day => [day.date, day.views, day.watchTimeMinutes, day.avp, day.likes, day.comments, day.revenue]),
   })
   const comparisonEventKey = `longform-comparison:${input.contentBuildId}:${input.videoId}:${comparison.changeDate}:${comparison.queryEndDate}:${comparison.status}:${comparisonHash}`
@@ -295,7 +297,7 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
       source: "youtube-analytics-v2",
       comparisonVersion: comparison.version,
       idempotencyKey: comparisonEventKey,
-      metadataVersionIds: listMetadataVersionIdsForComparison(input.contentBuildId, input.changeAt),
+      metadataVersionIds,
     },
   })
 
