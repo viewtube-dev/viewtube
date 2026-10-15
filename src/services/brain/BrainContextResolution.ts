@@ -1,5 +1,7 @@
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
 
+export const BRAIN_CONTEXT_RESOLVER_VERSION = "brain-context-resolution-v1"
+
 export interface BrainContextSectionResolution {
  text: string
  selectedSectionIds: string[]
