@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** PR #189 and PR #191 merged; phases 6–8 are being completed on a fresh branch from the current integration target; CI and rendered verification pending  
+**Status:** PR #189 and PR #191 merged; Confirmed Library phases 1–3 are implemented on `fix/confirmed-library-phases-1-3-layout-defaults`; tests and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Audit work branch:** `fix/studio-controls-phases-6-8-after-pr191-2026-10-15`  
+**Current work branch:** `fix/confirmed-library-phases-1-3-layout-defaults`  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -31,11 +31,11 @@ When values conflict, the desired authority is the exported size/global contract
 | Primary / secondary color authority | Primary = `--pair-a`; secondary = `--pair-b` | Shared color-pair contract |
 | Text color | Action labels are black; text fields use primary (`--pair-a`) at rest and black only while focused | Component/state dependent |
 | Stroke color | Black (`#000`) unless a documented state-specific text stroke applies | Outer borders and default button outlines |
-| Background fill | Buttons use primary; text fields use primary at 50% opacity | Default state |
+| Background fill | Ordinary buttons use the primary color; text fields use primary at 50% opacity at rest and 15% in focus | State-specific; menu panel is a separate surface |
 | Motion easing | `ease-out` | All transitions |
 | Border-radius policy | Size-specific: standard 6px; compact 4px | All components unless an explicitly indexed exception is approved |
 | Border-width policy | Size-specific: standard 3px; compact 2px | All components unless an explicitly indexed exception is approved |
-| Shadow policy | Hard offset shadow is for buttons only. Dropdown menus/options do not use press-motion; text fields use inset primary stroke and focus outline. | Semantic exception, not permission for arbitrary per-component drift |
+| Shadow / focus policy | Hard offset shadows belong to button faces and stationary dropdown panels. Text fields retain a primary inset stroke and a separate secondary-color focus accent; do not confuse the accent shadow with the computed CSS outline. | Component and state specific |
 | Stable shadow geometry | Shadow anchor/offset stays fixed; button face moves independently | All shadowed buttons |
 | Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | All shadowed buttons |
 | Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | All shadowed buttons |
@@ -406,3 +406,25 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - The governance test checks canonical Studio imports, source provenance, recursive defaults formatting, the distinct 56px action family, one data-driven word-toggle skin collection, responsive shared variant-grid selectors, and absence of superseded Confirmed Library dropdown overrides.
 - A source test is not a substitute for runtime verification. Run the focused governance test, TypeScript check, CSS parser, production build, and browser review for standard/compact, selected/disabled, focus-visible, open dropdown stacking, narrow widths, and reduced motion.
 - **Verification boundary:** this branch's source edits do not imply that those commands or browser checks have passed. Record actual CI results and browser evidence before declaring phases 6–8 fully certified.
+
+
+## 18. Confirmed Library phases 1–3 — 2026-10-15
+
+### Phase 1 — Canonical + Global Defaults display
+- The library renders the exported `STUDIO_COMPONENT_GLOBAL_DEFAULTS` and `STUDIO_COMPONENT_SIZE_DEFAULTS` values rather than copying a second set of token values into the gallery.
+- The gallery now explains standard 44px / 3px stroke / 6px radius and compact 28px / 2px stroke / 4px radius in natural language.
+- Field behavior is described by state: at rest, primary-color text/caret, 50% primary fill, black outer border, and primary inset stroke; focused, 15% primary fill and black text while retaining the inset stroke and secondary-color accent.
+- The prior live audit measured the visible secondary-color accent as a 3px standard / 2px compact box shadow, while the computed outline itself measured 1px. The two layers are documented separately; this note is historical evidence, not certification of a new deployment.
+
+### Phase 2 — Four-skin control rows
+- Switches, word toggles, radios, checkboxes, and X checkboxes label the four skin variants as `SOLID`, `COLOR SWAP`, `BLACK`, and `WHITE`.
+- Every skin set uses one four-column row. Narrow-screen rules preserve the four-item row with a minimum column width rather than silently stacking each skin into its own row.
+- Skin labels describe the actual variant names; the internal skin prop values remain unchanged.
+
+### Phase 3 — Standard / compact specimen layout
+- Standalone text inputs, labeled inputs, buttons, split-left buttons, and dropdowns use a full-width standard specimen row followed by a two-column compact A / compact B row.
+- Standalone compact text input now has both A and B specimens.
+- Button and split-left families use two columns so each standard specimen spans the full row and its compact A/B specimens sit together underneath; selected-state examples follow the same grouping.
+- The gallery-only CSS controls specimen layout and does not redefine production component geometry or interaction behavior.
+
+**Verification boundary:** source changes are recorded; automated checks and live browser review are still required before marking the new layout visually certified. The known compact button wrapper/face width discrepancy must be rechecked against the resulting deployed CSS.
