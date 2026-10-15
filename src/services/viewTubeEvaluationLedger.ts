@@ -1,6 +1,6 @@
 import type { ContentBuildPublicationIdentity } from "./asset-engine/contracts"
 import { listContentBuildEvents } from "./asset-engine/ContentBuildRepository"
-import { listAssetOutcomes } from "./brain/assetOutcomes"
+import { linkAssetOutcomeToPublication, listAssetOutcomes } from "./brain/assetOutcomes"
 import { getCurrentCanonicalIntelligenceDatasetRows, getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "./analytics-canon"
 import { evaluateViewTubeControl } from "./viewTubeUserControls"
 
@@ -169,6 +169,15 @@ export const createPublicationEvaluationRecord = (input: {
    idempotencyKey: checkpointIdempotencyKey,
   },
  })
+ for (const assetId of identity.selectedVariantAssetIds) {
+  linkAssetOutcomeToPublication({
+   assetId,
+   channelId: identity.channelId,
+   publicationIdentity: identity,
+   analyticsCheckpointIds: [checkpoint.id],
+   evidenceIds: [canonicalEvidenceId],
+  })
+ }
  const linkedOutcomes = listAssetOutcomes({ channelId: identity.channelId }).filter((outcome) =>
   outcome.kind === "published" &&
   identity.selectedVariantAssetIds.includes(outcome.assetId) &&
