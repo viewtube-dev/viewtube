@@ -100,8 +100,6 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    approvedSnapshotHash: input.approvedSnapshotHash || null,
    publishedVideoId: input.publishedVideoId || null,
    analyticsCheckpointIds: input.analyticsCheckpointIds || [],
-   actionPacketId: input.actionPacketId || null,
-   workflowId: input.workflowId || null,
    recommendationId: input.recommendationId || null,
    experimentId: input.experimentId || null,
    sourceToolId: input.sourceToolId,
