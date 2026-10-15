@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; audience-subscribers-retur
 
 Channel organization helps viewers understand what you make, find the video that fits their need, and discover a useful next step. A good structure does not guarantee recommendations or views; it reduces friction for people who already have a reason to explore your work.
 
-> **Creator principle:** Organize for the viewer's next question, not for the creator's folder structure. A playlist is useful when its topic, order, and promise make sense to the person choosing what to watch.
+> **Creator takeaway:** Organize for the viewer's next question, not for the creator's folder structure. A playlist is useful when its topic, order, and promise make sense to the person choosing what to watch.
 
 ## The Creator Mental Model
 
