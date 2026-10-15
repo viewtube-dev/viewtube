@@ -20,11 +20,12 @@ describe("Brain prompt governance", () => {
    promptFamily: "community", promptVersion: "community-post-v1",
    constitutionVersion: "asset-constitution-v1", contextResolverVersion: "brain-context-resolution-v1",
    outputSchemaVersion: "community-post-plan-v1", requestedModel: null, servedModel: "gemini-test",
-   evidenceSnapshotIds: ["snapshot-1", "snapshot-1", ""], channelKnowledgeFingerprint: null,
+   evidenceSnapshotIds: ["snapshot-1", "snapshot-1", ""], evidenceRefs: ["dataset:top_videos:snap-1", "dataset:top_videos:snap-1"], channelKnowledgeFingerprint: null,
    projectRevision: null, styleProfileVersion: null, creatorConstraints: ["no spoilers", "no spoilers"],
    repairCount: 1, generatedAt: "2026-10-15T00:00:00.000Z",
   })
   expect(receipt.evidenceSnapshotIds).toEqual(["snapshot-1"])
+  expect(receipt.evidenceRefs).toEqual(["dataset:top_videos:snap-1"])
   expect(receipt.creatorConstraints).toEqual(["no spoilers"])
   expect(validateBrainPromptRunReceipt(receipt)).toEqual([])
  })
@@ -34,7 +35,7 @@ describe("Brain prompt governance", () => {
    traceId: "", outputId: "", channelId: "", projectId: null,
    promptFamily: "community", promptVersion: "", constitutionVersion: "",
    contextResolverVersion: "", outputSchemaVersion: "", requestedModel: null, servedModel: null,
-   evidenceSnapshotIds: [], channelKnowledgeFingerprint: null, projectRevision: null,
+   evidenceSnapshotIds: [], evidenceRefs: [], channelKnowledgeFingerprint: null, projectRevision: null,
    styleProfileVersion: null, creatorConstraints: [], repairCount: -1, generatedAt: "not-a-date",
   })
   expect(validateBrainPromptRunReceipt(receipt)).toEqual(expect.arrayContaining([
