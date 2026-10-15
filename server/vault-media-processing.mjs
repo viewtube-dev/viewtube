@@ -4,7 +4,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { spawn } from "node:child_process";
 
-const MAX_REQUEST_BYTES = Number(process.env.VAULT_MEDIA_MAX_REQUEST_BYTES || 64 * 1024 * 1024);
+const MAX_REQUEST_BYTES = Number(process.env.VAULT_MEDIA_MAX_REQUEST_BYTES || 65 * 1024 * 1024);
 const MAX_OUTPUT_BYTES = Number(process.env.VAULT_MEDIA_MAX_OUTPUT_BYTES || 64 * 1024 * 1024);
 const MAX_DURATION_SECONDS = Number(process.env.VAULT_MEDIA_MAX_DURATION_SECONDS || 300);
 const ALLOWED_MIME_TYPES = new Set([
