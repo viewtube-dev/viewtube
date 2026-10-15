@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -415,5 +415,55 @@ describe("documented global-rule exception: Vault Spectrum Tags", () => {
     expect(vault).not.toContain("getAlphabeticalSpectrumColor(normalized)")
     const vaultCss = readFileSync(resolve(process.cwd(), "src/styles/vault-asset-module.css"), "utf8")
     expect(vaultCss).not.toContain(".vt-vault-tag-badge{")
+  })
+})
+
+
+describe("Studio Play/Pause Split-Left Button", () => {
+  it("reserves both labels so toggling does not change the label region width", () => {
+    const html = renderToStaticMarkup(<StudioPlayPauseButton playLabel="Play" pauseLabel="Pause" />)
+    expect(html).toContain('data-vt-studio-play-pause="true"')
+    expect(html).toContain('aria-pressed="false"')
+    expect(html).toContain('data-vt-studio-play-pause-measure="play"')
+    expect(html).toContain('data-vt-studio-play-pause-measure="pause"')
+    expect(html).toContain('data-vt-studio-play-pause-label>Play</span>')
+    const selected = renderToStaticMarkup(<StudioPlayPauseButton playing playLabel="Play" pauseLabel="Pause" />)
+    expect(selected).toContain('aria-pressed="true"')
+    expect(selected).toContain('data-vt-studio-play-pause-label>Pause</span>')
+    expect(selected).toContain('data-size="standard"')
+    expect(renderToStaticMarkup(<StudioPlayPauseButton sizeVariant="compact" />)).toContain('data-size="compact"')
+  })
+})
+
+describe("Studio Circle Icon Button", () => {
+  it("reuses the canonical icon button contract and marks the circular shape explicitly", () => {
+    const html = renderToStaticMarkup(<StudioCircleIconButton icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>} label="Profile" variant="v3" />)
+    expect(html).toContain('data-vt-studio-circle-icon-button="true"')
+    expect(html).toContain('data-vt-studio-icon-button="true"')
+    expect(html).toContain('data-icon-variant="v3"')
+    expect(html).toContain('aria-label="Profile"')
+    expect(renderToStaticMarkup(<StudioCircleIconButton icon={<span>U</span>} label="Compact profile" sizeVariant="compact" />)).toContain('data-size="compact"')
+  })
+})
+
+describe("Studio Username Split-Left Input", () => {
+  it("composes the canonical Studio text input with a split icon rail", () => {
+    const html = renderToStaticMarkup(<StudioUsernameInput icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /></svg>} aria-label="Username" placeholder="Username" />)
+    expect(html).toContain('data-vt-studio-username-input="true"')
+    expect(html).toContain('data-vt-studio-username-rail="true"')
+    expect(html).toContain('data-vt-studio-field-kind="text-input"')
+    expect(html).toContain('aria-label="Username"')
+    expect(html).not.toContain('data-vt-studio-button="true"')
+    expect(renderToStaticMarkup(<StudioUsernameInput icon={<span>U</span>} sizeVariant="compact" aria-label="Compact username" />)).toContain('data-size="compact"')
+  })
+
+  it("keeps the composite outline and inset strokes on the wrapper without a button shadow or seam", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('.vt-studio-username-input:focus-within')
+    expect(css).toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
+    expect(css).toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
+    expect(css).toContain('input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible)')
+    expect(css).toContain('box-shadow: none !important;')
+    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]')
   })
 })

@@ -13,6 +13,9 @@ type StudioTextInputBaseProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 type StudioTextInputSimpleProps = StudioTextInputBaseProps & {
   variant?: "simple"
+  /** Optional native input styling hooks for composite Studio controls. */
+  className?: string
+  style?: React.CSSProperties
   label?: never
   level?: never
   floatingLabelVariant?: never
