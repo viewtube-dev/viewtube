@@ -120,4 +120,15 @@ describe("ApprovedPublishSnapshot", () => {
   expect(localStorage.getItem("viewtube_approved_publish_snapshots_v1")).toBe("{not-json")
  })
 
+ it("rejects tampered snapshots already present in browser storage", () => {
+  const saved = persistApprovedPublishSnapshot(projection())
+  const raw = localStorage.getItem("viewtube_approved_publish_snapshots_v1")
+  expect(raw).toBeTruthy()
+  const parsed = JSON.parse(raw as string)
+  parsed[0].assets.titleAssetId = "tampered-after-persistence"
+  localStorage.setItem("viewtube_approved_publish_snapshots_v1", JSON.stringify(parsed))
+  expect(() => getApprovedPublishSnapshot(saved.id)).toThrow(/failed integrity verification/i)
+  expect(() => persistApprovedPublishSnapshot({ ...projection(), revision: 8 })).toThrow(/failed integrity verification/i)
+ })
+
 })
