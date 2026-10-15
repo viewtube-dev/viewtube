@@ -63,6 +63,8 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
  cachePacket(packet as ViewTubeActionPacket)
  const inboxItems = enqueueBrainHandoffs(packet as ViewTubeActionPacket)
  const record = createGenerationRecord({
+  operationId: packet.operationId || packet.id,
+  workflowId: packet.workflowId || `legacy:${packet.id}`,
   toolId: packet.sourceToolId as never,
   provider: "mock",
   model: "viewtube-action-packet-v1",
