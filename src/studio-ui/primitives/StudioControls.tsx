@@ -365,7 +365,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         data-icon-variant={variant}
         data-icon-effect={effect}
         data-icon-only="true"
-        data-icon-active={isSelected || isSuccess ? "true" : "false"}
+        data-icon-active={isSelected || isSuccess || animate ? "true" : "false"}
         data-pop={animate ? "true" : undefined}
         data-success={isSuccess ? "true" : undefined}
         data-has-badge={badge !== undefined && badge !== null && badge !== "" ? "true" : undefined}
