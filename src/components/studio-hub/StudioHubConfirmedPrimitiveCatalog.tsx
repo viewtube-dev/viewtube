@@ -4,6 +4,7 @@ import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
+  StudioActionButton,
   StudioRadio,
   StudioCheckbox,
   StudioXCheckbox,
@@ -89,6 +90,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-size-card"><strong>28PX COMPACT</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight}</span><span>Shadow {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowX}×{STUDIO_COMPONENT_SIZE_DEFAULTS.compact.buttonShadowY}px · Hover {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.hoverTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.hoverOffsetPx}px · Click {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.clickTransitionMs}ms / {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.clickOffsetPx}px · Icon {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconStroke}px</span></div>
       </div>
       <div className="vt-confirmed-size-card vt-confirmed-textarea-exception"><strong>MULTILINE TEXTAREA EXCEPTION</strong><span>Minimum surface: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.minHeight}px · Standard text: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.standardFontSize}px · Compact text: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.compactFontSize}px · Weight: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.fontWeight}</span><span>Long-form / print-friendly text. Preserves standard or compact borders, radii, focus, and caret; vertical resize enabled.</span></div>
+      <div className="vt-confirmed-size-card vt-confirmed-action-exception"><strong>PROMINENT ACTION EXCEPTION · SEPARATE FAMILY</strong><span>56px fixed height · 3px stroke · 6px radius · 3px stationary shadow · 20px / weight 1000 text.</span><span>Rendered by StudioActionButton; not a StudioButton size and not part of the 44px / 28px ordinary control contract.</span></div>
       <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div>
     </section>
     <section className="vt-confirmed-family vt-confirmed-exception-index" aria-labelledby="vt-confirmed-exception-index-title">
@@ -121,6 +123,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>28px compact · default A</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · default B</span><StudioButton heightVariant="28">button</StudioButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected heightVariant="44">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected A</span><StudioButton selected heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected B</span><StudioButton selected heightVariant="28">button</StudioButton></div>
+    </Family>
+    <Family title="Prominent Action · 56px" nonDefaultSettings={["Separate component family; not an ordinary StudioButton size variant.", "Fixed 56px height, 3px border, 6px radius, and 3px stationary shadow.", "Uses the action-specific 20px / weight-1000 typography contract.", "loading=true exposes aria-busy and disables the action; disabled=true blocks interaction."]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>56px prominent workflow action</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
     </Family>
     <Family title="Split-left" nonDefaultSettings={["heightVariant=\"28\" selects compact; default is 44px.", "tone=\"neutral\" | \"danger\" | \"warning\" | \"success\" (default: accent).", "selected=true swaps the module-pair selected treatment; disabled=true blocks interaction.", "loading=true exposes aria-busy and disables the split-left action.", "The icon prop is required; the same size/tone/selected settings are inherited from StudioButton."]} provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px icons explicitly enlarged; selected state swaps module-pair fills." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="44">split-left</StudioSplitLeftButton></div>
