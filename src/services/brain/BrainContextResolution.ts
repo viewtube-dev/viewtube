@@ -99,19 +99,20 @@ export const resolveBrainContextSections = (
  const chosen = new Map<number, { id: string; text: string }>()
  let used = 0
  for (const candidate of ranked) {
-  const remaining = maximumCharacters - used
+  const separatorCost = chosen.size ? 1 : 0
+  const remaining = maximumCharacters - used - separatorCost
   if (remaining <= 0) {
    omittedSectionIds.push(candidate.id)
    continue
   }
   if (candidate.text.length <= remaining) {
    chosen.set(candidate.index, { id: candidate.id, text: candidate.text })
-   used += candidate.text.length
+   used += candidate.text.length + separatorCost
    continue
   }
   if (remaining > 0 && (candidate.required || remaining >= 160)) {
    chosen.set(candidate.index, { id: candidate.id, text: candidate.text.slice(0, remaining) })
-   used += remaining
+   used += remaining + separatorCost
    omittedSectionIds.push(`${candidate.id}:truncated`)
   } else {
    omittedSectionIds.push(candidate.id)
