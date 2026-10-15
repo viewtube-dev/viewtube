@@ -1,13 +1,13 @@
 import React from "react"
 import { Image as ImageIcon } from "lucide-react"
-import { SubToolboxInnerActionButton } from "../components/Toolbox"
+import { SubToolboxInnerActionButton } from "../../components/Toolbox"
 import {
   SubToolboxInput,
   SubToolboxSelect,
   SubToolboxStatePanel,
-} from "../components/subtoolbox/SubToolboxPrimitives"
-import { createImportedVaultAsset } from "../services/vaultAdapter"
-import { computeVaultImagePalette } from "../services/vaultImagePalette"
+} from "../../components/subtoolbox/SubToolboxPrimitives"
+import { createImportedVaultAsset } from "../../services/vaultAdapter"
+import { computeVaultImagePalette } from "../../services/vaultImagePalette"
 import {
   DEFAULT_VAULT_IMAGE_TRANSFORM,
   transformVaultImage,
@@ -15,8 +15,8 @@ import {
   type VaultImageOutputFormat,
   type VaultImageTransform,
   type VaultImageTransformResult,
-} from "../services/vaultImageWorkbench"
-import type { VaultAsset } from "../types"
+} from "../../services/vaultImageWorkbench"
+import type { VaultAsset } from "../../types"
 
 const MAX_INLINE_VAULT_DERIVATIVE_BYTES = 750 * 1024
 
