@@ -249,6 +249,7 @@ describe("StudioSquareIconButton interactions", () => {
     }
     expect(buttons[0]?.className).toContain("is-effect-heart-pop")
     expect(buttons[1]?.className).toContain("is-effect-bell-ring")
+    expect(buttons[1]?.querySelector("[data-vt-square-alert-dot]")).not.toBeNull()
     expect(buttons[2]?.className).toContain("is-effect-refresh")
   })
 
