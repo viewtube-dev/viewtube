@@ -26,3 +26,19 @@ CREATE TABLE IF NOT EXISTS viewtube_brain_lifecycle_observations (
 
 CREATE INDEX IF NOT EXISTS viewtube_brain_lifecycle_observations_channel_idx
   ON viewtube_brain_lifecycle_observations(viewtube_user_id, channel_id, observed_at DESC);
+
+
+-- Durable publication outcomes, evaluations, and reviewed learning candidates.
+-- Every record is scoped to the authenticated user and connected channel.
+CREATE TABLE IF NOT EXISTS viewtube_brain_learning_records (
+  viewtube_user_id TEXT NOT NULL REFERENCES viewtube_users(id) ON DELETE CASCADE,
+  channel_id TEXT NOT NULL,
+  record_id TEXT NOT NULL,
+  record JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (viewtube_user_id, channel_id, record_id)
+);
+
+CREATE INDEX IF NOT EXISTS viewtube_brain_learning_records_channel_idx
+  ON viewtube_brain_learning_records(viewtube_user_id, channel_id, updated_at DESC);
