@@ -293,9 +293,16 @@ describe("shared Studio icon-size comparison contract", () => {
     expect(css).toContain('--vt-studio-control-stroke:2px')
   })
 
-  it("shows current, moderate, and large sizes for both square and split-left controls", () => {
+  it("shows the canonical standard and compact sizes for both square and split-left controls", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    for (const label of ["Current · 28px", "Moderate · 34px", "Large · 38px", "Current · 18px", "Moderate · 22px", "Large · 24px"]) {
+    for (const label of [
+      "44px standard · V1 primary fill",
+      "28px compact · V1",
+      "44px standard · default",
+      "28px compact · default A",
+      "44px standard · selected",
+      "28px compact · selected A",
+    ]) {
       expect(html).toContain(label)
     }
     expect(html).toContain('data-vt-library-component="StudioSquareIconButton"')
