@@ -140,7 +140,21 @@ export const recordAlgorithmEvaluation = (input: {
   title: `Evaluation: ${event.title}`,
   summary: evaluation.explanation,
   evaluationTargets: effectiveEvent.evaluationTargets,
-  metadata: { ...(input.metadata || {}), evaluation },
+  metadata: {
+   ...(input.metadata || {}),
+   lifecycleIdentity: {
+    recommendationId: event.recommendationId || null,
+    projectId: event.projectId || null,
+    contentBuildId: typeof event.metadata?.contentBuildId === "string" ? event.metadata.contentBuildId : null,
+    videoId: event.videoId || null,
+    actionPacketId: event.actionPacketId || null,
+    publicationTransactionId: typeof event.metadata?.publicationTransactionId === "string" ? event.metadata.publicationTransactionId : null,
+    approvedSnapshotId: typeof event.metadata?.approvedSnapshotId === "string" ? event.metadata.approvedSnapshotId : null,
+    metadataVersionIds: Array.isArray(event.metadata?.metadataVersionIds) ? event.metadata.metadataVersionIds.filter((value): value is string => typeof value === "string") : [],
+    checkpointId: typeof event.metadata?.checkpointId === "string" ? event.metadata.checkpointId : null,
+   },
+   evaluation,
+  },
  })
  return { evaluation, recorded }
 }
