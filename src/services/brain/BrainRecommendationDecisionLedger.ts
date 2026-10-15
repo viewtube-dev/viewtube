@@ -138,7 +138,7 @@ export const recordBrainRecommendationDecision = (
   parentEventIds: [source.id],
   evidenceIds: decision.evidenceIds,
   confidence: source.confidence,
-  title: `Creator ${input.decision}d recommendation`,
+  title: `Creator ${({ accept: "accepted", reject: "rejected", modify: "modified", defer: "deferred" } as const)[input.decision]} recommendation`,
   summary: decision.note || `Creator decision: ${input.decision}.`,
   metadata: {
    decision,
