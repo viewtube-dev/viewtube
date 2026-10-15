@@ -93,6 +93,7 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
     }
 
     const { className, style, variant: _variant, label: _label, level: _level, sizeVariant: _sizeVariant, ...areaProps } = props
+    void [_variant, _label, _level, _sizeVariant]
     return (
       <textarea
         ref={ref}
