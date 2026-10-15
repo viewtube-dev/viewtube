@@ -107,9 +107,11 @@ describe("Studio text-field module ownership and typography", () => {
     const inputModule = await import("./StudioTextInput")
     const areaModule = await import("./StudioTextArea")
     expect(inputModule.StudioTextInput).toBeDefined()
-    expect(inputModule.StudioLabeledInput).toBeDefined()
+    expect(inputModule.StudioTextInput).toBeDefined()
     expect(areaModule.StudioTextArea).toBeDefined()
-    expect(areaModule.StudioLabeledTextArea).toBeDefined()
+    expect(renderToStaticMarkup(<StudioTextInput variant="floating-label" label="Title" />)).toContain("vt-studio-floating-field")
+    expect(renderToStaticMarkup(<StudioTextArea variant="floating-label" label="Description" />)).toContain("vt-studio-floating-field")
+    expect(areaModule.StudioTextArea).toBeDefined()
   })
 
   it("defines the 18px standard and 14px compact typography for both input and textarea", () => {
