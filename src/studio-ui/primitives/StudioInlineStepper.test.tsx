@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { normalizeStudioInlineStepperValue, StudioInlineStepper } from "./StudioInlineStepper"
+import { normalizeStudioInlineStepperValue, StudioInlineStepper, StudioSplitStepper } from "./StudioControls"
 
 describe("StudioInlineStepper", () => {
   it("renders the horizontal decrement, editable value, increment layout as a canonical Studio control", () => {
@@ -13,6 +13,7 @@ describe("StudioInlineStepper", () => {
     expect(html).toContain('data-vt-studio-control="true"')
     expect(html).toContain('data-vt-studio-control-family="stepper"')
     expect(html).toContain('data-vt-studio-control-kind="inline-stepper"')
+    expect(html).toContain('data-vt-studio-username-foundation="true"')
     expect(html).toContain('data-size="standard"')
     expect(html).toContain('aria-label="Package count"')
     expect(html).toContain('aria-label="Decrease Package count"')
@@ -43,16 +44,38 @@ describe("StudioInlineStepper", () => {
 
   it("uses global Studio size tokens and has no SubToolbox style authority", () => {
     const allCss = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = allCss.indexOf(".vt-studio-inline-stepper {")
-    const end = allCss.indexOf("/* Canonical Studio Controls Split Stepper.", start)
-    const css = allCss.slice(start, end > start ? end : undefined)
+    const start = allCss.indexOf("/* Studio Controls-owned stepper family styles moved from primitive sidecars. */")
+    const css = allCss.slice(start)
     expect(css).toContain("var(--vt-studio-control-height")
     expect(css).toContain("var(--vt-studio-control-stroke")
     expect(css).toContain("var(--vt-studio-control-radius")
     expect(css).toContain("var(--vt-studio-control-font-family")
     expect(css).toContain("var(--pair-a")
     expect(css).toContain("var(--pair-b")
-    expect(css).toContain("grid-template-columns: var(--vt-inline-stepper-side) minmax(0, 2fr) var(--vt-inline-stepper-side)")
+    expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {\n  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
+    expect(css).toContain("background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);")
     expect(css).not.toContain("subtoolbox")
+  })
+})
+
+
+describe("StudioSplitStepper username-input foundation", () => {
+  it("renders the editable numeric pane and vertical secondary-color rail as a canonical Studio control", () => {
+    const html = renderToStaticMarkup(<StudioSplitStepper value={4} onValueChange={() => undefined} min={0} max={9} ariaLabel="Count" />)
+    expect(html).toContain('data-vt-studio-control-kind="split-stepper"')
+    expect(html).toContain('data-vt-studio-username-foundation="true"')
+    expect(html).toContain('type="number"')
+    expect(html).toContain('class="vt-studio-split-stepper-rail"')
+    expect(html).toContain('data-size="standard"')
+    expect(html).not.toContain("subtoolbox")
+  })
+
+  it("uses shared username input tokens for the primary inset strokes and secondary rail", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain(".vt-studio-username-input {")
+    expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {")
+    expect(css).toContain("--vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
+    expect(css).toContain("background: var(--vt-stepper-secondary);")
+    expect(css).toContain("box-shadow: none;")
   })
 })
