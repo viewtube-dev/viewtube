@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Confirmed Library source-parity audit in progress on `reconcile/confirmed-library-and-stepper-2026-10-15`; tests updated, execution and rendered verification pending  
+**Status:** PR #288 source-parity edits reconciled directly onto `master/consolidated-feature-integration`; CI and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Current work branch:** `reconcile/confirmed-library-and-stepper-2026-10-15` (confirmed-catalog fidelity audit and default-style parity)  
+**Current work branch:** `master/consolidated-feature-integration` (reconciled confirmed-catalog fidelity and default-style parity edits from PR #288)  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -22,6 +22,8 @@ When values conflict, the desired authority is the exported size/global contract
 ## 1A. Confirmed Library source-parity pass (2026-10-15)
 
 The Confirmed Primitive Library must describe the production component that actually renders, not an idealized redraw or a stale token snapshot. Catalog specimens import production primitives; catalog CSS should only control specimen layout. The gallery should distinguish declared shared defaults, effective CSS, family-specific exceptions, and examples that are static visual previews rather than live operation outcomes.
+
+These changes were carried over as targeted edits rather than merging PR #288's diverged branch wholesale, preserving the current integration branch's additional components and tests.
 
 | Concern | Current source-aligned representation | Exception / verification boundary |
 |---|---|---|
