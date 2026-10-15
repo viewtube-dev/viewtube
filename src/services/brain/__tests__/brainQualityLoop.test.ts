@@ -11,23 +11,27 @@ vi.mock("../../aiBrainConversationStore", () => ({
   sanitizeCreatorFacingBrainCopy: vi.fn((value: string) => String(value || "").replace(/\s+/g, " ").trim()),
 }));
 
-vi.mock("../../aiBrainCommandInterface", () => ({
-  buildCreatorBrainLocalFallback: vi.fn(() => "Fallback guidance for the restoration channel."),
-  formatCreatorBrainResponse: vi.fn(() => ({
-    id: "fallback-response",
-    mode: "strategy_brief",
-    headline: "Channel strategy",
-    keyInsight: "Use the clearest restoration evidence.",
-    body: "Review the strongest restoration lane and write a focused title.",
-    actions: ["Rewrite one title"],
-    modules: [],
-    evidenceIds: [],
-    evidenceChips: [],
-    learningSummary: "",
-    questions: [],
-    confidence: "medium",
-  })),
-}));
+vi.mock("../../aiBrainCommandInterface", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../aiBrainCommandInterface")>();
+  return {
+    ...actual,
+    buildCreatorBrainLocalFallback: vi.fn(() => "Fallback guidance for the restoration channel."),
+    formatCreatorBrainResponse: vi.fn(() => ({
+      id: "fallback-response",
+      mode: "strategy_brief",
+      headline: "Channel strategy",
+      keyInsight: "Use the clearest restoration evidence.",
+      body: "Review the strongest restoration lane and write a focused title.",
+      actions: ["Rewrite one title"],
+      modules: [],
+      evidenceIds: [],
+      evidenceChips: [],
+      learningSummary: "",
+      questions: [],
+      confidence: "medium",
+    })),
+  };
+});
 
 vi.mock("../../aiBrainSelfImprovement", () => ({
   captureAIBrainLearningEvent: vi.fn(async () => ({ id: "learning-test-1" })),
