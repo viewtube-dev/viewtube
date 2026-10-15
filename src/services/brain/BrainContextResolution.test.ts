@@ -29,6 +29,21 @@ describe("Brain context resolution", () => {
   expect(result.selectedSectionIds).not.toContain("current_public_research")
  })
 
+ it("reports capability-required sections that are absent instead of silently treating them as available", () => {
+  const result = resolveBrainContextSections([
+   "System prompt",
+   "\\nCREATOR CONTROL POLICY\\nAnalytics evidence access is enabled.",
+  ], {
+   userText: "Analyze my channel views",
+   maximumCharacters: 2000,
+   capabilityIds: ["statistics-intelligence"],
+  })
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:channel_evidence")
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:evidence_quality")
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:shared_evidence_contract")
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:deterministic_statistics_intelligence")
+ })
+
  it("deduplicates repeated context sections", () => {
   const repeated = "\nCHANNEL KNOWLEDGE\n" + "same statement ".repeat(8)
   const result = resolveBrainContextSections(["System prompt", repeated, repeated], {
