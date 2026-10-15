@@ -373,20 +373,20 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           <StudioSpectrumTag label="DRAGONFRUIT" />
           <StudioSpectrumTag label="ELDERBERRY" />
           <StudioSpectrumTag label="FIG" />
-          <StudioSpectrumTag label="GRAPE" />
+          <StudioSpectrumTag label="GUAVA" />
           <StudioSpectrumTag label="HONEYDEW" />
           <StudioSpectrumTag label="INDIGO" />
-          <StudioSpectrumTag label="JASMINE" />
-          <StudioSpectrumTag label="KIWI" />
+          <StudioSpectrumTag label="JACKFRUIT" />
           <StudioSpectrumTag label="LEMON" />
           <StudioSpectrumTag label="MANGO" />
           <StudioSpectrumTag label="NECTARINE" />
           <StudioSpectrumTag label="ORANGE" />
-          <StudioSpectrumTag label="PEACH" />
+          <StudioSpectrumTag label="PAPAYA" />
           <StudioSpectrumTag label="QUINCE" />
-          <StudioSpectrumTag label="RASPBERRY" />
           <StudioSpectrumTag label="STRAWBERRY" />
-          <StudioSpectrumTag label="TANGERINE" />
+          <StudioSpectrumTag label="UMBER" />
+          <StudioSpectrumTag label="WALNUT" />
+          <StudioSpectrumTag label="YUZU" />
         </div>
         <div className="vt-confirmed-spectrum-tag-selected">
           <span>Selected-state treatment</span>
