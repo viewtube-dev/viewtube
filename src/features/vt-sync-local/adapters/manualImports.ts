@@ -266,6 +266,9 @@ export const clearVtSyncTableDataFromSnapshot = (snapshot: VtSyncSnapshot, table
 // the normal channel filter so one signed-in channel cannot borrow another's data.
 export const toVtSyncManualImportState = (records: VtSyncDatasetTableRowsRecord[], channelId?: string | null): VtSyncManualImportState => {
  const state: VtSyncManualImportState = { rowsByTableId: {}, capturedAtByTableId: {} }
+ // Manual-import rows are creator-scoped evidence. Without a resolved channel,
+ // even a legacy unscoped record must not be hydrated into the active snapshot.
+ if (!channelId) return state
  for (const record of records) {
   if (record.provenance !== "csv" || !record.id.startsWith(MANUAL_IMPORT_ID_PREFIX)) continue
   if (channelId && record.channelId !== channelId) continue
