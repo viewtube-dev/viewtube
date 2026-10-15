@@ -85,6 +85,7 @@ import {
 import { resolveVaultSelection } from "../services/vaultSelection"
 import { buildVaultMaintenanceQueue } from "../services/vaultMaintenanceQueue"
 import { executeVaultBatchOperation } from "../services/vaultBatchOperations"
+import { getVaultMediaToolSupport, recommendVaultGovernanceActions } from "../services/vaultMediaGovernance"
 import { isVaultAssetProtected } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
@@ -590,6 +591,14 @@ const CreatorVaultOS: React.FC = () => {
  )
  const selectedAssetInspection = useMemo(
   () => selectedAsset ? inspectVaultAsset(selectedAsset) : null,
+  [selectedAsset, refreshTick],
+ )
+ const selectedMediaToolSupport = useMemo(
+  () => selectedAsset ? getVaultMediaToolSupport(selectedAsset.kind) : [],
+  [selectedAsset],
+ )
+ const selectedGovernanceRecommendations = useMemo(
+  () => selectedAsset ? recommendVaultGovernanceActions(selectedAsset) : [],
   [selectedAsset, refreshTick],
  )
  const selectedAssetRightsFindings = useMemo(
@@ -3426,6 +3435,15 @@ const CreatorVaultOS: React.FC = () => {
             <div><div className="font-black uppercase opacity-60">Dimensions</div><div>{selectedAssetInspection.technical.dimensions || "Not recorded"}</div></div>
             <div><div className="font-black uppercase opacity-60">Duration</div><div>{selectedAssetInspection.technical.durationSeconds == null ? "—" : selectedAssetInspection.technical.durationSeconds.toFixed(1) + "s"}</div></div>
            </div>
+           <div className="mt-2" aria-label="Connected local media tools">
+            <div className="mb-1 text-[10px] font-black uppercase opacity-60">Connected local tools</div>
+            <div className="flex flex-wrap gap-1">
+             {selectedMediaToolSupport.map((tool) => (
+              <span key={tool} className="border border-current px-2 py-1 text-[9px] font-black uppercase" data-media-tool={tool}>{tool}</span>
+             ))}
+            </div>
+            <div className="mt-1 text-[10px] font-bold opacity-60">This list reflects local source-backed support, not a remote worker or server processor.</div>
+           </div>
            {selectedAssetInspection.lineage.parentAssetIds.length ? (
             <div className="mt-2 text-xs font-bold"><span className="font-black uppercase opacity-60">Parents · </span>{selectedAssetInspection.lineage.parentAssetIds.join(", ")}</div>
            ) : null}
@@ -3969,6 +3987,16 @@ const CreatorVaultOS: React.FC = () => {
              ))}
             </div>
            ) : <div className="text-xs font-black uppercase">Rights fields have no current findings.</div>}
+           {selectedGovernanceRecommendations.length ? (
+            <div className="mt-2 flex flex-col gap-1" aria-label="Governance recommendations">
+             {selectedGovernanceRecommendations.map((item) => (
+              <div key={item.id} data-governance-recommendation={item.id} className="border-2 border-current/40 px-2 py-1 text-xs">
+               <div className="font-black uppercase">{item.label} · {item.status}</div>
+               <div className="font-bold opacity-70">{item.reason}</div>
+              </div>
+             ))}
+            </div>
+           ) : null}
           </div>
          </div>
          {(typeof selectedAsset.metadata?.width === "number"
