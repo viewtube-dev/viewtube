@@ -104,10 +104,12 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
           </div>
         }
       >
-        {isHardcoded
-          ? <StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />
-          : isConfirmed ? <StudioHubConfirmedPrimitiveCatalog />
-          : <><StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} /><StudioHubProductionButtonCatalog paletteIndex={paletteIndex} /></>}
+        <div className="contents" style={activePairStyle}>
+          {isHardcoded
+            ? <StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />
+            : isConfirmed ? <StudioHubConfirmedPrimitiveCatalog />
+            : <><StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} /><StudioHubProductionButtonCatalog paletteIndex={paletteIndex} /></>}
+        </div>
       </ToolboxScaffold>
     </div>
   )
