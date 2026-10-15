@@ -50,7 +50,7 @@ test("floating labels use balanced box spacing, 40% border alignment, and 80% fl
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
   assert.match(fieldCss, /translateY\(-40%\)/);
   assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
-  assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size-compact\)\s*\*\s*\.8\)/);
+  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-floating-label-size-compact\)/);
   assert.match(fieldCss, /transition:[^;]*font-size/);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
