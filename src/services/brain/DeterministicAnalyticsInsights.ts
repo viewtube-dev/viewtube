@@ -107,7 +107,16 @@ const valueFor = (
 }
 
 const slug = (value: string): string =>
- value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80)
+ value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 48)
+
+const stableHash = (value: string): string => {
+ let hash = 0x811c9dc5
+ for (let index = 0; index < value.length; index += 1) {
+  hash ^= value.charCodeAt(index)
+  hash = Math.imul(hash, 0x01000193)
+ }
+ return (hash >>> 0).toString(16).padStart(8, "0")
+}
 
 const metricEvidenceRef = (snapshotId: string, datasetId: string, metric: string): string =>
  `analytics:${snapshotId}:${datasetId}:${metric}`
@@ -160,6 +169,15 @@ export const buildPeriodComparisonInsights = (input: {
   }
   if (inclusiveDayCount(baseline.period) !== inclusiveDayCount(current.period)) {
    blockedReasons.add("Comparison periods have different inclusive day counts.")
+  }
+  const expectedDays: Record<string, number> = { "7d": 7, "28d": 28, "90d": 90, "365d": 365 }
+  const window = currentBundle.selectedWindow as string
+  if (window === "lifetime") {
+   blockedReasons.add("Lifetime snapshots cannot be treated as equal-length reporting periods.")
+  } else if (expectedDays[window] !== undefined
+   && (inclusiveDayCount(baseline.period) !== expectedDays[window]
+    || inclusiveDayCount(current.period) !== expectedDays[window])) {
+   blockedReasons.add("Explicit period lengths do not match the selected canonical reporting window.")
   }
  }
  if (baselineBundle.snapshotId === currentBundle.snapshotId) {
@@ -263,7 +281,7 @@ export const buildPeriodComparisonInsights = (input: {
 
    insights.push({
     ...common,
-    id: `analytics-insight:comparison:${slug(identity)}`,
+    id: `analytics-insight:comparison:${slug(currentDataset.id)}:${slug(metric)}:${stableHash(identity)}`,
     kind: "comparison",
     label: `${metric} changed from ${baselineValue} to ${currentValue}`,
    })
@@ -271,7 +289,7 @@ export const buildPeriodComparisonInsights = (input: {
    if (relativeDeltaPercent !== null && Math.abs(relativeDeltaPercent) >= materialThreshold) {
     insights.push({
      ...common,
-     id: `analytics-insight:material-change:${slug(identity)}`,
+     id: `analytics-insight:material-change:${slug(currentDataset.id)}:${slug(metric)}:${stableHash(identity)}`,
      kind: "material-change",
      label: `${metric} ${delta >= 0 ? "increased" : "decreased"} ${Math.abs(relativeDeltaPercent).toFixed(1)}% versus baseline`,
      formula: `period-comparison formula; emit material-change when abs(relativeDeltaPercent)>=${materialThreshold}`,
@@ -343,7 +361,7 @@ export const buildTrafficSourceContributionInsights = (input: {
  const aggregation = metricAggregation(metricKey)
  const insights = [...grouped.entries()]
   .map(([label, value]) => ({
-   id: `analytics-insight:contribution:${slug([
+   id: `analytics-insight:contribution:${slug(dataset.datasetId)}:${slug(metricKey)}:${stableHash([
     dataset.channelId,
     dataset.snapshotId,
     dataset.datasetId,
