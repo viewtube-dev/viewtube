@@ -108,9 +108,9 @@ describe("PublishTransaction",()=>{
 
  it("surfaces transaction storage write failures instead of returning an unrecorded transaction", () => {
   const originalSetItem = globalThis.localStorage.setItem
-  const setItem = vi.spyOn(globalThis.localStorage, "setItem").mockImplementation(function (key, value) {
+  const setItem = vi.spyOn(globalThis.localStorage, "setItem").mockImplementation((key: string, value: string) => {
    if (key === "viewtube_content_build_publish_transactions_v2") throw new Error("quota exceeded")
-   return originalSetItem.call(this, key, value)
+   return originalSetItem(key, value)
   })
   try {
    expect(() => beginPublishTransaction(projection())).toThrow(/could not persist publish transaction/i)
