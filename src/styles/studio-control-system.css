@@ -221,10 +221,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   top:0; left:10px; padding:2.25px 4.5px; border-radius:3px;
   background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000;
   -webkit-text-stroke:.5px currentColor;
-  transform:translateY(-75%) scale(.75); transform-origin:left center;
+  transform:translateY(-60%) scale(.8); transform-origin:left center;
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-75%) scale(.75); transform-origin:left center; }
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-60%) scale(.8); transform-origin:left center; }
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 /* Compact B is an explicit alternate specimen: add a solid secondary-color stroke
    equal to the compact 2px focus width, with no offset or layout movement. */
@@ -241,7 +241,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   outline-offset: 0;
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: 2px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
@@ -1497,6 +1497,11 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] > [data-vt-studio-button-icon] {
   width: 100%;
   height: 100%;
+}
+/* Keep the glyph comfortably inset from the circular edge at both canonical sizes. */
+button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg {
+  width: 80% !important;
+  height: 80% !important;
 }
 
 /* Username Split-Left Input: the root owns the shared outline and inset strokes.
