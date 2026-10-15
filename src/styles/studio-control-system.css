@@ -221,10 +221,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   top:0; left:10px; padding:2.25px 4.5px; border-radius:3px;
   background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000;
   -webkit-text-stroke:.5px currentColor;
-  transform:translateY(-56.25%) scale(.75); transform-origin:left center;
+  transform:translateY(-75%) scale(.75); transform-origin:left center;
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-56.25%) scale(.75); transform-origin:left center; }
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-75%) scale(.75); transform-origin:left center; }
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 /* Compact B is an explicit alternate specimen: add a solid secondary-color stroke
    equal to the compact 2px focus width, with no offset or layout movement. */
