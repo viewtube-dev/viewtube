@@ -492,7 +492,10 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   }
 }
 
-/* Standard dropdown menus visually join the trigger and reuse its size's typography. */
+/* Standard dropdown menus visually join the trigger and reuse its size's typography.
+   The !important declarations in this scoped block intentionally beat inherited
+   legacy button/reset styles from host toolboxes; keep the overrides local to this
+   external integration boundary until those host styles are removed at source. */
 .vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 6px; --vt-dropdown-font-size: 38px; }
 .vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 4px; --vt-dropdown-font-size: 24px; }
 .vt-studio-dropdown button[data-dropdown-trigger="true"] {
@@ -640,7 +643,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
   min-height: 28px !important;
   border-width: 2px !important;
-  border-radius: 3px !important;
+  border-radius: 4px !important;
   padding: 2px 6px !important;
   font-size: 24px !important;
   font-weight: 1000 !important;
