@@ -3,6 +3,7 @@ import {
  recordAlgorithmIntelligenceEvent,
  type AlgorithmIntelligenceEvent,
 } from "./AlgorithmIntelligenceEventLedger"
+import { canCaptureCreatorCommunications, readBrainUserControls } from "./BrainUserControls"
 
 export type CreatorCommunicationLabel =
  | "instruction"
@@ -33,6 +34,17 @@ export interface RecordCreatorCommunicationInput {
  projectId?: string | null
  relatedEventIds?: string[]
  occurredAt?: number
+}
+
+const fingerprintText = (value: string): string => {
+ // A compact deterministic fingerprint supports retry/collision checks without retaining the message.
+ // Raw text is never written to the event ledger or server persistence payload.
+ let hash = 0xcbf29ce484222325n
+ for (const byte of new TextEncoder().encode(value)) {
+  hash ^= BigInt(byte)
+  hash = BigInt.asUintN(64, hash * 0x100000001b3n)
+ }
+ return hash.toString(16).padStart(16, "0")
 }
 
 const RULES: Array<{ label: CreatorCommunicationLabel; pattern: RegExp; rationale: string }> = [
@@ -70,6 +82,53 @@ export const classifyCreatorCommunication = (text: string): CreatorCommunication
  * Stores communication as an immutable intelligence event. This is evidence of what
  * the creator said, not a memory write; promotion remains a separate governed workflow.
  */
+/**
+ * One-time privacy migration for pre-consent records. Redaction is always allowed:
+ * it removes retained creator text and writes the sanitized event back through the
+ * existing idempotent durable-sync path. It does not classify new communication.
+ */
+export const redactLegacyCreatorCommunicationText = (channelIdInput: string): number => {
+ const channelId = channelIdInput.trim()
+ if (!channelId) return 0
+ const legacy = listAlgorithmIntelligenceEvents({ channelId }).filter((event) =>
+  event.kind === "CREATOR_COMMUNICATION_CLASSIFIED" && typeof event.metadata?.communicationText === "string",
+ )
+ legacy.forEach((event) => {
+  const originalText = String(event.metadata.communicationText || "")
+  const metadata = { ...event.metadata }
+  delete metadata.communicationText
+  recordAlgorithmIntelligenceEvent({
+   id: event.id,
+   channelId: event.channelId,
+   projectId: event.projectId || null,
+   videoId: event.videoId || null,
+   kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+   sourceSystem: "communication",
+   sourceId: event.sourceId || event.id,
+   parentEventIds: event.parentEventIds,
+   recommendationId: event.recommendationId || null,
+   primingPlanId: event.primingPlanId || null,
+   primingStepId: event.primingStepId || null,
+   actionPacketId: event.actionPacketId || null,
+   workflowId: event.workflowId || null,
+   evidenceIds: event.evidenceIds,
+   confidence: event.confidence,
+   title: event.title,
+   summary: "Creator communication classified; legacy raw text redacted.",
+   evaluationTargets: event.evaluationTargets,
+   checkpointAt: event.checkpointAt || null,
+   metadata: {
+    ...metadata,
+    communicationText: undefined,
+    communicationTextFingerprint: fingerprintText(originalText),
+    rawCommunicationTextRetained: false,
+    retentionPolicy: "classification-and-fingerprint-only-v1",
+   },
+  })
+ })
+ return legacy.length
+}
+
 export const recordCreatorCommunicationEvidence = (
  input: RecordCreatorCommunicationInput,
 ): { classification: CreatorCommunicationClassification; event: AlgorithmIntelligenceEvent; idempotentReplay: boolean } => {
@@ -80,17 +139,22 @@ export const recordCreatorCommunicationEvidence = (
  if (!communicationId) throw new Error("communicationId is required")
  if (!text) throw new Error("communication text is required")
 
+ const controls = readBrainUserControls(channelId)
+ if (!canCaptureCreatorCommunications(controls)) {
+  throw new Error("Explicit creator communication capture consent is required")
+ }
  const classification = classifyCreatorCommunication(text)
  if (!classification.labels.length) throw new Error("Communication does not match a supported classification")
  const id = `creator-communication:${channelId}:${communicationId}`
  const existing = listAlgorithmIntelligenceEvents({ channelId }).find((event) => event.id === id)
+ const textFingerprint = fingerprintText(text)
  const relatedEventIds = Array.from(new Set((input.relatedEventIds || []).map((value) => value.trim()).filter(Boolean)))
  const projectId = input.projectId?.trim() || null
  if (existing) {
   const existingParents = [...existing.parentEventIds].sort()
   const requestedParents = [...relatedEventIds].sort()
   if (
-   existing.metadata?.communicationText !== text
+   existing.metadata?.communicationTextFingerprint !== textFingerprint
    || (existing.projectId || null) !== projectId
    || JSON.stringify(existingParents) !== JSON.stringify(requestedParents)
   ) {
@@ -109,12 +173,14 @@ export const recordCreatorCommunicationEvidence = (
   evidenceIds: [communicationId],
   confidence: classification.confidence,
   title: `Creator communication: ${classification.labels.join(", ")}`,
-  summary: text.slice(0, 240),
+  summary: `Creator communication classified (${classification.labels.join(", ")}); raw text intentionally not retained.`,
   checkpointAt: input.occurredAt ?? Date.now(),
   metadata: {
    classification,
    communicationId,
-   communicationText: text,
+   communicationTextFingerprint: textFingerprint,
+   rawCommunicationTextRetained: false,
+   retentionPolicy: "classification-and-fingerprint-only-v1",
    durableMemoryPromoted: false,
    promotionRequiresGovernedReview: true,
    sourceIdentityVerified: true,
