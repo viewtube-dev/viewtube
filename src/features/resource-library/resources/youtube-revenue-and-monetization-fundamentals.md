@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; reading-analytics-correc
 
 YouTube income is not a fixed amount per view. Earnings depend on the monetization features available to a channel, the content, the audience, eligible activity, advertiser demand, viewer purchases, and other conditions. The purpose of this guide is to help you understand the terms, compare results fairly, and build a sustainable plan without treating estimates as guarantees.
 
-> **Creator principle:** Views are attention, not a paycheck. Before interpreting revenue, check what the metric includes, which period it covers, what monetization was active, and whether the amount is estimated or finalized.
+> **Creator takeaway:** Views are attention, not a paycheck. Before interpreting revenue, check what the metric includes, which period it covers, what monetization was active, and whether the amount is estimated or finalized.
 
 ## The Creator Mental Model
 
