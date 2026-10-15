@@ -33,7 +33,7 @@ export interface DeterministicAnalyticsInsight {
  currentValue: number
  baselineValue: number | null
  delta: number | null
- /** Percentage points of relative change; null when a valid percentage is undefined. */
+ /** Percentage of relative change; null when a valid percentage is undefined. */
  relativeDeltaPercent: number | null
  /** Contribution share, 0–100, only for contribution findings. */
  sharePercent?: number
@@ -187,11 +187,20 @@ export const buildPeriodComparisonInsights = (input: {
    continue
   }
 
-  const metrics = Object.keys(currentDataset.metrics)
-   .filter((metric) => Object.prototype.hasOwnProperty.call(baselineDataset.metrics, metric))
-   .sort()
+  const metrics = [...new Set([
+   ...Object.keys(currentDataset.metrics),
+   ...Object.keys(baselineDataset.metrics),
+  ])].sort()
 
   for (const metric of metrics) {
+   if (!Object.prototype.hasOwnProperty.call(currentDataset.metrics, metric)) {
+    blockedReasons.add(`Metric ${metric} is missing from the current period in dataset ${currentDataset.id}.`)
+    continue
+   }
+   if (!Object.prototype.hasOwnProperty.call(baselineDataset.metrics, metric)) {
+    blockedReasons.add(`Metric ${metric} is missing from the baseline period in dataset ${currentDataset.id}.`)
+    continue
+   }
    if (currentDataset.missingMetrics.includes(metric) || baselineDataset.missingMetrics.includes(metric)) {
     blockedReasons.add(`Metric ${metric} is marked missing in dataset ${currentDataset.id}.`)
     continue
@@ -293,7 +302,6 @@ export const buildTrafficSourceContributionInsights = (input: {
  sourceRowCount?: number
 }): TrafficContributionResult => {
  const { dataset, metricKey, dimensionKey } = input
- const limitations: string[] = []
  if (dataset.status !== "available") {
   return { insights: [], limitations: [`Dataset ${dataset.datasetId} is not fully available.`] }
  }
@@ -364,5 +372,5 @@ export const buildTrafficSourceContributionInsights = (input: {
   }))
   .sort((a, b) => b.currentValue - a.currentValue || a.label.localeCompare(b.label))
 
- return { insights, limitations }
+ return { insights, limitations: [] }
 }
