@@ -71,12 +71,12 @@ describe("Data Visual canvas ownership", () => {
  })
 
  it("retires controllerSpec metadata in favor of module-authored controller rows", () => {
-  expect(shellSource).not.toContain("controllerSpec")
-  expect(shellSource).toContain("controllerRows?: readonly ControllerRow[]")
-  expect(shellSource).toContain("controllerWidth?: number")
+  expect(repoFile("src/components/AnalyticsVisualShell.tsx")).not.toContain("controllerSpec")
+  expect(repoFile("src/components/AnalyticsVisualShell.tsx")).toContain("controllerRows?: readonly ControllerRow[]")
+  expect(repoFile("src/components/AnalyticsVisualShell.tsx")).toContain("controllerWidth?: number")
   expect(shellSource).toContain("controllerDensity?: \"normal\" | \"compact\"")
-  expect(explorerSource).not.toContain("controllerSpec")
-  expect(explorerSource).toContain("controllerRows={")
+  expect(repoFile("src/components/TubeExplorerVisualModules.tsx")).not.toContain("controllerSpec")
+  expect(repoFile("src/components/TubeExplorerVisualModules.tsx")).toContain("controllerRows={")
  })
 
  it("marks migrated module bodies so the stand-down can find them", () => {
