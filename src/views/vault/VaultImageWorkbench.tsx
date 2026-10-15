@@ -1,6 +1,6 @@
 import React from "react"
 import { Download, Image as ImageIcon, RotateCcw, WandSparkles } from "lucide-react"
-import { SubToolbox, SubToolboxInnerActionButton } from "../components/Toolbox"
+import { SubToolboxInnerActionButton } from "../components/Toolbox"
 import {
   SubToolboxInput,
   SubToolboxSelect,
@@ -46,7 +46,6 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
 
   React.useEffect(() => {
     let cancelled = false
-    let objectUrl: string | null = null
     const loadDimensions = async () => {
       const sourceUrl = asset.url || asset.previewUrl
       if (!sourceUrl) {
@@ -75,7 +74,6 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
     void loadDimensions()
     return () => {
       cancelled = true
-      if (objectUrl) URL.revokeObjectURL(objectUrl)
     }
   }, [asset.id, asset.url, asset.previewUrl])
 
@@ -187,15 +185,14 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
   }
 
   return (
-    <SubToolbox
-      title="Image Workbench"
-      subtitle="Non-destructive crop, transform, resize, optimize, and derivative preview"
-      icon={<ImageIcon />}
-      paletteIndex={6}
-      isOpenInitial
-      persistenceId="vault-image-workbench"
-    >
-      <div className="flex min-w-0 flex-col gap-3" data-vault-image-workbench>
+    <section className="flex min-w-0 flex-col gap-3 rounded-md border-2 border-current p-3" data-vault-image-workbench aria-label="Image Workbench">
+      <header className="flex items-start gap-2">
+        <ImageIcon aria-hidden="true" className="mt-0.5 shrink-0" />
+        <div>
+          <h3 className="text-sm font-black uppercase">Image Workbench</h3>
+          <p className="text-xs font-bold opacity-65">Non-destructive crop, transform, resize, optimize, and derivative preview</p>
+        </div>
+      </header>
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs font-black uppercase">Source: {asset.name}</span>
           <span className="text-xs font-bold opacity-65">{sourceDimensions.width} × {sourceDimensions.height}</span>
@@ -290,8 +287,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
           </section>
         ) : null}
         <p className="text-xs font-bold opacity-60">The source is never overwritten. Larger outputs are downloaded instead of being embedded in browser storage. Smart crop suggestions are intentionally omitted until a real vision provider is configured.</p>
-      </div>
-    </SubToolbox>
+    </section>
   )
 }
 
