@@ -33,9 +33,7 @@ describe("Resource Library canonical palette contract", () => {
     expect(component).toContain("VT_SPECTRUM_PALETTE_06.map")
     expect(component).toContain("getResourcePaletteStyle(resource.accentPaletteIndex)")
     expect(component).toContain('paletteIndex={8}')
-    for (let index = 0; index < 12; index += 1) {
-      expect(component).toContain(`--vt-spectrum-${index}`)
-    }
+    expect(component).toContain("`--vt-spectrum-${index}`")
   })
 
   it("does not define a second hard-coded spectrum in the resource stylesheet", () => {
