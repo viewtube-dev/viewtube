@@ -317,3 +317,8 @@ test("20 spectrum samples cover all 12 canonical palette stops", () => {
     assert.ok(initials.has(initial), `spectrum gallery includes color-stop sample ${initial}`);
   }
 });
+
+
+test("component descriptions above specimens stay on one compact line", () => {
+  assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+});
