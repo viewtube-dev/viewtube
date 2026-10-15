@@ -3,6 +3,7 @@ import { Film, HardDrive } from "lucide-react";
 import { SubToolboxInnerActionButton } from "../components/Toolbox";
 import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../components/subtoolbox/SubToolboxPrimitives";
 import { createImportedVaultAsset } from "../services/vaultAdapter";
+import { extractVaultVideoThumbnail } from "../services/vaultVideoThumbnail";
 import { processVaultVideo, type VaultVideoOperation, type VaultVideoQuality } from "../services/vaultVideoWorkbench";
 import { getVaultMediaBinary, saveVaultMediaBinary } from "../services/vaultMediaBinaryStore";
 import type { VaultAsset } from "../types";
@@ -13,6 +14,13 @@ export interface VaultVideoWorkbenchProps {
 }
 
 const extensionFor = (mimeType: string) => mimeType === "image/jpeg" ? "jpg" : mimeType === "image/png" ? "png" : mimeType === "audio/mp4" ? "m4a" : mimeType === "video/webm" ? "webm" : "mp4";
+
+const blobToDataUrl = (blob: Blob): Promise<string> => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("Could not create a compact media preview."));
+  reader.onerror = () => reject(new Error("Could not create a compact media preview."));
+  reader.readAsDataURL(blob);
+});
 
 const loadVaultVideoSourceBlob = async (asset: VaultAsset): Promise<Blob> => {
   const binaryStoreId = typeof asset.metadata?.binaryStoreId === "string" ? asset.metadata.binaryStoreId : "";
@@ -123,6 +131,12 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
         operation,
         parameters: { operation, quality, startSeconds, endSeconds, atSeconds, sourceDurationSeconds: durationSeconds },
       });
+      let durablePreviewUrl: string | null = null;
+      if (result.mimeType.startsWith("video/")) {
+        durablePreviewUrl = await extractVaultVideoThumbnail(new File([result.blob], outputName, { type: result.mimeType }));
+      } else if (result.mimeType.startsWith("image/")) {
+        durablePreviewUrl = await blobToDataUrl(result.blob);
+      }
       const created = createImportedVaultAsset({
         name: outputName,
         kind: result.mimeType.startsWith("image/") ? "image" : result.mimeType.startsWith("audio/") ? "audio" : "video",
@@ -130,7 +144,7 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
         projectName: asset.projectName,
         toolId: "creator-vault-os",
         url: null,
-        previewUrl: null,
+        previewUrl: durablePreviewUrl,
         mimeType: result.mimeType,
         tags: [...new Set([...(asset.tags || []), "derivative", "processed"])],
         metadata: {
