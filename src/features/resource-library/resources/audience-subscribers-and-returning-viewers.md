@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; youtube-metrics-dimensions
 
 Audience reports help you understand who is finding your videos and whether people come back. They are most useful when treated as different views of a relationship—not as interchangeable measures of channel quality.
 
-> **Creator principle:** Subscriber count tells you how many accounts have subscribed under the platform's definition; it does not tell you how many people will watch the next upload. Build reasons to return, not just reasons to click once.
+> **Creator takeaway:** Subscriber count tells you how many accounts have subscribed under the platform's definition; it does not tell you how many people will watch the next upload. Build reasons to return, not just reasons to click once.
 
 ## The Creator Mental Model
 
