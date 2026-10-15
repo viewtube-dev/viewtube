@@ -6,6 +6,9 @@ import {
   buildLearningCandidateReview,
   evaluateAnalyticsOutcome,
   presentAnalyticsFindings,
+  recordAnalyticsOutcomeEvent,
+  recordAnalyticsRecommendationEvent,
+  recordAnalyticsLearningReviewEvent,
 } from "./AnalyticsIntelligenceWorkflow"
 
 const finding = (overrides: Partial<DeterministicAnalyticsInsight> = {}): DeterministicAnalyticsInsight => ({
@@ -123,6 +126,52 @@ describe("Analytics intelligence workflow phases 5–8", () => {
     expect(context.findingIds).toEqual(["finding-1"])
     expect(context.findings[0].currentValue).toBe(140)
     expect(context.findings[0].formula).toBe("delta = current - baseline")
+  })
+
+  it("bridges recommendation, outcome, and learning review into the existing algorithm event ledger", () => {
+    const action = buildAnalyticsRecommendationAction({
+      id: "recommendation-ledger",
+      creatorGoal: "Increase qualified watch time",
+      action: "Test the opening sequence",
+      channelId: "channel-1",
+      projectId: "project-1",
+      contentBuildId: "content-build-1",
+      publicationTransactionId: "publish-1",
+      metadataVersionIds: ["metadata-v3"],
+      finding: finding(),
+      evaluationWindow: "28d",
+    })!
+    const recommendationEvent = recordAnalyticsRecommendationEvent(action)
+    expect(recommendationEvent.id).toBe("analytics-recommendation:recommendation-ledger")
+    expect(recommendationEvent.kind).toBe("RECOMMENDATION_CREATED")
+    expect(recommendationEvent.evidenceIds).toContain("analytics:snapshot-after:daily:views")
+    expect(recommendationEvent.metadata.contentBuildId).toBe("content-build-1")
+
+    const outcome = evaluateAnalyticsOutcome({
+      recommendation: action,
+      baseline: measurement({ value: 100, snapshotId: "baseline-ledger" }),
+      followUp: measurement({
+        value: 125,
+        snapshotId: "followup-ledger",
+        observedAt: "2026-10-15T00:00:00.000Z",
+        periodStartDate: "2026-09-18",
+        periodEndDate: "2026-10-15",
+      }),
+    })
+    const outcomeEvent = recordAnalyticsOutcomeEvent(outcome)
+    expect(outcomeEvent.id).toBe(`analytics-outcome:${outcome.id}`)
+    expect(outcomeEvent.kind).toBe("OUTCOME_MEASURED")
+    expect(outcomeEvent.metadata.causalConclusion).toBeNull()
+
+    const candidate = buildLearningCandidateReview({
+      id: "candidate-ledger",
+      recommendation: action,
+      evaluations: [outcome, { ...outcome, id: "outcome-two" }, { ...outcome, id: "outcome-three" }],
+    })!
+    const learningEvent = recordAnalyticsLearningReviewEvent(candidate)
+    expect(learningEvent.id).toBe("analytics-learning-review:candidate-ledger")
+    expect(learningEvent.kind).toBe("LEARNING_CANDIDATE_CREATED")
+    expect(learningEvent.metadata.promotionAllowed).toBe(false)
   })
 
   it("creates a proposed, goal-aware action with provenance and evaluation criteria", () => {
