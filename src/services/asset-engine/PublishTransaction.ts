@@ -1,5 +1,5 @@
 import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentBuildStage } from "./ContentBuildRepository"
-import type { ContentBuildYouTubeBinding } from "./contracts"
+import type { ContentBuildPublicationIdentity, ContentBuildYouTubeBinding } from "./contracts"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
 
@@ -124,6 +124,36 @@ export const failPublishTransaction=(id:string,step:PublishTransactionStep,error
  appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.failed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{step,error:message,youtubeVideoId:next.youtubeVideoId||null}})
  return next
 }
+/**
+ * Resolve the verified identity that binds one completed publish transaction to
+ * its approved immutable snapshot and external YouTube video. Legacy project
+ * links are explicitly qualified instead of inferred from a snapshot alone.
+ */
+export const getContentBuildPublicationIdentity=(id:string):ContentBuildPublicationIdentity|null=>{
+ const transaction=getPublishTransaction(id)
+ if(!transaction||transaction.status!=="completed"||!transaction.youtubeVideoId)return null
+ const build=getContentBuild(transaction.contentBuildId)
+ if(!build||build.youtube?.status!=="published"||build.youtube.videoId!==transaction.youtubeVideoId)return null
+ const snapshot=getApprovedPublishSnapshot(transaction.approvedSnapshotId)
+ if(!snapshot||!verifyApprovedPublishSnapshot(snapshot))return null
+ return {
+  schemaVersion:1,
+  contentBuildId:transaction.contentBuildId,
+  projectId:snapshot.projectId,
+  projectAssociationStatus:build.legacyProjectId===snapshot.projectId?"verified":"snapshot-only",
+  videoPackageId:transaction.videoPackageId,
+  publishTransactionId:transaction.id,
+  youtubeVideoId:transaction.youtubeVideoId,
+  channelId:build.youtube.channelId||build.channelId||null,
+  approvedSnapshotId:transaction.approvedSnapshotId,
+  approvedSnapshotHash:transaction.approvedSnapshotHash,
+  selectedVariantAssetIds:[transaction.assetLock.titleAssetId,transaction.assetLock.thumbnailAssetId,transaction.assetLock.finalRenderAssetId,transaction.assetLock.descriptionAssetId,transaction.assetLock.tagsAssetId].filter((value):value is string=>Boolean(value)),
+  correlationId:transaction.id,
+  idempotencyKey:transaction.idempotencyKey,
+  publishedAt:build.youtube.publishedAt||null,
+ }
+}
+
 export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
  const transaction=getPublishTransaction(id);if(!transaction)throw new Error("Unknown publish transaction: "+id)
  if(transaction.status==="completed")return transaction
@@ -150,10 +180,11 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
     projectionRevision:next.assetLock.projectionRevision,
     youtubeVideoId:next.youtubeVideoId,
     publicationState:"published",
+    publicationIdentity:getContentBuildPublicationIdentity(next.id),
    },
   })
  } else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
- appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.completed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{youtubeVideoId:next.youtubeVideoId}})
+ appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.completed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{youtubeVideoId:next.youtubeVideoId,approvedSnapshotId:next.approvedSnapshotId,approvedSnapshotHash:next.approvedSnapshotHash,publicationIdentity:getContentBuildPublicationIdentity(next.id)}})
  return next
 }
 export const resetPublishTransactionRepositoryForTests=()=>{memory=[];if(canStore())localStorage.removeItem(KEY)}
