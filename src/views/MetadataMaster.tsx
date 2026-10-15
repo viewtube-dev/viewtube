@@ -14,6 +14,7 @@ import {
   Sparkles,
   Target,
   WandSparkles,
+  Clock3,
 } from "lucide-react"
 import { ToolboxScaffold, SubToolbox } from "../components/Toolbox"
 import {
@@ -54,7 +55,9 @@ import {
   type MetadataMasterSet,
   type MetadataMasterSlot,
 } from "../services/metadataMaster"
-import { recordMetadataPackageVersion } from "../services/metadataHistory"
+import { listMetadataHistory, recordMetadataPackageVersion } from "../services/metadataHistory"
+import type { ContentBuildEvent } from "../services/asset-engine/contracts"
+import { recordMetadataOperationProvenance } from "../services/MetadataOperationProvenance"
 import {
   createViewTubeActionPacket,
   persistViewTubeActionPacket,
@@ -127,10 +130,16 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
   const [error, setError] = useState<string | null>(null)
   const [lastAction, setLastAction] = useState<string>("Ready")
   const [history, setHistory] = useState<MetadataMasterPackage[]>([])
+  const [lifecycleHistory, setLifecycleHistory] = useState<ContentBuildEvent[]>([])
 
   useEffect(() => {
     setHistory(listMetadataMasterPackages())
   }, [])
+
+  useEffect(() => {
+    const contentBuildId = packageDraft.contentBuildId
+    setLifecycleHistory(contentBuildId ? listMetadataHistory(contentBuildId) : [])
+  }, [packageDraft.contentBuildId, packageDraft.version, lastAction])
 
   useEffect(() => {
     setPackageDraft(current => finalizeMetadataMasterPackage({
@@ -219,6 +228,29 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       })
 
       const generationOperationId = `metadata-generation-${Date.now()}`
+      if (workspaceContext?.contentBuildId) {
+        recordMetadataOperationProvenance({
+          contentBuildId: workspaceContext.contentBuildId,
+          operationId: generationOperationId,
+          operation: "generate",
+          toolId: "metadata-master",
+          projectId: workspaceContext.build.legacyProjectId || null,
+          videoId: publishedVideoId || workspaceContext.build.youtube?.videoId || null,
+          contentBuildRevision: workspaceContext.build.revision,
+          fields: ["title", "thumbnailPrompt", "thumbnailText", "description", "tags", "chapters", "category", "playlistIds", "endScreen"],
+          recipeId: "metadata-master.seo-package",
+          recipeVersion: "1",
+          outputPackageIds: candidates.map(candidate => candidate.package.id),
+          evidenceIds: workspaceContext.evidenceIds,
+          provider: "gemini-service",
+          model: null,
+          actorType: "brain",
+          inputFingerprintSource: {
+            concept, niche, audience, script, videoLength, channelHandle, resourceLinks,
+            goal, intensity, style, setCount,
+          },
+        })
+      }
       for (const candidateSet of candidates) {
         const candidatePackage = candidateSet.package
         if (!candidatePackage.contentBuildId) continue
@@ -686,7 +718,85 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
               ))}
             </SubToolboxStack>
           ) : (
-            <SubToolboxStatePanel state="empty" message="Saved package drafts appear here. Detailed change history and analytics belong in the separate History / Analytics workspace." />
+            <SubToolboxStatePanel state="empty" message="Saved package drafts appear here; lifecycle events and metadata performance comparisons are shown below." />
+          )}
+        </SubToolbox>
+
+        <SubToolbox
+          title="07 CHANGE + OUTCOME HISTORY"
+          icon={<Clock3 size={22} />}
+          paletteIndex={paletteIndex + 7}
+          collapsible
+          isOpenInitial={false}
+        >
+          {packageDraft.contentBuildId ? (
+            lifecycleHistory.length ? (
+              <SubToolboxStack density="dense">
+                {lifecycleHistory.slice().reverse().slice(0, 12).map(event => {
+                  const metadata = (event.metadata || {}) as Record<string, unknown>
+                  const comparison = event.entityType === "metadata-performance-comparison" &&
+                    event.resultingState && typeof event.resultingState === "object"
+                    ? event.resultingState as Record<string, unknown>
+                    : null
+                  const fieldChanges = Array.isArray(comparison?.fieldChanges)
+                    ? comparison.fieldChanges as Array<Record<string, unknown>>
+                    : []
+                  const metrics = Array.isArray(comparison?.metrics)
+                    ? comparison.metrics as Array<Record<string, unknown>>
+                    : []
+                  const metricLine = metrics
+                    .filter(metric => typeof metric.absoluteChange === "number")
+                    .slice(0, 3)
+                    .map(metric => {
+                      const delta = metric.absoluteChange as number
+                      const percent = typeof metric.percentChange === "number"
+                        ? ` (${metric.percentChange > 0 ? "+" : ""}${metric.percentChange.toFixed(1)}%)`
+                        : ""
+                      return `${String(metric.metric)}: ${delta > 0 ? "+" : ""}${delta.toFixed(2)}${percent}`
+                    })
+                  const title = comparison
+                    ? `PERFORMANCE COMPARISON · ${String(comparison.status || "unknown").toUpperCase()}`
+                    : event.entityType === "metadata-version"
+                      ? `METADATA ${String(metadata.operation || "CHANGE").toUpperCase()} · ${String(event.entityId || "").slice(0, 28)}`
+                      : event.eventType.replaceAll(".", " ").toUpperCase()
+                  return (
+                    <SubToolboxOutputCard key={event.id} title={title} badge={comparison ? String(comparison.status || "recorded").toUpperCase() : event.actorType.toUpperCase()}>
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold opacity-65">
+                        <span>{new Date(event.timestamp).toLocaleString()}</span>
+                        <span>·</span>
+                        <span>{event.toolId || "system"}</span>
+                        {typeof metadata.operationId === "string" ? <><span>·</span><span>OP {metadata.operationId.slice(0, 18)}</span></> : null}
+                      </div>
+                      {fieldChanges.length ? (
+                        <div className="mt-2 flex flex-col gap-1 text-xs font-bold">
+                          {fieldChanges.slice(0, 4).map((change, index) => (
+                            <div key={`${String(change.field)}-${index}`} className="grid grid-cols-[auto_1fr] gap-2">
+                              <span className="uppercase opacity-55">{String(change.field)}</span>
+                              <span className="break-words">{String(change.before ?? "—")} <span className="opacity-40">→</span> {String(change.after ?? "—")}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                      {comparison ? (
+                        <div className="mt-2 flex flex-col gap-1 text-xs font-bold">
+                          <p>Baseline: {String(comparison.baselineStartDate)}–{String(comparison.baselineEndDate)} · Follow-up: {String(comparison.followUpStartDate)}–{String(comparison.followUpEndDate)}</p>
+                          {metricLine.length ? <p>{metricLine.join(" · ")}</p> : <p>Metrics are incomplete; missing observations remain unknown, not zero.</p>}
+                          <p className="opacity-60">Evidence: {event.evidenceIds.length} reference(s). Temporal association only; this comparison does not establish causation.</p>
+                        </div>
+                      ) : event.entityType === "metadata-operation" ? (
+                        <p className="mt-2 text-xs font-bold opacity-65">Prompt recipe: {String(metadata.recipeId || "unknown")} v{String(metadata.recipeVersion || "unknown")} · Fields: {Array.isArray(metadata.fields) ? metadata.fields.join(", ") : "not recorded"}</p>
+                      ) : event.evidenceIds.length ? (
+                        <p className="mt-2 text-xs font-bold opacity-60">Evidence references: {event.evidenceIds.length}</p>
+                      ) : null}
+                    </SubToolboxOutputCard>
+                  )
+                })}
+              </SubToolboxStack>
+            ) : (
+              <SubToolboxStatePanel level="l1" state="empty" message="No ContentBuild metadata changes or performance comparisons have been recorded for this project yet." />
+            )
+          ) : (
+            <SubToolboxStatePanel level="l1" state="empty" message="Load or generate a package from an active Project to connect this history view to its canonical ContentBuild." />
           )}
         </SubToolbox>
 
