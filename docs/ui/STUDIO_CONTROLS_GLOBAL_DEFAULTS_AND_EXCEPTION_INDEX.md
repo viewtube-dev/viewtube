@@ -108,7 +108,7 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 | E-09 | Button shadow and transitions | Fixed shadow anchor; face moves half shadow on hover and full shadow on click | Final contract anchors shadow on the outer button and moves only the inner face at 150ms hover / 300ms active | **Implemented; awaiting automated and rendered verification** |
 | E-10 | Switches, radio buttons, checkboxes | Reference-specific 44px geometry and skin variants; selected state changes indicator/fill | Final contract restores 75.68×44 switch tracks, 36.667px handles, 3.667px symmetric insets, 31.68px travel, 44×44 choices, 33×33 radio dots, and explicit black/white/color-swap checkbox marks | **Implemented; awaiting visual verification** |
 | E-11 | Word toggles | 44px default or 28px compact; active handle measures selected word; skin/words/gap/inset may be customized | Dynamic measured handle and inline style are intentional geometry exceptions; CSS/state transitions must be checked for border/radius/motion consistency | **Intentional dynamic-width exception; audit remaining size behavior** |
-| E-12 | Floating-label input/textarea wrappers | Wrapper adds label positioning, not a second editable control | Wrapper classes are separately styled in catalog CSS; ensure they do not change field size/radius/stroke or duplicate focus rings | **Needs cross-file cascade audit** |
+| E-12 | Floating-label input/textarea variants | The input family adds a floating-label presentation to the canonical input; the textarea family adds it to the canonical writing surface. Neither creates a second native-control family. | `variant="floating-label"` adds only wrapper/label presentation; native field semantics, typography, selected size geometry, focus, and textarea multiline behavior remain owned by the corresponding family. | **Implemented in this refactor; build, source tests, and browser verification pending** |
 | E-13 | Small/small-size compatibility | CSS defines a `data-size="small"` height of 32px although canonical contract exports only standard/compact | Legacy third size can bypass the two-size rule | **Defect unless a documented migration-only exception is approved** |
 | E-14 | Action-size compatibility | CSS defines `data-size="action"` height 56px and button typography overrides | The canonical exported size map exposes only standard and compact; the separate 56px StudioActionButton is a distinct family, not a StudioButton size | **Defect/compatibility debt: inventory consumers and either migrate or formally document separate non-button layout semantics** |
 | E-15 | Focus and reduced motion | Focus needs visible, stable outline; reduced-motion must remain understandable | Focus uses 3px outline / 3px offset on buttons, not size-derived; reduced-motion sets transition duration to .01ms globally, suppressing most motion feedback | **Needs accessibility review and state feedback alternative** |
@@ -122,8 +122,8 @@ The canonical gallery currently uses production exports (good), and has family-l
 |---|---|---|
 | Text Input / Search / Number | `StudioTextInput`, `StudioSearchInput`, `StudioNumberInput` — `StudioControls.tsx` | Standard/compact font, border, radius, fill, focus ring, caret; no stale 8px radius |
 | Text Area | `StudioTextArea` | Control chrome follows size; explicitly document multiline minimum-height/resize exception |
-| Floating Label Input | `StudioLabeledInput` | Wrapper adds label only; no geometry override |
-| Floating Label Text Area | `StudioLabeledTextArea` | Wrapper adds label only; document multiline height |
+| Text Input · Floating Label Variant | `StudioTextInput` with `variant="floating-label"` | Wrapper adds label only; global 38px/24px input typography and selected size geometry remain unchanged |
+| Text Area · Floating Label Variant | `StudioTextArea` with `variant="floating-label"` | Wrapper adds label only; textarea 18px/14px typography, 92px minimum surface, multiline padding, and vertical resize remain unchanged |
 | Button | `StudioButton` | 38px/24px text contract, 3px/2px stroke, 6px/4px radius, shadow anchor and press states |
 | Icon Button | `StudioIconButton` | Same button contract; icon 28px/18px; no independent shadow/radius override |
 | Split-left Button | `StudioSplitLeftButton` | Divider 3px/2px; selected/default identical geometry; rail icon 28px/18px; stable shadow |
@@ -516,3 +516,29 @@ A previous entry in section 20 incorrectly described 18px / 14px as shared typog
 - Both families retain global 44px / 28px geometry, 3px / 2px borders, and 6px / 4px radii. The textarea typography and height are functional exceptions; they do not redefine global single-line input typography.
 
 The implementation had incorrectly assigned the textarea exception to the `textInput` tokens and added important CSS overrides to single-line inputs. The correction restores the input tokens to the global size contract and scopes 18px / 14px styles to textarea selectors only. Regression coverage explicitly checks both contracts and the Confirmed Library wording.
+
+## 9. Floating-label consolidation plan
+
+**Target:** remove the standalone `StudioLabeledInput` and `StudioLabeledTextArea` component APIs and expose their behavior only as variants of `StudioTextInput` and `StudioTextArea`.
+
+1. **Contract and API**
+   - [x] Add `variant="simple" | "floating-label"` to the canonical single-line input family (simple is the default).
+   - [x] Add the same variant contract to the canonical textarea family.
+   - [x] Keep `label` and optional `level="l0" | "l1" | "l2"` on the floating-label variant.
+   - [x] Keep the input-only Compact B specimen as `floatingLabelVariant="b"`; it must not become a second field component.
+   - [x] Keep the label typography/overlap CSS shared and preserve family-specific text sizes.
+2. **Consumer migration**
+   - [x] Move Confirmed Primitive Library examples into the Studio Text Input and Studio Text Area family sections.
+   - [x] Convert the Complete Primitive Catalog entries to `StudioTextInput` / `StudioTextArea` variants.
+   - [x] Remove the standalone component names from `StudioControls.tsx` and the public `src/studio-ui/index.ts` barrel.
+   - [ ] Audit all remaining repository consumers and remove any stale imports or calls before merge.
+3. **Regression coverage**
+   - [x] Update source-governance assertions to require variants and forbid the old exports.
+   - [ ] Run focused source-governance tests and production build; fix any failures before merge.
+   - [ ] Inspect the rendered Studio catalog for standard/compact labels, focused/filled states, and textarea resizing.
+4. **Definition of done**
+   - [ ] No source imports/exports/references to the two removed component names remain.
+   - [ ] Input variant retains 38px standard / 24px compact typography and 44px / 28px geometry.
+   - [ ] Textarea variant retains 18px standard / 14px compact typography, 92px minimum height, multiline padding, and vertical resize.
+   - [ ] Label typography remains the same across field sizes; wrapper changes do not add a second border or focus ring.
+   - [ ] Tests/build pass and rendered behavior is verified before merge/deployment.
