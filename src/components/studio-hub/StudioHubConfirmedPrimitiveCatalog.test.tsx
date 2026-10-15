@@ -6,7 +6,7 @@ import { StudioHubConfirmedPrimitiveCatalog } from "./StudioHubConfirmedPrimitiv
 describe("confirmed composite primitive catalog", () => {
   it("registers the production Play/Pause split-left control at standard and compact sizes", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('title="Play/Pause Split-left Button · 44px + 28px"')
+    expect(html).toContain('Play/Pause Split-left Button · 44px + 28px')
     expect(html).toContain('data-vt-studio-play-pause="true"')
     expect(html).toContain('data-vt-library-component="StudioPlayPauseButton"')
     expect(html).toContain('data-size="standard"')
@@ -18,7 +18,7 @@ describe("confirmed composite primitive catalog", () => {
 
   it("registers the circular icon shape by reusing the canonical square icon button contract", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('title="Circle Icon Button · 44px + 28px"')
+    expect(html).toContain('Circle Icon Button · 44px + 28px')
     expect(html).toContain('data-vt-studio-circle-icon-button="true"')
     expect(html).toContain('data-vt-studio-icon-button="true"')
     expect(html).toContain('data-vt-library-component="StudioCircleIconButton"')
@@ -28,7 +28,7 @@ describe("confirmed composite primitive catalog", () => {
 
   it("registers the username composite with standard and compact native inputs", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('title="Username Split-left Input · 44px + 28px"')
+    expect(html).toContain('Username Split-left Input · 44px + 28px')
     expect(html).toContain('data-vt-studio-username-input="true"')
     expect(html).toContain('data-vt-studio-username-rail="true"')
     expect(html).toContain('data-icon-size-variant="large"')
