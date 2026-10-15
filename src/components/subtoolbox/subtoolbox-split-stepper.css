@@ -1,0 +1,32 @@
+/* Canonical split-stepper family. Geometry inherits Studio Controls tokens. */
+.vt-subtoolbox-split-stepper{
+  --vt-stepper-height:var(--vt-component-height,var(--vt-subtoolbox-control-standard,48px));
+  --vt-stepper-stroke:var(--vt-component-stroke,var(--vt-subtoolbox-inner-stroke,3px));
+  --vt-stepper-radius:var(--vt-component-radius,var(--vt-subtoolbox-inner-radius,8px));
+  display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);
+  width:100%;min-width:0;height:var(--vt-stepper-height);min-height:var(--vt-stepper-height);
+  overflow:hidden;border:var(--vt-stepper-stroke) solid #000;border-radius:var(--vt-stepper-radius);
+  background:var(--pair-b,#fff);color:#000;box-shadow:var(--vt-component-shadow-offset,4px) var(--vt-component-shadow-offset,4px) 0 color-mix(in srgb,var(--pair-b,var(--vt-subtoolbox-shadow,#73deff)) 45%,transparent);
+}
+.vt-subtoolbox-split-stepper.is-compact{--vt-stepper-height:var(--vt-component-height-compact,var(--vt-subtoolbox-control-compact,32px))}
+.vt-subtoolbox-split-stepper.is-standard{--vt-stepper-height:var(--vt-component-height-standard,var(--vt-subtoolbox-control-standard,48px))}
+.vt-subtoolbox-split-stepper-value{
+  display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;
+  border:0;border-right:var(--vt-stepper-stroke) solid #000;
+  background:color-mix(in srgb,var(--pair-a,var(--vt-subtoolbox-fill,#73deff)) 50%,transparent);
+  color:inherit;font:inherit;font-size:var(--vt-component-font-size,14px);font-weight:900;line-height:1;
+  font-variant-numeric:tabular-nums;white-space:nowrap;padding-inline:8px;
+}
+.vt-subtoolbox-split-stepper-rail{display:grid;grid-template-rows:1fr 1fr;min-width:0;min-height:0;background:var(--pair-b,#fff)}
+.vt-subtoolbox-split-stepper-rail button{
+  display:grid;place-items:center;min-width:0;min-height:0;width:100%;height:100%;padding:0;
+  border:0;border-radius:0;background:var(--pair-b,#fff);color:#000;cursor:pointer;
+}
+.vt-subtoolbox-split-stepper-rail button+button{border-top:var(--vt-stepper-stroke) solid #000}
+.vt-subtoolbox-split-stepper-rail svg{width:calc(var(--vt-stepper-height)*.34);height:calc(var(--vt-stepper-height)*.34);max-width:90%;max-height:90%;stroke:currentColor;stroke-width:3.2}
+.vt-subtoolbox-split-stepper-rail button:hover:not(:disabled){background:color-mix(in srgb,var(--pair-b,#fff) 88%,#000 12%)}
+.vt-subtoolbox-split-stepper-rail button:active:not(:disabled){background:color-mix(in srgb,var(--pair-b,#fff) 75%,#000 25%)}
+.vt-subtoolbox-split-stepper-rail button:focus-visible{position:relative;z-index:1;outline:2px solid var(--pair-a,#73deff);outline-offset:-3px}
+.vt-subtoolbox-split-stepper-rail button:disabled{cursor:not-allowed;opacity:.35}
+.vt-subtoolbox-split-stepper:has(button:disabled){--vt-stepper-disabled:1}
+@media(prefers-reduced-motion:reduce){.vt-subtoolbox-split-stepper-rail button{transition:none}}
