@@ -1,7 +1,11 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import type { CanonicalIntelligenceEvidenceBundle } from "../../services/analytics-canon"
 import { buildCurrentCanonicalAnalyticsInsights } from "../../services/brain/CurrentCanonicalAnalyticsInsights"
-import { presentAnalyticsFindings } from "../../services/brain/AnalyticsIntelligenceWorkflow"
+import {
+ buildAnalyticsRecommendationAction,
+ presentAnalyticsFindings,
+ recordAnalyticsRecommendationEvent,
+} from "../../services/brain/AnalyticsIntelligenceWorkflow"
 
 const number = (value: number | null) => value === null
  ? "Not defined"
@@ -11,17 +15,60 @@ const number = (value: number | null) => value === null
 export const DeterministicAnalyticsFindingsPanel: React.FC<{
  evidence: CanonicalIntelligenceEvidenceBundle | null
 }> = ({ evidence }) => {
+ const [selectedFindingId, setSelectedFindingId] = useState("")
+ const [creatorGoal, setCreatorGoal] = useState("")
+ const [proposedAction, setProposedAction] = useState("")
+ const [projectId, setProjectId] = useState("")
+ const [expectedDirection, setExpectedDirection] = useState<"increase" | "decrease" | "observe">("observe")
+ const [evaluationWindow, setEvaluationWindow] = useState<"7d" | "28d" | "90d" | "365d">("28d")
+ const [proposalStatus, setProposalStatus] = useState<string | null>(null)
  const result = useMemo(() => {
-  if (!evidence?.channelId) return { findings: [], limitations: ["Resolve a channel-scoped canonical snapshot to calculate findings."] }
+  if (!evidence?.channelId) return { rawFindings: [], findings: [], limitations: ["Resolve a channel-scoped canonical snapshot to calculate findings."] }
   const current = buildCurrentCanonicalAnalyticsInsights({
    channelId: evidence.channelId,
    expectedSnapshotId: evidence.snapshotId,
   })
   return {
+   rawFindings: current.findings,
    findings: presentAnalyticsFindings(current.findings, evidence.channelId),
    limitations: current.limitations,
   }
  }, [evidence?.channelId, evidence?.snapshotId])
+
+ const createProposal = (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault()
+  setProposalStatus(null)
+  if (!evidence?.channelId) {
+   setProposalStatus("Blocked: canonical channel scope is unavailable.")
+   return
+  }
+  const finding = result.rawFindings.find((candidate) => candidate.id === selectedFindingId)
+  if (!finding) {
+   setProposalStatus("Choose a validated deterministic finding first.")
+   return
+  }
+  const recommendation = buildAnalyticsRecommendationAction({
+   id: `analytics-recommendation:${crypto.randomUUID()}`,
+   creatorGoal,
+   action: proposedAction,
+   channelId: evidence.channelId,
+   projectId: projectId.trim() || null,
+   finding,
+   expectedDirection,
+   evaluationWindow,
+  })
+  if (!recommendation) {
+   setProposalStatus("Proposal blocked: goal, action, and finding must be valid and channel-matched.")
+   return
+  }
+  try {
+   recordAnalyticsRecommendationEvent(recommendation)
+   setProposalStatus(`Proposed only: ${recommendation.id}. Saved to the existing browser-local Algorithm Intelligence event ledger; not approved or executed.`)
+   setProposedAction("")
+  } catch {
+   setProposalStatus("Proposal was not recorded. Browser-local event storage may be unavailable.")
+  }
+ }
 
  return (
   <section aria-labelledby="deterministic-analytics-findings-title" className="mb-6 overflow-hidden rounded-2xl border-[3px] border-black bg-white shadow-[5px_5px_0px_0px_black]">
@@ -66,6 +113,39 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
      </div>
     )}
    </div>
+   <form onSubmit={createProposal} className="border-t-[3px] border-black bg-[#E5FAFF] p-4">
+    <h4 className="text-sm font-black uppercase">Propose a creator-approved action</h4>
+    <p className="mt-1 text-xs font-bold text-black/65">This records a proposal only. It does not execute the action or silently create/modify a Project.</p>
+    <div className="mt-3 grid gap-3 md:grid-cols-2">
+     <label className="block text-[10px] font-black uppercase">Evidence finding
+      <select required value={selectedFindingId} onChange={(event) => setSelectedFindingId(event.target.value)} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold">
+       <option value="">Choose a finding</option>
+       {result.findings.map((finding) => <option key={finding.id} value={finding.id}>{finding.title}</option>)}
+      </select>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Evaluation window
+      <select value={evaluationWindow} onChange={(event) => setEvaluationWindow(event.target.value as typeof evaluationWindow)} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold">
+       <option value="7d">7 days</option><option value="28d">28 days</option><option value="90d">90 days</option><option value="365d">365 days</option>
+      </select>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Creator goal
+      <input required value={creatorGoal} onChange={(event) => setCreatorGoal(event.target.value)} maxLength={240} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="What outcome are you pursuing?"/>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Proposed action
+      <input required value={proposedAction} onChange={(event) => setProposedAction(event.target.value)} maxLength={300} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="What will you test or change?"/>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Project ID (optional)
+      <input value={projectId} onChange={(event) => setProjectId(event.target.value)} maxLength={180} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="Existing Project identity"/>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Expected direction
+      <select value={expectedDirection} onChange={(event) => setExpectedDirection(event.target.value as typeof expectedDirection)} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold">
+       <option value="observe">Observe</option><option value="increase">Increase</option><option value="decrease">Decrease</option>
+      </select>
+     </label>
+    </div>
+    <button type="submit" disabled={result.findings.length === 0} className="mt-3 min-h-10 border-2 border-black bg-black px-4 py-2 text-xs font-black uppercase text-white disabled:cursor-not-allowed disabled:opacity-40">Record proposed action</button>
+    {proposalStatus && <p role="status" className="mt-3 border-2 border-black bg-white p-3 text-xs font-bold">{proposalStatus}</p>}
+   </form>
    {result.limitations.length > 0 && (
     <details className="border-t-[3px] border-black bg-[#FFF9D9] p-4 text-xs">
      <summary className="cursor-pointer font-black uppercase">Calculation limitations ({result.limitations.length})</summary>
