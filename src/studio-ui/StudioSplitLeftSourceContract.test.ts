@@ -9,8 +9,8 @@ describe("Studio split-left source contract", () => {
     const controls = source("src/styles/studio-control-system.css")
     const splitStyles = source("src/styles/subtoolbox-split-primitives.css")
     const sharedStyles = source("src/styles/studio-split-left-consistency.css")
-    const labelRule = controls.slice(controls.indexOf('button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {'))
-    expect(labelRule.split("\n}")[0]).not.toContain("-webkit-text-stroke: .5px")
+    const labelRule = controls.match(/button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-split-label\]\s*\{([^}]*)\}/s)?.[1] ?? ""
+    expect(labelRule).not.toContain("-webkit-text-stroke: .5px")
     expect(splitStyles).not.toContain(".vt-subtoolbox-split-button {")
     expect(sharedStyles).toContain("box-shadow:")
     expect(sharedStyles).toContain("filter: none !important;")
