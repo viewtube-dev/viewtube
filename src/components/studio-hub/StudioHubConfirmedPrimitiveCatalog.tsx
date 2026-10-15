@@ -110,7 +110,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </section>
     <Family title="Studio Text Input · Simple + Floating + Fixed Label" nonDefaultSettings={["The field defaults to the 44px standard size; the compact option uses 28px geometry.", "Text follows global typography: 38px standard and 24px compact, at weight 1000 and the shared 0.86 line-height.", "variant=\"simple\" is the default; variant=\"floating-label\" adds the label wrapper while retaining the same native input and size tokens.", "Floating-label variants accept label and optional l0/l1/l2 level; label typography and overlap geometry are shared across sizes.", "A focused or non-empty field lifts the label above the border.", "Only the floating-label B variant adds the solid secondary-color focus stroke to the compact input specimen.", "Search and number inputs keep the same Studio field border, typography, fill, caret, and focus rules.", "Disabled fields cannot receive edits; read-only fields can still be focused and their text selected.", "Placeholder text matches entered-text typography. Native input options such as input mode, autocomplete, and maximum length remain configurable."]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native input family with simple and floating-label variants; standard 44px / compact 28px geometry and global 38px / 24px typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact A · StudioTextInput</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px A" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div><div className="vt-confirmed-variant"><span>28px compact B · StudioTextInput</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px B" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant"><span>28px compact A · StudioTextInput</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px A" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div><div className="vt-confirmed-variant"><span>28px compact · disabled</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px disabled" placeholder="TYPE HERE" disabled data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · standard · same input family</span><StudioTextInput variant="floating-label" label="TITLE" aria-label="Studio floating-label input" sizeVariant="standard" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Fixed label box · standard · Legend Multi label treatment</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input standard" sizeVariant="standard" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant"><span>Fixed label box · compact</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
@@ -126,11 +126,11 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <p className="vt-confirmed-intro">Confirmed primitives only. Each preview is the production component, not a catalog redraw. Standard and compact variants share the global Inter / weight-1000 / uppercase contract; geometry, icon scale, and stroke are size-specific.</p>
     <Family title="Button" nonDefaultSettings={["The button defaults to 44px; the explicit compact height selects 28px. The older compact size option is used only when no height is supplied.", "Accent is the default tone; neutral, danger, warning, and success communicate alternate action meaning.", "Selected buttons use the secondary module color and expose a pressed state; disabled buttons cannot be activated.", "Loading exposes its busy state and disables activation until loading ends.", "The face owns the visible border; tactile press moves the whole button by its shadow offset while the visible shadow disappears, using the shared 80ms press timing."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton heightVariant="44">button</StudioButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · default A</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · default B</span><StudioButton heightVariant="28">button</StudioButton></div>
+      <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton heightVariant="28" tone="neutral">button</StudioButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected heightVariant="44">button</StudioButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · selected A</span><StudioButton selected heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected B</span><StudioButton selected heightVariant="28">button</StudioButton></div>
+      <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioButton selected heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioButton selected disabled heightVariant="28">button</StudioButton></div>
     </Family>
-    <Family title="Prominent Action · 56px" nonDefaultSettings={["This is a distinct prominent-action family, not a third size of the ordinary button.", "Its height is fixed at 56px with a 3px border, 6px radius, and stationary 3px shadow.", "The action label uses the dedicated 20px Inter / weight-1000 typography.", "While loading, the action reports a busy state and cannot be activated; disabled actions also block interaction."]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Prominent Action · 56px" nonDefaultSettings={["This is a distinct prominent-action family, not a third size of the ordinary button.", "Its height is fixed at 56px with a 3px border, 6px radius, and 3px offset shadow. In the current CSS, hover translates the outer action by 1.5px and active translates it by 3px while suppressing the shadow.", "The action label uses the dedicated 20px Inter / weight-1000 typography.", "While loading, the action reports a busy state and cannot be activated; disabled actions also block interaction."]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>56px prominent workflow action</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
     </Family>
 
@@ -159,9 +159,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family title="Split-left" nonDefaultSettings={["The split-left button defaults to 44px; the compact option selects 28px. Its default icon uses the large 38px/24px size preset, and the rail divider follows the 3px/2px size stroke.", "Accent is the default tone; neutral, danger, warning, and success are available for semantic action meaning.", "Selected state swaps the face and icon-rail pair colors; disabled state prevents activation.", "Loading reports a busy state and disables activation until loading clears.", "The required icon occupies the fixed left rail; size, tone, loading, and selected behavior follow the ordinary Studio button contract."]} provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px / 28×28px shell; default large icon 38px/1.9 stroke standard and 24px/2.0 compact; 3px/2px divider; selected state swaps module-pair fills." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="44">split-left</StudioSplitLeftButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · default A</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · default B</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="28">split-left</StudioSplitLeftButton></div>
+      <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioSplitLeftButton icon={<Sparkles />} tone="neutral" heightVariant="28">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="44">split-left</StudioSplitLeftButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · selected A</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected B</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div>
+      <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioSplitLeftButton icon={<Settings2 />} selected disabled heightVariant="28">split-left</StudioSplitLeftButton></div>
     </Family>
     <Family
       title="Dropdown"
@@ -175,7 +175,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       />}
     >
       <div className="vt-confirmed-variant is-full-row">
-        <span>44px standard · open menu · multiselect</span>
+        <span>44px standard · selected values · multiselect trigger</span>
         <StudioLegendMultiDropdown
           label="dropdown"
           defaultValue={["videos", "shorts"]}
@@ -193,7 +193,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         />
       </div>
       <div className="vt-confirmed-variant">
-        <span>28px compact A · menu row ratio</span>
+        <span>28px compact A · closed trigger and count</span>
         <StudioLegendMultiDropdown
           label="dropdown"
           sizeVariant="compact"
@@ -209,7 +209,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         />
       </div>
       <div className="vt-confirmed-variant">
-        <span>28px compact B · menu row ratio</span>
+        <span>28px compact B · closed trigger and count</span>
         <StudioLegendMultiDropdown
           label="dropdown"
           sizeVariant="compact"
