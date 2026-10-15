@@ -1,6 +1,7 @@
 import type { BrainConfidenceLevel, SuperToolId } from "../../types"
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
 import type { ContentBuildPublicationIdentity } from "../asset-engine/contracts"
+import { enqueueBrainLearningRecord } from "./BrainLearningPersistence"
 
 const STORAGE_KEY = "vt_brain_outcome_ledger_v1"
 export const BRAIN_OUTCOME_EVENT = "vt_brain_outcome_ledger_changed"
@@ -83,6 +84,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
   createdAt: Date.now(),
  }
  write([record, ...read()])
+ void enqueueBrainLearningRecord(record.channelId, "brainOutcome", record)
 
  const positive = input.outcome === "accepted" || input.outcome === "completed"
  const corrective = input.outcome === "corrected" || input.outcome === "rejected"
@@ -156,6 +158,7 @@ export const updateBrainOutcomePublicationLineage = (input: {
   evidenceIds: [...new Set([...(found.evidenceIds || []), ...(input.evidenceIds || [])])],
  }
  write(records.map((record) => record.id === found.id ? next : record))
+ void enqueueBrainLearningRecord(next.channelId, "brainOutcome", next)
  return next
 }
 
