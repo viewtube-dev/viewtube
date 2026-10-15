@@ -83,6 +83,7 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
+import { canMutateVaultAsset } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
  createVaultSmartCollection,
@@ -542,15 +543,33 @@ const CreatorVaultOS: React.FC = () => {
   [allAssets, selectedAssetIds],
  )
  const selectedMediaCapabilities = useMemo(() => {
-  const kinds = selectedAssetIds
+  const selectedRecords = selectedAssetIds
    .map((id) => allAssets.find((asset) => asset.id === id))
    .filter((asset): asset is VaultAsset => Boolean(asset))
-   .map((asset): VaultMediaKind => (
-    asset.kind === "image" || asset.kind === "video" || asset.kind === "audio"
-     ? asset.kind
-     : "document"
-   ))
-  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: false, audioProcessorAvailable: false })
+  const kinds = selectedRecords.map((asset): VaultMediaKind => (
+   asset.kind === "image" || asset.kind === "video" || asset.kind === "audio"
+    ? asset.kind
+    : "document"
+  ))
+  const protectedSelection = selectedRecords.some((asset) => !canMutateVaultAsset(asset, "archive"))
+  /* lifecycle state is evaluated independently from account/workspace authorization */
+  const allSelectedTrashed = selectedRecords.length > 0 && selectedRecords.every((asset) => (
+   Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
+  ))
+  const anySelectedTrashed = selectedRecords.some((asset) => (
+   Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
+  ))
+  return resolveVaultMediaCapabilities({
+   kinds,
+   videoProcessorAvailable: false,
+   audioProcessorAvailable: false,
+   eligibility: {
+    archive: selectedRecords.length > 0 && !protectedSelection && !anySelectedTrashed,
+    delete: allSelectedTrashed && !protectedSelection,
+    metadataEdit: selectedRecords.length === 1 && !anySelectedTrashed,
+    sendTo: selectedRecords.length > 0,
+   },
+  })
  }, [allAssets, selectedAssetIds])
  const editableTextAsset = useMemo(() => {
   if (!selectedAsset || selectedAsset.kind !== "document") return null
