@@ -505,7 +505,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "Closeable badges intentionally use a 20px pill and 16px label instead of the global 44px / 28px control lattice.",
         "The label is uppercase Inter 1000 with its primary color mixed 50% with white; the pill uses primary fill and a 16px secondary circle with a primary X.",
         "Closing swaps the circle/X colors three times at 180ms per cycle, then fades the badge for one second before removal.",
-        "The tag editor uses 32px plus/check square actions with 3px black stroke, 8px radius and a 4px secondary-pair shadow at 45% opacity.",
+        "The tag editor uses 28px plus/check square actions with 3px black stroke, 8px radius and a 4px secondary-pair shadow at 45% opacity.",
         "Adding a tag opens the compact Studio input; Enter confirms, Escape cancels, and new text flies to the new badge. Reduced-motion removes nonessential animation."
       ]}
       provenance={<Provenance
