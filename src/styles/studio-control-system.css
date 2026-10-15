@@ -1487,8 +1487,11 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
 
 /* Circle Icon Button is a shape-only extension of the canonical square icon
    button. Its 44px/28px dimensions, variants, shadows, effects and behavior stay shared. */
+button[data-vt-studio-circle-icon-button="true"]::before,
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   border-radius: 9999px !important;
+}
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   overflow: hidden;
 }
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] > [data-vt-studio-button-icon] {
