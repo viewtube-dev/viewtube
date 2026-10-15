@@ -69,7 +69,7 @@ const Channelytics: React.FC = () => {
     return () => {
       window.removeEventListener('yt_analytics_synced', handleSync);
     };
-  }, [brain.channelyticsState.csvFiles, dataSource]);
+  }, [brain.channelyticsState.csvFiles, canonicalRows, dataSource]);
 
   const setUnifiedCsvFiles = (nextFiles: CsvFileWithTag[]) => {
     updateBrain({
