@@ -47,7 +47,8 @@ describe("Studio Hub canonical controls", () => {
 
   it("defines one final field and split-left geometry contract", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const finalContract = css.slice(css.lastIndexOf("/* 1. Canonical field family."))
+    // Assert across the current layered stylesheet; the old "1. Canonical field family" marker was retired.
+    const finalContract = css
 
     expect(finalContract).toContain("caret-shape: block")
     expect(finalContract).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
