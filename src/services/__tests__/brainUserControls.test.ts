@@ -4,6 +4,7 @@ import {
  BRAIN_USER_CONTROLS_STORAGE_KEY,
  DEFAULT_BRAIN_USER_CONTROLS,
  canBrainShareResearchData,
+ canCaptureCreatorCommunications,
  canBrainUseCapability,
  readBrainUserControls,
  setActiveBrainControlChannel,
@@ -20,6 +21,8 @@ describe("Brain user controls", () => {
  it("defaults to personal learning on and shared research off", () => {
   const controls = readBrainUserControls()
   expect(controls.learnFromInteractions).toBe(true)
+  expect(controls.captureCreatorCommunications).toBe(false)
+  expect(canCaptureCreatorCommunications(controls)).toBe(false)
   expect(controls.contributeDeidentifiedResearch).toBe(false)
   expect(canBrainShareResearchData(controls)).toBe(false)
  })
@@ -58,6 +61,14 @@ describe("Brain user controls", () => {
   const controls = { ...DEFAULT_BRAIN_USER_CONTROLS, allowAnalytics: false }
   expect(canBrainUseCapability(controls, "analytics")).toBe(false)
   expect(canBrainUseCapability(controls, "projects")).toBe(true)
+ })
+
+ it("requires explicit creator opt-in for communication capture", () => {
+  const controls = { ...DEFAULT_BRAIN_USER_CONTROLS, captureCreatorCommunications: true }
+  expect(canCaptureCreatorCommunications(controls)).toBe(true)
+  expect(canCaptureCreatorCommunications({ ...controls, learnFromInteractions: false })).toBe(false)
+  expect(canCaptureCreatorCommunications({ ...controls, personalization: false })).toBe(false)
+  expect(canCaptureCreatorCommunications({ ...controls, enabled: false })).toBe(false)
  })
 
  it("keeps personal learning separate from research contribution", () => {
