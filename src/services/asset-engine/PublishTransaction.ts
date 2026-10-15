@@ -77,6 +77,7 @@ export const getPublishTransaction=(id:string)=>{
 }
 
 export const beginPublishTransaction=(projection:PublishingPackageProjection,toolId="video-publisher")=>{
+ if(!canStore()) throw new Error("Publish transaction requires persistent browser storage; in-memory fallback is not safe for publishing.")
  if(!projection.ready) throw new Error("Publishing Package is not ready: "+projection.missing.join(", "))
  if(!projection.titleAssetId||!projection.thumbnailAssetId||!projection.finalRenderAssetId||!projection.descriptionAssetId) throw new Error("Publishing Package lacks required canonical assets.")
  // Preserve the strongest duplicate-upload guard first: if this exact final
