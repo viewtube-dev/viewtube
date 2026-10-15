@@ -17,7 +17,6 @@
 import { ANALYTICS_WINDOWS, type AnalyticsWindow } from "../analytics/windows"
 
 export type {
- AnalyticsWindow,
  CanonicalVideoRow,
  CanonicalMetricKey,
  CanonicalMetricDefinition,
