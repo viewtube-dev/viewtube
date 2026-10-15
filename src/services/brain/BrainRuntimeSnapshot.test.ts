@@ -35,6 +35,8 @@ const build = {
 const generationRequest = {
  schemaVersion: 1,
  id: "generation_request_1",
+ operationId: "operation-1",
+ workflowId: "workflow-1",
  contentBuildId: build.id,
  projectId: "project-2",
  channelId: "channel-1",
@@ -74,6 +76,8 @@ const toolReceipt = {
  schemaVersion: 1,
  id: "tool_receipt_1",
  requestId: generationRequest.id,
+ operationId: "operation-1",
+ workflowId: "workflow-1",
  contentBuildId: build.id,
  projectId: "project-2",
  toolId: "video-publisher",
