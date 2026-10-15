@@ -200,7 +200,7 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
    // Only recommendations explicitly bound to this exact ContentBuild + video
    // receive a due checkpoint. A proposal for another package is never joined.
    listAlgorithmIntelligenceEvents({ channelId: build.channelId as string })
-    .filter((event) => event.kind === "RECOMMENDATION_CREATED" && event.metadata?.contentBuildId === next.contentBuildId && (!event.videoId || event.videoId === next.youtubeVideoId) && Boolean(event.actionPacketId) && !event.checkpointAt)
+    .filter((event) => event.kind === "RECOMMENDATION_CREATED" && event.metadata?.contentBuildId === next.contentBuildId && Boolean(next.youtubeVideoId) && event.videoId === next.youtubeVideoId && Boolean(next.actionPacketId) && event.actionPacketId === next.actionPacketId && !event.checkpointAt)
     .forEach((event) => {
      const windowHours = Math.max(1, ...event.evaluationTargets.map((target) => Number(target.windowHours || 0)))
      recordAlgorithmIntelligenceEvent({
