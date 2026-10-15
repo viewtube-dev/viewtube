@@ -63,8 +63,9 @@ test("floating-label variant B matches the focus stroke color and width for stan
     studioCss.indexOf("/* Shared floating-label fields"),
     studioCss.indexOf("/* Permanent label-box variants"),
   )
-  assert.match(floatingBlock, /data-vt-floating-variant="b"[^{}]*\[data-size="standard"\]/)
-  assert.match(floatingBlock, /data-vt-floating-variant="b"[^{}]*\[data-size="compact"\]/)
+  assert.match(floatingBlock, /data-vt-floating-variant="b"[^{}]*:is\(:focus, :focus-visible\)/)
+  assert.match(floatingBlock, /:is\(:focus, :focus-visible\) \+ \.vt-studio-floating-field-label/)
+  assert.doesNotMatch(floatingBlock, /data-vt-floating-variant="b"[^{}]*\[data-size="compact"\]/)
   assert.match(floatingBlock, /outline:\s*var\(--vt-studio-control-focus-outline-width,\s*3px\) solid var\(--vt-studio-control-secondary/)
   assert.match(floatingBlock, /outline-offset:\s*0/)
 })
