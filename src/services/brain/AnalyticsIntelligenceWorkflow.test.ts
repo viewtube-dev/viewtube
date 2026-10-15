@@ -78,6 +78,12 @@ const measurement = (overrides: Partial<{
   observedAt: string
   periodStartDate: string
   periodEndDate: string
+  projectId: string | null
+  contentBuildId: string | null
+  videoId: string | null
+  actionPacketId: string | null
+  publicationTransactionId: string | null
+  metadataVersionIds: string[]
 }> = {}) => ({
   channelId: "channel-1",
   metric: "views",
