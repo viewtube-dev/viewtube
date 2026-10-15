@@ -605,6 +605,7 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
       data-vt-studio-control="true"
       data-vt-studio-username-input="true"
       data-size={sizeVariant}
+      data-icon-size-variant="large"
       data-disabled={disabled ? "true" : undefined}
       style={style}
     >

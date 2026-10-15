@@ -1524,6 +1524,15 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
     inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary);
   transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
+/* Match the split-left default large icon preset: 38px/1.9 standard and 24px/2 compact. */
+.vt-studio-username-input[data-size="standard"] {
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-icon-stroke: 1.9;
+}
+.vt-studio-username-input[data-size="compact"] {
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-icon-stroke: 2;
+}
 .vt-studio-username-input > [data-vt-studio-username-rail="true"] {
   box-sizing: border-box;
   display: grid;
