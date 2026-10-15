@@ -89,11 +89,11 @@ const ConfirmedStepperFamily: React.FC = () => {
     <Family
       title="Split Stepper · 44px + 28px"
       nonDefaultSettings={[
-        "44px standard is the default size; 28px compact uses the shared compact height, stroke, radius, and shadow tokens.",
-        "The left value pane takes two thirds of the width; the right one-third rail is divided into equal up/down chevron buttons.",
-        "Each tap or keyboard activation changes the value by one step; press-and-hold repeats with increasing speed.",
+        "44px standard is the default size; 28px compact uses the shared compact height, stroke, and radius tokens. This family is intentionally shadowless at both sizes.",
+        "Width is fixed, not auto/full-width: the editable number pane is 2:1 width-to-height, and the right rail is square with two 2:1 buttons stacked vertically.",
+        "Typing edits the number directly. A short button press changes one step; a held button enters full-component focus-outline mode and repeats with increasing speed.",
         "Optional min, max, and step props bound or customize the value. The disabled state prevents changes.",
-        "The value pane uses the primary pair color at 50% opacity; the two right-side controls use the opaque secondary pair with black chevrons."
+        "The number input has a primary-color inline stroke, 50% primary fill, and primary-color characters. The component has no shadow; chevrons are double the previous SVG sizing rule."
       ]}
       provenance={<Provenance
         primitive="SubToolboxSplitStepper"
@@ -134,7 +134,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family vt-confirmed-defaults-combined">
       <h3>Canonical + Global Defaults · All Component Sizes</h3>
-      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 38px / 24px input text · 18px / 14px textarea text · 1px compact button shadow</p>
+      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 38px / 24px input text · 18px / 14px textarea text</p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show full defaults and exceptions</summary>
       <div className="vt-confirmed-size-grid">
