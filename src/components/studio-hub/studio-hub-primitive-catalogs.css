@@ -1903,34 +1903,15 @@
   .vt-confirmed-family { padding: 10px; }
 }
 
-.vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,.vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(max-width:560px){.vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,.vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-.vt-confirmed-variant.is-full-row { grid-column:1 / -1; }
-.vt-confirmed-global-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-.vt-confirmed-global-grid > div { min-width:0; padding:8px; border:2px solid #000; border-radius:6px; background:#f7f7f7; overflow-wrap:anywhere; }
-.vt-confirmed-global-grid strong { font-size:11px; font-weight:950; text-transform:uppercase; }
-.vt-confirmed-global-grid p { margin:4px 0 0; font-size:12px; line-height:1.35; }
-@media(max-width:560px){ .vt-confirmed-global-grid { grid-template-columns:1fr; } }
-
-/* Confirmed primitives integration: combined, compact defaults at the top. */
-.vt-confirmed-defaults-combined{gap:5px!important;padding:7px 9px!important;border-width:2px!important;border-radius:6px!important}
-.vt-confirmed-defaults-combined>h3{font-size:10px!important;line-height:1!important;letter-spacing:-.025em}
-.vt-confirmed-size-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
-.vt-confirmed-size-card{display:grid;gap:2px;min-width:0;padding:4px 5px;border:1px solid #000;border-radius:4px;background:#f7f7f7;font-size:8px;line-height:1.15;overflow-wrap:anywhere}
-.vt-confirmed-size-card strong{font-size:8px;font-weight:950}
-.vt-confirmed-size-card span{font-size:8px;line-height:1.15}
-.vt-confirmed-defaults-combined .vt-confirmed-global-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
-.vt-confirmed-defaults-combined .vt-confirmed-global-grid>div{padding:3px 4px;border-width:1px;border-radius:3px}
-.vt-confirmed-defaults-combined .vt-confirmed-global-grid strong{font-size:7px;line-height:1.05}
-.vt-confirmed-defaults-combined .vt-confirmed-global-grid span{display:block;margin-top:1px;font-size:8px;line-height:1.1;overflow-wrap:anywhere}
-.vt-confirmed-family:has(.vt-studio-legend-multi) { overflow: visible; position: relative; }
-.vt-confirmed-variants:has(.vt-studio-legend-multi) { overflow: visible; }
+/* Confirmed Library dropdown layout: layout-only rules; production geometry stays in StudioControls CSS. */
+.vt-confirmed-family:has(.vt-studio-legend-multi) {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+}
 .vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) { z-index: 10001; }
-
-
-/* Confirmed library dropdown layout: standard control spans the row, then two compact
-   controls share the next row, matching the button and input component specimens. */
+.vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) .vt-studio-legend-menu { z-index: 10002; }
+.vt-confirmed-variants:has(.vt-studio-legend-multi) { overflow: visible; }
 .vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1941,65 +1922,6 @@
 .vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
   grid-column: 1 / -1;
 }
-.vt-confirmed-family:has(.vt-studio-legend-multi) {
-  overflow: visible;
-  position: relative;
-  isolation: isolate;
-}
-.vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) {
-  z-index: 10001;
-}
-.vt-confirmed-family:has(.vt-studio-legend-multi[data-open="true"]) .vt-studio-legend-menu {
-  z-index: 10002;
-}
-/* Open-menu rows follow the trigger's 44:28 size ratio and uppercase control typography. */
-.vt-confirmed-catalog .vt-studio-legend-multi:not([data-size="compact"]) .vt-studio-legend-option {
-  min-height: 44px;
-  padding: 4px 10px;
-  font-size: 32px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.035em;
-  text-transform: uppercase;
-}
-.vt-confirmed-catalog .vt-studio-legend-multi:not([data-size="compact"]) .vt-studio-legend-clear {
-  min-height: 44px;
-  font-size: 24px;
-  font-weight: 1000;
-  line-height: .9;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-}
-.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option {
-  min-height: 28px;
-  padding: 3px 6px;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-}
-.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check {
-  width: 12px;
-  height: 12px;
-  border-width: 1.5px;
-  border-radius: 2px;
-}
-.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-check svg {
-  width: 9px;
-  height: 9px;
-  stroke-width: 2;
-}
-.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
-  min-height: 28px;
-  padding: 3px 6px;
-  font-size: 14px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-}
 @media (max-width: 560px) {
   .vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2007,6 +1929,67 @@
   }
 }
 
+/* Control-family variants use one shared grid contract for switches, choices, and word-toggle skins. */
+.vt-confirmed-control-variants {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-control-variants > div {
+  display: grid;
+  grid-template-rows: minmax(20px, auto) auto;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-confirmed-control-variants > div > small {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 20px;
+  color: #000;
+  font-size: 9px;
+  font-weight: 1000;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  text-align: center;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-control-variants[data-control-size="28"] > div > small {
+  font-size: 8px;
+  letter-spacing: -.03em;
+}
+.vt-confirmed-control-variants :is(.vt-studio-switch, .vt-studio-radio, .vt-studio-checkbox, .vt-studio-x-checkbox, .vt-studio-44-word-toggle) {
+  max-width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-control-variants[data-control-size="28"] .vt-studio-44-word-toggle {
+  --vt-word-font-size: 24px;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-row > strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 10px;
+  font-weight: 1000;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-control-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 8px;
+  }
+  .vt-confirmed-control-variants > div > small { font-size: 8px; }
+  .vt-confirmed-control-variants[data-control-size="28"] > div > small { font-size: 7px; }
+}
 
 /* Library layout correction: button specimens get four desktop columns;
    controls retain their native full-row spans. On narrow screens use two columns. */
