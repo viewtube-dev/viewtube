@@ -42,6 +42,7 @@ describe("Resource Library canonical palette contract", () => {
     for (const resource of RESOURCE_LIBRARY_ENTRIES) {
       expect(resource.markdown, resource.id).toContain("## Field Exercise:")
       expect(resource.markdown, resource.id).toContain("## Evidence Boundary:")
+      expect(resource.markdown, resource.id).toContain("> **Creator takeaway:**")
     }
   })
 
