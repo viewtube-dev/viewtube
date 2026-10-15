@@ -18,6 +18,7 @@ import {
  subscribeBrainConversationChanges,
 } from "../services/brain/BrainConversationController"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
+import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
 import {
  readBrainUserControls,
  setActiveBrainControlChannel,
@@ -145,6 +146,22 @@ export const SidebarChatbot: React.FC = () => {
     blockedCapabilities: surface.blockedCapabilities,
    }
    const systemPrompt = `${baseSystemPrompt}\n\nCURRENT VIEWTUBE SURFACE CONTEXT\n${JSON.stringify(visibleContext, null, 2)}\nUse this surface context to understand references such as "this chart", "this project", "this comment", "this video", or "this tool". Never use a blocked capability. Treat selected-item context as current UI context, not automatically as durable channel memory.`
+
+   if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions) {
+    try {
+     recordCreatorCommunicationEvidence({
+      channelId,
+      communicationId: `sidebar:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`,
+      text: userText,
+      projectId: selection?.projectId ?? surface.projectId ?? null,
+     })
+    } catch (error) {
+     // Unclassified or unavailable communication evidence must never block the chat turn.
+     if (!(error instanceof Error && error.message.includes("does not match a supported classification"))) {
+      console.warn("[SidebarCopilot] Communication evidence capture skipped:", error)
+     }
+    }
+   }
 
    const result = await runBrainTask({
     surface: "sidebar-chatbot",
