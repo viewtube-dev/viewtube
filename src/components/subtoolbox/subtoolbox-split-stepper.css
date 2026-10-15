@@ -50,7 +50,7 @@
   border-radius: 0;
   outline: 0;
   background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
-  box-shadow: inset 0 var(--vt-stepper-stroke) 0 0 var(--pair-a, #73deff), inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--pair-a, #73deff), inset var(--vt-stepper-stroke) 0 0 0 var(--pair-a, #73deff);
+  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--pair-a, #73deff);
   color: var(--pair-a, #73deff);
   -webkit-text-fill-color: var(--pair-a, #73deff);
   -webkit-text-stroke: 0;
@@ -70,7 +70,7 @@
 }
 .vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value:focus {
   outline: 0;
-  box-shadow: inset 0 var(--vt-stepper-stroke) 0 0 var(--pair-a, #73deff), inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--pair-a, #73deff), inset var(--vt-stepper-stroke) 0 0 0 var(--pair-a, #73deff);
+  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--pair-a, #73deff);
 }
 .vt-subtoolbox-split-stepper.is-interacting {
   outline: 2px solid var(--pair-b, #fff);
