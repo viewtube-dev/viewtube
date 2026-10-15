@@ -1903,6 +1903,49 @@
   .vt-confirmed-family { padding: 10px; }
 }
 
+/* Confirmed Library shared specimen and defaults-panel layout. */
+.vt-confirmed-variant.is-full-row { grid-column: 1 / -1; }
+.vt-confirmed-global-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+.vt-confirmed-global-grid > div {
+  min-width: 0;
+  padding: 8px;
+  border: 2px solid #000;
+  border-radius: 6px;
+  background: #f7f7f7;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-global-grid strong { font-size: 11px; font-weight: 950; text-transform: uppercase; }
+.vt-confirmed-global-grid p { margin: 4px 0 0; font-size: 12px; line-height: 1.35; }
+.vt-confirmed-defaults-combined { display: grid; gap: 5px; padding: 7px 9px; border-width: 2px; border-radius: 6px; }
+.vt-confirmed-defaults-combined > h3 { font-size: 10px; line-height: 1; letter-spacing: -.025em; }
+.vt-confirmed-size-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.vt-confirmed-size-card {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 4px 5px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  background: #f7f7f7;
+  font-size: 8px;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-size-card strong { font-size: 8px; font-weight: 950; }
+.vt-confirmed-size-card span { font-size: 8px; line-height: 1.15; }
+.vt-confirmed-textarea-exception,
+.vt-confirmed-action-exception { grid-column: 1 / -1; }
+.vt-confirmed-action-exception { border-style: dashed; }
+@media (max-width: 560px) {
+  .vt-confirmed-global-grid { grid-template-columns: minmax(0, 1fr); }
+  .vt-confirmed-size-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* Confirmed Library dropdown layout: layout-only rules; production geometry stays in StudioControls CSS. */
 .vt-confirmed-family:has(.vt-studio-legend-multi) {
   position: relative;
