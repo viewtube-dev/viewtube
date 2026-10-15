@@ -43,8 +43,36 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
 
 /** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
 export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
-  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
+  standard: {
+    height: 44,
+    stroke: 3,
+    radius: 6,
+    fontSize: 38,
+    fontWeight: 1000,
+    buttonShadowX: 3,
+    buttonShadowY: 3,
+    hoverTransitionMs: 150,
+    hoverOffsetPx: 1.5,
+    clickTransitionMs: 300,
+    clickOffsetPx: 3,
+    iconSize: 28,
+    iconStroke: 2.5,
+  },
+  compact: {
+    height: 28,
+    stroke: 2,
+    radius: 4,
+    fontSize: 24,
+    fontWeight: 1000,
+    buttonShadowX: 1.5,
+    buttonShadowY: 1.5,
+    hoverTransitionMs: 150,
+    hoverOffsetPx: 0.75,
+    clickTransitionMs: 300,
+    clickOffsetPx: 1.5,
+    iconSize: 18,
+    iconStroke: 1.65,
+  },
 } as const
 
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
@@ -65,13 +93,13 @@ export const StudioTextInput = React.forwardRef<
   <input
     ref={ref}
     type={type}
-    {...withStudioAttrs(sizeVariant)}
     data-vt-studio-field-kind="text-input"
     placeholder={placeholder}
     spellCheck={spellCheck}
     autoCorrect={autoCorrect}
     autoCapitalize={autoCapitalize}
     {...props}
+    {...withStudioAttrs(sizeVariant)}
   />
 ))
 StudioTextInput.displayName = "StudioTextInput"
@@ -84,7 +112,7 @@ export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", type = "search", placeholder = "TITLE", ...props }, ref) => (
-  <input ref={ref} type={type} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} />
+  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
@@ -93,7 +121,7 @@ export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", type = "number", placeholder = "TITLE", ...props }, ref) => (
-  <input ref={ref} type={type} placeholder={placeholder} {...withStudioAttrs(sizeVariant)} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} />
+  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
 
@@ -109,13 +137,13 @@ export const StudioTextArea = React.forwardRef<
   <textarea
     ref={ref}
     rows={rows ?? 4}
-    {...withStudioAttrs(sizeVariant)}
     data-vt-studio-field-kind="textarea"
     placeholder={placeholder}
     spellCheck={spellCheck}
     autoCorrect={autoCorrect}
     autoCapitalize={autoCapitalize}
     {...props}
+    {...withStudioAttrs(sizeVariant)}
   />
 ))
 StudioTextArea.displayName = "StudioTextArea"
@@ -247,7 +275,7 @@ export const StudioSelect = React.forwardRef<
   HTMLSelectElement,
   React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
 >(({ sizeVariant = "standard", ...props }, ref) => (
-  <select ref={ref} {...withStudioAttrs(sizeVariant)} {...props} />
+  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
 StudioSelect.displayName = "StudioSelect"
 
@@ -261,21 +289,43 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
-  ({ sizeVariant = "standard", tone = "accent", loading = false, selected = false, heightVariant, disabled, children, type = "button", ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type}
-      {...withStudioAttrs(sizeVariant, tone)}
-      data-height-variant={heightVariant ?? (sizeVariant === "compact" ? "28" : "44")}
-      data-selected={selected || undefined}
-      aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
-      aria-busy={loading || undefined}
-      disabled={disabled || loading}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
+  (
+    {
+      sizeVariant,
+      tone = "accent",
+      loading = false,
+      selected = false,
+      heightVariant,
+      disabled,
+      children,
+      type = "button",
+      ...props
+    },
+    ref,
+  ) => {
+    // Height is the authoritative geometry when supplied. This prevents a 28px
+    // control from accidentally inheriting standard border/radius/shadow tokens.
+    const resolvedSize = heightVariant
+      ? heightVariant === "28" ? "compact" : "standard"
+      : sizeVariant ?? "standard"
+    const resolvedHeight = heightVariant ?? (resolvedSize === "compact" ? "28" : "44")
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        {...props}
+        {...withStudioAttrs(resolvedSize, tone)}
+        data-height-variant={resolvedHeight}
+        data-selected={selected || undefined}
+        aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
+        aria-busy={loading || undefined}
+        disabled={disabled || loading}
+      >
+        {children}
+      </button>
+    )
+  },
 )
 StudioButton.displayName = "StudioButton"
 
