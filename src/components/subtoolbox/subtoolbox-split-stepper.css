@@ -60,6 +60,29 @@
   appearance: textfield;
   -moz-appearance: textfield;
 }
+.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value[data-vt-studio-control="true"] {
+  height: 100%;
+  min-height: 0;
+  padding: 0 4px;
+  border: var(--vt-stepper-stroke) solid var(--pair-a, #73deff);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
+  color: var(--pair-a, #73deff);
+  -webkit-text-fill-color: var(--pair-a, #73deff);
+  -webkit-text-stroke: 0;
+  font-size: var(--vt-stepper-font-size) !important;
+  line-height: 1 !important;
+  outline: 0;
+  box-shadow: none;
+}
+.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value[data-vt-studio-control="true"]:focus {
+  background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
+  color: var(--pair-a, #73deff);
+  -webkit-text-fill-color: var(--pair-a, #73deff);
+  -webkit-text-stroke: 0;
+  outline: 0;
+  box-shadow: none;
+}
 .vt-subtoolbox-split-stepper-rail {
   display: grid;
   grid-template-rows: 1fr 1fr;
