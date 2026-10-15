@@ -470,3 +470,28 @@ describe("Studio Username Split-Left Input", () => {
     expect(css).toContain('.vt-studio-username-input[data-size="compact"] {\n  --vt-studio-control-icon-size: 24px;\n  --vt-studio-control-icon-stroke: 2;')
   })
 })
+
+
+describe("floating label geometry and circle icon sizing", () => {
+  it("floats labels at 80% scale with the control border crossing at 40% of the label box", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const floating = css.slice(css.indexOf("/* Shared floating-label fields."), css.indexOf("/* Permanent label-box variants"))
+    expect(floating).toContain("padding:2.25px 4.5px")
+    expect(floating).toContain("transition:top 180ms ease-out, transform 180ms ease-out")
+    expect(floating).toContain("transform:translateY(-60%) scale(.8)")
+    expect(floating).not.toContain("translateY(-75%) scale(.75)")
+  })
+
+  it("matches the compact floating label B stroke to the 2px compact focus outline", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const floating = css.slice(css.indexOf("/* Shared floating-label fields."), css.indexOf("/* Permanent label-box variants"))
+    expect(floating).toContain('outline: 2px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))')
+  })
+
+  it("renders circular button icons at 80% of the available icon stage", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const circle = css.slice(css.indexOf("/* Circle Icon Button"), css.indexOf("/* Username Split-Left Input"))
+    expect(circle).toContain('width: 80% !important;')
+    expect(circle).toContain('height: 80% !important;')
+  })
+})
