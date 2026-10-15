@@ -403,6 +403,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
     const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
     const [animationKey, setAnimationKey] = React.useState(0)
     const [liveCount, setLiveCount] = React.useState(typeof badge === "number" ? badge : 0)
+    React.useEffect(() => { if (typeof badge === "number") setLiveCount(badge) }, [badge])
     const counterEnabled = effect === "like" || (effect === "notification" && typeof badge === "number")
     const effectiveBadge: number | string | undefined = counterEnabled ? liveCount : badge
     const badgeValue = effectiveBadge === undefined || effectiveBadge === null || effectiveBadge === "" ? null : String(effectiveBadge)
