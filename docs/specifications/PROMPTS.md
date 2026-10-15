@@ -196,6 +196,22 @@ High:
 
 Do not run expensive multi-agent critique for every tiny reply.
 
+### Phase 4 generation/validation contract
+
+The canonical Brain generation path follows a bounded loop:
+1. Resolve the task profile and expected response mode.
+2. Assemble bounded context with evidence scope and omissions preserved.
+3. Generate structured output through the canonical Brain model path.
+4. Normalize/sanitize model output and validate the expected mode, task completion, evidence-supported numeric claims, and specialist task requirements.
+5. If validation fails, attempt at most one bounded repair with explicit failure reasons.
+6. Validate the repaired candidate independently.
+7. Deliver the candidate only if it passes; otherwise return the deterministic fallback and an explicit fallback reason.
+8. Record evaluation ID, task profile, generation path, prompt version, repair attempt/outcome and reasons in the existing turn/learning metadata.
+
+A repair is not a new source of truth and must not broaden evidence permissions. Deterministic validators remain authoritative for structure, IDs, counts, enums, scope and exact constraints. Model critique cannot waive a validator. Provider/repair failures must fall back safely rather than expose an unvalidated candidate.
+
+Certification requires tests for wrong output mode, invented numeric claims in structured fields, creative drafts with legitimate numbers, audience-task completeness, repair success, repair rejection, provider failure and fallback metadata. Also verify the real caller path, not just isolated validator behavior.
+
 ## Evaluation
 
 Representative fixtures should cover:
@@ -271,6 +287,29 @@ The registry should distinguish:
 - future required provenance fields.
 
 The registry is an inventory/projection, not a second work ledger.
+
+### Governed registry contract (v3)
+
+`prompt-registry.json` declares the required inventory fields, allowed reachability states, versioning semantics, migration gates and shared safety invariants. These fields are a governance contract; a declared field or migration state is not proof that every legacy entry has been populated or that runtime callers have migrated.
+
+Every production-reachable prompt or generation strategy should be attributable to:
+- a stable ID and canonical owner;
+- production callers and prompt family;
+- prompt, constitution, context-resolver and output-schema versions;
+- requested and served model when available;
+- relevant evidence snapshot and Channel Knowledge fingerprint;
+- Project/ContentBuild revision and Style Profile version when applicable;
+- evaluation baseline and a concrete reachability state.
+
+Use `production_reachable`, `test_only`, `dead_code_candidate`, `unverified` or `retired` only when supported by source/call-graph evidence. Unknown reachability remains `unverified`; do not infer dead code from an unobserved search result. Version changes must be scoped: a task wording change does not automatically bump the shared constitution or schema versions.
+
+### Phase 3 governance gate
+
+- Inventory all prompt definitions, aliases, task profiles, governed strategies, Oracle/editor templates and provider helpers.
+- Assign ownership, family, context recipe, schema and migration state.
+- Prove production reachability before redirecting or deleting legacy paths.
+- Keep the registry as an inventory projection; detailed work state and completion evidence stay in the task index/receipts.
+- Do not mark migration complete until representative fixtures and caller-level verification pass.
 
 ## Migration
 

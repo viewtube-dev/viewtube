@@ -127,3 +127,22 @@ The registry expands the original Brain-only Prompt System wave to cover legacy 
 ## Phase 10–12 certification gate
 
 The implementation and initial live wiring are committed on `brain-phases-10-12-project-comms-attribution`. Regression tests have been authored but not executed in this session. Do not certify complete until focused tests, typecheck, full suite, production build, reachability/governance audits, and browser verification pass on the current integration baseline.
+
+
+## Phase 3 — Prompt governance reconciliation (2026-10-15)
+
+- Updated `docs/specifications/prompt-registry.json` to registry v3 with an explicit governance contract: required provenance fields, reachability states, migration gates, versioning rules and safety invariants.
+- Updated `docs/specifications/PROMPTS.md` with the governed registry contract and a reachability-based migration gate.
+- The registry inventory currently includes 49 legacy prompt constants and 14 Brain task profiles. The governance contract is defined, but production caller reachability and per-entry provenance are not yet fully populated/certified.
+- Do not remove or redirect legacy prompt/provider paths until callers are identified, representative fixtures exist, output baselines are compared, and zero legacy production reachability is demonstrated.
+
+## Phase 4 — Generation and validation loop (2026-10-15)
+
+- The canonical `BrainOrchestrator` already performs task-profile routing, structured output normalization, deterministic response evaluation, one bounded repair attempt, independent repaired-candidate validation, safe fallback on failed repair/provider errors, and turn metadata recording.
+- Added regression tests for task-mode mismatch and audience-task completeness alongside existing tests for invented numeric claims in structured output and valid creative drafts containing numbers.
+- Updated the prompt specification with the bounded generation/repair/fallback contract and the certification matrix.
+- Still required: execute focused tests and the representative Brain golden suite; test repair-success/repair-rejection/provider-failure paths; verify prompt/schema/context/model provenance fields are consistently present in real turn receipts; inspect live caller reachability; run typecheck, runtime lint, full suite, production build and governance audits.
+
+## Phase 3–4 certification gate
+
+This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
