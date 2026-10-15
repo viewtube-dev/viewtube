@@ -768,7 +768,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           {packageDraft.contentBuildId ? (
             lifecycleHistory.length ? (
               <SubToolboxStack density="dense">
-                {lifecycleHistory.slice().reverse().slice(0, 12).map(event => {
+                {lifecycleHistory.slice(0, 12).map(event => {
                   const metadata = (event.metadata || {}) as Record<string, unknown>
                   const comparison = event.entityType === "metadata-performance-comparison" &&
                     event.resultingState && typeof event.resultingState === "object"
