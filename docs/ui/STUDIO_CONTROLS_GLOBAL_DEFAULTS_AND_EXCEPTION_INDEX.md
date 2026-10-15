@@ -517,3 +517,15 @@ The previous section 20 incorrectly generalized the textarea's 18px/14px typogra
 - The input-only CSS variables and important selectors now use 38px / 24px. Textarea-specific selectors remain 18px / 14px. Catalog specimen copy, global defaults summary, exception index, machine-readable tokens, and regression assertions must all preserve this distinction.
 
 The corrected regression test is in `scripts/audit/confirmed-library-layout.test.mjs`. CI and browser verification remain required; do not claim the hosted Render deployment has been updated until its deployed commit and computed font sizes are checked.
+
+
+## 21. Typography correction — single-line inputs follow global size family (2026-10-15)
+
+The earlier field note generalized the textarea's 18px/14px typography to single-line inputs. The canonical contract is:
+
+- **StudioTextInput / StudioLabeledInput:** standard 38px; compact 24px, following `STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize` and `STUDIO_CONTROL_SIZE_CONTRACT.compact.fontSize`.
+- **StudioTextArea / StudioLabeledTextArea:** standard 18px; compact 14px, as the documented multiline readability exception; minimum height 92px, vertical resize, multiline padding and line-height.
+- Input and textarea geometry still follows the selected 44px standard / 28px compact family. Font weight remains 1000 / Inter; placeholder text inherits entered-text typography.
+- The root input CSS variables and size-specific selectors use 38px / 24px and 0.86 line-height. Textarea-specific selectors remain 18px / 14px. The Confirmed Library's global summary and non-default settings describe this distinction explicitly.
+
+Regression coverage is in `scripts/audit/confirmed-library-layout.test.mjs`. CI and browser verification remain required; do not claim the hosted Render deployment has been updated until its deployed commit and computed font sizes are checked.
