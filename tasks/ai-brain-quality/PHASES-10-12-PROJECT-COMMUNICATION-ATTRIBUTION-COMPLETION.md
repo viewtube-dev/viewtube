@@ -76,3 +76,11 @@ The current integration branch has merged the Phase 10–12 foundation, but the 
 The current release-gates baseline also exposed an SSR/test failure where `keyVault.ts` accessed `localStorage` unguarded. Storage reads/writes are now best-effort and safe when storage is missing or blocked, with dedicated regression coverage. A stale Play/Pause primitive assertion was aligned with the rendered label marker.
 
 Still open: end-to-end stable IDs through every generation/variant/ActionPacket/publish/evaluation/learning writer; live project capability enforcement across all creation surfaces; privacy/retention and server durability certification; actual current-head CI and full lifecycle data validation. No phase is certified by source inspection alone.
+
+### Additional lineage hardening — 2026-10-15
+- The Brain Evaluation Inbox now exposes the existing read-only attribution chain directly, with a channel-scoped recommendation selector, per-stage evidence counts, unresolved stages, and explicit no-causality limitations.
+- Publication confirmation now carries ActionPacket, workflow, recommendation, experiment, ContentBuild, package, transaction, approved-snapshot and hash identity where the publish transaction provides those IDs. Exact stable IDs are also considered when finding same-channel related events.
+- Post-publish checkpoint events carry the same ActionPacket/workflow/recommendation identity, and evaluation lifecycle identity accepts the canonical `publishTransactionId` key while retaining compatibility with the older `publicationTransactionId` alias.
+- Regression coverage was added for identity-based attribution when parent links are absent and for publication transaction identity normalization.
+- This closes only the identified propagation gaps at the publication/checkpoint boundary. Generation and selected-variant writers, server persistence, live provider data, and full production lifecycle certification remain open.
+
