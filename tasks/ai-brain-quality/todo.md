@@ -162,3 +162,15 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+## Current candidate and next execution — 2026-10-15
+
+- [x] Reconcile PR #217's unique outcome/evaluation/governed-learning work into the current integration implementation; PR #217 remains closed unmerged.
+- [x] Create a current-base replacement PR for the certification fixes and Phase 13 persistence work: https://github.com/viewtube-dev/viewtube/pull/340.
+- [x] Add server-authoritative learning records and a retry-safe client persistence queue; add focused client/server store tests.
+- [ ] Get all required release gates green on the exact PR #340 head. Earlier candidate: focused contracts, Brain quality loop, source governance, build and smoke passed; full suite failed 99 tests across 43 files and runtime lint reported 2,239 errors.
+- [ ] Verify persistence with configured PostgreSQL across a fresh server process and authenticated connected-channel clients.
+- [ ] Execute CANONICAL-PUBLICATION-TO-LEARNING-GOLDEN-PATH-PLAN.md: recommendation → creator approval → Project/ActionPacket → approved snapshot → publication receipt → analytics checkpoints → evaluation → linked outcomes → reviewed and governed learning.
+- [ ] Complete recovery/replay, cross-surface handoffs, privacy/governance and exact-deployed-commit certification from PHASE-13-18-DURABLE-PRODUCTION-HANDOFF-PLAN.md.
+
+Status rule: implementation foundations are present, but Phases 5–12 and Phase 13 remain uncertified until their stated acceptance evidence and release gates pass. Do not equate a merged PR or a successful build with a completed production phase.
