@@ -72,6 +72,7 @@ describe("deterministic analytics insights", () => {
     bundle: bundle("snapshot-new", { views: { count: 1, sum: 125, average: 125, minimum: 125, maximum: 125 } }),
     period: period("Current 28 days", "2026-09-16", "2026-10-13"),
    },
+   minimumMaterialChangePercent: 30,
   })
 
   expect(result.blockedReasons).toEqual([])
@@ -101,6 +102,7 @@ describe("deterministic analytics insights", () => {
      bundle: bundle("snapshot-new", { views: { count: 1, sum: 125, average: 125, minimum: 125, maximum: 125 } }),
      period: period("Current 28 days", "2026-09-16", "2026-10-13"),
     },
+    minimumMaterialChangePercent: 30,
    }).insights[0].id,
   )
  })
