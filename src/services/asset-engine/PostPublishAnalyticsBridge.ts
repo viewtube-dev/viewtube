@@ -163,7 +163,6 @@ export const recordPostPublishIdentity = (
     outputAssetIds: [videoId],
     timestamp: input.publishedAt || undefined,
     metadata: {
-      publishTransactionId: transaction.id,
       operationId: transaction.id,
       ...identity,
       publishIdempotencyKey: transaction.idempotencyKey,
