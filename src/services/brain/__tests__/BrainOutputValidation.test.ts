@@ -24,10 +24,10 @@ describe("Brain structured output validation", () => {
    title: "x", count: 9, kind: "video", items: [],
   })
   expect(issues).toEqual(expect.arrayContaining([
-   expect.objectContaining({ path: "title", code: "min_length" }),
-   expect.objectContaining({ path: "count", code: "maximum" }),
-   expect.objectContaining({ path: "kind", code: "enum" }),
-   expect.objectContaining({ path: "items", code: "min_items" }),
+   expect.objectContaining({ path: "$.title", code: "min_length" }),
+   expect.objectContaining({ path: "$.count", code: "maximum" }),
+   expect.objectContaining({ path: "$.kind", code: "enum" }),
+   expect.objectContaining({ path: "$.items", code: "min_items" }),
   ]))
   expect(validateBrainStructuredOutput(schema, { title: "Good", count: 2, kind: "text" }))
    .toEqual(expect.arrayContaining([expect.objectContaining({ path: "$.items", code: "required" })]))
