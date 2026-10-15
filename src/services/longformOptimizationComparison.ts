@@ -78,6 +78,15 @@ const addDays = (value: Date, days: number) => {
 const minDate = (left: Date, right: Date) =>
   left.getTime() <= right.getTime() ? left : right
 
+const comparisonFingerprint = (value: unknown) => {
+  const input = JSON.stringify(value)
+  let hash = 2166136261
+  for (let index = 0; index < input.length; index += 1) {
+    hash = Math.imul(hash ^ input.charCodeAt(index), 16777619)
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0")
+}
+
 const average = (values: Array<number | null>) => {
   const present = values.filter((value): value is number => value != null && Number.isFinite(value))
   if (!present.length) return null
@@ -252,7 +261,14 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
     now,
   })
 
-  const comparisonEventKey = `longform-comparison:${input.contentBuildId}:${input.videoId}:${comparison.changeDate}:${comparison.queryEndDate}:${comparison.status}`
+  const comparisonHash = comparisonFingerprint({
+    version: comparison.version,
+    status: comparison.status,
+    before: comparison.before,
+    after: comparison.after,
+    days: comparison.days.map(day => [day.date, day.views, day.watchTimeMinutes, day.avp, day.likes, day.comments, day.revenue]),
+  })
+  const comparisonEventKey = `longform-comparison:${input.contentBuildId}:${input.videoId}:${comparison.changeDate}:${comparison.queryEndDate}:${comparison.status}:${comparisonHash}`
   const event = appendContentBuildEvent({
     contentBuildId: input.contentBuildId,
     idempotencyKey: comparisonEventKey,
