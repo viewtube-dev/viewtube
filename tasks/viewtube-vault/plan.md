@@ -326,3 +326,95 @@ Reconcile each existing Lane D/E item with the actual Projects/ContentBuild owne
 - Existing Vault work plan and task list already contain Lane A–G and UX requirements. This section extends their sequencing; it does not replace their unique donor findings.
 - Current source inspection confirms `src/views/CreatorVaultOS.tsx` and `src/services/vaultWorkspaceState.ts` exist on `main`. The previously reported `src/features/vault-workbench/*` paths were not found at those exact paths, so the adaptive-host implementation must be located or rebuilt by extending the actual canonical owner only after Phase 0.
 - No runtime implementation was performed by this planning update. All phase completion states remain unverified until the work is executed and evidenced.
+
+
+---
+
+## Phase 2C — Vault SubToolbox component layout and vertical-density audit
+
+**Status:** PLAN ONLY. Source-level audit performed against the current canonical branch. The earlier screenshot-backed mobile audit dated 2026-09-25 is retained as historical evidence; a fresh live screenshot pass across desktop, portrait and landscape is still a required acceptance gate.
+
+### Objective
+
+Audit every currently rendered Vault SubToolbox and the shared primitives/layout recipes it uses. Re-compose controls into compact, task-coherent rows; use shorter component variants where appropriate; reduce repeated padding, labels, nested frames and unnecessary vertical stacks while preserving behavior, legibility, touch access, the ViewTube visual identity and the existing canonical component owners.
+
+### Source evidence and verified findings
+
+Reviewed current canonical source:
+- `src/views/CreatorVaultOS.tsx` — Vault page and rendered SubToolbox composition.
+- `src/views/vault/VaultImageWorkbench.tsx` and `src/views/vault/VaultVideoWorkbench.tsx` — image/video operation forms.
+- `src/components/Toolbox.tsx` — Toolbox/SubToolbox shell.
+- `src/components/subtoolbox/SubToolboxPrimitives.tsx` — shared controls.
+- `src/components/subtoolbox/SubToolboxLayouts.tsx` — reusable stack/grid/actions/section composition.
+- `src/components/subtoolbox/tokens.ts` and `src/styles/subtoolbox-system.css` — structural levels, spacing, control sizing and responsive rules.
+- Existing `tasks/viewtube-vault/UI-DENSITY-AUDIT-2026-09-25.md` and the current Lane UX task ledger.
+
+Confirmed source findings:
+1. The Vault page currently renders first-class SubToolboxes for Asset Library, Image Workbench, Video Workbench, Compare & Versions, Import & Tags, Text Editor, Workspace Notes, Task Center, Asset Health, Relationships & Duplicates, and Inspector. Legacy module IDs/labels also remain in workspace state for migration compatibility and should not be confused with visible panels.
+2. `CreatorVaultOS.tsx` contains high call-site counts for `SubToolboxInnerActionButton` (90), `SubToolboxSelect` (17), `SubToolboxInput` (11), `SubToolboxTextArea` (6), `SubToolboxDataTable` (4), and `SubToolboxSegmentedToggle` (5). These counts are audit signals, not a claim that every instance is oversized.
+3. The canonical layout API already provides `SubToolboxGrid`, `SubToolboxActions`, `SubToolboxStack`, and `SubToolboxSection`; current Vault composition leans heavily on local utility-class stacks/wrapping rather than consistently expressing control groups through those named recipes. Audit which existing patterns can be replaced by shared recipes before inventing any new layout primitive.
+4. Canonical spacing tokens include 4/8/12/16/24px tiers. The SubToolbox CSS defaults to 12px gaps and 16px section gaps; those defaults are too generous for repeated low-priority rows when each row also contains full-size controls.
+5. Canonical structural controls include L0 56px, L1 48px, and L2 32px. Primitive family variants include micro/compact/standard sizes. Compactness should be chosen by task and viewport, not by globally shrinking every control.
+6. The Image and Video Workbench sections use their own bordered, padded inner `section` surfaces inside a SubToolbox. Their operation forms should be audited for redundant frame/padding, stacked labels, and controls that can share a row.
+7. The current CSS allows compact 32px controls and 26px micro controls, while mobile editable text has a separate 16px minimum guidance in the toolbox-builder contract. Do not make touch targets smaller than 44×44px merely to achieve visual density: use a compact visual variant inside an accessible hit area or reserve the compact variant for non-touch/secondary controls.
+8. Text areas are intentional multiline surfaces and must preserve enough height for long text. They are not candidates for a blanket one-line compact conversion.
+
+### Audit scope — every visible module
+
+| Module | Layout audit focus | Proposed density direction |
+|---|---|---|
+| Asset Library | Search, state/view/sort/filter controls, kind filters, active filter chips, selection actions, list/grid controls | One compact toolbar row where width permits; on narrow portrait use two deliberate rows (primary search + state/actions, then horizontally scrollable filters), not several wrapping full-width rows. Keep active chips only when applied. |
+| Image Workbench | Transform parameters, crop/rotation/flip, resize dimensions, format/quality, focal point, palette, preview/result/save actions | Group related numeric/select controls into responsive 2-column rows; put paired dimensions together; keep one primary Apply/Generate row and a compact result-action row. Crop-only controls appear only when crop is enabled. Keep preview/result visible when present. |
+| Video Workbench | Operation, quality, trim start/end, frame timestamp, duration, output/result actions | Put operation + quality on one row; pair trim start/end or timestamp/duration in one row according to selected operation; show only fields relevant to the chosen operation; keep processing status and errors compact but readable. |
+| Compare & Versions | Pair selection, before/after, version list, lineage/usage actions | Pair eligible selectors/actions into rows; do not reserve space for unavailable comparison actions; use compact metadata rows and a single responsive media comparison region. |
+| Import & Tags | TAGS/IMPORT mode, tag selection/editor, file intake, pending items, duplicate review, accept/reject | Keep mode toggle in the header/first row; arrange small tag controls in compact wrapping rows; pending item controls in one row per item where possible; retain clear per-item accept/reject hit targets and error details. |
+| Text Editor | Document identity, title/format, multiline content, save/download/create | Pair title with format and adjacent short actions; preserve tall multiline editor; keep Save/Download/Create actions together. Do not shrink textarea typography/height in ways that impair long-text editing. |
+| Workspace Notes | Scratchpad/checklist mode, note editor, checklist actions | Default collapsed as already specified in Lane UX; in active state pair title/save and checklist controls, with notes as the intentional tall surface. |
+| Task Center | Summary/status, filters, retry/clear actions, task rows | Idle state becomes one compact status entry; active/failed state uses compact rows with status + task label + contextual retry/cancel/clear, avoiding one full-width action per task. |
+| Asset Health | Counts/readiness, issue groups, affected assets, project readiness | Use compact status badges/metric rows; put issue filters and project status selectors on shared rows; expand detailed asset lists only for selected issue groups. |
+| Relationships & Duplicates | Similarity/duplicate actions, relationship groups, asset lists, readiness summaries | Use compact group headers and count badges; keep asset identity and action together in selectable rows; details expand on demand rather than stacking every issue's full detail. |
+| Inspector | Asset title/identity, metadata, tags, lifecycle/protection, versions, rights, captions/transcript, custom fields, usage/lineage, export/handoff | Group short metadata fields into responsive two-column rows; use full width only for multiline/editable long content, tables, media, and high-consequence actions. Group actions by task and hide ineligible/empty sections. On mobile, retain contextual sheet/scroll target behavior. |
+
+### Shared component and primitive rules
+
+- **No new duplicate primitive system.** Use the canonical SubToolbox composition APIs for shell/layout and the canonical Studio Controls owner for text-input geometry/typography. Feature components should choose primitives and recipes, not restyle or clone them.
+- Prefer `SubToolboxActions` for related action rows, `SubToolboxGrid minItemWidth="compact"` for short fields, `SubToolboxStack density="dense"` for tight groups, and `SubToolboxSection` only where a visible section label materially helps scanning. Do not wrap every single control in another card/section.
+- Use L2/compact/micro variants for short selectors, filter chips, small secondary actions and metadata controls when legible; preserve standard/large variants for primary commits, prominent states and controls requiring larger touch affordances.
+- Put related fields on the same row: width/height, start/end time, format/quality, title/format, search/state, status/count/action, label/value, and retry/clear actions. Use responsive grid breakpoints rather than hard-coded fixed widths.
+- Replace stacked labels plus full-width control pairs with compact field groups only when labels remain programmatically associated and visible/accessible. Do not rely on placeholder-only labels.
+- Use icon-only controls only when the action is unambiguous, has an accessible name, has a visible tooltip/help path, and remains easy to tap. Prefer short text labels for ambiguous operations.
+- Avoid wrapping a single action to its own row when two or more independent actions can safely share one row. Do not place destructive actions adjacent to primary actions without clear separation/confirmation.
+- Reduce nested borders and repeated padding; keep one strong SubToolbox shell and use interior surfaces only to distinguish genuinely different tasks or results.
+- Hide empty sections and ineligible actions instead of reserving blank regions. Preserve loading, error, success, permission, and no-compatible-asset states.
+- Preserve existing business behavior, asset identity, operation parameters, source/derivative lineage, selection, and saved workspace state.
+
+### Responsive layout contract
+
+- **Mobile portrait (320–430 CSS px):** use the smallest reasonable number of rows; toolbar controls may occupy two planned rows but must not wrap unpredictably. No horizontal page overflow, clipped labels, or offscreen action controls. Text entry remains usable with a 16px minimum effective font size on mobile WebKit; touch targets remain at least 44×44px.
+- **Mobile landscape (roughly 667–900 CSS px wide and short height):** reclaim horizontal space with 2–4-column compact field/action groups; prioritize the working canvas and selected asset preview; avoid tall stacked parameter panels. Respect the virtual keyboard and preserve scroll/selection across orientation changes.
+- **Tablet / narrow desktop:** use responsive compact grids with a readable minimum field width; avoid a single control spanning the full row when several short controls fit.
+- **Wide desktop:** use denser multi-column layouts for short controls, but keep long text, media previews, tables and complex comparisons at useful width.
+- **All breakpoints:** do not shrink multiline textareas indiscriminately; do not introduce horizontal scrolling for the entire page; horizontal scrolling is acceptable only for clearly bounded chips/tabs/toolbars when discoverable and keyboard/touch accessible.
+
+### Implementation sequence and checkpoints
+
+1. **Baseline and inventory:** record current branch/commit, enumerate all visible SubToolboxes and primitive call sites, run current typecheck/focused tests/build, capture desktop + mobile portrait + mobile landscape screenshots, and note pre-existing failures.
+2. **Shared recipe proof:** identify the highest-reuse row/grid patterns; map existing local flex/grid markup to canonical `SubToolboxActions/Grid/Stack/Section` and canonical Studio input variants. Add/extend shared recipe support only if the current API cannot express a verified repeated need.
+3. **Library + selection controls:** compact the toolbar and filter/action rows first because they dominate first-viewport height; preserve search/filter/sort/state/view behavior and saved values.
+4. **Image + Video Workbench:** group short operation fields and actions into responsive rows; conditionally reveal operation-specific controls; preserve output preview, progress, errors, save/download, and derivative metadata.
+5. **Import & Tags + Text Editor + Workspace Notes:** compact mode/action rows; keep multiline content intentionally tall; avoid duplicate tags/filter controls.
+6. **Compare & Versions + Inspector:** pack short metadata and contextual actions into rows; keep media comparison, long descriptions, tables and advanced metadata readable.
+7. **Task Center + Asset Health + Relationships:** compact idle/status/summary states; show details on demand and retain recovery actions for active/failed tasks.
+8. **Regression and final audit:** run tests/typecheck/lint/build; verify all controls and keyboard/touch access; capture a single batched screenshot matrix at desktop, mobile portrait and mobile landscape; fix the full set of verified issues in one bounded pass and allow at most one confirmation capture.
+
+### Definition of done
+
+- Every visible Vault SubToolbox is inventoried and has a documented row/grouping plan.
+- Every primitive use is classified as standard, compact/L2, micro, full-width, or multiline exception, with a reason.
+- Related short controls share rows at supported widths; no full-width secondary control is left alone without a usability reason.
+- The first useful Asset Library content is not pushed below the fold by configuration or redundant control chrome.
+- Portrait and landscape layouts show no clipped controls or page-level horizontal overflow.
+- Touch targets, labels, focus indicators, keyboard access and text-entry usability remain accessible.
+- Multiline text areas remain tall enough for real editing; mobile input font-size contract is preserved.
+- No behavior, metadata, derivative lineage, import review, or handoff semantics regress.
+- Exact commit has a successful build and the desktop/portrait/landscape screenshot review is recorded.
