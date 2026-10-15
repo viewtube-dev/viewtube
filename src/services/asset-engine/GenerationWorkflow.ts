@@ -38,6 +38,9 @@ export interface GenerationContextManifest {
 export interface GenerationRequest {
  schemaVersion: typeof GENERATION_WORKFLOW_SCHEMA_VERSION
  id: string
+ /** Stable operation identity shared with receipts, traces and ContentBuild events. */
+ operationId?: string
+ workflowId?: string
  contentBuildId: string
  projectId: string | null
  channelId: string | null
@@ -68,6 +71,8 @@ export interface ToolReceipt {
  schemaVersion: typeof GENERATION_WORKFLOW_SCHEMA_VERSION
  id: string
  requestId: string
+ operationId?: string
+ workflowId?: string
  contentBuildId: string
  projectId: string | null
  toolId: string
@@ -138,6 +143,8 @@ export const prepareGenerationRequest = (input: {
  parentAssetId?: string | null
  variantGroupId?: string | null
  traceId?: string | null
+ operationId?: string | null
+ workflowId?: string | null
 }): PreparedGenerationRequest => {
  const canonicalBuild = assertCanonicalScope(input)
  const channelId = canonicalBuild.channelId || input.channelId || null
@@ -181,9 +188,12 @@ export const prepareGenerationRequest = (input: {
   createdAt: timestamp,
  }
 
+ const requestId = createId("generation_request")
  const request: GenerationRequest = {
   schemaVersion: GENERATION_WORKFLOW_SCHEMA_VERSION,
-  id: createId("generation_request"),
+  id: requestId,
+  operationId: input.operationId || requestId,
+  workflowId: input.workflowId || `workflow:${canonicalBuild.id}`,
   contentBuildId: canonicalBuild.id,
   projectId,
   channelId,
@@ -260,6 +270,8 @@ export const recordToolReceipt = (input: {
   schemaVersion: GENERATION_WORKFLOW_SCHEMA_VERSION,
   id: createId("tool_receipt"),
   requestId: input.request.id,
+  operationId: input.request.operationId || input.request.id,
+  workflowId: input.request.workflowId || `workflow:${input.request.contentBuildId}`,
   contentBuildId: input.request.contentBuildId,
   projectId: input.request.projectId,
   toolId: input.request.toolId,
