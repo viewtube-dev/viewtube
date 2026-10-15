@@ -42,6 +42,40 @@ describe("buildBrainAttributionChain", () => {
   expect(result.unresolvedStages).toEqual([])
  })
 
+ it("joins a publication through stable recommendation/action/workflow identity when parent links are missing", () => {
+  const result = buildBrainAttributionChain({
+   channelId: "channel-1",
+   recommendationEventId: "recommendation-1",
+   events: [
+    event({ recommendationId: "rec-1", actionPacketId: "packet-1", workflowId: "workflow-1" }),
+    event({
+     id: "publication-by-identity",
+     kind: "PUBLICATION_CONFIRMED",
+     sourceSystem: "workflow",
+     parentEventIds: [],
+     recommendationId: "rec-1",
+     actionPacketId: "packet-1",
+     workflowId: "workflow-1",
+     videoId: "video-1",
+     metadata: { publishTransactionId: "publish-tx-1", approvedSnapshotId: "snapshot-1" },
+    }),
+    event({
+     id: "outcome-from-publication",
+     kind: "OUTCOME_MEASURED",
+     sourceSystem: "evaluation",
+     parentEventIds: ["publication-by-identity"],
+     recommendationId: "rec-1",
+     actionPacketId: "packet-1",
+     workflowId: "workflow-1",
+     videoId: "video-1",
+     metadata: {},
+    }),
+   ],
+  })
+  expect(result.publications.map(row => row.id)).toContain("publication-by-identity")
+  expect(result.outcomes.map(row => row.id)).toContain("outcome-from-publication")
+ })
+ 
  it("does not infer links from timestamps or shared project scope alone", () => {
   const result = buildBrainAttributionChain({
    channelId: "channel-1",
