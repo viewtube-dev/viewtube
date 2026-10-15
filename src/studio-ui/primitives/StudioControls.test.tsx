@@ -32,6 +32,19 @@ describe("standalone Studio text fields", () => {
     expect(compact).toContain('data-vt-studio-field-kind="textarea"')
     expect(compact).toContain('data-size="compact"')
   })
+
+  it("renders fixed label-box variants through the canonical input and textarea families", () => {
+    const standardInput = renderToStaticMarkup(<StudioTextInput variant="fixed-label" label="TITLE" aria-label="Title" />)
+    const compactInput = renderToStaticMarkup(<StudioTextInput variant="fixed-label" label="TITLE" sizeVariant="compact" aria-label="Compact title" />)
+    const compactArea = renderToStaticMarkup(<StudioTextArea variant="fixed-label" label="DESCRIPTION" sizeVariant="compact" aria-label="Compact description" />)
+    expect(standardInput).toContain('data-vt-studio-field-variant="fixed-label"')
+    expect(standardInput).toContain('class="vt-studio-fixed-field-label"')
+    expect(standardInput).toContain('data-size="standard"')
+    expect(compactInput).toContain('data-size="compact"')
+    expect(compactArea).toContain('data-vt-studio-field-kind="textarea"')
+    expect(compactArea).toContain('class="vt-studio-fixed-field-label"')
+    expect(compactArea).toContain('rows="4"')
+  })
 })
 
 describe("Studio text field library entries", () => {
@@ -77,6 +90,18 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(catalogCss).toContain('.vt-complete-catalog .vt-catalog-split-primitive[data-vt-studio-button="true"] > [data-vt-studio-button-face]')
     expect(catalogCss).toContain("grid-template-columns: var(--h) minmax(0, 1fr) !important")
     expect(catalogCss).toContain("width: 100% !important")
+  })
+
+  it("keeps fixed label boxes on the secondary pair and fits compact shadows to their faces", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
+    expect(css).toContain('.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before')
+    expect(css).toContain("right: 1px;")
+    expect(css).toContain("bottom: 1px;")
+    expect(css).toContain('letterSpacing: "-0.02em"')
+    expect(controls).toContain('letterSpacing: "-0.02em"')
   })
 
   it("anchors the action shadow while only the face moves", () => {
