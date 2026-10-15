@@ -902,7 +902,6 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   const [flyTarget, setFlyTarget] = React.useState<{ left: number; top: number } | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const editorRef = React.useRef<HTMLDivElement>(null);
-  const badgeLabelRefs = React.useRef<Record<string, HTMLSpanElement | null>>({});
   const nextId = React.useRef(1);
 
   const commit = (next: string[]) => {
@@ -938,7 +937,8 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   React.useEffect(() => {
     if (!fly) return;
     const frame = window.requestAnimationFrame(() => {
-      const target = badgeLabelRefs.current[`${fly.id}:${fly.label}`];
+      const labels = editorRef.current?.querySelectorAll<HTMLElement>(".vt-studio-closeable-badge__label");
+      const target = labels?.[labels.length - 1];
       if (target) {
         const rect = target.getBoundingClientRect();
         setFlyTarget({ left: rect.left, top: rect.top });
@@ -959,7 +959,6 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
     <div ref={editorRef} className={["vt-studio-tag-editor", className].filter(Boolean).join(" ")} data-vt-studio-tag-editor="true" role="group" aria-label={ariaLabel}>
       <div className="vt-studio-tag-editor__list">
         {tags.map((tag, index) => {
-          const flyId = fly && index === tags.length - 1 && tag === fly.label ? `${fly.id}:${fly.label}` : `existing:${index}:${tag}`;
           return (
             <StudioCloseableBadge
               key={`${index}:${tag}`}
