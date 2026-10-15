@@ -4,9 +4,10 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { spawn } from "node:child_process";
 
-const MAX_REQUEST_BYTES = Number(process.env.VAULT_MEDIA_MAX_REQUEST_BYTES || 65 * 1024 * 1024);
-const MAX_OUTPUT_BYTES = Number(process.env.VAULT_MEDIA_MAX_OUTPUT_BYTES || 64 * 1024 * 1024);
-const MAX_DURATION_SECONDS = Number(process.env.VAULT_MEDIA_MAX_DURATION_SECONDS || 300);
+const MAX_REQUEST_BYTES = Math.max(1024, Number(process.env.VAULT_MEDIA_MAX_REQUEST_BYTES) || 65 * 1024 * 1024);
+const MAX_OUTPUT_BYTES = Math.max(1024, Number(process.env.VAULT_MEDIA_MAX_OUTPUT_BYTES) || 64 * 1024 * 1024);
+const MAX_DURATION_SECONDS = Math.max(1, Number(process.env.VAULT_MEDIA_MAX_DURATION_SECONDS) || 300);
+const MAX_PROCESSING_MS = Math.max(1000, Number(process.env.VAULT_MEDIA_MAX_PROCESSING_MS) || 120000);
 const ALLOWED_MIME_TYPES = new Set([
   "video/mp4", "video/quicktime", "video/webm", "video/x-matroska",
   "video/ogg", "video/x-msvideo", "video/mpeg",
@@ -89,11 +90,25 @@ const readBody = (req, maxBytes) => new Promise((resolve, reject) => {
 const runFfmpeg = (args) => new Promise((resolve, reject) => {
   const child = spawn("ffmpeg", args, { stdio: ["ignore", "ignore", "pipe"] });
   let stderr = "";
+  let settled = false;
+  const timeout = setTimeout(() => {
+    child.kill("SIGKILL");
+    if (!settled) {
+      settled = true;
+      reject(new Error("Media processing exceeded its time limit."));
+    }
+  }, MAX_PROCESSING_MS);
   child.stderr.on("data", (chunk) => {
     stderr = (stderr + String(chunk || "")).slice(-12000);
   });
-  child.on("error", reject);
+  child.on("error", (error) => {
+    clearTimeout(timeout);
+    if (!settled) { settled = true; reject(error); }
+  });
   child.on("close", (code) => {
+    clearTimeout(timeout);
+    if (settled) return;
+    settled = true;
     if (code === 0) resolve();
     else reject(new Error(stderr || `ffmpeg exited with code ${code}`));
   });
