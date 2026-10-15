@@ -45,6 +45,16 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("StudioCloseableBadge / StudioTagEditor")
     expect(html).toContain("H 20px")
     expect(html).toContain("action H 32px")
+    expect(html).toContain("vt-studio-tag-editor__square-action")
+  })
+
+  it("uses the canonical compact Studio text input and staged flight transition", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('data-vt-studio-control="true"')
+    expect(html).toContain('data-size="compact"')
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('.vt-studio-tag-editor__fly[data-targeted="true"] { opacity: 1; }')
+    expect(css).toContain('.vt-studio-tag-editor__fly[data-arrived="true"] { opacity: 0; }')
   })
 
   it("preserves the requested comparison rows and 50-color spectrum sample", () => {

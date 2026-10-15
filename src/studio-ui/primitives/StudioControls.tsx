@@ -886,7 +886,7 @@ export interface StudioTagEditorProps {
   maxTagLength?: number;
 }
 
-/** Shared add/remove tag editor; new text flies into its canonical closeable badge. */
+/** Canonical add/remove tag editor using StudioTextInput in compact mode. */
 export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   value,
   defaultValue = [],
@@ -902,6 +902,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   const [draft, setDraft] = React.useState("");
   const [fly, setFly] = React.useState<{ id: number; label: string; left: number; top: number } | null>(null);
   const [flyTarget, setFlyTarget] = React.useState<{ left: number; top: number } | null>(null);
+  const [flyArrived, setFlyArrived] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const editorRef = React.useRef<HTMLDivElement>(null);
   const nextId = React.useRef(1);
@@ -928,8 +929,14 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
     }
     const inputRect = inputRef.current?.getBoundingClientRect();
     const id = nextId.current++;
+    setFlyArrived(false);
     if (inputRect) {
-      setFly({ id, label, left: inputRect.left + 12, top: inputRect.top + (inputRect.height - 20) / 2 });
+      setFly({
+        id,
+        label,
+        left: inputRect.left + 12,
+        top: inputRect.top + (inputRect.height - 20) / 2,
+      });
       setFlyTarget(null);
     }
     commit([...tags, label]);
@@ -946,31 +953,33 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
         setFlyTarget({ left: rect.left, top: rect.top });
       }
     });
-    const timer = window.setTimeout(() => {
+    const arriveTimer = window.setTimeout(() => setFlyArrived(true), 450);
+    const finishTimer = window.setTimeout(() => {
       setFly(null);
       setFlyTarget(null);
-      closeComposer();
+      setFlyArrived(false);
+      setOpen(false);
+      setDraft("");
     }, 850);
     return () => {
       window.cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
+      window.clearTimeout(arriveTimer);
+      window.clearTimeout(finishTimer);
     };
-  }, [fly, tags]);
+  }, [fly]);
 
   return (
     <div ref={editorRef} className={["vt-studio-tag-editor", className].filter(Boolean).join(" ")} data-vt-studio-tag-editor="true" role="group" aria-label={ariaLabel}>
       <div className="vt-studio-tag-editor__list">
-        {tags.map((tag, index) => {
-          return (
-            <StudioCloseableBadge
-              key={`${index}:${tag}`}
-              label={tag}
-              onClose={() => removeTag(index)}
-              entering={Boolean(fly && index === tags.length - 1 && tag === fly.label)}
-              className={fly && index === tags.length - 1 && tag === fly.label ? "is-fly-destination" : undefined}
-            />
-          );
-        })}
+        {tags.map((tag, index) => (
+          <StudioCloseableBadge
+            key={`${index}:${tag}`}
+            label={tag}
+            onClose={() => removeTag(index)}
+            entering={false}
+            className={fly && index === tags.length - 1 && tag === fly.label ? "is-fly-destination" : undefined}
+          />
+        ))}
       </div>
       {!open ? (
         <button type="button" className="vt-studio-tag-editor__square-action" aria-label="Add tag" title="Add tag" onClick={openComposer}>
@@ -978,11 +987,10 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
         </button>
       ) : (
         <div className={["vt-studio-tag-editor__composer", fly ? "is-fading" : ""].filter(Boolean).join(" ")}>
-          <input
+          <StudioTextInput
             ref={inputRef}
-            type="text"
-            data-vt-studio-control="true"
-            data-size="compact"
+            variant="simple"
+            sizeVariant="compact"
             value={draft}
             placeholder={placeholder}
             maxLength={maxTagLength}
@@ -1005,6 +1013,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
           className="vt-studio-tag-editor__fly"
           aria-hidden="true"
           data-targeted={flyTarget ? "true" : "false"}
+          data-arrived={flyArrived ? "true" : "false"}
           style={{
             left: flyTarget?.left ?? fly.left,
             top: flyTarget?.top ?? fly.top,
