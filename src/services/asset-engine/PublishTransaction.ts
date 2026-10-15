@@ -206,7 +206,7 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
       summary: event.summary,
       evaluationTargets: event.evaluationTargets,
       checkpointAt: Date.parse(timestamp) + windowHours * 3600000,
-      metadata: { ...event.metadata, publicationTransactionId: next.id, approvedSnapshotId: next.approvedSnapshotId, metadataVersionIds, publicationCheckpointAt: timestamp, checkpointStatus: "scheduled-for-follow-up-evaluation" },
+      metadata: { ...event.metadata, publicationTransactionId: next.id, approvedSnapshotId: next.approvedSnapshotId, metadataVersionIds, checkpointId: `publication-checkpoint:${next.id}`, publicationCheckpointAt: timestamp, checkpointStatus: "scheduled-for-follow-up-evaluation" },
      })
     })
    recordAlgorithmIntelligenceEvent({
