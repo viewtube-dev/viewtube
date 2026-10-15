@@ -17,6 +17,7 @@ import {
 } from "./AudienceIntelligence"
 import {
  buildOpportunityEvidenceFromBrainPack,
+ buildOpportunityEvidenceFromCanonicalBundle,
 } from "./OpportunityEvidenceAdapter"
 import type { OpportunityEvidence } from "./OpportunityIntelligence"
 import { projectCanonicalEvidenceRecords, type EvidenceRecord } from "./EvidenceRecord"
@@ -47,7 +48,7 @@ export interface EvidenceIntelligenceEnvelope {
  provenance: {
   analyticsOwner: "analytics-canon"
   sourceSnapshotId: string
-  opportunitySource: "brain-evidence-pack" | null
+  opportunitySource: "analytics-canon" | "brain-evidence-pack" | null
  }
 }
 
@@ -74,6 +75,11 @@ export interface EvidenceIntelligenceResolverDependencies {
   evidencePack: AIBrainEvidencePack
   limit?: number
  }) => OpportunityEvidence[]
+ buildCanonicalOpportunities?: (input: {
+  channelId: string
+  bundle: CanonicalIntelligenceEvidenceBundle
+  limit?: number
+ }) => OpportunityEvidence[]
  projectEvidence: (bundle: CanonicalIntelligenceEvidenceBundle) => EvidenceRecord[]
 }
 
@@ -83,6 +89,7 @@ const DEFAULT_DEPENDENCIES: EvidenceIntelligenceResolverDependencies = {
  buildStatistics: buildStatisticsIntelligence,
  buildAudience: buildAudienceIntelligence,
  buildOpportunities: buildOpportunityEvidenceFromBrainPack,
+ buildCanonicalOpportunities: buildOpportunityEvidenceFromCanonicalBundle,
  projectEvidence: projectCanonicalEvidenceRecords,
 }
 
@@ -101,13 +108,13 @@ export const resolveEvidenceIntelligence = (
  const canonicalEvidence = dependencies.getCanonicalEvidence({
   window: input.window,
   sectionIds: input.sectionIds,
-  maximumRowsPerDataset: input.includeAudience ? 5 : 0,
-  maximumCharacters: input.includeAudience ? 16_000 : 12_000,
+  maximumRowsPerDataset: input.includeAudience ? 5 : input.includeOpportunities ? 8 : 0,
+  maximumCharacters: input.includeAudience || input.includeOpportunities ? 16_000 : 12_000,
  })
  const evidenceQuality = dependencies.buildQuality(canonicalEvidence, {
   expectedChannelId: input.channelId,
  })
- const scopeUsable = evidenceQuality.scopeMatch !== "mismatch"
+ const scopeUsable = evidenceQuality.scopeMatch !== "mismatch" && evidenceQuality.scopeMatch !== "unscoped"
  const evidenceRecords = scopeUsable
   ? dependencies.projectEvidence(canonicalEvidence)
   : []
@@ -124,11 +131,13 @@ export const resolveEvidenceIntelligence = (
   && input.brainEvidencePack
   && (!input.brainEvidencePack.channelId || input.brainEvidencePack.channelId === channelId),
  )
- const opportunityEvidence = input.includeOpportunities && opportunityPackScopeUsable && channelId && input.brainEvidencePack
-  ? dependencies.buildOpportunities({
-    channelId,
-    evidencePack: input.brainEvidencePack,
-   })
+ const usesCanonicalOpportunitySource = Boolean(dependencies.buildCanonicalOpportunities)
+ const opportunityEvidence = input.includeOpportunities && scopeUsable && channelId
+  ? dependencies.buildCanonicalOpportunities
+   ? dependencies.buildCanonicalOpportunities({ channelId, bundle: canonicalEvidence })
+   : opportunityPackScopeUsable && input.brainEvidencePack
+    ? dependencies.buildOpportunities({ channelId, evidencePack: input.brainEvidencePack })
+    : []
   : []
 
  return {
@@ -144,7 +153,7 @@ export const resolveEvidenceIntelligence = (
   provenance: {
    analyticsOwner: "analytics-canon",
    sourceSnapshotId: canonicalEvidence.snapshotId,
-   opportunitySource: opportunityEvidence.length ? "brain-evidence-pack" : null,
+   opportunitySource: opportunityEvidence.length ? (usesCanonicalOpportunitySource ? "analytics-canon" : "brain-evidence-pack") : null,
   },
  }
 }
