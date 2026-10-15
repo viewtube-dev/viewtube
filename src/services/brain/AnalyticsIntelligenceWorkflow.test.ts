@@ -86,6 +86,7 @@ const measurement = (overrides: Partial<{
   metadataVersionIds: string[]
 }> = {}) => ({
   channelId: "channel-1",
+  projectId: "project-1",
   metric: "views",
   window: "28d" as const,
   value: 100,
