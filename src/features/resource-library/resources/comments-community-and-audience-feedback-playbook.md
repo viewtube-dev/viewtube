@@ -24,7 +24,7 @@ related_resources: audience-subscribers-returning-viewers; live-streaming-operat
 
 Audience feedback can reveal confusion, unmet needs, useful ideas, and how people interpret a video. It can also be noisy, unrepresentative, repetitive, or harmful. A good feedback process helps you listen without letting the loudest comment determine your entire content strategy.
 
-> **Creator principle:** Comments are a sample, not a representative poll. Look for repeated themes, preserve context, protect privacy, and moderate consistently.
+> **Creator takeaway:** Comments are a sample, not a representative poll. Look for repeated themes, preserve context, protect privacy, and moderate consistently.
 
 ## The Creator Mental Model
 
