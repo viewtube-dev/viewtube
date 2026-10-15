@@ -218,8 +218,8 @@ type ActionPacketProjection = {
  assetIds?: string[]
  evidence?: string[]
  provenance?: string[]
- recommendationId?: string
- experimentId?: string
+ recommendationId?: string | null
+ experimentId?: string | null
  contextManifestId?: string
  promptRecipeId?: string
  promptRecipeVersion?: string
