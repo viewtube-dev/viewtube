@@ -82,3 +82,51 @@ test("split-left buttons do not clip the stationary shadow or expose a wrapper b
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*background:\s*transparent/);
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*appearance:\s*none/);
 });
+
+
+test("single-line input typography follows the same standard/compact size split as textareas", () => {
+  const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
+  const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+  const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][^\n]*font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*18px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][^\n]*font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*14px\) !important/);
+  assert.ok(controls.includes('standardInputFontSize: "18px"'));
+  assert.ok(controls.includes('compactInputFontSize: "14px"'));
+});
+
+test("text field families are split into input-plus-label and textarea-plus-label modules", () => {
+  const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+  const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
+  const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  assert.ok(inputModule.includes("export const StudioTextInput"));
+  assert.ok(inputModule.includes("export const StudioLabeledInput"));
+  assert.ok(areaModule.includes("export const StudioTextArea"));
+  assert.ok(areaModule.includes("export const StudioLabeledTextArea"));
+  assert.ok(controls.includes('from "./StudioTextInput"'));
+  assert.ok(controls.includes('from "./StudioTextArea"'));
+});
+
+test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
+  assert.match(catalog, /const WORD_TOGGLE_SKINS = CANONICAL_SKINS\.slice\(0, 3\)/);
+  assert.match(catalog, /Array\(6\)\.fill\(false\)/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-row\[data-control-size="44"\][\s\S]*?grid-template-columns:\s*minmax\(0,1fr\)/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-row\[data-control-size="28"\][\s\S]*?justify-items:\s*center/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-row\[data-control-size="28"\][\s\S]*?justify-self:\s*center/);
+  assert.ok(!catalog.includes('label: "WHITE" },]\nconst WORD_TOGGLE_SKINS = CANONICAL_SKINS'));
+});
+
+test("compact Studio button shadow is a symmetric face-sized stationary offset", () => {
+  const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+  const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
+  assert.match(css, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
+  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\][^\n]*--vt-studio-control-shadow-x:\s*1px;[^\n]*--vt-studio-control-shadow-y:\s*1px/);
+  assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
+  assert.match(tokens, /compact: \{[^}]*buttonShadowX: 1, buttonShadowY: 1/);
+});
+
+test("global defaults use a compact collapsed panel with an explicit expand affordance", () => {
+  assert.ok(catalog.includes('className="vt-confirmed-defaults-details"'));
+  assert.ok(catalog.includes("Show full defaults and exceptions"));
+  assert.match(styles, /\.vt-confirmed-defaults-details\s*\{[^}]*max-height|\.vt-confirmed-defaults-details\s*\{/);
+});
