@@ -22,7 +22,7 @@ type StudioTextInputSimpleProps = StudioTextInputBaseProps & {
 
 type StudioTextInputFloatingLabelProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  "size" | "placeholder" | "className" | "style"
+  "size" | "className" | "style"
 > & {
   sizeVariant?: StudioControlSize
   /** Render the canonical input with the shared floating-label treatment. */
