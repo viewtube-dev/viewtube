@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { ChevronLeft, ChevronRight, Layers3 } from "lucide-react"
 import { ToolboxScaffold } from "./Toolbox"
 import { SubToolboxIconButton } from "./subtoolbox/SubToolboxPrimitives"
-import { getToolboxPaletteColors } from "../styles/toolboxPalette"
+import { getToolboxPaletteColors, VT_SPECTRUM_PALETTE_06 } from "../styles/toolboxPalette"
 import { StudioHubCompletePrimitiveCatalog } from "./studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubPrimitiveMigrationCatalog } from "./studio-hub/StudioHubPrimitiveMigrationCatalog"
 import { StudioHubProductionButtonCatalog } from "./studio-hub/StudioHubProductionButtonCatalog"
@@ -41,6 +41,13 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
   const primitiveContextStyle = {
     ["--vt-subtoolbox-fill" as string]: palette.header,
   } as React.CSSProperties
+  // The frozen hard-coded comparison stays untouched. Production and confirmed
+  // primitives receive the active pair at their shared root so every nested
+  // control consumes the same palette authority.
+  const activePairStyle = !isHardcoded ? {
+    ["--pair-a" as string]: VT_SPECTRUM_PALETTE_06[((paletteIndex % 12) + 12) % 12],
+    ["--pair-b" as string]: VT_SPECTRUM_PALETTE_06[(((paletteIndex + 6) % 12) + 12) % 12],
+  } as React.CSSProperties : undefined
   const isHardcoded = track === "hardcoded"
   const isConfirmed = track === "confirmed"
 
@@ -49,6 +56,7 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
       id={isHardcoded ? "toolbox-ui-library-hardcoded" : isConfirmed ? "toolbox-ui-library-confirmed" : "toolbox-ui-library-primitive"}
       className="scroll-mt-24 vt-studio-hub-component-library"
       data-vt-library-track={track}
+      style={activePairStyle}
     >
       <ToolboxScaffold
         title={isHardcoded
