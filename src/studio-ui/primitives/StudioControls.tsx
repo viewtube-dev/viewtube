@@ -322,7 +322,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         aria-busy={loading || undefined}
         disabled={disabled || loading}
       >
-        {children}
+        <span data-vt-studio-button-face>{children}</span>
       </button>
     )
   },
