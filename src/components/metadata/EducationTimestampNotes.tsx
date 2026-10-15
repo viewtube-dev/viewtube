@@ -2,7 +2,7 @@ import React from "react"
 import { BookOpenCheck, CheckCircle2 } from "lucide-react"
 import { SubToolbox } from "../Toolbox"
 import { SubToolboxStatusBadge } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioLabeledTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 
 export const EDUCATION_TIMESTAMP_PATTERN = /^\d{1,2}:\d{2}(?:\s+.+)$/
 
@@ -35,7 +35,7 @@ export const EducationTimestampNotes: React.FC<EducationTimestampNotesProps> = (
         </SubToolboxStatusBadge>
         {valid && hasContent ? <CheckCircle2 size={16} aria-label="Timestamp format valid" /> : null}
       </div>
-      <StudioLabeledTextArea
+      <StudioTextArea variant="floating-label"
         level="l1"
         label="QUESTIONS / PHRASES"
         value={value}
@@ -59,7 +59,7 @@ export const EducationTimestampNotes: React.FC<EducationTimestampNotesProps> = (
         </SubToolboxStatusBadge>
         {valid && hasContent ? <CheckCircle2 size={16} aria-label="Timestamp format valid" /> : null}
       </div>
-      <StudioLabeledTextArea
+      <StudioTextArea variant="floating-label"
         level="l1"
         label="QUESTIONS / PHRASES"
         value={value}
