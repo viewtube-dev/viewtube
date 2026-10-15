@@ -15,6 +15,7 @@ export {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
+  StudioActionButton,
   StudioIconButton,
   StudioInput,
   Studioinput,
@@ -36,6 +37,7 @@ export {
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
+  StudioActionButtonProps,
   StudioLegendMultiDropdownProps,
   StudioLegendMultiDropdownOption,
   StudioLabeledInputProps,
