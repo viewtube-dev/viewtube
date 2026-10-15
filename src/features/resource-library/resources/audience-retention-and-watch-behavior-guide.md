@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; thumbnail-title-packagin
 
 Audience retention helps you see how viewing continues through a video. It can point to moments that deserve attention, but it does not tell you exactly why a person stayed, skipped, replayed, or left. The job is to combine the shape of the data with the video itself and other evidence.
 
-> **Creator principle:** Treat a retention curve as a map of viewer behavior, not a grade for the creator or a universal target every video must hit.
+> **Creator takeaway:** Treat a retention curve as a map of viewer behavior, not a grade for the creator or a universal target every video must hit.
 
 ## The Creator Mental Model
 
