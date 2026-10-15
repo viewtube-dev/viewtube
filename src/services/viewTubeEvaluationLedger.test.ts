@@ -75,6 +75,7 @@ beforeEach(() => {
   channelId: "channel-a",
   kind: "published",
   publishedVideoId: "youtube-1",
+  publishTransactionId: "publish-a",
   traceId: "trace-a",
  }])
  vi.stubGlobal("window", {
@@ -135,6 +136,40 @@ describe("outcome evaluation and governed learning lineage", () => {
    comparabilityStatus: "comparable",
    outcome: "pending",
   })
+ })
+
+ it("does not attribute an outcome to a publication without an exact transaction match", () => {
+  lineageMocks.listAssetOutcomes.mockReturnValue([{
+   id: "unlinked-outcome",
+   assetId: "title-a",
+   channelId: "channel-a",
+   kind: "published",
+   publishedVideoId: "youtube-1",
+   traceId: "trace-a",
+  }])
+  const record = createPublicationEvaluationRecord({
+   publicationIdentity: {
+    schemaVersion: 1,
+    contentBuildId: "build-a",
+    projectId: "project-a",
+    projectAssociationStatus: "verified",
+    videoPackageId: "package-a",
+    publishTransactionId: "publish-a",
+    youtubeVideoId: "youtube-1",
+    channelId: "channel-a",
+    approvedSnapshotId: "approved-a",
+    approvedSnapshotHash: "hash-a",
+    selectedVariantAssetIds: ["title-a", "thumb-a", "render-a"],
+    correlationId: "publish-a",
+    idempotencyKey: "publish:build-a:approved-a",
+    publishedAt: "2026-10-15T10:00:00.000Z",
+   },
+   selectedWindow: "28d",
+   source: "post-publication",
+   recommendation: "Evaluate the published title variant",
+  })
+  expect(record?.sourceOutcomeIds).toEqual([])
+  expect(record?.sourceRecordIds).toEqual(["publish-a"])
  })
 
  it("fails closed unless the immutable publication receipt exists in ContentBuild", () => {
