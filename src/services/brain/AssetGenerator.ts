@@ -29,6 +29,8 @@ import type { Schema } from "@google/genai"
 import { beginBrainTrace, type BrainTrace } from "./BrainTrace"
 import { auditNumericClaims } from "./numericClaims"
 import type { ModelResolution } from "./modelRouting"
+import { buildBrainPromptRunReceipt, promptFamilyForAsset, validateBrainPromptRunReceipt, type BrainPromptRunReceipt } from "./BrainPromptGovernance"
+import { formatBrainOutputValidationIssues, validateBrainStructuredOutput } from "./BrainOutputValidation"
 import {
  buildStylePromptSection,
  evaluateStyleFidelity,
@@ -138,6 +140,8 @@ export interface AssetGeneratorStrategy<TOutput> {
  /** Prose to grade for style and numeric grounding. */
  toGradeableText: (output: TOutput) => string
  rubric?: (output: TOutput, request: AssetRequest) => RubricFinding[]
+ /** Stable schema version for output validation and outcome attribution. */
+ outputSchemaVersion?: string
 }
 
 export type AssetStatus =
@@ -169,6 +173,7 @@ export interface AssetRecord<TOutput = unknown> {
  rubricFindings: RubricFinding[]
  repairAttempts: number
  promptVersions: Record<string, string>
+ promptReceipt?: BrainPromptRunReceipt
 }
 
 export interface AssetGenerationResult<TOutput> {
@@ -275,7 +280,11 @@ const grade = <TOutput>(input: {
  const text = input.strategy.toGradeableText(input.output)
  const numeric = auditNumericClaims({ text, evidence: input.evidence.payload })
  const style = evaluateStyleFidelity({ text, profile: input.style })
- const rubricFindings = input.strategy.rubric?.(input.output, input.request) || []
+ const schemaIssues = validateBrainStructuredOutput(input.strategy.schema, input.output)
+ const schemaFindings: RubricFinding[] = formatBrainOutputValidationIssues(schemaIssues).map((detail) => ({
+  rule: "output_schema", detail, severity: "blocking",
+ }))
+ const rubricFindings = [...schemaFindings, ...(input.strategy.rubric?.(input.output, input.request) || [])]
 
  const fabricated = numeric.fabricated.map((claim) => claim.token)
  const blocking: string[] = []
@@ -335,6 +344,8 @@ export const generateAsset = async <TOutput>(input: {
  })
  trace.recordPromptVersion("constitution", ASSET_CONSTITUTION_VERSION)
  trace.recordPromptVersion(strategy.assetType, strategy.promptVersion)
+ trace.recordPromptVersion("prompt_family", promptFamilyForAsset(strategy.assetType))
+ trace.recordPromptVersion("context_resolver", "brain-context-resolution-v1")
  if (style) trace.recordStyle({ styleProfileId: style.id })
 
  const assetId = makeAssetId()
@@ -427,22 +438,55 @@ export const generateAsset = async <TOutput>(input: {
   trace.recordGrade("styleFidelity", assessment.style.score)
   trace.recordGrade("grounding", assessment.fabricated.length ? 0 : 100)
 
+  const promptReceipt = buildBrainPromptRunReceipt({
+   traceId: trace.id,
+   outputId: assetId,
+   channelId: request.channelId,
+   projectId: request.projectId || null,
+   promptFamily: promptFamilyForAsset(strategy.assetType),
+   promptVersion: strategy.promptVersion,
+   constitutionVersion: ASSET_CONSTITUTION_VERSION,
+   contextResolverVersion: "brain-context-resolution-v1",
+   outputSchemaVersion: strategy.outputSchemaVersion || `${strategy.assetType}-schema-v1`,
+   requestedModel: response.model?.requested || null,
+   servedModel: response.model?.served || null,
+   evidenceSnapshotIds: Array.isArray(request.inputs?.evidenceSnapshotIds) ? request.inputs.evidenceSnapshotIds.filter((value): value is string => typeof value === "string") : [],
+   evidenceRefs: evidence.refs,
+   channelKnowledgeFingerprint: typeof request.inputs?.channelKnowledgeFingerprint === "string" ? request.inputs.channelKnowledgeFingerprint : null,
+   projectRevision: typeof request.inputs?.projectRevision === "string" ? request.inputs.projectRevision : null,
+   styleProfileVersion: style?.id || null,
+   creatorConstraints: Array.isArray(request.inputs?.creatorConstraints)
+    ? request.inputs.creatorConstraints.filter((value): value is string => typeof value === "string")
+    : [],
+   repairCount: repairAttempts,
+  })
+  const receiptIssues = validateBrainPromptRunReceipt(promptReceipt)
+  const finalStatus: AssetStatus = receiptIssues.length ? "needs_review" : status
+  if (receiptIssues.length) {
+   assessment.rubricFindings.push(...receiptIssues.map((detail) => ({
+    rule: "prompt_provenance",
+    detail,
+    severity: "blocking" as const,
+   })))
+  }
+
   const record: AssetRecord<TOutput> = {
    ...baseRecord,
-   status,
+   status: finalStatus,
    output: response.output,
    styleScore: assessment.style.score,
    fabricatedNumbers: assessment.fabricated,
    unverifiedDerivedNumbers: assessment.unverifiedDerived,
    rubricFindings: assessment.rubricFindings,
    repairAttempts,
+   promptReceipt,
   }
   persistAsset(record as AssetRecord)
 
   return {
    record,
    trace: trace.complete({
-    status: status === "needs_review" ? "fallback" : "complete",
+    status: finalStatus === "needs_review" ? "fallback" : "complete",
     outputRef: record.id,
    }),
    style: assessment.style,
