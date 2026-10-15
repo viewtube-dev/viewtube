@@ -189,6 +189,56 @@ describe("CreatorContextResolver", () => {
   expect(result.provenance.projectSource).toBe("canonical_project_content_build")
  })
 
+ it("resolves the requested canonical project by exact ID when only projectId is passed", async () => {
+  const indexedProject = {
+   id: "project-target",
+   contentBuildId: "content-target",
+   name: "Indexed canonical project",
+   videoTitle: "Target title",
+   status: "active",
+   plan: { concept: "Target concept", niche: "history" },
+  }
+  const linkedBuild = {
+   id: "content-target",
+   legacyProjectId: "project-target",
+   stage: "package",
+   profile: { topic: "Canonical indexed topic", format: "long" },
+  }
+  const buildProject = vi.fn((input: any) => ({
+   channelId: input.channelId,
+   projectId: input.project.id,
+   contentBuildId: input.contentBuild.id,
+   title: input.project.videoTitle,
+   topic: input.contentBuild.profile.topic,
+   format: input.contentBuild.profile.format,
+   evidenceIds: input.artifactRefs,
+  }))
+  const deps: CreatorContextResolverDependencies = {
+   readControls: () => ({ ...DEFAULT_BRAIN_USER_CONTROLS }),
+   loadProfile: vi.fn(async () => profile),
+   buildKnowledge: vi.fn(() => knowledge as any),
+   resolveStyle: vi.fn(() => null),
+   buildProject,
+   getContentBuild: vi.fn(() => linkedBuild as any),
+  }
+
+  const result = await resolveCreatorContext({
+   channelId: "channel-1",
+   query: "Continue this project",
+   projectId: "project-target",
+   projects: [indexedProject as any, { id: "other-project", name: "Not this project" } as any],
+   visibleContext: { projectId: "project-target", title: "Stale visible title" },
+  }, deps)
+
+  expect(buildProject).toHaveBeenCalledWith(expect.objectContaining({
+   project: indexedProject,
+   contentBuild: linkedBuild,
+   projectId: "project-target",
+  }))
+  expect(result.project?.title).toBe("Target title")
+  expect(result.provenance.projectSource).toBe("canonical_project_content_build")
+ })
+
  it("honors creator controls instead of reconstructing disabled personalization or project context", async () => {
   const deps: CreatorContextResolverDependencies = {
    readControls: () => ({
