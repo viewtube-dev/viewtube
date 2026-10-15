@@ -2,7 +2,7 @@ export type BrainLearningRecordType = "assetOutcome" | "brainOutcome" | "evaluat
 
 export interface BrainLearningRecordEnvelope {
  recordType: BrainLearningRecordType
- record: { id: string; channelId?: string | null; [key: string]: unknown }
+ record: { id: string; channelId?: string | null } & Record<string, unknown>
 }
 
 export interface BrainLearningPersistenceResult {
@@ -52,6 +52,17 @@ const queueKey = (item: BrainLearningRecordEnvelope) => `${item.recordType}:${it
 export const flushBrainLearningPersistence = async (channelId?: string): Promise<BrainLearningPersistenceResult> => {
  const queued = readQueue()
  const storage = getStorage()
+ if (!channelId) {
+  const channels = [...new Set(queued.map((item) => String(item.record.channelId || "")).filter(Boolean))]
+  let persisted = 0
+  let authenticated = true
+  for (const channel of channels) {
+   const result = await flushBrainLearningPersistence(channel)
+   persisted += result.persisted
+   authenticated = authenticated && result.authenticated
+  }
+  return { persisted, pending: readQueue().length, authenticated }
+ }
  if (!storage || typeof window === "undefined") return { persisted: 0, pending: queued.length, authenticated: false }
  const pending = channelId ? queued.filter((item) => item.record.channelId === channelId) : queued
  let persisted = 0
@@ -84,10 +95,10 @@ export const flushBrainLearningPersistence = async (channelId?: string): Promise
 }
 
 /** Queue a durable record first, then attempt delivery; retries are idempotent. */
-export const enqueueBrainLearningRecord = async (
+export const enqueueBrainLearningRecord = async <T extends { id: string; channelId?: string | null }>(
  channelId: string | null | undefined,
  recordType: BrainLearningRecordType,
- record: { id: string; channelId?: string | null; [key: string]: unknown },
+ record: T,
 ): Promise<BrainLearningPersistenceResult> => {
  const normalizedChannelId = String(channelId || "").trim()
  if (!normalizedChannelId || !record?.id || String(record.channelId || "") !== normalizedChannelId) {
@@ -95,7 +106,7 @@ export const enqueueBrainLearningRecord = async (
  }
  const storage = getStorage()
  if (!storage || typeof window === "undefined") return { persisted: 0, pending: 0, authenticated: false }
- const envelope: BrainLearningRecordEnvelope = { recordType, record: { ...record, channelId: normalizedChannelId } }
+ const envelope: BrainLearningRecordEnvelope = { recordType, record: { ...record, channelId: normalizedChannelId } as Record<string, unknown> & { id: string; channelId: string } }
  const current = readQueue()
  const key = queueKey(envelope)
  writeQueue([...current.filter((item) => queueKey(item) !== key), envelope])
