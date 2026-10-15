@@ -911,3 +911,22 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Boundaries:** localStorage is not server-side durability or authorization; suggestion contracts are not an AI provider; rights findings are not legal clearance; no deployment or merge is claimed.
 - **Verification:** GitHub read-back confirms duplicate files removed and canonical services retained. Exact-head CI, typecheck/build, browser verification, merge, and post-merge read-back remain pending.
 - **Next action:** Review the latest PR checks and resolve failures before merging.
+
+
+#### LOG-ID: REC-20261015-vault-phases-7-10-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation continuation
+- **Round:** 1
+- **Category:** VAULT / CROSS-SYSTEM WORKFLOW / BATCH OPERATIONS / RELEASE GATES
+- **Action:** Advanced the Vault Workbench plan through phases 7–10, added a bounded per-item batch planner/runner and regression tests, formalized phase exit gates, and documented blockers rather than claiming production completion.
+- **Artifacts:** `src/services/vaultBatchOperations.ts`; `src/services/__tests__/vaultBatchOperations.test.ts`; `docs/vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md`; updated Vault master and `docs/Vault.md`.
+- **Status:** IMPLEMENTED IN BRANCH / EXACT-HEAD VERIFICATION PENDING; PHASE 8 BLOCKED
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **PR:** [#336](https://github.com/viewtube-dev/viewtube/pull/336), target `master/consolidated-feature-integration`.
+- **Phase 7 evidence:** canonical `src/services/assetEngine.ts` uses the existing Vault adapter, ContentBuild events, and ViewTube ActionPacket for asset creation and handoff. The full create/retry/reopen/edit/handoff/return/package/publish runtime flow is not yet certified.
+- **Phase 8 blocker:** authoritative account/workspace authorization and durable server-side job/receipt contracts are not verified. Browser localStorage/IndexedDB and local lifecycle guards are not authorization or a durable cross-device queue. No parallel auth model was invented.
+- **Phase 9 implementation:** per-item preflight, 50-item cap, duplicate/missing ID rejection, safe sequential executor, per-item success/failure/skip/cancel outcomes, and partial-failure reporting. Real processor/derivative/ledger integration and AI provider remain pending.
+- **Phase 10 evidence:** prior release-gate run #1503 passed production build, local smoke, and Brain quality loop; typecheck, source governance, focused contracts, and full suite failed. That run predates the newest batch/documentation commits and does not verify the current head.
+- **Verification:** source writes returned commit SHAs and PR metadata was read back. No claim of merge, exact-head CI pass, browser certification, or deployment is made.
+- **Next action:** inspect the newest release-gate run; resolve branch-introduced errors; complete processor/lineage integration and server authorization/durability; certify browser flow; merge only when required gates pass; re-read target branch afterward.
