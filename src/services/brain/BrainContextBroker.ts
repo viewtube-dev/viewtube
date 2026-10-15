@@ -101,7 +101,7 @@ export const buildBrainContextPack = (input: {
    ].join("\n"), 3200)
   : ""
 
- const analyticsFindings = controls.allowAnalytics && !analyticsScopeBlocked && input.analyticsFindingContext?.status === "ready"
+ const analyticsFindings = controls.allowAnalytics && !analyticsScopeBlocked && input.analyticsFindingContext?.status === "ready" && input.analyticsFindingContext.findings.length > 0
   ? clip([
     ...input.analyticsFindingContext.findings.slice(0, 8).map((finding) =>
      `id=${finding.id}; kind=${finding.kind}; metric=${finding.metric}; current=${finding.currentValue}; baseline=${finding.baselineValue ?? "not comparable"}; delta=${finding.delta ?? "undefined"}; relativeDeltaPercent=${finding.relativeDeltaPercent ?? "undefined"}; unit=${finding.unit}; formula=${finding.formula}; algorithm=${finding.algorithmVersion}; confidence=${finding.confidence}; snapshots=${finding.sourceSnapshotIds.join(",")}; evidence=${finding.evidenceRefs.join(",")}; limitations=${finding.limitations.join("; ")}`),
