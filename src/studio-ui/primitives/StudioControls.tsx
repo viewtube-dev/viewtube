@@ -902,6 +902,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   const [draft, setDraft] = React.useState("");
   const [fly, setFly] = React.useState<{ id: number; label: string; left: number; top: number } | null>(null);
   const [flyTarget, setFlyTarget] = React.useState<{ left: number; top: number } | null>(null);
+  const [revealingLabel, setRevealingLabel] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const editorRef = React.useRef<HTMLDivElement>(null);
   const nextId = React.useRef(1);
@@ -946,14 +947,22 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
         setFlyTarget({ left: rect.left, top: rect.top });
       }
     });
+    // The text flight lasts 450ms and its opacity handoff another 350ms.
+    // Reveal the destination only after the floating label has finished, then
+    // run the badge's normal 450ms entrance animation.
     const timer = window.setTimeout(() => {
       setFly(null);
       setFlyTarget(null);
+      setRevealingLabel(fly.label);
       closeComposer();
-    }, 850);
+    }, 800);
+    const revealTimer = window.setTimeout(() => {
+      setRevealingLabel(current => current === fly.label ? null : current);
+    }, 1260);
     return () => {
       window.cancelAnimationFrame(frame);
       window.clearTimeout(timer);
+      window.clearTimeout(revealTimer);
     };
   }, [fly, tags]);
 
@@ -966,7 +975,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
               key={`${index}:${tag}`}
               label={tag}
               onClose={() => removeTag(index)}
-              entering={Boolean(fly && index === tags.length - 1 && tag === fly.label)}
+              entering={Boolean(revealingLabel && index === tags.length - 1 && tag === revealingLabel)}
               className={fly && index === tags.length - 1 && tag === fly.label ? "is-fly-destination" : undefined}
             />
           );
