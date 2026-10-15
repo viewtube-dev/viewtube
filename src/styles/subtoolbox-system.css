@@ -4686,5 +4686,7 @@
    triggers intentionally remain stationary and shadow-free. */
 @media (prefers-reduced-motion: reduce) {
   .vt-subtoolbox-button,
-  .vt-subtoolbox-split-action { transition:none !important; }
+  .vt-subtoolbox-split-action,
+  .vt-subtoolbox-icon-button,
+  .vt-subtoolbox-media-control { transition:none !important; }
 }
