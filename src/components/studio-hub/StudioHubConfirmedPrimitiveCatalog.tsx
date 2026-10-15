@@ -12,6 +12,7 @@ import {
   StudioInlineStepper,
   StudioSplitStepper,
   StudioSplitLeftButton,
+  StudioSplitLeftBadge,
   StudioSquareIconButton,
   StudioPlayPauseButton,
   StudioCircleIconButton,
@@ -49,6 +50,54 @@ const CanonicalControlFamilies: React.FC = () => {
   return <>
     <Family title="44px Switches" nonDefaultSettings={["The switch starts OFF; turning it ON moves the indicator to the selected side.", "Round and rectangular shapes change the track and handle corners, not the 44px control height.", "SOLID, COLOR SWAP, BLACK, and WHITE change the selected indicator treatment; SOLID is the default.", "A disabled switch cannot be changed and remains visibly muted."]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="75.68×44px track; shared four-skin variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-control-row" key={shape}><strong>{shape === "round" ? "ROUND" : "RECTANGULAR"}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div></div>)}</div>
+    </Family>
+    <Family
+      title="Split-left Badge · Standard + Compact + Micro"
+      nonDefaultSettings={[
+        "A static informational badge based on the canonical StudioSplitLeftButton rail anatomy; it is not an action button.",
+        "Standard is 44px high with 3px black stroke; compact is 28px high with 2px stroke; the micro exception is 14px high with 1px stroke.",
+        "All variants use a 44px pill radius and have no shadow, elevation, hover/press transition, or animation.",
+        "Standard and compact are shown in full-row, half-row, and quarter-row (4×1) layout examples.",
+        "Micro 1×1, 2×1, and 4×1 specimens are confined to the left half of this library module; micro is a documented density exception, not a global control size."
+      ]}
+      provenance={<Provenance
+        primitive="StudioSplitLeftBadge"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
+        tokens="44px standard / 28px compact / 14px micro · 44px pill radius · flat and motionless"
+        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-split-left-badge-family" data-vt-library-component="StudioSplitLeftBadge">
+        <span>STANDARD · FULL ROW</span>
+        <StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitLeftBadge>
+        <span>STANDARD · HALF ROW</span>
+        <div className="vt-confirmed-badge-layout is-half">
+          <StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitLeftBadge>
+          <StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitLeftBadge>
+        </div>
+        <span>STANDARD · QUARTER ROW · 4×1</span>
+        <div className="vt-confirmed-badge-layout is-quarter">
+          {["READY", "SAVED", "SYNCED", "LIVE"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="standard">{label}</StudioSplitLeftBadge>)}
+        </div>
+        <span>COMPACT · FULL ROW</span>
+        <StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="compact">READY</StudioSplitLeftBadge>
+        <span>COMPACT · HALF ROW</span>
+        <div className="vt-confirmed-badge-layout is-half">
+          <StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="compact">READY</StudioSplitLeftBadge>
+          <StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="compact">READY</StudioSplitLeftBadge>
+        </div>
+        <span>COMPACT · QUARTER ROW · 4×1</span>
+        <div className="vt-confirmed-badge-layout is-quarter">
+          {["READY", "SAVED", "SYNCED", "LIVE"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="compact">{label}</StudioSplitLeftBadge>)}
+        </div>
+        <span>MICRO · LEFT HALF ONLY · 1×1 / 2×1 / 4×1</span>
+        <div className="vt-confirmed-badge-micro-stack">
+          <div className="is-one"><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="micro">1×1</StudioSplitLeftBadge></div>
+          <div className="is-two"><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="micro">2×1</StudioSplitLeftBadge></div>
+          <div className="is-four"><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="micro">4×1</StudioSplitLeftBadge></div>
+        </div>
+      </div>
     </Family>
     <Family title="44px Radio + Checkbox" nonDefaultSettings={["Radio, checkmark checkbox, and wide-X checkbox are separate public controls with their own selection marks.", "Round or rectangular shape changes the outer control shape; the wide-X checkbox changes only the mark.", "SOLID is the default skin; COLOR SWAP, BLACK, and WHITE change the selected indicator colors.", "Selected controls show their mark; disabled controls cannot be changed and appear muted."]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}</div>
