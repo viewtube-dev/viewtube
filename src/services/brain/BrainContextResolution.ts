@@ -1,4 +1,5 @@
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
+import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS } from "./BrainCapabilityRegistry"
 
 export const BRAIN_CONTEXT_RESOLVER_VERSION = "brain-context-resolution-v1"
 
@@ -92,10 +93,16 @@ const priorityFor = (id: string, intent: string): number => {
  */
 export const resolveBrainContextSections = (
  sections: string[],
- options: { userText: string; maximumCharacters: number },
+ options: { userText: string; maximumCharacters: number; capabilityIds?: string[] },
 ): BrainContextSectionResolution => {
  const maximumCharacters = Math.max(0, Math.floor(options.maximumCharacters))
  const profile = resolveBrainTaskProfile(options.userText)
+ const taskRequired = REQUIRED_CONTEXT_BY_TASK[profile.id] || []
+ const capabilityRequired = Array.from(new Set((options.capabilityIds || []).flatMap(
+  (capabilityId) => BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[capabilityId] || [],
+ )))
+ const explicitRequired = Array.from(new Set([...taskRequired, ...capabilityRequired]))
+ const requiredSet = new Set(explicitRequired)
  const seen = new Set<string>()
  const candidates: CandidateSection[] = []
  const omittedSectionIds: string[] = []
@@ -108,9 +115,12 @@ export const resolveBrainContextSections = (
    return
   }
   if (normalized.length > 80) seen.add(normalized)
-  const taskRequired = REQUIRED_CONTEXT_BY_TASK[profile.id] || []
-  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task") || taskRequired.includes(id)
+  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task") || requiredSet.has(id)
   candidates.push({ id, text, index, priority: priorityFor(id, profile.intent), required })
+ })
+ const availableSectionIds = new Set(candidates.map((candidate) => candidate.id))
+ explicitRequired.forEach((id) => {
+  if (!availableSectionIds.has(id)) omittedSectionIds.push(`required_evidence_missing:${id}`)
  })
  const ranked = [...candidates].sort((a, b) =>
   Number(b.required) - Number(a.required) || b.priority - a.priority || a.index - b.index,
