@@ -14,6 +14,7 @@ export const ensureVideoPackageForProject = (
   input: {
     channelId?: string | null
     sourceToolId?: string
+    now?: string
   } = {},
 ) => {
   if (!project.contentBuildId) return null
