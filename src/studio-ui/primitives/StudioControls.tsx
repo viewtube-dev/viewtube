@@ -317,6 +317,8 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
   tooltip?: string
   /** Outcome-driven success state. Set true only after the associated operation succeeds. */
   success?: boolean
+  /** Replay the small pop feedback when activated; false by default. */
+  animate?: boolean
   selected?: boolean
   defaultSelected?: boolean
   onSelectedChange?: (selected: boolean) => void
@@ -330,14 +332,18 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
     disabled, ...props
   }, ref) => {
     const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
+    const [animationKey, setAnimationKey] = React.useState(0)
     const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
     const isSuccess = effect === "success" && success
     const effectClass = effect === "standard" ? (animate ? "is-effect-pop" : undefined) : `is-effect-${effect}`
     const tooltipId = React.useId()
+    const successStatusId = React.useId()
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
       onClick?.(event)
-      if (!selectable || event.defaultPrevented || event.currentTarget.disabled) return
+      if (event.defaultPrevented || event.currentTarget.disabled) return
+      if (animate || effect === "notification") setAnimationKey(key => key + 1)
+      if (!selectable) return
       const next = !isSelected
       if (selected === undefined) setUncontrolledSelected(next)
       onSelectedChange?.(next)
@@ -349,7 +355,11 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
     )
     const iconNode = effect === "success" && isSuccess ? (activeIcon ?? fallbackCheck) : icon
     const alternateNode = activeIcon ?? icon
-    const describedBy = [props["aria-describedby"], effect === "tooltip" && tooltip ? tooltipId : undefined].filter(Boolean).join(" ") || undefined
+    const describedBy = [
+      props["aria-describedby"],
+      effect === "tooltip" && tooltip ? tooltipId : undefined,
+      isSuccess && tooltip ? successStatusId : undefined,
+    ].filter(Boolean).join(" ") || undefined
     return (
       <StudioButton
         ref={ref}
@@ -357,7 +367,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         className={studioClasses("vt-studio-square-icon-button", effectClass, className)}
         disabled={disabled}
         sizeVariant={sizeVariant}
-        aria-label={isSuccess && tooltip ? tooltip : effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? `${label}, ${badge}` : label}
+        aria-label={effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? `${label}, ${badge}` : label}
         aria-describedby={describedBy}
         aria-pressed={selectable ? isSelected : undefined}
         selected={selectable && isSelected}
@@ -383,17 +393,17 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
               <span data-vt-square-morph-face="back">{alternateNode}</span>
             </span>
           ) : (
-            <span data-vt-square-icon-current>{iconNode}</span>
+            <span key={`${effect}:${animationKey}:${effect === "notification" ? String(badge ?? "") : ""}`} data-vt-square-icon-current>{iconNode}</span>
           )}
         </span>
         {effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? (
-          <span data-vt-square-badge aria-hidden="true">{badge}</span>
+          <span key={String(badge)} data-vt-square-badge aria-hidden="true">{badge}</span>
         ) : null}
         {effect === "tooltip" && tooltip ? (
           <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
         ) : null}
         {effect === "success" && isSuccess && tooltip ? (
-          <span data-vt-square-success-label aria-hidden="true">{tooltip}</span>
+          <span id={successStatusId} role="status" aria-live="polite" aria-atomic="true" data-vt-square-success-label>{tooltip}</span>
         ) : null}
       </StudioButton>
     )
