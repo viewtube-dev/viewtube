@@ -436,6 +436,12 @@ describe("Studio Play/Pause Split-Left Button", () => {
 })
 
 describe("Studio Circle Icon Button", () => {
+  it("scales SVG glyphs to 80% while retaining canonical icon sizing", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-button="true"][data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg')
+    expect(css).toContain("transform: scale(.8)")
+  })
+
   it("reuses the canonical icon button contract and marks the circular shape explicitly", () => {
     const html = renderToStaticMarkup(<StudioCircleIconButton icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>} label="Profile" variant="v3" />)
     expect(html).toContain('data-vt-studio-circle-icon-button="true"')
