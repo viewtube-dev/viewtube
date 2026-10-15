@@ -421,3 +421,8 @@ Metadata Master
 ### Ownership invariant
 Metadata Master optimizes the package; Video Publisher executes publication; Video Manager mutates live published content.
 
+
+
+## Production handoff implementation contract
+
+The cross-system runtime handoff spine is specified in [Production Handoff Spine — Publishing, Analysis, Analytics, Prompts, Brain, and Studio Hub](./05_PRODUCTION_HANDOFF_SPINE.md). That document extends this interaction contract with packet/workflow/operation identity, context and prompt provenance, destination validation, creator approval gates, publication-to-analytics-to-Brain closure, and explicit production certification requirements. It reuses the existing ActionPacket, ContentBuild, Vault, Publisher, Analytics, Outcome/Evaluation, and Brain owners; it does not establish parallel stores.
