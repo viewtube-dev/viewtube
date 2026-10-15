@@ -498,6 +498,25 @@ describe("Studio Username Split-Left Input", () => {
 })
 
 
+describe("confirmed Studio primitive catalog ownership", () => {
+  it("registers the simple dropdown and split stepper from the canonical Studio Controls module", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8")
+    expect(catalog).toContain('import {')
+    expect(catalog).toContain('StudioSplitStepper')
+    expect(catalog).not.toContain('SubToolboxSplitStepper')
+    expect(catalog).toContain('primitive="StudioSplitStepper"')
+    expect(catalog).toContain('tsx="src/studio-ui/primitives/StudioControls.tsx"')
+    expect(catalog).toContain('primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx"')
+    expect(catalog).toContain('data-vt-library-component="StudioSplitStepper"')
+    expect(controls).toContain("export const StudioSplitStepper")
+    expect(controls).toContain("export const StudioSimpleDropdown")
+    expect(publicApi).toContain("StudioSplitStepper")
+    expect(publicApi).toContain("StudioSimpleDropdown")
+  })
+})
+
 describe("Studio Controls owns dropdown and stepper implementations", () => {
   it("keeps the simple dropdown and both stepper variants inside the canonical StudioControls module", async () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
