@@ -261,21 +261,29 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
-  ({ sizeVariant = "standard", tone = "accent", loading = false, selected = false, heightVariant, disabled, children, type = "button", ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type}
-      {...withStudioAttrs(sizeVariant, tone)}
-      data-height-variant={heightVariant ?? (sizeVariant === "compact" ? "28" : "44")}
-      data-selected={selected || undefined}
-      aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
-      aria-busy={loading || undefined}
-      disabled={disabled || loading}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
+  ({ sizeVariant, tone = "accent", loading = false, selected = false, heightVariant, disabled, children, type = "button", ...props }, ref) => {
+    // Explicit height geometry is authoritative. Keep data-size and its inherited
+    // stroke/radius/shadow tokens aligned, even when callers set heightVariant only.
+    const resolvedSizeVariant = heightVariant
+      ? (heightVariant === "28" ? "compact" : "standard")
+      : (sizeVariant ?? "standard")
+    const resolvedHeightVariant = heightVariant ?? (resolvedSizeVariant === "compact" ? "28" : "44")
+    return (
+      <button
+        ref={ref}
+        type={type}
+        {...withStudioAttrs(resolvedSizeVariant, tone)}
+        data-height-variant={resolvedHeightVariant}
+        data-selected={selected || undefined}
+        aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
+        aria-busy={loading || undefined}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {children}
+      </button>
+    )
+  },
 )
 StudioButton.displayName = "StudioButton"
 
