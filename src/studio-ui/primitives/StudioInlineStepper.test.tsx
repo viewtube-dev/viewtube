@@ -74,7 +74,7 @@ describe("StudioSplitStepper username-input foundation", () => {
   it("uses shared username input tokens for the primary inset strokes and secondary rail", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain(".vt-studio-username-input {")
-    expect(css).toContain(".vt-studio-inline-stepper,\\n.vt-studio-split-stepper {")
+    expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {")
     expect(css).toContain("--vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
     expect(css).toContain("background: var(--vt-stepper-secondary);")
     expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {\n  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
