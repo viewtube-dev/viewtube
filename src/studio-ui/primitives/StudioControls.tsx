@@ -486,6 +486,143 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
 
 
+/** Circular shape variant of the canonical square icon button. All icon sizing,
+ * palette, selection, effects, focus and disabled behavior remain shared. */
+export interface StudioCircleIconButtonProps extends StudioSquareIconButtonProps {}
+
+export const StudioCircleIconButton = React.forwardRef<HTMLButtonElement, StudioCircleIconButtonProps>(
+  ({ className, ...props }, ref) => (
+    <StudioSquareIconButton
+      ref={ref}
+      {...props}
+      className={studioClasses("vt-studio-circle-icon-button", className)}
+      data-vt-studio-circle-icon-button="true"
+    />
+  ),
+)
+StudioCircleIconButton.displayName = "StudioCircleIconButton"
+
+
+export interface StudioPlayPauseButtonProps extends Omit<StudioSplitLeftButtonProps, "icon" | "children" | "selected"> {
+  /** True while playing; omit to use the internal toggle state. */
+  playing?: boolean
+  defaultPlaying?: boolean
+  onPlayingChange?: (playing: boolean) => void
+  playLabel?: string
+  pauseLabel?: string
+  playIcon?: React.ReactNode
+  pauseIcon?: React.ReactNode
+}
+
+/** Stateful split-left action. The two labels are measured in the same grid cell
+ * so the label region does not resize when Play changes to Pause. */
+export const StudioPlayPauseButton = React.forwardRef<HTMLButtonElement, StudioPlayPauseButtonProps>(
+  ({
+    playing,
+    defaultPlaying = false,
+    onPlayingChange,
+    playLabel = "Play",
+    pauseLabel = "Pause",
+    playIcon,
+    pauseIcon,
+    onClick,
+    disabled,
+    className,
+    sizeVariant = "standard",
+    ...props
+  }, ref) => {
+    const [uncontrolledPlaying, setUncontrolledPlaying] = React.useState(defaultPlaying)
+    const isPlaying = playing ?? uncontrolledPlaying
+    const resolvedPlayIcon = playIcon ?? (
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none" /></svg>
+    )
+    const resolvedPauseIcon = pauseIcon ?? (
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14M17 5v14" fill="none" stroke="currentColor" strokeWidth="3" /></svg>
+    )
+    const activeLabel = isPlaying ? pauseLabel : playLabel
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      onClick?.(event)
+      if (event.defaultPrevented || event.currentTarget.disabled) return
+      const next = !isPlaying
+      if (playing === undefined) setUncontrolledPlaying(next)
+      onPlayingChange?.(next)
+    }
+    return (
+      <StudioSplitLeftButton
+        ref={ref}
+        {...props}
+        className={studioClasses("vt-studio-play-pause-button", className)}
+        data-vt-studio-play-pause="true"
+        sizeVariant={sizeVariant}
+        icon={isPlaying ? resolvedPauseIcon : resolvedPlayIcon}
+        aria-label={activeLabel}
+        aria-pressed={isPlaying}
+        selected={isPlaying}
+        disabled={disabled}
+        onClick={handleClick}
+      >
+        <span data-vt-studio-play-pause-label-grid>
+          <span data-vt-studio-play-pause-label>{activeLabel}</span>
+          <span data-vt-studio-play-pause-measure="play" aria-hidden="true">{playLabel}</span>
+          <span data-vt-studio-play-pause-measure="pause" aria-hidden="true">{pauseLabel}</span>
+        </span>
+      </StudioSplitLeftButton>
+    )
+  },
+)
+StudioPlayPauseButton.displayName = "StudioPlayPauseButton"
+
+
+export interface StudioUsernameInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "className" | "style"> {
+  icon: React.ReactNode
+  sizeVariant?: StudioControlSize
+  /** className/style apply to the complete composite; inputClassName/inputStyle target the native input. */
+  className?: string
+  style?: React.CSSProperties
+  inputClassName?: string
+  inputStyle?: React.CSSProperties
+}
+
+/**
+ * Composite username field. The rail follows split-left icon geometry, while
+ * the editable area is the canonical StudioTextInput. The wrapper owns the
+ * shared border, inline stroke, and whole-component focus treatment; it is not
+ * a button and intentionally has no offset shadow or press motion.
+ */
+export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
+  ({
+    icon,
+    sizeVariant = "standard",
+    className,
+    style,
+    inputClassName,
+    inputStyle,
+    disabled,
+    ...inputProps
+  }, ref) => (
+    <div
+      className={studioClasses("vt-studio-username-input", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-username-input="true"
+      data-size={sizeVariant}
+      data-disabled={disabled ? "true" : undefined}
+      style={style}
+    >
+      <span data-vt-studio-username-rail="true" aria-hidden="true">{icon}</span>
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        sizeVariant={sizeVariant}
+        disabled={disabled}
+        className={studioClasses("vt-studio-username-input__input", inputClassName)}
+        style={inputStyle}
+      />
+    </div>
+  ),
+)
+StudioUsernameInput.displayName = "StudioUsernameInput"
+
+
 export interface StudioLegendMultiDropdownOption {
   value: string
   label: string
