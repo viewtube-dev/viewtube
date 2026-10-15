@@ -85,7 +85,7 @@ export const buildOpportunityEvidenceFromBrainPack = (input: {
     currentValue: views,
     baselineValue: null,
     relativeDelta: null,
-    confidence: Math.round(clamp(coverage * 100)),
+    confidence: Math.round(clamp(coverage * datasetReliability * 100)),
     impactScore: Math.round(clamp(score * 100)),
     evidenceIds: [video.evidenceId],
     _score: score,
@@ -176,9 +176,11 @@ export const buildOpportunityEvidenceFromCanonicalBundle = (input: {
    { value: coverage, weight: 0.15 },
   ].filter((part): part is { value: number; weight: number } => part.value !== null)
   const weight = weighted.reduce((sum, part) => sum + part.weight, 0)
-  const score = weight
+  const rawScore = weight
    ? weighted.reduce((sum, part) => sum + part.value * part.weight, 0) / weight
    : coverage
+  const datasetReliability = dataset.status === "available" ? 1 : dataset.status === "partial" ? 0.6 : 0.35
+  const score = rawScore * datasetReliability
 
   return {
    id: `canonical-catalog:${input.bundle.snapshotId}:${videoId}`,
