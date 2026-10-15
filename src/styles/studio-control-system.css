@@ -1006,3 +1006,44 @@ button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true
    Select height is governed by its existing size-token contract above. */
 select[data-vt-studio-control="true"] { height: var(--vt-studio-control-height); }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] { min-height: var(--vt-studio-textarea-min-height, 92px); }
+
+
+/* Complete Primitive Catalog word-toggle layout: three skin specimens per size.
+   Standard skins stack; compact skins form a centered three-up row. */
+.vt-complete-catalog .vt-catalog-word-toggle-families .vt-catalog-control-variants.is-word-toggle-44 {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-items: start;
+}
+.vt-complete-catalog .vt-catalog-word-toggle-families .vt-catalog-control-variants.is-word-toggle-28 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  justify-items: center;
+  align-items: start;
+}
+.vt-complete-catalog .vt-catalog-word-toggle-families .vt-catalog-control-variant {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  gap: 6px;
+}
+.vt-complete-catalog .vt-catalog-word-toggle-families .vt-catalog-control-variant > small {
+  width: 100%;
+  text-align: center;
+}
+.vt-complete-catalog .vt-catalog-word-toggle-families .vt-catalog-control-variants .vt-studio-44-word-toggle {
+  align-self: center !important;
+  justify-self: center !important;
+  margin-inline: auto !important;
+  max-width: 100%;
+}
+@media (max-width: 520px) {
+  .vt-complete-catalog .vt-catalog-word-toggle-families .vt-catalog-control-variants.is-word-toggle-28 {
+    grid-template-columns: repeat(3, minmax(72px, 1fr)) !important;
+    overflow-x: auto !important;
+  }
+}
