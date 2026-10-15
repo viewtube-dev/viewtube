@@ -68,7 +68,7 @@ describe("normalizeVaultVideoOperation", () => {
   });
 
   it("supports proxy creation with conservative resource limits", () => {
-    const operation = normalizeVaultVideoOperation({ operation: "proxy", quality: "small" }, 120);
+    const operation = normalizeVaultVideoOperation({ operation: "proxy", quality: "small" }, 600);
     const args = buildVaultVideoFfmpegArgs(operation, "/tmp/input.mp4", "/tmp/proxy.mp4");
     expect(args.join(" ")).toContain("scale=");
     expect(args).toContain("-t");
