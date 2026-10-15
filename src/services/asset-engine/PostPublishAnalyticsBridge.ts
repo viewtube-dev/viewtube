@@ -142,6 +142,18 @@ export const recordPostPublishIdentity = (
   )
 
   if (existingReceipt) {
+    const receiptMetadata = existingReceipt.metadata as Record<string, unknown> | undefined
+    const decisionIdentityPairs = [
+      ["actionPacketId", input.actionPacketId],
+      ["workflowId", input.workflowId],
+      ["recommendationId", input.recommendationId],
+      ["experimentId", input.experimentId],
+    ] as const
+    for (const [key, requestedValue] of decisionIdentityPairs) {
+      if (requestedValue && receiptMetadata?.[key] !== requestedValue) {
+        throw new Error(`Existing publication receipt conflicts with ${key}; immutable decision lineage cannot be relinked.`)
+      }
+    }
     linkPublishedAssetOutcomes(identity)
     return {
       event: existingReceipt,
