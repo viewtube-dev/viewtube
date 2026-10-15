@@ -175,3 +175,11 @@ Detailed contracts:
 The current follow-up code now carries ActionPacket/workflow/recommendation/experiment identity through the publication receipt, published AssetOutcome, BrainOutcomeLedger, canonical analytics checkpoint, evaluation record, reviewable candidate, and governed Brain claim. Checkpoint and evaluation writes use deterministic idempotency keys; resolved evaluation outcomes are immutable on retry; a reused evaluation key with a conflicting publication/evidence scope is rejected. Promotion is creator-reviewed and requires five independent comparable positive published-video evaluations in the same channel/project/window.
 
 **Still not certified:** current-head CI, production callsite reachability for the checkpoint bridge, real provider freshness/coverage, cross-device/server durability, and distributed atomicity across browser-local stores. This PR does not claim the end-to-end production lifecycle is certified until those gates pass.
+
+## Current integration status — 2026-10-15
+
+The old PR #217 branch is closed unmerged. Its unique outcome/evaluation/governed-learning work has been reconciled into the current integration tree and replacement work. PR #340 is the current-base draft that combines certification fixes with Phase 13 durable learning persistence.
+
+The earlier PR #340 candidate passed focused contracts, the Brain quality loop, source governance, production build and local smoke. The full suite still reported 43 failing files / 99 failing tests, and runtime lint reported 2,239 errors across the existing tree; a newer head adds storage-safety fixes and is rerunning CI. Therefore Phases 5–12 are not certified complete, and Phase 13 is implementation-in-progress rather than production-certified.
+
+After the current integration head is settled, the next plan is CANONICAL-PUBLICATION-TO-LEARNING-GOLDEN-PATH-PLAN.md. It must prove the single creator-approved lineage from canonical analytics evidence and ActionPacket through publication, checkpoints, evaluation, outcomes, human review and governed learning. Server-authoritative PostgreSQL durability and exact deployed-commit verification remain required gates.
