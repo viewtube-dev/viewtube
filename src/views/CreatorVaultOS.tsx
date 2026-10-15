@@ -163,6 +163,7 @@ import {
 } from "../services/vaultTextDocuments"
 import type { VaultAsset, VaultAssetKind } from "../types"
 import { resolveVaultMediaCapabilities, type VaultMediaKind } from "../features/vault-workbench/capabilities"
+import { VaultAdaptiveWorkbenchHost } from "../features/vault-workbench/VaultAdaptiveWorkbenchHost"
 import { VaultImageWorkbench } from "./vault/VaultImageWorkbench"
 import { VaultVideoWorkbench } from "./vault/VaultVideoWorkbench"
 
@@ -549,7 +550,7 @@ const CreatorVaultOS: React.FC = () => {
      ? asset.kind
      : "document"
    ))
-  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: true, audioProcessorAvailable: false })
+  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: false, audioProcessorAvailable: false })
  }, [allAssets, selectedAssetIds])
  const editableTextAsset = useMemo(() => {
   if (!selectedAsset || selectedAsset.kind !== "document") return null
@@ -3312,20 +3313,7 @@ const CreatorVaultOS: React.FC = () => {
           )}
          </div>
          {selectedMediaCapabilities.length ? (
-          <section className="flex flex-wrap items-center gap-2 rounded-md border-2 border-current p-2" aria-label="Media Workbench capabilities" data-vault-media-capabilities>
-           <span className="text-xs font-black uppercase">Workbench</span>
-           {selectedMediaCapabilities.map((capability) => (
-            <span
-             key={capability.id}
-             title={capability.reason || capability.label}
-             aria-label={capability.available ? capability.label + " available" : capability.label + " unavailable: " + capability.reason}
-             className="rounded border-2 border-current px-2 py-1 text-[10px] font-black uppercase"
-             data-available={capability.available ? "true" : "false"}
-            >
-             {capability.label}{capability.available ? "" : " · unavailable"}
-            </span>
-           ))}
-          </section>
+          <VaultAdaptiveWorkbenchHost capabilities={selectedMediaCapabilities} selectionCount={selectedAssetIds.length} />
          ) : null}
          <div>
           <div className="text-xs font-black uppercase opacity-60">Name</div>
