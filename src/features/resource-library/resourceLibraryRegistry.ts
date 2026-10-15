@@ -426,6 +426,184 @@ export const RESOURCE_LIBRARY_ENTRIES: readonly ResourceLibraryEntry[] = [
   }
 ] as const
 
+
+export interface ResourceLearningPath {
+  id: string
+  title: string
+  description: string
+  outcome: string
+  level: "Beginner" | "Intermediate" | "Mixed"
+  resourceIds: readonly string[]
+}
+
+export const RESOURCE_LEARNING_PATHS: readonly ResourceLearningPath[] = Object.freeze([
+  {
+    id: "first-upload-ready",
+    title: "Publish with Confidence",
+    description: "Build a reliable release from packaging and preflight through measurement.",
+    outcome: "A checked, accurately packaged upload and a repeatable release checklist.",
+    level: "Beginner",
+    resourceIds: [
+      "thumbnail-title-packaging-handbook",
+      "publishing-best-practices-preflight",
+      "youtube-metrics-dimensions-glossary",
+      "reading-analytics-correctly-scope-windows-missingness",
+    ],
+  },
+  {
+    id: "discovery-and-growth",
+    title: "Discovery & Channel Growth",
+    description: "Understand how viewers find content and improve the promise each video makes.",
+    outcome: "A discovery hypothesis and one testable packaging or content improvement.",
+    level: "Beginner",
+    resourceIds: [
+      "youtube-recommendations-discovery",
+      "traffic-sources-discovery-pathways",
+      "thumbnail-title-packaging-handbook",
+      "shorts-vs-long-form-signals",
+      "audience-retention-watch-behavior",
+    ],
+  },
+  {
+    id: "analytics-to-action",
+    title: "Analytics to Action",
+    description: "Read metrics in context, diagnose viewer behavior, and keep conclusions reproducible.",
+    outcome: "A scoped analysis with an explicit hypothesis, limitation, and next check.",
+    level: "Intermediate",
+    resourceIds: [
+      "youtube-metrics-dimensions-glossary",
+      "reading-analytics-correctly-scope-windows-missingness",
+      "traffic-sources-discovery-pathways",
+      "audience-retention-watch-behavior",
+      "content-planning-experiments-learning-loops",
+    ],
+  },
+  {
+    id: "audience-and-community",
+    title: "Audience Understanding",
+    description: "Connect viewer needs, feedback, retention, and reasons to return.",
+    outcome: "A prioritized audience need and a useful follow-up content idea.",
+    level: "Beginner",
+    resourceIds: [
+      "audience-subscribers-returning-viewers",
+      "comments-community-audience-feedback",
+      "audience-retention-watch-behavior",
+      "playlist-series-channel-architecture",
+    ],
+  },
+  {
+    id: "creator-operations",
+    title: "Creator Operations",
+    description: "Plan a sustainable content system, organize viewer journeys, and prepare live releases.",
+    outcome: "A practical workflow for planning, publishing, and maintaining a safe channel.",
+    level: "Mixed",
+    resourceIds: [
+      "content-planning-experiments-learning-loops",
+      "playlist-series-channel-architecture",
+      "live-streaming-operations-handbook",
+      "publishing-best-practices-preflight",
+      "copyright-rights-reuse-ai-generated-media",
+    ],
+  },
+  {
+    id: "revenue-and-rights",
+    title: "Revenue, Rights & Responsible Publishing",
+    description: "Understand monetization measures and reduce avoidable rights and disclosure risks.",
+    outcome: "A conservative revenue review and a traceable asset-rights checklist.",
+    level: "Intermediate",
+    resourceIds: [
+      "youtube-revenue-monetization-fundamentals",
+      "copyright-rights-reuse-ai-generated-media",
+      "publishing-best-practices-preflight",
+      "reading-analytics-correctly-scope-windows-missingness",
+    ],
+  },
+])
+
+const SEARCH_STOP_WORDS = new Set([
+  "a", "an", "and", "are", "can", "do", "for", "get", "how", "i", "in", "is",
+  "it", "me", "my", "of", "on", "or", "the", "to", "up", "what", "when",
+  "where", "why", "with", "you", "your", "video", "videos", "content", "need",
+  "want", "help", "please", "best", "way",
+])
+
+const SEARCH_SYNONYMS: Readonly<Record<string, readonly string[]>> = Object.freeze({
+  views: ["views", "discovery", "recommendations", "impressions", "reach", "traffic", "browse", "suggested"],
+  reach: ["reach", "discovery", "recommendations", "impressions", "traffic"],
+  "not getting views": ["recommendations", "discovery", "impressions", "traffic", "packaging"],
+  ctr: ["ctr", "click-through-rate", "click rate", "thumbnail", "title", "packaging"],
+  "click": ["click", "click-through-rate", "ctr", "thumbnail", "title", "packaging"],
+  thumbnail: ["thumbnail", "title", "packaging", "click-through-rate", "testing"],
+  retention: ["retention", "watch-time", "intro", "viewer-behavior", "audience"],
+  audience: ["audience", "subscribers", "returning-viewers", "new-viewers", "comments", "community"],
+  "missing": ["missing", "missingness", "data-quality", "filters", "scope", "windows", "uncertainty"],
+  data: ["data", "analytics", "data-quality", "metrics", "scope", "filters"],
+  analytics: ["analytics", "metrics", "data-quality", "time-windows", "uncertainty"],
+  upload: ["upload", "publishing", "preflight", "metadata", "visibility", "captions"],
+  publish: ["publish", "publishing", "preflight", "metadata", "visibility", "rights"],
+  improve: ["improve", "optimization", "packaging", "retention", "experiments", "testing", "preflight"],
+  grow: ["growth", "discovery", "audience", "subscribers", "returning-viewers", "experiments"],
+  license: ["license", "licensing", "copyright", "rights", "reuse", "permission", "disclosure"],
+  copyright: ["copyright", "licensing", "rights", "reuse", "fair-use", "permission"],
+  money: ["revenue", "monetization", "rpm", "cpm", "ads", "memberships"],
+  revenue: ["revenue", "monetization", "rpm", "cpm", "ads", "memberships"],
+  plan: ["planning", "experiments", "content-calendar", "hypothesis"],
+  schedule: ["planning", "content-calendar", "publishing", "preflight"],
+  live: ["live-streaming", "moderation", "latency", "stream-health", "planning"],
+})
+
+const searchableText = (resource: ResourceLibraryEntry): string =>
+  [
+    resource.title,
+    resource.shortTitle,
+    resource.description,
+    resource.category,
+    ...resource.secondaryCategories,
+    ...resource.tags,
+    resource.markdown,
+  ].join(" ").toLocaleLowerCase()
+
+export const searchResourceLibrary = (
+  query: string,
+  options: { category?: string; learningPathId?: string } = {},
+): ResourceLibraryEntry[] => {
+  const normalized = query.trim().toLocaleLowerCase()
+  const terms = normalized
+    .split(/[^a-z0-9-]+/)
+    .filter((term) => term && !SEARCH_STOP_WORDS.has(term))
+  const phrases = Object.entries(SEARCH_SYNONYMS)
+    .filter(([phrase]) => normalized.includes(phrase))
+    .flatMap(([, synonyms]) => [...synonyms])
+  const concepts = Array.from(new Set([...terms, ...phrases]))
+  const pathIds = options.learningPathId
+    ? new Set(RESOURCE_LEARNING_PATHS.find((path) => path.id === options.learningPathId)?.resourceIds || [])
+    : null
+
+  return RESOURCE_LIBRARY_ENTRIES
+    .map((resource, index) => {
+      const text = searchableText(resource)
+      const categoryMatch = !options.category || options.category === "All" || resource.category === options.category
+      const pathMatch = !pathIds || pathIds.has(resource.id)
+      const score = concepts.reduce((total, term) => {
+        const synonyms = SEARCH_SYNONYMS[term] || [term]
+        return total + (synonyms.some((synonym) => text.includes(synonym)) ? 1 : 0)
+      }, 0)
+      return { resource, index, categoryMatch, pathMatch, score }
+    })
+    .filter(({ categoryMatch, pathMatch, score }) => categoryMatch && pathMatch && (!normalized || score > 0))
+    .sort((left, right) => right.score - left.score || left.index - right.index)
+    .map(({ resource }) => resource)
+}
+
+const VALID_RESOURCE_IDS = new Set<string>(RESOURCE_LIBRARY_ENTRIES.map((resource) => resource.id))
+
+export const normalizeResourceProgress = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return []
+  return Array.from(new Set(value.filter((item): item is string =>
+    typeof item === "string" && VALID_RESOURCE_IDS.has(item),
+  )))
+}
+
 export const getResourceById = (
   resourceId: string | null | undefined,
 ): ResourceLibraryEntry | null =>
