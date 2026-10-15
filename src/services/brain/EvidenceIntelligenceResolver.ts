@@ -108,13 +108,13 @@ export const resolveEvidenceIntelligence = (
  const canonicalEvidence = dependencies.getCanonicalEvidence({
   window: input.window,
   sectionIds: input.sectionIds,
-  maximumRowsPerDataset: input.includeAudience ? 5 : input.includeOpportunities ? 8 : 0,
+  maximumRowsPerDataset: input.includeOpportunities ? 8 : input.includeAudience ? 5 : 0,
   maximumCharacters: input.includeAudience || input.includeOpportunities ? 16_000 : 12_000,
  })
  const evidenceQuality = dependencies.buildQuality(canonicalEvidence, {
   expectedChannelId: input.channelId,
  })
- const scopeUsable = evidenceQuality.scopeMatch !== "mismatch" && evidenceQuality.scopeMatch !== "unscoped"
+ const scopeUsable = Boolean(input.channelId && evidenceQuality.scopeMatch === "exact")
  const evidenceRecords = scopeUsable
   ? dependencies.projectEvidence(canonicalEvidence)
   : []
