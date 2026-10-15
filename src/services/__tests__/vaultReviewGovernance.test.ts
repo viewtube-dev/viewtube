@@ -23,10 +23,10 @@ describe("Vault compare and governance", () => {
 
   it("keeps metadata suggestions as proposals until accepted and refuses protected edits", () => {
     const source = asset()
-    const proposal = proposeVaultMetadataSuggestions(source, { tags: ["thumbnail", "hero"], description: "Hero image" })
+    const proposal = proposeVaultMetadataSuggestions(source, { tags: ["thumbnail", "hero"], metadata: { description: "Hero image" } })
     expect(source.tags).toEqual(["cover"])
     expect(proposal.accepted).toBe(false)
-    expect(acceptVaultMetadataSuggestions(source, proposal).tags).toContain("hero")
+    expect(acceptVaultMetadataSuggestions(source, proposal).asset.tags).toContain("hero")
     const protectedSource = asset({ metadata: { protected: true, license: "Creator-owned" } })
     expect(acceptVaultMetadataSuggestions(protectedSource, proposal).accepted).toBe(false)
   })
