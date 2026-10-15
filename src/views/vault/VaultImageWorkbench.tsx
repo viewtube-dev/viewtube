@@ -46,6 +46,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
   const [message, setMessage] = React.useState("")
   const [palette, setPalette] = React.useState<string[]>([])
   const [focalPoint, setFocalPoint] = React.useState({ x: 50, y: 50 })
+  const [cropDragStart, setCropDragStart] = React.useState<{ x: number; y: number } | null>(null)
 
   React.useEffect(() => {
     let cancelled = false
@@ -261,6 +262,33 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
         </div>
 
         {cropEnabled ? (
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-black uppercase">Drag on the source image to set the crop area</p>
+            <div
+              className="relative w-full touch-none select-none overflow-hidden rounded border-2 border-current"
+              style={{ aspectRatio: sourceDimensions.width + " / " + sourceDimensions.height }}
+              onPointerDown={(event) => {
+                const bounds = event.currentTarget.getBoundingClientRect()
+                const x = Math.max(0, Math.min(sourceDimensions.width - 1, Math.round((event.clientX - bounds.left) / bounds.width * sourceDimensions.width)))
+                const y = Math.max(0, Math.min(sourceDimensions.height - 1, Math.round((event.clientY - bounds.top) / bounds.height * sourceDimensions.height)))
+                event.currentTarget.setPointerCapture(event.pointerId)
+                setCropDragStart({ x, y })
+                setCrop({ x, y, width: 1, height: 1 })
+              }}
+              onPointerMove={(event) => {
+                if (!cropDragStart) return
+                const bounds = event.currentTarget.getBoundingClientRect()
+                const x = Math.max(0, Math.min(sourceDimensions.width, Math.round((event.clientX - bounds.left) / bounds.width * sourceDimensions.width)))
+                const y = Math.max(0, Math.min(sourceDimensions.height, Math.round((event.clientY - bounds.top) / bounds.height * sourceDimensions.height)))
+                setCrop({ x: Math.min(cropDragStart.x, x), y: Math.min(cropDragStart.y, y), width: Math.max(1, Math.abs(x - cropDragStart.x)), height: Math.max(1, Math.abs(y - cropDragStart.y)) })
+              }}
+              onPointerUp={() => setCropDragStart(null)}
+              onPointerCancel={() => setCropDragStart(null)}
+            >
+              <img src={asset.previewUrl || asset.url || ""} alt="Source crop selection" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-fill" />
+              <div className="pointer-events-none absolute border-2 border-dashed border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: (crop.x / sourceDimensions.width * 100) + "%", top: (crop.y / sourceDimensions.height * 100) + "%", width: (crop.width / sourceDimensions.width * 100) + "%", height: (crop.height / sourceDimensions.height * 100) + "%" }} />
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {(["x", "y", "width", "height"] as const).map((key) => (
               <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase" key={key}>
