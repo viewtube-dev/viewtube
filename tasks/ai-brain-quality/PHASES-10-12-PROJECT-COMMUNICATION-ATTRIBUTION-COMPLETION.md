@@ -64,3 +64,15 @@ Acceptance still outstanding:
 ## Verification
 
 Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+
+
+## Current integration closeout update — 2026-10-15
+
+The current integration branch has merged the Phase 10–12 foundation, but the phases are not yet certified complete. This follow-up adds two concrete live integrations:
+
+- Brain Command Center command notes now pass through the existing creator-communication classifier when the channel's Brain, personalization, and learn-from-interactions controls are enabled. The communication identity is derived from the stable command-action ID, and the resulting evidence-event ID is included in the command signal. Classification remains evidence-only and cannot directly promote durable knowledge.
+- Brain Command Center now surfaces recent channel-scoped recommendation events and opens the existing read-only attribution detail panel. Empty recommendation history is shown as an empty evidence state; incomplete stages remain explicit.
+
+The current release-gates baseline also exposed an SSR/test failure where `keyVault.ts` accessed `localStorage` unguarded. Storage reads/writes are now best-effort and safe when storage is missing or blocked, with dedicated regression coverage. A stale Play/Pause primitive assertion was aligned with the rendered label marker.
+
+Still open: end-to-end stable IDs through every generation/variant/ActionPacket/publish/evaluation/learning writer; live project capability enforcement across all creation surfaces; privacy/retention and server durability certification; actual current-head CI and full lifecycle data validation. No phase is certified by source inspection alone.
