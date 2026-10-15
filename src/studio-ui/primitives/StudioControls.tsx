@@ -325,7 +325,7 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
 /** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
 export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
   ({
-    icon, label, variant = "v1", effect = "standard", activeIcon, badge, tooltip, success = false,
+    icon, label, variant = "v1", effect = "standard", activeIcon, badge, tooltip, success = false, animate = false,
     sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
     disabled, ...props
   }, ref) => {
@@ -333,7 +333,8 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
     const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
     const isSuccess = effect === "success" && success
-    const effectClass = effect === "standard" ? undefined : `is-effect-${effect}`
+    const effectClass = effect === "standard" ? (animate ? "is-effect-pop" : undefined) : `is-effect-${effect}`
+    const tooltipId = React.useId()
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
       onClick?.(event)
       if (!selectable || event.defaultPrevented || event.currentTarget.disabled) return
@@ -348,7 +349,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
     )
     const iconNode = effect === "success" && isSuccess ? (activeIcon ?? fallbackCheck) : icon
     const alternateNode = activeIcon ?? icon
-    const describedBy = tooltip ? props["aria-describedby"] : props["aria-describedby"]
+    const describedBy = [props["aria-describedby"], effect === "tooltip" && tooltip ? tooltipId : undefined].filter(Boolean).join(" ") || undefined
     return (
       <StudioButton
         ref={ref}
@@ -356,7 +357,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         className={studioClasses("vt-studio-square-icon-button", effectClass, className)}
         disabled={disabled}
         sizeVariant={sizeVariant}
-        aria-label={label}
+        aria-label={isSuccess && tooltip ? tooltip : label}
         aria-describedby={describedBy}
         aria-pressed={selectable ? isSelected : undefined}
         selected={selectable && isSelected}
@@ -388,7 +389,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
           <span data-vt-square-badge aria-hidden="true">{badge}</span>
         ) : null}
         {effect === "tooltip" && tooltip ? (
-          <span role="tooltip" data-vt-square-tooltip>{tooltip}</span>
+          <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
         ) : null}
         {effect === "success" && isSuccess && tooltip ? (
           <span data-vt-square-success-label aria-hidden="true">{tooltip}</span>
