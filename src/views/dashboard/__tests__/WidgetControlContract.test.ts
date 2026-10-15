@@ -163,7 +163,8 @@ describe("widget uniformity migrations", () => {
     expect(videoManagerSource).not.toContain("<WidgetSplitButton")
     expect(videoUploaderSource).toContain("video-uploader-gantry")
     expect(videoUploaderSource).toContain("<WidgetMediaUploadFrame")
-    expect(videoUploaderSource).toContain("<WidgetSplitButton")
+    expect(videoUploaderSource).toContain("<WidgetLeftSplitButton");
+    expect(videoUploaderSource).not.toContain("<WidgetSplitButton")
     expect(widgetRendererSource).toContain('"data-edit": React.lazy(() => import("./widgets/VideoManagerWidget")')
     expect(widgetRendererSource).toContain('"video-uploader": React.lazy(() => import("./widgets/VideoUploaderWidget")')
     expect(widgetRendererSource).not.toContain('"data-edit": React.lazy(() => import("./widgets/DataEditWidget")')
