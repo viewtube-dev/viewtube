@@ -66,3 +66,24 @@
 - Publication identity receipts now bind the completed publish transaction to the verified YouTube video and approved snapshot hash; these receipts explicitly do not claim performance or causality.
 - Video-level canonical analytics now fail closed when the exact video row is missing; channel aggregates cannot be used as a substitute.
 - Certification remains pending: durable server persistence, real snapshot/baseline checks, production integration tests, and branch CI/typecheck/build.
+
+
+## Phase 8 — Assistant continuity (2026-10-15)
+
+- [x] Add a shared continuity envelope with normalized page/tool/channel/project/build/video context.
+- [x] Reuse the canonical task-aware context resolver and return selected/omitted section trace.
+- [x] Add explicit limitations when scope or evidence identifiers are absent.
+- [x] Add regression tests for trace and budget behavior (execution pending).
+- [ ] Wire the trace through Sidebar, Brain Hub, and full Brain workspace callers.
+- [ ] Verify creator preferences remain distinct from performance-derived learning.
+- [ ] Browser/mobile test the same question across assistant surfaces.
+
+## Phase 9 — Brain health and certification (2026-10-15)
+
+- [x] Add a read-only health snapshot projection for evidence, knowledge, evaluation backlog, and learning-review states.
+- [x] Add reusable Brain Health panel with status, counts, and alerts.
+- [x] Fail closed to `insufficient_data` when evidence health is unavailable.
+- [ ] Connect canonical live source adapters and embed the panel in the Brain workspace.
+- [ ] Run focused tests, typecheck, full suite, production build, reachability/governance audits, and diff checks.
+- [ ] Compare failures against the current integration baseline and record certification receipt.
+- [ ] Reconcile branch conflicts and obtain review before merge.
