@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
   verifyApprovedPublishSnapshot: vi.fn(),
   recordAlgorithmEvaluation: vi.fn(),
   recordAlgorithmIntelligenceEvent: vi.fn(),
+  linkAssetOutcomeToPublication: vi.fn(),
 }))
 
 vi.mock("./ContentBuildRepository", () => ({
@@ -30,6 +31,9 @@ vi.mock("../brain/AlgorithmEvaluationEngine", () => ({
 }))
 vi.mock("../brain/AlgorithmIntelligenceEventLedger", () => ({
   recordAlgorithmIntelligenceEvent: mocks.recordAlgorithmIntelligenceEvent,
+}))
+vi.mock("../brain/assetOutcomes", () => ({
+  linkAssetOutcomeToPublication: mocks.linkAssetOutcomeToPublication,
 }))
 
 import {
@@ -155,6 +159,15 @@ describe("Post-publish analytics bridge", () => {
       approvedSnapshotHash: "hash-1",
       selectedVariantAssetIds: ["title-v3", "thumbnail-v4", "render-v2", "description-v2", "tags-v1"],
     })
+    expect(mocks.linkAssetOutcomeToPublication).toHaveBeenCalledWith(expect.objectContaining({
+      assetId: "title-v3",
+      channelId: "channel-1",
+      publicationIdentity: expect.objectContaining({
+        publishTransactionId: "publish-tx-1",
+        youtubeVideoId: "youtube-123",
+        approvedSnapshotHash: "hash-1",
+      }),
+    }))
     expect(mocks.appendContentBuildEvent).toHaveBeenCalledWith(expect.objectContaining({
       eventType: "youtube.state.changed",
       entityType: "publish-identity-receipt",
