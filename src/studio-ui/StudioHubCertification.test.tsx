@@ -45,7 +45,7 @@ describe("Studio Hub canonical controls", () => {
 
   it("defines one final field and split-left geometry contract", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const finalContract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
+    const finalContract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
 
     expect(finalContract).toContain("-webkit-text-stroke: .5px currentColor !important")
     expect(finalContract.slice(0, finalContract.indexOf("/* 2. Canonical 44px"))).not.toContain("-webkit-text-stroke: 0 !important")
