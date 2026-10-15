@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, it } from "vitest"
 import {
   appendContentBuildEvent,
   createContentBuild,
+  listContentBuildEvents,
   recordContentBuildMetadataChange,
   resetContentBuildRepositoryForTests,
 } from "./asset-engine/ContentBuildRepository"
 import {
   buildHistoricalMetadataComparison,
+  fetchAndRecordHistoricalMetadataComparison,
   resolveHistoricalMetadataContext,
 } from "./historicalMetadataIntelligence"
 
@@ -102,6 +104,63 @@ describe("historical metadata intelligence", () => {
     expect(result.metrics.find(metric => metric.metric === "views")?.followUpDaysObserved).toBe(2)
     expect(result.metrics.find(metric => metric.metric === "views")?.followUpAverage).toBe(230)
     expect(result.causalConclusion).toBeNull()
+  })
+
+  it("fetches canonical analytics and idempotently records a metadata performance comparison", async () => {
+    createContentBuild({ id: "cb-history", channelId: "channel-1", legacyProjectId: "project-1" })
+    recordContentBuildMetadataChange({
+      contentBuildId: "cb-history",
+      metadataVersionId: "metadata-v2",
+      operationId: "operation-edit-title",
+      operation: "edit",
+      fields: [{ field: "title", before: "Old title", after: "New title" }],
+      publishedVideoId: "video-1",
+      analyticsCheckpointIds: ["checkpoint-7d"],
+      evidenceIds: ["metadata-edit-evidence"],
+      occurredAt: "2026-10-08T12:00:00.000Z",
+    })
+    const fetchReport = vi.fn().mockResolvedValue({
+      columnHeaders: [
+        { name: "day" },
+        { name: "views" },
+        { name: "estimatedMinutesWatched" },
+        { name: "averageViewPercentage" },
+        { name: "likes" },
+        { name: "comments" },
+        { name: "estimatedRevenue" },
+      ],
+      rows: [
+        ...dailyRows("2026-10-01", 7, 100),
+        ...dailyRows("2026-10-09", 7, 200),
+      ].map(row => [
+        row.day, row.views, row.estimatedMinutesWatched, row.averageViewPercentage,
+        row.likes, row.comments, row.estimatedRevenue,
+      ]),
+    })
+
+    const input = {
+      contentBuildId: "cb-history",
+      videoId: "video-1",
+      metadataVersionId: "metadata-v2",
+      channelId: "channel-1",
+      now: new Date("2026-10-17T12:00:00.000Z"),
+      fetchReport,
+    }
+    const first = await fetchAndRecordHistoricalMetadataComparison(input)
+    const replay = await fetchAndRecordHistoricalMetadataComparison(input)
+
+    expect(fetchReport).toHaveBeenCalledWith(expect.objectContaining({
+      startDate: "2026-10-01",
+      endDate: "2026-10-15",
+      dimensions: ["day"],
+      filters: ["video==video-1"],
+    }), "Historical metadata performance comparison")
+    expect(first.status).toBe("ready")
+    expect(first.analysisEventId).toBeTruthy()
+    expect(replay.analysisEventId).toBe(first.analysisEventId)
+    expect(listContentBuildEvents("cb-history").filter(event =>
+      event.entityType === "metadata-performance-comparison"
+    )).toHaveLength(1)
   })
 
   it("resolves history and analytics only through canonical ContentBuild event IDs", () => {
