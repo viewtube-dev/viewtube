@@ -45,7 +45,7 @@ const read=():ContentBuildPublishTransaction[]=>{
 }
 const write=(v:ContentBuildPublishTransaction[])=>{
  if(!canStore()){memory=v;return}
- try{localStorage.setItem(KEY,JSON.stringify(v))}catch{throw new Error("Could not persist publish transaction; publishing must not continue without a recorded transaction.")}
+ try{localStorage.setItem(KEY,JSON.stringify(v))}catch{throw new Error("Could not persist publish transaction to browser storage; publishing must not continue without a recorded transaction.")}
 }
 const save=(t:ContentBuildPublishTransaction)=>{const all=read(),i=all.findIndex(x=>x.id===t.id);if(i>=0)all[i]=t;else all.push(t);write(all);return t}
 const assertTransactionSnapshotIntegrity = (transaction: ContentBuildPublishTransaction) => {
