@@ -1,12 +1,16 @@
 .vt-resource-library-page {
-  --vt-resource-ink: #192033;
-  --vt-resource-paper: #fffef8;
-  --vt-resource-soft: #f2f4f7;
-  --vt-resource-cyan: #36e0f6;
-  --vt-resource-purple: #b14aed;
-  --vt-resource-pink: #fa618a;
-  --vt-resource-yellow: #ffe357;
-  --vt-resource-lime: #c0f240;
+  /* Spectrum values are injected from src/styles/toolboxPalette.ts at runtime.
+     Keep this surface a consumer of the canonical palette, never a palette owner. */
+  --vt-resource-ink: var(--vt-color-ink, #192033);
+  --vt-resource-paper: var(--vt-color-paper, #fffef8);
+  --vt-resource-soft: var(--vt-color-surface, #f2f4f7);
+  --vt-resource-cyan: var(--vt-spectrum-7);
+  --vt-resource-purple: var(--vt-spectrum-9);
+  --vt-resource-pink: var(--vt-spectrum-0);
+  --vt-resource-yellow: var(--vt-spectrum-3);
+  --vt-resource-lime: var(--vt-spectrum-4);
+  --vt-resource-pair-shadow: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 24%, transparent);
+  --vt-resource-pair-shadow-soft: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 18%, transparent);
   min-height: 100vh;
   width: 100%;
   padding: 20px;
@@ -16,6 +20,13 @@
     #eef1f4;
   background-size: 60px 60px;
   color: var(--vt-resource-ink);
+}
+
+.vt-resource-overview-module,
+.vt-resource-card {
+  /* Recompute pair-derived shadows where each item owns its own palette pair. */
+  --vt-resource-pair-shadow: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 24%, transparent);
+  --vt-resource-pair-shadow-soft: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 18%, transparent);
 }
 
 .vt-resource-library-shell {
@@ -38,26 +49,26 @@
   border: 3px solid var(--vt-resource-ink);
   border-radius: 12px;
   background: var(--vt-resource-paper);
-  box-shadow: 5px 5px 0 rgba(25, 32, 51, 0.16);
+  box-shadow: 5px 5px 0 var(--vt-resource-pair-shadow);
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .vt-resource-overview-module:nth-child(1) {
-  background: color-mix(in srgb, var(--vt-resource-cyan) 18%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 18%, white);
 }
 
 .vt-resource-overview-module:nth-child(2) {
-  background: color-mix(in srgb, var(--vt-resource-yellow) 22%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 22%, white);
 }
 
 .vt-resource-overview-module:nth-child(3) {
-  background: color-mix(in srgb, var(--vt-resource-purple) 12%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 12%, white);
 }
 
 .vt-resource-overview-module:nth-child(4) {
-  background: color-mix(in srgb, var(--vt-resource-pink) 12%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 12%, white);
 }
 
 .vt-resource-overview-module > span,
@@ -137,7 +148,7 @@
 
 .vt-resource-search-field input:focus,
 .vt-resource-filter-field select:focus {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vt-resource-cyan) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 55%, transparent);
 }
 
 .vt-resource-index-results {
@@ -166,12 +177,12 @@
 
 .vt-resource-card:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 rgba(25, 32, 51, 0.16);
+  box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-card.is-active {
-  background: color-mix(in srgb, var(--vt-resource-purple) 11%, white);
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-resource-purple) 28%, transparent);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 11%, white);
+  box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-card-icon {
@@ -179,7 +190,7 @@
   display: grid;
   place-items: center;
   border-right: 3px solid var(--vt-resource-ink);
-  background: var(--vt-resource-yellow);
+  background: var(--vt-resource-pair-secondary, var(--vt-spectrum-0));
 }
 
 .vt-resource-card-icon svg {
@@ -235,7 +246,7 @@
     radial-gradient(circle at 89% 10%, color-mix(in srgb, var(--vt-resource-yellow) 65%, transparent) 0 11%, transparent 12%),
     radial-gradient(circle at 78% 12%, color-mix(in srgb, var(--vt-resource-cyan) 48%, transparent) 0 16%, transparent 17%),
     linear-gradient(135deg, #fff 0 66%, color-mix(in srgb, var(--vt-resource-purple) 13%, white) 66%);
-  box-shadow: 7px 7px 0 color-mix(in srgb, var(--vt-resource-purple) 24%, transparent);
+  box-shadow: 7px 7px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-document-kicker {
@@ -308,7 +319,7 @@
   padding: 4px 7px;
   border: 2px solid var(--vt-resource-ink);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--vt-resource-lime) 40%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 40%, white);
   font-size: 8px;
   font-weight: 1000;
   letter-spacing: 0.06em;
@@ -443,7 +454,7 @@
 }
 
 .vt-resource-table th {
-  background: color-mix(in srgb, var(--vt-resource-cyan) 28%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 28%, white);
   font-size: 9px;
   font-weight: 1000;
   letter-spacing: 0.06em;
@@ -467,7 +478,7 @@
   padding: 8px 10px;
   border: 2px solid var(--vt-resource-ink);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--vt-resource-lime) 11%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 11%, white);
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr);
   align-items: start;
@@ -523,15 +534,15 @@
   line-height: 1.18;
   font-weight: 1000;
   text-transform: uppercase;
-  box-shadow: 3px 3px 0 rgba(25, 32, 51, 0.12);
+  box-shadow: 3px 3px 0 var(--vt-resource-pair-shadow-soft);
 }
 
 .vt-resource-flow-node:nth-of-type(4n + 1) {
-  background: color-mix(in srgb, var(--vt-resource-yellow) 34%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 34%, white);
 }
 
 .vt-resource-flow-node:nth-of-type(4n + 3) {
-  background: color-mix(in srgb, var(--vt-resource-pink) 16%, white);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 16%, white);
 }
 
 .vt-resource-flow-arrow {
@@ -661,7 +672,7 @@
   .vt-resource-overview-module {
     min-height: 76px;
     padding: 10px 11px;
-    box-shadow: 3px 3px 0 rgba(25, 32, 51, 0.14);
+    box-shadow: 3px 3px 0 var(--vt-resource-pair-shadow-soft);
   }
 
   .vt-resource-overview-module > strong {
@@ -675,7 +686,7 @@
   .vt-resource-document-hero {
     padding: 16px;
     border-width: 3px;
-    box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-resource-purple) 22%, transparent);
+    box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
   }
 
   .vt-resource-document-hero h1 {
