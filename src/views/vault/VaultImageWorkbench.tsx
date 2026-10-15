@@ -34,9 +34,10 @@ const extensionFor = (mimeType: string) => mimeType === "image/jpeg" ? "jpg" : m
 export interface VaultImageWorkbenchProps {
   asset: VaultAsset
   onDerivativeCreated?: () => void
+  onOperationUpdated?: () => void
 }
 
-export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset, onDerivativeCreated }) => {
+export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset, onDerivativeCreated, onOperationUpdated }) => {
   const [transform, setTransform] = React.useState<VaultImageTransform>({ ...DEFAULT_VAULT_IMAGE_TRANSFORM })
   const [cropEnabled, setCropEnabled] = React.useState(false)
   const [crop, setCrop] = React.useState<VaultImageCrop>({ x: 0, y: 0, width: 1, height: 1 })
@@ -259,6 +260,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
       transitionVaultOperation(operationRecord.id, "failed", {
         error: caught instanceof Error ? caught.message : "Could not register this derivative in Vault.",
       })
+      onOperationUpdated?.()
       setError(caught instanceof Error ? caught.message : "Could not register this derivative in Vault.")
     }
   }
