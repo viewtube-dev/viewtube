@@ -162,3 +162,18 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+
+## Current integration reconciliation — 2026-10-15
+
+- [x] Add capability-specific required-evidence mappings and tests for absent required sections.
+- [x] Add bounded context token estimates, output reservation, safety margin, and selected/omitted-section reporting.
+- [x] Resolve requested project IDs from the canonical Brain project index and pass that index through BrainRuntime and the three Brain chat surfaces.
+- [x] Add authenticated user/channel-scoped durable learning-record read/write, retry queue, hydration, and regression tests.
+- [x] Add default-off creator communication capture consent enforced inside the ingestion service.
+- [x] Redact legacy raw creator communication text and stop retaining raw text in new communication events.
+- [x] Surface the attribution detail panel in Brain Command Center.
+- [ ] Run the release gates on the final exact commit and fix any Brain-specific failures.
+- [ ] Run the durable-store Node tests independently before the Studio controls gate; the focused script now orders these tests before the known failing Studio gate.
+- [ ] Validate PostgreSQL-backed persistence and authenticated channel isolation against a real test database.
+- [ ] Complete stable-ID lifecycle propagation and production data verification before certification.

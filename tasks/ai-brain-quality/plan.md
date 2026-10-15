@@ -146,3 +146,13 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+
+## Current integration reconciliation — 2026-10-15
+
+- Added capability-to-evidence requirements and explicit missing-evidence reporting; context resolution now supports a conservative character/token budget with reserved output and safety margin.
+- Passed the canonical Brain project index through the chat surfaces and runtime; exact project IDs resolve against the index instead of falling back to a neighboring active project.
+- Added authenticated, user-and-channel-scoped persistence for typed learning records, with idempotent record keys and hydration into outcome, evaluation, asset-outcome, and learning-candidate ledgers.
+- Added a default-off per-channel creator-communication capture control, service-level consent enforcement, fingerprint-only new records, and migration redaction for legacy raw communication text.
+- Connected the attribution detail panel to the Brain Command Center.
+- **Certification remains open.** The release-gates run for the current implementation passes the Brain quality loop, production build, and local browser smoke. Focused contracts still fail in unrelated Studio controls/catalog assertions; typecheck reports existing Studio dropdown and action-packet projection errors; source-governance reports four stale Studio library-layout assertions. Full-suite verification and database-backed persistence validation remain required.

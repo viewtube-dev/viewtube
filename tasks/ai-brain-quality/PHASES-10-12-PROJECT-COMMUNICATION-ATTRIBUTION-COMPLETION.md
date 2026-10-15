@@ -64,3 +64,12 @@ Acceptance still outstanding:
 ## Verification
 
 Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+
+
+## Current integration reconciliation — 2026-10-15
+
+Communication capture is now opt-in per channel (default off) and the ingestion service enforces consent even if a caller forgets its UI guard. New events retain classification, a deterministic fingerprint, and provenance rather than raw creator text. Hydration performs a one-time redaction migration for older events. Durable learning records are now persisted through the authenticated Brain Intelligence API and restored into existing outcome/evaluation/candidate ledgers.
+
+The Brain Command Center now exposes the existing read-only attribution detail panel. Capability evidence requirements, conservative context budgeting, and exact-ID project resolution are also integrated on the target branch.
+
+**Still uncertified:** database-backed integration verification, complete stable-ID propagation across all production writers, browser verification of attribution and consent controls, and a green full release-gates run. The current CI baseline still has unrelated Studio UI/catalog failures and typecheck errors.
