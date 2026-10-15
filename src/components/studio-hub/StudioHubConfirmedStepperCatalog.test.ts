@@ -39,3 +39,36 @@ describe("confirmed split stepper primitive family", () => {
     expect(component).not.toContain("\\n  valueRef.current")
   })
 })
+
+describe("confirmed floating and fixed field-label variants", () => {
+  it("shows standard floating-label examples followed by compact A/B rows for inputs and textareas", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+
+    expect(catalog).toContain("Floating label · 44px standard · A")
+    expect(catalog).toContain("Floating label · 28px compact · A")
+    expect(catalog).toContain("Floating label · 28px compact · B · reverse colors")
+    expect(catalog).toContain("Fixed label box · 28px compact · A")
+    expect(catalog).toContain("Fixed label box · 28px compact · B · reverse colors")
+    expect(catalog).toContain("Studio floating-label textarea compact B reverse colors")
+    expect(catalog).toContain("Studio fixed-label textarea compact B reverse colors")
+  })
+
+  it("implements reverse pair colors and the compact B focus stroke for both native field types", () => {
+    const css = source("src/styles/studio-control-system.css")
+    const textArea = source("src/studio-ui/primitives/StudioTextArea.tsx")
+
+    expect(css).toContain(".vt-studio-floating-field.is-reverse-colors")
+    expect(css).toContain(".vt-studio-fixed-label-field.is-reverse-colors")
+    expect(css).toContain('> :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible)')
+    expect(textArea).toContain('floatingLabelVariant?: "a" | "b"')
+    expect(textArea).toContain("data-vt-floating-variant={floatingLabelVariant}")
+  })
+
+  it("documents the non-default size, label, palette, focus, and textarea settings", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+
+    expect(catalog).toContain("compact floating label B reverses the paired colors")
+    expect(catalog).toContain("Compact fixed-label B reverses the label-box and field accent colors")
+    expect(catalog).toContain("Textarea-only typography is 18px standard / 14px compact")
+  })
+})
