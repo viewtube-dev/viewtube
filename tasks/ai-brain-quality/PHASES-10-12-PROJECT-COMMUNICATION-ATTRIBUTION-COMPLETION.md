@@ -10,7 +10,7 @@ Scope: project-centered phase context, creator communication as governed evidenc
 Implemented:
 - `src/services/brain/BrainProjectLifecycle.ts` maps the canonical ContentBuild stage to a bounded lifecycle phase and relevant capabilities.
 - Canonical workflow blockers are preserved.
-- `BrainProjectContext.ts` adds the resolved lifecycle to the existing `AlgorithmProjectContext`; ContentBuild remains the stage owner.
+- `BrainProjectContext.ts` adds the resolved lifecycle to the existing `AlgorithmProjectContext`; `BrainContextBroker.ts` passes phase, phase-relevant capabilities and blockers into the live Brain prompt policy. ContentBuild remains the stage owner.
 - Missing canonical ContentBuild data returns `insufficient_context` rather than guessing from UI labels.
 
 Acceptance still outstanding:
@@ -22,10 +22,10 @@ Acceptance still outstanding:
 
 Implemented:
 - `src/services/brain/BrainCommunicationIngestion.ts` classifies creator communications into instruction, preference, correction, criticism, factual claim, goal, constraint, approval, rejection, experiment note, and style feedback.
-- `recordCreatorCommunicationEvidence` stores communication as an immutable `CREATOR_COMMUNICATION_CLASSIFIED` event in the existing Algorithm Intelligence ledger.
+- `recordCreatorCommunicationEvidence` stores communication as an immutable `CREATOR_COMMUNICATION_CLASSIFIED` event in the existing Algorithm Intelligence ledger. Sidebar Copilot, full AI Brain, and Brain Hub invoke it only when Brain, personalization, and learn-from-interactions controls are enabled.
 - Stable channel + communication identity makes replays idempotent and rejects reuse of an ID for different text.
 - Event metadata explicitly says `durableMemoryPromoted: false` and `promotionRequiresGovernedReview: true`.
-- This path does not write directly to Channel Profile or validated knowledge.
+- Neutral text is left unclassified rather than mislabeled as a fact. This path does not write directly to Channel Profile or validated knowledge.
 
 Acceptance still outstanding:
 - Wire chat turns, tool feedback, creator edits, approvals/rejections, and experiment notes to the ingestion function.
@@ -63,4 +63,4 @@ Acceptance still outstanding:
 
 ## Verification
 
-Regression tests have been authored but not executed during this session. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
+Regression tests have been authored but not executed during this session. The three live chat surfaces now call communication ingestion behind the existing user controls. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
