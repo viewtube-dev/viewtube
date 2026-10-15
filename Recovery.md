@@ -851,3 +851,22 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Result:** The complete reference is committed on canonical main, registered in both structured recovery state and the conversation recovery index, and linked from docs/Vault.md.
 - **Next action:** Begin source-level capability inventory and runtime reconciliation before implementation.
 - **Verification:** GitHub read-back confirmed the master has the final section and expected content; Recovery.yaml contains the registration; docs/Vault.md links to the master; the index contains this contribution. Runtime tests/builds were not run because no runtime code changed.
+
+
+#### LOG-ID: REC-20261015-vault-phases-0-1-2-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation agent
+- **Round:** 1
+- **Category:** VAULT / SOURCE AUDIT / IDENTITY / SELECTION / ADAPTIVE WORKBENCH
+- **Action:** Audited the master integration branch baseline and implemented the first Vault Workbench phases on a dedicated branch targeting master integration.
+- **Source:** `master/consolidated-feature-integration`; `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; current Vault source, tests, and task plan.
+- **Artifacts:** `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; Vault capability registry/host; selection and mutation-policy services/tests.
+- **Status:** IMPLEMENTED / CI VERIFICATION PENDING
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **Changes:** Added the adaptive Workbench capability/mode registry and host; made processor availability fail closed; integrated host into `CreatorVaultOS.tsx`; rejected stale clicked selection IDs; centralized local lifecycle mutation eligibility for protected/GOLDEN and trashed assets; added identity, policy, selection, capability and host tests.
+- **Phase 0 result:** Canonical source ownership and existing Vault route/services/tests documented. The current browser localStorage asset adapter does not establish server-enforced account/workspace authorization.
+- **Phase 1 result:** Stable Vault asset ID/creation-time and selection contracts are covered; lifecycle mutation policy is shared and tested. Server-side per-user/per-workspace authorization remains BLOCKED pending the canonical account/server contract and is not claimed implemented.
+- **Phase 2 result:** Shared adaptive mode/capability registry and host are integrated; video/audio processing are not advertised as available without explicit processor evidence.
+- **Verification:** GitHub writes accepted. Focused tests, typecheck, build, and browser verification have not yet been run in this environment; PR CI/read-back is required before certification.
+- **Next action:** Inspect the PR checks, repair any branch-introduced failures, and verify all changed files against the current target head before merge.
