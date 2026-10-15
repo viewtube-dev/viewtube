@@ -23,6 +23,7 @@ import type { OpportunityEvidence } from "./OpportunityIntelligence"
 import { projectCanonicalEvidenceRecords, type EvidenceRecord } from "./EvidenceRecord"
 import type { DeterministicAnalyticsInsight } from "./DeterministicAnalyticsInsights"
 import { buildBrainAnalyticsFindingContext, type BrainAnalyticsFindingContext } from "./AnalyticsIntelligenceWorkflow"
+import { buildCurrentCanonicalAnalyticsInsights } from "./CurrentCanonicalAnalyticsInsights"
 
 export const EVIDENCE_INTELLIGENCE_VERSION = "vt-evidence-intelligence-v1" as const
 
@@ -36,6 +37,8 @@ export interface ResolveEvidenceIntelligenceInput {
  includeOpportunities?: boolean
  /** Optional findings computed by the deterministic analytics layer; never model-authored. */
  deterministicInsights?: DeterministicAnalyticsInsight[]
+ /** Generate trends only from full current canonical daily rows matching this evidence snapshot. */
+ includeCurrentTrends?: boolean
  brainEvidencePack?: AIBrainEvidencePack | null
 }
 
@@ -130,10 +133,16 @@ export const resolveEvidenceIntelligence = (
   ? dependencies.buildAudience(canonicalEvidence, statisticsIntelligence)
   : null
  const channelId = String(input.channelId || "").trim() || null
+ const currentTrends = scopeUsable && input.includeCurrentTrends
+  ? buildCurrentCanonicalAnalyticsInsights({
+   channelId,
+   expectedSnapshotId: canonicalEvidence.snapshotId,
+  }).findings
+  : []
  const analyticsFindingContext = buildBrainAnalyticsFindingContext({
   expectedChannelId: channelId,
   canonicalChannelId: canonicalEvidence.channelId,
-  findings: scopeUsable ? (input.deterministicInsights || []) : [],
+  findings: scopeUsable ? [...(input.deterministicInsights || []), ...currentTrends] : [],
  })
  const opportunityPackScopeUsable = Boolean(
   scopeUsable
