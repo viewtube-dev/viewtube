@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Evidence-gated candidate creation and same-evaluation/channel/project idempotent retries are implemented. Durable governed promotion and causal effectiveness remain unverified end-to-end.
+**Status:** Evidence-gated candidate creation, explicit creator review, and promotion through the existing Channel Knowledge governance path are implemented with regression coverage. Current-head release gates and production-data certification remain pending.
 
 ## Objective
 
@@ -14,7 +14,9 @@ Connect resolved evaluations to reviewable learning candidates without turning c
 - A channel-scoped candidate must include the same channel as its source evaluation. A project-scoped evaluation cannot be relabeled to another project.
 - Candidate records preserve evaluation ID, source outcome IDs, evaluation outcome, reporting window, comparability status, evidence status, and evidence record IDs.
 - Candidate creation always starts in `candidate` state. It does not approve or promote learning.
-- Existing explicit candidate review remains a separate action. This helper does not write validated Channel Knowledge or alter prompts/model memory.
+- Approval requires a named reviewer; unreviewed candidates cannot be promoted.
+- Promotion requires at least five distinct published videos with positive, available, comparable evaluations matching channel, project, source/recommendation, and reporting window.
+- Promotion creates a descriptive-association learning entry with evidence and reviewed-by provenance, then uses the existing `promoteBrainClaim` governance path and rebuilds affected context packs. It explicitly records no causal conclusion.
 - Candidate generation is blocked when creator learning is disabled.
 
 ## Decision-effectiveness dimensions
@@ -34,13 +36,13 @@ Acceptance is a creator decision signal; publication is exposure evidence; analy
 
 ## Regression coverage
 
-`src/services/viewTubeEvaluationLedger.test.ts` verifies that pending, non-comparable, and cross-channel evaluations cannot create a candidate; a resolved, evidence-backed, comparable evaluation can create a reviewable candidate while preserving its lineage.
+`src/services/viewTubeEvaluationLedger.test.ts` verifies candidate gating, scope matching, retry idempotency, named reviewer requirements, and promotion only after five independent positive/comparable publication evaluations. Promotion tests assert evidence lineage and that causal conclusion remains null.
 
 ## Remaining boundaries
 
 - The current local workflow candidate is not itself canonical Channel Knowledge.
 - A candidate's existence is not proof of effectiveness, causality, or approval.
-- Cross-system retry idempotency, cohort selection, contradiction accumulation, candidate supersession/expiry, and governed Channel Profile promotion remain separate certification work. Publication identity and canonical video-row evidence joins are implemented in Phases 10–11, but require fresh-account integration verification.
+- Cross-system atomic retry safety, richer cohort selection, contradiction accumulation, candidate supersession/expiry, and fresh-account production verification remain separate certification work. Publication identity and canonical video-row evidence joins are implemented in Phases 10–11.
 - The current browser-local ledgers are not a cross-device durable source of truth.
 
 ## Acceptance
@@ -50,6 +52,9 @@ Acceptance is a creator decision signal; publication is exposure evidence; analy
 - [x] Make candidate retries idempotent by caller key within the same evaluation/channel/project scope.
 - [x] Reject channel candidates when the source evaluation has no matching channel identity.
 - [x] Keep candidate creation separate from approval/promotion.
-- [x] Add regression tests for gating and scope.
+- [x] Require explicit named review before approval.
+- [x] Require five distinct positive, available, comparable published-video evaluations before promotion.
+- [x] Promote through the existing Channel Knowledge governance path and rebuild affected context packs.
+- [x] Add regression tests for gating, scope, retry idempotency, review and promotion.
 - [ ] Verify the new tests and all release gates on the latest PR head.
-- [ ] Demonstrate the complete recommendation → creator decision → immutable publish snapshot → canonical analytics → evaluation → governed Channel Knowledge path with stable IDs and retry safety.
+- [ ] Certify the complete production recommendation → creator decision → immutable publish snapshot → canonical analytics → evaluation → governed Channel Knowledge path with live data and cross-system retry safety.
