@@ -70,6 +70,7 @@ Do not create a new document for an existing subject. Update or consolidate its 
 ## UI implementation guide
 
 - [Studio Controls Authoring Guide](Studio-Controls-Authoring-Guide.md) — canonical authoring rules for src/studio-ui/primitives/StudioControls.tsx and src/styles/studio-control-system.css, including shared defaults, height variants, non-height-system components, layout safety, and truthful confirmed-library specimens.
+- [Studio Controls Global Defaults & Exception Index](ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md) — standard/compact global contracts, verified CSS conflicts, component-family exception inventory, and correction/verification plan.
 
 ## Current implementation / conversation records
 

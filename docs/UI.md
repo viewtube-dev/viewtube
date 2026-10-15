@@ -120,3 +120,8 @@ These decisions were established in the 2026-10-04 Widget UI governance conversa
 **Status:** VERIFIED as project/documentation decision; **runtime implementation alignment:** UNKNOWN pending source-level trace of the canonical Widget primitive, token, size, CSS, Reference Library, and consumer paths.
 
 **Related:** `docs/Widgets.md`, `docs/Toolbox.md`, `docs/Architecture.md`, `docs/recovery/handoffs/VIEWTUBE_ROUND_2_UI_RENDER_RECONCILIATION_2026-10-04.md`.
+
+
+## 15. Studio Controls global defaults and exceptions
+
+The canonical Studio Controls defaults, standard/compact size contracts, source-level exception index, Confirmed Primitive Library coverage map, and corrective plan are maintained in [Studio Controls — Global Defaults & Exception Index](ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md). That document distinguishes declared TypeScript defaults from CSS behavior and records source-verified conflicts without claiming browser-rendered verification. Update the exception register and the corresponding family module's non-default-settings section whenever a component variant or CSS override changes.
