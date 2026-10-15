@@ -21,6 +21,8 @@ describe("Studio Hub canonical controls", () => {
     expect(html).toContain('data-icon-only="true"')
     expect(html).toContain('data-split-left="true"')
     expect(html).toContain("data-vt-studio-split-rail")
+    expect(html).toContain("data-vt-studio-button-face")
+    expect(html).toContain('data-vt-studio-button="true"')
   })
 
   it("centers split-left icon rails and labels against the full control height", () => {
