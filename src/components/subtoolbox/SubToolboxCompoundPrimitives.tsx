@@ -83,9 +83,9 @@ export const SubToolboxTagActionRow: React.FC<SubToolboxTagActionRowProps> = ({
       removeIcon={<X />}
     />
     <div className="flex min-w-0 flex-nowrap items-center gap-1" role="group" aria-label="Tag actions">
-      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level)} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Settings2 />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("refine")}>REFINE</StudioSplitLeftButton>
-      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level)} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Sparkles />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("generate")}>GENERATE</StudioSplitLeftButton>
-      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level)} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Search />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("analyze")}>ANALYZE</StudioSplitLeftButton>
+      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level) as React.CSSProperties} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Settings2 />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("refine")}>REFINE</StudioSplitLeftButton>
+      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level) as React.CSSProperties} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Sparkles />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("generate")}>GENERATE</StudioSplitLeftButton>
+      <StudioSplitLeftButton data-vt-control-level={level} style={getComponentLevelCssVars(level) as React.CSSProperties} sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Search />} className="!min-w-0 !flex-1 !px-1" onClick={() => onAction("analyze")}>ANALYZE</StudioSplitLeftButton>
     </div>
     {actionStatus ? <p className="text-[9px] font-black uppercase" role="status">{actionStatus}</p> : null}
   </div>
