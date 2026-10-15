@@ -346,8 +346,11 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
     const tooltipId = React.useId()
     const successStatusId = React.useId()
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      // Disabled controls must not dispatch actions or state/animation changes,
+      // including when an event is dispatched programmatically in a test or wrapper.
+      if (event.currentTarget.disabled) return
       onClick?.(event)
-      if (event.defaultPrevented || event.currentTarget.disabled) return
+      if (event.defaultPrevented) return
       if (animate || effect === "notification") setAnimationKey(key => key + 1)
       if (!selectable) return
       const next = !isSelected
