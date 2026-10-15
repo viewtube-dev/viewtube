@@ -115,3 +115,9 @@ The publication receipt now preserves the stable producer outcome IDs and genera
 - Regression coverage verifies selected-asset filtering, trace continuity, metadata persistence and retry restoration.
 
 This improves the recommendation-to-publication lineage edge; it does not by itself prove that every upstream recommendation/creator-decision writer supplied its stable IDs or that downstream records are durable across devices.
+
+## Current-base implementation slice — publish action-boundary guard
+
+The canonical publishing transaction boundary now re-reads the current ContentBuild before creating a *new* transaction and fails closed unless its stage is one of `package`, `edit`, `review`, `launch`, or `scheduled`. It also refuses a new transaction when the canonical ContentBuild has unresolved workflow blockers. Existing transactions for the same final render still take the idempotent resume path before this new-transaction guard, preserving safe retries.
+
+Regression tests cover direct calls from a disallowed `idea` stage and unresolved blockers. This is a publication-boundary enforcement slice, not proof that every generation, editing, metadata, scheduling, and learning action is covered by the full stage capability matrix; those boundaries still require an explicit action-to-stage policy and direct-call tests.
