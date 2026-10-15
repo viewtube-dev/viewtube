@@ -113,7 +113,7 @@ describe("PublishTransaction",()=>{
   })
  })
 
- it("schedules evaluation only for the creator-approved recommendation matching the published ContentBuild and video", () => {
+ it("schedules evaluation only for the creator-approved recommendation matching the published ContentBuild and video", async () => {
   const recommendation = recordAlgorithmIntelligenceEvent({
    id: "recommendation:matching",
    channelId: "channel-a",
@@ -188,6 +188,8 @@ describe("PublishTransaction",()=>{
   completePublishStep({ transactionId: transaction.id, step: "upload-video", youtubeVideoId: "youtube-published" })
   completePublishStep({ transactionId: transaction.id, step: "verify-remote-state", youtubeVideoId: "youtube-published", youtubeBinding: { status: "published" } })
   completePublishTransaction(transaction.id)
+  // Publication integration dynamically imports the intelligence ledger to avoid a module cycle.
+  await new Promise((resolve) => setTimeout(resolve, 0))
 
   const events = listAlgorithmIntelligenceEvents({ channelId: "channel-a" })
   const linked = events.find((event) => event.id === recommendation.id)
