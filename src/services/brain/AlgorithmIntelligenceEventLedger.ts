@@ -15,6 +15,7 @@ export type AlgorithmIntelligenceEventKind =
  | "RECOMMENDATION_DECISION_RECORDED"
  | "PUBLICATION_CONFIRMED"
  | "CREATOR_APPROVAL_RECORDED"
+ | "CREATOR_COMMUNICATION_CLASSIFIED"
  | "PUBLICATION_CHECKPOINT_RECORDED"
  | "CHECKPOINT_REACHED"
  | "OUTCOME_MEASURED"
@@ -38,7 +39,7 @@ export interface AlgorithmIntelligenceEvent {
  projectId?: string | null
  videoId?: string | null
  kind: AlgorithmIntelligenceEventKind
- sourceSystem: "anomaly" | "opportunity" | "priming" | "decision" | "workflow" | "evaluation" | "learning"
+ sourceSystem: "anomaly" | "opportunity" | "priming" | "decision" | "communication" | "workflow" | "evaluation" | "learning"
  sourceId?: string | null
  parentEventIds: string[]
  recommendationId?: string | null
