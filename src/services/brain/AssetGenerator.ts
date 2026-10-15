@@ -438,9 +438,40 @@ export const generateAsset = async <TOutput>(input: {
   trace.recordGrade("styleFidelity", assessment.style.score)
   trace.recordGrade("grounding", assessment.fabricated.length ? 0 : 100)
 
+  const promptReceipt = buildBrainPromptRunReceipt({
+   traceId: trace.id,
+   outputId: assetId,
+   channelId: request.channelId,
+   projectId: request.projectId || null,
+   promptFamily: promptFamilyForAsset(strategy.assetType),
+   promptVersion: strategy.promptVersion,
+   constitutionVersion: ASSET_CONSTITUTION_VERSION,
+   contextResolverVersion: "brain-context-resolution-v1",
+   outputSchemaVersion: strategy.outputSchemaVersion || `${strategy.assetType}-schema-v1`,
+   requestedModel: response.model?.requested || null,
+   servedModel: response.model?.served || null,
+   evidenceSnapshotIds: evidence.refs,
+   channelKnowledgeFingerprint: typeof request.inputs?.channelKnowledgeFingerprint === "string" ? request.inputs.channelKnowledgeFingerprint : null,
+   projectRevision: typeof request.inputs?.projectRevision === "string" ? request.inputs.projectRevision : null,
+   styleProfileVersion: style?.id || null,
+   creatorConstraints: Array.isArray(request.inputs?.creatorConstraints)
+    ? request.inputs.creatorConstraints.filter((value): value is string => typeof value === "string")
+    : [],
+   repairCount: repairAttempts,
+  })
+  const receiptIssues = validateBrainPromptRunReceipt(promptReceipt)
+  const finalStatus: AssetStatus = receiptIssues.length ? "needs_review" : status
+  if (receiptIssues.length) {
+   assessment.rubricFindings.push(...receiptIssues.map((detail) => ({
+    rule: "prompt_provenance",
+    detail,
+    severity: "blocking" as const,
+   })))
+  }
+
   const record: AssetRecord<TOutput> = {
    ...baseRecord,
-   status,
+   status: finalStatus,
    output: response.output,
    styleScore: assessment.style.score,
    fabricatedNumbers: assessment.fabricated,
