@@ -1520,8 +1520,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity), transparent);
   box-shadow:
     inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary),
-    inset 0 calc(-1 * var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
-    inset calc(-1 * var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary);
+    inset 0 calc(0px - var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
+    inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary);
   transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 .vt-studio-username-input > [data-vt-studio-username-rail="true"] {
@@ -1574,8 +1574,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   outline-offset: var(--vt-studio-control-focus-outline-offset);
   box-shadow:
     inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary),
-    inset 0 calc(-1 * var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
-    inset calc(-1 * var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary),
+    inset 0 calc(0px - var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
+    inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary),
     0 0 0 var(--vt-field-focus-outline-width) color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
 }
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
