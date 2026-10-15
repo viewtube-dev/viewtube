@@ -9,6 +9,7 @@ import {
   StudioCheckbox,
   StudioXCheckbox,
   StudioLegendMultiDropdown,
+  StudioInlineStepper,
   StudioSplitLeftButton,
   StudioSquareIconButton,
   StudioPlayPauseButton,
@@ -91,6 +92,43 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
     )}
   </section>
 )
+
+const ConfirmedInlineStepperFamily: React.FC = () => {
+  const [standardValue, setStandardValue] = React.useState(22)
+  const [compactValue, setCompactValue] = React.useState(3)
+  return (
+    <Family
+      title="Inline Stepper · 44px + 28px"
+      nonDefaultSettings={[
+        "Horizontal decrement / editable value / increment composition with square side actions and a 1:2:1 layout.",
+        "Standard 44px and compact 28px sizes consume the global Studio Controls size, stroke, radius, typography, and color-pair tokens.",
+        "Direct numeric typing is supported; increment/decrement honor step and min/max bounds and expose accessible action labels.",
+        "This is a canonical Studio Controls primitive and is intentionally distinct from the existing vertical-rail StudioSplitStepper."
+      ]}
+      provenance={<Provenance
+        primitive="StudioInlineStepper"
+        tsx="src/studio-ui/primitives/StudioInlineStepper.tsx"
+        css="src/studio-ui/primitives/studio-inline-stepper.css"
+        tokens="Horizontal 1:2:1 layout · global 44px/28px size lattice · shared Studio color pair and focus treatment."
+        imports={["src/studio-ui/primitives/StudioInlineStepper.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
+        <span>Standard + compact · interactive horizontal comparison</span>
+        <div className="vt-confirmed-stepper-row-grid">
+          <div className="vt-confirmed-stepper-specimen">
+            <small>44px standard · horizontal</small>
+            <StudioInlineStepper value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard inline stepper" data-vt-library-component="StudioInlineStepper" />
+          </div>
+          <div className="vt-confirmed-stepper-specimen">
+            <small>28px compact · horizontal</small>
+            <StudioInlineStepper value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact inline stepper" data-vt-library-component="StudioInlineStepper" />
+          </div>
+        </div>
+      </div>
+    </Family>
+  )
+}
 
 const ConfirmedStepperFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(5)
@@ -486,6 +524,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioTagEditor defaultValue={["Tag One", "Featured"]} />
       </div>
     </Family>
+    <ConfirmedInlineStepperFamily />
     <ConfirmedStepperFamily />
   </div>
 )
