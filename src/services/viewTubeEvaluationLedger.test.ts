@@ -458,6 +458,41 @@ describe("outcome evaluation and governed learning lineage", () => {
   expect(lineageMocks.rebuildAffectedToolContextPacks).toHaveBeenCalledWith(expect.objectContaining({ channelId: "channel-a", affectedContextPacks: ["performance", "analytics_tools"] }))
  })
 
+ it("keeps contradictory outcomes from becoming a promoted channel claim", async () => {
+  let sourceEvaluationId = ""
+  for (let index = 1; index <= 10; index += 1) {
+   const evaluation = createEvaluationRecord({
+    channelId: "channel-a",
+    projectId: "project-a",
+    source: "post-publication",
+    recommendation: "Use the selected title strategy",
+    evidenceIds: [`snapshot-${index}:videos:1`],
+    publishedVideoId: `youtube-${index}`,
+    comparisonSnapshotId: `snapshot-${index}`,
+    selectedWindow: "28d",
+    comparabilityStatus: "comparable",
+    evidenceStatus: "available",
+   })!
+   if (index === 1) sourceEvaluationId = evaluation.id
+   resolveEvaluationRecord(evaluation.id, index <= 5 ? "positive" : "negative")
+  }
+  const candidate = proposeEvaluationLearningCandidate(sourceEvaluationId, {
+   channelId: "channel-a",
+   projectId: "project-a",
+   title: "Selected title strategy",
+   toolIds: ["packaging-lab-pro"],
+   reason: "Review a mixed outcome pattern.",
+   scope: "channel",
+  })!
+  reviewWorkflowCandidate(candidate.id, "approved", "creator-1")
+  expect(await promoteEvaluationLearningCandidateToChannelKnowledge({
+   candidateId: candidate.id,
+   reviewedBy: "creator-1",
+  })).toBeNull()
+  expect(lineageMocks.captureAIBrainLearningEvent).not.toHaveBeenCalled()
+  expect(lineageMocks.promoteBrainClaim).not.toHaveBeenCalled()
+ })
+
  it("fails closed for non-comparable or cross-channel learning candidates", () => {
   const evaluation = createEvaluationRecord({
    channelId: "channel-a",
