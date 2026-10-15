@@ -136,7 +136,7 @@ describe("VideoPackageRepository consolidation", () => {
     const videoPackage = createVideoPackage({
       id: "vp-storage-failure",
       contentBuildId: "cb-storage-failure",
-      channelId: null,
+      channelId: "channel-storage-failure",
       projectId: "project-storage-failure",
       workingTitle: "Storage failure",
       format: "long",
