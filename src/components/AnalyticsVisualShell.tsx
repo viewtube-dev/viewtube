@@ -13,13 +13,6 @@ import type { HeroVisualId } from "./heroVisualAnimations"
 
 export type AnalyticsVisualShellMode = "standard" | "vt2-preserved" | "compact-row"
 
-export type VisualControllerSpec = {
-  rows: readonly ControllerRow[]
-  width?: number
-  density?: "normal" | "compact"
-  denseLegacy?: boolean
-}
-
 export type AnalyticsVisualShellProps = React.PropsWithChildren<{
   shellMode: AnalyticsVisualShellMode
   title: string
@@ -27,7 +20,9 @@ export type AnalyticsVisualShellProps = React.PropsWithChildren<{
   iconKey?: string
   icon?: React.ReactNode
   headerColorPair: VtSyncVisualHeaderColorPair
-  controllerSpec?: VisualControllerSpec
+  controllerRows?: readonly ControllerRow[]
+  controllerWidth?: number
+  controllerDensity?: "normal" | "compact"
   controllerExplanation?: string
   activeContext?: SubToolboxChartModuleProps["activeContext"]
   canvasFitMode?: VtSyncVisualCanvasFitMode
@@ -44,7 +39,7 @@ const iconNode = (icon: React.ReactNode | undefined, iconKey: string | undefined
 }
 
 const normalizedRows = (
-  controllerSpec: VisualControllerSpec | undefined,
+  controllerRows: readonly ControllerRow[] | undefined,
   controllerExplanation: string | undefined,
 ): readonly ControllerRow[] | undefined => {
   /*
@@ -63,7 +58,7 @@ const normalizedRows = (
    * Row budgets belong to the per-orientation controller profile (phase 5),
    * where a dropped row is still reachable rather than gone.
    */
-  const rows = controllerSpec?.rows ?? []
+  const rows = controllerRows ?? []
   if (!controllerExplanation) return rows.length > 0 ? [...rows] : undefined
   if (rows.some((row) => row.type === "statement")) return [...rows]
   return [
@@ -84,7 +79,9 @@ export const AnalyticsVisualShell: React.FC<AnalyticsVisualShellProps> = ({
   iconKey,
   icon,
   headerColorPair,
-  controllerSpec,
+  controllerRows,
+  controllerWidth,
+  controllerDensity,
   controllerExplanation,
   activeContext,
   canvasFitMode = "balanced",
@@ -94,7 +91,7 @@ export const AnalyticsVisualShell: React.FC<AnalyticsVisualShellProps> = ({
   heroVisualId,
 }) => {
   const resolvedIcon = iconNode(icon, iconKey)
-  const rows = normalizedRows(controllerSpec, controllerExplanation)
+  const rows = normalizedRows(controllerRows, controllerExplanation)
 
   if (shellMode === "vt2-preserved") {
     return (
@@ -121,8 +118,8 @@ export const AnalyticsVisualShell: React.FC<AnalyticsVisualShellProps> = ({
       headerColorPair={headerColorPair}
       activeContext={activeContext}
       controllerRows={rows as ControllerRow[] | undefined}
-      controllerWidth={controllerSpec?.width}
-      controllerDensity={controllerSpec?.density}
+      controllerWidth={controllerWidth}
+      controllerDensity={controllerDensity}
       theme={standard?.theme}
       layout={standard?.layout}
       footer={standard?.footer}
