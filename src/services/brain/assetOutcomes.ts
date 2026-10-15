@@ -64,6 +64,8 @@ export interface AssetOutcome {
  editRatio?: number
  /** Links the outcome back to the generating turn. */
  traceId: string
+ /** Caller-supplied key makes retries of one creator action idempotent. */
+ idempotencyKey?: string
 }
 
 const STORAGE_KEY = "vt_asset_outcomes_v1"
@@ -191,6 +193,8 @@ const BRAIN_OUTCOME_FOR_KIND = {
 export const recordAssetOutcome = async (input: {
  assetId: string
  kind: AssetOutcomeKind
+ /** Reuse this key when retrying the same logical creator action. */
+ idempotencyKey?: string
  note?: string
  /** Required for `edited`: what the creator changed it to. */
  correctedText?: string
