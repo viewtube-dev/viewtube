@@ -84,15 +84,20 @@ test("split-left buttons do not clip the stationary shadow or expose a wrapper b
 });
 
 
-test("single-line input typography follows the same standard/compact size split as textareas", () => {
+test("single-line inputs follow global 38px/24px typography while textareas keep the 18px/14px exception", () => {
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
-  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*18px\) !important/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*14px\) !important/);
-  assert.ok(controls.includes('standardInputFontSize: "18px"'));
-  assert.ok(controls.includes('compactInputFontSize: "14px"'));
+  assert.match(tokens, /standard: \{[^}]*fontSize: 38/);
+  assert.match(tokens, /compact: \{[^}]*fontSize: 24/);
+  assert.match(tokens, /textInput:\s*\{[^}]*standardFontSize:\s*38,\s*compactFontSize:\s*24/);
+  assert.match(tokens, /multiline:\s*\{[^}]*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*38px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*24px\) !important/);
+  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\) !important/);
+  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\) !important/);
+  assert.ok(controls.includes('standardInputFontSize: "38px"'));
+  assert.ok(controls.includes('compactInputFontSize: "24px"'));
 });
 
 test("text field families are split into input-plus-label and textarea-plus-label modules", () => {
