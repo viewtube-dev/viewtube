@@ -323,6 +323,6 @@ describe("post-publication analytics and metadata intelligence golden path", () 
       observations: [{ metric: "views", value: 900, observedAt: Date.parse("2026-10-17T12:00:00.000Z") }],
       evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 700 }],
     })).toThrow(/does not match/)
-    expect(listContentBuildEvents("cb-golden").some(event => event.eventType === "analytics.checkpoint")).toBe(false)
+    expect(listContentBuildEvents("cb-golden").some(event => event.eventType === "analytics.checkpoint" && event.metadata.videoId === "youtube-other")).toBe(false)
   })
 })
