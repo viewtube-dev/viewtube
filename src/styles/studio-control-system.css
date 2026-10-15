@@ -239,13 +239,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
 
 /* Permanent label-box variants of the canonical input and textarea families.
-   The label geometry, secondary-color fill, black stroke and compact ratio follow Legend Multi. */
+   Label-box typography, position, dimensions, padding, border and radius mirror Legend Multi. */
 .vt-studio-fixed-label-field {
-  --vt-studio-fixed-label-height: 24px;
-  --vt-studio-fixed-label-font-size: 16px;
+  --vt-studio-fixed-label-height: 20px;
+  --vt-studio-fixed-label-font-size: 14px;
   --vt-studio-fixed-label-stroke: 3px;
   --vt-studio-control-radius: 6px;
-  --vt-studio-control-secondary-outline-width: 1.5px;
   --vt-studio-control-focus-outline-width: 3px;
   position: relative;
   display: block;
@@ -254,11 +253,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   isolation: isolate;
 }
 .vt-studio-fixed-label-field[data-size="compact"] {
-  --vt-studio-fixed-label-height: 16px;
-  --vt-studio-fixed-label-font-size: 11px;
+  --vt-studio-fixed-label-height: 14px;
+  --vt-studio-fixed-label-font-size: 9px;
   --vt-studio-fixed-label-stroke: 2px;
   --vt-studio-control-radius: 4px;
-  --vt-studio-control-secondary-outline-width: 1px;
   --vt-studio-control-focus-outline-width: 2px;
 }
 .vt-studio-fixed-label-field > [data-vt-studio-control="true"] {
@@ -268,7 +266,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-fixed-label-field > .vt-studio-fixed-field-label {
   position: absolute;
   z-index: 2;
-  top: calc(var(--vt-studio-fixed-label-height) / -2.65);
+  top: -9px;
   left: 12px;
   display: inline-flex;
   align-items: center;
@@ -277,36 +275,33 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   width: max-content;
   max-width: calc(100% - 24px);
   min-width: 0;
+  height: var(--vt-studio-fixed-label-height);
   min-height: var(--vt-studio-fixed-label-height);
-  padding: 0 8px;
+  max-height: var(--vt-studio-fixed-label-height);
+  padding: 0 10px;
   margin: 0;
   border: var(--vt-studio-fixed-label-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-fixed-label-font-size);
   font-weight: 1000;
   line-height: 1;
-  letter-spacing: -.02em;
+  letter-spacing: .055em;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-text-stroke: .5px currentColor;
+  -webkit-text-stroke: 0;
   pointer-events: none;
 }
-/* The permanent label sits above the control border, so the native text surface
-   keeps its canonical vertical padding and remains fully usable at compact size. */
+/* Focus styling belongs to the field surface. Permanent label boxes stay unchanged;
+   the secondary-color label outline is reserved for floating-label compact variant B. */
 .vt-studio-fixed-label-field:focus-within > :is(input, textarea) {
   outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
-.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label {
-  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-}
-.vt-studio-fixed-label-field.is-textarea > .vt-studio-fixed-field-label { top: calc(var(--vt-studio-fixed-label-height) / -2.65); }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-fixed-label-field > .vt-studio-fixed-field-label { transition: none; }
 }
