@@ -13,6 +13,8 @@ export type VaultWorkspaceModuleId =
  | "import-tags"
  | "text-editor"
  | "asset-library"
+ | "image-workbench"
+ | "video-workbench"
  | "compare-versions"
  | "task-center"
  | "health-center"
@@ -24,6 +26,8 @@ export const DEFAULT_VAULT_MODULE_ORDER: VaultWorkspaceModuleId[] = [
  "import-tags",
  "text-editor",
  "asset-library",
+ "image-workbench",
+ "video-workbench",
  "compare-versions",
  "task-center",
  "health-center",
@@ -121,8 +125,8 @@ export const readVaultWorkspaceState = (): VaultWorkspaceState => {
   const rawOrder = Array.isArray(parsed.moduleOrder) ? parsed.moduleOrder : []
   const legacyWorkspace = parsed.importTagsMode == null
   const visibleSeed = legacyWorkspace
-   ? [...rawVisible, "import-tags", "text-editor", "health-center"]
-   : [...rawVisible, ...(rawOrder.includes("health-center") ? [] : ["health-center"]), ...(rawOrder.includes("relationship-review") ? [] : ["relationship-review"])]
+   ? [...rawVisible, "import-tags", "text-editor", "health-center", "image-workbench", "video-workbench"]
+   : [...rawVisible, "image-workbench", "video-workbench", ...(rawOrder.includes("health-center") ? [] : ["health-center"]), ...(rawOrder.includes("relationship-review") ? [] : ["relationship-review"])]
   const orderSeed = legacyWorkspace
    ? [...rawOrder, "import-tags", "text-editor"]
    : rawOrder
