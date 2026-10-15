@@ -512,6 +512,9 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
  expect(snapshot.provenance.latestChain).toMatchObject({
   requestId: "generation_request_1",
   contextManifestId: "context-1",
+  operationId: "operation-1",
+  workflowId: "workflow-1",
+  operationIdentityMismatch: false,
   receiptId: "tool_receipt_1",
   traceId: "trace-1",
   contentBuildId: build.id,
