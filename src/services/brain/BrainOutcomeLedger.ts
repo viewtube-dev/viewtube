@@ -1,5 +1,6 @@
 import type { BrainConfidenceLevel, SuperToolId } from "../../types"
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
+import type { ContentBuildPublicationIdentity } from "../asset-engine/contracts"
 
 const STORAGE_KEY = "vt_brain_outcome_ledger_v1"
 export const BRAIN_OUTCOME_EVENT = "vt_brain_outcome_ledger_changed"
@@ -86,6 +87,41 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
   },
  })
  return record
+}
+
+/**
+ * Attach verified publication and analytics provenance to an existing outcome.
+ * The original outcome identity is retained; mismatched channel/source pairs fail closed.
+ */
+export const updateBrainOutcomePublicationLineage = (input: {
+ channelId: string
+ sourceRecordId: string
+ publicationIdentity: ContentBuildPublicationIdentity
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
+}): BrainOutcomeRecord | null => {
+ if (input.publicationIdentity.channelId !== input.channelId) return null
+ const records = read()
+ const found = records.find((record) =>
+  record.channelId === input.channelId && record.sourceRecordId === input.sourceRecordId
+ )
+ if (!found) return null
+ if (found.publishTransactionId && found.publishTransactionId !== input.publicationIdentity.publishTransactionId) return null
+ if (found.publishedVideoId && found.publishedVideoId !== input.publicationIdentity.youtubeVideoId) return null
+ const next: BrainOutcomeRecord = {
+  ...found,
+  contentBuildId: input.publicationIdentity.contentBuildId,
+  projectId: input.publicationIdentity.projectId,
+  publishTransactionId: input.publicationIdentity.publishTransactionId,
+  approvedSnapshotId: input.publicationIdentity.approvedSnapshotId,
+  approvedSnapshotHash: input.publicationIdentity.approvedSnapshotHash,
+  publishedVideoId: input.publicationIdentity.youtubeVideoId,
+  publicationIdentity: input.publicationIdentity,
+  analyticsCheckpointIds: [...new Set([...(found.analyticsCheckpointIds || []), ...(input.analyticsCheckpointIds || [])])],
+  evidenceIds: [...new Set([...(found.evidenceIds || []), ...(input.evidenceIds || [])])],
+ }
+ write(records.map((record) => record.id === found.id ? next : record))
+ return next
 }
 
 export const summarizeBrainOutcomes = (channelId?: string | null) => {
