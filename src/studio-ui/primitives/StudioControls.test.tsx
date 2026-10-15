@@ -247,6 +247,43 @@ describe("canonical square icon button family", () => {
 })
 
 
+describe("shared Studio icon-size comparison contract", () => {
+  it("renders current, moderate, and large icon sizing modes on both production primitives", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Current" iconSizeVariant="current" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Moderate" iconSizeVariant="moderate" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Large" iconSizeVariant="large" sizeVariant="compact" />
+        <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="moderate">Moderate split</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="large" heightVariant="28">Large compact split</StudioSplitLeftButton>
+      </>,
+    )
+    expect(html.match(/data-icon-size-variant="current"/g)).toHaveLength(1)
+    expect(html.match(/data-icon-size-variant="moderate"/g)).toHaveLength(2)
+    expect(html.match(/data-icon-size-variant="large"/g)).toHaveLength(2)
+  })
+
+  it("defines the requested icon dimensions and compensates SVG stroke for the larger viewBox-scaled box", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('data-icon-size-variant="moderate"][data-size="standard"]')
+    expect(css).toContain('--vt-studio-control-icon-size:34px')
+    expect(css).toContain('--vt-studio-control-icon-size:22px')
+    expect(css).toContain('data-icon-size-variant="large"][data-size="standard"]')
+    expect(css).toContain('--vt-studio-control-icon-size:38px')
+    expect(css).toContain('--vt-studio-control-icon-size:24px')
+  })
+
+  it("shows current, moderate, and large comparisons for both square and split-left production buttons", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain("Current · 28px / 18px")
+    expect(html).toContain("Moderate · 34px / 22px")
+    expect(html).toContain("Large · 38px / 24px")
+    expect(html).toContain('data-vt-library-component="StudioSquareIconButton"')
+    expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
+  })
+})
+
+
 describe("tactile button press accessibility and exclusion contract", () => {
   it("keeps keyboard focus visible and prevents disabled controls from depressing", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
