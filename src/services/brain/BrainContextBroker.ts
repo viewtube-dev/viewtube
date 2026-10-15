@@ -36,6 +36,9 @@ export const buildBrainContextPack = (input: {
  algorithmIntelligence?: AlgorithmIntelligencePortfolio | null
  creatorContext?: CreatorContextEnvelope | null
  maximumCharacters?: number
+ modelContextWindowTokens?: number | null
+ reservedOutputTokens?: number
+ contextSafetyMarginTokens?: number
 }): { systemInstruction: string; budget: BrainContextBudget } => {
  const requestedChannelId = input.channelId || null
  const creatorContextMatchesChannel = Boolean(
