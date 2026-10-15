@@ -136,6 +136,8 @@ export const createAsset = (input: CreateAssetInput): AssetEngineResult => {
  const contentBuildId = contentBuild?.id || null
 
  const record = createGenerationRecord({
+  operationId: context.operationId || null,
+  workflowId: context.workflowId || null,
   toolId: input.sourceToolId as SuperToolId,
   provider: "mock",
   model: "viewtube-asset-engine-v1",
