@@ -181,8 +181,8 @@ export const createPublicationEvaluationRecord = (input: {
  const linkedOutcomes = listAssetOutcomes({ channelId: identity.channelId }).filter((outcome) =>
   outcome.kind === "published" &&
   identity.selectedVariantAssetIds.includes(outcome.assetId) &&
-  (!outcome.publishedVideoId || outcome.publishedVideoId === identity.youtubeVideoId) &&
-  (!outcome.publishTransactionId || outcome.publishTransactionId === identity.publishTransactionId)
+  outcome.publishedVideoId === identity.youtubeVideoId &&
+  outcome.publishTransactionId === identity.publishTransactionId
  )
  const sourceOutcomeIds = linkedOutcomes.map((outcome) => outcome.id)
  const sourceRecordIds = [...new Set([...sourceOutcomeIds, identity.publishTransactionId])]
