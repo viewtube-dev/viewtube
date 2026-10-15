@@ -1,7 +1,7 @@
 import { latestCompleteAnalyticsDate } from "./analytics/windows"
 import { fetchCanonicalAnalyticsReport, rowsToObjects } from "./canonicalSync/query"
-import { appendContentBuildEvent } from "./asset-engine/ContentBuildRepository"
 import {
+  appendContentBuildEvent,
   listContentBuildEvents,
   listContentBuildMetadataHistory,
   type ContentBuildMetadataHistoryEntry,
@@ -185,7 +185,7 @@ export const buildHistoricalMetadataComparison = (input: {
   const followUpStart = dateOnly(addDays(new Date(Date.UTC(changedDay.getUTCFullYear(), changedDay.getUTCMonth(), changedDay.getUTCDate())), 1))
   const followUpTargetEnd = dateOnly(addDays(new Date(Date.UTC(changedDay.getUTCFullYear(), changedDay.getUTCMonth(), changedDay.getUTCDate())), 7))
   const now = input.now || new Date()
-  const completeThrough = dateOnly(addDays(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())), -1))
+  const completeThrough = dateOnly(latestCompleteAnalyticsDate(now))
   const queryEnd = followUpTargetEnd < completeThrough ? followUpTargetEnd : completeThrough
   const byDay = new Map(input.rows.map(row => {
     const day = String(row.day || row.date || "")
