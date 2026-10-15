@@ -130,6 +130,12 @@ After the event, inspect the archive for technical quality and check whether the
 
 A long Q&A may produce a useful set of future tutorials. A demo failure may reveal a missing explanation worth making into a short guide. Preserve those ideas in the project rather than relying on memory.
 
+## Repurpose the Stream Without Losing Context
+
+A live stream can become clips, Shorts, tutorials, FAQs, highlights, or future episode ideas. Choose excerpts that make sense outside the original event. Add enough context that a viewer who did not attend understands the question, the answer, and any limits. Do not cut an answer in a way that reverses its meaning or exposes a participant's private information.
+
+During the review, note timestamps for strong demonstrations, repeated questions, and moments that deserve a standalone explanation. Confirm that any music, guest appearance, or submitted material can be reused in the new format; permission for a live appearance does not automatically settle every reuse question.
+
 ## Use This in ViewTube
 
 Use **Projects** to keep the run of show, assets, guest notes and recovery plan together. Use **Video Publisher** for the stream's release details and **Analytics** to review the replay. Use the Resource Library's community and publishing guides to improve moderation and preflight.
