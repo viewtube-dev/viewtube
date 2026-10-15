@@ -4,8 +4,28 @@ vi.mock("./viewTubeUserControls", () => ({
  evaluateViewTubeControl: () => ({ allowed: true }),
 }))
 
+vi.mock("./analytics-canon", () => ({
+ getCurrentCanonicalIntelligenceEvidence: vi.fn(() => ({
+  snapshotId: "snapshot-current",
+  channelId: "channel-a",
+  selectedWindow: "28d",
+  datasets: [{ id: "videos", status: "available" }],
+ })),
+ getCurrentCanonicalIntelligenceDatasetRows: vi.fn(() => ({
+  snapshotId: "snapshot-current",
+  channelId: "channel-a",
+  dataset: {
+   snapshotId: "snapshot-current",
+   channelId: "channel-a",
+   rows: [{ videoId: "youtube-1", views: 120 }],
+  },
+ })),
+}))
+
+
 import {
  createEvaluationRecord,
+ createPublicationEvaluationRecord,
  listEvaluationRecords,
  proposeEvaluationLearningCandidate,
  listWorkflowCandidates,
@@ -26,6 +46,51 @@ beforeEach(() => {
 })
 
 describe("outcome evaluation and governed learning lineage", () => {
+ it("joins a completed publication identity to its exact canonical video row and preserves lineage", () => {
+  const record = createPublicationEvaluationRecord({
+   publicationIdentity: {
+    schemaVersion: 1,
+    contentBuildId: "build-a",
+    projectId: "project-a",
+    projectAssociationStatus: "verified",
+    videoPackageId: "package-a",
+    publishTransactionId: "publish-a",
+    youtubeVideoId: "youtube-1",
+    channelId: "channel-a",
+    approvedSnapshotId: "approved-a",
+    approvedSnapshotHash: "hash-a",
+    selectedVariantAssetIds: ["title-a", "thumb-a", "render-a"],
+    correlationId: "publish-a",
+    idempotencyKey: "publish:build-a:approved-a",
+    publishedAt: "2026-10-15T10:00:00.000Z",
+   },
+   selectedWindow: "28d",
+   source: "post-publication",
+   recommendation: "Evaluate the published title variant",
+   baselineSnapshotId: "snapshot-baseline",
+   comparabilityStatus: "comparable",
+   confounders: ["seasonality"],
+  })
+  expect(record).toMatchObject({
+   channelId: "channel-a",
+   projectId: "project-a",
+   contentBuildId: "build-a",
+   videoPackageId: "package-a",
+   publishTransactionId: "publish-a",
+   publishedVideoId: "youtube-1",
+   approvedSnapshotId: "approved-a",
+   approvedSnapshotHash: "hash-a",
+   selectedVariantAssetIds: ["title-a", "thumb-a", "render-a"],
+   baselineSnapshotId: "snapshot-baseline",
+   comparisonSnapshotId: "snapshot-current",
+   selectedWindow: "28d",
+   evidenceIds: ["snapshot-current:videos:1"],
+   evidenceStatus: "available",
+   comparabilityStatus: "comparable",
+   outcome: "pending",
+  })
+ })
+
  it("keeps evaluation retries idempotent within channel and project scope", () => {
   const input = {
    channelId: "channel-a",
