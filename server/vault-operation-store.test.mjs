@@ -69,6 +69,17 @@ test("Vault operation records are idempotent, persistent, and scoped to authenti
   }
 });
 
+test("Vault operation store rejects requests without an authenticated owner", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "vault-operations-"));
+  try {
+    const response = await invoke({ method: "GET", pathname: "/api/vault/operations", userId: null, root });
+    assert.equal(response.status, 401);
+    assert.equal(response.body.error, "Authentication required.");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("Vault operation store rejects unsupported operations and invalid state transitions", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "vault-operations-"));
   try {
