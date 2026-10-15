@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Evaluation contract, guarded writer, and canonical video-row join are implemented. Current-head CI and production data freshness/coverage still require verification.
+**Status:** Evaluation contract, guarded writer, canonical video-row join, source outcome/trace lineage, and matching ContentBuild analytics-checkpoint collection are implemented. Current-head CI and production data freshness/coverage still require verification.
 
 ## Objective
 
@@ -12,15 +12,15 @@ Extend the existing `viewTubeEvaluationLedger` rather than create another evalua
 
 `EvaluationRecord` now optionally retains:
 
-- source outcome IDs and producer record IDs;
+- source outcome IDs and producer record IDs, when a linked published outcome exists;
 - generation trace and asset IDs;
-- published video ID;
+- published video ID and immutable publication transaction/snapshot identity;
 - baseline and comparison snapshot IDs;
 - selected reporting window;
 - comparability status and evidence status;
 - declared confounders;
 - causal assessment (`observed_association`, `experimentally_supported`, or `insufficient_evidence`);
-- a caller idempotency key.
+- matching analytics checkpoint event IDs (only when the event identifies the same published video);\n- a caller idempotency key.
 
 Evaluation creation is idempotent when the caller supplies the same key in the same channel/project scope. Existing records without the new optional metadata remain readable. The current writer remains subject to the existing creator-learning control.
 
@@ -43,7 +43,8 @@ The contract deliberately does not calculate a causal effect from two metric obj
 
 - The evaluation writer now accepts the typed publication identity and requires the published YouTube video ID to exist in the same current canonical `videos` dataset snapshot and channel scope before creating an evaluation. It records the canonical row evidence ID, snapshot ID, selected window, approved snapshot/hash, transaction, package, ContentBuild, and selected asset IDs.
 - This is an identity join, not proof that the available metrics are sufficient or causally comparable. `projectAssociationStatus: snapshot-only` remains explicit where the legacy project association cannot be verified.
-- No automated ingestion of every analytics checkpoint is claimed by adding optional fields to the evaluation record.
+- Checkpoint collection is intentionally limited to ContentBuild `analytics.checkpoint` events whose `youtubeVideoId`/`publishedVideoId` matches the exact publication. Missing checkpoint events remain an empty list; canonical video-row evidence is still required.
+- No claim is made that every upstream analytics provider has emitted a checkpoint.
 - The system must not claim causality unless the evaluation has appropriate experimental support.
 
 ## Acceptance
