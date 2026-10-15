@@ -19,6 +19,8 @@ import {
   StudioTextInput,
   StudioWordToggle,
   StudioSpectrumTag,
+  StudioCloseableBadge,
+  StudioTagEditor,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
 import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"
@@ -454,6 +456,34 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           <span>Selected-state treatment</span>
           <StudioSpectrumTag label="DESIGN" selected />
         </div>
+      </div>
+    </Family>
+    <Family
+      title="Global Rules Exceptions · Closeable Badge + Tag Editor"
+      nonDefaultSettings={[
+        "Closeable badges intentionally use a 20px pill and 16px label instead of the global 44px / 28px control lattice.",
+        "The label is uppercase Inter 1000 with its primary color mixed 50% with white; the pill uses primary fill and a 16px secondary circle with a primary X.",
+        "Closing swaps the circle/X colors three times at 180ms per cycle, then fades the badge for one second before removal.",
+        "The tag editor uses 32px plus/check square actions with 3px black stroke, 8px radius and a 4px secondary-pair shadow at 45% opacity.",
+        "Adding a tag opens the compact Studio input; Enter confirms, Escape cancels, and new text flies to the new badge. Reduced-motion removes nonessential animation."
+      ]}
+      provenance={<Provenance
+        primitive="StudioCloseableBadge / StudioTagEditor"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
+        tokens={`Badge H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.closeableBadge.height}px · label ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.closeableBadge.fontSize}px / ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.closeableBadge.fontWeight} · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
+        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant">
+        <span>Closeable badge · enter, close-swap, and fade animations</span>
+        <div className="vt-confirmed-tag-editor-badge-row">
+          <StudioCloseableBadge label="Tag One" />
+          <StudioCloseableBadge label="Featured" />
+          <StudioCloseableBadge label="Live" />
+        </div>
+        <span>Interactive Tag Editor · add, confirm, fly, and remove</span>
+        <StudioTagEditor defaultValue={["Tag One", "Featured"]} />
       </div>
     </Family>
     <ConfirmedStepperFamily />
