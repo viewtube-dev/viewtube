@@ -267,8 +267,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   transform: translateY(-40%);
   transform-origin: left center;
 }
-.vt-studio-floating-field[data-size="compact"] > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field[data-size="compact"] > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+.vt-studio-floating-field[data-size="compact"]:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
+.vt-studio-floating-field[data-size="compact"]:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   font-size: calc(var(--vt-studio-floating-label-size-compact) * .8);
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
