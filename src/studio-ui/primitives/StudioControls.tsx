@@ -18,7 +18,14 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
-    sizeFamily: "Inherit global standard/compact height, border stroke, corner radius, font family, font weight, text size, text transform, letter spacing, and line height; textareas override only multiline surface and reading metrics.",
+    typography: {
+      standardInputFontSize: "38px",
+      compactInputFontSize: "24px",
+      standardTextAreaFontSize: "18px",
+      compactTextAreaFontSize: "14px",
+      rule: "Single-line inputs inherit the global Studio standard/compact typography (38px/24px). Only textareas use the multiline reading-size exception (18px/14px); input typography is not independently scaled away from the global defaults.",
+    },
+    sizeFamily: "Inherit global standard/compact height, border stroke, corner radius, font family, font weight, text size (38px/24px), uppercase transform, letter spacing, and line height; textareas override only multiline surface and reading metrics (18px/14px).",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
