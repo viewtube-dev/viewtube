@@ -2,6 +2,10 @@ import {
  getContentBuild,
 } from "./ContentBuildRepository"
 import {
+ operationRecordFromGenerationRequest,
+ operationRecordFromToolReceipt,
+} from "../operations/OperationRecord"
+import {
  recordContentBuildToolInput,
  recordContentBuildToolOutput,
  resolveContentBuildToolContext,
@@ -221,6 +225,9 @@ export const prepareGenerationRequest = (input: {
    parentAssetId: request.parentAssetId,
    variantGroupId: request.variantGroupId,
    generationRequest: request,
+   operationRecord: operationRecordFromGenerationRequest(request, {
+    selectedAssetIds: contextManifest.selectedAssetIds,
+   }),
    contextManifest,
   },
  })
@@ -287,6 +294,11 @@ export const recordToolReceipt = (input: {
    variantGroupId: receipt.variantGroupId,
    relationshipIds: receipt.relationshipIds,
    toolReceipt: receipt,
+   operationRecord: operationRecordFromToolReceipt(receipt, {
+    operationId: input.request.id,
+    workflowId: `workflow:${input.request.contentBuildId}`,
+    channelId: input.request.channelId,
+   }),
    ...(input.metadata || {}),
   },
  })
