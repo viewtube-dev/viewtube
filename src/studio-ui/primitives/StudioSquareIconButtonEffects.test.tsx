@@ -74,6 +74,8 @@ describe("StudioSquareIconButton interaction effects", () => {
     expect(css).toContain("180ms cubic-bezier(.2,.8,.2,1)")
     expect(css).toContain("220ms cubic-bezier(.2,.8,.2,1)")
     expect(css).toContain("320ms ease-in-out")
+    expect(css).toContain('is-effect-notification[data-notification-pulse="true"]')
+    expect(css).not.toContain('is-effect-notification[data-has-badge="true"]:not(:disabled) [data-vt-square-icon-current]')
     expect(css).toContain("450ms cubic-bezier(.2,.8,.2,1)")
     expect(css).toContain("500ms cubic-bezier(.2,.8,.2,1)")
     expect(css).toContain("outline: var(--vt-studio-control-focus-outline-width)")
