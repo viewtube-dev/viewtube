@@ -22,7 +22,7 @@ test("switch and choice skin families retain four-column rows at every viewport"
   assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants,[\s\S]*?grid-template-columns: repeat\(4, minmax\(64px, 1fr\)\) !important;[\s\S]*?overflow-x: auto/);
 });
 
-test("standard button specimens span a row and compact A/B share two columns", () => {
+test("standard button specimens span a row and compact variants share two columns", () => {
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants\s*\{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\) !important/);
   assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants > \.vt-confirmed-variant\.is-full-row\s*\{\s*grid-column: 1 \/ -1 !important/);
   assert.ok(catalog.includes('28px compact · default'));
@@ -203,6 +203,11 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
   assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
+});
+
+test("word-toggle settings distinguish displayed words from the boolean value", () => {
+  assert.ok(catalog.includes("The first word is selected when the value is false; selecting the second word changes the value to true."));
+  assert.ok(catalog.includes("Custom words change the displayed labels, not the boolean state contract."));
 });
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
