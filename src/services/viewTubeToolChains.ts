@@ -10,20 +10,23 @@ import {
 
 export type ViewTubeToolKind = "studio-tool" | "widget" | "analytics" | "project" | "vault" | "editor" | "brain" | "super-tool" | "system"
 export type ViewTubePayloadKind = "video" | "thumbnail" | "image" | "script" | "storyboard" | "metadata" | "comment" | "community-post" | "poll" | "analysis" | "tactic" | "hook" | "project" | "calendar-item" | "timeline" | "asset" | "evidence" | "json"
-export interface ViewTubeToolCapability { id:string; label:string; kind:ViewTubeToolKind; route:string; accepts:ViewTubePayloadKind[]; produces:ViewTubePayloadKind[]; status:"ready"|"partial"|"planned"; description:string }
-export interface ViewTubeActionPacket<T=unknown> { id:string; version:1; sourceToolId:string; sourceKind:ViewTubeToolKind; payloadKind:ViewTubePayloadKind; title:string; summary:string; payload:T; contentBuildId?:string|null; projectId?:string|null; channelId?:string|null; videoId?:string|null; evidence:string[]; provenance:string[]; suggestedTargets:string[]; createdAt:number }
+export type ViewTubeHandoffIntent = "inspect" | "prepare" | "propose" | "execute"
+export type ViewTubeApprovalState = "not-required" | "pending" | "approved" | "rejected"
+export type ViewTubeMutationClass = "read-only" | "prepare" | "proposal" | "user-approved-write" | "external-write"
+export interface ViewTubeToolCapability { id:string; label:string; kind:ViewTubeToolKind; route:string; accepts:ViewTubePayloadKind[]; produces:ViewTubePayloadKind[]; status:"ready"|"partial"|"planned"; description:string; requiredContext?:string[]; mutationClass?:ViewTubeMutationClass; resumeRoute?:string }
+export interface ViewTubeActionPacket<T=unknown> { id:string; version:1; sourceToolId:string; sourceKind:ViewTubeToolKind; payloadKind:ViewTubePayloadKind; title:string; summary:string; payload:T; creatorId?:string|null; contentBuildId?:string|null; projectId?:string|null; channelId?:string|null; videoId?:string|null; assetIds?:string[]; evidence:string[]; provenance:string[]; suggestedTargets:string[]; createdAt:number; workflowId?:string; operationId?:string; idempotencyKey?:string|null; parentPacketId?:string|null; recommendationId?:string|null; experimentId?:string|null; contextManifestId?:string|null; promptRecipeId?:string|null; promptRecipeVersion?:string|null; intent?:ViewTubeHandoffIntent; approvalState?:ViewTubeApprovalState; approvedBy?:string|null; approvedAt?:string|null; approvedSnapshotId?:string|null; approvedSnapshotHash?:string|null; expectedSnapshotHash?:string|null; identityMode?:"canonical"|"legacy-derived" }
 export interface ViewTubeToolChainStep { toolId:string; purpose:string; optional?:boolean }
 export interface ViewTubeSuggestedToolChain { id:string; title:string; description:string; startsWith:string[]; steps:ViewTubeToolChainStep[]; outcome:string }
 
 const PACKET_KEY = "viewtube:action-packets:v1"
 const readPackets = (): ViewTubeActionPacket[] => { if(typeof window==="undefined") return []; try{return JSON.parse(window.localStorage.getItem(PACKET_KEY)||"[]") as ViewTubeActionPacket[]}catch{return []} }
 const cachePacket = (packet:ViewTubeActionPacket) => { if(typeof window!=="undefined") window.localStorage.setItem(PACKET_KEY, JSON.stringify([packet,...readPackets().filter(p=>p.id!==packet.id)].slice(0,250))) }
-export const loadViewTubeActionPacket = (id:string) => readPackets().find(packet=>packet.id===id)||null
+export const loadViewTubeActionPacket = (id:string) => { const packet=readPackets().find(item=>item.id===id); if(!packet) return null; return { ...packet, workflowId:packet.workflowId||`legacy:${packet.id}`, operationId:packet.operationId||`legacy:${packet.id}`, intent:packet.intent||"prepare", approvalState:packet.approvalState||"not-required", identityMode:packet.identityMode||"legacy-derived" } }
 export const removeViewTubeActionPacket = (id:string) => { if(typeof window!=="undefined") window.localStorage.setItem(PACKET_KEY, JSON.stringify(readPackets().filter(packet=>packet.id!==id))) }
 
 export const VIEWTUBE_TOOL_CAPABILITIES: ViewTubeToolCapability[] = [
- {id:"video-manager",label:"Video Manager",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","asset"],produces:["video","metadata"],status:"ready",description:"Select and manage canonical creator videos and their assets."},
- {id:"video-publisher",label:"Video Publisher",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","script","asset"],produces:["metadata","asset"],status:"ready",description:"Assemble publish-ready metadata and creator deliverables."},
+ {id:"video-manager",label:"Video Manager",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","asset"],produces:["video","metadata"],status:"ready",description:"Select and manage canonical creator videos and their assets.",mutationClass:"external-write",requiredContext:["video"],resumeRoute:"/studio"},
+ {id:"video-publisher",label:"Video Publisher",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","script","asset"],produces:["metadata","asset"],status:"ready",description:"Assemble publish-ready metadata and creator deliverables.",mutationClass:"external-write",resumeRoute:"/publisher"},
  {id:"metadata-master",label:"Metadata Master",kind:"studio-tool",route:"/studio#metadata-master",accepts:["video","script","metadata","analysis","evidence","asset","thumbnail"],produces:["metadata","thumbnail","analysis","evidence","asset","json"],status:"ready",description:"Optimize, compare and assemble the publication package before publication or a proposed live-video update."},
  {id:"content-analysis",label:"Content Analysis",kind:"studio-tool",route:"/studio",accepts:["video","script","metadata","evidence"],produces:["analysis","tactic","hook"],status:"ready",description:"Analyze creator content and turn evidence into actionable findings."},
  {id:"thumbnail-studio",label:"Thumbnail Studio",kind:"studio-tool",route:"/studio",accepts:["video","image","metadata","analysis","hook"],produces:["thumbnail","image","asset"],status:"ready",description:"Create and analyze thumbnail packaging."},
@@ -53,8 +56,9 @@ export const VIEWTUBE_SUGGESTED_TOOL_CHAINS: ViewTubeSuggestedToolChain[] = [
 export const getViewTubeToolCapability=(id:string)=>VIEWTUBE_TOOL_CAPABILITIES.find(tool=>tool.id===id)||null
 export const getCompatibleHandoffTargets=(packet:Pick<ViewTubeActionPacket,"sourceToolId"|"payloadKind">)=>VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==packet.sourceToolId&&tool.accepts.includes(packet.payloadKind))
 export const getSuggestedChainsForTool=(toolId:string)=>VIEWTUBE_SUGGESTED_TOOL_CHAINS.filter(chain=>chain.startsWith.includes(toolId)||chain.steps.some(step=>step.toolId===toolId))
-export const createViewTubeActionPacket=<T,>(input:Omit<ViewTubeActionPacket<T>,"id"|"version"|"createdAt"|"suggestedTargets">&{suggestedTargets?:string[]}):ViewTubeActionPacket<T>=>{const compatible=VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==input.sourceToolId&&tool.accepts.includes(input.payloadKind)).map(tool=>tool.id);return{...input,id:crypto.randomUUID(),version:1,suggestedTargets:input.suggestedTargets||compatible,createdAt:Date.now()}}
+export const createViewTubeActionPacket=<T,>(input:Omit<ViewTubeActionPacket<T>,"id"|"version"|"createdAt"|"suggestedTargets"|"identityMode">&{suggestedTargets?:string[]}):ViewTubeActionPacket<T>=>{const compatible=VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==input.sourceToolId&&tool.accepts.includes(input.payloadKind)).map(tool=>tool.id);return{...input,id:crypto.randomUUID(),version:1,workflowId:input.workflowId||crypto.randomUUID(),operationId:input.operationId||crypto.randomUUID(),intent:input.intent||"prepare",approvalState:input.approvalState||"not-required",identityMode:"canonical",suggestedTargets:input.suggestedTargets||compatible,createdAt:Date.now()}}
 export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>) => {
+ packet = { ...packet, workflowId:packet.workflowId||`legacy:${packet.id}`, operationId:packet.operationId||`legacy:${packet.id}`, intent:packet.intent||"prepare", approvalState:packet.approvalState||"not-required", identityMode:packet.identityMode||"legacy-derived" }
  cachePacket(packet as ViewTubeActionPacket)
  const inboxItems = enqueueBrainHandoffs(packet as ViewTubeActionPacket)
  const record = createGenerationRecord({
@@ -65,15 +69,38 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
    sourceToolId: packet.sourceToolId,
    payloadKind: packet.payloadKind,
    contentBuildId: packet.contentBuildId || null,
+   workflowId: packet.workflowId || null,
+   operationId: packet.operationId || null,
+   promptRecipeId: packet.promptRecipeId || null,
+   promptRecipeVersion: packet.promptRecipeVersion || null,
+   contextManifestId: packet.contextManifestId || null,
   }),
   status: "running",
   artifacts: [],
   metadata: {
    actionPacketId: packet.id,
+   workflowId: packet.workflowId || null,
+   operationId: packet.operationId || null,
+   parentPacketId: packet.parentPacketId || null,
+   idempotencyKey: packet.idempotencyKey || null,
    contentBuildId: packet.contentBuildId || null,
    projectId: packet.projectId || null,
+   creatorId: packet.creatorId || null,
    channelId: packet.channelId || null,
    videoId: packet.videoId || null,
+   assetIds: packet.assetIds || [],
+   recommendationId: packet.recommendationId || null,
+   experimentId: packet.experimentId || null,
+   contextManifestId: packet.contextManifestId || null,
+   promptRecipeId: packet.promptRecipeId || null,
+   promptRecipeVersion: packet.promptRecipeVersion || null,
+   intent: packet.intent || "prepare",
+   approvalState: packet.approvalState || "not-required",
+   approvedBy: packet.approvedBy || null,
+   approvedAt: packet.approvedAt || null,
+   approvedSnapshotId: packet.approvedSnapshotId || null,
+   approvedSnapshotHash: packet.approvedSnapshotHash || null,
+   identityMode: packet.identityMode || "legacy-derived",
    universalToolHandoff: true,
    handoffInboxIds: inboxItems.map(item => item.id),
   },
@@ -143,6 +170,23 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
     metadata: {
      payloadKind: packet.payloadKind,
      suggestedTargets: packet.suggestedTargets,
+     workflowId: packet.workflowId || null,
+     operationId: packet.operationId || null,
+     parentPacketId: packet.parentPacketId || null,
+     idempotencyKey: packet.idempotencyKey || null,
+     creatorId: packet.creatorId || null,
+     recommendationId: packet.recommendationId || null,
+     experimentId: packet.experimentId || null,
+     contextManifestId: packet.contextManifestId || null,
+     promptRecipeId: packet.promptRecipeId || null,
+     promptRecipeVersion: packet.promptRecipeVersion || null,
+     intent: packet.intent || "prepare",
+     approvalState: packet.approvalState || "not-required",
+     approvedBy: packet.approvedBy || null,
+     approvedAt: packet.approvedAt || null,
+     approvedSnapshotId: packet.approvedSnapshotId || null,
+     approvedSnapshotHash: packet.approvedSnapshotHash || null,
+     identityMode: packet.identityMode || "legacy-derived",
     },
    })
   }
