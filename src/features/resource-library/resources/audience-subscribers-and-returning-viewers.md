@@ -132,6 +132,14 @@ https://support.google.com/youtube/answer/13615784
 **YouTube Help** — Check current Analytics definitions and availability for your channel.  
 https://support.google.com/youtube/
 
+## Field Exercise: Map a Reason to Return
+
+Write the recurring viewer need your channel serves and three different ways a viewer can benefit from returning. Map upcoming videos to those needs while leaving room for a deliberate experiment. Review returning-viewer and subscriber measures over a consistent window alongside the content published during it. If one video attracts many new viewers but does not produce repeat viewing, ask whether it served a one-time question or lacked a useful next step before calling it a failure.
+
+## Evidence Boundary: Audience Metrics
+
+Subscriber totals do not guarantee that subscribers will see or watch every upload. Audience measures depend on current platform definitions, reporting windows, and overlapping groups. A single spike is a clue, not a permanent audience profile. Verify definitions and compare several periods before changing channel strategy based on an apparent audience shift.
+
 ## Document Maintenance
 
 | Attribute | Value |
