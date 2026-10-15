@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea, StudioTextInput } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -360,5 +360,44 @@ describe("SubToolbox grid button width ownership", () => {
     expect(css).toContain('justify-self: stretch;')
     expect(css).toContain('.vt-subtoolbox-grid.is-compact{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr))}')
     expect(css).toContain('.vt-subtoolbox-grid.is-wide{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}')
+  })
+})
+
+
+describe("documented global-rule exception: Vault Spectrum Tags", () => {
+  it("renders the donor-exact monochromatic tag as a named Studio exception", () => {
+    const html = renderToStaticMarkup(<StudioSpectrumTag label="camera" selected />)
+    expect(html).toContain('class="vt-studio-spectrum-tag is-selected"')
+    expect(html).toContain('data-vt-studio-exception="vault-spectrum-tag"')
+    expect(html).toContain('data-tag="CAMERA"')
+    expect(html).toContain('aria-pressed="true"')
+    expect(html).toContain("CAMERA")
+  })
+
+  it("keeps the exact Vault chip geometry and palette rules in the exception registry", () => {
+    const exception = STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.vaultSpectrumTag
+    expect(exception.globalRuleException).toBe(true)
+    expect(exception.height).toBe(15)
+    expect(exception.borderWidth).toBe(2)
+    expect(exception.radius).toBe(4)
+    expect(exception.fontSize).toBe(8)
+    expect(exception.fontWeight).toBe(900)
+    expect(exception.letterSpacing).toBe("0.3px")
+    expect(exception.colorResolver).toBe("getAlphabeticalSpectrumColor")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain(".vt-studio-spectrum-tag {")
+    expect(css).toContain("height: 15px;")
+    expect(css).toContain("border: 2px solid var(--vt-spectrum-tag-color);")
+    expect(css).toContain("font-size: 8px;")
+    expect(css).toContain("color-mix(in srgb, var(--vt-spectrum-tag-color) 35%, white)")
+  })
+
+  it("uses the canonical Studio Spectrum Tag in Vault assets instead of duplicating its color and chip geometry", () => {
+    const vault = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/VaultAssetModule.tsx"), "utf8")
+    expect(vault).toContain('import { StudioSpectrumTag } from "../../studio-ui/primitives/StudioControls"')
+    expect(vault).toContain("<StudioSpectrumTag")
+    expect(vault).not.toContain("getAlphabeticalSpectrumColor(normalized)")
+    const vaultCss = readFileSync(resolve(process.cwd(), "src/styles/vault-asset-module.css"), "utf8")
+    expect(vaultCss).not.toContain(".vt-vault-tag-badge{")
   })
 })
