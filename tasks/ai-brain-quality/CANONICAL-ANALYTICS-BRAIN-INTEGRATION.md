@@ -1,6 +1,6 @@
 # Canonical Analytics Evidence → Brain Runtime Integration
 
-**Status:** Phases 0–5 implemented on the work branch; release verification pending  
+**Status:** Phases 0–5 implemented; Phase 7 governance map implemented; Phase 6 end-to-end lineage certification and Phase 8 release gates remain open  
 **Owner:** BrainRuntime + analytics-canon  
 **Branch:** `fix/brain-canonical-evidence-missingness-2026-10-15`  
 **Pull request:** [#213](https://github.com/viewtube-dev/viewtube/pull/213)  
@@ -142,3 +142,12 @@ GitHub Actions is the verification authority for this remote branch. A started o
 4. Reassess whether remaining Brain surfaces outside the orchestrator (including SidebarChatbot and BrainHubWidget) still assemble parallel context, and migrate only after verifying their real production callers.
 
 This document distinguishes implementation from certification: existing files or passing documentation checks alone do not establish full production reachability.
+
+
+## Phase 6–8 continuation
+
+See [Phases 6–8 — Lineage, Governance & Verification](./PHASES-6-8-LINEAGE-GOVERNANCE-VERIFICATION.md) for the evidence-backed lineage inventory, capability-evidence generator changes, production-surface caller audit, and exact release-gate blockers.
+
+- Phase 6: existing event/evaluation/learning lineage owners are inventoried; end-to-end recommendation-to-published-outcome-to-learning certification remains open.
+- Phase 7: capability evidence map, path validation in the generator, and regenerated report are committed; latest-head CI verification remains pending.
+- Phase 8: canonical runtime reachability is confirmed for SidebarChatbot and BrainHubWidget, but surface-owned prompt/snapshot composition remains a convergence boundary. Release certification is blocked by the latest observed typecheck/full-suite failures until rerun and triage.
