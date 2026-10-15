@@ -930,3 +930,14 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Phase 10 evidence:** prior release-gate run #1503 passed production build, local smoke, and Brain quality loop; typecheck, source governance, focused contracts, and full suite failed. That run predates the newest batch/documentation commits and does not verify the current head.
 - **Verification:** source writes returned commit SHAs and PR metadata was read back. No claim of merge, exact-head CI pass, browser certification, or deployment is made.
 - **Next action:** inspect the newest release-gate run; resolve branch-introduced errors; complete processor/lineage integration and server authorization/durability; certify browser flow; merge only when required gates pass; re-read target branch afterward.
+
+
+#### LOG-ID: REC-20261015-vault-phase-8-operation-store-followup-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Category:** VAULT / AUTHENTICATED SERVER OPERATION RECORDS
+- **Action:** Added `server/vault-operation-store.mjs`, mounted authenticated `/api/vault/operations` routes through the existing account-session resolver in `server/billing-server.mjs`, added `server/vault-operation-store.test.mjs`, and registered the test under `test:focused`.
+- **Status:** IMPLEMENTED IN BRANCH / CI PENDING; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING.
+- **Security boundary:** Every request requires the canonical authenticated user ID; records are stored under a user-derived directory and rechecked for owner identity. The endpoint fails closed unless `VAULT_OPERATION_STORAGE_DIR` is configured. This is not yet a processing worker; the filesystem implementation needs a persistent mounted disk and race-safe coordination before horizontal scaling.
+- **PR context:** PR #336 had already merged at commit `7b14a1d560fbd74cda567ab9889ac1e7213c1ceb` before these follow-up commits. The operation-store follow-up therefore requires a new PR against `master/consolidated-feature-integration`; it must not be described as included in the already merged PR.
+- **Next:** open a follow-up PR from the updated branch, run exact-head CI, fix regressions introduced by this change, configure and verify persistent storage, implement a real worker lease/claim path, and perform post-merge verification.
