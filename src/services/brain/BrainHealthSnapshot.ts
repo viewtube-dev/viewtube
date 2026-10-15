@@ -1,6 +1,8 @@
 import type { BrainEvidenceHealth } from "./BrainEvidenceContract"
 import type { ChannelKnowledgeRecord } from "./ChannelKnowledgeProjection"
 
+const safeCount = (value: number): number => Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0
+
 export interface BrainHealthSnapshotInput {
  evidenceHealth: BrainEvidenceHealth | null
  knowledgeRecords: ChannelKnowledgeRecord[]
@@ -62,19 +64,21 @@ export const buildBrainHealthSnapshot = (input: BrainHealthSnapshotInput): Brain
   hypotheses: records.filter((record) => record.knowledgeClass === "HYPOTHESIS" || record.lifecycleState === "hypothesis").length,
  }
  const evaluation = {
-  due: Math.max(0, Math.floor(input.evaluationBacklog.due)),
-  overdue: Math.max(0, Math.floor(input.evaluationBacklog.overdue)),
-  unattributedOutcomes: Math.max(0, Math.floor(input.evaluationBacklog.unattributedOutcomes)),
+  due: safeCount(input.evaluationBacklog.due),
+  overdue: safeCount(input.evaluationBacklog.overdue),
+  unattributedOutcomes: safeCount(input.evaluationBacklog.unattributedOutcomes),
  }
  const learning = {
-  pendingReview: Math.max(0, Math.floor(input.learningCandidates.pendingReview)),
-  held: Math.max(0, Math.floor(input.learningCandidates.held)),
-  rejected: Math.max(0, Math.floor(input.learningCandidates.rejected)),
+  pendingReview: safeCount(input.learningCandidates.pendingReview),
+  held: safeCount(input.learningCandidates.held),
+  rejected: safeCount(input.learningCandidates.rejected),
  }
  const alerts: string[] = []
  if (!evidence) alerts.push("Evidence health is unavailable; performance claims should be treated as unverified.")
  else {
   if (evidence.confidence === "insufficient") alerts.push("Evidence coverage is insufficient for confident recommendations.")
+  else if (evidence.confidence === "low") alerts.push("Evidence confidence is low; treat recommendations as provisional.")
+  else if (evidence.confidence === "medium") alerts.push("Evidence confidence is medium; verify important recommendations before acting.")
   if (evidence.missingIds.length) alerts.push(`${evidence.missingIds.length} evidence item(s) are missing.`)
   if (evidence.staleIds.length) alerts.push(`${evidence.staleIds.length} evidence item(s) are stale.`)
   if (evidence.conflictingClaimKeys.length) alerts.push(`${evidence.conflictingClaimKeys.length} evidence claim(s) conflict.`)
