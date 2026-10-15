@@ -23,8 +23,12 @@ import { projectCanonicalEvidenceRecords, type EvidenceRecord } from "./Evidence
 
 export const EVIDENCE_INTELLIGENCE_VERSION = "vt-evidence-intelligence-v1" as const
 
+type AnalyticsWindow = CanonicalIntelligenceEvidenceBundle["selectedWindow"]
+
 export interface ResolveEvidenceIntelligenceInput {
  channelId?: string | null
+ window?: AnalyticsWindow
+ sectionIds?: string[]
  includeAudience?: boolean
  includeOpportunities?: boolean
  brainEvidencePack?: AIBrainEvidencePack | null
@@ -49,6 +53,8 @@ export interface EvidenceIntelligenceEnvelope {
 
 export interface EvidenceIntelligenceResolverDependencies {
  getCanonicalEvidence: (input: {
+  window?: AnalyticsWindow
+  sectionIds?: string[]
   maximumRowsPerDataset?: number
   maximumCharacters?: number
  }) => CanonicalIntelligenceEvidenceBundle
@@ -83,16 +89,18 @@ const DEFAULT_DEPENDENCIES: EvidenceIntelligenceResolverDependencies = {
 /**
  * Read-only Brain runtime projection over canonical evidence owners.
  *
- * analytics-canon remains the analytics source of truth. This facade only
- * guarantees that evidence quality, statistics, audience reasoning and
- * opportunity derivation for a Brain turn are assembled coherently and with
- * one canonical analytics snapshot.
+ * analytics-canon remains the analytics source of truth. The caller may request
+ * a reporting window and task-specific dataset sections, but all deterministic
+ * quality/statistics/audience projections in this envelope share one canonical
+ * snapshot. Scope mismatches fail closed for every analytics-derived projection.
  */
 export const resolveEvidenceIntelligence = (
  input: ResolveEvidenceIntelligenceInput,
  dependencies: EvidenceIntelligenceResolverDependencies = DEFAULT_DEPENDENCIES,
 ): EvidenceIntelligenceEnvelope => {
  const canonicalEvidence = dependencies.getCanonicalEvidence({
+  window: input.window,
+  sectionIds: input.sectionIds,
   maximumRowsPerDataset: input.includeAudience ? 5 : 0,
   maximumCharacters: input.includeAudience ? 16_000 : 12_000,
  })
@@ -110,11 +118,17 @@ export const resolveEvidenceIntelligence = (
   ? dependencies.buildAudience(canonicalEvidence, statisticsIntelligence)
   : null
  const channelId = String(input.channelId || "").trim() || null
- const opportunityEvidence = input.includeOpportunities && channelId && input.brainEvidencePack
+ const opportunityPackScopeUsable = Boolean(
+  scopeUsable
+  && channelId
+  && input.brainEvidencePack
+  && (!input.brainEvidencePack.channelId || input.brainEvidencePack.channelId === channelId),
+ )
+ const opportunityEvidence = input.includeOpportunities && opportunityPackScopeUsable && channelId && input.brainEvidencePack
   ? dependencies.buildOpportunities({
     channelId,
     evidencePack: input.brainEvidencePack,
-  })
+   })
   : []
 
  return {
