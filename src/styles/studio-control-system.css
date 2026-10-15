@@ -1816,7 +1816,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  min-height: 32px;
+  min-height: 28px;
   position: relative;
 }
 .vt-studio-tag-editor__list {
