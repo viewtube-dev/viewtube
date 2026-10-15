@@ -134,7 +134,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
     expect(css).not.toContain('.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label')
-    expect(css).toContain('.vt-studio-floating-field[data-vt-floating-variant="b"] > input[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label')
+    expect(css).toContain('.vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label')
     expect(css).toContain('--vt-studio-fixed-label-height: 20px;')
     expect(css).toContain('--vt-studio-fixed-label-font-size: 14px;')
     expect(css).toContain('--vt-studio-fixed-label-height: 14px;')
@@ -296,8 +296,8 @@ describe("shared Studio icon-size comparison contract", () => {
   it("shows production specimens without icon-size testing components and labels real states", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     for (const label of [
-      "44px standard · V1 primary fill",
-      "28px compact · V1",
+      "Square icon button V1 primary fill",
+      "Compact square icon button V1",
       "44px standard · default",
       "28px compact · neutral tone",
       "44px standard · selected",
@@ -426,10 +426,10 @@ describe("Studio Play/Pause Split-Left Button", () => {
     expect(html).toContain('aria-pressed="false"')
     expect(html).toContain('data-vt-studio-play-pause-measure="play"')
     expect(html).toContain('data-vt-studio-play-pause-measure="pause"')
-    expect(html).toContain('data-vt-studio-play-pause-label>Play</span>')
+    expect(html).toContain('data-vt-studio-play-pause-label="true">Play</span>')
     const selected = renderToStaticMarkup(<StudioPlayPauseButton playing playLabel="Play" pauseLabel="Pause" />)
     expect(selected).toContain('aria-pressed="true"')
-    expect(selected).toContain('data-vt-studio-play-pause-label>Pause</span>')
+    expect(selected).toContain('data-vt-studio-play-pause-label="true">Pause</span>')
     expect(selected).toContain('data-size="standard"')
     expect(renderToStaticMarkup(<StudioPlayPauseButton sizeVariant="compact" />)).toContain('data-size="compact"')
   })
@@ -453,7 +453,7 @@ describe("floating label geometry and circular icon scale", () => {
 
   it("scales circle-button SVG icons to 80% without changing the canonical button size", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-stage] svg')
+    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg')
     expect(css).toContain("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
     expect(css).toContain("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
     expect(css).toContain("--vt-studio-control-icon-size: 38px")

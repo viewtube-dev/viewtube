@@ -5,8 +5,8 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioSplitStepper } from "../../studio-ui/primitives/StudioSplitStepper"
 
-const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitStepper.tsx"), "utf8")
-const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-split-stepper.css"), "utf8")
+const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
 
 describe("StudioSplitStepper", () => {
   it("renders a native editable number field and accessible rail actions", () => {

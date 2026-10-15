@@ -42,7 +42,10 @@ describe("StudioInlineStepper", () => {
   })
 
   it("uses global Studio size tokens and has no SubToolbox style authority", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-inline-stepper.css"), "utf8")
+    const allCss = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = allCss.indexOf(".vt-studio-inline-stepper {")
+    const end = allCss.indexOf("/* Canonical Studio Controls Split Stepper.", start)
+    const css = allCss.slice(start, end > start ? end : undefined)
     expect(css).toContain("var(--vt-studio-control-height")
     expect(css).toContain("var(--vt-studio-control-stroke")
     expect(css).toContain("var(--vt-studio-control-radius")
