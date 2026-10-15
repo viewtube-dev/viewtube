@@ -1359,6 +1359,16 @@ https://developers.google.com/youtube/reporting
 
 ---
 
+## Field Exercise: Write an Analytics Question Before Opening a Report
+
+Pick one decision you need to make, such as whether to change an opening, packaging, format, or publishing cadence. Write the question in one sentence. Then specify the metric, dimension, filter, time window, comparison group, and decision threshold you intend to use. If any one of these is unclear, the analysis question is not ready yet.
+
+Record the metric definition and report location alongside the result. Compare like with like: similar formats, comparable periods, and denominators that match the question. If data is missing or a report uses a different definition, mark the limitation instead of silently treating the numbers as interchangeable. End with three lines: “Observed,” “Possible explanation,” and “Next check.” This simple separation reduces the chance of turning a dashboard movement into an unsupported story.
+
+## Evidence Boundary: Metrics and Measurement
+
+A metric is a measurement under a defined reporting contract, not a complete description of viewer experience. Different reports can use different scopes, processing windows, eligibility rules, or definitions. A change in a metric can be real while its cause remains unknown. Small samples, delayed reporting, missing rows, changed content mix, and seasonal effects can all alter interpretation. Preserve the exact date range, filters, dimensions, and metric definition so the analysis can be repeated and challenged.
+
 ## Document Maintenance
 
 | Attribute | Value |
