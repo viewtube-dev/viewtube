@@ -9,6 +9,8 @@ const PREVIEW_CSS = repoFile("public/data-visual-preview-16x9.css")
 const PREVIEW_JS = repoFile("public/data-visual-preview-16x9.js")
 const MOBILE_CSS = repoFile("public/mobile-visual-responsive-system.css")
 const OWNED = "[data-vt-data-visual-canvas-owned]"
+const shellSource = repoFile("src/components/AnalyticsVisualShell.tsx")
+const explorerSource = repoFile("src/components/TubeExplorerVisualModules.tsx")
 
 /**
  * One canvas, one geometry owner. These assertions are the guard against the
