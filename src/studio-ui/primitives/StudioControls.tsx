@@ -828,6 +828,7 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   const [swapping, setSwapping] = React.useState(false);
   const [fading, setFading] = React.useState(false);
   const [isEntering, setIsEntering] = React.useState(entering);
+  const [removed, setRemoved] = React.useState(false);
   const busy = React.useRef(false);
 
   React.useEffect(() => {
@@ -843,11 +844,12 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
     window.setTimeout(() => {
       setSwapping(false);
       setFading(true);
-      window.setTimeout(() => onClose?.(), 1000);
+      window.setTimeout(() => { setRemoved(true); onClose?.(); }, 1000);
     }, 540);
   };
 
   const normalized = label.trim().toUpperCase();
+  if (removed) return null;
   return (
     <span
       className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
