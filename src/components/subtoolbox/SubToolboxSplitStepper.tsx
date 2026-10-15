@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import { StudioTextInput } from "../../studio-ui/primitives/StudioTextInput"
 import type { ToolboxControlLevel } from "./tokens"
 import { getComponentLevelCssVars } from "./tokens"
 import "../../styles/toolbox-entry.css"
@@ -17,7 +18,9 @@ export interface SubToolboxSplitStepperProps extends Omit<React.HTMLAttributes<H
   ariaLabel?: string
 }
 
-/** Canonical Studio Controls stepper: a 2:1 value pane and a square rail split into two equal chevron actions. */
+const HOLD_FOCUS_DELAY = 160
+
+/** Canonical Studio Controls stepper: fixed 3:1 overall width, 2:1 editable value field and square two-button rail. */
 export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   value,
   onValueChange,
@@ -32,18 +35,29 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   style,
   ...props
 }) => {
+  const [draftValue, setDraftValue] = useState(String(value))
+  const [isEditing, setIsEditing] = useState(false)
+  const [isHolding, setIsHolding] = useState(false)
   const valueRef = useRef(value)
   valueRef.current = value
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const focusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = useRef(0)
   const heldDirection = useRef<-1 | 1>(1)
+
+  useEffect(() => {
+    if (!isEditing) setDraftValue(String(value))
+  }, [value, isEditing])
 
   const stopHold = useCallback(() => {
     if (holdTimer.current) clearTimeout(holdTimer.current)
     if (repeatTimer.current) clearTimeout(repeatTimer.current)
+    if (focusTimer.current) clearTimeout(focusTimer.current)
     holdTimer.current = null
     repeatTimer.current = null
+    focusTimer.current = null
+    setIsHolding(false)
   }, [])
 
   useEffect(() => stopHold, [stopHold])
@@ -51,8 +65,21 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   const change = useCallback((direction: -1 | 1) => {
     const next = Math.min(max, Math.max(min, valueRef.current + direction * step))
     valueRef.current = next
+    setDraftValue(String(next))
     onValueChange(next)
   }, [max, min, onValueChange, step])
+
+  const commitDraft = useCallback(() => {
+    const parsed = Number(draftValue)
+    if (draftValue.trim() === "" || !Number.isFinite(parsed)) {
+      setDraftValue(String(valueRef.current))
+      return
+    }
+    const next = Math.min(max, Math.max(min, parsed))
+    valueRef.current = next
+    setDraftValue(String(next))
+    if (next !== valueRef.current || next !== value) onValueChange(next)
+  }, [draftValue, max, min, onValueChange, value])
 
   const scheduleRepeat = useCallback(() => {
     const elapsed = Date.now() - startedAt.current
@@ -70,6 +97,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     heldDirection.current = direction
     startedAt.current = Date.now()
     change(direction)
+    focusTimer.current = setTimeout(() => setIsHolding(true), HOLD_FOCUS_DELAY)
     holdTimer.current = setTimeout(scheduleRepeat, 360)
   }
 
@@ -77,14 +105,43 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   return (
     <div
       {...props}
-      className={["vt-subtoolbox-split-stepper", `is-${size}`, className].filter(Boolean).join(" ")}
+      className={[
+        "vt-subtoolbox-split-stepper",
+        `is-${size}`,
+        isEditing || isHolding ? "is-focused" : "",
+        className,
+      ].filter(Boolean).join(" ")}
       data-vt-control-level={level}
       data-stepper-size={size}
       role="group"
       aria-label={ariaLabel}
       style={{ ...levelStyle, ...style } as React.CSSProperties}
     >
-      <output className="vt-subtoolbox-split-stepper-value" aria-live="polite" aria-atomic="true">{value}</output>
+      <StudioTextInput
+        className="vt-subtoolbox-split-stepper-value"
+        sizeVariant={size}
+        type="number"
+        inputMode="numeric"
+        aria-label={ariaLabel}
+        value={draftValue}
+        disabled={disabled}
+        onFocus={() => setIsEditing(true)}
+        onChange={(event) => setDraftValue(event.currentTarget.value)}
+        onBlur={() => {
+          commitDraft()
+          setIsEditing(false)
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            commitDraft()
+            event.currentTarget.blur()
+          }
+          if (event.key === "Escape") {
+            setDraftValue(String(valueRef.current))
+            event.currentTarget.blur()
+          }
+        }}
+      />
       <div className="vt-subtoolbox-split-stepper-rail">
         <button
           type="button"
