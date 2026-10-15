@@ -78,6 +78,15 @@ const addDays = (value: Date, days: number) => {
 const minDate = (left: Date, right: Date) =>
   left.getTime() <= right.getTime() ? left : right
 
+const comparisonFingerprint = (value: unknown) => {
+  const input = JSON.stringify(value)
+  let hash = 2166136261
+  for (let index = 0; index < input.length; index += 1) {
+    hash = Math.imul(hash ^ input.charCodeAt(index), 16777619)
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0")
+}
+
 const average = (values: Array<number | null>) => {
   const present = values.filter((value): value is number => value != null && Number.isFinite(value))
   if (!present.length) return null
@@ -115,7 +124,9 @@ const metric = (row: Record<string, unknown> | undefined, ...keys: string[]) => 
 const summaryFor = (
   days: LongformOptimizationDailyDay[],
 ): LongformOptimizationDailySummary => {
-  const observed = days.filter((day) => !day.pending)
+  const observed = days.filter((day) => !day.pending && [
+    day.views, day.watchTimeMinutes, day.avp, day.likes, day.comments, day.revenue,
+  ].some(value => value != null && Number.isFinite(value)))
   return {
     daysObserved: observed.length,
     viewsAverage: average(observed.map((day) => day.views)),
@@ -169,7 +180,17 @@ export const buildLongformOptimizationDailyComparison = (input: {
 
   const beforeDays = days.filter((day) => day.phase === "before")
   const afterDays = days.filter((day) => day.phase === "after")
-  const afterComplete = afterDays.every((day) => !day.pending)
+  const beforeComplete = beforeDays.every((day) => !day.pending && byDay.has(day.date))
+  const afterComplete = afterDays.every((day) => !day.pending && byDay.has(day.date))
+  const hasAdequateMetricCoverage = before.daysObserved >= 5 && after.daysObserved >= 5 &&
+    [
+      [before.viewsAverage, after.viewsAverage],
+      [before.watchTimeMinutesAverage, after.watchTimeMinutesAverage],
+      [before.avpAverage, after.avpAverage],
+      [before.likesAverage, after.likesAverage],
+      [before.commentsAverage, after.commentsAverage],
+      [before.revenueAverage, after.revenueAverage],
+    ].some(([baseline, observed]) => baseline != null && observed != null)
 
   return {
     version: "longform-daily-comparison-v1",
@@ -179,7 +200,7 @@ export const buildLongformOptimizationDailyComparison = (input: {
     capturedAt: now.toISOString(),
     status: window.queryEndDate < window.startDate
       ? "unavailable"
-      : afterComplete
+      : beforeComplete && afterComplete && hasAdequateMetricCoverage
         ? "ready"
         : "partial",
     days,
@@ -188,6 +209,18 @@ export const buildLongformOptimizationDailyComparison = (input: {
     contentBuildEventId: null,
   }
 }
+
+const listMetadataVersionIdsForComparison = (contentBuildId: string, changeAt: number) =>
+  listContentBuildEvents(contentBuildId)
+    .filter(event => event.entityType === "metadata-version")
+    .filter(event => {
+      const metadata = event.metadata as Record<string, unknown> | undefined
+      const entry = metadata?.metadataHistory as Record<string, unknown> | undefined
+      const occurredAt = typeof entry?.occurredAt === "string" ? Date.parse(entry.occurredAt) : NaN
+      return Number.isFinite(occurredAt) && occurredAt >= changeAt - 7 * 86400000 && occurredAt <= changeAt + 7 * 86400000
+    })
+    .map(event => event.entityId)
+    .filter((id): id is string => Boolean(id))
 
 export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
   videoId: string
@@ -228,8 +261,17 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
     now,
   })
 
+  const comparisonHash = comparisonFingerprint({
+    version: comparison.version,
+    status: comparison.status,
+    before: comparison.before,
+    after: comparison.after,
+    days: comparison.days.map(day => [day.date, day.views, day.watchTimeMinutes, day.avp, day.likes, day.comments, day.revenue]),
+  })
+  const comparisonEventKey = `longform-comparison:${input.contentBuildId}:${input.videoId}:${comparison.changeDate}:${comparison.queryEndDate}:${comparison.status}:${comparisonHash}`
   const event = appendContentBuildEvent({
     contentBuildId: input.contentBuildId,
+    idempotencyKey: comparisonEventKey,
     eventType: "analytics.checkpoint",
     entityType: "longform-optimization-daily-comparison",
     entityId: `longform-daily:${input.videoId}:${comparison.changeDate}`,
@@ -252,6 +294,8 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
       afterDaysObserved: comparison.after.daysObserved,
       source: "youtube-analytics-v2",
       comparisonVersion: comparison.version,
+      idempotencyKey: comparisonEventKey,
+      metadataVersionIds: listMetadataVersionIdsForComparison(input.contentBuildId, input.changeAt),
     },
   })
 
@@ -273,27 +317,33 @@ export const fetchAndRecordLongformOptimizationDailyComparison = async (input: {
         ["comments", comparison.before.commentsAverage, comparison.after.commentsAverage],
         ["revenue", comparison.before.revenueAverage, comparison.after.revenueAverage],
       ] as const
-      recordAnalyticsCheckpointForEvaluation({
-        transactionId: transaction.id,
-        videoId: input.videoId,
-        checkpointId: `longform-daily:${input.videoId}:${comparison.changeDate}`,
-        checkpointAt,
-        observations: metrics.map(([metricName, , value]) => ({
-          metric: metricName,
-          value,
-          observedAt: checkpointAt,
-          evidenceId,
-        })),
-        evaluationTargets: metrics.map(([metricName, baselineValue]) => ({
-          metric: metricName,
-          direction: "increase" as const,
-          baselineValue,
-        })),
-        evidenceIds: [evidenceId],
-        now: now.getTime(),
-        summary: `Completed 7+7-day longform optimization comparison for ${input.videoId}.`,
-        toolId: "longform-optimizer",
-      })
+      const comparableMetrics = metrics.filter(([, baselineValue, observedValue]) =>
+        baselineValue != null && Number.isFinite(baselineValue) &&
+        observedValue != null && Number.isFinite(observedValue)
+      )
+      if (comparableMetrics.length > 0) {
+        recordAnalyticsCheckpointForEvaluation({
+          transactionId: transaction.id,
+          videoId: input.videoId,
+          checkpointId: `longform-daily:${input.videoId}:${comparison.changeDate}`,
+          checkpointAt,
+          observations: comparableMetrics.map(([metricName, , value]) => ({
+            metric: metricName,
+            value: value as number,
+            observedAt: checkpointAt,
+            evidenceId,
+          })),
+          evaluationTargets: comparableMetrics.map(([metricName, baselineValue]) => ({
+            metric: metricName,
+            direction: "increase" as const,
+            baselineValue: baselineValue as number,
+          })),
+          evidenceIds: [evidenceId],
+          now: now.getTime(),
+          summary: `Completed 7+7-day longform optimization comparison for ${input.videoId}; only metrics with observed baseline and follow-up values were evaluated.`,
+          toolId: "longform-optimizer",
+        })
+      }
     }
   }
 
