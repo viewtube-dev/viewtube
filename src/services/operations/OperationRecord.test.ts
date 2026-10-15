@@ -107,6 +107,8 @@ describe("OperationRecord v1", () => {
   const record = operationRecordFromToolReceipt({
    id: "receipt-1",
    requestId: "request-1",
+   operationId: "operation-1",
+   workflowId: "workflow-1",
    contentBuildId: "build-1",
    projectId: "project-1",
    toolId: "thumbnail-studio",
