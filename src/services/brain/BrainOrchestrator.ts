@@ -11,6 +11,7 @@ import type {
  CreatorBrainResponse,
  CreatorGrowthContext,
  NicheKnowledgeProfile,
+ Project,
 } from "../../types"
 import {
  buildCreatorBrainLocalFallback,
@@ -295,6 +296,7 @@ export interface RunBrainTurnInput {
  nicheResolver?: typeof resolveNicheKnowledge
  currentResearcher?: typeof groundCurrentNicheResearch
  projectId?: string | null
+ project?: Project | null
  analyticsWindow?: CanonicalIntelligenceEvidenceBundle["selectedWindow"]
  visibleContext?: Record<string, unknown> | null
  artifactRefs?: string[]
@@ -343,6 +345,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   channelId: input.channelId,
   query: input.userText,
   projectId: input.projectId,
+  project: input.project,
   visibleContext: input.visibleContext,
   artifactRefs: input.artifactRefs,
  }).catch(() => null)
