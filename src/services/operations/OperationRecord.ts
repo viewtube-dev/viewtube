@@ -389,3 +389,92 @@ export const operationRecordFromToolReceipt = (
   metadata: { source: "ToolReceipt", requestId: receipt.requestId },
  })
 }
+
+
+type GenerationRequestProjection = {
+ id: string
+ contentBuildId: string
+ projectId: string | null
+ channelId: string | null
+ toolId: string
+ operation: string
+ mode: "create" | "new-option" | "new-version" | "transform"
+ sourceAssetIds: string[]
+ evidenceIds: string[]
+ parentAssetId: string | null
+ variantGroupId: string | null
+ traceId: string | null
+ requestedAt: string
+ contextManifestId: string
+}
+
+export const operationRecordFromGenerationRequest = (
+ request: GenerationRequestProjection,
+ options: {
+  selectedAssetIds?: string[]
+  creatorId?: string | null
+  workflowId?: string
+ } = {},
+): OperationRecord => {
+ const normalizedOperation = request.operation.toLowerCase()
+ const kind: OperationKind = normalizedOperation.includes("render")
+  ? "render"
+  : normalizedOperation.includes("research")
+   ? "research"
+   : request.mode === "transform" ? "transform" : "generation"
+ const workflowId = options.workflowId || `workflow:${request.contentBuildId}`
+ return createOperationRecord({
+  operationId: request.id,
+  workflowId,
+  idempotencyKey: null,
+  kind,
+  status: "running",
+  mutationClass: "prepare",
+  approval: {
+   status: "not-required",
+   approvedBy: null,
+   approvedAt: null,
+   rejectedBy: null,
+   rejectedAt: null,
+  },
+  sourceToolId: request.toolId,
+  destinationToolId: null,
+  parentOperationId: null,
+  lineage: {
+   creatorId: options.creatorId || null,
+   channelId: request.channelId || null,
+   projectId: request.projectId || null,
+   contentBuildId: request.contentBuildId,
+   videoId: null,
+   assetIds: [...(options.selectedAssetIds || []), ...request.sourceAssetIds],
+   evidenceIds: request.evidenceIds,
+   traceId: request.traceId,
+   actionPacketId: null,
+   toolReceiptId: null,
+   generationRecordId: null,
+   publishTransactionId: null,
+   approvedSnapshotId: null,
+   approvedSnapshotHash: null,
+   recommendationId: null,
+   experimentId: null,
+   parentOperationId: null,
+  },
+  createdAt: request.requestedAt,
+  updatedAt: request.requestedAt,
+  startedAt: request.requestedAt,
+  completedAt: null,
+  errorCode: null,
+  errorMessage: null,
+  reversible: true,
+  undoOperationId: null,
+  metadata: {
+   source: "GenerationRequest",
+   contextManifestId: request.contextManifestId,
+   operation: request.operation,
+   mode: request.mode,
+   targetSlot: "unknown",
+   parentAssetId: request.parentAssetId,
+   variantGroupId: request.variantGroupId,
+  },
+ })
+}
