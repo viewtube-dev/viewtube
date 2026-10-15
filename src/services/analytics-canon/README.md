@@ -20,7 +20,8 @@ The homepage was reading from both. Every setState on the legacy path fanned out
 | `getMasterRows(window, "hybrid", brain.csvFiles)` | `useCanonicalRows(window)` |
 | `getMetricSummary(window, "hybrid", brain.csvFiles)` | `useCanonicalMetricSummary(window)` |
 | `readYouTubeAnalyticsCache().profile` | `useCanonicalChannelIdentity()` |
-| Any imperative call from a service | `getCanonicalRowsFromVtSync(getVtSyncSnapshot(), window)` |
+| Imperative API-only row read | `getCurrentCanonicalRows(window)` |
+| Exact range calculation | `resolveWindowRange({ window, period, channelPublishedAt })` |
 
 The `brain.csvFiles` argument is gone. Under the legacy path CSVs were a separate data source that had to be merged with API results at read-time; VT Sync's dataset ingest handles CSV as just another bundle that lands in the snapshot. Consumers no longer manage CSV bookkeeping.
 
@@ -31,7 +32,9 @@ The `brain.csvFiles` argument is gone. Under the legacy path CSVs were a separat
 | `contracts.ts` | Type re-exports. Consumers depend on THESE types, not the legacy ones. When the legacy files are deleted, only the runtime disappears — the types keep their canonical home here. |
 | `vtSyncAdapter.ts` | Pure, side-effect-free reshape of `VtSyncSnapshot` into `CanonicalVideoRow[]` / `MetricSummary` / `WindowTotals`. Safe to call from anywhere (tests, workers, AI code). |
 | `intelligenceEvidence.ts` | Registry-driven manifest and bounded report-evidence builder for all 34 active VT-SYNC datasets. Preserves availability, freshness, source provenance, zero values, and evidence references. |
-| `useAnalytics.ts` | React hooks — `useCanonicalRows`, `useCanonicalMetricSummary`, `useCanonicalWindowTotals`, `useCanonicalChannelIdentity`. Each subscribes to the vt-sync snapshot version and memoizes per-window so `React.memo` boundaries stay stable. |
+| `useAnalytics.ts` | React hooks — `useCanonicalRows`, `useCanonicalMetricSummary`, `useCanonicalWindowTotals`, `useCanonicalChannelIdentity`. Each subscribes to the VT Sync snapshot version and memoizes per-window so `React.memo` boundaries stay stable. |
+| `currentRows.ts` | Imperative canonical row/summary facade for exports, jobs, and service-layer joins. |
+| `../analytics/windows.ts` | Single source of truth for the five supported preset windows, inclusive UTC ranges, and latest complete day. Custom date ranges are not yet a canonical window key. |
 | `vtSyncAdapter.test.ts` | Shape parity tests — proves the adapter emits every field legacy consumers expect. |
 | `index.ts` | Public barrel — the ONLY entry point. If it's not re-exported here, it's not part of the canonical API. |
 
@@ -44,12 +47,12 @@ The `brain.csvFiles` argument is gone. Under the legacy path CSVs were a separat
 
 ## Migration phases
 
-- **Phase 0** — Foundation (this module lands, zero consumer changes). ← *you are here*
-- **Phase 1** — Dashboard: `useDashboardData` + `DashboardCanvas` widgets drop legacy imports for canonical hooks.
-- **Phase 2** — Auth adapter: `GlobalDataContext.hydrateAuthStateFromAnalyticsCache` becomes `hydrateAuthStateFromVtSync`, sourcing channel identity from `useCanonicalChannelIdentity`.
-- **Phase 3** — Tool views: Channelytics, MediaAnalyzer, HookGenerator, ThumbnailStudio, VideoPublisher, PerformanceHub-as-consumer, etc.
-- **Phase 4** — AI/brain: `bootstrapFirstRunBrain`, `AIBrainCommandInterface`, `BrainCommandCenter` read from vt-sync via this module.
-- **Phase 5** — Retire legacy: delete `services/analytics/DataStore.ts`, `Selectors.ts`, `services/SyncCoordinator.ts`, `services/youtube/coreLifetimeSync.ts`; loosen `vtSyncLocalIsolation.test.ts` (or rewrite it as a legacy-import-forbidden test in the OTHER direction).
+- **Phase 0 — Foundation:** landed (`analytics-canon` contracts, adapters, hooks, and evidence registry).
+- **Phase 1 — Dashboard:** partial; canonical summary hooks are live, but CSV/hybrid fallback and legacy row selectors remain.
+- **Phase 2 — Auth adapter:** partial; channel identity has a canonical hook, but `GlobalDataContext` still reads the legacy cache.
+- **Phase 3 — Tool views and exports:** in progress; Reference Studio, Simple Analytics, and API-mode export rows now use canonical reads. Other tool views and master-table projections still have legacy consumers.
+- **Phase 4 — AI/Brain:** partial; Intelligence evidence is canonical, but some onboarding/Brain paths still depend on legacy cache contracts.
+- **Phase 5 — Retire legacy:** blocked until all legacy selector/cache consumers and sync writers are migrated and compatibility tests prove there is no competing store.
 
 ## When you add a new field
 
