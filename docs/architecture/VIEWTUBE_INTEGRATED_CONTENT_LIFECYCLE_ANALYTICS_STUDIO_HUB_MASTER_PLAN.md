@@ -1212,3 +1212,45 @@ Investigate in order:
 5. Verify mobile portrait, mobile landscape, and desktop. Controls must remain visible/operable, wrap rather than clip, and use the same canonical `ToolboxHeaderToggle` primitive. Do not add a second toggle primitive or duplicate row as a workaround.
 
 Do not mark this resolved until the intended Render service's deployed commit is verified and the live header is checked. Keep source fixes on `master/consolidated-feature-integration`; do not merge into `main` without explicit approval.
+
+
+---
+
+## Analytics Intelligence Hub phases 7–10 convergence addendum — 2026-10-15
+
+**Scoped implementation authority:** [Analytics Intelligence Hub + Deterministic Evidence master plan](../analytics/ANALYTICS_INTELLIGENCE_HUB_DETERMINISTIC_EVIDENCE_MASTER_PLAN_2026-10-15.md).
+
+### Canonical handoff path
+
+```text
+Canonical Analytics Canon evidence
+  → deterministic finding + source snapshots/formula/version
+  → Intelligence Hub presentation (fact / interpretation / hypothesis / recommendation kept distinct)
+  → BrainContextBroker (exact channel scope; bounded findings; facts must not be recomputed)
+  → proposed creator-goal recommendation
+  → existing AlgorithmIntelligenceEventLedger: RECOMMENDATION_CREATED
+  → creator approval + existing Project / ActionPacket / ContentBuild / Publisher owners
+  → PublishTransaction + exact metadata/asset version identity
+  → canonical analytics checkpoint(s) with explicit windows
+  → comparable outcome evaluation
+  → existing AlgorithmIntelligenceEventLedger: OUTCOME_MEASURED
+  → review-only learning candidate; no automatic promotion
+```
+
+### Implemented workflow contract
+
+- Recommendation contracts preserve finding/evidence references and optional Project, ContentBuild, video, ActionPacket, publication transaction, and metadata-version identities.
+- Outcome comparisons require exact channel/metric/window compatibility, explicit valid period boundaries, non-overlapping chronological windows of the declared length, distinct snapshots, finite values, later follow-up observation, and matching lifecycle identity when supplied.
+- Zero-baseline relative change remains null. Before/after comparison is descriptive association only; causal conclusion remains null.
+- Three or more evaluated outcomes can produce a learning review candidate. It always remains `review-required` with `promotionAllowed: false`.
+- Recommendation, outcome, and learning-review events adapt into the existing Algorithm Intelligence event ledger. This is not a second event/outcome database.
+
+### Unfinished integration / release gates
+
+- Populate findings from the live canonical multi-period evidence path and render the presentation model in the Intelligence Hub UI.
+- Bind creator-approved recommendations to real Project/ActionPacket and publish transaction identities.
+- Read real publication/metadata-version lineage and canonical analytics checkpoints into outcome evaluation.
+- Current Algorithm Intelligence event storage remains browser-local; server-durable persistence and cross-device reconciliation are not claimed here.
+- Run and record the full application golden path, browser/mobile checks, and final-head tests. The service-level golden-path contract test does not certify production UI or persistence.
+
+This addendum updates the integration path only; it does not change ownership boundaries in the Project/ContentBuild, Asset Engine, Publisher, Analytics Canon, or governed learning systems.
