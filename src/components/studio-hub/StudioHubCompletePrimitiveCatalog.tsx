@@ -82,7 +82,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
 
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button")
     return <button className={`vt-catalog-button is-${level}`} style={style}>{name.replace(" Button", "")}</button>
-  if (name === "Square Icon Button") return <div className={`vt-catalog-square-icon-variants is-${level}`} style={style} aria-label="Square icon button variants">
+  if (name === "Square Icon Button") return <div className={`vt-catalog-square-icon-variants is-${level}`} style={style} role="group" aria-label="Square icon button variants">
     <StudioSquareIconButton icon={icon} label="Default primary fill and secondary shadow" variant="v1" sizeVariant={level === "l2" ? "compact" : "standard"} />
     <StudioSquareIconButton icon={icon} label="Secondary fill and primary shadow" variant="v2" sizeVariant={level === "l2" ? "compact" : "standard"} />
     <StudioSquareIconButton icon={icon} label="Selectable color swap" variant="v3" sizeVariant={level === "l2" ? "compact" : "standard"} />
