@@ -189,26 +189,30 @@ export const resolveAlgorithmMetricFromCanonicalCatalog = (input: {
   if (!dataset || dataset.status === "failed" || dataset.status === "unavailable") continue
 
   if (input.videoId) {
+   // Video-scoped evaluation must fail closed: only the exact video row in the
+   // canonical per-video dataset can supply evidence. Channel summaries and
+   // unrelated sample rows must never stand in for a missing published video.
+   if (dataset.id !== "videos") continue
    const matched = findVideoRow(dataset.sampleRows, input.videoId)
-   if (matched) {
-    for (const fieldRule of input.rule.fields) {
-     const value = numericValue(matched.row[fieldRule.field])
-     if (value == null) continue
-     return {
-      value,
-      evidenceId: `${input.snapshotId}:${dataset.id}:${matched.index + 1}:${fieldRule.field}`,
-      datasetId: dataset.id,
-      sourceField: fieldRule.field,
-      comparisonContext: comparisonContextFor({
-       rule: input.rule,
-       field: fieldRule,
-       dataset,
-       window: input.window,
-       matchedVideoRow: matched.row,
-      }),
-     }
+   if (!matched) continue
+   for (const fieldRule of input.rule.fields) {
+    const value = numericValue(matched.row[fieldRule.field])
+    if (value == null) continue
+    return {
+     value,
+     evidenceId: `${input.snapshotId}:${dataset.id}:${matched.index + 1}:${fieldRule.field}`,
+     datasetId: dataset.id,
+     sourceField: fieldRule.field,
+     comparisonContext: comparisonContextFor({
+      rule: input.rule,
+      field: fieldRule,
+      dataset,
+      window: input.window,
+      matchedVideoRow: matched.row,
+     }),
     }
    }
+   continue
   }
 
   for (const fieldRule of input.rule.fields) {

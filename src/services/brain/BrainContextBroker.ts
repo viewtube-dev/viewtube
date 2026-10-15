@@ -13,6 +13,8 @@ import type { BrainEvidenceQualityReport } from "./BrainEvidenceQuality"
 import type { BrainAnalyticsFindingContext } from "./AnalyticsIntelligenceWorkflow"
 import type { CreatorContextEnvelope } from "./CreatorContextResolver"
 import { buildAlgorithmIntelligenceContext, type AlgorithmIntelligencePortfolio } from "./AlgorithmIntelligenceOrchestrator"
+import { resolveBrainContextSections } from "./BrainContextResolution"
+import type { BrainEvidenceClaim, BrainEvidenceHealth } from "./BrainEvidenceContract"
 
 const clip = (value: string, maximum: number): string => value.slice(0, Math.max(0, maximum))
 
@@ -26,6 +28,8 @@ export const buildBrainContextPack = (input: {
  currentResearch?: string
  statisticsIntelligence?: StatisticsIntelligenceSnapshot | null
  evidenceQuality?: BrainEvidenceQualityReport | null
+ evidenceClaims?: BrainEvidenceClaim[] | null
+ sharedEvidenceHealth?: BrainEvidenceHealth | null
  analyticsFindingContext?: BrainAnalyticsFindingContext | null
  audienceIntelligence?: AudienceIntelligenceSnapshot | null
  algorithmIntelligence?: AlgorithmIntelligencePortfolio | null
@@ -86,6 +90,15 @@ export const buildBrainContextPack = (input: {
    : "Analytics evidence access is disabled by the creator in Brain User Controls. Do not infer private channel metrics or quote stored analytics values."
  if (!controls.allowAnalytics) omittedSections.push("analytics_access_disabled")
  if (analyticsScopeBlocked) omittedSections.push("analytics_scope_blocked")
+
+ const sharedEvidenceContract = controls.allowAnalytics && !analyticsScopeBlocked && input.sharedEvidenceHealth
+  ? clip([
+    `confidence=${input.sharedEvidenceHealth.confidence}; coverage=${Math.round(input.sharedEvidenceHealth.coverageRatio * 100)}%; scope=${input.sharedEvidenceHealth.scope}; claims=${input.sharedEvidenceHealth.usableClaims}/${input.sharedEvidenceHealth.totalClaims}`,
+    ...(input.evidenceClaims || []).slice(0, 12).map((claim) => `${claim.epistemicState} ${claim.claim}=${claim.value === null ? "unknown" : String(claim.value)}${claim.unit ? ` ${claim.unit}` : ""}; source=${claim.sourceOwner}:${claim.sourceId}; scope=channel:${claim.channelId || "unknown"}/project:${claim.projectId || "none"}/video:${claim.videoId || "none"}; refs=${claim.provenance.evidenceIds.join(",") || "none"}`),
+    ...input.sharedEvidenceHealth.limitations.map((value) => `Limitation: ${value}`),
+    "Shared evidence policy: source ownership and provenance must be preserved; missing is not zero; inferred, estimated and hypothetical claims are not observed facts; channel/project/video scope mismatch blocks use.",
+   ].join("\n"), 2400)
+  : ""
 
  const evidenceQuality = controls.allowAnalytics && input.evidenceQuality
   ? clip([
@@ -193,6 +206,7 @@ export const buildBrainContextPack = (input: {
   controlInstruction,
   "\nCHANNEL EVIDENCE\n" + evidence,
   evidenceQuality ? "\nEVIDENCE QUALITY\n" + evidenceQuality : "",
+  sharedEvidenceContract ? "\nSHARED EVIDENCE CONTRACT\n" + sharedEvidenceContract : "",
   statistics ? "\nDETERMINISTIC STATISTICS INTELLIGENCE\n" + statistics : "",
   analyticsFindings ? "\nDETERMINISTIC ANALYTICS FINDINGS\n" + analyticsFindings : "",
   audience ? "\nAUDIENCE INTELLIGENCE\n" + audience : "",
@@ -206,18 +220,16 @@ export const buildBrainContextPack = (input: {
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
   taskInstruction ? `\n${taskInstruction}` : "",
  ].filter(Boolean)
- let systemInstruction = sections.join("\n")
- if (systemInstruction.length > maximumCharacters) {
-  omittedSections.push("context_over_budget")
-  systemInstruction = systemInstruction.slice(0, maximumCharacters)
- }
+ const resolvedContext = resolveBrainContextSections(sections, { userText: input.userText, maximumCharacters })
+ omittedSections.push(...resolvedContext.omittedSectionIds)
+ const systemInstruction = resolvedContext.text
 
  return {
   systemInstruction,
   budget: {
    maximumCharacters,
    systemCharacters: system.length,
-   evidenceCharacters: evidence.length + evidenceQuality.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
+   evidenceCharacters: evidence.length + evidenceQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,
    knowledgeCharacters: knowledge.length + research.length,
    conversationCharacters: clippedConversation.length,
