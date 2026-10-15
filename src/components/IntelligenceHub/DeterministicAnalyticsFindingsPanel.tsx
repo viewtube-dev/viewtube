@@ -34,12 +34,31 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
  useEffect(() => {
   if (!evidence?.channelId) return
   let active = true
-  hydrateBrainIntelligenceFromPersistence(evidence.channelId).then((result) => {
-   if (active) setPersistenceStatus(result ? "Server persistence connected" : "Sign in to sync this channel event history")
-  }).catch(() => {
-   if (active) setPersistenceStatus("Server persistence unavailable; local cache retained")
-  })
-  return () => { active = false }
+  const syncLocalHistory = async () => {
+   try {
+    const durable = await hydrateBrainIntelligenceFromPersistence(evidence.channelId)
+    if (!active) return
+    if (!durable) {
+     setPersistenceStatus("Sign in to sync this channel event history")
+     return
+    }
+    // Reconcile the offline recovery cache after hydration, then retry any events
+    // whose earlier background write may have failed while the browser was offline.
+    const localEvents = listAlgorithmIntelligenceEvents({ channelId: evidence.channelId })
+    const synced = await persistBrainIntelligence({ channelId: evidence.channelId, events: localEvents })
+    if (active) setPersistenceStatus(synced
+     ? `Server persistence connected · ${synced.eventCount} events synced`
+     : "Server persistence unavailable; local cache retained")
+   } catch {
+    if (active) setPersistenceStatus("Server persistence unavailable; local cache retained")
+   }
+  }
+  void syncLocalHistory()
+  window.addEventListener("online", syncLocalHistory)
+  return () => {
+   active = false
+   window.removeEventListener("online", syncLocalHistory)
+  }
  }, [evidence?.channelId])
  const result = useMemo(() => {
   if (!evidence?.channelId) return { rawFindings: [], findings: [], limitations: ["Resolve a channel-scoped canonical snapshot to calculate findings."] }
