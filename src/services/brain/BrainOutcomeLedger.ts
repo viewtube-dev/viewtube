@@ -14,6 +14,8 @@ export interface BrainOutcomeRecord {
  targetToolId: SuperToolId | null
  actionPacketId?: string | null
  workflowId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
  /** Stable identity of the producer record that emitted this outcome. */
  sourceRecordId?: string | null
  /** Generation trace and asset identity, when this outcome came from Asset Engine. */
