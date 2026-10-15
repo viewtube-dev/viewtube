@@ -97,6 +97,7 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
     }
 
     const { className, style, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, ...inputProps } = props
+    void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant]
     return (
       <input
         ref={ref}
