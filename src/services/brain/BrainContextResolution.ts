@@ -89,8 +89,7 @@ export const resolveBrainContextSections = (
    return
   }
   if (normalized.length > 80) seen.add(normalized)
-  const required = ["system_prompt", "creator_control_policy"].includes(id)
-   || /(?:CONTENT GENERATION TASK|DAILY ORACLE TASK|FIRST WEEK PLAN TASK|BEST VIDEO AUTOPSY TASK)/.test(text)
+  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task")
   candidates.push({ id, text, index, priority: priorityFor(id, profile.intent), required })
  })
  const ranked = [...candidates].sort((a, b) =>
