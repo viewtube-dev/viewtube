@@ -159,3 +159,39 @@ describe("Studio text-field module ownership and typography", () => {
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
   })
 })
+
+
+describe("canonical square icon button family", () => {
+  it("renders all four icon color variants at standard and compact square sizes", () => {
+    const standard = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Default" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Secondary" variant="v2" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Selectable" variant="v3" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Black" variant="v4" />
+      </>,
+    )
+    const compact = renderToStaticMarkup(
+      <StudioSquareIconButton icon={<span>ICON</span>} label="Compact" sizeVariant="compact" />,
+    )
+    expect(standard.match(/data-vt-studio-icon-button="true"/g)).toHaveLength(4)
+    expect(standard).toContain('data-icon-variant="v1"')
+    expect(standard).toContain('data-icon-variant="v2"')
+    expect(standard).toContain('data-icon-variant="v3"')
+    expect(standard).toContain('data-icon-variant="v4"')
+    expect(standard).toContain('data-size="standard"')
+    expect(standard).toContain('width:44px')
+    expect(compact).toContain('data-size="compact"')
+    expect(compact).toContain('data-height-variant="28"')
+    expect(compact).toContain('data-icon-variant="v1"')
+  })
+
+  it("defines opposite fill/shadow pairs, selectable inversion, and the black/primary-icon variant", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
+    expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"]')
+    expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v4"]')
+    expect(css).toContain('background: #000;')
+    expect(css).toContain('color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));')
+  })
+})
