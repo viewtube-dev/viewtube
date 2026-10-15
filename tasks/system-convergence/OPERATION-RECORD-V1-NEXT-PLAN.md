@@ -3,7 +3,7 @@
 **Date:** 2026-10-15  
 **Parent work:** AI Brain phases 7–12; outcome/evaluation/learning integration  
 **Implementation branch:** `feat/operation-record-v1-and-outcome-loop-next-plan-2026-10-15`  
-**Status:** Phase 0–1 implementation in progress; later phases are planned, not certified.
+**Status:** Phase 0–1 implementation plus a Phase 2 identity-projection slice in progress; later phases are planned, not certified.
 
 ## Why this is next
 
@@ -36,6 +36,13 @@ Phases 7–12 established the outcome/evaluation/learning path: publication iden
 - [ ] Verify this branch's focused test and typecheck results in CI.
 
 ## Phase 2 — Complete the identity bridge without store duplication
+
+Progress on 2026-10-15:
+- Added optional `operationId` and `workflowId` to the shared `GenerationRecord` contract and populated them for ActionPacket-backed generation records.
+- GenerationWorkflow requests and ToolReceipts now carry a stable operation/workflow pair, write that pair into ContentBuild input/output event metadata, and project the same identity into OperationRecord.
+- Canonical Asset Engine context and generated records can carry operation/workflow identity when a producer supplies it.
+- BrainRuntime provenance exposes operation/workflow identity and reports `operation_identity_mismatch` rather than silently joining conflicting explicit IDs.
+- Added regression assertions for request/receipt identity continuity and conflict detection.
 
 1. Add optional operation/workflow identity to GenerationRecord and BrainTrace projections where absent.
 2. Make the GenerationWorkflow request, ToolReceipt, ActionPacket, BrainTrace, and ContentBuild event agree on the same operationId/workflowId.
