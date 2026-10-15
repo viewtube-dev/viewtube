@@ -104,6 +104,7 @@ import {
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitButton, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
+import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -430,7 +431,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxTextArea level={level} defaultValue="DESCRIPTION" />
   }
   if (name === "Stepper") {
-    return <SubToolboxStepper level={level} value={stepperValue} decreaseIcon={<Minus />} increaseIcon={<Plus />} onDecrease={() => setStepperValue((value) => value - 1)} onIncrease={() => setStepperValue((value) => value + 1)} />
+    return <SubToolboxSplitStepper level={level} size={level === "l2" ? "compact" : "standard"} value={stepperValue} onValueChange={setStepperValue} ariaLabel="Demo value" />
   }
   if (name === "Toggle") {
     return <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />
