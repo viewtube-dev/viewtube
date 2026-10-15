@@ -851,3 +851,82 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Result:** The complete reference is committed on canonical main, registered in both structured recovery state and the conversation recovery index, and linked from docs/Vault.md.
 - **Next action:** Begin source-level capability inventory and runtime reconciliation before implementation.
 - **Verification:** GitHub read-back confirmed the master has the final section and expected content; Recovery.yaml contains the registration; docs/Vault.md links to the master; the index contains this contribution. Runtime tests/builds were not run because no runtime code changed.
+
+
+#### LOG-ID: REC-20261015-vault-phases-0-1-2-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation agent
+- **Round:** 1
+- **Category:** VAULT / SOURCE AUDIT / IDENTITY / SELECTION / ADAPTIVE WORKBENCH
+- **Action:** Audited the master integration branch baseline and implemented the first Vault Workbench phases on a dedicated branch targeting master integration.
+- **Source:** `master/consolidated-feature-integration`; `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; current Vault source, tests, and task plan.
+- **Artifacts:** `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; Vault capability registry/host; selection and mutation-policy services/tests.
+- **Status:** IMPLEMENTED / CI VERIFICATION PENDING
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **Changes:** Added the adaptive Workbench capability/mode registry and host; made processor availability fail closed; integrated host into `CreatorVaultOS.tsx`; rejected stale clicked selection IDs; centralized local lifecycle mutation eligibility for protected/GOLDEN and trashed assets; added identity, policy, selection, capability and host tests.
+- **Phase 0 result:** Canonical source ownership and existing Vault route/services/tests documented. The current browser localStorage asset adapter does not establish server-enforced account/workspace authorization.
+- **Phase 1 result:** Stable Vault asset ID/creation-time and selection contracts are covered; lifecycle mutation policy is shared and tested. Server-side per-user/per-workspace authorization remains BLOCKED pending the canonical account/server contract and is not claimed implemented.
+- **Phase 2 result:** Shared adaptive mode/capability registry and host are integrated; video/audio processing are not advertised as available without explicit processor evidence.
+- **Verification:** GitHub writes accepted. Focused tests, typecheck, build, and browser verification have not yet been run in this environment; PR CI/read-back is required before certification.
+- **Next action:** Inspect the PR checks, repair any branch-introduced failures, and verify all changed files against the current target head before merge.
+
+
+#### LOG-ID: REC-20261015-vault-phases-3-4-5-6-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation agent
+- **Round:** 1
+- **Category:** VAULT / INSPECTION / OPERATION RECEIPTS / MEDIA / GOVERNANCE
+- **Action:** Implemented the next four Vault Workbench phases on the existing PR branch.
+- **Target:** `master/consolidated-feature-integration`
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **Artifacts:** `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md`; `docs/Vault.md`; inspection, operation-ledger, media-preflight, and review/governance services and tests.
+- **Phase 3:** Added read-only normalized asset inspection; integrated technical metadata, lineage, protected-state and actionable findings into the Inspector. Existing canonical manual/smart collections, search, filters, custom fields, and media metadata services remain the organization/inspection backbone.
+- **Phase 4:** Added a bounded operation receipt ledger with validated transitions, input/output asset IDs, parameters, errors and receipts; wired image/video derivative saves and displayed recent receipts in the Inspector.
+- **Phase 5:** Added media-operation preflight for supported media kind, duplicate/missing IDs, selection count, 64 MB known source limit and non-destructive derivative semantics; wired image/video workbenches to preflight before execution. Existing video processor submits to `/api/media/compress-analysis?vaultOperation=1`.
+- **Phase 6:** Added stable field-level metadata comparison, rights/expiry/restriction findings, and an explicit metadata-suggestion proposal/acceptance contract that rejects protected/provenance mutations. Integrated rights findings and full metadata differences into the Inspector/Compare surfaces.
+- **Hard limits:** Operation ledger is browser-localStorage, not a server audit log or cross-device queue. Batch planning is not batch execution. Video processor deployment health/FFmpeg and persistent server storage require runtime verification. Proposal contract does not provide an AI model; vision/suggested-tag and arbitrary local-file transcription integrations remain incomplete. Server-side account/workspace authorization remains blocked.
+- **Status:** IMPLEMENTED / CI VERIFICATION PENDING; not merged or release-certified.
+- **Verification:** Source and tests were written through GitHub. No local test/typecheck/build/browser run is claimed. Exact-head CI and merged-target read-back are required before certification.
+- **Next action:** Review latest PR CI; fix branch-introduced failures; verify latest changed files and then continue the remaining authorization, server-backed receipt, processor-health, batch-execution and AI-provider work.
+
+
+#### LOG-ID: REC-20261015-vault-phases-0-6-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation continuation
+- **Round:** 1
+- **Category:** VAULT / PHASE AUDIT / CANONICAL SERVICE RECONCILIATION
+- **Action:** Continued verification of phases 3–6 and reconciled the branch with the canonical Vault services already present, removing redundant experimental services and keeping the existing implementation as the owner.
+- **Artifacts:** `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; canonical `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md`.
+- **Status:** IMPLEMENTATION IN BRANCH / EXACT-HEAD CI VERIFICATION PENDING
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **PR:** [#336](https://github.com/viewtube-dev/viewtube/pull/336), target `master/consolidated-feature-integration`.
+- **Canonical Phase 3:** `vaultInspection` and existing search/collections/custom-field services; inspector surfaces technical, rights, lineage, and health findings.
+- **Canonical Phase 4:** `vaultOperationLedger` and Asset Engine lineage; guarded operation states, input/output IDs, retry/error/receipt records.
+- **Canonical Phase 5:** `vaultMediaOperations` preflight; media-kind/selection/source limits and derivative-only rules. Actual deployed processor health remains unverified.
+- **Canonical Phase 6:** `vaultReviewGovernance`; field comparison, rights findings, and safe metadata suggestion proposal/acceptance contract.
+- **Reconciliation:** Removed duplicate maintenance/operation/comparison/governance services and their tests created during the continuation audit; restored the Vault UI to the existing canonical services. No duplicate asset store or competing operation ledger is retained.
+- **Boundaries:** localStorage is not server-side durability or authorization; suggestion contracts are not an AI provider; rights findings are not legal clearance; no deployment or merge is claimed.
+- **Verification:** GitHub read-back confirms duplicate files removed and canonical services retained. Exact-head CI, typecheck/build, browser verification, merge, and post-merge read-back remain pending.
+- **Next action:** Review the latest PR checks and resolve failures before merging.
+
+
+#### LOG-ID: REC-20261015-vault-phases-7-10-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation continuation
+- **Round:** 1
+- **Category:** VAULT / CROSS-SYSTEM WORKFLOW / BATCH OPERATIONS / RELEASE GATES
+- **Action:** Advanced the Vault Workbench plan through phases 7–10, added a bounded per-item batch planner/runner and regression tests, formalized phase exit gates, and documented blockers rather than claiming production completion.
+- **Artifacts:** `src/services/vaultBatchOperations.ts`; `src/services/__tests__/vaultBatchOperations.test.ts`; `docs/vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md`; updated Vault master and `docs/Vault.md`.
+- **Status:** IMPLEMENTED IN BRANCH / EXACT-HEAD VERIFICATION PENDING; PHASE 8 BLOCKED
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **PR:** [#336](https://github.com/viewtube-dev/viewtube/pull/336), target `master/consolidated-feature-integration`.
+- **Phase 7 evidence:** canonical `src/services/assetEngine.ts` uses the existing Vault adapter, ContentBuild events, and ViewTube ActionPacket for asset creation and handoff. The full create/retry/reopen/edit/handoff/return/package/publish runtime flow is not yet certified.
+- **Phase 8 blocker:** authoritative account/workspace authorization and durable server-side job/receipt contracts are not verified. Browser localStorage/IndexedDB and local lifecycle guards are not authorization or a durable cross-device queue. No parallel auth model was invented.
+- **Phase 9 implementation:** per-item preflight, 50-item cap, duplicate/missing ID rejection, safe sequential executor, per-item success/failure/skip/cancel outcomes, and partial-failure reporting. Real processor/derivative/ledger integration and AI provider remain pending.
+- **Phase 10 evidence:** prior release-gate run #1503 passed production build, local smoke, and Brain quality loop; typecheck, source governance, focused contracts, and full suite failed. That run predates the newest batch/documentation commits and does not verify the current head.
+- **Verification:** source writes returned commit SHAs and PR metadata was read back. No claim of merge, exact-head CI pass, browser certification, or deployment is made.
+- **Next action:** inspect the newest release-gate run; resolve branch-introduced errors; complete processor/lineage integration and server authorization/durability; certify browser flow; merge only when required gates pass; re-read target branch afterward.

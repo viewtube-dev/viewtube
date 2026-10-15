@@ -1,11 +1,25 @@
 # ViewTube Vault / Asset Workbench — Tools, Capabilities, Plans & Systems Reference
 
 **Status:** CANONICAL RECONSTRUCTION / PRODUCT-ARCHITECTURE REFERENCE  
-**Implementation status:** Architecture and capability inventory are defined; individual runtime capabilities are not presumed implemented until current canonical source, tests, and runtime behavior are verified.  
+**Implementation status:** Reference architecture is defined. Phases 0–6 have implementation work; phases 7–10 are now being advanced on `vault/phases-0-1-2-workbench`. Exact-head CI, cross-system certification, server authorization/durable queue, and production runtime certification remain pending. Do not infer completion from branch writes alone.  
 **Canonical repository:** viewtube-dev/viewtube  
 **Primary owner document:** docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md  
 **Related overview:** docs/Vault.md  
 **Recovery evidence:** docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md
+
+## Current implementation checkpoint — October 15, 2026 (phases 0–10 continuation)
+
+The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md), [Phases 3–6 implementation audit](VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md), and [Phases 7–10 implementation audit](VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
+
+- **Phase 0:** canonical source ownership and baseline gaps documented.
+- **Phase 1:** stable local asset identity, stale-selection guards, and protected/lifecycle mutation policy strengthened with regression tests.
+- **Phase 2:** adaptive mode/capability host integrated; video/audio processing is not advertised without verified processors.
+- **Phase 3:** read-only technical/rights/lineage inspection and actionable findings added while reusing canonical search, collections, custom fields, and metadata services.
+- **Phase 4:** bounded operation ledger with guarded state transitions, input/output lineage, retry/error/receipt fields; derivative flows associate operations and lineage.
+- **Phase 5:** shared media-operation preflight enforces compatible media kind, selection/source limits, protected-source restrictions, and derivative-only behavior.
+- **Phase 6:** field-level comparison, rights/license/source/expiry/restriction findings, and explicit metadata suggestion proposal/acceptance safeguards added.
+
+**Release state:** IMPLEMENTATION IN BRANCH / EXACT-HEAD CI VERIFICATION PENDING. The browser `localStorage` adapter and operation ledger are not server durability or server authorization. The media preflight contract is not proof a deployed worker is healthy. Metadata suggestions are proposals, not a connected AI model. Rights findings are not legal clearance. Do not merge or certify until the latest-head tests, typecheck/build, browser verification, and target-branch read-back are complete.
 
 ## 1. Purpose and product promise
 
@@ -462,6 +476,21 @@ Add comparison and validation. Integrate AI suggestions with approval/provenance
 Certify Vault ↔ Projects ↔ ContentBuild ↔ Asset Engine ↔ package handoff. Verify identity through create → retry → reopen → edit → handoff → return → package → publish. Verify Resource Library and Brain integrations do not create duplicate stores. Test real deployment and representative creator flows.
 
 **Exit gate:** vertical slice works on canonical main and exact commit is verified.
+
+### Phase 8 — Server trust, durable operations, and storage boundary
+Bind asset reads/writes and operation execution to the authenticated account/workspace contract. Move authoritative operation receipts and queued job state to server-backed persistence with idempotency, cancellation, retry policy, resource limits, and per-workspace authorization. Verify durable media storage configuration. Do not substitute localStorage, UI-only guards, or an unauthenticated endpoint for server trust.
+
+**Exit gate:** authorization tests prove cross-workspace denial; operation/job records survive process restart; retry/cancel/idempotency and storage failure behavior are verified. If the repository's account/workspace contract or production storage is not available, mark this phase BLOCKED rather than inventing a second auth system.
+
+### Phase 9 — Safe batch execution and governed AI assistance
+Run eligible batch items through the canonical operation/Asset Engine path with per-item receipts, partial-failure visibility, bounded concurrency, cancellation, source preservation, and lineage. Connect vision/tag suggestions only through an available approved provider; keep proposals separate from accepted metadata and preserve provenance. Rights findings are advisory and must not be represented as legal approval.
+
+**Exit gate:** real supported processors produce derivatives, every output links to its source and operation, failed items can be retried safely, and AI suggestions are explicitly reviewed before applying.
+
+### Phase 10 — End-to-end certification and release
+Test the canonical lifecycle from asset creation through operation/retry, browser reload, edit, project/ContentBuild handoff, return, package assembly, and publication integration. Verify responsive and keyboard-accessible behavior, empty/error/loading states, logs/network behavior, exact-head tests/typecheck/build, live deployment, and post-merge target read-back. Track pre-existing failures separately but do not waive required gates silently.
+
+**Exit gate:** required checks are green on the exact PR head, representative browser/runtime paths pass against the matching deployed commit, changes are merged, and the target branch is re-read and verified.
 
 Required workflow: SEARCH → INSPECT → TEST → IMPLEMENT → VERIFY → DOCUMENT → MERGE → POST-MERGE VERIFY. Use test-first development for behavior changes. Do not mark work complete based on a plan, passing isolated mock tests, or a deployment unrelated to the verified commit.
 

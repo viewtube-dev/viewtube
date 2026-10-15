@@ -59,3 +59,10 @@ Recovered planning establishes this architecture, but current runtime implementa
 For the full capability inventory, adaptive Workbench modes, operation and lineage contracts, integrations, security, testing gates, and phased implementation plan, see the canonical [Vault / Asset Workbench — Tools, Capabilities, Plans & Systems Reference](vault/VAULT_ASSET_WORKBENCH_MASTER.md).
 
 This reference defines the target system; individual runtime capabilities must still be verified against canonical source, tests, and runtime behavior.
+
+## Implementation audits
+
+- [Phases 0–2: canonical source, identity/selection, adaptive host](vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md)
+- [Phases 3–6: inspection, operation receipts, media preflight, compare and governance](vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md)
+
+Both audit documents distinguish implemented code from pending CI, runtime, server-authorization, processor-health, durable-operation, and AI-provider verification.

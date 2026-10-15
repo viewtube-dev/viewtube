@@ -20,11 +20,16 @@ export const resolveVaultSelection = ({
  anchorId,
  shiftKey,
 }: VaultSelectionInput): VaultSelectionResult => {
- const selected = new Set(selectedIds)
- const anchorIndex = anchorId ? visibleIds.indexOf(anchorId) : -1
+ const selected = new Set(selectedIds.filter((id) => typeof id === "string" && id.length > 0))
  const clickedIndex = visibleIds.indexOf(clickedId)
 
- if (shiftKey && anchorIndex >= 0 && clickedIndex >= 0) {
+ // A stale card/event must never add an arbitrary ID to the selection.
+ if (clickedIndex < 0) {
+  return { selectedIds: Array.from(selected), anchorId: anchorId && visibleIds.includes(anchorId) ? anchorId : null }
+ }
+
+ const anchorIndex = anchorId ? visibleIds.indexOf(anchorId) : -1
+ if (shiftKey && anchorIndex >= 0) {
   const start = Math.min(anchorIndex, clickedIndex)
   const end = Math.max(anchorIndex, clickedIndex)
   const range = visibleIds.slice(start, end + 1)
@@ -32,7 +37,9 @@ export const resolveVaultSelection = ({
    if (nextSelected) selected.add(id)
    else selected.delete(id)
   }
-  return { selectedIds: visibleIds.filter((id) => selected.has(id)), anchorId }
+  return { selectedIds: visibleIds.filter((id) => selected.has(id)).concat(
+   [...selected].filter((id) => !visibleIds.includes(id)),
+  ), anchorId }
  }
 
  if (nextSelected) selected.add(clickedId)
@@ -42,6 +49,5 @@ export const resolveVaultSelection = ({
   ...visibleIds.filter((id) => selected.has(id)),
   ...selectedIds.filter((id) => !visibleIds.includes(id) && selected.has(id)),
  ]
-
  return { selectedIds: Array.from(new Set(ordered)), anchorId: clickedId }
 }

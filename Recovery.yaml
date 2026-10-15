@@ -947,3 +947,154 @@ vault_workbench_systems_reference:
     - "Authorization/recoverability of historical adaptive Workbench donor branch."
     - "Per-capability runtime/test coverage."
     - "Current deployment state for the exact canonical commit."
+
+
+vault_workbench_phases_0_1_2:
+  status: "IMPLEMENTED / CI VERIFICATION PENDING"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phases-0-1-2-001"
+  title: "Vault Workbench phases 0–2: source audit, identity/selection, adaptive host"
+  target_branch: "master/consolidated-feature-integration"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  audit_document: "docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md"
+  changed_files:
+    - "src/features/vault-workbench/capabilities.ts"
+    - "src/features/vault-workbench/capabilities.test.ts"
+    - "src/features/vault-workbench/VaultAdaptiveWorkbenchHost.tsx"
+    - "src/features/vault-workbench/VaultAdaptiveWorkbenchHost.test.tsx"
+    - "src/views/CreatorVaultOS.tsx"
+    - "src/services/vaultSelection.ts"
+    - "src/services/__tests__/vaultSelection.test.ts"
+    - "src/services/vaultMutationPolicy.ts"
+    - "src/services/__tests__/vaultMutationPolicy.test.ts"
+    - "src/services/__tests__/vaultAdapterIdentity.test.ts"
+  findings:
+    - "VaultAsset.id remains the canonical local asset identity; update/upsert preserve ID and creation time."
+    - "Stale clicked selection IDs are rejected by the selection resolver."
+    - "Protected/GOLDEN and permanent-delete lifecycle eligibility is centralized and tested."
+    - "Video/audio processing is unavailable unless a processor is explicitly verified."
+    - "The reviewed Vault adapter is localStorage-backed and does not establish server-enforced account/workspace authorization."
+  blockers:
+    - "True per-user/per-workspace authorization remains blocked pending canonical server/account authorization integration."
+    - "Focused tests, typecheck, build, browser verification, and PR CI remain pending."
+  verification:
+    - "GitHub accepted source and test writes on the implementation branch."
+    - "No local test/build run is claimed."
+
+
+vault_workbench_phases_3_4_5_6:
+  status: "IMPLEMENTED / CI VERIFICATION PENDING"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phases-3-4-5-6-001"
+  target_branch: "master/consolidated-feature-integration"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  audit_document: "docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md"
+  capabilities:
+    phase_3:
+      - "Normalized asset inspection projection with technical, rights, lineage, tag and health findings."
+      - "Inspector integration for technical summaries, lineage and actionable findings."
+      - "Existing manual/smart collection, search, custom field and metadata inspection services retained as canonical owners."
+    phase_4:
+      - "Browser-local operation receipt ledger with guarded transitions, input/output IDs, parameters, error and receipt."
+      - "Image/video derivative-save integration and recent receipts in Inspector."
+    phase_5:
+      - "Shared media preflight for kind, selection bounds, known 64 MB source limit and non-destructive output."
+      - "Image/video workbench preflight integration."
+    phase_6:
+      - "Stable field-level comparison including metadata."
+      - "Rights and expiry/restriction findings."
+      - "Metadata suggestion proposal/acceptance contract that protects lifecycle/provenance."
+  blockers:
+    - "Server-side per-user/per-workspace authorization."
+    - "Server-backed, cross-device operation receipts and job queue."
+    - "Deployed FFmpeg/processor health and persistent media storage verification."
+    - "Batch media execution (planner only)."
+    - "Actual AI vision/suggested-tag provider integration."
+    - "Focused tests, full suite, typecheck, production build, browser and deployment verification."
+  changed_paths:
+    - "src/services/vaultInspection.ts"
+    - "src/services/__tests__/vaultInspection.test.ts"
+    - "src/services/vaultOperationLedger.ts"
+    - "src/services/__tests__/vaultOperationLedger.test.ts"
+    - "src/services/vaultMediaOperations.ts"
+    - "src/services/__tests__/vaultMediaOperations.test.ts"
+    - "src/services/vaultReviewGovernance.ts"
+    - "src/services/__tests__/vaultReviewGovernance.test.ts"
+    - "src/views/CreatorVaultOS.tsx"
+    - "src/views/vault/VaultImageWorkbench.tsx"
+    - "src/views/vault/VaultVideoWorkbench.tsx"
+    - "src/services/vaultAdapter.ts"
+    - "src/services/__tests__/vaultAdapterIdentity.test.ts"
+    - "docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md"
+    - "docs/Vault.md"
+
+
+vault_workbench_phases_0_6:
+  status: "IMPLEMENTATION IN BRANCH / EXACT-HEAD CI VERIFICATION PENDING"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phases-0-6-001"
+  title: "Vault Workbench phases 0–6 canonical implementation and verification"
+  target_branch: "master/consolidated-feature-integration"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  pull_request: 336
+  audit_documents:
+    - "docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md"
+    - "docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md"
+  canonical_phase_3:
+    - "src/services/vaultInspection.ts"
+    - "src/services/vaultAdapter.ts"
+    - "src/services/vaultCollections.ts"
+    - "src/services/vaultCustomFields.ts"
+  canonical_phase_4:
+    - "src/services/vaultOperationLedger.ts"
+    - "src/services/assetEngine.ts"
+  canonical_phase_5:
+    - "src/services/vaultMediaOperations.ts"
+    - "src/services/__tests__/vaultMediaOperations.test.ts"
+  canonical_phase_6:
+    - "src/services/vaultReviewGovernance.ts"
+    - "src/services/__tests__/vaultReviewGovernance.test.ts"
+  reconciliation:
+    - "Removed duplicate experimental maintenance/operation/comparison/governance services and tests."
+    - "Restored CreatorVaultOS to canonical inspection, operation ledger, and rights/compare flows."
+    - "Corrected docs/Vault.md and the Vault master checkpoint to reference the canonical audit."
+  boundaries:
+    - "Browser localStorage is not server-side durability or account/workspace authorization."
+    - "Media preflight is not proof that a deployed worker is healthy."
+    - "Metadata suggestion proposal/acceptance is not a connected AI provider."
+    - "Rights findings are not legal clearance."
+  verification:
+    - "GitHub read-back confirms duplicate files removed and canonical services retained."
+    - "Exact-head CI, typecheck/build, browser verification, merge, and post-merge read-back remain pending."
+  next_action: "Review the latest PR checks and resolve failures before merging."
+
+
+vault_workbench_phases_7_10:
+  status: "IMPLEMENTED IN BRANCH / EXACT-HEAD VERIFICATION PENDING; PHASE 8 BLOCKED"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phases-7-10-001"
+  title: "Vault Workbench phases 7–10 cross-system, batch and certification continuation"
+  target_branch: "master/consolidated-feature-integration"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  pull_request: 336
+  audit_documents:
+    - "docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md"
+    - "docs/vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md"
+  implementation:
+    - "src/services/vaultBatchOperations.ts"
+    - "src/services/__tests__/vaultBatchOperations.test.ts"
+    - "src/services/assetEngine.ts (existing canonical Asset Engine and ActionPacket handoff path audited, not duplicated)"
+  phase_status:
+    phase_7: "PARTIAL — canonical Asset Engine, ContentBuild and ActionPacket path exists; end-to-end browser flow not certified"
+    phase_8: "BLOCKED — authenticated workspace authorization and durable server-side operation/job contract not verified"
+    phase_9: "IMPLEMENTED IN BRANCH / PARTIAL INTEGRATION — bounded per-item batch planning/execution results and tests; processor/ledger/AI provider integration pending"
+    phase_10: "PENDING — exact-head CI, browser/runtime verification, merge and post-merge read-back"
+  boundaries:
+    - "Client-side guards, localStorage and IndexedDB are not server authorization or cross-device durability."
+    - "The batch runner takes an executor callback and does not itself claim a durable worker or wire every media processor."
+    - "Metadata suggestion contracts are not an AI provider; rights findings are not legal clearance."
+  verification:
+    - "Release-gate run #1503 before these writes passed production build, local smoke and Brain quality loop."
+    - "That run failed typecheck, source governance, focused contracts and full suite; it predates the newest head."
+    - "No exact-head verification, merge, browser certification or deployment is claimed."
+  next_action: "Run and inspect CI for the newest PR head, fix branch-introduced failures, resolve phase 8 prerequisites, complete real processor/lineage wiring and certify post-merge target."

@@ -1,6 +1,7 @@
 import type { GenerationArtifact, SuperToolId, VaultAsset, VaultAssetKind } from "@/types"
 import { nexusSyncService } from "./nexusSyncService"
 import { getVaultAttentionReasons } from "./vaultAttention"
+import { canMutateVaultAsset, isVaultAssetProtected } from "./vaultMutationPolicy"
 
 export type VaultAssetLifecycle =
  | "DRAFT"
@@ -186,6 +187,31 @@ export const addVaultAsset = (
  return asset
 }
 
+
+const isProtectedContentMutation = (
+ existing: VaultAsset,
+ patch: Partial<Omit<VaultAsset, "id" | "createdAt">>,
+): boolean => {
+ if (!isVaultAssetProtected(existing)) return false
+ const contentKeys = ["name", "kind", "source", "url", "previewUrl", "mimeType"] as const
+ const contentChanged = contentKeys.some((key) => (
+  Object.prototype.hasOwnProperty.call(patch, key) && patch[key] !== existing[key]
+ ))
+ const protectedMetadataKeys = ["lifecycle", "contentHash"]
+ const protectedMetadataChanged = Boolean(patch.metadata && protectedMetadataKeys.some((key) => (
+  Object.prototype.hasOwnProperty.call(patch.metadata, key)
+  && patch.metadata?.[key] !== existing.metadata?.[key]
+ )))
+ const protectionChanged = Boolean(
+  patch.metadata
+  && Object.prototype.hasOwnProperty.call(patch.metadata, "protected")
+  && patch.metadata.protected !== existing.metadata?.protected
+ )
+ // Unlocking is a distinct operation: it cannot be combined with content or provenance changes.
+ if (patch.metadata?.protected === false && protectionChanged && !contentChanged && !protectedMetadataChanged) return false
+ return contentChanged || protectedMetadataChanged || (protectionChanged && patch.metadata?.protected !== false)
+}
+
 export const updateVaultAsset = (
  id: string,
  patch: Partial<Omit<VaultAsset, "id" | "createdAt">>,
@@ -193,6 +219,7 @@ export const updateVaultAsset = (
  const assets = readAssets()
  const existing = assets.find((asset) => asset.id === id)
  if (!existing) return null
+ if (isProtectedContentMutation(existing, patch)) return null
  const updated: VaultAsset = {
   ...existing,
   ...patch,
@@ -212,9 +239,8 @@ export const setVaultAssetState = (
  if (!existing) return null
  const metadata = { ...(existing.metadata || {}) }
  const lifecycle = String(metadata.lifecycle || "DRAFT").toUpperCase()
- const protectedAsset = metadata.protected === true || (lifecycle === "GOLDEN" && metadata.protected !== false)
- const destructiveRequested = input.archived === true || input.trashed === true
- if (protectedAsset && destructiveRequested) return null
+ if (input.archived === true && !canMutateVaultAsset(existing, "archive")) return null
+ if (input.trashed === true && !canMutateVaultAsset(existing, "trash")) return null
 
  if (typeof input.favorite === "boolean") metadata.favorite = input.favorite
 
@@ -281,12 +307,7 @@ export const deleteVaultAsset = (id: string): boolean => {
  const existing = assets.find((asset) => asset.id === id)
  if (!existing) return false
 
- const metadata = existing.metadata || {}
- const lifecycle = String(metadata.lifecycle || "").toUpperCase()
- const protectedAsset = metadata.protected === true || (lifecycle === "GOLDEN" && metadata.protected !== false)
- const isTrashed = Boolean(metadata.trashedAt) || lifecycle === "TRASHED"
-
- if (!isTrashed || protectedAsset) return false
+ if (!canMutateVaultAsset(existing, "permanent-delete")) return false
 
  writeAssets(assets.filter((asset) => asset.id !== id))
  return true
@@ -301,6 +322,7 @@ export const upsertVaultAsset = (
  if (!existing) {
   return addVaultAsset(input)
  }
+ if (isProtectedContentMutation(existing, input)) return existing
  const updated: VaultAsset = {
   ...existing,
   ...input,
