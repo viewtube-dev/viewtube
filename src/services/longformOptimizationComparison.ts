@@ -182,6 +182,8 @@ export const buildLongformOptimizationDailyComparison = (input: {
   const afterDays = days.filter((day) => day.phase === "after")
   const beforeComplete = beforeDays.every((day) => !day.pending && byDay.has(day.date))
   const afterComplete = afterDays.every((day) => !day.pending && byDay.has(day.date))
+  const before = summaryFor(beforeDays)
+  const after = summaryFor(afterDays)
   const hasAdequateMetricCoverage = before.daysObserved >= 5 && after.daysObserved >= 5 &&
     [
       [before.viewsAverage, after.viewsAverage],
@@ -204,8 +206,8 @@ export const buildLongformOptimizationDailyComparison = (input: {
         ? "ready"
         : "partial",
     days,
-    before: summaryFor(beforeDays),
-    after: summaryFor(afterDays),
+    before,
+    after,
     contentBuildEventId: null,
   }
 }
