@@ -19,8 +19,8 @@ Text areas preserve their taller multiline writing surface and vertical resizing
 - `src/styles/studio-control-system.css`: single-line inputs inherit global standard/compact typography; textarea-specific typography explicitly applies the 18px/14px multiline exception over the shared field base rule.
 
 ## Regression requirements
-1. Standard text input and standard textarea compute to 18px.
-2. Compact text input and compact textarea compute to 14px.
+1. Standard single-line text input computes to 38px; standard textarea computes to 18px.
+2. Compact single-line text input computes to 24px; compact textarea computes to 14px.
 3. Placeholder and entered text share typography in each control.
 4. Focus/blur does not change font size.
 5. Textarea remains multiline, vertically resizable, and at least the canonical multiline minimum height.
