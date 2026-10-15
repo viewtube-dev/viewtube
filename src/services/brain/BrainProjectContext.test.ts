@@ -38,17 +38,27 @@ describe("BrainProjectContext", () => {
    status: "active",
    plan: { concept: "Project concept", niche: "history" },
   }
-  const contentBuild = {
+  const contentBuild: ContentBuildSnapshot = {
+   schemaVersion: 1,
    id: "cb-canonical",
+   revision: 1,
+   channelId: "channel-a",
    stage: "package",
-   workflow: { blockerIds: [] },
+   assetIds: [],
+   selections: {},
+   relations: [],
+   versions: [],
+   variantGroups: [],
+   workflow: { completedStepIds: [], blockerIds: [] },
    profile: {
     subject: "Canonical build subject",
     topic: "Canonical build topic",
     format: "long",
     audienceSegments: ["Napoleonic history viewers", "military history viewers"],
    },
-  } as ContentBuildSnapshot
+   createdAt: "2026-10-15T00:00:00.000Z",
+   updatedAt: "2026-10-15T00:00:00.000Z",
+  }
 
   expect(buildAlgorithmProjectContext({
    channelId: "channel-a",
