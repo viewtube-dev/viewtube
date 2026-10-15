@@ -1887,7 +1887,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   opacity: 0;
 }
 .vt-studio-tag-editor__fly[data-targeted="false"] { opacity: 1; }
-.vt-studio-closeable-badge.is-fly-destination { opacity: 0; }
+.vt-studio-closeable-badge.is-fly-destination { opacity: 0; animation: none !important; }
 .vt-studio-tag-editor__fly[data-targeted="true"] { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-closeable-badge,
