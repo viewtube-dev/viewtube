@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   recordAlgorithmEvaluation: vi.fn(),
   recordAlgorithmIntelligenceEvent: vi.fn(),
   linkAssetOutcomeToPublication: vi.fn(),
+  createPublicationEvaluationRecord: vi.fn(),
+  getCurrentCanonicalIntelligenceEvidence: vi.fn(),
 }))
 
 vi.mock("./ContentBuildRepository", () => ({
@@ -34,6 +36,12 @@ vi.mock("../brain/AlgorithmIntelligenceEventLedger", () => ({
 }))
 vi.mock("../brain/assetOutcomes", () => ({
   linkAssetOutcomeToPublication: mocks.linkAssetOutcomeToPublication,
+}))
+vi.mock("../viewTubeEvaluationLedger", () => ({
+  createPublicationEvaluationRecord: mocks.createPublicationEvaluationRecord,
+}))
+vi.mock("../analytics-canon", () => ({
+  getCurrentCanonicalIntelligenceEvidence: mocks.getCurrentCanonicalIntelligenceEvidence,
 }))
 
 import {
@@ -120,6 +128,8 @@ describe("Post-publish analytics bridge", () => {
     }))
     mocks.recordAlgorithmIntelligenceEvent.mockImplementation((input) => input)
     mocks.recordAlgorithmEvaluation.mockReturnValue({ evaluation: { status: "positive" }, recorded: { id: "outcome-1" } })
+    mocks.getCurrentCanonicalIntelligenceEvidence.mockReturnValue({ selectedWindow: "28d" })
+    mocks.createPublicationEvaluationRecord.mockReturnValue({ id: "publication-evaluation-1" })
   })
 
   it("binds the published video to its exact ContentBuild, approved snapshot and selected assets", () => {
@@ -293,5 +303,18 @@ describe("Post-publish analytics bridge", () => {
       }),
     }))
     expect(result.evaluation.status).toBe("positive")
+    expect(result.publicationEvaluation).toEqual({ id: "publication-evaluation-1" })
+    expect(mocks.createPublicationEvaluationRecord).toHaveBeenCalledWith(expect.objectContaining({
+      publicationIdentity: expect.objectContaining({
+        contentBuildId: "build-1",
+        publishTransactionId: "publish-tx-1",
+        youtubeVideoId: "youtube-123",
+        approvedSnapshotHash: "hash-1",
+      }),
+      selectedWindow: "28d",
+      source: "post-publication-checkpoint",
+      comparabilityStatus: "unknown",
+      causalAssessment: "insufficient_evidence",
+    }))
   })
 })
