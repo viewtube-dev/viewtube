@@ -2474,6 +2474,7 @@ const CreatorVaultOS: React.FC = () => {
          key={selectedAsset.id}
          asset={selectedAsset}
          onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+         onOperationUpdated={() => setRefreshTick((current) => current + 1)}
         />
        ) : (
         <SubToolboxStatePanel
@@ -2498,6 +2499,7 @@ const CreatorVaultOS: React.FC = () => {
          key={selectedAsset.id}
          asset={selectedAsset}
          onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+         onOperationUpdated={() => setRefreshTick((current) => current + 1)}
         />
        ) : (
         <SubToolboxStatePanel
