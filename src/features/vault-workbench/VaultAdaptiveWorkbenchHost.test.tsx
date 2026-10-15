@@ -27,7 +27,7 @@ describe("VaultAdaptiveWorkbenchHost", () => {
 
   it("renders processing as unavailable until a processor is explicitly connected", () => {
     const html = renderToStaticMarkup(
-      <VaultAdaptiveWorkbenchHost capabilities={resolveVaultMediaCapabilities({ kinds: ["video"] })} selectionCount={1} />,
+      <VaultAdaptiveWorkbenchHost capabilities={resolveVaultMediaCapabilities({ kinds: ["video"] })} selectionCount={1} initialMode="process" />,
     )
     expect(html).toContain('data-capability="video-process"')
     expect(html).toContain('data-available="false"')
