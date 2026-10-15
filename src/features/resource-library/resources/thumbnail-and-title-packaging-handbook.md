@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; audience-retention-watch-b
 
 A title and thumbnail are a viewer's first explanation of what a video offers. Together they help the right person recognize the subject, understand the promise, and decide whether to watch. Good packaging earns an informed click; it does not trick someone into clicking.
 
-> **Creator principle:** The package makes a promise in two formats. The video should fulfill that promise, and performance should be judged in the context of who saw it and what happened after the click.
+> **Creator takeaway:** The package makes a promise in two formats. The video should fulfill that promise, and performance should be judged in the context of who saw it and what happened after the click.
 
 ## The Creator Mental Model
 
