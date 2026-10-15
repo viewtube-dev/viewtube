@@ -80,7 +80,7 @@ describe("metadata history foundation", () => {
       entityId: "title",
       previousState: "Old title",
       resultingState: "New title",
-      metadata: expect.objectContaining({ packageId: "package-1", operationId: "operation-1" }),
+      metadata: expect.objectContaining({ metadataPackageId: "package-1", operationId: "operation-1" }),
     })
   })
 
