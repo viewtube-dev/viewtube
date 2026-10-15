@@ -22,6 +22,7 @@ import {
   StudioSpectrumTag,
   StudioCloseableBadge,
   StudioTagEditor,
+  StudioSimpleDropdown,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
 import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"
@@ -522,6 +523,22 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
         <span>Interactive Tag Editor · add, confirm, fly, and remove</span>
         <StudioTagEditor defaultValue={["Tag One", "Featured"]} />
+      </div>
+    </Family>
+    <Family
+      title="Simple Dropdown · Single Selection"
+      nonDefaultSettings={[
+        "A plain single-choice dropdown with no top-left label, checkbox rows, or multi-select behavior.",
+        "The closed control and options inherit Studio Controls typography, color-pair tokens, and standard 44px / compact 28px sizing.",
+        "Keyboard selection and native select semantics are preserved; disabled options and an optional placeholder are supported."
+      ]}
+      provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioSimpleDropdown.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioSimpleDropdown.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>Standard · single select</span>
+        <StudioSimpleDropdown aria-label="Example simple dropdown" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
+        <span>Compact · single select</span>
+        <StudioSimpleDropdown aria-label="Example compact dropdown" size="compact" defaultValue="three" options={[{ value: "one", label: "One set" }, { value: "three", label: "Three sets" }, { value: "five", label: "Five sets" }]} />
       </div>
     </Family>
     <ConfirmedInlineStepperFamily />

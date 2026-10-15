@@ -810,6 +810,8 @@ StudioSpectrumTag.displayName = "StudioSpectrumTag"
 
 
 // First-class stepper family: implementation and styles remain owned by Studio Controls.
+export { StudioSimpleDropdown } from "./StudioSimpleDropdown"
+export type { StudioSimpleDropdownProps, StudioSimpleDropdownOption } from "./StudioSimpleDropdown"
 export { StudioSplitStepper } from "./StudioSplitStepper"
 export type { StudioSplitStepperProps, StudioSplitStepperSize } from "./StudioSplitStepper"
 
