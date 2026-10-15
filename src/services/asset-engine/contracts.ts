@@ -128,6 +128,32 @@ export interface ContentBuildVariantGroup {
  metadata?: Record<string, unknown>
 }
 
+export const CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION = 1 as const
+
+export type ContentBuildProjectAssociationStatus = "verified" | "snapshot-only"
+
+/**
+ * Canonical, evidence-carrying identity for one completed external publication.
+ * Project association is explicitly qualified; missing legacy linkage is never
+ * silently promoted to a verified association.
+ */
+export interface ContentBuildPublicationIdentity {
+ schemaVersion: typeof CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION
+ contentBuildId: string
+ projectId: string
+ projectAssociationStatus: ContentBuildProjectAssociationStatus
+ videoPackageId: string
+ publishTransactionId: string
+ youtubeVideoId: string
+ channelId: string | null
+ approvedSnapshotId: string
+ approvedSnapshotHash: string
+ selectedVariantAssetIds: string[]
+ correlationId: string
+ idempotencyKey: string
+ publishedAt: string | null
+}
+
 export interface ContentBuildYouTubeBinding {
  channelId?: string | null
  videoId: string
