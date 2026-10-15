@@ -34,6 +34,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run check:capability-coverage
       - run: npm run test:confirmed-library-layout
       - run: git diff --check
       - run: npm run check:routes
