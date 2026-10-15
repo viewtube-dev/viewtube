@@ -5,6 +5,7 @@ import { RESOURCE_LIBRARY_ENTRIES } from "./resourceLibraryRegistry"
 
 const stylesheet = readFileSync(new URL("./resource-library.css", import.meta.url), "utf8")
 const component = readFileSync(new URL("./ResourceLibrary.tsx", import.meta.url), "utf8")
+const renderer = readFileSync(new URL("./ResourceDocumentRenderer.tsx", import.meta.url), "utf8")
 
 describe("Resource Library canonical palette contract", () => {
   it("uses the canonical twelve-slot ViewTube spectrum", () => {
@@ -34,6 +35,31 @@ describe("Resource Library canonical palette contract", () => {
     expect(component).toContain("getResourcePaletteStyle(resource.accentPaletteIndex)")
     expect(component).toContain('paletteIndex={8}')
     expect(component).toContain("`--vt-spectrum-${index}`")
+  })
+
+  it("gives all fifteen resources a practical exercise and explicit evidence boundary", () => {
+    expect(RESOURCE_LIBRARY_ENTRIES).toHaveLength(15)
+    for (const resource of RESOURCE_LIBRARY_ENTRIES) {
+      expect(resource.markdown, resource.id).toContain("## Field Exercise:")
+      expect(resource.markdown, resource.id).toContain("## Evidence Boundary:")
+    }
+  })
+
+  it("renders six explicit quote/evidence semantics with visible text labels", () => {
+    for (const label of [
+      "Direct quotation",
+      "Platform guidance",
+      "Evidence",
+      "Creator takeaway",
+      "Caution",
+      "Unknown",
+    ]) {
+      expect(renderer).toContain(label)
+    }
+    expect(renderer).toContain("RESOURCE_QUOTE_PALETTE_SLOT")
+    expect(renderer).toContain("var(--vt-spectrum-${accent})")
+    expect(renderer).toContain('return { kind: "note", body: value }')
+    expect(renderer).not.toContain('normalized.includes("officially documented")')
   })
 
   it("does not define a second hard-coded spectrum in the resource stylesheet", () => {
