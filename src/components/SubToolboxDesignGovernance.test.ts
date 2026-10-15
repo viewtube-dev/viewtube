@@ -700,3 +700,24 @@ describe("subtoolbox design governance", () => {
    expect(studioCss).toContain('caret-shape: block;')
  })
 })
+
+
+describe("compact Studio button shell and face width regression", () => {
+ it("excludes modern StudioButton shells from the legacy compact-control padding rule", () => {
+  const studioCss = source("src/styles/studio-control-system.css")
+  const legacyCompactRule = studioCss.match(/button\\[data-vt-studio-control\\]\\[data-size="compact"\\][^{]*\\{[^}]*\\}/s)?.[0] ?? ""
+
+  expect(legacyCompactRule).toContain(':not([data-vt-studio-button="true"])')
+ })
+
+ it("keeps compact shell padding at zero and the face/shadow anchored to the same shell width", () => {
+  const studioCss = source("src/styles/studio-control-system.css")
+  const compactShellRule = studioCss.match(/button\\[data-vt-studio-button="true"\\]\\[data-size="compact"\\]:not\\(\\[data-split-left="true"\\]\\):not\\(\\[data-icon-only="true"\\]\\) \\{[^}]*\\}/s)?.[0] ?? ""
+
+  expect(compactShellRule).toMatch(/padding:\\s*0(?:;| !important;)/)
+  expect(compactShellRule).toContain("width: max-content;")
+  expect(studioCss).toContain('button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0;')
+  expect(studioCss).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {')
+  expect(studioCss).toContain("width: auto;")
+ })
+})
