@@ -143,7 +143,7 @@ export const normalizeVaultVideoOperation = (input, sourceDurationSeconds = null
   }
 
   const maxDurationSeconds = Math.min(duration ?? MAX_DURATION_SECONDS, MAX_DURATION_SECONDS);
-  return { operation, outputFormat: outputFormat === "webm" ? "webm" : "mp4", quality, maxDurationSeconds };
+  return { operation, outputFormat: operation === "transcode" && outputFormat === "webm" ? "webm" : "mp4", quality, maxDurationSeconds };
 };
 
 export const buildVaultVideoFfmpegArgs = (config, inputPath, outputPath) => {
