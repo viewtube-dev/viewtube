@@ -44,7 +44,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('data-vt-studio-tag-editor="true"')
     expect(html).toContain("StudioCloseableBadge / StudioTagEditor")
     expect(html).toContain("H 20px")
-    expect(html).toContain("action H 32px")
+    expect(html).toContain("action H 28px")
     expect(html).toContain("vt-studio-tag-editor__square-action")
   })
 
