@@ -26,8 +26,8 @@ const extractVideoId=(value:unknown):string|null=>{
  return null
 }
 
-export const beginYouTubePublishing=(projection:PublishingPackageProjection)=>
- beginPublishTransaction(projection,"video-publisher")
+export const beginYouTubePublishing=(projection:PublishingPackageProjection,identity?:{workflowId?:string|null;operationId?:string|null;actionPacketId?:string|null;recommendationId?:string|null;experimentId?:string|null})=>
+ beginPublishTransaction(projection,"video-publisher",identity)
 
 /**
  * Crash-safe upload boundary. If a prior attempt already persisted a YouTube ID,
