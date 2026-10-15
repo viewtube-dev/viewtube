@@ -160,6 +160,7 @@ describe("outcome evaluation and governed learning lineage", () => {
    channelId: "channel-a",
    kind: "published",
    publishedVideoId: "youtube-1",
+   publishTransactionId: "publish-a",
    traceId: "trace-a",
   }])
   const record = createPublicationEvaluationRecord({
