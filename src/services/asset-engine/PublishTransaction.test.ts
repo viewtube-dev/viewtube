@@ -156,6 +156,20 @@ describe("PublishTransaction",()=>{
    evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100, windowHours: 24 }],
    metadata: { contentBuildId: "cb-publish" },
   })
+  const wrongPacket = recordAlgorithmIntelligenceEvent({
+   id: "recommendation:wrong-packet",
+   channelId: "channel-a",
+   projectId: "project-a",
+   videoId: "youtube-published",
+   kind: "RECOMMENDATION_CREATED",
+   sourceSystem: "decision",
+   actionPacketId: "packet-not-published",
+   confidence: "high",
+   title: "Different ActionPacket",
+   summary: "Must not be joined to this publication.",
+   evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100, windowHours: 24 }],
+   metadata: { contentBuildId: "cb-publish" },
+  })
   const noApproval = recordAlgorithmIntelligenceEvent({
    id: "recommendation:no-packet",
    channelId: "channel-a",
@@ -184,7 +198,7 @@ describe("PublishTransaction",()=>{
    metadataVersionIds: expect.any(Array),
    checkpointId: `publication-checkpoint:${transaction.id}`,
   })
-  for (const untouched of [otherBuild, otherVideo, noApproval]) {
+  for (const untouched of [otherBuild, otherVideo, wrongPacket, noApproval]) {
    expect(events.find((event) => event.id === untouched.id)?.checkpointAt).toBeFalsy()
   }
  })
