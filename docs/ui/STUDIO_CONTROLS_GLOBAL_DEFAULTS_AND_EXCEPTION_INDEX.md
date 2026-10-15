@@ -1,6 +1,6 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Audit baseline / correction plan (not a certification that rendered controls currently conform)  
+**Status:** Audit baseline with field-rule correction committed on this branch; rendered controls still require verification  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Audit work branch:** `fix/studio-primitive-size-shadow-contracts-20261014`  
@@ -277,3 +277,16 @@ If a value is not defined in the current exported constants (for example, shadow
 ### Change note — 2026-10-14
 
 This pass reuses this existing canonical document rather than creating a competing duplicate. The document is linked from `docs/UI.md`; `docs/Index.md` already links to this path. The global contract remains a declared baseline, and the exceptions remain open until CSS is reconciled and browser/test evidence is recorded.
+
+
+## 14. Revised field-only requirements (user-confirmed 2026-10-14)
+
+- Text inputs: standard 44px high with 38px text; compact 28px high with 24px text.
+- Text areas: both standard and compact use a 92px minimum height. Text areas are the documented exception to standard/compact height and text-size defaults; they still follow the size-specific border and corner-radius rules.
+- Field border width follows the global size token: standard 3px, compact 2px.
+- Field corner radius follows the global size token: standard 6px, compact 4px.
+- Default fill is 100% primary color for all components except text inputs and text areas, whose default fill is 50% primary color.
+- Focus styling applies to text inputs and text areas only. The secondary-color outline must have zero offset (no gap). Do not add focus-outline styling to other component families unless explicitly approved.
+- Remove any obsolete exception entries that describe the field border/radius as defects after these rules are implemented; keep source-level legacy declarations in the drift audit until a repository-wide cascade audit confirms they no longer win.
+
+**Implementation note:** A final authoritative CSS block was added for field selectors to neutralize older duplicate declarations. It must be followed by computed-style checks and, where practical, earlier duplicate declarations should be consolidated rather than leaving a permanent cascade workaround.

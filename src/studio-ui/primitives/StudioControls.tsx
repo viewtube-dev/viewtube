@@ -10,7 +10,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   fontWeight: 1000,
   strokeColor: "#000000",
   colorPairSystem: "primary = --pair-a; secondary = --pair-b",
-  backgroundFill: "buttons use primary; text fields use primary at 50% opacity",
+  backgroundFill: "all components use primary at 100%; text inputs and text areas use primary at 50% opacity",
   textColor: "#000000",
   textTransform: "uppercase",
   letterSpacing: "-0.035em",
