@@ -358,6 +358,10 @@ export type StudioSquareIconButtonVariant = "v1" | "v2" | "v3" | "v4"
 export type StudioSquareIconButtonEffect =
   | "standard"
   | "notification"
+  | "pop-on-activation"
+  | "like"
+  | "unlock"
+  | "download"
   | "rotated-toggle"
   | "flip"
   | "tooltip"
@@ -398,13 +402,17 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
   }, ref) => {
     const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
     const [animationKey, setAnimationKey] = React.useState(0)
-    const badgeValue = badge === undefined || badge === null || badge === "" ? null : String(badge)
+    const [liveCount, setLiveCount] = React.useState(typeof badge === "number" ? badge : 0)
+    React.useEffect(() => { if (typeof badge === "number") setLiveCount(badge) }, [badge])
+    const counterEnabled = effect === "like" || (effect === "notification" && typeof badge === "number")
+    const effectiveBadge: number | string | undefined = counterEnabled ? liveCount : badge
+    const badgeValue = effectiveBadge === undefined || effectiveBadge === null || effectiveBadge === "" ? null : String(effectiveBadge)
     const previousBadgeValue = React.useRef(badgeValue)
     React.useEffect(() => {
       if (previousBadgeValue.current !== badgeValue) setAnimationKey(key => key + 1)
       previousBadgeValue.current = badgeValue
     }, [badgeValue])
-    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph"
+    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph" || effect === "unlock" || effect === "download"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
     const isSuccess = effect === "success" && success
     const effectClass = effect === "standard" ? (animate ? "is-effect-pop" : undefined) : `is-effect-${effect}`
@@ -416,7 +424,8 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
       if (event.currentTarget.disabled) return
       onClick?.(event)
       if (event.defaultPrevented) return
-      if (animate || effect === "notification") setAnimationKey(key => key + 1)
+      if (animate || effect === "notification" || effect === "pop-on-activation" || effect === "like") setAnimationKey(key => key + 1)
+      if (counterEnabled) setLiveCount(count => count + 1)
       if (!selectable) return
       const next = !isSelected
       if (selected === undefined) setUncontrolledSelected(next)
@@ -441,7 +450,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         className={studioClasses("vt-studio-square-icon-button", effectClass, className)}
         disabled={disabled}
         sizeVariant={sizeVariant}
-        aria-label={effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? `${label}, ${badge}` : label}
+        aria-label={effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? `${label}, ${effectiveBadge}` : label}
         aria-describedby={describedBy}
         aria-pressed={selectable ? isSelected : undefined}
         selected={selectable && isSelected}
@@ -451,10 +460,10 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         data-icon-effect={effect}
         data-icon-only="true"
         data-icon-active={isSelected || isSuccess || animate ? "true" : "false"}
-        data-pop={animate && animationKey > 0 ? "true" : undefined}
+        data-pop={(animate || effect === "pop-on-activation" || effect === "like") && animationKey > 0 ? "true" : undefined}
         data-success={isSuccess ? "true" : undefined}
         data-has-badge={badgeValue !== null ? "true" : undefined}
-        data-notification-pulse={effect === "notification" && badgeValue !== null && animationKey > 0 ? "true" : undefined}
+        data-notification-pulse={(effect === "notification" || effect === "like") && badgeValue !== null && animationKey > 0 ? "true" : undefined}
         onClick={handleClick}
       >
         <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
@@ -463,17 +472,17 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
               <span data-vt-square-flip-face="front">{icon}</span>
               <span data-vt-square-flip-face="back">{alternateNode}</span>
             </span>
-          ) : effect === "morph" ? (
+          ) : effect === "morph" || effect === "rotated-toggle" || effect === "unlock" || effect === "download" ? (
             <span data-vt-square-morph-inner>
               <span data-vt-square-morph-face="front">{icon}</span>
               <span data-vt-square-morph-face="back">{alternateNode}</span>
             </span>
           ) : (
-            <span key={`${effect}:${animationKey}:${effect === "notification" ? String(badge ?? "") : ""}`} data-vt-square-icon-current>{iconNode}</span>
+            <span key={`${effect}:${animationKey}:${effect === "notification" || effect === "like" ? String(effectiveBadge ?? "") : ""}`} data-vt-square-icon-current>{iconNode}</span>
           )}
         </span>
-        {effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? (
-          <span key={`${String(badge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{badge}</span>
+        {(effect === "notification" || effect === "like") && effectiveBadge !== undefined && effectiveBadge !== null && effectiveBadge !== "" ? (
+          <span key={`${String(effectiveBadge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{effectiveBadge}</span>
         ) : null}
         {effect === "tooltip" && tooltip ? (
           <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>

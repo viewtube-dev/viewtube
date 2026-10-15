@@ -2211,3 +2211,153 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-dropdown.is-simple .vt-studio-dropdown-option { background: #fff !important; }
 .vt-studio-dropdown.is-simple .vt-studio-dropdown-option[aria-selected="true"] { background: var(--pair-b, #ff7f6b) !important; }
 .vt-studio-tag-editor__square-action[data-size="compact"] { width: 28px; min-width: 28px; height: 28px; min-height: 28px; border-width: 2px; border-radius: 4px; }
+
+
+/* Studio square-button motion family — scoped to the canonical Studio Controls primitive. */
+button[data-vt-studio-icon-button="true"] > [data-vt-studio-button-face] {
+  position: relative;
+  isolation: isolate;
+}
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] > [data-vt-studio-button-face] {
+  animation: vt-studio-heart-face 420ms ease-out both;
+}
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] > [data-vt-studio-button-face]::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  border: 2px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  pointer-events: none;
+  animation: vt-studio-square-ripple 460ms cubic-bezier(.16,1,.3,1) both;
+}
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] [data-vt-square-icon-current] svg path,
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] [data-vt-square-icon-current] svg polygon {
+  animation: vt-studio-heart-fill 420ms ease-out both;
+}
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] [data-vt-square-icon-current] {
+  animation: vt-studio-square-pop 220ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"].is-effect-like [data-vt-square-icon-current],
+button[data-vt-studio-icon-button="true"].is-effect-like [data-vt-square-badge] {
+  transform-origin: center;
+}
+button[data-vt-studio-icon-button="true"].is-effect-like[data-notification-pulse="true"] [data-vt-square-icon-current],
+button[data-vt-studio-icon-button="true"].is-effect-like[data-notification-pulse="true"] [data-vt-square-badge] {
+  animation: vt-studio-square-pop 220ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"].is-effect-like[data-has-badge="true"] [data-vt-square-badge] {
+  position: absolute;
+  z-index: 3;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border: 2px solid #000;
+  border-radius: 999px;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+  font: 1000 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  pointer-events: none;
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle > [data-vt-studio-button-face] {
+  transition: background-color 220ms ease-out, color 220ms ease-out;
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] > [data-vt-studio-button-face] {
+  background: #000 !important;
+  color: var(--pair-a, #36e0f6);
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-inner] {
+  transition: transform 380ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] [data-vt-square-morph-inner] {
+  transform: rotate(180deg);
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-face="front"],
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-face="back"] {
+  transition: opacity 180ms ease-out, transform 220ms ease-out;
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-unlock [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-download [data-vt-square-morph-face="back"] {
+  opacity: 0;
+  transform: scale(.72);
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] [data-vt-square-morph-face="front"],
+button[data-vt-studio-icon-button="true"].is-effect-unlock[data-icon-active="true"] [data-vt-square-morph-face="front"],
+button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="true"] [data-vt-square-morph-face="front"] {
+  opacity: 0;
+  transform: scale(.72) rotate(-25deg);
+}
+button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-unlock[data-icon-active="true"] [data-vt-square-morph-face="back"],
+button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="true"] [data-vt-square-morph-face="back"] {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+button[data-vt-studio-icon-button="true"].is-effect-unlock[data-icon-active="true"] [data-vt-square-morph-face="back"] svg,
+button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="true"] [data-vt-square-morph-face="back"] svg {
+  animation: vt-studio-square-pop 240ms cubic-bezier(.2,.8,.2,1);
+}
+/* Tooltip follows the compact fixed-label-box scale, not a generic oversized bubble. */
+button[data-vt-studio-icon-button="true"].is-effect-tooltip [data-vt-square-tooltip] {
+  box-sizing: border-box;
+  min-height: 28px;
+  padding: 6px 8px;
+  border: 2px solid #000;
+  border-radius: 4px;
+  background: var(--pair-b, #fff);
+  color: var(--pair-a, #000);
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+button[data-vt-studio-icon-button="true"][data-size="compact"].is-effect-tooltip [data-vt-square-tooltip] {
+  min-height: 24px;
+  padding: 4px 6px;
+  font-size: 12px;
+  border-width: 2px;
+}
+@keyframes vt-studio-square-ripple {
+  0% { inset: 0; border-width: 2px; opacity: .95; }
+  100% { inset: -12px; border-width: 6px; opacity: 0; }
+}
+@keyframes vt-studio-heart-face {
+  0%, 100% { background-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); }
+  18%, 62% { background-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+}
+@keyframes vt-studio-heart-fill {
+  0%, 100% { fill: transparent; }
+  18%, 62% { fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] > [data-vt-studio-button-face],
+  button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] > [data-vt-studio-button-face]::after,
+  button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] [data-vt-square-icon-current] svg,
+  button[data-vt-studio-icon-button="true"].is-effect-like[data-notification-pulse="true"] [data-vt-square-icon-current],
+  button[data-vt-studio-icon-button="true"].is-effect-like[data-notification-pulse="true"] [data-vt-square-badge] {
+    animation: none !important;
+  }
+}
+
+button[data-vt-studio-icon-button="true"].is-effect-unlock[data-icon-active="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  transition: background-color 180ms ease-out, color 180ms ease-out;
+}
+@keyframes vt-studio-square-shake {
+  0%, 100% { transform: rotate(0deg); }
+  15%, 55% { transform: rotate(-12deg); }
+  30%, 70% { transform: rotate(12deg); }
+  42%, 82% { transform: rotate(-7deg); }
+}
