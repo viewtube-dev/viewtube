@@ -1,12 +1,12 @@
 import React from "react";
 import { Film, HardDrive } from "lucide-react";
-import { SubToolboxInnerActionButton } from "../components/Toolbox";
-import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../components/subtoolbox/SubToolboxPrimitives";
-import { createImportedVaultAsset } from "../services/vaultAdapter";
-import { extractVaultVideoThumbnail } from "../services/vaultVideoThumbnail";
-import { processVaultVideo, type VaultVideoOperation, type VaultVideoQuality } from "../services/vaultVideoWorkbench";
-import { getVaultMediaBinary, saveVaultMediaBinary } from "../services/vaultMediaBinaryStore";
-import type { VaultAsset } from "../types";
+import { SubToolboxInnerActionButton } from "../../components/Toolbox";
+import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../../components/subtoolbox/SubToolboxPrimitives";
+import { createImportedVaultAsset } from "../../services/vaultAdapter";
+import { extractVaultVideoThumbnail } from "../../services/vaultVideoThumbnail";
+import { processVaultVideo, type VaultVideoOperation, type VaultVideoQuality } from "../../services/vaultVideoWorkbench";
+import { getVaultMediaBinary, saveVaultMediaBinary } from "../../services/vaultMediaBinaryStore";
+import type { VaultAsset } from "../../types";
 
 export interface VaultVideoWorkbenchProps {
   asset: VaultAsset;
