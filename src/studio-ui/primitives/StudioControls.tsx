@@ -4,7 +4,7 @@ import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Lock, Minus, Moon, Plus, RefreshCw, Sun, ThumbsUp, Unlock } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, ChevronsDown, ChevronsUp, Download, Heart, Lock, Minus, Moon, Plus, RefreshCw, Sun, ThumbsUp, Unlock } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -1111,6 +1111,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
       data-vt-studio-control="true"
       data-vt-studio-control-family="stepper"
       data-vt-studio-control-kind="inline-stepper"
+      data-vt-studio-username-foundation="true"
       data-size={size}
       role="group"
       aria-label={ariaLabel}
@@ -1207,14 +1208,17 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   }, [])
   React.useEffect(() => stopHold, [stopHold])
 
+  const validBounds = min <= max
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
+
   const change = React.useCallback((direction: -1 | 1) => {
     const current = valueRef.current
-    const next = Math.min(max, Math.max(min, current + direction * step))
+    const next = normalizeStudioInlineStepperValue(current, direction, safeStep, min, max)
     if (next === current) { stopHold(); return }
     valueRef.current = next
     setDraft(String(next))
     onValueChange(next)
-  }, [max, min, onValueChange, step, stopHold])
+  }, [max, min, onValueChange, safeStep, stopHold])
 
   const scheduleRepeat = React.useCallback(() => {
     const elapsed = Date.now() - startedAt.current
@@ -1232,7 +1236,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   }, [change, max, min, stopHold])
 
   const beginHold = (direction: -1 | 1, event: React.PointerEvent<HTMLButtonElement>) => {
-    if (disabled || event.button !== 0) return
+    if (disabled || !validBounds || event.button !== 0) return
     if ((direction > 0 && valueRef.current >= max) || (direction < 0 && valueRef.current <= min)) return
     event.preventDefault()
     stopHold()
@@ -1246,9 +1250,9 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   }
 
   const commitDraft = () => {
-    const parsed = Number(draft)
-    if (!draft.trim() || !Number.isFinite(parsed)) { setDraft(String(valueRef.current)); return }
-    const normalized = Math.min(max, Math.max(min, parsed))
+    const parsed = draft.trim() === "" ? Number.NaN : Number(draft)
+    if (!Number.isFinite(parsed) || !validBounds) { setDraft(String(valueRef.current)); return }
+    const normalized = normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)
     valueRef.current = normalized
     setDraft(String(normalized))
     if (normalized !== value) onValueChange(normalized)
@@ -1261,6 +1265,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
       data-vt-studio-control="true"
       data-vt-studio-control-family="stepper"
       data-vt-studio-control-kind="split-stepper"
+      data-vt-studio-username-foundation="true"
       data-size={size}
       role="group"
       aria-label={ariaLabel}
@@ -1274,8 +1279,8 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
         max={Number.isFinite(max) ? max : undefined}
-        step={step}
-        disabled={disabled}
+        step={safeStep}
+        disabled={disabled || !validBounds}
         onFocus={() => setInputFocused(true)}
         onBlur={() => { setInputFocused(false); commitDraft() }}
         onChange={(event) => {
@@ -1284,24 +1289,25 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
           if (!nextDraft.trim()) return
           const parsed = Number(nextDraft)
           if (!Number.isFinite(parsed)) return
-          const normalized = Math.min(max, Math.max(min, parsed))
+          if (!validBounds) return
+          const normalized = normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)
           valueRef.current = normalized
           onValueChange(normalized)
         }}
       />
       <div className="vt-studio-split-stepper-rail">
         <button type="button" className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
-          disabled={disabled || value >= max}
+          disabled={disabled || !validBounds || value >= max}
           onPointerDown={(event) => beginHold(1, event)}
           onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
           onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }}
-        ><ChevronUp aria-hidden="true" /></button>
+        ><ChevronsUp aria-hidden="true" /></button>
         <button type="button" className="vt-studio-split-stepper-down" aria-label={`Decrease ${ariaLabel}`}
-          disabled={disabled || value <= min}
+          disabled={disabled || !validBounds || value <= min}
           onPointerDown={(event) => beginHold(-1, event)}
           onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
           onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }}
-        ><ChevronDown aria-hidden="true" /></button>
+        ><ChevronsDown aria-hidden="true" /></button>
       </div>
     </div>
   )
