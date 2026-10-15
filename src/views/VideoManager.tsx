@@ -518,8 +518,10 @@ const VideoManager: React.FC<VideoManagerProps> = ({
       occurredAt: metadataOccurredAt,
      })
     }
-    await setSimpleVideoThumbnail(selectedVideoId, thumbnailFile)
-    setThumbnailFile(null)
+    if (thumbnailFile) {
+     await setSimpleVideoThumbnail(selectedVideoId, thumbnailFile)
+     setThumbnailFile(null)
+    }
    }
    const toAdd = selectedPlaylistIds.filter((id) => !currentPlaylists.some((m) => m.playlistId === id))
    const toRemove = currentPlaylists.filter((m) => !selectedPlaylistIds.includes(m.playlistId))
