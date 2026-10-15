@@ -1016,8 +1016,10 @@ button[data-vt-studio-button="true"][data-size="compact"] {
   box-shadow: none !important;
 }
 button[data-vt-studio-button="true"][data-size="compact"]::before {
-  width: 100%;
-  height: 100%;
+  /* inset:0 already sizes this shadow to the button shell; explicit width:100%
+     can over-constrain absolute positioning and create a wider silhouette. */
+  width: auto;
+  height: auto;
   filter: none;
   transform: translate(var(--vt-studio-control-shadow-x, 1px), var(--vt-studio-control-shadow-y, 1px));
 }
@@ -1052,7 +1054,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none !important; }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:auto; min-width:0; max-width:100%; height:100%; min-height:100%; flex:0 0 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform var(--vt-studio-motion-button,180ms) ease-out,background-color var(--vt-studio-motion-button,180ms) ease-out; }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform var(--vt-studio-motion-button,180ms) ease-out,background-color var(--vt-studio-motion-button,180ms) ease-out; }
 /* Compact buttons may be stretched by grid/flex parents. Make the visible face
    occupy the same inline footprint as the shell that anchors its shadow; otherwise
    the shell shadow exposes the parent width beyond the intrinsic face (often 8px
@@ -1076,7 +1078,7 @@ button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; 
 button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
 button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-icon-only="true"] { width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); flex:0 0 var(--vt-studio-control-height); }
-button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { width:100%; max-width:none; flex:0 0 100%; padding:0; }
+button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { padding:0; }
 [data-vt-studio-button-icon] { display:grid; flex:0 0 auto; place-items:center; }
 button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
 
