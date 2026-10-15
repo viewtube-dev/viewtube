@@ -292,7 +292,7 @@ test("settings and source provenance are collapsed by default", () => {
 });
 
 test("component labels are one line with a 40ch visual cap", () => {
-  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap[^}]*text-overflow:\s*ellipsis/s);
+  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
   assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
 });
 
