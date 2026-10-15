@@ -42,7 +42,7 @@
   border: 3px solid var(--vt-resource-ink);
   border-radius: 12px;
   background: var(--vt-resource-paper);
-  box-shadow: 5px 5px 0 rgba(25, 32, 51, 0.16);
+  box-shadow: 5px 5px 0 var(--vt-resource-pair-shadow);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -141,7 +141,7 @@
 
 .vt-resource-search-field input:focus,
 .vt-resource-filter-field select:focus {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vt-resource-cyan) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 55%, transparent);
 }
 
 .vt-resource-index-results {
@@ -170,12 +170,12 @@
 
 .vt-resource-card:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 rgba(25, 32, 51, 0.16);
+  box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-card.is-active {
   background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 11%, white);
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-resource-purple) 28%, transparent);
+  box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-card-icon {
@@ -239,7 +239,7 @@
     radial-gradient(circle at 89% 10%, color-mix(in srgb, var(--vt-resource-yellow) 65%, transparent) 0 11%, transparent 12%),
     radial-gradient(circle at 78% 12%, color-mix(in srgb, var(--vt-resource-cyan) 48%, transparent) 0 16%, transparent 17%),
     linear-gradient(135deg, #fff 0 66%, color-mix(in srgb, var(--vt-resource-purple) 13%, white) 66%);
-  box-shadow: 7px 7px 0 color-mix(in srgb, var(--vt-resource-purple) 24%, transparent);
+  box-shadow: 7px 7px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-document-kicker {
@@ -527,7 +527,7 @@
   line-height: 1.18;
   font-weight: 1000;
   text-transform: uppercase;
-  box-shadow: 3px 3px 0 rgba(25, 32, 51, 0.12);
+  box-shadow: 3px 3px 0 var(--vt-resource-pair-shadow-soft);
 }
 
 .vt-resource-flow-node:nth-of-type(4n + 1) {
@@ -665,7 +665,7 @@
   .vt-resource-overview-module {
     min-height: 76px;
     padding: 10px 11px;
-    box-shadow: 3px 3px 0 rgba(25, 32, 51, 0.14);
+    box-shadow: 3px 3px 0 var(--vt-resource-pair-shadow-soft);
   }
 
   .vt-resource-overview-module > strong {
@@ -679,7 +679,7 @@
   .vt-resource-document-hero {
     padding: 16px;
     border-width: 3px;
-    box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-resource-purple) 22%, transparent);
+    box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
   }
 
   .vt-resource-document-hero h1 {
