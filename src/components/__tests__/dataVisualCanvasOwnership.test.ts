@@ -74,7 +74,7 @@ describe("Data Visual canvas ownership", () => {
   expect(repoFile("src/components/AnalyticsVisualShell.tsx")).not.toContain("controllerSpec")
   expect(repoFile("src/components/AnalyticsVisualShell.tsx")).toContain("controllerRows?: readonly ControllerRow[]")
   expect(repoFile("src/components/AnalyticsVisualShell.tsx")).toContain("controllerWidth?: number")
-  expect(shellSource).toContain("controllerDensity?: \"normal\" | \"compact\"")
+  expect(repoFile("src/components/AnalyticsVisualShell.tsx")).toContain("controllerDensity?: \"normal\" | \"compact\"")
   expect(repoFile("src/components/TubeExplorerVisualModules.tsx")).not.toContain("controllerSpec")
   expect(repoFile("src/components/TubeExplorerVisualModules.tsx")).toContain("controllerRows={")
  })
