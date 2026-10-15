@@ -106,6 +106,53 @@ describe("StudioSquareIconButton interactions", () => {
     expect(onSelectedChange).toHaveBeenCalledWith(true)
   })
 
+  it("does not invoke actions or animation when disabled", async () => {
+    const onClick = vi.fn()
+    const onSelectedChange = vi.fn()
+    await act(async () => {
+      root.render(
+        <StudioSquareIconButton
+          label="Disabled mode"
+          icon={<span>↻</span>}
+          variant="v3"
+          animate
+          disabled
+          onClick={onClick}
+          onSelectedChange={onSelectedChange}
+        />,
+      )
+    })
+
+    const button = host.querySelector("button")
+    await act(async () => {
+      button?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))
+    })
+
+    expect(onClick).not.toHaveBeenCalled()
+    expect(onSelectedChange).not.toHaveBeenCalled()
+    expect(button?.getAttribute("aria-pressed")).toBe("false")
+    expect(button?.hasAttribute("data-pop")).toBe(false)
+  })
+
+  it("connects contextual tooltip text to the control for assistive technology", async () => {
+    await act(async () => {
+      root.render(
+        <StudioSquareIconButton
+          label="Edit item"
+          icon={<span>✎</span>}
+          effect="tooltip"
+          tooltip="Edit this item"
+        />,
+      )
+    })
+
+    const button = host.querySelector("button")
+    const tooltip = host.querySelector('[role="tooltip"]')
+    expect(button?.getAttribute("aria-label")).toBe("Edit item")
+    expect(button?.getAttribute("aria-describedby")).toBe(tooltip?.getAttribute("id"))
+    expect(tooltip?.textContent).toBe("Edit this item")
+  })
+
   it("does not change selection when the activation event is cancelled", async () => {
     await act(async () => {
       root.render(
