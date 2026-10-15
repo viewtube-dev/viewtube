@@ -3,7 +3,7 @@
 **Status:** Phases 0–4 implementation is present on `master/consolidated-feature-integration`: deterministic period comparisons, contribution calculations, unified finding contract, regression tests, trend calculation, and existing-anomaly adapters are in the target branch. Automated test/typecheck/CI verification remains pending; live Intelligence Hub/Brain caller integration is tracked in the later integration phases.  
 **Date:** 2026-10-15  
 **Implementation branch:** `master/consolidated-feature-integration` (verified source for the current Phase 0–4 implementation)  
-**Prior tracking:** [PR #238](https://github.com/viewtube-dev/viewtube/pull/238) is closed; the Phase 0–4 implementation files are present on the target integration branch. This master record is updated on that branch.  
+**Implementation PR:** [#241 — Analytics Intelligence Hub: deterministic findings phases 0–4](https://github.com/viewtube-dev/viewtube/pull/241) (merged into this integration branch). This master record is updated on the target branch.  
 **Target integration branch:** `master/consolidated-feature-integration`  
 **Scope:** Build the Analytics Intelligence Hub and deterministic analytics findings/evidence without introducing a second analytics store or allowing AI-generated prose to become metric truth.
 
