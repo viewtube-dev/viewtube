@@ -15,12 +15,23 @@ export interface VaultVideoWorkbenchProps {
 
 const extensionFor = (mimeType: string) => mimeType === "image/jpeg" ? "jpg" : mimeType === "image/png" ? "png" : mimeType === "audio/mp4" ? "m4a" : mimeType === "video/webm" ? "webm" : "mp4";
 
-const blobToDataUrl = (blob: Blob): Promise<string> => new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("Could not create a compact media preview."));
-  reader.onerror = () => reject(new Error("Could not create a compact media preview."));
-  reader.readAsDataURL(blob);
-});
+const createCompactImagePreview = async (blob: Blob): Promise<string> => {
+  const bitmap = await createImageBitmap(blob);
+  try {
+    const scale = Math.min(1, 640 / bitmap.width);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Could not create a compact media preview.");
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL("image/jpeg", 0.72);
+  } finally {
+    bitmap.close();
+  }
+};
 
 const loadVaultVideoSourceBlob = async (asset: VaultAsset): Promise<Blob> => {
   const binaryStoreId = typeof asset.metadata?.binaryStoreId === "string" ? asset.metadata.binaryStoreId : "";
@@ -135,7 +146,7 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
       if (result.mimeType.startsWith("video/")) {
         durablePreviewUrl = await extractVaultVideoThumbnail(new File([result.blob], outputName, { type: result.mimeType }));
       } else if (result.mimeType.startsWith("image/")) {
-        durablePreviewUrl = await blobToDataUrl(result.blob);
+        durablePreviewUrl = await createCompactImagePreview(result.blob);
       }
       const created = createImportedVaultAsset({
         name: outputName,
