@@ -300,6 +300,10 @@ export interface RunBrainTurnInput {
  currentResearcher?: typeof groundCurrentNicheResearch
  projectId?: string | null
  project?: Project | null
+ projects?: Project[]
+ modelContextWindowTokens?: number | null
+ reservedOutputTokens?: number
+ contextSafetyMarginTokens?: number
  analyticsWindow?: CanonicalIntelligenceEvidenceBundle["selectedWindow"]
  visibleContext?: Record<string, unknown> | null
  artifactRefs?: string[]
@@ -362,6 +366,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   query: input.userText,
   projectId: input.projectId,
   project: input.project,
+  projects: input.projects,
   visibleContext: input.visibleContext,
   artifactRefs: input.artifactRefs,
  }).catch(() => null)
@@ -380,6 +385,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  let citations: BrainResponseCitation[] = []
  let context = buildBrainContextPack({
   channelId: input.channelId,
+  capabilityIds,
+  modelContextWindowTokens: input.modelContextWindowTokens,
+  reservedOutputTokens: input.reservedOutputTokens,
+  contextSafetyMarginTokens: input.contextSafetyMarginTokens,
   systemPrompt: input.systemPrompt,
   snapshot: input.snapshot,
   recentTurns: input.recentTurns || [],
@@ -423,6 +432,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   }
   context = buildBrainContextPack({
    channelId: input.channelId,
+   capabilityIds,
+   modelContextWindowTokens: input.modelContextWindowTokens,
+   reservedOutputTokens: input.reservedOutputTokens,
+   contextSafetyMarginTokens: input.contextSafetyMarginTokens,
    systemPrompt: input.systemPrompt,
    snapshot: input.snapshot,
    recentTurns: input.recentTurns || [],

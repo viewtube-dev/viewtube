@@ -813,6 +813,7 @@ const AIBrainCommandInterface: React.FC = () => {
     channelId,
     projectId: activeProject?.id || null,
     project: activeProject,
+    projects: brain.projects,
     visibleContext: activeProject ? {
      contentBuildId: activeProject.contentBuildId || null,
      title: activeProject.videoTitle || activeProject.name || null,
