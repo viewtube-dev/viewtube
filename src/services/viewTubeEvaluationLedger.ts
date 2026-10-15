@@ -1,3 +1,5 @@
+import type { ContentBuildPublicationIdentity } from "./asset-engine/contracts"
+import { getCurrentCanonicalIntelligenceDatasetRows, getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "./analytics-canon"
 import { evaluateViewTubeControl } from "./viewTubeUserControls"
 
 export type EvaluationOutcome = "pending" | "positive" | "neutral" | "negative"
@@ -11,6 +13,13 @@ export interface EvaluationRecord {
  recommendation: string
  evidenceIds: string[]
  actionPacketId?: string | null
+ contentBuildId?: string | null
+ videoPackageId?: string | null
+ publishTransactionId?: string | null
+ approvedSnapshotHash?: string | null
+ projectAssociationStatus?: ContentBuildPublicationIdentity["projectAssociationStatus"]
+ selectedVariantAssetIds?: string[]
+ correlationId?: string | null
  sourceOutcomeIds?: string[]
  sourceRecordIds?: string[]
  traceIds?: string[]
@@ -61,6 +70,64 @@ const EVAL_KEY = "viewtube:evaluation-ledger:v1"
 const CANDIDATE_KEY = "viewtube:workflow-candidates:v1"
 const read = <T,>(key: string): T[] => { if (typeof window === "undefined") return []; try { return JSON.parse(window.localStorage.getItem(key) || "[]") as T[] } catch { return [] } }
 const write = <T,>(key: string, values: T[]) => { if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(values)) }
+
+/**
+ * Create a post-publication evaluation only when the published video is present
+ * in the same current canonical analytics snapshot and channel scope. Missing
+ * rows are not converted to zeroes or guessed from title/date similarity.
+ */
+export const createPublicationEvaluationRecord = (input: {
+ publicationIdentity: ContentBuildPublicationIdentity
+ selectedWindow: AnalyticsWindow
+ source: string
+ recommendation: string
+ baselineSnapshotId?: string | null
+ comparabilityStatus?: EvaluationRecord["comparabilityStatus"]
+ confounders?: string[]
+ causalAssessment?: EvaluationRecord["causalAssessment"]
+}) => {
+ const identity = input.publicationIdentity
+ if (!identity.youtubeVideoId || !identity.publishTransactionId || !identity.approvedSnapshotId || !identity.approvedSnapshotHash) return null
+ const evidence = getCurrentCanonicalIntelligenceEvidence({ window: input.selectedWindow, sectionIds: ["executive-summary"] })
+ const currentRows = getCurrentCanonicalIntelligenceDatasetRows("videos")
+ const dataset = currentRows.dataset
+ if (!dataset || currentRows.snapshotId !== evidence.snapshotId || currentRows.channelId !== identity.channelId || evidence.channelId !== identity.channelId || dataset.channelId !== identity.channelId) return null
+ const rowIndex = dataset.rows.findIndex((row) =>
+  ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"].some((key) => row[key] === identity.youtubeVideoId)
+ )
+ if (rowIndex < 0) return null
+ const manifest = evidence.datasets.find((item) => item.id === "videos")
+ const evidenceStatus: EvaluationRecord["evidenceStatus"] = manifest?.status === "available"
+  ? "available"
+  : manifest?.status === "partial" ? "partial"
+  : manifest?.status === "stale" ? "stale"
+  : manifest?.status === "failed" ? "failed"
+  : "unavailable"
+ return createEvaluationRecord({
+  channelId: identity.channelId,
+  projectId: identity.projectId,
+  source: input.source,
+  recommendation: input.recommendation,
+  evidenceIds: [`${dataset.snapshotId}:videos:${rowIndex + 1}`],
+  contentBuildId: identity.contentBuildId,
+  videoPackageId: identity.videoPackageId,
+  publishTransactionId: identity.publishTransactionId,
+  publishedVideoId: identity.youtubeVideoId,
+  baselineSnapshotId: input.baselineSnapshotId || null,
+  comparisonSnapshotId: dataset.snapshotId,
+  approvedSnapshotHash: identity.approvedSnapshotHash,
+  projectAssociationStatus: identity.projectAssociationStatus,
+  selectedVariantAssetIds: [...identity.selectedVariantAssetIds],
+  correlationId: identity.correlationId,
+  sourceRecordIds: [identity.publishTransactionId],
+  selectedWindow: evidence.selectedWindow,
+  comparabilityStatus: input.comparabilityStatus || "unknown",
+  evidenceStatus,
+  confounders: [...(input.confounders || [])],
+  causalAssessment: input.causalAssessment || "insufficient_evidence",
+  idempotencyKey: `publication-evaluation:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`,
+ })
+}
 
 export const listEvaluationRecords = () => read<EvaluationRecord>(EVAL_KEY)
 export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"createdAt"|"updatedAt"|"outcome">) => {
