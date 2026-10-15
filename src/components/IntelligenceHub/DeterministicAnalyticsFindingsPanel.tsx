@@ -32,11 +32,12 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
  const [actionPacketId, setActionPacketId] = useState<string | null>(null)
 
  useEffect(() => {
-  if (!evidence?.channelId) return
+  const channelId = evidence?.channelId
+  if (!channelId) return
   let active = true
   const syncLocalHistory = async () => {
    try {
-    const durable = await hydrateBrainIntelligenceFromPersistence(evidence.channelId)
+    const durable = await hydrateBrainIntelligenceFromPersistence(channelId)
     if (!active) return
     if (!durable) {
      setPersistenceStatus("Sign in to sync this channel event history")
@@ -44,8 +45,8 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
     }
     // Reconcile the offline recovery cache after hydration, then retry any events
     // whose earlier background write may have failed while the browser was offline.
-    const localEvents = listAlgorithmIntelligenceEvents({ channelId: evidence.channelId })
-    const synced = await persistBrainIntelligence({ channelId: evidence.channelId, events: localEvents })
+    const localEvents = listAlgorithmIntelligenceEvents({ channelId: channelId })
+    const synced = await persistBrainIntelligence({ channelId: channelId, events: localEvents })
     if (active) setPersistenceStatus(synced
      ? `Server persistence connected · ${synced.eventCount} events synced`
      : "Server persistence unavailable; local cache retained")
