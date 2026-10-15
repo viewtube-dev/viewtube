@@ -19,7 +19,7 @@ describe("SubToolboxSplitStepper fixed-ratio input behavior", () => {
 
   it("uses a fixed 2:1 value pane and square rail with no component shadow", () => {
     const css = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/subtoolbox-split-stepper.css"), "utf8")
-    expect(css).toContain("width: calc(var(--vt-stepper-height) * 3)")
+    expect(css).toContain("width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height))")
     expect(css).toContain("grid-template-columns: minmax(0, 2fr) minmax(0, 1fr)")
     expect(css).toContain("grid-template-rows: minmax(0, 1fr) minmax(0, 1fr)")
     expect(css).toContain("box-shadow: none")
