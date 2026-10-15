@@ -82,7 +82,7 @@ describe("deterministic analytics insights", () => {
    baselineValue: 100,
    delta: 25,
    relativeDeltaPercent: 25,
-   formula: "delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100",
+   formula: "current=sum; baseline=sum; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0",
    deterministic: true,
    evidenceRefs: expect.arrayContaining([
     "analytics:daily",
