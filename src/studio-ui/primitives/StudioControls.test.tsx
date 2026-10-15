@@ -275,9 +275,12 @@ describe("shared Studio icon-size comparison contract", () => {
 
   it("shows current, moderate, and large comparisons for both square and split-left production buttons", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain("Current · 28px / 18px")
-    expect(html).toContain("Moderate · 34px / 22px")
-    expect(html).toContain("Large · 38px / 24px")
+    expect(html).toContain("Current · 28px")
+    expect(html).toContain("Moderate · 34px")
+    expect(html).toContain("Large · 38px")
+    expect(html).toContain("Current · 18px")
+    expect(html).toContain("Moderate · 22px")
+    expect(html).toContain("Large · 24px")
     expect(html).toContain('data-vt-library-component="StudioSquareIconButton"')
     expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
   })
