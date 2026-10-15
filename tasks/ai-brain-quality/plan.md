@@ -1,7 +1,7 @@
 # Implementation Plan — ViewTube Brain Quality & Learning
 
 Date: 2026-09-24
-Status: phased implementation in progress; see dated completion receipts. Phase 8–9 helpers are on `brain-phase-0-2-evidence-context-reconciled`; live consumer adoption and certification remain gated on repository checks.
+Status: implementation is spread across merged and open replacement PRs; Phases 5–12 remain uncertified. Current candidate: PR #340 on master/consolidated-feature-integration. Next plan: validate the current head, then certify the canonical publication-to-learning golden path. See dated completion receipts and CANONICAL-PUBLICATION-TO-LEARNING-GOLDEN-PATH-PLAN.md.
 
 ## Architecture
 Canonical data → evidence-contract → channel-knowledge → task context resolver → prompt system → AI quality loop → creator action → outcome evaluation → learning governance → Channel Profile.
@@ -146,3 +146,12 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+## Current integration and certification status — 2026-10-15
+
+- Original PR #217 is closed unmerged; its stale branch is not the canonical implementation.
+- PR #269 carries the reconciled evidence-context and outcome-lineage implementation; it is merged. Related phases are present in the integration tree, but merge status alone is not certification.
+- PR #340 is the current-base replacement for release-gate fixes plus Phase 13 durable learning persistence. It remains a draft while full-suite and runtime-lint baseline failures are investigated.
+- Focused contracts, Brain quality loop, source governance, production build, and local smoke passed on the earlier PR #340 candidate. The full suite reported 43 failing files / 99 failing tests, and runtime lint reported 2,239 errors across the existing tree. A newer candidate adds two storage-safety fixes and is rerunning CI.
+- Phase 13 adds a server-authoritative learning-record API/table and retry queue; it is not production-certified until PostgreSQL cross-process and authenticated channel tests pass.
+- Next: settle the current integration head, then execute CANONICAL-PUBLICATION-TO-LEARNING-GOLDEN-PATH-PLAN.md end to end. Do not mark phases complete until exact-head gates and evidence bundles pass.
