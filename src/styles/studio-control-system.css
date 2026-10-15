@@ -840,18 +840,18 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 }
 [data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
   --vt-field-stroke: 3px; --vt-field-outline-stroke: 1.5px;
-  min-height: 44px; border-radius: 8px; padding-inline: 14px; font-size: 38px;
+  min-height: 44px; border-radius: var(--vt-studio-control-radius, 8px); padding-inline: 14px; font-size: 38px;
 }
 [data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
   --vt-field-stroke: 2px; --vt-field-outline-stroke: 1px;
-  min-height: 28px; border-radius: 5px; padding-inline: 8px; font-size: 24px;
+  min-height: 28px; border-radius: var(--vt-studio-control-radius, 5px); padding-inline: 8px; font-size: 24px;
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  display: block; min-height: 92px; resize: vertical; padding: 10px 12px;
-  font-size: 18px; font-weight: 900; line-height: 1.25; letter-spacing: -.02em;
+  display: block; min-height: var(--vt-studio-textarea-min-height, 92px); resize: vertical; padding: 10px 12px;
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px); font-weight: var(--vt-studio-textarea-font-weight, 1000); line-height: var(--vt-studio-textarea-standard-line-height, 1.25); letter-spacing: -.02em;
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  min-height: 92px; padding: 8px 10px; font-size: 14px; font-weight: 900; line-height: 1.3;
+  min-height: var(--vt-studio-textarea-min-height, 92px); padding: 8px 10px; font-size: var(--vt-studio-textarea-compact-font-size, 14px); font-weight: var(--vt-studio-textarea-font-weight, 1000); line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
   color: color-mix(in srgb, var(--vt-field-primary) 70%, transparent);
