@@ -234,3 +234,51 @@ describe("canonical square icon button family", () => {
     expect(css).toContain('color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));')
   })
 })
+
+
+describe("tactile button press accessibility and exclusion contract", () => {
+  it("keeps keyboard focus visible and prevents disabled controls from depressing", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-button="true"]:focus-visible { outline:3px solid')
+    expect(css).toContain('button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }')
+    expect(css).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }')
+    expect(css).toContain(':active:not(:disabled)')
+    expect(css).toContain('@media (prefers-reduced-motion:reduce)')
+    expect(css).toContain('transition:none !important;')
+  })
+
+  it("keeps dropdown triggers and options outside the extruded-button press selectors", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('.vt-studio-dropdown button[data-dropdown-trigger="true"]')
+    expect(css).toContain('.vt-studio-dropdown-option:focus-visible')
+    expect(css).toContain('.vt-studio-dropdown-menu')
+    expect(css).not.toContain('.vt-studio-dropdown-option:active')
+    expect(css).not.toContain('button[data-dropdown-trigger="true"]:active')
+    // Menu panels may own a stationary shadow; trigger and option buttons do not
+    // receive the data-vt-studio-button marker used by the tactile press model.
+    expect(css).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
+  })
+
+  it("locks standard/compact displacement to the corresponding shadow offsets and icon metrics", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }')
+    expect(css).toContain('--vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5;')
+    expect(css).toContain('--vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65;')
+    expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
+    expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"]')
+    expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v4"]')
+  })
+
+  it("preserves SubToolbox disabled, menu, and reduced-motion boundaries", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+    expect(css).toContain('.vt-subtoolbox-button:active:not(:disabled)')
+    expect(css).toContain('.vt-subtoolbox-split-action:active:not(:disabled)')
+    expect(css).toContain('.vt-subtoolbox-icon-button:active:not(:disabled)')
+    expect(css).toContain('.vt-subtoolbox-media-control:active:not(:disabled)')
+    expect(css).toContain('dropdown/menu triggers intentionally remain stationary and shadow-free')
+    expect(css).toContain('@media (prefers-reduced-motion: reduce)')
+    expect(css).toContain('.vt-subtoolbox-button,')
+    expect(css).toContain('transition:none !important')
+  })
+})
