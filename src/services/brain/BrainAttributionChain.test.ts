@@ -33,7 +33,7 @@ describe("buildBrainAttributionChain", () => {
    ],
   })
   expect(result.status).toBe("complete")
-  expect(result.recommendation.id).toBe("recommendation-1")
+  expect(result.recommendation?.id).toBe("recommendation-1")
   expect(result.decisions.map(row => row.id)).toContain("decision-1")
   expect(result.executions.map(row => row.id)).toContain("execution-1")
   expect(result.publications.map(row => row.id)).toContain("publication-1")
