@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
+import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests, updateContentBuild } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
 import { listAlgorithmIntelligenceEvents } from "../brain/AlgorithmIntelligenceEventLedger"
@@ -23,7 +23,7 @@ const createTestStorage = () => {
 }
 
 describe("PublishTransaction",()=>{
- beforeEach(()=>{vi.stubGlobal("localStorage",createTestStorage());resetContentBuildRepositoryForTests();resetApprovedPublishSnapshotRepositoryForTests();resetPublishTransactionRepositoryForTests();createContentBuild({id:"cb-publish",channelId:"channel-a"})})
+ beforeEach(()=>{vi.stubGlobal("localStorage",createTestStorage());resetContentBuildRepositoryForTests();resetApprovedPublishSnapshotRepositoryForTests();resetPublishTransactionRepositoryForTests();createContentBuild({id:"cb-publish",channelId:"channel-a",stage:"package"})})
  afterEach(()=>vi.unstubAllGlobals())
 
  it("locks canonical assets and returns the same transaction for the same final render",()=>{
@@ -195,3 +195,13 @@ describe("PublishTransaction",()=>{
  })
 
 })
+
+ it("rejects a new publication transaction when the canonical ContentBuild stage does not permit publishing",()=>{
+  updateContentBuild("cb-publish",current=>({...current,stage:"idea"}))
+  expect(()=>beginPublishTransaction(projection())).toThrow(/ContentBuild stage "idea" does not allow a new publication transaction/)
+ })
+
+ it("rejects publication when the canonical ContentBuild has unresolved blockers",()=>{
+  updateContentBuild("cb-publish",current=>({...current,workflow:{...current.workflow,blockerIds:["asset-review-required"]}}))
+  expect(()=>beginPublishTransaction(projection())).toThrow(/blockers preventing publication: asset-review-required/)
+ })
