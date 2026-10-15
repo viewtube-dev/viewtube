@@ -71,6 +71,41 @@ Do not hand-add a family here without adding it to the production registry. The 
 62. Dashboard Pill Tags
 
 
+## Confirmed Square Icon Button — registered variants
+
+**Family #5 · production-backed source:** `src/studio-ui/primitives/StudioControls.tsx`  
+**Shared styles:** `src/styles/studio-control-system.css`  
+**Live catalog:** `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx`
+
+All variants below are registered under the existing **Square Icon Button** family. They do not create duplicate primitives or inflate the frozen family count.
+
+### Visual skins
+
+- **V1 — Primary face:** `--pair-a` fill with `--pair-b` hard offset shadow.
+- **V2 — Inverse face:** `--pair-b` fill with `--pair-a` hard offset shadow.
+- **V3 — Selectable inverse pair:** toggles the V1/V2 pair together and exposes pressed state.
+- **V4 — Black face:** black face with the inherited primary-pair icon.
+
+### Confirmed interaction effects
+
+- **Pop on activation** — opt-in feedback; does not animate on mount.
+- **Notification badge** — optional count/status badge with feedback when the value changes.
+- **Rotated toggle** — opt-in selected-state rotation.
+- **3D flip** — two-face flip; alternate icon supplied by the caller.
+- **Tooltip** — contextual label on hover/focus with accessible description.
+- **Morph** — icon crossfade/scale/rotation with an alternate icon.
+- **Success** — outcome-driven success state, checkmark and optional polite status announcement.
+
+### Inherited geometry and rules
+
+- Standard: **44×44px**, 3px border, 28px icon.
+- Compact: **28×28px**, 2px border, 18px icon.
+- Uses the existing sequential 12-color palette and `--pair-a` / `--pair-b` tokens.
+- The shared Studio button owns outer geometry, border, radius, shadow, focus, disabled and press behavior. Effects operate on inner layers and do not redefine the component's dimensions.
+- Effects are opt-in; reduced-motion preferences are honored.
+- Interactive regression contract: `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.square-icon-button.test.tsx`.
+
+
 ## Additional migrated compound patterns
 
 These patterns are registered in `STUDIO_HUB_MIGRATED_FAMILIES` and rendered on the **Primitive** track. They are deliberately listed separately from the frozen 62-family hardcoded baseline above; the baseline count is not inflated by migration examples.
