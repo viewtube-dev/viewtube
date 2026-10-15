@@ -251,7 +251,7 @@ test("confirmed Square Icon Button family catalogs every interaction effect at s
 test("confirmed square icon button variants 1–4 are grouped into one standard row and one compact row", () => {
   assert.match(catalog, /vt-confirmed-square-variant-row[^]*?44px standard · variants 1–4[^]*?variant="v1" sizeVariant="standard"[^]*?variant="v4" sizeVariant="standard"/);
   assert.match(catalog, /vt-confirmed-square-variant-row[^]*?28px compact · variants 1–4[^]*?variant="v1" sizeVariant="compact"[^]*?variant="v4" sizeVariant="compact"/);
-  assert.match(styles, /\.vt-confirmed-square-variant-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.vt-confirmed-square-variant-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, max-content\)\)/);
 });
 
 test("square icon interaction effect specimens preserve two effect cards per row", () => {
