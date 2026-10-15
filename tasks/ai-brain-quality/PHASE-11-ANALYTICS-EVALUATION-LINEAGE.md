@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Evaluation contract and guarded writer implemented; production publish-to-analytics join remains unverified.
+**Status:** Evaluation contract, guarded writer, and canonical video-row join are implemented. Current-head CI and production data freshness/coverage still require verification.
 
 ## Objective
 
@@ -41,7 +41,8 @@ The contract deliberately does not calculate a causal effect from two metric obj
 
 ## Explicitly not claimed complete
 
-- The production publisher's immutable approved snapshot has not yet been proven to bind to a canonical analytics row by the same project/ContentBuild/variant identity.
+- The evaluation writer now accepts the typed publication identity and requires the published YouTube video ID to exist in the same current canonical `videos` dataset snapshot and channel scope before creating an evaluation. It records the canonical row evidence ID, snapshot ID, selected window, approved snapshot/hash, transaction, package, ContentBuild, and selected asset IDs.
+- This is an identity join, not proof that the available metrics are sufficient or causally comparable. `projectAssociationStatus: snapshot-only` remains explicit where the legacy project association cannot be verified.
 - No automated ingestion of every analytics checkpoint is claimed by adding optional fields to the evaluation record.
 - The system must not claim causality unless the evaluation has appropriate experimental support.
 
@@ -52,4 +53,5 @@ The contract deliberately does not calculate a causal effect from two metric obj
 - [x] Evidence and comparability semantics are explicit in the type contract.
 - [x] Regression tests cover the evaluation writer and learning-candidate preconditions.
 - [ ] Verify focused tests, typecheck, runtime lint, full suite and build on the latest PR head.
-- [ ] Prove the production publish → canonical analytics checkpoint join using current production callers and immutable publication identity.
+- [x] Implement a fail-closed publication-identity → canonical video-row join in the evaluation service.
+- [ ] Verify current production callers, fresh canonical rows and release gates on the latest PR head.
