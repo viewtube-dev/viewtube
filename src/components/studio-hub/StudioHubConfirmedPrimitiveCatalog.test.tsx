@@ -37,7 +37,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('aria-label="Compact username"')
     expect(html).toContain('aria-label="Disabled username"')
   })
-  it("preserves the requested comparison rows and 20-color spectrum sample", () => {
+  it("preserves the requested comparison rows and 50-color spectrum sample", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     for (const label of [
       "Square icon button V1 primary fill",
@@ -61,10 +61,15 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('class="vt-confirmed-stepper-row-grid"')
     expect(html).toContain('class="vt-confirmed-spectrum-tag-grid"')
     for (const label of [
-      "APPLE", "BERRY", "CITRUS", "DRAGONFRUIT", "ELDERBERRY",
-      "FIG", "GRAPE", "HONEYDEW", "INDIGO", "JASMINE",
-      "KIWI", "LEMON", "MANGO", "NECTARINE", "ORANGE",
-      "PEACH", "QUINCE", "RASPBERRY", "STRAWBERRY", "TANGERINE",
+      "AARDVARK", "AZURE", "BANANA", "BLUEBELL", "CANDY", "CITRUS",
+      "DAFFODIL", "DENIM", "EBONY", "EMERALD", "FERN", "FROST",
+      "GOLD", "GREEN", "HAZEL", "HONEY", "INDIGO", "IVORY",
+      "JADE", "JASMINE", "KIWI", "KUMQUAT", "LAVENDER", "LEMON",
+      "MAGENTA", "MINT", "NAVY", "NEON", "OPAL", "ORANGE",
+      "PEACH", "PERIWINKLE", "QUARTZ", "QUINCE", "ROSE", "RUBY",
+      "SAPPHIRE", "SCARLET", "TEAL", "TURQUOISE", "ULTRAMARINE", "UMBER",
+      "VIOLET", "VIRIDIAN", "WALNUT", "WHITE", "XANTHAN", "XENON",
+      "YELLOW", "ZUCCHINI",
     ]) {
       expect(html).toContain(`>${label}</button>`)
     }
