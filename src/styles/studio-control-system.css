@@ -35,7 +35,7 @@ select[data-vt-studio-control] {
   padding-right: 36px;
 }
 
-button[data-vt-studio-control]:not(.vt-studio-legend-trigger) {
+button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) {
   display: inline-flex;
   min-width: 0;
   min-height: var(--vt-studio-control-height);
