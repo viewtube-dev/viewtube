@@ -152,3 +152,8 @@ See [Phases 7–9 — Governance, Assistant Continuity & Release Certification](
 - Phase 7: the generator now consumes the curated evidence map, validates referenced paths, supports reproducible `--check` mode, and is wired into release-gates source governance.
 - Phase 8: SidebarChatbot and BrainHubWidget production calls to BrainRuntime are confirmed. Their UI-owned snapshot and prompt construction remains a clearly documented convergence boundary rather than being falsely marked centralized.
 - Phase 9: release certification remains blocked until the latest branch head passes focused evidence tests, typecheck, runtime lint, full suite, production build, source governance, and local smoke. The observed run `38693153891` failed typecheck and full suite.
+
+
+## Phase 10 — outcome lineage continuity
+
+See [Phase 10 — Outcome Lineage Continuity](./PHASE-10-OUTCOME-LINEAGE.md). Asset Engine outcome records now carry `sourceRecordId`, `traceId`, `assetId`, and `assetType` into BrainOutcomeLedger and learning-event metadata, with a regression test and capability-coverage mapping. This closes one producer identity hop only; recommendation/action/publish/analytics/evaluation/governed-learning joins and idempotency remain open. Phase 9 release certification remains blocked until current-head gates are verified.
