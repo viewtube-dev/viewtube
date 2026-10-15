@@ -333,6 +333,12 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
   }, ref) => {
     const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
     const [animationKey, setAnimationKey] = React.useState(0)
+    const badgeValue = badge === undefined || badge === null || badge === "" ? null : String(badge)
+    const previousBadgeValue = React.useRef(badgeValue)
+    React.useEffect(() => {
+      if (previousBadgeValue.current !== badgeValue) setAnimationKey(key => key + 1)
+      previousBadgeValue.current = badgeValue
+    }, [badgeValue])
     const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
     const isSuccess = effect === "success" && success
@@ -378,7 +384,8 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         data-icon-active={isSelected || isSuccess || animate ? "true" : "false"}
         data-pop={animate && animationKey > 0 ? "true" : undefined}
         data-success={isSuccess ? "true" : undefined}
-        data-has-badge={badge !== undefined && badge !== null && badge !== "" ? "true" : undefined}
+        data-has-badge={badgeValue !== null ? "true" : undefined}
+        data-notification-pulse={effect === "notification" && animationKey > 0 ? "true" : undefined}
         onClick={handleClick}
       >
         <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
@@ -397,7 +404,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
           )}
         </span>
         {effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? (
-          <span key={String(badge)} data-vt-square-badge aria-hidden="true">{badge}</span>
+          <span key={`${String(badge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{badge}</span>
         ) : null}
         {effect === "tooltip" && tooltip ? (
           <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
