@@ -191,6 +191,16 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
 });
 
+test("icon-effect examples are clearly static previews, not live outcome claims", () => {
+  const squareStart = catalog.indexOf('<Family title="Square Icon Button · 44px + 28px"');
+  const splitStart = catalog.indexOf('<Family title="Split-left"', squareStart);
+  const squareFamily = catalog.slice(squareStart, splitStart);
+  assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
+  assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
+  assert.ok(squareFamily.includes("badge and success state below are explicitly static gallery previews"));
+  assert.ok(!squareFamily.includes("SUCCESS · CONFIRMED OUTCOME"));
+});
+
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
