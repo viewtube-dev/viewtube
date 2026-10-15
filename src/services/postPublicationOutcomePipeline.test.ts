@@ -120,6 +120,8 @@ describe("post-publication outcome pipeline", () => {
       checkpointEvent: { id: "checkpoint-event-1" },
       evaluation: { status: "neutral" },
       recorded: { id: "checkpoint-outcome-1" },
+      publicationEvaluation: { id: "publication-evaluation-1" },
+      publicationEvaluationError: null,
     })
     mocks.recordAlgorithmEvaluation.mockReturnValue({ evaluation: { status: "positive" }, recorded: { id: "recommendation-outcome-1" } })
     mocks.fetchAndRecordHistoricalMetadataComparison.mockResolvedValue({
