@@ -122,6 +122,43 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
     suggestedTargets: ["project-calendar", "video-manager"],
    })
    persistViewTubeActionPacket(packet)
+   // Enrich the original proposal event with the creator-approved packet identity.
+   // The publication owner later schedules evaluation only if this exact packet's
+   // recommendation is bound to the same ContentBuild and published video.
+   recordAlgorithmIntelligenceEvent({
+    id: `analytics-recommendation:${recommendation.id}`,
+    channelId: recommendation.channelId,
+    projectId: recommendation.projectId,
+    videoId: recommendation.videoId,
+    kind: "RECOMMENDATION_CREATED",
+    sourceSystem: "decision",
+    sourceId: recommendation.findingIds[0] || recommendation.id,
+    recommendationId: recommendation.id,
+    actionPacketId: packet.id,
+    parentEventIds: recommendation.findingIds,
+    evidenceIds: recommendation.evidenceRefs,
+    confidence: "medium",
+    title: "Creator-approved analytics recommendation",
+    summary: recommendation.action,
+    evaluationTargets: [{
+     metric: recommendation.metric,
+     direction: recommendation.expectedDirection === "observe" ? "inspect" : recommendation.expectedDirection,
+     baselineValue: recommendation.baselineValue,
+     windowHours: Number(recommendation.evaluationWindow.replace("d", "")) * 24,
+    }],
+    metadata: {
+     schemaVersion: recommendation.schemaVersion,
+     status: "creator-approved-for-project-review",
+     creatorGoal: recommendation.creatorGoal,
+     contentBuildId: recommendation.contentBuildId,
+     publicationTransactionId: recommendation.publicationTransactionId,
+     metadataVersionIds: recommendation.metadataVersionIds,
+     baselineSnapshotIds: recommendation.baselineSnapshotIds,
+     approvalScope: "internal-project-handoff-only",
+     externalMutationApproved: false,
+     publishingApproved: false,
+    },
+   })
    recordAlgorithmIntelligenceEvent({
     id: `analytics-creator-approval:${recommendation.id}`,
     channelId: recommendation.channelId,
