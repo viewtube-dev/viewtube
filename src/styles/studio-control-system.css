@@ -1839,7 +1839,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border-radius: 4px;
   background: var(--pair-a, #fa618a);
   color: #000;
-  box-shadow: 4px 4px 0 0 color-mix(in srgb, var(--pair-b, #4ee4be) 45%, transparent);
+  box-shadow: 1.5px 1.5px 0 0 color-mix(in srgb, var(--pair-b, #4ee4be) 45%, transparent);
   cursor: pointer;
   transition: filter 180ms ease-out, transform 180ms ease-out, box-shadow 180ms ease-out;
 }
