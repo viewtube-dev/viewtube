@@ -19,62 +19,6 @@
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
    SubToolboxPrimitives. They are not a second color authority. */
-[data-vt-studio-control]:is(input, textarea, select) {
-  width: 100%;
-  min-width: 0;
-  min-height: var(--vt-studio-control-height);
-  border: var(--vt-studio-control-stroke) solid #000;
-  border-radius: var(--vt-studio-control-radius);
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent) 50%, transparent);
-  background-image: none;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
-  caret-color: var(--vt-studio-control-accent);
-  color: var(--vt-studio-control-accent);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 38px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.035em;
-  text-transform: uppercase;
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: .5px currentColor;
-  outline: none;
-  padding: 0 14px;
-  transition: background-color 180ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out, outline-color 180ms ease-out;
-}
-
-[data-vt-studio-control][data-size="compact"]:is(input, textarea, select) {
-  font-size: 24px;
-  line-height: .86;
-  -webkit-text-stroke: .5px var(--vt-studio-control-accent);
-}
-
-[data-vt-studio-control]:is(input, textarea, select):focus,
-[data-vt-studio-control]:is(input, textarea, select):focus-visible {
-  border-color: #000;
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent) 15%, transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: .5px currentColor;
-  outline: var(--vt-studio-control-outline-stroke, calc(var(--vt-studio-control-stroke) / 2)) solid var(--vt-studio-control-secondary);
-  outline-offset: 1px;
-  caret-color: var(--vt-studio-control-accent);
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
-}
-
-[data-vt-studio-control]:is(input, textarea, select):disabled,
-[data-vt-studio-control]:is(input, textarea, select)[readonly] {
-  cursor: not-allowed;
-  opacity: .55;
-}
-
-textarea[data-vt-studio-control] {
-  min-height: 144px;
-  resize: vertical;
-}
-textarea[data-vt-studio-control][data-size="compact"],
-textarea[data-vt-studio-control][data-size="small"] { min-height: 72px; padding: 8px 10px; font-size: 24px; }
-
 select[data-vt-studio-control] {
   appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, #000 50%), linear-gradient(135deg, #000 50%, transparent 50%);
