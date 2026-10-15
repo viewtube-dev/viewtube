@@ -2250,3 +2250,84 @@
     scrollbar-width: thin;
   }
 }
+
+
+/* Confirmed Library density: keep the defaults summary visible and collapse
+   the exhaustive token inventory until requested. */
+.vt-confirmed-defaults-summary {
+  margin: 0;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.vt-confirmed-defaults-details {
+  min-width: 0;
+  border-top: 1px solid color-mix(in srgb, #000 18%, transparent);
+  padding-top: 4px;
+}
+.vt-confirmed-defaults-details > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 1000;
+  line-height: 1.2;
+  text-transform: uppercase;
+  list-style-position: inside;
+}
+.vt-confirmed-defaults-details[open] > summary { margin-bottom: 6px; }
+.vt-confirmed-defaults-details > summary:focus-visible {
+  outline: 2px solid var(--pair-b, #ff7f6b);
+  outline-offset: 2px;
+}
+.vt-confirmed-defaults-details > .vt-confirmed-size-grid { margin-top: 0; }
+.vt-confirmed-defaults-details .vt-confirmed-global-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+.vt-confirmed-defaults-details .vt-confirmed-global-grid > div { padding: 5px; }
+.vt-confirmed-defaults-details .vt-confirmed-defaults-explainer { padding: 6px; gap: 3px; }
+@media (max-width: 560px) {
+  .vt-confirmed-defaults-details .vt-confirmed-global-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Word-toggle skins intentionally use three variants only.
+   Standard controls stack one per row; compact controls remain centered. */
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"] {
+  grid-template-columns: minmax(0, 1fr) !important;
+  overflow: visible !important;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"] > div {
+  width: 100%;
+  justify-items: center;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="44"] .vt-studio-44-word-toggle {
+  justify-self: center !important;
+  align-self: center !important;
+  margin-inline: auto !important;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  justify-items: center;
+  overflow: visible !important;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] > div {
+  width: 100%;
+  justify-items: center;
+}
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] .vt-studio-44-word-toggle {
+  justify-self: center !important;
+  align-self: center !important;
+  margin-inline: auto !important;
+  width: max-content;
+  max-width: 100%;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] {
+    grid-template-columns: repeat(3, minmax(72px, 1fr)) !important;
+    overflow-x: auto !important;
+  }
+}
