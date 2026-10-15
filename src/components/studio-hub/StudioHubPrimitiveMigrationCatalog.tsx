@@ -1,7 +1,7 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
-import { StudioSplitStepper } from "../../studio-ui/primitives/StudioSplitStepper"
+import { StudioSplitStepper } from "../../studio-ui/primitives/StudioControls"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
