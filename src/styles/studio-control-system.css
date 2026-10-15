@@ -1986,26 +1986,38 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 
 
 /* Studio Controls-owned stepper family styles moved from primitive sidecars. */
-/* Horizontal inline stepper; geometry and visual states consume Studio Controls tokens. */
+/* Studio steppers share the Split-Left Username Input visual foundation:
+   primary translucent value surface, opaque secondary action rail, inset primary
+   strokes, black compound dividers, and no resting drop shadow. */
+.vt-studio-inline-stepper,
+.vt-studio-split-stepper {
+  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-stepper-height: var(--vt-studio-control-height, 44px);
+  --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
+  --vt-stepper-focus: var(--vt-studio-control-focus-outline-width, 3px);
+  box-sizing: border-box;
+  position: relative;
+  min-width: 0;
+  height: var(--vt-stepper-height);
+  min-height: var(--vt-stepper-height);
+  overflow: visible;
+  border: var(--vt-stepper-stroke) solid #000;
+  border-radius: var(--vt-stepper-radius);
+  background: var(--vt-stepper-secondary);
+  color: #000;
+  box-shadow: none;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+}
 .vt-studio-inline-stepper {
-  --vt-inline-stepper-height: var(--vt-studio-control-height, 44px);
-  --vt-inline-stepper-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-inline-stepper-radius: var(--vt-studio-control-radius, 6px);
-  --vt-inline-stepper-side: calc(var(--vt-inline-stepper-height) - 2 * var(--vt-inline-stepper-stroke));
+  --vt-inline-stepper-side: calc(var(--vt-stepper-height) - 2 * var(--vt-stepper-stroke));
   display: grid;
   grid-template-columns: var(--vt-inline-stepper-side) minmax(0, 2fr) var(--vt-inline-stepper-side);
   flex: 0 0 auto;
-  width: calc(4 * var(--vt-inline-stepper-height) - 6 * var(--vt-inline-stepper-stroke));
-  min-width: calc(4 * var(--vt-inline-stepper-height) - 6 * var(--vt-inline-stepper-stroke));
-  height: var(--vt-inline-stepper-height);
-  box-sizing: border-box;
+  width: calc(4 * var(--vt-stepper-height) - 6 * var(--vt-stepper-stroke));
+  min-width: calc(4 * var(--vt-stepper-height) - 6 * var(--vt-stepper-stroke));
   overflow: visible;
-  position: relative;
-  border: var(--vt-inline-stepper-stroke) solid var(--vt-studio-control-border, #000);
-  border-radius: var(--vt-inline-stepper-radius);
-  background: var(--pair-b, #fff);
-  color: var(--pair-a, #000);
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
 }
 .vt-studio-inline-stepper__button,
 .vt-studio-inline-stepper__value {
@@ -2019,8 +2031,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-weight: var(--vt-studio-control-font-weight, 1000);
   text-transform: var(--vt-studio-control-text-transform, uppercase);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -0.02em);
-  line-height: var(--vt-studio-control-line-height, 0.86);
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  line-height: var(--vt-studio-control-line-height, .86);
 }
 .vt-studio-inline-stepper__button {
   display: inline-flex;
@@ -2029,23 +2041,20 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   padding: 0;
   appearance: none;
   cursor: pointer;
-  background: var(--pair-a, #36e0f6);
+  background: var(--vt-stepper-secondary);
   color: #000;
-  box-shadow: none;
+  box-shadow: inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary);
   transition: background-color 180ms ease-out, color 180ms ease-out, opacity 180ms ease-out;
 }
 .vt-studio-inline-stepper__button svg {
   display: block;
-  width: calc(var(--vt-inline-stepper-height) * 0.52);
-  height: calc(var(--vt-inline-stepper-height) * 0.52);
-  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
+  width: calc(var(--vt-stepper-height) * .52);
+  height: calc(var(--vt-stepper-height) * .52);
+  stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
 }
-.vt-studio-inline-stepper__decrement {
-  border-right: var(--vt-inline-stepper-stroke) solid var(--vt-studio-control-border, #000);
-}
-.vt-studio-inline-stepper__increment {
-  border-left: var(--vt-inline-stepper-stroke) solid var(--vt-studio-control-border, #000);
-}
+.vt-studio-inline-stepper__decrement { border-right: var(--vt-stepper-stroke) solid #000; }
+.vt-studio-inline-stepper__increment { border-left: var(--vt-stepper-stroke) solid #000; }
 .vt-studio-inline-stepper__value {
   appearance: textfield;
   -moz-appearance: textfield;
@@ -2053,67 +2062,60 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   outline: 0;
   text-align: center;
   font-size: var(--vt-studio-control-font-size, 38px);
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  color: var(--pair-a, #000);
-  -webkit-text-fill-color: var(--pair-a, #000);
-  border: 0;
-  box-shadow: inset 0 var(--vt-inline-stepper-stroke) 0 var(--vt-studio-control-border, #000),
-    inset 0 calc(0px - var(--vt-inline-stepper-stroke)) 0 var(--vt-studio-control-border, #000);
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  box-shadow: inset 0 var(--vt-stepper-stroke) 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 var(--vt-stepper-primary);
   font-variant-numeric: tabular-nums;
 }
 .vt-studio-inline-stepper__value::-webkit-inner-spin-button,
 .vt-studio-inline-stepper__value::-webkit-outer-spin-button { appearance: none; margin: 0; }
-.vt-studio-inline-stepper__button:hover:not(:disabled) { background: var(--pair-b, #ff7f6b); }
+.vt-studio-inline-stepper__button:hover:not(:disabled) { filter: brightness(.94); }
 .vt-studio-inline-stepper__button:active:not(:disabled) { transform: translateY(var(--vt-studio-control-click-offset, 1px)); }
 .vt-studio-inline-stepper__button:focus-visible,
 .vt-studio-inline-stepper__value:focus-visible {
-  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-studio-control-secondary, var(--pair-b, #fff));
+  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset, 0);
   z-index: 1;
 }
 .vt-studio-inline-stepper.is-focused {
-  box-shadow: 0 0 0 var(--vt-studio-control-focus-outline-width, 3px) var(--vt-studio-control-secondary, var(--pair-b, #fff));
+  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
 }
 .vt-studio-inline-stepper__button:disabled,
-.vt-studio-inline-stepper__value:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
+.vt-studio-inline-stepper__value:disabled { cursor: not-allowed; opacity: .45; }
 .vt-studio-inline-stepper[data-size="compact"] {
-  --vt-inline-stepper-height: var(--vt-studio-control-height, 28px);
-  --vt-inline-stepper-stroke: var(--vt-studio-control-stroke, 2px);
-  --vt-inline-stepper-radius: var(--vt-studio-control-radius, 4px);
+  --vt-stepper-height: var(--vt-studio-28-height, 28px);
+  --vt-stepper-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-stepper-radius: var(--vt-studio-28-radius, 4px);
 }
-.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value {
-  font-size: var(--vt-studio-control-font-size, 24px);
+.vt-studio-inline-stepper[data-size="standard"] {
+  --vt-stepper-height: var(--vt-studio-44-height, 44px);
+  --vt-stepper-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-stepper-radius: var(--vt-studio-44-radius, 6px);
 }
-@media (prefers-reduced-motion: reduce) {
-  .vt-studio-inline-stepper__button { transition: none; }
-}
+.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value { font-size: var(--vt-studio-28-font-size, 24px); }
+@media (prefers-reduced-motion: reduce) { .vt-studio-inline-stepper__button { transition: none; } }
 
-
-/* Canonical Studio Controls Split Stepper. Geometry consumes the shared 44px/28px lattice. */
+/* Split stepper: editable 2:1 value pane + opaque, square secondary rail. */
 .vt-studio-split-stepper {
-  --vt-split-stepper-height: var(--vt-studio-control-height, 44px);
-  --vt-split-stepper-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-split-stepper-radius: var(--vt-studio-control-radius, 6px);
-  --vt-split-stepper-font-size: var(--vt-studio-control-font-size, 38px);
-  --vt-split-stepper-inner: calc(var(--vt-split-stepper-height) - 2 * var(--vt-split-stepper-stroke));
+  --vt-split-stepper-inner: calc(var(--vt-stepper-height) - 2 * var(--vt-stepper-stroke));
   display: grid;
   grid-template-columns: minmax(0, calc(var(--vt-split-stepper-inner) * 2)) var(--vt-split-stepper-inner);
   flex: 0 0 auto;
-  width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-split-stepper-stroke));
-  min-width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-split-stepper-stroke));
-  height: var(--vt-split-stepper-height);
-  min-height: var(--vt-split-stepper-height);
-  box-sizing: border-box;
-  position: relative;
-  overflow: visible;
-  border: var(--vt-split-stepper-stroke) solid var(--vt-studio-control-border, #000);
-  border-radius: var(--vt-split-stepper-radius);
-  background: var(--pair-b, #fff);
-  color: var(--pair-a, #000);
-  box-shadow: none;
+  width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke));
+  min-width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke));
+}
+.vt-studio-split-stepper[data-size="compact"] {
+  --vt-stepper-height: var(--vt-studio-28-height, 28px);
+  --vt-stepper-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-stepper-radius: var(--vt-studio-28-radius, 4px);
+}
+.vt-studio-split-stepper[data-size="standard"] {
+  --vt-stepper-height: var(--vt-studio-44-height, 44px);
+  --vt-stepper-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-stepper-radius: var(--vt-studio-44-radius, 6px);
 }
 .vt-studio-split-stepper input.vt-studio-split-stepper-value {
   appearance: textfield;
@@ -2125,28 +2127,34 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   height: 100%;
   min-height: 0;
   margin: 0;
-  padding: 0 3px;
+  padding: 0 8px;
   border: 0;
   border-radius: 0;
   outline: 0;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  box-shadow: inset 0 var(--vt-split-stepper-stroke) 0 var(--vt-studio-control-border, #000),
-              inset 0 calc(0px - var(--vt-split-stepper-stroke)) 0 var(--vt-studio-control-border, #000),
-              inset var(--vt-split-stepper-stroke) 0 0 var(--vt-studio-control-border, #000);
-  color: var(--pair-a, #000);
-  -webkit-text-fill-color: var(--pair-a, #000);
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  box-shadow: inset 0 var(--vt-stepper-stroke) 0 var(--vt-stepper-primary),
+              inset 0 calc(0px - var(--vt-stepper-stroke)) 0 var(--vt-stepper-primary),
+              inset var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary);
+  color: #000;
+  -webkit-text-fill-color: #000;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-split-stepper-font-size) !important;
+  font-size: var(--vt-studio-control-font-size, 38px) !important;
   font-weight: var(--vt-studio-control-font-weight, 1000);
   line-height: var(--vt-studio-control-line-height, .86) !important;
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
-  text-transform: uppercase;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
+.vt-studio-split-stepper[data-size="compact"] input.vt-studio-split-stepper-value {
+  font-size: var(--vt-studio-28-font-size, 24px) !important;
+  padding-inline: 4px;
+}
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button,
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.vt-studio-split-stepper.is-interacting { outline: var(--vt-studio-control-focus-outline-width, var(--vt-split-stepper-stroke)) solid var(--vt-studio-control-secondary, var(--pair-b, #fff)); outline-offset: var(--vt-studio-control-focus-outline-offset, 0px); }
+.vt-studio-split-stepper.is-interacting {
+  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
+}
 .vt-studio-split-stepper-rail {
   position: relative;
   display: grid;
@@ -2156,7 +2164,9 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   min-width: 0;
   height: 100%;
   min-height: 0;
-  background: var(--pair-b, #fff);
+  background: var(--vt-stepper-secondary);
+  box-shadow: inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary);
 }
 .vt-studio-split-stepper-rail::after {
   content: "";
@@ -2166,8 +2176,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   left: 0;
   top: 0;
   bottom: 0;
-  width: var(--vt-split-stepper-stroke);
-  background: var(--vt-studio-control-border, #000);
+  width: var(--vt-stepper-stroke);
+  background: #000;
 }
 .vt-studio-split-stepper-rail::before {
   content: "";
@@ -2177,9 +2187,9 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   left: 0;
   right: 0;
   top: 50%;
-  height: var(--vt-split-stepper-stroke);
+  height: var(--vt-stepper-stroke);
   transform: translateY(-50%);
-  background: var(--vt-studio-control-border, #000);
+  background: #000;
 }
 .vt-studio-split-stepper-rail button {
   display: grid;
@@ -2192,15 +2202,27 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: var(--pair-b, #fff);
-  color: var(--pair-a, #000);
+  background: var(--vt-stepper-secondary);
+  color: #000;
   cursor: pointer;
   touch-action: none;
+  box-shadow: inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary);
 }
-.vt-studio-split-stepper-rail svg { width: 136%; height: 136%; max-width: none; max-height: none; overflow: visible; stroke: #000; color: #000; stroke-width: 3.2; }
-.vt-studio-split-stepper-rail button:hover:not(:disabled) { background: color-mix(in srgb, var(--pair-b, #fff) 88%, #000 12%); }
-.vt-studio-split-stepper-rail button:active:not(:disabled) { background: color-mix(in srgb, var(--pair-b, #fff) 75%, #000 25%); }
-.vt-studio-split-stepper-rail button:focus-visible { outline: 2px solid var(--pair-a, #000); outline-offset: -3px; z-index: 4; }
+.vt-studio-split-stepper-rail svg {
+  display: block;
+  width: 70%;
+  height: 70%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: visible;
+  stroke: #000;
+  color: #000;
+  stroke-width: 3.2;
+}
+.vt-studio-split-stepper-rail button:hover:not(:disabled) { filter: brightness(.94); }
+.vt-studio-split-stepper-rail button:active:not(:disabled) { filter: brightness(.88); }
+.vt-studio-split-stepper-rail button:focus-visible { outline: 2px solid #000; outline-offset: -3px; z-index: 4; }
 .vt-studio-split-stepper-rail button:disabled { cursor: not-allowed; opacity: .35; }
 @media (prefers-reduced-motion: reduce) { .vt-studio-split-stepper-rail button { transition: none; } }
 
