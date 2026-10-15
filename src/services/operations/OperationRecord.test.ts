@@ -91,6 +91,18 @@ describe("OperationRecord v1", () => {
   expect(record.lineage.contentBuildId).toBe("build-1")
  })
 
+
+ it("fails closed when a legacy execute packet has no approval receipt", () => {
+  const record = operationRecordFromActionPacket({
+   id: "legacy-execute-packet",
+   sourceToolId: "video-publisher",
+   intent: "execute",
+  })
+  expect(record.status).toBe("awaiting-approval")
+  expect(record.approval.status).toBe("pending")
+  expect(record.requiresExplicitApproval).toBe(true)
+ })
+
  it("projects ToolReceipt outputs, trace, and generation record into shared lineage", () => {
   const record = operationRecordFromToolReceipt({
    id: "receipt-1",
