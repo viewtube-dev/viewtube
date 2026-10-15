@@ -4,6 +4,8 @@ import {
   listPersistedLifecycleObservations,
   upsertPersistedBrainEvents,
   upsertPersistedLifecycleObservations,
+  listPersistedBrainLearningRecords,
+  upsertPersistedBrainLearningRecords,
 } from "../server/brain-intelligence-store.mjs";
 
 const SESSION_COOKIE = "vt_session";
@@ -58,20 +60,22 @@ export default async function handler(req, res) {
     await requireConnectedChannel(userId, channelId);
 
     if (method === "GET") {
-      const [events, observations] = await Promise.all([
+      const [events, observations, learningRecords] = await Promise.all([
         listPersistedBrainEvents({ userId, channelId }),
         listPersistedLifecycleObservations({ userId, channelId }),
+        listPersistedBrainLearningRecords({ userId, channelId }),
       ]);
-      return res.status(200).json({ channelId, events, observations });
+      return res.status(200).json({ channelId, events, observations, learningRecords });
     }
 
     if (method === "PUT") {
       const body = await readJson(req);
-      const [eventCount, observationCount] = await Promise.all([
+      const [eventCount, observationCount, learningRecordCount] = await Promise.all([
         upsertPersistedBrainEvents({ userId, channelId, events: body.events || [] }),
         upsertPersistedLifecycleObservations({ userId, channelId, observations: body.observations || [] }),
+        upsertPersistedBrainLearningRecords({ userId, channelId, records: body.learningRecords || [] }),
       ]);
-      return res.status(200).json({ ok: true, channelId, eventCount, observationCount });
+      return res.status(200).json({ ok: true, channelId, eventCount, observationCount, learningRecordCount });
     }
 
     res.setHeader("Allow", "GET, PUT");
