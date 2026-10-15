@@ -51,10 +51,10 @@ The source regression test `npm run test:confirmed-library-layout` now guards th
 | Border-radius policy | Size-specific: standard 6px; compact 4px | All components unless an explicitly indexed exception is approved |
 | Border-width policy | Size-specific: standard 3px; compact 2px | All components unless an explicitly indexed exception is approved |
 | Shadow / focus policy | Hard offset shadows belong to button faces and stationary dropdown panels. Text fields retain a primary inset stroke and a separate secondary-color focus accent; do not confuse the accent shadow with the computed CSS outline. | Component and state specific |
-| Stable shadow geometry | Shadow anchor/offset stays fixed; button face moves independently | All shadowed buttons |
-| Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | All shadowed buttons |
-| Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | All shadowed buttons |
-| Motion timing | Hover 150ms; click 300ms per current size constants | Buttons; must be reconciled with CSS transition definitions |
+| Stable shadow geometry (target) | Shadow anchor/offset stays fixed; button face moves independently | Target contract; current active-state mismatch is documented in Section 7 and is not certified as fixed |
+| Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | Standard button hover follows this target; the prominent action moves its outer control instead and remains a documented exception |
+| Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | Current active-state rules still move the outer shell and hide the shadow; see Section 7 |
+| Motion timing | Hover 150ms; click 300ms per current size constants | CSS variables/fallbacks now match the constants; execution and browser verification are pending |
 | Reduced motion | Preserve state feedback while minimizing motion | Must not erase all state hierarchy or affordance |
 
 ## 3. Canonical size contracts
