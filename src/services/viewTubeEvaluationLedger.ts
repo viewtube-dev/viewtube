@@ -223,6 +223,7 @@ export const createPublicationEvaluationRecord = (input: {
   causalAssessment: input.causalAssessment || "insufficient_evidence",
   idempotencyKey: `publication-evaluation:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`,
  })
+}
 
 export const listEvaluationRecords = () => read<EvaluationRecord>(EVAL_KEY)
 export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"createdAt"|"updatedAt"|"outcome">) => {
