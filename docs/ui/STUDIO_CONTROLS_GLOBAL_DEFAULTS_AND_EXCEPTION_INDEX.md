@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** PR #189 merged; phases 3–5 follow-up changes prepared on a fresh branch from the integration target; rendered verification pending  
+**Status:** PR #189 and PR #191 merged; phases 6–8 are being completed on a fresh branch from the current integration target; CI and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Audit work branch:** `fix/studio-controls-phases-3-5-after-pr189-2026-10-15`  
+**Audit work branch:** `fix/studio-controls-phases-6-8-after-pr191-2026-10-15`  
 **Last reviewed:** 2026-10-15  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -386,4 +386,23 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - Keep library-only frame styles scoped to catalog wrappers; do not let them redefine the production component.
 - Run source governance, focused Vitest, TypeScript, production build, and rendered desktop/mobile checks. A successful source diff alone is not visual certification.
 
-**Current completion boundary:** source changes for phases 3–5 are committed on the follow-up branch. Final completion depends on GitHub Actions and browser/deployment evidence; no live visual pass is claimed before those checks finish.
+**Phase 3–5 status:** PR #191 merged to `master/consolidated-feature-integration`. Source changes are part of the current integration head; visual certification is still a separate gate.
+
+## 17. Confirmed Library phases 6–8 — 2026-10-15
+
+### Phase 6 — canonical source and component provenance
+- The Confirmed Primitive Library imports the real Studio exports from `src/studio-ui/primitives/StudioControls.tsx`; production control behavior remains owned by `src/styles/studio-control-system.css`.
+- Catalog provenance identifies those two files. Catalog CSS is restricted to specimen layout and explanatory metadata; it must not redefine production dropdown rows, word-toggle geometry, or component tokens.
+- The library renders `StudioActionButton` as a distinct 56px prominent-action family. It is not a third size of `StudioButton`; ordinary buttons remain 44px standard / 28px compact.
+- The global defaults inspector formats nested values recursively and must not display `[object Object]`.
+
+### Phase 7 — one layout contract for control variants
+- Switch, radio, checkbox, and word-toggle skins use the same four-column `.vt-confirmed-control-variants` structure. Word-toggle variants 1, 3, 4, and 5 come from one data-driven skin collection, repeated by size row.
+- The compact row uses the same markup with a size data attribute; responsive CSS may move the columns to two across on narrow screens without creating a second component/layout implementation.
+- Dropdown specimen CSS controls only stacking, overflow, and the standard-full-row / compact-two-up specimen arrangement. Its geometry, option typography, borders, and shadows remain defined by the production Studio dropdown stylesheet.
+- Superseded confirmed-catalog dropdown typography overrides and legacy split word-toggle layout classes are removed. Do not delete unrelated `.vt-complete-catalog` styles solely because they share this combined stylesheet; that is a separate legacy catalog surface and needs its own migration.
+
+### Phase 8 — governance and verification
+- The governance test checks canonical Studio imports, source provenance, recursive defaults formatting, the distinct 56px action family, one data-driven word-toggle skin collection, responsive shared variant-grid selectors, and absence of superseded Confirmed Library dropdown overrides.
+- A source test is not a substitute for runtime verification. Run the focused governance test, TypeScript check, CSS parser, production build, and browser review for standard/compact, selected/disabled, focus-visible, open dropdown stacking, narrow widths, and reduced motion.
+- **Verification boundary:** this branch's source edits do not imply that those commands or browser checks have passed. Record actual CI results and browser evidence before declaring phases 6–8 fully certified.
