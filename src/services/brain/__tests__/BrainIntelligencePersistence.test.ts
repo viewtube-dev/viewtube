@@ -35,4 +35,18 @@ describe("BrainIntelligencePersistence", () => {
   })
   expect(result).toBeNull()
  })
+ it("rejects a partial server acknowledgement instead of reporting the batch as persisted", async () => {
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({
+   ok: true,
+   channelId: "channel-1",
+   eventCount: 0,
+   observationCount: 0,
+  }), { status: 200, headers: { "Content-Type": "application/json" } })))
+
+  await expect(persistBrainIntelligence({
+   channelId: "channel-1",
+   events: [{ id: "event-1", channelId: "channel-1" }],
+  })).rejects.toThrow(/acknowledgement mismatch/i)
+ })
+
 })
