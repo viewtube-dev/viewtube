@@ -152,23 +152,27 @@ export const listPersistedBrainLearningRecords = async ({ userId, channelId }) =
 
 export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, records }) => {
   await initBrainIntelligenceStore();
+  const allowedTypes = new Set(["assetOutcome", "brainOutcome", "evaluation", "learningCandidate"]);
   const rows = (Array.isArray(records) ? records : [])
-    .filter((record) => record && typeof record.id === "string" && record.id.trim() && record.channelId === channelId)
+    .filter((item) => item && allowedTypes.has(item.recordType)
+      && item.record && typeof item.record.id === "string" && item.record.id.trim()
+      && item.record.channelId === channelId)
     .slice(0, 1000);
+  const recordKey = (item) => `${item.recordType}:${item.record.id}`;
   if (!pool) {
     const key = scope(userId, channelId);
     const map = memoryLearningRecords.get(key) || new Map();
-    rows.forEach((record) => map.set(record.id, record));
+    rows.forEach((item) => map.set(recordKey(item), item));
     memoryLearningRecords.set(key, map);
     return rows.length;
   }
-  for (const record of rows) {
+  for (const item of rows) {
     await pool.query(
       `INSERT INTO viewtube_brain_learning_records(viewtube_user_id,channel_id,record_id,record)
        VALUES($1,$2,$3,$4::jsonb)
        ON CONFLICT(viewtube_user_id,channel_id,record_id)
        DO UPDATE SET record=EXCLUDED.record,updated_at=NOW()`,
-      [userId, channelId, record.id, JSON.stringify(record)],
+      [userId, channelId, recordKey(item), JSON.stringify(item)],
     );
   }
   return rows.length;
