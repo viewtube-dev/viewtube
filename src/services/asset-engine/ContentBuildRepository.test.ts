@@ -125,6 +125,25 @@ describe("ContentBuild repository", () => {
   )).toHaveLength(1)
  })
 
+ it("rejects reuse of an idempotency key for a different event", () => {
+  createContentBuild({ id: "cb-idempotency-conflict" })
+  appendContentBuildEvent({
+   contentBuildId: "cb-idempotency-conflict",
+   eventType: "analytics.checkpoint",
+   entityType: "analytics-checkpoint",
+   entityId: "checkpoint-a",
+   idempotencyKey: "shared-checkpoint-key",
+  })
+
+  expect(() => appendContentBuildEvent({
+   contentBuildId: "cb-idempotency-conflict",
+   eventType: "publish.transaction.completed",
+   entityType: "publish-transaction",
+   entityId: "transaction-b",
+   idempotencyKey: "shared-checkpoint-key",
+  })).toThrow(/idempotency key was reused/)
+ })
+
  it("does not duplicate a post-publish YouTube binding when its write is replayed", () => {
   createContentBuild({ id: "cb-idempotent-binding", channelId: "channel-a" })
   const input = {
