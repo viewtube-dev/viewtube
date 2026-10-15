@@ -1,5 +1,5 @@
 import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, listContentBuildMetadataHistory, setContentBuildStage } from "./ContentBuildRepository"
-import type { ContentBuildYouTubeBinding } from "./contracts"
+import type { ContentBuildStage, ContentBuildYouTubeBinding } from "./contracts"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
 import { recordBrainPublicationIdentityReceipt } from "../brain/BrainPublicationOutcomeBridge"
@@ -94,6 +94,17 @@ export const beginPublishTransaction=(projection:PublishingPackageProjection,too
    if (requested && existingForRender[key] !== requested) throw new Error(`Existing publication transaction has immutable ${key} lineage that does not match this request.`)
   }
   return assertTransactionSnapshotIntegrity(existingForRender)
+ }
+
+ const canonicalBuild = getContentBuild(projection.contentBuildId)
+ if (!canonicalBuild) throw new Error("Publishing requires an existing canonical ContentBuild.")
+ const publishableStages = new Set<ContentBuildStage>(["package", "edit", "review", "launch", "scheduled"])
+ if (!publishableStages.has(canonicalBuild.stage)) {
+  throw new Error(`ContentBuild stage "${canonicalBuild.stage}" does not allow a new publication transaction.`)
+ }
+ const blockers = canonicalBuild.workflow?.blockerIds || []
+ if (blockers.length) {
+  throw new Error(`ContentBuild has blockers preventing publication: ${blockers.join(", ")}`)
  }
 
  const approvedSnapshot=persistApprovedPublishSnapshot(projection)
