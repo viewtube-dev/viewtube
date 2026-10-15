@@ -4,12 +4,16 @@ import { runBrainTurn } from "../BrainOrchestrator";
 import type { CreatorGrowthContext } from "../../../types";
 import type { StructuredBrainModelOutput } from "../../gemini";
 
-vi.mock("../../aiBrainConversationStore", () => ({
-  beginAIBrainTurn: vi.fn(async () => ({ id: "turn-test-1" })),
-  completeAIBrainTurn: vi.fn(async (input: Record<string, unknown>) => ({ id: input.turnId, ...input })),
-  formatCreatorGrowthModules: vi.fn((response: { modules?: unknown[] }) => response.modules || []),
-  sanitizeCreatorFacingBrainCopy: vi.fn((value: string) => String(value || "").replace(/\s+/g, " ").trim()),
-}));
+vi.mock("../../aiBrainConversationStore", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../aiBrainConversationStore")>();
+  return {
+    ...actual,
+    beginAIBrainTurn: vi.fn(async () => ({ id: "turn-test-1" })),
+    completeAIBrainTurn: vi.fn(async (input: Record<string, unknown>) => ({ id: input.turnId, ...input })),
+    formatCreatorGrowthModules: vi.fn((response: { modules?: unknown[] }) => response.modules || []),
+    sanitizeCreatorFacingBrainCopy: vi.fn((value: string) => String(value || "").replace(/\\s+/g, " ").trim()),
+  };
+});
 
 vi.mock("../../aiBrainCommandInterface", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../aiBrainCommandInterface")>();
