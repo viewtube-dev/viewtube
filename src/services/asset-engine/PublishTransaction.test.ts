@@ -70,6 +70,16 @@ describe("PublishTransaction",()=>{
   completePublishTransaction(transaction.id)
   const publishedEvents=listContentBuildEvents("cb-publish").filter(event=>event.eventType==="package.published")
   expect(publishedEvents).toHaveLength(1)
+  const checkpoints=listContentBuildEvents("cb-publish").filter(event=>event.eventType==="analytics.checkpoint")
+  expect(checkpoints).toHaveLength(1)
+  expect(checkpoints[0].metadata).toMatchObject({
+   checkpointId: `publication-checkpoint:${transaction.id}`,
+   videoId:"youtube-published",
+   channelId:"channel-a",
+   publicationTransactionId:transaction.id,
+   approvedSnapshotId:transaction.approvedSnapshotId,
+   status:"awaiting-follow-up-analytics",
+  })
   expect(publishedEvents[0]).toMatchObject({
    entityType:"publishing-package",
    entityId:"vp-a",

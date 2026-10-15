@@ -87,6 +87,20 @@ const confidenceFor = (available: number, total: number): BrainConfidenceLevel =
  return ratio >= .8 ? "high" : ratio >= .5 ? "medium" : "low"
 }
 
+export const buildAlgorithmEvaluationLifecycleIdentity = (event: AlgorithmIntelligenceEvent) => ({
+ recommendationId: event.recommendationId || null,
+ projectId: event.projectId || null,
+ contentBuildId: typeof event.metadata?.contentBuildId === "string" ? event.metadata.contentBuildId : null,
+ videoId: event.videoId || null,
+ actionPacketId: event.actionPacketId || null,
+ publicationTransactionId: typeof event.metadata?.publicationTransactionId === "string" ? event.metadata.publicationTransactionId : null,
+ approvedSnapshotId: typeof event.metadata?.approvedSnapshotId === "string" ? event.metadata.approvedSnapshotId : null,
+ metadataVersionIds: Array.isArray(event.metadata?.metadataVersionIds)
+  ? event.metadata.metadataVersionIds.filter((value): value is string => typeof value === "string")
+  : [],
+ checkpointId: typeof event.metadata?.checkpointId === "string" ? event.metadata.checkpointId : null,
+})
+
 export const evaluateAlgorithmEvent = (input: { event: AlgorithmIntelligenceEvent; observations: AlgorithmMetricObservation[]; now?: number }): AlgorithmEvaluationResult => {
  const now = input.now || Date.now()
  const targetResults = input.event.evaluationTargets.map((target) => evaluateTarget(target, input.observations.find((observation) => observation.metric === target.metric)))
@@ -140,7 +154,11 @@ export const recordAlgorithmEvaluation = (input: {
   title: `Evaluation: ${event.title}`,
   summary: evaluation.explanation,
   evaluationTargets: effectiveEvent.evaluationTargets,
-  metadata: { ...(input.metadata || {}), evaluation },
+  metadata: {
+   ...(input.metadata || {}),
+   lifecycleIdentity: buildAlgorithmEvaluationLifecycleIdentity(event),
+   evaluation,
+  },
  })
  return { evaluation, recorded }
 }
