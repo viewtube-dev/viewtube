@@ -12,6 +12,8 @@ describe("Brain evidence quality integration", () => {
   expect(broker).toContain("EVIDENCE QUALITY")
   expect(broker).toContain("scope=")
   expect(broker).toContain("Missing dataset:")
+  expect(broker).toContain("SHARED EVIDENCE CONTRACT")
+  expect(broker).toContain("resolveBrainContextSections")
  })
 
  it("builds one Evidence Intelligence envelope for statistics, quality and audience reasoning", () => {
@@ -20,6 +22,8 @@ describe("Brain evidence quality integration", () => {
   expect(orchestrator).toContain("evidenceIntelligence?.evidenceQuality")
   expect(orchestrator).toContain("evidenceIntelligence?.statisticsIntelligence")
   expect(orchestrator).toContain("evidenceIntelligence?.audienceIntelligence")
+  expect(orchestrator).toContain("evidenceClaims: evidenceIntelligence?.evidenceClaims")
+  expect(orchestrator).toContain("sharedEvidenceHealth: evidenceIntelligence?.sharedEvidenceHealth")
   expect(orchestrator).not.toContain("buildBrainEvidenceIntelligence")
   expect(orchestrator).not.toContain("buildBrainAudienceIntelligence")
  })
