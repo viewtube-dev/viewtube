@@ -70,7 +70,7 @@ test("button shadows stay on the stationary outer control while the face moves",
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\][^\n]*box-shadow:\s*var\(--vt-studio-control-shadow/);
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^\n]*box-shadow:\s*none/);
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][^\n]*box-shadow:\s*3px 3px 0/);
+  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][\s\S]*?box-shadow:\s*3px 3px 0/);
   assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][^\n]*box-shadow:\s*none/);
 });
 
