@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { readBrainRuntimeSnapshot } from "./BrainRuntimeSnapshot"
+import { readBrainRuntimeSnapshot, resolveBrainOperationIdentity } from "./BrainRuntimeSnapshot"
 
 const build = {
  schemaVersion: 1 as const,
@@ -91,6 +91,22 @@ const toolReceipt = {
  traceId: "trace-1",
  completedAt: "2026-09-24T05:01:02.000Z",
 }
+
+describe("resolveBrainOperationIdentity", () => {
+ it("keeps one stable operation/workflow identity", () => {
+  expect(resolveBrainOperationIdentity({
+   operationIds: ["operation-1", "operation-1", null],
+   workflowIds: ["workflow-1", "workflow-1"],
+  })).toEqual({ operationId: "operation-1", workflowId: "workflow-1", mismatch: false })
+ })
+
+ it("flags conflicting explicit identities instead of selecting a fuzzy join", () => {
+  expect(resolveBrainOperationIdentity({
+   operationIds: ["operation-1", "operation-2"],
+   workflowIds: ["workflow-1", "workflow-2"],
+  })).toEqual({ operationId: "operation-1", workflowId: "workflow-1", mismatch: true })
+ })
+})
 
 describe("readBrainRuntimeSnapshot", () => {
  it("summarizes the active Project, ContentBuild, generation lineage, trace, and outcomes", () => {
