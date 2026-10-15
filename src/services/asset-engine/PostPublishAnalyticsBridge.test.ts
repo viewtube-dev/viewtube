@@ -227,7 +227,7 @@ describe("Post-publish analytics bridge", () => {
       outputAssetIds: ["youtube-123"],
       evidenceIds: [],
       idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
-      metadata: { approvedSnapshotHash: "hash-1" },
+      metadata: { approvedSnapshotHash: "hash-1", actionPacketId: "action-packet-1", workflowId: "workflow-1", recommendationId: "recommendation-1", experimentId: "experiment-1" },
     }
     mocks.listContentBuildEvents.mockReturnValue([existingReceipt])
 
@@ -237,6 +237,12 @@ describe("Post-publish analytics bridge", () => {
     })
 
     expect(result.event.id).toBe("event-existing")
+    expect(result.identity).toMatchObject({
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
+    })
     expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
     expect(mocks.appendContentBuildEvent).not.toHaveBeenCalled()
   })
