@@ -96,6 +96,12 @@ No single factor guarantees the result. Commentary, criticism, education, or add
 
 Ask what purpose the excerpt serves, whether the amount is justified, whether the use adds meaningful new context, and what legal rules apply. Do not rely on a checklist as a legal ruling.
 
+## Reusing Your Own Material Is Different From Reusing Someone Else's
+
+Repurposing your own material can save effort, but check whether a collaborator, employer, music provider, stock service, or contract controls some relevant rights. Reuse rights for an original file may differ from the rights in music, footage, or a performance included in it.
+
+Copyright permission and platform monetization eligibility are also different questions. Content may be permitted to remain on the platform but still face monetization limitations under current policies; conversely, monetization status does not itself establish that all rights are cleared. Review each applicable rule independently.
+
 ## AI-Generated and Altered Media
 
 AI tools can generate images, video, music, voices, and other material. Before using output, check the tool's current terms, the rights in input material, the intended use, and any relevant platform disclosure requirements.
