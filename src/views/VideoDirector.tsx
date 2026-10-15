@@ -56,6 +56,7 @@ import {
   SubToolboxToggle,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 import {
+  StudioActionButton,
   StudioButton,
   StudioInput,
   StudioNumberInput,
@@ -887,8 +888,7 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                   ))}
                 </SubToolboxGrid>
                 <SubToolboxActions columns={2}>
-                  <StudioButton
-                    sizeVariant="action"
+                  <StudioActionButton
                     tone="accent"
                     loading={autoFillLoading}
                     disabled={!project.categories["concept-direction"].payload.brief.trim()}
@@ -921,9 +921,8 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                   >
                     <WandSparkles size={18} />
                     Auto-Fill Director
-                  </StudioButton>
-                  <StudioButton
-                    sizeVariant="action"
+                  </StudioActionButton>
+                  <StudioActionButton
                     tone="neutral"
                     onClick={() => {
                       setScopeKey("project")
@@ -933,7 +932,7 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                   >
                     <SlidersHorizontal size={18} />
                     Direct Manually
-                  </StudioButton>
+                  </StudioActionButton>
                 </SubToolboxActions>
                 {autoFillSummary ? (
                   <SubToolboxSurface tone="subtle" role="status">
@@ -1595,9 +1594,9 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
                     }}
                   >{conflictCount ? "Resolve Conflicts" : "Preview Plan"}</StudioSplitLeftButton>
                 </SubToolboxActions>
-                <StudioButton sizeVariant="action" tone="accent" disabled title="Provider adapters, cost reservation and persistent generation queue are the next execution layer.">
+                <StudioActionButton tone="accent" disabled title="Provider adapters, cost reservation and persistent generation queue are the next execution layer.">
                   <Sparkles size={19} />Generate — Provider Layer Next
-                </StudioButton>
+                </StudioActionButton>
               </SubToolboxStack>
             </SubToolbox>
           </div>
