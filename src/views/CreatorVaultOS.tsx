@@ -162,6 +162,8 @@ import {
  type VaultTextFormat,
 } from "../services/vaultTextDocuments"
 import type { VaultAsset, VaultAssetKind } from "../types"
+import { resolveVaultMediaCapabilities, type VaultMediaKind } from "../features/vault-workbench/capabilities"
+import { VaultImageWorkbench } from "./vault/VaultImageWorkbench"
 
 const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  navigator: "Navigator",
@@ -535,6 +537,17 @@ const CreatorVaultOS: React.FC = () => {
   () => allAssets.find((asset) => asset.id === selectedAssetIds[0]) || null,
   [allAssets, selectedAssetIds],
  )
+ const selectedMediaCapabilities = useMemo(() => {
+  const kinds = selectedAssetIds
+   .map((id) => allAssets.find((asset) => asset.id === id))
+   .filter((asset): asset is VaultAsset => Boolean(asset))
+   .map((asset): VaultMediaKind => (
+    asset.kind === "image" || asset.kind === "video" || asset.kind === "audio"
+     ? asset.kind
+     : "document"
+   ))
+  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: false, audioProcessorAvailable: false })
+ }, [allAssets, selectedAssetIds])
  const editableTextAsset = useMemo(() => {
   if (!selectedAsset || selectedAsset.kind !== "document") return null
   const hasTextContent = typeof selectedAsset.metadata?.textContent === "string"
@@ -3243,6 +3256,29 @@ const CreatorVaultOS: React.FC = () => {
            />
           )}
          </div>
+         {selectedMediaCapabilities.length ? (
+          <section className="flex flex-wrap items-center gap-2 rounded-md border-2 border-current p-2" aria-label="Media Workbench capabilities" data-vault-media-capabilities>
+           <span className="text-xs font-black uppercase">Workbench</span>
+           {selectedMediaCapabilities.map((capability) => (
+            <span
+             key={capability.id}
+             title={capability.reason || capability.label}
+             aria-label={capability.available ? capability.label + " available" : capability.label + " unavailable: " + capability.reason}
+             className="rounded border-2 border-current px-2 py-1 text-[10px] font-black uppercase"
+             data-available={capability.available ? "true" : "false"}
+            >
+             {capability.label}{capability.available ? "" : " · unavailable"}
+            </span>
+           ))}
+          </section>
+         ) : null}
+         {selectedAsset.kind === "image" ? (
+          <VaultImageWorkbench
+           key={selectedAsset.id}
+           asset={selectedAsset}
+           onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+          />
+         ) : null}
          <div>
           <div className="text-xs font-black uppercase opacity-60">Name</div>
           <div className="text-lg font-black uppercase">{selectedAsset.name}</div>
