@@ -95,7 +95,7 @@ describe("EvidenceIntelligenceResolver", () => {
   expect(deps.getCanonicalEvidence).toHaveBeenCalledWith({
    window: "90d",
    sectionIds: ["algorithm-diagnosis"],
-   maximumRowsPerDataset: 5,
+   maximumRowsPerDataset: 8,
    maximumCharacters: 16_000,
   })
   expect(deps.projectEvidence).toHaveBeenCalledTimes(1)
