@@ -144,16 +144,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>28px compact · V3 selectable</span><StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Toggle compact square icon button selection" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
       <div className="vt-confirmed-variant"><span>28px compact · V4</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
       <div className="vt-confirmed-variant"><span>44px standard · disabled</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled square icon button" variant="v1" sizeVariant="standard" disabled data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Icon size comparison · square · standard 44px</span><div className="vt-confirmed-icon-size-grid">
-        <div><small>Current · 28px</small><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square current standard icon" iconSizeVariant="current" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-        <div><small>Moderate · 34px</small><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square moderate standard icon" iconSizeVariant="moderate" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-        <div><small>Large · 38px</small><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square large standard icon" iconSizeVariant="large" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-      </div></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Icon size comparison · square · compact 28px</span><div className="vt-confirmed-icon-size-grid">
-        <div><small>Current · 18px</small><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square current compact icon" iconSizeVariant="current" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
-        <div><small>Moderate · 22px</small><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square moderate compact icon" iconSizeVariant="moderate" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
-        <div><small>Large · 24px</small><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square large compact icon" iconSizeVariant="large" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
-      </div></div>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-effects-wrap">
         <span>Interaction effects · each example uses the canonical primitive at both sizes</span>
         <div className="vt-confirmed-square-effect-grid">
@@ -171,16 +161,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="44">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default A</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · default B</span><StudioSplitLeftButton icon={<Sparkles />} heightVariant="28">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="44">split-left</StudioSplitLeftButton></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Icon size comparison · split-left · standard 44px</span><div className="vt-confirmed-icon-size-grid is-split">
-        <div><small>Current · 28px</small><StudioSplitLeftButton icon={<Settings2 />} iconSizeVariant="current" heightVariant="44" data-vt-library-component="StudioSplitLeftButton">Settings</StudioSplitLeftButton></div>
-        <div><small>Moderate · 34px</small><StudioSplitLeftButton icon={<Settings2 />} iconSizeVariant="moderate" heightVariant="44" data-vt-library-component="StudioSplitLeftButton">Settings</StudioSplitLeftButton></div>
-        <div><small>Large · 38px</small><StudioSplitLeftButton icon={<Settings2 />} iconSizeVariant="large" heightVariant="44" data-vt-library-component="StudioSplitLeftButton">Settings</StudioSplitLeftButton></div>
-      </div></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Icon size comparison · split-left · compact 28px</span><div className="vt-confirmed-icon-size-grid is-split">
-        <div><small>Current · 18px</small><StudioSplitLeftButton icon={<Settings2 />} iconSizeVariant="current" heightVariant="28" data-vt-library-component="StudioSplitLeftButton">Settings</StudioSplitLeftButton></div>
-        <div><small>Moderate · 22px</small><StudioSplitLeftButton icon={<Settings2 />} iconSizeVariant="moderate" heightVariant="28" data-vt-library-component="StudioSplitLeftButton">Settings</StudioSplitLeftButton></div>
-        <div><small>Large · 24px</small><StudioSplitLeftButton icon={<Settings2 />} iconSizeVariant="large" heightVariant="28" data-vt-library-component="StudioSplitLeftButton">Settings</StudioSplitLeftButton></div>
-      </div></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected A</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected B</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div>
     </Family>
     <Family
