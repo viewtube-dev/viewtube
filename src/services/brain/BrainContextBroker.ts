@@ -163,6 +163,10 @@ export const buildBrainContextPack = (input: {
     creatorContext.project.topic ? `topic=${creatorContext.project.topic}` : "",
     creatorContext.project.format ? `format=${creatorContext.project.format}` : "",
     creatorContext.project.plannedPublishAt ? `plannedPublishAt=${creatorContext.project.plannedPublishAt}` : "",
+    creatorContext.project.lifecycle?.currentPhase ? `currentLifecyclePhase=${creatorContext.project.lifecycle.currentPhase}` : "",
+    creatorContext.project.lifecycle?.relevantCapabilities?.length ? `phaseCapabilities=${creatorContext.project.lifecycle.relevantCapabilities.join(",")}` : "",
+    creatorContext.project.lifecycle?.blockers?.length ? `workflowBlockers=${creatorContext.project.lifecycle.blockers.join(",")}` : "",
+    creatorContext.project.lifecycle ? "Capability policy: prioritize only phase-relevant capabilities; do not claim later stages are complete." : "",
     creatorContext.provenance.projectSource ? `source=${creatorContext.provenance.projectSource}` : "",
     creatorContext.project.evidenceIds?.length
      ? `evidence=${creatorContext.project.evidenceIds.join(",")}`
