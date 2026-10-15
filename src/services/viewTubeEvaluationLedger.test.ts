@@ -4,6 +4,7 @@ const lineageMocks = vi.hoisted(() => ({
  appendContentBuildEvent: vi.fn(),
  listContentBuildEvents: vi.fn(),
  listAssetOutcomes: vi.fn(),
+ linkAssetOutcomeToPublication: vi.fn(),
  captureAIBrainLearningEvent: vi.fn(),
  promoteBrainClaim: vi.fn(),
  rebuildAffectedToolContextPacks: vi.fn(),
@@ -21,6 +22,7 @@ vi.mock("./asset-engine/ContentBuildRepository", () => ({
 
 vi.mock("./brain/assetOutcomes", () => ({
  listAssetOutcomes: lineageMocks.listAssetOutcomes,
+ linkAssetOutcomeToPublication: lineageMocks.linkAssetOutcomeToPublication,
 }))
 vi.mock("./aiBrainSelfImprovement", () => ({ captureAIBrainLearningEvent: lineageMocks.captureAIBrainLearningEvent }))
 vi.mock("./brain/BrainMemoryClaims", () => ({ promoteBrainClaim: lineageMocks.promoteBrainClaim, rebuildAffectedToolContextPacks: lineageMocks.rebuildAffectedToolContextPacks }))
