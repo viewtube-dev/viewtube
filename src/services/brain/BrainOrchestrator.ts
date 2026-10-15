@@ -330,9 +330,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     brainEvidencePack: input.snapshot.evidencePack,
    })
   : null
- const evidenceQuality = wantsStatisticsIntelligence
-  ? evidenceIntelligence?.evidenceQuality || null
-  : null
+ // Quality accompanies every analytics-backed task, including algorithm/anomaly requests.
+ const evidenceQuality = evidenceIntelligence?.evidenceQuality || null
  const statisticsIntelligence = wantsStatisticsIntelligence
   ? evidenceIntelligence?.statisticsIntelligence || null
   : null
