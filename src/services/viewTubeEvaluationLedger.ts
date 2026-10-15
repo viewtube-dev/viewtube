@@ -1,4 +1,6 @@
 import type { ContentBuildPublicationIdentity } from "./asset-engine/contracts"
+import { listContentBuildEvents } from "./asset-engine/ContentBuildRepository"
+import { listAssetOutcomes } from "./brain/assetOutcomes"
 import { getCurrentCanonicalIntelligenceDatasetRows, getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "./analytics-canon"
 import { evaluateViewTubeControl } from "./viewTubeUserControls"
 
@@ -92,6 +94,18 @@ export const createPublicationEvaluationRecord = (input: {
  )
  if (rowIndex < 0) return null
  const manifest = evidence.datasets.find((item) => item.id === "videos")
+ const publicationOutcomes = listAssetOutcomes().filter((outcome) =>
+  outcome.channelId === identity.channelId &&
+  outcome.publishTransactionId === identity.publishTransactionId &&
+  outcome.publishedVideoId === identity.youtubeVideoId
+ )
+ const analyticsCheckpointIds = listContentBuildEvents(identity.contentBuildId)
+  .filter((event) => {
+   if (event.eventType !== "analytics.checkpoint") return false
+   const metadata = event.metadata as Record<string, unknown> | undefined
+   return metadata?.youtubeVideoId === identity.youtubeVideoId || metadata?.publishedVideoId === identity.youtubeVideoId
+  })
+  .map((event) => event.id)
  const evidenceStatus: EvaluationRecord["evidenceStatus"] = manifest?.status === "available"
   ? "available"
   : manifest?.status === "partial" ? "partial"
@@ -108,13 +122,21 @@ export const createPublicationEvaluationRecord = (input: {
   videoPackageId: identity.videoPackageId,
   publishTransactionId: identity.publishTransactionId,
   publishedVideoId: identity.youtubeVideoId,
+  contentBuildId: identity.contentBuildId,
+  videoPackageId: identity.videoPackageId,
+  publishTransactionId: identity.publishTransactionId,
+  approvedSnapshotId: identity.approvedSnapshotId,
   baselineSnapshotId: input.baselineSnapshotId || null,
   comparisonSnapshotId: dataset.snapshotId,
   approvedSnapshotHash: identity.approvedSnapshotHash,
   projectAssociationStatus: identity.projectAssociationStatus,
   selectedVariantAssetIds: [...identity.selectedVariantAssetIds],
   correlationId: identity.correlationId,
-  sourceRecordIds: [identity.publishTransactionId],
+  sourceOutcomeIds: publicationOutcomes.map((outcome) => outcome.id),
+  sourceRecordIds: [identity.publishTransactionId, ...publicationOutcomes.map((outcome) => outcome.id)],
+  traceIds: [...new Set(publicationOutcomes.map((outcome) => outcome.traceId))],
+  assetIds: [...identity.selectedVariantAssetIds],
+  analyticsCheckpointIds,
   selectedWindow: evidence.selectedWindow,
   comparabilityStatus: input.comparabilityStatus || "unknown",
   evidenceStatus,
