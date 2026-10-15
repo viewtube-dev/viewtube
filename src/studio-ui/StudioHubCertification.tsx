@@ -86,7 +86,7 @@ export const StudioHubCertification: React.FC = () => {
               <StudioIconButton label="Confirm" tone="success" icon={<Check size={18} />} />
             </div>
             <StudioSplitLeftButton data-vt-control-level="l1" sizeVariant="compact" heightVariant="28" icon={<Sparkles size={14} />}>Generate · 28px</StudioSplitLeftButton>
-            <SplitLeftButton level="l1" tone="success" icon={<Link2 size={22} />}>Connect Channel</SplitLeftButton>
+            <StudioSplitLeftButton data-vt-control-level="l1" tone="success" icon={<Link2 size={22} />}>Connect Channel</StudioSplitLeftButton>
           </SubToolboxGrid>
         </SubToolboxSection>
       </SubToolboxStack>
