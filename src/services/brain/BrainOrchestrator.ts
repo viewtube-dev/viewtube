@@ -423,6 +423,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   }
   context = buildBrainContextPack({
    channelId: input.channelId,
+   capabilityIds,
    systemPrompt: input.systemPrompt,
    snapshot: input.snapshot,
    recentTurns: input.recentTurns || [],
