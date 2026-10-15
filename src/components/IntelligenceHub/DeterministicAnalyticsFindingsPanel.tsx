@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import type { CanonicalIntelligenceEvidenceBundle } from "../../services/analytics-canon"
 import { buildCurrentCanonicalAnalyticsInsights } from "../../services/brain/CurrentCanonicalAnalyticsInsights"
 import {
@@ -6,6 +6,9 @@ import {
  presentAnalyticsFindings,
  recordAnalyticsRecommendationEvent,
 } from "../../services/brain/AnalyticsIntelligenceWorkflow"
+import { createViewTubeActionPacket, persistViewTubeActionPacket } from "../../services/viewTubeToolChains"
+import { recordAlgorithmIntelligenceEvent, listAlgorithmIntelligenceEvents } from "../../services/brain/AlgorithmIntelligenceEventLedger"
+import { hydrateBrainIntelligenceFromPersistence, persistBrainIntelligence } from "../../services/brain/BrainIntelligencePersistence"
 
 const number = (value: number | null) => value === null
  ? "Not defined"
@@ -22,6 +25,20 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
  const [expectedDirection, setExpectedDirection] = useState<"increase" | "decrease" | "observe">("observe")
  const [evaluationWindow, setEvaluationWindow] = useState<"7d" | "28d" | "90d" | "365d">("28d")
  const [proposalStatus, setProposalStatus] = useState<string | null>(null)
+ const [pendingRecommendation, setPendingRecommendation] = useState<ReturnType<typeof buildAnalyticsRecommendationAction>>(null)
+ const [persistenceStatus, setPersistenceStatus] = useState("Checking durable event storage…")
+ const [actionPacketId, setActionPacketId] = useState<string | null>(null)
+
+ useEffect(() => {
+  if (!evidence?.channelId) return
+  let active = true
+  hydrateBrainIntelligenceFromPersistence(evidence.channelId).then((result) => {
+   if (active) setPersistenceStatus(result ? "Server persistence connected" : "Sign in to sync this channel event history")
+  }).catch(() => {
+   if (active) setPersistenceStatus("Server persistence unavailable; local cache retained")
+  })
+  return () => { active = false }
+ }, [evidence?.channelId])
  const result = useMemo(() => {
   if (!evidence?.channelId) return { rawFindings: [], findings: [], limitations: ["Resolve a channel-scoped canonical snapshot to calculate findings."] }
   const current = buildCurrentCanonicalAnalyticsInsights({
@@ -63,10 +80,68 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
   }
   try {
    recordAnalyticsRecommendationEvent(recommendation)
-   setProposalStatus(`Proposed only: ${recommendation.id}. Saved to the existing browser-local Algorithm Intelligence event ledger; not approved or executed.`)
+   setPendingRecommendation(recommendation)
+   setActionPacketId(null)
+   setProposalStatus(`Proposal recorded: ${recommendation.id}. It is not approved or executed. Use the explicit approval button below to create the canonical ActionPacket handoff to Projects.`)
    setProposedAction("")
+   void persistBrainIntelligence({ channelId: recommendation.channelId, events: listAlgorithmIntelligenceEvents({ channelId: recommendation.channelId }) })
+    .then((result) => setPersistenceStatus(result ? "Proposal synced to server-side Brain event storage" : "Proposal is local-only until this channel is signed in and connected"))
+    .catch(() => setPersistenceStatus("Server sync failed; proposal remains in local recovery cache"))
   } catch {
-   setProposalStatus("Proposal was not recorded. Browser-local event storage may be unavailable.")
+   setProposalStatus("Proposal was not recorded. Browser storage may be unavailable.")
+  }
+ }
+
+ const approveAndHandoff = async () => {
+  const recommendation = pendingRecommendation
+  if (!recommendation) return
+  try {
+   const packet = createViewTubeActionPacket({
+    sourceToolId: "ai-brain",
+    sourceKind: "brain",
+    payloadKind: "project",
+    title: "Creator-approved analytics action",
+    summary: recommendation.action,
+    payload: {
+     schemaVersion: 1,
+     recommendation,
+     approval: { status: "creator-approved-for-project-review", approvedAt: new Date().toISOString() },
+     externalMutationApproved: false,
+     publishingApproved: false,
+    },
+    projectId: recommendation.projectId,
+    contentBuildId: recommendation.contentBuildId,
+    channelId: recommendation.channelId,
+    videoId: recommendation.videoId,
+    evidence: recommendation.evidenceRefs,
+    provenance: [...recommendation.findingIds, ...recommendation.baselineSnapshotIds],
+    suggestedTargets: ["project-calendar", "video-manager"],
+   })
+   persistViewTubeActionPacket(packet)
+   recordAlgorithmIntelligenceEvent({
+    id: `analytics-creator-approval:${recommendation.id}`,
+    channelId: recommendation.channelId,
+    projectId: recommendation.projectId,
+    videoId: recommendation.videoId,
+    kind: "CREATOR_APPROVAL_RECORDED",
+    sourceSystem: "decision",
+    sourceId: recommendation.id,
+    recommendationId: recommendation.id,
+    actionPacketId: packet.id,
+    parentEventIds: [`analytics-recommendation:${recommendation.id}`],
+    evidenceIds: recommendation.evidenceRefs,
+    confidence: "medium",
+    title: "Creator approved analytics action for Project review",
+    summary: "Creator explicitly approved an internal Project/ActionPacket handoff; external publishing and external mutations remain unapproved.",
+    evaluationTargets: [{ metric: recommendation.metric, direction: recommendation.expectedDirection === "observe" ? "inspect" : recommendation.expectedDirection, baselineValue: recommendation.baselineValue, windowHours: Number(recommendation.evaluationWindow.replace("d", "")) * 24 }],
+    metadata: { recommendationId: recommendation.id, approvalScope: "internal-project-handoff-only", externalMutationApproved: false, publishingApproved: false },
+   })
+   setActionPacketId(packet.id)
+   setProposalStatus(`Creator approval recorded. ActionPacket ${packet.id} was sent through the canonical handoff inbox to Projects. This does not publish or modify external YouTube state.`)
+   const durable = await persistBrainIntelligence({ channelId: recommendation.channelId, events: listAlgorithmIntelligenceEvents({ channelId: recommendation.channelId }) })
+   setPersistenceStatus(durable ? "Approval and recommendation synced to server-side Brain event storage" : "Approval saved locally; sign in and connect this channel for server sync")
+  } catch (error) {
+   setProposalStatus(`Approval/handoff failed: ${error instanceof Error ? error.message : String(error)}`)
   }
  }
 
@@ -115,7 +190,8 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
    </div>
    <form onSubmit={createProposal} className="border-t-[3px] border-black bg-[#E5FAFF] p-4">
     <h4 className="text-sm font-black uppercase">Propose a creator-approved action</h4>
-    <p className="mt-1 text-xs font-bold text-black/65">This records a proposal only. It does not execute the action or silently create/modify a Project.</p>
+    <p className="mt-1 text-xs font-bold text-black/65">First record a proposal. Then explicitly approve it for an internal ActionPacket handoff to Projects. This approval does not authorize publishing or external YouTube changes.</p>
+    <p className="mt-2 text-[10px] font-black uppercase" role="status">Event storage: {persistenceStatus}</p>
     <div className="mt-3 grid gap-3 md:grid-cols-2">
      <label className="block text-[10px] font-black uppercase">Evidence finding
       <select required value={selectedFindingId} onChange={(event) => setSelectedFindingId(event.target.value)} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold">
@@ -145,6 +221,8 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
     </div>
     <button type="submit" disabled={result.findings.length === 0} className="mt-3 min-h-10 border-2 border-black bg-black px-4 py-2 text-xs font-black uppercase text-white disabled:cursor-not-allowed disabled:opacity-40">Record proposed action</button>
     {proposalStatus && <p role="status" className="mt-3 border-2 border-black bg-white p-3 text-xs font-bold">{proposalStatus}</p>}
+    {pendingRecommendation && !actionPacketId && <button type="button" onClick={() => void approveAndHandoff()} className="mt-3 min-h-10 border-2 border-black bg-[#CCFF00] px-4 py-2 text-xs font-black uppercase">Approve &amp; send to Projects</button>}
+    {actionPacketId && <p className="mt-3 break-words border-2 border-black bg-white p-3 text-xs font-bold">ActionPacket ID: {actionPacketId}</p>}
    </form>
    {result.limitations.length > 0 && (
     <details className="border-t-[3px] border-black bg-[#FFF9D9] p-4 text-xs">
