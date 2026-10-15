@@ -103,3 +103,16 @@ describe("buildBrainEvidenceQuality", () => {
   expect(result.limitations).toContain("Canonical evidence belongs to a different channel than the active Brain task.")
  })
 })
+
+
+ it("scores only the task-selected datasets instead of penalizing unrelated missing domains", () => {
+  const result = buildBrainEvidenceQuality(evidenceBundle({
+   requestedSectionIds: ["executive-summary"],
+  }), { expectedChannelId: "channel-1" })
+
+  expect(result.requestedSectionIds).toEqual(["executive-summary"])
+  expect(result.evaluatedDatasetIds).toEqual(["videos"])
+  expect(result.coverageRatio).toBe(1)
+  expect(result.confidence).toBe("high")
+  expect(result.missingness.unavailableDatasetIds).toEqual([])
+ })
