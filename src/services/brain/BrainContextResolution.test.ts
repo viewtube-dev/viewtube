@@ -9,7 +9,7 @@ describe("Brain context resolution", () => {
    "\nCREATOR STYLE\n" + "s".repeat(120),
    "\nACTIVE PROJECT CONTEXT\n" + "p".repeat(120),
    "\nCONTENT GENERATION TASK\nDraft a title.",
-  ], { userText: "Write a title for my video", maximumCharacters: 560 })
+  ], { userText: "Write a title for my video", maximumCharacters: 400 })
   expect(result.selectedSectionIds).toContain("creator_style")
   expect(result.selectedSectionIds).not.toContain("channel_evidence")
   expect(result.text).toContain("CREATOR STYLE")
