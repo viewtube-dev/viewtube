@@ -1,7 +1,8 @@
-import type {
- CanonicalIntelligenceDatasetManifest,
- CanonicalIntelligenceDatasetStatus,
- CanonicalIntelligenceEvidenceBundle,
+import {
+ INTELLIGENCE_SECTION_DATASETS,
+ type CanonicalIntelligenceDatasetManifest,
+ type CanonicalIntelligenceDatasetStatus,
+ type CanonicalIntelligenceEvidenceBundle,
 } from "../analytics-canon"
 
 export type BrainEvidenceEpistemicState =
@@ -32,6 +33,8 @@ export interface BrainEvidenceQualityReport {
  sourceSnapshotId: string
  channelId: string | null
  selectedWindow: CanonicalIntelligenceEvidenceBundle["selectedWindow"]
+ requestedSectionIds: string[]
+ evaluatedDatasetIds: string[]
  scopeMatch: BrainEvidenceScopeMatch
  confidence: BrainEvidenceConfidence
  coverageRatio: number
@@ -80,7 +83,7 @@ const confidenceFor = (input: {
  staleCount: number
  failedCount: number
 }): BrainEvidenceConfidence => {
- if (input.scopeMatch === "mismatch") return "insufficient"
+ if (input.scopeMatch === "mismatch" || input.scopeMatch === "unscoped") return "insufficient"
  if (input.coverageRatio <= 0) return "insufficient"
  if (
   input.coverageRatio >= 0.8
@@ -102,7 +105,16 @@ export const buildBrainEvidenceQuality = (
  bundle: CanonicalIntelligenceEvidenceBundle,
  options: { expectedChannelId?: string | null } = {},
 ): BrainEvidenceQualityReport => {
- const datasets: BrainEvidenceDatasetQuality[] = bundle.datasets.map((dataset) => ({
+ const requestedSectionIds = [...bundle.requestedSectionIds]
+ const relevantDatasetIds = new Set(
+  requestedSectionIds.flatMap((sectionId) => [...(INTELLIGENCE_SECTION_DATASETS[sectionId] || [])]),
+ )
+ // Fitness is calculated over the datasets selected for this task, not every
+ // unrelated dataset in the canonical catalog.
+ const relevantManifests = requestedSectionIds.length && relevantDatasetIds.size
+  ? bundle.datasets.filter((dataset) => relevantDatasetIds.has(dataset.id))
+  : bundle.datasets
+ const datasets: BrainEvidenceDatasetQuality[] = relevantManifests.map((dataset) => ({
   datasetId: dataset.id,
   status: dataset.status,
   epistemicState: epistemicStateFor(dataset.status),
@@ -148,6 +160,8 @@ export const buildBrainEvidenceQuality = (
   sourceSnapshotId: bundle.snapshotId,
   channelId: bundle.channelId,
   selectedWindow: bundle.selectedWindow,
+  requestedSectionIds,
+  evaluatedDatasetIds: datasets.map((dataset) => dataset.datasetId),
   scopeMatch,
   confidence: confidenceFor({
    coverageRatio,

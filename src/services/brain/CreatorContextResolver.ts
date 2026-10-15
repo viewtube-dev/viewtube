@@ -131,6 +131,12 @@ export const resolveCreatorContext = async (
   && (!requestedProjectId || input.project.id === requestedProjectId)
   ? input.project
   : null
+ // Visible UI context must explicitly identify the active project when a project
+ // ID is requested; stale or unscoped UI context cannot fill canonical gaps.
+ const visibleContextProjectId = cleanId(input.visibleContext?.projectId as string | null | undefined)
+ const visibleContextMatchesProject = !requestedProjectId
+  || !input.visibleContext
+  || visibleContextProjectId === requestedProjectId
  const projectId = requestedProjectId || cleanId(canonicalProject?.id)
  const linkedContentBuild = canonicalProject?.contentBuildId && dependencies.getContentBuild
   ? dependencies.getContentBuild(canonicalProject.contentBuildId)
@@ -142,7 +148,7 @@ export const resolveCreatorContext = async (
     projectId,
     project: canonicalProject,
     contentBuild: linkedContentBuild,
-    visibleContext: input.visibleContext,
+    visibleContext: visibleContextMatchesProject ? input.visibleContext : null,
     artifactRefs: evidenceRefs,
    })
   : null
@@ -152,7 +158,9 @@ export const resolveCreatorContext = async (
    ? "canonical_project_content_build" as const
    : canonicalProject
     ? "canonical_project" as const
-    : "visible_context" as const
+    : visibleContextMatchesProject && input.visibleContext
+     ? "visible_context" as const
+     : null
   : null
 
  return {
