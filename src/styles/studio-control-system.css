@@ -334,7 +334,6 @@ button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-l
   line-height: 1;
 }
 
-
 /* Canonical production buttons: both default to the ViewTube 44px control height. */
 button[data-vt-studio-control="true"] {
   box-sizing: border-box;
@@ -376,7 +375,6 @@ button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-sp
   line-height: .86;
   white-space: normal;
 }
-
 
 /* Canonical split-left anatomy: square rail, truly centered icon, readable
    label type, and no clipping from the generic oversized button typography. */
@@ -453,7 +451,6 @@ button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-
   }
 }
 
-
 /* Canonical typography contract shared with StudioButton.
    Split-left labels inherit family, size, weight, line-height, tracking and stroke.
    Only spacing may adapt on narrow screens; text size is not independently scaled. */
@@ -475,7 +472,6 @@ button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-
   font-weight: 1000;
   letter-spacing: -.025em;
 }
-
 
 /* Canonical Studio Hub text fields — 44px controls use 38px type; 28px controls use 24px.
    Primitive 20/21 own the editable control; 137/138 add only the label overlay. */
@@ -572,8 +568,6 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
 
-
-
 /* Canonical 09/V2 Legend Multi dropdown, translated into the shared Studio token contract. */
 .vt-studio-legend-multi {
   --vt-legend-a: var(--pair-a, #36e0f6);
@@ -655,7 +649,6 @@ textarea[data-vt-studio-control="true"][data-size="small"] {
 @media (max-width: 767px) { .vt-studio-legend-menu { max-height: min(280px, 45vh); } }
 @media (prefers-reduced-motion: reduce) { .vt-studio-legend-menu, .vt-studio-legend-chevron { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 
-
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
@@ -706,7 +699,6 @@ button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"]
  .vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:minmax(0,1fr); }
 }
 
-
 /* Canonical library defaults: 44px standard / 28px compact. */
 [data-vt-studio-control] { --vt-studio-control-radius:8px; --vt-studio-hover-duration:150ms; --vt-studio-click-duration:300ms; }
 [data-vt-studio-control][data-height-variant="44"],[data-vt-studio-control][data-size="standard"] { --vt-studio-control-radius:8px; }
@@ -722,7 +714,6 @@ button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [
 button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon],button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail]>svg { width:36px;height:36px;display:grid;place-items:center;margin:auto; }
 button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon] svg { width:36px;height:36px;stroke-width:2; }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-button-icon] svg,button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] svg { stroke-width:1.65; }
-
 
 /* Canonical text-field color/focus/caret behavior.
    Primary = module pair A; secondary = module pair B.
@@ -797,7 +788,6 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count { min-width:16px; height:16px; padding:0 3px; border-width:1.5px; border-radius:4px; font-size:9px; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron { width:12px; height:12px; stroke-width:2; }
 
-
 /* Dropdown size ratios: preserve the same relative control geometry in both sizes.
    Compact check marks and row spacing scale with the 28px trigger rather than staying 44px-sized. */
 .vt-studio-legend-multi { min-width: 0; }
@@ -835,7 +825,6 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
   margin-top: 2px;
   padding: 2px 5px;
 }
-
 
 /* Canonical Studio Controls ownership: migrated switch, choice, and word-toggle primitives. */
 /* Canonical 44px control family — ratios mirror the supplied reference specimen. */
@@ -875,8 +864,6 @@ button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-r
 .vt-studio-44-word-toggle.is-black-indicator button.is-active{color:#fff}
 .vt-studio-44-word-toggle.is-white-indicator button.is-active{color:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
 @media(prefers-reduced-motion:reduce){.vt-studio-44-switch,.vt-studio-44-handle,.vt-studio-44-choice,.vt-studio-44-choice span,.vt-studio-44-choice svg,.vt-studio-44-word-handle{transition:none!important;animation:none!important}}
-
-
 
 /* The choice family is not a raised action button; keep its square/track geometry flat. */
 button.vt-studio-44-switch,
@@ -942,7 +929,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   transform: none !important;
   box-shadow: none !important;
 }
-
 
 /* Prevent the word-toggle catalog specimens from competing for horizontal space. */
 .vt-complete-catalog .vt-catalog-control-variants.is-word-toggle-44 {
@@ -1084,8 +1070,6 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   line-height: 1.05;
 }
 
-
-
 /* Final canonical size typography for native Studio text fields.
    Keep typography and text-stroke proportional to the 44px / 28px component contract. */
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
@@ -1212,7 +1196,6 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   letter-spacing: -.035em !important;
 }
 
-
 /* Preserve readable paragraph rhythm while textareas share the size-specific font contract. */
 textarea[data-vt-studio-control="true"] { line-height: 1.05 !important; }
 textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05 !important; }
@@ -1304,7 +1287,6 @@ textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05
   top: -3px !important;
   transform: translateY(-50%) scale(.75) !important;
 }
-
 
 /* Canonical text-field stroke contract (reference-matched).
    Keep text fill/stroke coupled through currentColor, retain the inline accent
@@ -1542,251 +1524,12 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   font-size: 13px !important;
 }
 
+/* Canonical Studio Controls contract (single authoritative tail).
+   Earlier sections define component anatomy; this section owns final field,
+   action-button, split-left, and word-toggle geometry. Keep it last so each
+   component has one predictable final state without selector-by-selector patches. */
 
-/* Phase 1: canonical editable text must never inherit decorative button/indicator text strokes. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  -webkit-text-stroke: 0 !important;
-  text-stroke: 0 !important;
-  color: #000 !important;
-  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  -webkit-text-stroke: 0 !important;
-  text-stroke: 0 !important;
-  color: #000 !important;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
-  outline: 1.5px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 0 !important;
-}
-
-
-/* Split-left size/state cascade fix (2026-10-14).
-   The earlier canonical base rule hard-coded standard 3px/8px geometry and the
-   selected rule added a 3px outer ring. Scope dimensions by data-size and use
-   the same compact geometry in default, hover, active and selected states. */
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="standard"],
-button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) {
-  border: 3px solid #000 !important;
-  border-radius: 6px !important;
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] {
-  border: 2px solid #000 !important;
-  border-radius: 4px !important;
-  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="standard"] > [data-vt-studio-split-rail],
-button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) > [data-vt-studio-split-rail] {
-  border-right: 3px solid #000 !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-split-rail],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] > [data-vt-studio-split-rail] {
-  border-right: 2px solid #000 !important;
-}
-/* Selected styling changes state/color only; it must not add a second stroke. */
-button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] {
-  outline: none !important;
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"][aria-pressed="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"][aria-pressed="true"] {
-  border: 2px solid #000 !important;
-  border-radius: 4px !important;
-  outline: none !important;
-  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
-button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled) {
-  border-width: var(--vt-split-stroke, 3px) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] {
-  --vt-split-stroke: 2px;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="standard"],
-button[data-vt-studio-control="true"][data-split-left="true"]:not([data-size="compact"]):not([data-size="28"]) {
-  --vt-split-stroke: 3px;
-}
-
-
-/* StudioButton emits data-height-variant (not data-size); use the actual DOM contract. */
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] {
-  --vt-split-stroke: 3px;
-  border: 3px solid #000 !important;
-  border-radius: 6px !important;
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] {
-  --vt-split-stroke: 2px;
-  border: 2px solid #000 !important;
-  border-radius: 4px !important;
-  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] > [data-vt-studio-split-rail] {
-  border-right: 3px solid #000 !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail] {
-  border-right: 2px solid #000 !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"][aria-pressed="true"] {
-  border: 3px solid #000 !important;
-  border-radius: 6px !important;
-  outline: none !important;
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"][aria-pressed="true"] {
-  border: 2px solid #000 !important;
-  border-radius: 4px !important;
-  outline: none !important;
-  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
-}
-
-
-/* 2026-10-14 follow-up: single source of truth for text-field typography and motion. */
-[data-vt-studio-control][data-vt-studio-field-kind="text-input"],
-[data-vt-studio-control][data-vt-studio-field-kind="textarea"] {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-weight: 1000 !important;
-  font-size: 38px !important;
-  line-height: .86 !important;
-  letter-spacing: -.035em !important;
-  -webkit-text-stroke: .5px currentColor !important;
-  caret-color: var(--vt-studio-control-accent) !important;
-}
-[data-vt-studio-control][data-vt-studio-field-kind="text-input"][data-size="compact"],
-[data-vt-studio-control][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  font-size: 24px !important;
-  line-height: .86 !important;
-}
-[data-vt-studio-control][data-vt-studio-field-kind="textarea"] {
-  width: 100%;
-  display: block;
-  box-sizing: border-box;
-  resize: vertical;
-}
-[data-vt-studio-control][data-vt-studio-field-kind="textarea"]::placeholder,
-[data-vt-studio-control][data-vt-studio-field-kind="text-input"]::placeholder {
-  font: inherit;
-  font-weight: 1000;
-  letter-spacing: inherit;
-  -webkit-text-stroke: .5px currentColor;
-  opacity: 1;
-}
-
-/* Canonical interaction geometry: shadow, hover travel, and click travel are independent. */
-[data-vt-studio-control] {
-  --vt-studio-control-shadow: 3px;
-  --vt-studio-control-hover-offset: 1.5px;
-}
-[data-vt-studio-control][data-size="compact"] {
-  --vt-studio-control-shadow: 1.5px;
-  --vt-studio-control-hover-offset: .75px;
-}
-button[data-vt-studio-control]:not(:disabled) {
-  transition-duration: 150ms, 150ms, 300ms, 150ms;
-}
-button[data-vt-studio-control]:hover:not(:disabled) {
-  transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px));
-  box-shadow: var(--vt-studio-control-hover-offset, 1.5px) var(--vt-studio-control-hover-offset, 1.5px) 0 0 var(--vt-studio-control-shadow-color);
-}
-button[data-vt-studio-control]:active:not(:disabled) {
-  transform: translate(var(--vt-studio-control-shadow, 3px), var(--vt-studio-control-shadow, 3px));
-  box-shadow: none;
-}
-
-
-/* 2026-10-14: text-field defaults and Android Chrome composition/caret mitigation. */
-[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  font-size: 18px !important;
-  line-height: 1.25 !important;
-  -webkit-text-stroke: 0 !important;
-  text-decoration: none !important;
-  -webkit-text-decoration: none !important;
-  caret-shape: block;
-  -webkit-appearance: none;
-  appearance: none;
-}
-[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  font-size: 14px !important;
-  line-height: 1.25 !important;
-}
-[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder {
-  font-size: inherit !important;
-  line-height: inherit !important;
-  -webkit-text-stroke: 0 !important;
-}
-[data-vt-studio-control="true"]:is(input, textarea) {
-  text-decoration: none !important;
-  -webkit-text-decoration: none !important;
-  caret-shape: block;
-  -webkit-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
-}
-[data-vt-studio-control="true"]:is(input, textarea):focus,
-[data-vt-studio-control="true"]:is(input, textarea):focus-visible {
-  text-decoration: none !important;
-  -webkit-text-decoration: none !important;
-  -webkit-text-stroke: 0 !important;
-  outline-offset: 0 !important;
-}
-/* Public CSS knobs: consumers can tune active-handle inset/width without replacing the primitive. */
-.vt-studio-44-word-toggle {
-  --vt-word-toggle-handle-inset: 2.75px;
-  --vt-word-toggle-handle-width-scale: 1;
-  --vt-word-toggle-word-gap: 0px;
-}
-.vt-studio-44-word-toggle.is-size-28 {
-  --vt-word-toggle-handle-inset: 2px;
-}
-.vt-studio-44-word-toggle > button {
-  margin-inline: calc(var(--vt-word-toggle-word-gap, 0px) / 2);
-}
-.vt-studio-44-word-handle {
-  left: var(--vt-word-toggle-handle-left, 2.75px);
-  width: calc(var(--vt-word-toggle-handle-width, 16px) * var(--vt-word-toggle-handle-width-scale, 1));
-}
-
-
-/* 2026-10-14: Studio text area type size and mobile composition cleanup.
-   These rules are deliberately textarea-only: input typography remains governed
-   by the standard/compact input contract. */
-textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  font-size: 18px !important;
-  line-height: 1.25 !important;
-  -webkit-text-stroke: 0 !important;
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-  caret-color: var(--pair-a, #36e0f6) !important;
-  caret-shape: block;
-  -webkit-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
-}
-textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  font-size: 14px !important;
-  line-height: 1.3 !important;
-}
-/* Chrome/Android can apply native spellcheck/composition decoration while an
-   IME is composing. Disable decoration on the field itself where CSS permits;
-   the component also opts out of spellcheck/autocorrect by default. */
-textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::spelling-error,
-textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::grammar-error {
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-}
-
-
-/* Field contract correction — authoritative final rules.
-   Text inputs use size-based height/type; textareas intentionally use a shared
-   92px minimum height and may use a component-specific text size. */
+/* 1. Editable text fields: black, unstroked text; pair-A fill/caret/inset stroke. */
 [data-vt-studio-control="true"]:is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   textarea
@@ -1800,26 +1543,59 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::g
   border-radius: var(--vt-studio-control-radius, 6px) !important;
   background-color: color-mix(in srgb, var(--vt-field-color-1) 50%, transparent) !important;
   background-image: none !important;
-  color: var(--vt-field-color-1) !important;
-  -webkit-text-fill-color: var(--vt-field-color-1) !important;
-  -webkit-text-stroke: .5px var(--vt-field-color-1) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: 0 !important;
+  text-stroke: 0 !important;
   caret-color: var(--vt-field-color-1) !important;
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
   outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 [data-vt-studio-control="true"][data-size="standard"]:is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"])
-) { min-height: 44px; font-size: 38px; }
+) {
+  min-height: 44px;
+  font-size: 38px;
+  line-height: .86;
+}
 
 [data-vt-studio-control="true"][data-size="compact"]:is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"])
-) { min-height: 28px; font-size: 24px; }
-
-textarea[data-vt-studio-control="true"][data-size="standard"],
-textarea[data-vt-studio-control="true"][data-size="compact"] {
-  min-height: 92px !important;
+) {
+  min-height: 28px;
   font-size: 24px;
-  line-height: 1.05;
+  line-height: .86;
+}
+
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  display: block;
+  width: 100%;
+  min-height: 92px !important;
+  resize: vertical;
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+}
+
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+
+[data-vt-studio-control="true"]:is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea
+)::placeholder {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+  font: inherit;
+  opacity: 1;
 }
 
 [data-vt-studio-control="true"]:is(
@@ -1831,50 +1607,127 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   textarea
 ):focus-visible {
   background-color: color-mix(in srgb, var(--vt-field-color-1) 15%, transparent) !important;
+  border-color: #000 !important;
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-  border-color: #000 !important;
+  -webkit-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+  caret-color: var(--vt-field-color-1) !important;
   outline: var(--vt-field-outline-stroke) solid var(--vt-field-color-2) !important;
   outline-offset: 0 !important;
   box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-color-1) !important;
 }
 
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::spelling-error,
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::grammar-error {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
 
-/* Recovery correction — canonical button motion and compact split-rail stroke.
-   Keep the hard shadow anchored at the resting offset. Only the button face
-   moves; hover covers half the shadow and active covers it fully. */
-button[data-vt-studio-control="true"] {
-  --vt-studio-control-motion-shadow-x: var(--vt-studio-control-shadow, 3px);
-  --vt-studio-control-motion-shadow-y: var(--vt-studio-control-shadow, 3px);
+/* 2. Action-button motion: the resting hard shadow stays anchored.
+   Hover moves by half the shadow; press moves by the full shadow. */
+button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
+  --vt-studio-control-shadow: 3px;
+  --vt-studio-control-hover-offset: 1.5px;
+  --vt-studio-control-motion-shadow-x: var(--vt-studio-control-shadow);
+  --vt-studio-control-motion-shadow-y: var(--vt-studio-control-shadow);
+  box-sizing: border-box;
   box-shadow: var(--vt-studio-control-motion-shadow-x) var(--vt-studio-control-motion-shadow-y) 0 0 var(--vt-studio-control-shadow-color) !important;
   transform: translate(0, 0);
-  transition: filter 150ms ease-out, transform 150ms ease-out, background-color 150ms ease-out;
+  transition: transform 150ms ease-out, background-color 150ms ease-out;
 }
 
-button[data-vt-studio-control="true"][data-size="compact"] {
-  --vt-studio-control-motion-shadow-x: 1.5px;
-  --vt-studio-control-motion-shadow-y: 1.5px;
+button[data-vt-studio-control="true"][data-size="compact"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger),
+button[data-vt-studio-control="true"][data-height-variant="28"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
+  --vt-studio-control-shadow: 1.5px;
+  --vt-studio-control-hover-offset: .75px;
 }
 
-button[data-vt-studio-control="true"]:hover:not(:disabled) {
-  transform: translate(
-    calc(var(--vt-studio-control-motion-shadow-x) / 2),
-    calc(var(--vt-studio-control-motion-shadow-y) / 2)
-  ) !important;
-  box-shadow: var(--vt-studio-control-motion-shadow-x) var(--vt-studio-control-motion-shadow-y) 0 0 var(--vt-studio-control-shadow-color) !important;
-  transition-duration: 150ms;
+button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger):hover:not(:disabled) {
+  transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px)) !important;
 }
 
-button[data-vt-studio-control="true"]:active:not(:disabled) {
-  transform: translate(
-    var(--vt-studio-control-motion-shadow-x),
-    var(--vt-studio-control-motion-shadow-y)
-  ) !important;
-  box-shadow: var(--vt-studio-control-motion-shadow-x) var(--vt-studio-control-motion-shadow-y) 0 0 var(--vt-studio-control-shadow-color) !important;
-  transition-duration: 300ms;
+button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger):active:not(:disabled) {
+  transform: translate(var(--vt-studio-control-shadow, 3px), var(--vt-studio-control-shadow, 3px)) !important;
 }
 
-button[data-vt-studio-control="true"][data-height-variant="28"][data-split-left="true"] [data-vt-studio-split-rail] {
-  border-right-width: var(--vt-studio-control-stroke, 2px) !important;
+@media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
+    transition: none !important;
+  }
+}
+
+/* 3. Split-left buttons: height variant is the geometry authority.
+   Selected/pressed state changes colors only; it never adds another stroke. */
+button[data-vt-studio-control="true"][data-split-left="true"] {
+  --vt-studio-control-shadow: 3px;
+  --vt-studio-control-hover-offset: 1.5px;
+  border: 3px solid #000 !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  width: 44px;
+  min-width: 44px;
+  height: 100%;
+  border-right: 3px solid #000 !important;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] {
+  --vt-studio-control-shadow: 1.5px;
+  --vt-studio-control-hover-offset: .75px;
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-split-rail],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] > [data-vt-studio-split-rail] {
+  width: 28px;
+  min-width: 28px;
+  border-right-width: 2px !important;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"]:is(:hover, :active, [data-selected="true"], [aria-pressed="true"]) {
+  border-width: var(--vt-studio-control-stroke, 3px) !important;
+  outline: none !important;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"]:is(:hover, :active, [data-selected="true"], [aria-pressed="true"]),
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"]:is(:hover, :active, [data-selected="true"], [aria-pressed="true"]),
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"]:is(:hover, :active, [data-selected="true"], [aria-pressed="true"]) {
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent) !important;
+}
+
+button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-split-rail],
+button[data-vt-studio-control="true"][data-split-left="true"][data-size="28"] > [data-vt-studio-split-rail] {
+  border-right-width: 2px !important;
+}
+
+/* 4. Word-toggle sizing controls remain configurable at the component boundary. */
+.vt-studio-44-word-toggle {
+  --vt-word-toggle-handle-inset: 2.75px;
+  --vt-word-toggle-handle-width-scale: 1;
+  --vt-word-toggle-word-gap: 0px;
+}
+
+.vt-studio-44-word-toggle.is-size-28 {
+  --vt-word-toggle-handle-inset: 2px;
+}
+
+.vt-studio-44-word-toggle > button {
+  margin-inline: calc(var(--vt-word-toggle-word-gap, 0px) / 2);
+}
+
+.vt-studio-44-word-handle {
+  left: var(--vt-word-toggle-handle-left, 2.75px);
+  width: calc(var(--vt-word-toggle-handle-width, 16px) * var(--vt-word-toggle-handle-width-scale, 1));
 }
