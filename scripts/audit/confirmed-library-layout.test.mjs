@@ -180,6 +180,20 @@ test("compact Studio button shadow and typography tokens match the effective con
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
 });
 
+test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
+  const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
+  const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(controls, /iconSizeVariant = "large"/);
+  assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
+  assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
+  assert.match(catalog, /1\.5px compact button shadow/);
+  assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
+  assert.match(catalog, /44px switch\/choice rectangular corners and the standard word-toggle use reference-specific 7\.333px radii/);
+  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
+});
+
 test("global defaults use a compact collapsed panel with an explicit expand affordance", () => {
   assert.ok(catalog.includes('className="vt-confirmed-defaults-details"'));
   assert.ok(catalog.includes("Show full defaults and exceptions"));
