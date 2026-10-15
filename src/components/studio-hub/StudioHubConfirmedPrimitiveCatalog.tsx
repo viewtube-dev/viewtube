@@ -15,6 +15,8 @@ import {
   StudioTextArea,
   StudioTextInput,
   StudioWordToggle,
+  StudioSpectrumTag,
+  STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
 import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"
 import "./studio-hub-primitive-catalogs.css"
@@ -270,6 +272,33 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
             { value: "shorts", label: "SHORTS" },
           ]}
         />
+      </div>
+    </Family>
+    <Family
+      title="Global Rules Exceptions · Vault Spectrum Tags"
+      nonDefaultSettings={[
+        "This family is intentionally 15px high, not 44px / 28px; it is donor-backed dense metadata, not a general-purpose control.",
+        "The border and text use the same alphabetical ViewTube spectrum color; the fill mixes that color with white at 35%.",
+        "Alphabetical color is resolved by the first A–Z letter through getAlphabeticalSpectrumColor and the canonical 12-stop palette.",
+        "Selected tags move upward 1px and use the four-layer white/spectrum glow; reduced-motion disables the movement.",
+        "The exception is explicitly registered in STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS so generic global sizing must not normalize it."
+      ]}
+      provenance={<Provenance
+        primitive="StudioSpectrumTag"
+        tsx="src/studio-ui/primitives/StudioControls.tsx"
+        css="src/styles/studio-control-system.css"
+        tokens={`H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.vaultSpectrumTag.height}px · border ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.vaultSpectrumTag.borderWidth}px · radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.vaultSpectrumTag.radius}px · ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.vaultSpectrumTag.fontSize}px / weight ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.vaultSpectrumTag.fontWeight} · fill 35% white mix`}
+        imports={["src/components/subtoolbox/VaultAssetModule.tsx", "src/studio-ui/primitives/StudioControls.tsx"]}
+      />}
+    >
+      <p className="vt-confirmed-defaults-summary">Intentional exception to global control geometry · exact Vault asset-module chip styling</p>
+      <div className="vt-confirmed-variant is-full-row" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+        <span>Default</span>
+        <StudioSpectrumTag label="APPLE" />
+        <StudioSpectrumTag label="CAMERA" />
+        <StudioSpectrumTag label="YOUTUBE" />
+        <span>Selected</span>
+        <StudioSpectrumTag label="DESIGN" selected />
       </div>
     </Family>
     <ConfirmedStepperFamily />
