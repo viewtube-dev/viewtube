@@ -131,6 +131,10 @@ describe("deterministic analytics insights", () => {
    baseline: { bundle: base, period: period("Previous", "not-a-date", "2026-09-28") },
    current: { bundle: current, period: period("Current", "2026-09-16", "2026-10-13") },
   }).blockedReasons).toContain("Period boundaries must be valid YYYY-MM-DD dates.")
+  expect(buildPeriodComparisonInsights({
+   baseline: { bundle: base, period: period("Previous", "2026-08-19", "2026-09-15") },
+   current: { bundle: current, period: period("Current", "2026-09-16", "2026-10-12") },
+  }).blockedReasons).toContain("Explicit period lengths do not match the selected canonical reporting window.")
  })
 
  it("fails closed for partial, stale, missing, or non-finite metric evidence", () => {
