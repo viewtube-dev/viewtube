@@ -1185,6 +1185,10 @@ button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button {
   overflow: visible;
   isolation: isolate;
 }
+button[data-vt-studio-icon-button="true"]:focus-visible {
+  outline: var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  outline-offset: var(--vt-studio-control-focus-outline-offset);
+}
 button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button > [data-vt-studio-button-face] {
   position: relative;
   overflow: visible;
