@@ -265,8 +265,55 @@ test("confirmed stepper standard and compact specimens share one comparison row"
 });
 
 test("confirmed spectrum tag gallery shows 20 production tag specimens across the alphabetic spectrum", () => {
-  assert.match(catalog, /vt-confirmed-spectrum-tag-grid[^]*?StudioSpectrumTag label="APPLE"[^]*?StudioSpectrumTag label="TANGERINE"/);
+  assert.match(catalog, /vt-confirmed-spectrum-tag-grid[^]*?StudioSpectrumTag label="APPLE"[^]*?StudioSpectrumTag label="YUZU"/);
   const tagGrid = catalog.match(/className="vt-confirmed-spectrum-tag-grid"[^]*?<\/div>/)?.[0] ?? "";
   assert.equal((tagGrid.match(/<StudioSpectrumTag\s/g) ?? []).length, 20, "expected 20 canonical StudioSpectrumTag specimens");
   assert.match(styles, /\.vt-confirmed-spectrum-tag-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5, minmax\(0, max-content\)\)/);
+});
+
+
+test("confirmed library includes circle, play-pause, and username composites", () => {
+  assert.match(catalog, /StudioCircleIconButton/);
+  assert.match(catalog, /StudioPlayPauseButton/);
+  assert.match(catalog, /StudioUsernameInput/);
+  assert.match(catalog, /Circle icon · standard V1–V4/);
+  assert.match(catalog, /Circle icon · compact V1–V4/);
+  assert.match(catalog, /Play \/ pause · both sizes/);
+  assert.match(catalog, /Username · both sizes/);
+});
+
+test("settings and source provenance are collapsed by default", () => {
+  assert.match(catalog, /<details className="vt-confirmed-source-details">\s*<summary>Settings \+ source<\/summary>/);
+  assert.match(catalog, /NON-DEFAULT SETTINGS/);
+  assert.match(catalog, /TSX: <code>/);
+  assert.match(catalog, /CSS: <code>/);
+  assert.match(catalog, /Imports:/);
+  assert.match(styles, /\.vt-confirmed-source-details\s*\{/);
+});
+
+test("component labels are one line with a 40ch visual cap", () => {
+  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap[^}]*text-overflow:\s*ellipsis/s);
+  assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
+});
+
+test("confirmed-library textareas span the full available width", () => {
+  assert.match(styles, /\.vt-confirmed-variant:has\(textarea\)[\s\S]*?grid-column:\s*1 \/ -1/);
+  assert.match(styles, /\.vt-confirmed-catalog textarea,[\s\S]*?width:\s*100% !important/);
+});
+
+test("composite controls are exported through the public Studio entry point", () => {
+  const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
+  for (const name of ["StudioCircleIconButton", "StudioPlayPauseButton", "StudioUsernameInput", "StudioCircleIconButtonProps", "StudioPlayPauseButtonProps", "StudioUsernameInputProps"]) {
+    assert.ok(publicIndex.includes(name), `public Studio entry point exports ${name}`);
+  }
+});
+
+test("20 spectrum samples cover all 12 canonical palette stops", () => {
+  const tagGrid = catalog.match(/className="vt-confirmed-spectrum-tag-grid"[^]*?<\/div>/)?.[0] ?? "";
+  const labels = [...tagGrid.matchAll(/<StudioSpectrumTag label="([A-Z]+)"/g)].map(match => match[1]);
+  assert.equal(labels.length, 20);
+  const initials = new Set(labels.map(label => label[0]));
+  for (const initial of ["A", "C", "E", "G", "I", "L", "N", "P", "S", "U", "W", "Y"]) {
+    assert.ok(initials.has(initial), `spectrum gallery includes color-stop sample ${initial}`);
+  }
 });
