@@ -27,7 +27,7 @@ The Confirmed Primitive Library must describe the component that actually render
 |---|---|---|
 | Shared control geometry | Standard 44px / compact 28px; 3px / 2px border; 6px / 4px radius for ordinary buttons and fields | 44px switch/choice rectangular geometry and standard word-toggle use the supplied 7.333px radius; round and pill shapes keep their own geometry |
 | Typography | Inter, weight 1000, uppercase, -0.02em tracking, 0.86 baseline line-height | Single-line inputs are 38px / 24px; textareas are 18px / 14px with multiline line-height and padding |
-| Button shadow / motion | Standard 3px × 3px; compact 1.5px × 1.5px; 150ms general/hover and 300ms click timing | The prominent action is its own fixed 56px family, not a third StudioButton size |
+| Button shadow / motion | Standard 3px × 3px; compact 1.5px × 1.5px; 180ms general/hover and 80ms press timing | The prominent action is its own fixed 56px family, not a third StudioButton size |
 | Icon size | Icon buttons default to large: 38px / 1.9 stroke standard and 24px / 2.0 stroke compact | Current (28px / 18px) and moderate (34px / 22px) are opt-in icon-size API variants, not the default gallery specimen |
 | Focus | Fields show a separate zero-offset secondary-color accent and CSS outline; the prior live audit measured a 3px / 2px accent shadow and 1px computed outline | Buttons currently use their own visible 3px outline with 3px offset; do not describe button focus as the field focus treatment |
 | Dropdown | Legend Multi is a production multi-select with standard/compact trigger geometry | Menu rows/options are not button-press surfaces; the panel may use its own stationary shadow |
@@ -54,7 +54,7 @@ The source regression test `npm run test:confirmed-library-layout` now guards th
 | Stable shadow geometry (target) | Shadow anchor/offset stays fixed; button face moves independently | Target contract; current active-state mismatch is documented in Section 7 and is not certified as fixed |
 | Hover press depth | Move halfway across the declared shadow offset; preserve the shadow anchor | Standard button hover follows this target; the prominent action moves its outer control instead and remains a documented exception |
 | Click press depth | Move the remaining half so the face covers the shadow completely; shadow does not travel with the face | Current active-state rules still move the outer shell and hide the shadow; see Section 7 |
-| Motion timing | Hover 150ms; click 300ms per current size constants | CSS variables/fallbacks now match the constants; execution and browser verification are pending |
+| Motion timing | General/hover 180ms; active press 80ms per current size constants | CSS variables/fallbacks now match the constants; execution and browser verification are pending |
 | Reduced motion | Preserve state feedback while minimizing motion | Must not erase all state hierarchy or affordance |
 
 ## 3. Canonical size contracts
@@ -69,12 +69,12 @@ These values come from `STUDIO_COMPONENT_SIZE_DEFAULTS` in `StudioControls.tsx`.
 | Text size | 38px | 24px |
 | Font weight | 1000 | 1000 |
 | Button shadow X/Y | 3px / 3px | 1.5px / 1.5px |
-| Hover transition | 150ms | 150ms |
+| General/hover transition | 180ms | 180ms |
 | Hover face movement | 1.5px (half of 3px) | 0.75px (half of 1.5px) |
-| Click transition | 300ms | 300ms |
+| Active press transition | 80ms | 80ms |
 | Click face movement | 3px (full offset; covers shadow) | 1.5px (full offset; covers shadow) |
 | Default button icon size | 38px | 24px |
-| Icon stroke | 2.5px | 1.65px |
+| Default large button-icon stroke | 1.9px | 2.0px |
 
 **Resolved in this branch:** The final CSS contract now keeps text-field radius/stroke size-specific, uses a 3px standard / 2px compact split-left divider, and gives placeholder/value text the same primary-color typography at rest. The 44px switch/choice family intentionally follows the supplied `viewtube-control-library-44px.html` geometry rather than the generic button/field radius token.
 
@@ -120,7 +120,7 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 | E-06 | Split-left selected state | Selected state swaps primary/secondary colors only; geometry is unchanged | Final face/rail selectors swap fills without changing border widths, radius, or the stationary shadow | **Implemented; awaiting visual verification** |
 | E-07 | Button typography | Button and split-left labels share the same type contract | The canonical face layer centralizes typography at 38px standard / 24px compact, weight 1000, uppercase and -0.02em tracking; shared tracking tokens now match effective CSS | **Implemented; verify visually** |
 | E-08 | Button radius | Standard 6px, compact 4px | Final action face uses 6px standard / 4px compact; 44px switch and choice shapes use the supplied reference-specific 7.333px rectangular radius | **Implemented; verify effective computed styles** |
-| E-09 | Button shadow and transitions | Fixed shadow anchor; face moves half shadow on hover and full shadow on click | Current CSS keeps the pseudo-shadow stationary during hover, but active moves the outer StudioButton shell and hides that shadow; StudioActionButton also moves its outer shell on hover/active. Timing tokens and CSS now agree at 150ms / 300ms | **Implemented; awaiting automated and rendered verification** |
+| E-09 | Button shadow and transitions | Fixed shadow anchor; face moves half shadow on hover and full shadow on click | Current CSS keeps the pseudo-shadow stationary during hover, but active moves the outer StudioButton shell and hides that shadow; StudioActionButton also moves its outer shell on hover/active. Timing tokens and CSS now agree at 180ms / 80ms | **Implemented; awaiting automated and rendered verification** |
 | E-10 | Switches, radio buttons, checkboxes | Reference-specific 44px geometry and skin variants; selected state changes indicator/fill | Final contract restores 75.68×44 switch tracks, 36.667px handles, 3.667px symmetric insets, 31.68px travel, 44×44 choices, 33×33 radio dots, and explicit black/white/color-swap checkbox marks | **Implemented; awaiting visual verification** |
 | E-11 | Word toggles | 44px default or 28px compact; active handle measures selected word; skin/words/gap/inset may be customized | Dynamic measured handle and inline style are intentional geometry exceptions; CSS/state transitions must be checked for border/radius/motion consistency | **Intentional dynamic-width exception; audit remaining size behavior** |
 | E-12 | Floating-label input/textarea variants | The input family adds a floating-label presentation to the canonical input; the textarea family adds it to the canonical writing surface. Neither creates a second native-control family. | `variant="floating-label"` adds only wrapper/label presentation; native field semantics, typography, selected size geometry, focus, and textarea multiline behavior remain owned by the corresponding family. | **Implemented in this refactor; build, source tests, and browser verification pending** |
@@ -155,7 +155,7 @@ The table distinguishes what is visibly represented in the Confirmed Primitive L
 
 These are deterministic source findings; they are not claims from a rendered browser inspection.
 
-1. **Shared size defaults reconciled in this pass:** compact button shadow is now 1.5px × 1.5px in tokens and effective CSS; shared tracking is -0.02em; CSS timing matches the 150ms hover/general and 300ms click tokens. Regression assertions were added, but have not yet been executed in this session.
+1. **Shared size defaults reconciled in this pass:** compact button shadow is now 1.5px × 1.5px in tokens and effective CSS; shared tracking is -0.02em; CSS timing matches the 180ms hover/general and 80ms active-press tokens. Regression assertions were added, but have not yet been executed in this session.
 2. **Button active-state shadow behavior remains a gap:** StudioButton moves its outer shell and hides the pseudo-shadow on active; StudioActionButton moves the outer action on hover/active and suppresses the shadow on active. The gallery now states the action-button behavior as it is implemented. Do not certify the stable-shadow click target until the CSS and component tests are reconciled.
 3. **Button focus is a family-specific exception:** button focus currently uses a 3px outline with 3px offset for both sizes. Field focus uses a different secondary-color accent/outline stack; the catalog distinguishes these.
 4. **No implicit third size found in current control CSS:** data-size="small" and data-size="action" selectors were not found in the audited stylesheet. StudioActionButton remains a separate fixed 56px family, not a third StudioButton size.
@@ -233,7 +233,7 @@ This section preserves the original source patterns as historical audit evidence
 | Typography diverged from size tokens | Older generic/compact/height-variant rules used competing font sizes | **Resolved in current CSS:** ordinary button faces use the 38px / 24px size contract; stale 32px/10px/36px/22px values were not found in the audited stylesheet | Keep source regression checks |
 | Field radius/stroke overrode size contract | Older field selector used 8px radius and 3px border at both sizes | **Resolved in current CSS:** those override patterns were not found; fields use size-specific 6px/4px radius and 3px/2px stroke tokens | Verify computed styles after consumer CSS |
 | Compact shadow contract mismatch | Token used 1px while the final CSS used 1.5px | **Resolved in this pass:** tokens and effective CSS now both use 1.5px × 1.5px | Run focused test and browser inspection |
-| Transition duration mismatch | Older CSS used 180ms general / 80ms press while tokens used 150ms / 300ms | **Resolved in this pass:** CSS timing variables/fallbacks now use 150ms / 300ms | Run focused test and verify motion in browser |
+| Transition duration mismatch | Older tokens used 150ms / 300ms while effective CSS used 180ms general / 80ms press | **Resolved in this pass:** CSS timing variables/fallbacks and exported tokens now use 180ms / 80ms | Run focused test and verify motion in browser |
 | Active-state shadow moves/disappears | Active rules translate the outer button and hide its pseudo-shadow | **Still open:** this differs from the stable-shadow target contract; current gallery text describes the behavior rather than claiming it is fixed | Reconcile CSS behavior and component tests before certifying tactile interaction |
 | Button focus geometry is shared across sizes | Button focus uses a 3px outline with 3px offset for both sizes | **Known exception / review needed** | Approve/document the common focus ring or define size-derived values without weakening visibility |
 | Implicit third control sizes | Historical `data-size="small"` and `data-size="action"` selectors | **Resolved in current stylesheet:** those selectors were not found; StudioActionButton is a separate fixed 56px component family | Keep the 56px family documented separately |
@@ -251,7 +251,7 @@ Use the current represented-vs-not-represented inventory in Section 6 as the can
 
 ## 13. Evidence status and audit scope
 
-**Verified from current source:** production primitive imports and specimen labels; standard/compact size tokens; compact shadow token/CSS alignment at 1.5px; -0.02em tracking alignment; 150ms / 300ms motion timing alignment; large default icon metrics; component-specific radius and textarea exceptions; dropdown closed initial state; static badge/success preview labeling.
+**Verified from current source:** production primitive imports and specimen labels; standard/compact size tokens; compact shadow token/CSS alignment at 1.5px; -0.02em tracking alignment; 180ms / 80ms motion timing alignment; large default icon metrics; component-specific radius and textarea exceptions; dropdown closed initial state; static badge/success preview labeling.
 
 **Added but not executed in this session:** source regression assertions in `scripts/audit/confirmed-library-layout.test.mjs`, exposed as `npm run test:confirmed-library-layout`. GitHub Actions, test command, typecheck, CSS parser, and production build results must be checked on the pull request.
 
