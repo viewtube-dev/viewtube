@@ -1193,7 +1193,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-icon-current] {
   height: 100%;
   transform-origin: center;
 }
-button[data-vt-studio-icon-button="true"].is-effect-standard[data-icon-active="true"] [data-vt-square-icon-current],
+button[data-vt-studio-icon-button="true"].is-effect-pop[data-icon-active="true"] [data-vt-square-icon-current],
 button[data-vt-studio-icon-button="true"].is-effect-notification[data-icon-active="true"] [data-vt-square-icon-current] {
   animation: vt-studio-square-pop 180ms cubic-bezier(.2,.8,.2,1);
 }
