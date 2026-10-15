@@ -657,3 +657,12 @@ export const adaptAnomalyToAnalyticsFinding = (anomaly: ViewTubeAnomaly): Determ
   ],
  }
 }
+
+
+/** Deterministically adapts an existing anomaly batch without changing detector results. */
+export const adaptAnomaliesToAnalyticsFindings = (
+ anomalies: readonly ViewTubeAnomaly[],
+): DeterministicAnalyticsInsight[] =>
+ anomalies
+  .map(adaptAnomalyToAnalyticsFinding)
+  .sort((left, right) => left.id.localeCompare(right.id))
