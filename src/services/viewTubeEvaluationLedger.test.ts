@@ -140,6 +140,66 @@ describe("outcome evaluation and governed learning lineage", () => {
   expect(listWorkflowCandidates()).toHaveLength(1)
  })
 
+ it("preserves publication and analytics checkpoint lineage through evaluation", () => {
+  const evaluation = createEvaluationRecord({
+   channelId: "channel-a",
+   projectId: "project-a",
+   source: "post-publication",
+   recommendation: "Evaluate selected title variant",
+   evidenceIds: ["snapshot-a:videos:1"],
+   sourceOutcomeIds: ["outcome-a"],
+   sourceRecordIds: ["asset-outcome-a"],
+   traceIds: ["trace-a"],
+   assetIds: ["asset-a"],
+   contentBuildId: "build-a",
+   publishTransactionId: "publish-a",
+   publishedVideoId: "video-a",
+   approvedSnapshotId: "approved-a",
+   approvedSnapshotHash: "sha256:approved-a",
+   analyticsCheckpointIds: ["checkpoint-a"],
+   selectedWindow: "28d",
+   comparabilityStatus: "comparable",
+   evidenceStatus: "available",
+  })
+  expect(evaluation).toMatchObject({
+   contentBuildId: "build-a",
+   publishTransactionId: "publish-a",
+   publishedVideoId: "video-a",
+   approvedSnapshotId: "approved-a",
+   approvedSnapshotHash: "sha256:approved-a",
+   analyticsCheckpointIds: ["checkpoint-a"],
+   sourceOutcomeIds: ["outcome-a"],
+   evidenceIds: ["snapshot-a:videos:1"],
+  })
+ })
+
+ it("deduplicates learning candidates by scoped idempotency key", () => {
+  const evaluation = createEvaluationRecord({
+   channelId: "channel-a",
+   projectId: "project-a",
+   source: "post-publication",
+   recommendation: "Evaluate selected title variant",
+   evidenceIds: ["snapshot-a:videos:1"],
+   selectedWindow: "28d",
+   comparabilityStatus: "comparable",
+   evidenceStatus: "available",
+  })
+  resolveEvaluationRecord(evaluation!.id, "positive")
+  const input = {
+   channelId: "channel-a",
+   projectId: "project-a",
+   title: "Review title outcome",
+   toolIds: ["packaging-lab-pro"],
+   reason: "Comparable evidence is available for review.",
+   scope: "channel" as const,
+   idempotencyKey: "candidate-evaluation-a",
+  }
+  const first = proposeEvaluationLearningCandidate(evaluation!.id, input)
+  const retry = proposeEvaluationLearningCandidate(evaluation!.id, input)
+  expect(retry?.id).toBe(first?.id)
+  expect(listWorkflowCandidates()).toHaveLength(1)
+ })
+
  it("fails closed for non-comparable or cross-channel learning candidates", () => {
   const evaluation = createEvaluationRecord({
    channelId: "channel-a",
