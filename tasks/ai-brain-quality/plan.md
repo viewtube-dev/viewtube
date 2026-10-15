@@ -1,7 +1,7 @@
 # Implementation Plan — ViewTube Brain Quality & Learning
 
 Date: 2026-09-24
-Status: planning; no application code changes in this branch yet.
+Status: phased implementation in progress; see the dated completion receipts. Code changes exist on `brain-phase-0-2-evidence-context`; certification and merge remain gated on repository checks.
 
 ## Architecture
 Canonical data → evidence-contract → channel-knowledge → task context resolver → prompt system → AI quality loop → creator action → outcome evaluation → learning governance → Channel Profile.
@@ -46,11 +46,11 @@ Checkpoint: model cannot directly write validated learning.
 25. Measure retry/revision cost and avoid unnecessary multi-pass generation.
 
 ## Wave 6 — Outcome evaluation
-26. Ensure recommendation/generation/package IDs survive into creator action and publish state.
-27. Evaluate at appropriate windows (1h/6h/24h/72h/7d/28d where supported).
-28. Compare against correct format/topic/traffic/duration cohorts.
-29. Separate observation from causal conclusion.
-30. Surface unattributed outcomes and evaluation backlog.
+26. Preserve recommendation/generation/package identity into creator decisions and verified publication; bind completed publication to ContentBuild, package, YouTube video, approved snapshot/hash and locked assets. (Foundation added; see Phase 6–7 receipt.)
+27. Evaluate at appropriate windows (1h/6h/24h/72h/7d/28d where supported), requiring the exact video row for video-scoped metrics. (Fail-closed row resolution added; production snapshot verification remains.)
+28. Compare against correct format/topic/traffic/duration cohorts and explicit baseline snapshots.
+29. Separate observed results, comparison, interpretation and causal claims.
+30. Surface unattributed outcomes and evaluation backlog; do not treat publication receipts as performance outcomes.
 
 ## Wave 7 — Governed learning
 31. Create/reuse learning candidates from evaluations.
