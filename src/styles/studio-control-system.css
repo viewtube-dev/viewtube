@@ -1499,16 +1499,10 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   height: 100%;
 }
 
-/* Circle Icon Button: scale the selected canonical icon preset to 80%.
-   The square icon-button family retains its original sizing. */
-button[data-vt-studio-button="true"][data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg {
-  width: calc(var(--vt-studio-control-icon-size, 28px) * .8);
-  height: calc(var(--vt-studio-control-icon-size, 28px) * .8);
-}
 /* Keep the glyph comfortably inset from the circular edge at both canonical sizes. */
 button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg {
-  width: 80% !important;
-  height: 80% !important;
+  width: calc(var(--vt-studio-control-icon-size, 28px) * .8) !important;
+  height: calc(var(--vt-studio-control-icon-size, 28px) * .8) !important;
 }
 
 /* Username Split-Left Input: the root owns the shared outline and inset strokes.
