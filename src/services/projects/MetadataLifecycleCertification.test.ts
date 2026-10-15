@@ -179,6 +179,9 @@ describe("metadata/project lifecycle certification fixture", () => {
       toolId: "metadata-lifecycle-certification",
     })
 
+    const youtubeBoundAt = listContentBuildEvents(contentBuildId).find(event => event.eventType === "youtube.bound")?.timestamp
+    if (!youtubeBoundAt) throw new Error("Certification fixture did not record the YouTube binding event.")
+
     const analyticsEvidenceId = "evidence:youtube-certification-video:24h"
     const checkpoint = appendContentBuildEvent({
       contentBuildId,
@@ -204,7 +207,7 @@ describe("metadata/project lifecycle certification fixture", () => {
         evidenceId: analyticsEvidenceId,
         source: "deterministic-certification-fixture",
       },
-      timestamp: "2026-10-14T12:02:00.000Z",
+      timestamp: new Date(Date.parse(youtubeBoundAt) + 1_000).toISOString(),
     })
 
     const now = Date.parse("2026-10-14T12:03:00.000Z")
