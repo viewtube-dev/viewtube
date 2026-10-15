@@ -103,27 +103,32 @@ const ConfirmedStepperFamily: React.FC = () => {
         imports={["src/components/subtoolbox/SubToolboxSplitStepper.tsx"]}
       />}
     >
-      <div className="vt-confirmed-variant is-full-row">
-        <span>44px standard · interactive</span>
-        <SubToolboxSplitStepper
-          value={standardValue}
-          onValueChange={setStandardValue}
-          size="standard"
-          level="l1"
-          ariaLabel="Standard stepper value"
-          data-vt-library-component="SubToolboxSplitStepper"
-        />
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>28px compact · interactive</span>
-        <SubToolboxSplitStepper
-          value={compactValue}
-          onValueChange={setCompactValue}
-          size="compact"
-          level="l1"
-          ariaLabel="Compact stepper value"
-          data-vt-library-component="SubToolboxSplitStepper"
-        />
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
+        <span>Standard + compact · interactive comparison</span>
+        <div className="vt-confirmed-stepper-row-grid">
+          <div className="vt-confirmed-stepper-specimen">
+            <small>44px standard</small>
+            <SubToolboxSplitStepper
+              value={standardValue}
+              onValueChange={setStandardValue}
+              size="standard"
+              level="l1"
+              ariaLabel="Standard stepper value"
+              data-vt-library-component="SubToolboxSplitStepper"
+            />
+          </div>
+          <div className="vt-confirmed-stepper-specimen">
+            <small>28px compact</small>
+            <SubToolboxSplitStepper
+              value={compactValue}
+              onValueChange={setCompactValue}
+              size="compact"
+              level="l1"
+              ariaLabel="Compact stepper value"
+              data-vt-library-component="SubToolboxSplitStepper"
+            />
+          </div>
+        </div>
       </div>
     </Family>
   )
@@ -191,14 +196,24 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
 
     <Family title="Square Icon Button · 44px + 28px" nonDefaultSettings={["The square icon button is the canonical square counterpart to the split-left icon rail; use StudioSquareIconButton, not a catalog-only drawing.", "Standard is 44×44px; compact is 28×28px. Geometry, border, radius, icon scale, and shadow follow shared Studio button size tokens. The default large icon preset is 38px/1.9 stroke standard and 24px/2.0 compact; current and moderate presets are opt-in, not default specimens.", "V1 uses primary fill with secondary shadow; V2 uses secondary fill with primary shadow; V3 toggles between paired colors and exposes aria-pressed; V4 uses black fill with the primary-colored icon.", "Interaction effects are opt-in: pop on activation, notification badge, rotated toggle, 3D flip, tooltip, morph, and outcome-driven success. Effects never redefine outer geometry.", "Flip and morph accept an alternate icon; notification accepts a real count/status; success must only be set after the operation succeeds.", "The label prop supplies the accessible name; tooltip descriptions and success status announcements preserve accessible naming.", "Disabled buttons cannot activate. All variants inherit canonical focus, reduced-motion, and tactile press behavior."]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; seven opt-in interaction effects; shared Studio button shadow and motion contract." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
-      <div className="vt-confirmed-variant"><span>44px standard · V1 primary fill</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square icon button V1 primary fill" variant="v1" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>44px standard · V2 secondary fill</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square icon button V2 secondary fill" variant="v2" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>44px standard · V3 selectable</span><StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Toggle square icon button selection" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>44px standard · V4 black</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square icon button V4 black fill" variant="v4" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact · V1</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V1" variant="v1" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact · V2</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V2" variant="v2" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact · V3 selectable</span><StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Toggle compact square icon button selection" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact · V4</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" /></div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row">
+        <span>44px standard · variants 1–4</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square icon button V1 primary fill" variant="v1" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square icon button V2 secondary fill" variant="v2" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Toggle square icon button selection" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Square icon button V4 black fill" variant="v4" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row">
+        <span>28px compact · variants 1–4</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V1" variant="v1" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V2" variant="v2" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Toggle compact square icon button selection" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+        </div>
+      </div>
       <div className="vt-confirmed-variant"><span>44px standard · disabled</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled square icon button" variant="v1" sizeVariant="standard" disabled data-vt-library-component="StudioSquareIconButton" /></div>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-effects-wrap">
         <span>Interaction effects · each example uses the canonical primitive at both sizes</span>
@@ -298,13 +313,34 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       />}
     >
       <p className="vt-confirmed-defaults-summary">Intentional exception to global control geometry · exact Vault asset-module chip styling</p>
-      <div className="vt-confirmed-variant is-full-row" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
-        <span>Default</span>
-        <StudioSpectrumTag label="APPLE" />
-        <StudioSpectrumTag label="CAMERA" />
-        <StudioSpectrumTag label="YOUTUBE" />
-        <span>Selected</span>
-        <StudioSpectrumTag label="DESIGN" selected />
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-spectrum-tag-variant">
+        <span>20 alphabetical spectrum samples · canonical 12-stop palette</span>
+        <div className="vt-confirmed-spectrum-tag-grid">
+          <StudioSpectrumTag label="APPLE" />
+          <StudioSpectrumTag label="BERRY" />
+          <StudioSpectrumTag label="CITRUS" />
+          <StudioSpectrumTag label="DRAGONFRUIT" />
+          <StudioSpectrumTag label="ELDERBERRY" />
+          <StudioSpectrumTag label="FIG" />
+          <StudioSpectrumTag label="GRAPE" />
+          <StudioSpectrumTag label="HONEYDEW" />
+          <StudioSpectrumTag label="INDIGO" />
+          <StudioSpectrumTag label="JASMINE" />
+          <StudioSpectrumTag label="KIWI" />
+          <StudioSpectrumTag label="LEMON" />
+          <StudioSpectrumTag label="MANGO" />
+          <StudioSpectrumTag label="NECTARINE" />
+          <StudioSpectrumTag label="ORANGE" />
+          <StudioSpectrumTag label="PEACH" />
+          <StudioSpectrumTag label="QUINCE" />
+          <StudioSpectrumTag label="RASPBERRY" />
+          <StudioSpectrumTag label="STRAWBERRY" />
+          <StudioSpectrumTag label="TANGERINE" />
+        </div>
+        <div className="vt-confirmed-spectrum-tag-selected">
+          <span>Selected-state treatment</span>
+          <StudioSpectrumTag label="DESIGN" selected />
+        </div>
       </div>
     </Family>
     <ConfirmedStepperFamily />
