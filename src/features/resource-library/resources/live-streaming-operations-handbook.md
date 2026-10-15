@@ -24,7 +24,7 @@ related_resources: publishing-best-practices-preflight; comments-community-audie
 
 A live stream is both a show and a real-time operation. The audience experiences your content while you are also managing equipment, connection quality, timing, chat, safety, and unexpected interruptions. A simple plan makes it easier to focus on the people watching.
 
-> **Creator principle:** Prepare the experience, test the technical path, assign moderation responsibility, and decide how you will recover before you go live.
+> **Creator takeaway:** Prepare the experience, test the technical path, assign moderation responsibility, and decide how you will recover before you go live.
 
 ## The Creator Mental Model
 
@@ -174,6 +174,14 @@ https://support.google.com/youtube/answer/2474026
 
 **YouTube Help** — Check current live chat, moderation, stream-health and archive options.  
 https://support.google.com/youtube/
+
+## Field Exercise: Rehearse One Failure
+
+Choose a realistic failure mode such as a lost connection, muted microphone, failed scene, spam burst, or unavailable guest. Rehearse how to detect it, what the audience sees, what message is communicated, and the safe fallback. Write down unclear steps and update a short run sheet with the responsible person, recovery action, audience-facing message, and condition for stopping or restarting. Confirm that moderation permissions and emergency contacts are available to the people who need them.
+
+## Evidence Boundary: Live Operations
+
+A successful rehearsal lowers risk but cannot guarantee a stable stream. Network conditions, platform availability, devices, and audience behavior vary. Metrics and chat activity do not fully describe viewer satisfaction. Verify current platform requirements and distinguish a tested setting from an untested fallback assumption.
 
 ## Document Maintenance
 

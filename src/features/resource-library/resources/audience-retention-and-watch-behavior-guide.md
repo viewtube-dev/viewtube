@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; thumbnail-title-packagin
 
 Audience retention helps you see how viewing continues through a video. It can point to moments that deserve attention, but it does not tell you exactly why a person stayed, skipped, replayed, or left. The job is to combine the shape of the data with the video itself and other evidence.
 
-> **Creator principle:** Treat a retention curve as a map of viewer behavior, not a grade for the creator or a universal target every video must hit.
+> **Creator takeaway:** Treat a retention curve as a map of viewer behavior, not a grade for the creator or a universal target every video must hit.
 
 ## The Creator Mental Model
 
@@ -145,6 +145,14 @@ https://support.google.com/youtube/answer/9314415
 
 **YouTube Help** — Check current Analytics definitions and availability for your channel and format.  
 https://support.google.com/youtube/
+
+## Field Exercise: Test a Retention Hypothesis
+
+Choose one clear change in the retention curve. Inspect the matching moment in the video, the promise made before it, and what the viewer receives at that point. Write two possible explanations before selecting one. Check comments or other available context for clues, but do not treat them as representative of every viewer. For the next comparable upload, test one change—such as a shorter setup or an earlier demonstration—and record the review window in advance.
+
+## Evidence Boundary: Retention
+
+A retention curve records viewing behavior under the report's definitions; it does not directly reveal why an individual stayed or left. Dips and spikes can have several causes, and audience mix, traffic source, and video length affect the pattern. Use the curve to identify a question, then combine it with content review and other evidence. Describe causal explanations as hypotheses unless the comparison can support them.
 
 ## Document Maintenance
 

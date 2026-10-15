@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; thumbnail-title-packaging-
 
 Publishing is a handoff from creative work to a public viewer experience. The goal is not to tick every possible box. It is to make sure the video works, the promise is accurate, the right audience can access it, and the creator can verify what actually went live.
 
-> **Creator principle:** A publish button cannot catch every mistake. A repeatable preflight protects the viewer experience and gives you a known point from which to diagnose later performance.
+> **Creator takeaway:** A publish button cannot catch every mistake. A repeatable preflight protects the viewer experience and gives you a known point from which to diagnose later performance.
 
 ## The Creator Mental Model
 
@@ -157,6 +157,16 @@ https://support.google.com/youtube/answer/9884579
 
 **YouTube Help** — Use current topic-specific guidance for visibility, audience settings, altered content, captions, copyright and monetization; platform settings can change.  
 https://support.google.com/youtube/
+
+## Field Exercise: Run a Release Candidate Review
+
+Before scheduling or publishing, ask someone who did not make the video to check the final export and metadata as a viewer would. Have them confirm that the title and thumbnail set an accurate expectation, the opening delivers on it, the description is useful, the audience and visibility settings are intentional, and the selected file is the approved final version. Verify captions, audio, end screens or cards where used, and any rights or disclosure requirements relevant to the content.
+
+Record the final filename, approval date, selected visibility, scheduled time, and any known limitations. After publication, open the public or intended viewing experience and check that the correct video, thumbnail, metadata, and playback are present. A successful upload is not the same as a verified release. If something is wrong, capture the actual state and correction rather than relying on memory.
+
+## Evidence Boundary: Publishing Checks
+
+A completed checklist lowers avoidable operational risk; it cannot guarantee performance, eligibility, monetization, or that every viewer's device will behave identically. Platform settings and policies can change, so verify high-impact options against current official guidance. Keep the distinction between “we checked this setting,” “the platform accepted the upload,” and “the intended audience can view the finished release.”
 
 ## Document Maintenance
 

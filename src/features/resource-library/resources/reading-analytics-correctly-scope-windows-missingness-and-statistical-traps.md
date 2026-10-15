@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; audience-retention-watch
 
 Analytics can help you make better decisions, but only when you understand what the numbers include and what they leave out. A chart may be accurate and still lead to a wrong conclusion if you compare different time periods, ignore a filter, mistake missing data for zero, or treat correlation as proof of cause.
 
-> **Creator principle:** Before interpreting a number, ask what it counts, which items and period are included, how it was calculated, what may be missing, and what conclusion the evidence can actually support.
+> **Creator takeaway:** Before interpreting a number, ask what it counts, which items and period are included, how it was calculated, what may be missing, and what conclusion the evidence can actually support.
 
 ## The Creator Mental Model
 
@@ -187,6 +187,14 @@ https://developers.google.com/youtube/analytics
 ## Advanced Reference
 
 For deeper analysis, document the grain of each dataset (one row per video/day/source, for example), key dimensions, data freshness, filters, join keys, deduplication rules, and treatment of unavailable values. Do not combine tables at different grains without checking whether the join duplicates counts. A correct calculation on duplicated rows can still produce a misleading result.
+
+## Field Exercise: Make a Finding Reproducible
+
+Save the exact report, metric definition, date range, filters, dimensions, comparison baseline, retrieval date, and any export limitations. Explain the numerator and denominator in plain language where relevant. If a row is absent, determine whether it is zero, unavailable, suppressed, delayed, or filtered out. Ask a second person to reproduce the finding from the saved specification before using it for a decision. Write the result as: observed value, plausible interpretations, and the next measurement that would reduce uncertainty.
+
+## Evidence Boundary: Missingness and Statistical Traps
+
+Missing data is not automatically zero, and a filtered view is not the whole population. Aggregates can hide changes in audience mix; percentages can move when denominators change; small samples can swing widely. Statistical significance, practical importance, and causal evidence are different questions. Document uncertainty and scope, and never report more precision than the source data supports.
 
 ## Document Maintenance
 

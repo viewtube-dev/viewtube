@@ -61,3 +61,34 @@ Metadata extensions such as prerequisites, learning-path IDs, audience level, so
 - Verify all registry accent indices resolve through the canonical palette.
 - Run the focused Resource Library contract test, then the repository test, typecheck, CSS checks, and production build before release.
 - Do not claim visual or deployment certification without an actual browser inspection and a deployment using the verified commit.
+
+## 8. Editorial template and field practice
+
+Every published resource must give the reader a practical way to apply the subject. Keep the guide's existing structure where it works; do not add filler headings merely to satisfy a template. Include, where relevant:
+- a beginner-first mental model and concise answer;
+- the workflow or diagnostic steps;
+- a worked example with clearly illustrative assumptions;
+- an application step inside ViewTube, where the feature exists;
+- a checklist and useful glossary;
+- sources and maintenance checks;
+- a **Field Exercise** that creates a concrete artifact or decision;
+- an **Evidence Boundary** that names what the available data or platform documentation cannot establish.
+
+The field exercise should specify an input, a sequence of actions, an output to retain, and a follow-up check. The evidence boundary should distinguish observed facts from interpretation, correlation from causation, and operational advice from guarantees. Avoid generic word-count padding. A guide is ready when it helps a creator make a better decision and makes its limits understandable.
+
+## 9. Markdown quote/evidence labels
+
+The renderer recognizes a leading label inside a Markdown blockquote. Use one of these exact forms when the block needs a semantic classification:
+
+- `> **Direct quotation:** “Exact words.” — Named source, linked below.`
+- `> **Platform guidance:** A faithful summary of official guidance, linked below.`
+- `> **Evidence:** The observed result, with scope and source.`
+- `> **Creator takeaway:** A practical interpretation of the evidence.`
+- `> **Caution:** A risk, limitation, or common misreading.`
+- `> **Unknown:** What the available information does not establish.`
+
+Do not invent a direct quotation or imply that a paraphrase is verbatim. Direct quotations require attribution and a traceable source. Evidence blocks should describe the sample, metric, date window, or other scope when applicable. Creator takeaways are interpretations, not platform policy. Caution and Unknown blocks must say what is uncertain or risky, not merely use the label. Unlabeled legacy blockquotes render as **Creator note** and must not be automatically classified from keywords. The visible label and border both communicate meaning; color is supplemental, never the only cue.
+
+## 10. Editorial release certification
+
+For every guide, verify that the title and registry description match the actual content; the field exercise is topic-specific; evidence limits are explicit; source links are attributable; examples are labeled; reading-time metadata remains aligned with the content; and the guide has no placeholder or unsupported guarantee. Review all fifteen resources as one system for consistency, while preserving topic-specific workflows and examples.

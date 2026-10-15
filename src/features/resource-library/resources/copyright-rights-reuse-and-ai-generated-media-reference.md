@@ -24,7 +24,7 @@ related_resources: publishing-best-practices-preflight; youtube-revenue-monetiza
 
 A creator's video may contain footage, music, photographs, graphics, fonts, voices, performances, logos, and AI-generated or AI-modified material. Each item can have different rights, license terms, restrictions, and disclosure considerations. Finding a file online—or generating it with a tool—does not automatically mean you may use it in any way you choose.
 
-> **Creator principle:** Record where each asset came from, who controls it, what permission or license applies, and what limits remain. Credit is not a substitute for permission.
+> **Creator takeaway:** Record where each asset came from, who controls it, what permission or license applies, and what limits remain. Credit is not a substitute for permission.
 
 This guide is operational education, not legal advice. Copyright, publicity rights, privacy, contracts, platform policies, and exceptions vary by jurisdiction and circumstance. For a consequential use or dispute, consult a qualified legal professional.
 
@@ -169,6 +169,14 @@ https://support.google.com/youtube/answer/9783148
 
 **YouTube Help: disclose altered or synthetic content** — Current disclosure guidance and examples.  
 https://support.google.com/youtube/
+
+## Field Exercise: Create an Asset Rights Record
+
+For each material asset in a release, record what it is, who created or supplied it, the source or agreement, license scope, attribution requirements, and any expiry or territory limits. Distinguish self-created assets from limited licenses, client-supplied material, and unresolved rights. Keep the record with the project. Before publication, review music, footage, images, fonts, voice, likeness, and generated or altered media where relevant. If rights or disclosure requirements are unclear, pause the affected use and seek authoritative guidance.
+
+## Evidence Boundary: Rights and Platform Policy
+
+This is operational risk management, not legal advice or a guarantee against claims. Copyright exceptions and privacy, publicity, trademark, and disclosure rules depend on facts and jurisdiction; platform policy is a separate layer. Attribution alone does not replace permission where required. Escalate uncertain, high-impact cases to qualified counsel or the rights holder.
 
 ## Document Maintenance
 

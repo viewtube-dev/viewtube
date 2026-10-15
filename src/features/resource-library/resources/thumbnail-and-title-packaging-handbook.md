@@ -24,7 +24,7 @@ related_resources: youtube-recommendations-discovery; audience-retention-watch-b
 
 A title and thumbnail are a viewer's first explanation of what a video offers. Together they help the right person recognize the subject, understand the promise, and decide whether to watch. Good packaging earns an informed click; it does not trick someone into clicking.
 
-> **Creator principle:** The package makes a promise in two formats. The video should fulfill that promise, and performance should be judged in the context of who saw it and what happened after the click.
+> **Creator takeaway:** The package makes a promise in two formats. The video should fulfill that promise, and performance should be judged in the context of who saw it and what happened after the click.
 
 ## The Creator Mental Model
 
@@ -168,6 +168,16 @@ https://support.google.com/youtube/answer/7628154
 
 **YouTube Help** — Check current thumbnail and testing features available to your channel.  
 https://support.google.com/youtube/
+
+## Field Exercise: Audit the Promise at Small Size
+
+Create two truthful packaging options for the same video. For each, write the viewer's likely question, the concrete outcome promised, and the evidence in the video that fulfills that promise. Shrink the thumbnail to a phone-sized preview and check legibility, visual hierarchy, contrast, and whether the main subject remains recognizable. Ask a viewer unfamiliar with the project what they expect to learn; compare their answer with the actual video.
+
+If a testing feature is available, define the comparison before reading results. Choose the success measure, minimum observation period, and any audience or traffic limitations you will record. Keep notes on whether the alternatives differ in one meaningful way or several. A result can inform the next iteration without proving a universal design rule. If no controlled test is available, label feedback as qualitative rather than presenting it as a statistical winner.
+
+## Evidence Boundary: Packaging Performance
+
+Click-through rate is affected by who saw the impression, where it appeared, the topic, and the competing choices around it. A higher CTR alone does not prove that a package is more satisfying or that it will sustain reach. Avoid universal CTR targets and do not treat small or differently sourced samples as equivalent. The title and thumbnail must remain accurate even when optimizing for attention.
 
 ## Document Maintenance
 

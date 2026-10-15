@@ -268,20 +268,65 @@ const ResourceFlow: React.FC<{ value: string }> = ({ value }) => {
   )
 }
 
-const quoteTone = (value: string): string => {
-  const normalized = value.toLocaleLowerCase()
-  if (normalized.includes("unknown")) return "unknown"
-  if (normalized.includes("important limitation") || normalized.includes("do not conclude")) return "warning"
-  if (normalized.includes("officially documented") || normalized.includes("strong evidence")) return "evidence"
-  if (normalized.includes("creator observation")) return "observation"
-  return "note"
+type ResourceQuoteKind =
+  | "direct-quotation"
+  | "platform-guidance"
+  | "evidence"
+  | "creator-takeaway"
+  | "caution"
+  | "unknown"
+  | "note"
+
+const RESOURCE_QUOTE_LABELS: Record<ResourceQuoteKind, string> = {
+  "direct-quotation": "Direct quotation",
+  "platform-guidance": "Platform guidance",
+  evidence: "Evidence",
+  "creator-takeaway": "Creator takeaway",
+  caution: "Caution",
+  unknown: "Unknown",
+  note: "Creator note",
 }
 
-const ResourceQuote: React.FC<{ value: string }> = ({ value }) => (
-  <blockquote className={`vt-resource-quote is-${quoteTone(value)}`}>
-    <InlineMarkdown>{value}</InlineMarkdown>
-  </blockquote>
-)
+const RESOURCE_QUOTE_PALETTE_SLOT: Record<ResourceQuoteKind, number> = {
+  "direct-quotation": 8,
+  "platform-guidance": 7,
+  evidence: 4,
+  "creator-takeaway": 9,
+  caution: 3,
+  unknown: 10,
+  note: 0,
+}
+
+const parseResourceQuote = (value: string): { kind: ResourceQuoteKind; body: string } => {
+  const match = value.match(
+    /^\s*\*\*(Direct quotation|Platform guidance|Evidence|Creator takeaway|Caution|Unknown):\*\*\s*/i,
+  )
+  if (!match) return { kind: "note", body: value }
+  const label = (match[1] || "").toLocaleLowerCase()
+  const kind = label === "direct quotation"
+    ? "direct-quotation"
+    : label === "platform guidance"
+      ? "platform-guidance"
+      : label === "creator takeaway"
+        ? "creator-takeaway"
+        : label as Exclude<ResourceQuoteKind, "note">
+  return { kind, body: value.slice(match[0].length) }
+}
+
+const ResourceQuote: React.FC<{ value: string }> = ({ value }) => {
+  const quote = parseResourceQuote(value)
+  const accent = RESOURCE_QUOTE_PALETTE_SLOT[quote.kind]
+  return (
+    <blockquote
+      className={`vt-resource-quote is-${quote.kind}`}
+      style={{ "--vt-resource-quote-accent": `var(--vt-spectrum-${accent})` } as React.CSSProperties}
+      aria-label={RESOURCE_QUOTE_LABELS[quote.kind]}
+    >
+      <span className="vt-resource-quote-label">{RESOURCE_QUOTE_LABELS[quote.kind]}</span>
+      <div className="vt-resource-quote-body"><InlineMarkdown>{quote.body}</InlineMarkdown></div>
+    </blockquote>
+  )
+}
 
 const SectionBlocks: React.FC<{ body: string }> = ({ body }) => {
   const blocks = React.useMemo(() => parseMarkdownBlocks(body), [body])

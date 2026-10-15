@@ -30,7 +30,7 @@ The useful creator question is simpler:
 
 YouTube's current creator guidance describes Search and Discovery as systems that try to match each viewer with videos they are likely to watch and enjoy. Recommendations are personalized, and the same video can perform very differently with different audiences, on different surfaces, and at different times.
 
-> **Creator principle:** The algorithm is not an audience you have to impress. It is a collection of systems trying to predict which viewers may want which videos.
+> **Creator takeaway:** The algorithm is not an audience you have to impress. It is a collection of systems trying to predict which viewers may want which videos.
 
 This guide focuses on the parts creators can actually use: audience fit, topic choice, packaging, discovery surfaces, retention, satisfaction, catalog relationships, and diagnosis inside ViewTube.
 
@@ -148,7 +148,7 @@ A video can also start slowly and later grow because:
 - a future upload creates a new catalog relationship;
 - YouTube finds a better viewer group for it.
 
-> **Do not conclude:** A slow first day does not prove a video is permanently dead, and a fast first hour does not guarantee long-term scale.
+> **Caution:** A slow first day does not prove a video is permanently dead, and a fast first hour does not guarantee long-term scale.
 
 ---
 
@@ -773,6 +773,16 @@ https://research.google.com/pubs/archive/45530.pdf
 https://dl.acm.org/doi/10.1145/3298689.3346997
 
 ---
+
+## Field Exercise: Trace One Video's Discovery Path
+
+Choose one recent upload and write down its intended viewer, the promise made by its title and thumbnail, and the viewer question it answers. Then review each available discovery surface separately: Browse, Suggested, Search, Shorts Feed where applicable, notifications, playlists, and external referrals. For every surface, record the date range, the metric available, and one observation. Do not combine all surfaces into a single verdict: their audiences and contexts differ.
+
+Use the observations to create one testable next step. For example: “For the next two tutorials on this topic, I will make the specific outcome clearer in the opening 20 seconds.” Keep the audience and format reasonably comparable, and review the result after a preselected interval. This is a practical experiment, not proof that one change caused a result.
+
+## Evidence Boundary: Recommendation Systems
+
+Public platform explanations describe broad principles and available signals; they do not reveal a complete ranking formula or guarantee distribution for a specific upload. Creator analytics show what happened within the reported scope, not every internal decision made by a recommendation system. Treat explanations of why a video received more or fewer impressions as hypotheses unless the evidence isolates the cause. Competition, viewer context, topic interest, seasonality, and normal variation can coexist. Avoid “the algorithm punished this video” as a conclusion when the available data only shows a change in traffic or impressions.
 
 ## Document Maintenance
 

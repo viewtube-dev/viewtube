@@ -24,7 +24,7 @@ related_resources: audience-subscribers-returning-viewers; live-streaming-operat
 
 Audience feedback can reveal confusion, unmet needs, useful ideas, and how people interpret a video. It can also be noisy, unrepresentative, repetitive, or harmful. A good feedback process helps you listen without letting the loudest comment determine your entire content strategy.
 
-> **Creator principle:** Comments are a sample, not a representative poll. Look for repeated themes, preserve context, protect privacy, and moderate consistently.
+> **Creator takeaway:** Comments are a sample, not a representative poll. Look for repeated themes, preserve context, protect privacy, and moderate consistently.
 
 ## The Creator Mental Model
 
@@ -145,6 +145,14 @@ https://support.google.com/youtube/answer/9483359
 
 **YouTube Help** — Check current community, privacy and safety guidance.  
 https://support.google.com/youtube/
+
+## Field Exercise: Turn Feedback Into a Safe Change
+
+Review a defined sample of comments, questions, corrections, and requests. Remove personal information from working notes and group feedback by theme rather than treating the loudest individual as representative. Record the sample source and whether a theme concerns factual accuracy, usability, preference, or a new idea. Choose one theme to address, then decide whether the right response is a correction, clearer explanation, new resource, or no change. Revisit the theme after the next relevant upload.
+
+## Evidence Boundary: Audience Feedback
+
+Comments are useful qualitative evidence but are not a random sample of all viewers. Participation is shaped by who chooses to comment, moderation, language, and topic. Repeated feedback can justify investigation without proving prevalence across the audience. Protect personal data and separate verified corrections from preferences or speculation.
 
 ## Document Maintenance
 

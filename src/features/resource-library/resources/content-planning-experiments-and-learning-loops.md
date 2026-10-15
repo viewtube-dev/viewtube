@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; reading-analytics-correc
 
 A content plan is a sequence of informed bets. It helps you decide what to make, why it might matter to viewers, what resources it needs, and what you hope to learn after publishing. A good plan leaves room for creativity and surprise while avoiding a cycle of making videos without remembering what they taught you.
 
-> **Creator principle:** Every planned video should have a viewer purpose. Not every video needs to be an experiment, but every result can teach you something when you record the context and interpret it carefully.
+> **Creator takeaway:** Every planned video should have a viewer purpose. Not every video needs to be an experiment, but every result can teach you something when you record the context and interpret it carefully.
 
 ## The Creator Mental Model
 
@@ -155,6 +155,14 @@ https://creatoracademy.youtube.com/
 
 **YouTube Help** — Current Analytics definitions and creator guidance.  
 https://support.google.com/youtube/
+
+## Field Exercise: Write a Small Experiment Brief
+
+Before production, record the audience need, hypothesis, proposed change, expected signal, comparison, review date, and risks. Prefer one interpretable change over a broad rework with many simultaneous differences. Define what would make you keep, revise, or stop the experiment, and include a guardrail such as accuracy or production effort. After publishing, record the result even if it contradicts the hypothesis. If the outcome is ambiguous, label it inconclusive and design a better next test.
+
+## Evidence Boundary: Experiments and Causality
+
+A before-and-after comparison is not automatically controlled. Topic demand, audience composition, timing, promotion, and creative execution may change together. Small samples are noisy, and one video's result may not generalize. State the strength of evidence, avoid unsupported causal language, and preserve null or negative outcomes as useful learning.
 
 ## Document Maintenance
 
