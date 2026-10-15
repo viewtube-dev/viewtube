@@ -1,26 +1,26 @@
-/* Canonical split-stepper family; dimensions follow the confirmed Studio control size contract. */
+/* Fixed-ratio split stepper: editable 2:1 value field + square two-button rail. */
 .vt-subtoolbox-split-stepper {
   --vt-stepper-height: 44px;
   --vt-stepper-stroke: 3px;
   --vt-stepper-radius: 6px;
   --vt-stepper-font-size: 38px;
+  --vt-stepper-inner-height: calc(var(--vt-stepper-height) - (var(--vt-stepper-stroke) * 2));
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke));
-  min-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke));
-  max-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke) - var(--vt-stepper-stroke));
   flex: 0 0 auto;
+  width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));
+  min-width: calc(var(--vt-stepper-inner-height) * 3 + (var(--vt-stepper-stroke) * 2));
+  max-width: none;
   height: var(--vt-stepper-height);
   min-height: var(--vt-stepper-height);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
   border: var(--vt-stepper-stroke) solid #000;
   border-radius: var(--vt-stepper-radius);
   background: var(--pair-b, #fff);
-  color: #000;
+  color: var(--pair-a, #000);
   box-shadow: none;
-  outline: 0;
-  outline-offset: 2px;
 }
 .vt-subtoolbox-split-stepper.is-compact {
   --vt-stepper-height: var(--vt-studio-28-height, 28px);
@@ -34,65 +34,61 @@
   --vt-stepper-radius: var(--vt-studio-44-radius, 6px);
   --vt-stepper-font-size: 38px;
 }
-.vt-subtoolbox-split-stepper-value {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-  border: var(--vt-stepper-stroke) solid var(--pair-a, #73deff);
-  border-radius: 0;
-  outline: 0;
-  box-shadow: none;
-  background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
-  color: var(--pair-a, #73deff);
-  font: inherit;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: var(--vt-stepper-font-size);
-  font-weight: 900;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  padding: 0 4px;
-  text-align: center;
+.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value[data-vt-studio-control="true"] {
   appearance: textfield;
   -moz-appearance: textfield;
-}
-.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value[data-vt-studio-control="true"] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   height: 100%;
   min-height: 0;
-  padding: 0 4px;
-  border: var(--vt-stepper-stroke) solid var(--pair-a, #73deff);
+  margin: 0;
+  padding: 0 3px;
+  border: 0;
+  border-right: var(--vt-stepper-stroke) solid #000;
   border-radius: 0;
+  outline: 0;
   background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
+  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--pair-a, #73deff);
   color: var(--pair-a, #73deff);
   -webkit-text-fill-color: var(--pair-a, #73deff);
   -webkit-text-stroke: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-stepper-font-size) !important;
-  line-height: 1 !important;
-  outline: 0;
-  box-shadow: none;
+  font-weight: 1000;
+  line-height: .86 !important;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
-.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value[data-vt-studio-control="true"]:focus {
-  background: color-mix(in srgb, var(--pair-a, #73deff) 50%, transparent);
-  color: var(--pair-a, #73deff);
-  -webkit-text-fill-color: var(--pair-a, #73deff);
-  -webkit-text-stroke: 0;
+.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value::-webkit-inner-spin-button,
+.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vt-subtoolbox-split-stepper input.vt-subtoolbox-split-stepper-value:focus {
   outline: 0;
-  box-shadow: none;
+  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--pair-a, #73deff);
+}
+.vt-subtoolbox-split-stepper.is-interacting {
+  outline: 2px solid var(--pair-b, #fff);
+  outline-offset: 2px;
 }
 .vt-subtoolbox-split-stepper-rail {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  width: var(--vt-stepper-inner-height);
   min-width: 0;
+  height: 100%;
   min-height: 0;
   background: var(--pair-b, #fff);
 }
 .vt-subtoolbox-split-stepper-rail button {
   display: grid;
   place-items: center;
+  box-sizing: border-box;
   min-width: 0;
   min-height: 0;
   width: 100%;
@@ -101,7 +97,7 @@
   border: 0;
   border-radius: 0;
   background: var(--pair-b, #fff);
-  color: #000;
+  color: var(--pair-a, #000);
   cursor: pointer;
   touch-action: none;
 }
@@ -123,19 +119,7 @@
   background: color-mix(in srgb, var(--pair-b, #fff) 75%, #000 25%);
 }
 .vt-subtoolbox-split-stepper-rail button:focus-visible {
-  position: relative;
-  z-index: 1;
-  outline: 2px solid var(--pair-a, #73deff);
-  outline-offset: -3px;
-}
-.vt-subtoolbox-split-stepper.is-interacting {
-  outline: var(--vt-stepper-stroke) solid var(--pair-a, #73deff);
-  outline-offset: 2px;
-}
-.vt-subtoolbox-split-stepper-value::-webkit-inner-spin-button,
-.vt-subtoolbox-split-stepper-value::-webkit-outer-spin-button {
-  margin: 0;
-  appearance: none;
+  outline: 0;
 }
 .vt-subtoolbox-split-stepper-rail button:disabled {
   cursor: not-allowed;
