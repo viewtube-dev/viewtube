@@ -129,7 +129,11 @@ export const createPublicationEvaluationRecord = (input: {
    metadata?.approvedSnapshotId === identity.approvedSnapshotId &&
    metadata?.approvedSnapshotHash === identity.approvedSnapshotHash &&
    metadata?.contentBuildId === identity.contentBuildId &&
-   metadata?.channelId === identity.channelId
+   metadata?.channelId === identity.channelId &&
+   (!identity.actionPacketId || metadata?.actionPacketId === identity.actionPacketId) &&
+   (!identity.workflowId || metadata?.workflowId === identity.workflowId) &&
+   (!identity.recommendationId || metadata?.recommendationId === identity.recommendationId) &&
+   (!identity.experimentId || metadata?.experimentId === identity.experimentId)
  })
  if (!receipt) return null
 
