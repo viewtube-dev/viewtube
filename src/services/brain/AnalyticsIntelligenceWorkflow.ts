@@ -74,6 +74,8 @@ export interface OutcomeMeasurement {
   value: number
   snapshotId: string
   observedAt: string
+  periodStartDate: string
+  periodEndDate: string
 }
 
 export interface OutcomeEvaluation {
@@ -120,6 +122,22 @@ const validNumber = (value: unknown): value is number =>
 const validTimestamp = (value: string): boolean =>
   Boolean(value.trim()) && Number.isFinite(Date.parse(value))
 
+const validPeriodDate = (value: string): boolean => {
+  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false
+  const date = new Date(`${value}T00:00:00.000Z`)
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value
+}
+
+const expectedWindowDays: Record<OutcomeMeasurement["window"], number> = {
+  "7d": 7,
+  "28d": 28,
+  "90d": 90,
+  "365d": 365,
+}
+
+const periodDayCount = (start: string, end: string): number =>
+  (Date.parse(`${end}T00:00:00.000Z`) - Date.parse(`${start}T00:00:00.000Z`)) / 86_400_000 + 1
+
 const validFinding = (finding: DeterministicAnalyticsInsight): boolean =>
   finding.validationState === "validated"
   && finding.deterministic === true
@@ -127,6 +145,8 @@ const validFinding = (finding: DeterministicAnalyticsInsight): boolean =>
   && validNumber(finding.currentValue)
   && (finding.baselineValue === null || validNumber(finding.baselineValue))
   && (finding.delta === null || validNumber(finding.delta))
+  && (finding.relativeDeltaPercent === null || validNumber(finding.relativeDeltaPercent))
+  && validNumber(finding.confidence)
   && finding.evidenceRefs.length > 0
   && finding.sourceSnapshotIds.length > 0
 
