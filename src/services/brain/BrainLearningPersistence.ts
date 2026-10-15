@@ -83,7 +83,10 @@ export const flushBrainLearningPersistence = async (channelId?: string): Promise
    }
    if (!response.ok) { authenticated = false; break }
    const result = await response.json() as { learningRecordCount?: number }
-   if (Number(result.learningRecordCount) !== batch.length) break
+   if (Number(result.learningRecordCount) !== batch.length) {
+    authenticated = false
+    break
+   }
    const sentKeys = new Set(batch.map(queueKey))
    writeQueue(currentQueue.filter((item) => !sentKeys.has(queueKey(item))))
    persisted += batch.length
