@@ -940,5 +940,5 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Status:** IMPLEMENTED IN FOLLOW-UP BRANCH / EXACT-HEAD CI PENDING; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING.
 - **Security boundary:** Requests use the canonical authenticated account-session resolver; operation records are per-user, owner-checked, and fail closed unless `VAULT_OPERATION_STORAGE_DIR` is configured.
 - **Limit:** This persists lifecycle records but does not execute media jobs. Configure a persistent mounted disk, add worker leases and race-safe coordination, and verify restart recovery before production claims.
-- **Follow-up PR:** [#394](https://github.com/viewtube-dev/viewtube/pull/394), target `master/consolidated-feature-integration`.
+- **Follow-up PR:** [#394](https://github.com/viewtube-dev/viewtube/pull/395), target `master/consolidated-feature-integration`.
 - **Next:** inspect exact-head CI, resolve introduced failures, implement worker execution and safe claim/idempotency coordination, then verify deployment storage and post-merge target.
