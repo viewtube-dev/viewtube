@@ -117,6 +117,14 @@ describe("generateAsset", () => {
    constitution: ASSET_CONSTITUTION_VERSION,
    community_post: "community-post-v1",
   })
+  expect(result.record.promptReceipt).toMatchObject({
+   schemaVersion: "brain-prompt-run-receipt-v1",
+   promptFamily: "community",
+   promptVersion: "community-post-v1",
+   outputSchemaVersion: "community-post-plan-v1",
+   traceId: result.trace.id,
+   outputId: result.record.id,
+  })
  })
 
  it("blocks and repairs a fabricated figure, then delivers", async () => {
