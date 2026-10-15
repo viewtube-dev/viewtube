@@ -1040,7 +1040,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 20px; font-weight: 1000; line-height: .95; letter-spacing: -.02em;
   text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
-  transition: transform 150ms ease-out, background-color 150ms ease-out;
+  transition: transform var(--vt-studio-motion-button,180ms) ease-out, background-color var(--vt-studio-motion-button,180ms) ease-out;
 }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) { transform: translate(1.5px, 1.5px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) { box-shadow:none; transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); transition-duration:var(--vt-studio-motion-press,80ms); }
@@ -1103,7 +1103,7 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
 button[data-vt-studio-button="true"][data-size="compact"][data-split-left="true"] [data-vt-studio-split-label] { padding-inline:8px; }
 button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
-@media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { transition:none; } }
+@media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"]::before, button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { transition:none; } }
 
 /* 4. Word-toggle sizing remains configurable at the component boundary. */
 .vt-studio-44-word-toggle {
