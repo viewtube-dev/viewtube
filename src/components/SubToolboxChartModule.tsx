@@ -411,7 +411,7 @@ export const SubToolboxChartModule: React.FC<
           ) : null}
 
           <div
-            className="flex-1 p-0 vt-chart-interior"
+            className="flex-1 min-h-[80px] p-0 vt-chart-interior"
             style={{ minHeight: interiorMinHeight }}
           >
             {hasOpened ? content : null}
