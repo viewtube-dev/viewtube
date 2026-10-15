@@ -32,6 +32,21 @@ describe("Studio Hub canonical controls", () => {
     expect(css).toContain("align-items: center")
   })
 
+  it("maps compact split-left height to compact geometry and a 2px divider in every state", () => {
+    const html = renderToStaticMarkup(
+      <StudioSplitLeftButton icon={<span>i</span>} heightVariant="28">Compact split</StudioSplitLeftButton>,
+    )
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+
+    expect(html).toContain('data-size="compact"')
+    expect(html).toContain('data-height-variant="28"')
+    expect(css).toContain('button[data-vt-studio-control="true"][data-height-variant="28"][data-split-left="true"]')
+    expect(css).toContain('--vt-studio-control-stroke: 2px')
+    expect(css).toContain('border-right-width: 2px !important')
+    expect(css).toContain('--vt-studio-control-radius: 4px')
+    expect(css).toContain('--vt-studio-control-shadow: 1.5px')
+  })
+
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
     const html = renderToStaticMarkup(
       <StudioDropdown
