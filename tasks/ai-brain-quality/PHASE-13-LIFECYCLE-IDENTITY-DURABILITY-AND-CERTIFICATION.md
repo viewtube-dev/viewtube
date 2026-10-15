@@ -101,3 +101,5 @@ This slice is **not Phase 13 certification**. Remaining gates still include curr
 ## Consent-retention regression added
 
 The server persistence suite now verifies that an existing channel-scoped creator-communication event containing legacy raw text is replaced by a sanitized version with the same stable event ID, and that a subsequent durable read contains no raw message text. This validates the server store's replacement behavior; a full authenticated cross-device purge/reload flow is still required for certification.
+
+The focused Brain persistence contract suite also exercises rehydration of a channel-scoped outcome after local browser data is cleared, confirming that the durable response restores the stable outcome ID, producer record ID, and generation trace. This is a mocked authenticated-endpoint integration contract; live database and two-device browser certification remain separate gates.
