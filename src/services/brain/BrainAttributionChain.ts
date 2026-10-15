@@ -46,7 +46,6 @@ const linkedByIdentity = (candidate: AlgorithmIntelligenceEvent, known: Algorith
   const values = [
    text(event.metadata?.outputRef),
    text(event.metadata?.modifiedOutputRef),
-   text(event.metadata?.contentBuildId),
    text(event.metadata?.videoPackageId),
    text(event.metadata?.publishTransactionId),
    text(event.metadata?.approvedSnapshotId),
@@ -98,7 +97,7 @@ export const buildBrainAttributionChain = (input: {
 
  const decisions = chain.filter((event) => ["RECOMMENDATION_DECISION_RECORDED", "CREATOR_APPROVAL_RECORDED"].includes(event.kind))
  const executions = chain.filter((event) => ["RECOMMENDATION_EXECUTED", "PRIMING_STEP_EXECUTED"].includes(event.kind))
- const publications = chain.filter((event) => ["PUBLICATION_CONFIRMED", "PUBLICATION_CHECKPOINT_RECORDED", "CHECKPOINT_REACHED"].includes(event.kind))
+ const publications = chain.filter((event) => ["PUBLICATION_CONFIRMED", "PUBLICATION_CHECKPOINT_RECORDED"].includes(event.kind))
  const outcomes = chain.filter((event) => event.kind === "OUTCOME_MEASURED")
  const learningCandidates = chain.filter((event) => ["LEARNING_CANDIDATE_CREATED", "LEARNING_CANDIDATE_REVIEWED", "LEARNING_PROMOTED"].includes(event.kind))
  const unresolvedStages: BrainAttributionChain["unresolvedStages"] = []
