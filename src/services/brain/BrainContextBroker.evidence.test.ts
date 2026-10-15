@@ -42,7 +42,7 @@ const quality = (scopeMatch: "exact" | "mismatch" | "unscoped") => ({
  limitations: scopeMatch === "exact" ? [] : ["Scope is not safe for channel-specific claims."],
 } as any)
 
-const build = (scopeMatch: "exact" | "mismatch" | "unscoped") => buildBrainContextPack({
+const build = (scopeMatch: "exact" | "mismatch" | "unscoped", project: Record<string, unknown> | null = null) => buildBrainContextPack({
  channelId: "channel-1",
  systemPrompt: "Use evidence carefully.",
  snapshot,
@@ -74,11 +74,31 @@ const build = (scopeMatch: "exact" | "mismatch" | "unscoped") => buildBrainConte
   version: "vt-creator-context-v1",
   channelId: "channel-1",
   controls: { enabled: true, personalization: false, allowAnalytics: true, allowProjects: true, learnFromInteractions: true },
-  project: null,
+  project,
   channelKnowledge: null,
   styleProfile: null,
   provenance: {},
  } as any,
+ it("injects the canonical ContentBuild phase and only phase-relevant capabilities into Brain context", () => {
+  const result = build("exact", {
+   projectId: "project-1",
+   contentBuildId: "build-1",
+   title: "Launch guide",
+   lifecycle: {
+    status: "resolved",
+    currentPhase: "package",
+    sourceStage: "package",
+    relevantCapabilities: ["title", "thumbnail", "metadata"],
+    audiencePromisePresent: true,
+    blockers: ["creator-review"],
+   },
+  })
+  expect(result.systemInstruction).toContain("currentLifecyclePhase=package")
+  expect(result.systemInstruction).toContain("phaseCapabilities=title,thumbnail,metadata")
+  expect(result.systemInstruction).toContain("workflowBlockers=creator-review")
+  expect(result.systemInstruction).toContain("prioritize only phase-relevant capabilities")
+ })
+
 })
 
 describe("BrainContextBroker canonical evidence health", () => {
