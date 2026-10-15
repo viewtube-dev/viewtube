@@ -226,6 +226,8 @@ export const prepareGenerationRequest = (input: {
   summary: request.creatorIntent,
   metadata: {
    requestId: request.id,
+   operationId: request.operationId || request.id,
+   workflowId: request.workflowId || `workflow:${request.contentBuildId}`,
    contextManifestId: request.contextManifestId,
    contextRevision: request.contextRevision,
    operation: request.operation,
@@ -237,6 +239,7 @@ export const prepareGenerationRequest = (input: {
    generationRequest: request,
    operationRecord: operationRecordFromGenerationRequest(request, {
     selectedAssetIds: contextManifest.selectedAssetIds,
+    workflowId: request.workflowId,
    }),
    contextManifest,
   },
@@ -297,6 +300,8 @@ export const recordToolReceipt = (input: {
   metadata: {
    receiptId: receipt.id,
    requestId: receipt.requestId,
+   operationId: receipt.operationId || input.request.operationId || input.request.id,
+   workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
    contextManifestId: input.request.contextManifestId,
    contextRevision: input.request.contextRevision,
    operation: input.request.operation,
@@ -307,8 +312,8 @@ export const recordToolReceipt = (input: {
    relationshipIds: receipt.relationshipIds,
    toolReceipt: receipt,
    operationRecord: operationRecordFromToolReceipt(receipt, {
-    operationId: input.request.id,
-    workflowId: `workflow:${input.request.contentBuildId}`,
+    operationId: receipt.operationId || input.request.operationId || input.request.id,
+    workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
     channelId: input.request.channelId,
    }),
    ...(input.metadata || {}),
