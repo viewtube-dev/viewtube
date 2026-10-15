@@ -45,13 +45,14 @@ Certification is fail-closed. A merged PR, successful build, or reachable page a
 
 ### Current certification record
 
-- CI workflow: [ViewTube release gates run #854](https://github.com/viewtube-dev/viewtube/actions/runs/38702756592), run against the phase 9 golden-path commit.
-- Observed run #854: production build, source governance, focused contracts and local Playwright smoke passed. Typecheck passed; runtime lint was still running at the last poll. The full suite failed on a stale source-contract assertion expecting `<WidgetSplitButton` in Video Manager even though the component now uses the canonical `<WidgetLeftSplitButton`. A follow-up test-only fix was committed after PR #232 merged and needs its own release-gates run.
+- CI workflow: [ViewTube release gates run #866](https://github.com/viewtube-dev/viewtube/actions/runs/38703093293), against the phase 9 golden-path and test-contract follow-up.
+- Run #866: `focused-contracts`, `production-build`, `source-governance`, and `local-smoke` passed. The full suite failed with 100 failing tests across 47 test files (2,498 passed); the failure set includes stale source-contract expectations and other existing contract/test failures. Runtime lint failed with 2,232 errors and 159 warnings across the repository. These broad failures must be triaged before claiming full-suite/release certification.
+- Typecheck passed in the prior run #854; the current run #866 static-quality job failed at `npm run lint:runtime`.
 - Vercel status checks report build-rate-limit failures. Those checks are neither a passing build nor evidence that the Render master-integration deployment is current.
-- Read-only live check on 2026-10-15: [home route](https://publisher-3n7h.onrender.com/) returned HTTP 200 and rendered the ViewTube app; [`/api/release`](https://publisher-3n7h.onrender.com/api/release) returned HTTP 502 with an empty plain-text response. No release identity fields were available.
+- Read-only live route smoke on 2026-10-15: [home](https://publisher-3n7h.onrender.com/) returned HTTP 200; [Studio](https://publisher-3n7h.onrender.com/studio) returned HTTP 200; [Publisher](https://publisher-3n7h.onrender.com/publisher) redirected to the dashboard. Both [`/api/release`](https://publisher-3n7h.onrender.com/api/release) and [`/api/account/snapshot`](https://publisher-3n7h.onrender.com/api/account/snapshot) returned HTTP 502 with empty plain-text bodies.
 - Expected live target for master integration: `https://publisher-3n7h.onrender.com`.
-- **Deployed SHA / branch / environment:** not certified because `/api/release` is unhealthy.
-- **Live route smoke:** home route passed; release identity endpoint failed. Publisher/Studio route-level smoke still requires a successful identity endpoint and a clean release candidate.
+- **Deployed SHA / branch / environment:** not certified because both API endpoints are unhealthy and no release identity JSON is available.
+- **Live frontend routes:** home and Studio pass basic HTTP/render checks; Publisher does not remain on a distinct route; no API-backed route can be certified.
 - **Production deployment:** not triggered by this change. Do not deploy or mark production certified while required gates are failing or pending.
 
 ### Remaining release blockers
@@ -62,4 +63,4 @@ Certification is fail-closed. A merged PR, successful build, or reachable page a
 
 ## Certification decision
 
-Phase 9 implementation is present in source and is wired into the focused test suite; its pass/fail result is owned by the release-gates run. Phase 10 is **not certified** until CI finishes successfully and the live Render release identity matches the certified integration commit.
+Phase 9's focused golden path passes, but the full regression suite is **not certified** because run #866 reports 100 failing tests across 47 files. Phase 10 is **not certified**: runtime lint fails broadly, both Render API health endpoints return HTTP 502, and the deployed release identity cannot be matched to the certified integration commit.
