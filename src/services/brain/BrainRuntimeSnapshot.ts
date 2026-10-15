@@ -29,6 +29,10 @@ import {
  summarizeBrainOutcomes,
  type BrainOutcomeRecord,
 } from "./BrainOutcomeLedger"
+import {
+ summarizeMetadataIntelligence,
+ type MetadataIntelligenceSummary,
+} from "../MetadataLearningGovernance"
 
 export interface BrainRuntimeProjectSummary {
  id: string
@@ -173,6 +177,7 @@ export interface BrainRuntimeSnapshot {
  outcomes: BrainRuntimeOutcomeSummary
  provenance: BrainRuntimeProvenanceSummary
  lifecycle: BrainRuntimeLifecycleSummary
+ metadataIntelligence: MetadataIntelligenceSummary
 }
 
 export interface BrainRuntimeSnapshotInput {
@@ -664,5 +669,6 @@ export const readBrainRuntimeSnapshot = (
   outcomes: sources.summarizeBrainOutcomes(input.channelId),
   provenance,
   lifecycle: summarizeLifecycle(events),
+  metadataIntelligence: summarizeMetadataIntelligence(events),
  }
 }
