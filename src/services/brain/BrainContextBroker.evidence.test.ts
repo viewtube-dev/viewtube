@@ -79,7 +79,25 @@ const build = (scopeMatch: "exact" | "mismatch" | "unscoped", project: Record<st
   styleProfile: null,
   provenance: {},
  } as any,
- it("injects the canonical ContentBuild phase and only phase-relevant capabilities into Brain context", () => {
+})
+
+describe("BrainContextBroker canonical evidence health", () => {
+ it("includes the selected reporting window and snapshot provenance for exact scope", () => {
+  const result = build("exact")
+  expect(result.systemInstruction).toContain("window=90d")
+  expect(result.systemInstruction).toContain("snapshot=canonical-snapshot-90d")
+  expect(result.systemInstruction).toContain("DETERMINISTIC STATISTICS INTELLIGENCE")
+ })
+
+ it.each(["mismatch", "unscoped"] as const)("blocks channel-specific analytics context for %s evidence", (scope) => {
+  const result = build(scope)
+  expect(result.systemInstruction).toContain("Analytics evidence is blocked")
+  expect(result.systemInstruction).not.toContain("DETERMINISTIC STATISTICS INTELLIGENCE")
+  expect(result.systemInstruction).not.toContain("ALGORITHM / CHANNEL / OPPORTUNITY INTELLIGENCE")
+  expect(result.budget.omittedSections).toContain("analytics_scope_blocked")
+ })
+
+ it("injects the canonical ContentBuild phase and phase-relevant capabilities into Brain context", () => {
   const result = build("exact", {
    projectId: "project-1",
    contentBuildId: "build-1",
@@ -97,23 +115,5 @@ const build = (scopeMatch: "exact" | "mismatch" | "unscoped", project: Record<st
   expect(result.systemInstruction).toContain("phaseCapabilities=title,thumbnail,metadata")
   expect(result.systemInstruction).toContain("workflowBlockers=creator-review")
   expect(result.systemInstruction).toContain("prioritize only phase-relevant capabilities")
- })
-
-})
-
-describe("BrainContextBroker canonical evidence health", () => {
- it("includes the selected reporting window and snapshot provenance for exact scope", () => {
-  const result = build("exact")
-  expect(result.systemInstruction).toContain("window=90d")
-  expect(result.systemInstruction).toContain("snapshot=canonical-snapshot-90d")
-  expect(result.systemInstruction).toContain("DETERMINISTIC STATISTICS INTELLIGENCE")
- })
-
- it.each(["mismatch", "unscoped"] as const)("blocks channel-specific analytics context for %s evidence", (scope) => {
-  const result = build(scope)
-  expect(result.systemInstruction).toContain("Analytics evidence is blocked")
-  expect(result.systemInstruction).not.toContain("DETERMINISTIC STATISTICS INTELLIGENCE")
-  expect(result.systemInstruction).not.toContain("ALGORITHM / CHANNEL / OPPORTUNITY INTELLIGENCE")
-  expect(result.budget.omittedSections).toContain("analytics_scope_blocked")
  })
 })
