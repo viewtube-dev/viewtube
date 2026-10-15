@@ -2499,7 +2499,8 @@
   border:var(--vt-component-stroke) solid #000;
   border-top:0;
   border-radius:0 0 var(--vt-component-radius) var(--vt-component-radius);
-  background:#fff;
+  /* The open menu is the primary palette surface; each option is an explicit white row. */
+  background:var(--vt-top-title-title);
   box-shadow:var(--vt-component-shadow-offset) var(--vt-component-shadow-offset) 0 var(--vt-top-title-shadow);
 }
 .vt-subtoolbox-top-title-dropdown-panel>button{
@@ -2517,11 +2518,16 @@
   font:1000 var(--vt-component-font-size)/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
   letter-spacing:-.055em;
   text-transform:uppercase;
+  transition:background-color 160ms ease-out,color 160ms ease-out;
 }
 .vt-subtoolbox-top-title-dropdown-panel>button:last-child{border-bottom:0}
-.vt-subtoolbox-top-title-dropdown-panel>button:is(:hover,:focus-visible,.is-selected){
-  background:color-mix(in srgb,var(--vt-top-title-body) 78%,white);
+.vt-subtoolbox-top-title-dropdown-panel>button:is(:hover,:focus-visible){
+  background:color-mix(in srgb,var(--vt-top-title-body) 22%,white);
   outline:none;
+}
+.vt-subtoolbox-top-title-dropdown-panel>button.is-selected{
+  background:var(--vt-top-title-body);
+  color:#000;
 }
 .vt-subtoolbox-top-title-dropdown-panel>button:disabled{opacity:.45;cursor:not-allowed}
 
@@ -2579,11 +2585,29 @@
   flex:0 0 calc(var(--vt-component-height)*.5);
   display:grid;
   place-items:center;
+  overflow:hidden;
   border:var(--vt-component-stroke) solid #000;
   border-radius:calc(var(--vt-component-radius)*.5);
-  background:var(--vt-top-title-title);
+  background:#fff;
+  color:transparent;
   font-size:calc(var(--vt-component-font-size)*.9);
+  font-weight:1000;
   line-height:1;
+  transition:background-color 160ms ease-out,color 160ms ease-out;
+}
+.vt-subtoolbox-top-title-dropdown-check.is-checked{
+  background:var(--vt-top-title-title);
+  color:#fff;
+  animation:vt-multiselect-check-in 180ms cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes vt-multiselect-check-in{
+  from{opacity:.35;transform:scale(.72)}
+  to{opacity:1;transform:scale(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .vt-subtoolbox-top-title-dropdown-panel>button,
+  .vt-subtoolbox-top-title-dropdown-check{transition:none}
+  .vt-subtoolbox-top-title-dropdown-check.is-checked{animation:none}
 }
 
 
