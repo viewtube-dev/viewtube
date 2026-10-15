@@ -1,7 +1,7 @@
 import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentBuildStage } from "./ContentBuildRepository"
 import type { ContentBuildYouTubeBinding } from "./contracts"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
-import { persistApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
+import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
 
 export type PublishTransactionStep =
  | "validate-package" | "creator-approval" | "upload-video" | "bind-youtube"
@@ -33,25 +33,63 @@ let memory: ContentBuildPublishTransaction[]=[]
 const now=()=>new Date().toISOString()
 const uuid=()=>globalThis.crypto?.randomUUID?.()||`publish-${Date.now()}-${Math.random().toString(36).slice(2)}`
 const canStore=()=>{try{return typeof localStorage!=="undefined"}catch{return false}}
-const read=():ContentBuildPublishTransaction[]=>{if(!canStore())return memory;try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return []}}
-const write=(v:ContentBuildPublishTransaction[])=>{if(!canStore()){memory=v;return}try{localStorage.setItem(KEY,JSON.stringify(v))}catch{}}
+const read=():ContentBuildPublishTransaction[]=>{
+ if(!canStore())return memory
+ let raw:string|null
+ try{raw=localStorage.getItem(KEY)}catch{throw new Error("Publish transaction storage could not be read.")}
+ if(raw===null)return []
+ let parsed:unknown
+ try{parsed=JSON.parse(raw)}catch{throw new Error("Publish transaction storage is unreadable; refusing to overwrite it.")}
+ if(!Array.isArray(parsed)||!parsed.every((item)=>Boolean(item)&&typeof item==="object"&&typeof (item as ContentBuildPublishTransaction).id==="string"&&typeof (item as ContentBuildPublishTransaction).contentBuildId==="string"))throw new Error("Publish transaction storage is malformed; refusing to overwrite it.")
+ return parsed as ContentBuildPublishTransaction[]
+}
+const write=(v:ContentBuildPublishTransaction[])=>{
+ if(!canStore()){memory=v;return}
+ try{localStorage.setItem(KEY,JSON.stringify(v))}catch{throw new Error("Could not persist publish transaction to browser storage; publishing must not continue without a recorded transaction.")}
+}
 const save=(t:ContentBuildPublishTransaction)=>{const all=read(),i=all.findIndex(x=>x.id===t.id);if(i>=0)all[i]=t;else all.push(t);write(all);return t}
-export const listPublishTransactions=(contentBuildId:string)=>read().filter(x=>x.contentBuildId===contentBuildId).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))
-export const getPublishTransaction=(id:string)=>read().find(x=>x.id===id)||null
+const assertTransactionSnapshotIntegrity = (transaction: ContentBuildPublishTransaction) => {
+ const snapshot = getApprovedPublishSnapshot(transaction.approvedSnapshotId)
+ if (!snapshot || !verifyApprovedPublishSnapshot(snapshot)) {
+  throw new Error("Publish transaction approved snapshot is missing or failed integrity verification.")
+ }
+ const assetsMatch =
+  transaction.contentBuildId === snapshot.contentBuildId &&
+  transaction.videoPackageId === snapshot.videoPackageId &&
+  transaction.approvedSnapshotHash === snapshot.hash &&
+  transaction.assetLock.projectionRevision === snapshot.contentBuildRevision &&
+  transaction.assetLock.titleAssetId === snapshot.assets.titleAssetId &&
+  transaction.assetLock.thumbnailAssetId === snapshot.assets.thumbnailAssetId &&
+  transaction.assetLock.finalRenderAssetId === snapshot.assets.finalRenderAssetId &&
+  transaction.assetLock.descriptionAssetId === snapshot.assets.descriptionAssetId &&
+  transaction.assetLock.tagsAssetId === snapshot.assets.tagsAssetId &&
+  transaction.assetLock.scheduledAt === snapshot.scheduledAt
+ if (!assetsMatch) {
+  throw new Error("Publish transaction binding does not match its approved snapshot and locked assets.")
+ }
+ return transaction
+}
+
+export const listPublishTransactions=(contentBuildId:string)=>read().filter(x=>x.contentBuildId===contentBuildId).map(assertTransactionSnapshotIntegrity).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))
+export const getPublishTransaction=(id:string)=>{
+ const transaction=read().find(x=>x.id===id)||null
+ return transaction ? assertTransactionSnapshotIntegrity(transaction) : null
+}
 
 export const beginPublishTransaction=(projection:PublishingPackageProjection,toolId="video-publisher")=>{
+ if(!canStore()) throw new Error("Publish transaction requires persistent browser storage; in-memory fallback is not safe for publishing.")
  if(!projection.ready) throw new Error("Publishing Package is not ready: "+projection.missing.join(", "))
  if(!projection.titleAssetId||!projection.thumbnailAssetId||!projection.finalRenderAssetId||!projection.descriptionAssetId) throw new Error("Publishing Package lacks required canonical assets.")
  // Preserve the strongest duplicate-upload guard first: if this exact final
  // render already has a transaction, later metadata/package edits must resume it
  // rather than silently creating another remote upload.
  const existingForRender=read().find(x=>x.contentBuildId===projection.contentBuildId&&x.assetLock.finalRenderAssetId===projection.finalRenderAssetId)
- if(existingForRender) return existingForRender
+ if(existingForRender) return assertTransactionSnapshotIntegrity(existingForRender)
 
  const approvedSnapshot=persistApprovedPublishSnapshot(projection)
  const key=`publish:${approvedSnapshot.contentBuildId}:${approvedSnapshot.id}`
  const existing=read().find(x=>x.contentBuildId===approvedSnapshot.contentBuildId&&x.approvedSnapshotId===approvedSnapshot.id)
- if(existing) return existing
+ if(existing) return assertTransactionSnapshotIntegrity(existing)
  const timestamp=now()
  const transaction:ContentBuildPublishTransaction={
   id:uuid(),contentBuildId:approvedSnapshot.contentBuildId,videoPackageId:approvedSnapshot.videoPackageId,idempotencyKey:key,

@@ -119,12 +119,30 @@ const canStoreSnapshots = () => {
 
 const readSnapshots = (): ApprovedPublishSnapshot[] => {
  if (!canStoreSnapshots()) return memorySnapshots
+ let raw: string | null
  try {
-  const parsed = JSON.parse(localStorage.getItem(SNAPSHOT_KEY) || "[]")
-  return Array.isArray(parsed) ? parsed : []
+  raw = localStorage.getItem(SNAPSHOT_KEY)
  } catch {
-  return []
+  throw new Error("Stored approved publish snapshots could not be read.")
  }
+ if (raw === null) return []
+ let parsed: unknown
+ try {
+  parsed = JSON.parse(raw)
+ } catch {
+  throw new Error("Stored approved publish snapshots are unreadable; refusing to overwrite them.")
+ }
+ if (
+  !Array.isArray(parsed) ||
+  !parsed.every((snapshot): snapshot is ApprovedPublishSnapshot =>
+   Boolean(snapshot) &&
+   typeof snapshot === "object" &&
+   verifyApprovedPublishSnapshot(snapshot as ApprovedPublishSnapshot)
+  )
+ ) {
+  throw new Error("Stored approved publish snapshots failed integrity verification; refusing to overwrite them.")
+ }
+ return parsed
 }
 
 const writeSnapshots = (snapshots: ApprovedPublishSnapshot[]) => {
@@ -135,7 +153,7 @@ const writeSnapshots = (snapshots: ApprovedPublishSnapshot[]) => {
  try {
   localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(snapshots))
  } catch {
-  // Persistence failures remain non-destructive; callers still receive the immutable value.
+  throw new Error("Could not persist approved publish snapshot to browser storage; publishing must not continue without a recorded snapshot.")
  }
 }
 

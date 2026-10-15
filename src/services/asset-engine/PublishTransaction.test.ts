@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
@@ -11,8 +11,18 @@ const projection=():PublishingPackageProjection=>({
  scheduledAt:null,publishedVideoId:null,approval:{status:"approved"},checks:[],blockers:[],ready:true,missing:[],
 })
 
+const createTestStorage = () => {
+ const values = new Map<string, string>()
+ return {
+  getItem: (key: string) => values.get(key) ?? null,
+  setItem: (key: string, value: string) => { values.set(key, String(value)) },
+  removeItem: (key: string) => { values.delete(key) },
+ }
+}
+
 describe("PublishTransaction",()=>{
- beforeEach(()=>{resetContentBuildRepositoryForTests();resetApprovedPublishSnapshotRepositoryForTests();resetPublishTransactionRepositoryForTests();createContentBuild({id:"cb-publish",channelId:"channel-a"})})
+ beforeEach(()=>{vi.stubGlobal("localStorage",createTestStorage());resetContentBuildRepositoryForTests();resetApprovedPublishSnapshotRepositoryForTests();resetPublishTransactionRepositoryForTests();createContentBuild({id:"cb-publish",channelId:"channel-a"})})
+ afterEach(()=>vi.unstubAllGlobals())
 
  it("locks canonical assets and returns the same transaction for the same final render",()=>{
   const first=beginPublishTransaction(projection())
@@ -70,6 +80,52 @@ describe("PublishTransaction",()=>{
     publicationState:"published",
    }),
   })
+ })
+
+ it("refuses to resume a transaction whose approved snapshot is missing", () => {
+  const first = beginPublishTransaction(projection())
+  resetApprovedPublishSnapshotRepositoryForTests()
+  expect(() => beginPublishTransaction(projection())).toThrow(/approved snapshot.*(missing|integrity|binding)/i)
+  expect(first.approvedSnapshotId).toBeTruthy()
+ })
+
+ it("refuses to complete a transaction whose locked assets do not match its approved snapshot", () => {
+  const transaction = beginPublishTransaction(projection())
+  const stored = localStorage.getItem("viewtube_content_build_publish_transactions_v2")
+  expect(stored).toBeTruthy()
+  const parsed = JSON.parse(stored as string)
+  parsed[0].assetLock.titleAssetId = "tampered-title"
+  localStorage.setItem("viewtube_content_build_publish_transactions_v2", JSON.stringify(parsed))
+  expect(() => completePublishStep({ transactionId: transaction.id, step: "apply-metadata" }))
+   .toThrow(/approved snapshot.*(integrity|binding|locked assets)/i)
+ })
+
+ it("refuses to create a transaction over unreadable transaction storage", () => {
+  localStorage.setItem("viewtube_content_build_publish_transactions_v2", "{not-json")
+  expect(() => beginPublishTransaction(projection())).toThrow(/publish transaction storage is unreadable/i)
+  expect(localStorage.getItem("viewtube_content_build_publish_transactions_v2")).toBe("{not-json")
+ })
+
+ it("surfaces transaction storage write failures instead of returning an unrecorded transaction", () => {
+  const originalSetItem = globalThis.localStorage.setItem
+  const setItem = vi.spyOn(globalThis.localStorage, "setItem").mockImplementation(function (key, value) {
+   if (key === "viewtube_content_build_publish_transactions_v2") throw new Error("quota exceeded")
+   return originalSetItem.call(this, key, value)
+  })
+  try {
+   expect(() => beginPublishTransaction(projection())).toThrow(/could not persist publish transaction/i)
+  } finally {
+   setItem.mockRestore()
+  }
+ })
+
+ it("refuses to start publishing when only volatile in-memory persistence is available", () => {
+  vi.stubGlobal("localStorage", undefined)
+  try {
+   expect(() => beginPublishTransaction(projection())).toThrow(/persistent browser storage/i)
+  } finally {
+   vi.unstubAllGlobals()
+  }
  })
 
 })

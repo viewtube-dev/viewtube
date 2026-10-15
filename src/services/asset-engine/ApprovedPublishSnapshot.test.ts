@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import {
  createApprovedPublishSnapshot,
  getApprovedPublishSnapshot,
@@ -36,8 +36,18 @@ const projection = (): PublishingPackageProjection => ({
  missing: [],
 })
 
+const createTestStorage = () => {
+ const values = new Map<string, string>()
+ return {
+  getItem: (key: string) => values.get(key) ?? null,
+  setItem: (key: string, value: string) => { values.set(key, String(value)) },
+  removeItem: (key: string) => { values.delete(key) },
+ }
+}
+
 describe("ApprovedPublishSnapshot", () => {
- beforeEach(() => resetApprovedPublishSnapshotRepositoryForTests())
+ beforeEach(() => { vi.stubGlobal("localStorage", createTestStorage()); resetApprovedPublishSnapshotRepositoryForTests() })
+ afterEach(() => vi.unstubAllGlobals())
 
  it("freezes the exact approved package identity and assets", () => {
   const snapshot = createApprovedPublishSnapshot(projection())
@@ -103,4 +113,32 @@ describe("ApprovedPublishSnapshot", () => {
   expect(getApprovedPublishSnapshot(saved.id)?.assets.titleAssetId).toBe("title-final")
   expect(getApprovedPublishSnapshot(saved.id)?.contentBuildRevision).toBe(7)
  })
+ it("fails closed when browser storage refuses to persist an approved snapshot", () => {
+  const setItem = vi.spyOn(globalThis.localStorage, "setItem").mockImplementation(() => {
+   throw new Error("quota exceeded")
+  })
+  try {
+   expect(() => persistApprovedPublishSnapshot(projection())).toThrow(/could not persist/i)
+  } finally {
+   setItem.mockRestore()
+  }
+ })
+
+ it("refuses to overwrite malformed snapshot storage", () => {
+  localStorage.setItem("viewtube_approved_publish_snapshots_v1", "{not-json")
+  expect(() => persistApprovedPublishSnapshot(projection())).toThrow(/stored approved publish snapshots are unreadable/i)
+  expect(localStorage.getItem("viewtube_approved_publish_snapshots_v1")).toBe("{not-json")
+ })
+
+ it("rejects tampered snapshots already present in browser storage", () => {
+  const saved = persistApprovedPublishSnapshot(projection())
+  const raw = localStorage.getItem("viewtube_approved_publish_snapshots_v1")
+  expect(raw).toBeTruthy()
+  const parsed = JSON.parse(raw as string)
+  parsed[0].assets.titleAssetId = "tampered-after-persistence"
+  localStorage.setItem("viewtube_approved_publish_snapshots_v1", JSON.stringify(parsed))
+  expect(() => getApprovedPublishSnapshot(saved.id)).toThrow(/failed integrity verification/i)
+  expect(() => persistApprovedPublishSnapshot({ ...projection(), revision: 8 })).toThrow(/failed integrity verification/i)
+ })
+
 })
