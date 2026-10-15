@@ -33,7 +33,7 @@ test("learning writes reject unknown types, missing IDs, and mismatched channel 
       { recordType: "unknown", record: { id: "bad-type", channelId: "learning-channel-validation" } },
       { recordType: "assetOutcome", record: { id: "wrong-channel", channelId: "another-channel" } },
       { recordType: "evaluation", record: { channelId: "learning-channel-validation" } },
-      { recordType: "evaluation", record: { id: "raw-record-not-envelope", channelId: "learning-channel-validation" } },
+      { recordType: "evaluation", id: "raw-record-not-envelope", channelId: "learning-channel-validation" },
     ],
   });
   assert.equal(count, 0);
