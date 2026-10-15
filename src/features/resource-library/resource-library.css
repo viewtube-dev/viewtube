@@ -1,12 +1,16 @@
 .vt-resource-library-page {
-  --vt-resource-ink: #192033;
-  --vt-resource-paper: #fffef8;
-  --vt-resource-soft: #f2f4f7;
-  --vt-resource-cyan: #36e0f6;
-  --vt-resource-purple: #b14aed;
-  --vt-resource-pink: #fa618a;
-  --vt-resource-yellow: #ffe357;
-  --vt-resource-lime: #c0f240;
+  /* Spectrum values are injected from src/styles/toolboxPalette.ts at runtime.
+     Keep this surface a consumer of the canonical palette, never a palette owner. */
+  --vt-resource-ink: var(--vt-color-ink, #192033);
+  --vt-resource-paper: var(--vt-color-paper, #fffef8);
+  --vt-resource-soft: var(--vt-color-surface, #f2f4f7);
+  --vt-resource-cyan: var(--vt-spectrum-7);
+  --vt-resource-purple: var(--vt-spectrum-9);
+  --vt-resource-pink: var(--vt-spectrum-0);
+  --vt-resource-yellow: var(--vt-spectrum-3);
+  --vt-resource-lime: var(--vt-spectrum-4);
+  --vt-resource-pair-shadow: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 24%, transparent);
+  --vt-resource-pair-shadow-soft: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 18%, transparent);
   min-height: 100vh;
   width: 100%;
   padding: 20px;
