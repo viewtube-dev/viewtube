@@ -2,12 +2,25 @@ import React from "react"
 import { BookOpenText, FileText, Search, Sparkles } from "lucide-react"
 import { useSearchParams } from "react-router-dom"
 import { SubToolbox, ToolboxScaffold } from "../../components/Toolbox"
+import { VT_SPECTRUM_PALETTE_06, getToolboxPaletteColors } from "../../styles/toolboxPalette"
 import ResourceDocumentRenderer from "./ResourceDocumentRenderer"
 import {
   RESOURCE_LIBRARY_ENTRIES,
   getResourceById,
 } from "./resourceLibraryRegistry"
 import "./resource-library.css"
+
+const getResourcePaletteStyle = (index: number): React.CSSProperties => {
+  const pair = getToolboxPaletteColors(index)
+  return {
+    "--vt-resource-pair-primary": pair.header,
+    "--vt-resource-pair-secondary": pair.icon,
+  } as React.CSSProperties
+}
+
+const canonicalSpectrumStyle = Object.fromEntries(
+  VT_SPECTRUM_PALETTE_06.map((color, index) => [`--vt-spectrum-${index}`, color]),
+) as React.CSSProperties
 
 const ResourceLibrary: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -51,7 +64,7 @@ const ResourceLibrary: React.FC = () => {
   }
 
   return (
-    <div className="vt-resource-library-page">
+    <div className="vt-resource-library-page" style={{ ...canonicalSpectrumStyle, ...getResourcePaletteStyle(8) }}>
       <ToolboxScaffold
         title="RESOURCE LIBRARY"
         subtitle="Source-grounded creator references, guides, playbooks and reusable learning resources."
