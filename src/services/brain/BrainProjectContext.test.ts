@@ -127,11 +127,17 @@ describe("BrainProjectContext", () => {
    contentBuildId: "cb-visible",
    topic: "Visible topic",
   })
-  expect(buildAlgorithmProjectContext({
+  const withoutVisibleFallback = buildAlgorithmProjectContext({
    channelId: "channel-a",
    projectId: "project-a",
    contentBuild: unrelatedBuild,
-  })).toBeNull()
+  })
+  expect(withoutVisibleFallback).toMatchObject({
+   channelId: "channel-a",
+   projectId: "project-a",
+   contentBuildId: null,
+  })
+  expect(withoutVisibleFallback).not.toHaveProperty("lifecycle")
  })
 
 })
