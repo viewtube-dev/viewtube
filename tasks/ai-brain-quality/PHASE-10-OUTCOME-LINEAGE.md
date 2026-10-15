@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Asset outcome → Brain ledger lineage and local retry idempotency implemented with regression coverage; full publication → analytics attribution → governed-learning closure remains open.
+**Status:** Asset outcome → Brain ledger lineage, local retry idempotency, and immutable publish-transaction → approved-snapshot → YouTube publication identity are implemented with regression coverage. Cross-system durable persistence and full governed-learning closure remain open.
 
 ## Implementation completed in this slice
 
@@ -18,7 +18,7 @@ Regression coverage in `src/services/brain/__tests__/assetOutcomes.test.ts` veri
 
 ## Remaining end-to-end work — not certified complete
 
-This slice closes only the Asset Engine → AssetOutcome → BrainOutcomeLedger identity hop. It does not yet prove:
+This slice now closes the Asset Engine → AssetOutcome → BrainOutcomeLedger hop and records a typed publication identity on the canonical ContentBuild completion events. It does not yet prove:
 
 1. recommendation/experiment identity survives through the exact ActionPacket or workflow that was executed;
 2. publish transaction and immutable publishing snapshot retain the same Project/ContentBuild/asset/variant identity;
@@ -41,7 +41,8 @@ The earlier release-gates run `38693153891` passed production build, configured 
 - [x] Register the regression test in capability coverage.
 - [x] Add optional producer idempotency keys and prevent duplicate Brain ledger events for a repeated source record.
 - [ ] Verify the new test and capability-coverage check on the latest PR head.
-- [ ] Join recommendation/action/publish/analytics/evaluation/learning IDs end-to-end.
+- [x] Join publish transaction, approved snapshot/hash, ContentBuild, package, YouTube video, selected assets and correlation/idempotency IDs in a typed publication identity.
+- [ ] Join recommendation/action/publish/analytics/evaluation/learning IDs end-to-end across durable producer systems.
 - [ ] Add idempotency and cross-channel/project isolation tests across the full outcome chain.
 - [ ] Complete Phase 9 release gates before merge.
 
