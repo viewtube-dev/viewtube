@@ -82,6 +82,52 @@ export const classifyCreatorCommunication = (text: string): CreatorCommunication
  * Stores communication as an immutable intelligence event. This is evidence of what
  * the creator said, not a memory write; promotion remains a separate governed workflow.
  */
+/**
+ * One-time privacy migration for pre-consent records. Redaction is always allowed:
+ * it removes retained creator text and writes the sanitized event back through the
+ * existing idempotent durable-sync path. It does not classify new communication.
+ */
+export const redactLegacyCreatorCommunicationText = (channelIdInput: string): number => {
+ const channelId = channelIdInput.trim()
+ if (!channelId) return 0
+ const legacy = listAlgorithmIntelligenceEvents({ channelId }).filter((event) =>
+  event.kind === "CREATOR_COMMUNICATION_CLASSIFIED" && typeof event.metadata?.communicationText === "string",
+ )
+ legacy.forEach((event) => {
+  const originalText = String(event.metadata.communicationText || "")
+  const { communicationText: _discardedText, ...metadata } = event.metadata
+  recordAlgorithmIntelligenceEvent({
+   id: event.id,
+   channelId: event.channelId,
+   projectId: event.projectId || null,
+   videoId: event.videoId || null,
+   kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+   sourceSystem: "communication",
+   sourceId: event.sourceId || event.id,
+   parentEventIds: event.parentEventIds,
+   recommendationId: event.recommendationId || null,
+   primingPlanId: event.primingPlanId || null,
+   primingStepId: event.primingStepId || null,
+   actionPacketId: event.actionPacketId || null,
+   workflowId: event.workflowId || null,
+   evidenceIds: event.evidenceIds,
+   confidence: event.confidence,
+   title: event.title,
+   summary: "Creator communication classified; legacy raw text redacted.",
+   evaluationTargets: event.evaluationTargets,
+   checkpointAt: event.checkpointAt || null,
+   metadata: {
+    ...metadata,
+    communicationText: undefined,
+    communicationTextFingerprint: fingerprintText(originalText),
+    rawCommunicationTextRetained: false,
+    retentionPolicy: "classification-and-fingerprint-only-v1",
+   },
+  })
+ })
+ return legacy.length
+}
+
 export const recordCreatorCommunicationEvidence = (
  input: RecordCreatorCommunicationInput,
 ): { classification: CreatorCommunicationClassification; event: AlgorithmIntelligenceEvent; idempotentReplay: boolean } => {
