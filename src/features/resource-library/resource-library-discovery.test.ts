@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 import {
   RESOURCE_LIBRARY_ENTRIES,
@@ -5,6 +6,9 @@ import {
   normalizeResourceProgress,
   searchResourceLibrary,
 } from "./resourceLibraryRegistry"
+
+const libraryComponent = readFileSync(new URL("./ResourceLibrary.tsx", import.meta.url), "utf8")
+const appRoutes = readFileSync(new URL("../../app/AppRoutes.tsx", import.meta.url), "utf8")
 
 describe("Resource Library discovery and learning paths", () => {
   it("finds resources through creator-language synonyms, not only literal titles", () => {
@@ -37,4 +41,27 @@ describe("Resource Library discovery and learning paths", () => {
     expect(normalizeResourceProgress(null)).toEqual([])
     expect(normalizeResourceProgress("bad-data")).toEqual([])
   })
+  it("keeps workspace continuation links on routes that exist in AppRoutes", () => {
+    for (const route of ["/studio", "/projects", "/analytics", "/ai-brain", "/vault", "/video-publisher"]) {
+      expect(appRoutes, route).toContain(`path="${route}"`)
+      expect(libraryComponent).toContain(route)
+    }
+    expect(libraryComponent).toContain("Help me apply the Resource Library guide")
+    expect(libraryComponent).toContain("they do not automatically copy guide content or change project data")
+  })
+
+  it("persists completion locally and degrades gracefully if browser storage is unavailable", () => {
+    expect(libraryComponent).toContain('viewtube:resource-library:completed:v1')
+    expect(libraryComponent).toContain("normalizeResourceProgress")
+    expect(libraryComponent).toContain("window.localStorage.setItem")
+    expect(libraryComponent).toContain("Private browsing or storage policy may block persistence")
+  })
+
+  it("exposes path progress and completion state accessibly", () => {
+    expect(libraryComponent).toContain('aria-pressed={active}')
+    expect(libraryComponent).toContain('aria-pressed={completedResources.includes(selectedResource.id)}')
+    expect(libraryComponent).toContain("completedCount")
+    expect(libraryComponent).toContain("searchResourceLibrary(query")
+  })
+
 })
