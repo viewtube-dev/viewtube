@@ -21,7 +21,8 @@
  * changing callers.
  */
 
-import { recordBrainOutcome } from "./BrainOutcomeLedger"
+import { recordBrainOutcome, updateBrainOutcomePublicationLineage } from "./BrainOutcomeLedger"
+import type { ContentBuildPublicationIdentity } from "../asset-engine/contracts"
 import { getGeneratedAsset, type AssetRecord, type AssetType } from "./AssetGenerator"
 import { compareStyleFeatures, extractStyleFeatures, type StyleFeatures } from "./styleMetrics"
 
@@ -66,6 +67,16 @@ export interface AssetOutcome {
  traceId: string
  /** Caller-supplied key makes retries of one creator action idempotent. */
  idempotencyKey?: string
+ /** Canonical publication provenance, attached only after publication is verified. */
+ contentBuildId?: string
+ projectId?: string
+ publishTransactionId?: string
+ approvedSnapshotId?: string
+ approvedSnapshotHash?: string
+ publishedVideoId?: string
+ publicationIdentity?: ContentBuildPublicationIdentity
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
 }
 
 const STORAGE_KEY = "vt_asset_outcomes_v1"
@@ -126,6 +137,17 @@ export const listAssetOutcomes = (input?: {
   if (input?.assetId && outcome.assetId !== input.assetId) return false
   return true
  })
+
+const persistUpdated = (outcome: AssetOutcome): void => {
+ if (!canUseStorage()) return
+ try {
+  const next = readOutcomes().map((entry) => entry.id === outcome.id ? outcome : entry)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next.slice(0, MAXIMUM_RETAINED)))
+  window.dispatchEvent(new CustomEvent(ASSET_OUTCOME_EVENT, { detail: outcome }))
+ } catch {
+  // Publication attribution is best-effort in this browser-local ledger.
+ }
+}
 
 const makeId = (): string =>
  typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -266,6 +288,56 @@ export const recordAssetOutcome = async (input: {
  }
 
  return outcome
+}
+
+/**
+ * Join a recorded asset outcome to the canonical immutable publication identity and,
+ * when available, analytics checkpoint evidence. A selected variant, channel match,
+ * approved snapshot and transaction identity are required; conflicting relinks fail closed.
+ */
+export const linkAssetOutcomeToPublication = (input: {
+ assetId: string
+ channelId: string
+ publicationIdentity: ContentBuildPublicationIdentity
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
+}): AssetOutcome | null => {
+ const identity = input.publicationIdentity
+ if (
+  identity.channelId !== input.channelId ||
+  !identity.publishTransactionId ||
+  !identity.youtubeVideoId ||
+  !identity.approvedSnapshotId ||
+  !identity.approvedSnapshotHash ||
+  !identity.selectedVariantAssetIds.includes(input.assetId)
+ ) return null
+ const existing = readOutcomes().find((entry) =>
+  entry.assetId === input.assetId && entry.channelId === input.channelId
+ )
+ if (!existing || existing.kind !== "published") return null
+ if (existing.publishTransactionId && existing.publishTransactionId !== identity.publishTransactionId) return null
+ if (existing.publishedVideoId && existing.publishedVideoId !== identity.youtubeVideoId) return null
+ const linked: AssetOutcome = {
+  ...existing,
+  contentBuildId: identity.contentBuildId,
+  projectId: identity.projectId,
+  publishTransactionId: identity.publishTransactionId,
+  approvedSnapshotId: identity.approvedSnapshotId,
+  approvedSnapshotHash: identity.approvedSnapshotHash,
+  publishedVideoId: identity.youtubeVideoId,
+  publicationIdentity: identity,
+  analyticsCheckpointIds: [...new Set([...(existing.analyticsCheckpointIds || []), ...(input.analyticsCheckpointIds || [])])],
+  evidenceIds: [...new Set([...(existing.evidenceIds || []), ...(input.evidenceIds || [])])],
+ }
+ persistUpdated(linked)
+ updateBrainOutcomePublicationLineage({
+  channelId: input.channelId,
+  sourceRecordId: existing.id,
+  publicationIdentity: identity,
+  analyticsCheckpointIds: input.analyticsCheckpointIds,
+  evidenceIds: input.evidenceIds,
+ })
+ return linked
 }
 
 export interface AssetOutcomeSummary {
