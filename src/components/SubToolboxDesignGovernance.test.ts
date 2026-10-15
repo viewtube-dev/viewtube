@@ -522,7 +522,7 @@ describe("subtoolbox design governance", () => {
   expect(subtoolboxCss).toContain("font-size:32px")
   expect(subtoolboxCss).toContain("letter-spacing:-.035em")
   expect(studioCss).toContain("--vt-studio-control-height: 44px")
-  expect(studioCss).toContain("font-size: 32px")
+  expect(studioCss).toContain("font-size: var(--vt-studio-control-font-size, 38px)")
   expect(studioCss).toContain("letter-spacing: -.035em")
  })
 
