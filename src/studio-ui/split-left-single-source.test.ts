@@ -26,10 +26,12 @@ describe("canonical Studio split-left button ownership", () => {
     expect(source).not.toContain("<SplitLeftButton")
   })
 
-  it("defaults to the shared action typography scale and prevents stacked split shadows", () => {
+  it("uses the shared standard/compact geometry and prevents stacked split shadows", () => {
     const component = read("src/studio-ui/primitives/StudioControls.tsx")
     const css = read("src/styles/studio-split-left-consistency.css")
-    expect(component).toContain('sizeVariant = "action"')
+    expect(component).toContain('sizeVariant = "standard"')
+    expect(component).toContain('data-split-left="true"')
+    expect(component).toContain("Separate 56px action family")
     expect(css).toContain("filter: none !important")
     expect(css).toContain("button.vt-subtoolbox-split-button:active:not(:disabled)")
   })
