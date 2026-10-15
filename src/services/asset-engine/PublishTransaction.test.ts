@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
@@ -11,8 +11,18 @@ const projection=():PublishingPackageProjection=>({
  scheduledAt:null,publishedVideoId:null,approval:{status:"approved"},checks:[],blockers:[],ready:true,missing:[],
 })
 
+const createTestStorage = () => {
+ const values = new Map<string, string>()
+ return {
+  getItem: (key: string) => values.get(key) ?? null,
+  setItem: (key: string, value: string) => { values.set(key, String(value)) },
+  removeItem: (key: string) => { values.delete(key) },
+ }
+}
+
 describe("PublishTransaction",()=>{
- beforeEach(()=>{resetContentBuildRepositoryForTests();resetApprovedPublishSnapshotRepositoryForTests();resetPublishTransactionRepositoryForTests();createContentBuild({id:"cb-publish",channelId:"channel-a"})})
+ beforeEach(()=>{vi.stubGlobal("localStorage",createTestStorage());resetContentBuildRepositoryForTests();resetApprovedPublishSnapshotRepositoryForTests();resetPublishTransactionRepositoryForTests();createContentBuild({id:"cb-publish",channelId:"channel-a"})})
+ afterEach(()=>vi.unstubAllGlobals())
 
  it("locks canonical assets and returns the same transaction for the same final render",()=>{
   const first=beginPublishTransaction(projection())
@@ -97,8 +107,8 @@ describe("PublishTransaction",()=>{
  })
 
  it("surfaces transaction storage write failures instead of returning an unrecorded transaction", () => {
-  const originalSetItem = Storage.prototype.setItem
-  const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(function (key, value) {
+  const originalSetItem = globalThis.localStorage.setItem
+  const setItem = vi.spyOn(globalThis.localStorage, "setItem").mockImplementation(function (key, value) {
    if (key === "viewtube_content_build_publish_transactions_v2") throw new Error("quota exceeded")
    return originalSetItem.call(this, key, value)
   })
