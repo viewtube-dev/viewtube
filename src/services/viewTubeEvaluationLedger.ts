@@ -6,6 +6,7 @@ import { captureAIBrainLearningEvent } from "./aiBrainSelfImprovement"
 import { promoteBrainClaim, rebuildAffectedToolContextPacks } from "./brain/BrainMemoryClaims"
 import { readBrainUserControls } from "./brain/BrainUserControls"
 import { evaluateViewTubeControl } from "./viewTubeUserControls"
+import { enqueueBrainLearningRecord } from "./brain/BrainLearningPersistence"
 
 export type EvaluationOutcome = "pending" | "positive" | "neutral" | "negative"
 export interface EvaluationRecord {
@@ -94,6 +95,28 @@ const EVAL_KEY = "viewtube:evaluation-ledger:v1"
 const CANDIDATE_KEY = "viewtube:workflow-candidates:v1"
 const read = <T,>(key: string): T[] => { if (typeof window === "undefined") return []; try { return JSON.parse(window.localStorage.getItem(key) || "[]") as T[] } catch { return [] } }
 const write = <T,>(key: string, values: T[]) => { if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(values)) }
+
+/** Merge server-authoritative rows into the existing evaluation and candidate ledgers. */
+export const hydrateBrainLearningRecords = (input: {
+ evaluations: EvaluationRecord[]
+ candidates: WorkflowCandidate[]
+}) => {
+ const evaluations = new Map(listEvaluationRecords().map((record) => [record.id, record]))
+ for (const record of input.evaluations || []) {
+  if (!record?.id || !record.channelId) continue
+  evaluations.set(record.id, record)
+ }
+ const candidates = new Map(listWorkflowCandidates().map((record) => [record.id, record]))
+ for (const record of input.candidates || []) {
+  if (!record?.id || !record.channelId) continue
+  candidates.set(record.id, record)
+ }
+ const mergedEvaluations = [...evaluations.values()].sort((left, right) => right.updatedAt - left.updatedAt).slice(0, 5000)
+ const mergedCandidates = [...candidates.values()].sort((left, right) => right.createdAt - left.createdAt).slice(0, 1000)
+ write(EVAL_KEY, mergedEvaluations)
+ write(CANDIDATE_KEY, mergedCandidates)
+ return { evaluations: mergedEvaluations.length, candidates: mergedCandidates.length }
+}
 
 /**
  * Create a post-publication evaluation only when the published video is present
@@ -283,6 +306,7 @@ export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"create
  const now = Date.now()
  const item: EvaluationRecord = { ...input, channelId: input.channelId || null, projectId: input.projectId || null, id: crypto.randomUUID(), createdAt: now, updatedAt: now, outcome: "pending" }
  write(EVAL_KEY, [item, ...records].slice(0, 5000))
+ if (item.channelId) void enqueueBrainLearningRecord(item.channelId, "evaluation", item)
  return item
 }
 export const resolveEvaluationRecord = (
@@ -299,12 +323,13 @@ export const resolveEvaluationRecord = (
  if (found.outcome !== "pending") return found.outcome === outcome ? found : null
  const next = { ...found, outcome, outcomeNote, metricsAfter, updatedAt: Date.now() }
  write(EVAL_KEY, records.map((record) => record.id === id ? next : record))
+ if (next.channelId) void enqueueBrainLearningRecord(next.channelId, "evaluation", next)
  return next
 }
 export const listWorkflowCandidates = () => read<WorkflowCandidate>(CANDIDATE_KEY)
 export const proposeWorkflowCandidate = (input: Omit<WorkflowCandidate,"id"|"createdAt"|"status">) => {
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
- const item: WorkflowCandidate = { ...input, id: crypto.randomUUID(), createdAt: Date.now(), status: "candidate" }; write(CANDIDATE_KEY, [item, ...listWorkflowCandidates()].slice(0,1000)); return item
+ const item: WorkflowCandidate = { ...input, id: crypto.randomUUID(), createdAt: Date.now(), status: "candidate" }; write(CANDIDATE_KEY, [item, ...listWorkflowCandidates()].slice(0,1000)); if (item.channelId) void enqueueBrainLearningRecord(item.channelId, "learningCandidate", item); return item
 }
 /**
  * Create a reviewable candidate only from a resolved evaluation with trustworthy evidence.
@@ -356,6 +381,7 @@ export const proposeEvaluationLearningCandidate = (
   idempotencyKey: input.idempotencyKey || null,
  }
  write(CANDIDATE_KEY, [item, ...listWorkflowCandidates()].slice(0, 1000))
+ if (item.channelId) void enqueueBrainLearningRecord(item.channelId, "learningCandidate", item)
  return item
 }
 
@@ -377,6 +403,7 @@ export const reviewWorkflowCandidate = (
   reviewedAt: Date.now(),
  }
  write(CANDIDATE_KEY, values.map((value) => value.id === id ? next : value))
+ if (next.channelId) void enqueueBrainLearningRecord(next.channelId, "learningCandidate", next)
  return next
 }
 
@@ -510,5 +537,6 @@ export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input
  write(CANDIDATE_KEY, listWorkflowCandidates().map((value) =>
   value.id === candidate.id ? updatedCandidate : value
  ))
+ if (updatedCandidate.channelId) void enqueueBrainLearningRecord(updatedCandidate.channelId, "learningCandidate", updatedCandidate)
  return { candidate: updatedCandidate, claim: promoted.claim, decision: promoted.decision }
 }
