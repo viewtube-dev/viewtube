@@ -164,6 +164,28 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
  const build=getContentBuild(next.contentBuildId)
  if(build?.youtube?.status==="published"){
   const publicationIdentity = getContentBuildPublicationIdentity(next.id)
+  if (!publicationIdentity) {
+   throw new Error("Cannot complete publication without a verified immutable publication identity.")
+  }
+  appendContentBuildEvent({
+   contentBuildId: next.contentBuildId,
+   idempotencyKey: `publication-identity:${next.id}`,
+   eventType: "youtube.state.changed",
+   entityType: "publish-identity-receipt",
+   entityId: next.id,
+   actorType: "youtube",
+   toolId,
+   timestamp,
+   inputAssetIds: [...publicationIdentity.selectedVariantAssetIds],
+   outputAssetIds: [],
+   evidenceIds: [publicationIdentity.approvedSnapshotId],
+   metadata: {
+    ...publicationIdentity,
+    publishTransactionId: next.id,
+    contentBuildId: next.contentBuildId,
+    channelId: publicationIdentity.channelId,
+   },
+  })
   setContentBuildStage(next.contentBuildId,"published",{actorType:"youtube",toolId})
   appendContentBuildEvent({
    contentBuildId:next.contentBuildId,
