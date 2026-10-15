@@ -172,4 +172,13 @@ describe("CreatorVaultOS mobile card density", () => {
   expect(source).toContain('aria-modal="true"')
   expect(source).not.toContain('title="Workspace Controls"')
  })
+
+ it("provides a dedicated landscape workspace grid and dense landscape toolbar rules", () => {
+  expect(source).toContain('data-vault-layout-grid')
+  const css = fs.readFileSync(path.resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+  expect(css).toContain("@media (orientation: landscape) and (max-height: 500px)")
+  expect(css).toContain("[data-vault-layout-grid]")
+  expect(css).toContain("[data-vault-toolbar-secondary]")
+ })
+
 })
