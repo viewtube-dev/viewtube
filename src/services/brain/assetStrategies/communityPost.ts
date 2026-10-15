@@ -82,6 +82,7 @@ const requestedDays = (request: AssetRequest): number => {
 export const communityPostStrategy: AssetGeneratorStrategy<CommunityPostPlan> = {
  assetType: "community_post",
  promptVersion: "community-post-v1",
+ outputSchemaVersion: "community-post-plan-v1",
  evidenceClasses: [
   "channel_profile",
   "top_videos",
