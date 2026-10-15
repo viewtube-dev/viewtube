@@ -82,6 +82,11 @@ describe("post-publication outcome pipeline", () => {
       youtubeVideoId: "video-1",
       approvedSnapshotId: "snapshot-1",
       approvedSnapshotHash: "snapshot-hash-1",
+      workflowId: "workflow-1",
+      operationId: "operation-1",
+      actionPacketId: "packet-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
     }])
     mocks.listAlgorithmIntelligenceEvents.mockImplementation(({ kind }: { kind?: string }) =>
       kind === "OUTCOME_MEASURED" ? [] : [{
@@ -145,6 +150,11 @@ describe("post-publication outcome pipeline", () => {
     expect(mocks.recordAnalyticsCheckpointForEvaluation).toHaveBeenCalledWith(expect.objectContaining({
       transactionId: "tx-1",
       videoId: "video-1",
+      actionPacketId: "packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
+      experimentId: "experiment-1",
+      correlationId: "operation-1",
       checkpointId: "daily:2026-10-14",
       toolId: "canonical-analytics-sync",
     }))
@@ -153,6 +163,11 @@ describe("post-publication outcome pipeline", () => {
       metadata: expect.objectContaining({
         contentBuildId: "build-1",
         publicationTransactionId: "tx-1",
+        workflowId: "workflow-1",
+        operationId: "operation-1",
+        actionPacketId: "packet-1",
+        recommendationId: "recommendation-1",
+        experimentId: "experiment-1",
         checkpointId: "daily:2026-10-14",
         causalConclusion: null,
       }),
