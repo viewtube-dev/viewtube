@@ -496,3 +496,30 @@ describe("Studio Username Split-Left Input", () => {
     expect(css).toContain('.vt-studio-username-input[data-size="compact"] {\n  --vt-studio-control-icon-size: 24px;\n  --vt-studio-control-icon-stroke: 2;')
   })
 })
+
+
+describe("Studio Controls owns dropdown and stepper implementations", () => {
+  it("keeps the simple dropdown and both stepper variants inside the canonical StudioControls module", async () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(controls).toContain("export const StudioSimpleDropdown")
+    expect(controls).toContain("export const StudioSplitStepper")
+    expect(controls).toContain("export const StudioInlineStepper")
+    expect(controls).toContain("export const StudioDropdown")
+    expect(controls).toContain("export const StudioLegendMultiDropdown")
+    expect(controls).not.toContain('from "./StudioSimpleDropdown"')
+    expect(controls).not.toContain('from "./StudioSplitStepper"')
+    expect(controls).not.toContain('from "./StudioInlineStepper"')
+    expect(css).toContain(".vt-studio-split-stepper")
+    expect(css).toContain(".vt-studio-inline-stepper")
+  })
+
+  it("uses the canonical compact square-button size for tag editor actions", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(controls).toContain('data-size="compact" data-vt-studio-tag-editor-action="true"')
+    expect(css).toContain(".vt-studio-tag-editor__square-action[data-size=\"compact\"]")
+    expect(css).toContain("width: 28px")
+    expect(css).not.toContain("flex: 0 0 32px;")
+  })
+})
