@@ -22,3 +22,9 @@ test("the rail divider is centered and spans only the button rail", () => {
   assert.match(styles, /grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/)
   assert.doesNotMatch(styles, /\.vt-subtoolbox-split-stepper-rail button \+ button\s*\{[^}]*border-top:/s)
 })
+
+
+test("long press repeats without activating the full-component focus outline", () => {
+  assert.doesNotMatch(component, /\(inputFocused \|\| held\)/)
+  assert.doesNotMatch(component, /const \[held, setHeld\]/)
+})
