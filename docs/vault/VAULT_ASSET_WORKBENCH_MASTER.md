@@ -1,15 +1,15 @@
 # ViewTube Vault / Asset Workbench — Tools, Capabilities, Plans & Systems Reference
 
 **Status:** CANONICAL RECONSTRUCTION / PRODUCT-ARCHITECTURE REFERENCE  
-**Implementation status:** Reference architecture is defined. Phases 0–6 have implementation work on `vault/phases-0-1-2-workbench`; CI, merge, server-side authorization, and production runtime certification remain pending. Do not infer completion from branch writes alone.  
+**Implementation status:** Reference architecture is defined. Phases 0–6 have implementation work; phases 7–10 are now being advanced on `vault/phases-0-1-2-workbench`. Exact-head CI, cross-system certification, server authorization/durable queue, and production runtime certification remain pending. Do not infer completion from branch writes alone.  
 **Canonical repository:** viewtube-dev/viewtube  
 **Primary owner document:** docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md  
 **Related overview:** docs/Vault.md  
 **Recovery evidence:** docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md
 
-## Current implementation checkpoint — October 15, 2026
+## Current implementation checkpoint — October 15, 2026 (phases 0–10 continuation)
 
-The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md) and [Phases 3–6 implementation audit](VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
+The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md), [Phases 3–6 implementation audit](VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md), and [Phases 7–10 implementation audit](VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
 
 - **Phase 0:** canonical source ownership and baseline gaps documented.
 - **Phase 1:** stable local asset identity, stale-selection guards, and protected/lifecycle mutation policy strengthened with regression tests.
