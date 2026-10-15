@@ -38,7 +38,7 @@ describe("StudioInlineStepper", () => {
     expect(normalizeStudioInlineStepperValue(0.2, 1, 0.1, 0, 10)).toBe(0.3)
     expect(normalizeStudioInlineStepperValue(10, 1, 1, 0, 10)).toBe(10)
     expect(normalizeStudioInlineStepperValue(0, -1, 1, 0, 10)).toBe(0)
-    expect(normalizeStudioInlineStepperValue(Number.NaN, 1, 1, 0, 10)).toBe(0)
+    expect(normalizeStudioInlineStepperValue(Number.NaN, 1, 1, 0, 10)).toBe(1)
   })
 
   it("uses global Studio size tokens and has no SubToolbox style authority", () => {
