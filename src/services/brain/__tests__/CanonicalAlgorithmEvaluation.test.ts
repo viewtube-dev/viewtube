@@ -74,6 +74,30 @@ describe("CanonicalAlgorithmEvaluation", () => {
   expect(duration?.comparisonContext.unit).toBe("seconds")
  })
 
+ it("fails closed for a video-scoped evaluation when the exact video row is absent", () => {
+  const result = resolveAlgorithmMetricFromCanonicalCatalog({
+   snapshotId: "snapshot-current",
+   videoId: "published-video-missing",
+   rule: rule("qualified_views"),
+   catalog: [{
+    id: "videos",
+    status: "available",
+    sampleRows: [{ videoId: "another-video", engagedViews: 900 }],
+    metrics: {
+     engagedViews: { count: 1, sum: 900, average: 900, minimum: 900, maximum: 900 },
+    },
+   }, {
+    id: "channel_totals",
+    status: "available",
+    sampleRows: [],
+    metrics: {
+     views: { count: 1, sum: 5000, average: 5000, minimum: 5000, maximum: 5000 },
+    },
+   }] as any,
+  })
+  expect(result).toBeNull()
+ })
+
  it("uses canonical summary aggregation when no video row is requested", () => {
   const result = resolveAlgorithmMetricFromCanonicalCatalog({
    snapshotId: "snapshot-current",
