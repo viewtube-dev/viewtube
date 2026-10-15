@@ -173,6 +173,10 @@ export const transformVaultImage = async (
       preserveAspectRatio: transform.preserveAspectRatio,
     })
     const output = createCanvas(dimensions.width, dimensions.height)
+    if (transform.outputFormat === "image/jpeg") {
+      output.context.fillStyle = "#ffffff"
+      output.context.fillRect(0, 0, dimensions.width, dimensions.height)
+    }
     output.context.drawImage(rotated.canvas, 0, 0, dimensions.width, dimensions.height)
     const blob = await canvasToBlob(output.canvas, transform.outputFormat, transform.quality)
     return {
