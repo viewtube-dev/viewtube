@@ -146,3 +146,8 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+
+## Phase 13 — Lifecycle identity, enforceable capability policy, and durable evaluation (2026-10-15)
+
+The next wave is specified in `PHASE-13-LIFECYCLE-IDENTITY-DURABILITY-AND-CERTIFICATION.md`. It closes the remaining acceptance gaps from phases 10–12: stable-ID propagation across every lifecycle writer, final-boundary ContentBuild-stage capability enforcement, authenticated server persistence for outcomes/evaluations, consent and retention verification, provider-backed E2E, and same-commit release-gate baseline comparison. Phase 13 remains planned, not certified.
