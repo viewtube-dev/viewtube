@@ -97,3 +97,7 @@ A focused Phase 13 implementation now hardens the existing authenticated learnin
 - Regression tests cover conflict rejection, preservation of the original record, and an allowed pending-to-positive evaluation update.
 
 This slice is **not Phase 13 certification**. Remaining gates still include current-head CI, server/database-backed integration coverage, full producer-to-learning ancestry, direct action-boundary capability enforcement, consent redaction verification across devices, browser/E2E evidence, and the production-host/served-commit check.
+
+## Consent-retention regression added
+
+The server persistence suite now verifies that an existing channel-scoped creator-communication event containing legacy raw text is replaced by a sanitized version with the same stable event ID, and that a subsequent durable read contains no raw message text. This validates the server store's replacement behavior; a full authenticated cross-device purge/reload flow is still required for certification.
