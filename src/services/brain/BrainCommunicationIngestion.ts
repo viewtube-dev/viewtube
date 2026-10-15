@@ -52,7 +52,7 @@ const RULES: Array<{ label: CreatorCommunicationLabel; pattern: RegExp; rational
 export const classifyCreatorCommunication = (text: string): CreatorCommunicationClassification => {
  const normalized = text.trim().replace(/\s+/g, " ")
  const matched = RULES.filter((rule) => rule.pattern.test(normalized))
- const labels = matched.length ? matched.map((rule) => rule.label) : ["factual_claim" as const]
+ const labels = matched.map((rule) => rule.label)
  const decisive = labels.some((label) => ["approval", "rejection", "correction", "experiment_note"].includes(label))
  return {
   schemaVersion: "brain-creator-communication-v1",
@@ -60,9 +60,9 @@ export const classifyCreatorCommunication = (text: string): CreatorCommunication
   confidence: decisive ? "high" : labels.length >= 2 ? "medium" : "low",
   durableMemoryPromoted: false,
   requiresGovernedReview: true,
-  rationale: matched.map((rule) => rule.rationale).concat(
-   normalized ? [] : ["Empty communication has no classifiable content."],
-  ),
+  rationale: matched.length
+   ? matched.map((rule) => rule.rationale)
+   : ["No deterministic communication signal; do not infer a fact or preference."],
  }
 }
 
@@ -81,6 +81,7 @@ export const recordCreatorCommunicationEvidence = (
  if (!text) throw new Error("communication text is required")
 
  const classification = classifyCreatorCommunication(text)
+ if (!classification.labels.length) throw new Error("Communication does not match a supported classification")
  const id = `creator-communication:${channelId}:${communicationId}`
  const existing = listAlgorithmIntelligenceEvents({ channelId }).find((event) => event.id === id)
  const relatedEventIds = Array.from(new Set((input.relatedEventIds || []).map((value) => value.trim()).filter(Boolean)))
