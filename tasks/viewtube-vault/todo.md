@@ -161,3 +161,26 @@
 - [ ] Selection actions appear only when relevant.
 - [ ] External ViewTube tools are visibly handoff destinations.
 - [ ] Default asset cards prioritize media over metadata chrome.
+
+
+## Lane UX-C — SubToolbox component row-packing and density pass
+- [ ] RH-UX136 Inventory all currently rendered Vault SubToolboxes and primitive call sites; classify each control as primary, secondary, status, short field, long text, media, or contextual-only.
+- [ ] RH-UX137 Capture baseline desktop, mobile portrait, and mobile landscape screenshots and record pre-existing build/typecheck/test failures before layout edits.
+- [ ] RH-UX138 Standardize reusable compact row/grid/stack recipes using existing `SubToolboxActions`, `SubToolboxGrid`, `SubToolboxStack`, `SubToolboxSection`, and canonical Studio Controls; add no duplicate primitive authority.
+- [ ] RH-UX139 Pack Asset Library search/state/view/sort/filter and selection controls into intentional responsive rows; preserve all filter chips and state.
+- [ ] RH-UX140 Pack Image Workbench and Video Workbench short parameter fields and action buttons into responsive rows; reveal only operation-relevant fields.
+- [ ] RH-UX141 Pack Import & Tags, Text Editor, and Workspace Notes control rows; preserve tall multiline editing surfaces.
+- [ ] RH-UX142 Pack Compare & Versions and Inspector short metadata/action groups; preserve media, tables, long text, and consequential-action safety.
+- [ ] RH-UX143 Compact Task Center, Asset Health, and Relationships & Duplicates into status/summary rows with on-demand details.
+- [ ] RH-UX144 Apply compact row composition to all remaining visible Vault controls; remove redundant nested frames, repeated labels/padding, and empty reserved regions where behavior allows.
+- [ ] RH-UX145 Add responsive layout assertions/tests for control grouping, no page-level overflow, touch target size, and mobile text-entry sizing.
+- [ ] RH-UX146 Re-run UIAudit and capture one batched desktop / portrait / landscape screenshot matrix; fix verified defects and perform at most one confirmation pass.
+
+### Checkpoint — component density
+- [ ] Every rendered SubToolbox has a documented layout/row plan and all controls are accounted for.
+- [ ] Related short fields/actions share rows at supported widths without clipped text or accidental wrapping.
+- [ ] Portrait and landscape are both optimized for limited viewport height, not only width.
+- [ ] Touch, keyboard, focus, accessible names, labels, error states, and multiline text remain usable.
+- [ ] No duplicate primitive styling authority or feature-local component geometry is introduced.
+- [ ] Typecheck, focused tests, relevant suite, lint, and production build are green or any baseline failure is explicitly documented.
+- [ ] Final live screenshot review confirms the deployed exact commit.
