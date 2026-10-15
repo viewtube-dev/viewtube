@@ -461,7 +461,7 @@ describe("Studio Username Split-Left Input", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('.vt-studio-username-input:focus-within')
     expect(css).toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
-    expect(css).toContain('inset calc(-1 * var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
+    expect(css).toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
     expect(css).toContain('input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible)')
     expect(css).toContain('box-shadow: none !important;')
     expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]')
