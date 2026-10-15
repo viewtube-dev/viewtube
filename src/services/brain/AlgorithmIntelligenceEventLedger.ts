@@ -12,6 +12,8 @@ export type AlgorithmIntelligenceEventKind =
  | "PRIMING_STEP_EXECUTED"
  | "RECOMMENDATION_CREATED"
  | "RECOMMENDATION_EXECUTED"
+ | "CREATOR_APPROVAL_RECORDED"
+ | "PUBLICATION_CHECKPOINT_RECORDED"
  | "CHECKPOINT_REACHED"
  | "OUTCOME_MEASURED"
  | "LEARNING_CANDIDATE_CREATED"
@@ -67,10 +69,39 @@ const read = (): AlgorithmIntelligenceEvent[] => {
  }
 }
 
+const persistDurably = (events: AlgorithmIntelligenceEvent[]) => {
+ if (!events.length || typeof window === "undefined") return
+ // Dynamic import avoids a module-initialization cycle: the persistence adapter
+ // hydrates/upserts this ledger, while writes here trigger an idempotent server sync.
+ void import("./BrainIntelligencePersistence").then(async ({ persistBrainIntelligence }) => {
+  const byChannel = new Map<string, AlgorithmIntelligenceEvent[]>()
+  events.forEach((event) => {
+   if (!event.channelId) return
+   const channelEvents = byChannel.get(event.channelId) || []
+   channelEvents.push(event)
+   byChannel.set(event.channelId, channelEvents)
+  })
+  for (const [channelId, channelEvents] of byChannel) {
+   try {
+    await persistBrainIntelligence({ channelId, events: channelEvents })
+   } catch (error) {
+    // Keep the browser cache available for offline recovery. The caller can
+    // report durable-sync status separately; never fail a creator action solely
+    // because the server is temporarily unreachable.
+    window.dispatchEvent(new CustomEvent("vt_algorithm_intelligence_persistence_error", {
+     detail: { channelId, message: error instanceof Error ? error.message : String(error) },
+    }))
+   }
+  }
+ }).catch(() => undefined)
+}
+
 const write = (events: AlgorithmIntelligenceEvent[]) => {
  if (!canUseStorage()) return
- localStorage.setItem(STORAGE_KEY, JSON.stringify(events.slice(0, 2000)))
- window.dispatchEvent(new CustomEvent(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, { detail: events }))
+ const bounded = events.slice(0, 2000)
+ localStorage.setItem(STORAGE_KEY, JSON.stringify(bounded))
+ window.dispatchEvent(new CustomEvent(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, { detail: bounded }))
+ persistDurably(bounded)
 }
 
 export const recordAlgorithmIntelligenceEvent = (
