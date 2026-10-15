@@ -218,6 +218,12 @@ Added a second save mode to the existing selected-video frame workflow: **Save a
 
 The action creates a candidate only; it does not silently select or publish the thumbnail. The original **Save Frame to Vault** path remains unchanged. Focused component tests, storage integration, and end-to-end ContentBuild selection verification remain pending.
 
+## Fourth implementation slice — video clip audio controls
+
+The selected media-layer inspector now exposes embedded video audio volume and mute controls. Volume is initialized to 100% when the payload has no explicit value, matching the existing Remotion video renderer default; mute writes the existing `payload.muted` field. Both changes use the existing `updateLayerPayload` path and are consumed by the current `OffthreadVideo` render contract, so this adds controls without inventing a new audio schema.
+
+The separate audio-clip controls remain unchanged. Video playback-rate editing is deliberately not exposed here because the inspected video render path does not currently apply a media-layer playback-rate field.
+
 ## Immediate next sequence
 
 1. Verify ratio-aware crop, rotation, split-at-playhead, source-aware trimming, and audio volume/fade curves with focused tests, undo/redo, preview/render parity, and responsive visual QA.
