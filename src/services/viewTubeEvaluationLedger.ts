@@ -16,6 +16,11 @@ export interface EvaluationRecord {
  traceIds?: string[]
  assetIds?: string[]
  publishedVideoId?: string | null
+ contentBuildId?: string | null
+ publishTransactionId?: string | null
+ approvedSnapshotId?: string | null
+ approvedSnapshotHash?: string | null
+ analyticsCheckpointIds?: string[]
  baselineSnapshotId?: string | null
  comparisonSnapshotId?: string | null
  selectedWindow?: string | null
@@ -39,6 +44,8 @@ export interface WorkflowCandidate {
  reason: string
  evidenceRecordIds: string[]
  evaluationRecordId?: string | null
+ /** Caller key for idempotent candidate creation within one evaluation/scope. */
+ idempotencyKey?: string | null
  sourceOutcomeIds?: string[]
  evaluationOutcome?: Exclude<EvaluationOutcome, "pending">
  selectedWindow?: string | null
@@ -94,6 +101,15 @@ export const proposeEvaluationLearningCandidate = (
  if (!evaluation || evaluation.outcome === "pending") return null
  if (!evaluation.evidenceIds.some((id) => typeof id === "string" && id.trim().length > 0) || evaluation.evidenceStatus !== "available") return null
  if (evaluation.comparabilityStatus !== "comparable" && evaluation.causalAssessment !== "experimentally_supported") return null
+ if (input.idempotencyKey) {
+  const existing = listWorkflowCandidates().find((candidate) =>
+   candidate.idempotencyKey === input.idempotencyKey &&
+   candidate.evaluationRecordId === evaluation.id &&
+   candidate.channelId === (input.channelId || null) &&
+   candidate.projectId === (input.projectId || null)
+  )
+  if (existing) return existing
+ }
  if (input.scope === "channel" && !input.channelId) return null
  // Never infer or broaden scope when an evaluation omitted its channel/project identity.
  if ((input.channelId || null) !== (evaluation.channelId || null)) return null
