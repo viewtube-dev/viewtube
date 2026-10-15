@@ -21,6 +21,10 @@ export interface PostPublishIdentityInput {
   status?: ContentBuildYouTubeBinding["status"]
   publishedAt?: string | null
   correlationId?: string | null
+  actionPacketId?: string | null
+  workflowId?: string | null
+  recommendationId?: string | null
+  experimentId?: string | null
   toolId?: string
 }
 
@@ -121,6 +125,10 @@ export const recordPostPublishIdentity = (
     approvedSnapshotHash: snapshot.hash,
     selectedVariantAssetIds: assetIds,
     correlationId: input.correlationId || transaction.id,
+    actionPacketId: input.actionPacketId || null,
+    workflowId: input.workflowId || null,
+    recommendationId: input.recommendationId || null,
+    experimentId: input.experimentId || null,
     idempotencyKey: identityKey,
     publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
   }
@@ -171,6 +179,7 @@ export const recordPostPublishIdentity = (
     entityType: "publish-identity-receipt",
     entityId: transaction.id,
     actorType: "youtube",
+    actionPacketId: identity.actionPacketId || null,
     toolId: input.toolId || "video-publisher",
     previousState: build.youtube || null,
     resultingState: binding.youtube || null,
