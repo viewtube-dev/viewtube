@@ -349,8 +349,9 @@ describe("VT-SYNC data visual module registry", () => {
   expect(subToolboxSource).toContain("visualStyle?.iconKey")
   expect(subToolboxSource).toContain("AnalyticsVisualIcon")
   expect(subToolboxSource).toContain("size={60}")
-  expect(subToolboxSource).toContain("min-h-[80px]")
-  expect(subToolboxSource).toContain("min-w-[80px]")
+  // Header geometry is driven by the shared Studio token, not duplicated fixed Tailwind dimensions.
+  expect(subToolboxSource).toContain("minHeight: `var(--vt-subtoolbox-header-height")
+  expect(subToolboxSource).toContain("minWidth: `var(--vt-subtoolbox-header-height")
   expect(unifiedChartSource).toContain("useAnalyticsVisualStyle()")
   expect(unifiedChartSource).toContain("resolvedHeaderColor")
   expect(unifiedChartSource).toContain("resolvedIconColor")
