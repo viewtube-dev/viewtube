@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import type { ToolboxControlLevel } from "./tokens"
 import { getComponentLevelCssVars } from "./tokens"
-import { StudioNumberInput } from "../../studio-ui/primitives/StudioTextInput"
 import "../../styles/toolbox-entry.css"
 import "./subtoolbox-split-stepper.css"
 
@@ -94,10 +93,12 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
       aria-label={ariaLabel}
       style={{ ...levelStyle, ...style } as React.CSSProperties}
     >
-      <StudioNumberInput
+      <input
+        type="number"
         className="vt-subtoolbox-split-stepper-value"
-        sizeVariant={size === "compact" ? "compact" : "standard"}
+        data-vt-studio-control="true"
         aria-label={ariaLabel}
+        inputMode="decimal"
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
         max={Number.isFinite(max) ? max : undefined}
