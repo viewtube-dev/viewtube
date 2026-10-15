@@ -22,6 +22,7 @@ import type {
 import type { CanonicalIntelligenceEvidenceBundle } from "../../services/analytics-canon"
 import { IntelligenceChart } from "./IntelligenceChart"
 import { EvidencePreflightPanel } from "./EvidencePreflightPanel"
+import { DeterministicAnalyticsFindingsPanel } from "./DeterministicAnalyticsFindingsPanel"
 import { emitSignal } from "../../services/brain"
 import { isGeminiConfigured } from "../../services/gemini"
 import { generateUltimateChannelReport } from "./ultimateReport"
@@ -560,6 +561,7 @@ const [activeSectionIdx, setActiveSectionIdx] = useState(0)
     <div><span className="block text-[9px] font-black uppercase tracking-[0.14em] text-white/55">Dataset coverage</span><strong className="text-sm">{visibleEvidence ? `${visibleEvidence.coverage.available + visibleEvidence.coverage.partial + visibleEvidence.coverage.stale} / ${visibleEvidence.coverage.total}` : "Snapshot unavailable"}</strong></div>
    </div>
    <EvidencePreflightPanel evidence={visibleEvidence} aiConfigured={isGeminiConfigured()} />
+   <DeterministicAnalyticsFindingsPanel evidence={visibleEvidence} />
    {showFullSurface ?
     <div className="border-4 border-black bg-white rounded-3xl overflow-hidden shadow-[8px_8px_0px_0px_black] mb-12">
      <div className="bg-[#00CCFF] border-b-4 border-black px-6 py-4 flex items-center justify-between">
