@@ -31,7 +31,7 @@ This folder documents the creator-facing **Resource Library** at `/resources`. T
 | `copyright-rights-reuse-ai-generated-media` | Copyright, Rights, Reuse and AI-Generated Media Reference | Publishing | `src/features/resource-library/resources/copyright-rights-reuse-and-ai-generated-media-reference.md` |
 | `reading-analytics-correctly-scope-windows-missingness` | Reading Analytics Correctly: Scope, Windows, Missingness and Statistical Traps | Analytics | `src/features/resource-library/resources/reading-analytics-correctly-scope-windows-missingness-and-statistical-traps.md` |
 
-The fifteen IDs above are the published collection. The seven shorter files with older, abbreviated names under the runtime directory are unregistered historical drafts for guides 9–15; they are not additional resources. Compare them before any archival or deletion, and preserve their unique material and Git history.
+The fifteen IDs above are the published collection. The seven shorter, unregistered historical drafts for guides 9–15 have been moved out of the runtime resource directory into `docs/resources/archive/legacy-drafts/`. Their unique material was reviewed and incorporated where useful. They remain historical donors, not additional published resources.
 
 ## Editorial status
 
