@@ -1,7 +1,7 @@
 # Phase 13 — Server-Authoritative Learning Persistence
 
-**Implementation PR:** pending review  
-**Status:** Implementation slice prepared; CI and production database verification pending.  
+**Implementation PR:** https://github.com/viewtube-dev/viewtube/pull/340  
+**Status:** Implementation slice prepared in the integrated current-base PR; CI and production database verification pending.  
 **Parent plan:** `PHASE-13-18-DURABLE-PRODUCTION-HANDOFF-PLAN.md`
 
 ## Scope
