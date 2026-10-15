@@ -472,7 +472,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 ## 20. Confirmed Library density, text-field typography, and deployment gate — 2026-10-15
 
 ### Global defaults panel
-- The default view shows a one-line summary of standard/compact geometry, the shared 18px/14px text-field sizes, and the compact shadow size.
+- The default view shows a one-line summary of standard/compact geometry, global 38px/24px single-line input typography, the textarea-only 18px/14px exception, and the compact shadow size.
 - The exhaustive size cards, full global token map, exceptions, and explanatory focus notes live inside an accessible collapsed `details/summary` panel. Opening it exposes the full canonical values; leaving it closed avoids making the library page vertically dominated by the global-defaults reference.
 - The expanded global token map uses three columns on wider screens and two on narrow screens.
 
@@ -483,12 +483,12 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 
 ### Shared text-field typography and module ownership
 - Source audit found the root cause of the single-line input mismatch: the shared field rule inherited the global control font tokens (38px standard / 24px compact), while only textarea selectors explicitly overrode typography to 18px / 14px. The single-line input selectors had no corresponding font-size override, so standard and compact inputs could look like the same compact size when upstream declarations/cascades applied.
-- The resolved contract is now explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` use 18px standard / 14px compact; `StudioTextArea` and `StudioLabeledTextArea` use the same font sizes. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
+- The resolved contract is explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` use global 38px standard / 24px compact typography with the global 0.86 line height; `StudioTextArea` and `StudioLabeledTextArea` alone use the multiline exception of 18px standard / 14px compact. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
 - Related components are grouped in two modules:
   - `src/studio-ui/primitives/StudioTextInput.tsx`: standalone, search, number, and labeled single-line inputs.
   - `src/studio-ui/primitives/StudioTextArea.tsx`: standalone and labeled multiline textareas.
   - `StudioControls.tsx` re-exports these modules for compatibility with existing imports.
-- CSS owns typography explicitly by `data-size` on the native input, with important 18px standard / 14px compact font-size and matching line-height overrides. The labeled components compose those same native primitives instead of maintaining a second style path.
+- CSS owns single-line input typography explicitly by `data-size`, using the global 38px / 24px font-size tokens and 0.86 line-height. Textarea-only selectors use the separate 18px / 14px tokens and multiline line-height. Labeled components compose the same native primitives instead of maintaining a second style path.
 
 ### Word-toggle catalog contract
 - Word toggles show three skins only: SOLID, COLOR SWAP, and BLACK. The fourth WHITE skin remains available to switches/radios/checkboxes but is intentionally omitted from the word-toggle examples.
@@ -503,5 +503,15 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - **Current follow-up:** [PR #222 — Remove duplicate publication transaction metadata key](https://github.com/viewtube-dev/viewtube/pull/222) is intended to clear the remaining TypeScript error reported by PR #221 CI. Its checks must run before considering typecheck clean.
 - **Deployment URL:** https://publisher-3n7h.onrender.com/studio
 - **Deployment status:** not yet confirmed for these changes. A merged PR or successful build does not alone prove the hosted deployment has picked up the commit.
-- **Required confirmation:** after PR #222 is reviewed/merged, verify the Render service's deployed commit includes the latest merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact input and textarea computed font sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
+- **Required confirmation:** after PR #222 is reviewed/merged, verify the Render service's deployed commit includes the latest merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact input computed font sizes (38px/24px) and textarea computed font sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
 - **Verification boundary:** PR #221's CI reported the production build, focused contracts, local smoke checks, and source governance passing, but TypeScript failed on a duplicate `publishTransactionId` key and the full test suite reported 100 failing tests across 47 files. PR #222 removes that duplicate key; do not describe the full suite as passing until a fresh run confirms it. Do not describe the UI as deployed until the deployed commit and rendered page are confirmed.
+
+### Correction — input typography versus textarea exception — 2026-10-15
+
+A previous entry in section 20 incorrectly described 18px / 14px as shared typography for all inputs and textareas. That wording was wrong. The canonical contract is:
+
+- **Single-line inputs** (`StudioTextInput`, search/number inputs, and `StudioLabeledInput`): global **38px standard / 24px compact**, weight 1000, uppercase, global 0.86 line-height.
+- **Multiline textareas only** (`StudioTextArea` and `StudioLabeledTextArea`): **18px standard / 14px compact**, weight 1000, multiline 1.25 / 1.3 line-height, 92px minimum height, vertical resize.
+- Both families retain global 44px / 28px geometry, 3px / 2px borders, and 6px / 4px radii. The textarea typography and height are functional exceptions; they do not redefine global single-line input typography.
+
+The implementation had incorrectly assigned the textarea exception to the `textInput` tokens and added important CSS overrides to single-line inputs. The correction restores the input tokens to the global size contract and scopes 18px / 14px styles to textarea selectors only. Regression coverage explicitly checks both contracts and the Confirmed Library wording.
