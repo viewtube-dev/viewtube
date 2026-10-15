@@ -232,10 +232,10 @@ export const buildPeriodComparisonInsights = (input: {
  const baselineById = new Map<string, CanonicalIntelligenceDatasetManifest>(
   baselineBundle.datasets.map((dataset) => [dataset.id, dataset] as const),
  )
- const baselineEvidenceByMetric = new Map(
+ const baselineEvidenceByMetric = new Map<string, ReturnType<typeof projectCanonicalEvidenceRecords>[number]>(
   projectCanonicalEvidenceRecords(baselineBundle).map((record) => [`${record.datasetId}:${record.metric}`, record] as const),
  )
- const currentEvidenceByMetric = new Map(
+ const currentEvidenceByMetric = new Map<string, ReturnType<typeof projectCanonicalEvidenceRecords>[number]>(
   projectCanonicalEvidenceRecords(currentBundle).map((record) => [`${record.datasetId}:${record.metric}`, record] as const),
  )
  const materialThreshold = input.minimumMaterialChangePercent ?? 20
