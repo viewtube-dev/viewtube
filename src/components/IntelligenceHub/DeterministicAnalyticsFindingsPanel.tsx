@@ -254,7 +254,13 @@ export const DeterministicAnalyticsFindingsPanel: React.FC<{
      <label className="block text-[10px] font-black uppercase">Project ID (optional)
       <input value={projectId} onChange={(event) => setProjectId(event.target.value)} maxLength={180} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="Existing Project identity"/>
      </label>
-     <label className="block text-[10px] font-black uppercase">ContentBuild ID (optional; links publish checkpoints)\n      <input value={contentBuildId} onChange={(event) => setContentBuildId(event.target.value)} maxLength={180} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="Canonical ContentBuild ID"/>\n     </label>\n     <label className="block text-[10px] font-black uppercase">Published video ID (optional)\n      <input value={videoId} onChange={(event) => setVideoId(event.target.value)} maxLength={180} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="YouTube video ID"/>\n     </label>\n     <label className="block text-[10px] font-black uppercase">Expected direction
+     <label className="block text-[10px] font-black uppercase">ContentBuild ID (optional; links publish checkpoints)
+      <input value={contentBuildId} onChange={(event) => setContentBuildId(event.target.value)} maxLength={180} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="Canonical ContentBuild ID"/>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Published video ID (optional)
+      <input value={videoId} onChange={(event) => setVideoId(event.target.value)} maxLength={180} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold" placeholder="YouTube video ID"/>
+     </label>
+     <label className="block text-[10px] font-black uppercase">Expected direction
       <select value={expectedDirection} onChange={(event) => setExpectedDirection(event.target.value as typeof expectedDirection)} className="mt-1 block min-h-10 w-full border-2 border-black bg-white p-2 text-xs font-bold">
        <option value="observe">Observe</option><option value="increase">Increase</option><option value="decrease">Decrease</option>
       </select>
