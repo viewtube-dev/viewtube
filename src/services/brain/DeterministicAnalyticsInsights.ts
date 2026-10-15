@@ -3,11 +3,15 @@ import type {
  CanonicalIntelligenceDatasetRows,
  CanonicalIntelligenceEvidenceBundle,
 } from "../analytics-canon"
+import type { DerivedSignal } from "./EvidenceRecord"
+import type { ViewTubeAnomaly } from "../anomaly-intelligence/contracts"
 
 export type DeterministicAnalyticsInsightKind =
  | "comparison"
  | "material-change"
  | "contribution"
+ | "trend"
+ | "anomaly"
 
 export interface AnalyticsInsightPeriod {
  label: string
@@ -30,6 +34,31 @@ export interface DeterministicAnalyticsInsight {
  datasetId: string
  metric: string
  aggregation: "sum" | "average"
+ findingType: DeterministicAnalyticsInsightKind
+ observedFact: {
+  currentValue: number
+  baselineValue: number | null
+  delta: number | null
+  relativeDeltaPercent: number | null
+  sharePercent?: number
+ }
+ calculation: {
+  formula: string
+  algorithmVersion: "vt-deterministic-analytics-insights-v1"
+  deterministic: true
+ }
+ validationState: "validated"
+ /** Reserved for a separately authored explanation; deterministic calculation never fabricates interpretation. */
+ interpretation: string | null
+ /** Reserved for a goal-aware, separately validated recommendation. */
+ recommendation: string | null
+ trend?: {
+  direction: "increasing" | "decreasing" | "stable"
+  slopePerObservation: number
+  observationCount: number
+  firstDate: string
+  lastDate: string
+ }
  currentValue: number
  baselineValue: number | null
  delta: number | null
@@ -57,6 +86,11 @@ export interface PeriodComparisonResult {
 }
 
 export interface TrafficContributionResult {
+ insights: DeterministicAnalyticsInsight[]
+ limitations: string[]
+}
+
+export interface TrendInsightResult {
  insights: DeterministicAnalyticsInsight[]
  limitations: string[]
 }
@@ -278,6 +312,21 @@ export const buildPeriodComparisonInsights = (input: {
     formula: "current=sum; baseline=sum; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0",
     algorithmVersion: ALGORITHM_VERSION,
     deterministic: true as const,
+    findingType: "comparison" as const,
+    observedFact: {
+     currentValue,
+     baselineValue,
+     delta,
+     relativeDeltaPercent,
+    },
+    calculation: {
+     formula: "current=sum; baseline=sum; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0",
+     algorithmVersion: ALGORITHM_VERSION,
+     deterministic: true as const,
+    },
+    validationState: "validated" as const,
+    interpretation: null,
+    recommendation: null,
     period: {
      current: { ...current.period },
      baseline: { ...baseline.period },
@@ -296,10 +345,17 @@ export const buildPeriodComparisonInsights = (input: {
    if (relativeDeltaPercent !== null && Math.abs(relativeDeltaPercent) >= materialThreshold) {
     insights.push({
      ...common,
+     observedFact: { currentValue, baselineValue, delta, relativeDeltaPercent },
      id: `analytics-insight:material-change:${slug(currentDataset.id)}:${slug(metric)}:${stableHash(identity)}`,
      kind: "material-change",
      label: `${metric} ${delta >= 0 ? "increased" : "decreased"} ${Math.abs(relativeDeltaPercent).toFixed(1)}% versus baseline`,
      formula: `period-comparison formula; emit material-change when abs(relativeDeltaPercent)>=${materialThreshold}`,
+     calculation: {
+      formula: `period-comparison formula; emit material-change when abs(relativeDeltaPercent)>=${materialThreshold}`,
+      algorithmVersion: ALGORITHM_VERSION,
+      deterministic: true as const,
+     },
+     findingType: "material-change" as const,
      limitations: [
       ...limitations,
       "Threshold-based materiality is not a statistical significance test.",
@@ -396,6 +452,22 @@ export const buildTrafficSourceContributionInsights = (input: {
    formula: `sourceSum=sum(${metricKey} where ${dimensionKey}=${JSON.stringify(label)}); sharePercent=sourceSum/sum(all ${metricKey})*100`,
    algorithmVersion: ALGORITHM_VERSION,
    deterministic: true as const,
+   findingType: "contribution" as const,
+   observedFact: {
+    currentValue: value,
+    baselineValue: total,
+    delta: null,
+    relativeDeltaPercent: null,
+    sharePercent: (value / total) * 100,
+   },
+   calculation: {
+    formula: `sourceSum=sum(${metricKey} where ${dimensionKey}=${JSON.stringify(label)}); sharePercent=sourceSum/sum(all ${metricKey})*100`,
+    algorithmVersion: ALGORITHM_VERSION,
+    deterministic: true as const,
+   },
+   validationState: "validated" as const,
+   interpretation: null,
+   recommendation: null,
    limitations: [
     "Contribution describes distribution, not causation.",
     "Confidence reflects canonical data availability and row completeness, not statistical certainty.",
@@ -404,4 +476,184 @@ export const buildTrafficSourceContributionInsights = (input: {
   .sort((a, b) => b.currentValue - a.currentValue || a.label.localeCompare(b.label))
 
  return { insights, limitations: [] }
+}
+
+
+/**
+ * Calculates a simple least-squares trend over explicitly observed daily rows.
+ * It never fills missing dates with zero and rejects duplicate or malformed dates.
+ */
+export const buildTrendInsights = (input: {
+ dataset: CanonicalIntelligenceDatasetRows
+ metricKey: string
+ dateKey: string
+ minimumObservations?: number
+ entityKey?: string
+}): TrendInsightResult => {
+ const { dataset, metricKey, dateKey, entityKey } = input
+ const minimumObservations = input.minimumObservations ?? 5
+ const fail = (reason: string): TrendInsightResult => ({ insights: [], limitations: [reason] })
+ if (dataset.status !== "available") return fail(`Dataset ${dataset.datasetId} is not fully available for trend analysis.`)
+ if (!dataset.channelId) return fail("Trend analysis requires a known channel identity.")
+ if (dataset.missingMetrics.includes(metricKey)) return fail(`Metric ${metricKey} is marked missing by the canonical dataset.`)
+ if (!metricAggregation(metricKey)) return fail(`Metric ${metricKey} requires denominator-aware aggregation; trend analysis is unsupported for this metric.`)
+ if (!Number.isInteger(minimumObservations) || minimumObservations < 3) return fail("Trend analysis requires a minimum observation count of at least 3.")
+ const groups = new Map<string, Array<{ date: string; value: number }>>()
+ for (const [index, row] of dataset.rows.entries()) {
+  const date = row[dateKey]
+  const rawValue = row[metricKey]
+  const entity = entityKey ? row[entityKey] : "all"
+  if (typeof date !== "string" || !isValidDate(date)) {
+   return fail(`Canonical row ${index} has no valid YYYY-MM-DD ${dateKey} value.`)
+  }
+  if (typeof rawValue !== "number" || !Number.isFinite(rawValue) || rawValue < 0) {
+   return fail(`Canonical row ${index} has no valid non-negative numeric ${metricKey} value.`)
+  }
+  if (typeof entity !== "string" || !entity.trim()) {
+   return fail(`Canonical row ${index} has no usable ${entityKey || "entity"} value.`)
+  }
+  const key = entity.trim()
+  const observations = groups.get(key) || []
+  if (observations.some((point) => point.date === date)) {
+   return fail(`Duplicate observation date ${date} for entity ${key}; aggregate duplicate rows canonically before trend analysis.`)
+  }
+  observations.push({ date, value: rawValue })
+  groups.set(key, observations)
+ }
+ if (groups.size === 0) return fail("Trend analysis requires canonical dated rows.")
+ const insights: DeterministicAnalyticsInsight[] = []
+ for (const [entity, unsorted] of [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))) {
+  const observations = [...unsorted].sort((a, b) => a.date.localeCompare(b.date))
+  if (observations.length < minimumObservations) {
+   return fail(`Entity ${entity} requires at least ${minimumObservations} valid dated observations; found ${observations.length}.`)
+  }
+  const values = observations.map((point) => point.value)
+  const xMean = (observations.length - 1) / 2
+  const yMean = values.reduce((sum, value) => sum + value, 0) / values.length
+  const numerator = observations.reduce((sum, point, index) => sum + (index - xMean) * (point.value - yMean), 0)
+  const denominator = observations.reduce((sum, _point, index) => sum + (index - xMean) ** 2, 0)
+  const slope = denominator === 0 ? 0 : numerator / denominator
+  const first = observations[0]
+  const last = observations[observations.length - 1]
+  const delta = last.value - first.value
+  const relativeDeltaPercent = first.value === 0 ? null : (delta / Math.abs(first.value)) * 100
+  const direction = Math.abs(slope) < 1e-9 ? "stable" : slope > 0 ? "increasing" : "decreasing"
+  const formula = "slope=leastSquaresLinearRegression(observed values by ascending date); delta=lastObserved-firstObserved; no missing-date imputation"
+  const refs = [...new Set([
+   `analytics:${dataset.snapshotId}:${dataset.datasetId}:${metricKey}`,
+   ...dataset.sources.map((source) => `source:${source}`),
+  ])].sort()
+  insights.push({
+   id: `analytics-insight:trend:${slug(dataset.datasetId)}:${slug(metricKey)}:${stableHash([dataset.channelId, dataset.snapshotId, entity, first.date, last.date].join(":"))}`,
+   kind: "trend",
+   findingType: "trend",
+   label: `${metricKey} trend for ${entity}: ${direction}`,
+   channelId: dataset.channelId,
+   datasetId: dataset.datasetId,
+   metric: metricKey,
+   aggregation: "sum",
+   currentValue: last.value,
+   baselineValue: first.value,
+   delta,
+   relativeDeltaPercent,
+   unit: "source-metric-value",
+   confidence: Math.min(0.95, 0.65 + observations.length * 0.02),
+   evidenceRefs: refs,
+   formula,
+   algorithmVersion: ALGORITHM_VERSION,
+   deterministic: true,
+   observedFact: { currentValue: last.value, baselineValue: first.value, delta, relativeDeltaPercent },
+   calculation: { formula, algorithmVersion: ALGORITHM_VERSION, deterministic: true },
+   validationState: "validated",
+   interpretation: null,
+   recommendation: null,
+   trend: {
+    direction,
+    slopePerObservation: slope,
+    observationCount: observations.length,
+    firstDate: first.date,
+    lastDate: last.date,
+   },
+   limitations: [
+    "Trend is descriptive, not causal.",
+    "Only observed rows are included; absent dates are not assumed to be zero.",
+    "Confidence is a deterministic completeness heuristic, not a statistical confidence interval.",
+   ],
+  })
+ }
+ return { insights: insights.sort((a, b) => a.id.localeCompare(b.id)), limitations: [] }
+}
+
+/** Maps a canonical finding to the repository's existing derived-signal contract. */
+export const toDerivedSignal = (finding: DeterministicAnalyticsInsight): DerivedSignal => ({
+ id: finding.id,
+ kind: finding.findingType === "material-change" ? "comparison" : finding.findingType,
+ channelId: finding.channelId,
+ label: finding.label,
+ metric: finding.metric,
+ currentValue: finding.currentValue,
+ baselineValue: finding.baselineValue,
+ delta: finding.delta,
+ relativeDelta: finding.relativeDeltaPercent === null ? null : finding.relativeDeltaPercent / 100,
+ confidence: finding.confidence,
+ impact: finding.sharePercent ?? (finding.delta === null ? null : Math.abs(finding.delta)),
+ evidenceIds: [...finding.evidenceRefs],
+ derivation: {
+  method: finding.calculation.formula,
+  version: finding.calculation.algorithmVersion,
+  deterministic: true,
+ },
+ limitations: [...finding.limitations],
+ metadata: {
+  datasetId: finding.datasetId,
+  findingType: finding.findingType,
+  unit: finding.unit,
+  validationState: finding.validationState,
+  interpretation: finding.interpretation,
+  recommendation: finding.recommendation,
+  currentValue: finding.currentValue,
+  baselineValue: finding.baselineValue,
+  relativeDeltaPercent: finding.relativeDeltaPercent,
+  sharePercent: finding.sharePercent ?? null,
+  trendDirection: finding.trend?.direction ?? null,
+ },
+})
+
+/** Adapts existing anomaly output; detector semantics remain owned by anomaly-intelligence. */
+export const adaptAnomalyToAnalyticsFinding = (anomaly: ViewTubeAnomaly): DeterministicAnalyticsInsight => {
+ const delta = anomaly.currentValue - anomaly.baselineValue
+ const relativeDeltaPercent = Number.isFinite(anomaly.relativeDelta) ? anomaly.relativeDelta * 100 : null
+ const formula = "existing anomaly-intelligence robust magnitude detector; values and scores preserved without recomputation"
+ const refs = [...new Set(anomaly.evidence.map((evidence) =>
+  evidence.id || `analytics:${evidence.snapshotId}:${evidence.datasetId}:${anomaly.metric}`,
+ ))].sort()
+ return {
+  id: `analytics-insight:anomaly:${slug(anomaly.datasetId)}:${stableHash(anomaly.id)}`,
+  kind: "anomaly",
+  findingType: "anomaly",
+  label: `${anomaly.metric} ${anomaly.kind.replace(/_/g, " ")}${anomaly.entity ? ` for ${anomaly.entity}` : ""}`,
+  channelId: anomaly.channelId || "",
+  datasetId: anomaly.datasetId,
+  metric: anomaly.metric,
+  aggregation: "sum",
+  currentValue: anomaly.currentValue,
+  baselineValue: anomaly.baselineValue,
+  delta,
+  relativeDeltaPercent,
+  unit: "source-metric-value",
+  confidence: Math.max(0, Math.min(1, anomaly.confidence > 1 ? anomaly.confidence / 100 : anomaly.confidence)),
+  evidenceRefs: refs,
+  formula,
+  algorithmVersion: ALGORITHM_VERSION,
+  deterministic: true,
+  observedFact: { currentValue: anomaly.currentValue, baselineValue: anomaly.baselineValue, delta, relativeDeltaPercent },
+  calculation: { formula, algorithmVersion: ALGORITHM_VERSION, deterministic: true },
+  validationState: "validated",
+  interpretation: null,
+  recommendation: null,
+  limitations: [
+   "Anomaly scores are produced by the existing anomaly-intelligence detector.",
+   "An anomaly is a signal for review, not evidence of cause.",
+  ],
+ }
 }
