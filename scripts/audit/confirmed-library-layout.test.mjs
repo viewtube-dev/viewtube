@@ -311,3 +311,11 @@ test("circle and username specimens use canonical production exports", () => {
   assert.match(catalog, /data-vt-library-component="StudioPlayPauseButton"/);
   assert.match(catalog, /data-vt-library-component="StudioUsernameInput"/);
 });
+
+
+test("composite primitives are exported from the canonical public entry point", () => {
+  const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
+  for (const name of ["StudioCircleIconButton", "StudioPlayPauseButton", "StudioUsernameInput", "StudioCircleIconButtonProps", "StudioPlayPauseButtonProps", "StudioUsernameInputProps"]) {
+    assert.ok(publicIndex.includes(name), `public Studio entry point exports ${name}`);
+  }
+});
