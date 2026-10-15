@@ -48,7 +48,7 @@ test("floating labels use the reduced overlapping-label geometry and strong text
   assert.match(fieldCss, /translateY\(-75%\) scale\(\.75\)/);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
-  assert.match(fieldCss, /data-vt-floating-variant="b".*outline:var\(--vt-field-focus-outline-width\) solid var\(--vt-field-secondary\)/s);
+  assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
 });
 
 test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
@@ -61,7 +61,7 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 
 test("non-default settings explain the real public props in plain language", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
-  assert.ok(catalog.includes("Floating-label variants accept label and optional l0/l1/l2 level"));
+  assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
   assert.ok(catalog.includes("A focused or non-empty field lifts the label above the border."));
   assert.ok(catalog.includes("Only the floating-label B variant adds the solid secondary-color focus stroke to the compact input specimen."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
@@ -218,7 +218,7 @@ test("icon-effect examples are clearly static previews, not live outcome claims"
   const squareFamily = catalog.slice(squareStart, splitStart);
   assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
   assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
-  assert.ok(squareFamily.includes("badge count and success state below are explicitly static gallery previews"));
+  assert.ok(squareFamily.includes("notification accepts a real count/status; success must only be set after the operation succeeds."));
   assert.ok(!squareFamily.includes("SUCCESS · CONFIRMED OUTCOME"));
 });
 
