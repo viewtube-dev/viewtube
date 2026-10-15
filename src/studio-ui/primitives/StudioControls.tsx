@@ -15,7 +15,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   backgroundFill: "primary (--pair-a) is the default component fill; text inputs and text areas use primary at 50% opacity; solid/selected family states must be explicit",
   textColor: "text fields use primary by default and black on focus; other controls use their component contract",
   textTransform: "uppercase",
-  letterSpacing: "-0.035em",
+  letterSpacing: "-0.02em",
   lineHeight: 0.86,
   shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
