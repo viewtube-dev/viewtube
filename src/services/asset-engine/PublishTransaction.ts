@@ -186,18 +186,19 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
    },
   })
   if (publicationIdentity?.channelId) {
+   const verifiedPublicationIdentity = publicationIdentity
    const finalRenderAssetId = next.assetLock.finalRenderAssetId
    // Record actual exposure (not just creator acceptance) when this render is
    // known to Asset Engine, then attach the immutable publication identity.
    void recordAssetOutcome({
     assetId: finalRenderAssetId,
     kind: "published",
-    idempotencyKey: `publish:${publicationIdentity.publishTransactionId}:${finalRenderAssetId}`,
+    idempotencyKey: `publish:${verifiedPublicationIdentity.publishTransactionId}:${finalRenderAssetId}`,
    }).then(() => {
     linkAssetOutcomeToPublication({
      assetId: finalRenderAssetId,
-     channelId: publicationIdentity.channelId as string,
-     publicationIdentity,
+     channelId: verifiedPublicationIdentity.channelId,
+     publicationIdentity: verifiedPublicationIdentity,
     })
    }).catch((cause) => {
     console.warn("Publication completed; optional Brain outcome attribution could not be recorded.", cause)
