@@ -319,16 +319,25 @@ declare global {
  }
 }
 
+// Read browser preferences without breaking SSR, Node tests, or restricted storage contexts.
+const readLocalPreference = (key: string): string | null => {
+ try {
+  return typeof localStorage === "undefined" ? null : localStorage.getItem(key)
+ } catch {
+  return null
+ }
+}
+
 // Helper to get the AI settings
 const getAiSettings = () => {
  const customKey =
   getVaultKey("gemini") ||
-  localStorage.getItem("yt_api_key") ||
-  localStorage.getItem("vt_gemini_api_key") ||
-  localStorage.getItem("gemini_api_key") ||
-  localStorage.getItem("google_api_key") ||
+  readLocalPreference("yt_api_key") ||
+  readLocalPreference("vt_gemini_api_key") ||
+  readLocalPreference("gemini_api_key") ||
+  readLocalPreference("google_api_key") ||
   ""
- const modelPreference = localStorage.getItem("vt_ai_model") || "gemini-3.1-flash"
+ const modelPreference = readLocalPreference("vt_ai_model") || "gemini-3.1-flash"
  return { customKey, modelPreference }
 }
 
