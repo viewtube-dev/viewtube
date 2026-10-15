@@ -201,6 +201,7 @@ describe("subtoolbox design governance", () => {
 
  it("locks Video Manager spacing and level hierarchy to the new mobile authority", () => {
   const manager = source("src/views/VideoManager.tsx")
+  const systemCss = source("src/styles/studio-control-system.css")
   const toolbox = source("src/components/Toolbox.tsx")
   const toolboxCss = source("src/styles/toolbox-system.css")
   const primitiveCss = source("src/styles/subtoolbox-system.css")
@@ -369,9 +370,13 @@ describe("subtoolbox design governance", () => {
 
   expect(studioCss).toContain("--vt-studio-control-accent: var(--pair-a")
   expect(studioCss).toContain("--vt-studio-control-secondary: var(--pair-b")
-  expect(studioCss).toContain("color-mix(in srgb, var(--vt-studio-control-accent) 50%, #fff)")
-  expect(studioCss).toContain("inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent)")
-  expect(studioCss).toContain("color-mix(in srgb, var(--vt-studio-control-secondary) 78%, transparent)")
+  expect(studioCss).toContain("--vt-studio-control-default-fill-opacity: 50%")
+  expect(studioCss).toContain("caret-color: var(--vt-field-primary)")
+  expect(studioCss).toContain("caret-shape: block")
+  expect(studioCss.match(/caret-color:/g)).toHaveLength(1)
+  expect(studioCss).toContain("inset 0 0 0 var(--vt-field-stroke) var(--vt-field-primary)")
+  expect(studioCss).toContain("outline-offset: var(--vt-studio-control-focus-outline-offset, 0px)")
+  expect(studioCss).not.toContain("caret-color:var(--field-accent)!important")
  })
 
  it("derives every SubToolbox component pair from the canonical 12-color title/icon pattern", () => {
@@ -624,9 +629,32 @@ describe("subtoolbox design governance", () => {
     expect(subtoolboxPrimitives).not.toContain("export const SubToolbox44WordToggle:")
     expect(subtoolboxCss).not.toContain(".vt-subtoolbox-44-word-toggle{")
     expect(studioCss).toContain(".vt-studio-44-word-toggle{")
-    expect(studioCss).toContain("--vt-word-font-size:32px")
-    expect(studioCss).toContain("--vt-word-font-size:14px")
-    expect(studioCss).toContain("font-size: var(--vt-studio-44-font-size, 32px) !important")
+    expect(studioCss).toContain("--vt-word-font-size:38px")
+    expect(studioCss).toContain("--vt-word-font-size:24px")
+    expect(studioCss).toContain("letter-spacing:-.035em")
+    expect(studioCss).toContain("font:1000 var(--vt-word-font-size)/.86")
   })
+
+ 
+ it("keeps Studio phases 3–5 aligned across controls, dropdowns, and the Confirmed Library", () => {
+   const studioCss = source("src/styles/studio-control-system.css")
+   const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
+   const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+   const catalogCss = source("src/components/studio-hub/studio-hub-primitive-catalogs.css")
+
+   expect(studioCss).toContain('--vt-legend-height: 28px; --vt-legend-stroke: 2px; --vt-legend-shadow-offset: 1.5px; --vt-legend-radius: 4px;')
+   expect(studioCss).toContain('box-shadow: none;')
+   expect(studioCss).toContain('flex: 1 1 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;')
+   expect(studioControls).toContain('const menuAccessibleLabel = accessibleLabel ??')
+   expect(studioControls).toContain('aria-label={menuAccessibleLabel}')
+   expect(catalog).toContain('formatDefaultValue')
+   expect(catalog).not.toContain('<span>{String(value)}</span>')
+   expect(catalog).toContain('primitive="StudioSwitch"')
+   expect(catalog).toContain('primitive="StudioWordToggle"')
+   expect(catalog).toContain('data-control-size={item.size}')
+   expect(catalog).not.toContain('is-word-toggle-44')
+   expect(catalogCss).toContain('.vt-confirmed-control-variants[data-control-size] .vt-studio-44-word-toggle')
+   expect(catalogCss).not.toContain('.vt-confirmed-control-variants:is(.is-word-toggle-44, .is-word-toggle-28)')
+ })
 
 })
