@@ -164,6 +164,10 @@ describe("recordAssetOutcome", () => {
    approvedSnapshotHash: "sha256:approved",
    selectedVariantAssetIds: [asset.id],
    correlationId: "correlation-1",
+    actionPacketId: "action-packet-1",
+    workflowId: "workflow-1",
+    recommendationId: "recommendation-1",
+    experimentId: "experiment-1",
    idempotencyKey: "publish-tx-1",
    publishedAt: "2026-10-15T12:00:00.000Z",
   }
@@ -185,6 +189,10 @@ describe("recordAssetOutcome", () => {
    publishedVideoId: "youtube-video-1",
    analyticsCheckpointIds: ["checkpoint-1"],
    evidenceIds: ["snapshot-1:videos:1"],
+    actionPacketId: "action-packet-1",
+    workflowId: "workflow-1",
+    recommendationId: "recommendation-1",
+    experimentId: "experiment-1",
   })
   expect(listAssetOutcomes({ assetId: asset.id })[0]).toMatchObject({ publishTransactionId: "publish-tx-1" })
   expect(listBrainOutcomes("channel-1")[0]).toMatchObject({
@@ -193,6 +201,10 @@ describe("recordAssetOutcome", () => {
    publishedVideoId: "youtube-video-1",
    analyticsCheckpointIds: ["checkpoint-1"],
    evidenceIds: ["snapshot-1:videos:1"],
+    actionPacketId: "action-packet-1",
+    workflowId: "workflow-1",
+    recommendationId: "recommendation-1",
+    experimentId: "experiment-1",
   })
  })
 
