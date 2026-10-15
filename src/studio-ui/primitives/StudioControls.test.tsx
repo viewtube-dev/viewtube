@@ -485,13 +485,13 @@ describe("floating label geometry and circle icon sizing", () => {
   it("matches the compact floating label B stroke to the 2px compact focus outline", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const floating = css.slice(css.indexOf("/* Shared floating-label fields."), css.indexOf("/* Permanent label-box variants"))
-    expect(floating).toContain('outline: 2px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))')
+    expect(floating).toContain('outline: var(--vt-studio-floating-focus-width, var(--vt-studio-control-focus-outline-width, 3px)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))')
   })
 
   it("renders circular button icons at 80% of the available icon stage", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const circle = css.slice(css.indexOf("/* Circle Icon Button"), css.indexOf("/* Username Split-Left Input"))
-    expect(circle).toContain('width: 80% !important;')
-    expect(circle).toContain('height: 80% !important;')
+    expect(circle).toContain('width: calc(var(--vt-studio-control-icon-size, 28px) * .8) !important;')
+    expect(circle).toContain('height: calc(var(--vt-studio-control-icon-size, 28px) * .8) !important;')
   })
 })
