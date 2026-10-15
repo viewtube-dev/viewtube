@@ -18,7 +18,30 @@ export const BRAIN_CAPABILITY_REGISTRY: BrainCapabilityDefinition[] = [
  { id: "niche-knowledge", label: "Niche knowledge", description: "Adds bounded public subject knowledge after the niche is stable.", intents: ["strategy", "seo", "audience", "content_analysis"], maximumInvocationsPerTurn: 1 },
  { id: "current-grounding", label: "Current grounding", description: "Uses Google grounding only for timely public questions.", intents: ["strategy", "seo", "audience"], maximumInvocationsPerTurn: 1, requiresCurrentResearch: true },
  { id: "content-generation", label: "Content generation", description: "Drafts creator assets: scripts, hooks, pinned comments, descriptions, tags, titles, community posts, and replies.", intents: ["content_generation"], maximumInvocationsPerTurn: 1, requiresChannelData: true },
+
 ]
+
+/**
+ * Required context/evidence sections for each capability. These are contracts,
+ * not a promise that evidence exists: the resolver reports missing required
+ * sections explicitly so a caller cannot silently substitute guessed context.
+ */
+export const BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS: Readonly<Record<string, readonly string[]>> = {
+ "channel-profile": ["confirmed_creator_context", "channel_knowledge"],
+ "signal-anomaly-intelligence": ["channel_evidence", "evidence_quality", "shared_evidence_contract", "algorithm_channel_opportunity_intelligence"],
+ "statistics-intelligence": ["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence"],
+ "algorithm-intelligence": ["evidence_quality", "shared_evidence_contract", "algorithm_channel_opportunity_intelligence"],
+ "analytics-diagnosis": ["channel_evidence", "evidence_quality", "deterministic_statistics_intelligence", "deterministic_analytics_findings"],
+ "top-performer-mining": ["channel_evidence", "evidence_quality"],
+ "audience-promise": ["audience_intelligence", "channel_knowledge"],
+ "seo-opportunity": ["channel_evidence", "creator_style", "public_niche_knowledge"],
+ "goal-coach": ["confirmed_creator_context"],
+ "daily-oracle": ["confirmed_creator_context", "active_project_context"],
+ "journal-memory": ["confirmed_creator_context", "channel_knowledge"],
+ "niche-knowledge": ["public_niche_knowledge"],
+ "current-grounding": ["current_public_research"],
+ "content-generation": ["creator_style", "active_project_context"],
+}
 
 export const inferBrainIntent = (userText: string): BrainCapabilityDefinition["intents"][number] => {
  return resolveBrainTaskProfile(userText).intent
