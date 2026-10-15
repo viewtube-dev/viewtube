@@ -63,3 +63,22 @@ test("non-default settings explain the real public props in plain language", () 
   assert.ok(catalog.includes("Only Compact B adds the solid secondary-color focus stroke."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
+
+
+test("button shadows stay on the stationary outer control while the face moves", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\][^\n]*box-shadow:\s*var\(--vt-studio-control-shadow/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^\n]*box-shadow:\s*none/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
+  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][^\n]*box-shadow:\s*3px 3px 0/);
+  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][^\n]*box-shadow:\s*none/);
+});
+
+test("split-left buttons do not clip the stationary shadow or expose a wrapper border", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*overflow:\s*visible/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-button-face\][^\n]*border:\s*var\(--vt-studio-control-stroke\) solid #000/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-button-face\][^\n]*overflow:\s*hidden/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*background:\s*transparent/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*appearance:\s*none/);
+});
