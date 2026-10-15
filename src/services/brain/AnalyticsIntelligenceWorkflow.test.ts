@@ -188,6 +188,78 @@ describe("Analytics intelligence workflow phases 5–8", () => {
     expect(result.limitations.some((item) => item.includes("baseline is zero"))).toBe(true)
   })
 
+  it("completes the canonical finding-to-project-to-publication-outcome golden path", () => {
+    const [presented] = presentAnalyticsFindings([finding()], "channel-1")
+    expect(presented.evidenceRefs).toContain("analytics:snapshot-after:daily:views")
+
+    const action = buildAnalyticsRecommendationAction({
+      id: "recommendation-golden",
+      creatorGoal: "Increase qualified watch time",
+      action: "Test a clearer opening sequence",
+      channelId: "channel-1",
+      projectId: "project-golden",
+      contentBuildId: "content-build-golden",
+      videoId: "video-golden",
+      actionPacketId: "action-packet-golden",
+      publicationTransactionId: "publish-transaction-golden",
+      metadataVersionIds: ["metadata-v3"],
+      finding: finding(),
+      evaluationWindow: "28d",
+      expectedDirection: "increase",
+    })!
+    expect(action.status).toBe("proposed")
+    expect(action.contentBuildId).toBe("content-build-golden")
+
+    const evaluate = (suffix: string, baselineStart: string, baselineEnd: string, followStart: string, followEnd: string, before: number, after: number) =>
+      evaluateAnalyticsOutcome({
+        recommendation: action,
+        baseline: measurement({
+          value: before,
+          snapshotId: `baseline-${suffix}`,
+          observedAt: `${baselineEnd}T23:00:00.000Z`,
+          periodStartDate: baselineStart,
+          periodEndDate: baselineEnd,
+          projectId: "project-golden",
+          contentBuildId: "content-build-golden",
+          videoId: "video-golden",
+          publicationTransactionId: "publish-transaction-golden",
+          metadataVersionIds: ["metadata-v2"],
+        }),
+        followUp: measurement({
+          value: after,
+          snapshotId: `followup-${suffix}`,
+          observedAt: `${followEnd}T23:00:00.000Z`,
+          periodStartDate: followStart,
+          periodEndDate: followEnd,
+          projectId: "project-golden",
+          contentBuildId: "content-build-golden",
+          videoId: "video-golden",
+          publicationTransactionId: "publish-transaction-golden",
+          metadataVersionIds: ["metadata-v3"],
+        }),
+      })
+
+    const first = evaluate("one", "2026-01-01", "2026-01-28", "2026-01-29", "2026-02-25", 100, 120)
+    const second = evaluate("two", "2026-02-26", "2026-03-25", "2026-03-26", "2026-04-22", 120, 135)
+    const third = evaluate("three", "2026-04-23", "2026-05-20", "2026-05-21", "2026-06-17", 135, 145)
+    expect([first.status, second.status, third.status]).toEqual(["evaluated", "evaluated", "evaluated"])
+    expect(first.contentBuildId).toBe(action.contentBuildId)
+    expect(first.publicationTransactionId).toBe(action.publicationTransactionId)
+    expect(first.metadataVersionIds).toEqual(["metadata-v2", "metadata-v3"])
+
+    const candidate = buildLearningCandidateReview({
+      id: "candidate-golden",
+      recommendation: action,
+      evaluations: [first, second, third],
+    })
+    expect(candidate?.status).toBe("review-required")
+    expect(candidate?.promotionAllowed).toBe(false)
+    expect(candidate?.contentBuildId).toBe("content-build-golden")
+    expect(candidate?.publicationTransactionId).toBe("publish-transaction-golden")
+    expect(candidate?.metadataVersionIds).toContain("metadata-v3")
+    expect(candidate?.causalConclusion).toBeNull()
+  })
+
   it("keeps learning candidates review-only and requires repeated evaluated outcomes", () => {
     const action = recommendation()
     const base = evaluateAnalyticsOutcome({
