@@ -1876,9 +1876,9 @@
   overflow: hidden;
   font-size: 10px;
   font-weight: 800;
+  white-space: nowrap;
   text-overflow: ellipsis;
   text-transform: uppercase;
-  white-space: nowrap;
 }
 .vt-confirmed-provenance {
   display: grid;
