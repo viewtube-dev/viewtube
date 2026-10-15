@@ -250,6 +250,7 @@ export type ContentBuildEventType =
 
 export interface ContentBuildEvent<T = Record<string, unknown>> {
  id: string
+ idempotencyKey?: string | null
  contentBuildId: string
  timestamp: string
  eventType: ContentBuildEventType
@@ -283,6 +284,7 @@ export interface CreateContentBuildInput {
 }
 
 export interface BindYouTubeVideoInput {
+ idempotencyKey?: string | null
  contentBuildId: string
  videoId: string
  channelId?: string | null
