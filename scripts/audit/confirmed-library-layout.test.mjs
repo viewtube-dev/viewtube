@@ -61,7 +61,7 @@ test("non-default settings explain the real public props in plain language", () 
   assert.ok(catalog.includes('variant="floating-label"'));
   assert.ok(catalog.includes("Floating-label variants accept label and optional l0/l1/l2 level"));
   assert.ok(catalog.includes("A focused or non-empty field lifts the label above the border."));
-  assert.ok(catalog.includes("Only Compact B adds the solid secondary-color focus stroke."));
+  assert.ok(catalog.includes('Only floatingLabelVariant="b" adds the solid secondary-color focus stroke to the compact input specimen.'));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
