@@ -162,3 +162,14 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+
+## Phase 2 — current-base reconciliation update — 2026-10-15
+
+- [x] Resolve a requested project ID from the canonical project index supplied by active Brain state when the surface omits the full Project object.
+- [x] Pass the project index through BrainRuntime and the Sidebar Copilot, Brain Hub, and full Brain workspace.
+- [x] Define capability-specific required context/evidence sections and feed selected capability IDs into context resolution.
+- [x] Report absent required sections explicitly as `required_evidence_missing:<section>`; add matrix-completeness and fail-closed regression tests.
+- [ ] Validate the matrix against every live capability/control combination and verify no required sections are accidentally absent on legitimate rich-evidence tasks.
+- [ ] Implement model-aware token budgeting from an explicit provider context-window contract; do not guess model limits.
+- [ ] Complete cross-surface parity/isolation tests and certify the exact head.
