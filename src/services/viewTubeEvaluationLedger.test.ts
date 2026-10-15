@@ -61,6 +61,7 @@ import {
 const store = new Map<string, string>()
 
 beforeEach(() => {
+ vi.clearAllMocks()
  store.clear()
  lineageMocks.appendContentBuildEvent.mockImplementation((input: Record<string, unknown>) => ({
   id: `event:${String(input.idempotencyKey || "checkpoint")}`,
