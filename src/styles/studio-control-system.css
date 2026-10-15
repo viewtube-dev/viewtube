@@ -296,12 +296,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   -webkit-text-stroke: .5px currentColor;
   pointer-events: none;
 }
-.vt-studio-fixed-label-field.is-input > input {
-  padding-top: calc(var(--vt-studio-control-height, 44px) / 2.5);
-}
-.vt-studio-fixed-label-field.is-textarea > textarea {
-  padding-top: calc(var(--vt-studio-control-height, 44px) / 2.1);
-}
+/* The permanent label sits above the control border, so the native text surface
+   keeps its canonical vertical padding and remains fully usable at compact size. */
 .vt-studio-fixed-label-field:focus-within > :is(input, textarea) {
   outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
