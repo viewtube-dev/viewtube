@@ -1524,8 +1524,8 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
   font-size: 13px !important;
 }
 
-/* Canonical Studio Controls contract (single authoritative tail).
-   Earlier sections define component anatomy; this section owns final field,
+/* Canonical Studio Controls contract (single authoritative tail). */
+/* Earlier sections define component anatomy; this section owns final field,
    action-button, split-left, and word-toggle geometry. Keep it last so each
    component has one predictable final state without selector-by-selector patches. */
 
