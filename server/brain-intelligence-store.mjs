@@ -9,6 +9,7 @@ let pool = null;
 let initialized = false;
 const memoryEvents = new Map();
 const memoryObservations = new Map();
+const memoryLearningRecords = new Map();
 
 const schemaSql = `
 CREATE TABLE IF NOT EXISTS viewtube_brain_intelligence_events (
@@ -32,7 +33,18 @@ CREATE TABLE IF NOT EXISTS viewtube_brain_lifecycle_observations (
   PRIMARY KEY(viewtube_user_id,channel_id,observation_key)
 );
 CREATE INDEX IF NOT EXISTS viewtube_brain_lifecycle_observations_channel_idx
-  ON viewtube_brain_lifecycle_observations(viewtube_user_id,channel_id,observed_at DESC);`;
+  ON viewtube_brain_lifecycle_observations(viewtube_user_id,channel_id,observed_at DESC);
+CREATE TABLE IF NOT EXISTS viewtube_brain_learning_records (
+  viewtube_user_id TEXT NOT NULL REFERENCES viewtube_users(id) ON DELETE CASCADE,
+  channel_id TEXT NOT NULL,
+  record_id TEXT NOT NULL,
+  record JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(viewtube_user_id,channel_id,record_id)
+);
+CREATE INDEX IF NOT EXISTS viewtube_brain_learning_records_channel_idx
+  ON viewtube_brain_learning_records(viewtube_user_id,channel_id,updated_at DESC);`;
 
 const scope = (userId, channelId) => `${userId}:${channelId}`;
 
@@ -115,6 +127,48 @@ export const upsertPersistedLifecycleObservations = async ({ userId, channelId, 
        ON CONFLICT(viewtube_user_id,channel_id,observation_key)
        DO UPDATE SET observation=EXCLUDED.observation,observed_at=EXCLUDED.observed_at,updated_at=NOW()`,
       [userId, channelId, observationKey(row), JSON.stringify(row), Number(row.observedAt || Date.now())],
+    );
+  }
+  return rows.length;
+};
+
+
+/**
+ * Durable learning records are scoped to both the authenticated ViewTube user
+ * and the connected channel. Stable record IDs make retries idempotent.
+ * Raw creator communication must not be stored here; records should contain
+ * reviewed candidates, evaluation summaries, and explicit provenance only.
+ */
+export const listPersistedBrainLearningRecords = async ({ userId, channelId }) => {
+  await initBrainIntelligenceStore();
+  if (!pool) return [...(memoryLearningRecords.get(scope(userId, channelId))?.values() || [])];
+  const result = await pool.query(
+    `SELECT record FROM viewtube_brain_learning_records
+     WHERE viewtube_user_id=$1 AND channel_id=$2 ORDER BY updated_at DESC LIMIT 5000`,
+    [userId, channelId],
+  );
+  return result.rows.map((row) => row.record);
+};
+
+export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, records }) => {
+  await initBrainIntelligenceStore();
+  const rows = (Array.isArray(records) ? records : [])
+    .filter((record) => record && typeof record.id === "string" && record.id.trim() && record.channelId === channelId)
+    .slice(0, 1000);
+  if (!pool) {
+    const key = scope(userId, channelId);
+    const map = memoryLearningRecords.get(key) || new Map();
+    rows.forEach((record) => map.set(record.id, record));
+    memoryLearningRecords.set(key, map);
+    return rows.length;
+  }
+  for (const record of rows) {
+    await pool.query(
+      `INSERT INTO viewtube_brain_learning_records(viewtube_user_id,channel_id,record_id,record)
+       VALUES($1,$2,$3,$4::jsonb)
+       ON CONFLICT(viewtube_user_id,channel_id,record_id)
+       DO UPDATE SET record=EXCLUDED.record,updated_at=NOW()`,
+      [userId, channelId, record.id, JSON.stringify(record)],
     );
   }
   return rows.length;
