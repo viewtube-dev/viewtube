@@ -8,6 +8,7 @@ import {
 } from "./asset-engine/ContentBuildRepository"
 import {
   createMetadataLearningCandidate,
+  listPromotedMetadataLearningCandidates,
   promoteMetadataLearningCandidate,
   summarizeMetadataIntelligence,
 } from "./MetadataLearningGovernance"
@@ -105,6 +106,7 @@ describe("metadata learning governance", () => {
       interpretation: "descriptive-association-only",
       causalConclusion: null,
     })
+    expect(listPromotedMetadataLearningCandidates("cb-learning").map(event => event.id)).toContain(promoted.id)
     expect(promoteMetadataLearningCandidate({
       contentBuildId: "cb-learning",
       candidateEventId: candidate.id,
