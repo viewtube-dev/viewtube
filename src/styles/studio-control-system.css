@@ -334,7 +334,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-28-button-shadow-x: 1px; --vt-studio-28-button-shadow-y: 1px;
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
-  --vt-studio-text-input-standard-font-size: 18px; --vt-studio-text-input-compact-font-size: 14px;
+  --vt-studio-text-input-standard-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-text-input-compact-font-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-text-input-standard-line-height: 1.25; --vt-studio-text-input-compact-line-height: 1.3;
   --vt-studio-textarea-standard-font-size: 18px; --vt-studio-textarea-compact-font-size: 14px;
   --vt-studio-control-letter-spacing: -.035em; --vt-studio-control-line-height: .86;
@@ -764,11 +764,11 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
 }
 input[data-vt-studio-control="true"][data-size="standard"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   font-size: var(--vt-studio-text-input-standard-font-size, 18px) !important;
-  line-height: var(--vt-studio-text-input-standard-line-height, 1.25) !important;
+  line-height: var(--vt-studio-control-line-height, .86) !important;
 }
 input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   font-size: var(--vt-studio-text-input-compact-font-size, 14px) !important;
-  line-height: var(--vt-studio-text-input-compact-line-height, 1.3) !important;
+  line-height: var(--vt-studio-control-line-height, .86) !important;
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   display: block;
