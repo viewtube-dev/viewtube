@@ -1,5 +1,5 @@
 import React from "react"
-import type { StudioControlSize } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens"
 import "../../styles/studio-control-system.css"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
@@ -36,44 +36,13 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       outlineStrokeWidth: "half the current border width",
       outlineShadowColor: "secondary",
     },
-    caret: { color: "primary", style: "native insertion caret" },
+    caret: { color: "primary", style: "primary-colored block caret" },
   },
   motionEasing: "ease-out",
 } as const
 
-/** Canonical size contracts. CSS mirrors these values in studio-control-system.css. */
-export const STUDIO_COMPONENT_SIZE_DEFAULTS = {
-  standard: {
-    height: 44,
-    stroke: 3,
-    radius: 6,
-    fontSize: 38,
-    fontWeight: 1000,
-    buttonShadowX: 3,
-    buttonShadowY: 3,
-    hoverTransitionMs: 150,
-    hoverOffsetPx: 1.5,
-    clickTransitionMs: 300,
-    clickOffsetPx: 3,
-    iconSize: 28,
-    iconStroke: 2.5,
-  },
-  compact: {
-    height: 28,
-    stroke: 2,
-    radius: 4,
-    fontSize: 24,
-    fontWeight: 1000,
-    buttonShadowX: 1.5,
-    buttonShadowY: 1.5,
-    hoverTransitionMs: 150,
-    hoverOffsetPx: 0.75,
-    clickTransitionMs: 300,
-    clickOffsetPx: 1.5,
-    iconSize: 18,
-    iconStroke: 1.65,
-  },
-} as const
+/** Canonical machine-readable contract; defined once in studio-ui/tokens.ts. */
+export const STUDIO_COMPONENT_SIZE_DEFAULTS = STUDIO_CONTROL_SIZE_CONTRACT
 
 const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
   "data-vt-studio-control": "true",
@@ -88,7 +57,7 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
  */
 export const StudioTextInput = React.forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
 >(({ sizeVariant = "standard", type = "text", placeholder = "TITLE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
   <input
     ref={ref}
@@ -110,7 +79,7 @@ export const StudioInput = StudioTextInput
 /** Canonical search input using the shared Studio text-field contract. */
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
 >(({ sizeVariant = "standard", type = "search", placeholder = "TITLE", ...props }, ref) => (
   <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
@@ -119,7 +88,7 @@ StudioSearchInput.displayName = "StudioSearchInput"
 /** Canonical number input using the shared Studio text-field contract. */
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
 >(({ sizeVariant = "standard", type = "number", placeholder = "TITLE", ...props }, ref) => (
   <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
@@ -132,7 +101,7 @@ StudioNumberInput.displayName = "StudioNumberInput"
  */
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
+  React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: StudioControlSize }
 >(({ sizeVariant = "standard", rows, placeholder = "DESCRIPTION", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
   <textarea
     ref={ref}
@@ -150,7 +119,7 @@ StudioTextArea.displayName = "StudioTextArea"
 
 export interface StudioLabeledInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "placeholder"> {
   label: string
-  sizeVariant?: Exclude<StudioControlSize, "action">
+  sizeVariant?: StudioControlSize
   level?: "l0" | "l1" | "l2"
 }
 /** Floating-label input composed from the canonical StudioTextInput primitive. */
@@ -169,7 +138,7 @@ StudioLabeledInput.displayName = "StudioLabeledInput"
 
 export interface StudioLabeledTextAreaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "placeholder"> {
   label: string
-  sizeVariant?: Exclude<StudioControlSize, "action">
+  sizeVariant?: StudioControlSize
   level?: "l0" | "l1" | "l2"
 }
 /** Floating-label textarea composed from the canonical StudioTextArea primitive. */
@@ -273,7 +242,7 @@ export const Studioarea = StudioTextArea
 
 export const StudioSelect = React.forwardRef<
   HTMLSelectElement,
-  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: Exclude<StudioControlSize, "action"> }
+  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
 >(({ sizeVariant = "standard", ...props }, ref) => (
   <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
