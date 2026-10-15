@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Phase 10 code path implemented: completed publication emits a typed immutable identity and attempts a retry-safe published outcome → Brain ledger join. Regression coverage covers lineage and fail-closed scope. Latest-head CI and real-account/durable-store certification remain pending.
+**Status:** Phase 10 implementation is expanded: the immutable publication receipt carries ActionPacket/workflow/recommendation/experiment IDs; publisher completion automatically links selected published AssetOutcomes to the Brain outcome ledger; the canonical analytics evaluation path adds checkpoint lineage. Latest-head CI, production-caller reachability, and server/cross-device durability certification remain pending.
 
 ## Implementation completed in this slice
 
@@ -49,3 +49,10 @@ The earlier release-gates run `38693153891` passed production build, configured 
 
 
 Next contracts: [Phase 11 — Analytics Evaluation Lineage](./PHASE-11-ANALYTICS-EVALUATION-LINEAGE.md) and [Phase 12 — Decision Effectiveness & Governed Learning](./PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md).
+
+
+## Implementation update — 2026-10-15
+
+The publication receipt now preserves optional `actionPacketId`, `workflowId`, `recommendationId`, and `experimentId`. The publisher bridge links every selected variant asset to the exact channel, transaction, approved snapshot/hash, and published video; the evaluation writer then attaches the canonical analytics checkpoint and evidence IDs to both AssetOutcome and BrainOutcomeLedger. Conflicting decision identity on a publication retry is rejected instead of silently relinking the receipt.
+
+The remaining uncompleted boundary is cross-device/server durability and a final live-caller certification. The browser-local ledgers are retry-safe within their own stores, not a distributed transaction across independent producer systems.
