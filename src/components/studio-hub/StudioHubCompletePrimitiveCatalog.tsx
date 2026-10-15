@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-primitive-catalogs.css"
 
@@ -82,7 +82,12 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
 
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button")
     return <button className={`vt-catalog-button is-${level}`} style={style}>{name.replace(" Button", "")}</button>
-  if (name === "Square Icon Button") return <button aria-label="Settings" className={`vt-catalog-icon-button is-${level}`} style={style}>{icon}</button>
+  if (name === "Square Icon Button") return <div className={`vt-catalog-square-icon-variants is-${level}`} style={style} aria-label="Square icon button variants">
+    <StudioSquareIconButton icon={icon} label="Default primary fill and secondary shadow" variant="v1" sizeVariant={level === "l2" ? "compact" : "standard"} />
+    <StudioSquareIconButton icon={icon} label="Secondary fill and primary shadow" variant="v2" sizeVariant={level === "l2" ? "compact" : "standard"} />
+    <StudioSquareIconButton icon={icon} label="Selectable color swap" variant="v3" sizeVariant={level === "l2" ? "compact" : "standard"} />
+    <StudioSquareIconButton icon={icon} label="Black fill and primary icon" variant="v4" sizeVariant={level === "l2" ? "compact" : "standard"} />
+  </div>
   if (name === "Split Left Button" || name === "Head Tail Action") return <StudioSplitLeftButton className={`vt-catalog-split-primitive is-${level}`} heightVariant={level === "l2" ? "28" : "44"} style={{ ...style, ["--vt-studio-control-accent" as string]: colors.b, ["--vt-studio-control-secondary" as string]: colors.a } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
   if (name === "28px Dropdown Pair") return <div className="vt-catalog-dropdown-pair" style={style}>
     {["OPTION 1","OPTION 2"].map((label, i) => <button type="button" key={label} className="vt-catalog-dropdown-28" aria-label={`Choose ${label}`} onClick={() => setMenuChoice(label)}><span>{menuChoice === label ? label : label}</span><ChevronDown aria-hidden="true" /></button>)}
