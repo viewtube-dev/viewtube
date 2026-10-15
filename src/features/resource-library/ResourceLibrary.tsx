@@ -29,11 +29,12 @@ const RESOURCE_PROGRESS_STORAGE_KEY = "viewtube:resource-library:completed:v1"
 
 const getResourceWorkflowLinks = (resource: (typeof RESOURCE_LIBRARY_ENTRIES)[number]) => {
   const tags = resource.tags.join(" ").toLocaleLowerCase()
+  const aiBrainHref = `/ai-brain?ask=${encodeURIComponent(`Help me apply the Resource Library guide "${resource.title}" (${resource.id}) to my current creator workflow. Use available channel context, identify missing evidence, and do not assume the guide has changed my project data.`)}`
   if (/copyright|licensing|rights|synthetic-media/.test(tags)) {
     return [{ label: "Open Creator Vault", href: "/vault" }, { label: "Open Publisher", href: "/video-publisher" }]
   }
   if (/analytics|retention|traffic-sources|metrics|data-quality/.test(tags) || resource.category === "Analytics") {
-    return [{ label: "Open Analytics", href: "/analytics" }, { label: "Open AI Brain", href: "/ai-brain" }]
+    return [{ label: "Open Analytics", href: "/analytics" }, { label: "Apply guide with AI Brain", href: aiBrainHref }]
   }
   if (/planning|content-calendar|live-streaming|preflight/.test(tags)) {
     return [{ label: "Open Projects", href: "/projects" }, { label: "Open Studio", href: "/studio" }]
