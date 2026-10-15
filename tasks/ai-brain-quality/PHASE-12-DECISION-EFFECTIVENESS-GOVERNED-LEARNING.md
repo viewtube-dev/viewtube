@@ -46,7 +46,9 @@ Acceptance is a creator decision signal; publication is exposure evidence; analy
 ## Acceptance
 
 - [x] Preserve evaluation-to-candidate lineage and evidence IDs.
-- [x] Require resolved, scoped, evidence-backed, comparable input.
+- [x] Require resolved, strictly scope-matched, evidence-backed, comparable input.
+- [x] Make candidate retries idempotent by caller key within the same evaluation/channel/project scope.
+- [x] Reject channel candidates when the source evaluation has no matching channel identity.
 - [x] Keep candidate creation separate from approval/promotion.
 - [x] Add regression tests for gating and scope.
 - [ ] Verify the new tests and all release gates on the latest PR head.
