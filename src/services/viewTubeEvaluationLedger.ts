@@ -18,6 +18,9 @@ export interface EvaluationRecord {
  recommendation: string
  evidenceIds: string[]
  actionPacketId?: string | null
+ workflowId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
  contentBuildId?: string | null
  videoPackageId?: string | null
  publishTransactionId?: string | null
@@ -55,6 +58,19 @@ export interface WorkflowCandidate {
  reason: string
  evidenceRecordIds: string[]
  evaluationRecordId?: string | null
+ actionPacketId?: string | null
+ workflowId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
+ contentBuildId?: string | null
+ publishTransactionId?: string | null
+ approvedSnapshotId?: string | null
+ approvedSnapshotHash?: string | null
+ analyticsCheckpointIds?: string[]
+ sourceRecordIds?: string[]
+ traceIds?: string[]
+ assetIds?: string[]
+ publishedVideoIds?: string[]
  sourceOutcomeIds?: string[]
  evaluationOutcome?: Exclude<EvaluationOutcome, "pending">
  selectedWindow?: string | null
@@ -213,6 +229,10 @@ export const createPublicationEvaluationRecord = (input: {
   correlationId: identity.correlationId,
   sourceOutcomeIds,
   sourceRecordIds,
+  actionPacketId: identity.actionPacketId || null,
+  workflowId: identity.workflowId || null,
+  recommendationId: identity.recommendationId || null,
+  experimentId: identity.experimentId || null,
   traceIds: [...new Set(linkedOutcomes.map((outcome) => outcome.traceId))],
   assetIds: [...new Set(linkedOutcomes.map((outcome) => outcome.assetId))],
   analyticsCheckpointIds: [checkpoint.id],
@@ -257,7 +277,7 @@ export const proposeWorkflowCandidate = (input: Omit<WorkflowCandidate,"id"|"cre
  */
 export const proposeEvaluationLearningCandidate = (
  evaluationRecordId: string,
- input: Omit<WorkflowCandidate, "id" | "createdAt" | "status" | "evaluationRecordId" | "sourceOutcomeIds" | "evaluationOutcome" | "evidenceRecordIds" | "selectedWindow" | "comparabilityStatus" | "evidenceStatus" | "reviewedBy" | "reviewedAt" | "promotedClaimId" | "promotedAt" | "supportingEvaluationIds">,
+ input: Omit<WorkflowCandidate, "id" | "createdAt" | "status" | "evaluationRecordId" | "sourceOutcomeIds" | "evaluationOutcome" | "evidenceRecordIds" | "selectedWindow" | "comparabilityStatus" | "evidenceStatus" | "reviewedBy" | "reviewedAt" | "promotedClaimId" | "promotedAt" | "supportingEvaluationIds" | "actionPacketId" | "workflowId" | "recommendationId" | "experimentId" | "contentBuildId" | "publishTransactionId" | "approvedSnapshotId" | "approvedSnapshotHash" | "analyticsCheckpointIds" | "sourceRecordIds" | "traceIds" | "assetIds" | "publishedVideoIds">,
 ) => {
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
  const evaluation = listEvaluationRecords().find((record) => record.id === evaluationRecordId)
@@ -399,6 +419,13 @@ export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input
    evaluationLearningCandidateId: candidate.id,
    evaluationRecordIds,
    publishedVideoIds: supporting.map((record) => record.publishedVideoId),
+   actionPacketIds: [...new Set(supporting.map((record) => record.actionPacketId).filter((id): id is string => Boolean(id)))],
+   workflowIds: [...new Set(supporting.map((record) => record.workflowId).filter((id): id is string => Boolean(id)))],
+   recommendationIds: [...new Set(supporting.map((record) => record.recommendationId).filter((id): id is string => Boolean(id)))],
+   experimentIds: [...new Set(supporting.map((record) => record.experimentId).filter((id): id is string => Boolean(id)))],
+   publishTransactionIds: [...new Set(supporting.map((record) => record.publishTransactionId).filter((id): id is string => Boolean(id)))],
+   approvedSnapshotIds: [...new Set(supporting.map((record) => record.approvedSnapshotId).filter((id): id is string => Boolean(id)))],
+   analyticsCheckpointIds: [...new Set(supporting.flatMap((record) => record.analyticsCheckpointIds || []))],
    selectedWindow: sourceEvaluation.selectedWindow,
    interpretation: "descriptive-association-only",
    causalConclusion: null,
