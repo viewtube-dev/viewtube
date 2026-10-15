@@ -153,7 +153,7 @@ const writeSnapshots = (snapshots: ApprovedPublishSnapshot[]) => {
  try {
   localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(snapshots))
  } catch {
-  throw new Error("Could not persist approved publish snapshot; publishing must not continue without a durable local receipt.")
+  throw new Error("Could not persist approved publish snapshot to browser storage; publishing must not continue without a recorded snapshot.")
  }
 }
 
