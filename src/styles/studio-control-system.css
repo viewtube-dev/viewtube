@@ -973,6 +973,34 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 button[data-vt-studio-button="true"] { box-sizing:border-box; display:inline-flex; width:auto; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out,box-shadow 150ms ease-out; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
+/* Separate prominent action family. Not a StudioButton size variant. */
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
+  --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
+  --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px;
+  box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
+  min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 6px; background: transparent;
+  box-shadow: 3px 3px 0 var(--vt-studio-control-shadow-color); color: #000;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
+  box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; min-height: 56px; height: 56px; padding: 10px 16px;
+  border: 3px solid #000; border-radius: 6px;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 20px; font-weight: 1000; line-height: .95; letter-spacing: -.02em;
+  text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
+  transition: transform 150ms ease-out, background-color 150ms ease-out;
+}
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) > [data-vt-studio-action-face] { transform: translate(1.5px, 1.5px); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform: translate(3px, 3px); transition-duration: 300ms; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; }
+@media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none; }
+}
+
 button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; height:100%; min-height:100%; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
 button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] { padding-inline:8px; font-size:24px; }
 button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
