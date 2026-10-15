@@ -146,3 +146,10 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+
+## Phase 2 implementation update — 2026-10-15
+
+The current-base follow-up now resolves `projectId` through the active Brain project index when the surface does not supply the Project object, and passes that index through the canonical runtime from Sidebar Copilot, Brain Hub and full Brain workspace. Capability-specific evidence requirements are declared centrally and the resolver reports missing required sections explicitly rather than silently omitting them.
+
+Remaining Phase 2 work: verify the evidence matrix against live control/capability combinations, add an explicit provider context-window contract for model-aware budgets, and finish cross-surface parity/isolation tests. Do not certify Phase 2 yet. Continue with Phase 3 prompt provenance/reachability and Phase 4 real-caller provenance verification only after these focused tests and exact-head release checks are reviewed.
