@@ -2331,3 +2331,27 @@
     overflow-x: auto !important;
   }
 }
+
+
+/* Square icon button family uses the production primitive for all four color variants. */
+.vt-complete-catalog .vt-catalog-square-icon-variants {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-complete-catalog .vt-catalog-square-icon-variants > button[data-vt-studio-icon-button="true"] {
+  margin: 0;
+}
+@media (max-width: 520px) {
+  .vt-complete-catalog .vt-catalog-square-icon-variants {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-content: start;
+    gap: 5px;
+  }
+  .vt-complete-catalog .vt-catalog-square-icon-variants > button[data-vt-studio-icon-button="true"] {
+    justify-self: center;
+  }
+}
