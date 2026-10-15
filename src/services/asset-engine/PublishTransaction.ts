@@ -239,7 +239,8 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
      thumbnailAssetId: next.assetLock.thumbnailAssetId,
      descriptionAssetId: next.assetLock.descriptionAssetId,
      scheduledAt: next.assetLock.scheduledAt,
-     awaitingCanonicalAnalyticsCheckpoint: true,\n     checkpointId: `publication-checkpoint:${next.id}`,
+     awaitingCanonicalAnalyticsCheckpoint: true,
+     checkpointId: `publication-checkpoint:${next.id}`,
      causalConclusion: null,
     },
    })
