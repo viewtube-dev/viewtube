@@ -165,6 +165,7 @@ export interface BrainPromptRunReceipt {
  requestedModel: string | null
  servedModel: string | null
  evidenceSnapshotIds: string[]
+ evidenceRefs: string[]
  channelKnowledgeFingerprint: string | null
  projectRevision: string | null
  styleProfileVersion: string | null
@@ -179,6 +180,7 @@ export const buildBrainPromptRunReceipt = (input: Omit<BrainPromptRunReceipt, "s
  schemaVersion: "brain-prompt-run-receipt-v1",
  ...input,
  evidenceSnapshotIds: [...new Set(input.evidenceSnapshotIds.filter(Boolean))],
+ evidenceRefs: [...new Set(input.evidenceRefs.filter(Boolean))],
  creatorConstraints: [...new Set(input.creatorConstraints.filter(Boolean))],
  repairCount: Math.max(0, Math.floor(input.repairCount)),
  generatedAt: input.generatedAt || new Date().toISOString(),
