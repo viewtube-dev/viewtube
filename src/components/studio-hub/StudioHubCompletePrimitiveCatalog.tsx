@@ -82,11 +82,29 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
 
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button")
     return <button className={`vt-catalog-button is-${level}`} style={style}>{name.replace(" Button", "")}</button>
-  if (name === "Square Icon Button") return <div className={`vt-catalog-square-icon-variants is-${level}`} style={style} role="group" aria-label="Square icon button variants">
-    <StudioSquareIconButton icon={icon} label="Default primary fill and secondary shadow" variant="v1" sizeVariant={level === "l2" ? "compact" : "standard"} />
-    <StudioSquareIconButton icon={icon} label="Secondary fill and primary shadow" variant="v2" sizeVariant={level === "l2" ? "compact" : "standard"} />
-    <StudioSquareIconButton icon={icon} label="Selectable color swap" variant="v3" sizeVariant={level === "l2" ? "compact" : "standard"} />
-    <StudioSquareIconButton icon={icon} label="Black fill and primary icon" variant="v4" sizeVariant={level === "l2" ? "compact" : "standard"} />
+  if (name === "Square Icon Button") return <div className={`vt-catalog-square-icon-family is-${level}`} style={style} data-vt-confirmed-component="StudioSquareIconButton">
+    <section className="vt-catalog-square-icon-group" aria-label="Confirmed visual skins">
+      <h4>VISUAL SKINS · V1–V4</h4>
+      <div className="vt-catalog-square-icon-variants" role="group" aria-label="Square icon button visual skins">
+        <StudioSquareIconButton icon={icon} label="V1 primary fill and secondary shadow" variant="v1" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} label="V2 secondary fill and primary shadow" variant="v2" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="V3 selectable inverse pair" variant="v3" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} label="V4 black face and primary icon" variant="v4" sizeVariant={level === "l2" ? "compact" : "standard"} />
+      </div>
+    </section>
+    <section className="vt-catalog-square-icon-group" aria-label="Confirmed interaction effects">
+      <h4>INTERACTION EFFECTS · OPT-IN</h4>
+      <div className="vt-catalog-square-icon-effects" role="group" aria-label="Square icon button interaction effects">
+        <StudioSquareIconButton icon={icon} label="Pop feedback on activation" animate sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} label="Notification count" effect="notification" badge={3} sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} label="Rotated toggle" effect="rotated-toggle" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} activeIcon={<Check aria-hidden="true" />} label="3D flip" effect="flip" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} label="Tooltip on hover or focus" effect="tooltip" tooltip="EDIT ITEM" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} activeIcon={<Check aria-hidden="true" />} label="Morph between icons" effect="morph" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} label="Success confirmation" effect="success" success tooltip="SAVED" sizeVariant={level === "l2" ? "compact" : "standard"} />
+      </div>
+    </section>
+    <p className="vt-catalog-square-icon-contract">Shared geometry: 44×44 standard / 28×28 compact · 3px / 2px stroke · 28px / 18px icon · inherited palette pair · shared press/focus/disabled behavior.</p>
   </div>
   if (name === "Split Left Button" || name === "Head Tail Action") return <StudioSplitLeftButton className={`vt-catalog-split-primitive is-${level}`} heightVariant={level === "l2" ? "28" : "44"} style={{ ...style, ["--vt-studio-control-accent" as string]: colors.b, ["--vt-studio-control-secondary" as string]: colors.a } as React.CSSProperties} icon={name === "Head Tail Action" ? <ChevronRight /> : icon}>{name === "Head Tail Action" ? "Action" : "Settings"}</StudioSplitLeftButton>
   if (name === "28px Dropdown Pair") return <div className="vt-catalog-dropdown-pair" style={style}>
@@ -246,7 +264,7 @@ export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimit
     </header>
     <div className="vt-complete-catalog-grid">
       {STUDIO_HUB_COMPONENT_FAMILIES.map((name, index) => (
-        <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state="hardcoded-reference">
+        <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state={name === "Square Icon Button" ? "confirmed-production-primitive" : "hardcoded-reference"}>
           <h3><span>{String(index + 1).padStart(2,"0")}</span>{name}</h3>
           <div className="vt-catalog-levels">
             {["44px Switches", "44px Radio + Checkbox", "Word Toggles"].includes(name) ? <CanonicalControlFamily name={name} paletteIndex={paletteIndex} /> : LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
