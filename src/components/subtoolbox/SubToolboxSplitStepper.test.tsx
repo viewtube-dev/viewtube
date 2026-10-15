@@ -20,10 +20,10 @@ describe("StudioSplitStepper", () => {
   })
 
   it("uses canonical Studio Controls sizing and a fixed 2:1 value pane", () => {
-    expect(css).toContain("var(--vt-studio-44-height, 44px)")
-    expect(css).toContain("var(--vt-studio-28-height, 28px)")
+    expect(css).toContain("var(--vt-studio-control-height, 44px)")
+    expect(css).toContain("var(--vt-studio-control-stroke, 3px)")\n    expect(css).toContain("var(--vt-studio-control-radius, 6px)")
     expect(css).toContain("grid-template-columns: minmax(0, calc(var(--vt-split-stepper-inner) * 2)) var(--vt-split-stepper-inner)")
-    expect(css).toContain("box-shadow: none;")
+    expect(css).toContain("box-shadow: none;")\n    expect(css).toContain("width: 136%; height: 136%")\n    expect(css).toContain("var(--vt-studio-control-default-fill-opacity, 50%)")
     const inputRule = css.match(/\.vt-studio-split-stepper input\.vt-studio-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
     expect(inputRule).toContain("border-radius: 0;")
     expect(inputRule).toContain("border: 0;")
@@ -38,7 +38,7 @@ describe("StudioSplitStepper", () => {
   it("preserves draft editing, bounds, controlled synchronization and hold-repeat behavior", () => {
     expect(source).toContain("if (!inputFocused) setDraft(String(value))")
     expect(source).toContain("Math.min(max, Math.max(min, parsed))")
-    expect(source).toContain("scheduleRepeat")
+    expect(source).toContain("scheduleRepeat")\n    expect(source).toContain("inputFocused || holding")\n    expect(source).toContain("data-vt-studio-control-family=\"stepper\"")
     expect(source).toContain("onPointerDown")
     expect(source).toContain("type=\"number\"")
   })
