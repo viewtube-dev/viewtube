@@ -121,7 +121,7 @@ const canonicalText = (row: Record<string, unknown>, keys: string[]): string | n
  * Canonical Opportunity Intelligence projection. It consumes the videos
  * dataset from the same analytics-canon bundle used by Brain quality and
  * statistics. Missing values stay null; each item retains the canonical row
- * evidence reference and selected reporting window via context.
+ * evidence reference and selected reporting window in explicit provenance.
  */
 export const buildOpportunityEvidenceFromCanonicalBundle = (input: {
  channelId: string
