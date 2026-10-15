@@ -225,10 +225,12 @@ body {
   background: color-mix(in srgb, var(--vt-subtoolbox-fill, #fff) 14%, #fff);
 }
 
-/* Global field normalization: unified placeholder + black-to-blue focus outline */
-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.dashboard-barrier input),
-textarea:not(.dashboard-barrier textarea),
-select:not(.dashboard-barrier select) {
+/* Global field normalization for legacy/widget fields only.
+   Canonical Studio fields are explicitly excluded: StudioControls owns their
+   fill, caret, border width, inset stroke, placeholder, and focus appearance. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.dashboard-barrier input):not([data-vt-studio-control="true"]),
+textarea:not(.dashboard-barrier textarea):not([data-vt-studio-control="true"]),
+select:not(.dashboard-barrier select):not([data-vt-studio-control="true"]) {
   outline: none;
   border: 2px solid var(--widget-color, #000);
   background-color: #fff;
@@ -239,9 +241,9 @@ select:not(.dashboard-barrier select) {
   caret-color: var(--widget-color, #000);
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.dashboard-barrier input):focus,
-textarea:not(.dashboard-barrier textarea):focus,
-select:not(.dashboard-barrier select):focus {
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.dashboard-barrier input):not([data-vt-studio-control="true"]):focus,
+textarea:not(.dashboard-barrier textarea):not([data-vt-studio-control="true"]):focus,
+select:not(.dashboard-barrier select):not([data-vt-studio-control="true"]):focus {
   border-color: var(--widget-color, #000);
   background-color: color-mix(in srgb, var(--widget-color, #fff) 6%, white);
   box-shadow:
@@ -249,8 +251,8 @@ select:not(.dashboard-barrier select):focus {
     0 0 16px 2px color-mix(in srgb, var(--widget-color, #000) 55%, transparent);
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.dashboard-barrier input)::placeholder,
-textarea:not(.dashboard-barrier textarea)::placeholder {
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.dashboard-barrier input):not([data-vt-studio-control="true"])::placeholder,
+textarea:not(.dashboard-barrier textarea):not([data-vt-studio-control="true"])::placeholder {
   color: rgb(0 0 0 / 0.35);
   font-weight: 700;
 }
