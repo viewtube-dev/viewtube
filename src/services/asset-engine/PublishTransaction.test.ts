@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { createContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
+import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
@@ -126,6 +126,41 @@ describe("PublishTransaction",()=>{
   } finally {
    vi.unstubAllGlobals()
   }
+ })
+
+ it("does not rebind an already-completed upload step to a conflicting YouTube video", () => {
+  const transaction = beginPublishTransaction(projection())
+  completePublishStep({ transactionId: transaction.id, step: "upload-video", youtubeVideoId: "youtube-original" })
+  const duplicate = completePublishStep({ transactionId: transaction.id, step: "upload-video", youtubeVideoId: "youtube-conflict" })
+  expect(duplicate.youtubeVideoId).toBe("youtube-original")
+  expect(getContentBuild("cb-publish")?.youtube?.videoId).toBe("youtube-original")
+ })
+
+ it("preserves completed upload state while retrying a failed metadata step", () => {
+  const transaction = beginPublishTransaction(projection())
+  completePublishStep({ transactionId: transaction.id, step: "upload-video", youtubeVideoId: "youtube-retry" })
+  failPublishTransaction(transaction.id, "apply-metadata", new Error("temporary metadata failure"))
+
+  const resumed = beginPublishTransaction(projection())
+  expect(resumed.id).toBe(transaction.id)
+  expect(resumed.steps["upload-video"]?.status).toBe("completed")
+  expect(resumed.steps["apply-metadata"]?.status).toBe("failed")
+
+  const retried = completePublishStep({
+   transactionId: resumed.id,
+   step: "apply-metadata",
+   receipt: { retry: true, applied: true },
+  })
+  expect(retried.steps["upload-video"]?.status).toBe("completed")
+  expect(retried.steps["apply-metadata"]?.status).toBe("completed")
+  expect(listContentBuildEvents("cb-publish").filter(event => event.eventType === "publish.transaction.started")).toHaveLength(1)
+ })
+
+ it("refuses transaction completion before the remote YouTube state is verified", () => {
+  const transaction = beginPublishTransaction(projection())
+  completePublishStep({ transactionId: transaction.id, step: "upload-video", youtubeVideoId: "youtube-unverified" })
+  expect(() => completePublishTransaction(transaction.id)).toThrow(/before remote verification/i)
+  expect(beginPublishTransaction(projection()).status).not.toBe("completed")
  })
 
 })
