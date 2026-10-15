@@ -17,6 +17,9 @@ export interface VaultImageTransform {
   preserveAspectRatio: boolean
   outputFormat: VaultImageOutputFormat
   quality: number
+  brightness?: number
+  contrast?: number
+  saturation?: number
 }
 
 export interface VaultImageDimensions {
@@ -115,6 +118,9 @@ export const normalizeVaultImageTransform = (
     preserveAspectRatio: transform.preserveAspectRatio !== false,
     outputFormat,
     quality: Math.max(0.1, Math.min(1, Number.isFinite(transform.quality) ? transform.quality : 0.92)),
+    brightness: Math.max(-100, Math.min(100, Number.isFinite(transform.brightness) ? transform.brightness as number : 0)),
+    contrast: Math.max(-100, Math.min(100, Number.isFinite(transform.contrast) ? transform.contrast as number : 0)),
+    saturation: Math.max(-100, Math.min(100, Number.isFinite(transform.saturation) ? transform.saturation as number : 0)),
   }
 }
 
@@ -149,6 +155,7 @@ export const transformVaultImage = async (
     const transform = normalizeVaultImageTransform(requestedTransform, bitmap.width, bitmap.height)
     const crop = transform.crop || { x: 0, y: 0, width: bitmap.width, height: bitmap.height }
     const cropped = createCanvas(crop.width, crop.height)
+    cropped.context.filter = `brightness(${100 + (transform.brightness || 0)}%) contrast(${100 + (transform.contrast || 0)}%) saturate(${100 + (transform.saturation || 0)}%)`
     cropped.context.drawImage(bitmap, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height)
 
     const swapsAxes = transform.rotation === 90 || transform.rotation === 270
@@ -193,4 +200,7 @@ export const DEFAULT_VAULT_IMAGE_TRANSFORM: VaultImageTransform = {
   preserveAspectRatio: true,
   outputFormat: "image/png",
   quality: 0.92,
+  brightness: 0,
+  contrast: 0,
+  saturation: 0,
 }
