@@ -97,7 +97,7 @@ export const buildBrainContextPack = (input: {
     ...(input.evidenceClaims || []).slice(0, 12).map((claim) => `${claim.epistemicState} ${claim.claim}=${claim.value === null ? "unknown" : String(claim.value)}${claim.unit ? ` ${claim.unit}` : ""}; source=${claim.sourceOwner}:${claim.sourceId}; scope=channel:${claim.channelId || "unknown"}/project:${claim.projectId || "none"}/video:${claim.videoId || "none"}; refs=${claim.provenance.evidenceIds.join(",") || "none"}`),
     ...input.sharedEvidenceHealth.limitations.map((value) => `Limitation: ${value}`),
     "Shared evidence policy: source ownership and provenance must be preserved; missing is not zero; inferred, estimated and hypothetical claims are not observed facts; channel/project/video scope mismatch blocks use.",
-   ].join("\\n"), 2400)
+   ].join("\n"), 2400)
   : ""
 
  const evidenceQuality = controls.allowAnalytics && input.evidenceQuality
@@ -206,6 +206,7 @@ export const buildBrainContextPack = (input: {
   controlInstruction,
   "\nCHANNEL EVIDENCE\n" + evidence,
   evidenceQuality ? "\nEVIDENCE QUALITY\n" + evidenceQuality : "",
+  sharedEvidenceContract ? "\nSHARED EVIDENCE CONTRACT\n" + sharedEvidenceContract : "",
   statistics ? "\nDETERMINISTIC STATISTICS INTELLIGENCE\n" + statistics : "",
   analyticsFindings ? "\nDETERMINISTIC ANALYTICS FINDINGS\n" + analyticsFindings : "",
   audience ? "\nAUDIENCE INTELLIGENCE\n" + audience : "",
@@ -219,11 +220,9 @@ export const buildBrainContextPack = (input: {
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
   taskInstruction ? `\n${taskInstruction}` : "",
  ].filter(Boolean)
- let systemInstruction = sections.join("\n")
- if (systemInstruction.length > maximumCharacters) {
-  omittedSections.push("context_over_budget")
-  systemInstruction = systemInstruction.slice(0, maximumCharacters)
- }
+ const resolvedContext = resolveBrainContextSections(sections, { userText: input.userText, maximumCharacters })
+ omittedSections.push(...resolvedContext.omittedSectionIds)
+ const systemInstruction = resolvedContext.text
 
  return {
   systemInstruction,
