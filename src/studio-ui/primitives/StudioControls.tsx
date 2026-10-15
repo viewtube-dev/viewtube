@@ -6,6 +6,45 @@ import { StudioTextArea } from "./StudioTextArea"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
+/**
+ * Explicit register of intentional departures from the global 44px / 28px
+ * Studio control lattice. Exceptions must remain named, source-backed, and
+ * represented in the confirmed primitive library instead of being silently
+ * normalized by generic control selectors.
+ */
+export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
+  vaultSpectrumTag: {
+    owner: "VaultAssetModule / StudioSpectrumTag",
+    globalRuleException: true,
+    height: 15,
+    borderWidth: 2,
+    radius: 4,
+    fontSize: 8,
+    fontWeight: 900,
+    letterSpacing: "0.3px",
+    fill: "alphabetical spectrum color mixed at 35% with white",
+    textAndBorder: "resolved alphabetical spectrum color",
+    colorResolver: "getAlphabeticalSpectrumColor",
+    selectedTreatment: "1px upward offset plus four-layer white/color glow",
+    rationale: "Asset-module tags are donor-specified dense metadata chips, not ordinary 44px/28px controls.",
+  },
+  textareaTypography: {
+    globalRuleException: true,
+    standardFontSize: 18,
+    compactFontSize: 14,
+    rationale: "Multiline reading/writing surface uses a dedicated type scale while retaining canonical field geometry.",
+  },
+  prominentAction: {
+    globalRuleException: true,
+    height: 56,
+    stroke: 3,
+    radius: 6,
+    shadow: 3,
+    rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
+  },
+} as const
+
+
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
@@ -565,3 +604,43 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
   )
 }
 StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
+
+
+export interface StudioSpectrumTagProps {
+  label: string
+  selected?: boolean
+  className?: string
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  ariaLabel?: string
+}
+
+/**
+ * Vault's donor-backed 15px monochromatic tag. This is a deliberate global
+ * sizing exception; the alphabetic ViewTube spectrum and chip geometry are
+ * shared by Vault and the confirmed Studio Controls library.
+ */
+export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
+  label,
+  selected = false,
+  className,
+  onClick,
+  ariaLabel,
+}) => {
+  const normalized = label.trim().toUpperCase()
+  const color = getAlphabeticalSpectrumColor(normalized)
+  return (
+    <button
+      type="button"
+      className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
+      data-vt-studio-exception="vault-spectrum-tag"
+      data-tag={normalized}
+      aria-label={ariaLabel ?? normalized}
+      aria-pressed={selected}
+      style={{ ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
+      onClick={onClick}
+    >
+      {normalized}
+    </button>
+  )
+}
+StudioSpectrumTag.displayName = "StudioSpectrumTag"

@@ -1,8 +1,8 @@
 import React from "react"
 import { FileText, Image as ImageIcon, Music, Play } from "lucide-react"
-import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { getToolboxColorPair, VAULT_ASSET_MODULE_DNA, type ToolboxControlLevel } from "./tokens"
 import "../../styles/vault-asset-module.css"
+import { StudioSpectrumTag } from "../../studio-ui/primitives/StudioControls"
 
 export type VaultAssetModuleKind = "image" | "video" | "audio" | "document"
 export type VaultAssetModuleVariant =
@@ -163,28 +163,19 @@ export const VaultAssetTagEditor: React.FC<{
         <div className="vt-vault-tag-list">
           {(expandedTags ? [...tags].sort((a, b) => a.localeCompare(b)) : [...tags].sort((a, b) => a.localeCompare(b)).slice(0, 3)).map((tag) => {
             const normalized = tag.toUpperCase()
-            const color = getAlphabeticalSpectrumColor(normalized)
             return (
-              <button
-                type="button"
+              <StudioSpectrumTag
                 key={normalized}
-                className={classes("vt-vault-tag-badge", selected === normalized && "is-selected")}
-                data-tag={normalized}
-                aria-pressed={selected === normalized}
-                style={{
-                  ["--vt-vault-tag-stroke" as string]: color,
-                  ["--vt-vault-tag-fill" as string]: `color-mix(in srgb, ${color} 35%, white)`,
-                } as React.CSSProperties}
+                label={normalized}
+                selected={selected === normalized}
                 onClick={() => setSelected((current) => current === normalized ? null : normalized)}
-              >
-                {normalized}
-              </button>
+              />
             )
           })}
           {tags.length > 3 ? (
             <button
               type="button"
-              className="vt-vault-tag-badge vt-vault-tag-overflow"
+              className="vt-vault-tag-overflow"
               aria-label={expandedTags ? "Collapse asset tags" : `Show ${tags.length - 3} more asset tags`}
               aria-expanded={expandedTags}
               onClick={() => setExpandedTags((current) => !current)}
