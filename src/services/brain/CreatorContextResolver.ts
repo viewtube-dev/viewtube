@@ -27,6 +27,7 @@ export interface ResolveCreatorContextInput {
  query: string
  projectId?: string | null
  project?: Project | null
+ projects?: Project[]
  visibleContext?: Record<string, unknown> | null
  artifactRefs?: string[]
  assetType?: string
