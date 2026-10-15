@@ -60,6 +60,8 @@ import {
  scoreAIBrainAnswerUsefulness,
 } from "../services/aiBrainSelfImprovement"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
+import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
+import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
 import { BrainConfidenceChip, confidenceForEvidence } from "../components/brain/BrainConfidenceChip"
@@ -789,6 +791,23 @@ const AIBrainCommandInterface: React.FC = () => {
    const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
     || brain.projects.find((project) => project.status === "active")
     || null
+   if (channelId) {
+    const communicationControls = readBrainUserControls(channelId)
+    if (communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions) {
+     try {
+      recordCreatorCommunicationEvidence({
+       channelId,
+       communicationId: userMessage.id,
+       text: userText,
+       projectId: activeProject?.id || null,
+      })
+     } catch (error) {
+      if (!(error instanceof Error && error.message.includes("does not match a supported classification"))) {
+       console.warn("[AIBrain] Communication evidence capture skipped:", error)
+      }
+     }
+    }
+   }
    const result = await runBrainTask({
     surface: "ai-brain",
     channelId,
