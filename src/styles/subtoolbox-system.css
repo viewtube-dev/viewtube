@@ -205,7 +205,7 @@
   font:1000 var(--vt-component-font-size)/.9 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
   letter-spacing:-.055em!important;text-transform:uppercase!important;
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  transition:transform 180ms ease-out,box-shadow 180ms ease-out!important;
+  transition:transform var(--vt-subtoolbox-motion-button,180ms) ease-out,box-shadow var(--vt-subtoolbox-motion-button,180ms) ease-out!important;
 }
 .vt-subtoolbox-button.has-component-level .vt-subtoolbox-button-label{display:grid;place-items:center;white-space:nowrap}
 .vt-subtoolbox-button.has-component-level:hover:not(:disabled){
@@ -224,7 +224,7 @@
   border:var(--vt-component-stroke) solid #000;border-radius:var(--vt-component-radius);
   display:grid;place-items:center;background:var(--pair-a,#36e0f6);color:#000;
   box-shadow:var(--vt-canonical-shadow-x) var(--vt-canonical-shadow-y) 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 42%,transparent);
-  transition:transform 180ms ease-out,box-shadow 180ms ease-out;touch-action:manipulation;
+  transition:transform var(--vt-subtoolbox-motion-button,180ms) ease-out,box-shadow var(--vt-subtoolbox-motion-button,180ms) ease-out;touch-action:manipulation;
 }
 .vt-subtoolbox-icon-button svg{width:54%;height:54%;stroke-width:3}
 .vt-subtoolbox-icon-button:hover:not(:disabled){transform:translate(calc(var(--vt-canonical-shadow-x)*.5),calc(var(--vt-canonical-shadow-y)*.5));box-shadow:calc(var(--vt-canonical-shadow-x)*.5) calc(var(--vt-canonical-shadow-y)*.5) 0 color-mix(in srgb,var(--pair-b,#ff7f6b) 42%,transparent)}
@@ -2898,7 +2898,7 @@
   border:var(--vt-component-stroke) solid #000;border-radius:var(--vt-component-radius);
   background:#fff;color:#000;cursor:pointer;
   box-shadow:var(--vt-component-shadow-offset) var(--vt-component-shadow-offset) 0 color-mix(in srgb,var(--vt-media-a) 38%,transparent);
-  transition:transform 160ms ease,box-shadow 160ms ease,background 160ms ease
+  transition:transform var(--vt-subtoolbox-motion-button,180ms) ease-out,box-shadow var(--vt-subtoolbox-motion-button,180ms) ease-out,background var(--vt-subtoolbox-motion-button,180ms) ease-out
 }
 .vt-subtoolbox-media-control.is-wide{width:calc(var(--vt-component-height)*1.28)}
 .vt-subtoolbox-media-control.is-active{background:var(--vt-media-a)}
