@@ -20,32 +20,70 @@ export interface VaultSnapshot {
   auphonic: string;
 }
 
+/**
+ * Storage is optional at module/runtime boundaries (SSR, tests, privacy-restricted
+ * browsers). Never let an unavailable or throwing Storage implementation crash Brain
+ * orchestration; reads fall back to defaults and writes become safe no-ops.
+ */
+const getBrowserStorage = (): Storage | null => {
+  try {
+    if (typeof localStorage === 'undefined') return null;
+    return localStorage;
+  } catch {
+    return null;
+  }
+};
+
+const readStorage = (key: string): string | null => {
+  try {
+    return getBrowserStorage()?.getItem(key) ?? null;
+  } catch {
+    return null;
+  }
+};
+
+const writeStorage = (key: string, value: string): void => {
+  try {
+    getBrowserStorage()?.setItem(key, value);
+  } catch {
+    // Browser storage may be blocked or full. Callers should still be able to run.
+  }
+};
+
+const removeStorage = (key: string): void => {
+  try {
+    getBrowserStorage()?.removeItem(key);
+  } catch {
+    // Best-effort cleanup; absence of storage must not break the runtime.
+  }
+};
+
 export const getVaultKey = (name: VaultKeyName): string => {
   if (name === 'gemini') {
-    const found = GEMINI_ALIASES.map((key) => localStorage.getItem(key) || '').find((value) => value.trim().length > 0);
+    const found = GEMINI_ALIASES.map((key) => readStorage(key) || '').find((value) => value.trim().length > 0);
     return found || '';
   }
   const storageKey = KEY_MAP[name];
-  return localStorage.getItem(storageKey) || DEFAULTS[name] || '';
+  return readStorage(storageKey) || DEFAULTS[name] || '';
 };
 
 export const setVaultKey = (name: VaultKeyName, value: string): void => {
   if (name === 'gemini') {
     const trimmed = value.trim();
     if (!trimmed) {
-      GEMINI_ALIASES.forEach((key) => localStorage.removeItem(key));
+      GEMINI_ALIASES.forEach(removeStorage);
       return;
     }
-    GEMINI_ALIASES.forEach((key) => localStorage.setItem(key, trimmed));
+    GEMINI_ALIASES.forEach((key) => writeStorage(key, trimmed));
     return;
   }
 
   const storageKey = KEY_MAP[name];
   if (!value) {
-    localStorage.removeItem(storageKey);
+    removeStorage(storageKey);
     return;
   }
-  localStorage.setItem(storageKey, value);
+  writeStorage(storageKey, value);
 };
 
 export const getVaultSnapshot = (): VaultSnapshot => ({
