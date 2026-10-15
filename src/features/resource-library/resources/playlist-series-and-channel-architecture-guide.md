@@ -98,6 +98,12 @@ Examples:
 
 Do not add a next step simply because a slot exists. If the next video does not help the viewer, it may be better to direct them to a relevant playlist or leave the decision open.
 
+## Avoid Over-Architecture and Clarify Format Roles
+
+Too many overlapping playlists, near-identical categories, or inconsistent naming can make a channel harder to understand. Start with a small set of meaningful viewer pathways and add structure only when it solves a real navigation problem.
+
+Different formats can coexist when their roles are clear. Shorts may introduce an idea, long-form may teach it in depth, and live content may support interaction or an ongoing event. Do not assume every viewer will move between formats or that every format should serve the same purpose. Connect them when the next step is genuinely useful.
+
 ## Diagnose Structure With Evidence
 
 If viewers watch one video but rarely continue to another, the cause might be weak connections, unrelated topics, a completed one-time task, or simply the viewer's intent. Do not assume a playlist change alone will increase watch time.
