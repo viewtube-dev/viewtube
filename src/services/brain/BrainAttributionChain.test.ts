@@ -48,7 +48,7 @@ describe("buildBrainAttributionChain", () => {
    recommendationEventId: "recommendation-1",
    events: [
     event({}),
-    event({ id: "unrelated-outcome", kind: "OUTCOME_MEASURED", sourceSystem: "evaluation", projectId: "project-1", createdAt: 101 }),
+    event({ id: "unrelated-outcome", kind: "OUTCOME_MEASURED", sourceSystem: "evaluation", projectId: "project-1", metadata: {}, createdAt: 101 }),
    ],
   })
   expect(result.outcomes).toEqual([])
