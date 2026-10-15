@@ -22,6 +22,13 @@
   color: var(--vt-resource-ink);
 }
 
+.vt-resource-overview-module,
+.vt-resource-card {
+  /* Recompute pair-derived shadows where each item owns its own palette pair. */
+  --vt-resource-pair-shadow: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 24%, transparent);
+  --vt-resource-pair-shadow-soft: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 18%, transparent);
+}
+
 .vt-resource-library-shell {
   display: flex;
   flex-direction: column;
