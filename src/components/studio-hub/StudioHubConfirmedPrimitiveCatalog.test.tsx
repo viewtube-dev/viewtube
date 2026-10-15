@@ -48,15 +48,12 @@ describe("confirmed composite primitive catalog", () => {
       "Compact square icon button V2",
       "Toggle compact square icon button selection",
       "Compact square icon button V4",
-      "POP FEEDBACK",
-      "NOTIFICATIONS",
       "ROTATED TOGGLE",
       "3D FLIP",
       "TOOLTIP",
       "MORPH",
       "SUCCESS STATE",
     ]) {
-      if (label === "POP FEEDBACK" || label === "NOTIFICATIONS") continue
       expect(html).toContain(label)
     }
     expect(html).toContain('class="vt-confirmed-square-variant-grid"')
