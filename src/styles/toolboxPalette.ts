@@ -175,10 +175,9 @@ export const getPaletteColor = (index: number) => {
 
 
 /**
- * Canonical A–Z mapping for Toolbox tags.
- * Letters advance monotonically from the first spectrum slot to the last while
- * preserving the twelve explicit ViewTube palette colors. This intentionally
- * does not synthesize 26 independent HSL hues.
+ * Coarse 12-stop A–Z slot for systems that need a stable palette category.
+ * Dense tags use resolveAlphabeticalSpectrumPosition instead so labels that
+ * sort between existing labels also receive a blended color between them.
  */
 export const resolveAlphabeticalSpectrumSlot = (label: string): number => {
   const firstLetter = label.trim().toUpperCase().match(/[A-Z]/)?.[0];
@@ -186,8 +185,43 @@ export const resolveAlphabeticalSpectrumSlot = (label: string): number => {
   return Math.round(((firstLetter.charCodeAt(0) - 65) * (VT_SPECTRUM_PALETTE_06.length - 1)) / 25);
 };
 
+/**
+ * Continuous alphabetic rank for A–Z labels, including arbitrarily long names.
+ * Each suffix letter subdivides the preceding interval in base 27 (A–Z plus
+ * the string terminator), so labels inserted alphabetically between two names
+ * always receive an intermediate position. Positions approach the final stop
+ * without a hard limit on suffix length.
+ */
+export const resolveAlphabeticalSpectrumPosition = (label: string): number => {
+  const letters = label.trim().toUpperCase().match(/[A-Z]/g) ?? [];
+  if (letters.length === 0) return 0;
+
+  const firstIndex = letters[0].charCodeAt(0) - 65;
+  const suffixPosition = letters.slice(1).reduce(
+    (position, letter, index) => position + (letter.charCodeAt(0) - 64) / Math.pow(27, index + 1),
+    0,
+  );
+  return Math.max(0, Math.min(1, (firstIndex + suffixPosition) / 26));
+};
+
+const interpolateSpectrumColor = (position: number): string => {
+  const scaledPosition = Math.max(0, Math.min(1, position)) * (VT_SPECTRUM_PALETTE_06.length - 1);
+  const startIndex = Math.floor(scaledPosition);
+  const endIndex = Math.min(startIndex + 1, VT_SPECTRUM_PALETTE_06.length - 1);
+  const blend = scaledPosition - startIndex;
+  const start = Number.parseInt(VT_SPECTRUM_PALETTE_06[startIndex].slice(1), 16);
+  const end = Number.parseInt(VT_SPECTRUM_PALETTE_06[endIndex].slice(1), 16);
+  const channel = (shift: number) => {
+    const from = (start >> shift) & 0xff;
+    const to = (end >> shift) & 0xff;
+    return Math.round(from + (to - from) * blend).toString(16).padStart(2, "0");
+  };
+  return `#${channel(16)}${channel(8)}${channel(0)}`.toUpperCase();
+};
+
+/** Returns a continuous, interpolated color for any alphabetic tag label. */
 export const getAlphabeticalSpectrumColor = (label: string): string =>
-  VT_SPECTRUM_PALETTE_06[resolveAlphabeticalSpectrumSlot(label)];
+  interpolateSpectrumColor(resolveAlphabeticalSpectrumPosition(label));
 
 export const getNavPaletteColor = (index: number) => {
   const len = VT_NAV_PALETTE_06.length;

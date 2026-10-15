@@ -156,7 +156,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
       <div className="vt-confirmed-size-card vt-confirmed-field-typography-exception"><strong>SINGLE-LINE INPUTS · GLOBAL TYPOGRAPHY</strong><span>Standard text: {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.standardFontSize}px · Compact text: {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.compactFontSize}px · Weight: {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.fontWeight}</span><span>Inputs follow the global standard/compact font-size and line-height tokens, matching ordinary controls. No textarea typography exception applies.</span></div><div className="vt-confirmed-size-card vt-confirmed-field-typography-exception"><strong>MULTILINE TEXTAREA · TYPOGRAPHY EXCEPTION</strong><span>Standard text: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.standardFontSize}px · Compact text: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.compactFontSize}px · Weight: {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.fontWeight}</span><span>Textareas alone use smaller 18px / 14px type, a {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.minHeight}px minimum surface, multiline line-height/padding, and vertical resize.</span></div>
       <div className="vt-confirmed-size-card vt-confirmed-action-exception"><strong>PROMINENT ACTION EXCEPTION · SEPARATE FAMILY</strong><span>56px fixed height · 3px stroke · 6px radius · 3px stationary shadow · 20px / weight 1000 text.</span><span>Rendered by StudioActionButton; not a StudioButton size and not part of the 44px / 28px ordinary control contract.</span></div>
-      <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div><div className="vt-confirmed-defaults-explainer"><strong>HOW TO READ THESE DEFAULTS</strong><p><b>Standard:</b> 44px high, 3px border, 6px radius. <b>Compact:</b> 28px high, 2px border, 4px radius. Font family and weight are Inter / 1000 unless a documented functional exception applies.</p><p><b>Text fields at rest:</b> primary-color text and caret, primary fill at 50% opacity, black outer border, and primary inset stroke. <b>Focused:</b> primary fill at 15% opacity, black text, the primary inset stroke remains, and the secondary-color focus accent is layered at zero offset.</p><p><b>Icon metrics:</b> button-family icons default to the large production preset: 38px/1.9 stroke standard and 24px/2.0 compact. Current (28px/18px) and moderate (34px/22px) presets are opt-in variants, not default specimens.</p><p><b>Component geometry exceptions:</b> 44px switch/choice rectangular corners and the standard word-toggle use reference-specific 7.333px radii.</p><p><b>Focus measurement note:</b> the last live browser audit measured the visible secondary-color accent as a 3px standard / 2px compact box shadow; the computed CSS outline itself measured 1px. These are separate layers, not interchangeable widths. Re-check the rendered deployment before calling the current branch visually certified.</p></div>
+      <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div><div className="vt-confirmed-defaults-explainer"><strong>HOW TO READ THESE DEFAULTS</strong><p><b>Standard:</b> 44px high, 3px border, 6px radius. <b>Compact:</b> 28px high, 2px border, 4px radius. Font family and weight are Inter / 1000 unless a documented functional exception applies.</p><p><b>Text fields at rest:</b> primary-color text and caret, primary fill at 50% opacity, black outer border, and primary inset stroke. <b>Focused:</b> primary fill at 15% opacity, black text, the primary inset stroke remains, and the secondary-color focus accent is layered at zero offset.</p><p><b>Icon metrics:</b> button-family icons default to the large production preset: 38px/1.9 stroke standard and 24px/2.0 compact. Current (28px/18px) and moderate (34px/22px) presets are opt-in variants, not default specimens.</p><p><b>Component geometry exceptions:</b> rectangular 44px switches and rectangular radios use reference-specific 7.333px radii; checkmark and X checkboxes use the standard 6px radius.</p><p><b>Focus measurement note:</b> the last live browser audit measured the visible secondary-color accent as a 3px standard / 2px compact box shadow; the computed CSS outline itself measured 1px. These are separate layers, not interchangeable widths. Re-check the rendered deployment before calling the current branch visually certified.</p></div>
       </details>
     </section>
     <section className="vt-confirmed-family vt-confirmed-exception-index" aria-labelledby="vt-confirmed-exception-index-title">
@@ -397,28 +397,58 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <p className="vt-confirmed-defaults-summary">Intentional exception to global control geometry · exact Vault asset-module chip styling</p>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-spectrum-tag-variant">
-        <span>20 alphabetical spectrum samples · canonical 12-stop palette</span>
+        <span>50 continuous alphabetical spectrum samples</span>
         <div className="vt-confirmed-spectrum-tag-grid">
-          <StudioSpectrumTag label="APPLE" />
-          <StudioSpectrumTag label="BERRY" />
+          <StudioSpectrumTag label="AARDVARK" />
+          <StudioSpectrumTag label="AZURE" />
+          <StudioSpectrumTag label="BANANA" />
+          <StudioSpectrumTag label="BLUEBELL" />
+          <StudioSpectrumTag label="CANDY" />
           <StudioSpectrumTag label="CITRUS" />
-          <StudioSpectrumTag label="DRAGONFRUIT" />
-          <StudioSpectrumTag label="ELDERBERRY" />
-          <StudioSpectrumTag label="FIG" />
-          <StudioSpectrumTag label="GUAVA" />
-          <StudioSpectrumTag label="HONEYDEW" />
+          <StudioSpectrumTag label="DAFFODIL" />
+          <StudioSpectrumTag label="DENIM" />
+          <StudioSpectrumTag label="EBONY" />
+          <StudioSpectrumTag label="EMERALD" />
+          <StudioSpectrumTag label="FERN" />
+          <StudioSpectrumTag label="FROST" />
+          <StudioSpectrumTag label="GOLD" />
+          <StudioSpectrumTag label="GREEN" />
+          <StudioSpectrumTag label="HAZEL" />
+          <StudioSpectrumTag label="HONEY" />
           <StudioSpectrumTag label="INDIGO" />
-          <StudioSpectrumTag label="JACKFRUIT" />
+          <StudioSpectrumTag label="IVORY" />
+          <StudioSpectrumTag label="JADE" />
+          <StudioSpectrumTag label="JASMINE" />
+          <StudioSpectrumTag label="KIWI" />
+          <StudioSpectrumTag label="KUMQUAT" />
+          <StudioSpectrumTag label="LAVENDER" />
           <StudioSpectrumTag label="LEMON" />
-          <StudioSpectrumTag label="MANGO" />
-          <StudioSpectrumTag label="NECTARINE" />
+          <StudioSpectrumTag label="MAGENTA" />
+          <StudioSpectrumTag label="MINT" />
+          <StudioSpectrumTag label="NAVY" />
+          <StudioSpectrumTag label="NEON" />
+          <StudioSpectrumTag label="OPAL" />
           <StudioSpectrumTag label="ORANGE" />
-          <StudioSpectrumTag label="PAPAYA" />
+          <StudioSpectrumTag label="PEACH" />
+          <StudioSpectrumTag label="PERIWINKLE" />
+          <StudioSpectrumTag label="QUARTZ" />
           <StudioSpectrumTag label="QUINCE" />
-          <StudioSpectrumTag label="STRAWBERRY" />
+          <StudioSpectrumTag label="ROSE" />
+          <StudioSpectrumTag label="RUBY" />
+          <StudioSpectrumTag label="SAPPHIRE" />
+          <StudioSpectrumTag label="SCARLET" />
+          <StudioSpectrumTag label="TEAL" />
+          <StudioSpectrumTag label="TURQUOISE" />
+          <StudioSpectrumTag label="ULTRAMARINE" />
           <StudioSpectrumTag label="UMBER" />
+          <StudioSpectrumTag label="VIOLET" />
+          <StudioSpectrumTag label="VIRIDIAN" />
           <StudioSpectrumTag label="WALNUT" />
-          <StudioSpectrumTag label="YUZU" />
+          <StudioSpectrumTag label="WHITE" />
+          <StudioSpectrumTag label="XANTHAN" />
+          <StudioSpectrumTag label="XENON" />
+          <StudioSpectrumTag label="YELLOW" />
+          <StudioSpectrumTag label="ZUCCHINI" />
         </div>
         <div className="vt-confirmed-spectrum-tag-selected">
           <span>Selected-state treatment</span>
