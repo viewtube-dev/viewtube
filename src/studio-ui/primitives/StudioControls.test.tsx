@@ -293,13 +293,14 @@ describe("shared Studio icon-size comparison contract", () => {
     expect(css).toContain('--vt-studio-control-stroke:2px')
   })
 
-  it("shows current, moderate, and large sizes for both square and split-left controls", () => {
+  it("omits icon-size comparison specimens while retaining production square and split-left controls", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     for (const label of ["Current · 28px", "Moderate · 34px", "Large · 38px", "Current · 18px", "Moderate · 22px", "Large · 24px"]) {
-      expect(html).toContain(label)
+      expect(html).not.toContain(label)
     }
     expect(html).toContain('data-vt-library-component="StudioSquareIconButton"')
     expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
+    expect(html).toContain("default large icon preset")
   })
 })
 
@@ -329,7 +330,7 @@ describe("tactile button press accessibility and exclusion contract", () => {
   it("locks standard/compact displacement to the corresponding shadow offsets and icon metrics", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px; }')
     expect(css).toContain('--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
     expect(css).toContain('--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0;')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
