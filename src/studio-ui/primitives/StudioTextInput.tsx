@@ -54,6 +54,7 @@ type StudioTextInputFixedLabelProps = Omit<
   /** Optional direct styling for the native input inside the wrapper. */
   controlClassName?: string
   controlStyle?: React.CSSProperties
+  floatingLabelVariant?: never
 }
 
 export type StudioTextInputProps = StudioTextInputSimpleProps | StudioTextInputFloatingLabelProps | StudioTextInputFixedLabelProps
