@@ -35,8 +35,6 @@ const build = {
 const generationRequest = {
  schemaVersion: 1,
  id: "generation_request_1",
- operationId: "operation-1",
- workflowId: "workflow-1",
  contentBuildId: build.id,
  projectId: "project-2",
  channelId: "channel-1",
@@ -375,7 +373,7 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    evidenceIds: ["evidence-1", "evidence-2"],
    actionPacketId: "packet-1",
    traceId: "trace-1",
-   metadata: { generationRequest, contextManifest },
+   metadata: { generationRequest: { ...generationRequest, operationId: "operation-1", workflowId: "workflow-1" }, contextManifest },
   },
   {
    id: "event-output",
@@ -389,7 +387,7 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    generationRecordId: "generation-record-1",
    actionPacketId: "packet-1",
    traceId: "trace-1",
-   metadata: { toolReceipt },
+   metadata: { toolReceipt: { ...toolReceipt, operationId: "operation-1", workflowId: "workflow-1" } },
   },
  ] as any
 
