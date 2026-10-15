@@ -171,5 +171,6 @@
 - [x] Define capability-specific required context/evidence sections and feed selected capability IDs into context resolution.
 - [x] Report absent required sections explicitly as `required_evidence_missing:<section>`; add matrix-completeness and fail-closed regression tests.
 - [ ] Validate the matrix against every live capability/control combination and verify no required sections are accidentally absent on legitimate rich-evidence tasks.
-- [ ] Implement model-aware token budgeting from an explicit provider context-window contract; do not guess model limits.
+- [x] Add explicit context-window budgeting support: reserve output/safety tokens, derive a conservative character cap, and record estimated input tokens and budget source; regression test covers the calculation.
+- [ ] Wire a provider-reported context-window contract into production callers; keep character fallback until the selected model exposes a trustworthy limit.
 - [ ] Complete cross-surface parity/isolation tests and certify the exact head.
