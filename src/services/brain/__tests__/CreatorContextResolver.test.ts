@@ -187,4 +187,86 @@ describe("CreatorContextResolver", () => {
   expect(result.styleProfile).toBeNull()
   expect(deps.loadProfile).not.toHaveBeenCalled()
  })
+ it("does not borrow visible context from a different or unidentified project", async () => {
+  const buildProject = vi.fn((input: any) => ({
+   channelId: input.channelId,
+   projectId: input.projectId,
+   title: input.visibleContext?.title || null,
+   topic: input.visibleContext?.topic || null,
+   evidenceIds: input.artifactRefs || [],
+  }))
+  const deps: CreatorContextResolverDependencies = {
+   readControls: () => ({ ...DEFAULT_BRAIN_USER_CONTROLS }),
+   loadProfile: vi.fn(async () => profile),
+   buildKnowledge: vi.fn(() => knowledge as any),
+   resolveStyle: vi.fn(() => null),
+   buildProject,
+  }
+
+  await resolveCreatorContext({
+   channelId: "channel-1",
+   query: "Plan active project",
+   projectId: "project-active",
+   project: { id: "project-stale", name: "Stale project" } as any,
+   visibleContext: { projectId: "project-stale", title: "Wrong project title", topic: "Wrong topic" },
+  }, deps)
+  expect(buildProject).toHaveBeenCalledWith(expect.objectContaining({ visibleContext: null, project: null }))
+
+  await resolveCreatorContext({
+   channelId: "channel-1",
+   query: "Plan active project",
+   projectId: "project-active",
+   visibleContext: { title: "Unscoped stale title", topic: "Unscoped stale topic" },
+  }, deps)
+  expect(buildProject).toHaveBeenLastCalledWith(expect.objectContaining({ visibleContext: null }))
+ })
+
+ it("honors creator controls instead of reconstructing disabled personalization or project context", async () => {
+  const deps: CreatorContextResolverDependencies = {
+   readControls: () => ({
+    ...DEFAULT_BRAIN_USER_CONTROLS,
+    personalization: false,
+    allowProjects: false,
+   }),
+   loadProfile: vi.fn(async () => ({ ...profile, personalizationEnabled: false })),
+   buildKnowledge: vi.fn(() => knowledge as any),
+   resolveStyle: vi.fn(() => ({ id: "style-1" }) as any),
+   buildProject: vi.fn(() => ({ projectId: "project-1" }) as any),
+  }
+
+  const result = await resolveCreatorContext({
+   channelId: "channel-1",
+   query: "What should I make?",
+   projectId: "project-1",
+   visibleContext: { title: "private project" },
+  }, deps)
+
+  expect(result.channelKnowledge).toBeNull()
+  expect(result.styleProfile).toBeNull()
+  expect(result.project).toBeNull()
+  expect(deps.buildKnowledge).not.toHaveBeenCalled()
+  expect(deps.resolveStyle).not.toHaveBeenCalled()
+  expect(deps.buildProject).not.toHaveBeenCalled()
+ })
+
+ it("avoids channel-scoped reads when no channel is active", async () => {
+  const deps: CreatorContextResolverDependencies = {
+   readControls: () => ({ ...DEFAULT_BRAIN_USER_CONTROLS }),
+   loadProfile: vi.fn(async () => profile),
+   buildKnowledge: vi.fn(() => knowledge as any),
+   resolveStyle: vi.fn(() => ({ id: "style-1" }) as any),
+   buildProject: vi.fn(() => null),
+  }
+
+  const result = await resolveCreatorContext({
+   channelId: null,
+   query: "Help me plan",
+  }, deps)
+
+  expect(result.channelId).toBeNull()
+  expect(result.profile).toBeNull()
+  expect(result.channelKnowledge).toBeNull()
+  expect(result.styleProfile).toBeNull()
+  expect(deps.loadProfile).not.toHaveBeenCalled()
+ })
 })
