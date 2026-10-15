@@ -1,11 +1,25 @@
 # ViewTube Vault / Asset Workbench — Tools, Capabilities, Plans & Systems Reference
 
 **Status:** CANONICAL RECONSTRUCTION / PRODUCT-ARCHITECTURE REFERENCE  
-**Implementation status:** Architecture and capability inventory are defined; individual runtime capabilities are not presumed implemented until current canonical source, tests, and runtime behavior are verified.  
+**Implementation status:** Reference architecture is defined. Phases 0–6 have implementation work on `vault/phases-0-1-2-workbench`; CI, merge, server-side authorization, and production runtime certification remain pending. Do not infer completion from branch writes alone.  
 **Canonical repository:** viewtube-dev/viewtube  
 **Primary owner document:** docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md  
 **Related overview:** docs/Vault.md  
 **Recovery evidence:** docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md
+
+## Current implementation checkpoint — October 15, 2026
+
+The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md) and [Phases 3–6 implementation audit](VAULT_PHASES_3_6_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
+
+- **Phase 0:** canonical source ownership and baseline gaps documented.
+- **Phase 1:** canonical local identity, selection guards, and protected/lifecycle mutation policy improved and covered by tests.
+- **Phase 2:** adaptive mode/capability host integrated; video/audio processing is not advertised without verified processors.
+- **Phase 3:** derived maintenance queue added and surfaced in the selected-asset Workbench.
+- **Phase 4:** confirmed batch operation pipeline, per-item receipts, and bounded local operation history added; existing selection actions use the pipeline.
+- **Phase 5:** local media capability support is explicitly registered; durable video/audio processing remains unavailable.
+- **Phase 6:** field comparison, exact-hash duplicate candidate grouping, and evidence-backed rights/governance recommendations added.
+
+**Release state:** IMPLEMENTED IN BRANCH / CI VERIFICATION PENDING. The browser `localStorage` adapter and history are not server durability or server authorization. The duplicate resolver suggests candidates only and never deletes/merges automatically. Rights guidance is not legal clearance. Do not merge or certify until the latest-head CI, typecheck/build, focused tests, browser verification, and target-branch read-back are complete.
 
 ## 1. Purpose and product promise
 
