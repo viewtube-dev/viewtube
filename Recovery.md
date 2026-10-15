@@ -897,16 +897,17 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Timestamp:** 2026-10-15 (exact execution time not asserted)
 - **Agent:** ViewTube Vault Workbench implementation continuation
 - **Round:** 1
-- **Category:** VAULT / MAINTENANCE / OPERATIONS / MEDIA / GOVERNANCE
-- **Action:** Continued the Vault Workbench from phases 0–2 through phases 3–6 on the same PR branch.
-- **Artifacts:** `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; `docs/vault/VAULT_PHASES_3_6_IMPLEMENTATION_AUDIT.md`; `src/services/vaultMaintenanceQueue.ts`; `src/services/vaultOperationPipeline.ts`; `src/services/vaultOperationHistory.ts`; `src/services/vaultBatchOperations.ts`; `src/services/vaultAssetComparison.ts`; `src/services/vaultMediaGovernance.ts`.
-- **Status:** IMPLEMENTED IN BRANCH / CI VERIFICATION PENDING
+- **Category:** VAULT / PHASE AUDIT / CANONICAL SERVICE RECONCILIATION
+- **Action:** Continued verification of phases 3–6 and reconciled the branch with the canonical Vault services already present, removing redundant experimental services and keeping the existing implementation as the owner.
+- **Artifacts:** `docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md`; `docs/vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md`; canonical `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md`.
+- **Status:** IMPLEMENTATION IN BRANCH / EXACT-HEAD CI VERIFICATION PENDING
 - **Branch:** `vault/phases-0-1-2-workbench`
 - **PR:** [#336](https://github.com/viewtube-dev/viewtube/pull/336), target `master/consolidated-feature-integration`.
-- **Phase 3:** Added derived maintenance queue and selected-asset queue UI for missing assignment/tags/previews/hashes, attention, duplicate hashes, and rights status.
-- **Phase 4:** Added preview/confirmation operation plans, per-asset outcomes, partial failure reporting, local receipt history, and wired selection-level favorite/archive/trash/restore through the shared pipeline.
-- **Phase 5:** Registered only local source-backed media tools and retained fail-closed video/audio processing availability.
-- **Phase 6:** Added field comparison, exact-hash duplicate candidates, and rights/governance recommendations without automatic merge/delete or legal-clearance claims.
-- **Boundaries:** localStorage receipt history is not a server audit ledger; client-side lifecycle policy is not account/workspace authorization; no durable video/audio processor or connected AI provider is claimed.
-- **Verification:** GitHub writes accepted. Focused tests, typecheck, build, browser verification, latest-head CI, merge, and post-merge read-back remain pending.
-- **Next action:** Inspect the latest PR checks, fix any newly introduced errors, then merge only after required gates and authorization blockers are appropriately resolved.
+- **Canonical Phase 3:** `vaultInspection` and existing search/collections/custom-field services; inspector surfaces technical, rights, lineage, and health findings.
+- **Canonical Phase 4:** `vaultOperationLedger` and Asset Engine lineage; guarded operation states, input/output IDs, retry/error/receipt records.
+- **Canonical Phase 5:** `vaultMediaOperations` preflight; media-kind/selection/source limits and derivative-only rules. Actual deployed processor health remains unverified.
+- **Canonical Phase 6:** `vaultReviewGovernance`; field comparison, rights findings, and safe metadata suggestion proposal/acceptance contract.
+- **Reconciliation:** Removed duplicate maintenance/operation/comparison/governance services and their tests created during the continuation audit; restored the Vault UI to the existing canonical services. No duplicate asset store or competing operation ledger is retained.
+- **Boundaries:** localStorage is not server-side durability or authorization; suggestion contracts are not an AI provider; rights findings are not legal clearance; no deployment or merge is claimed.
+- **Verification:** GitHub read-back confirms duplicate files removed and canonical services retained. Exact-head CI, typecheck/build, browser verification, merge, and post-merge read-back remain pending.
+- **Next action:** Review the latest PR checks and resolve failures before merging.
