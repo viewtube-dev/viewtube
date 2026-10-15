@@ -504,6 +504,13 @@ export const setContentBuildSelection = (
  }
  const refreshed = getContentBuild(contentBuildId)!
  const previous = refreshed.selections[slot] || null
+ if (previous === assetId && !input.final) return refreshed
+ if (input.final && previous === assetId && readEvents().some(event =>
+  event.contentBuildId === contentBuildId &&
+  event.eventType === "asset.finalized" &&
+  event.entityId === slot &&
+  event.resultingState === assetId
+ )) return refreshed
  const next = updateContentBuild(contentBuildId, build => ({
   ...build,
   selections: { ...build.selections, [slot]: assetId },
