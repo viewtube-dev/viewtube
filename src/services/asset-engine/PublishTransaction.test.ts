@@ -70,6 +70,22 @@ describe("PublishTransaction",()=>{
   completePublishTransaction(transaction.id)
   const publishedEvents=listContentBuildEvents("cb-publish").filter(event=>event.eventType==="package.published")
   expect(publishedEvents).toHaveLength(1)
+  const identityReceipts=listContentBuildEvents("cb-publish").filter(event=>event.entityType==="publish-identity-receipt")
+  expect(identityReceipts).toHaveLength(1)
+  expect(identityReceipts[0]).toMatchObject({
+   eventType:"youtube.state.changed",
+   entityId:transaction.id,
+   metadata:expect.objectContaining({
+    publishTransactionId:transaction.id,
+    contentBuildId:"cb-publish",
+    videoPackageId:"vp-a",
+    youtubeVideoId:"youtube-published",
+    approvedSnapshotId:transaction.approvedSnapshotId,
+    approvedSnapshotHash:transaction.approvedSnapshotHash,
+    channelId:"channel-a",
+    projectAssociationStatus:"snapshot-only",
+   }),
+  })
   expect(publishedEvents[0]).toMatchObject({
    entityType:"publishing-package",
    entityId:"vp-a",
