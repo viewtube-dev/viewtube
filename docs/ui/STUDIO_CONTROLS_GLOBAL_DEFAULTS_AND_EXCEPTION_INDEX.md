@@ -472,7 +472,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 ## 20. Confirmed Library density, text-field typography, and deployment gate — 2026-10-15
 
 ### Global defaults panel
-- The default view shows a one-line summary of standard/compact geometry, the shared 18px/14px text-field sizes, and the compact shadow size.
+- The default view shows a one-line summary of standard/compact geometry, global 38px/24px single-line input typography, the textarea-only 18px/14px exception, and compact shadow size.
 - The exhaustive size cards, full global token map, exceptions, and explanatory focus notes live inside an accessible collapsed `details/summary` panel. Opening it exposes the full canonical values; leaving it closed avoids making the library page vertically dominated by the global-defaults reference.
 - The expanded global token map uses three columns on wider screens and two on narrow screens.
 
@@ -482,13 +482,13 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - The outer button remains overflow-visible; the split-left face owns the black border and radius and clips only its internal icon rail/content.
 
 ### Shared text-field typography and module ownership
-- Source audit found the root cause of the single-line input mismatch: the shared field rule inherited the global control font tokens (38px standard / 24px compact), while only textarea selectors explicitly overrode typography to 18px / 14px. The single-line input selectors had no corresponding font-size override, so standard and compact inputs could look like the same compact size when upstream declarations/cascades applied.
-- The resolved contract is now explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` use 18px standard / 14px compact; `StudioTextArea` and `StudioLabeledTextArea` use the same font sizes. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
+- Source audit found the single-line input mismatch: the shared field rule inherited global control font tokens (38px standard / 24px compact), but a later input-specific override incorrectly forced 18px / 14px. The textarea selectors also use 18px / 14px, but only as a multiline writing-surface exception.
+- The corrected contract is explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` follow the global 38px standard / 24px compact typography; `StudioTextArea` and `StudioLabeledTextArea` alone use 18px standard / 14px compact. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
 - Related components are grouped in two modules:
   - `src/studio-ui/primitives/StudioTextInput.tsx`: standalone, search, number, and labeled single-line inputs.
   - `src/studio-ui/primitives/StudioTextArea.tsx`: standalone and labeled multiline textareas.
   - `StudioControls.tsx` re-exports these modules for compatibility with existing imports.
-- CSS owns typography explicitly by `data-size` on the native input, with important 18px standard / 14px compact font-size and matching line-height overrides. The labeled components compose those same native primitives instead of maintaining a second style path.
+- CSS owns typography explicitly by `data-size` on the native input: single-line inputs use 38px / 24px and global 0.86 line-height; textareas use 18px / 14px with multiline 1.25 / 1.3 line heights. The labeled components compose those same native primitives instead of maintaining a second style path.
 
 ### Word-toggle catalog contract
 - Word toggles show three skins only: SOLID, COLOR SWAP, and BLACK. The fourth WHITE skin remains available to switches/radios/checkboxes but is intentionally omitted from the word-toggle examples.
@@ -503,5 +503,17 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - **Current follow-up:** [PR #222 — Remove duplicate publication transaction metadata key](https://github.com/viewtube-dev/viewtube/pull/222) is intended to clear the remaining TypeScript error reported by PR #221 CI. Its checks must run before considering typecheck clean.
 - **Deployment URL:** https://publisher-3n7h.onrender.com/studio
 - **Deployment status:** not yet confirmed for these changes. A merged PR or successful build does not alone prove the hosted deployment has picked up the commit.
-- **Required confirmation:** after PR #222 is reviewed/merged, verify the Render service's deployed commit includes the latest merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact input and textarea computed font sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
+- **Required confirmation:** after PR #222 is reviewed/merged, verify the Render service's deployed commit includes the latest merge SHA, reload the Studio page, confirm the defaults panel is collapsed by default, inspect standard/compact single-line input sizes (38px/24px) and textarea sizes (18px/14px), compare compact button face/shadow bounds, and check three word-toggle skins plus standard stacking / compact centering in both catalogs. Record the deployed commit and actual browser result here.
 - **Verification boundary:** PR #221's CI reported the production build, focused contracts, local smoke checks, and source governance passing, but TypeScript failed on a duplicate `publishTransactionId` key and the full test suite reported 100 failing tests across 47 files. PR #222 removes that duplicate key; do not describe the full suite as passing until a fresh run confirms it. Do not describe the UI as deployed until the deployed commit and rendered page are confirmed.
+
+
+## 21. Typography correction — single-line inputs follow global size family (2026-10-15)
+
+The previous section 20 incorrectly generalized the textarea's 18px/14px typography to single-line inputs. The canonical contract is now:
+
+- **StudioTextInput / StudioLabeledInput:** standard 38px; compact 24px, following `STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize` and `STUDIO_CONTROL_SIZE_CONTRACT.compact.fontSize`.
+- **StudioTextArea / StudioLabeledTextArea:** standard 18px; compact 14px, as the documented multiline readability exception; minimum height 92px, vertical resize, multiline padding and line-height.
+- Input and textarea geometry still follows the selected 44px standard / 28px compact family. Font weight remains 1000 / Inter; placeholder text inherits the entered-text typography.
+- The input-only CSS variables and important selectors now use 38px / 24px. Textarea-specific selectors remain 18px / 14px. Catalog specimen copy, global defaults summary, exception index, machine-readable tokens, and regression assertions must all preserve this distinction.
+
+The corrected regression test is in `scripts/audit/confirmed-library-layout.test.mjs`. CI and browser verification remain required; do not claim the hosted Render deployment has been updated until its deployed commit and computed font sizes are checked.
