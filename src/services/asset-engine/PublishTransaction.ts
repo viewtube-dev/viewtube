@@ -1,4 +1,4 @@
-import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentBuildStage } from "./ContentBuildRepository"
+import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, listContentBuildMetadataHistory, setContentBuildStage } from "./ContentBuildRepository"
 import type { ContentBuildYouTubeBinding } from "./contracts"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
@@ -157,7 +157,28 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
  // Publication identity is recorded into the canonical Brain event stream so a
  // later VT-SYNC checkpoint can join by channel/video/transaction. This event
  // is not a metric observation and does not claim the transaction caused results.
- if (build?.channelId && next.youtubeVideoId) {
+ const metadataVersionIds = listContentBuildMetadataHistory(next.contentBuildId).map((entry) => entry.metadataVersionId).filter(Boolean)
+ if (build?.youtube?.status === "published" && build.channelId && next.youtubeVideoId) {
+  appendContentBuildEvent({
+   contentBuildId: next.contentBuildId,
+   eventType: "analytics.checkpoint",
+   entityType: "publication-checkpoint",
+   entityId: next.id,
+   actorType: "analytics",
+   toolId: "post-publication-outcome-pipeline",
+   timestamp,
+   evidenceIds: [next.approvedSnapshotId, next.approvedSnapshotHash],
+   metadata: {
+    checkpointId: `publication-checkpoint:${next.id}`,
+    videoId: next.youtubeVideoId,
+    channelId: build.channelId,
+    publicationTransactionId: next.id,
+    approvedSnapshotId: next.approvedSnapshotId,
+    metadataVersionIds,
+    status: "awaiting-follow-up-analytics",
+    causalConclusion: null,
+   },
+  })
   void import("../brain/AlgorithmIntelligenceEventLedger").then(({ recordAlgorithmIntelligenceEvent }) => {
    recordAlgorithmIntelligenceEvent({
     id: `publish-checkpoint:${next.id}`,
@@ -181,7 +202,7 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
      approvedSnapshotId: next.approvedSnapshotId,
      approvedSnapshotHash: next.approvedSnapshotHash,
      projectionRevision: next.assetLock.projectionRevision,
-     metadataVersionIds: [],
+     metadataVersionIds,
      publicationState: build.youtube?.status || "unknown",
      youtubeVideoId: next.youtubeVideoId,
      finalRenderAssetId: next.assetLock.finalRenderAssetId,
@@ -189,7 +210,7 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
      thumbnailAssetId: next.assetLock.thumbnailAssetId,
      descriptionAssetId: next.assetLock.descriptionAssetId,
      scheduledAt: next.assetLock.scheduledAt,
-     awaitingCanonicalAnalyticsCheckpoint: true,
+     awaitingCanonicalAnalyticsCheckpoint: true,\n     checkpointId: `publication-checkpoint:${next.id}`,
      causalConclusion: null,
     },
    })
