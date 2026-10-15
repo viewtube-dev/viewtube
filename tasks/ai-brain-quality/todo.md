@@ -52,12 +52,14 @@
 - [ ] Remove legacy prompt paths only after zero production reachability.
 
 
-## Phase 0–2 implementation branch — 2026-10-15
+## Phase 0–2 implementation and current-target reconciliation — 2026-10-15
 
-- Implementation receipt and baseline/PR #217 reconciliation: `tasks/ai-brain-quality/PHASES-0-2-EVIDENCE-CONTEXT-COMPLETION.md`.
-- The shared evidence contract and task-aware final context resolver are implemented on `brain-phase-0-2-evidence-context`.
-- Do not mark the work certified or merged until focused tests, typecheck, runtime lint, full suite, production build, and source-governance checks pass on the current target baseline.
-- Remaining Phase 2 gaps are explicit in the completion record: canonical Project lookup from `projectId`, full per-capability evidence requirements, token-based budgeting, and Sidebar/Brain Hub parity.
+- Historical implementation receipt: `tasks/ai-brain-quality/PHASES-0-2-EVIDENCE-CONTEXT-COMPLETION.md`.
+- Current integration audit: `tasks/ai-brain-quality/PHASES-0-2-CURRENT-INTEGRATION-RECONCILIATION-2026-10-15.md`.
+- The shared evidence contract and task-aware context resolver are present on `master/consolidated-feature-integration`; the old implementation branch is a donor only and must not be merged wholesale.
+- Phase 0 ownership inventory and Phase 1 evidence-contract foundations are present; neither is release-certified until current-target checks run.
+- Phase 2 remains open for canonical Project lookup from `projectId`, a complete per-capability evidence requirements matrix, supported model-aware token budgeting, Sidebar/Brain Hub/full-workspace parity, and representative runtime isolation tests.
+- Do not mark the work certified until focused tests, typecheck, runtime lint, full suite, production build, source-governance/reachability checks, and same-day baseline comparison pass.
 
 
 ## Phase 6–7 implementation branch — 2026-10-15
