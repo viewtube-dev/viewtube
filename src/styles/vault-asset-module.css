@@ -242,7 +242,6 @@
   border-left:var(--vt-vault-stroke) solid var(--vt-vault-ink);background:#111;
 }
 .vt-vault-asset-module.is-half .vt-vault-module-title{padding:7px 8px 5px;font-size:11px}
-.vt-vault-asset-module.is-half .vt-vault-tag-badge{height:13px;font-size:7px;border-width:1.5px}
 .vt-vault-asset-module.is-half .vt-vault-add-tag{width:13px;min-width:13px;height:13px;flex-basis:13px;font-size:9px}
 .vt-vault-audio-preview{display:grid;grid-template-rows:1fr 18px;background:linear-gradient(135deg,#171717,#2a2a2a)}
 .vt-vault-waveform{display:flex;align-items:center;justify-content:center;gap:2px;padding:6px 5px 2px}
