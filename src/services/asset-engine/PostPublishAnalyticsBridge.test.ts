@@ -132,6 +132,21 @@ describe("Post-publish analytics bridge", () => {
       initialThumbnailAssetId: "thumbnail-v4",
       finalRenderAssetId: "render-v2",
     }))
+    expect(result.identity).toMatchObject({
+      schemaVersion: 1,
+      contentBuildId: "build-1",
+      projectId: "project-1",
+      projectAssociationStatus: "verified",
+      videoPackageId: "package-1",
+      publishTransactionId: "publish-tx-1",
+      youtubeVideoId: "youtube-123",
+      approvedSnapshotId: "snapshot-1",
+      approvedSnapshotHash: "hash-1",
+      idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
+    })
+    expect(mocks.bindYouTubeVideo).toHaveBeenCalledWith(expect.objectContaining({
+      idempotencyKey: "post-publish-binding:publish-tx-1:hash-1",
+    }))
     expect(result).toMatchObject({
       contentBuildId: "build-1",
       projectId: "project-1",
@@ -150,6 +165,45 @@ describe("Post-publish analytics bridge", () => {
         correlationId: "creator-loop-1",
       }),
     }))
+  })
+
+  it("reports snapshot-only project association instead of guessing a missing Project link", () => {
+    mocks.getContentBuild.mockReturnValue({ ...build, legacyProjectId: null })
+
+    const result = recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })
+
+    expect(result.identity.projectAssociationStatus).toBe("snapshot-only")
+    expect(result.identity.projectId).toBe("project-1")
+  })
+
+  it("reuses an existing identity receipt without rebinding or appending a duplicate", () => {
+    const existingReceipt = {
+      id: "event-existing",
+      contentBuildId: "build-1",
+      timestamp: "2026-10-01T00:00:00.000Z",
+      eventType: "youtube.state.changed",
+      entityType: "publish-identity-receipt",
+      entityId: "publish-tx-1",
+      actorType: "youtube",
+      inputAssetIds: [],
+      outputAssetIds: ["youtube-123"],
+      evidenceIds: [],
+      idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
+      metadata: { approvedSnapshotHash: "hash-1" },
+    }
+    mocks.listContentBuildEvents.mockReturnValue([existingReceipt])
+
+    const result = recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })
+
+    expect(result.event.id).toBe("event-existing")
+    expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
+    expect(mocks.appendContentBuildEvent).not.toHaveBeenCalled()
   })
 
   it("rejects a transaction whose video identity does not match", () => {
