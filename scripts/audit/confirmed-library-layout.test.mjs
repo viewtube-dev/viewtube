@@ -62,8 +62,8 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 test("non-default settings explain the real public props in plain language", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
   assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
-  assert.ok(catalog.includes("A focused or non-empty field lifts the label above the border."));
-  assert.ok(catalog.includes("Only the floating-label B variant adds the solid secondary-color focus stroke to the compact input specimen."));
+  assert.ok(catalog.includes("Floating labels lift when the field is focused or non-empty; the label remains associated with the native input for accessible naming."));
+  assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
