@@ -426,10 +426,10 @@ describe("Studio Play/Pause Split-Left Button", () => {
     expect(html).toContain('aria-pressed="false"')
     expect(html).toContain('data-vt-studio-play-pause-measure="play"')
     expect(html).toContain('data-vt-studio-play-pause-measure="pause"')
-    expect(html).toContain('data-vt-studio-play-pause-label>Play</span>')
+    expect(html).toContain('data-vt-studio-play-pause-label="true">Play</span>')
     const selected = renderToStaticMarkup(<StudioPlayPauseButton playing playLabel="Play" pauseLabel="Pause" />)
     expect(selected).toContain('aria-pressed="true"')
-    expect(selected).toContain('data-vt-studio-play-pause-label>Pause</span>')
+    expect(selected).toContain('data-vt-studio-play-pause-label="true">Pause</span>')
     expect(selected).toContain('data-size="standard"')
     expect(renderToStaticMarkup(<StudioPlayPauseButton sizeVariant="compact" />)).toContain('data-size="compact"')
   })
@@ -453,7 +453,7 @@ describe("floating label geometry and circular icon scale", () => {
 
   it("scales circle-button SVG icons to 80% without changing the canonical button size", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-stage] svg')
+    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg')
     expect(css).toContain("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
     expect(css).toContain("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
     expect(css).toContain("--vt-studio-control-icon-size: 38px")
