@@ -179,6 +179,8 @@ test("compact Studio button shadow and typography tokens match the effective con
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(css, /--vt-studio-motion-button:\s*150ms;\s*--vt-studio-motion-press:\s*300ms/);
+  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*180ms\)|var\(--vt-studio-motion-press,\s*80ms\)/);
 });
 
 test("catalog labels dropdown and action specimens according to their actual initial state and CSS", () => {
