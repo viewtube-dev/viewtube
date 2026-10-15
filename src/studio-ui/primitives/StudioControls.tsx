@@ -49,7 +49,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 28,
     stroke: 2,
     radius: 4,
-    shadow: "4px offset secondary-color at 45% opacity",
+    shadow: "1.5px compact offset secondary-color at 45% opacity",
     rationale: "The plus/check actions use the canonical compact 28px square-button size.",
   },
   textareaTypography: {
