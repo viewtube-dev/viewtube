@@ -1406,7 +1406,8 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   padding: 1px 3px;
   border: 2px solid var(--vt-spectrum-tag-color);
   border-radius: 4px;
-  background: color-mix(in srgb, var(--vt-spectrum-tag-color) 35%, white);
+  --vt-spectrum-tag-fill: color-mix(in srgb, var(--vt-spectrum-tag-color) 35%, white);
+  background: var(--vt-spectrum-tag-fill);
   color: var(--vt-spectrum-tag-color);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 8px;
@@ -1424,8 +1425,8 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   transform: translateY(-1px);
   box-shadow:
     0 0 4px #fff,
-    0 0 8px color-mix(in srgb, color-mix(in srgb, var(--vt-spectrum-tag-color) 35%, white) 92%, #fff),
-    0 0 14px color-mix(in srgb, color-mix(in srgb, var(--vt-spectrum-tag-color) 35%, white) 78%, #fff),
+    0 0 8px color-mix(in srgb, var(--vt-spectrum-tag-fill) 92%, #fff),
+    0 0 14px color-mix(in srgb, var(--vt-spectrum-tag-fill) 78%, #fff),
     0 0 22px color-mix(in srgb, var(--vt-spectrum-tag-color) 42%, #fff);
 }
 .vt-studio-spectrum-tag:focus-visible {
