@@ -56,4 +56,19 @@ describe("BrainLearningPersistence", () => {
   expect(retried).toMatchObject({ persisted: 1, pending: 0, authenticated: true })
   expect(fetchMock).toHaveBeenCalledTimes(2)
  })
+ it("reports an incomplete acknowledgement as unsuccessful and keeps records queued", async () => {
+  const storage = makeStorage()
+  vi.stubGlobal("window", { localStorage: storage })
+  vi.stubGlobal("localStorage", storage)
+  const fetchMock = vi.fn(async () => new Response(JSON.stringify({ learningRecordCount: 0 }), { status: 200 }))
+  vi.stubGlobal("fetch", fetchMock)
+
+  const result = await enqueueBrainLearningRecord("channel-a", "brainOutcome", {
+   id: "outcome-unacknowledged", channelId: "channel-a", outcome: "completed",
+  })
+
+  expect(result).toMatchObject({ persisted: 0, pending: 1, authenticated: false })
+  expect(fetchMock).toHaveBeenCalledOnce()
+ })
+
 })
