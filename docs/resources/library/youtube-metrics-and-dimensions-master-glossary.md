@@ -12,7 +12,7 @@ production_date: 2026-09-26
 last_researched: 2026-09-26
 recommended_review_date: 2026-12-26
 research_status: creator-first and source-grounded
-version: 2.0
+version: 2.1
 official_sources_prioritized: true
 viewtube_resource: true
 tags: analytics, metrics, dimensions, filters, traffic-sources, retention, audience, revenue, shorts, comparisons
