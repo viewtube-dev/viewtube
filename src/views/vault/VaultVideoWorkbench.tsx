@@ -5,7 +5,9 @@ import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../../c
 import { createImportedVaultAsset } from "../../services/vaultAdapter";
 import { extractVaultVideoThumbnail } from "../../services/vaultVideoThumbnail";
 import { processVaultVideo, type VaultVideoOperation, type VaultVideoQuality } from "../../services/vaultVideoWorkbench";
-import { getVaultMediaBinary, saveVaultMediaBinary } from "../../services/vaultMediaBinaryStore";
+import { getVaultMediaBinary, saveVaultMediaBinary } from "../../services/vaultMediaBinaryStore"
+import { resolveVaultMediaOperationPlan } from "../../services/vaultMediaOperations"
+import { createVaultOperation, transitionVaultOperation } from "../../services/vaultOperationLedger";
 import type { VaultAsset } from "../../types";
 
 export interface VaultVideoWorkbenchProps {
@@ -110,6 +112,16 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
     clearResult();
     try {
       const source = await loadVaultVideoSourceBlob(asset);
+      const operationPlan = resolveVaultMediaOperationPlan({
+        operation: operation === "trim" ? "video-trim" : operation === "proxy" ? "video-proxy" : operation === "extract-frame" ? "frame-extract" : operation === "extract-audio" ? "audio-extract" : "video-transcode",
+        assets: [{
+          id: asset.id,
+          kind: asset.kind,
+          byteSize: source.size,
+          protected: asset.metadata?.protected === true || (String(asset.metadata?.lifecycle || "").toUpperCase() === "GOLDEN" && asset.metadata?.protected !== false),
+        }],
+      });
+      if (!operationPlan.allowed) throw new Error(operationPlan.reason || "Media operation is not available for this selection.");
       const config = {
         operation,
         quality,
@@ -139,6 +151,15 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
 
   const saveDerivative = async () => {
     if (!result || !previewUrl || savedId) return;
+    const operationType = operation === "trim" ? "video-trim" : operation === "proxy" ? "video-proxy" : operation === "extract-frame" ? "frame-extract" : operation === "extract-audio" ? "audio-extract" : "video-transcode";
+    const operationRecord = createVaultOperation({
+      type: operationType,
+      label: "Video derivative · " + asset.name,
+      inputAssetIds: [asset.id],
+      parameters: { operation, quality, startSeconds, endSeconds, atSeconds, sourceDurationSeconds: durationSeconds },
+    });
+    transitionVaultOperation(operationRecord.id, "queued");
+    transitionVaultOperation(operationRecord.id, "processing");
     try {
       const outputName = `${asset.name.replace(/\.[^.]+$/, "")}-${operation}.${extensionFor(result.mimeType)}`;
       const parameters = { operation, quality, startSeconds, endSeconds, atSeconds, sourceDurationSeconds: durationSeconds };
@@ -188,6 +209,8 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
           derivativeOfAssetId: asset.id,
           sourceAssetId: asset.id,
           derivativeOperation: operation,
+          operationId: operationRecord.id,
+          operationReceipt: "Media derivative created from the original asset; source preserved.",
           operationParameters: { operation, quality, startSeconds, endSeconds, atSeconds },
           byteSize: result.byteSize,
           lifecycle: "CANDIDATE",
@@ -196,12 +219,19 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
         },
       });
       if (!created.id) throw new Error("Vault did not return an asset identity.");
+      transitionVaultOperation(operationRecord.id, "completed", {
+        outputAssetIds: [created.id],
+        receipt: "Derivative " + created.id + " registered; original " + asset.id + " preserved.",
+      });
       setSavedId(created.id);
       setMessage(serverBinaryId
         ? "Derivative bytes are stored in browser IndexedDB and the authenticated server storage. Cross-device durability requires VAULT_MEDIA_STORAGE_DIR to point at a mounted persistent disk."
         : "Derivative bytes are stored in browser IndexedDB with source lineage. Server storage is unavailable or not configured, so this copy is local to this browser/device.");
       onDerivativeCreated?.();
     } catch (caught) {
+      transitionVaultOperation(operationRecord.id, "failed", {
+        error: caught instanceof Error ? caught.message : "Could not store the media derivative.",
+      });
       setError(caught instanceof Error ? caught.message : "Could not store the media derivative.");
     }
   };
