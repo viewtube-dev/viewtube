@@ -75,7 +75,8 @@ Do not hand-add a family here without adding it to the production registry. The 
 
 **Family #5 · production-backed source:** `src/studio-ui/primitives/StudioControls.tsx`  
 **Shared styles:** `src/styles/studio-control-system.css`  
-**Live catalog:** `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx`
+**Confirmed catalog:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`  
+**Cross-level reference catalog:** `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx`
 
 All variants below are registered under the existing **Square Icon Button** family. They do not create duplicate primitives or inflate the frozen family count.
 
@@ -104,6 +105,7 @@ All variants below are registered under the existing **Square Icon Button** fami
 - The shared Studio button owns outer geometry, border, radius, shadow, focus, disabled and press behavior. Effects operate on inner layers and do not redefine the component's dimensions.
 - Effects are opt-in; reduced-motion preferences are honored.
 - Interactive regression contract: `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.square-icon-button.test.tsx`.
+- Confirmed-library layout contract: `scripts/audit/confirmed-library-layout.test.mjs`.
 
 
 ## Additional migrated compound patterns
