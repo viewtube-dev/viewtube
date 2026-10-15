@@ -1541,11 +1541,19 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 
-/* Circle Icon Button is a shape-only extension of the canonical square icon
-   button. Its 44px/28px dimensions, variants, shadows, effects and behavior stay shared. */
+/* Circle Icon Button keeps canonical outer geometry and behavior while its
+   icon uses 80% of the default large preset to preserve comfortable circular inset. */
 button[data-vt-studio-circle-icon-button="true"]::before,
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   border-radius: 9999px !important;
+}
+button[data-vt-studio-circle-icon-button="true"][data-size="standard"] {
+  --vt-studio-control-icon-size: calc(38px * .8);
+  --vt-studio-control-icon-stroke: 1.9;
+}
+button[data-vt-studio-circle-icon-button="true"][data-size="compact"] {
+  --vt-studio-control-icon-size: calc(24px * .8);
+  --vt-studio-control-icon-stroke: 2;
 }
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   overflow: hidden;
