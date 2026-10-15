@@ -109,7 +109,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea, StudioLabeledInput, StudioLabeledTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -142,8 +142,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Textarea",
   "20 Plain Input",
   "21 Plain Text Area",
-  "137 Floating Label Input",
-  "138 Floating Label Text Area",
   "Split Search",
   "Number Field",
   "Input Action",
@@ -259,8 +257,8 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Media Queue",
   "Media Inspector",
   "Media Review Panel",
-  "Labeled Input",
-  "Labeled Textarea",
+  "Studio Text Input · Floating Label Variant",
+  "Studio Text Area · Floating Label Variant",
   "Video Selector",
   "Mini SubToolbox",
   "Full-Width Section Band",
@@ -363,8 +361,8 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Media Queue": { mode: "canvas", inlineUnits: 8.1, portraitStack: true },
   "Media Inspector": { mode: "canvas", inlineUnits: 7.6, portraitStack: true },
   "Media Review Panel": { mode: "canvas", inlineUnits: 10.8, portraitStack: true },
-  "Labeled Input": { mode: "field", inlineUnits: 5.2, portraitStack: true },
-  "Labeled Textarea": { mode: "field", inlineUnits: 6.2, portraitStack: true },
+  "Studio Text Input · Floating Label Variant": { mode: "field", inlineUnits: 5.2, portraitStack: true },
+  "Studio Text Area · Floating Label Variant": { mode: "field", inlineUnits: 6.2, portraitStack: true },
   "Video Selector": { mode: "canvas", inlineUnits: 7.4, portraitStack: true },
   "Mini SubToolbox": { mode: "canvas", inlineUnits: 6.4, portraitStack: true },
   "Full-Width Section Band": { mode: "field", inlineUnits: 6.4, portraitStack: true },
@@ -603,8 +601,8 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
-  if (name === "137 Floating Label Input") return <StudioLabeledInput sizeVariant="standard" label="TITLE" aria-label="Title" />
-  if (name === "138 Floating Label Text Area") return <StudioLabeledTextArea sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
+  if (name === "Studio Text Input · Floating Label Variant") return <StudioTextInput variant="floating-label" sizeVariant="standard" label="TITLE" aria-label="Title" />
+  if (name === "Studio Text Area · Floating Label Variant") return <StudioTextArea variant="floating-label" sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
   if (name === "Number Field") {
     return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
@@ -1023,11 +1021,11 @@ const PrimitiveMigrationControl: React.FC<{
       actions={<><SubToolboxMediaControlButton level={level} icon={<Check />} label="Approve" active /><SubToolboxMediaControlButton level={level} icon={<Settings2 />} label="Review settings" /></>}
     />
   }
-  if (name === "Labeled Input") {
-    return <StudioLabeledInput level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
+  if (name === "Studio Text Input · Floating Label Variant") {
+    return <StudioTextInput variant="floating-label" level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
   }
-  if (name === "Labeled Textarea") {
-    return <StudioLabeledTextArea level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
+  if (name === "Studio Text Area · Floating Label Variant") {
+    return <StudioTextArea variant="floating-label" level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
