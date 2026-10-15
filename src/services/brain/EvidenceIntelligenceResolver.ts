@@ -24,6 +24,7 @@ import { projectCanonicalEvidenceRecords, type EvidenceRecord } from "./Evidence
 import type { DeterministicAnalyticsInsight } from "./DeterministicAnalyticsInsights"
 import { buildBrainAnalyticsFindingContext, type BrainAnalyticsFindingContext } from "./AnalyticsIntelligenceWorkflow"
 import { buildCurrentCanonicalAnalyticsInsights } from "./CurrentCanonicalAnalyticsInsights"
+import { projectEvidenceRecordsToBrainClaims, summarizeBrainEvidenceHealth, type BrainEvidenceClaim, type BrainEvidenceHealth } from "./BrainEvidenceContract"
 
 export const EVIDENCE_INTELLIGENCE_VERSION = "vt-evidence-intelligence-v1" as const
 
@@ -47,6 +48,10 @@ export interface EvidenceIntelligenceEnvelope {
  channelId: string | null
  canonicalEvidence: CanonicalIntelligenceEvidenceBundle
  evidenceRecords: EvidenceRecord[]
+ /** Shared epistemic projection; empty for consumers when channel scope is not verified. */
+ evidenceClaims: BrainEvidenceClaim[]
+ /** Quality summary is computed from the canonical projection, including blocked scope. */
+ sharedEvidenceHealth: BrainEvidenceHealth
  evidenceQuality: BrainEvidenceQualityReport
  scopeUsable: boolean
  statisticsIntelligence: StatisticsIntelligenceSnapshot | null
@@ -124,9 +129,11 @@ export const resolveEvidenceIntelligence = (
   expectedChannelId: input.channelId,
  })
  const scopeUsable = Boolean(input.channelId && evidenceQuality.scopeMatch === "exact")
- const evidenceRecords = scopeUsable
-  ? dependencies.projectEvidence(canonicalEvidence)
-  : []
+ const projectedRecords = dependencies.projectEvidence(canonicalEvidence)
+ const allEvidenceClaims = projectEvidenceRecordsToBrainClaims(projectedRecords)
+ const sharedEvidenceHealth = summarizeBrainEvidenceHealth(allEvidenceClaims, { channelId: input.channelId })
+ const evidenceRecords = scopeUsable ? projectedRecords : []
+ const evidenceClaims = scopeUsable ? allEvidenceClaims : []
  const statisticsIntelligence = scopeUsable
   ? dependencies.buildStatistics(canonicalEvidence)
   : null
@@ -165,6 +172,8 @@ export const resolveEvidenceIntelligence = (
   channelId,
   canonicalEvidence,
   evidenceRecords,
+  evidenceClaims,
+  sharedEvidenceHealth,
   evidenceQuality,
   scopeUsable,
   statisticsIntelligence,
