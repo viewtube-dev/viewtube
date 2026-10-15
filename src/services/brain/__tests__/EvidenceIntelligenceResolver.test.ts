@@ -149,3 +149,43 @@ describe("EvidenceIntelligenceResolver", () => {
   expect(deps.buildOpportunities).not.toHaveBeenCalled()
  })
 })
+
+
+describe("canonical opportunity convergence", () => {
+ it("uses canonical dataset rows for opportunity evidence when the production adapter is available", () => {
+  const deps = {
+   ...makeDeps(),
+   buildCanonicalOpportunities: vi.fn(() => opportunities),
+  }
+  const result = resolveEvidenceIntelligence({
+   channelId: "channel-1",
+   window: "90d",
+   sectionIds: ["strategy-engine"],
+   includeOpportunities: true,
+   brainEvidencePack: { channelId: "channel-2", topVideos: [], searchTerms: [], trafficSources: [] } as any,
+  }, deps)
+
+  expect(deps.buildCanonicalOpportunities).toHaveBeenCalledWith({
+   channelId: "channel-1",
+   bundle: canonicalEvidence,
+  })
+  expect(deps.buildOpportunities).not.toHaveBeenCalled()
+  expect(result.provenance.opportunitySource).toBe("analytics-canon")
+ })
+
+ it("blocks every projection when canonical evidence has no verifiable channel scope", () => {
+  const deps = makeDeps({ ...evidenceQuality, scopeMatch: "unscoped", confidence: "insufficient" } as any)
+  const result = resolveEvidenceIntelligence({
+   channelId: "channel-1",
+   includeAudience: true,
+   includeOpportunities: true,
+   brainEvidencePack: { channelId: "channel-1", topVideos: [], searchTerms: [], trafficSources: [] } as any,
+  }, deps)
+
+  expect(result.scopeUsable).toBe(false)
+  expect(result.evidenceRecords).toEqual([])
+  expect(result.statisticsIntelligence).toBeNull()
+  expect(result.audienceIntelligence).toBeNull()
+  expect(result.opportunityEvidence).toEqual([])
+ })
+})
