@@ -95,7 +95,8 @@ export const redactLegacyCreatorCommunicationText = (channelIdInput: string): nu
  )
  legacy.forEach((event) => {
   const originalText = String(event.metadata.communicationText || "")
-  const { communicationText: _discardedText, ...metadata } = event.metadata
+  const metadata = { ...event.metadata }
+  delete metadata.communicationText
   recordAlgorithmIntelligenceEvent({
    id: event.id,
    channelId: event.channelId,
