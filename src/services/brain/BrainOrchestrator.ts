@@ -36,6 +36,7 @@ import {
  shouldUseCurrentGrounding,
 } from "./BrainCapabilityRegistry"
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
+import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence } from "./EvidenceIntelligenceResolver"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
@@ -294,6 +295,7 @@ export interface RunBrainTurnInput {
  nicheResolver?: typeof resolveNicheKnowledge
  currentResearcher?: typeof groundCurrentNicheResearch
  projectId?: string | null
+ analyticsWindow?: CanonicalIntelligenceEvidenceBundle["selectedWindow"]
  visibleContext?: Record<string, unknown> | null
  artifactRefs?: string[]
 }
@@ -311,9 +313,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  const engineControls = readBrainEngineControls(input.channelId)
  const wantsStatisticsIntelligence = capabilityIds.includes("statistics-intelligence")
  const wantsAlgorithmIntelligence = capabilityIds.includes("algorithm-intelligence") && engineControls.channelIntelligence
+ const evidenceSectionIds = Array.from(new Set([
+  ...(wantsStatisticsIntelligence ? ["executive-summary", "strategy-engine"] : []),
+  ...(wantsStatisticsIntelligence && brainIntent === "audience"
+   ? ["channel-pulse", "comparative-analysis", "keyword-matrix"]
+   : []),
+  ...(wantsAlgorithmIntelligence ? ["algorithm-diagnosis", "strategy-engine"] : []),
+ ]))
  const evidenceIntelligence = wantsStatisticsIntelligence || wantsAlgorithmIntelligence
   ? resolveEvidenceIntelligence({
     channelId: input.channelId,
+    window: input.analyticsWindow,
+    sectionIds: evidenceSectionIds,
     includeAudience: wantsStatisticsIntelligence && brainIntent === "audience",
     includeOpportunities: wantsAlgorithmIntelligence && engineControls.opportunityIntelligence,
     brainEvidencePack: input.snapshot.evidencePack,
