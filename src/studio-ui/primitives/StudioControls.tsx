@@ -3,6 +3,7 @@ import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSi
 import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
+import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
