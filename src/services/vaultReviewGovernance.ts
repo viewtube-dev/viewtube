@@ -24,10 +24,11 @@ export type VaultMetadataSuggestionResult = {
 
 const stable = (value: unknown): string => {
   if (value === undefined) return "undefined"
-  if (value === null || typeof value !== "object") return String(value)
-  if (Array.isArray(value)) return "[" + value.map(stable).join(",") + "]"
+  if (value === null) return "null"
+  if (typeof value !== "object") return typeof value + ":" + String(value)
+  if (Array.isArray(value)) return "array:[" + value.map(stable).join(",") + "]"
   const record = value as Record<string, unknown>
-  return "{" + Object.keys(record).sort().map((key) => JSON.stringify(key) + ":" + stable(record[key])).join(",") + "}"
+  return "object:{" + Object.keys(record).sort().map((key) => JSON.stringify(key) + ":" + stable(record[key])).join(",") + "}"
 }
 
 export const compareVaultAssets = (left: VaultReviewAsset, right: VaultReviewAsset): VaultMetadataDifference[] => {
