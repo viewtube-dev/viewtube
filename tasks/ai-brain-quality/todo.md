@@ -95,7 +95,7 @@
 - [x] Return phase-relevant capabilities and workflow blockers.
 - [x] Fail closed when canonical ContentBuild state is unavailable.
 - [x] Add project context regression tests.
-- [ ] Wire lifecycle capabilities into live Brain/runtime/UI consumers.
+- [x] Include canonical lifecycle phase, relevant capabilities and blockers in BrainContextBroker prompt context.\n- [ ] Enforce phase capabilities in live UI/tool affordances.
 - [ ] Verify all project surfaces provide the canonical ContentBuild snapshot.
 
 ## Phase 11 — Communication ingestion
@@ -104,7 +104,7 @@
 - [x] Record classified communication as an immutable intelligence evidence event.
 - [x] Make communication identity idempotent and reject conflicting replays.
 - [x] Explicitly prevent automatic durable-memory promotion.
-- [ ] Connect live chat, tool feedback, approval/rejection and edit events.
+- [x] Connect Sidebar Copilot, AI Brain, and Brain Hub chat messages behind personalization and learn-from-interactions controls.\n- [ ] Connect non-chat tool feedback, approval/rejection and edit events.
 - [ ] Confirm privacy, consent, retention and durable persistence behavior.
 
 ## Phase 12 — Recommendation and asset attribution
