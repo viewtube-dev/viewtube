@@ -37,11 +37,17 @@ const canUseStorage = () => {
 
 const readJson = <T,>(key: string, fallback: T): T => {
  if (!canUseStorage()) return fallback
+ let raw: string | null
  try {
-  const raw = localStorage.getItem(key)
-  return raw ? JSON.parse(raw) as T : fallback
+  raw = localStorage.getItem(key)
  } catch {
-  return fallback
+  throw new Error("ContentBuild storage could not be read.")
+ }
+ if (raw === null) return fallback
+ try {
+  return JSON.parse(raw) as T
+ } catch {
+  throw new Error("ContentBuild storage is unreadable; refusing to overwrite it.")
  }
 }
 
@@ -50,12 +56,20 @@ const writeJson = (key: string, value: unknown) => {
  try {
   localStorage.setItem(key, JSON.stringify(value))
  } catch {
-  // Browser compatibility bridge only. A server repository can replace this adapter.
+  throw new Error("ContentBuild state could not be persisted; refusing to report an unrecorded lifecycle change.")
  }
 }
 
-const readBuilds = (): ContentBuildSnapshot[] =>
- canUseStorage() ? readJson<ContentBuildSnapshot[]>(BUILDS_KEY, []) : memoryBuilds
+const readBuilds = (): ContentBuildSnapshot[] => {
+ const builds = canUseStorage() ? readJson<ContentBuildSnapshot[]>(BUILDS_KEY, []) : memoryBuilds
+ if (!Array.isArray(builds) || !builds.every(build =>
+  Boolean(build) && typeof build === "object" &&
+  typeof build.id === "string" && typeof build.revision === "number"
+ )) {
+  throw new Error("ContentBuild storage is malformed; refusing to overwrite it.")
+ }
+ return builds
+}
 
 const writeBuilds = (builds: ContentBuildSnapshot[]) => {
  if (canUseStorage()) writeJson(BUILDS_KEY, builds)
