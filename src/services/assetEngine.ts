@@ -275,6 +275,8 @@ export const handoffAsset = <T,>(input: HandoffAssetInput<T>) => {
    contentBuildId,
   } as Record<string, unknown>),
   contentBuildId,
+  operationId: context.operationId || undefined,
+  workflowId: context.workflowId || undefined,
   projectId: context.projectId || input.asset.projectId || null,
   channelId: context.channelId || null,
   videoId: context.videoId || null,
@@ -300,7 +302,7 @@ export const handoffAsset = <T,>(input: HandoffAssetInput<T>) => {
    evidenceIds: evidenceIds(context),
    actionPacketId: persisted.packet.id,
    traceId: context.traceId || null,
-   metadata: { payloadKind: input.payloadKind, suggestedTargets: input.suggestedTargets || [] },
+   metadata: { payloadKind: input.payloadKind, suggestedTargets: input.suggestedTargets || [], operationId: persisted.packet.operationId || null, workflowId: persisted.packet.workflowId || null },
   })
  }
 
