@@ -106,6 +106,9 @@ export const EMPTY_ASSET_EVIDENCE: AssetEvidence = {
 
 export interface AssetRequest {
  channelId: string
+ /** Shared operation identity supplied by the orchestration/handoff layer. */
+ operationId?: string
+ workflowId?: string
  assetType: AssetType
  /** What the creator asked for. */
  instruction: string
