@@ -644,6 +644,7 @@ describe("subtoolbox design governance", () => {
 
    expect(studioCss).toContain('--vt-legend-height: 28px; --vt-legend-stroke: 2px; --vt-legend-radius: 4px;')
    expect(studioCss).toContain('--vt-legend-shadow-offset: 1.5px')
+   expect(studioCss).toContain('button[data-vt-studio-control]:not(.vt-studio-legend-trigger)')
    expect(studioCss).toContain('box-shadow: none;')
    expect(studioCss).toContain('box-shadow: var(--vt-legend-shadow-offset) var(--vt-legend-shadow-offset) 0 0 var(--vt-legend-shadow-color)')
    expect(studioCss).toContain('flex: 1 1 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;')
