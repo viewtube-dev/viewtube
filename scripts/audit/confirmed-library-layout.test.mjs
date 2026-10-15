@@ -47,7 +47,7 @@ test("floating labels use the reduced overlapping-label geometry and strong text
   assert.match(fieldCss, /translateY\(-75%\) scale\(\.75\)/);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
-  assert.match(fieldCss, /:focus[^\\n]*outline:[^;]*var\(--vt-field-focus-outline-width\)[^;]*var\(--vt-field-secondary\)/);
+  assert.match(fieldCss, /data-vt-floating-variant="b".*outline:var\(--vt-field-focus-outline-width\) solid var\(--vt-field-secondary\)/s);
 });
 
 test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
