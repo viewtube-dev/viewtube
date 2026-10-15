@@ -80,6 +80,7 @@ import {
 import { mergeTrafficCsvFiles } from "./trafficCsvMerge"
 import { syncTrafficAnalytics } from "../youtube/trafficAnalyticsSync"
 import { ANALYTICS_WINDOWS } from "../analytics/windows"
+import { runPostPublicationOutcomePipeline } from "../postPublicationOutcomePipeline"
 
 const buildSyncRun = (
  channelId = "pending",
@@ -502,8 +503,41 @@ export const runCanonicalPhaseThreeSync = async (): Promise<CanonicalSyncOvervie
    ...syncRun,
    stageStatus: { ...syncRun.stageStatus, shadow_diff: "complete" },
   }
+
+  let postPublicationOutcomePipeline: Awaited<ReturnType<typeof runPostPublicationOutcomePipeline>> | null = null
+  try {
+   postPublicationOutcomePipeline = await runPostPublicationOutcomePipeline({ channelId: channel.channelId })
+  } catch {
+   postPublicationOutcomePipeline = {
+    channelId: channel.channelId,
+    status: "partial",
+    publishedBuildsChecked: 0,
+    checkpointsRecorded: 0,
+    recommendationEvaluations: 0,
+    metadataComparisonsRecorded: 0,
+    metadataComparisonsReady: 0,
+    skipped: 0,
+    failures: [{ contentBuildId: "unknown", stage: "analytics-checkpoint", code: "post-publication-pipeline-unavailable" }],
+    completedAt: new Date().toISOString(),
+   }
+  }
+
   await finalizeFamilySyncRun(syncRun, "complete")
-  return buildCanonicalSyncOverview()
+  const overview = await buildCanonicalSyncOverview()
+  return {
+   ...overview,
+   postPublicationOutcomePipeline: {
+    status: postPublicationOutcomePipeline.status,
+    publishedBuildsChecked: postPublicationOutcomePipeline.publishedBuildsChecked,
+    checkpointsRecorded: postPublicationOutcomePipeline.checkpointsRecorded,
+    recommendationEvaluations: postPublicationOutcomePipeline.recommendationEvaluations,
+    metadataComparisonsRecorded: postPublicationOutcomePipeline.metadataComparisonsRecorded,
+    metadataComparisonsReady: postPublicationOutcomePipeline.metadataComparisonsReady,
+    skipped: postPublicationOutcomePipeline.skipped,
+    failureCount: postPublicationOutcomePipeline.failures.length,
+    completedAt: postPublicationOutcomePipeline.completedAt,
+   },
+  }
  } catch (error) {
   await finalizeFamilySyncRun(
    syncRun,
