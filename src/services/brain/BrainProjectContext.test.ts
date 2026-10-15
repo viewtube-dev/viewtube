@@ -48,7 +48,7 @@ describe("BrainProjectContext", () => {
     format: "long",
     audienceSegments: ["Napoleonic history viewers", "military history viewers"],
    },
-  } as ContentBuildSnapshot
+  } as unknown as ContentBuildSnapshot
 
   expect(buildAlgorithmProjectContext({
    channelId: "channel-a",
