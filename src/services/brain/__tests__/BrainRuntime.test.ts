@@ -94,6 +94,14 @@ describe("BrainRuntime", () => {
     contentBuildId: "cb-1",
     artifactRefs: ["asset-1", "asset-2"],
     hasVisibleContext: true,
+    assistantContinuityTrace: expect.objectContaining({
+     version: "vt-brain-assistant-trace-v1",
+     scope: expect.objectContaining({
+      channelId: "channel-1",
+      projectId: "project-1",
+      contentBuildId: "cb-1",
+     }),
+    }),
    },
   })
  })
