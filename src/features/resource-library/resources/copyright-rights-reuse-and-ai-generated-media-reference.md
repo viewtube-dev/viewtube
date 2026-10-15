@@ -170,6 +170,14 @@ https://support.google.com/youtube/answer/9783148
 **YouTube Help: disclose altered or synthetic content** — Current disclosure guidance and examples.  
 https://support.google.com/youtube/
 
+## Field Exercise: Create an Asset Rights Record
+
+For each material asset in a release, record what it is, who created or supplied it, the source or agreement, license scope, attribution requirements, and any expiry or territory limits. Distinguish self-created assets from limited licenses, client-supplied material, and unresolved rights. Keep the record with the project. Before publication, review music, footage, images, fonts, voice, likeness, and generated or altered media where relevant. If rights or disclosure requirements are unclear, pause the affected use and seek authoritative guidance.
+
+## Evidence Boundary: Rights and Platform Policy
+
+This is operational risk management, not legal advice or a guarantee against claims. Copyright exceptions and privacy, publicity, trademark, and disclosure rules depend on facts and jurisdiction; platform policy is a separate layer. Attribution alone does not replace permission where required. Escalate uncertain, high-impact cases to qualified counsel or the rights holder.
+
 ## Document Maintenance
 
 | Attribute | Value |
