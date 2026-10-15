@@ -125,10 +125,10 @@ export const recordPostPublishIdentity = (
     approvedSnapshotHash: snapshot.hash,
     selectedVariantAssetIds: assetIds,
     correlationId: input.correlationId || transaction.id,
-    actionPacketId: input.actionPacketId || null,
-    workflowId: input.workflowId || null,
-    recommendationId: input.recommendationId || null,
-    experimentId: input.experimentId || null,
+    actionPacketId: input.actionPacketId || transaction.actionPacketId || null,
+    workflowId: input.workflowId || transaction.workflowId || null,
+    recommendationId: input.recommendationId || transaction.recommendationId || null,
+    experimentId: input.experimentId || transaction.experimentId || null,
     idempotencyKey: identityKey,
     publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
   }
@@ -144,10 +144,10 @@ export const recordPostPublishIdentity = (
   if (existingReceipt) {
     const receiptMetadata = existingReceipt.metadata as Record<string, unknown> | undefined
     const decisionIdentityPairs = [
-      ["actionPacketId", input.actionPacketId],
-      ["workflowId", input.workflowId],
-      ["recommendationId", input.recommendationId],
-      ["experimentId", input.experimentId],
+      ["actionPacketId", input.actionPacketId || transaction.actionPacketId],
+      ["workflowId", input.workflowId || transaction.workflowId],
+      ["recommendationId", input.recommendationId || transaction.recommendationId],
+      ["experimentId", input.experimentId || transaction.experimentId],
     ] as const
     for (const [key, requestedValue] of decisionIdentityPairs) {
       if (requestedValue && receiptMetadata?.[key] !== requestedValue) {
@@ -205,7 +205,8 @@ export const recordPostPublishIdentity = (
     outputAssetIds: [videoId],
     timestamp: input.publishedAt || undefined,
     metadata: {
-      operationId: transaction.id,
+      operationId: transaction.operationId || transaction.id,
+      publishTransactionId: transaction.id,
       ...identity,
       publishIdempotencyKey: transaction.idempotencyKey,
     },
@@ -271,8 +272,12 @@ export const recordAnalyticsCheckpointForEvaluation = (
     projectId: snapshot.projectId,
     videoId: identity.videoId,
     publishTransactionId: transaction.id,
-    operationId: transaction.id,
-    correlationId: input.correlationId || transaction.id,
+    operationId: transaction.operationId || transaction.id,
+    actionPacketId: identity.actionPacketId,
+    workflowId: identity.workflowId,
+    recommendationId: identity.recommendationId,
+    experimentId: identity.experimentId,
+    correlationId: input.correlationId || transaction.operationId || transaction.id,
     approvedSnapshotId: snapshot.id,
     approvedSnapshotHash: snapshot.hash,
     selectedVariantAssetIds: identity.selectedVariantAssetIds,
