@@ -63,11 +63,15 @@
 - [ ] Inventory AssetGenerator production callers.
 - [ ] Inventory GenerationWorkflow production callers.
 - [ ] Inventory ActionPacket/ToolReceipt/GenerationRecord overlap.
-- [ ] Define OperationRecord v1.
+- [x] Define OperationRecord v1 contract and lifecycle projection. — `src/services/operations/OperationRecord.ts`; implementation/tests in the OperationRecord v1 next-plan branch.
 - [ ] Map BrainTrace onto operation lineage.
 - [ ] Define media-provider operation contract.
-- [ ] Define approval/undo/irreversibility metadata.
-- [ ] Add operation idempotency tests.
+- [x] Define approval/undo/irreversibility metadata in the shared contract.
+- [x] Add operation idempotency-key and lifecycle-gate tests.
+- [ ] Verify current-head focused CI/typecheck.
+- [ ] Certify one ActionPacket → GenerationWorkflow → ToolReceipt → BrainTrace → publish/outcome pilot.
+- [ ] Execute the server-authoritative persistence plan only after the backend/auth owner is confirmed.
+- [ ] Follow `tasks/system-convergence/OPERATION-RECORD-V1-NEXT-PLAN.md` for phase gates.
 
 ## Outcomes / Evaluation / Learning
 
