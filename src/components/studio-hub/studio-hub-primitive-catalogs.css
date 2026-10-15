@@ -2640,3 +2640,13 @@
   .vt-confirmed-square-effect-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
   .vt-confirmed-spectrum-tag-grid { gap: 5px; }
 }
+
+
+/* Keep explanatory copy above specimens to one compact line as well. */
+.vt-confirmed-family > p {
+  max-width: 40ch;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
