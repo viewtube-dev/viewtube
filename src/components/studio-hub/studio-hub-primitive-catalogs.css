@@ -2242,5 +2242,7 @@
   .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="standard"],
   .vt-confirmed-word-toggle-family .vt-confirmed-control-variants[data-control-size="28"] {
     grid-template-columns: repeat(4, minmax(64px, 1fr)) !important;
+    overflow-x: auto;
+    scrollbar-width: thin;
   }
 }
