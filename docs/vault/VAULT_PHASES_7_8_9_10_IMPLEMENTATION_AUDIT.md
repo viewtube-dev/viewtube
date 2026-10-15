@@ -22,18 +22,17 @@ This audit deliberately separates source changes from system guarantees that can
 
 ## Phase 8 — Server trust, durable operations, and storage
 
-**Status: BLOCKED / NOT IMPLEMENTED AS A PRODUCTION GUARANTEE.**
+**Status: PARTIALLY IMPLEMENTED IN BRANCH; persistent runtime configuration and worker execution remain pending.**
 
-Current Vault assets and operation ledger are browser-localStorage-backed; media binaries can use IndexedDB and an optional server storage path. Those are not proof of authenticated per-workspace authorization, an authoritative server audit log, or a durable job queue.
+Added `server/vault-operation-store.mjs` and mounted it in `server/billing-server.mjs` behind the existing `getAuthenticatedViewtubeUserId` account-session resolver. The store uses per-user directories, owner checks, private/no-store responses, idempotency keys, bounded JSON requests, capped records, and persisted lifecycle history for create/list/read/cancel/retry. It fails closed with 503 when `VAULT_OPERATION_STORAGE_DIR` is not configured. Tests in `server/vault-operation-store.test.mjs` cover missing configuration, idempotency, user isolation, lifecycle persistence and invalid transitions.
 
-The current evidence does not establish a single authenticated workspace contract that the Vault mutation API can safely enforce end to end. This work therefore does not invent a second authentication model or falsely label client-side lifecycle checks as authorization.
+**Important limit:** this stores durable operation records; it is not yet a worker queue. It does not claim a queued operation is being processed, and retry/cancel state changes do not signal a worker. The media storage and operation directories require persistent mounted storage in the deployed environment. Filesystem persistence also requires a single-writer/atomic coordination strategy before scaling the API horizontally.
 
 Required before closure:
-1. Identify and reuse the canonical authenticated account/workspace identity and authorization middleware.
-2. Enforce scope on server reads, writes, operation/job access, retries, and cancellation.
-3. Persist operation/job receipts with idempotency and actor/workspace identity.
-4. Verify configured persistent storage and restart recovery.
-5. Test cross-workspace denial, expired/absent authentication, retries, cancellation, and persistence failures.
+1. Configure and verify `VAULT_OPERATION_STORAGE_DIR` on the target deployment with a persistent mounted disk.
+2. Add a real worker claim/lease/heartbeat model and connect operation types to supported media processors.
+3. Add race-safe idempotency/claim transactions before horizontal scaling.
+4. Verify restart recovery on the actual deployment and test absent authentication/cross-account denial through the HTTP server.
 
 ## Phase 9 — Safe batch execution and governed assistance
 
@@ -75,7 +74,7 @@ This run predates the newest batch service, tests, and documentation commits; it
 | Phase | Status | Evidence / remaining gate |
 |---|---|---|
 | 7 — cross-system workflow | **PARTIAL** | Canonical Asset Engine and ActionPacket route exist; full vertical slice not runtime-certified |
-| 8 — server trust and durability | **BLOCKED** | Need verified canonical workspace auth contract, server receipt/job store, persistent storage and cross-workspace tests |
+| 8 — server trust and durability | **PARTIAL / DEPLOYMENT CONFIG REQUIRED** | Authenticated owner-scoped operation records and tests added; persistent disk configuration, worker execution, race-safe claims and deployed restart test pending |
 | 9 — batch and governed assistance | **IMPLEMENTED IN BRANCH / PARTIAL INTEGRATION** | Planner/runner and tests authored; production processor, ledger, derivative and AI-provider wiring remains |
 | 10 — release certification | **PENDING** | Latest-head CI, browser/deployment check, merge, and post-merge read-back required |
 
