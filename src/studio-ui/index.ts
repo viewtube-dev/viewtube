@@ -18,6 +18,7 @@ export {
   StudioActionButton,
   StudioIconButton,
   StudioInput,
+  StudioTextInput,
   Studioinput,
   StudioTextArea,
   Studioarea,
@@ -28,8 +29,6 @@ export {
   Studioxbox,
   StudioChoice,
   StudioLegendMultiDropdown,
-  StudioLabeledInput,
-  StudioLabeledTextArea,
   StudioNumberInput,
   StudioSearchInput,
   StudioSelect,
@@ -45,8 +44,6 @@ export type {
   StudioActionButtonProps,
   StudioLegendMultiDropdownProps,
   StudioLegendMultiDropdownOption,
-  StudioLabeledInputProps,
-  StudioLabeledTextAreaProps,
   StudioControlTone,
   StudioIconButtonProps,
   StudioSplitLeftButtonProps,
@@ -55,6 +52,8 @@ export type {
   StudioChoiceKind,
   StudioChoiceProps,
   StudioWordToggleProps,
+  StudioTextInputProps,
+  StudioTextAreaProps,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
