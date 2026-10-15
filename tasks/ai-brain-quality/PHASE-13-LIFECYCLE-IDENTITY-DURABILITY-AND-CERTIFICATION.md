@@ -84,3 +84,15 @@ Phase 13 is complete only when every workstream has acceptance evidence on the s
 Implemented foundations now include typed durable learning-record persistence, user/channel isolation, queue-and-hydrate behavior for outcomes/evaluations/candidates, default-off communication capture consent, legacy raw-text redaction, capability-specific required evidence, conservative context budgeting, exact project-ID resolution, and the attribution detail panel.
 
 Acceptance is still blocked on database-backed integration tests, complete stable-ID propagation through every production writer, browser verification, and the broader release-gates baseline. Do not mark this phase complete from unit tests or build success alone.
+
+## Current-base implementation slice — publication producer ancestry
+
+The publication receipt now preserves the stable producer outcome IDs and generation trace IDs for the exact selected assets, in addition to the existing channel/project/ContentBuild, ActionPacket/workflow/recommendation/experiment, approved snapshot/hash, transaction and video identity.
+
+- The bridge reads outcomes only for the matching channel and selected asset IDs.
+- Outcome record IDs and trace IDs are deduplicated and sorted for deterministic receipts.
+- Unselected assets are excluded.
+- Retry handling restores ancestry already recorded on the immutable receipt and unions any still-available producer IDs, so a missing browser-local outcome does not erase previously recorded provenance.
+- Regression coverage verifies selected-asset filtering, trace continuity, metadata persistence and retry restoration.
+
+This improves the recommendation-to-publication lineage edge; it does not by itself prove that every upstream recommendation/creator-decision writer supplied its stable IDs or that downstream records are durable across devices.
