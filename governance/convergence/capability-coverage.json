@@ -200,7 +200,9 @@
       "taskRefs": [
         "tasks/system-convergence/todo.md"
       ],
-      "tests": [],
+      "tests": [
+        "src/services/brain/__tests__/assetOutcomes.test.ts"
+      ],
       "uiSurfaces": [
         "Channel Intelligence Hub",
         "Packaging & Experiment Lab",
