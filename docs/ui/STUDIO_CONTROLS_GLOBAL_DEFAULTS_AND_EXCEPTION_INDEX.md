@@ -290,3 +290,60 @@ This pass reuses this existing canonical document rather than creating a competi
 - Remove any obsolete exception entries that describe the field border/radius as defects after these rules are implemented; keep source-level legacy declarations in the drift audit until a repository-wide cascade audit confirms they no longer win.
 
 **Implementation note:** A final authoritative CSS block was added for field selectors to neutralize older duplicate declarations. It must be followed by computed-style checks and, where practical, earlier duplicate declarations should be consolidated rather than leaving a permanent cascade workaround.
+
+
+## 15. Post-merge recovery audit — 2026-10-14
+
+**Audit branch:** `audit/recover-post-merge-studio-edits-20261014`  
+**Integration baseline:** `master/consolidated-feature-integration` at `19c2b2870c16144cb09703f83c587c06dcec3cb0`  
+**Purpose:** Record verified cascade and integration discrepancies before restoring implementation changes. This section is source inspection, not browser certification.
+
+### Verified discrepancy: PR #168 field focus rule is not the sole effective rule
+
+The current integration CSS still contains the earlier general field focus rule:
+
+```css
+[data-vt-studio-control]:is(input, textarea, select):focus,
+[data-vt-studio-control]:is(input, textarea, select):focus-visible {
+  outline-offset: 1px;
+}
+```
+
+PR #168 appends a more specific field-only correction with `outline-offset: 0 !important` for text inputs and textareas. That correction should win for those matched inputs/textareas, but the general selector remains active for selects and still declares a 1px gap. The contract must therefore be stated precisely: zero gap for text inputs and textareas only; select/menu focus is a separate component-family decision and must not accidentally inherit the field correction.
+
+### Verified conflict: textarea type-size declarations contradict one another
+
+The integration CSS contains a PR #159 textarea-specific rule using `font-size: 18px !important` for standard textareas and `14px !important` for compact textareas. PR #168 subsequently appends a rule requesting `font-size: 24px` for both sizes without `!important`. Because the earlier 18px/14px declarations are important and the later 24px declarations are not, the later declarations do not override them. The resulting intended textarea typography is unresolved across the merged PR history.
+
+**Do not silently change this to 24px or 18px/14px without reconciling the product requirement.** The merged PR descriptions conflict. The 92px minimum-height rule from #168 is important and does override the earlier 144px/72px minimum heights; typography needs a single explicit source-of-truth decision.
+
+### Verified surviving source-level drift
+
+The integration CSS still contains declarations inconsistent with the declared global size/motion contract, including:
+- Generic button typography declarations of 32px standard and 10px compact.
+- Button height-variant overrides of 36px standard and 22px compact, including `!important` on button font sizes.
+- Compact split-left rail `border-right-width: 3px`, inconsistent with the 2px compact stroke.
+- Button hover/click transitions at 180ms while the exported size contract declares 150ms hover and 300ms click.
+- Active buttons remove the shadow (`box-shadow: none`) while translating by the full shadow offset. This violates the fixed-shadow-anchor contract; the face should move over the anchored shadow rather than the shadow disappearing or changing offset.
+- The generic button hover rule rewrites the box-shadow offset instead of keeping the anchor fixed.
+
+These are not inferred from a PR's description: they are present in the current integration CSS source. Their exact rendered impact still requires browser computed-style and visual checks.
+
+### Post-merge branch handling finding
+
+The former PR #168 head branch, `fix/studio-primitive-size-shadow-contracts-20261014`, currently compares as **3 commits ahead and 39 behind** the integration branch. The PR is already merged. Its head is therefore not a safe place to continue work, and those three branch-only commits must be inspected individually before deciding whether any contain recoverable changes. Do not merge that stale branch wholesale because it is heavily behind the integration baseline.
+
+### Recovery ledger
+
+| Finding | Evidence in integration | Action |
+|---|---|---|
+| Textarea font-size conflict (#159 vs #168) | Important 18px/14px rules coexist with later non-important 24px rules | Resolve requirements and consolidate to one authoritative selector |
+| Field focus offset | General selector says 1px; #168 text input/textarea correction says 0px important | Keep zero-gap scope limited to text inputs/textareas; document other field-like controls separately |
+| Button shadow anchor | Hover rewrites shadow offset; active removes shadow | Restore fixed shadow anchor and move the face only |
+| Compact split rail stroke | Compact rail explicitly uses 3px right border | Make rail divider consume compact 2px stroke token |
+| Button typography | 32/10 and 36/22 rules remain beside declared 38/24 size defaults | Reconcile button label typography with confirmed primitive-specific exceptions |
+| Stale #168 head | 3 ahead / 39 behind integration | Inspect the three unique commits; selectively cherry-pick/reimplement only verified missing work |
+
+### Verification boundary
+
+This recovery pass confirms source-level discrepancies. It does not claim that every one of these defects was caused by editing an already-merged PR, nor that any fix has been visually certified. Before calling a finding recovered, compare its original PR/commit patch with the current target branch, apply the correction on a fresh branch from the current integration baseline, inspect the resulting diff, and verify the merged commit. Run available typecheck/tests/build and browser computed-style checks when possible.
