@@ -2,8 +2,8 @@ import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/t
 
 /** Studio shell tokens may reference SubToolbox hierarchy geometry; standalone controls use the independent contract below. */
 export const STUDIO_CONTROL_SIZE_CONTRACT = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.035, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.5, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
-  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.035, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 1, buttonShadowY: 1, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.035, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.5, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 38, iconStroke: 1.9 },
+  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.035, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 1, buttonShadowY: 1, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 24, iconStroke: 2.0 },
   /** Single-line text inputs inherit the canonical global standard/compact control typography. */
   textInput: { standardFontSize: 38, compactFontSize: 24, fontWeight: 1000, lineHeight: 0.86, textTransform: "uppercase", letterSpacing: -0.035, followsSizeFamily: true },
   /** Multiline exception: taller writing surface while preserving the chosen standard/compact geometry. */
@@ -42,7 +42,7 @@ export const STUDIO_TOKENS = {
 export const STUDIO_ICON_SIZE_COMPARISON = {
   current: { standard: { size: 28, stroke: 2.5 }, compact: { size: 18, stroke: 1.65 } },
   moderate: { standard: { size: 34, stroke: 2.0588 }, compact: { size: 22, stroke: 1.35 } },
-  large: { standard: { size: 38, stroke: 1.8421 }, compact: { size: 24, stroke: 1.2375 } },
+  large: { standard: { size: 38, stroke: 1.9 }, compact: { size: 24, stroke: 2.0 } },
 } as const
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
