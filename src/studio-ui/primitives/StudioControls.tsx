@@ -1,5 +1,5 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
@@ -302,6 +302,8 @@ export type StudioSquareIconButtonEffect =
   | "success"
 
 export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "children" | "selected"> {
+  /** Visual comparison preset; changes SVG size only, never the button face geometry. */
+  iconSizeVariant?: StudioIconSizeVariant
   icon: React.ReactNode
   label: string
   /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
@@ -327,7 +329,7 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
 /** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
 export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
   ({
-    icon, label, variant = "v1", effect = "standard", activeIcon, badge, tooltip, success = false, animate = false,
+    icon, label, variant = "v1", effect = "standard", iconSizeVariant = "current", activeIcon, badge, tooltip, success = false, animate = false,
     sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
     disabled, ...props
   }, ref) => {
@@ -381,6 +383,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         aria-pressed={selectable ? isSelected : undefined}
         selected={selectable && isSelected}
         data-vt-studio-icon-button="true"
+        data-icon-size-variant={iconSizeVariant}
         data-icon-variant={variant}
         data-icon-effect={effect}
         data-icon-only="true"
@@ -422,12 +425,14 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
 StudioSquareIconButton.displayName = "StudioSquareIconButton"
 
 export interface StudioSplitLeftButtonProps extends StudioButtonProps {
+  /** Visual comparison preset; changes SVG size only, never the button face geometry. */
+  iconSizeVariant?: StudioIconSizeVariant
   icon: React.ReactNode
 }
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
-  ({ icon, children, sizeVariant = "standard", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" {...props}>
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "current", ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-icon-size-variant={iconSizeVariant} {...props}>
       <span
         aria-hidden="true"
         data-vt-studio-split-rail
