@@ -1,8 +1,55 @@
 import { evaluateViewTubeControl } from "./viewTubeUserControls"
 
 export type EvaluationOutcome = "pending" | "positive" | "neutral" | "negative"
-export interface EvaluationRecord { id: string; createdAt: number; updatedAt: number; channelId?: string | null; projectId?: string | null; source: string; recommendation: string; evidenceIds: string[]; actionPacketId?: string | null; outcome: EvaluationOutcome; outcomeNote?: string; metricsBefore?: Record<string, number>; metricsAfter?: Record<string, number> }
-export interface WorkflowCandidate { id: string; createdAt: number; channelId?: string | null; title: string; toolIds: string[]; reason: string; evidenceRecordIds: string[]; status: "candidate" | "approved" | "rejected"; scope: "channel" | "global-experiment" }
+export interface EvaluationRecord {
+ id: string
+ createdAt: number
+ updatedAt: number
+ channelId?: string | null
+ projectId?: string | null
+ source: string
+ recommendation: string
+ evidenceIds: string[]
+ actionPacketId?: string | null
+ /** Producer/outcome lineage used to join a recommendation to its measured result. */
+ sourceOutcomeIds?: string[]
+ sourceRecordIds?: string[]
+ traceIds?: string[]
+ assetIds?: string[]
+ publishedVideoId?: string | null
+ baselineSnapshotId?: string | null
+ comparisonSnapshotId?: string | null
+ selectedWindow?: string | null
+ comparabilityStatus?: "comparable" | "partially_comparable" | "not_comparable" | "unknown"
+ evidenceStatus?: "available" | "partial" | "stale" | "failed" | "unavailable"
+ confounders?: string[]
+ causalAssessment?: "observed_association" | "experimentally_supported" | "insufficient_evidence"
+ /** Optional caller key makes retries idempotent within the same channel/project scope. */
+ idempotencyKey?: string | null
+ outcome: EvaluationOutcome
+ outcomeNote?: string
+ metricsBefore?: Record<string, number>
+ metricsAfter?: Record<string, number>
+}
+export interface WorkflowCandidate {
+ id: string
+ createdAt: number
+ channelId?: string | null
+ projectId?: string | null
+ title: string
+ toolIds: string[]
+ reason: string
+ evidenceRecordIds: string[]
+ /** Evaluation provenance; candidates never become validated knowledge by creation alone. */
+ evaluationRecordId?: string | null
+ sourceOutcomeIds?: string[]
+ evaluationOutcome?: Exclude<EvaluationOutcome, "pending">
+ selectedWindow?: string | null
+ comparabilityStatus?: EvaluationRecord["comparabilityStatus"]
+ evidenceStatus?: EvaluationRecord["evidenceStatus"]
+ status: "candidate" | "approved" | "rejected"
+ scope: "channel" | "global-experiment"
+}
 
 const EVAL_KEY = "viewtube:evaluation-ledger:v1"
 const CANDIDATE_KEY = "viewtube:workflow-candidates:v1"
@@ -12,8 +59,27 @@ const write = <T,>(key: string, values: T[]) => { if (typeof window !== "undefin
 export const listEvaluationRecords = () => read<EvaluationRecord>(EVAL_KEY)
 export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"createdAt"|"updatedAt"|"outcome">) => {
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
- const now = Date.now(); const item: EvaluationRecord = { ...input, id: crypto.randomUUID(), createdAt: now, updatedAt: now, outcome: "pending" }
- write(EVAL_KEY, [item, ...listEvaluationRecords()].slice(0, 5000)); return item
+ const records = listEvaluationRecords()
+ if (input.idempotencyKey) {
+  const existing = records.find((record) =>
+   record.idempotencyKey === input.idempotencyKey &&
+   record.channelId === (input.channelId || null) &&
+   record.projectId === (input.projectId || null)
+  )
+  if (existing) return existing
+ }
+ const now = Date.now()
+ const item: EvaluationRecord = {
+  ...input,
+  channelId: input.channelId || null,
+  projectId: input.projectId || null,
+  id: crypto.randomUUID(),
+  createdAt: now,
+  updatedAt: now,
+  outcome: "pending",
+ }
+ write(EVAL_KEY, [item, ...records].slice(0, 5000))
+ return item
 }
 export const resolveEvaluationRecord = (id: string, outcome: Exclude<EvaluationOutcome,"pending">, outcomeNote?: string, metricsAfter?: Record<string,number>) => {
  const records = listEvaluationRecords(); const found = records.find((r) => r.id === id); if (!found) return null
@@ -24,6 +90,39 @@ export const proposeWorkflowCandidate = (input: Omit<WorkflowCandidate,"id"|"cre
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
  const item: WorkflowCandidate = { ...input, id: crypto.randomUUID(), createdAt: Date.now(), status: "candidate" }; write(CANDIDATE_KEY, [item, ...listWorkflowCandidates()].slice(0,1000)); return item
 }
+/**
+ * Build a learning candidate only from a resolved evaluation with usable, comparable evidence.
+ * This never approves or promotes the candidate; review remains an explicit governance step.
+ */
+export const proposeEvaluationLearningCandidate = (
+ evaluationRecordId: string,
+ input: Omit<WorkflowCandidate, "id" | "createdAt" | "status" | "evaluationRecordId" | "sourceOutcomeIds" | "evaluationOutcome" | "evidenceRecordIds" | "selectedWindow" | "comparabilityStatus" | "evidenceStatus">,
+) => {
+ if (!evaluateViewTubeControl("creator-learning").allowed) return null
+ const evaluation = listEvaluationRecords().find((record) => record.id === evaluationRecordId)
+ if (!evaluation || evaluation.outcome === "pending") return null
+ if (!evaluation.evidenceIds.length || evaluation.evidenceStatus !== "available") return null
+ if (evaluation.comparabilityStatus !== "comparable" && evaluation.causalAssessment !== "experimentally_supported") return null
+ if (input.scope === "channel" && !input.channelId) return null
+ if (evaluation.channelId && input.channelId !== evaluation.channelId) return null
+ if (evaluation.projectId && input.projectId && input.projectId !== evaluation.projectId) return null
+ const item: WorkflowCandidate = {
+  ...input,
+  id: crypto.randomUUID(),
+  createdAt: Date.now(),
+  status: "candidate",
+  evaluationRecordId: evaluation.id,
+  sourceOutcomeIds: [...(evaluation.sourceOutcomeIds || [])],
+  evaluationOutcome: evaluation.outcome,
+  evidenceRecordIds: [...evaluation.evidenceIds],
+  selectedWindow: evaluation.selectedWindow || null,
+  comparabilityStatus: evaluation.comparabilityStatus,
+  evidenceStatus: evaluation.evidenceStatus,
+ }
+ write(CANDIDATE_KEY, [item, ...listWorkflowCandidates()].slice(0, 1000))
+ return item
+}
+
 export const reviewWorkflowCandidate = (id: string, status: "approved"|"rejected") => {
  const values = listWorkflowCandidates(); const found = values.find((v) => v.id === id); if (!found) return null
  const next = { ...found, status }; write(CANDIDATE_KEY, values.map((v) => v.id === id ? next : v)); return next
