@@ -61,7 +61,7 @@
     "test:confirmed-library-layout": "node --test scripts/audit/confirmed-library-layout.test.mjs",
     "start:production": "node scripts/production-stack.mjs",
     "test:production-stack": "node --test scripts/production-stack.test.mjs",
-    "test:studio-controls": "vitest run src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx src/components/CommentResponder.contract.test.ts"
+    "test:studio-controls": "vitest run src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx src/components/CommentResponder.contract.test.ts src/studio-ui/StudioHubCertification.test.tsx"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
