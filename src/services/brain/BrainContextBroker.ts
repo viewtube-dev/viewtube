@@ -225,14 +225,25 @@ export const buildBrainContextPack = (input: {
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
   taskInstruction ? `\n${taskInstruction}` : "",
  ].filter(Boolean)
- const resolvedContext = resolveBrainContextSections(sections, { userText: input.userText, maximumCharacters, capabilityIds: input.capabilityIds })
+ const resolvedContext = resolveBrainContextSections(sections, {
+  userText: input.userText,
+  maximumCharacters,
+  capabilityIds: input.capabilityIds,
+  modelContextWindowTokens: input.modelContextWindowTokens,
+  reservedOutputTokens: input.reservedOutputTokens,
+  safetyMarginTokens: input.contextSafetyMarginTokens,
+ })
  omittedSections.push(...resolvedContext.omittedSectionIds)
  const systemInstruction = resolvedContext.text
 
  return {
   systemInstruction,
   budget: {
-   maximumCharacters,
+   maximumCharacters: resolvedContext.maximumCharacters,
+   modelContextWindowTokens: resolvedContext.modelContextWindowTokens,
+   reservedOutputTokens: resolvedContext.reservedOutputTokens,
+   estimatedInputTokens: resolvedContext.estimatedInputTokens,
+   contextBudgetSource: resolvedContext.budgetSource,
    systemCharacters: system.length,
    evidenceCharacters: evidence.length + evidenceQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,
