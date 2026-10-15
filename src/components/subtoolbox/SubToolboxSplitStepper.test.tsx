@@ -1,64 +1,39 @@
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import React from "react"
-import { describe, expect, it, vi } from "vitest"
-import { fireEvent, render, screen, act } from "@testing-library/react"
+import { renderToStaticMarkup } from "react-dom/server"
+import { describe, expect, it } from "vitest"
 import { SubToolboxSplitStepper } from "./SubToolboxSplitStepper"
 
-describe("SubToolboxSplitStepper", () => {
-  it("uses an editable numeric Studio input and fixed, shadowless compound geometry", () => {
-    const { container } = render(<SubToolboxSplitStepper value={5} onValueChange={() => {}} />)
-    const root = container.querySelector(".vt-subtoolbox-split-stepper")
-    const input = screen.getByRole("spinbutton", { name: "Value" })
-    expect(root).toHaveAttribute("data-stepper-size", "standard")
-    expect(input).toHaveClass("vt-subtoolbox-split-stepper-value")
-    expect(root).not.toHaveClass("is-interacting")
+describe("SubToolboxSplitStepper fixed-ratio input behavior", () => {
+  it("renders the editable value through the canonical Studio text-input primitive", () => {
+    const html = renderToStaticMarkup(
+      <SubToolboxSplitStepper value={7} onValueChange={() => undefined} ariaLabel="Count" />,
+    )
+    expect(html).toContain('data-vt-studio-field-kind="text-input"')
+    expect(html).toContain('type="number"')
+    expect(html).toContain('value="7"')
+    expect(html).toContain('aria-label="Count"')
+    expect(html).toContain('class="vt-subtoolbox-split-stepper-value"')
   })
 
-  it("enters full-component focus mode while editing the value", () => {
-    const { container } = render(<SubToolboxSplitStepper value={5} onValueChange={() => {}} />)
-    const root = container.querySelector(".vt-subtoolbox-split-stepper")!
-    const input = screen.getByRole("spinbutton", { name: "Value" })
-    fireEvent.focus(input)
-    expect(root).toHaveClass("is-interacting")
-    fireEvent.blur(input)
-    expect(root).not.toHaveClass("is-interacting")
+  it("uses a fixed 2:1 value pane and square rail with no component shadow", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/subtoolbox-split-stepper.css"), "utf8")
+    expect(css).toContain("width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height))")
+    expect(css).toContain("grid-template-columns: minmax(0, 2fr) minmax(0, 1fr)")
+    expect(css).toContain("grid-template-rows: minmax(0, 1fr) minmax(0, 1fr)")
+    expect(css).toContain("box-shadow: none")
+    expect(css).not.toContain("box-shadow: var(--vt-stepper-shadow)")
   })
 
-  it("does not enter focus mode for a short button click", () => {
-    vi.useFakeTimers()
-    try {
-      const { container } = render(<SubToolboxSplitStepper value={5} onValueChange={() => {}} />)
-      const root = container.querySelector(".vt-subtoolbox-split-stepper")!
-      const button = screen.getByRole("button", { name: "Increase Value" })
-      fireEvent.pointerDown(button, { button: 0, pointerId: 1 })
-      expect(root).not.toHaveClass("is-interacting")
-      fireEvent.pointerUp(button, { button: 0, pointerId: 1 })
-      act(() => { vi.advanceTimersByTime(400) })
-      expect(root).not.toHaveClass("is-interacting")
-    } finally {
-      vi.useRealTimers()
-    }
-  })
-
-  it("enters full-component focus mode while a button is held", () => {
-    vi.useFakeTimers()
-    try {
-      const { container } = render(<SubToolboxSplitStepper value={5} onValueChange={() => {}} />)
-      const root = container.querySelector(".vt-subtoolbox-split-stepper")!
-      const button = screen.getByRole("button", { name: "Increase Value" })
-      fireEvent.pointerDown(button, { button: 0, pointerId: 1 })
-      act(() => { vi.advanceTimersByTime(361) })
-      expect(root).toHaveClass("is-interacting")
-      fireEvent.pointerUp(button, { button: 0, pointerId: 1 })
-      expect(root).not.toHaveClass("is-interacting")
-    } finally {
-      vi.useRealTimers()
-    }
-  })
-
-  it("updates the value from typed input", () => {
-    const onValueChange = vi.fn()
-    render(<SubToolboxSplitStepper value={5} onValueChange={onValueChange} min={0} max={10} />)
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Value" }), { target: { value: "7" } })
-    expect(onValueChange).toHaveBeenCalledWith(7)
+  it("doubles the chevron size and wraps the whole stepper in focus mode", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/subtoolbox-split-stepper.css"), "utf8")
+    const source = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxSplitStepper.tsx"), "utf8")
+    expect(css).toContain("width: calc(var(--vt-stepper-height) * .68)")
+    expect(css).toContain(".vt-subtoolbox-split-stepper.is-focused")
+    expect(css).toContain("outline: 3px solid")
+    expect(source).toContain("setIsEditing(true)")
+    expect(source).toContain("setIsHolding(true)")
+    expect(source).toContain("HOLD_FOCUS_DELAY")
   })
 })

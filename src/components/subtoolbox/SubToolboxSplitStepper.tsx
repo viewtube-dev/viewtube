@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import { StudioTextInput } from "../../studio-ui/primitives/StudioTextInput"
 import type { ToolboxControlLevel } from "./tokens"
 import { getComponentLevelCssVars } from "./tokens"
-import { StudioNumberInput } from "../../studio-ui/primitives/StudioTextInput"
 import "../../styles/toolbox-entry.css"
 import "./subtoolbox-split-stepper.css"
 
@@ -18,7 +18,9 @@ export interface SubToolboxSplitStepperProps extends Omit<React.HTMLAttributes<H
   ariaLabel?: string
 }
 
-/** Canonical Studio Controls stepper: a 2:1 value pane and a square rail split into two equal chevron actions. */
+const HOLD_FOCUS_DELAY = 160
+
+/** Canonical Studio Controls stepper: fixed 3:1 overall width, 2:1 editable value field and square two-button rail. */
 export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   value,
   onValueChange,
@@ -33,24 +35,30 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   style,
   ...props
 }) => {
+  const [draftValue, setDraftValue] = useState(String(value))
+  const [isEditing, setIsEditing] = useState(false)
+  const [isHolding, setIsHolding] = useState(false)
   const valueRef = useRef(value)
   valueRef.current = value
-  const [draft, setDraft] = useState(String(value))
-  const [inputFocused, setInputFocused] = useState(false)
-  const [held, setHeld] = useState(false)
-
-  useEffect(() => setDraft(String(value)), [value])
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const focusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = useRef(0)
   const heldDirection = useRef<-1 | 1>(1)
+  const cancelEditRef = useRef(false)
+
+  useEffect(() => {
+    if (!isEditing) setDraftValue(String(value))
+  }, [value, isEditing])
 
   const stopHold = useCallback(() => {
     if (holdTimer.current) clearTimeout(holdTimer.current)
     if (repeatTimer.current) clearTimeout(repeatTimer.current)
+    if (focusTimer.current) clearTimeout(focusTimer.current)
     holdTimer.current = null
     repeatTimer.current = null
-    setHeld(false)
+    focusTimer.current = null
+    setIsHolding(false)
   }, [])
 
   useEffect(() => stopHold, [stopHold])
@@ -58,8 +66,22 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   const change = useCallback((direction: -1 | 1) => {
     const next = Math.min(max, Math.max(min, valueRef.current + direction * step))
     valueRef.current = next
+    setDraftValue(String(next))
     onValueChange(next)
   }, [max, min, onValueChange, step])
+
+  const commitDraft = useCallback(() => {
+    const parsed = Number(draftValue)
+    if (draftValue.trim() === "" || !Number.isFinite(parsed)) {
+      setDraftValue(String(valueRef.current))
+      return
+    }
+    const next = Math.min(max, Math.max(min, parsed))
+    const previous = valueRef.current
+    valueRef.current = next
+    setDraftValue(String(next))
+    if (next !== previous) onValueChange(next)
+  }, [draftValue, max, min, onValueChange])
 
   const scheduleRepeat = useCallback(() => {
     const elapsed = Date.now() - startedAt.current
@@ -77,55 +99,54 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     heldDirection.current = direction
     startedAt.current = Date.now()
     change(direction)
-    holdTimer.current = setTimeout(() => {
-      setHeld(true)
-      scheduleRepeat()
-    }, 360)
+    focusTimer.current = setTimeout(() => setIsHolding(true), HOLD_FOCUS_DELAY)
+    holdTimer.current = setTimeout(scheduleRepeat, 360)
   }
 
   const levelStyle = level ? getComponentLevelCssVars(level) : {}
   return (
     <div
       {...props}
-      className={["vt-subtoolbox-split-stepper", `is-${size}`, (inputFocused || held) ? "is-interacting" : "", className].filter(Boolean).join(" ")}
+      className={[
+        "vt-subtoolbox-split-stepper",
+        `is-${size}`,
+        isEditing || isHolding ? "is-focused" : "",
+        className,
+      ].filter(Boolean).join(" ")}
       data-vt-control-level={level}
       data-stepper-size={size}
       role="group"
       aria-label={ariaLabel}
       style={{ ...levelStyle, ...style } as React.CSSProperties}
     >
-      <StudioNumberInput
+      <StudioTextInput
         className="vt-subtoolbox-split-stepper-value"
+        sizeVariant={size}
+        type="number"
+        inputMode="numeric"
         aria-label={ariaLabel}
-        value={draft}
-        min={Number.isFinite(min) ? min : undefined}
-        max={Number.isFinite(max) ? max : undefined}
-        step={step}
+        value={draftValue}
         disabled={disabled}
-        onFocus={() => setInputFocused(true)}
+        onFocus={() => setIsEditing(true)}
+        onChange={(event) => setDraftValue(event.currentTarget.value)}
         onBlur={() => {
-          setInputFocused(false)
-          const parsed = Number(draft)
-          if (!draft.trim() || !Number.isFinite(parsed)) {
-            setDraft(String(valueRef.current))
+          if (cancelEditRef.current) {
+            setDraftValue(String(valueRef.current))
+            cancelEditRef.current = false
           } else {
-            const normalized = Math.min(max, Math.max(min, parsed))
-            setDraft(String(normalized))
-            if (normalized !== valueRef.current) {
-              valueRef.current = normalized
-              onValueChange(normalized)
-            }
+            commitDraft()
           }
+          setIsEditing(false)
         }}
-        onChange={(event) => {
-          const nextDraft = event.currentTarget.value
-          setDraft(nextDraft)
-          if (nextDraft.trim() === "") return
-          const parsed = Number(nextDraft)
-          if (!Number.isFinite(parsed)) return
-          const normalized = Math.min(max, Math.max(min, parsed))
-          valueRef.current = normalized
-          onValueChange(normalized)
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            commitDraft()
+            event.currentTarget.blur()
+          }
+          if (event.key === "Escape") {
+            cancelEditRef.current = true
+            event.currentTarget.blur()
+          }
         }}
       />
       <div className="vt-subtoolbox-split-stepper-rail">
