@@ -30,7 +30,7 @@ This guide teaches the system from the creator's point of view: **what each kind
 
 You do not need to memorize every field. You need to know how to ask the data a good question.
 
-> **Creator principle:** A metric is a measurement. A dimension tells you how that measurement is broken down. A filter narrows the data. A time window tells you when. Together, they form a useful question.
+> **Creator takeaway:** A metric is a measurement. A dimension tells you how that measurement is broken down. A filter narrows the data. A time window tells you when. Together, they form a useful question.
 
 ---
 
@@ -928,7 +928,7 @@ Some analytics are limited by:
 
 If a row disappears, do not automatically conclude nothing happened.
 
-> **Important limitation:** Missing, suppressed or unavailable data should be represented in ViewTube as missing/unknown—not silently converted to zero.
+> **Caution:** Missing, suppressed or unavailable data should be represented in ViewTube as missing/unknown—not silently converted to zero.
 
 ---
 
