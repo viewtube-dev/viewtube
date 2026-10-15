@@ -19,7 +19,7 @@ const project = {
 
 describe("Publisher metadata project persistence", () => {
   beforeEach(() => {
-    localStorage.clear()
+    if (typeof localStorage !== "undefined") localStorage.clear()
     resetVideoPackageRepositoryForTests()
     resetContentBuildRepositoryForTests()
   })
