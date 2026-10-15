@@ -84,15 +84,28 @@ test("split-left buttons do not clip the stationary shadow or expose a wrapper b
 });
 
 
-test("single-line input typography follows the same standard/compact size split as textareas", () => {
+test("single-line inputs use global 38px/24px typography while textareas alone use 18px/14px", () => {
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
-  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*18px\) !important/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*14px\) !important/);
-  assert.ok(controls.includes('standardInputFontSize: "18px"'));
-  assert.ok(controls.includes('compactInputFontSize: "14px"'));
+  const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+  const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
+  const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
+  assert.match(tokens, /standard:\s*\{[^}]*fontSize:\s*38/);
+  assert.match(tokens, /compact:\s*\{[^}]*fontSize:\s*24/);
+  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*38,\s*compactFontSize:\s*24/);
+  assert.match(tokens, /multiline:\s*\{\s*minHeight:\s*92,\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-44-font-size,\s*38px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-28-font-size,\s*24px\) !important/);
+  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\) !important/);
+  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\[data-size="compact"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\) !important/);
+  assert.ok(controls.includes('standardInputFontSize: "38px"'));
+  assert.ok(controls.includes('compactInputFontSize: "24px"'));
+  assert.ok(inputModule.includes("StudioTextInput"));
+  assert.ok(areaModule.includes("StudioTextArea"));
+  assert.match(catalog, /Studio Text Input · Standalone" nonDefaultSettings=\{\["[^"]*44px standard size[^"]*"[^"]*"[^"]*38px standard and 24px compact/);
+  assert.match(catalog, /Text areas are the documented exception: 92px minimum surface, 18px standard or 14px compact text/);
+  assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
 test("text field families are split into input-plus-label and textarea-plus-label modules", () => {

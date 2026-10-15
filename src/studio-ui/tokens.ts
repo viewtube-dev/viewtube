@@ -5,9 +5,9 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.035, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.5, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 150, hoverOffsetPx: 1.5, clickTransitionMs: 300, clickOffsetPx: 3, iconSize: 28, iconStroke: 2.5 },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.035, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 1, buttonShadowY: 1, hoverTransitionMs: 150, hoverOffsetPx: 0.75, clickTransitionMs: 300, clickOffsetPx: 1.5, iconSize: 18, iconStroke: 1.65 },
   /** Single-line text inputs inherit the canonical global standard/compact control typography. */
-  textInput: { standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardLineHeight: 1.25, compactLineHeight: 1.3, textTransform: "uppercase", letterSpacing: -0.035, followsSizeFamily: true },
+  textInput: { standardFontSize: 38, compactFontSize: 24, fontWeight: 1000, lineHeight: 0.86, textTransform: "uppercase", letterSpacing: -0.035, followsSizeFamily: true },
   /** Multiline exception: taller writing surface while preserving the chosen standard/compact geometry. */
-  multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardLineHeight: 1.25, compactLineHeight: 1.3, resize: "vertical", preservesSizeFamily: true, rationale: "Text inputs and textareas both use 18px standard and 14px compact; textareas additionally use multiline line-height, padding, and a 92px minimum surface." },
+  multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardLineHeight: 1.25, compactLineHeight: 1.3, resize: "vertical", preservesSizeFamily: true, rationale: "Textareas alone use 18px standard and 14px compact; they additionally use multiline line-height, padding, and a 92px minimum surface." },
 } as const
 
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
