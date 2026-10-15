@@ -305,6 +305,7 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
     surface: "brain-hub-widget",
     channelId,
     projectId: activeProject?.id || null,
+    project: activeProject,
     userText: text,
     snapshot,
     systemPrompt,

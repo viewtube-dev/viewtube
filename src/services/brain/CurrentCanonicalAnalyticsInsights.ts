@@ -19,15 +19,16 @@ export const buildCurrentCanonicalAnalyticsInsights = (input: {
  expectedSnapshotId?: string | null
  minimumObservations?: number
 }): CurrentCanonicalAnalyticsInsights => {
- const dataset = getCurrentCanonicalIntelligenceDatasetRows("daily")
+ const current = getCurrentCanonicalIntelligenceDatasetRows("daily")
+ const dataset = current.dataset
  if (!dataset) {
-  return { findings: [], limitations: ["Canonical daily dataset is unavailable."], sourceSnapshotId: null }
+  return { findings: [], limitations: ["Canonical daily dataset is unavailable."], sourceSnapshotId: current.snapshotId || null }
  }
- if (!input.channelId || dataset.channelId !== input.channelId) {
-  return { findings: [], limitations: ["Canonical daily dataset channel does not exactly match the requested channel."], sourceSnapshotId: dataset.snapshotId }
+ if (!input.channelId || current.channelId !== input.channelId || dataset.channelId !== input.channelId) {
+  return { findings: [], limitations: ["Canonical daily dataset channel does not exactly match the requested channel."], sourceSnapshotId: current.snapshotId }
  }
- if (input.expectedSnapshotId && dataset.snapshotId !== input.expectedSnapshotId) {
-  return { findings: [], limitations: ["Canonical daily dataset snapshot does not match the active evidence snapshot."], sourceSnapshotId: dataset.snapshotId }
+ if (input.expectedSnapshotId && current.snapshotId !== input.expectedSnapshotId) {
+  return { findings: [], limitations: ["Canonical daily dataset snapshot does not match the active evidence snapshot."], sourceSnapshotId: current.snapshotId }
  }
 
  const metricKeys = ["views", "engagedViews", "watchTime", "likes", "comments", "subscribersGained"]
@@ -47,6 +48,6 @@ export const buildCurrentCanonicalAnalyticsInsights = (input: {
  return {
   findings: findings.sort((left, right) => left.id.localeCompare(right.id)),
   limitations: [...new Set(limitations)],
-  sourceSnapshotId: dataset.snapshotId,
+  sourceSnapshotId: current.snapshotId,
  }
 }

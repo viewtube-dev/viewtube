@@ -812,6 +812,7 @@ const AIBrainCommandInterface: React.FC = () => {
     surface: "ai-brain",
     channelId,
     projectId: activeProject?.id || null,
+    project: activeProject,
     visibleContext: activeProject ? {
      contentBuildId: activeProject.contentBuildId || null,
      title: activeProject.videoTitle || activeProject.name || null,

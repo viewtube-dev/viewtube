@@ -9,12 +9,12 @@ import { STUDIO_CONTROL_SIZE_CONTRACT } from "../tokens"
 describe("StudioSquareIconButton interaction effects", () => {
   const icon = <svg viewBox="0 0 24 24"><path d="M2 2h20v20H2z" /></svg>
 
-  it("inherits the canonical 44px and 28px geometry instead of defining effect-specific sizes", () => {
+  it("inherits the canonical 44px and 38px standard icon geometry instead of defining effect-specific sizes", () => {
     expect(STUDIO_CONTROL_SIZE_CONTRACT.standard).toMatchObject({
       height: 44,
       stroke: 3,
       radius: 6,
-      iconSize: 28,
+      iconSize: 38,
       buttonShadowX: 3,
       buttonShadowY: 3,
     })
@@ -22,7 +22,7 @@ describe("StudioSquareIconButton interaction effects", () => {
       height: 28,
       stroke: 2,
       radius: 4,
-      iconSize: 18,
+      iconSize: 24,
       buttonShadowX: 1,
       buttonShadowY: 1,
     })

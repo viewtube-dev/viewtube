@@ -70,11 +70,14 @@
         "tasks/system-convergence/todo.md",
         "tasks/ai-brain-quality/PHASE-10-OUTCOME-LINEAGE.md",
         "tasks/ai-brain-quality/PHASE-11-ANALYTICS-EVALUATION-LINEAGE.md",
-        "tasks/ai-brain-quality/PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md"
+        "tasks/ai-brain-quality/PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md",
+        "tasks/ai-brain-quality/CANONICAL-ANALYTICS-BRAIN-INTEGRATION.md"
       ],
       "tests": [
         "src/services/brain/__tests__/assetOutcomes.test.ts",
-        "src/services/viewTubeEvaluationLedger.test.ts"
+        "src/services/viewTubeEvaluationLedger.test.ts",
+        "src/services/postPublicationOutcomePipeline.test.ts",
+        "src/services/asset-engine/PostPublishAnalyticsBridge.test.ts"
       ],
       "guideRefs": [
         "docs/capabilities/outcome-learning.md",

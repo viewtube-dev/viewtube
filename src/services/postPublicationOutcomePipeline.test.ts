@@ -120,6 +120,8 @@ describe("post-publication outcome pipeline", () => {
       checkpointEvent: { id: "checkpoint-event-1" },
       evaluation: { status: "neutral" },
       recorded: { id: "checkpoint-outcome-1" },
+      publicationEvaluation: { id: "publication-evaluation-1" },
+      publicationEvaluationError: null,
     })
     mocks.recordAlgorithmEvaluation.mockReturnValue({ evaluation: { status: "positive" }, recorded: { id: "recommendation-outcome-1" } })
     mocks.fetchAndRecordHistoricalMetadataComparison.mockResolvedValue({
@@ -169,6 +171,54 @@ describe("post-publication outcome pipeline", () => {
       metadataComparisonsReady: 1,
       failures: [],
     })
+  })
+
+  it("retries an existing daily checkpoint so missing recommendation outcomes can recover", async () => {
+    mocks.listContentBuildEvents.mockReturnValue([{
+      eventType: "analytics.checkpoint",
+      entityType: "analytics-checkpoint",
+      metadata: { videoId: "video-1", checkpointId: "daily:2026-10-14" },
+    }])
+
+    const result = await runPostPublicationOutcomePipeline({
+      channelId: "channel-1",
+      now: new Date("2026-10-15T12:00:00.000Z"),
+    })
+
+    expect(mocks.recordAnalyticsCheckpointForEvaluation).toHaveBeenCalled()
+    expect(mocks.recordAlgorithmEvaluation).toHaveBeenCalledWith(expect.objectContaining({
+      sourceEventId: "recommendation-1",
+      metadata: expect.objectContaining({ checkpointId: "daily:2026-10-14" }),
+    }))
+    expect(result).toMatchObject({
+      status: "complete",
+      checkpointsRecorded: 0,
+      recommendationEvaluations: 1,
+      failures: [],
+    })
+  })
+
+  it("surfaces a missing canonical publication evaluation as a partial pipeline failure", async () => {
+    mocks.recordAnalyticsCheckpointForEvaluation.mockReturnValue({
+      identity: { event: { id: "identity-1" } },
+      checkpointEvent: { id: "checkpoint-event-1" },
+      evaluation: { status: "neutral" },
+      recorded: { id: "checkpoint-outcome-1" },
+      publicationEvaluation: null,
+      publicationEvaluationError: "Exact published video is absent from the current canonical snapshot.",
+    })
+
+    const result = await runPostPublicationOutcomePipeline({
+      channelId: "channel-1",
+      now: new Date("2026-10-15T12:00:00.000Z"),
+    })
+
+    expect(result.status).toBe("partial")
+    expect(result.failures).toContainEqual(expect.objectContaining({
+      contentBuildId: "build-1",
+      stage: "analytics-checkpoint",
+      code: "canonical-publication-evaluation-unavailable",
+    }))
   })
 
   it("does not query or join another channel's publication history", async () => {
