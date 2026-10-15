@@ -118,7 +118,7 @@ const RuntimeCompactCell: React.FC<{
 )
 
 export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, embedded = false }) => {
- const { project, build, generation, brain, outcomes, lifecycle } = snapshot
+ const { project, build, generation, brain, outcomes, lifecycle, metadataIntelligence } = snapshot
  const request = generation.latestRequest
  const receipt = generation.latestReceipt
  const trace = brain.latestTrace
@@ -183,6 +183,10 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      <RuntimePill label="Events" value={build?.eventCount || 0} />
      <RuntimePill label="YouTube" value={titleCase(build?.youtubeStatus || "unbound")} />
      <RuntimePill label="Latest" value={titleCase(lifecycle.latestEventType || "none")} />
+     <RuntimePill label="Metadata versions" value={metadataIntelligence.metadataVersionCount} />
+     <RuntimePill label="Comparisons" value={`${metadataIntelligence.readyComparisonCount}/${metadataIntelligence.comparisonCount}`} />
+     <RuntimePill label="Learning candidates" value={metadataIntelligence.learningCandidateCount} />
+     <RuntimePill label="Promoted" value={metadataIntelligence.promotedKnowledgeCount} />
     </div>
    </section>
   )
@@ -287,6 +291,10 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
     <RuntimePill label="Repairs" value={trace?.repairAttempts || 0} />
     <RuntimePill label="Publish events" value={lifecycle.publishEventCount} />
     <RuntimePill label="Analytics" value={lifecycle.analyticsCheckpointCount} />
+    <RuntimePill label="Metadata versions" value={metadataIntelligence.metadataVersionCount} />
+    <RuntimePill label="Comparisons" value={`${metadataIntelligence.readyComparisonCount}/${metadataIntelligence.comparisonCount}`} />
+    <RuntimePill label="Learning candidates" value={metadataIntelligence.learningCandidateCount} />
+    <RuntimePill label="Promoted" value={metadataIntelligence.promotedKnowledgeCount} />
     <RuntimePill label="Latest" value={titleCase(lifecycle.latestEventType || "no build event")} />
     <span className="ml-auto hidden items-center gap-1 text-[8px] font-black uppercase tracking-[0.06em] opacity-50 md:inline-flex">
      <GitBranch size={11} aria-hidden="true" />
