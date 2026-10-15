@@ -124,13 +124,15 @@ export interface StudioLabeledInputProps extends Omit<React.InputHTMLAttributes<
   label: string
   sizeVariant?: StudioControlSize
   level?: "l0" | "l1" | "l2"
+  /** Specimen variant; B adds the documented compact secondary-color focus stroke. */
+  variant?: "a" | "b"
 }
 /** Floating-label input composed from the canonical StudioTextInput primitive. */
 export const StudioLabeledInput = React.forwardRef<HTMLInputElement, StudioLabeledInputProps>(
-  ({ label, sizeVariant = "standard", level = "l1", className, style, id, ...props }, ref) => {
+  ({ label, sizeVariant = "standard", level = "l1", variant = "a", className, style, id, ...props }, ref) => {
     const generatedId = React.useId()
     const fieldId = id ?? `studio-labeled-input-${generatedId}`
-    return <div data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level}
+    return <div data-vt-primitive-id="141" data-vt-studio-field="floating-input" data-vt-control-level={level} data-vt-floating-variant={variant}
       className={["vt-studio-floating-field", "is-input", className].filter(Boolean).join(" ")} style={style}>
       <StudioTextInput ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
       <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
