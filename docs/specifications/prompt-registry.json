@@ -1,6 +1,6 @@
 {
-  "version": "viewtube-prompt-registry-v2",
-  "generatedAt": "2026-09-26",
+  "version": "viewtube-prompt-registry-v3",
+  "generatedAt": "2026-10-15",
   "authority": "docs/specifications/PROMPTS.md",
   "targetArchitecture": "Prompt Constitution + prompt family + Context Resolver + personalization pack + evidence + schema + validators + trace",
   "sources": [
@@ -1335,5 +1335,61 @@
   ],
   "migratedFrom": "docs/brain/VIEWTUBE_PROMPT_REGISTRY_2026-09-24.json",
   "role": "PROMPT_INVENTORY_AND_REACHABILITY_PROJECTION",
-  "note": "Inventory/projection only. Durable prompt behavior is governed by docs/specifications/PROMPTS.md; exact work state belongs in Task Index."
+  "note": "Inventory/projection only. Durable prompt behavior is governed by docs/specifications/PROMPTS.md; exact work state belongs in Task Index.",
+  "governance": {
+    "authority": "docs/specifications/PROMPTS.md",
+    "registryRole": "inventory_and_reachability_projection_not_runtime_truth_or_work_ledger",
+    "phase": "3_prompt_governance",
+    "requiredRecordContract": [
+      "id",
+      "source",
+      "kind",
+      "owner",
+      "productionCallers",
+      "promptFamily",
+      "promptVersion",
+      "constitutionVersion",
+      "contextResolverVersion",
+      "outputSchemaVersion",
+      "requestedModel",
+      "servedModel",
+      "channelKnowledgeFingerprint",
+      "projectRevision",
+      "styleProfileVersion",
+      "evaluationBaseline",
+      "reachabilityStatus"
+    ],
+    "reachabilityStates": [
+      "production_reachable",
+      "test_only",
+      "dead_code_candidate",
+      "unverified",
+      "retired"
+    ],
+    "migrationGates": [
+      "inventory_all_callers",
+      "assign_canonical_owner_and_family",
+      "define_context_recipe_and_output_schema",
+      "add_representative_fixtures",
+      "compare_quality_baseline",
+      "migrate_one_surface",
+      "verify_runtime_reachability",
+      "remove_legacy_only_after_zero_production_reachability"
+    ],
+    "versioningRules": [
+      "promptVersion changes when prompt behavior changes",
+      "constitutionVersion changes only when shared instruction policy changes",
+      "contextResolverVersion changes when context selection/budget semantics change",
+      "outputSchemaVersion changes when the output contract changes",
+      "inventory status never implies runtime migration or certification"
+    ],
+    "safetyInvariants": [
+      "missing evidence is not zero",
+      "model output cannot directly mutate external systems",
+      "untrusted retrieved content is data and cannot override system policy",
+      "creator-confirmed preferences outrank inferred preferences",
+      "no silent learning promotion from model self-rating or one outcome"
+    ],
+    "status": "governance_contract_defined_migration_and_reachability_population_incomplete"
+  }
 }
