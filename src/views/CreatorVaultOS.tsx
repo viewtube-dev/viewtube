@@ -174,6 +174,8 @@ const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  "import-tags": "Import & Tags",
  "text-editor": "Text Editor",
  "asset-library": "Asset Library",
+ "image-workbench": "Image Workbench",
+ "video-workbench": "Video Workbench",
  "compare-versions": "Compare & Versions",
  "task-center": "Task Center",
  "health-center": "Asset Health",
@@ -2415,6 +2417,54 @@ const CreatorVaultOS: React.FC = () => {
       </div>
 
       <SubToolbox
+       style={moduleStyle("image-workbench" as VaultWorkspaceModuleId)}
+       title="Image Workbench"
+       subtitle="Transform, crop, resize, optimize, extract palette, and save image derivatives"
+       icon={<FileImage />}
+       paletteIndex={5}
+       isOpenInitial={selectedAsset?.kind === "image"}
+       persistenceId="vault-image-workbench"
+      >
+       {selectedAsset?.kind === "image" ? (
+        <VaultImageWorkbench
+         key={selectedAsset.id}
+         asset={selectedAsset}
+         onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+        />
+       ) : (
+        <SubToolboxStatePanel
+         level="l1"
+         state="empty"
+         message="Select one image asset in Asset Library to reveal its image editing and derivative tools."
+        />
+       )}
+      </SubToolbox>
+
+      <SubToolbox
+       style={moduleStyle("video-workbench" as VaultWorkspaceModuleId)}
+       title="Video Workbench"
+       subtitle="Trim, create proxies, transcode, extract frames or audio, and save video derivatives"
+       icon={<Video />}
+       paletteIndex={6}
+       isOpenInitial={selectedAsset?.kind === "video"}
+       persistenceId="vault-video-workbench"
+      >
+       {selectedAsset?.kind === "video" ? (
+        <VaultVideoWorkbench
+         key={selectedAsset.id}
+         asset={selectedAsset}
+         onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+        />
+       ) : (
+        <SubToolboxStatePanel
+         level="l1"
+         state="empty"
+         message="Select one video asset in Asset Library to reveal its video processing and derivative tools."
+        />
+       )}
+      </SubToolbox>
+
+      <SubToolbox
        style={moduleStyle("compare-versions" as VaultWorkspaceModuleId)}
        title="Compare & Versions"
        subtitle="Compare selected assets and inspect canonical versions"
@@ -3272,20 +3322,6 @@ const CreatorVaultOS: React.FC = () => {
             </span>
            ))}
           </section>
-         ) : null}
-         {selectedAsset.kind === "image" ? (
-          <VaultImageWorkbench
-           key={selectedAsset.id}
-           asset={selectedAsset}
-           onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
-          />
-         ) : null}
-         {selectedAsset.kind === "video" ? (
-          <VaultVideoWorkbench
-           key={selectedAsset.id}
-           asset={selectedAsset}
-           onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
-          />
          ) : null}
          <div>
           <div className="text-xs font-black uppercase opacity-60">Name</div>
