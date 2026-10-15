@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 const styles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8");
@@ -130,6 +131,26 @@ test("floating-label presentations are variants inside the canonical input and t
   assert.ok(catalog.includes('<StudioTextArea variant="floating-label"'));
   assert.ok(completeCatalog.includes('<StudioTextInput variant="floating-label"'));
   assert.ok(completeCatalog.includes('<StudioTextArea variant="floating-label"'));
+});
+
+
+test("removed standalone labeled components have no remaining source references", () => {
+  const legacyNames = ["StudioLabeledInput", "StudioLabeledTextArea"];
+  const sourceFiles = [];
+  const walk = (directory) => {
+    for (const entry of readdirSync(directory)) {
+      const path = join(directory, entry);
+      if (statSync(path).isDirectory()) walk(path);
+      else if (/\\.(tsx?|jsx?)$/.test(path)) sourceFiles.push(path);
+    }
+  };
+  walk("src");
+  for (const path of sourceFiles) {
+    const source = readFileSync(path, "utf8");
+    for (const legacyName of legacyNames) {
+      assert.ok(!source.includes(legacyName), `${legacyName} remains in ${path}`);
+    }
+  }
 });
 
 test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
