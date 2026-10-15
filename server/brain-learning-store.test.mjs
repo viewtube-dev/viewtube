@@ -13,7 +13,7 @@ test("learning envelopes remain user/channel scoped and idempotent by type and r
   const outcome = { recordType: "brainOutcome", record: { id: "outcome-1", channelId: channelA, outcome: "completed" } };
   const evaluation = { recordType: "evaluation", record: { id: "evaluation-1", channelId: channelA, outcome: "positive" } };
 
-  assert.equal(await upsertPersistedBrainLearningRecords({ userId: userA, channelId: channelA, records: [outcome, evaluation, outcome] }), 3);
+  assert.equal(await upsertPersistedBrainLearningRecords({ userId: userA, channelId: channelA, records: [outcome, evaluation, outcome] }), 2);
   assert.equal(await upsertPersistedBrainLearningRecords({ userId: userB, channelId: channelA, records: [outcome] }), 1);
   assert.equal(await upsertPersistedBrainLearningRecords({ userId: userA, channelId: channelB, records: [outcome] }), 0);
 
