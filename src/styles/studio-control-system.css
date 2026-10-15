@@ -200,8 +200,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   [data-vt-studio-control] { transition-duration: .01ms !important; }
 }
 
-/* Shared floating-label fields. The label box is 25% smaller and overlaps the
-   black control border by its bottom quarter when lifted; component geometry stays canonical. */
+/* Shared floating-label fields. Resting labels retain full-size typography;
+   lifted labels smoothly scale to 80%, with the black border crossing the label box at 40% height. */
 .vt-studio-floating-field { --vt-studio-floating-label-size: 24px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
 .vt-studio-floating-field[data-size="compact"] { --vt-studio-floating-label-size: 18px; }
 .vt-studio-floating-field > [data-vt-studio-control="true"] { display:block; width:100%; }
@@ -221,10 +221,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   top:0; left:10px; padding:2.25px 4.5px; border-radius:3px;
   background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000;
   -webkit-text-stroke:.5px currentColor;
-  transform:translateY(-75%) scale(.75); transform-origin:left center;
+  transform:translateY(-40%) scale(.8); transform-origin:left center;
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-75%) scale(.75); transform-origin:left center; }
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-40%) scale(.8); transform-origin:left center; }
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 /* Compact B is an explicit alternate specimen: add a solid secondary-color stroke
    equal to the compact 2px focus width, with no offset or layout movement. */
@@ -237,11 +237,11 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-control-secondary: var(--pair-a, #36e0f6);
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) {
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: var(--vt-studio-control-outline-stroke, 1px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: var(--vt-studio-control-outline-stroke, 1px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
@@ -1497,6 +1497,10 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] > [data-vt-studio-button-icon] {
   width: 100%;
   height: 100%;
+}
+button[data-vt-studio-circle-icon-button="true"] svg {
+  width: calc(var(--vt-studio-control-icon-size, 38px) * .8);
+  height: calc(var(--vt-studio-control-icon-size, 38px) * .8);
 }
 
 /* Username Split-Left Input: the root owns the shared outline and inset strokes.
