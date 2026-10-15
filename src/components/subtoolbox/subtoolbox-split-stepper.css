@@ -5,10 +5,10 @@
   --vt-stepper-radius: 6px;
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  width: calc(var(--vt-stepper-height) * 3);
-  min-width: calc(var(--vt-stepper-height) * 3);
-  max-width: calc(var(--vt-stepper-height) * 3);
-  flex: 0 0 calc(var(--vt-stepper-height) * 3);
+  width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
+  min-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
+  max-width: calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
+  flex: 0 0 calc(var(--vt-stepper-height) + var(--vt-stepper-height) + var(--vt-stepper-height));
   height: var(--vt-stepper-height);
   min-height: var(--vt-stepper-height);
   box-sizing: border-box;
@@ -114,7 +114,7 @@
   width: calc(var(--vt-stepper-height) * .68);
   height: calc(var(--vt-stepper-height) * .68);
   max-width: 96%;
-  max-height: 96%;
+  max-height: none;
   stroke: currentColor;
   stroke-width: 3.2;
 }
