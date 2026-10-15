@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Evidence-gated candidate creation, explicit creator review, and promotion through the existing Channel Knowledge governance path are implemented with regression coverage. Current-head release gates and production-data certification remain pending.
+**Status:** Evidence-gated candidate creation, named creator review, five-independent-publication promotion gate, and promotion through the existing BrainMemoryClaims/Channel Knowledge governance path are implemented with regression coverage. Current-head release gates and production-data certification remain pending.
 
 ## Objective
 
@@ -58,3 +58,10 @@ Acceptance is a creator decision signal; publication is exposure evidence; analy
 - [x] Add regression tests for gating, scope, retry idempotency, review and promotion.
 - [ ] Verify the new tests and all release gates on the latest PR head.
 - [ ] Certify the complete production recommendation → creator decision → immutable publish snapshot → canonical analytics → evaluation → governed Channel Knowledge path with live data and cross-system retry safety.
+
+
+## Implementation update — 2026-10-15
+
+Promotion is now a distinct async operation, `promoteEvaluationLearningCandidateToChannelKnowledge`. It requires an approved candidate with a named reviewer, enabled channel personalization, and at least five distinct published videos with positive outcomes, available evidence, matching channel/project/source/recommendation/window, and comparable metrics. It captures a creator-confirmed analytics learning entry with all supporting evaluation/evidence IDs, uses the existing `promoteBrainClaim` path, and rebuilds affected context packs. It keeps `causalConclusion: null` and records the supporting IDs on the candidate.
+
+This remains descriptive-association learning. Cross-device durability, contradiction/supersession policy for this candidate family, and current-head CI certification are still open.
