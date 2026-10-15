@@ -239,8 +239,8 @@ test("confirmed Square Icon Button family catalogs every interaction effect at s
   for (const effect of ['animate sizeVariant="standard"', 'animate sizeVariant="compact"', 'effect="notification"', 'effect="rotated-toggle"', 'effect="flip"', 'effect="tooltip"', 'effect="morph"', 'effect="success"']) {
     assert.ok(squareFamily.includes(effect), `confirmed Square Icon Button family includes ${effect}`);
   }
-  assert.match(squareFamily, /44px standard · V1 primary fill/);
-  assert.match(squareFamily, /28px compact · V4/);
+  assert.match(squareFamily, /44px standard · variants 1–4/);
+  assert.match(squareFamily, /28px compact · variants 1–4/);
   assert.match(squareFamily, /StudioSquareIconButton · v1\/v2\/v3\/v4 \+ seven effects/);
   assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(styles, /@media \(max-width: 520px\)\s*\{[\s\S]*?\.vt-confirmed-square-effect-grid\s*\{\s*grid-template-columns: minmax\(0, 1fr\)/);
@@ -320,4 +320,8 @@ test("20 spectrum samples cover all 12 canonical palette stops", () => {
   for (const initial of ["A", "C", "E", "G", "I", "L", "N", "P", "S", "U", "W", "Y"]) {
     assert.ok(initials.has(initial), `spectrum gallery includes palette-stop sample ${initial}`);
   }
+});
+
+test("component descriptions above specimens stay on one compact line", () => {
+  assert.match(styles, /\\.vt-confirmed-family > p\\s*\\{[^}]*max-width:\\s*40ch[^}]*text-overflow:\\s*ellipsis[^}]*white-space:\\s*nowrap/s);
 });
