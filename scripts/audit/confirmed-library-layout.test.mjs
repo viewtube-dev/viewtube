@@ -343,3 +343,19 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 test("component descriptions above specimens stay on one compact line", () => {
   assert.match(styles, /\\.vt-confirmed-family > p\\s*\\{[^}]*max-width:\\s*40ch[^}]*text-overflow:\\s*ellipsis[^}]*white-space:\\s*nowrap/s);
 });
+
+
+test("floating labels use 80% text size only in the raised label box and align the border at 40%", () => {
+  assert.match(controlStyles, /\.vt-studio-floating-field > \.vt-studio-floating-field-label\s*\{[^}]*font-size:\s*var\(--vt-studio-floating-label-size\)[^}]*transition:[^}]*font-size/s);
+  assert.match(controlStyles, /\.vt-studio-floating-field > :is\(input, textarea\):focus \+ \.vt-studio-floating-field-label,[\s\S]*?font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
+  assert.match(controlStyles, /top:\s*0;[^}]*padding:\s*2\.25px\s+4\.5px\s+2\.25px;[^}]*transform:\s*translateY\(-40%\)/s);
+});
+
+test("floating-label B uses the same secondary focus color and focus outline width on field and label", () => {
+  assert.match(controlStyles, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][^]*?outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\) solid var\(--vt-studio-control-secondary/);
+  assert.match(controlStyles, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][^]*?\+ \.vt-studio-floating-field-label\s*\{[^}]*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\) solid var\(--vt-studio-control-secondary/s);
+});
+
+test("circle icon button stage is 80% of the shared square icon stage", () => {
+  assert.match(controlStyles, /button\[data-vt-studio-circle-icon-button="true"\][^]*?\[data-vt-studio-button-face\]\s*>\s*\[data-vt-studio-button-icon\]\s*\{[^}]*width:\s*80%[^}]*height:\s*80%/s);
+});
