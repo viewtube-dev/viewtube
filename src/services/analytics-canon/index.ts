@@ -59,3 +59,4 @@ export type {
  ComparableAnalyticsWindow,
  ResolvedWindowRange,
 } from "../analytics/windows"
+export { getCurrentCanonicalRows, getCurrentCanonicalMetricSummary } from "./currentRows"
