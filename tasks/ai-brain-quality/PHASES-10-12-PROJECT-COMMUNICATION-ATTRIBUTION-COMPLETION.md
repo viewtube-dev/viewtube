@@ -1,0 +1,66 @@
+# AI Brain phases 10–12 implementation receipt
+
+Date: 2026-10-15
+Branch: `brain-phases-10-12-project-comms-attribution`
+Target: `master/consolidated-feature-integration`
+Scope: project-centered phase context, creator communication as governed evidence, and explicit recommendation-to-learning attribution.
+
+## Phase 10 — Project-centered creation workflow
+
+Implemented:
+- `src/services/brain/BrainProjectLifecycle.ts` maps the canonical ContentBuild stage to a bounded lifecycle phase and relevant capabilities.
+- Canonical workflow blockers are preserved.
+- `BrainProjectContext.ts` adds the resolved lifecycle to the existing `AlgorithmProjectContext`; ContentBuild remains the stage owner.
+- Missing canonical ContentBuild data returns `insufficient_context` rather than guessing from UI labels.
+
+Acceptance still outstanding:
+- Connect relevant capabilities to the live Brain runtime/UI filtering.
+- Ensure Sidebar, Brain Hub, Studio Hub, and project tools supply the same canonical ContentBuild snapshot.
+- Verify route changes, stale visible context, archived projects, and workflow blockers in a running browser.
+
+## Phase 11 — Communication ingestion
+
+Implemented:
+- `src/services/brain/BrainCommunicationIngestion.ts` classifies creator communications into instruction, preference, correction, criticism, factual claim, goal, constraint, approval, rejection, experiment note, and style feedback.
+- `recordCreatorCommunicationEvidence` stores communication as an immutable `CREATOR_COMMUNICATION_CLASSIFIED` event in the existing Algorithm Intelligence ledger.
+- Stable channel + communication identity makes replays idempotent and rejects reuse of an ID for different text.
+- Event metadata explicitly says `durableMemoryPromoted: false` and `promotionRequiresGovernedReview: true`.
+- This path does not write directly to Channel Profile or validated knowledge.
+
+Acceptance still outstanding:
+- Wire chat turns, tool feedback, creator edits, approvals/rejections, and experiment notes to the ingestion function.
+- Review text minimization, consent, privacy and retention boundaries.
+- Verify durable persistence and server replay behavior.
+
+## Phase 12 — Recommendation and asset attribution
+
+Implemented:
+- `src/services/brain/BrainAttributionChain.ts` resolves a read-only chain from recommendation through creator decision, execution, publication, measured outcome, and learning candidate.
+- Links use same-channel explicit ancestry, source/event references, and exact stable identifiers; project co-membership or timestamp proximity alone never establishes a link.
+- Cross-channel recommendation lookup fails closed.
+- Incomplete chains enumerate missing stages; publication confirmation is not treated as performance evidence or causal proof.
+- Existing event, decision and publication ledgers remain the writers; no parallel attribution store was introduced.
+
+Acceptance still outstanding:
+- Ensure generation, selected final variants, ActionPackets, publishing transactions, analytics evaluations and learning writers consistently propagate shared stable IDs.
+- Surface attribution chains in live Brain/Studio workflows.
+- Verify against production lifecycle records and confirm no ambiguous joins.
+
+## Files added/updated
+
+- `src/services/brain/BrainProjectLifecycle.ts`
+- `src/services/brain/BrainProjectLifecycle.test.ts`
+- `src/services/brain/BrainCommunicationIngestion.ts`
+- `src/services/brain/BrainCommunicationIngestion.test.ts`
+- `src/services/brain/BrainAttributionChain.ts`
+- `src/services/brain/BrainAttributionChain.test.ts`
+- `src/services/brain/AlgorithmIntelligenceEventLedger.ts`
+- `src/services/brain/AlgorithmIntelligenceOrchestrator.ts`
+- `src/services/brain/BrainProjectContext.ts`
+- `src/services/brain/BrainProjectContext.test.ts`
+- `tasks/ai-brain-quality/plan.md`
+- `tasks/ai-brain-quality/todo.md`
+
+## Verification
+
+Regression tests have been authored but not executed during this session. Typecheck, full suite, production build, reachability/governance checks, and browser verification have not been executed. This is **implementation foundation complete, phases 10–12 not yet certified complete**. Do not claim production readiness until live wiring and verification gates pass.
