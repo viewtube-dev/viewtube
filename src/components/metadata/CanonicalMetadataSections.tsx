@@ -1,5 +1,5 @@
 import React from "react"
-import { StudioLabeledInput, StudioLabeledTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import { Upload, Image as ImageIcon, Sparkles, WandSparkles, Search, MapPin, ListVideo, Users, Clock3, Globe2, MessageSquare, Bot, Tags, FolderOpen, Plus } from "lucide-react"
 import { SubToolbox, ThumbnailMiniSubToolbox } from "../Toolbox"
 import {
@@ -207,7 +207,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         ) : null}
 
         <SubToolboxSection>
-          <StudioLabeledInput label={titleLabel} value={title} onChange={e => onTitleChange(e.target.value)} aria-label="Title" />
+          <StudioTextInput variant="floating-label" label={titleLabel} value={title} onChange={e => onTitleChange(e.target.value)} aria-label="Title" />
           {shouldShowActions("title") ? <FieldActions field="title" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
@@ -233,7 +233,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         <SecondaryControls placement="pre-description" {...{ visibility, showScheduledVisibility, publishAt, onPublishAtChange, audience, timestamps, location, community, aiUse, onVisibilityChange, onAudienceChange, onTimestampsChange, onLocationChange, onCommunityChange, onAiUseChange }} />
 
         <SubToolboxSection>
-          <StudioLabeledTextArea label={descriptionLabel} value={description} onChange={e => onDescriptionChange(e.target.value)} aria-label="Description" sizeVariant="standard" />
+          <StudioTextArea variant="floating-label" label={descriptionLabel} value={description} onChange={e => onDescriptionChange(e.target.value)} aria-label="Description" sizeVariant="standard" />
           {shouldShowActions("description") ? <FieldActions field="description" {...{ onGenerate, onRefine, onAnalyze }} /> : null}
         </SubToolboxSection>
 
