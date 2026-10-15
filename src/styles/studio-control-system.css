@@ -92,7 +92,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   transition: filter 150ms ease-out, transform 150ms ease-out, box-shadow 150ms ease-out;
 }
 
-button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice) { font-size: 24px; padding: 0 8px; }
+button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) { font-size: 24px; padding: 0 8px; }
 [data-vt-studio-button-icon] { display: grid; place-items: center; }
 
 [data-vt-studio-control][data-tone="neutral"] { --vt-studio-control-accent: #fff; }
@@ -1077,6 +1077,7 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
   width: max-content;
   min-width: 0;
   max-width: 100%;
+  padding: 0; /* The shell owns geometry; the inner face owns the 8px text inset. */
   flex: 0 1 auto;
 }
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {

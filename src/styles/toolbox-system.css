@@ -614,6 +614,16 @@
   font-weight:1000!important;
   text-transform:uppercase;
 }
+
+/* Canonical compact StudioButtons carry their own face, stroke and pseudo-shadow.
+   Do not let the legacy mini-action button skin add shell padding/border around that face. */
+.vt-mini-subtoolbox-actions>button[data-vt-studio-button="true"][data-size="compact"]{
+  width:max-content!important;
+  min-width:0!important;
+  padding:0!important;
+  border:0!important;
+  box-shadow:none!important;
+}
 .vt-mini-subtoolbox-content{
   padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter);
   background:#fff;
