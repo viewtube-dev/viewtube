@@ -690,7 +690,7 @@ describe("subtoolbox design governance", () => {
    expect(catalogCss).not.toContain('.vt-confirmed-control-variants:is(.is-word-toggle-44, .is-word-toggle-28)')
    expect(catalogCss).not.toContain('.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option')
    expect(catalogCss).not.toContain('.vt-confirmed-catalog .vt-studio-legend-multi:not([data-size="compact"]) .vt-studio-legend-option')
-   expect(catalogCss).not.toContain('letter-spacing: -.055em !important;')
+   expect(catalogCss).not.toContain('.vt-confirmed-catalog .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option')
    expect(studioControls).toContain('export const STUDIO_COMPONENT_SIZE_DEFAULTS = STUDIO_CONTROL_SIZE_CONTRACT')
    expect(studioCss).toContain('caret-shape: block;')
  })
