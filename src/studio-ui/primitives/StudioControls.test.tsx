@@ -387,6 +387,8 @@ describe("documented global-rule exception: Vault Spectrum Tags", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain(".vt-studio-spectrum-tag {")
     expect(css).toContain("height: 15px;")
+    expect(css).toContain("width: max-content;")
+    expect(css).toContain("max-width: 100%;")
     expect(css).toContain("border: 2px solid var(--vt-spectrum-tag-color);")
     expect(css).toContain("font-size: 8px;")
     expect(css).toContain("color-mix(in srgb, var(--vt-spectrum-tag-color) 35%, white)")
