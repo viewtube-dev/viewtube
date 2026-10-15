@@ -7,7 +7,7 @@ category: Publishing
 secondary_categories: YouTube Strategy, Creator Education
 audience: YouTube creators
 difficulty: Beginner to Intermediate
-estimated_read_time: 10–14 min
+estimated_read_time: 8–10 min
 production_date: 2026-10-13
 last_researched: 2026-10-15
 recommended_review_date: 2027-04-15
