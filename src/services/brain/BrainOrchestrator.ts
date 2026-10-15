@@ -300,6 +300,7 @@ export interface RunBrainTurnInput {
  currentResearcher?: typeof groundCurrentNicheResearch
  projectId?: string | null
  project?: Project | null
+ projects?: Project[]
  analyticsWindow?: CanonicalIntelligenceEvidenceBundle["selectedWindow"]
  visibleContext?: Record<string, unknown> | null
  artifactRefs?: string[]
