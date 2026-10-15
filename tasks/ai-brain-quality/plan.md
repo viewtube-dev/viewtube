@@ -146,3 +146,10 @@ The implementation and initial live wiring are committed on `brain-phases-10-12-
 ## Phase 3–4 certification gate
 
 This work is implemented as an additive registry/specification update and validator regression-test slice on `work/brain-quality-phases-3-4-2026-10-15`. It is **not certified complete** until the test and build evidence above is attached to the exact reviewed commit. The prompt registry's declared contract must not be confused with complete per-entry population or proven production migration.
+
+
+## Phase 10–12 closeout progress — 2026-10-15
+
+The current-base follow-up connects command-note evidence capture to the governed communication classifier and makes recommendation attribution inspectable in Brain Command Center. Both preserve explicit control boundaries and avoid inferring effectiveness or causality from publication. Key-vault storage access is also safe in SSR/restricted-storage contexts.
+
+Closeout remains blocked on stable-ID propagation through all production writers, project capability enforcement across surfaces, consent/retention and durable replay verification, and exact-head release gates. Once these gates are resolved, proceed to Wave 5 quality-loop optimization: task-profile-specific validation depth, deterministic task validators, evidence-backed critique for high-value outputs, package-level title/thumbnail/hook checks, and retry/revision cost controls.
