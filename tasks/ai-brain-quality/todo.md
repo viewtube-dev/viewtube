@@ -149,3 +149,16 @@
 - [ ] Verify full prompt/schema/context/model/evidence provenance on real production caller paths.
 - [ ] Finish live UI adoption, server-authoritative persistence/consent/retention, stable-ID propagation and production lifecycle validation noted in the individual phase sections.
 - [x] Typecheck, production build, and local browser smoke passed on the same release-gates run.\n- [ ] Full phase certification remains blocked: broader focused-contract and full-suite jobs fail on existing UI/Vault/Studio contract mismatches; `test:confirmed-library-layout` fails on stale catalog assertions; `lint:runtime` reports 2,239 repository-wide errors. Reconcile those baseline failures and rerun governance/reachability plus the complete suite before certification.
+
+
+## Follow-up implementation — provenance receipts and phase-10 contract fixtures (2026-10-15)
+
+- [x] Version the canonical context resolver (brain-context-resolution-v1).
+- [x] Add output-schema version, resolver version, evidence IDs, channel/project/ContentBuild scope, context budget, explicit model-identity availability, and repair outcome to Brain learning/turn receipts across success and fallback paths.
+- [x] Explicitly leave requested/served model values null while the generator does not expose the actual model identity; do not fabricate model provenance.
+- [x] Correct the project lifecycle test to assert the canonical ContentBuild stage name (package).
+- [x] Supply a canonical stage and workflow state in the project-context fixture; missing stage remains fail-closed in production.
+- [ ] Run test:brain-quality-loop, project lifecycle/context tests, typecheck, and release gates on this exact branch.
+- [ ] Confirm provider/model identity can be exposed by the actual Gemini adapter before filling requestedModel / servedModel.
+- [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
+- [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
