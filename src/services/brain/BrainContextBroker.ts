@@ -43,7 +43,7 @@ export const buildBrainContextPack = (input: {
  const analyticsScopeBlocked = Boolean(
   controls.allowAnalytics
   && input.evidenceQuality
-  && (input.evidenceQuality.scopeMatch === "mismatch" || input.evidenceQuality.scopeMatch === "unscoped"),
+  && (!requestedChannelId || input.evidenceQuality.scopeMatch === "mismatch" || input.evidenceQuality.scopeMatch === "unscoped" || input.evidenceQuality.scopeMatch === "not_requested"),
  )
  const system = clip(input.systemPrompt, 11_000)
  if (system.length < input.systemPrompt.length) omittedSections.push("system_overflow")
