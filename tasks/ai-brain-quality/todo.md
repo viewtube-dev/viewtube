@@ -58,3 +58,11 @@
 - The shared evidence contract and task-aware final context resolver are implemented on `brain-phase-0-2-evidence-context`.
 - Do not mark the work certified or merged until focused tests, typecheck, runtime lint, full suite, production build, and source-governance checks pass on the current target baseline.
 - Remaining Phase 2 gaps are explicit in the completion record: canonical Project lookup from `projectId`, full per-capability evidence requirements, token-based budgeting, and Sidebar/Brain Hub parity.
+
+
+## Phase 6–7 implementation branch — 2026-10-15
+
+- Implementation receipt: `tasks/ai-brain-quality/PHASES-6-7-PUBLICATION-OUTCOME-EVALUATION-COMPLETION.md`.
+- Publication identity receipts now bind the completed publish transaction to the verified YouTube video and approved snapshot hash; these receipts explicitly do not claim performance or causality.
+- Video-level canonical analytics now fail closed when the exact video row is missing; channel aggregates cannot be used as a substitute.
+- Certification remains pending: durable server persistence, real snapshot/baseline checks, production integration tests, and branch CI/typecheck/build.
