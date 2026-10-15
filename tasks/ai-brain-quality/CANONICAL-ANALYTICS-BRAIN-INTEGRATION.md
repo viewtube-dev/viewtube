@@ -1,6 +1,6 @@
 # Canonical Analytics Evidence → Brain Runtime Integration
 
-**Status:** Phases 0–5 implemented via PR #215; Phases 7–12 tracked in follow-up PR #217; latest-head release verification pending  
+**Status:** Phases 0–5 implemented via PR #215; Phases 7–12 implementation and evidence contracts are in follow-up PR #217; latest-head release verification pending  
 **Owner:** BrainRuntime + analytics-canon  
 **Branch:** `fix/brain-canonical-evidence-phases-3-5-2026-10-15`  
 **Pull request:** [#215](https://github.com/viewtube-dev/viewtube/pull/215)  
@@ -28,7 +28,7 @@ Baseline branch: `master/consolidated-feature-integration`. Work is isolated on 
 | Opportunity source convergence | Resolver currently accepts `AIBrainEvidencePack` for opportunity derivation | Opportunity evidence is not yet directly derived from canonical bundle datasets | Explicit follow-up for specialist/source convergence; do not claim complete |
 | Brain task/context integration | `BrainOrchestrator.ts`, `BrainContextBroker.ts`, `EvidenceIntelligenceResolver.ts` | Shared integration exists; quality was omitted for algorithm-only requests and unscoped context could remain visible | Implemented in Phases 3–4; certification pending |
 | Project/ContentBuild context | Creator Context resolver and bounded project context | Stale visible context could leak across project IDs when canonical project lookup missed | Implemented project identity guard and regression test in Phase 5 |
-| Recommendation → action → outcome lineage | Existing outcome/evaluation/learning owners | No end-to-end certification in this slice | Later phase |
+| Recommendation → action → outcome lineage | `BrainOutcomeLedger`, `assetOutcomes`, `PublishTransaction`, `viewTubeEvaluationLedger` | Phases 10–12 now preserve publication identity, canonical video-row evidence, matching checkpoint IDs, and evidence-gated/idempotent candidate lineage; durable cross-system promotion is not certified | Phase implementation added in PR #217; CI and production-account validation remain pending |
 | Capability coverage report | `scripts/governance/build-capability-coverage.mjs` | Generator currently initializes task/test/guide/verification refs as empty arrays | Governance generator needs a separate truthful metadata change; do not hand-edit generated report |
 
 ## Phase 1 — certify and honor the canonical boundary
