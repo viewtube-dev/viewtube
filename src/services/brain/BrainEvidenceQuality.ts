@@ -32,6 +32,8 @@ export interface BrainEvidenceQualityReport {
  sourceSnapshotId: string
  channelId: string | null
  selectedWindow: CanonicalIntelligenceEvidenceBundle["selectedWindow"]
+ requestedSectionIds: string[]
+ evaluatedDatasetIds: string[]
  scopeMatch: BrainEvidenceScopeMatch
  confidence: BrainEvidenceConfidence
  coverageRatio: number
@@ -102,7 +104,17 @@ export const buildBrainEvidenceQuality = (
  bundle: CanonicalIntelligenceEvidenceBundle,
  options: { expectedChannelId?: string | null } = {},
 ): BrainEvidenceQualityReport => {
- const datasets: BrainEvidenceDatasetQuality[] = bundle.datasets.map((dataset) => ({
+ const requestedSectionIds = [...bundle.requestedSectionIds]
+ const relevantDatasetIds = new Set(
+  requestedSectionIds.flatMap((sectionId) => [...(INTELLIGENCE_SECTION_DATASETS[sectionId] || [])]),
+ )
+ // Evaluate fitness against the datasets selected for this task, not every
+ // unrelated dataset in the 34-table catalog. Empty/unknown mappings retain
+ // the canonical API's all-datasets fallback semantics.
+ const relevantManifests = requestedSectionIds.length && relevantDatasetIds.size
+  ? bundle.datasets.filter((dataset) => relevantDatasetIds.has(dataset.id))
+  : bundle.datasets
+ const datasets: BrainEvidenceDatasetQuality[] = relevantManifests.map((dataset) => ({
   datasetId: dataset.id,
   status: dataset.status,
   epistemicState: epistemicStateFor(dataset.status),
@@ -148,6 +160,8 @@ export const buildBrainEvidenceQuality = (
   sourceSnapshotId: bundle.snapshotId,
   channelId: bundle.channelId,
   selectedWindow: bundle.selectedWindow,
+  requestedSectionIds,
+  evaluatedDatasetIds: datasets.map((dataset) => dataset.datasetId),
   scopeMatch,
   confidence: confidenceFor({
    coverageRatio,
