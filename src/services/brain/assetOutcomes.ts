@@ -75,6 +75,10 @@ export interface AssetOutcome {
  approvedSnapshotHash?: string
  publishedVideoId?: string
  publicationIdentity?: ContentBuildPublicationIdentity
+ actionPacketId?: string | null
+ workflowId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
  analyticsCheckpointIds?: string[]
  evidenceIds?: string[]
 }
@@ -326,6 +330,10 @@ export const linkAssetOutcomeToPublication = (input: {
   approvedSnapshotHash: identity.approvedSnapshotHash,
   publishedVideoId: identity.youtubeVideoId,
   publicationIdentity: identity,
+  actionPacketId: identity.actionPacketId || existing.actionPacketId || null,
+  workflowId: identity.workflowId || existing.workflowId || null,
+  recommendationId: identity.recommendationId || existing.recommendationId || null,
+  experimentId: identity.experimentId || existing.experimentId || null,
   analyticsCheckpointIds: [...new Set([...(existing.analyticsCheckpointIds || []), ...(input.analyticsCheckpointIds || [])])],
   evidenceIds: [...new Set([...(existing.evidenceIds || []), ...(input.evidenceIds || [])])],
  }
