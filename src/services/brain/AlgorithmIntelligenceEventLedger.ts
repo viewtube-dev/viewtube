@@ -96,12 +96,12 @@ const persistDurably = (events: AlgorithmIntelligenceEvent[]) => {
  }).catch(() => undefined)
 }
 
-const write = (events: AlgorithmIntelligenceEvent[]) => {
+const write = (events: AlgorithmIntelligenceEvent[], durableEvents: AlgorithmIntelligenceEvent[] | null = events) => {
  if (!canUseStorage()) return
  const bounded = events.slice(0, 2000)
  localStorage.setItem(STORAGE_KEY, JSON.stringify(bounded))
  window.dispatchEvent(new CustomEvent(ALGORITHM_INTELLIGENCE_EVENT_CHANGED, { detail: bounded }))
- persistDurably(bounded)
+ if (durableEvents) persistDurably(durableEvents)
 }
 
 export const recordAlgorithmIntelligenceEvent = (
@@ -125,7 +125,7 @@ export const recordAlgorithmIntelligenceEvent = (
   metadata: { ...(existing?.metadata || {}), ...(input.metadata || {}) },
   createdAt: existing?.createdAt || Date.now(),
  }
- write([event, ...events.filter((candidate) => candidate.id !== event.id)])
+ write([event, ...events.filter((candidate) => candidate.id !== event.id)], [event])
  return event
 }
 
@@ -162,7 +162,7 @@ export const upsertAlgorithmIntelligenceEvents = (incoming: AlgorithmIntelligenc
   } : event)
  })
  const next = [...byId.values()].sort((left, right) => right.createdAt - left.createdAt)
- write(next)
+ write(next, null)
  return incoming.length
 }
 
