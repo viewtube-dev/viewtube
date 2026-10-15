@@ -210,6 +210,12 @@ describe("deterministic analytics insights", () => {
    ["Browse", 10, 10],
   ])
   expect(result.insights.every((insight) => insight.evidenceRefs.includes("analytics:snapshot-traffic:traffic:views"))).toBe(true)
+  expect(buildTrafficSourceContributionInsights({
+   dataset: source,
+   metricKey: "ctr",
+   dimensionKey: "trafficSource",
+   sourceRowCount: 3,
+  }).limitations).toContain("Metric ctr requires denominator-aware aggregation; source contributions are unsupported for this metric.")
  })
 
  it("blocks incomplete traffic rows and zero denominators instead of fabricating shares", () => {
