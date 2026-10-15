@@ -162,3 +162,20 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+
+## Current closeout and next implementation order — 2026-10-15
+
+- [x] Make the key vault safe when browser storage is absent or blocked; add SSR/restricted-storage regression tests.
+- [x] Align the Play/Pause primitive regression assertion with the actual canonical label marker.
+- [x] Capture Brain Command Center command-note communication as governed evidence behind the existing per-channel Brain/personalization/learning controls, using the stable command-action ID.
+- [x] Surface channel-scoped recommendation → outcome → learning attribution in Brain Command Center through the existing read-only detail panel.
+- [ ] Run focused Brain, key-vault and Studio primitive tests on the exact branch head.
+- [ ] Complete Phase 2: canonical Project lookup by projectId; per-capability evidence requirements; model-aware token budgeting; Sidebar/Brain Hub/full-workspace context parity and isolation tests.
+- [ ] Complete Phase 3: populate provenance and verified production reachability for every reachable prompt/generator.
+- [ ] Complete Phase 4: verify prompt/schema/context/model/evidence/repair provenance on real production caller paths.
+- [ ] Finish Phase 10 lifecycle capability enforcement on every project/creation surface.
+- [ ] Finish Phase 11 ingestion for tool feedback, creator edits, approvals/rejections and experiment notes; verify consent, retention and server replay.
+- [ ] Finish Phase 12 stable-ID propagation across generation, selected variants, ActionPackets, publication, evaluation and governed learning; validate real lifecycle chains.
+- [ ] Run exact-head typecheck, runtime lint, focused contracts, full suite, production build, source governance/reachability and local browser smoke. Triage unrelated current integration failures rather than waiving them.
+- [ ] Only after these gates, move to the next Wave 5 quality-loop optimization plan: task-profile-specific quality levels, deterministic task validators, evidence-backed critique for high-value outputs, package-level title/thumbnail/hook evaluation, and retry/revision cost controls.
