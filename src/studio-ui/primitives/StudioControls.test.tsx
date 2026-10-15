@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSquareIconButton, StudioTextArea, StudioTextInput } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea, StudioTextInput } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -246,6 +246,42 @@ describe("canonical square icon button family", () => {
   })
 })
 
+
+describe("shared Studio icon-size comparison contract", () => {
+  it("supports all three icon sizes on both production primitives without changing button dimensions", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Current" iconSizeVariant="current" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Moderate" iconSizeVariant="moderate" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Large" iconSizeVariant="large" sizeVariant="compact" />
+        <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="moderate">Moderate split</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="large" heightVariant="28">Large compact split</StudioSplitLeftButton>
+      </>,
+    )
+    expect(html.match(/data-icon-size-variant="current"/g)).toHaveLength(1)
+    expect(html.match(/data-icon-size-variant="moderate"/g)).toHaveLength(2)
+    expect(html.match(/data-icon-size-variant="large"/g)).toHaveLength(2)
+  })
+
+  it("defines the requested icon dimensions while preserving standard and compact border geometry", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('data-icon-size-variant="moderate"][data-size="standard"] { --vt-studio-control-icon-size:34px')
+    expect(css).toContain('data-icon-size-variant="moderate"][data-size="compact"] { --vt-studio-control-icon-size:22px')
+    expect(css).toContain('data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px')
+    expect(css).toContain('data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px')
+    expect(css).toContain('--vt-studio-control-stroke:3px')
+    expect(css).toContain('--vt-studio-control-stroke:2px')
+  })
+
+  it("shows current, moderate, and large sizes for both square and split-left controls", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    for (const label of ["Current · 28px", "Moderate · 34px", "Large · 38px", "Current · 18px", "Moderate · 22px", "Large · 24px"]) {
+      expect(html).toContain(label)
+    }
+    expect(html).toContain('data-vt-library-component="StudioSquareIconButton"')
+    expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
+  })
+})
 
 describe("tactile button press accessibility and exclusion contract", () => {
   it("keeps keyboard focus visible and prevents disabled controls from depressing", () => {
