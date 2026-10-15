@@ -56,6 +56,19 @@ describe("GenerationWorkflow", () => {
    targetSlot: "title",
    mode: "new-option",
    generationRequest: prepared.request,
+   operationRecord: expect.objectContaining({
+    schemaVersion: 1,
+    operationId: prepared.request.id,
+    workflowId: `workflow:${build.id}`,
+    status: "running",
+    kind: "generation",
+    lineage: expect.objectContaining({
+     contentBuildId: build.id,
+     projectId: "project-1",
+     channelId: "channel-1",
+     evidenceIds: ["evidence:channel-profile:1"],
+    }),
+   }),
    contextManifest: prepared.contextManifest,
   })
  })
@@ -144,6 +157,19 @@ describe("GenerationWorkflow", () => {
    variantGroupId: "variant-group-1",
    relationshipIds: ["relation-1"],
    toolReceipt: receipt,
+   operationRecord: expect.objectContaining({
+    schemaVersion: 1,
+    operationId: prepared.request.id,
+    workflowId: `workflow:${build.id}`,
+    status: "succeeded",
+    lineage: expect.objectContaining({
+     contentBuildId: build.id,
+     toolReceiptId: receipt.id,
+     generationRecordId: "generation-1",
+     traceId: "trace-1",
+     assetIds: ["asset-script-1", "asset-title-1", "asset-title-2"],
+    }),
+   }),
   })
  })
 })
