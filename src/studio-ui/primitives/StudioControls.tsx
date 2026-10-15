@@ -440,9 +440,9 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
       if (previousBadgeValue.current !== badgeValue) setAnimationKey(key => key + 1)
       previousBadgeValue.current = badgeValue
     }, [badgeValue])
-    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "lock-unlock" || effect === "download-success"
+    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "lock-unlock"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
-    const isSuccess = effect === "success" && success
+    const isSuccess = (effect === "success" || effect === "download-success") && success
     const effectClass = effect === "standard" ? (animate ? "is-effect-pop" : undefined) : `is-effect-${effect}`
     const replayOnActivation = animate || ["notification", "pop-on-activation", "heart-pop", "bell-ring", "like", "refresh"].includes(effect)
     const tooltipId = React.useId()
@@ -517,7 +517,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         {effect === "tooltip" && tooltip ? (
           <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
         ) : null}
-        {effect === "success" && isSuccess && tooltip ? (
+        {(effect === "success" || effect === "download-success") && isSuccess && tooltip ? (
           <span id={successStatusId} role="status" aria-live="polite" aria-atomic="true" data-vt-square-success-label>{tooltip}</span>
         ) : null}
       </StudioButton>
