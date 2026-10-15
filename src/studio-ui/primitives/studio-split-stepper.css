@@ -64,7 +64,7 @@
 }
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button,
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.vt-studio-split-stepper.is-interacting { outline: 2px solid var(--pair-b, #fff); outline-offset: 2px; }
+.vt-studio-split-stepper.is-interacting { outline: var(--vt-split-stepper-stroke) solid var(--vt-studio-control-border, #000); outline-offset: 2px; }
 .vt-studio-split-stepper-rail {
   position: relative;
   display: grid;
@@ -115,7 +115,7 @@
   cursor: pointer;
   touch-action: none;
 }
-.vt-studio-split-stepper-rail svg { width: 68%; height: 68%; max-width: 90%; max-height: 90%; stroke: currentColor; stroke-width: 3.2; }
+.vt-studio-split-stepper-rail svg { width: 136%; height: 136%; max-width: none; max-height: none; overflow: visible; stroke: #000; color: #000; stroke-width: 3.2; }
 .vt-studio-split-stepper-rail button:hover:not(:disabled) { background: color-mix(in srgb, var(--pair-b, #fff) 88%, #000 12%); }
 .vt-studio-split-stepper-rail button:active:not(:disabled) { background: color-mix(in srgb, var(--pair-b, #fff) 75%, #000 25%); }
 .vt-studio-split-stepper-rail button:focus-visible { outline: 2px solid var(--pair-a, #000); outline-offset: -3px; z-index: 4; }
