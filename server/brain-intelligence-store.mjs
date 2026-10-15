@@ -139,11 +139,11 @@ export const listPersistedBrainLearningRecords = async ({ userId, channelId }) =
   await initBrainIntelligenceStore();
   if (!pool) return [...(memoryLearningRecords.get(scope(userId, channelId))?.values() || [])];
   const result = await pool.query(
-    `SELECT record FROM viewtube_brain_learning_records
+    `SELECT record_type AS "recordType", record FROM viewtube_brain_learning_records
      WHERE viewtube_user_id=$1 AND channel_id=$2 ORDER BY updated_at DESC LIMIT 20000`,
     [userId, channelId],
   );
-  return result.rows.map((row) => row.record);
+  return result.rows.map((row) => ({ recordType: row.recordType, record: row.record }));
 };
 
 export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, records }) => {
@@ -161,7 +161,7 @@ export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, r
   if (!pool) {
     const key = scope(userId, channelId);
     const map = memoryLearningRecords.get(key) || new Map();
-    rows.forEach((row) => map.set(`${row.recordType}:${row.recordId}`, { ...row.record, recordType: row.recordType }));
+    rows.forEach((row) => map.set(`${row.recordType}:${row.recordId}`, { recordType: row.recordType, record: row.record }));
     memoryLearningRecords.set(key, map);
     return rows.length;
   }
