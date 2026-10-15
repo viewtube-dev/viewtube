@@ -184,8 +184,10 @@ describe("subtoolbox design governance", () => {
   }
 
   expect(manager).toContain("SubToolboxVideoSelector")
-  expect(manager).toContain("StudioLabeledInput")
-  expect(manager).toContain("StudioLabeledTextArea")
+  const metadataFields = source("src/components/metadata/CanonicalMetadataSections.tsx")
+  expect(manager).toContain("CanonicalMetadataSections")
+  expect(metadataFields).toContain('<StudioTextInput variant="floating-label"')
+  expect(metadataFields).toContain('<StudioTextArea variant="floating-label"')
   expect(manager).toContain("MiniSubToolbox")
   expect(manager).toContain("SubToolboxTagEditor")
   expect(manager).not.toContain("SubToolboxMetric")
