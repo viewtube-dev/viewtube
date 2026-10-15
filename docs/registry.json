@@ -396,6 +396,26 @@
         "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md",
         "docs/brain/UNIVERSAL_TOOL_HANDOFFS_AND_SUGGESTED_CHAINS.md"
       ]
+    },
+    {
+      "id": "DOC-PRODUCT-PRODUCTION-HANDOFF-SPINE",
+      "path": "docs/product/studio-hub/05_PRODUCTION_HANDOFF_SPINE.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "production-handoff-workflow-integration",
+      "owner": "Studio Hub + ActionPacket / Workflow Convergence",
+      "productionDate": "2026-10-15",
+      "lastEdited": "2026-10-15",
+      "lastAuditedMainSha": null,
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/product/studio-hub/04_STUDIO_HUB_INTERACTIONS_WORKFLOWS_HANDOFFS_CONTRACTS.md",
+        "docs/specifications/TOOLBOX_PROMOTION_AND_WORKFLOW_CHAINS.md",
+        "docs/specifications/PROMPTS.md",
+        "docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md",
+        "docs/domains/BRAIN.md",
+        "docs/architecture/VIEWTUBE_PROJECTS_CONTENTBUILD_WORKFLOW_MASTER_RESOURCE.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
