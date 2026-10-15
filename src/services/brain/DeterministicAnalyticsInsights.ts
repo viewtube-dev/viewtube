@@ -286,7 +286,7 @@ export const buildPeriodComparisonInsights = (input: {
     blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} has no finite value in both periods.`)
     continue
    }
-   const evidenceKey = `${currentDataset.id}:${metric}`
+   const evidenceKey: string = `${currentDataset.id}:${metric}`
    const currentEvidence = currentEvidenceByMetric.get(evidenceKey)
    const baselineEvidence = baselineEvidenceByMetric.get(evidenceKey)
    if (!currentEvidence || !baselineEvidence) {
