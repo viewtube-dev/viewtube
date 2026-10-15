@@ -45,6 +45,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   const focusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = useRef(0)
   const heldDirection = useRef<-1 | 1>(1)
+  const cancelEditRef = useRef(false)
 
   useEffect(() => {
     if (!isEditing) setDraftValue(String(value))
@@ -80,7 +81,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
     valueRef.current = next
     setDraftValue(String(next))
     if (next !== previous) onValueChange(next)
-  }, [draftValue, max, min, onValueChange, value])
+  }, [draftValue, max, min, onValueChange])
 
   const scheduleRepeat = useCallback(() => {
     const elapsed = Date.now() - startedAt.current
@@ -129,7 +130,12 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
         onFocus={() => setIsEditing(true)}
         onChange={(event) => setDraftValue(event.currentTarget.value)}
         onBlur={() => {
-          commitDraft()
+          if (cancelEditRef.current) {
+            setDraftValue(String(valueRef.current))
+            cancelEditRef.current = false
+          } else {
+            commitDraft()
+          }
           setIsEditing(false)
         }}
         onKeyDown={(event) => {
@@ -138,7 +144,7 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
             event.currentTarget.blur()
           }
           if (event.key === "Escape") {
-            setDraftValue(String(valueRef.current))
+            cancelEditRef.current = true
             event.currentTarget.blur()
           }
         }}
