@@ -25,6 +25,7 @@ Added `src/services/MetadataLearningGovernance.ts`:
 - Candidates remain `pending-creator-review`; they are not automatically promoted into Brain knowledge.
 - Promotion requires explicit named creator approval, at least five independent metadata versions, and evidence references.
 - Candidate and promotion events preserve `interpretation: "descriptive-association-only"` and `causalConclusion: null`.
+- Metadata Master reads only creator-approved promotion events back into later generation context; pending candidates are never silently treated as Brain knowledge.
 
 ## Phase 7 — metadata operation and prompt provenance
 
