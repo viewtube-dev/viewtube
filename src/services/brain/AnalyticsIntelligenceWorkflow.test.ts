@@ -151,6 +151,23 @@ describe("Analytics intelligence workflow phases 5–8", () => {
     expect(result.causalConclusion).toBeNull()
   })
 
+  it("blocks outcome comparisons when explicit reporting periods overlap", () => {
+    const result = evaluateAnalyticsOutcome({
+      recommendation: recommendation(),
+      baseline: measurement(),
+      followUp: measurement({
+        value: 120,
+        snapshotId: "snapshot-after",
+        observedAt: "2026-10-15T00:00:00.000Z",
+        periodStartDate: "2026-09-10",
+        periodEndDate: "2026-10-07",
+      }),
+    })
+    expect(result.status).toBe("blocked")
+    expect(result.absoluteChange).toBeNull()
+    expect(result.blockedReason).toContain("non-overlapping")
+  })
+
   it("evaluates comparable snapshots and leaves zero-baseline percentage undefined", () => {
     const result = evaluateAnalyticsOutcome({
       recommendation: recommendation(),
