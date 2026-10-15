@@ -23,6 +23,8 @@ export interface BrainEvidenceClaim {
  projectId: string | null
  contentBuildId: string | null
  videoId: string | null
+ entityType: string | null
+ entityId: string | null
  claim: string
  metric: string | null
  value: number | string | boolean | null
@@ -72,6 +74,8 @@ export const projectEvidenceRecordToBrainClaim = (record: EvidenceRecord): Brain
   projectId: record.projectId || null,
   contentBuildId: record.contentBuildId || null,
   videoId: record.videoId || null,
+  entityType: record.entityType || null,
+  entityId: record.entityId || null,
   claim: record.metric || record.entityType || record.entityId || record.sourceRef,
   metric: record.metric || null,
   // Missing is represented as null; it is never coerced to zero.
@@ -114,7 +118,7 @@ export const assessBrainEvidenceScope = (
 }
 
 const claimKey = (claim: BrainEvidenceClaim): string =>
- [claim.channelId || "*", claim.projectId || "*", claim.videoId || "*", claim.metric || claim.claim, claim.timeframe?.kind || "*", claim.timeframe?.start || "*", claim.timeframe?.end || "*"].join("::")
+ [claim.channelId || "*", claim.projectId || "*", claim.videoId || "*", claim.entityType || claim.sourceId, claim.entityId || "*", claim.metric || claim.claim, claim.timeframe?.kind || "*", claim.timeframe?.start || "*", claim.timeframe?.end || "*"].join("::")
 
 export const summarizeBrainEvidenceHealth = (
  claims: BrainEvidenceClaim[],
