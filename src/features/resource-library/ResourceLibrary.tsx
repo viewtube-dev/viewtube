@@ -6,7 +6,10 @@ import { VT_SPECTRUM_PALETTE_06, getToolboxPaletteColors } from "../../styles/to
 import ResourceDocumentRenderer from "./ResourceDocumentRenderer"
 import {
   RESOURCE_LIBRARY_ENTRIES,
+  RESOURCE_LEARNING_PATHS,
   getResourceById,
+  normalizeResourceProgress,
+  searchResourceLibrary,
 } from "./resourceLibraryRegistry"
 import "./resource-library.css"
 
@@ -22,35 +25,60 @@ const canonicalSpectrumStyle = Object.fromEntries(
   VT_SPECTRUM_PALETTE_06.map((color, index) => [`--vt-spectrum-${index}`, color]),
 ) as React.CSSProperties
 
+const RESOURCE_PROGRESS_STORAGE_KEY = "viewtube:resource-library:completed:v1"
+
+const getResourceWorkflowLinks = (resource: (typeof RESOURCE_LIBRARY_ENTRIES)[number]) => {
+  const tags = resource.tags.join(" ").toLocaleLowerCase()
+  if (/copyright|licensing|rights|synthetic-media/.test(tags)) {
+    return [{ label: "Open Creator Vault", href: "/vault" }, { label: "Open Publisher", href: "/video-publisher" }]
+  }
+  if (/analytics|retention|traffic-sources|metrics|data-quality/.test(tags) || resource.category === "Analytics") {
+    return [{ label: "Open Analytics", href: "/analytics" }, { label: "Open AI Brain", href: "/ai-brain" }]
+  }
+  if (/planning|content-calendar|live-streaming|preflight/.test(tags)) {
+    return [{ label: "Open Projects", href: "/projects" }, { label: "Open Studio", href: "/studio" }]
+  }
+  if (/thumbnail|packaging|click-through-rate|metadata|visibility/.test(tags)) {
+    return [{ label: "Open Publisher", href: "/video-publisher" }, { label: "Open Studio", href: "/studio" }]
+  }
+  if (/community|comments|audience|subscribers|returning-viewers/.test(tags) || resource.category === "Audience") {
+    return [{ label: "Open Studio", href: "/studio" }, { label: "Open AI Brain", href: "/ai-brain" }]
+  }
+  return [{ label: "Open Studio", href: "/studio" }, { label: "Open Projects", href: "/projects" }]
+}
+
 const ResourceLibrary: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedResource = getResourceById(searchParams.get("resource"))
   const [query, setQuery] = React.useState("")
   const [category, setCategory] = React.useState("All")
+  const [selectedPathId, setSelectedPathId] = React.useState("")
+  const [completedResources, setCompletedResources] = React.useState<string[]>(() => {
+    if (typeof window === "undefined") return []
+    try {
+      return normalizeResourceProgress(JSON.parse(window.localStorage.getItem(RESOURCE_PROGRESS_STORAGE_KEY) || "[]"))
+    } catch {
+      return []
+    }
+  })
+
+  React.useEffect(() => {
+    try {
+      window.localStorage.setItem(RESOURCE_PROGRESS_STORAGE_KEY, JSON.stringify(completedResources))
+    } catch {
+      // Private browsing or storage policy may block persistence; in-session progress still works.
+    }
+  }, [completedResources])
 
   const categories = React.useMemo(
     () => ["All", ...Array.from(new Set(RESOURCE_LIBRARY_ENTRIES.map((resource) => resource.category)))],
     [],
   )
 
-  const filteredResources = React.useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase()
-    return RESOURCE_LIBRARY_ENTRIES.filter((resource) => {
-      if (category !== "All" && resource.category !== category) return false
-      if (!normalizedQuery) return true
-      const haystack = [
-        resource.title,
-        resource.shortTitle,
-        resource.description,
-        resource.category,
-        ...resource.secondaryCategories,
-        ...resource.tags,
-      ]
-        .join(" ")
-        .toLocaleLowerCase()
-      return normalizedQuery.split(/\s+/).every((term) => haystack.includes(term))
-    })
-  }, [category, query])
+  const filteredResources = React.useMemo(
+    () => searchResourceLibrary(query, { category, learningPathId: selectedPathId || undefined }),
+    [category, query, selectedPathId],
+  )
 
   const selectedResource =
     requestedResource && filteredResources.some((resource) => resource.id === requestedResource.id)
@@ -97,6 +125,43 @@ const ResourceLibrary: React.FC = () => {
           </div>
         </section>
 
+        <section className="vt-resource-learning-paths" aria-labelledby="vt-resource-paths-title">
+          <div className="vt-resource-section-heading">
+            <div>
+              <span>GUIDED LEARNING</span>
+              <h2 id="vt-resource-paths-title">Choose an outcome</h2>
+            </div>
+            <button type="button" className={`vt-resource-path-reset ${selectedPathId ? "" : "is-active"}`}
+              onClick={() => setSelectedPathId("")} aria-pressed={!selectedPathId}>All resources</button>
+          </div>
+          <div className="vt-resource-path-grid">
+            {RESOURCE_LEARNING_PATHS.map((path, pathIndex) => {
+              const completedCount = path.resourceIds.filter((id) => completedResources.includes(id)).length
+              const active = selectedPathId === path.id
+              return (
+                <button key={path.id} type="button"
+                  className={`vt-resource-path-card ${active ? "is-active" : ""}`}
+                  style={getResourcePaletteStyle(pathIndex % 12)}
+                  onClick={() => {
+                    setSelectedPathId(active ? "" : path.id)
+                    setCategory("All")
+                    setQuery("")
+                  }}
+                  aria-pressed={active}>
+                  <span className="vt-resource-path-meta">{path.level} · {path.resourceIds.length} guides</span>
+                  <strong>{path.title}</strong>
+                  <span className="vt-resource-path-description">{path.description}</span>
+                  <span className="vt-resource-path-outcome">{path.outcome}</span>
+                  <span className="vt-resource-path-progress">
+                    <span><i style={{ width: `${(completedCount / path.resourceIds.length) * 100}%` }} /></span>
+                    <small>{completedCount} of {path.resourceIds.length} completed</small>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+
         <div className="vt-resource-library-layout">
           <aside className="vt-resource-library-index">
             <SubToolbox
@@ -106,7 +171,7 @@ const ResourceLibrary: React.FC = () => {
               unmountOnClose={false}
               contentClassName="vt-resource-index-content"
               persistenceId="resource-library:index"
-              helpText="Search and filter published Resource Library documents."
+              helpText="Search by creator question, task, topic, or metric. Select a learning path to narrow the index."
             >
               <label className="vt-resource-search-field">
                 <span>SEARCH</span>
@@ -114,7 +179,7 @@ const ResourceLibrary: React.FC = () => {
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Recommendations, analytics, Shorts..."
+                  placeholder="e.g. why am I not getting views?"
                 />
               </label>
 
@@ -128,6 +193,12 @@ const ResourceLibrary: React.FC = () => {
               </label>
 
               <div className="vt-resource-index-results">
+                {selectedPathId ? (
+                  <div className="vt-resource-active-path">
+                    <strong>{RESOURCE_LEARNING_PATHS.find((path) => path.id === selectedPathId)?.title}</strong>
+                    <button type="button" onClick={() => setSelectedPathId("")}>Clear path</button>
+                  </div>
+                ) : null}
                 {filteredResources.map((resource) => {
                   const active = selectedResource?.id === resource.id
                   return (
@@ -144,6 +215,7 @@ const ResourceLibrary: React.FC = () => {
                         <span>{resource.category}</span>
                         <strong>{resource.shortTitle}</strong>
                         <small>{resource.readTime} · {resource.difficulty}</small>
+                        {completedResources.includes(resource.id) ? <em className="vt-resource-complete-mark">COMPLETED</em> : null}
                       </div>
                     </button>
                   )
@@ -162,7 +234,33 @@ const ResourceLibrary: React.FC = () => {
 
           <main className="vt-resource-library-reader">
             {selectedResource ? (
-              <ResourceDocumentRenderer resource={selectedResource} />
+              <>
+                <div className="vt-resource-reader-actions">
+                  <button type="button"
+                    className={`vt-resource-completion-toggle ${completedResources.includes(selectedResource.id) ? "is-complete" : ""}`}
+                    onClick={() => setCompletedResources((current) => current.includes(selectedResource.id)
+                      ? current.filter((id) => id !== selectedResource.id)
+                      : [...current, selectedResource.id])}
+                    aria-pressed={completedResources.includes(selectedResource.id)}>
+                    <span aria-hidden="true">{completedResources.includes(selectedResource.id) ? "✓" : "○"}</span>
+                    {completedResources.includes(selectedResource.id) ? "Completed · mark for review" : "Mark guide complete"}
+                  </button>
+                  <span className="vt-resource-progress-note">Progress is saved in this browser when storage is available.</span>
+                </div>
+                <ResourceDocumentRenderer resource={selectedResource} />
+                <section className="vt-resource-workflow-links" aria-labelledby="vt-resource-apply-title">
+                  <div>
+                    <span>PUT IT INTO PRACTICE</span>
+                    <h2 id="vt-resource-apply-title">Apply in ViewTube</h2>
+                    <p>Continue in a related workspace. These links open the workspace; they do not automatically copy guide content or change project data.</p>
+                  </div>
+                  <div className="vt-resource-workflow-link-row">
+                    {getResourceWorkflowLinks(selectedResource).map((link) => (
+                      <a key={link.href} href={link.href}>{link.label} <span aria-hidden="true">↗</span></a>
+                    ))}
+                  </div>
+                </section>
+              </>
             ) : (
               <div className="vt-resource-empty vt-resource-empty--reader">
                 <BookOpenText aria-hidden="true" />
