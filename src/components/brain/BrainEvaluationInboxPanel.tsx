@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { AlertTriangle, CheckCircle2, Clock3, CloudUpload, GitBranch, RefreshCw, Sparkles } from "lucide-react"
 import { buildBrainEvaluationInbox, type BrainEvaluationInboxItem } from "../../services/brain/BrainEvaluationInbox"
-import { ALGORITHM_INTELLIGENCE_EVENT_CHANGED } from "../../services/brain/AlgorithmIntelligenceEventLedger"
+import { ALGORITHM_INTELLIGENCE_EVENT_CHANGED, listAlgorithmIntelligenceEvents } from "../../services/brain/AlgorithmIntelligenceEventLedger"
+import { buildBrainAttributionChain } from "../../services/brain/BrainAttributionChain"
 import { BRAIN_OUTCOME_EVENT } from "../../services/brain/BrainOutcomeLedger"
 import { reviewAlgorithmLearningCandidate } from "../../services/brain/AlgorithmLearningGovernance"
 import { captureCanonicalLifecycleObservations } from "../../services/brain/AlgorithmLifecycleObservationStore"
@@ -32,6 +33,7 @@ const iconFor = (item: BrainEvaluationInboxItem) => {
 export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; maximumItems?: number; compact?: boolean }> = ({ channelId, maximumItems = 6, compact = false }) => {
  const [revision, setRevision] = useState(0)
  const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
+ const [selectedRecommendationId, setSelectedRecommendationId] = useState<string | null>(null)
  const [syncingHistory, setSyncingHistory] = useState(false)
  const [historySyncStatus, setHistorySyncStatus] = useState<string | null>(null)
  const [promotingCandidateId, setPromotingCandidateId] = useState<string | null>(null)
@@ -81,6 +83,17 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
  }, [channelId])
 
  const inbox = useMemo(() => channelId ? buildBrainEvaluationInbox({ channelId, maximum: Math.max(20, maximumItems * 4) }) : null, [channelId, maximumItems, revision])
+ const intelligenceEvents = useMemo(() => channelId ? listAlgorithmIntelligenceEvents({ channelId }) : [], [channelId, revision])
+ const recommendations = useMemo(
+  () => intelligenceEvents.filter((event) => event.kind === "RECOMMENDATION_CREATED"),
+  [intelligenceEvents],
+ )
+ const activeRecommendationId = recommendations.some((event) => event.id === selectedRecommendationId)
+  ? selectedRecommendationId
+  : recommendations[0]?.id || null
+ const attribution = useMemo(() => channelId && activeRecommendationId
+  ? buildBrainAttributionChain({ channelId, recommendationEventId: activeRecommendationId, events: intelligenceEvents })
+  : null, [channelId, activeRecommendationId, intelligenceEvents])
  const items = inbox?.items.slice(0, maximumItems) || []
 
  const review = (item: BrainEvaluationInboxItem, decision: "hold" | "reject" | "approve_for_profile_review") => {
@@ -140,6 +153,34 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
  if (!channelId) return null
  return (
   <div className="grid gap-2">
+   <section className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white" aria-label="Recommendation attribution chain">
+    <div className="flex items-center justify-between gap-2 border-b-[2px] border-black bg-[#36E0F6] px-3 py-2">
+     <div className="min-w-0"><h3 className="text-[10px] font-[1000] uppercase leading-4 tracking-[0.1em]">Outcome Attribution</h3>{!compact ? <p className="text-[9px] font-bold leading-3 text-black/60">Trace recommendation → creator decision → execution → publication → measured outcome → governed learning.</p> : null}</div>
+     <span className="rounded-[5px] border-[2px] border-black bg-white px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{attribution?.status === "complete" ? "Complete" : attribution ? "Incomplete" : "No recommendation"}</span>
+    </div>
+    {recommendations.length ? <div className="grid gap-2 p-2">
+     <label className="grid gap-1 text-[8px] font-[1000] uppercase tracking-[0.06em]">Recommendation
+      <select aria-label="Select recommendation attribution chain" value={activeRecommendationId || ""} onChange={(event) => setSelectedRecommendationId(event.target.value)} className="min-h-8 w-full rounded-[6px] border-[2px] border-black bg-white px-2 text-[10px] font-bold normal-case tracking-normal">
+       {recommendations.slice(0, 50).map((event) => <option key={event.id} value={event.id}>{event.title || event.id}</option>)}
+      </select>
+     </label>
+     {attribution ? <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+      {([
+       ["Decision", attribution.decisions.length, "decision"],
+       ["Execution", attribution.executions.length, "execution"],
+       ["Publication", attribution.publications.length, "publication"],
+       ["Measured outcome", attribution.outcomes.length, "outcome"],
+       ["Learning", attribution.learningCandidates.length, "learning"],
+      ] as const).map(([label, count, stage]) => <div key={stage} className="rounded-[6px] border-[2px] border-black bg-[#f7f7f4] px-2 py-1.5">
+       <div className="text-[8px] font-[1000] uppercase tracking-[0.06em]">{label}</div>
+       <div className="text-[15px] font-[1000] leading-5">{count}</div>
+       <div className="text-[7px] font-black uppercase text-black/55">{count ? "Linked evidence" : "Missing evidence"}</div>
+      </div>)}
+     </div> : null}
+     {attribution?.unresolvedStages.length ? <p className="rounded-[6px] border-[2px] border-[#FFDA47] bg-[#FFF8D6] p-2 text-[9px] font-bold leading-4">Missing stages: {attribution.unresolvedStages.join(", ")}.</p> : null}
+     {attribution?.limitations.map((limitation) => <p key={limitation} className="text-[8px] font-bold leading-3 text-black/55">{limitation}</p>)}
+    </div> : <p className="p-3 text-[9px] font-bold leading-4 text-black/55">No recommendation events are recorded for this channel yet. The panel will populate as explicit lineage events arrive.</p>}
+   </section>
    <section className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white" aria-label="Brain evaluation inbox">
     <div className="flex items-center justify-between gap-2 border-b-[2px] border-black bg-[#FFDA47] px-3 py-2">
      <div className="min-w-0"><h3 className="text-[10px] font-[1000] uppercase leading-4 tracking-[0.1em]">Evaluation Inbox</h3>{!compact ? <p className="text-[9px] font-bold leading-3 text-black/60">What worked, what is overdue, and what still needs evidence.</p> : null}</div>
