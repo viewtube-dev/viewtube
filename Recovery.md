@@ -870,3 +870,23 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Phase 2 result:** Shared adaptive mode/capability registry and host are integrated; video/audio processing are not advertised as available without explicit processor evidence.
 - **Verification:** GitHub writes accepted. Focused tests, typecheck, build, and browser verification have not yet been run in this environment; PR CI/read-back is required before certification.
 - **Next action:** Inspect the PR checks, repair any branch-introduced failures, and verify all changed files against the current target head before merge.
+
+
+#### LOG-ID: REC-20261015-vault-phases-3-4-5-6-001
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Agent:** ViewTube Vault Workbench implementation agent
+- **Round:** 1
+- **Category:** VAULT / INSPECTION / OPERATION RECEIPTS / MEDIA / GOVERNANCE
+- **Action:** Implemented the next four Vault Workbench phases on the existing PR branch.
+- **Target:** `master/consolidated-feature-integration`
+- **Branch:** `vault/phases-0-1-2-workbench`
+- **Artifacts:** `docs/vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md`; `docs/Vault.md`; inspection, operation-ledger, media-preflight, and review/governance services and tests.
+- **Phase 3:** Added read-only normalized asset inspection; integrated technical metadata, lineage, protected-state and actionable findings into the Inspector. Existing canonical manual/smart collections, search, filters, custom fields, and media metadata services remain the organization/inspection backbone.
+- **Phase 4:** Added a bounded operation receipt ledger with validated transitions, input/output asset IDs, parameters, errors and receipts; wired image/video derivative saves and displayed recent receipts in the Inspector.
+- **Phase 5:** Added media-operation preflight for supported media kind, duplicate/missing IDs, selection count, 64 MB known source limit and non-destructive derivative semantics; wired image/video workbenches to preflight before execution. Existing video processor submits to `/api/media/compress-analysis?vaultOperation=1`.
+- **Phase 6:** Added stable field-level metadata comparison, rights/expiry/restriction findings, and an explicit metadata-suggestion proposal/acceptance contract that rejects protected/provenance mutations. Integrated rights findings and full metadata differences into the Inspector/Compare surfaces.
+- **Hard limits:** Operation ledger is browser-localStorage, not a server audit log or cross-device queue. Batch planning is not batch execution. Video processor deployment health/FFmpeg and persistent server storage require runtime verification. Proposal contract does not provide an AI model; vision/suggested-tag and arbitrary local-file transcription integrations remain incomplete. Server-side account/workspace authorization remains blocked.
+- **Status:** IMPLEMENTED / CI VERIFICATION PENDING; not merged or release-certified.
+- **Verification:** Source and tests were written through GitHub. No local test/typecheck/build/browser run is claimed. Exact-head CI and merged-target read-back are required before certification.
+- **Next action:** Review latest PR CI; fix branch-introduced failures; verify latest changed files and then continue the remaining authorization, server-backed receipt, processor-health, batch-execution and AI-provider work.
