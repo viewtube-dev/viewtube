@@ -16,7 +16,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   letterSpacing: "-0.035em",
   lineHeight: 0.86,
   shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
-  focusOutline: "Text inputs and text areas use a 3px standard / 2px compact focus outline at 0px offset plus a secondary-color 1.5px / 1px focus accent; focused text stroke follows text color.",
+  focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
     sizeFamily: "Inherit global standard/compact height, border stroke, corner radius, font family, font weight, text size, text transform, letter spacing, and line height; textareas override only multiline surface and reading metrics.",
     defaultMode: {
@@ -34,9 +34,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "global standard/compact focus width: 3px / 2px",
+      focusOutlineWidth: "visible secondary-color accent box shadow: 3px standard / 2px compact (last live audit)",
       focusOutlineOffset: "0px for both sizes",
-      outlineStrokeWidth: "1.5px standard / 1px compact (half the current border width)",
+      outlineStrokeWidth: "computed CSS outline measured 1px in the last live audit; reconcile with declared token before visual certification",
       outlineShadowColor: "secondary",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
