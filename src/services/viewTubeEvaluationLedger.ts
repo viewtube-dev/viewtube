@@ -1,5 +1,5 @@
 import type { ContentBuildPublicationIdentity } from "./asset-engine/contracts"
-import { listContentBuildEvents } from "./asset-engine/ContentBuildRepository"
+import { appendContentBuildEvent, listContentBuildEvents } from "./asset-engine/ContentBuildRepository"
 import { linkAssetOutcomeToPublication, listAssetOutcomes } from "./brain/assetOutcomes"
 import { getCurrentCanonicalIntelligenceDatasetRows, getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "./analytics-canon"
 import { captureAIBrainLearningEvent } from "./aiBrainSelfImprovement"
