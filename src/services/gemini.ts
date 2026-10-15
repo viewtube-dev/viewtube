@@ -319,16 +319,22 @@ declare global {
  }
 }
 
+// Browser storage is optional in SSR, worker, and Node test contexts.
+const getBrowserStorage = (): Storage | null => {
+ try { return typeof localStorage === "undefined" ? null : localStorage } catch { return null }
+}
+
 // Helper to get the AI settings
 const getAiSettings = () => {
+ const storage = getBrowserStorage()
  const customKey =
   getVaultKey("gemini") ||
-  localStorage.getItem("yt_api_key") ||
-  localStorage.getItem("vt_gemini_api_key") ||
-  localStorage.getItem("gemini_api_key") ||
-  localStorage.getItem("google_api_key") ||
+  storage?.getItem("yt_api_key") ||
+  storage?.getItem("vt_gemini_api_key") ||
+  storage?.getItem("gemini_api_key") ||
+  storage?.getItem("google_api_key") ||
   ""
- const modelPreference = localStorage.getItem("vt_ai_model") || "gemini-3.1-flash"
+ const modelPreference = storage?.getItem("vt_ai_model") || "gemini-3.1-flash"
  return { customKey, modelPreference }
 }
 
@@ -555,7 +561,7 @@ export const getAiClient = () => {
     let isAuthenticated = unifiedSnapshot?.authentication.status === "authenticated"
     if (!isUnifiedAccountServerEnabled()) {
      try {
-       const authStateRaw = localStorage.getItem("vt_auth_state")
+       const authStateRaw = getBrowserStorage()?.getItem("vt_auth_state") || null
        const authState = authStateRaw ? JSON.parse(authStateRaw) : {}
        isAuthenticated = Boolean((authState as { isAuthenticated?: unknown }).isAuthenticated)
      } catch {
