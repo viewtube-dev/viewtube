@@ -2372,6 +2372,16 @@ button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-he
 button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-pop-on-activation[data-pop="true"] svg path {
   animation: vt-studio-heart-fill 520ms ease-out both;
 }
+button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::after,
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  border-radius: inherit;
+  pointer-events: none;
+  animation: vt-studio-square-ripple 520ms ease-out both;
+}
 button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-icon-current] svg {
   transform-origin: 50% 12%;
   animation: vt-studio-bell-ring 620ms ease-in-out;
@@ -2384,6 +2394,21 @@ button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"]::
   border-radius: inherit;
   pointer-events: none;
   animation: vt-studio-square-ripple 520ms ease-out both;
+}
+button[data-vt-studio-icon-button="true"] [data-vt-square-alert-dot] {
+  position: absolute;
+  z-index: 4;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  pointer-events: none;
+}
+button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-alert-dot] {
+  animation: vt-studio-square-pop 260ms cubic-bezier(.2,.8,.2,1);
 }
 button[data-vt-studio-icon-button="true"].is-effect-like[data-pop="true"] [data-vt-square-icon-current] svg {
   animation: vt-studio-like-pop 280ms cubic-bezier(.2,.8,.2,1);
@@ -2425,7 +2450,7 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
 }
 @keyframes vt-studio-square-ripple {
   from { opacity: .95; transform: scale(.86); border-width: 3px; }
-  to { opacity: 0; transform: scale(1.22); border-width: 1px; }
+  to { opacity: 0; transform: scale(1.22); border-width: 3px; }
 }
 @keyframes vt-studio-like-pop {
   0%, 100% { transform: scale(1); }
@@ -2436,4 +2461,13 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   from { transform: rotate(0) scale(1); }
   60% { transform: rotate(300deg) scale(1.08); }
   to { transform: rotate(360deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::after,
+  button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::after,
+  button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"]::after,
+  button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-alert-dot] {
+    animation: none !important;
+  }
 }
