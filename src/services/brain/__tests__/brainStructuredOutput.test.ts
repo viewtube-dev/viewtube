@@ -128,4 +128,43 @@ describe("structured model output -> CreatorBrainResponse", () => {
   const response = fromStructuredOutput(output, snapshot)
   expect(response.modules?.[0]?.data).toBeUndefined()
  })
+
+ it("fails closed when the model output mode does not match the requested task", () => {
+  const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
+  const response = fromStructuredOutput(baseOutput({
+   mode: "analytics_diagnosis",
+   keyInsight: "The channel has a clear opportunity.",
+   body: "Review the latest videos.",
+  }), snapshot)
+
+  const evaluation = validateBrainResponse({
+   response,
+   snapshot,
+   expectedMode: "creator_asset_draft",
+  })
+
+  expect(evaluation.passed).toBe(false)
+  expect(evaluation.repairReasons.some((reason) => reason.includes("does not match"))).toBe(true)
+ })
+
+ it("requires audience insight answers to include a finding, usable language, and an evidence boundary", () => {
+  const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
+  const incomplete = fromStructuredOutput(baseOutput({
+   mode: "audience_insight",
+   keyInsight: "Your audience is interested in restoration.",
+   body: "This could be a useful direction.",
+   actions: ["Make more videos."],
+  }), snapshot)
+
+  const evaluation = validateBrainResponse({
+   response: incomplete,
+   snapshot,
+   expectedMode: "audience_insight",
+  })
+
+  expect(evaluation.passed).toBe(false)
+  expect(evaluation.repairReasons).toContain(
+   "Answer the audience-language task with an audience finding, concrete language guidance, and an evidence boundary.",
+  )
+ })
 })
