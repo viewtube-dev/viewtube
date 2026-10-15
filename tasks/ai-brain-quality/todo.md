@@ -155,10 +155,10 @@
 
 - [x] Version the canonical context resolver (brain-context-resolution-v1).
 - [x] Add output-schema version, resolver version, evidence IDs, channel/project/ContentBuild scope, context budget, explicit model-identity availability, and repair outcome to Brain learning/turn receipts across success and fallback paths.
-- [x] Explicitly leave requested/served model values null while the generator does not expose the actual model identity; do not fabricate model provenance.
+- [x] Record the requested model from the canonical Gemini model selector on production paths; injected test/custom generators are explicitly marked unknown, and served model remains null because the adapter does not expose it.
 - [x] Correct the project lifecycle test to assert the canonical ContentBuild stage name (package).
 - [x] Supply a canonical stage and workflow state in the project-context fixture; missing stage remains fail-closed in production.
 - [ ] Run test:brain-quality-loop, project lifecycle/context tests, typecheck, and release gates on this exact branch.
-- [ ] Confirm provider/model identity can be exposed by the actual Gemini adapter before filling requestedModel / servedModel.
+- [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
