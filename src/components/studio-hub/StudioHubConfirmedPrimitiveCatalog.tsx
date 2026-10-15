@@ -110,7 +110,7 @@ const ConfirmedStepperFamily: React.FC = () => {
         <span>Standard + compact · interactive comparison</span>
         <div className="vt-confirmed-stepper-row-grid">
           <div className="vt-confirmed-stepper-specimen">
-            <small>44px standard</small>
+            <small>44px standard · interactive</small>
             <SubToolboxSplitStepper
               value={standardValue}
               onValueChange={setStandardValue}
@@ -121,7 +121,7 @@ const ConfirmedStepperFamily: React.FC = () => {
             />
           </div>
           <div className="vt-confirmed-stepper-specimen">
-            <small>28px compact</small>
+            <small>28px compact · interactive</small>
             <SubToolboxSplitStepper
               value={compactValue}
               onValueChange={setCompactValue}
