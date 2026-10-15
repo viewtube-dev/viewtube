@@ -4,7 +4,7 @@ import { SubToolboxInnerActionButton } from "../components/Toolbox";
 import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../components/subtoolbox/SubToolboxPrimitives";
 import { createImportedVaultAsset } from "../services/vaultAdapter";
 import { processVaultVideo, type VaultVideoOperation, type VaultVideoQuality } from "../services/vaultVideoWorkbench";
-import { saveVaultMediaBinary } from "../services/vaultMediaBinaryStore";
+import { getVaultMediaBinary, saveVaultMediaBinary } from "../services/vaultMediaBinaryStore";
 import type { VaultAsset } from "../types";
 
 export interface VaultVideoWorkbenchProps {
@@ -13,6 +13,20 @@ export interface VaultVideoWorkbenchProps {
 }
 
 const extensionFor = (mimeType: string) => mimeType === "image/jpeg" ? "jpg" : mimeType === "image/png" ? "png" : mimeType === "audio/mp4" ? "m4a" : mimeType === "video/webm" ? "webm" : "mp4";
+
+const loadVaultVideoSourceBlob = async (asset: VaultAsset): Promise<Blob> => {
+  const binaryStoreId = typeof asset.metadata?.binaryStoreId === "string" ? asset.metadata.binaryStoreId : "";
+  if (binaryStoreId) {
+    const record = await getVaultMediaBinary(binaryStoreId);
+    if (record?.blob) return record.blob;
+    throw new Error("This derivative's local binary is missing. Re-import the source or restore the derivative.");
+  }
+  const sourceUrl = asset.url || asset.previewUrl;
+  if (!sourceUrl) throw new Error("This video has no readable source URL. Re-import the original video file.");
+  const response = await fetch(sourceUrl);
+  if (!response.ok) throw new Error(`Video source returned HTTP ${response.status}.`);
+  return response.blob();
+};
 
 export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset, onDerivativeCreated }) => {
   const [operation, setOperation] = React.useState<VaultVideoOperation>("trim");
@@ -31,12 +45,9 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
   React.useEffect(() => {
     let cancelled = false;
     const loadDuration = async () => {
-      const sourceUrl = asset.url || asset.previewUrl;
-      if (!sourceUrl) return;
+      if (!asset.url && !asset.previewUrl && !asset.metadata?.binaryStoreId) return;
       try {
-        const response = await fetch(sourceUrl);
-        if (!response.ok) return;
-        const blob = await response.blob();
+        const blob = await loadVaultVideoSourceBlob(asset);
         const objectUrl = URL.createObjectURL(blob);
         try {
           const duration = await new Promise<number>((resolve, reject) => {
@@ -72,11 +83,7 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
     setMessage("");
     clearResult();
     try {
-      const sourceUrl = asset.url || asset.previewUrl;
-      if (!sourceUrl) throw new Error("This video has no readable source URL. Re-import the original video file.");
-      const response = await fetch(sourceUrl);
-      if (!response.ok) throw new Error(`Video source returned HTTP ${response.status}.`);
-      const source = await response.blob();
+      const source = await loadVaultVideoSourceBlob(asset);
       const config = {
         operation,
         quality,
@@ -122,8 +129,8 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
         projectId: asset.projectId,
         projectName: asset.projectName,
         toolId: "creator-vault-os",
-        url: previewUrl,
-        previewUrl,
+        url: null,
+        previewUrl: null,
         mimeType: result.mimeType,
         tags: [...new Set([...(asset.tags || []), "derivative", "processed"])],
         metadata: {
