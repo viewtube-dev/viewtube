@@ -221,7 +221,7 @@ type ActionPacketProjection = {
  recommendationId?: string | null
  experimentId?: string | null
  contextManifestId?: string | null
- promptRecipeId?: string
+ promptRecipeId?: string | null
  promptRecipeVersion?: string
  intent?: "inspect" | "prepare" | "propose" | "execute"
  approvalState?: "not-required" | "pending" | "approved" | "rejected"
