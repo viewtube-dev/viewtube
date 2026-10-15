@@ -4,7 +4,7 @@ import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { StudioDropdown } from "./primitives/StudioDropdown"
-import { StudioActionButton, StudioButton, StudioIconButton, StudioSplitLeftButton } from "./primitives/StudioControls"
+import { StudioActionButton, StudioButton, StudioCloseableBadge, StudioIconButton, StudioSplitLeftButton, StudioTagEditor } from "./primitives/StudioControls"
 
 describe("Studio Hub canonical controls", () => {
   it("marks every action with the Studio ownership boundary and registered size", () => {
@@ -71,4 +71,25 @@ describe("Studio Hub canonical controls", () => {
     expect(html).toContain("Connect your YouTube channel to load videos")
     expect(html).toContain('aria-haspopup="listbox"')
   })
+
+  it("renders the canonical closeable badge anatomy and accessible close action", () => {
+    const html = renderToStaticMarkup(<StudioCloseableBadge label="Featured" entering={false} />)
+    expect(html).toContain('data-vt-studio-badge="true"')
+    expect(html).toContain("FEATURED")
+    expect(html).toContain('aria-label="Remove FEATURED"')
+    expect(html).toContain("vt-studio-closeable-badge__close")
+  })
+
+  it("renders the canonical tag editor actions and compact Studio composer contract", () => {
+    const html = renderToStaticMarkup(<StudioTagEditor defaultValue={["tag one"]} />)
+    expect(html).toContain('data-vt-studio-tag-editor="true"')
+    expect(html).toContain("TAG ONE")
+    expect(html).toContain('aria-label="Add tag"')
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("@keyframes vt-studio-badge-enter")
+    expect(css).toContain("@keyframes vt-studio-badge-swap")
+    expect(css).toContain(".vt-studio-tag-editor__fly")
+    expect(css).toContain("prefers-reduced-motion: reduce")
+  })
+
 })
