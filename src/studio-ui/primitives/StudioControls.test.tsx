@@ -1,4 +1,6 @@
 import React from "react"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioTextArea, StudioTextInput } from "./StudioControls"
@@ -46,14 +48,15 @@ describe("canonical Studio field, selection, and action contracts", () => {
   it("keeps default and placeholder field typography primary and identical", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
-    expect(contract).toContain("color: var(--vt-field-color-1) !important")
-    expect(contract).toContain("-webkit-text-fill-color: var(--vt-field-color-1) !important")
-    expect(contract).toContain("-webkit-text-stroke: .5px currentColor !important")
-    expect(contract).toContain("font: inherit")
-    expect(contract).toContain("font-weight: 1000")
-    expect(contract).not.toContain("-webkit-text-stroke: 0 !important")
-    expect(contract).toContain("font-size: 18px !important")
-    expect(contract).toContain("font-size: 14px !important")
+    const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
+    expect(fields).toContain("color: var(--vt-field-color-1) !important")
+    expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-color-1) !important")
+    expect(fields).toContain("-webkit-text-stroke: .5px currentColor !important")
+    expect(fields).toContain("font: inherit")
+    expect(fields).toContain("font-weight: 1000")
+    expect(fields).not.toContain("-webkit-text-stroke: 0 !important")
+    expect(fields).toContain("font-size: 18px !important")
+    expect(fields).toContain("font-size: 14px !important")
   })
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
@@ -70,11 +73,11 @@ describe("canonical Studio field, selection, and action contracts", () => {
   it("anchors the action shadow while only the face moves", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
-    expect(contract).toContain('button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before')
+    expect(contract).toContain('button[data-vt-studio-button="true"]::before')
     expect(contract).toContain("[data-vt-studio-button-face]")
     expect(contract).toContain("transition: transform 150ms ease-out")
     expect(contract).toContain("transition-duration: 300ms")
-    expect(contract).toContain("button[data-vt-studio-control=\"true\"][data-split-left=\"true\"] [data-vt-studio-split-rail]")
+    expect(contract).toContain("button[data-vt-studio-button=\"true\"][data-split-left=\"true\"] [data-vt-studio-split-rail]")
   })
 })
 
