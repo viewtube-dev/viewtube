@@ -237,6 +237,36 @@ export const recordContentBuildMetadataChange = (
   seen.add(field)
   return { field, before: change.before, after: change.after }
  })
+ const existingVersion = listContentBuildMetadataHistory(contentBuildId)
+  .find(existing => existing.metadataVersionId === metadataVersionId)
+ if (existingVersion) {
+  if (JSON.stringify(existingVersion) !== JSON.stringify({
+   schemaVersion: 1,
+   contentBuildId,
+   metadataVersionId,
+   operationId,
+   operation: input.operation,
+   fields,
+   actorType: input.actorType || "system",
+   actorId: input.actorId || null,
+   sourceToolId: input.sourceToolId || null,
+   generationRecordId: input.generationRecordId || null,
+   promptRecipeId: input.promptRecipeId || null,
+   promptRecipeVersion: input.promptRecipeVersion || null,
+   sourceAssetIds: [...new Set(input.sourceAssetIds || [])],
+   resultingAssetIds: [...new Set(input.resultingAssetIds || [])],
+   publishTransactionId: input.publishTransactionId || null,
+   approvedSnapshotId: input.approvedSnapshotId || null,
+   approvedSnapshotHash: input.approvedSnapshotHash || null,
+   publishedVideoId: input.publishedVideoId || null,
+   analyticsCheckpointIds: [...new Set(input.analyticsCheckpointIds || [])],
+   evidenceIds: [...new Set(input.evidenceIds || [])],
+   occurredAt: input.occurredAt || existingVersion.occurredAt,
+  })) {
+   throw new Error("Metadata version ID was reused with different content; metadata history is immutable.")
+  }
+  return existingVersion
+ }
  const entry: ContentBuildMetadataHistoryEntry = {
   schemaVersion: 1,
   contentBuildId,
