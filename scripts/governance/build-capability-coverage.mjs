@@ -25,7 +25,7 @@ const records=caps.capabilities.map(cap=>{
 
 fs.writeFileSync('governance/convergence/capability-coverage.json',JSON.stringify({
   schemaVersion:'viewtube.capability-coverage.v1',
-  lastEdited:'2026-09-27',
+  lastEdited:evidenceMap.lastEdited,
   source:'docs/architecture/capabilities.json',
   capabilities:records
 },null,2)+'\n');
