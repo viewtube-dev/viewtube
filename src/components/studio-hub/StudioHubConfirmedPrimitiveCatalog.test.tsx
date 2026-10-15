@@ -37,6 +37,16 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('aria-label="Compact username"')
     expect(html).toContain('aria-label="Disabled username"')
   })
+  it("registers the production closeable badge and animated tag editor under global rule exceptions", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain("Global Rules Exceptions · Closeable Badge + Tag Editor")
+    expect(html).toContain('data-vt-studio-badge="true"')
+    expect(html).toContain('data-vt-studio-tag-editor="true"')
+    expect(html).toContain("StudioCloseableBadge / StudioTagEditor")
+    expect(html).toContain("H 20px")
+    expect(html).toContain("action H 32px")
+  })
+
   it("preserves the requested comparison rows and 50-color spectrum sample", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     for (const label of [
