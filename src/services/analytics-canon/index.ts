@@ -41,3 +41,22 @@ export {
 } from "./currentEvidence"
 
 export * from "./metricComparability"
+
+/** Shared reporting-window vocabulary and exact inclusive date-range semantics. */
+export {
+ ANALYTICS_WINDOWS,
+ COMPARABLE_WINDOWS,
+ WINDOW_DAYS,
+ WINDOW_LABELS,
+ WINDOW_SHORT_LABELS,
+ isAnalyticsWindow,
+ latestCompleteAnalyticsDate,
+ resolveWindowRange,
+ windowDayCount,
+} from "../analytics/windows"
+export type {
+ AnalyticsPeriod,
+ ComparableAnalyticsWindow,
+ ResolvedWindowRange,
+} from "../analytics/windows"
+export { getCurrentCanonicalRows, getCurrentCanonicalMetricSummary } from "./currentRows"

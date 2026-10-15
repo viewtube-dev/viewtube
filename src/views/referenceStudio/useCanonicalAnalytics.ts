@@ -3,11 +3,11 @@ import type {
  AnalyticsWindow,
  CanonicalMetricKey,
  CanonicalVideoRow,
-} from "../../services/analytics/DataStore"
-import { getMasterRows, getMetricSummary } from "../../services/analytics/Selectors"
+ MetricSummary,
+} from "../../services/analytics-canon"
+import { useCanonicalRows, useCanonicalMetricSummary } from "../../services/analytics-canon"
+import { getVtSyncSnapshot } from "../../features/vt-sync-local/adapters/snapshot"
 import { useBrain } from "../../context/useBrain"
-import { readYouTubeAnalyticsCache } from "../../services/analytics/DataStore"
-import { reportToRows } from "../performanceHubUtils"
 
 const metricValue = (
  row: CanonicalVideoRow,
@@ -20,7 +20,7 @@ const metricValue = (
 
 export interface CanonicalAnalyticsView {
  rows: CanonicalVideoRow[]
- summary: ReturnType<typeof getMetricSummary>
+ summary: MetricSummary
  topRows: Array<{
   id: string
   title: string
@@ -63,15 +63,8 @@ export const useCanonicalAnalytics = (
 ): CanonicalAnalyticsView => {
  const { lastSyncComplete } = useBrain()
 
- const rows = useMemo(
-  () => getMasterRows(windowKey, "api"),
-  [lastSyncComplete, windowKey],
- )
-
- const summary = useMemo(
-  () => getMetricSummary(windowKey, "api"),
-  [lastSyncComplete, windowKey],
- )
+ const rows = useCanonicalRows(windowKey)
+ const summary = useCanonicalMetricSummary(windowKey)
 
  const topRows = useMemo(
   () =>
@@ -135,25 +128,29 @@ export const useCanonicalAnalytics = (
  }, [rows])
 
  const channelDailySeries = useMemo(() => {
-  const cache = readYouTubeAnalyticsCache()
-  const report = cache.dailyMetrics as any
-  if (!report || !Array.isArray(report.rows)) return []
-  const dailyRows = reportToRows(report, "daily", "YouTube API")
-  
-  return dailyRows.map(row => ({
-   date: String(row["Date"] || row["Day"] || ""),
-   views: Number(row["Views"] || 0),
-   watchHours: Number(row["Watch time (hours)"] || 0),
-   revenue: Number(row["Estimated revenue (USD)"] || 0),
-   subscribers: Number(row["Subscribers gained"] || 0),
-   likes: Number(row["Likes"] || 0),
-   dislikes: Number(row["Dislikes"] || 0),
-   comments: Number(row["Comments"] || 0),
-   shares: Number(row["Shares"] || 0),
-   impressions: Number(row["Impressions"] || 0),
-   ctr: Number(row["Impressions click-through rate (%)"] || 0),
-  })).sort((a, b) => a.date.localeCompare(b.date))
- }, [lastSyncComplete])
+  const dailyRows = getVtSyncSnapshot().dailyMetrics
+  if (!Array.isArray(dailyRows)) return []
+  return dailyRows.map(row => {
+   const rawWatchTime = Number(row.watchTime ?? row["Watch time (hours)"] ?? 0)
+   return {
+    date: String(row.date || row.Date || row.day || ""),
+    views: Number(row.views ?? row.Views ?? 0),
+    watchHours: row.watchHours !== undefined
+     ? Number(row.watchHours)
+     : row.watchTime !== undefined
+      ? rawWatchTime / 60
+      : rawWatchTime,
+    revenue: Number(row.revenue ?? row["Estimated revenue (USD)"] ?? 0),
+    subscribers: Number(row.subscribersGained ?? row["Subscribers gained"] ?? 0),
+    likes: Number(row.likes ?? row.Likes ?? 0),
+    dislikes: Number(row.dislikes ?? row.Dislikes ?? 0),
+    comments: Number(row.comments ?? row.Comments ?? 0),
+    shares: Number(row.shares ?? row.Shares ?? 0),
+    impressions: Number(row.impressions ?? row.Impressions ?? 0),
+    ctr: Number(row.ctr ?? row["Impressions click-through rate (%)"] ?? 0),
+   }
+  }).filter(row => row.date).sort((a, b) => a.date.localeCompare(b.date))
+ }, [lastSyncComplete, rows])
 
  return {
   rows,
