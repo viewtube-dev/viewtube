@@ -127,7 +127,7 @@ const mimeToExt = (mimeType) => {
 };
 
 export const handleCompressAnalysisRoute = async (req, res) => {
-  if (req.headers["x-vt-vault-operation"] === "1") {
+  if (new URL(req.url || "/", "http://localhost").searchParams.get("vaultOperation") === "1") {
     return handleVaultMediaProcessingRoute(req, res);
   }
   try {
