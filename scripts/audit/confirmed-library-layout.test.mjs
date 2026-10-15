@@ -356,6 +356,6 @@ test("floating-label B uses the same secondary focus color and focus outline wid
   assert.match(controlStyles, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][^]*?\+ \.vt-studio-floating-field-label\s*\{[^}]*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\) solid var\(--vt-studio-control-secondary/s);
 });
 
-test("circle icon button stage is 80% of the shared square icon stage", () => {
-  assert.match(controlStyles, /button\[data-vt-studio-circle-icon-button="true"\][^]*?\[data-vt-studio-button-face\]\s*>\s*\[data-vt-studio-button-icon\]\s*\{[^}]*width:\s*80%[^}]*height:\s*80%/s);
+test("circle icon button SVGs use 80% of their selected canonical icon size", () => {
+  assert.match(controlStyles, /button\[data-vt-studio-circle-icon-button="true"\]\s*\[data-vt-studio-button-icon\]\s+svg\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-icon-size,\s*38px\)\s*\*\s*\.8\)[^}]*height:\s*calc\(var\(--vt-studio-control-icon-size,\s*38px\)\s*\*\s*\.8\)/s);
 });
