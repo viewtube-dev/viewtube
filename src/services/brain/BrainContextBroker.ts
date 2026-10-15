@@ -21,6 +21,9 @@ const clip = (value: string, maximum: number): string => value.slice(0, Math.max
 export const buildBrainContextPack = (input: {
  channelId?: string | null
  capabilityIds?: string[]
+ modelContextWindowTokens?: number | null
+ reservedOutputTokens?: number
+ contextSafetyMarginTokens?: number
  systemPrompt: string
  snapshot: AIBrainContextSnapshot
  recentTurns: AIBrainConversationTurn[]
