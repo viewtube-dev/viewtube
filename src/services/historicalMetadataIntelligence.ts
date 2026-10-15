@@ -1,3 +1,6 @@
+import { latestCompleteAnalyticsDate } from "./analytics/windows"
+import { fetchCanonicalAnalyticsReport, rowsToObjects } from "./canonicalSync/query"
+import { appendContentBuildEvent } from "./asset-engine/ContentBuildRepository"
 import {
   listContentBuildEvents,
   listContentBuildMetadataHistory,
@@ -217,9 +220,13 @@ export const buildHistoricalMetadataComparison = (input: {
   const observedDays = Math.min(
     ...metrics.map(metric => Math.min(metric.baselineDaysObserved, metric.followUpDaysObserved)),
   )
+  const hasAdequateMetricCoverage = metrics.some(metric =>
+    metric.baselineAverage != null && metric.followUpAverage != null &&
+    metric.baselineDaysObserved >= 5 && metric.followUpDaysObserved >= 5
+  )
   const status = !hasBaselineRows && !hasFollowUpRows
     ? "unavailable"
-    : afterWindowComplete && metrics.some(metric => metric.baselineAverage != null && metric.followUpAverage != null)
+    : afterWindowComplete && hasAdequateMetricCoverage
       ? "ready"
       : "partial"
   return {
@@ -249,4 +256,87 @@ export const buildHistoricalMetadataComparison = (input: {
     ],
     sampleCoverage: confidenceFor(Math.max(0, observedDays)),
   }
+}
+
+/** Fetch canonical daily analytics for one explicit metadata version and persist the comparison on ContentBuild. */
+export const fetchAndRecordHistoricalMetadataComparison = async (input: {
+  contentBuildId: string
+  videoId: string
+  metadataVersionId: string
+  channelId?: string | null
+  now?: Date
+  fetchReport?: typeof fetchCanonicalAnalyticsReport
+}): Promise<HistoricalMetadataComparison & { analysisEventId: string | null }> => {
+  const history = listContentBuildMetadataHistory(input.contentBuildId)
+  const metadataVersion = history.find(entry => entry.metadataVersionId === input.metadataVersionId)
+  if (!metadataVersion) {
+    throw new Error("Unknown metadata version for this ContentBuild: " + input.metadataVersionId)
+  }
+  if (metadataVersion.publishedVideoId && metadataVersion.publishedVideoId !== input.videoId) {
+    throw new Error("Metadata version does not belong to the requested published video.")
+  }
+  const changedAt = Date.parse(metadataVersion.occurredAt)
+  if (!Number.isFinite(changedAt)) throw new Error("Metadata version has an invalid occurredAt timestamp.")
+  const changedDay = new Date(changedAt)
+  const changeDay = new Date(Date.UTC(changedDay.getUTCFullYear(), changedDay.getUTCMonth(), changedDay.getUTCDate()))
+  const startDate = dateOnly(addDays(changeDay, -7))
+  const targetEndDate = dateOnly(addDays(changeDay, 7))
+  const now = input.now || new Date()
+  const latestComplete = dateOnly(latestCompleteAnalyticsDate(now))
+  const queryEndDate = targetEndDate < latestComplete ? targetEndDate : latestComplete
+  const canQuery = queryEndDate >= startDate
+  const payload = canQuery
+    ? await (input.fetchReport || fetchCanonicalAnalyticsReport)({
+        startDate,
+        endDate: queryEndDate,
+        metrics: [
+          "views",
+          "estimatedMinutesWatched",
+          "averageViewPercentage",
+          "likes",
+          "comments",
+          "estimatedRevenue",
+        ],
+        dimensions: ["day"],
+        filters: [`video==${input.videoId}`],
+        sort: "day",
+      }, "Historical metadata performance comparison")
+    : { columnHeaders: [], rows: [] }
+  const comparison = buildHistoricalMetadataComparison({
+    contentBuildId: input.contentBuildId,
+    videoId: input.videoId,
+    metadataVersion,
+    rows: rowsToObjects(payload),
+    now,
+  })
+  const evidenceId = `youtube-analytics:video:${input.videoId}:${startDate}:${queryEndDate}`
+  const idempotencyKey = `historical-metadata-comparison:${input.contentBuildId}:${input.videoId}:${input.metadataVersionId}:${queryEndDate}:${comparison.status}`
+  const event = appendContentBuildEvent({
+    contentBuildId: input.contentBuildId,
+    idempotencyKey,
+    eventType: "analysis.completed",
+    entityType: "metadata-performance-comparison",
+    entityId: input.metadataVersionId,
+    actorType: "analytics",
+    toolId: "historical-metadata-intelligence",
+    evidenceIds: [...new Set([...comparison.evidenceIds, evidenceId])],
+    resultingState: comparison,
+    timestamp: now.toISOString(),
+    metadata: {
+      videoId: input.videoId,
+      channelId: input.channelId || null,
+      metadataVersionId: input.metadataVersionId,
+      operationId: metadataVersion.operationId,
+      baselineStartDate: comparison.baselineStartDate,
+      baselineEndDate: comparison.baselineEndDate,
+      followUpStartDate: comparison.followUpStartDate,
+      followUpEndDate: comparison.followUpEndDate,
+      queryEndDate,
+      status: comparison.status,
+      interpretation: comparison.interpretation,
+      causalConclusion: null,
+      idempotencyKey,
+    },
+  })
+  return { ...comparison, analysisEventId: event.id }
 }
