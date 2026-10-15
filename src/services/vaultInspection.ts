@@ -26,7 +26,7 @@ const numberOrNull = (value: unknown): number | null =>
   typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null
 
 const idsFrom = (value: unknown): string[] =>
-  Array.isArray(value) ? [...new Set(value.filter((item): item is string => typeof item === "string" && item.trim()).map((item) => item.trim()))] : []
+  Array.isArray(value) ? [...new Set(value.filter((item): item is string => typeof item === "string" && item.trim().length > 0).map((item) => item.trim()))] : []
 
 export const inspectVaultAsset = (asset: VaultInspectableAsset): VaultAssetInspection => {
   const metadata = asset.metadata || {}
