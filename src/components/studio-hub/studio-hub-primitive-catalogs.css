@@ -1938,6 +1938,8 @@
   width: 100%;
   min-width: 0;
 }
+.vt-confirmed-control-variants[data-control-size] { --vt-confirmed-control-gap: 10px; gap: var(--vt-confirmed-control-gap); }
+.vt-confirmed-control-variants[data-control-size="28"] { --vt-confirmed-control-gap: 8px; }
 .vt-confirmed-control-variants > div {
   display: grid;
   grid-template-rows: minmax(20px, auto) auto;
