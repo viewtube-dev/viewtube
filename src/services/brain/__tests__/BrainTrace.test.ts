@@ -98,6 +98,20 @@ describe("beginBrainTrace", () => {
   expect(finished.outputRef).toBe("asset_9f2")
  })
 
+ it("preserves shared operation and workflow identity when supplied by the caller", () => {
+  const trace = beginBrainTrace({
+   kind: "asset",
+   channelId: "channel-1",
+   operationId: "operation-1",
+   workflowId: "workflow-1",
+  })
+  expect(trace.snapshot().operationId).toBe("operation-1")
+  expect(trace.snapshot().workflowId).toBe("workflow-1")
+  const finished = trace.complete({ outputRef: "asset-1" })
+  expect(finished.operationId).toBe("operation-1")
+  expect(finished.workflowId).toBe("workflow-1")
+ })
+
  it("records a failure with its reason", () => {
   const trace = beginBrainTrace({ kind: "asset", channelId: null })
   const finished = trace.complete({ status: "failed", failureReason: "provider_error" })

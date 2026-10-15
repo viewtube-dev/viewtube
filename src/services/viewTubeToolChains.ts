@@ -1,4 +1,5 @@
 import { createGenerationRecord, updateGenerationRecord } from "./generationStore"
+import { operationRecordFromActionPacket } from "./operations/OperationRecord"
 import { ingestGenerationArtifacts } from "./vaultAdapter"
 import { enqueueBrainHandoffs } from "./brainHandoffInbox"
 import {
@@ -62,6 +63,8 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
  cachePacket(packet as ViewTubeActionPacket)
  const inboxItems = enqueueBrainHandoffs(packet as ViewTubeActionPacket)
  const record = createGenerationRecord({
+  operationId: packet.operationId || packet.id,
+  workflowId: packet.workflowId || `legacy:${packet.id}`,
   toolId: packet.sourceToolId as never,
   provider: "mock",
   model: "viewtube-action-packet-v1",
@@ -101,6 +104,7 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
    approvedSnapshotId: packet.approvedSnapshotId || null,
    approvedSnapshotHash: packet.approvedSnapshotHash || null,
    identityMode: packet.identityMode || "legacy-derived",
+   operationRecord: operationRecordFromActionPacket(packet),
    universalToolHandoff: true,
    handoffInboxIds: inboxItems.map(item => item.id),
   },
@@ -187,6 +191,7 @@ export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>)
      approvedSnapshotId: packet.approvedSnapshotId || null,
      approvedSnapshotHash: packet.approvedSnapshotHash || null,
      identityMode: packet.identityMode || "legacy-derived",
+     operationRecord: operationRecordFromActionPacket(packet),
     },
    })
   }

@@ -101,6 +101,9 @@ export interface BrainRuntimeProvenanceChain {
  requestId: string
  requestedAt: string
  contextManifestId: string
+ operationId: string | null
+ workflowId: string | null
+ operationIdentityMismatch: boolean
  receiptId: string | null
  traceId: string | null
  contentBuildId: string
@@ -314,6 +317,19 @@ const metadataString = (
 const uniqueStrings = (values: Array<string | null | undefined>): string[] =>
  [...new Set(values.filter((value): value is string => Boolean(value)))]
 
+export const resolveBrainOperationIdentity = (input: {
+ operationIds: Array<string | null | undefined>
+ workflowIds: Array<string | null | undefined>
+}) => {
+ const operationIds = uniqueStrings(input.operationIds)
+ const workflowIds = uniqueStrings(input.workflowIds)
+ return {
+  operationId: operationIds[0] || null,
+  workflowId: workflowIds[0] || null,
+  mismatch: operationIds.length > 1 || workflowIds.length > 1,
+ }
+}
+
 const eventExplicitlyMatchesRequest = (
  event: ContentBuildEvent,
  request: GenerationRequest,
@@ -403,9 +419,25 @@ const buildProvenanceChain = (input: {
   ...relatedEvents.map(event => event.actionPacketId),
   metadataString(generationRecord?.metadata, "actionPacketId"),
  ])
- let workflowIds = uniqueStrings([
-  metadataString(generationRecord?.metadata, "workflowId"),
+ const operationIds = uniqueStrings([
+  input.request.operationId,
+  receipt?.operationId,
+  trace?.operationId,
+  generationRecord?.operationId,
+  metadataString(generationRecord?.metadata, "operationId"),
+  ...relatedEvents.map(event => metadataString(event.metadata, "operationId")),
  ])
+ const declaredWorkflowIds = uniqueStrings([
+  input.request.workflowId,
+  receipt?.workflowId,
+  trace?.workflowId,
+  generationRecord?.workflowId,
+  metadataString(generationRecord?.metadata, "workflowId"),
+  ...relatedEvents.map(event => metadataString(event.metadata, "workflowId")),
+ ])
+ const operationIdentity = resolveBrainOperationIdentity({ operationIds, workflowIds: declaredWorkflowIds })
+ const operationIdentityMismatch = operationIdentity.mismatch
+ let workflowIds = operationIdentityMismatch ? [] : declaredWorkflowIds
 
  const matchedOutcomes = input.brainOutcomes
   .filter(outcome =>
@@ -451,6 +483,9 @@ const buildProvenanceChain = (input: {
   requestId: input.request.id,
   requestedAt: input.request.requestedAt,
   contextManifestId: input.request.contextManifestId,
+  operationId: operationIdentity.operationId,
+  workflowId: operationIdentity.workflowId,
+  operationIdentityMismatch,
   receiptId: receipt?.id || null,
   traceId,
   contentBuildId: input.request.contentBuildId,

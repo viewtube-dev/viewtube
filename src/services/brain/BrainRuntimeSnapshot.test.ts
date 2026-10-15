@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { readBrainRuntimeSnapshot } from "./BrainRuntimeSnapshot"
+import { readBrainRuntimeSnapshot, resolveBrainOperationIdentity } from "./BrainRuntimeSnapshot"
 
 const build = {
  schemaVersion: 1 as const,
@@ -87,6 +87,22 @@ const toolReceipt = {
  traceId: "trace-1",
  completedAt: "2026-09-24T05:01:02.000Z",
 }
+
+describe("resolveBrainOperationIdentity", () => {
+ it("keeps one stable operation/workflow identity", () => {
+  expect(resolveBrainOperationIdentity({
+   operationIds: ["operation-1", "operation-1", null],
+   workflowIds: ["workflow-1", "workflow-1"],
+  })).toEqual({ operationId: "operation-1", workflowId: "workflow-1", mismatch: false })
+ })
+
+ it("flags conflicting explicit identities instead of selecting a fuzzy join", () => {
+  expect(resolveBrainOperationIdentity({
+   operationIds: ["operation-1", "operation-2"],
+   workflowIds: ["workflow-1", "workflow-2"],
+  })).toEqual({ operationId: "operation-1", workflowId: "workflow-1", mismatch: true })
+ })
+})
 
 describe("readBrainRuntimeSnapshot", () => {
  it("summarizes the active Project, ContentBuild, generation lineage, trace, and outcomes", () => {
@@ -355,7 +371,7 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    evidenceIds: ["evidence-1", "evidence-2"],
    actionPacketId: "packet-1",
    traceId: "trace-1",
-   metadata: { generationRequest, contextManifest },
+   metadata: { generationRequest: { ...generationRequest, operationId: "operation-1", workflowId: "workflow-1" }, contextManifest },
   },
   {
    id: "event-output",
@@ -369,7 +385,7 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    generationRecordId: "generation-record-1",
    actionPacketId: "packet-1",
    traceId: "trace-1",
-   metadata: { toolReceipt },
+   metadata: { toolReceipt: { ...toolReceipt, operationId: "operation-1", workflowId: "workflow-1" } },
   },
  ] as any
 
@@ -384,6 +400,8 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    listContentBuildEvents: () => events,
    listBrainTraces: () => [{
     id: "trace-1",
+    operationId: "operation-1",
+    workflowId: "workflow-1",
     channelId: "channel-1",
     kind: "asset",
     createdAt: "2026-09-24T05:01:00.000Z",
@@ -406,6 +424,8 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    capabilityCount: 14,
    listGenerationRecords: () => [{
     id: "generation-record-1",
+    operationId: "operation-1",
+    workflowId: "workflow-1",
     toolId: "video-publisher",
     provider: "google",
     model: "gemini-2.5-pro",
@@ -504,6 +524,9 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
  expect(snapshot.provenance.latestChain).toMatchObject({
   requestId: "generation_request_1",
   contextManifestId: "context-1",
+  operationId: "operation-1",
+  workflowId: "workflow-1",
+  operationIdentityMismatch: false,
   receiptId: "tool_receipt_1",
   traceId: "trace-1",
   contentBuildId: build.id,

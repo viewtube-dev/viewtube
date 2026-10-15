@@ -46,6 +46,9 @@ export interface BrainTraceClaims {
 
 export interface BrainTrace {
  id: string
+ /** Shared creator-operation identity; optional for backward compatibility. */
+ operationId?: string
+ workflowId?: string
  channelId: string | null
  kind: BrainTraceKind
  /** Set for kind === "asset". */
@@ -168,11 +171,15 @@ export const beginBrainTrace = (input: {
  kind: BrainTraceKind
  channelId?: string | null
  assetType?: string
+ operationId?: string | null
+ workflowId?: string | null
 }): BrainTraceRecorder => {
  const startedAt = Date.now()
  const trace: BrainTrace = {
   id: makeTraceId(),
   channelId: input.channelId ?? null,
+  ...(input.operationId ? { operationId: input.operationId } : {}),
+  ...(input.workflowId ? { workflowId: input.workflowId } : {}),
   kind: input.kind,
   ...(input.assetType ? { assetType: input.assetType } : {}),
   createdAt: new Date(startedAt).toISOString(),

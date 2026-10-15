@@ -3,7 +3,7 @@
 **Capability ID:** `CAP-OUTCOME-LEARNING`  
 **Owner:** Outcomes, Evaluation & Learning  
 **Authority:** `docs/architecture/PRODUCT_ARCHITECTURE.md`  
-**Status:** ACCEPTED  
+**Status:** IMPLEMENTED / CERTIFICATION IN PROGRESS  
 **Production Date:** 2026-09-27  
 **Last Edited:** 2026-09-27
 
@@ -29,13 +29,13 @@ Connect actions to measured outcomes, evaluation and governed durable learning.
 
 - Authority: present
 - Code ownership: present
-- Task references: missing
-- Tests: missing
+- Task references: present — phases 10–12 and outcome-learning next steps
+- Tests: present — AssetOutcome lineage and evaluation/learning regression suites
 - UI surfaces: present
-- User Guide coverage: missing
-- Verification evidence: missing
+- User Guide coverage: partial / verify
+- Verification evidence: partial — focused Brain quality-loop job passed on integration; repository-wide release gates remain red
 
-**Current coverage gaps:** taskRefs, tests, guideRefs, verificationRefs
+**Current status:** core implementation and governance evidence are present. Full release certification is not complete while current integration has typecheck, focused UI contract, source-governance UI assertion, and full-suite failures. Do not interpret a successful production build or Brain quality-loop job as whole-repository green status.
 
 Coverage is diagnostic only and is not a completion percentage.
 

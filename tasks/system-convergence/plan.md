@@ -112,6 +112,8 @@ Exit: a generated/uploaded asset has one ID and lineage across Vault, Projects, 
 
 ## Phase 6 — Operations convergence
 
+**Implementation slice:** `tasks/system-convergence/OPERATION-RECORD-V1-NEXT-PLAN.md`.
+
 Define OperationRecord lifecycle and map:
 - AssetGenerator;
 - GenerationWorkflow;
@@ -121,9 +123,13 @@ Define OperationRecord lifecycle and map:
 - GenerationRecord;
 - render/research/publish operations.
 
+The shared v1 contract and lifecycle/approval gates now exist in `src/services/operations/OperationRecord.ts`. GenerationWorkflow projects the same operation identity into existing ContentBuild input/output events; ActionPacket and ToolReceipt adapters are additive projections, not new persistence owners.
+
+Remaining gates: production-caller inventory, BrainTrace and GenerationRecord identity propagation, provider-operation contract, CI/typecheck, end-to-end pilot, and server-authoritative durability/recovery.
+
 Do not prematurely collapse storage if different durability requirements remain.
 
-Exit: every operation can be traced from context/evidence through outputs/receipts.
+Exit: every priority operation can be traced from context/evidence through outputs/receipts using one stable operation/workflow identity, with scope, approval and retry behavior tested.
 
 ## Phase 7 — Outcomes convergence
 

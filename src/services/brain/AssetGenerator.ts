@@ -106,6 +106,9 @@ export const EMPTY_ASSET_EVIDENCE: AssetEvidence = {
 
 export interface AssetRequest {
  channelId: string
+ /** Shared operation identity supplied by the orchestration/handoff layer. */
+ operationId?: string
+ workflowId?: string
  assetType: AssetType
  /** What the creator asked for. */
  instruction: string
@@ -334,6 +337,8 @@ export const generateAsset = async <TOutput>(input: {
   kind: "asset",
   channelId: request.channelId,
   assetType: request.assetType,
+  operationId: request.operationId,
+  workflowId: request.workflowId,
  })
  trace.setIntent({ intent: "content_generation" })
  trace.recordCapabilities(["content-generation"])

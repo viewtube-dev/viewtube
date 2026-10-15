@@ -2063,6 +2063,9 @@ export interface GenerationArtifact {
 
 export interface GenerationRecord {
  id: string
+ /** Shared creator-operation identity; optional for legacy records. */
+ operationId?: string | null
+ workflowId?: string | null
  toolId: SuperToolId
  provider: AIProviderId
  model: string
