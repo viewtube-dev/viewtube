@@ -20,6 +20,7 @@ const clip = (value: string, maximum: number): string => value.slice(0, Math.max
 
 export const buildBrainContextPack = (input: {
  channelId?: string | null
+ capabilityIds?: string[]
  systemPrompt: string
  snapshot: AIBrainContextSnapshot
  recentTurns: AIBrainConversationTurn[]
@@ -224,7 +225,7 @@ export const buildBrainContextPack = (input: {
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
   taskInstruction ? `\n${taskInstruction}` : "",
  ].filter(Boolean)
- const resolvedContext = resolveBrainContextSections(sections, { userText: input.userText, maximumCharacters })
+ const resolvedContext = resolveBrainContextSections(sections, { userText: input.userText, maximumCharacters, capabilityIds: input.capabilityIds })
  omittedSections.push(...resolvedContext.omittedSectionIds)
  const systemInstruction = resolvedContext.text
 
