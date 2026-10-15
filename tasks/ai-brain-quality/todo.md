@@ -87,3 +87,31 @@
 - [ ] Run focused tests, typecheck, full suite, production build, reachability/governance audits, and diff checks.
 - [ ] Compare failures against the current integration baseline and record certification receipt.
 - [ ] Reconcile branch conflicts and obtain review before merge.
+
+
+## Phase 10 — Project-centered creation workflow
+
+- [x] Resolve current project phase from canonical ContentBuild stage.
+- [x] Return phase-relevant capabilities and workflow blockers.
+- [x] Fail closed when canonical ContentBuild state is unavailable.
+- [x] Add project context regression tests.
+- [ ] Wire lifecycle capabilities into live Brain/runtime/UI consumers.
+- [ ] Verify all project surfaces provide the canonical ContentBuild snapshot.
+
+## Phase 11 — Communication ingestion
+
+- [x] Add multi-label classification for creator communication categories.
+- [x] Record classified communication as an immutable intelligence evidence event.
+- [x] Make communication identity idempotent and reject conflicting replays.
+- [x] Explicitly prevent automatic durable-memory promotion.
+- [ ] Connect live chat, tool feedback, approval/rejection and edit events.
+- [ ] Confirm privacy, consent, retention and durable persistence behavior.
+
+## Phase 12 — Recommendation and asset attribution
+
+- [x] Resolve attribution chains from recommendation through decision, execution, publication, outcome and learning candidate.
+- [x] Use explicit event ancestry and exact stable identity fields; reject cross-channel links.
+- [x] Report missing stages without time-based inference.
+- [ ] Complete stable-ID propagation across generation, selected variants, ActionPackets, publish, evaluation and learning writers.
+- [ ] Surface the attribution chain in the live Brain/Studio UI.
+- [ ] Validate against real lifecycle data and run focused tests/typecheck/full suite/build/governance checks.
