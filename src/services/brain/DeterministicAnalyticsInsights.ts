@@ -316,8 +316,8 @@ export const buildTrafficSourceContributionInsights = (input: {
  dataset: CanonicalIntelligenceDatasetRows
  metricKey: string
  dimensionKey: string
- /** Optional expected count from the canonical row query; mismatch fails closed. */
- sourceRowCount?: number
+ /** Required expected count from the canonical row query; mismatch or omission fails closed. */
+ sourceRowCount: number
 }): TrafficContributionResult => {
  const { dataset, metricKey, dimensionKey } = input
  if (dataset.status !== "available") {
@@ -332,7 +332,7 @@ export const buildTrafficSourceContributionInsights = (input: {
  if (dataset.rows.length === 0) {
   return { insights: [], limitations: ["Traffic contribution requires at least one canonical row."] }
  }
- if (input.sourceRowCount !== undefined && input.sourceRowCount !== dataset.rows.length) {
+ if (!Number.isInteger(input.sourceRowCount) || input.sourceRowCount < 0 || input.sourceRowCount !== dataset.rows.length) {
   return { insights: [], limitations: ["Canonical row count does not match the supplied complete-row count."] }
  }
 
@@ -386,7 +386,10 @@ export const buildTrafficSourceContributionInsights = (input: {
    formula: `sourceSum=sum(${metricKey} where ${dimensionKey}=${JSON.stringify(label)}); sharePercent=sourceSum/sum(all ${metricKey})*100`,
    algorithmVersion: ALGORITHM_VERSION,
    deterministic: true as const,
-   limitations: ["Contribution describes distribution, not causation."],
+   limitations: [
+    "Contribution describes distribution, not causation.",
+    "Confidence reflects canonical data availability and row completeness, not statistical certainty.",
+   ],
   }))
   .sort((a, b) => b.currentValue - a.currentValue || a.label.localeCompare(b.label))
 
