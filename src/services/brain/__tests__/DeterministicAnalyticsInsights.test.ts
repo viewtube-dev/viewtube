@@ -144,10 +144,12 @@ describe("deterministic analytics insights", () => {
    current: { bundle: partial, period: period("Current", "2026-09-29", "2026-10-26") },
   }).blockedReasons).toContain("Dataset daily is not fully available in both periods.")
   const missing = bundle("snapshot-new", {})
-  expect(buildPeriodComparisonInsights({
+  const missingResult = buildPeriodComparisonInsights({
    baseline: { bundle: oldBundle, period: period("Previous", "2026-09-01", "2026-09-28") },
    current: { bundle: missing, period: period("Current", "2026-09-29", "2026-10-26") },
-  }).insights).toEqual([])
+  })
+  expect(missingResult.insights).toEqual([])
+  expect(missingResult.blockedReasons).toContain("Metric views is missing from the baseline period in dataset daily.")
  })
 
  it("emits threshold-based material-change signals but does not call them statistical significance", () => {
