@@ -242,7 +242,10 @@ export const operationRecordFromActionPacket = (
   at?: string
  } = {},
 ): OperationRecord => {
- const approvalStatus = packet.approvalState || "not-required"
+ const requestedApprovalStatus = packet.approvalState || "not-required"
+ const approvalStatus = packet.intent === "execute" && requestedApprovalStatus === "not-required"
+  ? "pending"
+  : requestedApprovalStatus
  const mutationClass = options.mutationClass || (
   packet.intent === "execute" ? "external-write" :
   packet.intent === "propose" ? "proposal" :
