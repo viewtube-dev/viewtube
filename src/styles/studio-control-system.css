@@ -1965,3 +1965,21 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   width: 28px;
   height: 28px;
 }
+
+
+/* Plain single-select dropdown primitive; inherits Studio Controls global sizing, pair and typography. */
+.vt-studio-simple-dropdown { position: relative; display: block; width: 100%; min-width: 0; }
+.vt-studio-simple-dropdown select {
+  appearance: none; display: block; box-sizing: border-box; width: 100%; min-width: 0;
+  height: var(--vt-studio-control-height, 44px); padding: 0 34px 0 8px;
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-border, #000);
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--pair-b, #fff); color: var(--pair-a, #000);
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--vt-studio-control-font-size, 24px); font-weight: var(--vt-studio-control-font-weight, 1000);
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em); text-transform: uppercase;
+}
+.vt-studio-simple-dropdown__icon { position: absolute; right: 8px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); pointer-events: none; color: var(--pair-a, #000); }
+.vt-studio-simple-dropdown select:focus-visible { outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #fff)); outline-offset: 0; }
+.vt-studio-simple-dropdown[data-size="compact"] select { height: 28px; padding-left: 5px; padding-right: 24px; font-size: 18px; border-width: 2px; }
+.vt-studio-simple-dropdown[data-size="compact"] .vt-studio-simple-dropdown__icon { width: 14px; height: 14px; right: 5px; }
