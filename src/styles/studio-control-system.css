@@ -1548,12 +1548,18 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border-radius: 9999px !important;
 }
 button[data-vt-studio-circle-icon-button="true"][data-size="standard"] {
-  --vt-studio-control-icon-size: calc(38px * .8);
+  --vt-studio-control-icon-size: 38px;
   --vt-studio-control-icon-stroke: 1.9;
 }
 button[data-vt-studio-circle-icon-button="true"][data-size="compact"] {
-  --vt-studio-control-icon-size: calc(24px * .8);
+  --vt-studio-control-icon-size: 24px;
   --vt-studio-control-icon-stroke: 2;
+}
+/* Scale the rendered glyph itself, not its full-size stage, so the circular
+   button gets an 80% icon while preserving the canonical stroke preset. */
+button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg {
+  width: calc(var(--vt-studio-control-icon-size, 28px) * .8);
+  height: calc(var(--vt-studio-control-icon-size, 28px) * .8);
 }
 button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
   overflow: hidden;
