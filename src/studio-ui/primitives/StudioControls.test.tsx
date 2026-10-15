@@ -72,6 +72,13 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(contract).toContain(".vt-studio-44-choice.is-white-indicator.is-on")
   })
 
+  it("keeps the split-left primitive catalog aligned with the button face layer", () => {
+    const catalogCss = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
+    expect(catalogCss).toContain('.vt-complete-catalog .vt-catalog-split-primitive[data-vt-studio-button="true"] > [data-vt-studio-button-face]')
+    expect(catalogCss).toContain("grid-template-columns: var(--h) minmax(0, 1fr) !important")
+    expect(catalogCss).toContain("width: 100% !important")
+  })
+
   it("anchors the action shadow while only the face moves", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
