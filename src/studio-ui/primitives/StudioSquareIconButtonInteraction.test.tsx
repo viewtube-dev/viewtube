@@ -218,7 +218,7 @@ describe("StudioSquareIconButton interactions", () => {
         <StudioSquareIconButton label="Notifications" iconPreset="bell" effect="bell-ring" />
         <StudioSquareIconButton label="Theme" iconPreset="sun-moon" effect="sun-moon" />
         <StudioSquareIconButton label="Unlock" iconPreset="lock-unlock" effect="lock-unlock" />
-        <StudioSquareIconButton label="Download" iconPreset="download-check" effect="download-success" />
+        <StudioSquareIconButton label="Download" iconPreset="download-check" effect="download-success" success />
         <StudioSquareIconButton label="Refresh" iconPreset="refresh" effect="refresh" />
         <StudioSquareIconButton label="Like" iconPreset="like" effect="like" />
       </>)
@@ -231,6 +231,7 @@ describe("StudioSquareIconButton interactions", () => {
     expect(buttons[2]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
     expect(buttons[3]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
     expect(buttons[4]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
+    expect(buttons[4]?.getAttribute("data-success")).toBe("true")
   })
 
   it("replays the heart, bell, and refresh animation hooks on activation", async () => {
