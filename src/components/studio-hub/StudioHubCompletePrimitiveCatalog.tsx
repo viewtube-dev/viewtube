@@ -95,12 +95,16 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
     <section className="vt-catalog-square-icon-group" aria-label="Confirmed interaction effects">
       <h4>INTERACTION EFFECTS · OPT-IN</h4>
       <div className="vt-catalog-square-icon-effects" role="group" aria-label="Square icon button interaction effects">
-        <StudioSquareIconButton icon={icon} label="Pop feedback on activation" animate sizeVariant={level === "l2" ? "compact" : "standard"} />
-        <StudioSquareIconButton icon={icon} label="Notification count" effect="notification" badge={3} sizeVariant={level === "l2" ? "compact" : "standard"} />
-        <StudioSquareIconButton icon={icon} label="Rotated toggle" effect="rotated-toggle" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
-        <StudioSquareIconButton icon={icon} activeIcon={<Check aria-hidden="true" />} label="3D flip" effect="flip" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="heart" label="Temporary heart fill + pop ripple" effect="heart-pop" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="bell" label="Bell ring + notification count" effect="bell-ring" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="like" label="Like counter + icon pop" effect="like" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="sun-moon" label="Sun / moon color toggle" effect="sun-moon" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="lock-unlock" label="Lock / unlock icon morph" effect="lock-unlock" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="download-check" label="Download success confirmation" effect="download-success" success tooltip="DOWNLOADED" sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton iconPreset="refresh" label="Refresh rotation" effect="refresh" sizeVariant={level === "l2" ? "compact" : "standard"} />
         <StudioSquareIconButton icon={icon} label="Tooltip on hover or focus" effect="tooltip" tooltip="EDIT ITEM" sizeVariant={level === "l2" ? "compact" : "standard"} />
-        <StudioSquareIconButton icon={icon} activeIcon={<Check aria-hidden="true" />} label="Morph between icons" effect="morph" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} activeIcon={<Check aria-hidden="true" />} label="3D flip" effect="flip" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
+        <StudioSquareIconButton icon={icon} activeIcon={<Check aria-hidden="true" />} label="Morph between custom icons" effect="morph" defaultSelected sizeVariant={level === "l2" ? "compact" : "standard"} />
         <StudioSquareIconButton icon={icon} label="Success confirmation" effect="success" success tooltip="SAVED" sizeVariant={level === "l2" ? "compact" : "standard"} />
       </div>
     </section>

@@ -4,7 +4,7 @@ import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { ChevronDown, ChevronUp, Minus, Plus } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Lock, Minus, Moon, Plus, RefreshCw, Sun, ThumbsUp, Unlock } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -87,9 +87,26 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
     v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
     v4: "Black face fill with primary (--pair-a) icon stroke.",
+    iconPresets: {
+      heart: "Heart outline; pair with heart-pop for temporary secondary-color fill and expanding border ripple.",
+      bell: "Bell outline; pair with bell-ring for bell rotation, secondary-color alert-dot pop, and border ripple.",
+      sunMoon: "Sun icon with Moon alternate face for a persistent selected toggle.",
+      lockUnlock: "Lock icon with Unlock alternate face for a persistent selected toggle.",
+      downloadCheck: "Download icon with Check alternate face; use download-success and success=true only after completion.",
+      refresh: "RefreshCw icon; pair with refresh for activation spin.",
+      like: "ThumbsUp icon; pair with like for pop feedback and a live activation count.",
+    },
     effects: {
       standard: "No additional motion; shared Studio press, hover, focus and disabled behavior only.",
       notification: "Optional positioned badge; count/status pop and icon shake. Supply badge only when a real count/status exists.",
+      popOnActivation: "One-shot inner icon pop; with the heart preset, also briefly fills the heart and emits an expanding secondary-color border ripple.",
+      heartPop: "Temporary heart fill, pop, and expanding/fading paired-color border ripple; never persists as selected state.",
+      bellRing: "Bell rotates, alert dot pops, and a secondary-color border ripple expands.",
+      like: "Live count increments on activation and the icon pops; count badge animates with the update.",
+      refresh: "Activation-triggered refresh rotation with a small scale response.",
+      sunMoon: "Persistent selected toggle crossfades and rotates between Sun and Moon.",
+      lockUnlock: "Persistent selected toggle morphs between Lock and Unlock.",
+      downloadSuccess: "Outcome-driven Download-to-Check state; set success only after the operation succeeds.",
       rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and press transform remain unchanged.",
       flip: "Opt-in two-face 3D flip; provide activeIcon for a meaningful alternate face.",
       tooltip: "Opt-in contextual label revealed on hover/focus; accessible name remains label.",
@@ -355,14 +372,22 @@ StudioIconButton.displayName = "StudioIconButton"
 
 
 export type StudioSquareIconButtonVariant = "v1" | "v2" | "v3" | "v4"
+export type StudioSquareIconPreset = "heart" | "bell" | "sun-moon" | "lock-unlock" | "download-check" | "refresh" | "like"
+
 export type StudioSquareIconButtonEffect =
   | "standard"
   | "notification"
   | "pop-on-activation"
+  | "heart-pop"
+  | "bell-ring"
   | "like"
   | "unlock"
   | "download"
   | "rotated-toggle"
+  | "sun-moon"
+  | "lock-unlock"
+  | "download-success"
+  | "refresh"
   | "flip"
   | "tooltip"
   | "morph"
@@ -371,7 +396,10 @@ export type StudioSquareIconButtonEffect =
 export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "children" | "selected"> {
   /** Visual comparison preset; outer button geometry is unchanged. */
   iconSizeVariant?: StudioIconSizeVariant
-  icon: React.ReactNode
+  /** Canonical feature icon pair; removes the need for placeholder glyphs. */
+  iconPreset?: StudioSquareIconPreset
+  /** Custom icon override. If omitted, iconPreset supplies the icon automatically. */
+  icon?: React.ReactNode
   label: string
   /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
    * v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
@@ -393,13 +421,30 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
   onSelectedChange?: (selected: boolean) => void
 }
 
+/** Canonical icon pair mapping; feature presets use consistent Lucide SVGs rather than placeholder glyphs. */
+const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: React.ReactNode; activeIcon?: React.ReactNode } | undefined => {
+  switch (preset) {
+    case "heart": return { icon: <Heart />, activeIcon: <Heart /> }
+    case "bell": return { icon: <Bell />, activeIcon: <Bell /> }
+    case "sun-moon": return { icon: <Sun />, activeIcon: <Moon /> }
+    case "lock-unlock": return { icon: <Lock />, activeIcon: <Unlock /> }
+    case "download-check": return { icon: <Download />, activeIcon: <Check /> }
+    case "refresh": return { icon: <RefreshCw /> }
+    case "like": return { icon: <ThumbsUp />, activeIcon: <ThumbsUp /> }
+    default: return undefined
+  }
+}
+
 /** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
 export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
   ({
-    icon, label, variant = "v1", effect = "standard", iconSizeVariant = "large", activeIcon, badge, tooltip, success = false, animate = false,
+    icon, iconPreset, label, variant = "v1", effect = "standard", iconSizeVariant = "large", activeIcon, badge, tooltip, success = false, animate = false,
     sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
     disabled, ...props
   }, ref) => {
+    const presetIcons = getStudioSquarePresetIcons(iconPreset)
+    const resolvedIcon = icon ?? presetIcons?.icon ?? <Plus />
+    const resolvedActiveIcon = activeIcon ?? presetIcons?.activeIcon
     const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
     const [animationKey, setAnimationKey] = React.useState(0)
     const [liveCount, setLiveCount] = React.useState(typeof badge === "number" ? badge : 0)
@@ -412,10 +457,11 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
       if (previousBadgeValue.current !== badgeValue) setAnimationKey(key => key + 1)
       previousBadgeValue.current = badgeValue
     }, [badgeValue])
-    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph" || effect === "unlock" || effect === "download"
+    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "lock-unlock"
     const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
-    const isSuccess = effect === "success" && success
+    const isSuccess = (effect === "success" || effect === "download-success") && success
     const effectClass = effect === "standard" ? (animate ? "is-effect-pop" : undefined) : `is-effect-${effect}`
+    const replayOnActivation = animate || ["notification", "pop-on-activation", "heart-pop", "bell-ring", "like", "refresh"].includes(effect)
     const tooltipId = React.useId()
     const successStatusId = React.useId()
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
@@ -424,7 +470,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
       if (event.currentTarget.disabled) return
       onClick?.(event)
       if (event.defaultPrevented) return
-      if (animate || effect === "notification" || effect === "pop-on-activation" || effect === "like") setAnimationKey(key => key + 1)
+      if (replayOnActivation) setAnimationKey(key => key + 1)
       if (counterEnabled) setLiveCount(count => count + 1)
       if (!selectable) return
       const next = !isSelected
@@ -436,8 +482,8 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         <path d="m5 12 4 4L19 6" />
       </svg>
     )
-    const iconNode = effect === "success" && isSuccess ? (activeIcon ?? fallbackCheck) : icon
-    const alternateNode = activeIcon ?? icon
+    const iconNode = effect === "success" && isSuccess ? (resolvedActiveIcon ?? fallbackCheck) : resolvedIcon
+    const alternateNode = resolvedActiveIcon ?? resolvedIcon
     const describedBy = [
       props["aria-describedby"],
       effect === "tooltip" && tooltip ? tooltipId : undefined,
@@ -458,36 +504,38 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         data-icon-size-variant={iconSizeVariant}
         data-icon-variant={variant}
         data-icon-effect={effect}
+        data-icon-preset={iconPreset}
         data-icon-only="true"
         data-icon-active={isSelected || isSuccess || animate ? "true" : "false"}
-        data-pop={(animate || effect === "pop-on-activation" || effect === "like") && animationKey > 0 ? "true" : undefined}
+        data-pop={replayOnActivation && animationKey > 0 ? "true" : undefined}
         data-success={isSuccess ? "true" : undefined}
         data-has-badge={badgeValue !== null ? "true" : undefined}
-        data-notification-pulse={(effect === "notification" || effect === "like") && badgeValue !== null && animationKey > 0 ? "true" : undefined}
+        data-notification-pulse={(effect === "notification" || effect === "bell-ring" || effect === "like") && (effect === "bell-ring" || badgeValue !== null) && animationKey > 0 ? "true" : undefined}
         onClick={handleClick}
       >
         <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
           {effect === "flip" ? (
             <span data-vt-square-flip-inner>
-              <span data-vt-square-flip-face="front">{icon}</span>
+              <span data-vt-square-flip-face="front">{resolvedIcon}</span>
               <span data-vt-square-flip-face="back">{alternateNode}</span>
             </span>
-          ) : effect === "morph" || effect === "rotated-toggle" || effect === "unlock" || effect === "download" ? (
+          ) : effect === "morph" || effect === "rotated-toggle" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "lock-unlock" || effect === "download-success" ? (
             <span data-vt-square-morph-inner>
-              <span data-vt-square-morph-face="front">{icon}</span>
+              <span data-vt-square-morph-face="front">{resolvedIcon}</span>
               <span data-vt-square-morph-face="back">{alternateNode}</span>
             </span>
           ) : (
             <span key={`${effect}:${animationKey}:${effect === "notification" || effect === "like" ? String(effectiveBadge ?? "") : ""}`} data-vt-square-icon-current>{iconNode}</span>
           )}
         </span>
+        {effect === "bell-ring" ? <span data-vt-square-alert-dot aria-hidden="true" /> : null}
         {(effect === "notification" || effect === "like") && effectiveBadge !== undefined && effectiveBadge !== null && effectiveBadge !== "" ? (
           <span key={`${String(effectiveBadge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{effectiveBadge}</span>
         ) : null}
         {effect === "tooltip" && tooltip ? (
           <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
         ) : null}
-        {effect === "success" && isSuccess && tooltip ? (
+        {(effect === "success" || effect === "download-success") && isSuccess && tooltip ? (
           <span id={successStatusId} role="status" aria-live="polite" aria-atomic="true" data-vt-square-success-label>{tooltip}</span>
         ) : null}
       </StudioButton>

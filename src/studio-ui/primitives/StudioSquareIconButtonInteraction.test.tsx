@@ -211,4 +211,46 @@ describe("StudioSquareIconButton interactions", () => {
     expect(buttons[1]?.getAttribute("aria-pressed")).toBe("true")
   })
 
+  it("provides canonical Lucide icon presets without placeholder glyphs", async () => {
+    await act(async () => {
+      root.render(<>
+        <StudioSquareIconButton label="Favorite" iconPreset="heart" effect="heart-pop" />
+        <StudioSquareIconButton label="Notifications" iconPreset="bell" effect="bell-ring" />
+        <StudioSquareIconButton label="Theme" iconPreset="sun-moon" effect="sun-moon" />
+        <StudioSquareIconButton label="Unlock" iconPreset="lock-unlock" effect="lock-unlock" />
+        <StudioSquareIconButton label="Download" iconPreset="download-check" effect="download-success" success />
+        <StudioSquareIconButton label="Refresh" iconPreset="refresh" effect="refresh" />
+        <StudioSquareIconButton label="Like" iconPreset="like" effect="like" />
+      </>)
+    })
+    const buttons = [...host.querySelectorAll("button")]
+    expect(buttons.map(button => button.getAttribute("data-icon-preset"))).toEqual([
+      "heart", "bell", "sun-moon", "lock-unlock", "download-check", "refresh", "like",
+    ])
+    expect(buttons.every(button => button.querySelector("svg"))).toBe(true)
+    expect(buttons[2]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
+    expect(buttons[3]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
+    expect(buttons[4]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
+    expect(buttons[4]?.getAttribute("data-success")).toBe("true")
+  })
+
+  it("replays the heart, bell, and refresh animation hooks on activation", async () => {
+    await act(async () => {
+      root.render(<>
+        <StudioSquareIconButton label="Favorite" iconPreset="heart" effect="heart-pop" />
+        <StudioSquareIconButton label="Notifications" iconPreset="bell" effect="bell-ring" />
+        <StudioSquareIconButton label="Refresh" iconPreset="refresh" effect="refresh" />
+      </>)
+    })
+    const buttons = [...host.querySelectorAll("button")]
+    for (const button of buttons) {
+      await act(async () => { button.dispatchEvent(new MouseEvent("click", { bubbles: true })) })
+      expect(button.getAttribute("data-pop")).toBe("true")
+    }
+    expect(buttons[0]?.className).toContain("is-effect-heart-pop")
+    expect(buttons[1]?.className).toContain("is-effect-bell-ring")
+    expect(buttons[1]?.querySelector("[data-vt-square-alert-dot]")).not.toBeNull()
+    expect(buttons[2]?.className).toContain("is-effect-refresh")
+  })
+
 })
