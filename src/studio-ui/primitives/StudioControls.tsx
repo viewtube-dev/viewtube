@@ -21,13 +21,13 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
     typography: {
-      standardInputFontSize: "18px",
-      compactInputFontSize: "14px",
+      standardInputFontSize: "38px",
+      compactInputFontSize: "24px",
       standardTextAreaFontSize: "18px",
       compactTextAreaFontSize: "14px",
-      rule: "Single-line inputs and textareas share 18px standard / 14px compact typography. Textareas additionally use multiline line-height, padding, and a 92px minimum writing surface.",
+      rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use the 18px standard / 14px compact multiline exception and a 92px minimum writing surface.",
     },
-    sizeFamily: "Use 18px standard / 14px compact typography for all single-line and multiline text fields. Size still selects 44px/28px height, 3px/2px stroke, and 6px/4px radius; textareas additionally use multiline padding, line-height, and a 92px minimum surface.",
+    sizeFamily: "Single-line inputs follow the global 38px standard / 24px compact typography. Textareas use the documented 18px / 14px multiline exception. Size still selects 44px/28px height, 3px/2px stroke, and 6px/4px radius; textareas additionally use multiline padding, line-height, and a 92px minimum surface.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
