@@ -174,7 +174,7 @@ export const presentAnalyticsFindings = (
     limitations: [...finding.limitations],
     layers: {
       fact: {
-        label: "Deterministic fact",
+        label: "Deterministic fact" as const,
         text: finding.baselineValue === null
           ? `${finding.metric}: ${finding.currentValue} (no comparable baseline)`
           : `${finding.metric}: ${finding.currentValue}; baseline ${finding.baselineValue}; change ${finding.delta ?? "undefined"}`,
