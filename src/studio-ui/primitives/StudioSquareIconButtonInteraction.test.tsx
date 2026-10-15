@@ -172,4 +172,43 @@ describe("StudioSquareIconButton interactions", () => {
 
     expect(button?.getAttribute("aria-pressed")).toBe("false")
   })
+  it("replays temporary heart activation without retaining selected state", async () => {
+    await act(async () => {
+      root.render(<StudioSquareIconButton label="Favorite" icon={<svg viewBox="0 0 24 24"><path d="M12 21 3 12a5 5 0 0 1 7-7l2 2 2-2a5 5 0 0 1 7 7z" /></svg>} effect="pop-on-activation" />)
+    })
+    const button = host.querySelector("button")
+    expect(button?.getAttribute("aria-pressed")).toBeNull()
+    await act(async () => { button?.dispatchEvent(new MouseEvent("click", { bubbles: true })) })
+    expect(button?.getAttribute("data-pop")).toBe("true")
+    expect(button?.getAttribute("aria-pressed")).toBeNull()
+    expect(button?.getAttribute("data-icon-effect")).toBe("pop-on-activation")
+  })
+
+  it("increments the like counter on every activation", async () => {
+    await act(async () => {
+      root.render(<StudioSquareIconButton label="Like" icon={<span>👍</span>} effect="like" />)
+    })
+    const button = host.querySelector("button")
+    expect(host.querySelector("[data-vt-square-badge]")?.textContent).toBe("0")
+    await act(async () => { button?.dispatchEvent(new MouseEvent("click", { bubbles: true })) })
+    expect(host.querySelector("[data-vt-square-badge]")?.textContent).toBe("1")
+    await act(async () => { button?.dispatchEvent(new MouseEvent("click", { bubbles: true })) })
+    expect(host.querySelector("[data-vt-square-badge]")?.textContent).toBe("2")
+  })
+
+  it("uses the alternate face for unlock and download completion states", async () => {
+    await act(async () => {
+      root.render(<>
+        <StudioSquareIconButton label="Unlock" icon={<span>🔒</span>} activeIcon={<span>🔓</span>} effect="unlock" />
+        <StudioSquareIconButton label="Download" icon={<span>↓</span>} activeIcon={<span>✓</span>} effect="download" />
+      </>)
+    })
+    expect(host.querySelectorAll("[data-vt-square-morph-inner]")).toHaveLength(2)
+    const buttons = host.querySelectorAll("button")
+    await act(async () => { buttons[0]?.dispatchEvent(new MouseEvent("click", { bubbles: true })) })
+    await act(async () => { buttons[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true })) })
+    expect(buttons[0]?.getAttribute("aria-pressed")).toBe("true")
+    expect(buttons[1]?.getAttribute("aria-pressed")).toBe("true")
+  })
+
 })
