@@ -193,8 +193,8 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   wordGap?: number;
 }
 export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
-  const rootRef = React.useRef<HTMLDivElement>(null);
-  const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const rootRef = React.React.useRef<HTMLDivElement>(null);
+  const wordRefs = React.React.useRef<Array<HTMLButtonElement | null>>([]);
   const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
   React.useEffect(() => {
     let frame = 0;
@@ -684,7 +684,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
   const [uncontrolled, setUncontrolled] = React.useState<string[]>(defaultValue)
   const [open, setOpen] = React.useState(false)
   const selected = value ?? uncontrolled
-  const rootRef = React.useRef<HTMLDivElement>(null)
+  const rootRef = React.React.useRef<HTMLDivElement>(null)
   const listId = React.useId()
   const setSelected = (next: string[]) => {
     if (value === undefined) setUncontrolled(next)
@@ -849,7 +849,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   const [open, setOpen] = React.useState(false)
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
   const [activeIndex, setActiveIndex] = React.useState(-1)
-  const rootRef = React.useRef<HTMLDivElement>(null)
+  const rootRef = React.React.useRef<HTMLDivElement>(null)
   const controlled = value !== undefined
   const currentValue = controlled ? value : internalValue
   const enabledOptions = options.filter((option) => !option.disabled)
@@ -1134,10 +1134,10 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   const [draft, setDraft] = React.useState(String(value))
   const [inputFocused, setInputFocused] = React.useState(false)
   const [holding, setHolding] = React.useState(false)
-  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const holdTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const repeatTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = React.useRef(0)
-  const heldDirection = useRef<-1 | 1>(1)
+  const heldDirection = React.useRef<-1 | 1>(1)
 
   React.useEffect(() => { if (!inputFocused) setDraft(String(value)) }, [value, inputFocused])
 
@@ -1342,8 +1342,8 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   const [fly, setFly] = React.useState<{ id: number; label: string; left: number; top: number } | null>(null);
   const [flyTarget, setFlyTarget] = React.useState<{ left: number; top: number } | null>(null);
   const [flyArrived, setFlyArrived] = React.useState(false);
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const editorRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.React.useRef<HTMLInputElement>(null);
+  const editorRef = React.React.useRef<HTMLDivElement>(null);
   const nextId = React.useRef(1);
 
   const commit = (next: string[]) => {
