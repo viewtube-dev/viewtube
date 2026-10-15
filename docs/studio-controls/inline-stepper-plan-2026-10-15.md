@@ -4,7 +4,7 @@ Date: 2026-10-15
 Repository: viewtube-dev/viewtube
 Base branch: master/consolidated-feature-integration
 Planning branch: plan/studio-controls-inline-stepper
-Status: Plan only — no component implementation or runtime behavior changed.
+Status: Implementation committed on the planning branch; automated and browser verification pending.
 
 ## Goal
 
@@ -57,7 +57,7 @@ Add a new canonical **Studio Controls** numeric stepper with a horizontal [-] [2
 13. Inspect a rendered browser result at standard and compact sizes, including focus, disabled, and min/max states.
 14. Record exact commands/results and separate pre-existing failures from regressions. Do not claim visual/browser certification without an actual rendered check.
 
-## Acceptance criteria
+## Implementation status\n\nImplemented on this branch: canonical TSX/CSS primitive, value normalization helper, public exports, confirmed-library specimen for both sizes, component contract tests, catalog integration test, and the focused test-script wiring. The existing vertical-rail StudioSplitStepper is unchanged. The repository could not be cloned into the local execution environment because GitHub hostname resolution failed, so tests, typecheck, lint, build, and browser screenshots have not been run locally. Open a draft PR to obtain CI evidence before claiming verification.\n\n## Acceptance criteria
 
 - [ ] New horizontal [-] [value] [+] control exists as a canonical Studio Controls primitive.
 - [ ] Left/right buttons are square and the control follows the 1:2:1 geometry.
