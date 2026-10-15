@@ -23,12 +23,22 @@ import {
 const DAY_MS = 24 * 60 * 60 * 1000
 const METRICS = [
   { metric: "views", aliases: ["views"] },
-  { metric: "estimatedMinutesWatched", aliases: ["estimatedMinutesWatched", "watchTimeMinutes"] },
+  { metric: "watchTimeMinutes", aliases: ["estimatedMinutesWatched", "watchTimeMinutes"] },
   { metric: "averageViewPercentage", aliases: ["averageViewPercentage"] },
   { metric: "likes", aliases: ["likes"] },
   { metric: "comments", aliases: ["comments"] },
-  { metric: "estimatedRevenue", aliases: ["estimatedRevenue", "revenue"] },
+  { metric: "revenue", aliases: ["estimatedRevenue", "revenue"] },
 ] as const
+
+const aliasesForMetric = (metric: string): readonly string[] => {
+  if (metric === "estimatedMinutesWatched" || metric === "watchTimeMinutes") return ["estimatedMinutesWatched", "watchTimeMinutes"]
+  if (metric === "estimatedRevenue" || metric === "revenue") return ["estimatedRevenue", "revenue"]
+  if (metric === "averageViewPercentage") return ["averageViewPercentage"]
+  if (metric === "views") return ["views"]
+  if (metric === "likes") return ["likes"]
+  if (metric === "comments") return ["comments"]
+  return [metric]
+}
 
 export interface PostPublicationOutcomePipelineResult {
   channelId: string
@@ -151,7 +161,11 @@ export const runPostPublicationOutcomePipeline = async (input: {
       candidate.status === "completed" && candidate.youtubeVideoId === videoId
     )
     if (!transaction) {
-      result.skipped += 1
+      result.failures.push({
+        contentBuildId: build.id,
+        stage: "analytics-checkpoint",
+        code: "verified-publish-transaction-unavailable",
+      })
       continue
     }
     result.publishedBuildsChecked += 1
@@ -160,7 +174,7 @@ export const runPostPublicationOutcomePipeline = async (input: {
       const report = await (input.fetchReport || fetchCanonicalAnalyticsReport)({
         startDate,
         endDate,
-        metrics: METRICS.map(metric => metric.aliases[0]),
+        metrics: [...new Set(METRICS.map(metric => metric.aliases[0]))],
         dimensions: ["day"],
         filters: [`video==${videoId}`],
         sort: "day",
@@ -171,21 +185,29 @@ export const runPostPublicationOutcomePipeline = async (input: {
         .sort((left, right) => left.day.localeCompare(right.day))
       const latestRow = rows.find(row => row.day === endDate) || null
       if (!latestRow) {
-        result.skipped += 1
+        result.failures.push({
+          contentBuildId: build.id,
+          stage: "analytics-checkpoint",
+          code: "latest-complete-video-analytics-row-unavailable",
+        })
       } else {
         const checkpointId = `daily:${endDate}`
         if (hasRecordedCheckpoint(build.id, videoId, checkpointId)) {
           result.skipped += 1
         } else {
           const baselineRows = rows.filter(row => row.day < endDate).slice(-7)
-          const observations: AlgorithmMetricObservation[] = METRICS.map(({ metric, aliases }) => ({
+          const dueRecommendations = recommendationsFor(algorithmEvents, build.id, videoId, nowMs)
+          const recommendationTargets = dueRecommendations.flatMap(event => event.evaluationTargets)
+          const observationMetricNames = [...new Set([
+            ...METRICS.map(({ metric }) => metric),
+            ...recommendationTargets.map(target => target.metric),
+          ])]
+          const observations: AlgorithmMetricObservation[] = observationMetricNames.map(metric => ({
             metric,
-            value: valueFor(latestRow, aliases),
+            value: valueFor(latestRow, aliasesForMetric(metric)),
             observedAt: Date.parse(`${endDate}T23:59:59.999Z`),
             evidenceId: `youtube-analytics:video:${videoId}:${endDate}:${metric}`,
           }))
-          const dueRecommendations = recommendationsFor(algorithmEvents, build.id, videoId, nowMs)
-          const recommendationTargets = dueRecommendations.flatMap(event => event.evaluationTargets)
           const targets: AlgorithmEvaluationTarget[] = recommendationTargets.length
             ? recommendationTargets
             : METRICS.map(({ metric, aliases }) => ({
