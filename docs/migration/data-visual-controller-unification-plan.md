@@ -4,7 +4,7 @@
 **Current authority:** `../analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md`  
 **Last re-audited:** 2026-09-24 against main `0c4610629bfba98ffc0703a42e422352d5f31514`
 
-Code-backed state: both declarative Analytics shells use `VisualControllerRail`; controller width-floor infrastructure is present; row-order authority has moved to module-authored order. The migration is still open because live `controllerSpec` metadata remains and the later vocabulary/orientation phases are not fully retired. The inventory below describes the original baseline where noted, not a guarantee about every current file.
+Code-backed state: both declarative Analytics shells use `VisualControllerRail`; controller width-floor infrastructure is present; row-order authority has moved to module-authored order. The `AnalyticsVisualShell` `controllerSpec` compatibility prop is now retired in favor of explicit module-authored `controllerRows`, `controllerWidth`, and `controllerDensity`. The migration remains open because the legacy preview JavaScript/CSS is still loaded and controller vocabulary/orientation, mark-scale migration, and portal behavior are not fully retired. The inventory below describes the original baseline where noted, not a guarantee about every current file.
 
 ## 2026-09-21 verification
 

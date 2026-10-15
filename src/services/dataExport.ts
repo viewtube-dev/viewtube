@@ -1,6 +1,6 @@
 import JSZip from "jszip"
 import { buildMasterTableBundle } from "./masterTables"
-import { getMasterRows, canonicalRowsToMasterTableRows } from "./analytics/Selectors"
+import { getMasterRows } from "./analytics/Selectors"
 import { getCurrentCanonicalRows, type AnalyticsWindow } from "./analytics-canon"
 import type { IngestMode, MasterTableType } from "./productArchitecture"
 import type { CsvFileWithTag } from "../types"
@@ -147,9 +147,7 @@ export const createExportBundle = async (
  }
 
  const uploadedCsvFiles = readUploadedCsvFiles()
- const apiRows = canonicalRowsToMasterTableRows(
-  getCurrentCanonicalRows(analyticsWindow),
- )
+ const apiRows = getCurrentCanonicalRows(analyticsWindow)
  const ownerRows = getMasterRows(analyticsWindow, "csv", uploadedCsvFiles)
  const authoritativeOwnerRows = selectAuthoritativeOwnerRows(ownerRows)
  const channelId = ((JSON.parse(ytCacheRaw) as { profile?: { id?: string } }).profile?.id ||

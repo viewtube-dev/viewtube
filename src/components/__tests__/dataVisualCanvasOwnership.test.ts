@@ -70,6 +70,15 @@ describe("Data Visual canvas ownership", () => {
   })
  })
 
+ it("retires controllerSpec metadata in favor of module-authored controller rows", () => {
+  expect(shellSource).not.toContain("controllerSpec")
+  expect(shellSource).toContain("controllerRows?: readonly ControllerRow[]")
+  expect(shellSource).toContain("controllerWidth?: number")
+  expect(shellSource).toContain("controllerDensity?: \"normal\" | \"compact\"")
+  expect(explorerSource).not.toContain("controllerSpec")
+  expect(explorerSource).toContain("controllerRows={")
+ })
+
  it("marks migrated module bodies so the stand-down can find them", () => {
   const moduleFrame = repoFile("src/components/TubeExplorerVisualModules.tsx")
   expect(moduleFrame).toContain('data-vt-data-visual-canvas-owned={canvasOwned ? "" : undefined}')
