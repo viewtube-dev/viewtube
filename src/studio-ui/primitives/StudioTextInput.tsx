@@ -65,7 +65,7 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
     const fieldId = id ?? `studio-text-input-${generatedId}`
 
     if (variant === "floating-label") {
-      const { className, style, controlClassName, controlStyle, ...inputProps } = props
+      const { className, style, controlClassName, controlStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, ...inputProps } = props
       return (
         <div
           data-vt-primitive-id="141"
@@ -95,7 +95,7 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
       )
     }
 
-    const { className, style, ...inputProps } = props
+    const { className, style, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, ...inputProps } = props
     return (
       <input
         ref={ref}
