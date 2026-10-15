@@ -188,7 +188,9 @@ export const buildPeriodComparisonInsights = (input: {
  }
  if (blockedReasons.size > 0) return { insights, blockedReasons: [...blockedReasons].sort() }
 
- const baselineById = new Map(baselineBundle.datasets.map((dataset) => [dataset.id, dataset]))
+ const baselineById = new Map<string, CanonicalIntelligenceDatasetManifest>(
+  baselineBundle.datasets.map((dataset) => [dataset.id, dataset] as const),
+ )
  const materialThreshold = input.minimumMaterialChangePercent ?? 20
  if (!Number.isFinite(materialThreshold) || materialThreshold <= 0) {
   return {
