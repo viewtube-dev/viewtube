@@ -1,5 +1,6 @@
 import type { BrainOrchestratorResult } from "../../../types"
 import type { RunBrainTurnInput } from "../BrainOrchestrator"
+import type { BrainAssistantEvidenceTrace } from "../BrainAssistantContinuity"
 
 export type BrainRuntimeSurface =
  | "ai-brain"
@@ -26,6 +27,7 @@ export interface BrainRuntimeMetadata {
  contentBuildId: string | null
  artifactRefs: string[]
  hasVisibleContext: boolean
+ assistantContinuityTrace?: BrainAssistantEvidenceTrace
 }
 
 export type BrainRuntimeResult = BrainOrchestratorResult & {
