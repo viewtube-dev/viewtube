@@ -140,6 +140,14 @@ https://support.google.com/youtube/topic/9314355
 **YouTube Help** — Check the current definitions for traffic sources and Analytics reports.  
 https://support.google.com/youtube/
 
+## Field Exercise: Diagnose a Traffic Mix Change
+
+Choose a video whose traffic mix changed. Fix the reporting window and compare source categories with the same metric definitions. For the largest movement, write what changed, what viewer intent the source may represent, and what evidence would distinguish competing explanations. Check whether the title and opening deliver the promise expected by viewers from that source. Make one adjustment only if the evidence points to a specific mismatch, and record a date for the next review.
+
+## Evidence Boundary: Traffic Attribution
+
+Traffic-source reports categorize attributed discovery; they are not a complete causal account of every view. Source labels and availability can change, and source-level averages combine different viewers and contexts. Do not infer that one source is inherently better from a single metric. Judge it against the video’s goal, the audience intent, and downstream behavior relevant to that upload.
+
 ## Document Maintenance
 
 | Attribute | Value |
