@@ -47,7 +47,7 @@ describe("Studio text field library entries", () => {
 describe("canonical Studio field, selection, and action contracts", () => {
   it("keeps default and placeholder field typography primary and identical", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
+    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
     expect(fields).toContain("color: var(--vt-field-color-1) !important")
     expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-color-1) !important")
@@ -61,7 +61,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
+    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
     expect(contract).toContain("width: 75.68px")
     expect(contract).toContain("width: 36.667px")
     expect(contract).toContain("transform: translateX(31.68px)")
@@ -81,8 +81,8 @@ describe("canonical Studio field, selection, and action contracts", () => {
 
   it("anchors the action shadow while only the face moves", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail). */"))
-    expect(contract).toContain('button[data-vt-studio-button="true"]::before')
+    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    expect(contract).toContain('button[data-vt-studio-button="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before')
     expect(contract).toContain("[data-vt-studio-button-face]")
     expect(contract).toContain("transition: transform 150ms ease-out")
     expect(contract).toContain("transition-duration: 300ms")
