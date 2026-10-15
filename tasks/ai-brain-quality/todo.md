@@ -1,11 +1,11 @@
 # ViewTube Brain Quality & Learning — Task List
 
 ## Evidence contract
-- [ ] Inventory canonical evidence types and producers.
-- [ ] Define additive epistemic/provenance projection.
-- [ ] Implement evidence-health calculation.
-- [ ] Integrate evidence health into Brain context.
-- [ ] Add missing/scope/provenance tests.
+- [x] Inventory canonical evidence types and producers (see `PHASES-0-2-EVIDENCE-CONTEXT-COMPLETION.md`).
+- [x] Define additive epistemic/provenance projection (`BrainEvidenceContract.ts`).
+- [x] Implement evidence-health calculation for coverage, missingness, stale state, scope and same-window conflicts.
+- [x] Integrate evidence health and scoped claims into Brain context.
+- [x] Add missing/scope/provenance regression tests (execution pending).
 
 ## Channel knowledge
 - [ ] Inventory Channel Profile + learning governance types.
@@ -16,7 +16,7 @@
 
 ## Context + prompts
 - [ ] Capability-specific context requirements.
-- [ ] Ranking/deduplication/token budgets.
+- [x] Task-aware ranking/deduplication/character budget and explicit omission reporting (`BrainContextResolution.ts`; test execution pending).
 - [ ] Prompt inventory.
 - [ ] Prompt constitution.
 - [ ] Versioned prompt families + provenance.
@@ -50,3 +50,11 @@
 - [ ] Migrate unsafe legacy prompt rules into canonical Prompt Constitution/families.
 - [ ] Establish rich/sparse/empty/stale/disabled prompt eval baselines.
 - [ ] Remove legacy prompt paths only after zero production reachability.
+
+
+## Phase 0–2 implementation branch — 2026-10-15
+
+- Implementation receipt and baseline/PR #217 reconciliation: `tasks/ai-brain-quality/PHASES-0-2-EVIDENCE-CONTEXT-COMPLETION.md`.
+- The shared evidence contract and task-aware final context resolver are implemented on `brain-phase-0-2-evidence-context`.
+- Do not mark the work certified or merged until focused tests, typecheck, runtime lint, full suite, production build, and source-governance checks pass on the current target baseline.
+- Remaining Phase 2 gaps are explicit in the completion record: canonical Project lookup from `projectId`, full per-capability evidence requirements, token-based budgeting, and Sidebar/Brain Hub parity.
