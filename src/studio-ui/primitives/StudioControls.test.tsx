@@ -273,12 +273,22 @@ describe("shared Studio icon-size comparison contract", () => {
     expect(html.match(/data-icon-size-variant="large"/g)).toHaveLength(2)
   })
 
+  it("defaults square and split-left controls to the large 38px/24px preset", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Default square" />
+        <StudioSplitLeftButton icon={<span>ICON</span>}>Default split</StudioSplitLeftButton>
+      </>,
+    )
+    expect(html.match(/data-icon-size-variant="large"/g)).toHaveLength(2)
+  })
+
   it("defines the requested icon dimensions while preserving standard and compact border geometry", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('data-icon-size-variant="moderate"][data-size="standard"] { --vt-studio-control-icon-size:34px')
     expect(css).toContain('data-icon-size-variant="moderate"][data-size="compact"] { --vt-studio-control-icon-size:22px')
-    expect(css).toContain('data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px')
-    expect(css).toContain('data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px')
+    expect(css).toContain('data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
+    expect(css).toContain('data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0;')
     expect(css).toContain('--vt-studio-control-stroke:3px')
     expect(css).toContain('--vt-studio-control-stroke:2px')
   })
@@ -320,8 +330,8 @@ describe("tactile button press accessibility and exclusion contract", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }')
-    expect(css).toContain('--vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5;')
-    expect(css).toContain('--vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65;')
+    expect(css).toContain('--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
+    expect(css).toContain('--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0;')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"]')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v4"]')
