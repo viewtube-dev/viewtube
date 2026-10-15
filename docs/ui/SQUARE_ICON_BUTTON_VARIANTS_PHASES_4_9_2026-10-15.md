@@ -23,6 +23,7 @@ Expanded `src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx` to co
 - Standard and compact size attributes, notification badge, tooltip, flip, morph and success markup.
 - Optional pop feedback and accessible success status semantics.
 - The reduced-motion rule and timing contracts for pop (180ms), badge/success pop (220ms), notification shake (320ms), rotated toggle (450ms), and 3D flip (500ms).
+- A jsdom interaction suite proves pop does not run on mount, runs after activation, V3 selection toggles, callbacks receive the next state, and cancelled clicks do not change selection.
 
 The tests are committed but must still be executed in CI or a local checkout before they can be considered passing.
 
@@ -63,7 +64,7 @@ Source-level checks completed:
 - Added stable accessibility semantics for success feedback and expanded the regression assertions.
 
 Release certification is **not complete** until the repository actually runs:
-1. `npx vitest run src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/components/CommentResponder.contract.test.ts src/studio-ui/StudioHubCertification.test.tsx`
+1. `npx vitest run src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx src/components/CommentResponder.contract.test.ts src/studio-ui/StudioHubCertification.test.tsx`
 2. `npm run typecheck`
 3. `npm run check:css`
 4. `npm run build`
@@ -76,6 +77,7 @@ Earlier Vercel checks were blocked by the account's build-rate limit. A blocked 
 - `src/studio-ui/primitives/StudioControls.tsx`
 - `src/styles/studio-control-system.css`
 - `src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx`
+- `src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx`
 - `src/studio-ui/StudioHubCertification.tsx`
 - `src/components/CommentResponder.tsx`
 - `src/components/CommentResponder.contract.test.ts`
