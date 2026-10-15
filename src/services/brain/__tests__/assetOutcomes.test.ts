@@ -11,6 +11,7 @@ import {
 import {
  editRatio,
  listAssetOutcomes,
+ linkAssetOutcomeToPublication,
  recordAssetOutcome,
  styleDriftBetween,
  summarizeAssetOutcomes,
@@ -145,6 +146,81 @@ describe("recordAssetOutcome", () => {
   expect(retry?.id).toBe(first?.id)
   expect(listAssetOutcomes({ assetId: asset.id })).toHaveLength(1)
   expect(listBrainOutcomes("channel-1").filter((record) => record.sourceRecordId === first?.id)).toHaveLength(1)
+ })
+
+ it("joins a published asset outcome to its immutable publication identity and analytics evidence", async () => {
+  const asset = await makeAsset()
+  const outcome = await recordAssetOutcome({ assetId: asset.id, kind: "published", idempotencyKey: "publish-asset-1" })
+  const publicationIdentity = {
+   schemaVersion: 1 as const,
+   contentBuildId: "build-1",
+   projectId: "project-1",
+   projectAssociationStatus: "verified" as const,
+   videoPackageId: "package-1",
+   publishTransactionId: "publish-tx-1",
+   youtubeVideoId: "youtube-video-1",
+   channelId: "channel-1",
+   approvedSnapshotId: "snapshot-1",
+   approvedSnapshotHash: "sha256:approved",
+   selectedVariantAssetIds: [asset.id],
+   correlationId: "correlation-1",
+   idempotencyKey: "publish-tx-1",
+   publishedAt: "2026-10-15T12:00:00.000Z",
+  }
+  const linked = linkAssetOutcomeToPublication({
+   assetId: asset.id,
+   channelId: "channel-1",
+   publicationIdentity,
+   analyticsCheckpointIds: ["checkpoint-1"],
+   evidenceIds: ["snapshot-1:videos:1"],
+  })
+  expect(linked).toMatchObject({
+   id: outcome?.id,
+   kind: "published",
+   contentBuildId: "build-1",
+   projectId: "project-1",
+   publishTransactionId: "publish-tx-1",
+   approvedSnapshotId: "snapshot-1",
+   approvedSnapshotHash: "sha256:approved",
+   publishedVideoId: "youtube-video-1",
+   analyticsCheckpointIds: ["checkpoint-1"],
+   evidenceIds: ["snapshot-1:videos:1"],
+  })
+  expect(listAssetOutcomes({ assetId: asset.id })[0]).toMatchObject({ publishTransactionId: "publish-tx-1" })
+  expect(listBrainOutcomes("channel-1")[0]).toMatchObject({
+   sourceRecordId: outcome?.id,
+   publishTransactionId: "publish-tx-1",
+   publishedVideoId: "youtube-video-1",
+   analyticsCheckpointIds: ["checkpoint-1"],
+   evidenceIds: ["snapshot-1:videos:1"],
+  })
+ })
+
+ it("rejects publication identity with a mismatched channel or unselected asset", async () => {
+  const asset = await makeAsset()
+  await recordAssetOutcome({ assetId: asset.id, kind: "published" })
+  const publicationIdentity = {
+   schemaVersion: 1 as const,
+   contentBuildId: "build-1",
+   projectId: "project-1",
+   projectAssociationStatus: "verified" as const,
+   videoPackageId: "package-1",
+   publishTransactionId: "publish-tx-1",
+   youtubeVideoId: "youtube-video-1",
+   channelId: "other-channel",
+   approvedSnapshotId: "snapshot-1",
+   approvedSnapshotHash: "sha256:approved",
+   selectedVariantAssetIds: ["some-other-asset"],
+   correlationId: "correlation-1",
+   idempotencyKey: "publish-tx-1",
+   publishedAt: "2026-10-15T12:00:00.000Z",
+  }
+  expect(linkAssetOutcomeToPublication({
+   assetId: asset.id,
+   channelId: "channel-1",
+   publicationIdentity,
+  })).toBeNull()
+  expect(listAssetOutcomes({ assetId: asset.id })[0].publishTransactionId).toBeUndefined()
  })
 
  it("links the outcome back to the generating trace and Brain ledger", async () => {
