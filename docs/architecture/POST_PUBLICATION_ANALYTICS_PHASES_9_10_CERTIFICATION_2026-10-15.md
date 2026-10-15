@@ -45,12 +45,13 @@ Certification is fail-closed. A merged PR, successful build, or reachable page a
 
 ### Current certification record
 
-- CI workflow: [ViewTube release gates run #851](https://github.com/viewtube-dev/viewtube/actions/runs/38702649440).
-- At the time this record was written, run #851 was pending; its final result must be checked before release approval.
+- CI workflow: [ViewTube release gates run #854](https://github.com/viewtube-dev/viewtube/actions/runs/38702756592), run against the phase 9 golden-path commit.
+- Observed run #854: production build, source governance, focused contracts and local Playwright smoke passed. Typecheck passed; runtime lint was still running at the last poll. The full suite failed on a stale source-contract assertion expecting `<WidgetSplitButton` in Video Manager even though the component now uses the canonical `<WidgetLeftSplitButton`. A follow-up test-only fix was committed after PR #232 merged and needs its own release-gates run.
 - Vercel status checks report build-rate-limit failures. Those checks are neither a passing build nor evidence that the Render master-integration deployment is current.
+- Read-only live check on 2026-10-15: [home route](https://publisher-3n7h.onrender.com/) returned HTTP 200 and rendered the ViewTube app; [`/api/release`](https://publisher-3n7h.onrender.com/api/release) returned HTTP 502 with an empty plain-text response. No release identity fields were available.
 - Expected live target for master integration: `https://publisher-3n7h.onrender.com`.
-- **Deployed SHA / branch / environment:** not certified yet.
-- **Live release endpoint and browser smoke:** pending final result.
+- **Deployed SHA / branch / environment:** not certified because `/api/release` is unhealthy.
+- **Live route smoke:** home route passed; release identity endpoint failed. Publisher/Studio route-level smoke still requires a successful identity endpoint and a clean release candidate.
 - **Production deployment:** not triggered by this change. Do not deploy or mark production certified while required gates are failing or pending.
 
 ### Remaining release blockers
