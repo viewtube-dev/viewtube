@@ -78,6 +78,12 @@ Platform revenue is not the same as profit. A creator may have expenses for equi
 
 For sponsorships, affiliate arrangements, products and memberships, record the agreement, deliverables, deadlines, disclosures, payment terms, and any applicable restrictions. Keep receipts and records using a process appropriate for your location and business. For tax or legal questions, consult a qualified professional.
 
+## Keep a Revenue Record
+
+Record revenue by source and period, the content associated with it when attribution is meaningful, direct production costs, and major external factors. Keep platform revenue, sponsorship payments, affiliate commissions, product sales, and costs distinct before calculating a combined business view. Normalize periods before comparing and annotate unusual events rather than deleting them.
+
+Diversification can reduce dependence on one source, but it is not automatically better. Each additional revenue stream has costs, obligations, disclosure needs, and audience-trust risks. Choose options that fit your audience and capacity instead of adding every available feature.
+
 ## Diagnose Revenue Questions
 
 ### “Views increased but revenue did not.”
