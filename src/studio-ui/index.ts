@@ -34,6 +34,11 @@ export {
   StudioSearchInput,
   StudioSelect,
   StudioSplitLeftButton,
+  StudioSwitch,
+  StudioWordToggle,
+  StudioRadio,
+  StudioCheckbox,
+  StudioXCheckbox,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,

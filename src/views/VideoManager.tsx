@@ -619,7 +619,7 @@ const VideoManager: React.FC<VideoManagerProps> = ({
      />
      {showHeaderLoadAssetsButton ? (
       <StudioSplitLeftButton
-       sizeVariant="action"
+       sizeVariant="standard"
        tone="neutral"
        icon={<RefreshCw aria-hidden="true" size={18} />}
        className="!w-auto"

@@ -58,7 +58,7 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
 export const StudioTextInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "text", placeholder = "TITLE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
+>(({ sizeVariant = "standard", type = "text", placeholder = "TYPE HERE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
   <input
     ref={ref}
     type={type}
@@ -80,7 +80,7 @@ export const StudioInput = StudioTextInput
 export const StudioSearchInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "search", placeholder = "TITLE", ...props }, ref) => (
+>(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
   <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
@@ -89,7 +89,7 @@ StudioSearchInput.displayName = "StudioSearchInput"
 export const StudioNumberInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "number", placeholder = "TITLE", ...props }, ref) => (
+>(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
   <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
 ))
 StudioNumberInput.displayName = "StudioNumberInput"
@@ -102,7 +102,7 @@ StudioNumberInput.displayName = "StudioNumberInput"
 export const StudioTextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", rows, placeholder = "DESCRIPTION", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
+>(({ sizeVariant = "standard", rows, placeholder = "TYPE HERE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
   <textarea
     ref={ref}
     rows={rows ?? 4}
@@ -239,6 +239,13 @@ export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = pr
 Studioxbox.displayName = "Studioxbox"
 export const Studioinput = StudioTextInput
 export const Studioarea = StudioTextArea
+
+/** Canonical public names; lowercase legacy exports remain compatibility aliases. */
+export const StudioSwitch = Studioswitch
+export const StudioWordToggle = Studiotoggle
+export const StudioRadio = Studioradio
+export const StudioCheckbox = Studiocheck
+export const StudioXCheckbox = Studioxbox
 
 export const StudioSelect = React.forwardRef<
   HTMLSelectElement,

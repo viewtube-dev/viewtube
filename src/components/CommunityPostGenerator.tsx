@@ -33,7 +33,7 @@ export const CommunityPostGenerator: React.FC = () => {
       const active = post.postType === id
       return <StudioSplitLeftButton
        key={id}
-       sizeVariant="action"
+       sizeVariant="standard"
        selected={active}
        aria-pressed={active}
        icon={<Icon size={18} aria-hidden="true" />}
