@@ -39,3 +39,27 @@ test("global defaults distinguish the measured focus shadow from the CSS outline
   assert.match(controls, /visible focus accent at 0px offset[\s\S]*?computed CSS outline itself measured 1px/);
   assert.match(catalog, /Focus measurement note:[\s\S]*?These are separate layers/);
 });
+
+test("floating labels use the reduced overlapping-label geometry and strong text stroke", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*24px/);
+  assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
+  assert.match(fieldCss, /translateY\(-75%\) scale\(\.75\)/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
+  assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
+  assert.match(fieldCss, /:focus[^\\n]*outline:[^;]*var\(--vt-field-focus-outline-width\)[^;]*var\(--vt-field-secondary\)/);
+});
+
+test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
+  assert.match(controls, /variant\?:\s*"a"\s*\|\s*"b"/);
+  assert.match(catalog, /label="TITLE"[^>]*variant="b"[^>]*sizeVariant="compact"/);
+  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][\s\S]*?data-size="compact"[^\n]*:is\(:focus, :focus-visible\)/);
+});
+
+test("non-default settings explain the real public props in plain language", () => {
+  assert.ok(catalog.includes("The visible label is supplied through label; there is no overlayLabel prop."));
+  assert.ok(catalog.includes("A focused or non-empty field lifts the label above the border."));
+  assert.ok(catalog.includes("Only Compact B adds the solid secondary-color focus stroke."));
+  assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
+});
