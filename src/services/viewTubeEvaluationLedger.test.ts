@@ -78,6 +78,7 @@ beforeEach(() => {
    youtubeVideoId: "youtube-1",
    approvedSnapshotId: "approved-a",
    approvedSnapshotHash: "hash-a",
+   contentBuildId: "build-a",
    channelId: "channel-a",
   },
  }])
@@ -161,7 +162,7 @@ describe("outcome evaluation and governed learning lineage", () => {
    channelId: "channel-a",
    kind: "published",
    publishedVideoId: "youtube-1",
-   publishTransactionId: "publish-a",
+   publishTransactionId: "publish-other",
    traceId: "trace-a",
   }])
   const record = createPublicationEvaluationRecord({
