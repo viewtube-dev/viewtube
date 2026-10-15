@@ -31,7 +31,8 @@ test("learning records are user/channel scoped and idempotent by record type and
 
   const rows = await listPersistedBrainLearningRecords({ userId: userA, channelId: channelA });
   assert.equal(rows.length, 2);
-  assert.deepEqual(new Set(rows.map((row) => row.id)), new Set(["outcome-1", "evaluation-1"]));
+  assert.deepEqual(new Set(rows.map((row) => row.record.id)), new Set(["outcome-1", "evaluation-1"]));
+  assert.deepEqual(new Set(rows.map((row) => row.recordType)), new Set(["brainOutcome", "evaluation"]));
   assert.equal((await listPersistedBrainLearningRecords({ userId: userB, channelId: channelA })).length, 1);
   assert.equal((await listPersistedBrainLearningRecords({ userId: userA, channelId: channelB })).length, 0);
 });
