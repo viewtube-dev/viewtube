@@ -319,7 +319,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
-    contextBudget: context.budget, taskProfileId: taskProfile.id },
+    taskProfileId: taskProfile.id },
  })
  const capabilities = selectBrainCapabilities({ channelId: input.channelId, userText: input.userText, snapshot: input.snapshot })
  const capabilityIds = capabilities.map((capability) => capability.id)
