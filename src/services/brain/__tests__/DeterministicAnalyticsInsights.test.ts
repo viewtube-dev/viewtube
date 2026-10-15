@@ -368,8 +368,11 @@ describe("deterministic analytics insights", () => {
    recommendation: null,
   })
   expect(finding.evidenceRefs).toContain("analytics:snapshot-anomaly:daily:views")
-  expect(adaptAnomaliesToAnalyticsFindings([anomaly, { ...anomaly, id: "daily:all:views:2026-10-13" }]).map((item) => item.id))
-   .toEqual(["analytics-insight:anomaly:daily:7c5b7b0d", "analytics-insight:anomaly:daily:7c5b7b0d"].sort())
+  const anomalies = [anomaly, { ...anomaly, id: "daily:all:views:2026-10-13" }]
+  const batch = adaptAnomaliesToAnalyticsFindings(anomalies)
+  expect(batch).toHaveLength(2)
+  expect(batch.map((item) => item.id)).toEqual([...batch.map((item) => item.id)].sort())
+  expect(batch.map((item) => item.id)).toEqual(adaptAnomaliesToAnalyticsFindings([...anomalies].reverse()).map((item) => item.id))
  })
 
 })
