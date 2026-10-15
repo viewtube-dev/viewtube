@@ -58,6 +58,7 @@ import {
 import { listMetadataHistory, recordMetadataPackageVersion } from "../services/metadataHistory"
 import type { ContentBuildEvent } from "../services/asset-engine/contracts"
 import { recordMetadataOperationProvenance } from "../services/MetadataOperationProvenance"
+import { resolveHistoricalMetadataContext } from "../services/historicalMetadataIntelligence"
 import {
   createViewTubeActionPacket,
   persistViewTubeActionPacket,
@@ -189,6 +190,41 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         "metadata-master",
         ["title", "thumbnail", "description", "tags", "category"],
       )
+      const historicalContext = workspaceContext ? resolveHistoricalMetadataContext({
+        contentBuildId: workspaceContext.contentBuildId,
+        videoId: publishedVideoId || workspaceContext.build.youtube?.videoId || "",
+        changeAt: Date.now(),
+        daysBefore: 90,
+        daysAfter: 0,
+      }) : null
+      const historicalComparisons = (historicalContext?.analyticsCheckpointEvents || [])
+        .filter(item => item.result.status === "ready" || item.result.status === "partial")
+        .slice(-3)
+        .map(item => {
+          const changes = Array.isArray(item.result.fieldChanges)
+            ? item.result.fieldChanges as Array<Record<string, unknown>>
+            : []
+          const metrics = Array.isArray(item.result.metrics)
+            ? item.result.metrics as Array<Record<string, unknown>>
+            : []
+          const changeText = changes.slice(0, 3).map(change =>
+            `${String(change.field)}: ${String(change.before ?? "—").slice(0, 100)} → ${String(change.after ?? "—").slice(0, 100)}`
+          ).join("; ")
+          const metricText = metrics.filter(metric =>
+            typeof metric.baselineAverage === "number" && typeof metric.followUpAverage === "number"
+          ).slice(0, 3).map(metric =>
+            `${String(metric.metric)} ${Number(metric.baselineAverage).toFixed(2)} → ${Number(metric.followUpAverage).toFixed(2)}`
+          ).join("; ")
+          return `Status ${String(item.result.status)} · ${String(item.result.baselineStartDate || "")}–${String(item.result.baselineEndDate || "")} vs ${String(item.result.followUpStartDate || "")}–${String(item.result.followUpEndDate || "")}. Changes: ${changeText || "not available"}. Metrics: ${metricText || "incomplete"}.`
+        })
+      const historicalEvidenceBrief = historicalComparisons.length
+        ? `HISTORICAL METADATA EVIDENCE (descriptive association only; not causal proof):\n${historicalComparisons.join("\n")}\nDo not infer causation from these comparisons. Treat missing metrics as unknown, note confounders, and use the evidence as context rather than a rule.`
+        : ""
+      const operationStrategyBrief = [
+        operationStrategyBrief,
+        historicalEvidenceBrief,
+      ].filter(Boolean).join("\n\n")
+
       const result = await generateSeoData(
         concept,
         niche,
@@ -241,7 +277,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           recipeId: "metadata-master.seo-package",
           recipeVersion: "1",
           outputPackageIds: candidates.map(candidate => candidate.package.id),
-          evidenceIds: workspaceContext.evidenceIds,
+          evidenceIds: [...workspaceContext.evidenceIds, ...(historicalContext?.evidenceIds || [])],
           provider: "gemini-service",
           model: null,
           actorType: "brain",
