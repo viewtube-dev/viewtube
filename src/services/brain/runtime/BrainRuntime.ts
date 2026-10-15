@@ -1,5 +1,6 @@
 import { runBrainTurn, type RunBrainTurnInput } from "../BrainOrchestrator"
 import { defaultBrainModelGateway } from "./BrainModelGateway"
+import { resolveBrainAssistantContinuity, type BrainAssistantEvidenceTrace } from "../BrainAssistantContinuity"
 import type {
  BrainRuntimeMetadata,
  BrainRuntimeRequest,
@@ -49,10 +50,53 @@ export const buildBrainRuntimeMetadata = (
 export const runBrainTask = async (
  input: BrainRuntimeRequest,
 ): Promise<BrainRuntimeResult> => {
- const result = await runBrainTurn(toLegacyInput(input))
+ const visibleContext = input.visibleContext || {}
+ const surface = input.surface === "sidebar-chatbot"
+  ? "sidebar"
+  : input.surface === "brain-hub-widget"
+   ? "brain_hub"
+   : "workspace"
+ const evidenceIds = Array.isArray(input.snapshot?.evidencePack?.evidenceIds)
+  ? input.snapshot.evidencePack.evidenceIds
+  : []
+ const continuity = resolveBrainAssistantContinuity({
+  location: {
+   surface,
+   route: typeof visibleContext.route === "string" ? visibleContext.route : null,
+   toolId: typeof visibleContext.toolId === "string" ? visibleContext.toolId : null,
+   channelId: input.channelId,
+   projectId: input.projectId || input.project?.id || (typeof visibleContext.projectId === "string" ? visibleContext.projectId : null),
+   contentBuildId: typeof visibleContext.contentBuildId === "string" ? visibleContext.contentBuildId : input.project?.contentBuildId || null,
+   videoId: typeof visibleContext.videoId === "string" ? visibleContext.videoId : null,
+  },
+  userText: input.userText,
+  contextSections: [
+   `SYSTEM_PROMPT\n${input.systemPrompt}`,
+   `ACTIVE_PROJECT_CONTEXT\n${JSON.stringify({
+    projectId: input.projectId || input.project?.id || null,
+    contentBuildId: input.project?.contentBuildId || visibleContext.contentBuildId || null,
+    projectName: input.project?.name || null,
+   })}`,
+   `CURRENT_VIEW_CONTEXT\n${JSON.stringify(visibleContext)}`,
+   `EVIDENCE_REFERENCES\n${JSON.stringify(evidenceIds.slice(0, 50))}`,
+  ],
+  evidenceIds,
+ })
+ const runtimeInput: BrainRuntimeRequest = {
+  ...input,
+  systemPrompt: `${input.systemPrompt}\n\nASSISTANT CONTINUITY TRACE (scope metadata, not additional evidence)\n${JSON.stringify(continuity.trace, null, 2)}\nRespect the declared channel/project/video scope. Omitted context is unavailable, not negative evidence.`,
+  visibleContext: {
+   ...visibleContext,
+   assistantContinuityTrace: continuity.trace,
+  },
+ }
+ const result = await runBrainTurn(toLegacyInput(runtimeInput))
  return {
   ...result,
-  runtime: buildBrainRuntimeMetadata(input),
+  runtime: {
+   ...buildBrainRuntimeMetadata(runtimeInput),
+   assistantContinuityTrace: continuity.trace,
+  },
  }
 }
 
