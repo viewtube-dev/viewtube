@@ -79,6 +79,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(contract).toContain("[data-vt-studio-button-face]")
     expect(contract).toContain("transition: transform 150ms ease-out")
     expect(contract).toContain("transition-duration: 300ms")
+    expect(contract).toContain("width: 36px !important")
     expect(contract).toContain("button[data-vt-studio-button=\"true\"][data-split-left=\"true\"] [data-vt-studio-split-rail]")
   })
 })
