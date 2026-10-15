@@ -58,10 +58,11 @@ test("floating labels use balanced box spacing, 40% border alignment, and 80% fl
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\+\s*\.vt-studio-floating-field-label\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
 });
 
-test("circle icon buttons scale default large icons to 80% of their square-button size", () => {
+test("circle icon buttons scale the rendered SVG to 80% of the canonical icon preset", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="standard"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*calc\(38px\s*\*\s*\.8\)/s);
-  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*calc\(24px\s*\*\s*\.8\)/s);
+  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="standard"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*38px/s);
+  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*24px/s);
+  assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\s*\[data-vt-square-icon-current\]\s*svg\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-icon-size,\s*28px\)\s*\*\s*\.8\);[^}]*height:\s*calc\(var\(--vt-studio-control-icon-size,\s*28px\)\s*\*\s*\.8\)/s);
 });
 
 test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
