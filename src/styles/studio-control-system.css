@@ -331,9 +331,11 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
   --vt-studio-44-button-shadow-x: 3px; --vt-studio-44-button-shadow-y: 3px;
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
-  --vt-studio-28-button-shadow-x: 1.5px; --vt-studio-28-button-shadow-y: 1.5px;
+  --vt-studio-28-button-shadow-x: 1px; --vt-studio-28-button-shadow-y: 1px;
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
+  --vt-studio-text-input-standard-font-size: 18px; --vt-studio-text-input-compact-font-size: 14px;
+  --vt-studio-text-input-standard-line-height: 1.25; --vt-studio-text-input-compact-line-height: 1.3;
   --vt-studio-textarea-standard-font-size: 18px; --vt-studio-textarea-compact-font-size: 14px;
   --vt-studio-control-letter-spacing: -.035em; --vt-studio-control-line-height: .86;
   --vt-studio-control-height: var(--vt-studio-44-height);
@@ -760,6 +762,14 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   height: var(--vt-studio-control-height);
 }
+input[data-vt-studio-control="true"][data-size="standard"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  font-size: var(--vt-studio-text-input-standard-font-size, 18px) !important;
+  line-height: var(--vt-studio-text-input-standard-line-height, 1.25) !important;
+}
+input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  font-size: var(--vt-studio-text-input-compact-font-size, 14px) !important;
+  line-height: var(--vt-studio-text-input-compact-line-height, 1.3) !important;
+}
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   display: block;
   height: auto;
@@ -921,9 +931,12 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 }
 
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
-button[data-vt-studio-button="true"] { appearance:none; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); overflow:visible; transform:translate(0,0); transition:box-shadow 150ms ease-out; }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
-button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
+button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:none; overflow:visible; transform:translate(0,0); transition:none; }
+button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); pointer-events:none; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1px; --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
 /* Separate prominent action family. Not a StudioButton size variant. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
@@ -952,7 +965,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none; }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
 button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] { padding-inline:8px; font-size:24px; }
 button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
 button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-shadow,3px),var(--vt-studio-control-shadow,3px)); transition-duration:300ms; }
