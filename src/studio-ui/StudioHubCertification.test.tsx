@@ -30,7 +30,7 @@ describe("Studio Hub canonical controls", () => {
     expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail]')
     expect(css).toContain("height: 100%")
     expect(css).toContain("place-items: center")
-    expect(css).toContain('button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-label]')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label]')
     expect(css).toContain("align-items: center")
   })
 
