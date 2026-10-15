@@ -1,7 +1,7 @@
 import { appendContentBuildEvent, bindYouTubeVideo, getContentBuild, setContentBuildStage } from "./ContentBuildRepository"
 import type { ContentBuildYouTubeBinding } from "./contracts"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
-import { persistApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
+import { getApprovedPublishSnapshot, persistApprovedPublishSnapshot, verifyApprovedPublishSnapshot } from "./ApprovedPublishSnapshot"
 
 export type PublishTransactionStep =
  | "validate-package" | "creator-approval" | "upload-video" | "bind-youtube"
@@ -36,8 +36,33 @@ const canStore=()=>{try{return typeof localStorage!=="undefined"}catch{return fa
 const read=():ContentBuildPublishTransaction[]=>{if(!canStore())return memory;try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return []}}
 const write=(v:ContentBuildPublishTransaction[])=>{if(!canStore()){memory=v;return}try{localStorage.setItem(KEY,JSON.stringify(v))}catch{}}
 const save=(t:ContentBuildPublishTransaction)=>{const all=read(),i=all.findIndex(x=>x.id===t.id);if(i>=0)all[i]=t;else all.push(t);write(all);return t}
+const assertTransactionSnapshotIntegrity = (transaction: ContentBuildPublishTransaction) => {
+ const snapshot = getApprovedPublishSnapshot(transaction.approvedSnapshotId)
+ if (!snapshot || !verifyApprovedPublishSnapshot(snapshot)) {
+  throw new Error("Publish transaction approved snapshot is missing or failed integrity verification.")
+ }
+ const assetsMatch =
+  transaction.contentBuildId === snapshot.contentBuildId &&
+  transaction.videoPackageId === snapshot.videoPackageId &&
+  transaction.approvedSnapshotHash === snapshot.hash &&
+  transaction.assetLock.projectionRevision === snapshot.contentBuildRevision &&
+  transaction.assetLock.titleAssetId === snapshot.assets.titleAssetId &&
+  transaction.assetLock.thumbnailAssetId === snapshot.assets.thumbnailAssetId &&
+  transaction.assetLock.finalRenderAssetId === snapshot.assets.finalRenderAssetId &&
+  transaction.assetLock.descriptionAssetId === snapshot.assets.descriptionAssetId &&
+  transaction.assetLock.tagsAssetId === snapshot.assets.tagsAssetId &&
+  transaction.assetLock.scheduledAt === snapshot.scheduledAt
+ if (!assetsMatch) {
+  throw new Error("Publish transaction binding does not match its approved snapshot and locked assets.")
+ }
+ return transaction
+}
+
 export const listPublishTransactions=(contentBuildId:string)=>read().filter(x=>x.contentBuildId===contentBuildId).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))
-export const getPublishTransaction=(id:string)=>read().find(x=>x.id===id)||null
+export const getPublishTransaction=(id:string)=>{
+ const transaction=read().find(x=>x.id===id)||null
+ return transaction ? assertTransactionSnapshotIntegrity(transaction) : null
+}
 
 export const beginPublishTransaction=(projection:PublishingPackageProjection,toolId="video-publisher")=>{
  if(!projection.ready) throw new Error("Publishing Package is not ready: "+projection.missing.join(", "))
@@ -46,12 +71,12 @@ export const beginPublishTransaction=(projection:PublishingPackageProjection,too
  // render already has a transaction, later metadata/package edits must resume it
  // rather than silently creating another remote upload.
  const existingForRender=read().find(x=>x.contentBuildId===projection.contentBuildId&&x.assetLock.finalRenderAssetId===projection.finalRenderAssetId)
- if(existingForRender) return existingForRender
+ if(existingForRender) return assertTransactionSnapshotIntegrity(existingForRender)
 
  const approvedSnapshot=persistApprovedPublishSnapshot(projection)
  const key=`publish:${approvedSnapshot.contentBuildId}:${approvedSnapshot.id}`
  const existing=read().find(x=>x.contentBuildId===approvedSnapshot.contentBuildId&&x.approvedSnapshotId===approvedSnapshot.id)
- if(existing) return existing
+ if(existing) return assertTransactionSnapshotIntegrity(existing)
  const timestamp=now()
  const transaction:ContentBuildPublishTransaction={
   id:uuid(),contentBuildId:approvedSnapshot.contentBuildId,videoPackageId:approvedSnapshot.videoPackageId,idempotencyKey:key,
