@@ -169,6 +169,7 @@
 - [x] Extend the shared creator-context resolver to resolve a requested project ID from the canonical project index supplied by the active Brain state when a surface omits the full Project object.
 - [x] Pass the canonical project index through BrainRuntime and the Sidebar Copilot, Brain Hub, and full Brain workspace callers.
 - [x] Add a regression test proving exact-ID resolution joins the matching ContentBuild and does not use a neighboring project.
-- [ ] Complete the per-capability evidence requirements matrix and fail-closed checks for absent required evidence.
+- [x] Define a per-capability evidence requirements matrix and report absent required context sections explicitly; regression tests cover matrix completeness and missing evidence.
+- [ ] Validate the semantics against each production capability and add evidence-present/disabled-control cases.
 - [ ] Implement model-aware token budgeting from an explicit model/context-window contract rather than guessing provider limits.
 - [ ] Verify cross-surface parity and channel/project isolation with focused tests and current-head release gates.
