@@ -105,3 +105,40 @@ test("learning lifecycle updates may change outcome state while preserving stabl
   assert.equal(rows[0].record.outcome, "positive");
   assert.equal(rows[0].record.updatedAt, 200);
 });
+
+test("sparse retries preserve previously asserted stable identity fields", async () => {
+  const userId = "learning-test-sparse-retry";
+  const channelId = "learning-channel-sparse-retry";
+  const original = {
+    recordType: "brainOutcome",
+    record: {
+      id: "outcome-sparse-retry",
+      channelId,
+      sourceRecordId: "asset-outcome-original",
+      traceId: "trace-original",
+      projectId: "project-original",
+      outcome: "completed",
+    },
+  };
+  await upsertPersistedBrainLearningRecords({ userId, channelId, records: [original] });
+
+  await upsertPersistedBrainLearningRecords({
+    userId,
+    channelId,
+    records: [{
+      recordType: "brainOutcome",
+      record: {
+        id: original.record.id,
+        channelId,
+        outcome: "reviewed",
+      },
+    }],
+  });
+
+  const rows = await listPersistedBrainLearningRecords({ userId, channelId });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].record.outcome, "reviewed");
+  assert.equal(rows[0].record.sourceRecordId, "asset-outcome-original");
+  assert.equal(rows[0].record.traceId, "trace-original");
+  assert.equal(rows[0].record.projectId, "project-original");
+});
