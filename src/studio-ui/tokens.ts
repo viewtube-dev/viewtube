@@ -38,5 +38,14 @@ export const STUDIO_TOKENS = {
   breakpoints: { phoneMax: 767, compactShellMax: 900 },
 } as const
 
+/** Comparison presets for the shared 24×24 Lucide-style SVG viewBox. Button geometry stays 44px / 28px; only icon artwork dimensions change. Stroke values compensate for SVG viewport scaling to keep rendered line weight close to the current baseline. */
+export const STUDIO_ICON_SIZE_COMPARISON = {
+  current: { standard: { size: 28, stroke: 2.5 }, compact: { size: 18, stroke: 1.65 } },
+  moderate: { standard: { size: 34, stroke: 2.0588 }, compact: { size: 22, stroke: 1.35 } },
+  large: { standard: { size: 38, stroke: 1.8421 }, compact: { size: 24, stroke: 1.2375 } },
+} as const
+
+export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
+
 export type StudioControlSize = "standard" | "compact"
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
