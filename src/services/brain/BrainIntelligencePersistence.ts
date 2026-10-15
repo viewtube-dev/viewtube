@@ -2,6 +2,7 @@ import { upsertAlgorithmIntelligenceEvents, type AlgorithmIntelligenceEvent } fr
 import { upsertAlgorithmLifecycleObservations } from "./AlgorithmLifecycleObservationStore"
 import type { AlgorithmLifecycleObservation } from "./AlgorithmLifecycleCohorts"
 import { hydrateBrainLearningFromPersistence } from "./BrainLearningPersistence"
+import { redactLegacyCreatorCommunicationText } from "./BrainCommunicationIngestion"
 
 const endpoint = (channelId: string) => `/api/brain-intelligence?channelId=${encodeURIComponent(channelId)}`
 
@@ -91,11 +92,12 @@ export const hydrateBrainIntelligenceFromPersistence = async (channelId: string)
   .filter((row): row is AlgorithmLifecycleObservation => Boolean(row && typeof row === "object" && String((row as AlgorithmLifecycleObservation).channelId || "") === channelId))
  upsertAlgorithmIntelligenceEvents(events)
  upsertAlgorithmLifecycleObservations(observations)
+ const redactedLegacyCommunications = redactLegacyCreatorCommunicationText(channelId)
  let learning = null
  try {
   learning = await hydrateBrainLearningFromPersistence(channelId)
  } catch (error) {
   console.warn("[BrainIntelligencePersistence] learning-ledger hydration unavailable; retaining local cache:", error)
  }
- return { channelId, events: events.length, observations: observations.length, learning }
+ return { channelId, events: events.length, observations: observations.length, redactedLegacyCommunications, learning }
 }

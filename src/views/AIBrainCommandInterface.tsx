@@ -793,7 +793,7 @@ const AIBrainCommandInterface: React.FC = () => {
     || null
    if (channelId) {
     const communicationControls = readBrainUserControls(channelId)
-    if (communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions) {
+    if (communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions && communicationControls.captureCreatorCommunications) {
      try {
       recordCreatorCommunicationEvidence({
        channelId,

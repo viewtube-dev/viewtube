@@ -151,7 +151,7 @@ export const SidebarChatbot: React.FC = () => {
     : null
    const systemPrompt = `${baseSystemPrompt}\n\nCURRENT VIEWTUBE SURFACE CONTEXT\n${JSON.stringify(visibleContext, null, 2)}\nUse this surface context to understand references such as "this chart", "this project", "this comment", "this video", or "this tool". Never use a blocked capability. Treat selected-item context as current UI context, not automatically as durable channel memory.`
 
-   if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions) {
+   if (channelId && controls.enabled && controls.personalization && controls.learnFromInteractions && controls.captureCreatorCommunications) {
     try {
      recordCreatorCommunicationEvidence({
       channelId,

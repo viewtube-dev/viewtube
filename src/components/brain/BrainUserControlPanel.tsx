@@ -74,6 +74,7 @@ export const BrainUserControlPanel: React.FC<{
     <Row label="Personalization" detail="Use this channel profile, goals, memory and learned patterns." value={controls.personalization} onChange={(value) => patch({ personalization: value })} />
     <Row label="Show evidence" detail="Expose why a recommendation was made and what channel data supports it." value={controls.showEvidence} onChange={(value) => patch({ showEvidence: value })} />
     <Row label="Learn from interactions" detail="Allow accepted/rejected outputs and corrections to improve this channel model." value={controls.learnFromInteractions} onChange={(value) => patch({ learnFromInteractions: value })} />
+    <Row label="Capture creator communications" detail="Explicit opt-in to classify your messages as evidence. Raw message text is not retained; this never promotes durable memory by itself." value={controls.captureCreatorCommunications} onChange={(value) => patch({ captureCreatorCommunications: value })} />
     <Row label="Analytics access" detail="Allow Brain to use canonical VT-SYNC / analytics evidence for this channel." value={controls.allowAnalytics} onChange={(value) => patch({ allowAnalytics: value })} />
     <Row label="Projects access" detail="Allow Brain to read or prepare internal Project actions." value={controls.allowProjects} onChange={(value) => patch({ allowProjects: value })} />
     <Row label="Comments access" detail="Allow audience/comment context in Brain workflows." value={controls.allowComments} onChange={(value) => patch({ allowComments: value })} />
