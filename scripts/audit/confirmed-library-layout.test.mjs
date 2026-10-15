@@ -182,3 +182,21 @@ test("global defaults use a compact collapsed panel with an explicit expand affo
   assert.ok(catalog.includes("Show full defaults and exceptions"));
   assert.match(styles, /\.vt-confirmed-defaults-details\s*\{/);
 });
+
+
+test("confirmed Square Icon Button family catalogs every interaction effect at standard and compact sizes", () => {
+  const squareStart = catalog.indexOf('<Family title="Square Icon Button · 44px + 28px"');
+  const splitStart = catalog.indexOf('<Family title="Split-left"', squareStart);
+  assert.ok(squareStart >= 0, "confirmed Square Icon Button family exists");
+  assert.ok(splitStart > squareStart, "Square Icon Button family has a bounded catalog section");
+  const squareFamily = catalog.slice(squareStart, splitStart);
+  for (const effect of ['animate sizeVariant="standard"', 'animate sizeVariant="compact"', 'effect="notification"', 'effect="rotated-toggle"', 'effect="flip"', 'effect="tooltip"', 'effect="morph"', 'effect="success"']) {
+    assert.ok(squareFamily.includes(effect), `confirmed Square Icon Button family includes ${effect}`);
+  }
+  assert.match(squareFamily, /44px standard · V1 primary fill/);
+  assert.match(squareFamily, /28px compact · V4/);
+  assert.match(squareFamily, /StudioSquareIconButton · v1\/v2\/v3\/v4 \+ seven effects/);
+  assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /@media \(max-width: 520px\)\s*\{[\s\S]*?\.vt-confirmed-square-effect-grid\s*\{\s*grid-template-columns: minmax\(0, 1fr\)/);
+  assert.match(controls, /squareIconButtonDefaults:[\s\S]*?rotatedToggle:[\s\S]*?flip:[\s\S]*?tooltip:[\s\S]*?morph:[\s\S]*?success:/);
+});
