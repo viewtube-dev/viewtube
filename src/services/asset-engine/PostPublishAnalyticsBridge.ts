@@ -47,6 +47,17 @@ const selectedAssets = (transaction: NonNullable<ReturnType<typeof getPublishTra
     transaction.assetLock.tagsAssetId,
   ].filter((id): id is string => Boolean(id)))]
 
+const linkPublishedAssetOutcomes = (identity: ContentBuildPublicationIdentity) => {
+  if (!identity.channelId) return
+  for (const assetId of identity.selectedVariantAssetIds) {
+    linkAssetOutcomeToPublication({
+      assetId,
+      channelId: identity.channelId,
+      publicationIdentity: identity,
+    })
+  }
+}
+
 const resolvePublishIdentity = (transactionId: string, videoId: string) => {
   const transaction = getPublishTransaction(required(transactionId, "transactionId"))
   if (!transaction) throw new Error(`Unknown publish transaction: ${transactionId}`)
