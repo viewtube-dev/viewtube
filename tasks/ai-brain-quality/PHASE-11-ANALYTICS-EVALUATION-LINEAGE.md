@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Evaluation contract, guarded writer, canonical video-row join, source outcome/trace lineage, and matching ContentBuild analytics-checkpoint collection are implemented. Current-head CI and production data freshness/coverage still require verification.
+**Status:** Evaluation contract, guarded writer, verified publication receipt, canonical video-row join, source outcome/trace/action lineage, immutable analytics-checkpoint event, and checkpoint-bridge invocation are implemented. Current-head CI, direct production-caller reachability, and data freshness/coverage still require verification.
 
 ## Objective
 
@@ -56,3 +56,10 @@ The contract deliberately does not calculate a causal effect from two metric obj
 - [ ] Verify focused tests, typecheck, runtime lint, full suite and build on the latest PR head.
 - [x] Implement a fail-closed publication-identity → canonical video-row join in the evaluation service.
 - [ ] Verify current production callers, fresh canonical rows and release gates on the latest PR head.
+
+
+## Implementation update — 2026-10-15
+
+`recordAnalyticsCheckpointForEvaluation` now invokes the canonical publication evaluator after recording the existing ContentBuild/algorithm checkpoint. It passes the typed publication identity, selected analytics window, and an explicitly non-causal default assessment. The canonical evaluation writer requires the immutable publication receipt and exact channel-scoped video row, appends an idempotent `analytics.checkpoint` event, and propagates that checkpoint ID/evidence to linked outcome records.
+
+This makes the bridge-to-evaluation path callable end-to-end; it does not establish that every analytics sync/provider currently invokes the bridge in production. That reachability and fresh-data certification remain open.
