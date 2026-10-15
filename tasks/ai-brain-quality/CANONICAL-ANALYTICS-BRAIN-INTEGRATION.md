@@ -3,7 +3,7 @@
 **Status:** Phases 0–5 implemented on the work branch; release verification pending  
 **Owner:** BrainRuntime + analytics-canon  
 **Branch:** `fix/brain-canonical-evidence-phases-3-5-2026-10-15`  
-**Pull request:** Pending PR creation  
+**Pull request:** [#215](https://github.com/viewtube-dev/viewtube/pull/215)  
 **Authority:** `docs/domains/BRAIN.md` and `docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md`  
 **Contract:** `tasks/ai-brain-quality/SPEC-evidence-contract.md`
 
