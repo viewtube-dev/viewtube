@@ -62,7 +62,7 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
     const fieldId = id ?? `studio-text-area-${generatedId}`
 
     if (variant === "floating-label") {
-      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, sizeVariant: _sizeVariant, ...areaProps } = props
+      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
       return (
         <div
           data-vt-primitive-id="142"
