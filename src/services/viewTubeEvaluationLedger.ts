@@ -276,6 +276,15 @@ export const proposeEvaluationLearningCandidate = (
  // Never infer or broaden scope when an evaluation omitted its channel/project identity.
  if ((input.channelId || null) !== (evaluation.channelId || null)) return null
  if ((input.projectId || null) !== (evaluation.projectId || null)) return null
+ if (input.idempotencyKey) {
+  const existing = listWorkflowCandidates().find((candidate) =>
+   candidate.idempotencyKey === input.idempotencyKey &&
+   candidate.evaluationRecordId === evaluation.id &&
+   (candidate.channelId || null) === (input.channelId || null) &&
+   (candidate.projectId || null) === (input.projectId || null)
+  )
+  if (existing) return existing
+ }
  const item: WorkflowCandidate = {
   ...input,
   id: crypto.randomUUID(),
