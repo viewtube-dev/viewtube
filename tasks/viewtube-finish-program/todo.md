@@ -14,9 +14,9 @@ Program authority: `docs/programs/INTEGRATED_APPLICATION.md`
 - [ ] A05 Migrate destination-specific Context Resolver recipes.
 - [x] A06 Implement immutable ApprovedPublishSnapshot. — Foundation exists on current main; durable authority/recovery remains A07/A27 and VT-014–016.
 - [ ] A07 Certify PublishTransaction retry/recovery/idempotency.
-- [ ] A08 Complete post-publish ContentBuild identity + checkpoint chain.
+- [ ] A08 Complete post-publish ContentBuild identity + checkpoint chain. — PR #220 merged the typed identity/replay-safe receipt foundation; this branch adds metadata history, stricter checkpoint completeness, and historical metadata comparisons. Full golden-path verification and server-authoritative persistence remain open.
 - [ ] A15 Close Editor → derived asset → Publishing Package → outcome loop.
-- [ ] A27 Plan and execute server-authoritative persistence migration after contracts stabilize.
+- [ ] A27 Plan and execute server-authoritative persistence migration after contracts stabilize. — Still a hard blocker: ContentBuild, approved snapshots and publish transactions remain browser-persistence-backed; no server-authoritative backend is established by the current repository adapter.
 
 ## Program B — Outcomes / Evaluation / Learning
 
