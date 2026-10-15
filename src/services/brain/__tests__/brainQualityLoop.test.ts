@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildGoldenChannelFixture, restorationRichSpec } from "../fixtures";
 import { runBrainTurn } from "../BrainOrchestrator";
-import type { CreatorGrowthContext } from "../../types";
+import type { CreatorGrowthContext } from "../../../types";
 import type { StructuredBrainModelOutput } from "../../gemini";
 
 vi.mock("../../aiBrainConversationStore", () => ({
