@@ -154,6 +154,12 @@ export const recordPostPublishIdentity = (
         throw new Error(`Existing publication receipt conflicts with ${key}; immutable decision lineage cannot be relinked.`)
       }
     }
+    const receiptString = (key: string): string | null =>
+      typeof receiptMetadata?.[key] === "string" ? receiptMetadata[key] as string : null
+    identity.actionPacketId = identity.actionPacketId || receiptString("actionPacketId")
+    identity.workflowId = identity.workflowId || receiptString("workflowId")
+    identity.recommendationId = identity.recommendationId || receiptString("recommendationId")
+    identity.experimentId = identity.experimentId || receiptString("experimentId")
     linkPublishedAssetOutcomes(identity)
     return {
       event: existingReceipt,
