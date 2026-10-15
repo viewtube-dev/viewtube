@@ -136,3 +136,15 @@
 - [ ] Verify generation provenance (prompt/schema/context/model, evidence, Project/ContentBuild and repair metadata) on real caller paths.
 - [ ] Run focused Brain tests and golden suite, typecheck, runtime lint, full test suite, build, source-governance/reachability audit and diff checks.
 - [ ] Attach exact-commit verification evidence before certification.
+
+## Phases 5–12 — cross-phase safety contract audit (2026-10-15)
+
+- [x] Add a Node contract audit covering bounded generation/one repair/revalidation/fallback receipts (Phase 5).
+- [x] Guard publication identity vs. measured performance/causality boundaries (Phases 6–7).
+- [x] Guard continuity trace omissions and fail-closed Brain health status (Phases 8–9).
+- [x] Guard canonical ContentBuild phase resolution and governed communication ingestion (Phases 10–11).
+- [x] Guard channel-scoped explicit attribution and unresolved-stage reporting (Phase 12).
+- [ ] Execute `npm run test:brain-quality-loop-contract` in CI and repair any mismatches.
+- [ ] Complete real caller-receipt tests for repair success/rejection/provider failures and full prompt provenance.
+- [ ] Finish live UI adoption, server-authoritative persistence/consent/retention, stable-ID propagation and production lifecycle validation noted in the individual phase sections.
+- [ ] Run focused Brain tests, source governance/reachability, typecheck, runtime lint, full suite, build, and browser verification against this exact integration head.
