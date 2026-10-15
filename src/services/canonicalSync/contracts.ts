@@ -537,6 +537,17 @@ export type ShadowDiffRecord = {
 }
 
 export type CanonicalSyncOverview = {
+ postPublicationOutcomePipeline?: {
+  status: "complete" | "partial" | "idle"
+  publishedBuildsChecked: number
+  checkpointsRecorded: number
+  recommendationEvaluations: number
+  metadataComparisonsRecorded: number
+  metadataComparisonsReady: number
+  skipped: number
+  failureCount: number
+  completedAt: string
+ }
  enabled: boolean
  ownerModeEnabled: boolean
  channelCount: number
