@@ -483,12 +483,12 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 
 ### Shared text-field typography and module ownership
 - Source audit found the root cause of the single-line input mismatch: the shared field rule inherited the global control font tokens (38px standard / 24px compact), while only textarea selectors explicitly overrode typography to 18px / 14px. The single-line input selectors had no corresponding font-size override, so standard and compact inputs could look like the same compact size when upstream declarations/cascades applied.
-- The resolved contract is now explicit for all four public field forms: `StudioTextInput` and `StudioLabeledInput` use 18px standard / 14px compact; `StudioTextArea` and `StudioLabeledTextArea` use the same font sizes. Textareas retain their multiline-only 92px minimum surface, padding, and 1.25 / 1.3 line heights.
+- Historical note superseded by section 21: single-line `StudioTextInput` and `StudioLabeledInput` use global 38px standard / 24px compact typography. `StudioTextArea` and `StudioLabeledTextArea` retain the multiline-only 18px / 14px exception, 92px minimum surface, padding, and 1.25 / 1.3 line heights.
 - Related components are grouped in two modules:
   - `src/studio-ui/primitives/StudioTextInput.tsx`: standalone, search, number, and labeled single-line inputs.
   - `src/studio-ui/primitives/StudioTextArea.tsx`: standalone and labeled multiline textareas.
   - `StudioControls.tsx` re-exports these modules for compatibility with existing imports.
-- CSS owns typography explicitly by `data-size` on the native input, with important 18px standard / 14px compact font-size and matching line-height overrides. The labeled components compose those same native primitives instead of maintaining a second style path.
+- CSS owns typography explicitly by `data-size` on the native input, with important global 38px standard / 24px compact font-size overrides. Textarea selectors separately enforce the important 18px / 14px exception. Labeled components compose the corresponding native primitives instead of maintaining a second style path.
 
 ### Word-toggle catalog contract
 - Word toggles show three skins only: SOLID, COLOR SWAP, and BLACK. The fourth WHITE skin remains available to switches/radios/checkboxes but is intentionally omitted from the word-toggle examples.
