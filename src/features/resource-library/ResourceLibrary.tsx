@@ -135,6 +135,7 @@ const ResourceLibrary: React.FC = () => {
                       key={resource.id}
                       type="button"
                       className={`vt-resource-card ${active ? "is-active" : ""}`}
+                      style={getResourcePaletteStyle(resource.accentPaletteIndex)}
                       onClick={() => selectResource(resource.id)}
                       aria-pressed={active}
                     >
