@@ -83,7 +83,7 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
-import { canMutateVaultAsset } from "../services/vaultMutationPolicy"
+import { isVaultAssetProtected } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
  createVaultSmartCollection,
@@ -551,7 +551,7 @@ const CreatorVaultOS: React.FC = () => {
     ? asset.kind
     : "document"
   ))
-  const protectedSelection = selectedRecords.some((asset) => !canMutateVaultAsset(asset, "archive"))
+  const protectedSelection = selectedRecords.some((asset) => isVaultAssetProtected(asset))
   /* lifecycle state is evaluated independently from account/workspace authorization */
   const allSelectedTrashed = selectedRecords.length > 0 && selectedRecords.every((asset) => (
    Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
