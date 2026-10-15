@@ -783,3 +783,8 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   )
 }
 StudioSpectrumTag.displayName = "StudioSpectrumTag"
+
+
+// First-class stepper family: implementation and styles remain owned by Studio Controls.
+export { StudioSplitStepper } from "./StudioSplitStepper"
+export type { StudioSplitStepperProps, StudioSplitStepperSize } from "./StudioSplitStepper"
