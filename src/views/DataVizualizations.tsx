@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { getMasterRows } from '../services/analytics/Selectors';
+import { useCanonicalRows } from '../services/analytics-canon';
 import { CHART_THEME, getChartSpecById } from '../chartSystem/unifiedChartSpec';
 
 // --- HELPER COMPONENT: NEO-BRUTALIST CHART SHELL ---
@@ -132,10 +132,9 @@ export default function DataVisualizations() {
   const deviceSpec = getChartSpecById("device-immersion");
   const footprintSpec = getChartSpecById("global-footprint");
 
-  // Pull from Nexus Cache
+  const rows = useCanonicalRows("lifetime");
   const data = useMemo(() => {
     try {
-      const rows = getMasterRows('lifetime', 'api');
       return rows.map((row) => {
         const viewsCell = row.metrics.views;
         const revenueCell = row.metrics.revenue;
@@ -170,7 +169,7 @@ export default function DataVisualizations() {
     } catch (e) {
       return []
     }
-  }, [])
+  }, [rows])
 
   // Use real data if available, else fallback to isolated demo-only mock rows.
   const finalVideos = data.length > 0 ? data : [
