@@ -30,7 +30,9 @@ export function normalizeStudioInlineStepperValue(
   if (lower > upper) return Number.isFinite(min) ? min : 0
   const next = base + direction * safeStep
   if (!Number.isFinite(next)) return direction < 0 && Number.isFinite(min) ? min : direction > 0 && Number.isFinite(max) ? max : base
-  return Math.min(upper, Math.max(lower, next))
+  const precision = Math.min(12, Math.max(String(base).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0))
+  const rounded = Number(next.toFixed(precision))
+  return Math.min(upper, Math.max(lower, rounded))
 }
 
 /**
