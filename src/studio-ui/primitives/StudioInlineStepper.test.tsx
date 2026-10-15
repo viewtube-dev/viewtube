@@ -34,7 +34,8 @@ describe("StudioInlineStepper", () => {
 
   it("normalizes step changes without leaking invalid values and respects bounds", () => {
     expect(normalizeStudioInlineStepperValue(4, 1, 1, 0, 10)).toBe(5)
-    expect(normalizeStudioInlineStepperValue(4, -1, 0.25, 0, 10)).toBe(3.75)\n    expect(normalizeStudioInlineStepperValue(0.2, 1, 0.1, 0, 10)).toBe(0.3)
+    expect(normalizeStudioInlineStepperValue(4, -1, 0.25, 0, 10)).toBe(3.75)
+    expect(normalizeStudioInlineStepperValue(0.2, 1, 0.1, 0, 10)).toBe(0.3)
     expect(normalizeStudioInlineStepperValue(10, 1, 1, 0, 10)).toBe(10)
     expect(normalizeStudioInlineStepperValue(0, -1, 1, 0, 10)).toBe(0)
     expect(normalizeStudioInlineStepperValue(Number.NaN, 1, 1, 0, 10)).toBe(0)
