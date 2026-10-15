@@ -1,65 +1,97 @@
 {
   "schemaVersion": "viewtube.capability-coverage.v1",
-  "lastEdited": "2026-09-27",
+  "lastEdited": "2026-10-15",
   "source": "docs/architecture/capabilities.json",
   "capabilities": [
     {
       "id": "CAP-CREATOR-CONTEXT",
       "name": "Creator Context Resolution",
       "authority": "docs/architecture/PRODUCT_ARCHITECTURE.md",
+      "home": "docs/capabilities/creator-context.md",
       "codeOwners": [
         "src/services/brain/**",
         "src/features/projects/**"
       ],
-      "taskRefs": [],
-      "tests": [],
+      "taskRefs": [
+        "tasks/system-convergence/CREATOR-CONTEXT-REACHABILITY.md"
+      ],
+      "tests": [
+        "src/services/brain/__tests__/BrainContextBrokerCreatorContext.test.ts"
+      ],
       "uiSurfaces": [
         "Channel Intelligence Hub",
         "Project & Production Command"
       ],
-      "guideRefs": [],
-      "verificationRefs": [],
-      "complete": false,
-      "missing": [
+      "guideRefs": [
+        "docs/domains/BRAIN.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ],
+      "capabilityId": "CAP-CREATOR-CONTEXT",
+      "complete": true,
+      "missing": [],
+      "covered": [
+        "authority",
+        "codeOwners",
         "taskRefs",
         "tests",
+        "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.42857142857142855,
-      "lastAudited": "2026-09-27"
+      "coverageRatio": 1,
+      "lastAudited": "2026-10-15"
     },
     {
       "id": "CAP-EVIDENCE-INTELLIGENCE",
       "name": "Evidence & Intelligence",
       "authority": "docs/architecture/PRODUCT_ARCHITECTURE.md",
+      "home": "docs/capabilities/evidence-intelligence.md",
       "codeOwners": [
         "src/features/vt-sync-local/**",
         "src/services/brain/**"
       ],
-      "taskRefs": [],
-      "tests": [],
+      "taskRefs": [
+        "tasks/ai-brain-quality/CANONICAL-ANALYTICS-BRAIN-INTEGRATION.md"
+      ],
+      "tests": [
+        "src/services/brain/__tests__/EvidenceIntelligenceResolver.test.ts",
+        "src/services/brain/__tests__/BrainEvidenceQuality.test.ts",
+        "src/services/brain/__tests__/BrainEvidenceQualityIntegration.test.ts"
+      ],
       "uiSurfaces": [
         "Opportunity Radar",
         "Channel Intelligence Hub",
         "Content Strategy Lab"
       ],
-      "guideRefs": [],
-      "verificationRefs": [],
-      "complete": false,
-      "missing": [
+      "guideRefs": [
+        "docs/domains/BRAIN.md",
+        "docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ],
+      "capabilityId": "CAP-EVIDENCE-INTELLIGENCE",
+      "complete": true,
+      "missing": [],
+      "covered": [
+        "authority",
+        "codeOwners",
         "taskRefs",
         "tests",
+        "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.42857142857142855,
-      "lastAudited": "2026-09-27"
+      "coverageRatio": 1,
+      "lastAudited": "2026-10-15"
     },
     {
       "id": "CAP-PROJECT-CONTENT-IDENTITY",
       "name": "Project / ContentBuild Identity",
       "authority": "docs/architecture/VIEWTUBE_PROJECTS_CONTENTBUILD_WORKFLOW_MASTER_RESOURCE.md",
+      "home": "docs/capabilities/project-content-identity.md",
       "codeOwners": [
         "src/features/projects/**",
         "src/services/contentBuild*"
@@ -71,12 +103,18 @@
       ],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-PROJECT-CONTENT-IDENTITY",
       "complete": false,
       "missing": [
         "taskRefs",
         "tests",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
+        "uiSurfaces"
       ],
       "coverageRatio": 0.42857142857142855,
       "lastAudited": "2026-09-27"
@@ -85,6 +123,7 @@
       "id": "CAP-ASSET-LINEAGE",
       "name": "Asset Lineage & Provenance",
       "authority": "docs/architecture/VIEWTUBE_ASSET_ENGINE_MASTER_RESOURCE.md",
+      "home": "docs/capabilities/asset-lineage.md",
       "codeOwners": [
         "src/features/vault/**",
         "src/services/asset*"
@@ -98,12 +137,18 @@
       ],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-ASSET-LINEAGE",
       "complete": false,
       "missing": [
         "taskRefs",
         "tests",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
+        "uiSurfaces"
       ],
       "coverageRatio": 0.42857142857142855,
       "lastAudited": "2026-09-27"
@@ -112,6 +157,7 @@
       "id": "CAP-CREATOR-OPERATIONS",
       "name": "Creator Operations & Generation",
       "authority": "docs/architecture/PRODUCT_ARCHITECTURE.md",
+      "home": "docs/capabilities/creator-operations.md",
       "codeOwners": [
         "src/services/brain/**",
         "src/features/video-director/**",
@@ -126,12 +172,18 @@
       ],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-CREATOR-OPERATIONS",
       "complete": false,
       "missing": [
         "taskRefs",
         "tests",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
+        "uiSurfaces"
       ],
       "coverageRatio": 0.42857142857142855,
       "lastAudited": "2026-09-27"
@@ -140,84 +192,130 @@
       "id": "CAP-OUTCOME-LEARNING",
       "name": "Outcome Evaluation & Governed Learning",
       "authority": "docs/architecture/PRODUCT_ARCHITECTURE.md",
+      "home": "docs/capabilities/outcome-learning.md",
       "codeOwners": [
         "src/services/brain/**",
         "src/services/analytics*"
       ],
-      "taskRefs": [],
+      "taskRefs": [
+        "tasks/system-convergence/todo.md"
+      ],
       "tests": [],
       "uiSurfaces": [
         "Channel Intelligence Hub",
         "Packaging & Experiment Lab",
         "Audience & Community Desk"
       ],
-      "guideRefs": [],
-      "verificationRefs": [],
+      "guideRefs": [
+        "docs/capabilities/outcome-learning.md",
+        "docs/domains/BRAIN.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ],
+      "capabilityId": "CAP-OUTCOME-LEARNING",
       "complete": false,
       "missing": [
+        "tests"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
         "taskRefs",
-        "tests",
+        "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.42857142857142855,
-      "lastAudited": "2026-09-27"
+      "coverageRatio": 0.8571428571428571,
+      "lastAudited": "2026-10-15"
     },
     {
       "id": "CAP-BRAIN-EXPERIENCE",
       "name": "Brain Runtime Experience",
       "authority": "docs/domains/BRAIN.md",
+      "home": "docs/capabilities/brain-experience.md",
       "codeOwners": [
         "src/services/brain/**",
         "src/views/BrainHub*"
       ],
-      "taskRefs": [],
-      "tests": [],
+      "taskRefs": [
+        "tasks/system-convergence/todo.md"
+      ],
+      "tests": [
+        "src/services/brain/__tests__/BrainRuntime.test.ts",
+        "src/services/brain/__tests__/BrainContextBrokerCreatorContext.test.ts"
+      ],
       "uiSurfaces": [
         "Channel Intelligence Hub",
         "Content Strategy Lab"
       ],
-      "guideRefs": [],
-      "verificationRefs": [],
-      "complete": false,
-      "missing": [
+      "guideRefs": [
+        "docs/domains/BRAIN.md",
+        "docs/brain/UNIFIED_AI_SYSTEM_CANONICAL_CONSOLIDATION_CONTRACT_2026-09-17.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ],
+      "capabilityId": "CAP-BRAIN-EXPERIENCE",
+      "complete": true,
+      "missing": [],
+      "covered": [
+        "authority",
+        "codeOwners",
         "taskRefs",
         "tests",
+        "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.42857142857142855,
-      "lastAudited": "2026-09-27"
+      "coverageRatio": 1,
+      "lastAudited": "2026-10-15"
     },
     {
       "id": "CAP-ANALYTICS-CANON",
       "name": "Canonical Analytics Evidence",
       "authority": "docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md",
+      "home": "docs/capabilities/analytics-canon.md",
       "codeOwners": [
         "src/features/vt-sync-local/**"
       ],
-      "taskRefs": [],
-      "tests": [],
+      "taskRefs": [
+        "tasks/ai-brain-quality/CANONICAL-ANALYTICS-BRAIN-INTEGRATION.md"
+      ],
+      "tests": [
+        "src/features/vt-sync-local/adapters/analyticsBundle.test.ts",
+        "src/services/brain/__tests__/EvidenceIntelligenceResolver.test.ts"
+      ],
       "uiSurfaces": [
         "Channel Intelligence Hub",
         "Monetization & Operations Hub"
       ],
-      "guideRefs": [],
-      "verificationRefs": [],
-      "complete": false,
-      "missing": [
+      "guideRefs": [
+        "docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ],
+      "capabilityId": "CAP-ANALYTICS-CANON",
+      "complete": true,
+      "missing": [],
+      "covered": [
+        "authority",
+        "codeOwners",
         "taskRefs",
         "tests",
+        "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.42857142857142855,
-      "lastAudited": "2026-09-27"
+      "coverageRatio": 1,
+      "lastAudited": "2026-10-15"
     },
     {
       "id": "CAP-EDITOR-RENDER",
       "name": "Editor & Deterministic Rendering",
       "authority": "docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md",
+      "home": "docs/capabilities/editor-render.md",
       "codeOwners": [
         "src/features/editor/**",
         "src/server/vt-e1-render-server.mjs"
@@ -229,12 +327,18 @@
       ],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-EDITOR-RENDER",
       "complete": false,
       "missing": [
         "taskRefs",
         "tests",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
+        "uiSurfaces"
       ],
       "coverageRatio": 0.42857142857142855,
       "lastAudited": "2026-09-27"
@@ -243,6 +347,7 @@
       "id": "CAP-PUBLISH",
       "name": "Approved Publishing & Distribution",
       "authority": "docs/architecture/PRODUCT_ARCHITECTURE.md",
+      "home": "docs/capabilities/publish.md",
       "codeOwners": [
         "src/services/youtube/**",
         "src/views/*Publish*",
@@ -255,12 +360,18 @@
       ],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-PUBLISH",
       "complete": false,
       "missing": [
         "taskRefs",
         "tests",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
+        "uiSurfaces"
       ],
       "coverageRatio": 0.42857142857142855,
       "lastAudited": "2026-09-27"
@@ -269,6 +380,7 @@
       "id": "CAP-WIDGET-SURFACES",
       "name": "Composable Dashboard Widgets",
       "authority": "docs/architecture/VIEWTUBE_WIDGET_DASHBOARD_MASTER_RESOURCE.md",
+      "home": "docs/capabilities/widget-surfaces.md",
       "codeOwners": [
         "src/views/dashboard/**",
         "src/components/dashboard/**"
@@ -280,12 +392,18 @@
       ],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-WIDGET-SURFACES",
       "complete": false,
       "missing": [
         "taskRefs",
         "tests",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners",
+        "uiSurfaces"
       ],
       "coverageRatio": 0.42857142857142855,
       "lastAudited": "2026-09-27"
@@ -294,6 +412,7 @@
       "id": "CAP-DOCUMENT-GOVERNANCE",
       "name": "Documentation Governance & Lineage",
       "authority": "docs/governance/DOCUMENTATION.md",
+      "home": "docs/capabilities/document-governance.md",
       "codeOwners": [
         "docs/**",
         ".claude/skills/viewtube-document-system/**"
@@ -303,6 +422,7 @@
       "uiSurfaces": [],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-DOCUMENT-GOVERNANCE",
       "complete": false,
       "missing": [
         "taskRefs",
@@ -311,6 +431,10 @@
         "guideRefs",
         "verificationRefs"
       ],
+      "covered": [
+        "authority",
+        "codeOwners"
+      ],
       "coverageRatio": 0.2857142857142857,
       "lastAudited": "2026-09-27"
     },
@@ -318,6 +442,7 @@
       "id": "CAP-VERIFICATION",
       "name": "Implementation Verification",
       "authority": "docs/governance/VERIFICATION.md",
+      "home": "docs/capabilities/verification.md",
       "codeOwners": [
         "scripts/**",
         "src/**/*.test.*",
@@ -328,6 +453,7 @@
       "uiSurfaces": [],
       "guideRefs": [],
       "verificationRefs": [],
+      "capabilityId": "CAP-VERIFICATION",
       "complete": false,
       "missing": [
         "taskRefs",
@@ -335,6 +461,10 @@
         "uiSurfaces",
         "guideRefs",
         "verificationRefs"
+      ],
+      "covered": [
+        "authority",
+        "codeOwners"
       ],
       "coverageRatio": 0.2857142857142857,
       "lastAudited": "2026-09-27"
