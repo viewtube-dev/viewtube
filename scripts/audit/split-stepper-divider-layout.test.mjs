@@ -2,31 +2,29 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-const component = readFileSync("src/components/subtoolbox/SubToolboxSplitStepper.tsx", "utf8")
-const styles = readFileSync("src/components/subtoolbox/subtoolbox-split-stepper.css", "utf8")
+const component = readFileSync("src/studio-ui/primitives/StudioSplitStepper.tsx", "utf8")
+const styles = readFileSync("src/studio-ui/primitives/studio-split-stepper.css", "utf8")
 
-test("stepper uses a native numeric input, not a nested Studio input primitive", () => {
-  assert.doesNotMatch(component, /StudioNumberInput/)
+test("stepper is implemented in Studio Controls and retains native numeric input", () => {
+  assert.match(component, /data-vt-studio-control-kind="split-stepper"/)
   assert.match(component, /<input[\s\S]*?type="number"/)
-  assert.match(component, /data-size=\{size === "compact" \? "compact" : "standard"\}/)
+  assert.match(component, /data-size=\{size\}/)
 })
 
-test("the number pane has square edges and leaves the seam to the rail overlay", () => {
-  const inputRule = styles.match(/\.vt-subtoolbox-split-stepper input\.vt-subtoolbox-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
+test("number pane has squared inner edge and rail owns the vertical seam", () => {
+  const inputRule = styles.match(/\.vt-studio-split-stepper input\.vt-studio-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
   assert.match(inputRule, /border-radius:\s*0/)
-  assert.doesNotMatch(inputRule, /border-right:/)
-  assert.doesNotMatch(styles, /\.vt-subtoolbox-split-stepper-rail\s*\{[^}]*border-left:/s)
-  assert.match(styles, /\.vt-subtoolbox-split-stepper-rail::after\s*\{[^}]*left:\s*0[^}]*top:\s*0[^}]*bottom:\s*0[^}]*width:\s*var\(--vt-stepper-stroke\)/s)
+  assert.match(inputRule, /border:\s*0/)
+  assert.doesNotMatch(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:/s)
+  assert.match(styles, /\.vt-studio-split-stepper-rail::after\s*\{[^}]*left:\s*0[^}]*top:\s*0[^}]*bottom:\s*0[^}]*width:\s*var\(--vt-split-stepper-stroke\)/s)
 })
 
-test("the horizontal divider is centered across the rail and both rows remain equal", () => {
-  assert.match(styles, /\.vt-subtoolbox-split-stepper-rail::before\s*\{[^}]*position:\s*absolute[^}]*left:\s*0[^}]*right:\s*0[^}]*top:\s*50%/s)
+test("horizontal divider is centered and both actions have equal rows", () => {
+  assert.match(styles, /\.vt-studio-split-stepper-rail::before\s*\{[^}]*left:\s*0[^}]*right:\s*0[^}]*top:\s*50%/s)
   assert.match(styles, /grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/)
-  assert.doesNotMatch(styles, /\.vt-subtoolbox-split-stepper-rail button \+ button\s*\{[^}]*border-top:/s)
 })
 
-test("long press repeats without activating the full-component focus outline", () => {
-  assert.doesNotMatch(component, /\(inputFocused \|\| held\)/)
-  assert.doesNotMatch(component, /const \[held, setHeld\]/)
-  assert.match(component, /scheduleRepeat\(\)/)
+test("hold repetition stops at bounds and visible focus remains available", () => {
+  assert.match(component, /if \(valueRef\.current !== max && valueRef\.current !== min\) scheduleRepeat\(\)/)
+  assert.match(styles, /button:focus-visible \{ outline: 2px solid/)
 })
