@@ -341,7 +341,7 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 });
 
 test("component descriptions above specimens stay on one compact line", () => {
-  assert.match(styles, /\\.vt-confirmed-family > p\\s*\\{[^}]*max-width:\\s*40ch[^}]*text-overflow:\\s*ellipsis[^}]*white-space:\\s*nowrap/s);
+  assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
 });
 
 test("floating labels keep full-size resting text and smoothly lift to 80% size on the 40% border line", () => {
