@@ -14,8 +14,8 @@ const fields = fieldStart >= 0 && fieldEnd > fieldStart ? css.slice(fieldStart, 
 
 test("Studio control sizes have one machine-readable standard/compact contract", () => {
   assert.match(tokens, /STUDIO_CONTROL_SIZE_CONTRACT/);
-  assert.match(tokens, /standard: \{ height: 44, stroke: 3, radius: 6/);
-  assert.match(tokens, /compact: \{ height: 28, stroke: 2, radius: 4/);
+  assert.match(tokens, /standard: \{ height: 44, stroke: 3, radius: 8/);
+  assert.match(tokens, /compact: \{ height: 28, stroke: 2, radius: 5/);
   assert.doesNotMatch(tokens, /height: \{[^}]*action:/);
   assert.match(tsx, /STUDIO_COMPONENT_SIZE_DEFAULTS = STUDIO_CONTROL_SIZE_CONTRACT/);
   assert.doesNotMatch(tsx, /sizeVariant\?: Exclude<StudioControlSize, "action">/);
