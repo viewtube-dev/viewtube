@@ -86,7 +86,6 @@ export interface WorkflowCandidate {
  reviewedAt?: number
  promotedClaimId?: string | null
  promotedAt?: number
- supportingEvaluationIds?: string[]
  status: "candidate" | "approved" | "rejected"
  scope: "channel" | "global-experiment"
 }
