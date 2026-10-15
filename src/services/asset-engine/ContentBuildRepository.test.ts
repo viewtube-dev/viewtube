@@ -242,6 +242,27 @@ describe("ContentBuild repository", () => {
   expect(listContentBuildEvents("cb-metadata-history").filter(event => event.entityId === "metadata-v1")).toHaveLength(1)
  })
 
+ it("rejects reuse of an immutable metadata version ID with changed values", () => {
+  createContentBuild({ id: "cb-metadata-immutable" })
+  recordContentBuildMetadataChange({
+   contentBuildId: "cb-metadata-immutable",
+   metadataVersionId: "metadata-v1",
+   operationId: "operation-1",
+   operation: "edit",
+   fields: [{ field: "title", before: "Old", after: "New" }],
+   occurredAt: "2026-10-15T12:00:00.000Z",
+  })
+
+  expect(() => recordContentBuildMetadataChange({
+   contentBuildId: "cb-metadata-immutable",
+   metadataVersionId: "metadata-v1",
+   operationId: "operation-1",
+   operation: "edit",
+   fields: [{ field: "title", before: "Old", after: "Different" }],
+   occurredAt: "2026-10-15T12:00:00.000Z",
+  })).toThrow(/metadata history is immutable/)
+ })
+
  it("rejects duplicate field names in a single metadata version", () => {
   createContentBuild({ id: "cb-metadata-duplicate-field" })
   expect(() => recordContentBuildMetadataChange({
