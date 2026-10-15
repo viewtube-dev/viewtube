@@ -95,7 +95,7 @@ Production currently includes:
 Migration is not finished:
 
 - the legacy `data-visual-preview-16x9.js` compatibility layer is still loaded;
-- `controllerSpec` still exists in live Analytics shell code;
+- the legacy `controllerSpec` shell prop has been removed in favor of direct module-authored controller rows; legacy preview compatibility and controller vocabulary/orientation migration remain open;
 - not every visualization is fully registry-native;
 - controller vocabulary/orientation cleanup and mark-scale migration remain active work.
 
