@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 const algorithmMocks = vi.hoisted(() => ({
   recordAlgorithmEvaluation: vi.fn(),
   recordAlgorithmIntelligenceEvent: vi.fn((input: Record<string, unknown>) => input),
+  listAlgorithmIntelligenceEvents: vi.fn(() => []),
 }))
 
 vi.mock("./brain/AlgorithmEvaluationEngine", () => ({
@@ -11,6 +12,7 @@ vi.mock("./brain/AlgorithmEvaluationEngine", () => ({
 }))
 vi.mock("./brain/AlgorithmIntelligenceEventLedger", () => ({
   recordAlgorithmIntelligenceEvent: algorithmMocks.recordAlgorithmIntelligenceEvent,
+  listAlgorithmIntelligenceEvents: algorithmMocks.listAlgorithmIntelligenceEvents,
 }))
 
 import {
