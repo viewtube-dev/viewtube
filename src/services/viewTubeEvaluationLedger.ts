@@ -44,6 +44,8 @@ export interface WorkflowCandidate {
  selectedWindow?: string | null
  comparabilityStatus?: EvaluationRecord["comparabilityStatus"]
  evidenceStatus?: EvaluationRecord["evidenceStatus"]
+ /** Stable caller key for retry-safe candidate creation. */
+ idempotencyKey?: string | null
  status: "candidate" | "approved" | "rejected"
  scope: "channel" | "global-experiment"
 }
@@ -90,11 +92,21 @@ export const proposeEvaluationLearningCandidate = (
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
  const evaluation = listEvaluationRecords().find((record) => record.id === evaluationRecordId)
  if (!evaluation || evaluation.outcome === "pending") return null
- if (!evaluation.evidenceIds.length || evaluation.evidenceStatus !== "available") return null
+ if (!evaluation.evidenceIds.some((id) => typeof id === "string" && id.trim().length > 0) || evaluation.evidenceStatus !== "available") return null
  if (evaluation.comparabilityStatus !== "comparable" && evaluation.causalAssessment !== "experimentally_supported") return null
  if (input.scope === "channel" && !input.channelId) return null
- if (evaluation.channelId && input.channelId !== evaluation.channelId) return null
- if (evaluation.projectId && input.projectId !== evaluation.projectId) return null
+ // Never infer or broaden scope when an evaluation omitted its channel/project identity.
+ if ((input.channelId || null) !== (evaluation.channelId || null)) return null
+ if ((input.projectId || null) !== (evaluation.projectId || null)) return null
+ if (input.idempotencyKey) {
+  const existing = listWorkflowCandidates().find((candidate) =>
+   candidate.idempotencyKey === input.idempotencyKey &&
+   candidate.evaluationRecordId === evaluation.id &&
+   (candidate.channelId || null) === (input.channelId || null) &&
+   (candidate.projectId || null) === (input.projectId || null)
+  )
+  if (existing) return existing
+ }
  const item: WorkflowCandidate = {
   ...input,
   id: crypto.randomUUID(),
@@ -107,6 +119,7 @@ export const proposeEvaluationLearningCandidate = (
   selectedWindow: evaluation.selectedWindow || null,
   comparabilityStatus: evaluation.comparabilityStatus,
   evidenceStatus: evaluation.evidenceStatus,
+  idempotencyKey: input.idempotencyKey || null,
  }
  write(CANDIDATE_KEY, [item, ...listWorkflowCandidates()].slice(0, 1000))
  return item
