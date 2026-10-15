@@ -1925,55 +1925,66 @@
 .vt-confirmed-defaults-combined .vt-confirmed-global-grid strong{font-size:7px;line-height:1.05}
 .vt-confirmed-defaults-combined .vt-confirmed-global-grid span{display:block;margin-top:1px;font-size:8px;line-height:1.1;overflow-wrap:anywhere}
 .vt-confirmed-simple-input{--vt-component-height:44px;--vt-component-stroke:3px;--vt-component-radius:8px;--vt-component-font-size:24px;max-width:100%}
-.vt-confirmed-simple-textarea{min-height:44px!important;height:44px!important;resize:vertical;font-size:12px!important;font-weight:900!important;letter-spacing:-.02em;text-transform:uppercase}
+
 .vt-confirmed-control-family{display:grid;gap:10px}
 .vt-confirmed-control-row{display:grid;gap:5px;min-width:0}
 .vt-confirmed-control-row>strong{font-size:9px;font-weight:950;letter-spacing:-.02em}
-.vt-confirmed-control-variants{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;align-items:start}
-.vt-confirmed-control-variants>div{display:grid;justify-items:center;align-content:start;gap:5px;min-width:0}
-.vt-confirmed-control-variants small{font-size:7px;font-weight:900;text-align:center;line-height:1.1}
-@media(max-width:560px){.vt-confirmed-defaults-combined .vt-confirmed-global-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vt-confirmed-control-variants{gap:3px}.vt-confirmed-control-variants small{font-size:6px}.vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle button{padding-inline:5px;font-size:12px}}
-
-/* Prevent canonical switch/radio/checkbox specimens from colliding.
-   Each specimen gets its own intrinsic footprint; rows wrap when four do not fit. */
+/* Single authoritative Confirmed Library control-variant layout.
+   Switch, choice, and word-toggle families all render four variants in one data-driven row. */
 .vt-confirmed-control-variants {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 10px 12px;
+  --vt-confirmed-variant-gap: 6px;
+  --vt-confirmed-variant-label-size: clamp(6px, 1.6vw, 7px);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  justify-items: stretch;
+  gap: var(--vt-confirmed-variant-gap);
+  width: 100%;
   min-width: 0;
 }
 .vt-confirmed-control-variants > div {
   display: grid;
-  flex: 0 1 78px;
-  width: 78px;
-  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   align-content: start;
-  gap: 6px;
+  gap: 5px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 3px 1px;
+  box-sizing: border-box;
 }
 .vt-confirmed-control-variants > div > small {
   display: block;
   width: 100%;
   min-height: 2.2em;
-  overflow-wrap: anywhere;
+  font-size: var(--vt-confirmed-variant-label-size);
+  font-weight: 900;
+  line-height: 1.1;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 .vt-confirmed-control-variants :is(button, input, [role="switch"], [role="radio"], [role="checkbox"]) {
-  position: relative;
+  justify-self: center;
   flex-shrink: 0;
   max-width: 100%;
   margin: 0;
 }
-.vt-confirmed-control-row { min-width: 0; }
-.vt-confirmed-control-row > strong { display: block; }
-@media (max-width: 560px) {
-  .vt-confirmed-control-variants { gap: 9px 8px; }
-  .vt-confirmed-control-variants > div { flex-basis: 70px; width: 70px; }
-  .vt-confirmed-control-variants small { font-size: 7px; }
+.vt-confirmed-control-variants:is(.is-word-toggle-44, .is-word-toggle-28) .vt-studio-44-word-toggle {
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
 }
-
+.vt-confirmed-control-variants:is(.is-word-toggle-44, .is-word-toggle-28) .vt-studio-44-word-toggle button {
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: 4px;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-control-variants { --vt-confirmed-variant-gap: 3px; }
+  .vt-confirmed-control-variants > div { padding-inline: 0; }
+}
+@media(max-width:560px){.vt-confirmed-defaults-combined .vt-confirmed-global-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* Confirmed plain input/textarea typography and paired stroke behavior.
    Standard and compact text follow the actual 44px / 28px size contracts. */
@@ -2128,131 +2139,6 @@
   }
 }
 
-/* Word-toggle layout is size-specific: standard is one specimen per row,
-   compact is two specimens per row. Keep each toggle inside its own card. */
-.vt-confirmed-control-variants.is-word-toggle-44,
-.vt-confirmed-control-variants.is-word-toggle-28 {
-  display: grid !important;
-  flex-wrap: initial;
-  align-items: stretch;
-  justify-content: stretch;
-  width: 100%;
-  gap: 8px;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 {
-  grid-template-columns: minmax(0, 1fr);
-}
-.vt-confirmed-control-variants.is-word-toggle-28 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.vt-confirmed-control-variants.is-word-toggle-44 > div,
-.vt-confirmed-control-variants.is-word-toggle-28 > div {
-  box-sizing: border-box;
-  display: flex;
-  flex: initial;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  gap: 6px;
-  padding: 6px;
-  border: 1px solid #d2d2d2;
-  border-radius: 5px;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 > div > small,
-.vt-confirmed-control-variants.is-word-toggle-28 > div > small {
-  width: 100%;
-  min-height: 0;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle,
-.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle {
-  flex: 0 1 auto;
-  width: max-content;
-  max-width: 100%;
-  min-width: 0;
-  margin: 0 auto;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle button,
-.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle button {
-  min-width: 0;
-  max-width: 100%;
-}
-@media (max-width: 560px) {
-  .vt-confirmed-control-variants.is-word-toggle-28 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
-  .vt-confirmed-control-variants.is-word-toggle-44 > div,
-  .vt-confirmed-control-variants.is-word-toggle-28 > div {
-    padding: 4px;
-  }
-}
-
-
-/* Confirmed Library: all four canonical skins remain visible on one row for
-   radio/checkboxes, switches, and word toggles. Only the specimen cards shrink;
-   the exported controls keep their native 44px / 28px geometry. */
-.vt-confirmed-control-variants,
-.vt-confirmed-control-variants.is-word-toggle-44,
-.vt-confirmed-control-variants.is-word-toggle-28 {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  flex-wrap: initial !important;
-  align-items: start !important;
-  justify-content: stretch !important;
-  width: 100% !important;
-  gap: 6px !important;
-}
-.vt-confirmed-control-variants > div,
-.vt-confirmed-control-variants.is-word-toggle-44 > div,
-.vt-confirmed-control-variants.is-word-toggle-28 > div {
-  display: grid !important;
-  flex: initial !important;
-  grid-template-columns: minmax(0, 1fr);
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  justify-items: center !important;
-  align-content: start !important;
-  gap: 5px !important;
-  padding: 3px 1px !important;
-  box-sizing: border-box !important;
-}
-.vt-confirmed-control-variants > div > small,
-.vt-confirmed-control-variants.is-word-toggle-44 > div > small,
-.vt-confirmed-control-variants.is-word-toggle-28 > div > small {
-  display: block;
-  width: 100% !important;
-  min-height: 2.2em !important;
-  font-size: clamp(6px, 1.6vw, 7px) !important;
-  line-height: 1.1 !important;
-  overflow-wrap: anywhere !important;
-  text-align: center !important;
-}
-.vt-confirmed-control-variants :is(button, [role="switch"], [role="radio"], [role="checkbox"]) {
-  justify-self: center;
-  flex-shrink: 0;
-  margin: 0 !important;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle,
-.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle {
-  width: max-content !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  margin: 0 auto !important;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 .vt-studio-44-word-toggle button,
-.vt-confirmed-control-variants.is-word-toggle-28 .vt-studio-44-word-toggle button {
-  min-width: 0 !important;
-  max-width: 100% !important;
-  padding-inline: 4px !important;
-}
-
-
 /* Open Legend Multi rows and its close/clear action use the same font sizing as
    the closed trigger: 38px at 44px, 24px at 28px, weight 1000 and matching stroke. */
 .vt-confirmed-catalog .vt-studio-legend-option,
@@ -2311,56 +2197,6 @@
   width: 100%;
   min-width: 0;
 }
-.vt-confirmed-control-variants {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  width: 100%;
-  min-width: 0;
-  align-items: start;
-  justify-items: stretch;
-  gap: 8px;
-}
-.vt-confirmed-control-variants > div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
-  align-content: start;
-  width: auto;
-  min-width: 0;
-  flex: initial;
-  gap: 6px;
-}
-.vt-confirmed-control-variants > div > small {
-  width: 100%;
-  min-height: 2.2em;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 {
-  grid-template-columns: minmax(0, 1fr);
-}
-.vt-confirmed-control-variants.is-word-toggle-44 > div {
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: stretch;
-}
-.vt-confirmed-control-variants.is-word-toggle-44 .vt-subtoolbox-44-word-toggle,
-.vt-confirmed-control-variants.is-word-toggle-44 .vt-subtoolbox-44-word-toggle button {
-  justify-self: center;
-  max-width: 100%;
-}
-.vt-confirmed-control-variants.is-word-toggle-28 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.vt-confirmed-control-variants.is-word-toggle-28 > div {
-  min-width: 0;
-}
-@media (max-width: 560px) {
-  .vt-confirmed-control-variants { gap: 8px 5px; }
-  .vt-confirmed-control-variants > div > small { font-size: 7px; }
-  .vt-confirmed-control-variants.is-word-toggle-44 { grid-template-columns: minmax(0, 1fr); }
-  .vt-confirmed-control-variants.is-word-toggle-28 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
 /* Confirmed primitive family footers: make non-default prop/state contracts
    inspectable at the bottom of every family module, before source provenance. */
 .vt-confirmed-nondefault-settings {
@@ -2544,52 +2380,6 @@
 .vt-confirmed-defaults-combined .vt-confirmed-global-grid > div > span {
   font-size: 8px;
   line-height: 1.2;
-}
-
-
-/* Phase 2: confirmed canonical catalog groups solid toggles on their own row. */
-.vt-confirmed-word-toggle-family .vt-confirmed-control-row { display:flex; flex-direction:column; align-items:stretch; gap:8px; }
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-solid-row { display:grid; grid-template-columns:minmax(0,1fr); }
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-solid-row > div { width:100%; }
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-other-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants > div { min-width:0; }
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-studio-44-word-toggle,
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants .vt-subtoolbox-44-word-toggle { max-width:100%; min-width:0; }
-@media(max-width:560px) { .vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-other-row { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-
-
-/* Confirmed primitive catalog: word toggles are not mini-module-sized controls. */
-.vt-confirmed-word-toggle-family {
-  display: block;
-  width: 100%;
-  min-width: 0;
-}
-.vt-confirmed-word-toggle-family > .vt-confirmed-control-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  width: 100%;
-  min-width: 0;
-}
-.vt-confirmed-word-toggle-family .vt-confirmed-control-variants.is-word-toggle-solid-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  width: 100%;
-  min-width: 0;
-}
-.vt-confirmed-word-toggle-family .is-word-toggle-solid-row > div {
-  width: 100%;
-  min-width: 0;
-}
-.vt-confirmed-word-toggle-family .is-word-toggle-solid-row .vt-studio-44-word-toggle {
-  width: max-content;
-  max-width: 100%;
-  min-width: max-content;
-}
-.vt-confirmed-word-toggle-family .is-word-toggle-solid-row .vt-studio-44-word-toggle button {
-  white-space: nowrap;
-}
-.vt-confirmed-control-family.vt-confirmed-word-toggle-family .vt-confirmed-control-row > strong {
-  grid-column: 1 / -1;
 }
 
 
