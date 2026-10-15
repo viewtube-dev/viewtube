@@ -34,7 +34,7 @@ describe("confirmed split stepper primitive family", () => {
     const component = source("src/studio-ui/primitives/StudioControls.tsx")
 
     expect(component).toContain("setHolding(true)")
-    expect(component).toContain("}, 360)")
+    expect(component).toContain("}, 320)")
     expect(component).toContain("scheduleRepeat()")
     expect(component).toContain("event.detail === 0")
     expect(component).toContain("onPointerUp={stopHold}")
