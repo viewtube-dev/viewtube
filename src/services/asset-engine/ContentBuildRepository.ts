@@ -62,17 +62,50 @@ const writeBuilds = (builds: ContentBuildSnapshot[]) => {
  else memoryBuilds = builds
 }
 
-const readEvents = (): ContentBuildEvent[] =>
- canUseStorage() ? readJson<ContentBuildEvent[]>(EVENTS_KEY, []) : memoryEvents
+const readEvents = (): ContentBuildEvent[] => {
+ if (!canUseStorage()) return memoryEvents
+ let raw: string | null
+ try {
+  raw = localStorage.getItem(EVENTS_KEY)
+ } catch {
+  throw new Error("ContentBuild event storage could not be read.")
+ }
+ if (raw === null) return []
+ let parsed: unknown
+ try {
+  parsed = JSON.parse(raw)
+ } catch {
+  throw new Error("ContentBuild event storage is unreadable; refusing to overwrite it.")
+ }
+ if (!Array.isArray(parsed) || !parsed.every((event) =>
+  Boolean(event) &&
+  typeof event === "object" &&
+  typeof (event as ContentBuildEvent).id === "string" &&
+  typeof (event as ContentBuildEvent).contentBuildId === "string" &&
+  typeof (event as ContentBuildEvent).timestamp === "string" &&
+  typeof (event as ContentBuildEvent).eventType === "string"
+ )) {
+  throw new Error("ContentBuild event storage is malformed; refusing to overwrite it.")
+ }
+ return parsed as ContentBuildEvent[]
+}
 
 const writeEvents = (events: ContentBuildEvent[]) => {
- if (canUseStorage()) writeJson(EVENTS_KEY, events)
- else memoryEvents = events
+ if (!canUseStorage()) {
+  memoryEvents = events
+  return
+ }
+ try {
+  localStorage.setItem(EVENTS_KEY, JSON.stringify(events))
+ } catch {
+  throw new Error("ContentBuild events could not be persisted; refusing to report an unrecorded lifecycle event.")
+ }
 }
 
 export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
  contentBuildId: string
  eventType: ContentBuildEventType
+ idempotencyKey?: string | null
  entityType?: string | null
  entityId?: string | null
  actorType?: ContentBuildEvent["actorType"]
@@ -89,8 +122,23 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
  metadata?: T
  timestamp?: string
 }): ContentBuildEvent<T> => {
+ const events = readEvents()
+ const idempotencyKey = input.idempotencyKey?.trim() || null
+ if (idempotencyKey) {
+  const existing = events.find(event =>
+   event.idempotencyKey === idempotencyKey ||
+   (event.metadata as Record<string, unknown> | undefined)?.idempotencyKey === idempotencyKey
+  )
+  if (existing) {
+   if (existing.contentBuildId !== input.contentBuildId || existing.eventType !== input.eventType) {
+    throw new Error("ContentBuild event idempotency key was reused for a different event.")
+   }
+   return existing as ContentBuildEvent<T>
+  }
+ }
  const event: ContentBuildEvent<T> = {
-  id: uuid(),
+  id: idempotencyKey ? `event:${encodeURIComponent(idempotencyKey)}` : uuid(),
+  idempotencyKey,
   contentBuildId: input.contentBuildId,
   timestamp: input.timestamp || nowIso(),
   eventType: input.eventType,
@@ -109,7 +157,6 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
   traceId: input.traceId || null,
   metadata: input.metadata,
  }
- const events = readEvents()
  events.push(event as ContentBuildEvent)
  writeEvents(events)
  return event
@@ -546,6 +593,22 @@ export const bindYouTubeVideo = (input: BindYouTubeVideoInput): ContentBuildSnap
  const build = getContentBuild(input.contentBuildId)
  if (!build) throw new Error("Unknown ContentBuild: " + input.contentBuildId)
  const previous = build.youtube || null
+ const idempotencyKey = input.idempotencyKey?.trim() || null
+ if (idempotencyKey) {
+  const existingEvent = listContentBuildEvents(input.contentBuildId).find(event =>
+   event.idempotencyKey === idempotencyKey ||
+   (event.metadata as Record<string, unknown> | undefined)?.idempotencyKey === idempotencyKey
+  )
+  if (existingEvent) {
+   if (build.youtube?.videoId !== input.videoId) {
+    throw new Error("YouTube binding idempotency key conflicts with the current ContentBuild video identity.")
+   }
+   return build
+  }
+  if (previous?.videoId && previous.videoId !== input.videoId) {
+   throw new Error("ContentBuild is already bound to a different YouTube video; refusing to overwrite publication lineage.")
+  }
+ }
  const binding = {
   channelId: input.channelId || build.channelId || null,
   videoId: input.videoId,
@@ -564,6 +627,7 @@ export const bindYouTubeVideo = (input: BindYouTubeVideoInput): ContentBuildSnap
  const next = updateContentBuild(input.contentBuildId, current => ({ ...current, youtube: binding }))
  appendContentBuildEvent({
   contentBuildId: input.contentBuildId,
+  idempotencyKey,
   eventType: previous ? "youtube.state.changed" : "youtube.bound",
   entityType: "youtube-video",
   entityId: input.videoId,
