@@ -1785,7 +1785,7 @@ button[data-vt-studio-control="true"][data-height-variant="28"]:not(.vt-studio-4
   min-height: 28px;
   height: 28px;
 }
-button[data-vt-studio-control="true"]::before {
+button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before {
   content: "";
   position: absolute;
   z-index: 0;
