@@ -113,8 +113,20 @@ describe("Brain generation quality loop", () => {
       taskProfileId: "strategy",
       generationPath: "repaired_model",
       promptVersion: expect.any(String),
+      contextResolverVersion: "brain-context-resolution-v1",
+      outputSchemaVersion: "structured-brain-output-v1",
+      requestedModel: null,
+      servedModel: null,
+      modelIdentityStatus: "not_exposed_by_generator",
+      evidenceIds: expect.any(Array),
+      channelId: null,
+      projectId: null,
+      contentBuildId: null,
+      contextBudget: expect.any(Object),
       evaluationId: expect.any(String),
       repaired: true,
+      repairAttempted: true,
+      repairSucceeded: true,
     });
   });
 
@@ -151,6 +163,13 @@ describe("Brain generation quality loop", () => {
       generationPath: "basic_guidance",
       fallbackReason: "provider_error",
       repaired: false,
+      contextResolverVersion: "brain-context-resolution-v1",
+      outputSchemaVersion: "structured-brain-output-v1",
+      modelIdentityStatus: "not_exposed_by_generator",
+      evidenceIds: expect.any(Array),
+      contextBudget: expect.any(Object),
+      repairAttempted: false,
+      repairSucceeded: false,
     });
   });
 });
