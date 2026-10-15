@@ -164,6 +164,7 @@ import {
 import type { VaultAsset, VaultAssetKind } from "../types"
 import { resolveVaultMediaCapabilities, type VaultMediaKind } from "../features/vault-workbench/capabilities"
 import { VaultImageWorkbench } from "./vault/VaultImageWorkbench"
+import { VaultVideoWorkbench } from "./vault/VaultVideoWorkbench"
 
 const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  navigator: "Navigator",
@@ -546,7 +547,7 @@ const CreatorVaultOS: React.FC = () => {
      ? asset.kind
      : "document"
    ))
-  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: false, audioProcessorAvailable: false })
+  return resolveVaultMediaCapabilities({ kinds, videoProcessorAvailable: true, audioProcessorAvailable: false })
  }, [allAssets, selectedAssetIds])
  const editableTextAsset = useMemo(() => {
   if (!selectedAsset || selectedAsset.kind !== "document") return null
@@ -3274,6 +3275,13 @@ const CreatorVaultOS: React.FC = () => {
          ) : null}
          {selectedAsset.kind === "image" ? (
           <VaultImageWorkbench
+           key={selectedAsset.id}
+           asset={selectedAsset}
+           onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+          />
+         ) : null}
+         {selectedAsset.kind === "video" ? (
+          <VaultVideoWorkbench
            key={selectedAsset.id}
            asset={selectedAsset}
            onDerivativeCreated={() => setRefreshTick((current) => current + 1)}

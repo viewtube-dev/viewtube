@@ -4,6 +4,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { handleCompressAnalysisRoute } from "./media-compression.mjs";
+import { handleVaultMediaBinaryGetRoute, handleVaultMediaBinaryUploadRoute } from "./vault-media-storage.mjs";
 import { handleYouTubeAcquireRoute } from "./youtube-acquisition.mjs";
 import { getReleaseMetadata } from "./release-metadata.mjs";
 import { getAuthenticatedViewtubeUserId, handleAccountRoute } from "./account-auth.mjs";
@@ -739,6 +740,19 @@ const server = http.createServer(async (req, res) => {
 
     if (method === "POST" && pathname === "/api/media/compress-analysis") {
       return await handleCompressAnalysisRoute(req, res);
+    }
+
+    if (method === "POST" && pathname === "/api/vault/media-binaries") {
+      const userId = await getAuthenticatedViewtubeUserId(req);
+      if (!userId) return json(res, 401, { error: "Authentication required for Vault media storage." });
+      return await handleVaultMediaBinaryUploadRoute(req, res, userId);
+    }
+
+    if (method === "GET" && pathname.startsWith("/api/vault/media-binaries/")) {
+      const userId = await getAuthenticatedViewtubeUserId(req);
+      if (!userId) return json(res, 401, { error: "Authentication required for Vault media storage." });
+      const mediaId = decodeURIComponent(pathname.slice("/api/vault/media-binaries/".length));
+      return await handleVaultMediaBinaryGetRoute(req, res, mediaId, userId);
     }
 
     if (method === "POST" && pathname === "/api/youtube/acquire") {

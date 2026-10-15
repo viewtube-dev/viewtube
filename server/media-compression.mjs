@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
 import { spawn } from "node:child_process";
+import { handleVaultMediaProcessingRoute } from "./vault-media-processing.mjs";
 
 const MAX_DURATION_SECONDS = Number(process.env.MEDIA_ANALYSIS_MAX_DURATION_SECONDS || 300);
 const MAX_OUTPUT_BYTES = Number(process.env.MEDIA_ANALYSIS_MAX_OUTPUT_BYTES || 12 * 1024 * 1024);
@@ -126,6 +127,9 @@ const mimeToExt = (mimeType) => {
 };
 
 export const handleCompressAnalysisRoute = async (req, res) => {
+  if (new URL(req.url || "/", "http://localhost").searchParams.get("vaultOperation") === "1") {
+    return handleVaultMediaProcessingRoute(req, res);
+  }
   try {
     const contentType = String(req.headers["content-type"] || "");
     if (!contentType.toLowerCase().includes("multipart/form-data")) {
