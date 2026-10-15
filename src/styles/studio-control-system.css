@@ -232,6 +232,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   outline:var(--vt-field-focus-outline-width) solid var(--vt-field-secondary);
   outline-offset:0;
 }
+.vt-studio-floating-field[data-vt-floating-variant="b"] > input[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  outline: var(--vt-field-focus-outline-width) solid var(--vt-field-secondary);
+  outline-offset: 0;
+}
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
 
 /* Permanent label-box variants of the canonical input and textarea families.
