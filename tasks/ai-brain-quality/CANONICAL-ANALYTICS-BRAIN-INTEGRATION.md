@@ -1,9 +1,9 @@
 # Canonical Analytics Evidence → Brain Runtime Integration
 
-**Status:** Phases 0–2 implemented on the work branch; release verification pending  
+**Status:** Phases 0–5 implemented on the work branch; release verification pending  
 **Owner:** BrainRuntime + analytics-canon  
-**Branch:** `fix/brain-canonical-evidence-missingness-2026-10-15`  
-**Pull request:** [#213](https://github.com/viewtube-dev/viewtube/pull/213)  
+**Branch:** `fix/brain-canonical-evidence-phases-3-5-2026-10-15`  
+**Pull request:** Pending PR creation  
 **Authority:** `docs/domains/BRAIN.md` and `docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md`  
 **Contract:** `tasks/ai-brain-quality/SPEC-evidence-contract.md`
 
@@ -26,8 +26,8 @@ Baseline branch: `master/consolidated-feature-integration`. Work is isolated on 
 | Scope safety | Resolver + `BrainEvidenceQuality.ts` | Canonical mismatch blocked core projections, but opportunity projection could still run | Implementation required; fixed in Phase 2 |
 | Opportunity metric semantics | `src/services/brain/OpportunityEvidenceAdapter.ts` | Missing views were converted to zero and confidence had an unsupported baseline | Regression fix and tests added in this work |
 | Opportunity source convergence | Resolver currently accepts `AIBrainEvidencePack` for opportunity derivation | Opportunity evidence is not yet directly derived from canonical bundle datasets | Explicit follow-up for specialist/source convergence; do not claim complete |
-| Brain task/context integration | `BrainOrchestrator.ts`, `BrainContextBroker.ts`, `EvidenceIntelligenceResolver.ts` | Shared integration exists; reachability varies by capability/surface | Phase 4 runtime audit |
-| Project/ContentBuild context | Creator Context resolver and bounded project context | Existing convergence items remain VERIFYING | Later phase; not implied complete here |
+| Brain task/context integration | `BrainOrchestrator.ts`, `BrainContextBroker.ts`, `EvidenceIntelligenceResolver.ts` | Shared integration exists; quality was omitted for algorithm-only requests and unscoped context could remain visible | Implemented in Phases 3–4; certification pending |
+| Project/ContentBuild context | Creator Context resolver and bounded project context | Stale visible context could leak across project IDs when canonical project lookup missed | Implemented project identity guard and regression test in Phase 5 |
 | Recommendation → action → outcome lineage | Existing outcome/evaluation/learning owners | No end-to-end certification in this slice | Later phase |
 | Capability coverage report | `scripts/governance/build-capability-coverage.mjs` | Generator currently initializes task/test/guide/verification refs as empty arrays | Governance generator needs a separate truthful metadata change; do not hand-edit generated report |
 
@@ -71,6 +71,42 @@ Implemented in this branch:
 
 The existing canonical dataset states remain `available`, `partial`, `stale`, `failed`, and `unavailable`; Brain projects these to epistemic/quality semantics. Missing is not zero. The full contract's `KNOWN`, `USER_PROVIDED`, `INFERRED`, `HYPOTHESIS`, `ESTIMATE`, and `CONFLICTING` states still need end-to-end certification across non-analytics sources; this slice does not claim those states are all produced by analytics-canon.
 
+## Phase 3 — evidence fitness in context selection
+
+Implemented:
+- Evidence quality is evaluated against the task-selected dataset set derived from the requested canonical sections, rather than treating every unrelated dataset in the 34-dataset catalog as equally relevant.
+- The quality report records requested sections and evaluated dataset IDs, alongside the selected reporting window and source snapshot.
+- BrainContextBroker includes bounded task-dataset coverage, source snapshot, window, freshness, missingness, limitations, and explicit evidence-use rules.
+- Unscoped or mismatched canonical evidence is blocked before channel-specific analytics, statistics, audience, and algorithm content is added to the model context.
+- Missing/unavailable values remain distinct from zero; stale data is identified as historical; partial evidence requires qualified claims; insufficient evidence cannot justify precise channel-specific claims.
+- Regression coverage added for task-scoped quality and context-level scope blocking.
+
+## Phase 4 — specialist reachability and shared contract
+
+Implemented:
+- Statistics and Audience continue to use projections from the same canonical evidence bundle.
+- Algorithm / Channel / Opportunity / Anomaly consumers now receive the shared evidence-quality report even when the request is not a statistics task.
+- Requested reporting window and capability-derived section IDs continue through BrainOrchestrator → EvidenceIntelligenceResolver → analytics-canon.
+- Canonical scope safety applies before evidence records, statistics, audience, and opportunity outputs are exposed.
+- Focused integration coverage checks canonical source selection, evidence scope, selected window, and context assembly.
+
+Certification boundary:
+- Source inspection and regression tests establish these call paths, but production reachability is not certified until the latest branch's focused tests, typecheck, runtime lint, full suite, and runtime smoke checks have completed successfully.
+
+## Phase 5 — canonical opportunities and project identity
+
+Implemented:
+- Production Opportunity Intelligence now projects catalog opportunities from the canonical `videos` dataset in the same evidence bundle used by quality/statistics, instead of deriving them from a separate Brain evidence pack.
+- Opportunity output retains canonical row evidence ID and explicit provenance: owner, snapshot ID, dataset ID/status, and selected window.
+- Channel mismatch, missing channel scope, failed/unavailable video dataset, and rows with no usable measured metric fail closed.
+- Missing view counts remain `null`; publication-date absence is not treated as maximum age; confidence is based on measured-metric coverage.
+- CreatorContextResolver refuses visible UI context whose project ID is different from, or not explicitly scoped to, the requested active project. Canonical Project → ContentBuild identity remains the preferred source.
+- Regression tests cover canonical opportunity provenance/scope and stale cross-project context.
+
+Not claimed complete:
+- This phase does not certify recommendation → creator action → publishing outcome → analytics attribution → governed learning end-to-end.
+- The capability-coverage generator still needs a separate governance change so task/test/guide/verification references can be represented truthfully.
+
 ## Verification commands
 
 - Focused: `npx vitest run src/services/brain/OpportunityEvidenceAdapter.test.ts src/services/brain/__tests__/EvidenceIntelligenceResolver.test.ts src/services/brain/__tests__/BrainEvidenceQuality.test.ts`
@@ -91,16 +127,18 @@ GitHub Actions is the verification authority for this remote branch. A started o
 - [x] Fail closed for canonical channel mismatch and explicitly cross-channel opportunity packs.
 - [x] Add focused regression coverage for the above contracts.
 - [x] Document remaining source-convergence and governance-generator gaps.
+- [x] Integrate task-selected evidence fitness and scope-safe context assembly.
+- [x] Route quality metadata to analytics-backed specialist requests, including algorithm/opportunity paths.
+- [x] Project opportunities from canonical analytics rows with source/window/snapshot provenance.
+- [x] Guard active project context against stale cross-project visible context.
 - [ ] Confirm focused tests, typecheck, runtime lint and full suite pass on the latest branch head.
 - [ ] Review CI results and any unrelated regressions before marking the PR ready.
 
-## Remaining work after Phase 2
+## Remaining work after Phase 5
 
-1. Certify all Brain surfaces and specialist consumers use the shared evidence envelope.
-2. Convert Opportunity Intelligence to a canonical evidence projection (or prove and document the canonical producer of its typed pack); preserve evidence IDs and windows.
-3. Verify active Project/ContentBuild identity and current opportunity context across runtime consumers.
-4. Trace evidence through recommendation, creator decision/action, outcome, evaluation and governed learning.
-5. Repair the capability-coverage generator so task/test/guide/verification metadata can be represented and regenerate derived reports.
-6. Run runtime/browser verification and record the exact commit and test results.
+1. Trace evidence through recommendation → creator decision/action → publishing outcome → analytics attribution → evaluation → governed learning, including explicit outcome lineage.
+2. Repair the capability-coverage generator so task/test/guide/verification metadata can be represented, then regenerate and audit derived reports.
+3. Run final focused tests, typecheck, runtime lint, full suite, and runtime/browser verification; record the exact final branch SHA and actual results.
+4. Reassess whether remaining Brain surfaces outside the orchestrator (including SidebarChatbot and BrainHubWidget) still assemble parallel context, and migrate only after verifying their real production callers.
 
 This document distinguishes implementation from certification: existing files or passing documentation checks alone do not establish full production reachability.
