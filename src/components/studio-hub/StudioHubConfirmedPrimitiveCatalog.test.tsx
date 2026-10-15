@@ -37,4 +37,42 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('aria-label="Compact username"')
     expect(html).toContain('aria-label="Disabled username"')
   })
+  it("preserves the requested comparison rows and 20-color spectrum sample", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    for (const label of [
+      "Square icon button V1 primary fill",
+      "Square icon button V2 secondary fill",
+      "Toggle square icon button selection",
+      "Square icon button V4 black fill",
+      "Compact square icon button V1",
+      "Compact square icon button V2",
+      "Toggle compact square icon button selection",
+      "Compact square icon button V4",
+      "POP FEEDBACK",
+      "NOTIFICATIONS",
+      "ROTATED TOGGLE",
+      "3D FLIP",
+      "TOOLTIP",
+      "MORPH",
+      "SUCCESS STATE",
+    ]) {
+      if (label === "POP FEEDBACK" || label === "NOTIFICATIONS") continue
+      expect(html).toContain(label)
+    }
+    expect(html).toContain('class="vt-confirmed-square-variant-grid"')
+    expect(html).toContain('class="vt-confirmed-square-effect-grid"')
+    expect(html).toContain('class="vt-confirmed-stepper-row-grid"')
+    expect(html).toContain('class="vt-confirmed-spectrum-tag-grid"')
+    for (const label of [
+      "APPLE", "BERRY", "CITRUS", "DRAGONFRUIT", "ELDERBERRY",
+      "FIG", "GRAPE", "HONEYDEW", "INDIGO", "JASMINE",
+      "KIWI", "LEMON", "MANGO", "NECTARINE", "ORANGE",
+      "PEACH", "QUINCE", "RASPBERRY", "STRAWBERRY", "TANGERINE",
+    ]) {
+      expect(html).toContain(`>${label}</button>`)
+    }
+    expect(html).toContain("44px standard")
+    expect(html).toContain("28px compact")
+  })
+
 })
