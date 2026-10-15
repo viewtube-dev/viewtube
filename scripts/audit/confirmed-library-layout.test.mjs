@@ -17,6 +17,8 @@ test("confirmed library uses the requested four skin names without changing skin
 test("all four-skin control families retain a four-column row at every viewport", () => {
   assert.match(styles, /\.vt-confirmed-word-toggle-family[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\) !important/);
   assert.match(styles, /\.vt-confirmed-control-variants\s*\{[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants\s*\{\s*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\) !important/);
+  assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants,[\s\S]*?grid-template-columns: repeat\(4, minmax\(64px, 1fr\)\) !important;[\s\S]*?overflow-x: auto/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*?\.vt-confirmed-word-toggle-family[\s\S]*?grid-template-columns: repeat\(4, minmax\(64px, 1fr\)\) !important/);
 });
 
