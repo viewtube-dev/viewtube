@@ -198,9 +198,17 @@
         "src/services/analytics*"
       ],
       "taskRefs": [
-        "tasks/system-convergence/todo.md"
+        "tasks/system-convergence/todo.md",
+        "tasks/ai-brain-quality/CANONICAL-ANALYTICS-BRAIN-INTEGRATION.md",
+        "tasks/ai-brain-quality/PHASE-10-OUTCOME-LINEAGE.md",
+        "tasks/ai-brain-quality/PHASE-11-ANALYTICS-EVALUATION-LINEAGE.md",
+        "tasks/ai-brain-quality/PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md"
       ],
-      "tests": [],
+      "tests": [
+        "src/services/postPublicationOutcomePipeline.test.ts",
+        "src/services/asset-engine/PostPublishAnalyticsBridge.test.ts",
+        "src/services/viewTubeEvaluationLedger.test.ts"
+      ],
       "uiSurfaces": [
         "Channel Intelligence Hub",
         "Packaging & Experiment Lab",
@@ -214,19 +222,18 @@
         ".github/workflows/release-gates.yml"
       ],
       "capabilityId": "CAP-OUTCOME-LEARNING",
-      "complete": false,
-      "missing": [
-        "tests"
-      ],
+      "complete": true,
+      "missing": [],
       "covered": [
         "authority",
         "codeOwners",
         "taskRefs",
+        "tests",
         "uiSurfaces",
         "guideRefs",
         "verificationRefs"
       ],
-      "coverageRatio": 0.8571428571428571,
+      "coverageRatio": 1,
       "lastAudited": "2026-10-15"
     },
     {
