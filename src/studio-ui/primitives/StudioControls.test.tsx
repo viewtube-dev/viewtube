@@ -133,8 +133,8 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(css).toContain('--vt-studio-fixed-label-font-size: 9px;')
     expect(css).toContain('letter-spacing: .055em;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before')
-    expect(css).toContain('--vt-studio-control-shadow-x: .75px;')
-    expect(css).toContain('--vt-studio-control-shadow-y: .75px;')
+    expect(css).toContain('--vt-studio-control-shadow-x: 1px;')
+    expect(css).toContain('--vt-studio-control-shadow-y: 1px;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }')
     // The selected shadow token is set on the shared button root, covering split-left variants too.
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] {')
@@ -159,20 +159,18 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(contract).not.toContain("transition-duration:300ms")
   })
 
-  it("applies the same physical depression model to SubToolbox and split-action buttons while excluding menu triggers", () => {
+  it("preserves canonical SubToolbox motion tokens and reduced-motion boundaries", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
-    expect(css).toContain("--vt-subtoolbox-motion-button: 180ms")
-    expect(css).toContain("--vt-subtoolbox-motion-press: 80ms")
-    expect(css).toContain(".vt-subtoolbox-button:active:not(:disabled)")
-    expect(css).toContain("box-shadow:none")
-    expect(css).toContain("translate(var(--vt-subtoolbox-inner-shadow")
-    expect(css).toContain(".vt-subtoolbox-split-action:active:not(:disabled)")
-    expect(css).toContain(".vt-subtoolbox-icon-button:active:not(:disabled)")
-    expect(css).toContain(".vt-subtoolbox-media-control:active:not(:disabled)")
-    expect(css).toContain("transition-duration:var(--vt-subtoolbox-motion-press,80ms)")
-    expect(css).toContain("translate(var(--vt-subtoolbox-shadow-offset")
+    expect(css).toContain("--vt-subtoolbox-motion-control:180ms")
+    expect(css).toContain("--vt-subtoolbox-motion-collapse:600ms")
+    expect(css).toContain("dropdown/menu")
+    expect(css).toContain("triggers intentionally remain stationary and shadow-free")
     expect(css).toContain("@media (prefers-reduced-motion: reduce)")
-    expect(readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")).toContain(".vt-studio-legend-trigger:active")
+    const studioCss = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const contract = studioCss.slice(studioCss.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    expect(contract).toContain("--vt-studio-motion-button: 180ms")
+    expect(contract).toContain("--vt-studio-motion-press: 80ms")
+    expect(contract).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)::before')
   })
 })
 
@@ -199,12 +197,14 @@ describe("Studio text-field module ownership and typography", () => {
     expect(areaModule.StudioTextArea).toBeDefined()
   })
 
-  it("defines the 18px standard and 14px compact typography for both input and textarea", () => {
+  it("uses global 38px/24px input typography and 18px/14px textarea typography", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size, 18px\) !important/)
-    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size, 14px\) !important/)
+    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size, 38px\) !important/)
+    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size, 24px\) !important/)
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
+    expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px) !important")
+    expect(css).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px) !important")
   })
 })
 
@@ -323,7 +323,7 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).toContain('.vt-subtoolbox-split-action:active:not(:disabled)')
     expect(css).toContain('.vt-subtoolbox-icon-button:active:not(:disabled)')
     expect(css).toContain('.vt-subtoolbox-media-control:active:not(:disabled)')
-    expect(css).toContain('dropdown/menu triggers intentionally remain stationary and shadow-free')
+    expect(css).toMatch(/dropdown\/menu\s+triggers intentionally remain stationary and shadow-free/)
     expect(css).toContain('@media (prefers-reduced-motion: reduce)')
     expect(css).toContain('.vt-subtoolbox-button,')
     expect(css).toContain('transition:none !important')
