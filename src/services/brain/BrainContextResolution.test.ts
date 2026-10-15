@@ -29,6 +29,38 @@ describe("Brain context resolution", () => {
   expect(result.selectedSectionIds).not.toContain("current_public_research")
  })
 
+ it("reports capability-required sections that are absent instead of silently treating them as available", () => {
+  const result = resolveBrainContextSections([
+   "System prompt",
+   "\\nCREATOR CONTROL POLICY\\nAnalytics evidence access is enabled.",
+  ], {
+   userText: "Analyze my channel views",
+   maximumCharacters: 2000,
+   capabilityIds: ["statistics-intelligence"],
+  })
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:channel_evidence")
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:evidence_quality")
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:shared_evidence_contract")
+  expect(result.omittedSectionIds).toContain("required_evidence_missing:deterministic_statistics_intelligence")
+ })
+
+ it("caps context to an explicitly supplied model window while reserving output and safety tokens", () => {
+  const result = resolveBrainContextSections([
+   "System prompt",
+   "\\nCHANNEL EVIDENCE\\n" + "e".repeat(5000),
+  ], {
+   userText: "Analyze my channel views",
+   maximumCharacters: 5000,
+   modelContextWindowTokens: 1000,
+   reservedOutputTokens: 100,
+   safetyMarginTokens: 50,
+  })
+  expect(result.maximumCharacters).toBe(2550)
+  expect(result.characterCount).toBeLessThanOrEqual(2550)
+  expect(result.estimatedInputTokens).toBeLessThanOrEqual(850)
+  expect(result.budgetSource).toBe("explicit_model_window")
+ })
+
  it("deduplicates repeated context sections", () => {
   const repeated = "\nCHANNEL KNOWLEDGE\n" + "same statement ".repeat(8)
   const result = resolveBrainContextSections(["System prompt", repeated, repeated], {

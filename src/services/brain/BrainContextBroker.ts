@@ -20,6 +20,10 @@ const clip = (value: string, maximum: number): string => value.slice(0, Math.max
 
 export const buildBrainContextPack = (input: {
  channelId?: string | null
+ capabilityIds?: string[]
+ modelContextWindowTokens?: number | null
+ reservedOutputTokens?: number
+ contextSafetyMarginTokens?: number
  systemPrompt: string
  snapshot: AIBrainContextSnapshot
  recentTurns: AIBrainConversationTurn[]
@@ -35,6 +39,9 @@ export const buildBrainContextPack = (input: {
  algorithmIntelligence?: AlgorithmIntelligencePortfolio | null
  creatorContext?: CreatorContextEnvelope | null
  maximumCharacters?: number
+ modelContextWindowTokens?: number | null
+ reservedOutputTokens?: number
+ contextSafetyMarginTokens?: number
 }): { systemInstruction: string; budget: BrainContextBudget } => {
  const requestedChannelId = input.channelId || null
  const creatorContextMatchesChannel = Boolean(
@@ -224,14 +231,25 @@ export const buildBrainContextPack = (input: {
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
   taskInstruction ? `\n${taskInstruction}` : "",
  ].filter(Boolean)
- const resolvedContext = resolveBrainContextSections(sections, { userText: input.userText, maximumCharacters })
+ const resolvedContext = resolveBrainContextSections(sections, {
+  userText: input.userText,
+  maximumCharacters,
+  capabilityIds: input.capabilityIds,
+  modelContextWindowTokens: input.modelContextWindowTokens,
+  reservedOutputTokens: input.reservedOutputTokens,
+  safetyMarginTokens: input.contextSafetyMarginTokens,
+ })
  omittedSections.push(...resolvedContext.omittedSectionIds)
  const systemInstruction = resolvedContext.text
 
  return {
   systemInstruction,
   budget: {
-   maximumCharacters,
+   maximumCharacters: resolvedContext.maximumCharacters,
+   modelContextWindowTokens: resolvedContext.modelContextWindowTokens,
+   reservedOutputTokens: resolvedContext.reservedOutputTokens,
+   estimatedInputTokens: resolvedContext.estimatedInputTokens,
+   contextBudgetSource: resolvedContext.budgetSource,
    systemCharacters: system.length,
    evidenceCharacters: evidence.length + evidenceQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,

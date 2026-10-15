@@ -1,6 +1,8 @@
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
+import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS } from "./BrainCapabilityRegistry"
 
 export const BRAIN_CONTEXT_RESOLVER_VERSION = "brain-context-resolution-v1"
+export const BRAIN_CONTEXT_CHARS_PER_TOKEN_ESTIMATE = 3
 
 export interface BrainContextSectionResolution {
  text: string
@@ -8,6 +10,11 @@ export interface BrainContextSectionResolution {
  omittedSectionIds: string[]
  characterCount: number
  maximumCharacters: number
+ modelContextWindowTokens: number | null
+ reservedOutputTokens: number
+ safetyMarginTokens: number
+ estimatedInputTokens: number
+ budgetSource: "explicit_model_window" | "character_fallback"
 }
 
 interface CandidateSection {
@@ -92,10 +99,36 @@ const priorityFor = (id: string, intent: string): number => {
  */
 export const resolveBrainContextSections = (
  sections: string[],
- options: { userText: string; maximumCharacters: number },
+ options: {
+  userText: string
+  maximumCharacters: number
+  capabilityIds?: string[]
+  modelContextWindowTokens?: number | null
+  reservedOutputTokens?: number
+  safetyMarginTokens?: number
+ },
 ): BrainContextSectionResolution => {
- const maximumCharacters = Math.max(0, Math.floor(options.maximumCharacters))
+ const requestedCharacterBudget = Math.max(0, Math.floor(options.maximumCharacters))
+ const modelContextWindowTokens = Number.isFinite(options.modelContextWindowTokens) && (options.modelContextWindowTokens || 0) > 0
+  ? Math.floor(options.modelContextWindowTokens as number)
+  : null
+ const reservedOutputTokens = Math.max(0, Math.floor(options.reservedOutputTokens ?? 2048))
+ const safetyMarginTokens = Math.max(0, Math.floor(options.safetyMarginTokens ?? 512))
+ const availableInputTokens = modelContextWindowTokens === null
+  ? null
+  : Math.max(0, modelContextWindowTokens - reservedOutputTokens - safetyMarginTokens)
+ const modelCharacterBudget = availableInputTokens === null
+  ? Number.POSITIVE_INFINITY
+  : Math.floor(availableInputTokens * BRAIN_CONTEXT_CHARS_PER_TOKEN_ESTIMATE)
+ const maximumCharacters = Math.min(requestedCharacterBudget, modelCharacterBudget)
+ const budgetSource = modelContextWindowTokens === null ? "character_fallback" as const : "explicit_model_window" as const
  const profile = resolveBrainTaskProfile(options.userText)
+ const taskRequired = REQUIRED_CONTEXT_BY_TASK[profile.id] || []
+ const capabilityRequired = Array.from(new Set((options.capabilityIds || []).flatMap(
+  (capabilityId) => BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[capabilityId] || [],
+ )))
+ const explicitRequired = Array.from(new Set([...taskRequired, ...capabilityRequired]))
+ const requiredSet = new Set(explicitRequired)
  const seen = new Set<string>()
  const candidates: CandidateSection[] = []
  const omittedSectionIds: string[] = []
@@ -108,9 +141,12 @@ export const resolveBrainContextSections = (
    return
   }
   if (normalized.length > 80) seen.add(normalized)
-  const taskRequired = REQUIRED_CONTEXT_BY_TASK[profile.id] || []
-  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task") || taskRequired.includes(id)
+  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task") || requiredSet.has(id)
   candidates.push({ id, text, index, priority: priorityFor(id, profile.intent), required })
+ })
+ const availableSectionIds = new Set(candidates.map((candidate) => candidate.id))
+ explicitRequired.forEach((id) => {
+  if (!availableSectionIds.has(id)) omittedSectionIds.push(`required_evidence_missing:${id}`)
  })
  const ranked = [...candidates].sort((a, b) =>
   Number(b.required) - Number(a.required) || b.priority - a.priority || a.index - b.index,
@@ -144,5 +180,10 @@ export const resolveBrainContextSections = (
   omittedSectionIds: [...new Set(omittedSectionIds)],
   characterCount: selected.reduce((sum, entry) => sum + entry.text.length, 0) + Math.max(0, selected.length - 1),
   maximumCharacters,
+  modelContextWindowTokens,
+  reservedOutputTokens,
+  safetyMarginTokens,
+  estimatedInputTokens: Math.ceil((selected.reduce((sum, entry) => sum + entry.text.length, 0) + Math.max(0, selected.length - 1)) / BRAIN_CONTEXT_CHARS_PER_TOKEN_ESTIMATE),
+  budgetSource,
  }
 }
