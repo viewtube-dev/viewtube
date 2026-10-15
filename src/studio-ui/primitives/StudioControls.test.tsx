@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioTextArea, StudioTextInput } from "./StudioControls"
+import { StudioSquareIconButton, StudioTextArea, StudioTextInput } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 
 describe("standalone Studio text fields", () => {
@@ -180,7 +180,7 @@ describe("canonical square icon button family", () => {
     expect(standard).toContain('data-icon-variant="v3"')
     expect(standard).toContain('data-icon-variant="v4"')
     expect(standard).toContain('data-size="standard"')
-    expect(standard).toContain('width:44px')
+    expect(standard).toContain('data-height-variant="44"')
     expect(compact).toContain('data-size="compact"')
     expect(compact).toContain('data-height-variant="28"')
     expect(compact).toContain('data-icon-variant="v1"')
