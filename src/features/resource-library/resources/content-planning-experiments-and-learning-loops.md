@@ -24,7 +24,7 @@ related_resources: youtube-metrics-dimensions-glossary; reading-analytics-correc
 
 A content plan is a sequence of informed bets. It helps you decide what to make, why it might matter to viewers, what resources it needs, and what you hope to learn after publishing. A good plan leaves room for creativity and surprise while avoiding a cycle of making videos without remembering what they taught you.
 
-> **Creator principle:** Every planned video should have a viewer purpose. Not every video needs to be an experiment, but every result can teach you something when you record the context and interpret it carefully.
+> **Creator takeaway:** Every planned video should have a viewer purpose. Not every video needs to be an experiment, but every result can teach you something when you record the context and interpret it carefully.
 
 ## The Creator Mental Model
 
