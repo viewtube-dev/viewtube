@@ -78,9 +78,12 @@ const validPeriod = (period: AnalyticsInsightPeriod): boolean =>
  && period.startDate <= period.endDate
  && Boolean(period.label.trim())
 
-const metricAggregation = (metric: string): "sum" | "average" => {
+const metricAggregation = (metric: string): "sum" | null => {
  const key = metric.toLowerCase()
- return key.includes("average")
+ // The current canonical summary contract exposes row count/sum/arithmetic
+ // average, but not enough denominator metadata to aggregate rates correctly.
+ if (
+  key.includes("average")
   || key.startsWith("avg")
   || key === "ctr"
   || key.endsWith("_ctr")
@@ -91,18 +94,18 @@ const metricAggregation = (metric: string): "sum" | "average" => {
   || key.includes("rpm")
   || key.includes("cpm")
   || key.includes("duration")
-  ? "average"
-  : "sum"
+ ) return null
+ return "sum"
 }
 
 const valueFor = (
  dataset: CanonicalIntelligenceDatasetManifest,
  metric: string,
- aggregation: "sum" | "average",
+ aggregation: "sum",
 ): number | null => {
  const summary = dataset.metrics[metric]
  if (!summary) return null
- const value = aggregation === "sum" ? summary.sum : summary.average
+ const value = summary.sum
  return Number.isFinite(value) ? value : null
 }
 
@@ -224,6 +227,10 @@ export const buildPeriodComparisonInsights = (input: {
     continue
    }
    const aggregation = metricAggregation(metric)
+   if (!aggregation) {
+    blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} requires denominator-aware aggregation not provided by the canonical summary contract.`)
+    continue
+   }
    const currentValue = valueFor(currentDataset, metric, aggregation)
    const baselineValue = valueFor(baselineDataset, metric, aggregation)
    if (currentValue === null || baselineValue === null) {
@@ -266,9 +273,7 @@ export const buildPeriodComparisonInsights = (input: {
     unit: "source-metric-value" as const,
     confidence: 0.9,
     evidenceRefs,
-    formula: aggregation === "sum"
-     ? "current=sum; baseline=sum; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0"
-     : "current=average; baseline=average; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0",
+    formula: "current=sum; baseline=sum; delta=current-baseline; relativeDeltaPercent=(delta/abs(baseline))*100 when baseline!=0",
     algorithmVersion: ALGORITHM_VERSION,
     deterministic: true as const,
     period: {
@@ -328,6 +333,9 @@ export const buildTrafficSourceContributionInsights = (input: {
  }
  if (dataset.missingMetrics.includes(metricKey)) {
   return { insights: [], limitations: [`Metric ${metricKey} is marked missing by the canonical dataset.`] }
+ }
+ if (!metricAggregation(metricKey)) {
+  return { insights: [], limitations: [`Metric ${metricKey} requires denominator-aware aggregation; source contributions are unsupported for this metric.`] }
  }
  if (dataset.rows.length === 0) {
   return { insights: [], limitations: ["Traffic contribution requires at least one canonical row."] }
