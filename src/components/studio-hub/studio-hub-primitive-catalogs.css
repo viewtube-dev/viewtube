@@ -2591,3 +2591,40 @@
 .vt-confirmed-control-family.vt-confirmed-word-toggle-family .vt-confirmed-control-row > strong {
   grid-column: 1 / -1;
 }
+
+
+/* Canonical StudioSplitLeftButton now keeps its shadow on the outer button and
+   renders border/background/typography on the dedicated face span. The older
+   catalog specimen rules targeted the button itself and its first child; keep
+   the library examples aligned with the same production anatomy. */
+.vt-complete-catalog .vt-catalog-split-primitive[data-vt-studio-button="true"] {
+  display: flex !important;
+  width: 100% !important;
+  height: var(--h) !important;
+  min-height: var(--h) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: var(--radius) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  overflow: visible !important;
+}
+.vt-complete-catalog .vt-catalog-split-primitive[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+  display: grid !important;
+  grid-template-columns: var(--h) minmax(0, 1fr) !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: var(--h) !important;
+  min-height: var(--h) !important;
+  padding: 0 !important;
+  border-width: var(--stroke) !important;
+  border-radius: var(--radius) !important;
+  font-size: var(--fs) !important;
+  font-weight: 1000 !important;
+  line-height: .86 !important;
+  letter-spacing: -.055em !important;
+  overflow: hidden !important;
+}
