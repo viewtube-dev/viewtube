@@ -1915,3 +1915,53 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   .vt-studio-tag-editor__square-action:hover:not(:disabled),
   .vt-studio-tag-editor__square-action:active:not(:disabled) { transform: none; }
 }
+
+
+/* Tag editor surface: use the canonical Studio textarea treatment rather than a loose tag row. */
+.vt-studio-tag-editor {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 6px;
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-border, #000);
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  color: var(--pair-a, #000);
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+}
+.vt-studio-tag-editor__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-studio-tag-editor__composer {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 220px;
+}
+.vt-studio-tag-editor__composer input,
+.vt-studio-tag-editor__composer textarea {
+  box-sizing: border-box;
+  min-width: 0;
+  flex: 1 1 auto;
+  background: var(--pair-b, #fff);
+  color: var(--pair-a, #000);
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+}
+.vt-studio-tag-editor__square-action {
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: 0;
+  height: var(--vt-studio-control-height, 44px);
+  box-sizing: border-box;
+}
+[data-vt-studio-control][data-size="compact"] .vt-studio-tag-editor__square-action {
+  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
+}
