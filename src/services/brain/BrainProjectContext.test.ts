@@ -40,6 +40,8 @@ describe("BrainProjectContext", () => {
   }
   const contentBuild = {
    id: "cb-canonical",
+   stage: "package",
+   workflow: { blockerIds: [] },
    profile: {
     subject: "Canonical build subject",
     topic: "Canonical build topic",
