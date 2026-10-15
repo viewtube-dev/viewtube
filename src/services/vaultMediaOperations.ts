@@ -36,7 +36,7 @@ export const resolveVaultMediaOperationPlan = (input: {
   if (!assetIds.length) reason = "Select at least one asset."
   else if (assetIds.length !== input.assets.length) reason = "The selection contains duplicate or missing asset IDs."
   else if (assetIds.length > MAX_SELECTION) reason = `Select no more than ${MAX_SELECTION} assets per operation.`
-  else if (input.assets.some((asset) => asset.protected) && input.overwriteSource) reason = "Protected assets cannot be overwritten; unlock is required before destructive changes."
+  else if (input.assets.some((asset) => asset.protected) && input.overwriteSource) reason = "protected assets cannot be overwritten; unlock is required before destructive changes."
   else if (input.overwriteSource) reason = "Vault media operations are non-destructive and always create derivatives."
   else if (input.assets.some((asset) => asset.kind !== EXPECTED_KIND[input.operation])) reason = `This operation requires ${EXPECTED_KIND[input.operation]} assets only.`
   else if (input.assets.some((asset) => asset.byteSize != null && asset.byteSize > MAX_SOURCE_BYTES)) reason = "Source files over 64 MB must be reduced or imported through a supported durable-processing path."
