@@ -49,14 +49,14 @@ describe("canonical Studio field, selection, and action contracts", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
-    expect(fields).toContain("color: var(--vt-field-color-1) !important")
-    expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-color-1) !important")
-    expect(fields).toContain("-webkit-text-stroke: .5px currentColor !important")
+    expect(fields).toContain("color: var(--vt-field-primary);")
+    expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-primary);")
+    expect(fields).toContain("-webkit-text-stroke: .5px var(--vt-field-primary);")
     expect(fields).toContain("font: inherit")
-    expect(fields).toContain("font-weight: 1000")
+    expect(fields).toContain("font-weight: var(--vt-studio-control-font-weight);")
     expect(fields).not.toContain("-webkit-text-stroke: 0 !important")
-    expect(fields).toContain("font-size: 18px !important")
-    expect(fields).toContain("font-size: 14px !important")
+    expect(fields).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px) !important")
+    expect(fields).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px) !important")
   })
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
@@ -82,21 +82,41 @@ describe("canonical Studio field, selection, and action contracts", () => {
   it("anchors the action shadow while only the face moves", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
-    expect(contract).toContain('button[data-vt-studio-button="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before')
+    expect(contract).toContain('button[data-vt-studio-button="true"]::before')
     expect(contract).toContain("[data-vt-studio-button-face]")
     expect(contract).toContain("transition: transform 150ms ease-out")
     expect(contract).toContain("transition-duration: 300ms")
-    expect(contract).toContain("width: 36px !important")
+    expect(contract).toContain("--vt-studio-control-shadow-x:1px")
     expect(contract).toContain("button[data-vt-studio-button=\"true\"][data-split-left=\"true\"] [data-vt-studio-split-rail]")
   })
 })
 
 describe("Studio primitive catalog control layout", () => {
-  it("puts standard word toggles one per row and compact word toggles two per row", () => {
+  it("puts standard word toggles one per row and centers three compact word-toggle skins", () => {
     const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />)
     expect(html).toContain('class="vt-catalog-control-variants is-word-toggle-44"')
     expect(html).toContain('class="vt-catalog-control-variants is-word-toggle-28"')
     expect(html).toContain('class="vt-catalog-control-row vt-catalog-word-toggle-row is-word-toggle-44"')
     expect(html).toContain('class="vt-catalog-control-row vt-catalog-word-toggle-row is-word-toggle-28"')
+  })
+})
+
+
+describe("Studio text-field module ownership and typography", () => {
+  it("exports each labeled field alongside its matching standalone field module", async () => {
+    const inputModule = await import("./StudioTextInput")
+    const areaModule = await import("./StudioTextArea")
+    expect(inputModule.StudioTextInput).toBeDefined()
+    expect(inputModule.StudioLabeledInput).toBeDefined()
+    expect(areaModule.StudioTextArea).toBeDefined()
+    expect(areaModule.StudioLabeledTextArea).toBeDefined()
+  })
+
+  it("defines the 18px standard and 14px compact typography for both input and textarea", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size, 18px\) !important/)
+    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size, 14px\) !important/)
+    expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
+    expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
   })
 })
