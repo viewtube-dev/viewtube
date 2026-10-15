@@ -442,7 +442,7 @@ describe("floating label geometry and circular icon scale", () => {
     expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
     expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
-    expect(css).toContain("padding:2.25px 4.5px")
+    expect(css).toContain("padding: 2.25px 4.5px;")
   })
 
   it("matches the floating-label secondary focus stroke width and color to the compact focus outline", () => {
