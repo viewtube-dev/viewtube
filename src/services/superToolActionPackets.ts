@@ -3,8 +3,8 @@ import { createGenerationRecord, updateGenerationRecord } from "./generationStor
 import { getSuperTool } from "./superToolRegistry"
 import { MOUNTED_INTERNAL_TOOL_IDS } from "./superToolRuntimePlanRegistry"
 import { ingestGenerationArtifacts } from "./vaultAdapter"
-import { createWorkflowChain, createWorkflowStep } from "./workflowEngine"
-import { createViewTubeActionPacket, persistViewTubeActionPacket, type ViewTubePayloadKind, type ViewTubeToolKind } from "./viewTubeToolChains"
+import { attachArtifactToWorkflow, createWorkflowChain, createWorkflowStep } from "./workflowEngine"
+import { createViewTubeActionPacket, persistViewTubeActionPacket, type ViewTubeApprovalState, type ViewTubeHandoffIntent, type ViewTubePayloadKind, type ViewTubeToolKind } from "./viewTubeToolChains"
 import { attachAssetToContentBuild, ensureContentBuild } from "./asset-engine/ContentBuildRepository"
 import { recordContentBuildToolInput, recordContentBuildToolOutput } from "./asset-engine/ToolContext"
 
@@ -48,6 +48,20 @@ export interface CreateSuperToolActionPacketInput {
  workflowGoal: string
  workflowSteps: Array<{ title: string; surface: SuperToolSurface; toolId: SuperToolId; details: string }>
  tags?: string[]
+ creatorId?: string | null
+ promptRecipeId?: string | null
+ promptRecipeVersion?: string | null
+ contextManifestId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
+ idempotencyKey?: string | null
+ intent?: ViewTubeHandoffIntent
+ approvalState?: ViewTubeApprovalState
+ approvedBy?: string | null
+ approvedAt?: string | null
+ approvedSnapshotId?: string | null
+ approvedSnapshotHash?: string | null
+ expectedSnapshotHash?: string | null
 }
 
 const stringScope = (value: unknown) => typeof value === "string" && value.trim() ? value.trim() : null
@@ -93,7 +107,7 @@ export const createSuperToolActionPacket = (
   })
  }
 
- const packet: SuperToolActionPacket = {
+ let packet: SuperToolActionPacket = {
   id: crypto.randomUUID(),
   toolId: input.toolId,
   moduleId: input.moduleId,
@@ -103,6 +117,19 @@ export const createSuperToolActionPacket = (
   projectId: scope.projectId,
   channelId: scope.channelId,
   videoId: scope.videoId,
+  creatorId: input.creatorId || stringScope(input.inputs.creatorId),
+  promptRecipeId: input.promptRecipeId || stringScope(input.inputs.promptRecipeId),
+  promptRecipeVersion: input.promptRecipeVersion || stringScope(input.inputs.promptRecipeVersion),
+  contextManifestId: input.contextManifestId || stringScope(input.inputs.contextManifestId),
+  recommendationId: input.recommendationId || stringScope(input.inputs.recommendationId),
+  experimentId: input.experimentId || stringScope(input.inputs.experimentId),
+  intent: input.intent || "prepare",
+  approvalState: input.approvalState || "not-required",
+  approvedBy: input.approvedBy || null,
+  approvedAt: input.approvedAt || null,
+  approvedSnapshotId: input.approvedSnapshotId || null,
+  approvedSnapshotHash: input.approvedSnapshotHash || null,
+  expectedSnapshotHash: input.expectedSnapshotHash || null,
   inputs: input.inputs,
   outputs: input.outputs,
   confidence: input.confidence,
@@ -111,6 +138,22 @@ export const createSuperToolActionPacket = (
   handoffTargets: input.handoffTargets,
   createdAt: Date.now(),
  }
+
+ const chain = createWorkflowChain({
+  title: input.workflowTitle,
+  goal: input.workflowGoal,
+  projectId: scope.projectId,
+  primaryToolId: input.toolId,
+  steps: input.workflowSteps.map(step => createWorkflowStep(step.title, step.surface, step.toolId, step.details)),
+  provenance: [
+   `${input.toolId}.${input.moduleId}.${packet.id}`,
+   `operation:${packet.id}`,
+   ...(scope.contentBuildId ? [`content-build:${scope.contentBuildId}`] : []),
+   ...input.evidence,
+   ...input.handoffTargets,
+  ],
+ })
+ packet = { ...packet, workflowId: chain.id, operationId: packet.id }
 
  const selfImprovement = {
   inputsUsed: Object.keys(input.inputs).filter(key => {
@@ -136,11 +179,26 @@ export const createSuperToolActionPacket = (
   artifacts: [],
   metadata: {
    actionPacketId: packet.id,
+   workflowId: packet.workflowId,
+   operationId: packet.operationId,
    moduleId: input.moduleId,
    contentBuildId: scope.contentBuildId,
    projectId: scope.projectId,
+   creatorId: packet.creatorId || null,
    channelId: scope.channelId,
    videoId: scope.videoId,
+   promptRecipeId: packet.promptRecipeId || null,
+   promptRecipeVersion: packet.promptRecipeVersion || null,
+   contextManifestId: packet.contextManifestId || null,
+   recommendationId: packet.recommendationId || null,
+   experimentId: packet.experimentId || null,
+   intent: packet.intent || "prepare",
+   approvalState: packet.approvalState || "not-required",
+   approvedBy: packet.approvedBy || null,
+   approvedAt: packet.approvedAt || null,
+   approvedSnapshotId: packet.approvedSnapshotId || null,
+   approvedSnapshotHash: packet.approvedSnapshotHash || null,
+   expectedSnapshotHash: packet.expectedSnapshotHash || null,
    selfImprovement,
   },
  })
@@ -180,7 +238,7 @@ export const createSuperToolActionPacket = (
    toolId: input.toolId,
    evidenceIds: input.evidence,
    generationRecordId: record.id,
-   metadata: { moduleId: input.moduleId, actionPacketId: packet.id },
+   metadata: { moduleId: input.moduleId, actionPacketId: packet.id, workflowId: packet.workflowId, operationId: packet.operationId, promptRecipeId: packet.promptRecipeId || null, promptRecipeVersion: packet.promptRecipeVersion || null, contextManifestId: packet.contextManifestId || null },
   })
   recordContentBuildToolOutput({
    contentBuildId: scope.contentBuildId,
@@ -192,24 +250,28 @@ export const createSuperToolActionPacket = (
    metadata: {
     moduleId: input.moduleId,
     actionPacketId: packet.id,
+    workflowId: packet.workflowId,
+    operationId: packet.operationId,
+    promptRecipeId: packet.promptRecipeId || null,
+    promptRecipeVersion: packet.promptRecipeVersion || null,
+    contextManifestId: packet.contextManifestId || null,
     workflowTitle: input.workflowTitle,
    },
   })
  }
 
- const chain = createWorkflowChain({
-  title: input.workflowTitle,
-  goal: input.workflowGoal,
-  projectId: scope.projectId,
-  primaryToolId: input.toolId,
-  steps: input.workflowSteps.map(step => createWorkflowStep(step.title, step.surface, step.toolId, step.details)),
-  provenance: [
-   `${input.toolId}.${input.moduleId}.${packet.id}`,
-   ...(scope.contentBuildId ? [`content-build:${scope.contentBuildId}`] : []),
-   ...input.evidence,
-   ...input.handoffTargets,
-  ],
- })
+ let linkedChain = attachArtifactToWorkflow(
+  chain.id,
+  artifact.id,
+  `generation-record:${record.id}; action-packet:${packet.id}; operation:${packet.operationId}`,
+ ) || chain
+ if (vaultAsset) {
+  linkedChain = attachArtifactToWorkflow(
+   chain.id,
+   vaultAsset.id,
+   `vault-asset:${vaultAsset.id}; content-build:${scope.contentBuildId || "unlinked"}`,
+  ) || linkedChain
+ }
 
  const liveTargets = [
   ...new Set(
@@ -227,10 +289,28 @@ export const createSuperToolActionPacket = (
    payloadKind,
    title: input.title,
    summary: input.summary,
+   creatorId: packet.creatorId || null,
    contentBuildId: scope.contentBuildId,
    projectId: scope.projectId,
    channelId: scope.channelId,
    videoId: scope.videoId,
+   assetIds: vaultAsset ? [vaultAsset.id] : [],
+   workflowId: chain.id,
+   operationId: packet.operationId || packet.id,
+   parentPacketId: packet.id,
+   idempotencyKey: input.idempotencyKey || `super-tool-action:${packet.id}`,
+   recommendationId: packet.recommendationId || null,
+   experimentId: packet.experimentId || null,
+   contextManifestId: packet.contextManifestId || null,
+   promptRecipeId: packet.promptRecipeId || null,
+   promptRecipeVersion: packet.promptRecipeVersion || null,
+   intent: packet.intent || "prepare",
+   approvalState: packet.approvalState || "not-required",
+   approvedBy: packet.approvedBy || null,
+   approvedAt: packet.approvedAt || null,
+   approvedSnapshotId: packet.approvedSnapshotId || null,
+   approvedSnapshotHash: packet.approvedSnapshotHash || null,
+   expectedSnapshotHash: packet.expectedSnapshotHash || null,
    payload: {
     ...input.inputs,
     ...input.outputs,
@@ -238,12 +318,17 @@ export const createSuperToolActionPacket = (
     confidence: input.confidence,
     missingInputs: input.missingInputs,
     workflowId: chain.id,
+    operationId: packet.operationId || packet.id,
     sourceActionPacketId: packet.id,
+    promptRecipeId: packet.promptRecipeId || null,
+    promptRecipeVersion: packet.promptRecipeVersion || null,
+    contextManifestId: packet.contextManifestId || null,
    },
    evidence: input.evidence,
    provenance: [
     `${input.toolId}.${input.moduleId}.${packet.id}`,
     `workflow:${chain.id}`,
+    `operation:${packet.operationId || packet.id}`,
     ...(scope.contentBuildId ? [`content-build:${scope.contentBuildId}`] : []),
    ],
    suggestedTargets: liveTargets,
@@ -251,6 +336,6 @@ export const createSuperToolActionPacket = (
   persistViewTubeActionPacket(livePacket)
  }
 
- return { packet, recordId: record.id, artifactId: artifact.id, chain }
+ return { packet, recordId: record.id, artifactId: artifact.id, chain: linkedChain }
 }
 
