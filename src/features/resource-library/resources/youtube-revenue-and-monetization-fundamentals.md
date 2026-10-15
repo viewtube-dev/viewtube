@@ -145,6 +145,14 @@ https://support.google.com/youtube/answer/72851
 **Understand your YouTube revenue** — Current revenue reports and metric definitions.  
 https://support.google.com/youtube/
 
+## Field Exercise: Build a Conservative Revenue Review
+
+Choose a consistent period and record the revenue measure, eligible-view scope, content mix, and known monetization changes. Separate platform-reported revenue from sponsorships, products, memberships, affiliate income, and costs. Do not add incompatible time windows or currencies without normalizing them. For planning, create low, middle, and high scenarios, write down each assumption, and identify what evidence would change the estimate. Avoid building a strategy around one unusually high-RPM upload without checking audience fit and repeatability.
+
+## Evidence Boundary: Revenue Estimates
+
+CPM and RPM describe different concepts and can vary with audience, geography, season, inventory, format, eligibility, and included revenue sources. Historical performance does not guarantee future earnings. Public anecdotes are not universal benchmarks. Use current definitions in the analytics and monetization interfaces, document assumptions, and never promise a particular earning outcome.
+
 ## Document Maintenance
 
 | Attribute | Value |
