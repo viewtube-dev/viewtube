@@ -70,6 +70,10 @@ const transaction = {
     lockedAt: "2026-10-01T00:00:00.000Z",
   },
   youtubeVideoId: "youtube-123",
+  actionPacketId: "action-packet-1",
+  workflowId: "workflow-1",
+  recommendationId: "recommendation-1",
+  experimentId: "experiment-1",
   startedAt: "2026-10-01T00:00:00.000Z",
   updatedAt: "2026-10-01T00:01:00.000Z",
 }
@@ -310,6 +314,9 @@ describe("Post-publish analytics bridge", () => {
       projectId: "project-1",
       videoId: "youtube-123",
       kind: "CHECKPOINT_REACHED",
+      actionPacketId: "action-packet-1",
+      workflowId: "workflow-1",
+      recommendationId: "recommendation-1",
       evidenceIds: ["evidence-1"],
     }))
     expect(mocks.recordAlgorithmEvaluation).toHaveBeenCalledWith(expect.objectContaining({
