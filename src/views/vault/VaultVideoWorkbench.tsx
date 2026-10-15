@@ -36,9 +36,16 @@ const createCompactImagePreview = async (blob: Blob): Promise<string> => {
 const loadVaultVideoSourceBlob = async (asset: VaultAsset): Promise<Blob> => {
   const binaryStoreId = typeof asset.metadata?.binaryStoreId === "string" ? asset.metadata.binaryStoreId : "";
   if (binaryStoreId) {
-    const record = await getVaultMediaBinary(binaryStoreId);
+    const record = await getVaultMediaBinary(binaryStoreId).catch(() => null);
     if (record?.blob) return record.blob;
-    throw new Error("This derivative's local binary is missing. Re-import the source or restore the derivative.");
+  }
+  const serverBinaryId = typeof asset.metadata?.serverBinaryId === "string" ? asset.metadata.serverBinaryId : "";
+  if (serverBinaryId) {
+    const response = await fetch(`/api/vault/media-binaries/${encodeURIComponent(serverBinaryId)}`, { credentials: "include" });
+    if (response.ok) return response.blob();
+  }
+  if (binaryStoreId || serverBinaryId) {
+    throw new Error("The stored derivative binary is unavailable. Check this browser's local storage or the configured Vault media storage service.");
   }
   const sourceUrl = asset.url || asset.previewUrl;
   if (!sourceUrl) throw new Error("This video has no readable source URL. Re-import the original video file.");
@@ -134,14 +141,31 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
     if (!result || !previewUrl || savedId) return;
     try {
       const outputName = `${asset.name.replace(/\.[^.]+$/, "")}-${operation}.${extensionFor(result.mimeType)}`;
+      const parameters = { operation, quality, startSeconds, endSeconds, atSeconds, sourceDurationSeconds: durationSeconds };
       const binary = await saveVaultMediaBinary({
         blob: result.blob,
         name: outputName,
         mimeType: result.mimeType,
         sourceAssetId: asset.id,
         operation,
-        parameters: { operation, quality, startSeconds, endSeconds, atSeconds, sourceDurationSeconds: durationSeconds },
+        parameters,
       });
+      let serverBinaryId: string | null = null;
+      try {
+        const form = new FormData();
+        form.append("file", result.blob, outputName);
+        form.append("name", outputName);
+        form.append("sourceAssetId", asset.id);
+        form.append("operation", operation);
+        form.append("parameters", JSON.stringify(parameters));
+        const response = await fetch("/api/vault/media-binaries", { method: "POST", body: form, credentials: "include" });
+        if (response.ok) {
+          const payload = await response.json() as { asset?: { id?: string } };
+          serverBinaryId = payload.asset?.id || null;
+        }
+      } catch {
+        // Local IndexedDB storage remains a supported fallback when server storage is unavailable.
+      }
       let durablePreviewUrl: string | null = null;
       if (result.mimeType.startsWith("video/")) {
         durablePreviewUrl = await extractVaultVideoThumbnail(new File([result.blob], outputName, { type: result.mimeType }));
@@ -160,19 +184,22 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
         tags: [...new Set([...(asset.tags || []), "derivative", "processed"])],
         metadata: {
           binaryStoreId: binary.id,
+          serverBinaryId,
           derivativeOfAssetId: asset.id,
           sourceAssetId: asset.id,
           derivativeOperation: operation,
           operationParameters: { operation, quality, startSeconds, endSeconds, atSeconds },
           byteSize: result.byteSize,
           lifecycle: "CANDIDATE",
-          storage: "indexeddb-local",
+          storage: serverBinaryId ? "server-persistent-disk+indexeddb-local" : "indexeddb-local",
           durableAcrossReloads: true,
         },
       });
       if (!created.id) throw new Error("Vault did not return an asset identity.");
       setSavedId(created.id);
-      setMessage("Derivative bytes are stored in browser IndexedDB with source lineage. Storage is local to this browser/device, not cloud-synced.");
+      setMessage(serverBinaryId
+        ? "Derivative bytes are stored in browser IndexedDB and the authenticated server storage. Cross-device durability requires VAULT_MEDIA_STORAGE_DIR to point at a mounted persistent disk."
+        : "Derivative bytes are stored in browser IndexedDB with source lineage. Server storage is unavailable or not configured, so this copy is local to this browser/device.");
       onDerivativeCreated?.();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not store the media derivative.");
