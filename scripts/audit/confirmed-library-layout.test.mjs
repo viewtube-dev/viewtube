@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 const styles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8");
@@ -51,16 +52,17 @@ test("floating labels use the reduced overlapping-label geometry and strong text
 
 test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
   const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
-  assert.match(inputModule, /variant\?:\s*"a"\s*\|\s*"b"/);
-  assert.match(catalog, /label="TITLE"[^>]*variant="b"[^>]*sizeVariant="compact"/);
+  assert.match(inputModule, /floatingLabelVariant\?:\s*"a"\s*\|\s*"b"/);
+  assert.match(catalog, /variant="floating-label"[^>]*floatingLabelVariant="b"[^>]*label="TITLE"[^>]*sizeVariant="compact"/);
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][\s\S]*?data-size="compact"[^\n]*:is\(:focus, :focus-visible\)/);
 });
 
 test("non-default settings explain the real public props in plain language", () => {
-  assert.ok(catalog.includes("The visible label is supplied through label; there is no overlayLabel prop."));
+  assert.ok(catalog.includes('variant="floating-label"'));
+  assert.ok(catalog.includes("Floating-label variants accept label and optional l0/l1/l2 level"));
   assert.ok(catalog.includes("A focused or non-empty field lifts the label above the border."));
-  assert.ok(catalog.includes("Only Compact B adds the solid secondary-color focus stroke."));
+  assert.ok(catalog.includes('Only floatingLabelVariant="b" adds the solid secondary-color focus stroke to the compact input specimen.'));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
@@ -110,16 +112,47 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
-test("text field families are split into input-plus-label and textarea-plus-label modules", () => {
+test("floating-label presentations are variants inside the canonical input and textarea families", () => {
   const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
   const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
   assert.ok(inputModule.includes("export const StudioTextInput"));
-  assert.ok(inputModule.includes("export const StudioLabeledInput"));
+  assert.ok(inputModule.includes('variant: "floating-label"'));
+  assert.ok(!inputModule.includes("export const StudioLabeledInput"));
   assert.ok(areaModule.includes("export const StudioTextArea"));
-  assert.ok(areaModule.includes("export const StudioLabeledTextArea"));
+  assert.ok(areaModule.includes('variant: "floating-label"'));
+  assert.ok(!areaModule.includes("export const StudioLabeledTextArea"));
   assert.ok(controls.includes('from "./StudioTextInput"'));
   assert.ok(controls.includes('from "./StudioTextArea"'));
+  assert.ok(!controls.includes("StudioLabeledInput"));
+  assert.ok(!controls.includes("StudioLabeledTextArea"));
+  const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
+  assert.ok(!publicIndex.includes("StudioLabeledInput"));
+  assert.ok(!publicIndex.includes("StudioLabeledTextArea"));
+  assert.ok(catalog.includes('<StudioTextInput variant="floating-label"'));
+  assert.ok(catalog.includes('<StudioTextArea variant="floating-label"'));
+  assert.ok(completeCatalog.includes('<StudioTextInput variant="floating-label"'));
+  assert.ok(completeCatalog.includes('<StudioTextArea variant="floating-label"'));
+});
+
+
+test("removed standalone labeled components have no remaining source references", () => {
+  const legacyNames = ["StudioLabeledInput", "StudioLabeledTextArea"];
+  const sourceFiles = [];
+  const walk = (directory) => {
+    for (const entry of readdirSync(directory)) {
+      const path = join(directory, entry);
+      if (statSync(path).isDirectory()) walk(path);
+      else if (/\.(tsx?|jsx?)$/.test(path)) sourceFiles.push(path);
+    }
+  };
+  walk("src");
+  for (const path of sourceFiles) {
+    const source = readFileSync(path, "utf8");
+    for (const legacyName of legacyNames) {
+      assert.ok(!source.includes(legacyName), `${legacyName} remains in ${path}`);
+    }
+  }
 });
 
 test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
