@@ -50,7 +50,7 @@ The `brain.csvFiles` argument is gone. Under the legacy path CSVs were a separat
 - **Phase 0 — Foundation:** landed (`analytics-canon` contracts, adapters, hooks, and evidence registry).
 - **Phase 1 — Dashboard:** partial; canonical summary hooks are live, but CSV/hybrid fallback and legacy row selectors remain.
 - **Phase 2 — Auth adapter:** partial; channel identity has a canonical hook, but `GlobalDataContext` still reads the legacy cache.
-- **Phase 3 — Tool views and exports:** in progress; Reference Studio, Simple Analytics, and API-mode export rows now use canonical reads. Other tool views and master-table projections still have legacy consumers.
+- **Phase 3 — Tool views and exports:** in progress; Reference Studio, Simple Analytics, Internal Analytics Panel, Data Visualizations, Toolbox Preview, Channelytics API rows, and API-mode master-table/export rows now use canonical reads. CSV/import/hybrid data and other tool views still have legacy consumers.
 - **Phase 4 — AI/Brain:** partial; Intelligence evidence is canonical, but some onboarding/Brain paths still depend on legacy cache contracts.
 - **Phase 5 — Retire legacy:** blocked until all legacy selector/cache consumers and sync writers are migrated and compatibility tests prove there is no competing store.
 
