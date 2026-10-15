@@ -21,7 +21,8 @@
  * changing callers.
  */
 
-import { recordBrainOutcome } from "./BrainOutcomeLedger"
+import { recordBrainOutcome, updateBrainOutcomePublicationLineage } from "./BrainOutcomeLedger"
+import type { ContentBuildPublicationIdentity } from "../asset-engine/contracts"
 import { getGeneratedAsset, type AssetRecord, type AssetType } from "./AssetGenerator"
 import { compareStyleFeatures, extractStyleFeatures, type StyleFeatures } from "./styleMetrics"
 
@@ -64,6 +65,22 @@ export interface AssetOutcome {
  editRatio?: number
  /** Links the outcome back to the generating turn. */
  traceId: string
+ /** Caller-supplied key makes retries of one creator action idempotent. */
+ idempotencyKey?: string
+ /** Canonical publication provenance, attached only after publication is verified. */
+ contentBuildId?: string
+ projectId?: string
+ publishTransactionId?: string
+ approvedSnapshotId?: string
+ approvedSnapshotHash?: string
+ publishedVideoId?: string
+ publicationIdentity?: ContentBuildPublicationIdentity
+ actionPacketId?: string | null
+ workflowId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
 }
 
 const STORAGE_KEY = "vt_asset_outcomes_v1"
@@ -124,6 +141,17 @@ export const listAssetOutcomes = (input?: {
   if (input?.assetId && outcome.assetId !== input.assetId) return false
   return true
  })
+
+const persistUpdated = (outcome: AssetOutcome): void => {
+ if (!canUseStorage()) return
+ try {
+  const next = readOutcomes().map((entry) => entry.id === outcome.id ? outcome : entry)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next.slice(0, MAXIMUM_RETAINED)))
+  window.dispatchEvent(new CustomEvent(ASSET_OUTCOME_EVENT, { detail: outcome }))
+ } catch {
+  // Publication attribution is best-effort in this browser-local ledger.
+ }
+}
 
 const makeId = (): string =>
  typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -191,6 +219,8 @@ const BRAIN_OUTCOME_FOR_KIND = {
 export const recordAssetOutcome = async (input: {
  assetId: string
  kind: AssetOutcomeKind
+ /** Reuse this key when retrying the same logical creator action. */
+ idempotencyKey?: string
  note?: string
  /** Required for `edited`: what the creator changed it to. */
  correctedText?: string
@@ -199,6 +229,16 @@ export const recordAssetOutcome = async (input: {
 }): Promise<AssetOutcome | null> => {
  const asset = getGeneratedAsset(input.assetId) as AssetRecord | null
  if (!asset) return null
+
+ if (input.idempotencyKey) {
+  const existing = readOutcomes().find((entry) =>
+   entry.idempotencyKey === input.idempotencyKey &&
+   entry.assetId === asset.id &&
+   entry.channelId === asset.channelId &&
+   entry.kind === input.kind
+  )
+  if (existing) return existing
+ }
 
  const generated = input.generatedText
   ?? (typeof (asset.output as { body?: unknown })?.body === "string"
@@ -223,6 +263,7 @@ export const recordAssetOutcome = async (input: {
     }
    : {}),
   traceId: asset.traceId,
+  ...(input.idempotencyKey ? { idempotencyKey: input.idempotencyKey } : {}),
  }
 
  persist(outcome)
@@ -236,6 +277,10 @@ export const recordAssetOutcome = async (input: {
    outcome: BRAIN_OUTCOME_FOR_KIND[input.kind],
    summary: `${asset.assetType} ${input.kind}${input.note ? `: ${input.note}` : ""}`,
    evidence: asset.evidenceRefs,
+   sourceRecordId: outcome.id,
+   traceId: outcome.traceId,
+   assetId: asset.id,
+   assetType: asset.assetType,
    // What the creator did is direct evidence; a style score is an inference about it.
    confidence: input.kind === "edited" || input.kind === "rejected" ? "high" : "medium",
   })
@@ -247,6 +292,60 @@ export const recordAssetOutcome = async (input: {
  }
 
  return outcome
+}
+
+/**
+ * Join a recorded asset outcome to the canonical immutable publication identity and,
+ * when available, analytics checkpoint evidence. A selected variant, channel match,
+ * approved snapshot and transaction identity are required; conflicting relinks fail closed.
+ */
+export const linkAssetOutcomeToPublication = (input: {
+ assetId: string
+ channelId: string
+ publicationIdentity: ContentBuildPublicationIdentity
+ analyticsCheckpointIds?: string[]
+ evidenceIds?: string[]
+}): AssetOutcome | null => {
+ const identity = input.publicationIdentity
+ if (
+  identity.channelId !== input.channelId ||
+  !identity.publishTransactionId ||
+  !identity.youtubeVideoId ||
+  !identity.approvedSnapshotId ||
+  !identity.approvedSnapshotHash ||
+  !identity.selectedVariantAssetIds.includes(input.assetId)
+ ) return null
+ const existing = readOutcomes().find((entry) =>
+  entry.assetId === input.assetId && entry.channelId === input.channelId
+ )
+ if (!existing || existing.kind !== "published") return null
+ if (existing.publishTransactionId && existing.publishTransactionId !== identity.publishTransactionId) return null
+ if (existing.publishedVideoId && existing.publishedVideoId !== identity.youtubeVideoId) return null
+ const linked: AssetOutcome = {
+  ...existing,
+  contentBuildId: identity.contentBuildId,
+  projectId: identity.projectId,
+  publishTransactionId: identity.publishTransactionId,
+  approvedSnapshotId: identity.approvedSnapshotId,
+  approvedSnapshotHash: identity.approvedSnapshotHash,
+  publishedVideoId: identity.youtubeVideoId,
+  publicationIdentity: identity,
+  actionPacketId: identity.actionPacketId || existing.actionPacketId || null,
+  workflowId: identity.workflowId || existing.workflowId || null,
+  recommendationId: identity.recommendationId || existing.recommendationId || null,
+  experimentId: identity.experimentId || existing.experimentId || null,
+  analyticsCheckpointIds: [...new Set([...(existing.analyticsCheckpointIds || []), ...(input.analyticsCheckpointIds || [])])],
+  evidenceIds: [...new Set([...(existing.evidenceIds || []), ...(input.evidenceIds || [])])],
+ }
+ persistUpdated(linked)
+ updateBrainOutcomePublicationLineage({
+  channelId: input.channelId,
+  sourceRecordId: existing.id,
+  publicationIdentity: identity,
+  analyticsCheckpointIds: input.analyticsCheckpointIds,
+  evidenceIds: input.evidenceIds,
+ })
+ return linked
 }
 
 export interface AssetOutcomeSummary {
