@@ -21,7 +21,7 @@ type StudioTextAreaSimpleProps = StudioTextAreaBaseProps & {
 
 type StudioTextAreaFloatingLabelProps = Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "placeholder" | "className" | "style"
+  "className" | "style"
 > & {
   sizeVariant?: StudioControlSize
   /** Render the canonical writing surface with the shared floating-label treatment. */
