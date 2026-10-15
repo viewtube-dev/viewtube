@@ -104,7 +104,8 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(inputModule.includes("StudioTextInput"));
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.match(catalog, /Studio Text Input · Standalone" nonDefaultSettings=\{\["[^"]*44px standard size[^"]*"[^"]*"[^"]*38px standard and 24px compact/);
-  assert.match(catalog, /Text areas are the documented exception: 92px minimum surface, 18px standard or 14px compact text/);
+  assert.match(catalog, /Labeled single-line inputs follow global 38px standard \/ 24px compact text sizes\. Labeled textareas alone use 18px \/ 14px text and a 92px minimum surface/);
+  assert.match(css, /--vt-studio-text-input-standard-font-size:\s*var\(--vt-studio-44-font-size,\s*38px\);\s*--vt-studio-text-input-compact-font-size:\s*var\(--vt-studio-28-font-size,\s*24px\)/);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
