@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import type { AIBrainEvidencePack } from "../../types"
-import { buildOpportunityEvidenceFromBrainPack } from "./OpportunityEvidenceAdapter"
+import { buildOpportunityEvidenceFromBrainPack, buildOpportunityEvidenceFromCanonicalBundle } from "./OpportunityEvidenceAdapter"
 
 const pack = (): AIBrainEvidencePack => ({
  promptVersion: "brain-chat-v2",
@@ -143,5 +143,76 @@ describe("OpportunityEvidenceAdapter", () => {
    channelId: "channel-a",
    evidencePack,
   })).toEqual([])
+ })
+})
+
+
+describe("buildOpportunityEvidenceFromCanonicalBundle", () => {
+ const makeBundle = (overrides: Record<string, unknown> = {}) => ({
+  version: "vt-intelligence-evidence-v1",
+  snapshotId: "snapshot-canonical-1",
+  channelId: "channel-1",
+  channelName: "Test channel",
+  capturedAt: "2026-10-15T00:00:00.000Z",
+  generatedAt: "2026-10-15T00:00:00.000Z",
+  selectedWindow: "90d",
+  coverage: { total: 1, available: 1, partial: 0, stale: 0, failed: 0, unavailable: 0, represented: 1 },
+  requestedSectionIds: ["strategy-engine"],
+  omittedDatasetIds: [],
+  contextText: "",
+  datasets: [{
+   id: "videos",
+   label: "Video Catalog Analytics",
+   description: "",
+   categoryIds: ["videos"],
+   status: "available",
+   rowCount: 2,
+   sources: ["youtube_analytics_v2"],
+   missingMetrics: [],
+   updatedAt: "2026-10-15T00:00:00.000Z",
+   columns: [],
+   metrics: {},
+   evidenceRefs: ["snapshot-canonical-1:videos:1", "snapshot-canonical-1:videos:2"],
+   sampleRows: [
+    { videoId: "video-1", title: "Measured video", views: 240, watchTime: 12, publishedAt: "2026-09-01" },
+    { videoId: "video-2", title: "Partial video", views: null, watchTime: 4, publishedAt: null },
+   ],
+  }],
+  ...overrides,
+ } as any)
+
+ it("projects only canonical video rows and preserves row provenance, window and missing metrics", () => {
+  const result = buildOpportunityEvidenceFromCanonicalBundle({
+   channelId: "channel-1",
+   bundle: makeBundle(),
+   now: new Date("2026-10-15T00:00:00.000Z"),
+  })
+
+  expect(result).toHaveLength(2)
+  expect(result[0].evidenceIds).toEqual(["snapshot-canonical-1:videos:1"])
+  expect(result[0].currentValue).toBe(240)
+  expect(result[0].provenance).toMatchObject({
+   sourceOwner: "analytics-canon",
+   window: "90d",
+   sourceSnapshotId: "snapshot-canonical-1",
+   datasetId: "videos",
+  })
+  expect(result.find((item) => item.videoId === "video-2")?.currentValue).toBeNull()
+ })
+
+ it("fails closed when the canonical bundle belongs to another channel", () => {
+  expect(buildOpportunityEvidenceFromCanonicalBundle({
+   channelId: "channel-1",
+   bundle: makeBundle({ channelId: "channel-2" }),
+  })).toEqual([])
+ })
+
+ it("does not produce metric opportunities from failed or unavailable video datasets", () => {
+  for (const status of ["failed", "unavailable"]) {
+   const bundle = makeBundle({
+    datasets: [{ ...makeBundle().datasets[0], status }],
+   })
+   expect(buildOpportunityEvidenceFromCanonicalBundle({ channelId: "channel-1", bundle })).toEqual([])
+  }
  })
 })
