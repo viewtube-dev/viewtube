@@ -1528,3 +1528,27 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   );
 };
 StudioTagEditor.displayName = "StudioTagEditor";
+
+
+/** Static split-left status/metadata badge. Unlike action buttons it is never raised,
+ * animated, or given a shadow. Micro is a 14px catalog-only density variant. */
+export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({
+  icon, children, sizeVariant = "standard", className, ...props
+}) => (
+  <span
+    {...props}
+    data-vt-studio-control="true"
+    data-vt-studio-split-left-badge="true"
+    data-size={sizeVariant}
+    className={["vt-studio-split-left-badge", className].filter(Boolean).join(" ")}
+  >
+    <span className="vt-studio-split-left-badge__rail" aria-hidden="true">{icon}</span>
+    <span className="vt-studio-split-left-badge__label">{children}</span>
+  </span>
+);
+StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
