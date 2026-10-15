@@ -781,7 +781,7 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   -webkit-text-stroke: inherit;
 }
 
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] > svg { width:28px !important; height:28px !important; stroke-width:2.5px; }
+button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] > svg { width:36px !important; height:36px !important; min-width:36px !important; min-height:36px !important; stroke-width:2.5px; }
 button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] > svg { width:18px !important; height:18px !important; stroke-width:1.65px; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label { left:8px; max-width:calc(100% - 16px); padding:1px 5px; border-width:2px; border-radius:4px; font-size:8px; letter-spacing:.08em; }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { padding:0 6px 0 8px; border-radius:4px; font-size:22px; }
@@ -1862,6 +1862,15 @@ button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-bu
 [data-vt-studio-button-icon] { display: grid; place-items: center; flex: none; }
 button[data-vt-studio-button="true"][data-height-variant="44"] [data-vt-studio-button-icon] svg { width: 36px; height: 36px; stroke-width: 2; }
 button[data-vt-studio-button="true"][data-height-variant="28"] [data-vt-studio-button-icon] svg { width: 22px; height: 22px; stroke-width: 1.65; }
+button[data-vt-studio-button="true"][data-height-variant="44"][data-split-left="true"] [data-vt-studio-split-rail] > svg {
+  display: block;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  flex: 0 0 36px;
+  stroke-width: 2.5px;
+}
 
 /* Split-left uses the same button face/shadow contract; rail width equals height. */
 button[data-vt-studio-button="true"][data-split-left="true"] {
