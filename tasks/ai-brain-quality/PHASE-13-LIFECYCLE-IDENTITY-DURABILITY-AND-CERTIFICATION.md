@@ -103,3 +103,15 @@ This slice is **not Phase 13 certification**. Remaining gates still include curr
 The server persistence suite now verifies that an existing channel-scoped creator-communication event containing legacy raw text is replaced by a sanitized version with the same stable event ID, and that a subsequent durable read contains no raw message text. This validates the server store's replacement behavior; a full authenticated cross-device purge/reload flow is still required for certification.
 
 The focused Brain persistence contract suite also exercises rehydration of a channel-scoped outcome after local browser data is cleared, confirming that the durable response restores the stable outcome ID, producer record ID, and generation trace. This is a mocked authenticated-endpoint integration contract; live database and two-device browser certification remain separate gates.
+
+## Current-base implementation slice — publication producer ancestry
+
+The publication receipt now preserves the stable producer outcome IDs and generation trace IDs for the exact selected assets, in addition to the existing channel/project/ContentBuild, ActionPacket/workflow/recommendation/experiment, approved snapshot/hash, transaction and video identity.
+
+- The bridge reads outcomes only for the matching channel and selected asset IDs.
+- Outcome record IDs and trace IDs are deduplicated and sorted for deterministic receipts.
+- Unselected assets are excluded.
+- Retry handling restores ancestry already recorded on the immutable receipt and unions any still-available producer IDs, so a missing browser-local outcome does not erase previously recorded provenance.
+- Regression coverage verifies selected-asset filtering, trace continuity, metadata persistence and retry restoration.
+
+This improves the recommendation-to-publication lineage edge; it does not by itself prove that every upstream recommendation/creator-decision writer supplied its stable IDs or that downstream records are durable across devices.
