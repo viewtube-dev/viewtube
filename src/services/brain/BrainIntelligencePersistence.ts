@@ -1,6 +1,7 @@
 import { upsertAlgorithmIntelligenceEvents, type AlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
 import { upsertAlgorithmLifecycleObservations } from "./AlgorithmLifecycleObservationStore"
 import type { AlgorithmLifecycleObservation } from "./AlgorithmLifecycleCohorts"
+import { redactLegacyCreatorCommunicationText } from "./BrainCommunicationIngestion"
 
 const endpoint = (channelId: string) => `/api/brain-intelligence?channelId=${encodeURIComponent(channelId)}`
 
@@ -90,5 +91,8 @@ export const hydrateBrainIntelligenceFromPersistence = async (channelId: string)
   .filter((row): row is AlgorithmLifecycleObservation => Boolean(row && typeof row === "object" && String((row as AlgorithmLifecycleObservation).channelId || "") === channelId))
  upsertAlgorithmIntelligenceEvents(events)
  upsertAlgorithmLifecycleObservations(observations)
- return { channelId, events: events.length, observations: observations.length }
+ // Redact legacy raw creator text after durable history is hydrated. The ledger write
+ // path syncs sanitized replacements back to the server without creating new evidence.
+ const redactedCommunicationEvents = redactLegacyCreatorCommunicationText(channelId)
+ return { channelId, events: events.length, observations: observations.length, redactedCommunicationEvents }
 }
