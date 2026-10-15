@@ -83,18 +83,24 @@ export const recordCreatorCommunicationEvidence = (
  const classification = classifyCreatorCommunication(text)
  const id = `creator-communication:${channelId}:${communicationId}`
  const existing = listAlgorithmIntelligenceEvents({ channelId }).find((event) => event.id === id)
+ const relatedEventIds = Array.from(new Set((input.relatedEventIds || []).map((value) => value.trim()).filter(Boolean)))
+ const projectId = input.projectId?.trim() || null
  if (existing) {
-  if (existing.metadata?.communicationText !== text) {
-   throw new Error("Communication ID was already used for different text")
+  const existingParents = [...existing.parentEventIds].sort()
+  const requestedParents = [...relatedEventIds].sort()
+  if (
+   existing.metadata?.communicationText !== text
+   || (existing.projectId || null) !== projectId
+   || JSON.stringify(existingParents) !== JSON.stringify(requestedParents)
+  ) {
+   throw new Error("Communication ID was already used for different text or scope")
   }
   return { classification, event: existing, idempotentReplay: true }
  }
-
- const relatedEventIds = Array.from(new Set((input.relatedEventIds || []).map((value) => value.trim()).filter(Boolean)))
  const event = recordAlgorithmIntelligenceEvent({
   id,
   channelId,
-  projectId: input.projectId?.trim() || null,
+  projectId,
   kind: "CREATOR_COMMUNICATION_CLASSIFIED",
   sourceSystem: "communication",
   sourceId: communicationId,
