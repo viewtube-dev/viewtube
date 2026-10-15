@@ -28,7 +28,7 @@ That means creators should not judge them with one universal scoreboard.
 
 YouTube's current guidance says the recommendation goal is consistent across formats: understand whether a viewer is likely to be interested and satisfied. But the signals used to understand performance vary by format, and viewers themselves often have different preferences for Shorts, long videos, live streams, and posts.
 
-> **Creator principle:** Do not ask whether Shorts or long-form is "better." Ask what job each format is doing for your audience, what evidence fits that viewing experience, and whether the format supports your channel strategy.
+> **Creator takeaway:** Do not ask whether Shorts or long-form is "better." Ask what job each format is doing for your audience, what evidence fits that viewing experience, and whether the format supports your channel strategy.
 
 This guide teaches how to compare the formats without mixing incompatible metrics, how to diagnose each one in ViewTube, and how to use Shorts and long-form together without assuming one automatically helps or hurts the other.
 
@@ -142,7 +142,7 @@ Across formats, useful signals can include:
 - subsequent viewing;
 - returning behavior.
 
-> **Do not conclude:** There is not one public Shorts score and one public long-form score that creators can calculate. YouTube does not publish exact ranking weights.
+> **Caution:** There is not one public Shorts score and one public long-form score that creators can calculate. YouTube does not publish exact ranking weights.
 
 ---
 
