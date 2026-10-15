@@ -2467,3 +2467,111 @@
 
 
 /* Shared production icon-size comparison specimens. */
+
+
+/* Confirmed library comparison-row layout: square icons, steppers, and full-spectrum tags. */
+.vt-confirmed-square-variant-row {
+  gap: 6px;
+}
+.vt-confirmed-square-variant-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, max-content));
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  min-width: 0;
+}
+.vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"] {
+  flex: 0 0 auto;
+  margin: 0;
+}
+.vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"][data-size="standard"] {
+  width: 44px;
+  min-width: 44px;
+}
+.vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"][data-size="compact"] {
+  width: 28px;
+  min-width: 28px;
+}
+
+.vt-confirmed-stepper-row {
+  gap: 8px;
+}
+.vt-confirmed-stepper-row-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  align-items: start;
+  justify-content: start;
+  gap: 18px;
+  min-width: 0;
+}
+.vt-confirmed-stepper-specimen {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-confirmed-stepper-specimen > small {
+  font-size: 10px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.vt-confirmed-spectrum-tag-variant {
+  gap: 8px;
+}
+.vt-confirmed-spectrum-tag-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, max-content));
+  align-items: center;
+  justify-content: start;
+  gap: 8px 10px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+}
+.vt-confirmed-spectrum-tag-grid > button[data-vt-studio-exception="vault-spectrum-tag"] {
+  justify-self: start;
+  flex: 0 0 auto;
+}
+.vt-confirmed-spectrum-tag-selected {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #d2d2d2;
+}
+.vt-confirmed-spectrum-tag-selected > span {
+  font-size: 10px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .vt-confirmed-square-variant-grid {
+    grid-template-columns: repeat(4, minmax(0, max-content));
+    gap: 8px;
+  }
+  .vt-confirmed-stepper-row-grid {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    gap: 10px;
+  }
+  .vt-confirmed-square-effect-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .vt-confirmed-square-effect-pair {
+    padding: 6px;
+  }
+  .vt-confirmed-square-effect-sizes {
+    gap: 6px;
+  }
+  .vt-confirmed-spectrum-tag-grid {
+    grid-template-columns: repeat(5, minmax(0, max-content));
+    gap: 7px 8px;
+  }
+  .vt-confirmed-spectrum-tag-selected {
+    flex-wrap: wrap;
+  }
+}
