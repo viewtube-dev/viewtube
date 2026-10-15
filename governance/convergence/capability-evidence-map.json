@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "viewtube.capability-evidence-map.v1",
+  "lastEdited": "2026-10-15",
+  "sourceOfTruth": "Curated repository-path references; empty arrays mean evidence has not been mapped, not that evidence does not exist.",
+  "capabilities": {
+    "CAP-ANALYTICS-CANON": {
+      "taskRefs": [
+        "tasks/ai-brain-quality/CANONICAL-ANALYTICS-BRAIN-INTEGRATION.md"
+      ],
+      "tests": [
+        "src/features/vt-sync-local/adapters/analyticsBundle.test.ts",
+        "src/services/brain/__tests__/EvidenceIntelligenceResolver.test.ts"
+      ],
+      "guideRefs": [
+        "docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ]
+    },
+    "CAP-EVIDENCE-INTELLIGENCE": {
+      "taskRefs": [
+        "tasks/ai-brain-quality/CANONICAL-ANALYTICS-BRAIN-INTEGRATION.md"
+      ],
+      "tests": [
+        "src/services/brain/__tests__/EvidenceIntelligenceResolver.test.ts",
+        "src/services/brain/__tests__/BrainEvidenceQuality.test.ts",
+        "src/services/brain/__tests__/BrainEvidenceQualityIntegration.test.ts"
+      ],
+      "guideRefs": [
+        "docs/domains/BRAIN.md",
+        "docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ]
+    },
+    "CAP-CREATOR-CONTEXT": {
+      "taskRefs": [
+        "tasks/system-convergence/CREATOR-CONTEXT-REACHABILITY.md"
+      ],
+      "tests": [
+        "src/services/brain/__tests__/BrainContextBrokerCreatorContext.test.ts"
+      ],
+      "guideRefs": [
+        "docs/domains/BRAIN.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ]
+    },
+    "CAP-BRAIN-EXPERIENCE": {
+      "taskRefs": [
+        "tasks/system-convergence/todo.md"
+      ],
+      "tests": [
+        "src/services/brain/__tests__/BrainRuntime.test.ts",
+        "src/services/brain/__tests__/BrainContextBrokerCreatorContext.test.ts"
+      ],
+      "guideRefs": [
+        "docs/domains/BRAIN.md",
+        "docs/brain/UNIFIED_AI_SYSTEM_CANONICAL_CONSOLIDATION_CONTRACT_2026-09-17.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ]
+    },
+    "CAP-OUTCOME-LEARNING": {
+      "taskRefs": [
+        "tasks/system-convergence/todo.md"
+      ],
+      "tests": [],
+      "guideRefs": [
+        "docs/capabilities/outcome-learning.md",
+        "docs/domains/BRAIN.md"
+      ],
+      "verificationRefs": [
+        ".github/workflows/release-gates.yml"
+      ]
+    }
+  }
+}
