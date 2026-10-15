@@ -64,6 +64,8 @@ export interface AssetOutcome {
  editRatio?: number
  /** Links the outcome back to the generating turn. */
  traceId: string
+ /** Caller-supplied retry key; optional for legacy producers. */
+ idempotencyKey?: string
 }
 
 const STORAGE_KEY = "vt_asset_outcomes_v1"
@@ -191,6 +193,8 @@ const BRAIN_OUTCOME_FOR_KIND = {
 export const recordAssetOutcome = async (input: {
  assetId: string
  kind: AssetOutcomeKind
+ /** Reuse the same key when retrying one logical creator action. */
+ idempotencyKey?: string
  note?: string
  /** Required for `edited`: what the creator changed it to. */
  correctedText?: string
@@ -199,6 +203,16 @@ export const recordAssetOutcome = async (input: {
 }): Promise<AssetOutcome | null> => {
  const asset = getGeneratedAsset(input.assetId) as AssetRecord | null
  if (!asset) return null
+
+ if (input.idempotencyKey) {
+  const existing = readOutcomes().find((entry) =>
+   entry.idempotencyKey === input.idempotencyKey &&
+   entry.assetId === asset.id &&
+   entry.channelId === asset.channelId &&
+   entry.kind === input.kind
+  )
+  if (existing) return existing
+ }
 
  const generated = input.generatedText
   ?? (typeof (asset.output as { body?: unknown })?.body === "string"
@@ -223,6 +237,7 @@ export const recordAssetOutcome = async (input: {
     }
    : {}),
   traceId: asset.traceId,
+  ...(input.idempotencyKey ? { idempotencyKey: input.idempotencyKey } : {}),
  }
 
  persist(outcome)
@@ -236,6 +251,10 @@ export const recordAssetOutcome = async (input: {
    outcome: BRAIN_OUTCOME_FOR_KIND[input.kind],
    summary: `${asset.assetType} ${input.kind}${input.note ? `: ${input.note}` : ""}`,
    evidence: asset.evidenceRefs,
+   sourceRecordId: outcome.id,
+   traceId: outcome.traceId,
+   assetId: asset.id,
+   assetType: asset.assetType,
    // What the creator did is direct evidence; a style score is an inference about it.
    confidence: input.kind === "edited" || input.kind === "rejected" ? "high" : "medium",
   })
