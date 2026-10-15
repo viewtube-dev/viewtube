@@ -357,7 +357,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         className={studioClasses("vt-studio-square-icon-button", effectClass, className)}
         disabled={disabled}
         sizeVariant={sizeVariant}
-        aria-label={isSuccess && tooltip ? tooltip : label}
+        aria-label={isSuccess && tooltip ? tooltip : effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? `${label}, ${badge}` : label}
         aria-describedby={describedBy}
         aria-pressed={selectable ? isSelected : undefined}
         selected={selectable && isSelected}
