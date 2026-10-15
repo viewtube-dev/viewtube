@@ -4,6 +4,8 @@
 **Status:** Implementation slice prepared in the integrated current-base PR; CI and production database verification pending.  
 **Parent plan:** `PHASE-13-18-DURABLE-PRODUCTION-HANDOFF-PLAN.md`
 
+**Next plan:** `CANONICAL-PUBLICATION-TO-LEARNING-GOLDEN-PATH-PLAN.md` — validate the current integration head, then certify recommendation → creator approval → publication → analytics evidence → evaluation → governed learning.
+
 ## Scope
 
 Extend the existing authenticated `/api/brain-intelligence` endpoint and PostgreSQL-backed `server/brain-intelligence-store.mjs`. Do not add a second persistence API or replace the existing local ledgers.
