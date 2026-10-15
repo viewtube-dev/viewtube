@@ -95,6 +95,28 @@ const CANDIDATE_KEY = "viewtube:workflow-candidates:v1"
 const read = <T,>(key: string): T[] => { if (typeof window === "undefined") return []; try { return JSON.parse(window.localStorage.getItem(key) || "[]") as T[] } catch { return [] } }
 const write = <T,>(key: string, values: T[]) => { if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(values)) }
 
+/** Merge server-authoritative rows into the existing evaluation and candidate ledgers. */
+export const hydrateBrainLearningRecords = (input: {
+ evaluations: EvaluationRecord[]
+ candidates: WorkflowCandidate[]
+}) => {
+ const evaluations = new Map(listEvaluationRecords().map((record) => [record.id, record]))
+ for (const record of input.evaluations || []) {
+  if (!record?.id || !record.channelId) continue
+  evaluations.set(record.id, record)
+ }
+ const candidates = new Map(listWorkflowCandidates().map((record) => [record.id, record]))
+ for (const record of input.candidates || []) {
+  if (!record?.id || !record.channelId) continue
+  candidates.set(record.id, record)
+ }
+ const mergedEvaluations = [...evaluations.values()].sort((left, right) => right.updatedAt - left.updatedAt).slice(0, 5000)
+ const mergedCandidates = [...candidates.values()].sort((left, right) => right.createdAt - left.createdAt).slice(0, 1000)
+ write(EVAL_KEY, mergedEvaluations)
+ write(CANDIDATE_KEY, mergedCandidates)
+ return { evaluations: mergedEvaluations.length, candidates: mergedCandidates.length }
+}
+
 /**
  * Create a post-publication evaluation only when the published video is present
  * in the same current canonical analytics snapshot and channel scope. Missing
