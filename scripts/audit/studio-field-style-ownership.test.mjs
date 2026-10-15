@@ -45,3 +45,30 @@ test("button faces use the solid primary color and own their aligned shadow", ()
   assert.match(studioCss, /button\[data-vt-studio-button="true"\]\s*>\s*\[data-vt-studio-button-face\]\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
   assert.match(studioCss, /button\[data-vt-studio-button="true"\]\s*>\s*\[data-vt-studio-button-face\]\s*\{[^}]*box-shadow:\s*var\(--vt-studio-control-shadow\)/s)
 })
+
+test("floating labels preserve input-area typography and animate to 80% size with a 40% border overlap", () => {
+  const floatingBlock = studioCss.slice(
+    studioCss.indexOf("/* Shared floating-label fields"),
+    studioCss.indexOf("/* Permanent label-box variants"),
+  )
+  assert.match(floatingBlock, /transition:[^;]*font-size/)
+  assert.match(floatingBlock, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/)
+  assert.match(floatingBlock, /transform:translateY\(-60%\)/)
+  assert.doesNotMatch(floatingBlock, /transform:translateY\(-75%\)\s*scale\(\.75\)/)
+  assert.match(floatingBlock, /padding:\s*2\.25px\s+4\.5px/)
+})
+
+test("floating-label variant B matches the focus stroke color and width for standard and compact inputs", () => {
+  const floatingBlock = studioCss.slice(
+    studioCss.indexOf("/* Shared floating-label fields"),
+    studioCss.indexOf("/* Permanent label-box variants"),
+  )
+  assert.match(floatingBlock, /data-vt-floating-variant="b"[^{}]*\[data-size="standard"\]/)
+  assert.match(floatingBlock, /data-vt-floating-variant="b"[^{}]*\[data-size="compact"\]/)
+  assert.match(floatingBlock, /outline:\s*var\(--vt-studio-control-focus-outline-width,\s*3px\) solid var\(--vt-studio-control-secondary/)
+  assert.match(floatingBlock, /outline-offset:\s*0/)
+})
+
+test("circle icon buttons render icons at 80% of their canonical icon dimensions", () => {
+  assert.match(studioCss, /button\[data-vt-studio-circle-icon-button="true"\][^{}]*\[data-vt-studio-button-icon\]\s+svg\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-icon-size,\s*28px\)\s*\*\s*\.8\)[^}]*height:\s*calc\(var\(--vt-studio-control-icon-size,\s*28px\)\s*\*\s*\.8\)/s)
+})
