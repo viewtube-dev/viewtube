@@ -1,6 +1,8 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens"
 import "../../styles/studio-control-system.css"
+import { StudioTextInput } from "./StudioTextInput"
+import { StudioTextArea } from "./StudioTextArea"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
