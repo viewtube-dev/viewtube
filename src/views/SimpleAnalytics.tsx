@@ -20,9 +20,11 @@ import type {
  AnalyticsWindow,
  CanonicalMetricKey,
  CanonicalVideoRow,
-} from "../services/analytics/DataStore"
-import { getMasterRows, getMetricSummary } from "../services/analytics/Selectors"
-import { useBrain } from "../context/useBrain"
+} from "../services/analytics-canon"
+import {
+ useCanonicalRows,
+ useCanonicalMetricSummary,
+} from "../services/analytics-canon"
 
 const WINDOW_OPTIONS: AnalyticsWindow[] = ["28d", "7d", "90d", "365d", "lifetime"]
 
@@ -47,11 +49,10 @@ const formatNumber = (value: number): string => {
 const formatMoney = (value: number): string => `$${value.toFixed(2)}`
 
 const SimpleAnalytics: React.FC = () => {
- const { lastSyncComplete } = useBrain()
  const [windowKey, setWindowKey] = useState<AnalyticsWindow>("28d")
 
- const rows = useMemo(() => getMasterRows(windowKey, "api"), [windowKey, lastSyncComplete])
- const summary = useMemo(() => getMetricSummary(windowKey, "api"), [windowKey, lastSyncComplete])
+ const rows = useCanonicalRows(windowKey)
+ const summary = useCanonicalMetricSummary(windowKey)
 
  const tableRows = useMemo(
   () =>
