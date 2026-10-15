@@ -18,6 +18,13 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   letterSpacing: "-0.02em",
   lineHeight: 0.86,
   shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
+  squareIconButtonDefaults: {
+    geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; icon 28px with 2.5 stroke standard / 18px with 1.65 stroke compact.",
+    v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
+    v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
+    v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
+    v4: "Black face fill with primary (--pair-a) icon stroke.",
+  },
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
     typography: {
