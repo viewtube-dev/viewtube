@@ -171,6 +171,7 @@ export const SidebarChatbot: React.FC = () => {
     surface: "sidebar-chatbot",
     projectId: selection?.projectId ?? surface.projectId ?? null,
     project: activeProject,
+    projects: brain.projects,
     visibleContext,
     channelId,
     userText,
