@@ -240,6 +240,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-fixed-label-height: 24px;
   --vt-studio-fixed-label-font-size: 16px;
   --vt-studio-fixed-label-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-secondary-outline-width: 1.5px;
+  --vt-studio-control-focus-outline-width: 3px;
   position: relative;
   display: block;
   width: 100%;
@@ -250,6 +253,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-fixed-label-height: 16px;
   --vt-studio-fixed-label-font-size: 11px;
   --vt-studio-fixed-label-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-secondary-outline-width: 1px;
+  --vt-studio-control-focus-outline-width: 2px;
 }
 .vt-studio-fixed-label-field > [data-vt-studio-control="true"] {
   display: block;
