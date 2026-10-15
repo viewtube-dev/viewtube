@@ -2,7 +2,6 @@ import type { ViewTubeActionPacket, ViewTubePayloadKind } from "./viewTubeToolCh
 import { getViewTubeToolCapability, loadViewTubeActionPacket } from "./viewTubeToolChains"
 import { listBrainHandoffs, updateBrainHandoffState, type BrainHandoffInboxItem } from "./brainHandoffInbox"
 import { recordBrainWorkflowResult } from "./brainWorkflowLearning"
-import { validateProductionHandoff } from "./productionHandoffContracts"
 
 export type BrainToolIntegrationState = "ready" | "blocked" | "consumed"
 
@@ -27,30 +26,17 @@ export const getPendingToolIntegrations = (destinationToolId: string): BrainTool
       const packet = loadViewTubeActionPacket(handoff.packetId)
       if (!packet) return { handoff, packet: null, destinationToolId, payloadKind: handoff.payloadKind, state: "blocked" as const, reason: "ActionPacket is no longer available." }
       if (!target) return { handoff, packet, destinationToolId, payloadKind: packet.payloadKind, state: "blocked" as const, reason: "Destination tool is not registered." }
-      const validation = validateProductionHandoff(packet, target)
-      if (!validation.ok) return { handoff, packet, destinationToolId, payloadKind: packet.payloadKind, state: "blocked" as const, reason: validation.issues.join(" ") }
-      return { handoff, packet, destinationToolId, payloadKind: packet.payloadKind, state: "ready" as const, reason: validation.warnings.length ? validation.warnings.join(" ") : undefined }
+      if (!target.accepts.includes(packet.payloadKind)) return { handoff, packet, destinationToolId, payloadKind: packet.payloadKind, state: "blocked" as const, reason: `${target.label} cannot accept ${packet.payloadKind}.` }
+      return { handoff, packet, destinationToolId, payloadKind: packet.payloadKind, state: "ready" as const }
     })
     .filter((row): row is BrainToolIntegrationEnvelope => row.packet !== null)
 }
 
 export const openToolIntegration = (handoffId: string) => updateBrainHandoffState(handoffId, "opened")
-export const acceptToolIntegration = (handoffId: string) => {
-  const handoff = listBrainHandoffs().find(item => item.id === handoffId)
-  if (!handoff || (handoff.state !== "queued" && handoff.state !== "opened")) return null
-  const packet = loadViewTubeActionPacket(handoff.packetId)
-  const target = getViewTubeToolCapability(handoff.destinationToolId)
-  if (!packet || !target || !validateProductionHandoff(packet, target).ok) return null
-  return updateBrainHandoffState(handoffId, "accepted")
-}
-export const completeToolIntegration = (handoffId: string, channelId?: string | null, chainId?: string) => {
-  const handoff = listBrainHandoffs().find(item => item.id === handoffId)
-  if (!handoff || handoff.state !== "accepted") return null
-  const packet = loadViewTubeActionPacket(handoff.packetId)
-  const target = getViewTubeToolCapability(handoff.destinationToolId)
-  if (!packet || !target || !validateProductionHandoff(packet, target).ok) return null
+export const acceptToolIntegration = (handoffId: string) => updateBrainHandoffState(handoffId, "accepted")
+export const completeToolIntegration = (handoffId: string, channelId?: string | null, chainId = "live-tool-handoff") => {
   const item = updateBrainHandoffState(handoffId, "completed")
-  if (item && channelId) recordBrainWorkflowResult({ channelId, chainId: chainId || packet.workflowId || "live-tool-handoff", goal: "produce", outcome: "completed", scoreBefore: 0.5 })
+  if (item && channelId) recordBrainWorkflowResult({ channelId, chainId, goal: "produce", outcome: "completed", scoreBefore: 0.5 })
   return item
 }
 export const dismissToolIntegration = (handoffId: string, channelId?: string | null, chainId = "live-tool-handoff") => {
