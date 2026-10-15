@@ -385,7 +385,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         data-pop={animate && animationKey > 0 ? "true" : undefined}
         data-success={isSuccess ? "true" : undefined}
         data-has-badge={badgeValue !== null ? "true" : undefined}
-        data-notification-pulse={effect === "notification" && animationKey > 0 ? "true" : undefined}
+        data-notification-pulse={effect === "notification" && badgeValue !== null && animationKey > 0 ? "true" : undefined}
         onClick={handleClick}
       >
         <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
