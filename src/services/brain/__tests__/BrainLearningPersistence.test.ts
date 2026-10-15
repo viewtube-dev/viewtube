@@ -76,7 +76,7 @@ describe("BrainLearningPersistence", () => {
 
  it("rehydrates channel-scoped outcomes from durable storage after local browser data is lost", async () => {
   const storage = makeStorage()
-  vi.stubGlobal("window", { localStorage: storage })
+  vi.stubGlobal("window", { localStorage: storage, dispatchEvent: vi.fn() })
   vi.stubGlobal("localStorage", storage)
   const durableRecord = {
    recordType: "brainOutcome",
