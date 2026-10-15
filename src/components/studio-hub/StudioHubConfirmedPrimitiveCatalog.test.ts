@@ -23,7 +23,7 @@ describe("confirmed Studio button primitive library", () => {
     expect(controls).toContain('sizeVariant = "standard"')
     expect(controls).toContain("data-height-variant={resolvedHeight}")
     expect(css).toContain(':has([data-height-variant="28"])')
-    expect(css).toContain('font-size: 14px !important')
+    expect(css).toContain("--vt-studio-floating-label-size-compact")
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"][data-split-left="true"] [data-vt-studio-split-rail]')
   })
 
