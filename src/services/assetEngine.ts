@@ -67,6 +67,8 @@ export interface AssetEngineContext {
  provenance?: string[]
  parentAssetIds?: string[]
  traceId?: string | null
+ operationId?: string | null
+ workflowId?: string | null
 }
 
 export interface CreateAssetInput {
