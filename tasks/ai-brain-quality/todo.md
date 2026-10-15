@@ -132,7 +132,7 @@
 - [x] Record canonical task-profile → structured generation → deterministic evaluation → one bounded repair → independent revalidation → safe fallback contract.
 - [x] Add regression coverage for wrong task mode and incomplete audience-task responses.
 - [x] Preserve existing numeric-claim and creative-draft validation coverage.
-- [ ] Test repair success, repair rejection and provider failure/fallback receipts.
+- [x] Test repair success, repair rejection and provider failure/fallback receipts in `brainQualityLoop.test.ts` (all three passed in release-gates run 1297).
 - [ ] Verify generation provenance (prompt/schema/context/model, evidence, Project/ContentBuild and repair metadata) on real caller paths.
 - [ ] Run focused Brain tests and golden suite, typecheck, runtime lint, full test suite, build, source-governance/reachability audit and diff checks.
 - [ ] Attach exact-commit verification evidence before certification.
@@ -145,7 +145,7 @@
 - [x] Guard continuity trace omissions and fail-closed Brain health status (Phases 8–9).
 - [x] Guard canonical ContentBuild phase resolution and governed communication ingestion (Phases 10–11).
 - [x] Guard channel-scoped explicit attribution and unresolved-stage reporting (Phase 12).
-- [ ] Execute both new test suites on this exact head and repair any mismatches.
+- [x] Execute `test:brain-quality-loop-contract` and `test:brain-quality-loop`; both passed on PR #310 head `d75850788c3f4c9e80108148845480e1306ba30a` (release-gates run 1297).
 - [ ] Verify full prompt/schema/context/model/evidence provenance on real production caller paths.
 - [ ] Finish live UI adoption, server-authoritative persistence/consent/retention, stable-ID propagation and production lifecycle validation noted in the individual phase sections.
-- [ ] Run focused Brain tests, source governance/reachability, typecheck, runtime lint, full suite, build, and browser verification against this exact integration head.
+- [x] Typecheck, production build, and local browser smoke passed on the same release-gates run.\n- [ ] Full phase certification remains blocked: broader focused-contract and full-suite jobs fail on existing UI/Vault/Studio contract mismatches; `test:confirmed-library-layout` fails on stale catalog assertions; `lint:runtime` reports 2,239 repository-wide errors. Reconcile those baseline failures and rerun governance/reachability plus the complete suite before certification.
