@@ -1802,7 +1802,7 @@ const CreatorVaultOS: React.FC = () => {
 
     <div className={density === "compact"
      ? "grid grid-cols-1 gap-2 xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]"
-     : "grid grid-cols-1 gap-4 xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]"}>
+     : "grid grid-cols-1 gap-4 xl:grid-cols-[minmax(220px,0.72fr)_minmax(0,2.1fr)_minmax(260px,0.9fr)]"} data-vault-layout-grid>
      <div className="flex min-w-0 flex-col gap-4">
       <section aria-label="Vault library toolbar" className="flex flex-col gap-2">
        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
