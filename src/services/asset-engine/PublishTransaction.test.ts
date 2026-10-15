@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests } from "./ContentBuildRepository"
 import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
-import { listAlgorithmIntelligenceEvents } from "../brain/AlgorithmIntelligenceEventLedger"
+import { listAlgorithmIntelligenceEvents, recordAlgorithmIntelligenceEvent } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
 
 const projection=():PublishingPackageProjection=>({
@@ -111,6 +111,82 @@ describe("PublishTransaction",()=>{
    approvedSnapshotId:transaction.approvedSnapshotId,
    approvedSnapshotHash:transaction.approvedSnapshotHash,
   })
+ })
+
+ it("schedules evaluation only for the creator-approved recommendation matching the published ContentBuild and video", () => {
+  const recommendation = recordAlgorithmIntelligenceEvent({
+   id: "recommendation:matching",
+   channelId: "channel-a",
+   projectId: "project-a",
+   videoId: "youtube-published",
+   kind: "RECOMMENDATION_CREATED",
+   sourceSystem: "decision",
+   actionPacketId: "packet-approved",
+   confidence: "high",
+   title: "Test approved recommendation",
+   summary: "Evaluate the exact published package.",
+   evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100, windowHours: 24 }],
+   metadata: { contentBuildId: "cb-publish", approvalScope: "internal-project-handoff-only" },
+  })
+  const otherBuild = recordAlgorithmIntelligenceEvent({
+   id: "recommendation:other-build",
+   channelId: "channel-a",
+   projectId: "project-a",
+   videoId: "youtube-published",
+   kind: "RECOMMENDATION_CREATED",
+   sourceSystem: "decision",
+   actionPacketId: "packet-other-build",
+   confidence: "high",
+   title: "Different ContentBuild",
+   summary: "Must not be joined.",
+   evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100, windowHours: 24 }],
+   metadata: { contentBuildId: "other-build" },
+  })
+  const otherVideo = recordAlgorithmIntelligenceEvent({
+   id: "recommendation:other-video",
+   channelId: "channel-a",
+   projectId: "project-a",
+   videoId: "youtube-other",
+   kind: "RECOMMENDATION_CREATED",
+   sourceSystem: "decision",
+   actionPacketId: "packet-other-video",
+   confidence: "high",
+   title: "Different video",
+   summary: "Must not be joined.",
+   evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100, windowHours: 24 }],
+   metadata: { contentBuildId: "cb-publish" },
+  })
+  const noApproval = recordAlgorithmIntelligenceEvent({
+   id: "recommendation:no-packet",
+   channelId: "channel-a",
+   projectId: "project-a",
+   videoId: "youtube-published",
+   kind: "RECOMMENDATION_CREATED",
+   sourceSystem: "decision",
+   confidence: "high",
+   title: "No creator approval",
+   summary: "Must remain unlinked.",
+   evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100, windowHours: 24 }],
+   metadata: { contentBuildId: "cb-publish" },
+  })
+
+  const transaction = beginPublishTransaction(projection(), "video-publisher", { actionPacketId: "packet-approved" })
+  completePublishStep({ transactionId: transaction.id, step: "upload-video", youtubeVideoId: "youtube-published" })
+  completePublishStep({ transactionId: transaction.id, step: "verify-remote-state", youtubeVideoId: "youtube-published", youtubeBinding: { status: "published" } })
+  completePublishTransaction(transaction.id)
+
+  const events = listAlgorithmIntelligenceEvents({ channelId: "channel-a" })
+  const linked = events.find((event) => event.id === recommendation.id)
+  expect(linked?.checkpointAt).toBeGreaterThan(0)
+  expect(linked?.metadata).toMatchObject({
+   publicationTransactionId: transaction.id,
+   approvedSnapshotId: transaction.approvedSnapshotId,
+   metadataVersionIds: expect.any(Array),
+   checkpointId: `publication-checkpoint:${transaction.id}`,
+  })
+  for (const untouched of [otherBuild, otherVideo, noApproval]) {
+   expect(events.find((event) => event.id === untouched.id)?.checkpointAt).toBeFalsy()
+  }
  })
 
  it("refuses to resume a transaction whose approved snapshot is missing", () => {
