@@ -171,22 +171,36 @@ export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, r
       }
     }
   };
+  const preserveMissingIdentity = (existing, incoming) => {
+    if (!existing || !incoming || existing.recordType !== incoming.recordType) return incoming;
+    const record = { ...incoming.record };
+    for (const field of identityFields[incoming.recordType] || []) {
+      if (!hasIdentityValue(record[field]) && hasIdentityValue(existing.record?.[field])) {
+        record[field] = existing.record[field];
+      }
+    }
+    return { ...incoming, record };
+  };
   const unique = new Map();
   for (const item of Array.isArray(records) ? records : []) {
     if (!item || !allowedTypes.has(item.recordType) || !item.record
       || typeof item.record.id !== "string" || !item.record.id.trim()
       || item.record.channelId !== channelId) continue;
     const key = `${item.recordType}:${item.record.id}`;
-    assertIdentityCompatible(unique.get(key), item);
-    unique.set(key, item);
+    const previous = unique.get(key);
+    assertIdentityCompatible(previous, item);
+    unique.set(key, preserveMissingIdentity(previous, item));
   }
   const rows = [...unique.values()].slice(0, 1000);
   const recordKey = (item) => `${item.recordType}:${item.record.id}`;
   if (!pool) {
     const key = scope(userId, channelId);
     const map = memoryLearningRecords.get(key) || new Map();
-    for (const item of rows) assertIdentityCompatible(map.get(recordKey(item)), item);
-    rows.forEach((item) => map.set(recordKey(item), item));
+    for (const item of rows) {
+      const previous = map.get(recordKey(item));
+      assertIdentityCompatible(previous, item);
+      map.set(recordKey(item), preserveMissingIdentity(previous, item));
+    }
     memoryLearningRecords.set(key, map);
     return rows.length;
   }
@@ -201,13 +215,15 @@ export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, r
          WHERE viewtube_user_id=$1 AND channel_id=$2 AND record_id=$3 FOR UPDATE`,
         [userId, channelId, recordKey(item)],
       );
-      if (existing.rows[0]) assertIdentityCompatible(existing.rows[0].record, item);
+      const previous = existing.rows[0]?.record;
+      if (previous) assertIdentityCompatible(previous, item);
+      const durableItem = preserveMissingIdentity(previous, item);
       await client.query(
         `INSERT INTO viewtube_brain_learning_records(viewtube_user_id,channel_id,record_id,record)
          VALUES($1,$2,$3,$4::jsonb)
          ON CONFLICT(viewtube_user_id,channel_id,record_id)
          DO UPDATE SET record=EXCLUDED.record,updated_at=NOW()`,
-        [userId, channelId, recordKey(item), JSON.stringify(item)],
+        [userId, channelId, recordKey(item), JSON.stringify(durableItem)],
       );
       await client.query("COMMIT");
     } catch (error) {
