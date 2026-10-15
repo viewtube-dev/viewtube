@@ -12,8 +12,7 @@ const TrimPanel=({store}:PanelProps)=>{
  const sourceInSec=Number(c.sourceInSec??0);
  const sourceOutSec=Number.isFinite(Number(c.sourceOutSec))?Number(c.sourceOutSec):sourceInSec+(c.end-c.start);
  const hasSourceDuration=Number.isFinite(sourceDurationSec)&&sourceDurationSec>0;
- const canSlipBack=hasSourceDuration&&sourceInSec>0.001;
- const canSlipForward=hasSourceDuration&&sourceOutSec<sourceDurationSec-0.001;
+ const canSlip=(deltaSec:number)=>hasSourceDuration&&canSlipSourceWindow(sourceInSec,sourceOutSec,sourceDurationSec,deltaSec);
  const slip=(deltaSec:number)=>store.dispatch({type:'slipClip',id:c.id,deltaSec,sourceDurationSec});
  return <><Card name="Timeline Trim">
   <div style={label}>Playhead · {playhead.toFixed(2)}s</div>
