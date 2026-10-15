@@ -37,6 +37,37 @@ describe("StudioSquareIconButton interactions", () => {
     expect(button?.getAttribute("data-pop")).toBe("true")
   })
 
+  it("keeps notification feedback quiet on mount and replays it after count changes", async () => {
+    await act(async () => {
+      root.render(
+        <StudioSquareIconButton
+          label="Pending notifications"
+          icon={<span>●</span>}
+          effect="notification"
+          badge={2}
+        />,
+      )
+    })
+
+    const button = host.querySelector("button")
+    expect(button?.getAttribute("data-has-badge")).toBe("true")
+    expect(button?.hasAttribute("data-notification-pulse")).toBe(false)
+
+    await act(async () => {
+      root.render(
+        <StudioSquareIconButton
+          label="Pending notifications"
+          icon={<span>●</span>}
+          effect="notification"
+          badge={3}
+        />,
+      )
+    })
+
+    expect(button?.getAttribute("data-notification-pulse")).toBe("true")
+    expect(host.querySelector("[data-vt-square-badge]")?.textContent).toBe("3")
+  })
+
   it("toggles the V3 selectable skin and emits the next selection state", async () => {
     const onSelectedChange = vi.fn()
     await act(async () => {
