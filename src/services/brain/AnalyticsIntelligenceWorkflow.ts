@@ -223,7 +223,6 @@ export const buildAnalyticsRecommendationAction = (input: {
 }): AnalyticsRecommendationAction | null => {
   if (!input.id.trim() || !input.creatorGoal.trim() || !input.action.trim()) return null
   if (input.finding.channelId !== input.channelId || !validFinding(input.finding)) return null
-  const period = input.finding.period
   return {
     schemaVersion: 1,
     id: input.id,
