@@ -44,6 +44,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
   const [busy, setBusy] = React.useState(false)
   const [error, setError] = React.useState("")
   const [message, setMessage] = React.useState("")
+  const [savedDerivativeId, setSavedDerivativeId] = React.useState<string | null>(null)
   const [palette, setPalette] = React.useState<string[]>([])
   const [focalPoint, setFocalPoint] = React.useState({ x: 50, y: 50 })
   const [cropDragStart, setCropDragStart] = React.useState<{ x: number; y: number } | null>(null)
@@ -85,8 +86,18 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
     if (previewUrl) URL.revokeObjectURL(previewUrl)
   }, [previewUrl])
 
+  const invalidatePreview = () => {
+    setResult(null)
+    setSavedDerivativeId(null)
+    setPreviewUrl((previous) => {
+      if (previous) URL.revokeObjectURL(previous)
+      return null
+    })
+  }
+
   const patchTransform = (patch: Partial<VaultImageTransform>) => {
     setTransform((current) => ({ ...current, ...patch }))
+    invalidatePreview()
     setMessage("")
   }
 
@@ -102,6 +113,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
       const sourceBlob = await response.blob()
       const nextTransform = { ...transform, crop: cropEnabled ? crop : null }
       const transformed = await transformVaultImage(sourceBlob, nextTransform)
+      setSavedDerivativeId(null)
       const nextUrl = URL.createObjectURL(transformed.blob)
       setPreviewUrl((previous) => {
         if (previous) URL.revokeObjectURL(previous)
@@ -205,6 +217,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
         },
       })
       if (!created.id) throw new Error("Vault did not return an asset identity.")
+      setSavedDerivativeId(created.id)
       setMessage("Derivative registered in Vault with its source asset ID and transformation metadata.")
       onDerivativeCreated?.()
     } catch (caught) {
@@ -257,7 +270,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
             <input type="checkbox" checked={transform.preserveAspectRatio} onChange={(event) => patchTransform({ preserveAspectRatio: event.target.checked })} /> Preserve aspect ratio
           </label>
           <label className="flex items-center gap-2 text-xs font-black uppercase">
-            <input type="checkbox" checked={cropEnabled} onChange={(event) => { setCropEnabled(event.target.checked); setMessage("") }} /> Enable pixel crop
+            <input type="checkbox" checked={cropEnabled} onChange={(event) => { setCropEnabled(event.target.checked); invalidatePreview(); setMessage("") }} /> Enable pixel crop
           </label>
         </div>
 
@@ -274,6 +287,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
                 const y = Math.max(0, Math.min(sourceDimensions.height - 1, Math.round((event.clientY - bounds.top) / bounds.height * sourceDimensions.height)))
                 event.currentTarget.setPointerCapture(event.pointerId)
                 setCropDragStart({ x, y })
+                invalidatePreview()
                 setCrop({ x, y, width: 1, height: 1 })
               }}
               onPointerMove={(event) => {
@@ -281,6 +295,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
                 const bounds = event.currentTarget.getBoundingClientRect()
                 const x = Math.max(0, Math.min(sourceDimensions.width, Math.round((event.clientX - bounds.left) / bounds.width * sourceDimensions.width)))
                 const y = Math.max(0, Math.min(sourceDimensions.height, Math.round((event.clientY - bounds.top) / bounds.height * sourceDimensions.height)))
+                invalidatePreview()
                 setCrop({ x: Math.min(cropDragStart.x, x), y: Math.min(cropDragStart.y, y), width: Math.max(1, Math.abs(x - cropDragStart.x)), height: Math.max(1, Math.abs(y - cropDragStart.y)) })
               }}
               onPointerUp={() => setCropDragStart(null)}
@@ -294,7 +309,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
             {(["x", "y", "width", "height"] as const).map((key) => (
               <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase" key={key}>
                 {key}
-                <SubToolboxInput type="number" min={key === "width" || key === "height" ? 1 : 0} max={key === "x" ? sourceDimensions.width - 1 : key === "y" ? sourceDimensions.height - 1 : undefined} value={crop[key]} onChange={(event) => setCrop((current) => ({ ...current, [key]: Number(event.target.value) }))} />
+                <SubToolboxInput type="number" min={key === "width" || key === "height" ? 1 : 0} max={key === "x" ? sourceDimensions.width - 1 : key === "y" ? sourceDimensions.height - 1 : undefined} value={crop[key]} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, [key]: Number(event.target.value) })) }} />
               </label>
             ))}
           </div>
@@ -331,11 +346,11 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Focal point X (%)
-            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.x} onChange={(event) => setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, Number(event.target.value))) }))} />
+            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.x} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Focal point Y (%)
-            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.y} onChange={(event) => setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, Number(event.target.value))) }))} />
+            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.y} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
           </label>
           <div className="col-span-2 flex flex-wrap items-end gap-2">
             <SubToolboxInnerActionButton label="Thumbnail Preset" iconName="image" tone="orange" onClick={() => patchTransform({ resizeWidth: 1280, resizeHeight: 720, preserveAspectRatio: true })} disabled={busy} />
@@ -378,7 +393,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
             <div className="flex flex-wrap gap-2">
               <SubToolboxInnerActionButton label="Download Output" iconName="download" tone="green" onClick={download} />
               {result.byteSize <= MAX_INLINE_VAULT_DERIVATIVE_BYTES ? (
-                <SubToolboxInnerActionButton label="Save Derivative to Vault" iconName="database" tone="purple" onClick={() => void saveToVault()} />
+                <SubToolboxInnerActionButton label={savedDerivativeId ? "Derivative Saved" : "Save Derivative to Vault"} iconName="database" tone="purple" onClick={() => void saveToVault()} disabled={Boolean(savedDerivativeId)} />
               ) : (
                 <p className="text-xs font-bold">Output exceeds the safe inline Vault limit. Download it and import it through Import &amp; Tags to avoid exhausting local storage.</p>
               )}
