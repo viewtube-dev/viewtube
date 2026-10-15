@@ -50,7 +50,8 @@ test("floating labels use the reduced overlapping-label geometry and strong text
 });
 
 test("floating-label Compact B variant is explicit and only adds the scoped secondary focus stroke", () => {
-  assert.match(controls, /variant\?:\s*"a"\s*\|\s*"b"/);
+  const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+  assert.match(inputModule, /variant\?:\s*"a"\s*\|\s*"b"/);
   assert.match(catalog, /label="TITLE"[^>]*variant="b"[^>]*sizeVariant="compact"/);
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][\s\S]*?data-size="compact"[^\n]*:is\(:focus, :focus-visible\)/);
@@ -66,8 +67,8 @@ test("non-default settings explain the real public props in plain language", () 
 
 test("button shadows stay on the stationary outer control while the face moves", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\][^\n]*box-shadow:\s*var\(--vt-studio-control-shadow/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^\n]*box-shadow:\s*none/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*box-shadow:\s*none/);
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
   assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][\s\S]*?box-shadow:\s*3px 3px 0/);
   assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][\s\S]*?box-shadow:\s*none/);
