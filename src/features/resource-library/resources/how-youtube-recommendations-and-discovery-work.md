@@ -12,7 +12,7 @@ production_date: 2026-09-26
 last_researched: 2026-09-26
 recommended_review_date: 2027-03-26
 research_status: creator-first and source-grounded
-version: 2.0
+version: 2.1
 official_sources_prioritized: true
 viewtube_resource: true
 tags: algorithm, recommendations, discovery, home, suggested, search, shorts, audience, packaging, retention, satisfaction
