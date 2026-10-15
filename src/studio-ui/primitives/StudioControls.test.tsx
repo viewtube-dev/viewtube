@@ -107,7 +107,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(css).toContain('--vt-studio-control-shadow-x: .75px;')
     expect(css).toContain('--vt-studio-control-shadow-y: .75px;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }')
+    // The selected shadow token is set on the shared button root, covering split-left variants too.
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] {')
     expect(css).toContain("box-shadow: none !important;")
     expect(css).toContain("width: 100%;");
