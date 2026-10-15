@@ -316,6 +316,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         type={type}
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
+        data-vt-studio-button="true"
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
         aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
