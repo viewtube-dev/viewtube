@@ -94,19 +94,16 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div>
     </section>
     <section className="vt-confirmed-family vt-confirmed-exception-index" aria-labelledby="vt-confirmed-exception-index-title">
-      <h3 id="vt-confirmed-exception-index-title">Global Exceptions &amp; Known Deviations</h3>
+      <h3 id="vt-confirmed-exception-index-title">Global Exceptions &amp; Verification Boundary</h3>
       <p>Canonical source: <code>src/studio-ui/primitives/StudioControls.tsx</code> + <code>src/styles/studio-control-system.css</code>. Full register: <code>docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md</code>.</p>
       <ul>
-        <li><strong>FIX REQUIRED · Compact split-left divider:</strong> compact is 2px by contract, but legacy CSS currently sets the rail divider to 3px in default and selected states.</li>
-        <li><strong>FIX REQUIRED · Field radius:</strong> a later field rule forces 8px instead of standard 6px / compact 4px.</li>
-        <li><strong>FIX REQUIRED · Button typography:</strong> conflicting 32px, 10px, 36px, and 22px declarations bypass the 38px / 24px contract.</li>
-        <li><strong>FIX REQUIRED · Button shadow motion:</strong> hover changes the shadow offset and active removes the shadow while moving the button; required behavior is a fixed shadow anchor with the face moving halfway on hover and fully on click.</li>
-        <li><strong>FIX REQUIRED · Transition timing:</strong> CSS currently uses 180ms while size constants specify 150ms hover / 300ms click.</li>
-        <li><strong>REVIEW · Undeclared sizes:</strong> CSS includes 32px small and 56px action heights outside the standard/compact defaults.</li>
-        <li><strong>DOCUMENTED FUNCTIONAL EXCEPTION · Dropdown menus/options:</strong> menu surface and options do not use button press shadows; option typography and minimum height are menu-specific and must remain explicitly documented.</li>
-        <li><strong>REVIEW · Fields and wrappers:</strong> multiline height, floating-label layout, focus ring, switch/choice sizing, and word-toggle measured handle need size-by-size verification.</li>
+        <li><strong>DOCUMENTED EXCEPTION · Multiline textarea:</strong> taller writing surface, 92px minimum, 18px standard / 14px compact typography, weight 1000; selected size still controls border, radius, focus, and caret.</li>
+        <li><strong>DOCUMENTED EXCEPTION · Prominent workflow action:</strong> StudioActionButton is a separate fixed 56px family; ordinary StudioButton supports only standard 44px and compact 28px.</li>
+        <li><strong>DOCUMENTED EXCEPTION · Dropdown panel/options:</strong> menu rows and the floating panel are not button-press surfaces. Panel shadow is stationary; menu-specific row typography is governed by the production dropdown CSS.</li>
+        <li><strong>BROWSER CAPABILITY · Block caret:</strong> the global stylesheet requests a native block insertion caret with <code>caret-shape: block</code> and retains native insertion behavior when a browser does not implement that property. Never simulate a caret with a fake overlay.</li>
+        <li><strong>VERIFICATION GATE · Visual states:</strong> source governance does not replace browser verification. Confirm standard/compact sizing, selected and disabled states, keyboard focus, open dropdown stacking, narrow-screen wrapping, and reduced motion in a rendered browser.</li>
       </ul>
-      <p><strong>Audit status:</strong> source-level conflicts verified; browser-computed styles and rendered states are not yet certified. Do not treat these listed defects as approved exceptions.</p>
+      <p><strong>Audit status:</strong> this gallery renders imported production primitives and uses catalog CSS for specimen layout only. A passing source test or build is not a claim of live visual certification.</p>
     </section>
     <Family title="Studio Text Input · Standalone" nonDefaultSettings={["sizeVariant=\"compact\" selects 28px; default is standard 44px.", "type=\"search\" or type=\"number\" uses the shared Studio field styling.", "disabled=true prevents editing; readOnly=true permits focus and selection without edits.", "placeholder, inputMode, autoComplete, and maxLength can be overridden with native input props."]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Native input; standard 44px and compact 28px size variants; TYPE HERE placeholder shares entered-text typography; independent of SubToolbox primitives." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
