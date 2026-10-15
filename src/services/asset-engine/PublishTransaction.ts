@@ -154,6 +154,47 @@ export const completePublishTransaction=(id:string,toolId="video-publisher")=>{
   })
  } else if(build?.youtube?.status==="scheduled")setContentBuildStage(next.contentBuildId,"scheduled",{actorType:"youtube",toolId})
  appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.completed",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId,metadata:{youtubeVideoId:next.youtubeVideoId}})
+ // Publication identity is recorded into the canonical Brain event stream so a
+ // later VT-SYNC checkpoint can join by channel/video/transaction. This event
+ // is not a metric observation and does not claim the transaction caused results.
+ if (build?.channelId && next.youtubeVideoId) {
+  void import("../brain/AlgorithmIntelligenceEventLedger").then(({ recordAlgorithmIntelligenceEvent }) => {
+   recordAlgorithmIntelligenceEvent({
+    id: `publish-checkpoint:${next.id}`,
+    channelId: build.channelId as string,
+    projectId: build.legacyProjectId || null,
+    videoId: next.youtubeVideoId as string,
+    kind: "PUBLICATION_CHECKPOINT_RECORDED",
+    sourceSystem: "workflow",
+    sourceId: next.id,
+    parentEventIds: [],
+    evidenceIds: [next.approvedSnapshotId, next.approvedSnapshotHash],
+    confidence: "medium",
+    title: "Canonical publishing transaction checkpoint",
+    summary: "A creator-approved publishing transaction completed. Await canonical post-publication analytics before evaluating outcome.",
+    evaluationTargets: [],
+    checkpointAt: Date.parse(timestamp),
+    metadata: {
+     contentBuildId: next.contentBuildId,
+     videoPackageId: next.videoPackageId,
+     publicationTransactionId: next.id,
+     approvedSnapshotId: next.approvedSnapshotId,
+     approvedSnapshotHash: next.approvedSnapshotHash,
+     projectionRevision: next.assetLock.projectionRevision,
+     metadataVersionIds: [],
+     publicationState: build.youtube?.status || "unknown",
+     youtubeVideoId: next.youtubeVideoId,
+     finalRenderAssetId: next.assetLock.finalRenderAssetId,
+     titleAssetId: next.assetLock.titleAssetId,
+     thumbnailAssetId: next.assetLock.thumbnailAssetId,
+     descriptionAssetId: next.assetLock.descriptionAssetId,
+     scheduledAt: next.assetLock.scheduledAt,
+     awaitingCanonicalAnalyticsCheckpoint: true,
+     causalConclusion: null,
+    },
+   })
+  }).catch(() => undefined)
+ }
  return next
 }
 export const resetPublishTransactionRepositoryForTests=()=>{memory=[];if(canStore())localStorage.removeItem(KEY)}
