@@ -54,3 +54,43 @@ test("lifecycle observations remain user and channel scoped", async () => {
   assert.equal(rows[0].videoId, "video-1");
   assert.equal(rows[0].metric, "views");
 });
+
+test("legacy creator communication redaction replaces previously persisted raw metadata", async () => {
+  const userId = "test-user-communication-redaction";
+  const channelId = "channel-communication-redaction";
+  const eventId = "creator-communication:channel-communication-redaction:legacy-1";
+  await upsertPersistedBrainEvents({
+    userId,
+    channelId,
+    events: [{
+      id: eventId,
+      channelId,
+      kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+      metadata: {
+        communicationId: "legacy-1",
+        communicationText: "Private creator message that must be purged.",
+      },
+    }],
+  });
+
+  await upsertPersistedBrainEvents({
+    userId,
+    channelId,
+    events: [{
+      id: eventId,
+      channelId,
+      kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+      metadata: {
+        communicationId: "legacy-1",
+        communicationTextFingerprint: "0123456789abcdef",
+        rawCommunicationTextRetained: false,
+      },
+    }],
+  });
+
+  const rows = await listPersistedBrainEvents({ userId, channelId });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].metadata.communicationText, undefined);
+  assert.equal(rows[0].metadata.rawCommunicationTextRetained, false);
+  assert.equal(JSON.stringify(rows[0]).includes("Private creator message that must be purged."), false);
+});
