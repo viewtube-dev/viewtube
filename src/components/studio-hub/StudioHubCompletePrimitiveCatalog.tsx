@@ -5,7 +5,7 @@ import {
   Upload, Video, X,
 } from "lucide-react"
 import {
-  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxLabeledInput, SubToolboxLabeledTextArea, SubToolboxStatusBadge,
+  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { StudioSplitLeftButton, StudioTextInput, StudioInput, StudioTextArea, StudioLabeledInput, StudioLabeledTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
