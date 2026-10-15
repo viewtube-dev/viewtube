@@ -520,6 +520,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
     expect(controls).toContain('data-size="compact" data-vt-studio-tag-editor-action="true"')
     expect(css).toContain(".vt-studio-tag-editor__square-action[data-size=\"compact\"]")
     expect(css).toContain("width: 28px")
-    expect(css).not.toContain("flex: 0 0 32px;")
+    const actionBlock = css.slice(css.indexOf(".vt-studio-tag-editor__square-action {"), css.indexOf("\n}", css.indexOf(".vt-studio-tag-editor__square-action {")) + 2)
+    expect(actionBlock).not.toContain("32px")
   })
 })
