@@ -321,7 +321,13 @@ export const evaluateAnalyticsOutcome = (input: {
     blockedReason = "Baseline and follow-up metric must match the recommendation validation metric."
   } else if (baseline.window !== recommendation.evaluationWindow || followUp.window !== recommendation.evaluationWindow) {
     blockedReason = "Baseline and follow-up must use the recommendation's declared canonical window."
-  } else if ((recommendation.projectId && baseline.projectId !== recommendation.projectId) || (recommendation.projectId && followUp.projectId !== recommendation.projectId)) {\n    blockedReason = "Baseline and follow-up must preserve the recommendation project identity."\n  } else if ((recommendation.contentBuildId && (baseline.contentBuildId !== recommendation.contentBuildId || followUp.contentBuildId !== recommendation.contentBuildId)) || (recommendation.videoId && (baseline.videoId !== recommendation.videoId || followUp.videoId !== recommendation.videoId))) {\n    blockedReason = "Baseline and follow-up must preserve the recommendation content/video identity."\n  } else if ((recommendation.publicationTransactionId && followUp.publicationTransactionId !== recommendation.publicationTransactionId)) {\n    blockedReason = "Baseline and follow-up must match the linked publication transaction."\n  } else if (baseline.snapshotId === followUp.snapshotId) {
+  } else if (recommendation.projectId && (baseline.projectId !== recommendation.projectId || followUp.projectId !== recommendation.projectId)) {
+    blockedReason = "Baseline and follow-up must preserve the recommendation project identity."
+  } else if ((recommendation.contentBuildId && (baseline.contentBuildId !== recommendation.contentBuildId || followUp.contentBuildId !== recommendation.contentBuildId)) || (recommendation.videoId && (baseline.videoId !== recommendation.videoId || followUp.videoId !== recommendation.videoId))) {
+    blockedReason = "Baseline and follow-up must preserve the recommendation content/video identity."
+  } else if (recommendation.publicationTransactionId && followUp.publicationTransactionId !== recommendation.publicationTransactionId) {
+    blockedReason = "Baseline and follow-up must match the linked publication transaction."
+  } else if (baseline.snapshotId === followUp.snapshotId) {
     blockedReason = "Baseline and follow-up must use distinct analytics snapshots."
   } else if (!validPeriodDate(baseline.periodStartDate) || !validPeriodDate(baseline.periodEndDate) || !validPeriodDate(followUp.periodStartDate) || !validPeriodDate(followUp.periodEndDate)) {
     blockedReason = "Baseline and follow-up must have valid explicit YYYY-MM-DD period boundaries."
