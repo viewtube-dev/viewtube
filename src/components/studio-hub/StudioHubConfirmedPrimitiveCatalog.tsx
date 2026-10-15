@@ -1,8 +1,19 @@
 import React from "react"
 import { Settings2, Sparkles } from "lucide-react"
-import { StudioSwitch, StudioChoice, StudioWordToggle } from "../../studio-ui"
-import { STUDIO_COMPONENT_GLOBAL_DEFAULTS, STUDIO_COMPONENT_SIZE_DEFAULTS, StudioButton, StudioLabeledInput, StudioLabeledTextArea, StudioLegendMultiDropdown, StudioSplitLeftButton } from "../../studio-ui"
-import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import {
+  STUDIO_COMPONENT_GLOBAL_DEFAULTS,
+  STUDIO_COMPONENT_SIZE_DEFAULTS,
+  StudioButton,
+  StudioChoice,
+  StudioLabeledInput,
+  StudioLabeledTextArea,
+  StudioLegendMultiDropdown,
+  StudioSplitLeftButton,
+  StudioSwitch,
+  StudioTextArea,
+  StudioTextInput,
+  StudioWordToggle,
+} from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
