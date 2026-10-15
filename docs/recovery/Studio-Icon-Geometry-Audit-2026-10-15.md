@@ -22,7 +22,7 @@ Both `StudioSquareIconButton` and `StudioSplitLeftButton` expose the same `iconS
 | Moderate | 34px | 22px | 77.3% | 78.6% |
 | Large | 38px | 24px | 86.4% | 85.7% |
 
-Stroke tokens are inversely scaled for a 24×24 viewBox to keep nominal rendered stroke close to the current baseline: current 2.5 / 1.65, moderate 2.0588 / 1.35, large 1.8421 / 1.2375. These are geometric estimates; browser rasterization, line joins, path geometry, and non-24×24 icons may look different.
+Stroke tokens are calibrated toward the outer border: current 2.5 / 1.65, moderate 2.0588 / 1.35, selected large 1.9 / 2.0. For a 24×24 viewBox, nominal rendered stroke is token × rendered icon size ÷ 24: 1.9 × 38 ÷ 24 ≈ 3.01px; 2.0 × 24 ÷ 24 = 2px. Browser rasterization, line joins, path geometry, and non-24×24 icons may look different.
 
 ## Phase 3 — Visual specimens
 
