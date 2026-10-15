@@ -69,9 +69,8 @@ export const processVaultVideo = async (
   const form = new FormData();
   form.append("mode", JSON.stringify(config));
   form.append("file", source, source instanceof File ? source.name : "vault-source.mp4");
-  const response = await fetcher("/api/media/compress-analysis", {
+  const response = await fetcher("/api/media/compress-analysis?vaultOperation=1", {
     method: "POST",
-    headers: { "X-VT-Vault-Operation": "1" },
     body: form,
   });
   if (!response.ok) {
