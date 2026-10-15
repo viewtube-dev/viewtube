@@ -1,9 +1,9 @@
-# Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–2 Execution Record
+# Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–4 Implementation Record
 
-**Status:** Phases 0–4 implementation slice documented on the feature branch; deterministic period comparisons, contribution calculations, unified finding contract, regression tests, trend calculation, and existing-anomaly adapters are implemented. Automated test/typecheck/CI verification and live Intelligence Hub/Brain caller integration remain pending.  
+**Status:** Phases 0–4 implementation is present on `master/consolidated-feature-integration`: deterministic period comparisons, contribution calculations, unified finding contract, regression tests, trend calculation, and existing-anomaly adapters are in the target branch. Automated test/typecheck/CI verification remains pending; live Intelligence Hub/Brain caller integration is tracked in the later integration phases.  
 **Date:** 2026-10-15  
-**Implementation branch:** `feat/analytics-intelligence-hub-phases-2-4-2026-10-15`  
-**Pull request:** [#238 — Analytics Intelligence Hub: deterministic insights phases 0–2](https://github.com/viewtube-dev/viewtube/pull/238) (open, ready for review; not merged)  
+**Implementation branch:** `master/consolidated-feature-integration` (verified source for the current Phase 0–4 implementation)  
+**Prior tracking:** [PR #238](https://github.com/viewtube-dev/viewtube/pull/238) is closed; the Phase 0–4 implementation files are present on the target integration branch. This master record is updated on that branch.  
 **Target integration branch:** `master/consolidated-feature-integration`  
 **Scope:** Build the Analytics Intelligence Hub and deterministic analytics findings/evidence without introducing a second analytics store or allowing AI-generated prose to become metric truth.
 
@@ -156,7 +156,7 @@ Add an Analytics fixture golden path from canonical dataset → deterministic fi
 
 ## Phase 0–4 implementation receipt
 
-This receipt must be updated with actual code paths, commit SHA, CI checks and test commands after implementation. A written plan is not evidence that code or runtime integration is complete.
+Code paths and current branch state are recorded below. Runtime wiring and release certification are separate gates; do not mark them complete without actual test and CI evidence.
 
 - Phase 0: audit and ownership reconciliation recorded above; existing canonical source, Brain bridge, historical plans, adjacent PR boundaries and validation gaps are documented.
 - Phase 1: `src/services/brain/DeterministicAnalyticsInsights.ts` defines explicit inclusive period bounds, stable source-linked findings, formula/version, confidence and limitations; it fails closed on unknown/mismatched channels, mismatched windows, invalid/overlapping/non-chronological or unequal-length periods, same snapshot IDs, unavailable datasets, missing metrics and non-finite values.
