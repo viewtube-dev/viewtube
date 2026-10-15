@@ -147,6 +147,20 @@ describe("deterministic analytics insights", () => {
    baseline: { bundle: oldBundle, period: period("Previous", "2026-08-19", "2026-09-15") },
    current: { bundle: partial, period: period("Current", "2026-09-16", "2026-10-13") },
   }).blockedReasons).toContain("Dataset daily is not fully available in both periods.")
+  const stale = bundle("snapshot-new", oldMetrics, {
+   datasets: [dataset("daily", oldMetrics, { status: "stale" })],
+  })
+  expect(buildPeriodComparisonInsights({
+   baseline: { bundle: oldBundle, period: period("Previous", "2026-08-19", "2026-09-15") },
+   current: { bundle: stale, period: period("Current", "2026-09-16", "2026-10-13") },
+  }).blockedReasons).toContain("Dataset daily is not fully available in both periods.")
+  const invalid = bundle("snapshot-new", {
+   views: { count: 1, sum: Number.NaN, average: Number.NaN, minimum: Number.NaN, maximum: Number.NaN },
+  })
+  expect(buildPeriodComparisonInsights({
+   baseline: { bundle: oldBundle, period: period("Previous", "2026-08-19", "2026-09-15") },
+   current: { bundle: invalid, period: period("Current", "2026-09-16", "2026-10-13") },
+  }).blockedReasons).toContain("Metric views in dataset daily has no finite value in both periods.")
   const missing = bundle("snapshot-new", {})
   const missingResult = buildPeriodComparisonInsights({
    baseline: { bundle: oldBundle, period: period("Previous", "2026-08-19", "2026-09-15") },
