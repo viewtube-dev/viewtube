@@ -88,7 +88,7 @@ export interface EvidenceIntelligenceResolverDependencies {
   bundle: CanonicalIntelligenceEvidenceBundle
   limit?: number
  }) => OpportunityEvidence[]
- buildCurrentInsights?: (input: { channelId: string | null; expectedSnapshotId: string }) => DeterministicAnalyticsInsight[]
+ buildCurrentInsights?: typeof buildCurrentCanonicalAnalyticsInsights
  projectEvidence: (bundle: CanonicalIntelligenceEvidenceBundle) => EvidenceRecord[]
 }
 
