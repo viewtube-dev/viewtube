@@ -169,6 +169,7 @@ import { resolveVaultMediaCapabilities, type VaultMediaKind } from "../features/
 import { VaultAdaptiveWorkbenchHost } from "../features/vault-workbench/VaultAdaptiveWorkbenchHost"
 import { inspectVaultAsset } from "../services/vaultInspection"
 import { evaluateVaultRights } from "../services/vaultReviewGovernance"
+import { compareVaultAssets } from "../services/vaultReviewGovernance"
 import { listVaultOperations } from "../services/vaultOperationLedger"
 import { VaultImageWorkbench } from "./vault/VaultImageWorkbench"
 import { VaultVideoWorkbench } from "./vault/VaultVideoWorkbench"
@@ -2634,21 +2635,22 @@ const CreatorVaultOS: React.FC = () => {
          <section aria-label="Asset comparison differences" className="border-t-[3px] border-current pt-3">
           <div className="mb-2 text-xs font-black uppercase opacity-60">Differences</div>
           <div className="flex flex-col gap-1">
-           {([
-            ["Name", comparePair[0].name, comparePair[1].name],
-            ["Type", comparePair[0].kind, comparePair[1].kind],
-            ["Project", comparePair[0].projectName || "Unassigned", comparePair[1].projectName || "Unassigned"],
-            ["Source", comparePair[0].source, comparePair[1].source],
-            ["Dimensions", `${comparePair[0].metadata?.width || "—"} × ${comparePair[0].metadata?.height || "—"}`, `${comparePair[1].metadata?.width || "—"} × ${comparePair[1].metadata?.height || "—"}`],
-            ["File size", typeof comparePair[0].metadata?.byteSize === "number" ? formatVaultBytes(Number(comparePair[0].metadata.byteSize)) : "—", typeof comparePair[1].metadata?.byteSize === "number" ? formatVaultBytes(Number(comparePair[1].metadata.byteSize)) : "—"],
-            ["Tags", (comparePair[0].tags || []).join(", ") || "—", (comparePair[1].tags || []).join(", ") || "—"],
-           ] as Array<[string, string, string]>).map(([label, left, right]) => (
-            <div key={label} className="grid grid-cols-[84px_minmax(0,1fr)_minmax(0,1fr)] gap-2 border-b border-current/20 py-1 text-xs">
-             <span className="font-black uppercase opacity-60">{label}</span>
-             <span className={left === right ? "font-bold" : "font-black"}>{left}</span>
-             <span className={left === right ? "font-bold" : "font-black"}>{right}</span>
-            </div>
-           ))}
+           {compareVaultAssets(comparePair[0], comparePair[1]).map((difference) => {
+            const formatValue = (value: unknown) => value == null || value === ""
+             ? "—"
+             : typeof value === "string" || typeof value === "number" || typeof value === "boolean"
+              ? String(value)
+              : JSON.stringify(value)
+            const left = formatValue(difference.left)
+            const right = formatValue(difference.right)
+            return (
+             <div key={difference.field} className="grid grid-cols-[minmax(80px,auto)_minmax(0,1fr)_minmax(0,1fr)] gap-2 border-b border-current/20 py-1 text-xs">
+              <span className="font-black uppercase opacity-60">{difference.field}</span>
+              <span className={left === right ? "font-bold" : "font-black"}>{left}</span>
+              <span className={left === right ? "font-bold" : "font-black"}>{right}</span>
+             </div>
+            )
+           })}
           </div>
          </section>
         ) : (
