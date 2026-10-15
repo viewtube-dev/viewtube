@@ -76,9 +76,10 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
       return
     }
     const next = Math.min(max, Math.max(min, parsed))
+    const previous = valueRef.current
     valueRef.current = next
     setDraftValue(String(next))
-    if (next !== valueRef.current || next !== value) onValueChange(next)
+    if (next !== previous) onValueChange(next)
   }, [draftValue, max, min, onValueChange, value])
 
   const scheduleRepeat = useCallback(() => {
