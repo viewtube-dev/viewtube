@@ -4,6 +4,7 @@ import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
+import { ChevronDown, ChevronUp, Minus, Plus } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -45,11 +46,11 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   tagEditorAction: {
     owner: "StudioTagEditor",
     globalRuleException: true,
-    height: 32,
-    stroke: 3,
-    radius: 8,
+    height: 28,
+    stroke: 2,
+    radius: 4,
     shadow: "4px offset secondary-color at 45% opacity",
-    rationale: "The plus/check actions belong to the donor-defined 32px tag-composer compound, separate from the global 44px/28px lattice.",
+    rationale: "The plus/check actions use the canonical compact 28px square-button size.",
   },
   textareaTypography: {
     globalRuleException: true,
@@ -714,6 +715,8 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
       ref={rootRef}
       data-vt-primitive-id="140"
       data-vt-studio-field="legend-multi-dropdown"
+      data-vt-studio-control-family="dropdown"
+      data-vt-studio-dropdown-variant="multiselect"
       data-vt-control-level={level}
       data-size={sizeVariant}
       data-open={open || undefined}
@@ -809,11 +812,445 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
 StudioSpectrumTag.displayName = "StudioSpectrumTag"
 
 
-// First-class stepper family: implementation and styles remain owned by Studio Controls.
-export { StudioSimpleDropdown } from "./StudioSimpleDropdown"
-export type { StudioSimpleDropdownProps, StudioSimpleDropdownOption } from "./StudioSimpleDropdown"
-export { StudioSplitStepper } from "./StudioSplitStepper"
-export type { StudioSplitStepperProps, StudioSplitStepperSize } from "./StudioSplitStepper"
+// Canonical dropdown family: single-select variants share the same trigger/menu implementation.
+export interface StudioDropdownOption {
+  value: string
+  label: React.ReactNode
+  disabled?: boolean
+}
+
+export interface StudioDropdownProps {
+  value?: string
+  defaultValue?: string
+  options: StudioDropdownOption[]
+  onChange?: (value: string) => void
+  placeholder?: React.ReactNode
+  disabled?: boolean
+  connectionMessage?: React.ReactNode
+  className?: string
+  id?: string
+  ariaLabel?: string
+  sizeVariant?: "standard" | "compact"
+  variant?: "default" | "simple"
+}
+
+export const StudioDropdown: React.FC<StudioDropdownProps> = ({
+  value,
+  defaultValue,
+  options,
+  onChange,
+  placeholder = "Select",
+  disabled = false,
+  connectionMessage,
+  className = "",
+  id,
+  ariaLabel,
+  sizeVariant = "standard",
+  variant = "default",
+}) => {
+  const [open, setOpen] = React.useState(false)
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
+  const [activeIndex, setActiveIndex] = React.useState(-1)
+  const rootRef = React.useRef<HTMLDivElement>(null)
+  const controlled = value !== undefined
+  const currentValue = controlled ? value : internalValue
+  const enabledOptions = options.filter((option) => !option.disabled)
+  const selected = options.find((option) => option.value === currentValue)
+
+  React.useEffect(() => {
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+    document.addEventListener("pointerdown", onPointerDown)
+    return () => document.removeEventListener("pointerdown", onPointerDown)
+  }, [])
+
+  const selectValue = (next: string) => {
+    if (!controlled) setInternalValue(next)
+    onChange?.(next)
+    setOpen(false)
+  }
+
+  const moveActive = (direction: 1 | -1) => {
+    if (!enabledOptions.length) return
+    const currentEnabledIndex = enabledOptions.findIndex((option) => option.value === options[activeIndex]?.value)
+    const nextEnabledIndex = currentEnabledIndex < 0
+      ? direction === 1 ? 0 : enabledOptions.length - 1
+      : (currentEnabledIndex + direction + enabledOptions.length) % enabledOptions.length
+    const option = enabledOptions[nextEnabledIndex]
+    setActiveIndex(options.findIndex((candidate) => candidate.value === option.value))
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (disabled) return
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault()
+      if (!open) setOpen(true)
+      moveActive(event.key === "ArrowDown" ? 1 : -1)
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      if (!open) {
+        setOpen(true)
+        const selectedIndex = options.findIndex((option) => option.value === currentValue && !option.disabled)
+        setActiveIndex(selectedIndex >= 0 ? selectedIndex : options.findIndex((option) => !option.disabled))
+      } else if (activeIndex >= 0 && !options[activeIndex]?.disabled) {
+        selectValue(options[activeIndex].value)
+      }
+    } else if (event.key === "Escape") {
+      setOpen(false)
+    } else if (event.key === "Home" && open) {
+      event.preventDefault()
+      setActiveIndex(options.findIndex((option) => !option.disabled))
+    } else if (event.key === "End" && open) {
+      event.preventDefault()
+      const reversed = [...options].reverse().findIndex((option) => !option.disabled)
+      if (reversed >= 0) setActiveIndex(options.length - 1 - reversed)
+    }
+  }
+
+  return (
+    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
+      <button
+        id={id}
+        type="button"
+        data-vt-studio-control="true"
+        data-size={sizeVariant}
+        data-dropdown-trigger="true"
+        aria-label={ariaLabel}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={id ? `${id}-listbox` : undefined}
+        disabled={disabled}
+        onClick={() => setOpen((current) => !current)}
+        onKeyDown={onKeyDown}
+      >
+        <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
+        <ChevronDown size={18} strokeWidth={3} aria-hidden="true" />
+      </button>
+      {open && !disabled ? (
+        <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
+          {options.map((option, index) => (
+            <button
+              key={option.value}
+              type="button"
+              role="option"
+              aria-selected={option.value === currentValue}
+              disabled={option.disabled}
+              className="vt-studio-dropdown-option"
+              data-active={index === activeIndex || undefined}
+              data-selected={option.value === currentValue || undefined}
+              onMouseEnter={() => setActiveIndex(index)}
+              onClick={() => selectValue(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
+export interface StudioSimpleDropdownProps {
+  value?: string
+  defaultValue?: string
+  options: StudioSimpleDropdownOption[]
+  onChange?: (value: string) => void
+  placeholder?: React.ReactNode
+  disabled?: boolean
+  className?: string
+  id?: string
+  ariaLabel?: string
+  sizeVariant?: "standard" | "compact"
+}
+
+/** Simple single-select child variant of the canonical StudioDropdown family. */
+export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
+  <StudioDropdown {...props} options={options} variant="simple" />
+)
+StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
+
+// Canonical Studio stepper implementations are owned by this module.
+export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number
+  onValueChange: (value: number) => void
+  min?: number
+  max?: number
+  step?: number
+  size?: StudioControlSize
+  disabled?: boolean
+  ariaLabel?: string
+}
+
+/** Clamp a numeric step action to valid finite values and the supplied bounds. */
+export function normalizeStudioInlineStepperValue(
+  value: number,
+  direction: -1 | 0 | 1,
+  step = 1,
+  min = -Infinity,
+  max = Infinity,
+): number {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
+  const base = Number.isFinite(value) ? value : Number.isFinite(min) ? min : 0
+  const lower = Number.isFinite(min) ? min : -Infinity
+  const upper = Number.isFinite(max) ? max : Infinity
+  if (lower > upper) return Number.isFinite(min) ? min : 0
+  const next = base + direction * safeStep
+  if (!Number.isFinite(next)) return direction < 0 && Number.isFinite(min) ? min : direction > 0 && Number.isFinite(max) ? max : base
+  const precision = Math.min(12, Math.max(String(base).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0))
+  const rounded = Number(next.toFixed(precision))
+  return Math.min(upper, Math.max(lower, rounded))
+}
+
+/**
+ * Canonical horizontal Studio Controls stepper: square decrement button,
+ * editable numeric field, square increment button. Independent from SubToolbox.
+ */
+export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
+  value,
+  onValueChange,
+  min = -Infinity,
+  max = Infinity,
+  step = 1,
+  size = "standard",
+  disabled = false,
+  ariaLabel = "Value",
+  className,
+  style,
+  ...props
+}) => {
+  const [draft, setDraft] = React.useState(String(Number.isFinite(value) ? value : 0))
+  const [focused, setFocused] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!focused) setDraft(String(Number.isFinite(value) ? value : 0))
+  }, [value, focused])
+
+  const commit = React.useCallback(() => {
+    const parsed = draft.trim() === "" ? Number.NaN : Number(draft)
+    if (!Number.isFinite(parsed)) {
+      setDraft(String(Number.isFinite(value) ? value : 0))
+      return
+    }
+    const normalized = normalizeStudioInlineStepperValue(parsed, 0, step, min, max)
+    setDraft(String(normalized))
+    if (normalized !== value) onValueChange(normalized)
+  }, [draft, max, min, onValueChange, step, value])
+
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const parsedDraft = draft.trim() === "" ? Number.NaN : Number(draft)
+    const base = Number.isFinite(parsedDraft) ? parsedDraft : value
+    const next = normalizeStudioInlineStepperValue(base, direction, step, min, max)
+    setDraft(String(next))
+    if (next !== value) onValueChange(next)
+  }, [draft, max, min, onValueChange, step, value])
+
+  const currentForBounds = Number.isFinite(value) ? value : 0
+  const validBounds = min <= max
+
+  return (
+    <div
+      {...props}
+      className={["vt-studio-inline-stepper", `is-${size}`, focused ? "is-focused" : "", className].filter(Boolean).join(" ")}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="inline-stepper"
+      data-size={size}
+      role="group"
+      aria-label={ariaLabel}
+      style={style}
+    >
+      <button
+        type="button"
+        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__decrement"
+        aria-label={`Decrease ${ariaLabel}`}
+        disabled={disabled || !validBounds || currentForBounds <= min}
+        onClick={() => adjust(-1)}
+      >
+        <Minus aria-hidden="true" focusable="false" />
+      </button>
+      <input
+        className="vt-studio-inline-stepper__value"
+        type="number"
+        inputMode="decimal"
+        aria-label={ariaLabel}
+        value={draft}
+        min={Number.isFinite(min) ? min : undefined}
+        max={Number.isFinite(max) ? max : undefined}
+        step={step > 0 && Number.isFinite(step) ? step : 1}
+        disabled={disabled}
+        onFocus={() => setFocused(true)}
+        onBlur={() => { setFocused(false); commit() }}
+        onChange={event => {
+          const nextDraft = event.currentTarget.value
+          setDraft(nextDraft)
+          if (!nextDraft.trim()) return
+          const parsed = Number(nextDraft)
+          if (!Number.isFinite(parsed)) return
+          onValueChange(normalizeStudioInlineStepperValue(parsed, 0, step, min, max))
+        }}
+        onKeyDown={event => {
+          if (event.key === "Enter") {
+            event.preventDefault()
+            commit()
+            event.currentTarget.blur()
+          }
+        }}
+      />
+      <button
+        type="button"
+        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__increment"
+        aria-label={`Increase ${ariaLabel}`}
+        disabled={disabled || !validBounds || currentForBounds >= max}
+        onClick={() => adjust(1)}
+      >
+        <Plus aria-hidden="true" focusable="false" />
+      </button>
+    </div>
+  )
+}
+
+StudioInlineStepper.displayName = "StudioInlineStepper"
+
+export type StudioSplitStepperSize = "standard" | "compact"
+export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number
+  onValueChange: (value: number) => void
+  min?: number
+  max?: number
+  step?: number
+  size?: StudioSplitStepperSize
+  disabled?: boolean
+  ariaLabel?: string
+}
+
+/** Studio Controls stepper family: fixed 2:1 editable value pane and square split-action rail. */
+export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
+  value, onValueChange, min = -Infinity, max = Infinity, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, style, ...props
+}) => {
+  const valueRef = React.useRef(value)
+  valueRef.current = value
+  const [draft, setDraft] = React.useState(String(value))
+  const [inputFocused, setInputFocused] = React.useState(false)
+  const [holding, setHolding] = React.useState(false)
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const startedAt = React.useRef(0)
+  const heldDirection = useRef<-1 | 1>(1)
+
+  React.useEffect(() => { if (!inputFocused) setDraft(String(value)) }, [value, inputFocused])
+
+  const stopHold = React.useCallback(() => {
+    if (holdTimer.current) clearTimeout(holdTimer.current)
+    if (repeatTimer.current) clearTimeout(repeatTimer.current)
+    holdTimer.current = null
+    repeatTimer.current = null
+    setHolding(false)
+  }, [])
+  React.useEffect(() => stopHold, [stopHold])
+
+  const change = React.useCallback((direction: -1 | 1) => {
+    const current = valueRef.current
+    const next = Math.min(max, Math.max(min, current + direction * step))
+    if (next === current) { stopHold(); return }
+    valueRef.current = next
+    setDraft(String(next))
+    onValueChange(next)
+  }, [max, min, onValueChange, step, stopHold])
+
+  const scheduleRepeat = React.useCallback(() => {
+    const elapsed = Date.now() - startedAt.current
+    const delay = elapsed > 1800 ? 32 : elapsed > 1100 ? 58 : elapsed > 500 ? 105 : 220
+    repeatTimer.current = setTimeout(() => {
+      const current = valueRef.current
+      if ((heldDirection.current > 0 && current >= max) || (heldDirection.current < 0 && current <= min)) {
+        stopHold()
+        return
+      }
+      change(heldDirection.current)
+      if ((heldDirection.current > 0 && valueRef.current < max) || (heldDirection.current < 0 && valueRef.current > min)) scheduleRepeat()
+      else stopHold()
+    }, delay)
+  }, [change, max, min, stopHold])
+
+  const beginHold = (direction: -1 | 1, event: React.PointerEvent<HTMLButtonElement>) => {
+    if (disabled || event.button !== 0) return
+    if ((direction > 0 && valueRef.current >= max) || (direction < 0 && valueRef.current <= min)) return
+    event.preventDefault()
+    stopHold()
+    heldDirection.current = direction
+    startedAt.current = Date.now()
+    change(direction)
+    holdTimer.current = setTimeout(() => {
+      setHolding(true)
+      scheduleRepeat()
+    }, 320)
+  }
+
+  const commitDraft = () => {
+    const parsed = Number(draft)
+    if (!draft.trim() || !Number.isFinite(parsed)) { setDraft(String(valueRef.current)); return }
+    const normalized = Math.min(max, Math.max(min, parsed))
+    valueRef.current = normalized
+    setDraft(String(normalized))
+    if (normalized !== value) onValueChange(normalized)
+  }
+
+  return (
+    <div
+      {...props}
+      className={["vt-studio-split-stepper", `is-${size}`, inputFocused || holding ? "is-interacting" : "", className].filter(Boolean).join(" ")}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="split-stepper"
+      data-size={size}
+      role="group"
+      aria-label={ariaLabel}
+      style={style}
+    >
+      <input
+        type="number"
+        className="vt-studio-split-stepper-value"
+        aria-label={ariaLabel}
+        inputMode="decimal"
+        value={draft}
+        min={Number.isFinite(min) ? min : undefined}
+        max={Number.isFinite(max) ? max : undefined}
+        step={step}
+        disabled={disabled}
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => { setInputFocused(false); commitDraft() }}
+        onChange={(event) => {
+          const nextDraft = event.currentTarget.value
+          setDraft(nextDraft)
+          if (!nextDraft.trim()) return
+          const parsed = Number(nextDraft)
+          if (!Number.isFinite(parsed)) return
+          const normalized = Math.min(max, Math.max(min, parsed))
+          valueRef.current = normalized
+          onValueChange(normalized)
+        }}
+      />
+      <div className="vt-studio-split-stepper-rail">
+        <button type="button" className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
+          disabled={disabled || value >= max}
+          onPointerDown={(event) => beginHold(1, event)}
+          onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
+          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }}
+        ><ChevronUp aria-hidden="true" /></button>
+        <button type="button" className="vt-studio-split-stepper-down" aria-label={`Decrease ${ariaLabel}`}
+          disabled={disabled || value <= min}
+          onPointerDown={(event) => beginHold(-1, event)}
+          onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
+          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }}
+        ><ChevronDown aria-hidden="true" /></button>
+      </div>
+    </div>
+  )
+}
 
 
 /** Closeable metadata pill with the shared primary/secondary pair and donor-defined motion. */
@@ -986,7 +1423,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
         ))}
       </div>
       {!open ? (
-        <button type="button" className="vt-studio-tag-editor__square-action" aria-label="Add tag" title="Add tag" onClick={openComposer}>
+        <button type="button" className="vt-studio-tag-editor__square-action" data-vt-studio-control="true" data-size="compact" data-vt-studio-tag-editor-action="true" aria-label="Add tag" title="Add tag" onClick={openComposer}>
           <svg viewBox="0 0 16 16" aria-hidden="true"><line x1="8" y1="3" x2="8" y2="13" /><line x1="3" y1="8" x2="13" y2="8" /></svg>
         </button>
       ) : (
@@ -1007,7 +1444,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
               if (event.key === "Escape") { event.preventDefault(); closeComposer(); }
             }}
           />
-          <button type="button" className="vt-studio-tag-editor__square-action" aria-label="Confirm tag" title="Confirm tag" onClick={confirmTag}>
+          <button type="button" className="vt-studio-tag-editor__square-action" data-vt-studio-control="true" data-size="compact" data-vt-studio-tag-editor-action="true" aria-label="Confirm tag" title="Confirm tag" onClick={confirmTag}>
             <svg viewBox="0 0 16 16" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4" /></svg>
           </button>
         </div>
