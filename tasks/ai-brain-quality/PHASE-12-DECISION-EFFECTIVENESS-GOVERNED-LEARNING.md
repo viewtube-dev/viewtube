@@ -2,7 +2,7 @@
 
 **Branch:** `fix/brain-phase-7-9-governance-continuity-2026-10-15`  
 **Pull request:** [#217](https://github.com/viewtube-dev/viewtube/pull/217)  
-**Status:** Evidence-gated candidate creation implemented; governed promotion and causal effectiveness remain unverified end-to-end.
+**Status:** Evidence-gated candidate creation and same-evaluation/channel/project idempotent retries are implemented. Durable governed promotion and causal effectiveness remain unverified end-to-end.
 
 ## Objective
 
@@ -40,7 +40,7 @@ Acceptance is a creator decision signal; publication is exposure evidence; analy
 
 - The current local workflow candidate is not itself canonical Channel Knowledge.
 - A candidate's existence is not proof of effectiveness, causality, or approval.
-- Cross-system retry idempotency, immutable publish transaction joins, analytics attribution, cohort selection, contradiction accumulation, candidate supersession/expiry, and governed Channel Profile promotion remain separate certification work.
+- Cross-system retry idempotency, cohort selection, contradiction accumulation, candidate supersession/expiry, and governed Channel Profile promotion remain separate certification work. Publication identity and canonical video-row evidence joins are implemented in Phases 10–11, but require fresh-account integration verification.
 - The current browser-local ledgers are not a cross-device durable source of truth.
 
 ## Acceptance
