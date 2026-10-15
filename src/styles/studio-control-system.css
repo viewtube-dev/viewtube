@@ -1034,7 +1034,9 @@ button[data-vt-studio-button="true"][data-icon-size-variant="current"][data-size
 button[data-vt-studio-button="true"][data-icon-size-variant="moderate"][data-size="standard"] { --vt-studio-control-icon-size:34px; --vt-studio-control-icon-stroke:2.0588; }
 button[data-vt-studio-button="true"][data-icon-size-variant="moderate"][data-size="compact"] { --vt-studio-control-icon-size:22px; --vt-studio-control-icon-stroke:1.35; }
 button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.8421; }
-button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:1.2375; }/* Separate prominent action family. Not a StudioButton size variant. */
+button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:1.2375; }
+
+/* Separate prominent action family. Not a StudioButton size variant. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
   --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px;
