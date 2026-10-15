@@ -296,6 +296,7 @@ const CreatorVaultOS: React.FC = () => {
  const [activeCollectionId, setActiveCollectionId] = useState<string | null>(null)
  const [targetCollectionId, setTargetCollectionId] = useState("")
  const [taskRefresh, setTaskRefresh] = useState(0)
+ const [showVaultTaskHistory, setShowVaultTaskHistory] = useState(false)
  const [inspectedTaskId, setInspectedTaskId] = useState<string | null>(null)
  const [scratchpadRefresh, setScratchpadRefresh] = useState(0)
  const [scratchpadTitle, setScratchpadTitle] = useState("")
@@ -336,7 +337,7 @@ const CreatorVaultOS: React.FC = () => {
  const tasks = useMemo(() => listVaultTasks(), [taskRefresh])
  const activeVaultTasks = tasks.filter((task) => task.status === "queued" || task.status === "processing")
  const failedVaultTasks = tasks.filter((task) => task.status === "failed")
- const completedVaultTasks = tasks.filter((task) => task.status === "completed").slice(0, 5)
+ const completedVaultTasks = tasks.filter((task) => task.status === "completed")
  const vaultHealthGroups = useMemo(() => [
   {
    id: "unassigned",
@@ -2929,7 +2930,7 @@ const CreatorVaultOS: React.FC = () => {
        persistenceId="vault-task-center"
       >
        <div className="flex flex-col gap-2">
-        {activeVaultTasks.length || failedVaultTasks.length || completedVaultTasks.length ? [...failedVaultTasks, ...activeVaultTasks, ...completedVaultTasks].slice(0, 12).map((task) => (
+        {activeVaultTasks.length || failedVaultTasks.length || completedVaultTasks.length ? [...failedVaultTasks, ...activeVaultTasks, ...(showVaultTaskHistory ? completedVaultTasks : completedVaultTasks.slice(0, 5))].slice(0, showVaultTaskHistory ? 100 : 12).map((task) => (
          <React.Fragment key={task.id}>
          <div data-vault-task-status={task.status} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
           <div className="min-w-0">
@@ -3004,6 +3005,17 @@ const CreatorVaultOS: React.FC = () => {
         )) : (
          <SubToolboxStatePanel level="l1" state="empty" message="No Vault background tasks yet." />
         )}
+        {completedVaultTasks.length ? (
+         <div className="flex flex-wrap items-center gap-2" data-vault-task-history>
+          <span className="text-xs font-bold opacity-60">{completedVaultTasks.length} completed task{completedVaultTasks.length === 1 ? "" : "s"}</span>
+          <SubToolboxInnerActionButton
+           label={showVaultTaskHistory ? "Hide Task History" : "View Task History"}
+           iconName="search"
+           tone="cyan"
+           onClick={() => setShowVaultTaskHistory((current) => !current)}
+          />
+         </div>
+        ) : null}
         {tasks.some((task) => task.status === "completed") ? (
          <SubToolboxInnerActionButton
           label="Clear Completed"
