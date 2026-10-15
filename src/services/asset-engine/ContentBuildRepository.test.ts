@@ -10,6 +10,7 @@ import {
  deriveLegacyContentBuildId,
  getContentBuild,
  listContentBuildEvents,
+ appendContentBuildEvent,
  resetContentBuildRepositoryForTests,
  setContentBuildSelection,
  selectContentBuildVariant,
@@ -97,6 +98,69 @@ describe("ContentBuild repository", () => {
   const events = listContentBuildEvents("cb-selection")
   expect(events.filter(event => event.eventType === "asset.selected" && event.entityId === "thumbnail")).toHaveLength(1)
   expect(events.filter(event => event.eventType === "asset.finalized" && event.entityId === "thumbnail")).toHaveLength(1)
+ })
+
+ it("deduplicates lifecycle events by an explicit idempotency key", () => {
+  createContentBuild({ id: "cb-idempotent-events" })
+  const first = appendContentBuildEvent({
+   contentBuildId: "cb-idempotent-events",
+   eventType: "analytics.checkpoint",
+   entityType: "analytics-checkpoint",
+   entityId: "checkpoint-7d",
+   idempotencyKey: "checkpoint:cb-idempotent-events:yt-7:7d",
+   metadata: { checkpointId: "7d" },
+  })
+  const replay = appendContentBuildEvent({
+   contentBuildId: "cb-idempotent-events",
+   eventType: "analytics.checkpoint",
+   entityType: "analytics-checkpoint",
+   entityId: "checkpoint-7d",
+   idempotencyKey: "checkpoint:cb-idempotent-events:yt-7:7d",
+   metadata: { checkpointId: "7d" },
+  })
+
+  expect(replay.id).toBe(first.id)
+  expect(listContentBuildEvents("cb-idempotent-events").filter(event =>
+   event.idempotencyKey === "checkpoint:cb-idempotent-events:yt-7:7d"
+  )).toHaveLength(1)
+ })
+
+ it("rejects reuse of an idempotency key for a different event", () => {
+  createContentBuild({ id: "cb-idempotency-conflict" })
+  appendContentBuildEvent({
+   contentBuildId: "cb-idempotency-conflict",
+   eventType: "analytics.checkpoint",
+   entityType: "analytics-checkpoint",
+   entityId: "checkpoint-a",
+   idempotencyKey: "shared-checkpoint-key",
+  })
+
+  expect(() => appendContentBuildEvent({
+   contentBuildId: "cb-idempotency-conflict",
+   eventType: "publish.transaction.completed",
+   entityType: "publish-transaction",
+   entityId: "transaction-b",
+   idempotencyKey: "shared-checkpoint-key",
+  })).toThrow(/idempotency key was reused/)
+ })
+
+ it("does not duplicate a post-publish YouTube binding when its write is replayed", () => {
+  createContentBuild({ id: "cb-idempotent-binding", channelId: "channel-a" })
+  const input = {
+   contentBuildId: "cb-idempotent-binding",
+   channelId: "channel-a",
+   videoId: "yt-idempotent",
+   status: "published" as const,
+   publishedAt: "2026-10-15T00:00:00.000Z",
+   idempotencyKey: "post-publish-binding:tx-1:snapshot-hash",
+  }
+  const first = bindYouTubeVideo(input)
+  const eventCount = listContentBuildEvents("cb-idempotent-binding").length
+  const replay = bindYouTubeVideo(input)
+
+  expect(replay.revision).toBe(first.revision)
+  expect(listContentBuildEvents("cb-idempotent-binding")).toHaveLength(eventCount)
+  expect(replay.youtube?.videoId).toBe("yt-idempotent")
  })
 
  it("binds the same build to a published YouTube identity", () => {

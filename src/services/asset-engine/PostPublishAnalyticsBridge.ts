@@ -10,7 +10,7 @@ import {
   type AlgorithmEvaluationTarget,
 } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { BrainConfidenceLevel } from "../../types"
-import type { ContentBuildEvent, ContentBuildYouTubeBinding } from "./contracts"
+import { CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION, type ContentBuildEvent, type ContentBuildPublicationIdentity, type ContentBuildYouTubeBinding } from "./contracts"
 
 export interface PostPublishIdentityInput {
   transactionId: string
@@ -23,6 +23,7 @@ export interface PostPublishIdentityInput {
 
 export interface PostPublishIdentityReceipt {
   event: ContentBuildEvent
+  identity: ContentBuildPublicationIdentity
   contentBuildId: string
   projectId: string
   videoId: string
@@ -91,16 +92,37 @@ export const recordPostPublishIdentity = (
   if (build.youtube?.videoId && build.youtube.videoId !== videoId) {
     throw new Error("ContentBuild is already bound to a different YouTube video; refusing to overwrite lineage.")
   }
+  const identityKey = `post-publish-identity:${transaction.id}:${snapshot.hash}`
+  const bindingKey = `post-publish-binding:${transaction.id}:${snapshot.hash}`
+  const identity: ContentBuildPublicationIdentity = {
+    schemaVersion: CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION,
+    contentBuildId: build.id,
+    projectId: snapshot.projectId,
+    projectAssociationStatus: build.legacyProjectId === snapshot.projectId ? "verified" : "snapshot-only",
+    videoPackageId: transaction.videoPackageId,
+    publishTransactionId: transaction.id,
+    youtubeVideoId: videoId,
+    channelId: build.channelId || null,
+    approvedSnapshotId: snapshot.id,
+    approvedSnapshotHash: snapshot.hash,
+    selectedVariantAssetIds: assetIds,
+    correlationId: input.correlationId || transaction.id,
+    idempotencyKey: identityKey,
+    publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
+  }
   const existingReceipt = listContentBuildEvents(build.id).find(event =>
     event.eventType === "youtube.state.changed" &&
     event.entityType === "publish-identity-receipt" &&
     event.entityId === transaction.id &&
-    (event.metadata as Record<string, unknown> | undefined)?.approvedSnapshotHash === snapshot.hash
+    ((event.idempotencyKey === identityKey) ||
+      (event.metadata as Record<string, unknown> | undefined)?.idempotencyKey === identityKey ||
+      (event.metadata as Record<string, unknown> | undefined)?.approvedSnapshotHash === snapshot.hash)
   )
 
   if (existingReceipt) {
     return {
       event: existingReceipt,
+      identity,
       contentBuildId: build.id,
       projectId: snapshot.projectId,
       videoId,
@@ -111,6 +133,7 @@ export const recordPostPublishIdentity = (
   }
 
   const binding = bindYouTubeVideo({
+    idempotencyKey: bindingKey,
     contentBuildId: build.id,
     videoId,
     channelId: build.channelId || null,
@@ -128,6 +151,7 @@ export const recordPostPublishIdentity = (
 
   const event = appendContentBuildEvent({
     contentBuildId: build.id,
+    idempotencyKey: identityKey,
     eventType: "youtube.state.changed",
     entityType: "publish-identity-receipt",
     entityId: transaction.id,
@@ -141,19 +165,14 @@ export const recordPostPublishIdentity = (
     metadata: {
       publishTransactionId: transaction.id,
       operationId: transaction.id,
-      correlationId: input.correlationId || transaction.id,
-      idempotencyKey: transaction.idempotencyKey,
-      contentBuildId: build.id,
-      projectId: snapshot.projectId,
-      videoId,
-      approvedSnapshotId: snapshot.id,
-      approvedSnapshotHash: snapshot.hash,
-      selectedVariantAssetIds: assetIds,
+      ...identity,
+      publishIdempotencyKey: transaction.idempotencyKey,
     },
   })
 
   return {
     event,
+    identity,
     contentBuildId: build.id,
     projectId: snapshot.projectId,
     videoId,
@@ -224,6 +243,7 @@ export const recordAnalyticsCheckpointForEvaluation = (
   )) {
     appendContentBuildEvent({
       contentBuildId: build.id,
+      idempotencyKey: eventId,
       eventType: "analytics.checkpoint",
       entityType: "analytics-checkpoint",
       entityId: eventId,
