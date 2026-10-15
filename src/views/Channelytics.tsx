@@ -12,6 +12,7 @@ import {
   Database
 } from 'lucide-react';
 import { useBrain } from '../context/useBrain';
+import { useCanonicalRows } from '../services/analytics-canon';
 import { analyzeChannelData } from '../services/gemini';
 import type { CsvFileWithTag, ChartConfig, CsvUploadType } from '../types';
 import ReportViewer from '../components/ReportViewer';
@@ -26,11 +27,11 @@ import {
 import { dedupeByVideoDate, normalizeAndEnrichRow } from '../services/DataEngine';
 import {
   canonicalRowsToMasterTableRows,
-  getMasterRows,
 } from '../services/analytics/Selectors';
 
 const Channelytics: React.FC = () => {
   const { brain, updateBrain, registerProvider, unregisterProvider, setResearchLabState } = useBrain();
+  const canonicalRows = useCanonicalRows("lifetime");
   const csvFiles = brain.channelyticsState.csvFiles ?? [];
 
   const [isUploading, setIsUploading] = useState(false);
@@ -104,7 +105,6 @@ const Channelytics: React.FC = () => {
     // 2. Process API Data
     if (dataSource === 'analytics' || dataSource === 'both') {
       try {
-        const canonicalRows = getMasterRows('lifetime', 'api');
         const apiRows = canonicalRowsToMasterTableRows(canonicalRows).map((row, idx) =>
           normalizeAndEnrichRow({
             ...row,
