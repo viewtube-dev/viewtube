@@ -739,6 +739,10 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (method === "POST" && pathname === "/api/media/compress-analysis") {
+      if (parsedUrl.searchParams.get("vaultOperation") === "1") {
+        const userId = await getAuthenticatedViewtubeUserId(req);
+        if (!userId) return json(res, 401, { error: "Authentication required for Vault media processing." });
+      }
       return await handleCompressAnalysisRoute(req, res);
     }
 
