@@ -1076,6 +1076,16 @@ https://support.google.com/youtube/thread/333869549
 
 ---
 
+## Field Exercise: Compare Formats Without Flattening Them
+
+Choose one viewer need and outline how a Short and a long-form video could each satisfy it. Write the intended viewing context, opening promise, main payoff, and next step for each format. Review each upload against its own format-appropriate metrics and retention pattern before making any cross-format comparison.
+
+Use a comparison sheet with four columns: shared audience need, format-specific execution, observed result, and next experiment. Where metrics differ in definition or counting rules, label them rather than putting them in a single “winner” ranking. A Short can be effective at discovery while a longer video is better suited to depth; that is a strategy choice, not a universal law. The useful question is whether each format served the goal it was designed for.
+
+## Evidence Boundary: Cross-Format Conclusions
+
+Views, engaged views, retention displays, and discovery contexts may not be directly comparable across formats or across changes in reporting definitions. A result from one upload does not establish a general rule about the format. Audience overlap, topic, length, distribution, and creative execution can all differ at once. State the exact comparison and its limitations, and recheck current platform definitions before interpreting a trend across a reporting change.
+
 ## Document Maintenance
 
 | Attribute | Value |
