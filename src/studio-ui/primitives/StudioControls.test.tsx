@@ -54,6 +54,8 @@ describe("Studio text field library entries", () => {
     expect(html).toContain('data-vt-library-component="StudioTextArea"');
     expect(html).toContain('aria-label="Canonical Studio text input"');
     expect(html).toContain('aria-label="Canonical Studio text area"');
+    expect(html).toContain('data-vt-studio-icon-button="true"');
+    expect(html).toContain('data-icon-variant="v4"');
   });
 });
 
@@ -179,6 +181,8 @@ describe("canonical square icon button family", () => {
     expect(standard).toContain('data-icon-variant="v2"')
     expect(standard).toContain('data-icon-variant="v3"')
     expect(standard).toContain('data-icon-variant="v4"')
+    expect(standard).toContain('aria-pressed="false"')
+    expect(renderToStaticMarkup(<StudioSquareIconButton icon={<span>ICON</span>} label="Selected" variant="v3" selected />)).toContain('aria-pressed="true"')
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('data-height-variant="44"')
     expect(compact).toContain('data-size="compact"')
