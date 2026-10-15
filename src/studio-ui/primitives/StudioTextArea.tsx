@@ -81,8 +81,8 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
     const fieldId = id ?? `studio-text-area-${generatedId}`
 
     if (variant === "fixed-label") {
-      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
-      void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant, _placeholder]
+      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
+      void [_variant, _label, _level, _sizeVariant, _placeholder]
       return (
         <div
           data-vt-primitive-id="144"
@@ -113,8 +113,8 @@ export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAr
     }
 
     if (variant === "floating-label") {
-      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
-      void [_variant, _label, _level, _sizeVariant, _placeholder]
+      const { className, style, fieldClassName, fieldStyle, variant: _variant, label: _label, level: _level, floatingLabelVariant: _floatingLabelVariant, sizeVariant: _sizeVariant, placeholder: _placeholder, ...areaProps } = props
+      void [_variant, _label, _level, _floatingLabelVariant, _sizeVariant, _placeholder]
       return (
         <div
           data-vt-primitive-id="142"
