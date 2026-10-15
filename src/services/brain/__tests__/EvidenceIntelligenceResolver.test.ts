@@ -71,14 +71,16 @@ const makeDeps = (
 })
 
 describe("EvidenceIntelligenceResolver", () => {
- it("builds one runtime evidence envelope from one canonical analytics snapshot", () => {
+ it("builds one runtime evidence envelope from one canonical analytics snapshot and forwards the requested window", () => {
   const deps = makeDeps()
 
   const result = resolveEvidenceIntelligence({
    channelId: "channel-1",
+   window: "90d",
+   sectionIds: ["algorithm-diagnosis"],
    includeAudience: true,
    includeOpportunities: true,
-   brainEvidencePack: { topVideos: [], searchTerms: [], trafficSources: [] } as any,
+   brainEvidencePack: { channelId: "channel-1", topVideos: [], searchTerms: [], trafficSources: [] } as any,
   }, deps)
 
   expect(result.version).toBe("vt-evidence-intelligence-v1")
@@ -90,26 +92,33 @@ describe("EvidenceIntelligenceResolver", () => {
   expect(result.opportunityEvidence).toBe(opportunities)
   expect(result.scopeUsable).toBe(true)
   expect(deps.getCanonicalEvidence).toHaveBeenCalledTimes(1)
+  expect(deps.getCanonicalEvidence).toHaveBeenCalledWith({
+   window: "90d",
+   sectionIds: ["algorithm-diagnosis"],
+   maximumRowsPerDataset: 5,
+   maximumCharacters: 16_000,
+  })
   expect(deps.projectEvidence).toHaveBeenCalledTimes(1)
   expect(deps.projectEvidence).toHaveBeenCalledWith(canonicalEvidence)
  })
 
- it("blocks canonical analytics-derived evidence and specialists when evidence belongs to another channel", () => {
+ it("blocks all analytics-derived projections when canonical evidence belongs to another channel", () => {
   const deps = makeDeps({ ...evidenceQuality, scopeMatch: "mismatch", confidence: "insufficient" } as any)
 
   const result = resolveEvidenceIntelligence({
    channelId: "channel-2",
    includeAudience: true,
    includeOpportunities: true,
-   brainEvidencePack: { topVideos: [], searchTerms: [], trafficSources: [] } as any,
+   brainEvidencePack: { channelId: "channel-2", topVideos: [], searchTerms: [], trafficSources: [] } as any,
   }, deps)
 
   expect(result.scopeUsable).toBe(false)
   expect(result.evidenceRecords).toEqual([])
   expect(result.statisticsIntelligence).toBeNull()
   expect(result.audienceIntelligence).toBeNull()
-  expect(result.opportunityEvidence).toBe(opportunities)
+  expect(result.opportunityEvidence).toEqual([])
   expect(deps.projectEvidence).not.toHaveBeenCalled()
+  expect(deps.buildOpportunities).not.toHaveBeenCalled()
  })
 
  it("does not build optional audience or opportunity projections when the task does not request them", () => {
@@ -125,6 +134,18 @@ describe("EvidenceIntelligenceResolver", () => {
   expect(result.audienceIntelligence).toBeNull()
   expect(result.opportunityEvidence).toEqual([])
   expect(deps.buildAudience).not.toHaveBeenCalled()
+  expect(deps.buildOpportunities).not.toHaveBeenCalled()
+ })
+
+ it("blocks opportunity evidence that is explicitly scoped to a different channel", () => {
+  const deps = makeDeps()
+  const result = resolveEvidenceIntelligence({
+   channelId: "channel-1",
+   includeOpportunities: true,
+   brainEvidencePack: { channelId: "channel-2", topVideos: [], searchTerms: [], trafficSources: [] } as any,
+  }, deps)
+
+  expect(result.opportunityEvidence).toEqual([])
   expect(deps.buildOpportunities).not.toHaveBeenCalled()
  })
 })
