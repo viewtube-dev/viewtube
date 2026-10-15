@@ -269,7 +269,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       title="Circle Icon Button · 44px + 28px"
       nonDefaultSettings={[
         "Circle is a shape variant of StudioSquareIconButton, not a copied button implementation. Palette, icon preset, disabled state, focus, and press behavior remain shared.",
-        "Standard is 44×44px; compact is 28×28px. The default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 compact.",
+        "Standard is 44×44px; compact is 28×28px. Circle buttons render the default large icon preset at 80% of its canonical dimensions: 30.4px / 1.9 stroke standard and 19.2px / 2.0 compact.",
         "V1–V4 variants and opt-in square-button effects are inherited from the canonical square icon button."
       ]}
       provenance={<Provenance primitive="StudioCircleIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Circular shape wrapper over StudioSquareIconButton; shared V1–V4, sizing, effects, and accessibility contracts." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
