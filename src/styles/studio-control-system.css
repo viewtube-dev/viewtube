@@ -1210,7 +1210,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-icon-current] {
   transform-origin: center;
 }
 button[data-vt-studio-icon-button="true"].is-effect-pop[data-pop="true"] [data-vt-square-icon-current],
-button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge="true"] [data-vt-square-icon-current] {
+button[data-vt-studio-icon-button="true"].is-effect-notification[data-notification-pulse="true"] [data-vt-square-icon-current] {
   animation: vt-studio-square-pop 180ms cubic-bezier(.2,.8,.2,1);
 }
 button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge="true"] [data-vt-square-badge] {
@@ -1233,9 +1233,11 @@ button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge=
   text-transform: none;
   -webkit-text-stroke: 0;
   pointer-events: none;
+}
+button[data-vt-studio-icon-button="true"].is-effect-notification[data-notification-pulse="true"] [data-vt-square-badge] {
   animation: vt-studio-square-pop 220ms cubic-bezier(.2,.8,.2,1);
 }
-button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge="true"]:not(:disabled) [data-vt-square-icon-current] {
+button[data-vt-studio-icon-button="true"].is-effect-notification[data-notification-pulse="true"]:not(:disabled) [data-vt-square-icon-current] {
   animation: vt-studio-square-shake 320ms ease-in-out;
 }
 button[data-vt-studio-icon-button="true"].is-effect-notification [data-vt-square-badge] {
