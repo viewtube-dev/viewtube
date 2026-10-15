@@ -40,6 +40,11 @@ export const buildBrainContextPack = (input: {
   : readBrainUserControls(input.channelId)
  const maximumCharacters = input.maximumCharacters || 24_000
  const omittedSections: string[] = []
+ const analyticsScopeBlocked = Boolean(
+  controls.allowAnalytics
+  && input.evidenceQuality
+  && (input.evidenceQuality.scopeMatch === "mismatch" || input.evidenceQuality.scopeMatch === "unscoped"),
+ )
  const system = clip(input.systemPrompt, 11_000)
  if (system.length < input.systemPrompt.length) omittedSections.push("system_overflow")
 
@@ -64,7 +69,7 @@ export const buildBrainContextPack = (input: {
    ].filter(Boolean).join("\n"), 3200)
   : ""
 
- const evidence = controls.allowAnalytics
+ const evidence = controls.allowAnalytics && !analyticsScopeBlocked
   ? clip([
     `Channel: ${input.snapshot.channel.label}`,
     `Inferred niche: ${input.snapshot.inferredProfile.niche || "unknown"}`,
@@ -74,12 +79,15 @@ export const buildBrainContextPack = (input: {
      `${video.title}${typeof video.views === "number" ? ` | ${video.views.toLocaleString()} views` : " | views unknown"}`),
     ...input.snapshot.evidencePack.missingInputs.map((value) => `Missing: ${value}`),
    ].join("\n"), 3800)
-  : "Analytics evidence access is disabled by the creator in Brain User Controls. Do not infer private channel metrics or quote stored analytics values."
+  : analyticsScopeBlocked
+   ? "Analytics evidence is blocked because the canonical bundle is unscoped or belongs to a different channel. Do not use channel-specific metrics or performance claims for this turn."
+   : "Analytics evidence access is disabled by the creator in Brain User Controls. Do not infer private channel metrics or quote stored analytics values."
  if (!controls.allowAnalytics) omittedSections.push("analytics_access_disabled")
+ if (analyticsScopeBlocked) omittedSections.push("analytics_scope_blocked")
 
  const evidenceQuality = controls.allowAnalytics && input.evidenceQuality
   ? clip([
-    `confidence=${input.evidenceQuality.confidence}; coverage=${Math.round(input.evidenceQuality.coverageRatio * 100)}%; scope=${input.evidenceQuality.scopeMatch}; refs=${input.evidenceQuality.evidenceReferenceCount}`,
+    `confidence=${input.evidenceQuality.confidence}; coverage=${Math.round(input.evidenceQuality.coverageRatio * 100)}%; scope=${input.evidenceQuality.scopeMatch}; window=${input.evidenceQuality.selectedWindow}; snapshot=${input.evidenceQuality.sourceSnapshotId}; refs=${input.evidenceQuality.evidenceReferenceCount}`,
     ...input.evidenceQuality.missingness.unavailableDatasetIds.slice(0, 10).map((id) => `Missing dataset: ${id}`),
     ...input.evidenceQuality.missingness.failedDatasetIds.slice(0, 10).map((id) => `Failed dataset: ${id}`),
     ...input.evidenceQuality.freshness.staleDatasetIds.slice(0, 10).map((id) => `Stale dataset: ${id}`),
@@ -88,7 +96,7 @@ export const buildBrainContextPack = (input: {
    ].join("\n"), 3200)
   : ""
 
- const statistics = controls.allowAnalytics && input.statisticsIntelligence
+ const statistics = controls.allowAnalytics && !analyticsScopeBlocked && input.statisticsIntelligence
   ? clip([
     `confidence=${input.statisticsIntelligence.confidence}; coverage=${Math.round(input.statisticsIntelligence.coverageRatio * 100)}%; window=${input.statisticsIntelligence.selectedWindow}`,
     ...input.statisticsIntelligence.metrics.slice(0, 18).map((metric) =>
@@ -97,7 +105,7 @@ export const buildBrainContextPack = (input: {
    ].join("\n"), 4200)
   : ""
 
- const audience = controls.allowAnalytics && input.audienceIntelligence
+ const audience = controls.allowAnalytics && !analyticsScopeBlocked && input.audienceIntelligence
   ? clip([
     `confidence=${input.audienceIntelligence.confidence}; window=${input.audienceIntelligence.selectedWindow}`,
     ...input.audienceIntelligence.signals.slice(0, 16).map((signal) =>
@@ -107,7 +115,7 @@ export const buildBrainContextPack = (input: {
    ].join("\n"), 4200)
   : ""
 
- const algorithm = controls.allowAnalytics && input.algorithmIntelligence
+ const algorithm = controls.allowAnalytics && !analyticsScopeBlocked && input.algorithmIntelligence
   ? clip(buildAlgorithmIntelligenceContext(input.algorithmIntelligence), 4800)
   : ""
 
