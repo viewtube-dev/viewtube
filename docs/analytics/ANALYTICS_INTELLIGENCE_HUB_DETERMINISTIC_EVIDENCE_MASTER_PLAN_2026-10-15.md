@@ -154,7 +154,7 @@ Add an Analytics fixture golden path from canonical dataset → deterministic fi
 - [ ] Focused tests, typecheck, lint, full suite, production build and relevant browser smoke are run on the final head.
 - [ ] CI and branch/PR conflicts are checked; no merge/deployment claim without evidence.
 
-## Phase 0–4 implementation receipt
+## Phase 0–8 implementation receipt
 
 Code paths and current branch state are recorded below. Runtime wiring and release certification are separate gates; do not mark them complete without actual test and CI evidence.
 
@@ -164,3 +164,16 @@ Code paths and current branch state are recorded below. Runtime wiring and relea
 - Phase 3: unified finding fields and `toDerivedSignal` adapter are implemented in `src/services/brain/DeterministicAnalyticsInsights.ts`; existing `DerivedSignalKind` now includes `material-change` and `contribution`. No parallel evidence store was added.
 - Phase 4: descriptive linear trends and existing-anomaly adapters are implemented in the same service. Trend calculation rejects invalid/duplicate dates, unsupported metrics, unavailable evidence, incomplete series and too few observations; it never imputes missing dates as zero. Anomaly records retain detector-produced values/scores and source evidence.
 - Runtime integration / release verification: these helpers are implemented but are not yet wired into the live Intelligence Hub/Brain request path. GitHub Actions release-gate runs on earlier heads were cancelled after subsequent commits; latest-head checks must be reviewed. Vercel statuses have reported build-rate-limit failures. Tests, typecheck, full suite, build, and browser verification have not been verified from this session; keep the work un-certified until those gates pass and results are reviewed.
+
+
+### Phase 5–8 implementation receipt (work branch pending review/merge)
+
+- Added `src/services/brain/AnalyticsIntelligenceWorkflow.ts`:
+  - Phase 5: evidence-linked presentation projection keeps fact, interpretation, hypothesis, and recommendation as separate layers.
+  - Phase 6: exact-channel Brain finding context with validated deterministic values, formula/version, source snapshot IDs, evidence refs, limitations, and a bounded list.
+  - Phase 7: creator-goal-aware proposed action contract retains finding/evidence/project linkage, baseline, expected direction, and declared evaluation window; proposals are not approved or executed.
+  - Phase 8: comparability-guarded before/after evaluation; zero baseline produces null percent change; causal conclusion stays null; learning candidate requires repeated evaluations and remains review-only.
+- Added `src/services/brain/AnalyticsIntelligenceWorkflow.test.ts` for layer separation, scope blocking, finding filtering, recommendation provenance, metric mismatch rejection, zero-baseline behavior, and learning-review safeguards.
+- Added the workflow test to `npm run test:focused`.
+- Extended `src/services/brain/EvidenceIntelligenceResolver.ts` with an optional deterministic finding input and scope-guarded context projection. Existing callers may omit it without changing their current behavior.
+- **Not yet certified:** no local test/typecheck/build was run in this session. The findings input is optional and not yet populated by the live Brain caller; the Intelligence Hub UI is not yet rendering the projection; action/evaluation records are not yet written into the canonical Project/publication/outcome owners; end-to-end and production persistence checks remain open.
