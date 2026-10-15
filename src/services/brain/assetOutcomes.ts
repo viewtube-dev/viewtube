@@ -204,6 +204,16 @@ export const recordAssetOutcome = async (input: {
  const asset = getGeneratedAsset(input.assetId) as AssetRecord | null
  if (!asset) return null
 
+ if (input.idempotencyKey) {
+  const existing = readOutcomes().find((entry) =>
+   entry.idempotencyKey === input.idempotencyKey &&
+   entry.assetId === asset.id &&
+   entry.channelId === asset.channelId &&
+   entry.kind === input.kind
+  )
+  if (existing) return existing
+ }
+
  const generated = input.generatedText
   ?? (typeof (asset.output as { body?: unknown })?.body === "string"
    ? String((asset.output as { body: string }).body)
@@ -227,6 +237,7 @@ export const recordAssetOutcome = async (input: {
     }
    : {}),
   traceId: asset.traceId,
+  ...(input.idempotencyKey ? { idempotencyKey: input.idempotencyKey } : {}),
  }
 
  persist(outcome)
@@ -240,6 +251,10 @@ export const recordAssetOutcome = async (input: {
    outcome: BRAIN_OUTCOME_FOR_KIND[input.kind],
    summary: `${asset.assetType} ${input.kind}${input.note ? `: ${input.note}` : ""}`,
    evidence: asset.evidenceRefs,
+   sourceRecordId: outcome.id,
+   traceId: outcome.traceId,
+   assetId: asset.id,
+   assetType: asset.assetType,
    // What the creator did is direct evidence; a style score is an inference about it.
    confidence: input.kind === "edited" || input.kind === "rejected" ? "high" : "medium",
   })
