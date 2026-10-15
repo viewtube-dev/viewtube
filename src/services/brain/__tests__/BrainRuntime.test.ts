@@ -50,6 +50,7 @@ describe("BrainRuntime", () => {
    allowModel: true,
    surface: "ai-brain",
    projectId: "project-1",
+   analyticsWindow: "90d",
    visibleContext: { selectedVideoId: "video-1", contentBuildId: "cb-1" },
    artifactRefs: ["asset-1", "asset-1", "asset-2"],
    requestedOutput: "strategy brief",
@@ -69,6 +70,7 @@ describe("BrainRuntime", () => {
    nicheResolver: undefined,
    currentResearcher: undefined,
    projectId: "project-1",
+   analyticsWindow: "90d",
    visibleContext: { selectedVideoId: "video-1", contentBuildId: "cb-1" },
    artifactRefs: ["asset-1", "asset-1", "asset-2"],
   })

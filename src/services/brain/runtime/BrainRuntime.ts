@@ -21,6 +21,7 @@ const toLegacyInput = (input: BrainRuntimeRequest): RunBrainTurnInput => ({
  nicheResolver: input.nicheResolver,
  currentResearcher: input.currentResearcher,
  projectId: input.projectId,
+ analyticsWindow: input.analyticsWindow,
  visibleContext: input.visibleContext,
  artifactRefs: input.artifactRefs,
 })
