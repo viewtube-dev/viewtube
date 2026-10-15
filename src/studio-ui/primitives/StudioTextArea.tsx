@@ -7,44 +7,107 @@ const withStudioAttrs = (size: StudioControlSize) => ({
   "data-size": size,
 })
 
-/**
- * Canonical multiline Studio writing-surface family.
- * Standalone and floating-label textareas share typography and multiline geometry.
- */
-export const StudioTextArea = React.forwardRef<
-  HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", rows, placeholder = "TYPE HERE", spellCheck = false, autoCorrect = "off", autoCapitalize = "off", ...props }, ref) => (
-  <textarea
-    ref={ref}
-    rows={rows ?? 4}
-    data-vt-studio-field-kind="textarea"
-    placeholder={placeholder}
-    spellCheck={spellCheck}
-    autoCorrect={autoCorrect}
-    autoCapitalize={autoCapitalize}
-    {...props}
-    {...withStudioAttrs(sizeVariant)}
-  />
-))
-StudioTextArea.displayName = "StudioTextArea"
-
-export interface StudioLabeledTextAreaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "placeholder"> {
-  label: string
+type StudioTextAreaBaseProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   sizeVariant?: StudioControlSize
-  level?: "l0" | "l1" | "l2"
 }
 
-/** Floating-label textarea composed from the canonical multiline family. */
-export const StudioLabeledTextArea = React.forwardRef<HTMLTextAreaElement, StudioLabeledTextAreaProps>(
-  ({ label, sizeVariant = "standard", level = "l1", className, style, id, ...props }, ref) => {
+type StudioTextAreaSimpleProps = StudioTextAreaBaseProps & {
+  variant?: "simple"
+  label?: never
+  level?: never
+  fieldClassName?: never
+  fieldStyle?: never
+}
+
+type StudioTextAreaFloatingLabelProps = Omit<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  "placeholder" | "className" | "style"
+> & {
+  sizeVariant?: StudioControlSize
+  /** Render the canonical writing surface with the shared floating-label treatment. */
+  variant: "floating-label"
+  label: string
+  level?: "l0" | "l1" | "l2"
+  /** className/style target the field wrapper in floating-label mode. */
+  className?: string
+  style?: React.CSSProperties
+  /** Optional direct styling for the native textarea inside the wrapper. */
+  fieldClassName?: string
+  fieldStyle?: React.CSSProperties
+}
+
+export type StudioTextAreaProps = StudioTextAreaSimpleProps | StudioTextAreaFloatingLabelProps
+
+/**
+ * Canonical multiline Studio writing-surface family.
+ * Simple and floating-label presentations are variants of this one primitive.
+ * Textarea typography alone is 18px standard / 14px compact; the 92px minimum
+ * writing surface, multiline padding, and vertical resize remain shared by variants.
+ */
+export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAreaProps>(
+  (props, ref) => {
     const generatedId = React.useId()
-    const fieldId = id ?? `studio-labeled-textarea-${generatedId}`
-    return <div data-vt-primitive-id="142" data-vt-studio-field="floating-textarea" data-vt-control-level={level}
-      className={["vt-studio-floating-field", "is-textarea", className].filter(Boolean).join(" ")} style={style}>
-      <StudioTextArea ref={ref} id={fieldId} sizeVariant={sizeVariant} placeholder=" " {...props} />
-      <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
-    </div>
+    const {
+      variant = "simple",
+      label,
+      level = "l1",
+      sizeVariant = "standard",
+      rows,
+      placeholder = "TYPE HERE",
+      spellCheck = false,
+      autoCorrect = "off",
+      autoCapitalize = "off",
+      id,
+    } = props
+    const fieldId = id ?? `studio-text-area-${generatedId}`
+
+    if (variant === "floating-label") {
+      const { className, style, fieldClassName, fieldStyle, ...areaProps } = props
+      return (
+        <div
+          data-vt-primitive-id="142"
+          data-vt-studio-field="floating-textarea"
+          data-vt-studio-field-variant="floating-label"
+          data-vt-control-level={level}
+          className={["vt-studio-floating-field", "is-textarea", className].filter(Boolean).join(" ")}
+          style={style}
+        >
+          <textarea
+            ref={ref}
+            id={fieldId}
+            rows={rows ?? 4}
+            data-vt-studio-field-kind="textarea"
+            placeholder=" "
+            spellCheck={spellCheck}
+            autoCorrect={autoCorrect}
+            autoCapitalize={autoCapitalize}
+            {...areaProps}
+            className={fieldClassName}
+            style={fieldStyle}
+            {...withStudioAttrs(sizeVariant)}
+          />
+          <label className="vt-studio-floating-field-label" htmlFor={fieldId}>{label}</label>
+        </div>
+      )
+    }
+
+    const { className, style, ...areaProps } = props
+    return (
+      <textarea
+        ref={ref}
+        id={id}
+        rows={rows ?? 4}
+        data-vt-studio-field-kind="textarea"
+        placeholder={placeholder}
+        spellCheck={spellCheck}
+        autoCorrect={autoCorrect}
+        autoCapitalize={autoCapitalize}
+        {...areaProps}
+        className={className}
+        style={style}
+        {...withStudioAttrs(sizeVariant)}
+      />
+    )
   },
 )
-StudioLabeledTextArea.displayName = "StudioLabeledTextArea"
+StudioTextArea.displayName = "StudioTextArea"
