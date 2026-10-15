@@ -13,6 +13,7 @@ import type { VaultAsset } from "../../types";
 export interface VaultVideoWorkbenchProps {
   asset: VaultAsset;
   onDerivativeCreated?: () => void;
+  onOperationUpdated?: () => void;
 }
 
 const extensionFor = (mimeType: string) => mimeType === "image/jpeg" ? "jpg" : mimeType === "image/png" ? "png" : mimeType === "audio/mp4" ? "m4a" : mimeType === "video/webm" ? "webm" : "mp4";
@@ -56,7 +57,7 @@ const loadVaultVideoSourceBlob = async (asset: VaultAsset): Promise<Blob> => {
   return response.blob();
 };
 
-export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset, onDerivativeCreated }) => {
+export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset, onDerivativeCreated, onOperationUpdated }) => {
   const [operation, setOperation] = React.useState<VaultVideoOperation>("trim");
   const [quality, setQuality] = React.useState<VaultVideoQuality>("balanced");
   const [startSeconds, setStartSeconds] = React.useState(0);
@@ -232,6 +233,7 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
       transitionVaultOperation(operationRecord.id, "failed", {
         error: caught instanceof Error ? caught.message : "Could not store the media derivative.",
       });
+      onOperationUpdated?.();
       setError(caught instanceof Error ? caught.message : "Could not store the media derivative.");
     }
   };
