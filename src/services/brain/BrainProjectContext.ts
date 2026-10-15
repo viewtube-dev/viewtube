@@ -35,8 +35,17 @@ export const buildAlgorithmProjectContext = (input: {
  const visible = input.visibleContext || {}
  const contentBuildMatchesProject = Boolean(
   input.contentBuild
-  && (!project?.contentBuildId || input.contentBuild.id === project.contentBuildId)
-  && (!input.contentBuild.legacyProjectId || input.contentBuild.legacyProjectId === projectId),
+  && input.contentBuild.channelId === channelId
+  && (
+   project
+    ? (
+      project.contentBuildId
+       ? input.contentBuild.id === project.contentBuildId
+       : input.contentBuild.legacyProjectId === projectId
+     )
+     && (!input.contentBuild.legacyProjectId || input.contentBuild.legacyProjectId === projectId)
+    : input.contentBuild.legacyProjectId === projectId
+  ),
  )
  const contentBuild = contentBuildMatchesProject ? input.contentBuild || null : null
  const profile = contentBuild?.profile || {}

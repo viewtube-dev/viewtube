@@ -98,4 +98,46 @@ describe("BrainProjectContext", () => {
   expect(buildAlgorithmProjectContext({ channelId: "channel-a", projectId: null })).toBeNull()
   expect(buildAlgorithmProjectContext({ channelId: null, projectId: "project-a" })).toBeNull()
  })
+ it("does not attach an unrelated ContentBuild when the canonical Project link is absent", () => {
+  const unrelatedBuild: ContentBuildSnapshot = {
+   schemaVersion: CONTENT_BUILD_SCHEMA_VERSION,
+   id: "cb-unrelated",
+   revision: 3,
+   channelId: "channel-a",
+   stage: "package",
+   assetIds: [],
+   selections: {},
+   relations: [],
+   versions: [],
+   variantGroups: [],
+   workflow: { completedStepIds: [], blockerIds: [] },
+   profile: { topic: "Unrelated project topic" },
+   createdAt: "2026-10-15T00:00:00.000Z",
+   updatedAt: "2026-10-15T00:00:00.000Z",
+  }
+
+  expect(buildAlgorithmProjectContext({
+   channelId: "channel-a",
+   projectId: "project-a",
+   contentBuild: unrelatedBuild,
+   visibleContext: { contentBuildId: "cb-visible", topic: "Visible topic" },
+  })).toMatchObject({
+   channelId: "channel-a",
+   projectId: "project-a",
+   contentBuildId: "cb-visible",
+   topic: "Visible topic",
+  })
+  const withoutVisibleFallback = buildAlgorithmProjectContext({
+   channelId: "channel-a",
+   projectId: "project-a",
+   contentBuild: unrelatedBuild,
+  })
+  expect(withoutVisibleFallback).toMatchObject({
+   channelId: "channel-a",
+   projectId: "project-a",
+   contentBuildId: null,
+  })
+  expect(withoutVisibleFallback).not.toHaveProperty("lifecycle")
+ })
+
 })
