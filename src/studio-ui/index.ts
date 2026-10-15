@@ -50,6 +50,7 @@ export type {
   StudioSplitLeftButtonProps,
   StudioSquareIconButtonProps,
   StudioSquareIconButtonVariant,
+  StudioSquareIconButtonEffect,
   StudioControlSkin,
   StudioControlButtonProps,
   StudioChoiceKind,
