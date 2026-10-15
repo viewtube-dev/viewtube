@@ -388,6 +388,8 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    listContentBuildEvents: () => events,
    listBrainTraces: () => [{
     id: "trace-1",
+    operationId: "operation-1",
+    workflowId: "workflow-1",
     channelId: "channel-1",
     kind: "asset",
     createdAt: "2026-09-24T05:01:00.000Z",
@@ -410,6 +412,8 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
    capabilityCount: 14,
    listGenerationRecords: () => [{
     id: "generation-record-1",
+    operationId: "operation-1",
+    workflowId: "workflow-1",
     toolId: "video-publisher",
     provider: "google",
     model: "gemini-2.5-pro",
