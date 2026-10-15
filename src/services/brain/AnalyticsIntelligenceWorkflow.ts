@@ -288,6 +288,12 @@ export const evaluateAnalyticsOutcome = (input: {
     blockedReason = "Baseline and follow-up must use the recommendation's declared canonical window."
   } else if (baseline.snapshotId === followUp.snapshotId) {
     blockedReason = "Baseline and follow-up must use distinct analytics snapshots."
+  } else if (!validPeriodDate(baseline.periodStartDate) || !validPeriodDate(baseline.periodEndDate) || !validPeriodDate(followUp.periodStartDate) || !validPeriodDate(followUp.periodEndDate)) {
+    blockedReason = "Baseline and follow-up must have valid explicit YYYY-MM-DD period boundaries."
+  } else if (baseline.periodStartDate > baseline.periodEndDate || followUp.periodStartDate > followUp.periodEndDate || baseline.periodEndDate >= followUp.periodStartDate) {
+    blockedReason = "Baseline and follow-up periods must be chronological and non-overlapping."
+  } else if (periodDayCount(baseline.periodStartDate, baseline.periodEndDate) !== expectedWindowDays[baseline.window] || periodDayCount(followUp.periodStartDate, followUp.periodEndDate) !== expectedWindowDays[followUp.window]) {
+    blockedReason = "Explicit period lengths must match the declared canonical reporting window."
   } else if (!validNumber(baseline.value) || !validNumber(followUp.value)) {
     blockedReason = "Baseline and follow-up values must be finite numeric observations."
   } else if (!validTimestamp(baseline.observedAt) || !validTimestamp(followUp.observedAt) || Date.parse(followUp.observedAt) <= Date.parse(baseline.observedAt)) {
