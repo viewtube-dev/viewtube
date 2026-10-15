@@ -15,6 +15,23 @@ export interface BrainHandoffInboxItem {
   projectId?: string | null
   channelId?: string | null
   videoId?: string | null
+  creatorId?: string | null
+  contentBuildId?: string | null
+  workflowId?: string | null
+  operationId?: string | null
+  parentPacketId?: string | null
+  recommendationId?: string | null
+  experimentId?: string | null
+  contextManifestId?: string | null
+  promptRecipeId?: string | null
+  promptRecipeVersion?: string | null
+  idempotencyKey?: string | null
+  intent?: ViewTubeActionPacket["intent"]
+  approvalState?: ViewTubeActionPacket["approvalState"]
+  approvedBy?: string | null
+  approvedAt?: string | null
+  approvedSnapshotId?: string | null
+  approvedSnapshotHash?: string | null
   state: BrainHandoffState
   createdAt: number
   updatedAt: number
@@ -59,6 +76,23 @@ export const enqueueBrainHandoffs = (packet: ViewTubeActionPacket) => {
       projectId: packet.projectId,
       channelId: packet.channelId,
       videoId: packet.videoId,
+      creatorId: packet.creatorId || null,
+      contentBuildId: packet.contentBuildId || null,
+      workflowId: packet.workflowId || null,
+      operationId: packet.operationId || null,
+      parentPacketId: packet.parentPacketId || null,
+      recommendationId: packet.recommendationId || null,
+      experimentId: packet.experimentId || null,
+      contextManifestId: packet.contextManifestId || null,
+      promptRecipeId: packet.promptRecipeId || null,
+      promptRecipeVersion: packet.promptRecipeVersion || null,
+      idempotencyKey: packet.idempotencyKey || null,
+      intent: packet.intent || "prepare",
+      approvalState: packet.approvalState || "not-required",
+      approvedBy: packet.approvedBy || null,
+      approvedAt: packet.approvedAt || null,
+      approvedSnapshotId: packet.approvedSnapshotId || null,
+      approvedSnapshotHash: packet.approvedSnapshotHash || null,
       state: "queued" as const,
       createdAt: now,
       updatedAt: now,

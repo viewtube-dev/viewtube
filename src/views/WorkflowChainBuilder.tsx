@@ -525,6 +525,48 @@ const WorkflowChainBuilder: React.FC<WorkflowChainBuilderProps> = (props) => {
     </div>
    </section>
 
+   <section className="rounded-[22px] border-[4px] border-black bg-white shadow-[8px_8px_0px_0px_black]">
+    <div className="border-b-[4px] border-black bg-[#00F0FF] px-6 py-5">
+     <div className="text-[10px] font-black uppercase tracking-[0.22em] text-black/55">
+      Production Handoff Lineage
+     </div>
+     <div className="text-3xl font-[1000] uppercase tracking-[-0.05em]">
+      Exact Workflow Identity
+     </div>
+     <p className="mt-2 max-w-3xl text-xs font-bold leading-5 text-black/65">
+      Canonical ActionPackets, operation receipts, ContentBuild references, evidence, and generated artifacts stay attached to the existing workflow chain.
+     </p>
+    </div>
+    <div className="grid gap-4 p-5 md:grid-cols-3">
+     <div className="rounded-[14px] border-[3px] border-black bg-[#f8f7f1] p-4">
+      <div className="text-[10px] font-black uppercase tracking-[0.16em] text-black/55">Workflow ID</div>
+      <code className="mt-2 block break-all text-xs font-black">{selectedChain?.id || "No workflow selected"}</code>
+     </div>
+     <div className="rounded-[14px] border-[3px] border-black bg-[#f8f7f1] p-4">
+      <div className="text-[10px] font-black uppercase tracking-[0.16em] text-black/55">Project ID</div>
+      <code className="mt-2 block break-all text-xs font-black">{selectedChain?.projectId || "No Project linked"}</code>
+     </div>
+     <div className="rounded-[14px] border-[3px] border-black bg-[#f8f7f1] p-4">
+      <div className="text-[10px] font-black uppercase tracking-[0.16em] text-black/55">Attached Artifacts</div>
+      <div className="mt-2 text-2xl font-[1000]">{selectedChain?.artifactIds?.length || 0}</div>
+     </div>
+    </div>
+    <div className="border-t-[3px] border-black p-5">
+     <div className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Provenance and Handoff Receipts</div>
+     <div className="mt-3 flex flex-wrap gap-2">
+      {selectedChain?.provenance?.length ? selectedChain.provenance.map((reference, index) => (
+       <span key={`${selectedChain.id}-lineage-${index}`} className="max-w-full break-all rounded-[9px] border-[3px] border-black bg-[#f8f7f1] px-3 py-2 text-[10px] font-black tracking-[0.04em]">
+        {reference}
+       </span>
+      )) : (
+       <span className="rounded-[9px] border-[3px] border-dashed border-black/35 bg-[#f8f7f1] px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/50">
+        No canonical handoff receipts are linked to this chain yet.
+       </span>
+      )}
+     </div>
+    </div>
+   </section>
+
    <section className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
     <div className="rounded-[22px] border-[4px] border-black bg-white shadow-[8px_8px_0px_0px_black]">
      <div className="border-b-[4px] border-black bg-[#FF4FD8] px-6 py-5 text-white">
