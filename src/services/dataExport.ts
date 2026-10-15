@@ -1,8 +1,7 @@
 import JSZip from "jszip"
 import { buildMasterTableBundle } from "./masterTables"
 import { getMasterRows, canonicalRowsToMasterTableRows } from "./analytics/Selectors"
-import { getCanonicalRowsFromVtSync, type AnalyticsWindow } from "./analytics-canon"
-import { getVtSyncSnapshot } from "../features/vt-sync-local/adapters/snapshot"
+import { getCurrentCanonicalRows, type AnalyticsWindow } from "./analytics-canon"
 import type { IngestMode, MasterTableType } from "./productArchitecture"
 import type { CsvFileWithTag } from "../types"
 import {
@@ -149,7 +148,7 @@ export const createExportBundle = async (
 
  const uploadedCsvFiles = readUploadedCsvFiles()
  const apiRows = canonicalRowsToMasterTableRows(
-  getCanonicalRowsFromVtSync(getVtSyncSnapshot(), analyticsWindow),
+  getCurrentCanonicalRows(analyticsWindow),
  )
  const ownerRows = getMasterRows(analyticsWindow, "csv", uploadedCsvFiles)
  const authoritativeOwnerRows = selectAuthoritativeOwnerRows(ownerRows)
