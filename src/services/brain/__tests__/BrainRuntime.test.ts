@@ -57,11 +57,11 @@ describe("BrainRuntime", () => {
   })
 
   expect(runBrainTurn).toHaveBeenCalledTimes(1)
-  expect(runBrainTurn).toHaveBeenCalledWith({
+  expect(runBrainTurn).toHaveBeenCalledWith(expect.objectContaining({
    channelId: "channel-1",
    userText: "What should I make next?",
    snapshot,
-   systemPrompt: "system",
+   systemPrompt: expect.stringContaining("ASSISTANT CONTINUITY TRACE"),
    growthContext,
    recentTurns: [],
    history: [],
@@ -71,10 +71,22 @@ describe("BrainRuntime", () => {
    currentResearcher: undefined,
    projectId: "project-1",
    analyticsWindow: "90d",
-   visibleContext: { selectedVideoId: "video-1", contentBuildId: "cb-1" },
+   visibleContext: expect.objectContaining({
+    selectedVideoId: "video-1",
+    contentBuildId: "cb-1",
+    assistantContinuityTrace: expect.objectContaining({
+     version: "vt-brain-assistant-trace-v1",
+     location: expect.objectContaining({
+      channelId: "channel-1",
+      projectId: "project-1",
+      contentBuildId: "cb-1",
+      videoId: "video-1",
+     }),
+    }),
+   }),
    artifactRefs: ["asset-1", "asset-1", "asset-2"],
-  })
-  expect(result).toEqual({
+  }))
+  expect(result).toMatchObject({
    ...orchestratorResult,
    runtime: {
     runtimeVersion: BRAIN_RUNTIME_VERSION,
@@ -83,6 +95,15 @@ describe("BrainRuntime", () => {
     contentBuildId: "cb-1",
     artifactRefs: ["asset-1", "asset-2"],
     hasVisibleContext: true,
+    assistantContinuityTrace: expect.objectContaining({
+     version: "vt-brain-assistant-trace-v1",
+     location: expect.objectContaining({
+      channelId: "channel-1",
+      projectId: "project-1",
+      contentBuildId: "cb-1",
+      videoId: "video-1",
+     }),
+    }),
    },
   })
  })
