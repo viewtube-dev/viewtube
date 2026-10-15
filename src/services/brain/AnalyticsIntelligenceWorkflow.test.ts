@@ -54,7 +54,7 @@ const finding = (overrides: Partial<DeterministicAnalyticsInsight> = {}): Determ
   ...overrides,
 })
 
-const recommendation = (overrides: Parameters<typeof buildAnalyticsRecommendationAction>[0] = {}) =>
+const recommendation = (overrides: Partial<Parameters<typeof buildAnalyticsRecommendationAction>[0]> = {}) =>
   buildAnalyticsRecommendationAction({
     id: "recommendation-1",
     creatorGoal: "Increase qualified watch time",
@@ -112,7 +112,7 @@ describe("Analytics intelligence workflow phases 5–8", () => {
       findings: [
         finding(),
         finding({ id: "wrong-channel", channelId: "channel-2" }),
-        finding({ id: "unvalidated", validationState: "blocked" as "validated" }),
+        ({ ...finding({ id: "unvalidated" }), validationState: "blocked" } as unknown as DeterministicAnalyticsInsight),
       ],
       limit: 1,
     })
