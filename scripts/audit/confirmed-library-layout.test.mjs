@@ -124,7 +124,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.ok(catalog.includes("Studio Text Input · Simple + Floating + Fixed Label"));
   assert.ok(catalog.includes("Single-line input typography is 38px standard / 24px compact"));
-  assert.match(catalog, /Studio Text Area · Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?Standard text uses 18px and compact text uses 14px/);
+  assert.match(catalog, /Studio Text Area · Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?Textarea-only typography is 18px standard \/ 14px compact/);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
@@ -210,7 +210,7 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
   assert.match(catalog, /1\.5px compact button shadow/);
   assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
-  assert.match(catalog, /44px switch\/choice rectangular corners and the standard word-toggle use reference-specific 7\.333px radii/);
+  assert.match(catalog, /rectangular 44px switches and rectangular radios use reference-specific 7\.333px radii/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
 });
@@ -325,7 +325,7 @@ test("non-default settings and TSX/CSS/import provenance are collapsed by defaul
 });
 
 test("confirmed component and variant labels are visually constrained to one line and 40ch", () => {
-  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap[^}]*text-overflow:\s*ellipsis/s);
+  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
   assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
 });
 
