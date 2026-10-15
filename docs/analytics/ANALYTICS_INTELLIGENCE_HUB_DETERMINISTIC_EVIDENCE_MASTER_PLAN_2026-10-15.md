@@ -1,9 +1,9 @@
-# Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–2 Execution Record
+# Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–4 Execution Record
 
 **Status:** Phases 0–4 implementation slice documented on the feature branch; deterministic period comparisons, contribution calculations, unified finding contract, regression tests, trend calculation, and existing-anomaly adapters are implemented. Automated test/typecheck/CI verification and live Intelligence Hub/Brain caller integration remain pending.  
 **Date:** 2026-10-15  
-**Implementation branch:** `feat/analytics-intelligence-hub-phases-2-4-2026-10-15`  
-**Pull request:** [#238 — Analytics Intelligence Hub: deterministic insights phases 0–2](https://github.com/viewtube-dev/viewtube/pull/238) (open, ready for review; not merged)  
+**Implementation branch:** `feat/analytics-intelligence-hub-phases-2-4-current-integration-2026-10-15`  
+**Pull request:** [#243 — Analytics Intelligence Hub: deterministic findings phases 2–4](https://github.com/viewtube-dev/viewtube/pull/243) (open; validation pending; not merged)  
 **Target integration branch:** `master/consolidated-feature-integration`  
 **Scope:** Build the Analytics Intelligence Hub and deterministic analytics findings/evidence without introducing a second analytics store or allowing AI-generated prose to become metric truth.
 
