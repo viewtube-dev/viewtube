@@ -10,7 +10,7 @@
   --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-text-transform: uppercase;
-  --vt-studio-control-letter-spacing: -.035em;
+  --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: .86;
   --vt-studio-control-shadow: var(--vt-studio-44-button-shadow-x, 3px);
   --vt-studio-control-default-fill-opacity: 50%;
@@ -85,7 +85,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
   line-height: .86;
-  letter-spacing: -.035em;
+  letter-spacing: -.02em;
   -webkit-text-stroke: 1px currentColor;
   padding: 0 1em;
   text-transform: uppercase;
@@ -203,13 +203,14 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 /* Shared floating-label fields. The label box is 25% smaller and overlaps the
    black control border by its bottom quarter when lifted; component geometry stays canonical. */
 .vt-studio-floating-field { --vt-studio-floating-label-size: 24px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
+.vt-studio-floating-field[data-size="compact"] { --vt-studio-floating-label-size: 18px; }
 .vt-studio-floating-field > [data-vt-studio-control="true"] { display:block; width:100%; }
 .vt-studio-floating-field > .vt-studio-floating-field-label {
   position:absolute; z-index:1; left:14px; top:50%; max-width:calc(100% - 28px);
   padding:0; overflow:hidden; color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size:var(--vt-studio-floating-label-size); font-weight:1000; line-height:1;
-  letter-spacing:-.035em; text-transform:uppercase; white-space:nowrap; text-overflow:ellipsis;
+  letter-spacing:-.02em; text-transform:uppercase; white-space:nowrap; text-overflow:ellipsis;
   -webkit-text-stroke:.5px currentColor;
   pointer-events:none; transform:translateY(-50%); transform-origin:left center;
   transition:top 180ms ease-out, transform 180ms ease-out, padding 180ms ease-out, color 180ms ease-out, background-color 180ms ease-out;
@@ -220,10 +221,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   top:0; left:10px; padding:2.25px 4.5px; border-radius:3px;
   background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color:#000;
   -webkit-text-stroke:.5px currentColor;
-  transform:translateY(-75%) scale(.75); transform-origin:left center;
+  transform:translateY(-56.25%) scale(.75); transform-origin:left center;
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-75%) scale(.75); transform-origin:left center; }
+.vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label { top:0; transform:translateY(-56.25%) scale(.75); transform-origin:left center; }
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label { color:#000; }
 /* Compact B is an explicit alternate specimen: add a solid secondary-color stroke
    equal to the compact 2px focus width, with no offset or layout movement. */
@@ -232,6 +233,77 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   outline-offset:0;
 }
 @media (prefers-reduced-motion: reduce) { .vt-studio-floating-field-label { transition-duration:.01ms !important; } }
+
+/* Permanent label-box variants of the canonical input and textarea families.
+   The label geometry, secondary-color fill, black stroke and compact ratio follow Legend Multi. */
+.vt-studio-fixed-label-field {
+  --vt-studio-fixed-label-height: 24px;
+  --vt-studio-fixed-label-font-size: 16px;
+  --vt-studio-fixed-label-stroke: 3px;
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  isolation: isolate;
+}
+.vt-studio-fixed-label-field[data-size="compact"] {
+  --vt-studio-fixed-label-height: 16px;
+  --vt-studio-fixed-label-font-size: 11px;
+  --vt-studio-fixed-label-stroke: 2px;
+}
+.vt-studio-fixed-label-field > [data-vt-studio-control="true"] {
+  display: block;
+  width: 100%;
+}
+.vt-studio-fixed-label-field > .vt-studio-fixed-field-label {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--vt-studio-fixed-label-height) / -2.65);
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  min-width: 0;
+  min-height: var(--vt-studio-fixed-label-height);
+  padding: 0 8px;
+  margin: 0;
+  border: var(--vt-studio-fixed-label-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--vt-studio-fixed-label-font-size);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-text-stroke: .5px currentColor;
+  pointer-events: none;
+}
+.vt-studio-fixed-label-field.is-input > input {
+  padding-top: calc(var(--vt-studio-control-height, 44px) / 2.5);
+}
+.vt-studio-fixed-label-field.is-textarea > textarea {
+  padding-top: calc(var(--vt-studio-control-height, 44px) / 2.1);
+}
+.vt-studio-fixed-label-field:focus-within > :is(input, textarea) {
+  outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label {
+  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+.vt-studio-fixed-label-field.is-textarea > .vt-studio-fixed-field-label { top: calc(var(--vt-studio-fixed-label-height) / -2.65); }
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-fixed-label-field > .vt-studio-fixed-field-label { transition: none; }
+}
 
 /* Canonical 09/V2 Legend Multi dropdown, translated into the shared Studio token contract. */
 .vt-studio-legend-multi {
@@ -270,7 +342,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   padding: 0 8px 0 12px; border: var(--vt-legend-stroke) solid #000;
   border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; box-shadow: none;
-  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.035em; text-transform: uppercase; transform: none; transition: none;
+  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase; transform: none; transition: none;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
 .vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active { box-shadow: none; transform: none; transition: none; }
@@ -301,7 +373,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height);
   margin-bottom: 3px; padding: 2px 8px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   background: var(--vt-legend-a); color: #000; cursor: pointer; text-align: left;
-  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.035em; text-transform: uppercase;
+  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option { font-size: 24px; margin-bottom: 2px; padding-inline: 6px; }
 .vt-studio-legend-option:last-child { border-bottom: 0; }
@@ -319,7 +391,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-legend-clear {
   display: block; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height); margin-top: 3px; padding: 2px 8px;
   border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius); background: var(--vt-legend-b); color: #000; cursor: pointer;
-  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.035em; text-transform: uppercase; text-align: center;
+  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase; text-align: center;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear { font-size: 24px; margin-top: 2px; padding-inline: 6px; }
 .vt-studio-legend-clear:disabled { cursor: not-allowed; opacity: .45; }
@@ -337,7 +409,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-text-input-standard-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-text-input-compact-font-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-text-input-standard-line-height: var(--vt-studio-control-line-height, .86); --vt-studio-text-input-compact-line-height: var(--vt-studio-control-line-height, .86);
   --vt-studio-textarea-standard-font-size: 18px; --vt-studio-textarea-compact-font-size: 14px;
-  --vt-studio-control-letter-spacing: -.035em; --vt-studio-control-line-height: .86;
+  --vt-studio-control-letter-spacing: -.02em; --vt-studio-control-line-height: .86;
   --vt-studio-control-height: var(--vt-studio-44-height);
   --vt-studio-control-stroke: var(--vt-studio-44-stroke);
   --vt-studio-control-radius: var(--vt-studio-44-radius);
@@ -373,7 +445,7 @@ select[data-vt-studio-control="true"] {
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
   line-height: .86;
-  letter-spacing: -.035em;
+  letter-spacing: -.02em;
   text-transform: uppercase;
   padding-left: 14px;
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
@@ -420,14 +492,14 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 .vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;box-shadow:0 1px 2.75px rgba(0,0,0,.15)}
 .vt-studio-44-switch.is-solid.is-on,.vt-studio-44-choice.is-solid.is-on{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));outline-offset:3px}
-.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:#fff;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.035em;line-height:.86}
+.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:#fff;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.02em;line-height:.86}
 .vt-studio-44-word-toggle.is-size-28{--vt-word-height:28px;--vt-word-font-size:24px;--vt-word-radius:4px;border-width:2px}
 .vt-studio-44-word-handle{position:absolute;top:2.75px;bottom:2.75px;left:2.75px;width:calc(50% - 5.5px);border-radius:calc(var(--vt-word-radius)*.5);background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6));transition:left .22s cubic-bezier(.2,.8,.2,1),width .22s cubic-bezier(.2,.8,.2,1),background-color .22s ease-out;pointer-events:none}
 .vt-studio-44-word-toggle.is-size-28 .vt-studio-44-word-handle{top:2px;bottom:2px;left:2px;width:calc(50% - 4px);border-radius:2.3px}
 .vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
 .vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle{background:#000}
 .vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle{background:#fff}
-.vt-studio-44-word-toggle button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:100%;padding:0 20px;border:0;background:transparent;color:#000;font:1000 var(--vt-word-font-size)/.86 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.035em;text-transform:uppercase;white-space:nowrap;-webkit-text-stroke:.5px currentColor}
+.vt-studio-44-word-toggle button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:100%;padding:0 20px;border:0;background:transparent;color:#000;font:1000 var(--vt-word-font-size)/.86 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;-webkit-text-stroke:.5px currentColor}
 .vt-studio-44-word-toggle.is-size-28 button{padding:0 6px}
 .vt-studio-44-word-toggle.is-color-swap button.is-active{color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-word-toggle.is-black-indicator button.is-active{color:#fff}
@@ -574,7 +646,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-size: var(--vt-dropdown-font-size) !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
-  letter-spacing: -.035em !important;
+  letter-spacing: -.02em !important;
   -webkit-text-stroke: .5px currentColor;
   padding: 0 8px 0 14px;
 }
@@ -610,7 +682,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-size: var(--vt-dropdown-font-size, 38px) !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
-  letter-spacing: -.035em !important;
+  letter-spacing: -.02em !important;
   -webkit-text-stroke: .5px currentColor;
   text-transform: uppercase !important;
   padding: 3px 8px !important;
@@ -624,7 +696,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-size: 24px !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
-  letter-spacing: -.035em !important;
+  letter-spacing: -.02em !important;
   padding: 2px 6px !important;
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
@@ -643,7 +715,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-size: var(--vt-studio-44-font-size, 38px) !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
-  letter-spacing: -.035em !important;
+  letter-spacing: -.02em !important;
   text-transform: uppercase !important;
   margin-top: 3px !important;
 }
@@ -651,7 +723,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-size: var(--vt-studio-28-font-size, 24px) !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
-  letter-spacing: -.035em !important;
+  letter-spacing: -.02em !important;
 }
 
 /* Keep the library's switch, choice, and word-toggle examples from being
@@ -714,7 +786,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-size: 24px !important;
   font-weight: 1000 !important;
   line-height: .86 !important;
-  letter-spacing: -.035em !important;
+  letter-spacing: -.02em !important;
 }
 /* Canonical Studio Controls contract (single authoritative tail).
    This section is the final authority for fields, 44px selection controls,
@@ -935,6 +1007,13 @@ button[data-vt-studio-button="true"] { appearance:none; position:relative; isola
 button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); pointer-events:none; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; }
+/* Compact shadow anchor is intentionally one pixel narrower than the face,
+   so its translated silhouette never exceeds the button's right/bottom bounds. */
+button[data-vt-studio-button="true"][data-size="compact"]::before {
+  right: 1px;
+  bottom: 1px;
+  transform: translate(var(--vt-studio-control-shadow-x, 1px), var(--vt-studio-control-shadow-y, 1px));
+}
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1px; --vt-studio-control-shadow-x:1px; --vt-studio-control-shadow-y:1px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
 /* Separate prominent action family. Not a StudioButton size variant. */
@@ -965,7 +1044,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none; }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
 button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] { padding-inline:8px; font-size:24px; }
 button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
 button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-shadow,3px),var(--vt-studio-control-shadow,3px)); transition-duration:300ms; }
