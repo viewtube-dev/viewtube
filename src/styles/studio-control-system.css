@@ -289,12 +289,36 @@ button[data-vt-studio-control][data-height-variant="28"][data-selected="true"] {
  background:var(--vt-studio-control-secondary);
  --vt-studio-control-shadow-color:color-mix(in srgb,var(--vt-studio-control-accent) 65%,transparent);
 }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { background:var(--vt-studio-control-secondary); border-width:var(--vt-studio-control-stroke); }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background:var(--vt-studio-control-secondary)!important; }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background:var(--vt-studio-control-accent)!important; }
-button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"][data-selected="true"] { border-width:var(--vt-studio-28-stroke); }
-[data-vt-studio-control]:is(input,textarea,select)[data-size="standard"] { border-width:var(--vt-studio-44-stroke); font-size:var(--vt-studio-44-font-size); font-weight:var(--vt-studio-44-font-weight); box-shadow:none!important; }
-[data-vt-studio-control]:is(input,textarea,select)[data-size="compact"] { border-width:var(--vt-studio-28-stroke); font-size:var(--vt-studio-28-font-size); font-weight:var(--vt-studio-28-font-weight); box-shadow:none!important; }
+/* Split-left selected colors and borders are owned by the single canonical face/rail contract below. */
+
+/* Native select is a field-family control but has no insertion caret. */
+select[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--vt-studio-control-height, 44px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+  padding-left: 14px;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+select[data-vt-studio-control="true"][data-size="compact"] { padding-left: 8px; font-size: 24px; }
+select[data-vt-studio-control="true"]:focus,
+select[data-vt-studio-control="true"]:focus-visible {
+  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 15%, transparent);
+  color: #000;
+  outline: var(--vt-studio-control-outline-stroke, 1.5px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .55; }
 /* V2 Legend Multi: trigger, menu rows and action share the closed trigger's size-specific text/stroke. */
 .vt-studio-legend-multi { --vt-legend-stroke:var(--vt-studio-44-stroke); --vt-legend-height:var(--vt-studio-44-height); --vt-legend-shadow-offset:0px; }
 .vt-studio-legend-multi[data-size="compact"] { --vt-legend-height:var(--vt-studio-28-height); --vt-legend-stroke:var(--vt-studio-28-stroke); --vt-legend-shadow-offset:0px; --vt-legend-radius:6px; }
