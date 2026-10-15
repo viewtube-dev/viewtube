@@ -100,7 +100,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before')
     expect(css).toContain("right: 1px;")
     expect(css).toContain("bottom: 1px;")
-    expect(css).toContain('letterSpacing: "-0.02em"')
+    expect(css).toContain("letter-spacing: -.02em;")
     expect(controls).toContain('letterSpacing: "-0.02em"')
   })
 
