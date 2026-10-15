@@ -33,7 +33,7 @@ History links:
 
 ## Resource inventory and content depth
 
-Fifteen resources are registered. The first three are the current detailed benchmark (roughly 4,200–5,200 words). The registered versions of guides 4–15 were previously roughly 600–800 words each and are being expanded to deliver meaningful beginner-facing education. A common template or large number of headings does not establish completeness.
+Fifteen resources are registered. The first three are the current detailed benchmark (roughly 4,200–5,200 words). The registered versions of guides 4–15 were previously roughly 600–800 words each. The convergence branch expands them to approximately 1,425–1,909 words each and adds creator-facing examples, diagnostic workflows, action checklists, caveats, ViewTube handoffs, and topic-specific source links. A common template or large number of headings does not establish completeness; current source verification and rendered UI review remain required.
 
 ## Seven older unregistered drafts
 
