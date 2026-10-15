@@ -1205,8 +1205,8 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-icon-current] {
   height: 100%;
   transform-origin: center;
 }
-button[data-vt-studio-icon-button="true"].is-effect-pop[data-icon-active="true"] [data-vt-square-icon-current],
-button[data-vt-studio-icon-button="true"].is-effect-notification[data-icon-active="true"] [data-vt-square-icon-current] {
+button[data-vt-studio-icon-button="true"].is-effect-pop[data-pop="true"] [data-vt-square-icon-current],
+button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge="true"] [data-vt-square-icon-current] {
   animation: vt-studio-square-pop 180ms cubic-bezier(.2,.8,.2,1);
 }
 button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge="true"] [data-vt-square-badge] {
@@ -1233,6 +1233,11 @@ button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge=
 }
 button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge="true"]:not(:disabled) [data-vt-square-icon-current] {
   animation: vt-studio-square-shake 320ms ease-in-out;
+}
+button[data-vt-studio-icon-button="true"].is-effect-notification [data-vt-square-badge] {
+  max-width: min(44px, 70vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-icon-stage] {
   transform: rotate(-6deg);
