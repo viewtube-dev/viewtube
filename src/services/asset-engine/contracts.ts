@@ -150,6 +150,11 @@ export interface ContentBuildPublicationIdentity {
  approvedSnapshotHash: string
  selectedVariantAssetIds: string[]
  correlationId: string
+ /** Decision/action identity that led to this exact publication, when supplied. */
+ actionPacketId?: string | null
+ workflowId?: string | null
+ recommendationId?: string | null
+ experimentId?: string | null
  idempotencyKey: string
  publishedAt: string | null
 }
