@@ -74,7 +74,34 @@ describe("OpportunityEvidenceAdapter", () => {
   expect(result.filter((item) => item.videoId === "video-top")).toHaveLength(1)
  })
 
- it("preserves missing views as unknown and does not assign confidence without metric coverage", () => {
+ it("preserves missing views as unknown when other metrics exist", () => {
+  const evidencePack = pack()
+  evidencePack.recentVideos[0].metrics = {
+   views: null,
+   watchTime: 20,
+   subscribers: 3,
+   revenue: null,
+   ctr: 5,
+   averagePercentageViewed: 50,
+   likes: null,
+   comments: null,
+  }
+
+  const result = buildOpportunityEvidenceFromBrainPack({
+   channelId: "channel-a",
+   evidencePack,
+   now: new Date("2026-09-25T12:00:00.000Z"),
+  })
+  const recent = result.find((item) => item.videoId === "video-recent")
+
+  expect(recent).toMatchObject({
+   currentValue: null,
+   confidence: 80,
+   evidenceIds: ["ev-recent"],
+  })
+ })
+
+ it("does not derive a metric-backed opportunity when every metric is missing", () => {
   const evidencePack = pack()
   evidencePack.recentVideos[0].metrics = {
    views: null,
@@ -92,13 +119,8 @@ describe("OpportunityEvidenceAdapter", () => {
    evidencePack,
    now: new Date("2026-09-25T12:00:00.000Z"),
   })
-  const recent = result.find((item) => item.videoId === "video-recent")
 
-  expect(recent).toMatchObject({
-   currentValue: null,
-   confidence: 0,
-   evidenceIds: ["ev-recent"],
-  })
+  expect(result.some((item) => item.videoId === "video-recent")).toBe(false)
  })
 
  it("refuses cross-channel evidence instead of relabeling it", () => {
