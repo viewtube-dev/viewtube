@@ -460,3 +460,10 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - The focused regression test initially caught a stale expected specimen label; the assertion was corrected to match the actual rendered labels and passed in the subsequent CI run.
 
 **Verification boundary:** phases 4–5 are implemented; the dedicated layout regression, source-governance checks, CSS parser, production build, focused tests, local smoke checks, and the four requested live visual checks pass. Phase 6 remains partially blocked by unrelated repository-wide typecheck/full-suite failures and remaining browser checks for populated/disabled states, narrow portrait/landscape widths, reduced motion, and the compact button wrapper/face width discrepancy. Do not describe the overall typecheck/full suite as passing.
+
+
+### Follow-up: button shadow ownership and split-left edges — 2026-10-15
+- PR #206 moved the hard offset shadow from the animated face to the stationary outer button for both 44px/28px Studio buttons and the separate 56px action-button family. Hover/press movement remains on the face, so the shadow no longer travels with the face.
+- Split-left outer wrappers now explicitly reset native appearance, border, and background, and remain overflow-visible. The actual face owns the black border and radius and clips the icon rail inside that radius. This removes the extra light wrapper edge and prevents the wrapper from clipping the stationary shadow.
+- Regression coverage was added for stationary shadow ownership, face-only movement, split-left overflow, and wrapper reset.
+- PR #206 merged to `master/consolidated-feature-integration` at `45a4bb8627e6710cc9cb1368a2a05287d76ec645`. Focused Confirmed Library tests, source-governance/CSS checks, focused contracts, production build, and local Playwright smoke passed. Repository-wide typecheck remains blocked by the unrelated errors listed above; live Render visual inspection remains outstanding.
