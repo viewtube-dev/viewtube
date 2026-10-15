@@ -3,7 +3,7 @@ import type {
  CanonicalIntelligenceDatasetRows,
  CanonicalIntelligenceEvidenceBundle,
 } from "../analytics-canon"
-import type { DerivedSignal } from "./EvidenceRecord"
+import { compareEvidenceRecords, projectCanonicalEvidenceRecords, type DerivedSignal } from "./EvidenceRecord"
 import type { ViewTubeAnomaly } from "../anomaly-intelligence/contracts"
 
 export type DeterministicAnalyticsInsightKind =
@@ -232,6 +232,12 @@ export const buildPeriodComparisonInsights = (input: {
  const baselineById = new Map<string, CanonicalIntelligenceDatasetManifest>(
   baselineBundle.datasets.map((dataset) => [dataset.id, dataset] as const),
  )
+ const baselineEvidenceByMetric = new Map(
+  projectCanonicalEvidenceRecords(baselineBundle).map((record) => [`${record.datasetId}:${record.metric}`, record] as const),
+ )
+ const currentEvidenceByMetric = new Map(
+  projectCanonicalEvidenceRecords(currentBundle).map((record) => [`${record.datasetId}:${record.metric}`, record] as const),
+ )
  const materialThreshold = input.minimumMaterialChangePercent ?? 20
  if (!Number.isFinite(materialThreshold) || materialThreshold <= 0) {
   return {
@@ -272,6 +278,18 @@ export const buildPeriodComparisonInsights = (input: {
    const aggregation = metricAggregation(metric)
    if (!aggregation) {
     blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} requires denominator-aware aggregation not provided by the canonical summary contract.`)
+    continue
+   }
+   const evidenceKey = `${currentDataset.id}:${metric}`
+   const currentEvidence = currentEvidenceByMetric.get(evidenceKey)
+   const baselineEvidence = baselineEvidenceByMetric.get(evidenceKey)
+   if (!currentEvidence || !baselineEvidence) {
+    blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} lacks a canonical evidence record for comparability validation.`)
+    continue
+   }
+   const comparability = compareEvidenceRecords(baselineEvidence, currentEvidence)
+   if (!comparability.comparable) {
+    blockedReasons.add(`Metric ${metric} in dataset ${currentDataset.id} is not comparable: ${comparability.reasons.join(" ")}`)
     continue
    }
    const currentValue = valueFor(currentDataset, metric, aggregation)
