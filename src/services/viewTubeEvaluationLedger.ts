@@ -83,60 +83,122 @@ export const createPublicationEvaluationRecord = (input: {
  confounders?: string[]
  causalAssessment?: EvaluationRecord["causalAssessment"]
 }) => {
+ if (!evaluateViewTubeControl("creator-learning").allowed) return null
  const identity = input.publicationIdentity
- if (!identity.youtubeVideoId || !identity.publishTransactionId || !identity.approvedSnapshotId || !identity.approvedSnapshotHash) return null
- const evidence = getCurrentCanonicalIntelligenceEvidence({ window: input.selectedWindow, sectionIds: ["executive-summary"] })
+ if (
+  identity.schemaVersion !== 1 ||
+  !identity.channelId ||
+  !identity.contentBuildId ||
+  !identity.youtubeVideoId ||
+  !identity.publishTransactionId ||
+  !identity.approvedSnapshotId ||
+  !identity.approvedSnapshotHash
+ ) return null
+
+ const receipt = listContentBuildEvents(identity.contentBuildId).find((event) => {
+  if (event.eventType !== "youtube.state.changed" ||
+      event.entityType !== "publish-identity-receipt" ||
+      event.entityId !== identity.publishTransactionId) return false
+  const metadata = event.metadata as Record<string, unknown> | undefined
+  return metadata?.publishTransactionId === identity.publishTransactionId &&
+   metadata?.youtubeVideoId === identity.youtubeVideoId &&
+   metadata?.approvedSnapshotId === identity.approvedSnapshotId &&
+   metadata?.approvedSnapshotHash === identity.approvedSnapshotHash &&
+   metadata?.contentBuildId === identity.contentBuildId &&
+   metadata?.channelId === identity.channelId
+ })
+ if (!receipt) return null
+
+ const evidence = getCurrentCanonicalIntelligenceEvidence({
+  window: input.selectedWindow,
+  sectionIds: ["executive-summary"],
+ })
  const currentRows = getCurrentCanonicalIntelligenceDatasetRows("videos")
  const dataset = currentRows.dataset
- if (!dataset || currentRows.snapshotId !== evidence.snapshotId || currentRows.channelId !== identity.channelId || evidence.channelId !== identity.channelId || dataset.channelId !== identity.channelId) return null
+ if (
+  !dataset ||
+  currentRows.snapshotId !== evidence.snapshotId ||
+  currentRows.channelId !== identity.channelId ||
+  evidence.channelId !== identity.channelId ||
+  dataset.channelId !== identity.channelId
+ ) return null
  const rowIndex = dataset.rows.findIndex((row) =>
-  ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"].some((key) => row[key] === identity.youtubeVideoId)
+  ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"]
+   .some((key) => row[key] === identity.youtubeVideoId)
  )
  if (rowIndex < 0) return null
+
  const manifest = evidence.datasets.find((item) => item.id === "videos")
- const publicationOutcomes = listAssetOutcomes().filter((outcome) =>
-  outcome.channelId === identity.channelId &&
-  outcome.publishTransactionId === identity.publishTransactionId &&
-  outcome.publishedVideoId === identity.youtubeVideoId
- )
- const analyticsCheckpointIds = listContentBuildEvents(identity.contentBuildId)
-  .filter((event) => {
-   if (event.eventType !== "analytics.checkpoint") return false
-   const metadata = event.metadata as Record<string, unknown> | undefined
-   return metadata?.youtubeVideoId === identity.youtubeVideoId || metadata?.publishedVideoId === identity.youtubeVideoId
-  })
-  .map((event) => event.id)
  const evidenceStatus: EvaluationRecord["evidenceStatus"] = manifest?.status === "available"
   ? "available"
   : manifest?.status === "partial" ? "partial"
   : manifest?.status === "stale" ? "stale"
   : manifest?.status === "failed" ? "failed"
   : "unavailable"
+ const canonicalEvidenceId = `${dataset.snapshotId}:videos:${rowIndex + 1}`
+ const checkpointIdempotencyKey = `analytics-checkpoint:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`
+ const checkpoint = appendContentBuildEvent({
+  contentBuildId: identity.contentBuildId,
+  idempotencyKey: checkpointIdempotencyKey,
+  eventType: "analytics.checkpoint",
+  entityType: "published-video-analytics",
+  entityId: identity.youtubeVideoId,
+  actorType: "analytics",
+  toolId: "analytics-canon",
+  inputAssetIds: [...identity.selectedVariantAssetIds],
+  outputAssetIds: [],
+  evidenceIds: [canonicalEvidenceId],
+  timestamp: evidence.capturedAt || undefined,
+  metadata: {
+   contentBuildId: identity.contentBuildId,
+   projectId: identity.projectId,
+   projectAssociationStatus: identity.projectAssociationStatus,
+   videoPackageId: identity.videoPackageId,
+   publishTransactionId: identity.publishTransactionId,
+   youtubeVideoId: identity.youtubeVideoId,
+   approvedSnapshotId: identity.approvedSnapshotId,
+   approvedSnapshotHash: identity.approvedSnapshotHash,
+   selectedVariantAssetIds: [...identity.selectedVariantAssetIds],
+   correlationId: identity.correlationId,
+   canonicalSnapshotId: dataset.snapshotId,
+   datasetId: "videos",
+   selectedWindow: evidence.selectedWindow,
+   evidenceStatus,
+   comparabilityStatus: input.comparabilityStatus || "unknown",
+   baselineSnapshotId: input.baselineSnapshotId || null,
+   idempotencyKey: checkpointIdempotencyKey,
+  },
+ })
+ const linkedOutcomes = listAssetOutcomes({ channelId: identity.channelId }).filter((outcome) =>
+  outcome.kind === "published" &&
+  identity.selectedVariantAssetIds.includes(outcome.assetId) &&
+  (!outcome.publishedVideoId || outcome.publishedVideoId === identity.youtubeVideoId) &&
+  (!outcome.publishTransactionId || outcome.publishTransactionId === identity.publishTransactionId)
+ )
+ const sourceOutcomeIds = linkedOutcomes.map((outcome) => outcome.id)
+ const sourceRecordIds = [...new Set([...sourceOutcomeIds, identity.publishTransactionId])]
  return createEvaluationRecord({
   channelId: identity.channelId,
   projectId: identity.projectId,
   source: input.source,
   recommendation: input.recommendation,
-  evidenceIds: [`${dataset.snapshotId}:videos:${rowIndex + 1}`],
+  evidenceIds: [canonicalEvidenceId],
   contentBuildId: identity.contentBuildId,
   videoPackageId: identity.videoPackageId,
   publishTransactionId: identity.publishTransactionId,
   publishedVideoId: identity.youtubeVideoId,
-  contentBuildId: identity.contentBuildId,
-  videoPackageId: identity.videoPackageId,
-  publishTransactionId: identity.publishTransactionId,
-  approvedSnapshotId: identity.approvedSnapshotId,
   baselineSnapshotId: input.baselineSnapshotId || null,
   comparisonSnapshotId: dataset.snapshotId,
+  approvedSnapshotId: identity.approvedSnapshotId,
   approvedSnapshotHash: identity.approvedSnapshotHash,
   projectAssociationStatus: identity.projectAssociationStatus,
   selectedVariantAssetIds: [...identity.selectedVariantAssetIds],
   correlationId: identity.correlationId,
-  sourceOutcomeIds: publicationOutcomes.map((outcome) => outcome.id),
-  sourceRecordIds: [identity.publishTransactionId, ...publicationOutcomes.map((outcome) => outcome.id)],
-  traceIds: [...new Set(publicationOutcomes.map((outcome) => outcome.traceId))],
-  assetIds: [...identity.selectedVariantAssetIds],
-  analyticsCheckpointIds,
+  sourceOutcomeIds,
+  sourceRecordIds,
+  traceIds: [...new Set(linkedOutcomes.map((outcome) => outcome.traceId))],
+  assetIds: [...new Set(linkedOutcomes.map((outcome) => outcome.assetId))],
+  analyticsCheckpointIds: [checkpoint.id],
   selectedWindow: evidence.selectedWindow,
   comparabilityStatus: input.comparabilityStatus || "unknown",
   evidenceStatus,
@@ -144,7 +206,6 @@ export const createPublicationEvaluationRecord = (input: {
   causalAssessment: input.causalAssessment || "insufficient_evidence",
   idempotencyKey: `publication-evaluation:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`,
  })
-}
 
 export const listEvaluationRecords = () => read<EvaluationRecord>(EVAL_KEY)
 export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"createdAt"|"updatedAt"|"outcome">) => {
