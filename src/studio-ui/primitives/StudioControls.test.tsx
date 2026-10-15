@@ -64,7 +64,7 @@ describe("compact Studio button intrinsic sizing", () => {
   it("prevents intrinsic text faces from creating a percentage-width shrink cycle", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-button="true"] > [data-vt-studio-button-face]')
-    expect(css).toContain('width:auto; min-width:0; max-width:100%; flex:0 0 auto;')
+    expect(css).toContain('width:auto; min-width:0; max-width:100%; height:100%; min-height:100%; flex:0 0 auto;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { width:100%; max-width:none; flex:0 0 100%; padding:0; }')
   })
 })
