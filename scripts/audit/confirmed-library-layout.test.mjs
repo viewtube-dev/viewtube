@@ -141,7 +141,7 @@ test("removed standalone labeled components have no remaining source references"
     for (const entry of readdirSync(directory)) {
       const path = join(directory, entry);
       if (statSync(path).isDirectory()) walk(path);
-      else if (/\\.(tsx?|jsx?)$/.test(path)) sourceFiles.push(path);
+      else if (/\.(tsx?|jsx?)$/.test(path)) sourceFiles.push(path);
     }
   };
   walk("src");
