@@ -465,6 +465,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 - PR #206 moved the hard offset shadow from the animated face to the stationary outer button for both 44px/28px Studio buttons and the separate 56px action-button family. Hover/press movement remains on the face, so the shadow no longer travels with the face.
 - Split-left outer wrappers now explicitly reset native appearance, border, and background, and remain overflow-visible. The actual face owns the black border and radius and clips the icon rail inside that radius. This removes the extra light wrapper edge and prevents the wrapper from clipping the stationary shadow.
 - Regression coverage was added for stationary shadow ownership, face-only movement, split-left overflow, and wrapper reset.
+- **Current-source correction (2026-10-15):** the effective active selectors still move the outer StudioButton shell and hide the pseudo-shadow; StudioActionButton also moves the outer shell on hover/active. The earlier note above overstated stable-shadow behavior for active press. Section 7 and the current catalog descriptions are the current source-level status; rendered verification remains outstanding.
 - PR #206 merged to `master/consolidated-feature-integration` at `45a4bb8627e6710cc9cb1368a2a05287d76ec645`. Focused Confirmed Library tests, source-governance/CSS checks, focused contracts, production build, and local Playwright smoke passed. Repository-wide typecheck remains blocked by unrelated existing errors; the full suite also fails on an existing `WidgetSplitButton` source-contract assertion. Live Render visual inspection remains outstanding.
 
 
@@ -477,7 +478,7 @@ PR #189 is merged. This follow-up starts from the current `master/consolidated-f
 
 ### Compact button shadow contract
 - Standard buttons retain a symmetric 3px × 3px hard shadow offset.
-- Compact buttons use a symmetric 1px × 1px offset. The shadow is rendered as a stationary, face-sized pseudo-element on the outer button; the bordered face sits above it and owns hover/press translation. This avoids a separately sized box-shadow being painted around a wrapper wider than the visible face.
+- Compact buttons use a symmetric 1.5px × 1.5px offset, matching the effective CSS and current token contract. Hover moves the inner face by half the offset, but the active rule currently moves the outer StudioButton shell and hides the pseudo-shadow; StudioActionButton also moves its outer shell on hover/active and suppresses its shadow on active. The stable-shadow click behavior remains unresolved and must not be described as fixed.
 - The outer button remains overflow-visible; the split-left face owns the black border and radius and clips only its internal icon rail/content.
 
 ### Shared text-field typography and module ownership
