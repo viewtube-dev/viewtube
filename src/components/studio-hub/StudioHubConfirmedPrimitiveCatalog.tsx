@@ -94,8 +94,8 @@ const CanonicalControlFamilies: React.FC = () => {
         <span>MICRO · LEFT HALF ONLY · 1×1 / 2×1 / 4×1</span>
         <div className="vt-confirmed-badge-micro-stack">
           <div className="is-one"><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="micro">1×1</StudioSplitLeftBadge></div>
-          <div className="is-two"><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="micro">2×1</StudioSplitLeftBadge></div>
-          <div className="is-four"><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="micro">4×1</StudioSplitLeftBadge></div>
+          <div className="is-two">{["2×1 A", "2×1 B"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="micro">{label}</StudioSplitLeftBadge>)}</div>
+          <div className="is-four">{["A", "B", "C", "D"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="micro">{label}</StudioSplitLeftBadge>)}</div>
         </div>
       </div>
     </Family>
