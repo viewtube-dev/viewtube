@@ -1,6 +1,7 @@
 import type { GenerationArtifact, SuperToolId, VaultAsset, VaultAssetKind } from "@/types"
 import { nexusSyncService } from "./nexusSyncService"
 import { getVaultAttentionReasons } from "./vaultAttention"
+import { canMutateVaultAsset } from "./vaultMutationPolicy"
 
 export type VaultAssetLifecycle =
  | "DRAFT"
@@ -212,9 +213,8 @@ export const setVaultAssetState = (
  if (!existing) return null
  const metadata = { ...(existing.metadata || {}) }
  const lifecycle = String(metadata.lifecycle || "DRAFT").toUpperCase()
- const protectedAsset = metadata.protected === true || (lifecycle === "GOLDEN" && metadata.protected !== false)
- const destructiveRequested = input.archived === true || input.trashed === true
- if (protectedAsset && destructiveRequested) return null
+ if (input.archived === true && !canMutateVaultAsset(existing, "archive")) return null
+ if (input.trashed === true && !canMutateVaultAsset(existing, "trash")) return null
 
  if (typeof input.favorite === "boolean") metadata.favorite = input.favorite
 
@@ -281,12 +281,7 @@ export const deleteVaultAsset = (id: string): boolean => {
  const existing = assets.find((asset) => asset.id === id)
  if (!existing) return false
 
- const metadata = existing.metadata || {}
- const lifecycle = String(metadata.lifecycle || "").toUpperCase()
- const protectedAsset = metadata.protected === true || (lifecycle === "GOLDEN" && metadata.protected !== false)
- const isTrashed = Boolean(metadata.trashedAt) || lifecycle === "TRASHED"
-
- if (!isTrashed || protectedAsset) return false
+ if (!canMutateVaultAsset(existing, "permanent-delete")) return false
 
  writeAssets(assets.filter((asset) => asset.id !== id))
  return true
