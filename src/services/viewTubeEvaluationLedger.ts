@@ -300,6 +300,7 @@ export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"create
      (existing.experimentId || null) === (input.experimentId || null) &&
      [...(existing.evidenceIds || [])].sort().join("|") === [...(input.evidenceIds || [])].sort().join("|")
     if (!sameLogicalEvaluation) throw new Error("Evaluation idempotency key was reused for a different publication or evidence scope.")
+    void enqueueBrainLearningRecord(existing.channelId, "evaluation", existing)
     return existing
    }
   }
@@ -351,7 +352,7 @@ export const proposeEvaluationLearningCandidate = (
    candidate.channelId === (input.channelId || null) &&
    candidate.projectId === (input.projectId || null)
   )
-  if (existing) return existing
+  if (existing) { void enqueueBrainLearningRecord(existing.channelId, "learningCandidate", existing); return existing }
  }
  if (input.scope === "channel" && !input.channelId) return null
  // Never infer or broaden scope when an evaluation omitted its channel/project identity.
@@ -364,7 +365,7 @@ export const proposeEvaluationLearningCandidate = (
    (candidate.channelId || null) === (input.channelId || null) &&
    (candidate.projectId || null) === (input.projectId || null)
   )
-  if (existing) return existing
+  if (existing) { void enqueueBrainLearningRecord(existing.channelId, "learningCandidate", existing); return existing }
  }
  const item: WorkflowCandidate = {
   ...input,
@@ -395,7 +396,10 @@ export const reviewWorkflowCandidate = (
  const values = listWorkflowCandidates()
  const found = values.find((value) => value.id === id)
  if (!found) return null
- if (found.status !== "candidate") return found.status === status && found.reviewedBy === reviewer ? found : null
+ if (found.status !== "candidate") {
+  if (found.status === status && found.reviewedBy === reviewer) { void enqueueBrainLearningRecord(found.channelId, "learningCandidate", found); return found }
+  return null
+ }
  const next: WorkflowCandidate = {
   ...found,
   status,
