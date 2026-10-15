@@ -184,7 +184,7 @@ describe("deterministic analytics insights", () => {
     { trafficSource: "Browse", views: 10 },
    ],
   }
-  const result = buildTrafficSourceContributionInsights({ dataset: source, metricKey: "views", dimensionKey: "trafficSource" })
+  const result = buildTrafficSourceContributionInsights({ dataset: source, metricKey: "views", dimensionKey: "trafficSource", sourceRowCount: 3 })
   expect(result.limitations).toEqual([])
   expect(result.insights.map((insight) => [insight.label, insight.currentValue, insight.sharePercent])).toEqual([
    ["Search", 60, 60],
@@ -212,11 +212,13 @@ describe("deterministic analytics insights", () => {
    dataset: { ...base, rows: [{ trafficSource: "Search", views: 0 }, { trafficSource: "Suggested", views: 0 }] },
    metricKey: "views",
    dimensionKey: "trafficSource",
+   sourceRowCount: 2,
   }).limitations).toContain("Contribution shares require a positive metric total.")
   expect(buildTrafficSourceContributionInsights({
    dataset: { ...base, status: "partial" },
    metricKey: "views",
    dimensionKey: "trafficSource",
+   sourceRowCount: 2,
   }).insights).toEqual([])
  })
 })
