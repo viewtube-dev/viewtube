@@ -27,7 +27,7 @@ Creator-facing learning experience
 
 All 15 resource IDs are registered, but registration is not the same as editorial completion. Guides 1–3 are detailed creator-first resources of approximately 4,200–5,200 words. Guides 4–15 were substantially shorter at the start of this audit, approximately 600–800 words each, and are being expanded to deliver a comparable practical learning experience.
 
-The goal is not to force every guide to the same word count. The goal is to ensure each one has enough useful substance: plain-language mental model, worked examples, creator questions, diagnostic workflows, decision aids, common mistakes, relevant ViewTube handoffs, glossary, and reliable sources. Reading time must reflect the final document.
+The goal is not to force every guide to the same word count. In the current convergence branch, guides 4–15 are approximately 1,425–1,909 words each and now include a plain-language mental model, worked examples, creator questions, diagnostic workflows, decision aids, common mistakes, relevant ViewTube handoffs, glossary, and topic-specific sources. Reading-time metadata has been recalculated. The remaining editorial gate is verification of current official-source links and platform-sensitive claims, followed by rendered desktop/mobile review.
 
 ## Source authority
 
