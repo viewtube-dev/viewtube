@@ -1,9 +1,9 @@
 # Studio Controls — Global Defaults & Exception Index
 
-**Status:** Audit baseline with field-rule correction committed on this branch; rendered controls still require verification  
+**Status:** Phases 1–3 implemented on the audit branch; automated checks and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Audit work branch:** `fix/studio-primitive-size-shadow-contracts-20261014`  
+**Audit work branch:** `fix/studio-controls-phases-1-3-2026-10-14`  
 **Last reviewed:** 2026-10-14  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
@@ -29,7 +29,7 @@ When values conflict, the desired authority is the exported size/global contract
 | Letter spacing | `-0.035em` | General controls; a component may document a narrower exception |
 | Line height | `0.86` baseline; component geometry may align a label using a documented equivalent | Text controls and button labels |
 | Primary / secondary color authority | Primary = `--pair-a`; secondary = `--pair-b` | Shared color-pair contract |
-| Text color | Black by default; text fields use primary-color text in default mode per exported field policy | Component/state dependent |
+| Text color | Action labels are black; text fields use primary (`--pair-a`) at rest and black only while focused | Component/state dependent |
 | Stroke color | Black (`#000`) unless a documented state-specific text stroke applies | Outer borders and default button outlines |
 | Background fill | Buttons use primary; text fields use primary at 50% opacity | Default state |
 | Motion easing | `ease-out` | All transitions |
@@ -61,7 +61,20 @@ These values come from `STUDIO_COMPONENT_SIZE_DEFAULTS` in `StudioControls.tsx`.
 | Icon size | 28px | 18px |
 | Icon stroke | 2.5px | 1.65px |
 
-**Critical contract note:** The constants currently call the compact outer stroke 2px, but the CSS explicitly gives compact split-left rails a 3px right border in one rule and later reintroduces a 3px rail border in a more general rule. The CSS also contains a later text-field rule that forces an 8px radius, overriding the intended 6px standard radius. These are confirmed source-level contradictions.
+**Resolved in this branch:** The final CSS contract now keeps text-field radius/stroke size-specific, uses a 3px standard / 2px compact split-left divider, and gives placeholder/value text the same primary-color typography at rest. The 44px switch/choice family intentionally follows the supplied `viewtube-control-library-44px.html` geometry rather than the generic button/field radius token.
+
+
+### 44px switch / choice geometry reference
+
+The supplied Library file **`viewtube-control-library-44px.html`** is the geometry authority for the switch, radio, checkbox, and word-toggle family. The Studio CSS preserves these exact ratios:
+
+- Switch track: **75.68 × 44px** (1.72:1); round radius 999px; rectangular radius **7.333px**.
+- Handle: **36.667 × 36.667px**, inset **3.667px** from the left/top; on travel **31.68px**, leaving the same approximately 3.667px inset at the right.
+- Square radio/checkbox control: **44 × 44px**; radio indicator: **33 × 33px**.
+- Rectangular choice radius: **7.333px**; compact inner rectangle radius: **1.833px**.
+- Solid selected state fills with primary; color-swap selected state uses secondary fill with primary handle/check mark. Black- and white-indicator skins override checkbox mark strokes explicitly.
+
+These ratios are specific to the 44px switch/choice family and do not override the general 6px standard / 4px compact radius contract for fields and action buttons.
 
 ## 4. Required state model for all buttons
 
@@ -76,7 +89,7 @@ The face and shadow are separate visual layers. The shadow's position must remai
 | Focus-visible | Stable geometry plus visible focus indicator | Stable geometry plus visible focus indicator | No layout shift |
 | Disabled | Stable geometry; disabled affordance | Stable geometry; disabled affordance | No accidental press animation |
 
-CSS currently uses the button's own `box-shadow` and changes the shadow offsets on hover, then removes the shadow and translates the button on active. This violates the stable-shadow-anchor contract: the shadow is coupled to the moving face in hover and disappears as a style change rather than being covered by the face.
+**Resolved in this branch:** action buttons now keep the shadow on a stationary outer button layer while the inner `[data-vt-studio-button-face]` translates. Hover moves the face by half the shadow offset; active moves it by the full offset over 300ms. The shadow is not moved or removed.
 
 ## 5. Exception index
 
@@ -84,16 +97,16 @@ Exceptions below are either intentional semantic exceptions or known drift. Only
 
 | ID | Component / family | Intended exception | Current source behavior / issue | Status |
 |---|---|---|---|---|
-| E-01 | Text inputs, search/number inputs | Native field semantics; default field text color/stroke follows field policy; inset primary stroke; secondary focus outline | Later canonical field rule forces `border-radius: 8px`, `border: 3px`, and inset stroke `1px` for all sizes; compact sizing is inconsistent | **Defect: remove hard-coded radius/stroke and use size tokens** |
-| E-02 | Textareas | Taller writing surface; resize behavior; compact minimum height may be smaller | Generic textarea rules use 144px minimum height and compact/small 72px; typography/padding also overridden; clarify if 28px means control chrome height or multiline minimum height | **Needs explicit documented geometry exception** |
+| E-01 | Text inputs, search/number inputs | Native field semantics; primary-color default text and stroke; inset primary stroke; secondary focus outline | Final contract now applies primary default text/fill/stroke, consistent placeholder/value typography, size-specific border/radius, and black focused text | **Implemented; awaiting tests and browser verification** |
+| E-02 | Textareas | Taller writing surface; resize behavior; standard 18px / compact 14px copy; 92px minimum height | Final contract now preserves a 92px minimum height in both sizes, 18px/14px typography, and 900 weight | **Implemented; awaiting tests and browser verification** |
 | E-03 | Dropdown trigger | Trigger behaves like a button; menu overlays content | Trigger gets a white-mixed background; component class may have separate sizing and state styling | **Review token inheritance and size conformance** |
 | E-04 | Dropdown menu / options | No button shadow and no press-motion on options; menu can use its own panel geometry | `.vt-studio-dropdown-menu` uses 8px fallback radius and shadow fallback 4px; options have fixed 14px font, 40px minimum height and 2px separator, outside the 44/28 control contracts | **Intentional menu exception; document and visually verify** |
-| E-05 | Split-left button rail/divider | Rail is a separate colored icon region; divider should match the button's declared stroke size | Compact variant explicitly uses `border-right-width: 3px`; later general split rail uses `border-right: 3px solid #000`. This causes the reported thick compact divider in default and selected states | **Defect: derive divider from size stroke token** |
+| E-05 | Split-left button rail/divider | Rail is a separate colored icon region; divider matches the declared size stroke | Final contract uses 3px standard and 2px compact dividers and styles rail/label inside the face wrapper | **Implemented; awaiting tests and browser verification** |
 | E-06 | Split-left selected state | Selected state swaps primary/secondary colors only; geometry is unchanged | Selected CSS explicitly preserves shadow but does not neutralize the conflicting 3px rail rules; selected state can inherit same thick divider | **Defect: selected state must not override geometry** |
-| E-07 | Button typography | Button and split-left labels share the same type contract | Base button CSS declares 32px; compact declares 10px; height variant 44 forces 36px !important; compact height variant forces 22px !important. Split label rules repeat sizes, then later inherit. This conflicts with declared 38px/24px defaults | **Defect: remove contradictory type declarations; one token source** |
-| E-08 | Button radius | Standard 6px, compact 4px | Base token radius 6px; compact selector sets 4px; later field-only rule sets 8px. Other class/inline rules need repository-wide scan | **Partial defect confirmed; standard button radius still needs full cascade audit** |
-| E-09 | Button shadow and transitions | Fixed shadow anchor; face moves half shadow on hover and full shadow on click | Hover changes box-shadow offsets; active sets shadow none and translates button. CSS transitions use 180ms, while constants say 150ms/300ms | **Defect: separate face/shadow layers and unify timings** |
-| E-10 | Switches, radio buttons, checkboxes | 44px square controls with variant skins/shape; selected state changes indicator/fill | Implementations hard-code `data-size="standard"` even though switch/choice APIs have no size prop; CSS family rules and tokens must be audited against intended 44px / stroke / radius values | **Needs audit; explicit API only supports standard currently** |
+| E-07 | Button typography | Button and split-left labels share the same type contract | The final face layer centralizes typography at 36px standard / 22px compact to preserve the established Studio button-label sizing while removing competing parent-level font and shadow behavior | **Implemented; verify visually** |
+| E-08 | Button radius | Standard 6px, compact 4px | Final action face uses 6px standard / 4px compact; 44px switch and choice shapes use the supplied reference-specific 7.333px rectangular radius | **Implemented; verify effective computed styles** |
+| E-09 | Button shadow and transitions | Fixed shadow anchor; face moves half shadow on hover and full shadow on click | Final contract anchors shadow on the outer button and moves only the inner face at 150ms hover / 300ms active | **Implemented; awaiting automated and rendered verification** |
+| E-10 | Switches, radio buttons, checkboxes | Reference-specific 44px geometry and skin variants; selected state changes indicator/fill | Final contract restores 75.68×44 switch tracks, 36.667px handles, 3.667px symmetric insets, 31.68px travel, 44×44 choices, 33×33 radio dots, and explicit black/white/color-swap checkbox marks | **Implemented; awaiting visual verification** |
 | E-11 | Word toggles | 44px default or 28px compact; active handle measures selected word; skin/words/gap/inset may be customized | Dynamic measured handle and inline style are intentional geometry exceptions; CSS/state transitions must be checked for border/radius/motion consistency | **Intentional dynamic-width exception; audit remaining size behavior** |
 | E-12 | Floating-label input/textarea wrappers | Wrapper adds label positioning, not a second editable control | Wrapper classes are separately styled in catalog CSS; ensure they do not change field size/radius/stroke or duplicate focus rings | **Needs cross-file cascade audit** |
 | E-13 | Small/small-size compatibility | CSS defines a `data-size="small"` height of 32px although canonical contract exports only standard/compact | Legacy third size can bypass the two-size rule | **Defect unless a documented migration-only exception is approved** |
