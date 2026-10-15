@@ -5,6 +5,7 @@ import { SubToolboxSection, SubToolboxStack, SubToolboxGrid } from "../component
 import { SubToolboxFieldLabel, SubToolboxSurface } from "../components/subtoolbox/SubToolboxPrimitives"
 import { StudioDropdown } from "./primitives/StudioDropdown"
 import {
+  StudioActionButton,
   StudioButton,
   StudioIconButton,
   StudioInput,
@@ -61,7 +62,7 @@ export const StudioHubCertification: React.FC = () => {
           <SubToolboxGrid minItemWidth="compact">
             <StudioButton sizeVariant="compact" heightVariant="28">Compact · 28px</StudioButton>
             <StudioButton sizeVariant="standard">Standard</StudioButton>
-            <StudioButton sizeVariant="action">Action</StudioButton>
+            <StudioActionButton>Action</StudioActionButton>
             <StudioButton sizeVariant="standard" selected>Selected</StudioButton>
             <StudioButton sizeVariant="standard" disabled>Disabled</StudioButton>
             <StudioButton sizeVariant="standard" loading>Loading</StudioButton>

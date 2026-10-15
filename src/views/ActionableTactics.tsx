@@ -26,7 +26,8 @@ import { toolboxSystem } from "../components/toolboxSystem"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { SubToolboxButton } from "../components/subtoolbox/SubToolboxPrimitives"
 import {
- StudioButton,
+ StudioActionButton,
+  StudioButton,
  StudioInput,
  StudioSearchInput,
  StudioSelect,
@@ -256,9 +257,8 @@ const ActionableTactics: React.FC<{
           ))}
          </StudioSelect>
         </div>
-        <StudioButton
+        <StudioActionButton
          className="w-full"
-         sizeVariant="action"
          onClick={handleGenerate}
          loading={loading}>
          {loading ? (
@@ -267,7 +267,7 @@ const ActionableTactics: React.FC<{
           <Zap size={20} className="fill-black" />
          )}
          {loading ? "Analyzing..." : "Gen 20 Tactics"}
-        </StudioButton>
+        </StudioActionButton>
        </div>
       </SubToolbox>
      </div>

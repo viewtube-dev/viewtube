@@ -6,6 +6,7 @@
   --vt-studio-control-height: 44px;
   --vt-studio-control-stroke: 3px;
   --vt-studio-control-radius: 6px;
+  --vt-studio-control-font-size: 38px;
   --vt-studio-control-shadow: 3px;
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
@@ -14,68 +15,10 @@
 }
 
 [data-vt-studio-control][data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-outline-stroke: 1px; --vt-studio-control-radius: 4px; --vt-studio-control-shadow: 1.5px; --vt-studio-control-hover-offset: .75px; --vt-studio-control-font-size: 24px; }
-[data-vt-studio-control][data-size="small"] { --vt-studio-control-height: 32px; }
 [data-vt-studio-control][data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-outline-stroke: 1.5px; --vt-studio-control-hover-offset: 1.5px; --vt-studio-control-font-size: 38px; }
-[data-vt-studio-control][data-size="action"] { --vt-studio-control-height: 56px; }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
    SubToolboxPrimitives. They are not a second color authority. */
-[data-vt-studio-control]:is(input, textarea, select) {
-  width: 100%;
-  min-width: 0;
-  min-height: var(--vt-studio-control-height);
-  border: var(--vt-studio-control-stroke) solid #000;
-  border-radius: var(--vt-studio-control-radius);
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent) 50%, transparent);
-  background-image: none;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
-  caret-color: var(--vt-studio-control-accent);
-  color: var(--vt-studio-control-accent);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 38px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.035em;
-  text-transform: uppercase;
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: .5px currentColor;
-  outline: none;
-  padding: 0 14px;
-  transition: background-color 180ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out, outline-color 180ms ease-out;
-}
-
-[data-vt-studio-control][data-size="compact"]:is(input, textarea, select) {
-  font-size: 24px;
-  line-height: .86;
-  -webkit-text-stroke: .5px var(--vt-studio-control-accent);
-}
-
-[data-vt-studio-control]:is(input, textarea, select):focus,
-[data-vt-studio-control]:is(input, textarea, select):focus-visible {
-  border-color: #000;
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent) 15%, transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: .5px currentColor;
-  outline: var(--vt-studio-control-outline-stroke, calc(var(--vt-studio-control-stroke) / 2)) solid var(--vt-studio-control-secondary);
-  outline-offset: 1px;
-  caret-color: var(--vt-studio-control-accent);
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
-}
-
-[data-vt-studio-control]:is(input, textarea, select):disabled,
-[data-vt-studio-control]:is(input, textarea, select)[readonly] {
-  cursor: not-allowed;
-  opacity: .55;
-}
-
-textarea[data-vt-studio-control] {
-  min-height: 144px;
-  resize: vertical;
-}
-textarea[data-vt-studio-control][data-size="compact"],
-textarea[data-vt-studio-control][data-size="small"] { min-height: 72px; padding: 8px 10px; font-size: 24px; }
-
 select[data-vt-studio-control] {
   appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, #000 50%), linear-gradient(135deg, #000 50%, transparent 50%);
@@ -110,98 +53,7 @@ button[data-vt-studio-control] {
 }
 
 button[data-vt-studio-control][data-size="compact"] { font-size: 10px; padding: 6px 8px; }
-/* Confirmed StudioButton / StudioSplitLeftButton geometry contract. Both variants
-   share the same typography; only total height and icon rail geometry change. */
-button[data-vt-studio-control][data-height-variant="44"] {
-  --vt-studio-control-height: 44px;
-  height: 44px;
-  min-height: 44px;
-  font-size: 36px !important;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-button[data-vt-studio-control][data-height-variant="28"] {
-  --vt-studio-control-height: 28px;
-  height: 28px;
-  min-height: 28px;
-  padding: 0 8px;
-  border-radius: 4px;
-  font-size: 22px !important;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"],
-button[data-vt-studio-control][data-height-variant="44"][data-split-left="true"] {
-  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
-  padding: 0;
-}
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] {
-  width: 44px;
-  height: 44px;
-}
-button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] {
-  width: 28px;
-  height: 28px;
-  border-right-width: 3px;
-}
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-label] {
-  font-size: 36px;
-  font-weight: 1000;
-  line-height: .86;
-}
-button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
-  font-size: 22px;
-  font-weight: 1000;
-  line-height: .86;
-}
-button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-label] {
-  padding: 0 8px;
-}
-
-button[data-vt-studio-control][data-size="action"] { font-size: 20px; padding: 10px 16px; }
-button[data-vt-studio-control]:hover:not(:disabled) { filter: brightness(.97); transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px)); box-shadow: var(--vt-studio-control-hover-offset, 1.5px) var(--vt-studio-control-hover-offset, 1.5px) 0 0 var(--vt-studio-control-shadow-color); }
-button[data-vt-studio-control]:active:not(:disabled) { box-shadow: none; transform: translate(var(--vt-studio-control-shadow), var(--vt-studio-control-shadow)); }
-button[data-vt-studio-control]:focus-visible { outline: 3px solid var(--vt-studio-control-accent); outline-offset: 3px; }
-button[data-vt-studio-control]:disabled { cursor: not-allowed; filter: grayscale(.5); opacity: .5; }
-/* StudioButton has no selected state. Split-left selection swaps the two module-pair fills without changing geometry or adding a thick border. */
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { box-shadow: var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-button[data-vt-studio-control][data-icon-only="true"] { width: var(--vt-studio-control-height); flex: 0 0 var(--vt-studio-control-height); padding: 0; }
-
 [data-vt-studio-button-icon] { display: grid; place-items: center; }
-
-button[data-vt-studio-control][data-split-left="true"] {
-  display: grid;
-  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
-  width: 100%;
-  min-height: var(--vt-studio-control-height);
-  padding: 0;
-  overflow: hidden;
-  text-align: left;
-}
-
-[data-vt-studio-split-rail] {
-  display: grid;
-  width: var(--vt-studio-control-height);
-  height: var(--vt-studio-control-height);
-  place-items: center;
-  align-self: stretch;
-  border-right: var(--vt-studio-control-stroke) solid #000;
-  background: var(--vt-studio-control-secondary);
-}
-
-[data-vt-studio-split-label] {
-  min-width: 0;
-  padding: 0 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 [data-vt-studio-control][data-tone="neutral"] { --vt-studio-control-accent: #fff; }
 [data-vt-studio-control][data-tone="danger"] { --vt-studio-control-accent: #ff7ac8; }
@@ -308,243 +160,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   [data-vt-studio-control] { transition-duration: .01ms !important; }
 }
 
-/* Split-left controls were using a fixed-height icon rail and a baseline-aligned
-   inline label. Center both regions against the full button height. */
-button[data-vt-studio-control][data-split-left="true"] {
-  align-items: stretch;
-  grid-auto-rows: minmax(var(--vt-studio-control-height), 1fr);
-}
-button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-rail] {
-  display: grid;
-  width: var(--vt-studio-control-height);
-  height: 100%;
-  min-height: var(--vt-studio-control-height);
-  align-self: stretch;
-  place-items: center;
-}
-[data-vt-studio-split-rail] > svg {
-  display: block;
-  flex: 0 0 auto;
-}
-button[data-vt-studio-control][data-split-left="true"] > [data-vt-studio-split-label] {
-  display: flex;
-  min-height: 100%;
-  align-items: center;
-  align-self: stretch;
-  line-height: 1;
-}
-
-/* Canonical production buttons: both default to the ViewTube 44px control height. */
-button[data-vt-studio-control="true"] {
-  box-sizing: border-box;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
-}
-button[data-vt-studio-control="true"][data-size="standard"]:not([data-height-variant="28"]) {
-  height: 44px;
-  min-height: 44px;
-}
-button[data-vt-studio-control="true"][data-split-left="true"] {
-  display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
-  align-items: stretch;
-  gap: 0;
-  padding: 0;
-  overflow: hidden;
-}
-button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail] {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 100%;
-  min-width: 44px;
-  border-right: 3px solid #000;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail] svg {
-  width: 55%;
-  height: 55%;
-  stroke-width: 3;
-}
-button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-label] {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 8px;
-  line-height: .86;
-  white-space: normal;
-}
-
-/* Canonical split-left anatomy: square rail, truly centered icon, readable
-   label type, and no clipping from the generic oversized button typography. */
-button[data-vt-studio-control="true"][data-split-left="true"] {
-  display: grid;
-  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr);
-  align-items: stretch;
-  justify-items: stretch;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
-  max-height: var(--vt-studio-control-height, 44px);
-  padding: 0;
-  overflow: hidden;
-  line-height: 1;
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] {
-  box-sizing: border-box;
-  display: flex;
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  height: 100%;
-  min-height: 0;
-  max-height: 100%;
-  align-items: center;
-  justify-content: center;
-  justify-self: stretch;
-  align-self: stretch;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
-  overflow: hidden;
-}
-
-/* Icon size follows the split-left control's declared geometry. The previous
-   fixed 20px rule overrode the 28px standard icon contract, making every 44px
-   split-left icon look undersized. Keep compact controls proportionate. */
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="44"] > [data-vt-studio-split-rail] > svg {
-  display: block;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
-  flex: 0 0 28px;
-  margin: 0;
-  position: static;
-  transform: none;
-}
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-split-rail] > svg {
-  display: block;
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  min-height: 18px;
-  flex: 0 0 18px;
-  margin: 0;
-  position: static;
-  transform: none;
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
-  font: inherit;
-  letter-spacing: inherit;
-  -webkit-text-stroke: inherit;
-}
-
-@media (max-width: 520px) and (orientation: portrait) {
-  button[data-vt-studio-control="true"][data-split-left="true"] {
-    grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
-  }
-  button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
-    padding-inline: 8px;
-  }
-}
-
-/* Canonical typography contract shared with StudioButton.
-   Split-left labels inherit family, size, weight, line-height, tracking and stroke.
-   Only spacing may adapt on narrow screens; text size is not independently scaled. */
-button[data-vt-studio-control="true"] {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.035em;
-  text-transform: uppercase;
-}
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
-  font-family: inherit;
-  font-weight: 1000;
-  letter-spacing: -.035em;
-  -webkit-text-stroke: .5px currentColor;
-}
-.vt-studio-dropdown-option {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-weight: 1000;
-  letter-spacing: -.025em;
-}
-
-/* Canonical Studio Hub text fields — 44px controls use 38px type; 28px controls use 24px.
-   Primitive 20/21 own the editable control; 137/138 add only the label overlay. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  min-height: var(--vt-studio-control-height, 44px);
-  border: 3px solid #000;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #fff);
-  box-shadow: inset 0 0 0 1px var(--pair-b, #ff7f6b) !important;
-  color: #000;
-  caret-color: var(--pair-a, #36e0f6);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 38px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.035em;
-  text-transform: uppercase;
-  -webkit-text-stroke: .5px currentColor;
-  outline: none;
-  padding: 0 14px;
-  transition: background-color 180ms ease-out, border-color 180ms ease-out, box-shadow 180ms ease-out, outline-color 180ms ease-out;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
-  color: color-mix(in srgb, #000 48%, transparent);
-  opacity: 1;
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: uppercase;
-  -webkit-text-stroke: inherit;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  background: #fff;
-  border-color: #000;
-  box-shadow: inset 0 0 0 2px var(--pair-a, #36e0f6) !important;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  outline: 3px solid var(--pair-b, #ff7f6b);
-  outline-offset: 3px;
-}
-[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea),
-[data-vt-studio-control="true"][data-size="small"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-studio-control-height: 32px;
-  min-height: 32px;
-  padding: 0 10px;
-  font-size: 24px;
-  border-radius: 7px;
-  -webkit-text-stroke: .25px currentColor;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]))[data-size="micro"] {
-  --vt-studio-control-height: 26px;
-  min-height: 26px;
-  padding: 2px 8px;
-  border-width: 2px;
-  border-radius: 6px;
-  font-size: 10px;
-  -webkit-text-stroke: .15px currentColor;
-}
-textarea[data-vt-studio-control="true"] {
-  min-height: 144px;
-  padding: 12px 14px;
-  resize: vertical;
-  line-height: 1.05;
-}
-textarea[data-vt-studio-control="true"][data-size="compact"],
-textarea[data-vt-studio-control="true"][data-size="small"] {
-  min-height: 72px;
-  padding: 8px 10px;
-  line-height: 1.05;
-}
 /* Shared floating-label fields. Label type is independent of field text size. */
 .vt-studio-floating-field { --vt-studio-floating-label-size: 32px; position:relative; display:block; width:100%; min-width:0; isolation:isolate; }
 .vt-studio-floating-field > [data-vt-studio-control="true"] { display:block; width:100%; }
@@ -698,95 +313,6 @@ button[data-vt-studio-control][data-height-variant="28"][data-split-left="true"]
  .vt-confirmed-family:has([data-height-variant="28"]) .vt-confirmed-variants,
  .vt-confirmed-family:has(.vt-studio-legend-multi[data-size="compact"]) .vt-confirmed-variants { grid-template-columns:minmax(0,1fr); }
 }
-
-/* Canonical library defaults: 44px standard / 28px compact. */
-[data-vt-studio-control] { --vt-studio-control-radius:8px; --vt-studio-hover-duration:150ms; --vt-studio-click-duration:300ms; }
-[data-vt-studio-control][data-height-variant="44"],[data-vt-studio-control][data-size="standard"] { --vt-studio-control-radius:8px; }
-[data-vt-studio-control][data-height-variant="28"],[data-vt-studio-control][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:5px; }
-button[data-vt-studio-control][data-height-variant="44"] { border-radius:8px; }
-button[data-vt-studio-control][data-height-variant="28"] { border-radius:5px; }
-button[data-vt-studio-control]:hover:not(:disabled) { transform:translateY(1.5px); transition-duration:150ms; }
-button[data-vt-studio-control]:active:not(:disabled) { transform:translate(3px,3px); transition-duration:300ms; }
-button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] { border-right-width:2px; }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] { border-width:var(--vt-studio-control-stroke,3px)!important; border-color:#000!important; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))!important; }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6))!important; border-right-width:var(--vt-studio-control-stroke,3px)!important; }
-button[data-vt-studio-control][data-split-left="true"][data-selected="true"] > [data-vt-studio-split-label] { background:transparent!important; }
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon],button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail]>svg { width:36px;height:36px;display:grid;place-items:center;margin:auto; }
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-button-icon] svg { width:36px;height:36px;stroke-width:2; }
-button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-button-icon] svg,button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] svg { stroke-width:1.65; }
-
-/* Canonical text-field color/focus/caret behavior.
-   Primary = module pair A; secondary = module pair B.
-   Border and inline stroke share the same size-specific width. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-color-1: var(--pair-a, #36e0f6);
-  --vt-field-color-2: var(--pair-b, #ff7f6b);
-  --vt-field-stroke: 3px;
-  --vt-field-outline-stroke: calc(var(--vt-field-stroke) / 2);
-  border: var(--vt-field-stroke) solid #000;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--vt-field-color-1) 50%, transparent);
-  color: var(--vt-field-color-1);
-  -webkit-text-fill-color: var(--vt-field-color-1);
-  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-color-1);
-  caret-color: var(--vt-field-color-1);
-  caret-shape: block;
-  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-color-1) !important;
-  outline: none;
-  transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 300ms ease-out;
-}
-[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-stroke: 3px;
-  --vt-field-outline-stroke: 1.5px;
-  min-height: 44px;
-  border-width: 3px;
-  border-radius: 8px;
-}
-[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-stroke: 2px;
-  --vt-field-outline-stroke: 1px;
-  min-height: 28px;
-  border-width: 2px;
-  border-radius: 5px;
-  padding-left: 8px;
-  padding-right: 8px;
-  font-size: 24px;
-}
-textarea[data-vt-studio-control="true"][data-size="standard"] {
-  min-height: 144px;
-  padding: 12px 14px;
-  line-height: 1.05;
-}
-textarea[data-vt-studio-control="true"][data-size="compact"] {
-  min-height: 72px;
-  padding: 8px;
-  line-height: 1.05;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  background: color-mix(in srgb, var(--vt-field-color-1) 15%, transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: #000;
-  border-color: #000;
-  outline: var(--vt-field-outline-stroke) solid var(--vt-field-color-2);
-  outline-offset: 2px;
-  box-shadow:
-    inset 0 0 0 var(--vt-field-stroke) var(--vt-field-color-1),
-    0 0 0 5px color-mix(in srgb, var(--vt-field-color-2) 30%, transparent) !important;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
-  color: color-mix(in srgb, var(--vt-field-color-1) 70%, transparent);
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: inherit;
-}
-
-button[data-vt-studio-control][data-height-variant="44"] [data-vt-studio-split-rail] > svg { width:36px !important; height:36px !important; min-width:36px !important; min-height:36px !important; stroke-width:2.5px; }
-button[data-vt-studio-control][data-height-variant="28"] [data-vt-studio-split-rail] > svg { width:18px !important; height:18px !important; stroke-width:1.65px; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-label { left:8px; max-width:calc(100% - 16px); padding:1px 5px; border-width:2px; border-radius:4px; font-size:8px; letter-spacing:.08em; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { padding:0 6px 0 8px; border-radius:4px; font-size:22px; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-count { min-width:16px; height:16px; padding:0 3px; border-width:1.5px; border-radius:4px; font-size:9px; }
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron { width:12px; height:12px; stroke-width:2; }
 
 /* Dropdown size ratios: preserve the same relative control geometry in both sizes.
    Compact check marks and row spacing scale with the 28px trigger rather than staying 44px-sized. */
@@ -989,120 +515,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   }
 }
 
-/* Studio text field rendering correction
-   Keep this authoritative block after legacy compatibility rules and labeled-field
-   styles. Earlier wrapper declarations used !important and overrode the field state.
-   Native insertion caret is intentional: experimental block-caret shaping is not interoperable and
-   can render duplicated/wide blocks in some browsers. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-color-1: var(--pair-a, #36e0f6);
-  --vt-field-color-2: var(--pair-b, #ff7f6b);
-  --vt-field-stroke: 3px;
-  --vt-field-outline-stroke: 1.5px;
-  --vt-field-outline-shadow-width: 3px;
-  box-sizing: border-box !important;
-  background-color: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent) !important;
-  background-image: none !important;
-  color: var(--pair-a, #36e0f6) !important;
-  -webkit-text-fill-color: var(--pair-a, #36e0f6) !important;
-  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
-  caret-color: var(--pair-a, #36e0f6) !important;
-  border: 3px solid #000 !important;
-  border-radius: 8px !important;
-  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--pair-a, #36e0f6) !important;
-  outline: none;
-  transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
-}
-
-[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-stroke: 3px;
-  --vt-field-outline-stroke: 1.5px;
-  --vt-field-outline-shadow-width: 3px;
-  min-height: 44px;
-  border-width: 3px !important;
-  border-radius: 8px !important;
-}
-
-[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  --vt-field-stroke: 2px;
-  --vt-field-outline-stroke: 1px;
-  --vt-field-outline-shadow-width: 2px;
-  min-height: 28px;
-  border-width: 2px !important;
-  border-radius: 5px !important;
-  padding-inline: 8px;
-  font-size: 24px;
-  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
-}
-
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  background-color: color-mix(in srgb, var(--pair-a, #36e0f6) 15%, transparent) !important;
-  background-image: none !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke: .5px #000 !important;
-  border-color: #000 !important;
-  outline: var(--vt-field-outline-stroke) solid var(--pair-b, #ff7f6b) !important;
-  outline-offset: 2px !important;
-  box-shadow:
-    inset 0 0 0 var(--vt-field-stroke) var(--pair-a, #36e0f6),
-    0 0 0 var(--vt-field-outline-shadow-width) color-mix(in srgb, var(--pair-b, #ff7f6b) 30%, transparent) !important;
-  caret-color: var(--pair-a, #36e0f6) !important;
-}
-
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
-  color: color-mix(in srgb, var(--pair-a, #36e0f6) 70%, transparent) !important;
-  -webkit-text-fill-color: currentColor !important;
-  -webkit-text-stroke: inherit !important;
-  opacity: 1;
-}
-
-textarea[data-vt-studio-control="true"][data-size="standard"] {
-  min-height: 144px;
-  padding: 12px 14px;
-  line-height: 1.05;
-}
-
-textarea[data-vt-studio-control="true"][data-size="compact"] {
-  min-height: 72px;
-  padding: 8px;
-  line-height: 1.05;
-}
-
-/* Final canonical size typography for native Studio text fields.
-   Keep typography and text-stroke proportional to the 44px / 28px component contract. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-size: 38px !important;
-  font-weight: 1000 !important;
-  line-height: .86 !important;
-  letter-spacing: -.035em !important;
-  text-transform: uppercase !important;
-  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
-  padding: 0 14px !important;
-}
-[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  font-size: 38px !important;
-  font-weight: 1000 !important;
-  line-height: .86 !important;
-  letter-spacing: -.035em !important;
-  border-width: 3px !important;
-  border-radius: 8px !important;
-  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
-  padding-inline: 14px !important;
-}
-[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  font-size: 24px !important;
-  font-weight: 1000 !important;
-  line-height: .86 !important;
-  letter-spacing: -.035em !important;
-  border-width: 2px !important;
-  border-radius: 5px !important;
-  -webkit-text-stroke: .5px var(--pair-a, #36e0f6) !important;
-  padding-inline: 8px !important;
-}
-
 /* Standard dropdown menus visually join the trigger and reuse its size's typography. */
 .vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 8px; --vt-dropdown-font-size: 38px; }
 .vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 5px; --vt-dropdown-font-size: 24px; }
@@ -1196,25 +608,6 @@ textarea[data-vt-studio-control="true"][data-size="compact"] {
   letter-spacing: -.035em !important;
 }
 
-/* Preserve readable paragraph rhythm while textareas share the size-specific font contract. */
-textarea[data-vt-studio-control="true"] { line-height: 1.05 !important; }
-textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05 !important; }
-
-/* 2026-10-13 UI audit: one focus stroke, matching text-field typography/caret,
-   single-column primitive specimens, and a size-consistent compact dropdown. */
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-weight: 1000 !important;
-  -webkit-text-stroke: .5px currentColor;
-  caret-color: var(--pair-a, #36e0f6) !important;
-  caret-shape: block;
-}
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
-  outline: var(--vt-field-outline-stroke, 1.5px) solid var(--pair-b, #ff7f6b) !important;
-  outline-offset: 2px !important;
-  box-shadow: none !important;
-}
 /* Keep the library's switch, choice, and word-toggle examples from being
    squeezed into a two-column grid inside narrow toolbox modules. */
 .vt-catalog-control-family .vt-catalog-control-variants,
@@ -1286,132 +679,6 @@ textarea[data-vt-studio-control="true"][data-size="compact"] { line-height: 1.05
 .vt-studio-legend-multi[data-size="compact"]:has(.vt-studio-legend-count.is-visible) .vt-studio-legend-label {
   top: -3px !important;
   transform: translateY(-50%) scale(.75) !important;
-}
-
-/* Canonical text-field stroke contract (reference-matched).
-   Keep text fill/stroke coupled through currentColor, retain the inline accent
-   stroke in both states, and nest the secondary focus ring directly against
-   the black outer border rather than leaving a white offset gap. */
-[data-vt-studio-control]:is(input, textarea, select) {
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke-color: currentColor;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
-}
-
-[data-vt-studio-control]:is(input, textarea, select):focus,
-[data-vt-studio-control]:is(input, textarea, select):focus-visible {
-  color: #000;
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke-color: currentColor;
-  outline-offset: 0;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent);
-}
-
-/* Textareas must keep the same inline accent stroke as inputs, including focus. */
-textarea[data-vt-studio-control],
-textarea[data-vt-studio-control]:focus,
-textarea[data-vt-studio-control]:focus-visible {
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-studio-control-accent) !important;
-}
-
-/* Preserve a visible keyboard focus ring without adding a second shadow ring. */
-[data-vt-studio-control]:is(input, textarea, select):focus-visible {
-  outline-style: solid;
-}
-
-/* Consolidated from studio-split-left-consistency.css: canonical split-left geometry/state contract. */
-button[data-vt-studio-control="true"][data-split-left="true"] {
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
-  align-items: stretch;
-  gap: 0;
-  width: 100%;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
-  max-height: var(--vt-studio-control-height, 44px);
-  padding: 0;
-  overflow: hidden;
-  border: 3px solid #000;
-  border-radius: 8px;
-  color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 14px;
-  font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.035em;
-  text-align: left;
-  text-transform: uppercase;
-  filter: none !important;
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  place-self: stretch;
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  max-width: var(--vt-studio-control-height, 44px);
-  height: 100%;
-  min-height: 0;
-  max-height: 100%;
-  margin: 0;
-  padding: 0;
-  border-right: 3px solid #000;
-  line-height: 0;
-  overflow: hidden;
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-rail] > svg {
-  display: block;
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
-  flex: 0 0 20px;
-  margin: 0;
-  stroke-width: 3;
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  min-height: 0;
-  margin: 0;
-  padding: 0 10px;
-  overflow: hidden;
-  color: #000;
-  font: inherit;
-  letter-spacing: inherit;
-  text-align: left;
-  text-transform: uppercase;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  -webkit-text-stroke: inherit;
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"],
-button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] {
-  box-shadow: 0 0 0 3px #000, 4px 4px 0 color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
-}
-
-button[data-vt-studio-control="true"][data-split-left="true"]:hover:not(:disabled),
-button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabled) {
-  filter: none !important;
-}
-
-@media (max-width: 520px) and (orientation: portrait) {
-  button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {
-    padding-inline: 8px;
-  }
 }
 
 /* Dropdown label/trigger separation: the floating label is fixed-size and never
@@ -1528,117 +795,59 @@ button[data-vt-studio-control="true"][data-split-left="true"]:active:not(:disabl
    This section is the final authority for fields, 44px selection controls,
    button-face motion, split-left geometry, and configurable word-toggle ratios. */
 
-/* 1. Text fields: primary text/stroke at rest; black text only while focused. */
-[data-vt-studio-control="true"]:is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-  textarea
-) {
-  --vt-field-color-1: var(--pair-a, #36e0f6);
-  --vt-field-color-2: var(--pair-b, #ff7f6b);
+/* 1. Canonical field family. The primary-colored block caret is the global rule for inputs and textareas. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-primary: var(--pair-a, #36e0f6);
+  --vt-field-secondary: var(--pair-b, #ff7f6b);
   --vt-field-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-field-outline-stroke: calc(var(--vt-field-stroke) / 2);
-  box-sizing: border-box !important;
-  width: 100%;
-  min-width: 0;
-  border: var(--vt-field-stroke) solid #000 !important;
-  border-radius: var(--vt-studio-control-radius, 6px) !important;
-  background-color: color-mix(in srgb, var(--vt-field-color-1) 50%, transparent) !important;
-  background-image: none !important;
-  color: var(--vt-field-color-1) !important;
-  -webkit-text-fill-color: var(--vt-field-color-1) !important;
-  -webkit-text-stroke: .5px currentColor !important;
-  caret-color: var(--vt-field-color-1) !important;
-  caret-shape: block;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-weight: 1000 !important;
-  text-transform: uppercase !important;
-  letter-spacing: -.035em;
-  text-decoration: none !important;
-  -webkit-text-decoration: none !important;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box; width: 100%; min-width: 0;
+  border: var(--vt-field-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background-color: color-mix(in srgb, var(--vt-field-primary) 50%, transparent);
+  background-image: none; color: var(--vt-field-primary);
+  -webkit-text-fill-color: var(--vt-field-primary); -webkit-text-stroke: .5px currentColor;
+  caret-color: var(--vt-field-primary); caret-shape: block;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000; text-transform: uppercase; letter-spacing: -.035em; line-height: .86;
+  outline: none; appearance: none; -webkit-tap-highlight-color: transparent;
+  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-primary);
+  transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
-
-[data-vt-studio-control="true"][data-size="standard"]:is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"])
-) {
-  min-height: 44px;
-  font-size: 38px !important;
-  line-height: .86;
+[data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-stroke: 3px; --vt-field-outline-stroke: 1.5px;
+  min-height: 44px; border-radius: 6px; padding-inline: 14px; font-size: 38px;
 }
-
-[data-vt-studio-control="true"][data-size="compact"]:is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"])
-) {
-  min-height: 28px;
-  font-size: 24px !important;
-  line-height: .86;
-  --vt-field-stroke: 2px;
-  --vt-field-outline-stroke: 1px;
-  border-radius: 4px !important;
+[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
+  --vt-field-stroke: 2px; --vt-field-outline-stroke: 1px;
+  min-height: 28px; border-radius: 4px; padding-inline: 8px; font-size: 24px;
 }
-
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  display: block;
-  min-height: 92px !important;
-  resize: vertical;
-  padding: 10px 12px;
-  font-size: 18px !important;
-  font-weight: 900 !important;
-  line-height: 1.25 !important;
-  letter-spacing: -.02em;
+  display: block; min-height: 92px; resize: vertical; padding: 10px 12px;
+  font-size: 18px; font-weight: 900; line-height: 1.25; letter-spacing: -.02em;
 }
-
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  min-height: 92px !important;
-  padding: 8px 10px;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  line-height: 1.3 !important;
+  min-height: 92px; padding: 8px 10px; font-size: 14px; font-weight: 900; line-height: 1.3;
 }
-
-[data-vt-studio-control="true"]:is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-  textarea
-)::placeholder {
-  color: var(--vt-field-color-1) !important;
-  -webkit-text-fill-color: var(--vt-field-color-1) !important;
-  -webkit-text-stroke: .5px currentColor !important;
-  font: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  opacity: 1 !important;
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
+  color: color-mix(in srgb, var(--vt-field-primary) 70%, transparent);
+  -webkit-text-fill-color: currentColor; -webkit-text-stroke: inherit; font: inherit; opacity: 1;
 }
-
-[data-vt-studio-control="true"]:is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-  textarea
-):focus,
-[data-vt-studio-control="true"]:is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-  textarea
-):focus-visible {
-  background-color: color-mix(in srgb, var(--vt-field-color-1) 15%, transparent) !important;
-  border-color: #000 !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke: .5px currentColor !important;
-  caret-color: var(--vt-field-color-1) !important;
-  outline: var(--vt-field-outline-stroke) solid var(--vt-field-color-2) !important;
-  outline-offset: 0 !important;
-  box-shadow:
-    inset 0 0 0 var(--vt-field-stroke) var(--vt-field-color-1),
-    0 0 0 5px color-mix(in srgb, var(--vt-field-color-2) 30%, transparent) !important;
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus,
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):focus-visible {
+  background-color: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);
+  color: #000; -webkit-text-fill-color: #000; -webkit-text-stroke: .5px currentColor;
+  caret-color: var(--vt-field-primary);
+  outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary); outline-offset: 0;
+  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-primary),
+    0 0 0 3px color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
 }
-
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):disabled,
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)[readonly] {
+  cursor: not-allowed; opacity: .55;
+}
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::spelling-error,
-textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::grammar-error {
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::grammar-error { text-decoration: none; text-decoration-line: none; }
 
 /* 2. Canonical 44px selection-control geometry.
    Switch travel is derived from the exact reference ratios:
@@ -1760,182 +969,60 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
   }
 }
 
-/* 3. Raised actions: shadow remains on the stationary button; only its face moves. */
-button[data-vt-studio-button="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
-  --vt-studio-control-shadow: 3px;
-  --vt-studio-control-hover-offset: 1.5px;
-  --vt-studio-control-radius: 6px;
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  align-items: stretch;
-  justify-content: stretch;
-  box-sizing: border-box;
-  min-width: 0;
-  min-height: 44px;
-  height: 44px;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: var(--vt-studio-control-radius) !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  transform: none !important;
-  overflow: visible;
-  transition: none !important;
+/* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
+button[data-vt-studio-button="true"] { box-sizing:border-box; display:inline-flex; width:auto; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color); transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out,box-shadow 150ms ease-out; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
+/* Separate prominent action family. Not a StudioButton size variant. */
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
+  --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
+  --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px;
+  box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
+  min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 6px; background: transparent;
+  box-shadow: 3px 3px 0 var(--vt-studio-control-shadow-color); color: #000;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
 }
-button[data-vt-studio-button="true"][data-size="compact"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger),
-button[data-vt-studio-button="true"][data-height-variant="28"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
-  --vt-studio-control-shadow: 1.5px;
-  --vt-studio-control-hover-offset: .75px;
-  --vt-studio-control-radius: 4px;
-  min-height: 28px;
-  height: 28px;
-}
-button[data-vt-studio-button="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: var(--vt-studio-control-shadow, 3px) var(--vt-studio-control-shadow, 3px) 0 0 var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent));
-  pointer-events: none;
-}
-button[data-vt-studio-button="true"]:hover:not(:disabled),
-button[data-vt-studio-button="true"]:active:not(:disabled) {
-  transform: none !important;
-}
-[data-vt-studio-button-face] {
-  position: relative;
-  z-index: 1;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: auto;
-  min-width: 0;
-  min-height: 44px;
-  height: 44px;
-  padding: 0 1em;
-  border: 3px solid #000;
-  border-radius: 6px;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  color: #000;
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
+  box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; min-height: 56px; height: 56px; padding: 10px 16px;
+  border: 3px solid #000; border-radius: 6px;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 36px;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  -webkit-text-stroke: 1px currentColor;
-  transform: translate(0, 0);
+  font-size: 20px; font-weight: 1000; line-height: .95; letter-spacing: -.02em;
+  text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
   transition: transform 150ms ease-out, background-color 150ms ease-out;
 }
-button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {
-  transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px));
-}
-button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] {
-  transform: translate(var(--vt-studio-control-shadow, 3px), var(--vt-studio-control-shadow, 3px));
-  transition-duration: 300ms;
-}
-button[data-vt-studio-button="true"]:focus-visible {
-  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 3px;
-}
-button[data-vt-studio-button="true"][data-height-variant="28"] > [data-vt-studio-button-face],
-button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] {
-  min-height: 28px;
-  height: 28px;
-  padding: 0 8px;
-  border-width: 2px;
-  border-radius: 4px;
-  font-size: 22px;
-}
-button[data-vt-studio-button="true"][data-icon-only="true"] {
-  width: var(--vt-studio-control-height, 44px);
-  flex: 0 0 var(--vt-studio-control-height, 44px);
-}
-button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] {
-  width: 100%;
-  padding: 0;
-}
-[data-vt-studio-button-icon] { display: grid; place-items: center; flex: none; }
-button[data-vt-studio-button="true"][data-height-variant="44"] [data-vt-studio-button-icon] svg { width: 36px; height: 36px; stroke-width: 2; }
-button[data-vt-studio-button="true"][data-height-variant="28"] [data-vt-studio-button-icon] svg { width: 22px; height: 22px; stroke-width: 1.65; }
-button[data-vt-studio-button="true"][data-height-variant="44"][data-split-left="true"] [data-vt-studio-split-rail] > svg {
-  display: block;
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  flex: 0 0 36px;
-  stroke-width: 2.5px;
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) > [data-vt-studio-action-face] { transform: translate(1.5px, 1.5px); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform: translate(3px, 3px); transition-duration: 300ms; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; }
+@media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none; }
 }
 
-/* Split-left uses the same button face/shadow contract; rail width equals height. */
-button[data-vt-studio-button="true"][data-split-left="true"] {
-  display: flex;
-  width: 100%;
-}
-button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] {
-  display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
-  align-items: stretch;
-  justify-content: stretch;
-  width: 100%;
-  min-width: 0;
-  padding: 0;
-  overflow: hidden;
-  text-align: left;
-}
-button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] {
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  align-self: stretch;
-  width: 44px;
-  min-width: 44px;
-  height: 100%;
-  border-right: 3px solid #000;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  padding: 0 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-button[data-vt-studio-button="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-button-face],
-button[data-vt-studio-button="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-button-face] {
-  grid-template-columns: 28px minmax(0, 1fr);
-}
-button[data-vt-studio-button="true"][data-split-left="true"][data-height-variant="28"] [data-vt-studio-split-rail],
-button[data-vt-studio-button="true"][data-split-left="true"][data-size="compact"] [data-vt-studio-split-rail] {
-  width: 28px;
-  min-width: 28px;
-  border-right-width: 2px;
-}
-button[data-vt-studio-button="true"][data-split-left="true"][data-height-variant="28"] [data-vt-studio-split-label],
-button[data-vt-studio-button="true"][data-split-left="true"][data-size="compact"] [data-vt-studio-split-label] {
-  padding: 0 8px;
-  font-size: 22px;
-}
-button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] > [data-vt-studio-button-face],
-button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail],
-button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
-@media (prefers-reduced-motion: reduce) {
-  button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
-    transition: none !important;
-  }
-}
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; height:100%; min-height:100%; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.035em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform 150ms ease-out,background-color 150ms ease-out; }
+button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] { padding-inline:8px; font-size:24px; }
+button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
+button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-shadow,3px),var(--vt-studio-control-shadow,3px)); transition-duration:300ms; }
+button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
+button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; }
+button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+button[data-vt-studio-button="true"][data-icon-only="true"] { width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); flex:0 0 var(--vt-studio-control-height); }
+button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { padding:0; }
+[data-vt-studio-button-icon] { display:grid; flex:0 0 auto; place-items:center; }
+button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
+
+/* Sole split-left geometry contract: rail equals control height and divider uses the shared stroke token. */
+button[data-vt-studio-button="true"][data-split-left="true"] { display:inline-flex; width:100%; padding:0; overflow:hidden; }
+button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] { display:grid; grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr); align-items:stretch; justify-content:stretch; padding:0; overflow:hidden; text-align:left; }
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] { box-sizing:border-box; display:grid; place-items:center; align-self:stretch; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); height:100%; border-right:var(--vt-studio-control-stroke) solid #000; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] > svg { display:block; width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); min-width:var(--vt-studio-control-icon-size,28px); min-height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] { display:flex; align-items:center; min-width:0; height:100%; padding-inline:10px; overflow:hidden; color:#000; font:inherit; letter-spacing:inherit; text-align:left; text-overflow:ellipsis; white-space:nowrap; -webkit-text-stroke:inherit; }
+button[data-vt-studio-button="true"][data-size="compact"][data-split-left="true"] [data-vt-studio-split-label] { padding-inline:8px; }
+button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+@media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { transition:none; } }
 
 /* 4. Word-toggle sizing remains configurable at the component boundary. */
 .vt-studio-44-word-toggle {

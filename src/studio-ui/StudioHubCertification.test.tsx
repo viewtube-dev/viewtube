@@ -4,13 +4,14 @@ import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { StudioDropdown } from "./primitives/StudioDropdown"
-import { StudioButton, StudioIconButton, StudioSplitLeftButton } from "./primitives/StudioControls"
+import { StudioActionButton, StudioButton, StudioIconButton, StudioSplitLeftButton } from "./primitives/StudioControls"
 
 describe("Studio Hub canonical controls", () => {
   it("marks every action with the Studio ownership boundary and registered size", () => {
     const html = renderToStaticMarkup(
       <>
         <StudioButton sizeVariant="compact">Compact</StudioButton>
+        <StudioActionButton>Action</StudioActionButton>
         <StudioIconButton label="Icon" icon={<span>i</span>} />
         <StudioSplitLeftButton icon={<span>i</span>}>Split</StudioSplitLeftButton>
       </>,
@@ -18,6 +19,7 @@ describe("Studio Hub canonical controls", () => {
 
     expect(html).toContain('data-vt-studio-control="true"')
     expect(html).toContain('data-size="compact"')
+    expect(html).toContain('data-vt-studio-action-button="true"')
     expect(html).toContain('data-icon-only="true"')
     expect(html).toContain('data-split-left="true"')
     expect(html).toContain("data-vt-studio-split-rail")
@@ -45,13 +47,13 @@ describe("Studio Hub canonical controls", () => {
 
   it("defines one final field and split-left geometry contract", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const finalContract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    const finalContract = css.slice(css.lastIndexOf("/* 1. Canonical field family."))
 
-    expect(finalContract).toContain("-webkit-text-stroke: .5px currentColor !important")
-    expect(finalContract.slice(0, finalContract.indexOf("/* 2. Canonical 44px"))).not.toContain("-webkit-text-stroke: 0 !important")
-    expect(finalContract).toContain("border-right-width: 2px")
-    expect(finalContract).toContain("--vt-studio-control-hover-offset: .75px")
-    expect(finalContract).toContain("font-size: 18px !important")
+    expect(finalContract).toContain("caret-shape: block")
+    expect(finalContract).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
+    expect(finalContract).toContain("--vt-studio-control-hover-offset:.75px")
+    expect(finalContract).toContain("--vt-studio-control-icon-size:18px")
+    expect(finalContract).toContain("button[data-vt-studio-action-button")
   })
 
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
