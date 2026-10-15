@@ -36,7 +36,7 @@ The goal is not to force every guide to the same word count. The goal is to ensu
 - **Renderer authority:** `src/features/resource-library/ResourceDocumentRenderer.tsx` plus shared CSS.
 - **Editorial mirrors:** `docs/resources/library/` contains copies of the first three guides for historical/editorial continuity. They must not be edited independently; sync them deliberately when changing the corresponding runtime source.
 - **Git history and donor repository:** source of prior versions, not competing runtime authorities.
-- **Older abbreviated drafts for guides 9–15:** seven unregistered files under the runtime resource directory. Compare for unique material; do not register as extra guides or delete before reviewing.
+- **Older abbreviated drafts for guides 9–15:** seven unregistered files preserved under `docs/resources/archive/legacy-drafts/`. Their unique material was reviewed and carried into the registered guides where useful; the archive is for provenance and is not runtime content.
 
 Donor repo: [themotionvisual/ViewTubeBUILD](https://github.com/themotionvisual/ViewTubeBUILD). Preserve the September 27 creator-facing rewrites of guides 1–2 as primary learning versions; use earlier technical versions to recover useful detail into optional Advanced Reference sections, not to replace the beginner-first path.
 
@@ -108,7 +108,7 @@ Link between these systems when useful; do not duplicate their purpose.
 
 - [ ] Runtime source authority and duplicate-copy policy are explicit.
 - [ ] Guides 1–3 remain creator-first; useful technical history is preserved as optional reference where appropriate.
-- [ ] Older drafts for guides 9–15 are compared and their unique material preserved.
+- [x] Older drafts for guides 9–15 are compared, their unique material preserved, and the original drafts archived outside the runtime directory.
 - [ ] Guides 4–15 provide substantial beginner-facing explanations and practical application.
 - [ ] Reading times are recalculated from actual content.
 - [ ] Broken or placeholder source URLs are corrected or removed.
@@ -119,5 +119,5 @@ Link between these systems when useful; do not duplicate their purpose.
 
 ## Status of the first series
 
-The 15 IDs are registered. The collection is in **content-quality remediation**, not being declared fully complete solely because all entries exist.
+All 15 IDs remain registered. Guides 4–15 have been expanded substantially, their reading times and registry descriptions corrected, the first two technical donor guides recovered into optional Advanced Reference sections, and the seven short legacy drafts moved to the archive. The collection remains in **content-quality remediation** until tests, source checks, and rendered desktop/mobile review are complete.
 
