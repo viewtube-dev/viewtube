@@ -23,6 +23,23 @@ const sectionId = (section: string, index: number): string => {
  return raw.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")
 }
 
+const REQUIRED_CONTEXT_BY_TASK: Record<string, string[]> = {
+ creator_asset_draft: ["creator_style", "active_project_context", "channel_knowledge", "confirmed_creator_context"],
+ daily_oracle: ["confirmed_creator_context", "channel_knowledge", "active_project_context", "algorithm_channel_opportunity_intelligence"],
+ first_week_plan: ["confirmed_creator_context", "channel_knowledge", "active_project_context", "algorithm_channel_opportunity_intelligence"],
+ best_video_autopsy: ["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence", "deterministic_analytics_findings"],
+ channel_revival: ["confirmed_creator_context", "channel_knowledge", "active_project_context", "current_public_research"],
+ strategy: ["confirmed_creator_context", "channel_knowledge", "active_project_context", "algorithm_channel_opportunity_intelligence"],
+ analytics: ["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence", "deterministic_analytics_findings"],
+ seo: ["channel_evidence", "evidence_quality", "creator_style", "public_niche_knowledge"],
+ audience: ["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence", "audience_intelligence", "channel_knowledge"],
+ revenue: ["channel_evidence", "evidence_quality", "shared_evidence_contract", "deterministic_statistics_intelligence", "deterministic_analytics_findings"],
+ publishing: ["active_project_context", "confirmed_creator_context", "channel_knowledge"],
+ content_analysis: ["channel_evidence", "channel_knowledge", "active_project_context", "public_niche_knowledge"],
+ journal: ["confirmed_creator_context", "channel_knowledge", "recent_conversation"],
+ goal_coach: ["confirmed_creator_context", "channel_knowledge", "active_project_context", "algorithm_channel_opportunity_intelligence"],
+}
+
 const priorityFor = (id: string, intent: string): number => {
  const priority: Record<string, number> = {
   system_prompt: 1000,
@@ -89,7 +106,8 @@ export const resolveBrainContextSections = (
    return
   }
   if (normalized.length > 80) seen.add(normalized)
-  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task")
+  const taskRequired = REQUIRED_CONTEXT_BY_TASK[profile.id] || []
+  const required = ["system_prompt", "creator_control_policy"].includes(id) || id.endsWith("_task") || taskRequired.includes(id)
   candidates.push({ id, text, index, priority: priorityFor(id, profile.intent), required })
  })
  const ranked = [...candidates].sort((a, b) =>
