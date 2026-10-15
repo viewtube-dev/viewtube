@@ -33,7 +33,7 @@ test("standalone text inputs provide standard, compact, and disabled specimens",
   assert.ok(catalog.includes('aria-label="Studio text input 44px"'));
   assert.ok(catalog.includes('aria-label="Studio text input 28px A"'));
   assert.ok(catalog.includes('aria-label="Studio text input 28px disabled"'));
-  assert.match(catalog, /28px compact · disabled[\\s\\S]*?sizeVariant="compact"[^>]*disabled/);
+  assert.match(catalog, /28px compact · disabled[\s\S]*?sizeVariant="compact"[^>]*disabled/);
 });
 
 test("global defaults distinguish the measured focus shadow from the CSS outline", () => {
