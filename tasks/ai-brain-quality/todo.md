@@ -162,3 +162,13 @@
 - [ ] Expose the provider-reported served model version from the Gemini response without changing the structured output contract.
 - [ ] Add project revision, style profile version, and selected/omitted context-section IDs only when their canonical source contracts are available.
 - [ ] Full phases 5–12 remain uncertified until the live UI, durable server persistence/consent, stable-ID lifecycle propagation, and full-suite baseline failures listed above are resolved.
+
+
+## Phase 2 — canonical project resolution update — 2026-10-15
+
+- [x] Extend the shared creator-context resolver to resolve a requested project ID from the canonical project index supplied by the active Brain state when a surface omits the full Project object.
+- [x] Pass the canonical project index through BrainRuntime and the Sidebar Copilot, Brain Hub, and full Brain workspace callers.
+- [x] Add a regression test proving exact-ID resolution joins the matching ContentBuild and does not use a neighboring project.
+- [ ] Complete the per-capability evidence requirements matrix and fail-closed checks for absent required evidence.
+- [ ] Implement model-aware token budgeting from an explicit model/context-window contract rather than guessing provider limits.
+- [ ] Verify cross-surface parity and channel/project isolation with focused tests and current-head release gates.
