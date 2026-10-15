@@ -156,6 +156,14 @@ https://creatoracademy.youtube.com/
 **YouTube Help** — Current Analytics definitions and creator guidance.  
 https://support.google.com/youtube/
 
+## Field Exercise: Write a Small Experiment Brief
+
+Before production, record the audience need, hypothesis, proposed change, expected signal, comparison, review date, and risks. Prefer one interpretable change over a broad rework with many simultaneous differences. Define what would make you keep, revise, or stop the experiment, and include a guardrail such as accuracy or production effort. After publishing, record the result even if it contradicts the hypothesis. If the outcome is ambiguous, label it inconclusive and design a better next test.
+
+## Evidence Boundary: Experiments and Causality
+
+A before-and-after comparison is not automatically controlled. Topic demand, audience composition, timing, promotion, and creative execution may change together. Small samples are noisy, and one video's result may not generalize. State the strength of evidence, avoid unsupported causal language, and preserve null or negative outcomes as useful learning.
+
 ## Document Maintenance
 
 | Attribute | Value |
