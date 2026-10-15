@@ -1755,7 +1755,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 }
 
 /* 3. Raised actions: shadow remains on the stationary button; only its face moves. */
-button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
+button[data-vt-studio-button="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
   --vt-studio-control-shadow: 3px;
   --vt-studio-control-hover-offset: 1.5px;
   --vt-studio-control-radius: 6px;
@@ -1777,15 +1777,15 @@ button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-4
   overflow: visible;
   transition: none !important;
 }
-button[data-vt-studio-control="true"][data-size="compact"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger),
-button[data-vt-studio-control="true"][data-height-variant="28"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
+button[data-vt-studio-button="true"][data-size="compact"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger),
+button[data-vt-studio-button="true"][data-height-variant="28"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger) {
   --vt-studio-control-shadow: 1.5px;
   --vt-studio-control-hover-offset: .75px;
   --vt-studio-control-radius: 4px;
   min-height: 28px;
   height: 28px;
 }
-button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before {
+button[data-vt-studio-button="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-legend-trigger)::before {
   content: "";
   position: absolute;
   z-index: 0;
@@ -1794,8 +1794,8 @@ button[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-4
   box-shadow: var(--vt-studio-control-shadow, 3px) var(--vt-studio-control-shadow, 3px) 0 0 var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent));
   pointer-events: none;
 }
-button[data-vt-studio-control="true"]:hover:not(:disabled),
-button[data-vt-studio-control="true"]:active:not(:disabled) {
+button[data-vt-studio-button="true"]:hover:not(:disabled),
+button[data-vt-studio-button="true"]:active:not(:disabled) {
   transform: none !important;
 }
 [data-vt-studio-button-face] {
@@ -1825,19 +1825,19 @@ button[data-vt-studio-control="true"]:active:not(:disabled) {
   transform: translate(0, 0);
   transition: transform 150ms ease-out, background-color 150ms ease-out;
 }
-button[data-vt-studio-control="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {
   transform: translate(var(--vt-studio-control-hover-offset, 1.5px), var(--vt-studio-control-hover-offset, 1.5px));
 }
-button[data-vt-studio-control="true"]:active:not(:disabled) > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] {
   transform: translate(var(--vt-studio-control-shadow, 3px), var(--vt-studio-control-shadow, 3px));
   transition-duration: 300ms;
 }
-button[data-vt-studio-control="true"]:focus-visible {
+button[data-vt-studio-button="true"]:focus-visible {
   outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 3px;
 }
-button[data-vt-studio-control="true"][data-height-variant="28"] > [data-vt-studio-button-face],
-button[data-vt-studio-control="true"][data-size="compact"] > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"][data-height-variant="28"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] {
   min-height: 28px;
   height: 28px;
   padding: 0 8px;
@@ -1845,24 +1845,24 @@ button[data-vt-studio-control="true"][data-size="compact"] > [data-vt-studio-but
   border-radius: 4px;
   font-size: 22px;
 }
-button[data-vt-studio-control="true"][data-icon-only="true"] {
+button[data-vt-studio-button="true"][data-icon-only="true"] {
   width: var(--vt-studio-control-height, 44px);
   flex: 0 0 var(--vt-studio-control-height, 44px);
 }
-button[data-vt-studio-control="true"][data-icon-only="true"] > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] {
   width: 100%;
   padding: 0;
 }
 [data-vt-studio-button-icon] { display: grid; place-items: center; flex: none; }
-button[data-vt-studio-control="true"][data-height-variant="44"] [data-vt-studio-button-icon] svg { width: 36px; height: 36px; stroke-width: 2; }
-button[data-vt-studio-control="true"][data-height-variant="28"] [data-vt-studio-button-icon] svg { width: 22px; height: 22px; stroke-width: 1.65; }
+button[data-vt-studio-button="true"][data-height-variant="44"] [data-vt-studio-button-icon] svg { width: 36px; height: 36px; stroke-width: 2; }
+button[data-vt-studio-button="true"][data-height-variant="28"] [data-vt-studio-button-icon] svg { width: 22px; height: 22px; stroke-width: 1.65; }
 
 /* Split-left uses the same button face/shadow contract; rail width equals height. */
-button[data-vt-studio-control="true"][data-split-left="true"] {
+button[data-vt-studio-button="true"][data-split-left="true"] {
   display: flex;
   width: 100%;
 }
-button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
   align-items: stretch;
@@ -1873,7 +1873,7 @@ button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-
   overflow: hidden;
   text-align: left;
 }
-button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-rail] {
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] {
   box-sizing: border-box;
   display: grid;
   place-items: center;
@@ -1884,7 +1884,7 @@ button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-sp
   border-right: 3px solid #000;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
-button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-split-label] {
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] {
   display: flex;
   min-width: 0;
   align-items: center;
@@ -1893,31 +1893,31 @@ button[data-vt-studio-control="true"][data-split-left="true"] [data-vt-studio-sp
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-button-face],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"][data-split-left="true"][data-height-variant="28"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-split-left="true"][data-size="compact"] > [data-vt-studio-button-face] {
   grid-template-columns: 28px minmax(0, 1fr);
 }
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] [data-vt-studio-split-rail],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] [data-vt-studio-split-rail] {
+button[data-vt-studio-button="true"][data-split-left="true"][data-height-variant="28"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-split-left="true"][data-size="compact"] [data-vt-studio-split-rail] {
   width: 28px;
   min-width: 28px;
   border-right-width: 2px;
 }
-button[data-vt-studio-control="true"][data-split-left="true"][data-height-variant="28"] [data-vt-studio-split-label],
-button[data-vt-studio-control="true"][data-split-left="true"][data-size="compact"] [data-vt-studio-split-label] {
+button[data-vt-studio-button="true"][data-split-left="true"][data-height-variant="28"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-split-left="true"][data-size="compact"] [data-vt-studio-split-label] {
   padding: 0 8px;
   font-size: 22px;
 }
-button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"] > [data-vt-studio-button-face],
-button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
-button[data-vt-studio-control="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail],
-button[data-vt-studio-control="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
+button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
 @media (prefers-reduced-motion: reduce) {
-  button[data-vt-studio-control="true"] > [data-vt-studio-button-face] {
+  button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
     transition: none !important;
   }
 }
