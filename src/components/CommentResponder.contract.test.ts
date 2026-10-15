@@ -18,7 +18,8 @@ describe("Comment Responder Studio Hub contract", () => {
  it("uses canonical Studio controls for freeform reply and queue navigation", () => {
   expect(view).toContain("StudioTextArea")
   expect(view).toContain("StudioButton")
-  expect(view).toContain("StudioIconButton")
+  expect(view).toContain("StudioSquareIconButton")
+  expect(view).toContain("animate />")
   expect(view).not.toContain("StandardTextArea")
  })
 
