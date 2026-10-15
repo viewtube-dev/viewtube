@@ -7,7 +7,6 @@ import type {
 } from "../../services/analytics-canon"
 import { useCanonicalRows, useCanonicalMetricSummary } from "../../services/analytics-canon"
 import { getVtSyncSnapshot } from "../../features/vt-sync-local/adapters/snapshot"
-import { useBrain } from "../../context/useBrain"
 
 const metricValue = (
  row: CanonicalVideoRow,
@@ -61,8 +60,6 @@ export interface CanonicalAnalyticsView {
 export const useCanonicalAnalytics = (
  windowKey: AnalyticsWindow = "28d",
 ): CanonicalAnalyticsView => {
- const { lastSyncComplete } = useBrain()
-
  const rows = useCanonicalRows(windowKey)
  const summary = useCanonicalMetricSummary(windowKey)
 
@@ -127,7 +124,7 @@ export const useCanonicalAnalytics = (
    .map(([date, bucket]) => ({ date, ...bucket }))
  }, [rows])
 
- const channelDailySeries = useMemo(() => {
+ const channelDailySeries = (() => {
   const dailyRows = getVtSyncSnapshot().dailyMetrics
   if (!Array.isArray(dailyRows)) return []
   return dailyRows.map(row => {
@@ -150,7 +147,7 @@ export const useCanonicalAnalytics = (
     ctr: Number(row.ctr ?? row["Impressions click-through rate (%)"] ?? 0),
    }
   }).filter(row => row.date).sort((a, b) => a.date.localeCompare(b.date))
- }, [lastSyncComplete, rows])
+ })()
 
  return {
   rows,
