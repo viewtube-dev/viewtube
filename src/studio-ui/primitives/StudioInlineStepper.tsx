@@ -1,6 +1,6 @@
 import React from "react"
 import { Minus, Plus } from "lucide-react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens"
+import type { StudioControlSize } from "../tokens"
 import "../../styles/studio-control-system.css"
 import "./studio-inline-stepper.css"
 
@@ -108,7 +108,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
         max={Number.isFinite(max) ? max : undefined}
-        step={step > 0 && Number.isFinite(step) ? step : STUDIO_CONTROL_SIZE_CONTRACT[size].height / STUDIO_CONTROL_SIZE_CONTRACT[size].height}
+        step={step > 0 && Number.isFinite(step) ? step : 1}
         disabled={disabled}
         onFocus={() => setFocused(true)}
         onBlur={() => { setFocused(false); commit() }}
