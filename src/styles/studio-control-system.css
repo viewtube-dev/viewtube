@@ -1711,3 +1711,195 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-44-choice.is-checkbox.is-rect {
   border-radius: var(--vt-studio-44-radius, 6px) !important;
 }
+
+
+/* Closeable Badge + Tag Editor: named dense-control exceptions.
+   Colors resolve from the owning --pair-a / --pair-b colorway. */
+.vt-studio-closeable-badge {
+  --vt-badge-primary: var(--pair-a, var(--vt-c-0, #fa618a));
+  --vt-badge-secondary: var(--pair-b, var(--vt-c-6, #4ee4be));
+  --vt-badge-text: color-mix(in srgb, var(--vt-badge-primary) 50%, #fff);
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+  height: 20px;
+  padding: 0 2px 0 8px;
+  border-radius: 999px;
+  background: var(--vt-badge-primary);
+  color: var(--vt-badge-text);
+  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  vertical-align: middle;
+  transition: opacity 1s ease-out;
+}
+.vt-studio-closeable-badge[data-entering="true"] {
+  animation: vt-studio-badge-enter 450ms cubic-bezier(.22,1,.36,1) both;
+}
+.vt-studio-closeable-badge[data-fading="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+.vt-studio-closeable-badge__label {
+  display: inline-block;
+  color: var(--vt-badge-text);
+  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.vt-studio-closeable-badge__close {
+  box-sizing: border-box;
+  flex: 0 0 16px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--vt-badge-secondary);
+  color: var(--vt-badge-primary);
+  cursor: pointer;
+  transition: background-color 60ms linear, color 60ms linear;
+}
+.vt-studio-closeable-badge__close:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 1px;
+}
+.vt-studio-closeable-badge__close svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+.vt-studio-closeable-badge__close svg line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.vt-studio-closeable-badge__close[data-swapping="true"] {
+  animation: vt-studio-badge-swap 180ms linear 3;
+}
+@keyframes vt-studio-badge-enter {
+  from { opacity: 0; transform: scale(.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes vt-studio-badge-swap {
+  0%, 100% { background: var(--vt-badge-secondary); color: var(--vt-badge-primary); }
+  50% { background: var(--vt-badge-primary); color: var(--vt-badge-secondary); }
+}
+
+/* The tag editor action squares are 32px donor-defined compound actions, not 28px controls. */
+.vt-studio-tag-editor {
+  --pair-a: var(--pair-a, var(--vt-c-0, #fa618a));
+  --pair-b: var(--pair-b, var(--vt-c-6, #4ee4be));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  position: relative;
+}
+.vt-studio-tag-editor__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-studio-tag-editor__square-action {
+  box-sizing: border-box;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background: var(--pair-a, #fa618a);
+  color: #000;
+  box-shadow: 4px 4px 0 0 color-mix(in srgb, var(--pair-b, #4ee4be) 45%, transparent);
+  cursor: pointer;
+  transition: filter 180ms ease-out, transform 180ms ease-out, box-shadow 180ms ease-out;
+}
+.vt-studio-tag-editor__square-action:hover:not(:disabled) {
+  filter: brightness(.97);
+  transform: translateY(1px);
+}
+.vt-studio-tag-editor__square-action:active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(4px,4px);
+}
+.vt-studio-tag-editor__square-action:focus-visible {
+  outline: 3px solid var(--pair-a, #fa618a);
+  outline-offset: 3px;
+}
+.vt-studio-tag-editor__square-action svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+.vt-studio-tag-editor__square-action svg line,
+.vt-studio-tag-editor__square-action svg polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vt-studio-tag-editor__composer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 1;
+  transition: opacity 350ms ease-out;
+}
+.vt-studio-tag-editor__composer.is-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+.vt-studio-tag-editor__composer input[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  width: 160px;
+  min-width: 120px;
+  max-width: min(160px, 52vw);
+}
+.vt-studio-tag-editor__fly {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, #fff);
+  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: left 450ms cubic-bezier(.22,1,.36,1), top 450ms cubic-bezier(.22,1,.36,1), opacity 350ms ease-out;
+  opacity: 0;
+}
+.vt-studio-tag-editor__fly[data-targeted="false"] { opacity: 1; }
+.vt-studio-tag-editor__fly[data-targeted="true"] { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-closeable-badge,
+  .vt-studio-closeable-badge *,
+  .vt-studio-tag-editor__square-action,
+  .vt-studio-tag-editor__composer,
+  .vt-studio-tag-editor__fly {
+    animation: none !important;
+    transition: none !important;
+  }
+  .vt-studio-closeable-badge[data-entering="true"] { transform: none; }
+  .vt-studio-tag-editor__square-action:hover:not(:disabled),
+  .vt-studio-tag-editor__square-action:active:not(:disabled) { transform: none; }
+}
