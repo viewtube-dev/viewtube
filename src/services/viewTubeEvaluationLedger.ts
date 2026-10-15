@@ -40,8 +40,8 @@ export interface EvaluationRecord {
  idempotencyKey?: string | null
  outcome: EvaluationOutcome
  outcomeNote?: string
- metricsBefore?: Record<string, number>
- metricsAfter?: Record<string, number>
+ metricsBefore?: Record<string, number | null>
+ metricsAfter?: Record<string, number | null>
 }
 export interface WorkflowCandidate {
  id: string
@@ -146,7 +146,7 @@ export const createEvaluationRecord = (input: Omit<EvaluationRecord,"id"|"create
  write(EVAL_KEY, [item, ...records].slice(0, 5000))
  return item
 }
-export const resolveEvaluationRecord = (id: string, outcome: Exclude<EvaluationOutcome,"pending">, outcomeNote?: string, metricsAfter?: Record<string,number>) => {
+export const resolveEvaluationRecord = (id: string, outcome: Exclude<EvaluationOutcome,"pending">, outcomeNote?: string, metricsAfter?: Record<string,number | null>) => {
  const records = listEvaluationRecords(); const found = records.find((r) => r.id === id); if (!found) return null
  const next = { ...found, outcome, outcomeNote, metricsAfter, updatedAt: Date.now() }; write(EVAL_KEY, records.map((r) => r.id === id ? next : r)); return next
 }
