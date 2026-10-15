@@ -1455,3 +1455,162 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   .vt-studio-spectrum-tag { transition: none; }
   .vt-studio-spectrum-tag.is-selected { transform: none; }
 }
+
+
+/* Play/Pause split-left variant: use the canonical split-left button and selected
+   palette swap, while measuring both labels in one shared grid cell. */
+button[data-vt-studio-play-pause="true"] [data-vt-studio-play-pause-label-grid] {
+  display: grid;
+  grid-template-columns: max-content;
+  min-width: max-content;
+  align-items: center;
+  justify-items: start;
+}
+button[data-vt-studio-play-pause="true"] [data-vt-studio-play-pause-label],
+button[data-vt-studio-play-pause="true"] [data-vt-studio-play-pause-measure] {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+button[data-vt-studio-play-pause="true"] [data-vt-studio-play-pause-measure] {
+  visibility: hidden;
+  pointer-events: none;
+}
+button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] > svg {
+  fill: none;
+}
+button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+
+/* Circle Icon Button is a shape-only extension of the canonical square icon
+   button. Its 44px/28px dimensions, variants, shadows, effects and behavior stay shared. */
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
+  border-radius: 9999px !important;
+  overflow: hidden;
+}
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] > [data-vt-studio-button-icon] {
+  width: 100%;
+  height: 100%;
+}
+
+/* Username Split-Left Input: the root owns the shared outline and inset strokes.
+   The left inset stroke is intentionally omitted at the rail/divider seam. */
+.vt-studio-username-input {
+  --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-field-stroke: var(--vt-studio-control-stroke);
+  --vt-field-outline-stroke: var(--vt-studio-control-secondary-outline-width);
+  --vt-field-focus-outline-width: var(--vt-studio-control-focus-outline-width);
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  height: var(--vt-studio-control-height);
+  padding: 0;
+  overflow: hidden;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity), transparent);
+  box-shadow:
+    inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary),
+    inset 0 calc(-1 * var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
+    inset calc(-1 * var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary);
+  transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
+}
+.vt-studio-username-input > [data-vt-studio-username-rail="true"] {
+  box-sizing: border-box;
+  display: grid;
+  flex: 0 0 var(--vt-studio-control-height);
+  place-items: center;
+  width: var(--vt-studio-control-height);
+  min-width: var(--vt-studio-control-height);
+  height: 100%;
+  border-right: var(--vt-studio-control-stroke) solid #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-username-input > [data-vt-studio-username-rail="true"] > svg {
+  display: block;
+  width: var(--vt-studio-control-icon-size, 28px);
+  height: var(--vt-studio-control-icon-size, 28px);
+  min-width: var(--vt-studio-control-icon-size, 28px);
+  min-height: var(--vt-studio-control-icon-size, 28px);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0 !important;
+  height: 100%;
+  margin: 0;
+  padding: 0 12px 0 14px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  align-self: stretch;
+}
+.vt-studio-username-input[data-size="compact"] input.vt-studio-username-input__input[data-vt-studio-control="true"] {
+  padding-inline: 8px !important;
+}
+.vt-studio-username-input:focus-within {
+  background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
+  outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset);
+  box-shadow:
+    inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary),
+    inset 0 calc(-1 * var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
+    inset calc(-1 * var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary),
+    0 0 0 var(--vt-field-focus-outline-width) color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
+}
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
+  background: transparent !important;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: .5px #000;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]::placeholder {
+  color: var(--vt-field-primary);
+  -webkit-text-fill-color: var(--vt-field-primary);
+  -webkit-text-stroke: .5px var(--vt-field-primary);
+  opacity: 1;
+}
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:focus::placeholder,
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:focus-visible::placeholder {
+  color: #8b8b8b;
+  -webkit-text-fill-color: #8b8b8b;
+  -webkit-text-stroke: 0;
+}
+.vt-studio-username-input[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.vt-studio-username-input[data-disabled="true"] input {
+  opacity: 1;
+  cursor: not-allowed;
+}
+.vt-studio-username-input input[readonly] {
+  cursor: text;
+}
+@media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-play-pause="true"],
+  button[data-vt-studio-play-pause="true"] *,
+  .vt-studio-username-input,
+  .vt-studio-username-input * {
+    transition: none !important;
+  }
+}
