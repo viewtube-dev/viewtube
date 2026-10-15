@@ -327,6 +327,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     sectionIds: evidenceSectionIds,
     includeAudience: wantsStatisticsIntelligence && brainIntent === "audience",
     includeOpportunities: wantsAlgorithmIntelligence && engineControls.opportunityIntelligence,
+    includeCurrentTrends: wantsStatisticsIntelligence || wantsAlgorithmIntelligence,
     brainEvidencePack: input.snapshot.evidencePack,
    })
   : null
