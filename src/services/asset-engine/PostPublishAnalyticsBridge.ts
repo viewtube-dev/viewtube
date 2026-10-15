@@ -10,6 +10,7 @@ import {
   type AlgorithmEvaluationTarget,
 } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { BrainConfidenceLevel } from "../../types"
+import { linkAssetOutcomeToPublication } from "../brain/assetOutcomes"
 import { CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION, type ContentBuildEvent, type ContentBuildPublicationIdentity, type ContentBuildYouTubeBinding } from "./contracts"
 
 export interface PostPublishIdentityInput {
@@ -120,6 +121,7 @@ export const recordPostPublishIdentity = (
   )
 
   if (existingReceipt) {
+    linkPublishedAssetOutcomes(identity)
     return {
       event: existingReceipt,
       identity,
@@ -169,6 +171,7 @@ export const recordPostPublishIdentity = (
     },
   })
 
+  linkPublishedAssetOutcomes(identity)
   return {
     event,
     identity,
