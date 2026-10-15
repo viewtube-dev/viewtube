@@ -20,7 +20,7 @@ export type VaultAssetInspection = {
 }
 
 const nonEmptyString = (value: unknown): string | null =>
-  typeof value === "string" && value.trim() ? value.trim() : null
+  typeof value === "string" && value.trim().length > 0 ? value.trim() : null
 
 const numberOrNull = (value: unknown): number | null =>
   typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null
