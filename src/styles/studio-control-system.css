@@ -719,8 +719,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
    This section is the final authority for fields, 44px selection controls,
    button-face motion, split-left geometry, and configurable word-toggle ratios. */
 
-/* Canonical text-entry family: all geometry and typography come from the global size tokens.
-   Textareas override only multiline surface/reading metrics; colors and strokes stay shared. */
+/* Canonical text-entry family: single-line inputs inherit global standard/compact typography (38px/24px).
+   Textareas alone use the documented multiline reading-size exception (18px/14px); colors and strokes stay shared. */
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea) {
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
