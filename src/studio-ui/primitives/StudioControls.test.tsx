@@ -339,3 +339,16 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).toContain('transition:none !important')
   })
 })
+
+
+describe("SubToolbox grid button width ownership", () => {
+  it("lets grid cells control component-level button width instead of global intrinsic sizing", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+    expect(css).toContain('.vt-subtoolbox-button.has-component-level{')
+    expect(css).toContain('.vt-subtoolbox-grid > .vt-subtoolbox-button.has-component-level {')
+    expect(css).toContain('width: 100% !important;')
+    expect(css).toContain('justify-self: stretch;')
+    expect(css).toContain('.vt-subtoolbox-grid.is-compact{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr))}')
+    expect(css).toContain('.vt-subtoolbox-grid.is-wide{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}')
+  })
+})
