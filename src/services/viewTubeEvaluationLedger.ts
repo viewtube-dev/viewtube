@@ -2,6 +2,9 @@ import type { ContentBuildPublicationIdentity } from "./asset-engine/contracts"
 import { listContentBuildEvents } from "./asset-engine/ContentBuildRepository"
 import { linkAssetOutcomeToPublication, listAssetOutcomes } from "./brain/assetOutcomes"
 import { getCurrentCanonicalIntelligenceDatasetRows, getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "./analytics-canon"
+import { captureAIBrainLearningEvent } from "./aiBrainSelfImprovement"
+import { promoteBrainClaim, rebuildAffectedToolContextPacks } from "./brain/BrainMemoryClaims"
+import { readBrainUserControls } from "./brain/BrainUserControls"
 import { evaluateViewTubeControl } from "./viewTubeUserControls"
 
 export type EvaluationOutcome = "pending" | "positive" | "neutral" | "negative"
@@ -59,6 +62,11 @@ export interface WorkflowCandidate {
  evidenceStatus?: EvaluationRecord["evidenceStatus"]
  /** Stable caller key for retry-safe candidate creation. */
  idempotencyKey?: string | null
+ reviewedBy?: string | null
+ reviewedAt?: number
+ promotedClaimId?: string | null
+ promotedAt?: number
+ supportingEvaluationIds?: string[]
  status: "candidate" | "approved" | "rejected"
  scope: "channel" | "global-experiment"
 }
@@ -248,7 +256,7 @@ export const proposeWorkflowCandidate = (input: Omit<WorkflowCandidate,"id"|"cre
  */
 export const proposeEvaluationLearningCandidate = (
  evaluationRecordId: string,
- input: Omit<WorkflowCandidate, "id" | "createdAt" | "status" | "evaluationRecordId" | "sourceOutcomeIds" | "evaluationOutcome" | "evidenceRecordIds" | "selectedWindow" | "comparabilityStatus" | "evidenceStatus">,
+ input: Omit<WorkflowCandidate, "id" | "createdAt" | "status" | "evaluationRecordId" | "sourceOutcomeIds" | "evaluationOutcome" | "evidenceRecordIds" | "selectedWindow" | "comparabilityStatus" | "evidenceStatus" | "reviewedBy" | "reviewedAt" | "promotedClaimId" | "promotedAt" | "supportingEvaluationIds">,
 ) => {
  if (!evaluateViewTubeControl("creator-learning").allowed) return null
  const evaluation = listEvaluationRecords().find((record) => record.id === evaluationRecordId)
@@ -268,15 +276,6 @@ export const proposeEvaluationLearningCandidate = (
  // Never infer or broaden scope when an evaluation omitted its channel/project identity.
  if ((input.channelId || null) !== (evaluation.channelId || null)) return null
  if ((input.projectId || null) !== (evaluation.projectId || null)) return null
- if (input.idempotencyKey) {
-  const existing = listWorkflowCandidates().find((candidate) =>
-   candidate.idempotencyKey === input.idempotencyKey &&
-   candidate.evaluationRecordId === evaluation.id &&
-   (candidate.channelId || null) === (input.channelId || null) &&
-   (candidate.projectId || null) === (input.projectId || null)
-  )
-  if (existing) return existing
- }
  const item: WorkflowCandidate = {
   ...input,
   id: crypto.randomUUID(),
@@ -295,7 +294,121 @@ export const proposeEvaluationLearningCandidate = (
  return item
 }
 
-export const reviewWorkflowCandidate = (id: string, status: "approved"|"rejected") => {
- const values = listWorkflowCandidates(); const found = values.find((v) => v.id === id); if (!found) return null
- const next = { ...found, status }; write(CANDIDATE_KEY, values.map((v) => v.id === id ? next : v)); return next
+export const reviewWorkflowCandidate = (
+ id: string,
+ status: "approved" | "rejected",
+ reviewedBy?: string,
+) => {
+ const reviewer = String(reviewedBy || "").trim()
+ if (!reviewer) return null
+ const values = listWorkflowCandidates()
+ const found = values.find((value) => value.id === id)
+ if (!found || found.status !== "candidate") return null
+ const next: WorkflowCandidate = {
+  ...found,
+  status,
+  reviewedBy: reviewer,
+  reviewedAt: Date.now(),
+ }
+ write(CANDIDATE_KEY, values.map((value) => value.id === id ? next : value))
+ return next
+}
+
+/**
+ * Promote a reviewed candidate into the existing Brain Channel Knowledge store.
+ * Promotion requires five or more distinct published videos with positive,
+ * comparable, available observations in the same channel/project/window. This
+ * records descriptive association only; it never asserts causal effect.
+ */
+export const promoteEvaluationLearningCandidateToChannelKnowledge = async (input: {
+ candidateId: string
+ reviewedBy: string
+ minimumIndependentEvaluations?: number
+}) => {
+ const reviewer = input.reviewedBy.trim()
+ if (!reviewer) return null
+ const candidate = listWorkflowCandidates().find((value) => value.id === input.candidateId)
+ if (
+  !candidate ||
+  candidate.status !== "approved" ||
+  candidate.reviewedBy !== reviewer ||
+  candidate.promotedClaimId ||
+  !candidate.channelId
+ ) return null
+ const controls = readBrainUserControls(candidate.channelId)
+ if (!controls.enabled || !controls.personalization) return null
+
+ const sourceEvaluation = listEvaluationRecords().find((record) => record.id === candidate.evaluationRecordId)
+ if (
+  !sourceEvaluation ||
+  sourceEvaluation.channelId !== candidate.channelId ||
+  (sourceEvaluation.projectId || null) !== (candidate.projectId || null) ||
+  sourceEvaluation.outcome !== "positive" ||
+  sourceEvaluation.evidenceStatus !== "available" ||
+  sourceEvaluation.comparabilityStatus !== "comparable" ||
+  !sourceEvaluation.selectedWindow
+ ) return null
+
+ const minimum = Math.max(5, Math.floor(input.minimumIndependentEvaluations || 5))
+ const eligible = listEvaluationRecords().filter((record) =>
+  record.channelId === sourceEvaluation.channelId &&
+  (record.projectId || null) === (sourceEvaluation.projectId || null) &&
+  record.source === sourceEvaluation.source &&
+  record.recommendation === sourceEvaluation.recommendation &&
+  record.outcome === "positive" &&
+  record.evidenceStatus === "available" &&
+  record.comparabilityStatus === "comparable" &&
+  record.selectedWindow === sourceEvaluation.selectedWindow &&
+  Boolean(record.publishedVideoId) &&
+  record.evidenceIds.some((id) => typeof id === "string" && id.trim().length > 0)
+ )
+ const byPublishedVideo = new Map<string, EvaluationRecord>()
+ for (const record of eligible) {
+  if (record.publishedVideoId && !byPublishedVideo.has(record.publishedVideoId)) {
+   byPublishedVideo.set(record.publishedVideoId, record)
+  }
+ }
+ const supporting = [...byPublishedVideo.values()]
+ if (supporting.length < minimum) return null
+ const evaluationRecordIds = supporting.map((record) => record.id)
+ const evidenceIds = [...new Set(supporting.flatMap((record) => record.evidenceIds))]
+ if (evidenceIds.length < minimum) return null
+
+ const learningEntry = await captureAIBrainLearningEvent({
+  channelId: sourceEvaluation.channelId,
+  source: "copilot",
+  summary: candidate.title,
+  detail: `Repeated positive post-publication observations for “${sourceEvaluation.recommendation}” across ${supporting.length} distinct published videos. Descriptive association only; no causal conclusion.`,
+  category: "analytics_insight",
+  confidence: "high",
+  evidence: evidenceIds,
+  metadata: {
+   creatorInitiated: true,
+   confirmed: true,
+   reviewedBy: reviewer,
+   evaluationLearningCandidateId: candidate.id,
+   evaluationRecordIds,
+   publishedVideoIds: supporting.map((record) => record.publishedVideoId),
+   selectedWindow: sourceEvaluation.selectedWindow,
+   interpretation: "descriptive-association-only",
+   causalConclusion: null,
+  },
+ })
+ if (learningEntry.status === "dismissed") return null
+ const promoted = await promoteBrainClaim(learningEntry)
+ if (!promoted.claim || !["promote", "supersede"].includes(promoted.decision.decision)) return null
+ await rebuildAffectedToolContextPacks({
+  channelId: sourceEvaluation.channelId,
+  affectedContextPacks: ["performance", "analytics_tools"],
+ })
+ const updatedCandidate: WorkflowCandidate = {
+  ...candidate,
+  promotedClaimId: promoted.claim.id,
+  promotedAt: Date.now(),
+  supportingEvaluationIds: evaluationRecordIds,
+ }
+ write(CANDIDATE_KEY, listWorkflowCandidates().map((value) =>
+  value.id === candidate.id ? updatedCandidate : value
+ ))
+ return { candidate: updatedCandidate, claim: promoted.claim, decision: promoted.decision }
 }
