@@ -1501,7 +1501,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 
 /* Circle Icon Button: scale the selected canonical icon preset to 80%.
    The square icon-button family retains its original sizing. */
-button[data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg {
+button[data-vt-studio-button="true"][data-vt-studio-circle-icon-button="true"] [data-vt-studio-button-icon] svg {
   width: calc(var(--vt-studio-control-icon-size, 28px) * .8);
   height: calc(var(--vt-studio-control-icon-size, 28px) * .8);
 }
