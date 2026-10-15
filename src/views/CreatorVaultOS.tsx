@@ -162,6 +162,7 @@ import {
  type VaultTextFormat,
 } from "../services/vaultTextDocuments"
 import type { VaultAsset, VaultAssetKind } from "../types"
+import { VaultImageWorkbench } from "./vault/VaultImageWorkbench"
 
 const VAULT_MODULE_LABELS: Record<VaultWorkspaceModuleId, string> = {
  navigator: "Navigator",
@@ -3243,6 +3244,13 @@ const CreatorVaultOS: React.FC = () => {
            />
           )}
          </div>
+         {selectedAsset.kind === "image" ? (
+          <VaultImageWorkbench
+           key={selectedAsset.id}
+           asset={selectedAsset}
+           onDerivativeCreated={() => setRefreshTick((current) => current + 1)}
+          />
+         ) : null}
          <div>
           <div className="text-xs font-black uppercase opacity-60">Name</div>
           <div className="text-lg font-black uppercase">{selectedAsset.name}</div>
