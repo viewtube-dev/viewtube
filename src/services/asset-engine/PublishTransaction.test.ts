@@ -78,6 +78,17 @@ describe("PublishTransaction",()=>{
     approvedSnapshotId:transaction.approvedSnapshotId,
     youtubeVideoId:"youtube-published",
     publicationState:"published",
+    publicationIdentity:expect.objectContaining({
+     schemaVersion:1,
+     contentBuildId:"cb-publish",
+     projectId:"project-a",
+     projectAssociationStatus:"snapshot-only",
+     publishTransactionId:transaction.id,
+     youtubeVideoId:"youtube-published",
+     approvedSnapshotId:transaction.approvedSnapshotId,
+     approvedSnapshotHash:transaction.approvedSnapshotHash,
+     idempotencyKey:transaction.idempotencyKey,
+    }),
    }),
   })
  })
