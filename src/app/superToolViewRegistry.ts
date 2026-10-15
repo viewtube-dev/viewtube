@@ -34,7 +34,7 @@ export const SUPER_TOOL_VIEWS: Partial<
  "packaging-lab-pro": lazy(() => import("../views/PackagingLabPro")),
  "series-and-theme-generator": lazy(() => import("../views/SeriesThemeGenerator")),
  "project-command-kanban": lazy(() => import("../views/ProjectCommandKanban")),
- "publishing-schedule-architect": lazy(() => import("../views/PublishingScheduleArchitect")),
+ "publishing-schedule-architect": lazy(() => import("../views/PublishingScheduleArchitect").then(({ default: View }) => ({ default: () => <View /> }))),
  "cinematic-analytics-lab": lazy(() => import("../views/CinematicAnalyticsLab")),
  "retention-autopsy-experiment-engine": lazy(
   () => import("../views/RetentionAutopsyExperimentEngine"),
