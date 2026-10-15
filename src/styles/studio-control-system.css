@@ -922,3 +922,26 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   min-height: 92px;
 }
+
+
+/* Visual-audit follow-up: a generic control rule was painting a border and
+   hard shadow on the outer button while the canonical face painted its own
+   border. Keep the outer button as a transparent interaction shell; the face
+   is the sole visible border/surface. The face translates on hover/press while
+   the shell supplies the stationary hard shadow. */
+button[data-vt-studio-button="true"] {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+  box-shadow: var(--vt-studio-control-shadow, 3px) var(--vt-studio-control-shadow, 3px) 0 0 var(--vt-studio-control-shadow-color);
+}
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
+  box-shadow: 3px 3px 0 0 var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
+}
