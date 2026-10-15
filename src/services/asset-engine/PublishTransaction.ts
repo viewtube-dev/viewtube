@@ -33,8 +33,20 @@ let memory: ContentBuildPublishTransaction[]=[]
 const now=()=>new Date().toISOString()
 const uuid=()=>globalThis.crypto?.randomUUID?.()||`publish-${Date.now()}-${Math.random().toString(36).slice(2)}`
 const canStore=()=>{try{return typeof localStorage!=="undefined"}catch{return false}}
-const read=():ContentBuildPublishTransaction[]=>{if(!canStore())return memory;try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return []}}
-const write=(v:ContentBuildPublishTransaction[])=>{if(!canStore()){memory=v;return}try{localStorage.setItem(KEY,JSON.stringify(v))}catch{}}
+const read=():ContentBuildPublishTransaction[]=>{
+ if(!canStore())return memory
+ let raw:string|null
+ try{raw=localStorage.getItem(KEY)}catch{throw new Error("Publish transaction storage could not be read.")}
+ if(raw===null)return []
+ let parsed:unknown
+ try{parsed=JSON.parse(raw)}catch{throw new Error("Publish transaction storage is unreadable; refusing to overwrite it.")}
+ if(!Array.isArray(parsed)||!parsed.every((item)=>Boolean(item)&&typeof item==="object"&&typeof (item as ContentBuildPublishTransaction).id==="string"&&typeof (item as ContentBuildPublishTransaction).contentBuildId==="string"))throw new Error("Publish transaction storage is malformed; refusing to overwrite it.")
+ return parsed as ContentBuildPublishTransaction[]
+}
+const write=(v:ContentBuildPublishTransaction[])=>{
+ if(!canStore()){memory=v;return}
+ try{localStorage.setItem(KEY,JSON.stringify(v))}catch{throw new Error("Could not persist publish transaction; publishing must not continue without a recorded transaction.")}
+}
 const save=(t:ContentBuildPublishTransaction)=>{const all=read(),i=all.findIndex(x=>x.id===t.id);if(i>=0)all[i]=t;else all.push(t);write(all);return t}
 const assertTransactionSnapshotIntegrity = (transaction: ContentBuildPublishTransaction) => {
  const snapshot = getApprovedPublishSnapshot(transaction.approvedSnapshotId)
@@ -58,7 +70,7 @@ const assertTransactionSnapshotIntegrity = (transaction: ContentBuildPublishTran
  return transaction
 }
 
-export const listPublishTransactions=(contentBuildId:string)=>read().filter(x=>x.contentBuildId===contentBuildId).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))
+export const listPublishTransactions=(contentBuildId:string)=>read().filter(x=>x.contentBuildId===contentBuildId).map(assertTransactionSnapshotIntegrity).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))
 export const getPublishTransaction=(id:string)=>{
  const transaction=read().find(x=>x.id===id)||null
  return transaction ? assertTransactionSnapshotIntegrity(transaction) : null
