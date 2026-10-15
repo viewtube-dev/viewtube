@@ -66,6 +66,19 @@ describe("StudioSquareIconButton interactions", () => {
 
     expect(button?.getAttribute("data-notification-pulse")).toBe("true")
     expect(host.querySelector("[data-vt-square-badge]")?.textContent).toBe("3")
+
+    await act(async () => {
+      root.render(
+        <StudioSquareIconButton
+          label="Pending notifications"
+          icon={<span>●</span>}
+          effect="notification"
+        />,
+      )
+    })
+
+    expect(button?.hasAttribute("data-notification-pulse")).toBe(false)
+    expect(host.querySelector("[data-vt-square-badge]")).toBeNull()
   })
 
   it("toggles the V3 selectable skin and emits the next selection state", async () => {
