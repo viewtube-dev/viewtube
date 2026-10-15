@@ -36,7 +36,6 @@ const linkedByIdentity = (candidate: AlgorithmIntelligenceEvent, known: Algorith
  const candidateMetadataRefs = [
   text(metadata.outputRef),
   text(metadata.modifiedOutputRef),
-  text(metadata.contentBuildId),
   text(metadata.videoPackageId),
   text(metadata.publishTransactionId),
   text(metadata.approvedSnapshotId),
