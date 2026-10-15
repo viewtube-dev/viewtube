@@ -1098,3 +1098,29 @@ vault_workbench_phases_7_10:
     - "That run failed typecheck, source governance, focused contracts and full suite; it predates the newest head."
     - "No exact-head verification, merge, browser certification or deployment is claimed."
   next_action: "Run and inspect CI for the newest PR head, fix branch-introduced failures, resolve phase 8 prerequisites, complete real processor/lineage wiring and certify post-merge target."
+
+
+vault_phase_8_operation_store_followup:
+  status: "IMPLEMENTED IN BRANCH / CI PENDING; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phase-8-operation-store-followup-001"
+  title: "Authenticated server-side Vault operation records"
+  implementation_branch: "vault/phases-0-1-2-workbench"
+  target_branch: "master/consolidated-feature-integration"
+  files:
+    - "server/vault-operation-store.mjs"
+    - "server/vault-operation-store.test.mjs"
+    - "server/billing-server.mjs"
+    - "package.json"
+  security:
+    - "Uses the existing authenticated account-session resolver; no second identity system."
+    - "Per-user storage directory, owner check, private no-store responses, request size cap, idempotency key and record cap."
+    - "Fails closed when VAULT_OPERATION_STORAGE_DIR is absent."
+  limits:
+    - "Records lifecycle state; does not execute media processing jobs."
+    - "Requires persistent mounted disk and restart verification."
+    - "Filesystem idempotency is not race-safe across concurrent API processes."
+  pull_request:
+    prior_pr_336_merged_commit: "7b14a1d560fbd74cda567ab9889ac1e7213c1ceb"
+    followup_pr: "Required; not yet created at time of this log"
+  next_action: "Create follow-up PR, run exact-head CI, resolve introduced failures, implement worker leases and verify deployment persistence."
