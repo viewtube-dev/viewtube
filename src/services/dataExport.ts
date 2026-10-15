@@ -1,7 +1,8 @@
 import JSZip from "jszip"
 import { buildMasterTableBundle } from "./masterTables"
-import { getMasterRows } from "./analytics/Selectors"
-import type { AnalyticsWindow } from "./analytics/DataStore"
+import { getMasterRows, canonicalRowsToMasterTableRows } from "./analytics/Selectors"
+import { getCanonicalRowsFromVtSync, type AnalyticsWindow } from "./analytics-canon"
+import { getVtSyncSnapshot } from "../features/vt-sync-local/adapters/snapshot"
 import type { IngestMode, MasterTableType } from "./productArchitecture"
 import type { CsvFileWithTag } from "../types"
 import {
@@ -147,7 +148,9 @@ export const createExportBundle = async (
  }
 
  const uploadedCsvFiles = readUploadedCsvFiles()
- const apiRows = getMasterRows(analyticsWindow, "api")
+ const apiRows = canonicalRowsToMasterTableRows(
+  getCanonicalRowsFromVtSync(getVtSyncSnapshot(), analyticsWindow),
+ )
  const ownerRows = getMasterRows(analyticsWindow, "csv", uploadedCsvFiles)
  const authoritativeOwnerRows = selectAuthoritativeOwnerRows(ownerRows)
  const channelId = ((JSON.parse(ytCacheRaw) as { profile?: { id?: string } }).profile?.id ||
@@ -159,7 +162,9 @@ export const createExportBundle = async (
   ownerRows: authoritativeOwnerRows,
  })
  const sourceMode = ingestMode === "import" ? "csv" : ingestMode === "hybrid" ? "hybrid" : "api"
- const projectionRows = getMasterRows(analyticsWindow, sourceMode, uploadedCsvFiles)
+ const projectionRows = sourceMode === "api"
+  ? apiRows
+  : getMasterRows(analyticsWindow, sourceMode, uploadedCsvFiles)
  const projection = buildYouTubeStyleProjection(projectionRows, "engagedViews")
 
  zip.file("projections/Table data.csv", rowsToCsv(projection.tableRows))
