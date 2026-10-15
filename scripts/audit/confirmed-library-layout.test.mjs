@@ -343,3 +343,20 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 test("component descriptions above specimens stay on one compact line", () => {
   assert.match(styles, /\\.vt-confirmed-family > p\\s*\\{[^}]*max-width:\\s*40ch[^}]*text-overflow:\\s*ellipsis[^}]*white-space:\\s*nowrap/s);
 });
+
+test("floating labels keep full-size resting text and smoothly lift to 80% size on the 40% border line", () => {
+  assert.match(controlStyles, /\.vt-studio-floating-field > \.vt-studio-floating-field-label\s*\{[^}]*transition:[^;]*transform/s);
+  assert.match(controlStyles, /:focus \+ \.vt-studio-floating-field-label,[^]*?transform:translateY\(-40%\) scale\(\.8\)/);
+  assert.match(controlStyles, /\.vt-studio-floating-field\.is-textarea > :is\(input, textarea\):focus[^]*?transform:translateY\(-40%\) scale\(\.8\)/);
+  assert.match(controlStyles, /padding:2\.25px 4\.5px/);
+});
+
+test("floating-label B focus stroke matches the field focus outline width and secondary color", () => {
+  const focusVariant = controlStyles.match(/\.vt-studio-floating-field\[data-vt-floating-variant="b"\][^]*?@media \(prefers-reduced-motion: reduce\)/)?.[0] ?? "";
+  assert.match(focusVariant, /outline: var\(--vt-studio-control-outline-stroke, 1px\) solid var\(--vt-studio-control-secondary, var\(--pair-b, #ff7f6b\)\)/);
+  assert.doesNotMatch(focusVariant, /outline: var\(--vt-studio-control-focus-outline-width/);
+});
+
+test("circle icon buttons render icons at 80% of the matching square icon size", () => {
+  assert.match(controlStyles, /button\[data-vt-studio-circle-icon-button="true"\] svg\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-icon-size, 38px\) \* \.8\)[^}]*height:\s*calc\(var\(--vt-studio-control-icon-size, 38px\) \* \.8\)/s);
+});
