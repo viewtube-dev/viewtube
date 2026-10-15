@@ -94,6 +94,8 @@ test("single-line inputs follow global 38px/24px typography while textareas keep
   assert.match(tokens, /multiline:\s*\{[^}]*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
   assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*38px\) !important/);
   assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*24px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?line-height:\s*var\(--vt-studio-text-input-standard-line-height,\s*0\.86\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?line-height:\s*var\(--vt-studio-text-input-compact-line-height,\s*0\.86\) !important/);
   assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\) !important/);
   assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\) !important/);
   assert.ok(controls.includes('standardInputFontSize: "38px"'));
