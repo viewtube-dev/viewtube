@@ -84,6 +84,8 @@ export interface EvidenceRecord {
 export type DerivedSignalKind =
  | "trend"
  | "comparison"
+ | "material-change"
+ | "contribution"
  | "anomaly"
  | "opportunity"
  | "cohort"
