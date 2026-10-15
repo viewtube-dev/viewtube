@@ -10,6 +10,8 @@ import {
  deriveLegacyContentBuildId,
  getContentBuild,
  listContentBuildEvents,
+ listContentBuildMetadataHistory,
+ recordContentBuildMetadataChange,
  appendContentBuildEvent,
  resetContentBuildRepositoryForTests,
  setContentBuildSelection,
@@ -180,6 +182,78 @@ describe("ContentBuild repository", () => {
   })
   const events = listContentBuildEvents("cb-003")
   expect(events[events.length - 1]?.eventType).toBe("youtube.bound")
+ })
+
+ it("records reconstructable metadata versions with field-level values and provenance", () => {
+  createContentBuild({ id: "cb-metadata-history", legacyProjectId: "project-9", channelId: "channel-9" })
+  const first = recordContentBuildMetadataChange({
+   contentBuildId: "cb-metadata-history",
+   metadataVersionId: "metadata-v1",
+   operationId: "operation-generate-1",
+   operation: "create",
+   fields: [
+    { field: "title", before: null, after: "A new title" },
+    { field: "description", before: null, after: "A long description" },
+   ],
+   actorType: "brain",
+   sourceToolId: "video-publisher",
+   generationRecordId: "generation-44",
+   promptRecipeId: "title-description-v3",
+   promptRecipeVersion: "3.1.0",
+   resultingAssetIds: ["title-asset-v1", "description-asset-v1"],
+   approvedSnapshotId: "snapshot-8",
+   approvedSnapshotHash: "hash-8",
+   evidenceIds: ["analytics-baseline-1"],
+   occurredAt: "2026-10-15T12:00:00.000Z",
+  })
+  const replay = recordContentBuildMetadataChange({
+   contentBuildId: "cb-metadata-history",
+   metadataVersionId: "metadata-v1",
+   operationId: "operation-generate-1",
+   operation: "create",
+   fields: [
+    { field: "title", before: null, after: "A new title" },
+    { field: "description", before: null, after: "A long description" },
+   ],
+   actorType: "brain",
+   sourceToolId: "video-publisher",
+   generationRecordId: "generation-44",
+   promptRecipeId: "title-description-v3",
+   promptRecipeVersion: "3.1.0",
+   resultingAssetIds: ["title-asset-v1", "description-asset-v1"],
+   approvedSnapshotId: "snapshot-8",
+   approvedSnapshotHash: "hash-8",
+   evidenceIds: ["analytics-baseline-1"],
+   occurredAt: "2026-10-15T12:00:00.000Z",
+  })
+
+  expect(first).toMatchObject({
+   metadataVersionId: "metadata-v1",
+   operationId: "operation-generate-1",
+   fields: [
+    { field: "title", before: null, after: "A new title" },
+    { field: "description", before: null, after: "A long description" },
+   ],
+   promptRecipeVersion: "3.1.0",
+   approvedSnapshotHash: "hash-8",
+  })
+  expect(replay.metadataVersionId).toBe(first.metadataVersionId)
+  expect(listContentBuildMetadataHistory("cb-metadata-history")).toHaveLength(1)
+  expect(listContentBuildEvents("cb-metadata-history").filter(event => event.entityId === "metadata-v1")).toHaveLength(1)
+ })
+
+ it("rejects duplicate field names in a single metadata version", () => {
+  createContentBuild({ id: "cb-metadata-duplicate-field" })
+  expect(() => recordContentBuildMetadataChange({
+   contentBuildId: "cb-metadata-duplicate-field",
+   metadataVersionId: "metadata-bad",
+   operationId: "operation-bad",
+   operation: "edit",
+   fields: [
+    { field: "title", before: "A", after: "B" },
+    { field: "title", before: "B", after: "C" },
+   ],
+  })).toThrow(/unique per version/)
  })
 
  it("derives stable compatibility ids from legacy project/video scope", () => {
