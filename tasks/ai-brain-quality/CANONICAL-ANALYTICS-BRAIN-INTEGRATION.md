@@ -1,6 +1,6 @@
 # Canonical Analytics Evidence → Brain Runtime Integration
 
-**Status:** Phases 0–5 implemented on the work branch; release verification pending  
+**Status:** Phases 0–5 merged via PR #215; Phases 7–12 implemented in follow-up PR #217; current-head release verification pending  
 **Owner:** BrainRuntime + analytics-canon  
 **Branch:** `fix/brain-canonical-evidence-phases-3-5-2026-10-15`  
 **Pull request:** [#215](https://github.com/viewtube-dev/viewtube/pull/215)  
@@ -151,3 +151,22 @@ See [Phases 6–8 — Lineage, Governance & Verification](./PHASES-6-8-LINEAGE-G
 - Phase 6: existing event/evaluation/learning lineage owners are inventoried; end-to-end recommendation-to-published-outcome-to-learning certification remains open.
 - Phase 7: capability evidence map, path validation in the generator, and regenerated report are committed; latest-head CI verification remains pending.
 - Phase 8: canonical runtime reachability is confirmed for SidebarChatbot and BrainHubWidget, but surface-owned prompt/snapshot composition remains a convergence boundary. Release certification is blocked until latest-head gates pass or existing base-branch failures are proven unchanged.
+
+
+## Phases 7–12 — Governance, lineage, evaluation and learning continuity
+
+Follow-up implementation: [PR #217](https://github.com/viewtube-dev/viewtube/pull/217).
+
+- **Phase 7 — Capability coverage governance:** curated evidence map, reference/path validation, reproducible report generation, and release-gate `--check`.
+- **Phase 8 — Assistant continuity audit:** SidebarChatbot and BrainHubWidget reach the shared runtime; their surface-owned snapshot/prompt composition remains an explicit convergence boundary.
+- **Phase 9 — Release certification:** blocked until current-head focused tests, typecheck, runtime lint, full suite, build, source governance, and smoke are verified. Prior failure results remain failures, not exceptions.
+- **Phase 10 — Outcome lineage:** stable AssetOutcome ID, generation trace, asset ID/type pass into BrainOutcomeLedger; optional caller idempotency key suppresses duplicate AssetOutcome/Brain ledger writes on retries.
+- **Phase 11 — Analytics evaluation lineage:** evaluation records can retain source outcome/producer IDs, asset/trace/video IDs, baseline/comparison snapshots, selected window, evidence status, comparability, and confounders. This is a data contract; production publisher-to-canonical-analytics joining remains unverified.
+- **Phase 12 — Decision effectiveness and governed learning:** only resolved, evidence-backed, available and comparable evaluations (or explicitly experimentally supported ones) may produce a reviewable learning candidate. Candidate creation never approves or promotes Channel Knowledge.
+
+Detailed contracts:
+- [Phase 10 — Outcome Lineage Continuity](./PHASE-10-OUTCOME-LINEAGE.md)
+- [Phase 11 — Analytics Checkpoints and Before/After Evaluation](./PHASE-11-ANALYTICS-EVALUATION-LINEAGE.md)
+- [Phase 12 — Decision Effectiveness and Governed Learning](./PHASE-12-DECISION-EFFECTIVENESS-GOVERNED-LEARNING.md)
+
+**Certification boundary:** the full recommendation → creator decision/action → immutable publish snapshot → canonical analytics checkpoint → evaluation → governed Channel Knowledge chain, cross-system idempotency, and production reachability are not claimed complete until tested against real callers and the latest CI head.
