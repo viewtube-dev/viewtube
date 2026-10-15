@@ -194,7 +194,6 @@ describe("PublishTransaction",()=>{
   expect(beginPublishTransaction(projection()).status).not.toBe("completed")
  })
 
-})
 
  it("rejects a new publication transaction when the canonical ContentBuild stage does not permit publishing",()=>{
   updateContentBuild("cb-publish",current=>({...current,stage:"idea"}))
@@ -205,3 +204,5 @@ describe("PublishTransaction",()=>{
   updateContentBuild("cb-publish",current=>({...current,workflow:{...current.workflow,blockerIds:["asset-review-required"]}}))
   expect(()=>beginPublishTransaction(projection())).toThrow(/blockers preventing publication: asset-review-required/)
  })
+
+})
