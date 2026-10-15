@@ -7,7 +7,7 @@ category: Publishing
 secondary_categories: Creator Education, Legal and Safety
 audience: YouTube creators
 difficulty: Beginner to Intermediate
-estimated_read_time: 14–18 min
+estimated_read_time: 9–12 min
 production_date: 2026-10-13
 last_researched: 2026-10-15
 recommended_review_date: 2027-04-15
