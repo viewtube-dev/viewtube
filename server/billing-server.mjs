@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { handleCompressAnalysisRoute } from "./media-compression.mjs";
 import { handleVaultMediaBinaryGetRoute, handleVaultMediaBinaryUploadRoute } from "./vault-media-storage.mjs";
+import { handleVaultOperationStore } from "./vault-operation-store.mjs";
 import { handleYouTubeAcquireRoute } from "./youtube-acquisition.mjs";
 import { getReleaseMetadata } from "./release-metadata.mjs";
 import { getAuthenticatedViewtubeUserId, handleAccountRoute } from "./account-auth.mjs";
@@ -744,6 +745,15 @@ const server = http.createServer(async (req, res) => {
         if (!userId) return json(res, 401, { error: "Authentication required for Vault media processing." });
       }
       return await handleCompressAnalysisRoute(req, res);
+    }
+
+    if (pathname === "/api/vault/operations" || pathname.startsWith("/api/vault/operations/")) {
+      const userId = await getAuthenticatedViewtubeUserId(req);
+      if (!userId) return json(res, 401, { error: "Authentication required for Vault operations." });
+      if (["GET", "POST", "PATCH"].includes(method)) {
+        return await handleVaultOperationStore({ req, res, method, pathname, parsedUrl, userId });
+      }
+      return json(res, 405, { error: "Method not allowed." });
     }
 
     if (method === "POST" && pathname === "/api/vault/media-binaries") {
