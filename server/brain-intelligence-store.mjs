@@ -153,11 +153,14 @@ export const listPersistedBrainLearningRecords = async ({ userId, channelId }) =
 export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, records }) => {
   await initBrainIntelligenceStore();
   const allowedTypes = new Set(["assetOutcome", "brainOutcome", "evaluation", "learningCandidate"]);
-  const rows = (Array.isArray(records) ? records : [])
-    .filter((item) => item && allowedTypes.has(item.recordType)
-      && item.record && typeof item.record.id === "string" && item.record.id.trim()
-      && item.record.channelId === channelId)
-    .slice(0, 1000);
+  const unique = new Map();
+  for (const item of Array.isArray(records) ? records : []) {
+    if (!item || !allowedTypes.has(item.recordType) || !item.record
+      || typeof item.record.id !== "string" || !item.record.id.trim()
+      || item.record.channelId !== channelId) continue;
+    unique.set(`${item.recordType}:${item.record.id}`, item);
+  }
+  const rows = [...unique.values()].slice(0, 1000);
   const recordKey = (item) => `${item.recordType}:${item.record.id}`;
   if (!pool) {
     const key = scope(userId, channelId);
