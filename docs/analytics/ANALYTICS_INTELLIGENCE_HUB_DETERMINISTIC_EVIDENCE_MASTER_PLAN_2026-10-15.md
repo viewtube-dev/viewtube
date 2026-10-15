@@ -1,8 +1,8 @@
 # Analytics Intelligence Hub + Deterministic Evidence — Master Plan and Phase 0–2 Execution Record
 
-**Status:** Phase 0 audit documented; Phase 1 insight contract and Phase 2 deterministic engine implemented on the feature branch; automated test/typecheck/CI verification and runtime caller integration remain pending.  
+**Status:** Phases 0–4 implementation slice documented on the feature branch; deterministic period comparisons, contribution calculations, unified finding contract, regression tests, trend calculation, and existing-anomaly adapters are implemented. Automated test/typecheck/CI verification and live Intelligence Hub/Brain caller integration remain pending.  
 **Date:** 2026-10-15  
-**Implementation branch:** `feat/analytics-intelligence-hub-phases-0-2-2026-10-15`  
+**Implementation branch:** `feat/analytics-intelligence-hub-phases-2-4-integration-2026-10-15`  
 **Pull request:** [#238 — Analytics Intelligence Hub: deterministic insights phases 0–2](https://github.com/viewtube-dev/viewtube/pull/238) (open, ready for review; not merged)  
 **Target integration branch:** `master/consolidated-feature-integration`  
 **Scope:** Build the Analytics Intelligence Hub and deterministic analytics findings/evidence without introducing a second analytics store or allowing AI-generated prose to become metric truth.
@@ -122,7 +122,7 @@ Engine requirements:
 Reconcile engine output with `DerivedSignal` and specialist-intelligence contracts. Avoid parallel types when existing contracts can safely express the result. Keep evidence records immutable and derived signals reproducible.
 
 ### Phase 4 — Trend, comparison and anomaly integration
-Route period comparisons through the same comparability guard. Reuse the existing anomaly service and bridge rather than building a duplicate detector. Expose threshold/configuration and avoid false precision for sparse samples.
+Route period comparisons through the same comparability guard. Reuse the existing anomaly service and bridge rather than building a duplicate detector. Expose threshold/configuration and avoid false precision for sparse samples. **Implemented:** least-squares descriptive trends over explicit, unique, valid dated canonical rows; no absent-date-to-zero imputation; minimum-observation and completeness guards; stable adapters for existing `ViewTubeAnomaly` records and sorted anomaly batches. Anomaly scores/detector semantics are preserved, not recalculated.
 
 ### Phase 5 — Intelligence Hub interpretation
 Present source facts, calculated findings, interpretation, hypothesis, confidence, limitations and suggested next action as separate fields/sections. Cite canonical evidence and reporting periods. Keep preflight visible when evidence is incomplete.
@@ -154,11 +154,13 @@ Add an Analytics fixture golden path from canonical dataset → deterministic fi
 - [ ] Focused tests, typecheck, lint, full suite, production build and relevant browser smoke are run on the final head.
 - [ ] CI and branch/PR conflicts are checked; no merge/deployment claim without evidence.
 
-## Phase 0–2 implementation receipt
+## Phase 0–4 implementation receipt
 
 This receipt must be updated with actual code paths, commit SHA, CI checks and test commands after implementation. A written plan is not evidence that code or runtime integration is complete.
 
 - Phase 0: audit and ownership reconciliation recorded above; existing canonical source, Brain bridge, historical plans, adjacent PR boundaries and validation gaps are documented.
 - Phase 1: `src/services/brain/DeterministicAnalyticsInsights.ts` defines explicit inclusive period bounds, stable source-linked findings, formula/version, confidence and limitations; it fails closed on unknown/mismatched channels, mismatched windows, invalid/overlapping/non-chronological or unequal-length periods, same snapshot IDs, unavailable datasets, missing metrics and non-finite values.
-- Phase 2: the same service implements period comparisons, declared-threshold material-change signals, and complete-row traffic-source contribution calculations. It preserves null relative change for a zero baseline, rejects incomplete/partial rows and zero denominators, sorts output deterministically, and labels materiality as distinct from statistical significance. Regression tests live in `src/services/brain/__tests__/DeterministicAnalyticsInsights.test.ts` and were added to `npm run test:focused`.
-- Runtime integration / release verification: the service is implemented but not yet wired into the Intelligence Hub/Brain request path. GitHub Actions “ViewTube release gates” runs on earlier PR heads were cancelled after subsequent commits; no completed run is currently visible for the latest head. Vercel statuses currently report build-rate-limit failures. Tests, typecheck, full suite, build, and browser verification have not been verified from this session; keep the work un-certified until latest-head gates finish and results are reviewed.
+- Phase 2: period comparisons, threshold-based material-change signals and complete-row traffic-source contributions are implemented. Unsupported denominator-dependent metrics are rejected; zero baselines preserve null relative change; missing/partial rows and zero contribution denominators fail closed. Tests are in `src/services/brain/__tests__/DeterministicAnalyticsInsights.test.ts` and included in `npm run test:focused`.
+- Phase 3: unified finding fields and `toDerivedSignal` adapter are implemented in `src/services/brain/DeterministicAnalyticsInsights.ts`; existing `DerivedSignalKind` now includes `material-change` and `contribution`. No parallel evidence store was added.
+- Phase 4: descriptive linear trends and existing-anomaly adapters are implemented in the same service. Trend calculation rejects invalid/duplicate dates, unsupported metrics, unavailable evidence, incomplete series and too few observations; it never imputes missing dates as zero. Anomaly records retain detector-produced values/scores and source evidence.
+- Runtime integration / release verification: these helpers are implemented but are not yet wired into the live Intelligence Hub/Brain request path. GitHub Actions release-gate runs on earlier heads were cancelled after subsequent commits; latest-head checks must be reviewed. Vercel statuses have reported build-rate-limit failures. Tests, typecheck, full suite, build, and browser verification have not been verified from this session; keep the work un-certified until those gates pass and results are reviewed.
