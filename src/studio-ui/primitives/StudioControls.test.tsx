@@ -134,7 +134,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
     expect(css).not.toContain('.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label')
-    expect(css).toContain('.vt-studio-floating-field[data-vt-floating-variant="b"] > input[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label')
+    expect(css).toContain('.vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label')
     expect(css).toContain('--vt-studio-fixed-label-height: 20px;')
     expect(css).toContain('--vt-studio-fixed-label-font-size: 14px;')
     expect(css).toContain('--vt-studio-fixed-label-height: 14px;')
