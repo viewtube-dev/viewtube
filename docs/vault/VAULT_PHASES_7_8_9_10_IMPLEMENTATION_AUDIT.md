@@ -2,8 +2,8 @@
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target:** `master/consolidated-feature-integration`  
-**Execution branch:** `vault/phase-8-operation-store-current`  
-**Current tracking PR:** [#395](https://github.com/viewtube-dev/viewtube/pull/395) (foundation PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) merged)  
+**Execution branch:** `migration/vault-operation-store-current-2026-10-16`  
+**Current tracking PR:** [#429](https://github.com/viewtube-dev/viewtube/pull/429), migrated from superseded PR #395 onto current integration (foundation PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) merged)  
 **Status:** Phases 7–9 partially implemented; phase 10 remains pending exact-head and runtime certification.
 
 This audit deliberately separates source changes from system guarantees that cannot be established by a client-side implementation or documentation alone.
@@ -51,7 +51,7 @@ Required before closure:
 
 ## Phase 10 — Exact-head release certification
 
-Exact-head run for PR #395: [run #1697](https://github.com/viewtube-dev/viewtube/actions/runs/38834033324), head `550625bcddec2ca40462981759335c9eda01242b`, base `3017d0c7df6d4b92f997db3692c41cdeebda38b5).
+Historical exact-head run for original PR #395: [run #1697](https://github.com/viewtube-dev/viewtube/actions/runs/38834033324), head `550625bcddec2ca40462981759335c9eda01242b`, base `3017d0c7df6d4b92f997db3692c41cdeebda38b5`. Migrated current-base PR #429 head `bbf5f7e017382014b4b0fbc8848024fa0241d22c` is under release-gate run [#1779](https://github.com/viewtube-dev/viewtube/actions/runs/38842778072); inspect its exact-head result before merge.
 - Production build: **passed**.
 - Local smoke: **passed**.
 - Brain quality loop: **passed**.
