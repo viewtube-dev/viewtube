@@ -27,6 +27,9 @@ export const buildCurrentCanonicalAnalyticsInsights = (input: {
  if (!input.channelId || current.channelId !== input.channelId || dataset.channelId !== input.channelId) {
   return { findings: [], limitations: ["Canonical daily dataset channel does not exactly match the requested channel."], sourceSnapshotId: current.snapshotId }
  }
+ if (dataset.snapshotId !== current.snapshotId) {
+  return { findings: [], limitations: ["Canonical daily dataset snapshot does not match its enclosing evidence snapshot."], sourceSnapshotId: current.snapshotId }
+ }
  if (input.expectedSnapshotId && current.snapshotId !== input.expectedSnapshotId) {
   return { findings: [], limitations: ["Canonical daily dataset snapshot does not match the active evidence snapshot."], sourceSnapshotId: current.snapshotId }
  }

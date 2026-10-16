@@ -123,7 +123,7 @@ export const hydrateBrainLearningRecords = (input: {
  * in the same current canonical analytics snapshot and channel scope. Missing
  * rows are not converted to zeroes or guessed from title/date similarity.
  */
-export const createPublicationEvaluationRecord = (input: {
+export const createPublicationEvaluationRecordWithDiagnostics = (input: {
  publicationIdentity: ContentBuildPublicationIdentity
  selectedWindow: AnalyticsWindow
  source: string
@@ -133,7 +133,7 @@ export const createPublicationEvaluationRecord = (input: {
  confounders?: string[]
  causalAssessment?: EvaluationRecord["causalAssessment"]
 }) => {
- if (!evaluateViewTubeControl("creator-learning").allowed) return null
+ if (!evaluateViewTubeControl("creator-learning").allowed) return { status: "skipped", reason: "creator-learning-control-disabled" } as const
  const identity = input.publicationIdentity
  if (
   identity.schemaVersion !== 1 ||
@@ -143,7 +143,7 @@ export const createPublicationEvaluationRecord = (input: {
   !identity.publishTransactionId ||
   !identity.approvedSnapshotId ||
   !identity.approvedSnapshotHash
- ) return null
+ ) return { status: "skipped", reason: "invalid-publication-identity" } as const
 
  const receipt = listContentBuildEvents(identity.contentBuildId).find((event) => {
   if (event.eventType !== "youtube.state.changed" ||
@@ -161,7 +161,7 @@ export const createPublicationEvaluationRecord = (input: {
    (!identity.recommendationId || metadata?.recommendationId === identity.recommendationId) &&
    (!identity.experimentId || metadata?.experimentId === identity.experimentId)
  })
- if (!receipt) return null
+ if (!receipt) return { status: "skipped", reason: "publication-identity-receipt-missing" } as const
 
  const evidence = getCurrentCanonicalIntelligenceEvidence({
   window: input.selectedWindow,
@@ -175,12 +175,12 @@ export const createPublicationEvaluationRecord = (input: {
   currentRows.channelId !== identity.channelId ||
   evidence.channelId !== identity.channelId ||
   dataset.channelId !== identity.channelId
- ) return null
+ ) return { status: "skipped", reason: "canonical-evidence-snapshot-or-channel-mismatch" } as const
  const rowIndex = dataset.rows.findIndex((row) =>
   ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"]
    .some((key) => row[key] === identity.youtubeVideoId)
  )
- if (rowIndex < 0) return null
+ if (rowIndex < 0) return { status: "skipped", reason: "published-video-not-found-in-canonical-videos-dataset" } as const
 
  const manifest = evidence.datasets.find((item) => item.id === "videos")
  const evidenceStatus: EvaluationRecord["evidenceStatus"] = manifest?.status === "available"
@@ -240,7 +240,7 @@ export const createPublicationEvaluationRecord = (input: {
  )
  const sourceOutcomeIds = linkedOutcomes.map((outcome) => outcome.id)
  const sourceRecordIds = [...new Set([...sourceOutcomeIds, identity.publishTransactionId])]
- return createEvaluationRecord({
+ const record = createEvaluationRecord({
   channelId: identity.channelId,
   projectId: identity.projectId,
   source: input.source,
@@ -273,6 +273,17 @@ export const createPublicationEvaluationRecord = (input: {
   causalAssessment: input.causalAssessment || "insufficient_evidence",
   idempotencyKey: `publication-evaluation:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`,
  })
+ return record ? { status: "created", record } as const : { status: "skipped", reason: "evaluation-record-not-created" } as const
+}
+
+
+/** Backwards-compatible record-only API. Call the diagnostic variant when a caller
+ * must distinguish missing canonical evidence from a successful evaluation. */
+export const createPublicationEvaluationRecord = (
+ input: Parameters<typeof createPublicationEvaluationRecordWithDiagnostics>[0],
+): EvaluationRecord | null => {
+ const result = createPublicationEvaluationRecordWithDiagnostics(input)
+ return result.status === "created" ? result.record : null
 }
 
 export const listEvaluationRecords = () => read<EvaluationRecord>(EVAL_KEY)

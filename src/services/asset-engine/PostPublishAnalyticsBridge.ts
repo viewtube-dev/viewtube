@@ -11,7 +11,7 @@ import {
 } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { BrainConfidenceLevel } from "../../types"
 import { linkAssetOutcomeToPublication, listAssetOutcomes } from "../brain/assetOutcomes"
-import { createPublicationEvaluationRecord } from "../viewTubeEvaluationLedger"
+import { createPublicationEvaluationRecordWithDiagnostics } from "../viewTubeEvaluationLedger"
 import { getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "../analytics-canon"
 import { CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION, type ContentBuildEvent, type ContentBuildPublicationIdentity, type ContentBuildYouTubeBinding } from "./contracts"
 
@@ -346,13 +346,14 @@ export const recordAnalyticsCheckpointForEvaluation = (
   })
 
   let publicationEvaluation = null
+  let publicationEvaluationStatus: "created" | "skipped" | "error" = "skipped"
   let publicationEvaluationError: string | null = null
   try {
     const canonical = getCurrentCanonicalIntelligenceEvidence({
       window: input.selectedWindow,
       sectionIds: ["executive-summary"],
     })
-    publicationEvaluation = createPublicationEvaluationRecord({
+    const evaluationResult = createPublicationEvaluationRecordWithDiagnostics({
       publicationIdentity: identity.identity,
       selectedWindow: input.selectedWindow || canonical.selectedWindow,
       source: "post-publication-checkpoint",
@@ -360,9 +361,17 @@ export const recordAnalyticsCheckpointForEvaluation = (
       comparabilityStatus: "unknown",
       causalAssessment: "insufficient_evidence",
     })
+    if (evaluationResult.status === "created") {
+      publicationEvaluation = evaluationResult.record
+      publicationEvaluationStatus = "created"
+    } else {
+      publicationEvaluationStatus = "skipped"
+      publicationEvaluationError = evaluationResult.reason
+    }
   } catch (cause) {
+    publicationEvaluationStatus = "error"
     publicationEvaluationError = cause instanceof Error ? cause.message : String(cause)
   }
 
-  return { identity, checkpointEvent, ...result, publicationEvaluation, publicationEvaluationError }
+  return { identity, checkpointEvent, ...result, publicationEvaluation, publicationEvaluationStatus, publicationEvaluationError }
 }
