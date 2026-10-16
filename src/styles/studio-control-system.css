@@ -2116,10 +2116,9 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   flex: 0 0 auto;
-  width: min(100%, calc(3 * var(--vt-stepper-height)));
-  max-width: calc(3 * var(--vt-stepper-height));
+  width: min(100%, calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke)));
+  max-width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke));
   min-width: 0;
-  aspect-ratio: 3 / 1;
   overflow: hidden;
 }
 .vt-studio-split-stepper[data-size="compact"] {
