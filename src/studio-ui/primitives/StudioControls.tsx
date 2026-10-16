@@ -438,7 +438,7 @@ const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: Re
 /** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
 export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
   ({
-    icon, iconPreset, label, variant = "v1", effect = "standard", iconSizeVariant = "current", activeIcon, badge, tooltip, success = false, animate = false,
+    icon, iconPreset, label, variant = "v1", effect = "standard", iconSizeVariant = "large", activeIcon, badge, tooltip, success = false, animate = false,
     sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
     disabled, ...props
   }, ref) => {
