@@ -110,7 +110,7 @@ const contentBuildNode = (event: ContentBuildEvent): EvidenceLineageNode => {
     id: event.id,
     type: "contentbuild-event",
     occurredAt: event.timestamp,
-    parentIds: stringIds(metadata.parentEventIds),
+    parentIds: stringIds(event.parentEventIds ?? metadata.parentEventIds),
     evidenceIds: stringIds(event.evidenceIds),
     sourceRecordRef: `contentbuild-event:${event.id}`,
   }
