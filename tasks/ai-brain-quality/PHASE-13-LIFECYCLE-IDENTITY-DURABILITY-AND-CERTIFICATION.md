@@ -144,3 +144,10 @@ The generation receipt boundary now verifies that the request's captured `contex
 Regression coverage prepares a request, changes the canonical stage (incrementing the build revision), and proves that receipt recording fails closed without writing a `tool.output.recorded` event for the supplied output asset.
 
 This protects the receipt boundary against stale context, but it does not cancel provider work already dispatched. Provider-side authorization/revision checks, the complete action-to-stage matrix, and live authenticated persistence/E2E certification remain open. Release gates are not waived.
+
+
+## Current-base implementation slice — generation stage allowlist
+
+The generation boundary now uses an explicit allowlist of known pre-publication/editable ContentBuild stages instead of a denylist of post-publication stages. A newly introduced or malformed future stage therefore does not automatically inherit generation permission. The same guard runs during request preparation and ToolReceipt recording, alongside the existing canonical scope and revision checks.
+
+Regression coverage adds a direct request-preparation case for an unrecognized stage and requires fail-closed behavior. This narrows one policy gap; it does **not** certify provider dispatch authorization, the full action-to-stage matrix for non-generation actions, or cross-device durable lifecycle replay. The phase remains open pending all remaining acceptance evidence and same-commit release gates.
