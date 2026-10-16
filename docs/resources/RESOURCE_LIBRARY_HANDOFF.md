@@ -121,3 +121,14 @@ Link between these systems when useful; do not duplicate their purpose.
 
 All 15 IDs remain registered. Guides 4–15 have been expanded substantially, their reading times and registry descriptions corrected, the first two technical donor guides recovered into optional Advanced Reference sections, and the seven short legacy drafts moved to the archive. The collection remains in **content-quality remediation** until tests, source checks, and rendered desktop/mobile review are complete.
 
+## Discovery and learning workflow — 2026-10-15
+
+The next convergence layer adds six curated learning paths over the existing 15 canonical resource IDs, creator-language synonym search, category/path filtering, browser-local completion tracking, and context-aware links to existing ViewTube workspaces. Learning paths reference the registry; they do not duplicate guide content. Completion is optional and local to the browser. Workspace links are navigation/context handoffs only and do not claim to update a project or publish data.
+
+### Phase 6–8 acceptance
+- [ ] Search finds common creator questions and task synonyms while preserving deterministic order.
+- [ ] Category and path filters compose correctly and can be cleared independently.
+- [ ] All path resource IDs resolve to the canonical registry.
+- [ ] Completion state is deduplicated, validated against current IDs, and resilient to blocked storage.
+- [ ] Workspace links resolve to existing routes and do not imply automatic state mutation.
+- [ ] Focused tests, typecheck, build, full suite, and desktop/mobile visual review pass before certification.
