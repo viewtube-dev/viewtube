@@ -2123,8 +2123,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   min-width: 0;
   overflow: visible;
   isolation: isolate;
-  border: var(--vt-studio-control-stroke) solid #000;
-  border-radius: var(--vt-studio-control-radius);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
   background: transparent;
   box-shadow: none;
 }
@@ -2143,6 +2143,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   --vt-stepper-stroke: var(--vt-studio-28-stroke, 2px);
   --vt-stepper-radius: var(--vt-studio-28-radius, 4px);
   grid-template-columns: minmax(0, 1fr) var(--vt-studio-28-height, 28px);
+  border-width: var(--vt-studio-28-stroke, 2px);
+  border-radius: var(--vt-studio-28-radius, 4px);
   width: min(100%, calc(3 * var(--vt-studio-28-height, 28px) + 2 * var(--vt-studio-28-stroke, 2px)));
 }
 .vt-studio-split-stepper[data-size="standard"] {
