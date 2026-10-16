@@ -175,7 +175,7 @@ export const createPublicationEvaluationRecordWithDiagnostics = (input: {
   currentRows.channelId !== identity.channelId ||
   evidence.channelId !== identity.channelId ||
   dataset.channelId !== identity.channelId
- ) return { status: "skipped", reason: "invalid-publication-identity" } as const
+ ) return { status: "skipped", reason: "canonical-evidence-snapshot-or-channel-mismatch" } as const
  const rowIndex = dataset.rows.findIndex((row) =>
   ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"]
    .some((key) => row[key] === identity.youtubeVideoId)
