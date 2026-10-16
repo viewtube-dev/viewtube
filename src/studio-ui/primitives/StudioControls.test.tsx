@@ -74,7 +74,7 @@ describe("compact Studio button intrinsic sizing", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height);')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before {')
+    expect(css).not.toContain('button[data-vt-studio-button="true"][data-size="compact"]::before {')
     expect(css).toContain('height: auto;')
   })
 })
@@ -129,7 +129,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(catalogCss).toContain("width: 100% !important")
   })
 
-  it("keeps fixed label boxes on the secondary pair and fits compact shadows to their faces", () => {
+  it("keeps fixed label boxes on the secondary pair and button effects opt-in", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
@@ -140,29 +140,23 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(css).toContain('--vt-studio-fixed-label-height: 14px;')
     expect(css).toContain('--vt-studio-fixed-label-font-size: 9px;')
     expect(css).toContain('letter-spacing: .055em;')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before')
-    expect(css).toContain('--vt-studio-control-shadow-x:1.5px;')
-    expect(css).toContain('--vt-studio-control-shadow-y:1.5px;')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }')
-    // The selected shadow token is set on the shared button root, covering split-left variants too.
+    expect(css).toContain('button[data-vt-button-shadow="true"]')
+    expect(css).not.toContain('button[data-vt-studio-button="true"]::before')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] {')
-    expect(css).toContain("box-shadow: none !important;")
     expect(css).toContain("width: 100%;");
     expect(css).toContain("height: 100%;")
     expect(css).toContain("letter-spacing: -.02em;")
     expect(controls).toContain('letterSpacing: "-0.02em"')
   })
 
-  it("uses tactile press transitions that remove the shadow and depress the whole Studio button", () => {
+  it("keeps Studio buttons stationary and flat during hover and press", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
-    expect(contract).toContain("--vt-studio-motion-button: 180ms")
-    expect(contract).toContain("--vt-studio-motion-press: 80ms")
-    expect(contract).toContain('button[data-vt-studio-button="true"]::before')
-    expect(contract).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)::before')
-    expect(contract).toContain("opacity:0")
-    expect(contract).toContain("transform:translate(var(--vt-studio-control-shadow-x")
-    expect(contract).toContain("transition-duration:var(--vt-studio-motion-press,80ms)")
+    expect(contract).not.toContain("--vt-studio-motion-button")
+    expect(contract).not.toContain("--vt-studio-motion-press")
+    expect(contract).not.toContain('button[data-vt-studio-button="true"]::before')
+    expect(contract).not.toContain("transform:translate(var(--vt-studio-control-shadow-x")
+    expect(contract).toContain('button[data-vt-button-shadow="true"]')
     expect(contract).toContain('button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail]')
     expect(contract).not.toContain("transition-duration:300ms")
   })
@@ -341,11 +335,9 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
   })
 
-  it("locks standard/compact displacement to the corresponding shadow offsets and icon metrics", () => {
+  it("locks standard/compact geometry independently from optional button shadows", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] {')
-    expect(css).toContain('--vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px;')
     expect(css).toContain('--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
     expect(css).toContain('--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0;')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
@@ -490,7 +482,7 @@ describe("Studio Username Split-Left Input", () => {
     expect(css).toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
     expect(css).toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
     expect(css).toContain('input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible)')
-    expect(css).toContain('box-shadow: none !important;')
+    expect(css).not.toMatch(/\\.vt-studio-username-input:focus-within\\s*\\{[^}]*box-shadow/s)
     expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]')
     expect(css).toContain('.vt-studio-username-input[data-size="standard"] {\n  --vt-studio-control-icon-size: 38px;\n  --vt-studio-control-icon-stroke: 1.9;')
     expect(css).toContain('.vt-studio-username-input[data-size="compact"] {\n  --vt-studio-control-icon-size: 24px;\n  --vt-studio-control-icon-stroke: 2;')
@@ -558,7 +550,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
     expect(css).toContain("width: 28px")
     const actionBlock = css.slice(css.indexOf(".vt-studio-tag-editor__square-action {"), css.indexOf("\n}", css.indexOf(".vt-studio-tag-editor__square-action {")) + 2)
     expect(actionBlock).not.toContain("32px")
-    expect(actionBlock).toContain("box-shadow: 1.5px 1.5px 0 0")
-    expect(actionBlock).not.toContain("4px 4px 0 0")
+    expect(actionBlock).not.toContain("box-shadow")
+    expect(css).toContain('button[data-vt-button-shadow="true"]')
   })
 })
