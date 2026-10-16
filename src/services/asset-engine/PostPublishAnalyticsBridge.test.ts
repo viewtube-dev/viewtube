@@ -12,7 +12,7 @@ const mocks = vi.hoisted(() => ({
   recordAlgorithmIntelligenceEvent: vi.fn(),
   linkAssetOutcomeToPublication: vi.fn(),
   listAssetOutcomes: vi.fn(),
-  createPublicationEvaluationRecord: vi.fn(),
+  createPublicationEvaluationRecordWithDiagnostics: vi.fn(),
   getCurrentCanonicalIntelligenceEvidence: vi.fn(),
 }))
 
@@ -40,7 +40,7 @@ vi.mock("../brain/assetOutcomes", () => ({
   listAssetOutcomes: mocks.listAssetOutcomes,
 }))
 vi.mock("../viewTubeEvaluationLedger", () => ({
-  createPublicationEvaluationRecord: mocks.createPublicationEvaluationRecord,
+  createPublicationEvaluationRecordWithDiagnostics: mocks.createPublicationEvaluationRecordWithDiagnostics,
 }))
 vi.mock("../analytics-canon", () => ({
   getCurrentCanonicalIntelligenceEvidence: mocks.getCurrentCanonicalIntelligenceEvidence,
@@ -132,7 +132,7 @@ describe("Post-publish analytics bridge", () => {
     mocks.recordAlgorithmIntelligenceEvent.mockImplementation((input) => input)
     mocks.recordAlgorithmEvaluation.mockReturnValue({ evaluation: { status: "positive" }, recorded: { id: "outcome-1" } })
     mocks.getCurrentCanonicalIntelligenceEvidence.mockReturnValue({ selectedWindow: "28d" })
-    mocks.createPublicationEvaluationRecord.mockReturnValue({ id: "publication-evaluation-1" })
+    mocks.createPublicationEvaluationRecordWithDiagnostics.mockReturnValue({ status: "created", record: { id: "publication-evaluation-1" } })
   })
 
   it("binds the published video to its exact ContentBuild, approved snapshot, selected assets and producer ancestry", () => {
@@ -343,7 +343,7 @@ describe("Post-publish analytics bridge", () => {
     }))
     expect(result.evaluation.status).toBe("positive")
     expect(result.publicationEvaluation).toEqual({ id: "publication-evaluation-1" })
-    expect(mocks.createPublicationEvaluationRecord).toHaveBeenCalledWith(expect.objectContaining({
+    expect(mocks.createPublicationEvaluationRecordWithDiagnostics).toHaveBeenCalledWith(expect.objectContaining({
       publicationIdentity: expect.objectContaining({
         contentBuildId: "build-1",
         publishTransactionId: "publish-tx-1",
