@@ -83,13 +83,12 @@ test("non-default settings explain the real public props in plain language", () 
 });
 
 
-test("button shadows stay on the stationary outer control while the face moves", () => {
+test("Studio buttons stay stationary and shadows are opt-in on the button surface", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*box-shadow:\s*none/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][\s\S]*?box-shadow:\s*3px 3px 0/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][\s\S]*?box-shadow:\s*none/);
+  assert.doesNotMatch(fieldCss, /button\[data-vt-studio-button="true"\]::before/);
+  assert.match(fieldCss, /button\[data-vt-button-shadow="true"\]\s*\{[^}]*box-shadow:/);
+  assert.doesNotMatch(fieldCss, /button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\btransform\s*:/s);
+  assert.doesNotMatch(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][^{}]*\{[^}]*box-shadow:/);
 });
 
 test("split-left buttons do not clip the stationary shadow or expose a wrapper border", () => {
