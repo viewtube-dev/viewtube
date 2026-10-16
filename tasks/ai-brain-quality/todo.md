@@ -177,3 +177,14 @@
 - [ ] Run the durable-store Node tests independently before the Studio controls gate; the focused script now orders these tests before the known failing Studio gate.
 - [ ] Validate PostgreSQL-backed persistence and authenticated channel isolation against a real test database.
 - [ ] Complete stable-ID lifecycle propagation and production data verification before certification.
+
+
+## Turn receipt provenance follow-up — 2026-10-15
+
+- [x] Persist creator-context envelope version and profile load timestamp on successful, repaired, validation-fallback, and provider-error turn/learning receipts.
+- [x] Persist project-context source, selection update timestamp, whether a style profile was resolved, and bounded channel-knowledge/contradiction record IDs on those receipts.
+- [x] Add a behavioral regression fixture proving populated creator-context provenance survives into the turn receipt; retain explicit null/empty values when context is unavailable.
+- [ ] Verify served-model identity with the actual provider adapter; current contract correctly records `servedModel: null` when the provider does not expose it.
+- [ ] Verify stable project revision / ContentBuild revision propagation from the canonical project/build source; do not synthesize revision IDs.
+- [ ] Run the focused Brain quality-loop CI job and exact-head typecheck/build; attach the resulting workflow run before marking this slice verified.
+- [ ] Full phase certification remains blocked by the separately recorded full-suite, focused-contract, runtime-lint, source-governance, live UI adoption, persistence/consent, and real lifecycle validation gates.
