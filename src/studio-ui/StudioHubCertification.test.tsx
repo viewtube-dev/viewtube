@@ -74,6 +74,16 @@ describe("Studio Hub canonical controls", () => {
     expect(finalContract).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button')
   })
 
+  it("renders split-left and split-stepper shadows as real shell shadows, not filled overlay layers", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }')
+    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] {')
+    expect(css).toContain('.vt-studio-split-stepper::before { content: none; display: none; }')
+    const splitStepper = css.slice(css.indexOf(".vt-studio-split-stepper {"), css.indexOf('.vt-studio-split-stepper[data-size="compact"]'))
+    expect(splitStepper).toContain('var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0')
+    expect(splitStepper).not.toContain('translate(var(--vt-studio-control-shadow-x')
+  })
+
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
     const html = renderToStaticMarkup(
       <StudioDropdown
