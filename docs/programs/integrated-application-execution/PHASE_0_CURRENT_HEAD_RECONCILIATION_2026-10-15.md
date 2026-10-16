@@ -86,7 +86,15 @@ These are intake signals only. Before changing either PR, re-fetch its current h
 - Can measured outcomes produce a governed learning candidate and a traceable future recommendation without silent state mutation?
 - Do the focused tests, typecheck, build, runtime checks, and relevant UI certification pass on the exact integration SHA?
 
-## 8. Current disposition
+## 8. CI and deployment status snapshot
+
+After opening draft PR #407, GitHub reported release-gates workflow run [38830370816](https://github.com/viewtube-dev/viewtube/actions/runs/38830370816) as **queued** for PR head `e8537b40ca9b9c2e94e4d8c0ed9b4d117336fc29`. A queued workflow is not a passing check.
+
+The inspected integration HEAD's combined status showed two Vercel checks failing with a build-rate-limit URL and one Vercel project check succeeding. This is evidence of a deployment-check limitation on the inspected SHA, not proof that application behavior is healthy or broken. The successful Vercel status alone does not certify the release.
+
+No PR-triggered workflow run was returned for the inspected base SHA `040046e5c90713ce7d8e9f8251392247a25bf1ce` by the commit-workflow-runs query. This is not evidence that no other CI ever ran; it means no applicable run was returned by that query.
+
+## 9. Current disposition
 
 **Phase 0 is partially complete.** Branch provenance, existing source/test anchors, known donor/PR cautions and a dependency-ordered proof plan are recorded. Test/build execution, full current-head PR status revalidation, runtime/authenticated workflows, UI screenshot analysis, canonical task reconciliation and a release receipt remain outstanding.
 
