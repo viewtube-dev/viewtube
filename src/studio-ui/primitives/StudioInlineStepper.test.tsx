@@ -79,3 +79,18 @@ describe("StudioSplitStepper username-input foundation", () => {
     expect(css).toContain("box-shadow: none;")
   })
 })
+
+
+describe("Studio stepper single-shell geometry regression", () => {
+  it("clips all inline stepper layers inside one compact root instead of letting child surfaces stack outward", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*overflow:\s*hidden;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*max-width:\s*100%;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper__button\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper__value\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*hidden;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*max-width:\s*100%;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*overflow:\s*hidden;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
+  })
+})
