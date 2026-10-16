@@ -10,7 +10,7 @@ import {
   type AlgorithmEvaluationTarget,
 } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { BrainConfidenceLevel } from "../../types"
-import { linkAssetOutcomeToPublication } from "../brain/assetOutcomes"
+import { linkAssetOutcomeToPublication, listAssetOutcomes } from "../brain/assetOutcomes"
 import { createPublicationEvaluationRecord } from "../viewTubeEvaluationLedger"
 import { getCurrentCanonicalIntelligenceEvidence, type AnalyticsWindow } from "../analytics-canon"
 import { CONTENT_BUILD_PUBLICATION_IDENTITY_SCHEMA_VERSION, type ContentBuildEvent, type ContentBuildPublicationIdentity, type ContentBuildYouTubeBinding } from "./contracts"
@@ -107,6 +107,11 @@ export const recordPostPublishIdentity = (
   const videoId = required(input.videoId, "videoId")
   const { transaction, snapshot, build } = resolvePublishIdentity(input.transactionId, videoId)
   const assetIds = selectedAssets(transaction)
+  const selectedOutcomes = listAssetOutcomes({ channelId: build.channelId || undefined })
+    .filter((outcome) => assetIds.includes(outcome.assetId))
+    .sort((left, right) => left.id.localeCompare(right.id))
+  const assetOutcomeRecordIds = [...new Set(selectedOutcomes.map((outcome) => outcome.id))]
+  const generationTraceIds = [...new Set(selectedOutcomes.map((outcome) => outcome.traceId).filter(Boolean))]
   if (build.youtube?.videoId && build.youtube.videoId !== videoId) {
     throw new Error("ContentBuild is already bound to a different YouTube video; refusing to overwrite lineage.")
   }
@@ -129,6 +134,8 @@ export const recordPostPublishIdentity = (
     workflowId: input.workflowId || transaction.workflowId || null,
     recommendationId: input.recommendationId || transaction.recommendationId || null,
     experimentId: input.experimentId || transaction.experimentId || null,
+    assetOutcomeRecordIds,
+    generationTraceIds,
     idempotencyKey: identityKey,
     publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
   }
@@ -156,10 +163,16 @@ export const recordPostPublishIdentity = (
     }
     const receiptString = (key: string): string | null =>
       typeof receiptMetadata?.[key] === "string" ? receiptMetadata[key] as string : null
+    const receiptStringArray = (key: string): string[] =>
+      Array.isArray(receiptMetadata?.[key])
+        ? (receiptMetadata[key] as unknown[]).filter((value): value is string => typeof value === "string" && Boolean(value.trim()))
+        : []
     identity.actionPacketId = identity.actionPacketId || receiptString("actionPacketId")
     identity.workflowId = identity.workflowId || receiptString("workflowId")
     identity.recommendationId = identity.recommendationId || receiptString("recommendationId")
     identity.experimentId = identity.experimentId || receiptString("experimentId")
+    identity.assetOutcomeRecordIds = [...new Set([...receiptStringArray("assetOutcomeRecordIds"), ...(identity.assetOutcomeRecordIds || [])])]
+    identity.generationTraceIds = [...new Set([...receiptStringArray("generationTraceIds"), ...(identity.generationTraceIds || [])])]
     linkPublishedAssetOutcomes(identity)
     return {
       event: existingReceipt,
