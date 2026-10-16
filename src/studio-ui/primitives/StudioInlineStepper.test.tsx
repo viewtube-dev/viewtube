@@ -109,7 +109,7 @@ describe("split stepper value pane geometry and username-input styling", () => {
 
   it("inherits the username input's font, weight, stroke, fill, padding and focus treatment", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = css.indexOf("/* Split stepper: the editable input pane is 2:1")
+    const start = css.indexOf("/* Split stepper: stationary SplitLeftButton shell")
     const end = css.indexOf("/* Simple dropdown is a visual variant", start)
     const splitCss = css.slice(start, end)
     expect(splitCss).toContain("font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);")
