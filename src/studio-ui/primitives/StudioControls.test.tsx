@@ -476,13 +476,13 @@ describe("Studio Username Split-Left Input", () => {
     expect(renderToStaticMarkup(<StudioUsernameInput icon={<span>U</span>} sizeVariant="compact" aria-label="Compact username" />)).toContain('data-size="compact"')
   })
 
-  it("keeps the composite outline and inset strokes on the wrapper without a button shadow or seam", () => {
+  it("keeps the composite outline and real border strokes without a button shadow or seam", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('.vt-studio-username-input:focus-within')
-    expect(css).toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
-    expect(css).toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
+    expect(css).toContain('border: var(--vt-studio-control-stroke) solid #000;')
+    expect(css).toContain('outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);')
     expect(css).toContain('input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible)')
-    expect(css).not.toMatch(/\\.vt-studio-username-input:focus-within\\s*\\{[^}]*box-shadow/s)
+    expect(css).not.toMatch(/\.vt-studio-username-input:focus-within\s*\{[^}]*box-shadow/s)
     expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]')
     expect(css).toContain('.vt-studio-username-input[data-size="standard"] {\n  --vt-studio-control-icon-size: 38px;\n  --vt-studio-control-icon-stroke: 1.9;')
     expect(css).toContain('.vt-studio-username-input[data-size="compact"] {\n  --vt-studio-control-icon-size: 24px;\n  --vt-studio-control-icon-stroke: 2;')
