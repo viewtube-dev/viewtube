@@ -1256,10 +1256,11 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
             {tag}
           </SubToolboxRemovableTag>
         ))}
-        {committingTag ? <span className="vt-subtoolbox-tag-morph" aria-hidden="true">{committingTag}</span> : null}
         {editing ? (
           <>
-            <SubToolboxInput20
+            <span className="vt-subtoolbox-tag-entry">
+              {committingTag ? <span className="vt-subtoolbox-tag-morph" aria-hidden="true">{committingTag}</span> : null}
+              <SubToolboxInput20
               controlSize="micro"
               autoFocus
               className="vt-subtoolbox-tag-editor-input"
@@ -1271,7 +1272,8 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
                 if (event.key === "Enter") save()
                 if (event.key === "Escape") { setDraft(""); setEditing(false) }
               }}
-            />
+              />
+            </span>
             <button type="button" className="submit" aria-label="Save tag" onClick={save}>{saveIcon}</button>
           </>
         ) : <button type="button" className="add" aria-label="Add tag" onClick={() => setEditing(true)}>{addIcon}</button>}
