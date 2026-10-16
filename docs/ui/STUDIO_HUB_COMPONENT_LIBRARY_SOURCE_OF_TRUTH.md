@@ -340,3 +340,30 @@ Certification requirements:
 - Render the production TSX exports in the Confirmed Primitive Library rather than reproducing them with catalog-only markup.
 - Verify add, Enter-to-confirm, Escape-to-cancel, close-swap/fade/removal, controlled `value` / `onChange`, color-pair inheritance, keyboard focus, and reduced-motion behavior.
 - The 20px badge and 32px composer action sizes are the only deliberate geometry exceptions for this family; all other typography, color and motion should inherit the Studio Controls token/pair system.
+
+
+## Confirmed Button / Split-left / Icon Button Variant Matrix — 2026-10-15
+
+The Confirmed Primitive Library must render production imports, not locally redrawn approximations. Canonical owners are StudioControls.tsx and studio-control-system.css; the catalog is a live demonstration and certification surface.
+
+### Button families
+- StudioButton: 44px standard and 28px compact; accent, neutral, danger, warning, and success tones; selected, disabled, and loading states; inherited keyboard focus, tactile press, and reduced-motion behavior.
+- StudioActionButton: separate fixed 56px prominent workflow-action family, not a third ordinary button size.
+- StudioIconButton: icon-only wrapper over StudioButton; inherits button sizing, tone, selected, disabled, loading, and focus contracts.
+
+### Split-left families
+- StudioSplitLeftButton: 44px / 28px standard and compact, fixed square icon rail, five semantic tones, selected / disabled / loading states, shared tactile press behavior.
+- StudioPlayPauseButton: interactive color-swap variant with stable label geometry and persistent play/pause state.
+- StudioSplitLeftBadge is informational and static, not an animated action button; do not conflate its badge anatomy with split-left button behavior.
+
+### Square and circle icon-button families
+- StudioSquareIconButton: V1 primary fill / secondary offset shadow; V2 inverse pair; V3 selectable inverse pair; V4 black face / primary icon. Standard 44×44px and compact 28×28px.
+- StudioCircleIconButton: shape variant over the canonical square icon button, inheriting its skins, effects, sizing, focus and disabled behavior.
+- Feature presets: heart, bell, sun-moon, lock-unlock, download-check, refresh, and like.
+- Effects: standard, notification, pop-on-activation, heart-pop, bell-ring, like, unlock, download, rotated-toggle, sun-moon, lock-unlock, download-success, refresh, flip, tooltip, morph, and success.
+- Animation samples must be activatable in the catalog; do not trigger them on mount. Keep movement on inner icon/feedback layers so outer geometry remains fixed.
+- Heart pop uses a black fill that gradually returns to transparent over three seconds and a thicker, higher-opacity paired ripple. Lock/unlock changes only the shackle. Sun/moon uses a shared 6.5-unit outer circular reference.
+- Tooltips use the fixed-label typography/geometry contract. Reduced-motion preferences suppress motion while preserving semantic state feedback.
+
+### Catalog completeness rule
+For each family, display the production source paths, standard and compact sizes where supported, each meaningful visual skin, applicable interaction effects, and selected / disabled / loading / success states. Mark outcome-driven states clearly and never imply that a successful action occurred merely because a static success specimen is visible. The catalog may organize examples but must not own a competing visual implementation.
