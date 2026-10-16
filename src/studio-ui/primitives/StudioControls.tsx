@@ -4,7 +4,7 @@ import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, ChevronsDown, ChevronsUp, Download, Heart, Lock, Minus, Moon, Plus, RefreshCw, Sun, ThumbsUp, Unlock } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, ChevronsDown, ChevronsUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -426,8 +426,14 @@ const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: Re
   switch (preset) {
     case "heart": return { icon: <Heart />, activeIcon: <Heart /> }
     case "bell": return { icon: <Bell />, activeIcon: <Bell /> }
-    case "sun-moon": return { icon: <Sun />, activeIcon: <Moon /> }
-    case "lock-unlock": return { icon: <Lock />, activeIcon: <Unlock /> }
+    case "sun-moon": return {
+      icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5.2" /><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.57 4.57l1.56 1.56M17.87 17.87l1.56 1.56M19.43 4.57l-1.56 1.56M6.13 17.87l-1.56 1.56" /></svg>,
+      activeIcon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M22.5 14.2A10.5 10.5 0 0 1 9.8 1.7 10.5 10.5 0 1 0 22.5 14.2Z" /></svg>,
+    }
+    case "lock-unlock": return {
+      icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="10" width="14" height="11" rx="1.5" /><path data-vt-lock-shackle="true" d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>,
+      activeIcon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="10" width="14" height="11" rx="1.5" /><path data-vt-lock-shackle="true" d="M16 10V7a4 4 0 0 0-7.7-1.6" /></svg>,
+    }
     case "download-check": return { icon: <Download />, activeIcon: <Check /> }
     case "refresh": return { icon: <RefreshCw /> }
     case "like": return { icon: <ThumbsUp />, activeIcon: <ThumbsUp /> }
