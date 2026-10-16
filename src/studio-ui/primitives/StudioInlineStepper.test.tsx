@@ -94,3 +94,30 @@ describe("Studio stepper single-shell geometry regression", () => {
     expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
   })
 })
+
+
+describe("split stepper value pane geometry and username-input styling", () => {
+  it("locks the input pane to a 2:1 ratio against the square rail", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf("/* Split stepper: the editable input pane is 2:1")
+    const end = css.indexOf("/* Simple dropdown is a visual variant", start)
+    const splitCss = css.slice(start, end)
+    expect(splitCss).toContain("grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);")
+    expect(splitCss).toContain("width: min(100%, calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke)));")
+    expect(splitCss).toContain("max-width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke));")
+  })
+
+  it("inherits the username input's font, weight, stroke, fill, padding and focus treatment", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf("/* Split stepper: the editable input pane is 2:1")
+    const end = css.indexOf("/* Simple dropdown is a visual variant", start)
+    const splitCss = css.slice(start, end)
+    expect(splitCss).toContain("font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;")
+    expect(splitCss).toContain("font-weight: var(--vt-studio-control-font-weight, 1000) !important;")
+    expect(splitCss).toContain("font-size: var(--vt-studio-control-font-size, 38px) !important;")
+    expect(splitCss).toContain("padding: 0 14px !important;")
+    expect(splitCss).toContain("inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary)")
+    expect(splitCss).toContain(".vt-studio-split-stepper:focus-within")
+    expect(splitCss).toContain("-webkit-text-stroke: .5px #000;")
+  })
+})
