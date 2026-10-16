@@ -89,7 +89,7 @@ describe("Studio stepper single-shell geometry regression", () => {
     expect(css).toMatch(/\.vt-studio-inline-stepper__button\s*\{[^}]*position:\s*relative;/s)
     expect(css).toMatch(/\.vt-studio-inline-stepper__value\s*\{[^}]*position:\s*relative;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*visible;/s)
-    expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*max-width:\s*100%;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*width:\s*calc\(3\s*\*\s*var\(--vt-stepper-height\)\s*\+\s*2\s*\*\s*var\(--vt-stepper-stroke\)\);/s)
     expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*overflow:\s*hidden;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
   })
