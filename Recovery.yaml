@@ -1101,7 +1101,7 @@ vault_workbench_phases_7_10:
 
 
 vault_phase_8_operation_store_current_base:
-  status: "IMPLEMENTED IN FOLLOW-UP BRANCH / EXACT-HEAD CI PENDING; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING"
+  status: "IMPLEMENTED IN FOLLOW-UP BRANCH / EXACT-HEAD CI FAILED; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING"
   date: "2026-10-15"
   update_id: "REC-20261015-vault-phase-8-operation-store-followup-002"
   title: "Authenticated Vault operation records on current integration base"
@@ -1121,4 +1121,4 @@ vault_phase_8_operation_store_current_base:
     - "Durable operation records only; no media worker execution yet."
     - "Requires persistent mounted disk and restart verification."
     - "Filesystem idempotency requires race-safe coordination before multi-process scaling."
-  next_action: "Open PR from current-base branch, run exact-head CI, implement worker leases and verify deployed persistence."
+  next_action: "Reconcile exact-head runtime lint and integration-test failures against the target branch; implement worker leases and race-safe claims; configure persistent storage and verify deployed restart recovery before merge."
