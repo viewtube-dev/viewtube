@@ -133,7 +133,7 @@ export const createPublicationEvaluationRecordWithDiagnostics = (input: {
  confounders?: string[]
  causalAssessment?: EvaluationRecord["causalAssessment"]
 }) => {
- if (!evaluateViewTubeControl("creator-learning").allowed) return null
+ if (!evaluateViewTubeControl("creator-learning").allowed) return { status: "skipped", reason: "creator-learning-control-disabled" } as const
  const identity = input.publicationIdentity
  if (
   identity.schemaVersion !== 1 ||
@@ -161,7 +161,7 @@ export const createPublicationEvaluationRecordWithDiagnostics = (input: {
    (!identity.recommendationId || metadata?.recommendationId === identity.recommendationId) &&
    (!identity.experimentId || metadata?.experimentId === identity.experimentId)
  })
- if (!receipt) return null
+ if (!receipt) return { status: "skipped", reason: "publication-identity-receipt-missing" } as const
 
  const evidence = getCurrentCanonicalIntelligenceEvidence({
   window: input.selectedWindow,
@@ -180,7 +180,7 @@ export const createPublicationEvaluationRecordWithDiagnostics = (input: {
   ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"]
    .some((key) => row[key] === identity.youtubeVideoId)
  )
- if (rowIndex < 0) return null
+ if (rowIndex < 0) return { status: "skipped", reason: "published-video-not-found-in-canonical-videos-dataset" } as const
 
  const manifest = evidence.datasets.find((item) => item.id === "videos")
  const evidenceStatus: EvaluationRecord["evidenceStatus"] = manifest?.status === "available"
@@ -240,7 +240,7 @@ export const createPublicationEvaluationRecordWithDiagnostics = (input: {
  )
  const sourceOutcomeIds = linkedOutcomes.map((outcome) => outcome.id)
  const sourceRecordIds = [...new Set([...sourceOutcomeIds, identity.publishTransactionId])]
- return createEvaluationRecord({
+ const record = createEvaluationRecord({
   channelId: identity.channelId,
   projectId: identity.projectId,
   source: input.source,
@@ -273,6 +273,7 @@ export const createPublicationEvaluationRecordWithDiagnostics = (input: {
   causalAssessment: input.causalAssessment || "insufficient_evidence",
   idempotencyKey: `publication-evaluation:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`,
  })
+ return record ? { status: "created", record } as const : { status: "skipped", reason: "evaluation-record-not-created" } as const
 }
 
 
