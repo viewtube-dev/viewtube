@@ -26,14 +26,10 @@ describe("StudioSquareIconButton interaction effects", () => {
 
 
   it("keeps controls flat by default and exposes shadows only as an explicit button primitive feature", () => {
-    const html = renderToStaticMarkup(
-      <>
-        <StudioButton>Flat</StudioButton>
-        <StudioButton shadow>Opt-in shadow</StudioButton>
-      </>,
-    )
-    expect(html).not.toContain('data-vt-button-shadow="true"')
-    expect(html).toContain('data-vt-button-shadow="true"')
+    const flatHtml = renderToStaticMarkup(<StudioButton>Flat</StudioButton>)
+    const shadowHtml = renderToStaticMarkup(<StudioButton shadow>Opt-in shadow</StudioButton>)
+    expect(flatHtml).not.toContain('data-vt-button-shadow="true"')
+    expect(shadowHtml).toContain('data-vt-button-shadow="true"')
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-button-shadow="true"]')
     expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\btransform\s*:/s)
