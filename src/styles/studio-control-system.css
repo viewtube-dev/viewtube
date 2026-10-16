@@ -1434,30 +1434,57 @@ button[data-vt-studio-icon-button="true"].is-effect-morph[data-icon-active="true
   opacity: 1;
   transform: scale(1) rotate(0);
 }
+/* Tooltip and success labels use the same fixed-label tokens as input/textarea labels. */
 button[data-vt-studio-icon-button="true"].is-effect-tooltip [data-vt-square-tooltip],
 button[data-vt-studio-icon-button="true"] [data-vt-square-success-label] {
+  --vt-studio-fixed-label-height: 20px;
+  --vt-studio-fixed-label-font-size: 14px;
+  --vt-studio-fixed-label-stroke: 3px;
+  --vt-studio-control-radius: 6px;
   position: absolute;
   z-index: 5;
   left: 50%;
   bottom: calc(100% + 8px);
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   width: max-content;
-  max-width: min(220px, 70vw);
-  padding: 5px 7px;
-  border: 2px solid #000;
-  border-radius: 4px;
-  background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  max-width: min(70vw, 320px);
+  min-width: 0;
+  height: var(--vt-studio-fixed-label-height);
+  min-height: var(--vt-studio-fixed-label-height);
+  max-height: var(--vt-studio-fixed-label-height);
+  padding: 0 10px;
+  margin: 0;
+  border: var(--vt-studio-fixed-label-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
-  font: 1000 11px/1.15 Inter,ui-sans-serif,system-ui,sans-serif;
-  letter-spacing: -.02em;
+  font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size: var(--vt-studio-fixed-label-font-size);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: .055em;
   text-transform: uppercase;
   -webkit-text-stroke: 0;
-  white-space: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%,4px) scale(.96);
   transform-origin: bottom center;
   transition: opacity 160ms ease-out, transform 180ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"][data-control-size="compact"].is-effect-tooltip [data-vt-square-tooltip],
+button[data-vt-studio-icon-button="true"][data-control-size="compact"] [data-vt-square-success-label] {
+  --vt-studio-fixed-label-height: 14px;
+  --vt-studio-fixed-label-font-size: 9px;
+  --vt-studio-fixed-label-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  padding: 0 7px;
+  letter-spacing: .04em;
 }
 button[data-vt-studio-icon-button="true"].is-effect-tooltip:hover:not(:disabled) [data-vt-square-tooltip],
 button[data-vt-studio-icon-button="true"].is-effect-tooltip:focus-visible [data-vt-square-tooltip] {
@@ -2441,17 +2468,26 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="
 }
 button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-heart-pop[data-pop="true"] svg path,
 button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-pop-on-activation[data-pop="true"] svg path {
-  animation: vt-studio-heart-fill 520ms ease-out both;
+  animation: vt-studio-heart-fill 3s linear both;
 }
+button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::before,
 button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::after,
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::before,
 button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::after {
   content: "";
   position: absolute;
-  inset: -1px;
-  border: 1px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  z-index: 5;
+  inset: -2px;
+  border: 5px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
   border-radius: inherit;
   pointer-events: none;
-  animation: vt-studio-square-ripple 520ms ease-out both;
+  opacity: 1;
+  animation: vt-studio-square-ripple-heavy 1.15s cubic-bezier(.16,1,.3,1) both;
+}
+button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::after,
+button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::after {
+  border-width: 3px;
+  animation-delay: 140ms;
 }
 button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-icon-current] svg {
   transform-origin: 50% 12%;
@@ -2511,8 +2547,22 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   transform: scale(.65) rotate(18deg);
 }
 @keyframes vt-studio-heart-fill {
-  0%, 100% { fill: none; }
-  28%, 72% { fill: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+  0%, 68% { fill: #000; }
+  100% { fill: transparent; }
+}
+@keyframes vt-studio-square-ripple-heavy {
+  0% { inset: -1px; opacity: .98; border-width: 6px; }
+  58% { opacity: .9; }
+  100% { inset: -16px; opacity: 0; border-width: 3px; }
+}
+/* Unlock motion belongs exclusively to the shackle; the lock body remains fixed. */
+button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle] {
+  transform-box: view-box;
+  transform-origin: 7px 10px;
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1);
+}
+button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle].is-unlocked {
+  transform: rotate(32deg) translate(1px,-1px);
 }
 @keyframes vt-studio-bell-ring {
   0%, 100% { transform: rotate(0); }
@@ -2535,7 +2585,9 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
 }
 
 @media (prefers-reduced-motion: reduce) {
+  button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::before,
   button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::after,
+  button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::before,
   button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::after,
   button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"]::after,
   button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-alert-dot] {
