@@ -2110,31 +2110,46 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value { font-size: var(--vt-studio-28-font-size, 24px); }
 @media (prefers-reduced-motion: reduce) { .vt-studio-inline-stepper__button { transition: none; } }
 
-/* Split stepper uses the canonical SplitLeftButton shell/face geometry, held stationary:
-   one black outlined rounded face, one static offset secondary-color shadow, one
-   control-height action rail, and a primary value pane. No hover/press translation. */
+/* Split stepper: stationary SplitLeftButton shell, with a fixed 2:1 value pane-to-rail ratio.
+   The editable pane inherits the canonical Studio text-input/username-input typography,
+   accent fill, inset strokes, and focus treatment. */
 .vt-studio-split-stepper {
-  --vt-split-stepper-inner: var(--vt-studio-control-height, 44px);
+  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-stepper-height: var(--vt-studio-control-height, 44px);
+  --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
+  --vt-stepper-focus: var(--vt-studio-control-focus-outline-width, 3px);
+  box-sizing: border-box;
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, 44px);
-  flex: 0 1 auto;
-  width: min(100%, calc(3 * var(--vt-studio-control-height, 44px) + 2 * var(--vt-studio-control-stroke, 3px)));
-  max-width: 100%;
+  grid-template-columns: minmax(0, 2fr) var(--vt-stepper-height);
+  flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
+  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
+  max-width: none;
   min-width: 0;
+  height: var(--vt-stepper-height);
+  min-height: var(--vt-stepper-height);
   overflow: visible;
   isolation: isolate;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
-  background: transparent;
-  box-shadow: none;
+  border: var(--vt-stepper-stroke) solid #000;
+  border-radius: var(--vt-stepper-radius);
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity), transparent);
+  color: var(--vt-stepper-primary);
+  box-shadow:
+    inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary),
+    inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary);
+  font-family: var(--vt-studio-control-font-family);
+  transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 .vt-studio-split-stepper::before {
   content: "";
   position: absolute;
   z-index: -1;
   inset: 0;
-  border-radius: var(--vt-studio-control-radius);
-  background: var(--vt-studio-control-shadow-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  border-radius: var(--vt-stepper-radius);
+  background: var(--vt-studio-control-shadow-color, var(--vt-stepper-secondary));
   transform: translate(var(--vt-studio-control-shadow-x, 3px), var(--vt-studio-control-shadow-y, 3px));
   pointer-events: none;
 }
@@ -2142,10 +2157,6 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   --vt-stepper-height: var(--vt-studio-28-height, 28px);
   --vt-stepper-stroke: var(--vt-studio-28-stroke, 2px);
   --vt-stepper-radius: var(--vt-studio-28-radius, 4px);
-  grid-template-columns: minmax(0, 1fr) var(--vt-studio-28-height, 28px);
-  border-width: var(--vt-studio-28-stroke, 2px);
-  border-radius: var(--vt-studio-28-radius, 4px);
-  width: min(100%, calc(3 * var(--vt-studio-28-height, 28px) + 2 * var(--vt-studio-28-stroke, 2px)));
 }
 .vt-studio-split-stepper[data-size="standard"] {
   --vt-stepper-height: var(--vt-studio-44-height, 44px);
@@ -2164,31 +2175,48 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   height: 100%;
   min-height: 0;
   margin: 0;
-  padding: 0 8px;
+  padding: 0 12px;
   border: 0;
   border-radius: 0;
   outline: 0;
-  background: var(--vt-stepper-primary);
-  box-shadow: none;
-  color: #000;
-  -webkit-text-fill-color: #000;
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px) !important;
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .86) !important;
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  background: transparent;
+  color: var(--vt-stepper-primary);
+  -webkit-text-fill-color: var(--vt-stepper-primary);
+  -webkit-text-stroke: .5px var(--vt-stepper-primary);
+  caret-color: var(--vt-stepper-primary);
+  caret-shape: block;
+  font-family: var(--vt-studio-control-font-family);
+  font-size: var(--vt-studio-control-font-size) !important;
+  font-weight: var(--vt-studio-control-font-weight);
+  text-transform: var(--vt-studio-control-text-transform);
+  letter-spacing: var(--vt-studio-control-letter-spacing);
+  line-height: var(--vt-studio-control-line-height) !important;
   text-align: center;
   font-variant-numeric: tabular-nums;
+  box-shadow: none;
+  transition: color 150ms ease-out, -webkit-text-fill-color 150ms ease-out;
 }
 .vt-studio-split-stepper[data-size="compact"] input.vt-studio-split-stepper-value {
-  font-size: var(--vt-studio-28-font-size, 24px) !important;
-  padding-inline: 4px;
+  padding-inline: 8px;
+}
+.vt-studio-split-stepper input.vt-studio-split-stepper-value:focus,
+.vt-studio-split-stepper input.vt-studio-split-stepper-value:focus-visible {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: .5px #000;
+  outline: none;
 }
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button,
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.vt-studio-split-stepper.is-interacting {
-  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
-  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
+.vt-studio-split-stepper:focus-within {
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
+  outline: var(--vt-studio-control-secondary-outline-width) solid var(--vt-stepper-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset);
+  box-shadow:
+    inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary),
+    inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary),
+    0 0 0 var(--vt-studio-control-focus-outline-width) color-mix(in srgb, var(--vt-stepper-secondary) 30%, transparent);
 }
 .vt-studio-split-stepper-rail {
   position: relative;
