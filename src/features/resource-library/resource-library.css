@@ -756,3 +756,325 @@
     overflow: visible;
   }
 }
+
+
+/* Phase 6–8: discovery, guided learning, and workspace continuation. */
+.vt-resource-learning-paths {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+.vt-resource-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vt-resource-section-heading > div > span,
+.vt-resource-workflow-links > div > span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--vt-resource-pair-primary, var(--vt-spectrum-8));
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vt-resource-section-heading h2,
+.vt-resource-workflow-links h2 {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.05;
+  font-weight: 950;
+  letter-spacing: -0.035em;
+}
+
+.vt-resource-path-reset,
+.vt-resource-active-path button {
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 2px solid var(--vt-resource-ink);
+  border-radius: 7px;
+  color: var(--vt-resource-ink);
+  background: var(--vt-resource-paper);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.vt-resource-path-reset.is-active {
+  border-color: var(--vt-resource-pair-primary, var(--vt-spectrum-8));
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 14%, var(--vt-resource-paper));
+}
+
+.vt-resource-path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.vt-resource-path-card {
+  --vt-resource-pair-primary: var(--vt-spectrum-8);
+  --vt-resource-pair-secondary: var(--vt-spectrum-0);
+  min-width: 0;
+  min-height: 184px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  border: 3px solid var(--vt-resource-pair-primary);
+  border-radius: 10px;
+  color: var(--vt-resource-ink);
+  background: color-mix(in srgb, var(--vt-resource-pair-primary) 8%, var(--vt-resource-paper));
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--vt-resource-pair-primary) 25%, transparent);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.vt-resource-path-card:hover,
+.vt-resource-path-card:focus-visible {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-resource-pair-primary) 32%, transparent);
+}
+
+.vt-resource-path-card.is-active {
+  border-color: var(--vt-resource-pair-secondary);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary) 14%, var(--vt-resource-paper));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vt-resource-pair-secondary) 24%, transparent), 3px 3px 0 color-mix(in srgb, var(--vt-resource-pair-primary) 25%, transparent);
+}
+
+.vt-resource-path-meta {
+  color: color-mix(in srgb, var(--vt-resource-ink) 72%, var(--vt-resource-pair-primary));
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.vt-resource-path-card > strong {
+  font-size: 15px;
+  line-height: 1.08;
+  font-weight: 950;
+}
+
+.vt-resource-path-description,
+.vt-resource-path-outcome {
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.vt-resource-path-outcome {
+  padding-left: 8px;
+  border-left: 3px solid var(--vt-resource-pair-secondary);
+  font-weight: 750;
+}
+
+.vt-resource-path-progress {
+  width: 100%;
+  margin-top: auto;
+  display: grid;
+  gap: 5px;
+}
+
+.vt-resource-path-progress > span {
+  display: block;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--vt-resource-ink) 12%, transparent);
+}
+
+.vt-resource-path-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--vt-resource-pair-secondary);
+  transition: width 160ms ease;
+}
+
+.vt-resource-path-progress small {
+  font-size: 9px;
+  font-weight: 850;
+  opacity: 0.7;
+}
+
+.vt-resource-active-path {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border: 2px solid var(--vt-resource-pair-primary, var(--vt-spectrum-8));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 9%, var(--vt-resource-paper));
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.vt-resource-complete-mark {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 2px 5px;
+  border: 1px solid var(--vt-resource-pair-secondary, var(--vt-spectrum-0));
+  border-radius: 4px;
+  color: var(--vt-resource-ink);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 15%, var(--vt-resource-paper));
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+}
+
+.vt-resource-reader-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border: 2px solid color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 65%, var(--vt-resource-ink));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 6%, var(--vt-resource-paper));
+}
+
+.vt-resource-completion-toggle {
+  min-height: 36px;
+  padding: 7px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 2px solid var(--vt-resource-pair-primary, var(--vt-spectrum-8));
+  border-radius: 7px;
+  color: var(--vt-resource-ink);
+  background: var(--vt-resource-paper);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.vt-resource-completion-toggle > span {
+  width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  border: 2px solid currentColor;
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.vt-resource-completion-toggle.is-complete {
+  border-color: var(--vt-resource-pair-secondary, var(--vt-spectrum-0));
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 15%, var(--vt-resource-paper));
+}
+
+.vt-resource-progress-note {
+  font-size: 9px;
+  line-height: 1.3;
+  font-weight: 650;
+  opacity: 0.62;
+  text-align: right;
+}
+
+.vt-resource-workflow-links {
+  margin-top: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  border: 3px solid var(--vt-resource-pair-primary, var(--vt-spectrum-8));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 7%, var(--vt-resource-paper));
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 24%, transparent);
+}
+
+.vt-resource-workflow-links p {
+  max-width: 680px;
+  margin: 7px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.vt-resource-workflow-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vt-resource-workflow-link-row a {
+  min-height: 40px;
+  padding: 9px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid var(--vt-resource-pair-secondary, var(--vt-spectrum-0));
+  border-radius: 7px;
+  color: var(--vt-resource-ink);
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 14%, var(--vt-resource-paper));
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 24%, transparent);
+  font-size: 10px;
+  font-weight: 950;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.vt-resource-workflow-link-row a:hover,
+.vt-resource-workflow-link-row a:focus-visible {
+  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 24%, var(--vt-resource-paper));
+}
+
+@media (max-width: 1100px) {
+  .vt-resource-path-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .vt-resource-path-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vt-resource-path-card {
+    min-height: 0;
+  }
+
+  .vt-resource-section-heading,
+  .vt-resource-reader-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .vt-resource-progress-note {
+    text-align: left;
+  }
+
+  .vt-resource-workflow-links {
+    padding: 12px;
+  }
+
+  .vt-resource-workflow-link-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .vt-resource-workflow-link-row a {
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-resource-path-card,
+  .vt-resource-path-progress i {
+    transition: none;
+  }
+}
