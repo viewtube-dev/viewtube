@@ -107,6 +107,51 @@ describe("GenerationWorkflow", () => {
   })).toThrow(/project scope mismatch/i)
  })
 
+ it("fails closed for generation requests and receipts after publication", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-post-publish",
+   channelId: "channel-post-publish",
+   legacyProjectId: "project-post-publish",
+   stage: "published",
+  })
+
+  expect(() => prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-post-publish",
+   projectId: "project-post-publish",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "new-option",
+   creatorIntent: "Generate a new title after publication.",
+  })).toThrow(/not allowed.*stage published/i)
+
+  const request = {
+   schemaVersion: 1 as const,
+   id: "request-after-publish",
+   contentBuildId: build.id,
+   projectId: "project-post-publish",
+   channelId: "channel-post-publish",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "new-option" as const,
+   sourceAssetIds: [],
+   evidenceIds: [],
+   contextManifestId: "context-after-publish",
+   contextRevision: build.revision,
+   creatorIntent: "A stale request must not record output.",
+   constraints: {},
+   outputSpec: {},
+   parentAssetId: null,
+   variantGroupId: null,
+   traceId: null,
+   requestedAt: new Date().toISOString(),
+  }
+  expect(() => recordToolReceipt({ request, outputAssetIds: ["asset-after-publish"] }))
+   .toThrow(/not allowed.*stage published/i)
+ })
+
  it("records a ToolReceipt in the existing ContentBuild event history", () => {
   const build = createContentBuild({
    id: "cb-generation-workflow-receipt",
