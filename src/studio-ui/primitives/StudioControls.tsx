@@ -551,7 +551,7 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
 }
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
-  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "current", ...props }, ref) => (
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
       <span
         aria-hidden="true"
