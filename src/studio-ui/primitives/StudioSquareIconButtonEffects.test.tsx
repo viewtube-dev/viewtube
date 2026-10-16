@@ -28,10 +28,18 @@ describe("StudioSquareIconButton interaction effects", () => {
   it("keeps controls flat by default and exposes shadows only as an explicit button primitive feature", () => {
     const flatHtml = renderToStaticMarkup(<StudioButton>Flat</StudioButton>)
     const shadowHtml = renderToStaticMarkup(<StudioButton shadow>Opt-in shadow</StudioButton>)
+    const squareShadowHtml = renderToStaticMarkup(<StudioSquareIconButton label="Shadow icon" icon={icon} shadow />)
     expect(flatHtml).not.toContain('data-vt-button-shadow="true"')
     expect(shadowHtml).toContain('data-vt-button-shadow="true"')
+    expect(squareShadowHtml).toContain('data-vt-button-shadow="true"')
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-button-shadow="true"]')
+    const shadowSelectors = [...css.matchAll(/([^{}]+)\\{[^{}]*\\bbox-shadow\\s*:/g)].map(match => match[1].trim())
+    expect(shadowSelectors.length).toBeGreaterThan(0)
+    expect(shadowSelectors.every(selector =>
+      selector.includes("button[data-vt-button-shadow=\\"true\\"]") ||
+      (selector.includes("button[data-vt-studio-icon-button=\\"true\\"]") && selector.includes("::after")),
+    )).toBe(true)
     expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\btransform\s*:/s)
     expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\bbox-shadow\s*:/s)
   })
