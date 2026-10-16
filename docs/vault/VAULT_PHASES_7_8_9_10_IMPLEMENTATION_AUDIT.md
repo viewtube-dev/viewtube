@@ -51,16 +51,16 @@ Required before closure:
 
 ## Phase 10 — Exact-head release certification
 
-Latest completed exact-head run before the idempotency-conflict regression fix: [run #1695](https://github.com/viewtube-dev/viewtube/actions/runs/38823226151), head `cc2d016e1854a8e0fd621553a6391af16f1989b5`. The same base commit `3017d0c7df6d4b92f997db3692c41cdeebda38b5` has the same `static-quality` and `full-suite` failure categories, so those two failures are baseline integration debt rather than evidence of a regression from this PR. New focused operation-store tests passed on that run. A subsequent idempotency-conflict test/fix has been committed; its exact-head run must finish before reassessment.
+Exact-head run for PR #395: [run #1697](https://github.com/viewtube-dev/viewtube/actions/runs/38834033324), head `550625bcddec2ca40462981759335c9eda01242b`, base `3017d0c7df6d4b92f997db3692c41cdeebda38b5).
 - Production build: **passed**.
 - Local smoke: **passed**.
 - Brain quality loop: **passed**.
-- Static typecheck: **failed**.
-- Source governance / confirmed component layout: **failed**.
-- Focused contracts: **failed**.
-- Full test suite: **failed**.
+- Source governance: **passed**.
+- Static typecheck: **passed**, but the combined static-quality job **failed at runtime lint** with 2,250 errors and 158 warnings across many existing source files; examples include settings and supertools code, not the Vault operation-store module.
+- Focused Vault operation-store test: **passed** as its own release-gate step. The combined focused-contracts job **failed** on existing integration contract expectations, including a Studio Hub confirmed primitive test and BrainRuntime context expectations.
+- Full test suite: **failed** with multiple failures, including the same Studio Hub and BrainRuntime assertions.
 
-This run predates the newest batch service, tests, and documentation commits; it is not exact-head verification of this continuation. A new release-gate run and inspection of its logs are required.
+These failures mean phase 10 is not certified. The available run logs do not establish that all failing checks are baseline failures, and a clean baseline run was not obtained; do not label them harmless or merge on this evidence. The Vercel commit statuses also report deployment rate limiting (“retry in 24 hours”), so this run does not certify deployment.
 
 ### Release gate
 1. Focused Vault tests pass on the newest head.
