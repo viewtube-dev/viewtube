@@ -239,7 +239,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family vt-confirmed-defaults-combined">
       <h3>Canonical + Global Defaults · All Component Sizes</h3>
-      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 38px / 24px input text · 18px / 14px textarea text · 1.5px compact button shadow</p>
+      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 38px / 24px input text · 18px / 14px textarea text · button-owned shadow off by default</p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show full defaults and exceptions</summary>
       <div className="vt-confirmed-size-grid">
@@ -291,7 +291,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected heightVariant="44">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioButton selected heightVariant="28">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioButton selected disabled heightVariant="28">button</StudioButton></div>
     </Family>
-    <Family title="Prominent Action · 56px" nonDefaultSettings={["This is a distinct prominent-action family, not a third size of the ordinary button.", "Its height is fixed at 56px with a 3px border, 6px radius, and 3px offset shadow. In the current CSS, hover translates the outer action by 1.5px and active translates it by 3px while suppressing the shadow.", "The action label uses the dedicated 20px Inter / weight-1000 typography.", "While loading, the action reports a busy state and cannot be activated; disabled actions also block interaction."]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Prominent Action · 56px" nonDefaultSettings={["This is a distinct prominent-action family, not a third size of the ordinary button.", "Its height is fixed at 56px with a 3px border and 6px radius. The control remains stationary on hover and press; its optional button-owned shadow is off by default.", "The action label uses the dedicated 20px Inter / weight-1000 typography.", "While loading, the action reports a busy state and cannot be activated; disabled actions also block interaction."]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>56px prominent workflow action</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
     </Family>
 
