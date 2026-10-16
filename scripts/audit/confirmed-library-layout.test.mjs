@@ -205,7 +205,7 @@ test("confirmed library describes the actual default icon preset and component-s
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(controls, /iconSizeVariant = "current"/);
+  assert.match(controls, /iconSizeVariant = "large"/);
   assert.match(controls, /default icon preset is 28px \/ 2\.5 stroke standard and 18px \/ 1\.65 stroke compact/);
   assert.match(css, /Icon buttons default to the canonical preset: 28px\/2\.5 standard and 18px\/1\.65 compact/);
   assert.match(catalog, /1\.5px compact button shadow/);
