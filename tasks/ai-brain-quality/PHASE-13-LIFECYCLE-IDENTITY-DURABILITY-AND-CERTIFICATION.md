@@ -135,3 +135,12 @@ This guard complements the server-side stable-identity check. It does not replac
 The canonical `GenerationWorkflow` now rejects new generation request preparation and ToolReceipt recording when the canonical ContentBuild is in `published`, `monitor`, `evaluation`, `learning`, or `archived` stage. The check reads the canonical ContentBuild stage at both request preparation and receipt recording; a caller cannot bypass the guard by constructing a request object directly and attempting to record a receipt.
 
 Regression coverage exercises both the normal request-preparation path and a direct receipt call against a published build. This is a deliberately conservative post-publication guard, **not** the complete action-to-stage capability matrix or provider-dispatch enforcement required for Phase 13 certification. Stale-revision checks, workflow-blocker policy, other generation/edit/metadata/scheduling boundaries, and direct provider invocation paths remain to be mapped and tested.
+
+
+## Current-base implementation slice — stale generation revision guard
+
+The generation receipt boundary now verifies that the request's captured `contextRevision` still equals the canonical ContentBuild revision before recording output. It also rechecks asserted channel and project scope against the current canonical build. A request prepared before a lifecycle/profile/build update is rejected rather than attaching output to stale context.
+
+Regression coverage prepares a request, changes the canonical stage (incrementing the build revision), and proves that receipt recording fails closed without writing a `tool.output.recorded` event for the supplied output asset.
+
+This protects the receipt boundary against stale context, but it does not cancel provider work already dispatched. Provider-side authorization/revision checks, the complete action-to-stage matrix, and live authenticated persistence/E2E certification remain open. Release gates are not waived.
