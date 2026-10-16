@@ -132,6 +132,54 @@ describe("ContentBuild repository", () => {
   )).toHaveLength(1)
  })
 
+ it("persists typed parent references and accepts delayed parent delivery", () => {
+  createContentBuild({ id: "cb-delayed-lineage" })
+  const child = appendContentBuildEvent({
+   contentBuildId: "cb-delayed-lineage",
+   eventType: "publish.transaction.completed",
+   idempotencyKey: "lineage-child",
+   parentEventIds: ["event:lineage-parent"],
+  })
+
+  expect(child.parentEventIds).toEqual(["event:lineage-parent"])
+  expect(listContentBuildEvents("cb-delayed-lineage")).toContainEqual(expect.objectContaining({
+   id: "event:lineage-child",
+   parentEventIds: ["event:lineage-parent"],
+  }))
+
+  const parent = appendContentBuildEvent({
+   contentBuildId: "cb-delayed-lineage",
+   eventType: "recommendation.created" as never,
+   idempotencyKey: "lineage-parent",
+  })
+  expect(parent.id).toBe("event:lineage-parent")
+  expect(listContentBuildEvents("cb-delayed-lineage")).toHaveLength(3)
+ })
+
+ it("rejects circular ancestry and idempotency replays with changed parents", () => {
+  createContentBuild({ id: "cb-circular-lineage" })
+  appendContentBuildEvent({
+   contentBuildId: "cb-circular-lineage",
+   eventType: "analytics.checkpoint",
+   idempotencyKey: "lineage-a",
+   parentEventIds: ["event:lineage-b"],
+  })
+
+  expect(() => appendContentBuildEvent({
+   contentBuildId: "cb-circular-lineage",
+   eventType: "analytics.checkpoint",
+   idempotencyKey: "lineage-b",
+   parentEventIds: ["event:lineage-a"],
+  })).toThrow(/circular provenance/)
+
+  expect(() => appendContentBuildEvent({
+   contentBuildId: "cb-circular-lineage",
+   eventType: "analytics.checkpoint",
+   idempotencyKey: "lineage-a",
+   parentEventIds: [],
+  })).toThrow(/idempotency key was reused/)
+ })
+
  it("rejects reuse of an idempotency key for a different event", () => {
   createContentBuild({ id: "cb-idempotency-conflict" })
   appendContentBuildEvent({
