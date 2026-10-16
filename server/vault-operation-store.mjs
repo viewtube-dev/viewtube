@@ -8,6 +8,10 @@ const json = (res, status, body) => {
 };
 const dirFor = (root, userId) => path.join(root, crypto.createHash("sha256").update(String(userId)).digest("hex"));
 const idPattern = /^[0-9a-f-]{36}$/i;
+const canonicalJson = (value) => JSON.stringify(value, (_key, item) => {
+  if (!item || typeof item !== "object" || Array.isArray(item)) return item;
+  return Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b)));
+});
 const readBody = async (req) => {
   let raw = "";
   for await (const chunk of req) {
@@ -49,16 +53,20 @@ export const handleVaultOperationStore = async ({ req, res, method, pathname, pa
       if (!sourceAssetId || !key || !["image-transform", "video-trim", "video-proxy", "video-transcode", "frame-extract", "audio-extract", "compress-analysis", "thumbnail-generate", "metadata-analyze"].includes(operation)) {
         return json(res, 400, { error: "INVALID_OPERATION", message: "Source asset, supported operation, and idempotency key are required." });
       }
+      const parameters = body.parameters && typeof body.parameters === "object" && !Array.isArray(body.parameters) ? body.parameters : {};
       const names = (await fs.readdir(dir)).filter((name) => name.endsWith(".json"));
       for (const name of names) {
         try {
           const prior = JSON.parse(await fs.readFile(path.join(dir, name), "utf8"));
-          if (prior.idempotencyKey === key) return json(res, 200, { operation: prior, reused: true });
+          if (prior.idempotencyKey !== key) continue;
+          const sameRequest = prior.sourceAssetId === sourceAssetId && prior.operation === operation && canonicalJson(prior.parameters || {}) === canonicalJson(parameters);
+          if (!sameRequest) return json(res, 409, { error: "IDEMPOTENCY_KEY_CONFLICT" });
+          return json(res, 200, { operation: prior, reused: true });
         } catch {}
       }
       if (names.length >= 1000) return json(res, 429, { error: "OPERATION_LIMIT_REACHED" });
       const now = new Date().toISOString();
-      const record = { id: crypto.randomUUID(), userId: String(userId), sourceAssetId, operation, parameters: body.parameters && typeof body.parameters === "object" && !Array.isArray(body.parameters) ? body.parameters : {}, idempotencyKey: key, status: "queued", attempt: 0, createdAt: now, updatedAt: now, history: [{ status: "queued", at: now }] };
+      const record = { id: crypto.randomUUID(), userId: String(userId), sourceAssetId, operation, parameters, idempotencyKey: key, status: "queued", attempt: 0, createdAt: now, updatedAt: now, history: [{ status: "queued", at: now }] };
       await persist(dir, record);
       return json(res, 201, { operation: record, reused: false });
     }
