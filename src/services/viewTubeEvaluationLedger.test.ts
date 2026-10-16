@@ -50,6 +50,7 @@ vi.mock("./analytics-canon", () => ({
 import {
  createEvaluationRecord,
  createPublicationEvaluationRecord,
+ createPublicationEvaluationRecordWithDiagnostics,
  listEvaluationRecords,
  proposeEvaluationLearningCandidate,
  listWorkflowCandidates,
@@ -524,4 +525,36 @@ describe("outcome evaluation and governed learning lineage", () => {
   })).toBeNull()
   expect(listWorkflowCandidates()).toHaveLength(0)
  })
+
+ it("reports why a publication evaluation is skipped when its receipt is missing", () => {
+  lineageMocks.listContentBuildEvents.mockReturnValue([])
+  const result = createPublicationEvaluationRecordWithDiagnostics({
+   publicationIdentity: {
+    schemaVersion: 1,
+    contentBuildId: "build-a",
+    projectId: "project-a",
+    projectAssociationStatus: "verified",
+    videoPackageId: "package-a",
+    publishTransactionId: "publish-a",
+    youtubeVideoId: "youtube-1",
+    channelId: "channel-a",
+    approvedSnapshotId: "approved-a",
+    approvedSnapshotHash: "hash-a",
+    selectedVariantAssetIds: ["title-a", "thumb-a", "render-a"],
+    correlationId: "publish-a",
+    idempotencyKey: "publish:build-a:approved-a",
+    publishedAt: "2026-10-15T10:00:00.000Z",
+   },
+   selectedWindow: "28d",
+   source: "post-publication",
+   recommendation: "Evaluate the published title variant",
+  })
+
+  expect(result).toEqual({
+   status: "skipped",
+   reason: "publication-identity-receipt-missing",
+  })
+  expect(lineageMocks.appendContentBuildEvent).not.toHaveBeenCalled()
+ })
+
 })
