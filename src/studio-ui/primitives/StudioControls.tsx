@@ -303,7 +303,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     ref,
   ) => {
     // Height is the authoritative geometry when supplied. This prevents a 28px
-    // control from accidentally inheriting standard border/radius/shadow tokens.
+    // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
       ? heightVariant === "28" ? "compact" : "standard"
       : sizeVariant ?? "standard"
@@ -405,8 +405,7 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
   /** Custom icon override. If omitted, iconPreset supplies the icon automatically. */
   icon?: React.ReactNode
   label: string
-  /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
-   * v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
+  /** v1: primary fill; v2: secondary fill; v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
   variant?: StudioSquareIconButtonVariant
   /** Optional interaction effect. Defaults to standard; visual skin remains controlled by variant. */
   effect?: StudioSquareIconButtonEffect
