@@ -356,4 +356,26 @@ describe("Post-publish analytics bridge", () => {
       causalAssessment: "insufficient_evidence",
     }))
   })
+
+  it("surfaces a canonical evaluation skip reason to post-publish callers", () => {
+    mocks.createPublicationEvaluationRecordWithDiagnostics.mockReturnValue({
+      status: "skipped",
+      reason: "published-video-not-found-in-canonical-videos-dataset",
+    })
+
+    const result = recordAnalyticsCheckpointForEvaluation({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+      checkpointId: "day-7-missing-video",
+      checkpointAt: 1790812800000,
+      observations: [{ metric: "views", value: 1200, observedAt: 1790812800000, evidenceId: "evidence-1" }],
+      evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 1000 }],
+      evidenceIds: ["evidence-1"],
+    })
+
+    expect(result.publicationEvaluation).toBeNull()
+    expect(result.publicationEvaluationStatus).toBe("skipped")
+    expect(result.publicationEvaluationError).toBe("published-video-not-found-in-canonical-videos-dataset")
+  })
+
 })
