@@ -1177,10 +1177,8 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
   font-size: 24px;
 }
 button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {  }
-button[data-vt-studio-button="true"]:active:not(:disabled) {  transition-duration:var(--vt-studio-motion-press,80ms); }
-button[data-vt-studio-button="true"]:active:not(:disabled)::before { opacity:0; transition-duration:var(--vt-studio-motion-press,80ms); }
-button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled)::before { opacity:0; }
-button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] {  transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-button="true"]:active:not(:disabled) {   }
+button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] {   }
 button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
 /* Selected faces switch to secondary, so their shadow must switch to the opposite primary color. */
