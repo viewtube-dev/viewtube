@@ -376,6 +376,20 @@ describe("Post-publish analytics bridge", () => {
     expect(result.publicationEvaluation).toBeNull()
     expect(result.publicationEvaluationStatus).toBe("skipped")
     expect(result.publicationEvaluationError).toBe("published-video-not-found-in-canonical-videos-dataset")
+    expect(mocks.recordAlgorithmIntelligenceEvent).toHaveBeenCalledWith(expect.objectContaining({
+      id: "publication-evaluation-blocked:publish-tx-1:day-7-missing-video",
+      kind: "EVALUATION_BLOCKED",
+      sourceSystem: "evaluation",
+      channelId: "channel-1",
+      videoId: "youtube-123",
+      parentEventIds: expect.arrayContaining(["checkpoint-event-1"]),
+      metadata: expect.objectContaining({
+        evaluationStatus: "skipped",
+        skipReason: "published-video-not-found-in-canonical-videos-dataset",
+        checkpointId: "day-7-missing-video",
+        approvedSnapshotHash: "hash-1",
+      }),
+    }))
   })
 
 })
