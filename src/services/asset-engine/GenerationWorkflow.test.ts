@@ -173,6 +173,26 @@ describe("GenerationWorkflow", () => {
   })).toThrow(/not allowed.*stage future-stage.*not in the generation allowlist/i)
  })
 
+
+ it("uses the canonical capability matrix to deny generation after publication and on unknown stages", () => {
+  const published = createContentBuild({
+   id: "cb-capability-published",
+   channelId: "channel-capability",
+   legacyProjectId: "project-capability",
+   stage: "published",
+  })
+  expect(() => prepareGenerationRequest({
+   contentBuildId: published.id,
+   channelId: "channel-capability",
+   projectId: "project-capability",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "create",
+   creatorIntent: "Must be denied after publish.",
+  })).toThrow(/does not allow capability generate/i)
+ })
+
  it("rejects a stale generation request after the canonical build revision changes", () => {
   const build = createContentBuild({
    id: "cb-generation-workflow-stale-revision",
