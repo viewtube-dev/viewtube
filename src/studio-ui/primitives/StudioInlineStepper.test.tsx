@@ -114,3 +114,30 @@ describe("Studio split stepper uses the stationary SplitLeftButton base", () => 
     expect(stepperCss).not.toMatch(/\.vt-studio-split-stepper:active[^}]*transform:/s)
   })
 })
+
+
+describe("stepper value pane matches username input sizing and typography", () => {
+  it("keeps the split value area at a 2:1 width-to-height ratio against a square rail", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf("/* Split stepper uses the canonical SplitLeftButton shell/face geometry")
+    const end = css.indexOf("/* Simple dropdown is a visual variant", start)
+    const splitCss = css.slice(start, end)
+    expect(splitCss).toMatch(/grid-template-columns:\s*minmax\(0,\s*2fr\)\s+minmax\(0,\s*1fr\)/)
+    expect(splitCss).toContain("aspect-ratio: 3 / 1;")
+    expect(splitCss).toContain("grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);")
+  })
+
+  it("uses the username input typography, fill, inset strokes, and focus treatment", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf("/* Split stepper uses the canonical SplitLeftButton shell/face geometry")
+    const end = css.indexOf("/* Simple dropdown is a visual variant", start)
+    const splitCss = css.slice(start, end)
+    expect(splitCss).toContain("font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);")
+    expect(splitCss).toContain("font-weight: var(--vt-studio-control-font-weight, 1000);")
+    expect(splitCss).toContain("font-size: var(--vt-studio-control-font-size, 38px) !important;")
+    expect(splitCss).toContain("background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);")
+    expect(splitCss).toContain("inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary)")
+    expect(splitCss).toContain(".vt-studio-split-stepper:focus-within")
+    expect(splitCss).toContain("-webkit-text-stroke: .5px #000;")
+  })
+})
