@@ -18,8 +18,8 @@
   --vt-studio-control-focus-outline-width: 3px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.5px;
-  --vt-studio-control-icon-size: 28px;
-  --vt-studio-control-icon-stroke: 2.5;
+  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
   --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary) 65%, transparent);
@@ -38,8 +38,8 @@
   --vt-studio-control-focus-outline-width: 2px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1px;
-  --vt-studio-control-icon-size: 18px;
-  --vt-studio-control-icon-stroke: 1.65;
+  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2.0);
 }
 [data-vt-studio-control][data-size="standard"] {
   --vt-studio-control-height: var(--vt-studio-44-height, 44px);
@@ -53,8 +53,8 @@
   --vt-studio-control-focus-outline-width: 3px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.5px;
-  --vt-studio-control-icon-size: 28px;
-  --vt-studio-control-icon-stroke: 2.5;
+  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
 }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
