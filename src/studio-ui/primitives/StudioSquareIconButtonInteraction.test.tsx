@@ -228,8 +228,10 @@ describe("StudioSquareIconButton interactions", () => {
       "heart", "bell", "sun-moon", "lock-unlock", "download-check", "refresh", "like",
     ])
     expect(buttons.every(button => button.querySelector("svg"))).toBe(true)
-    expect(buttons[2]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
-    expect(buttons[3]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
+    expect(buttons[2]?.querySelector('[data-vt-square-morph-face="back"] [data-vt-sun-moon-glyph="moon"] [data-vt-sun-moon-disc="true"]')?.getAttribute("d")).toContain("A6.5 6.5")
+    expect(buttons[2]?.querySelector('[data-vt-square-morph-face="front"] [data-vt-sun-moon-disc="true"]')?.getAttribute("r")).toBe("6.5")
+    expect(buttons[3]?.querySelector('[data-vt-lock-body="true"]')).not.toBeNull()
+    expect(buttons[3]?.querySelector('[data-vt-lock-shackle="true"]')).not.toBeNull()
     expect(buttons[4]?.querySelector('[data-vt-square-morph-face="back"] svg')).not.toBeNull()
     expect(buttons[4]?.getAttribute("data-success")).toBe("true")
   })
