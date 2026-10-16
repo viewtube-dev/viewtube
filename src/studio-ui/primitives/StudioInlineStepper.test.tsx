@@ -103,8 +103,8 @@ describe("split stepper value pane geometry and username-input styling", () => {
     const end = css.indexOf("/* Simple dropdown is a visual variant", start)
     const splitCss = css.slice(start, end)
     expect(splitCss).toContain("grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);")
-    expect(splitCss).toContain("aspect-ratio: 3 / 1;")
-    expect(splitCss).toContain("width: min(100%, calc(3 * var(--vt-stepper-height)));")
+    expect(splitCss).toContain("width: min(100%, calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke)));")
+    expect(splitCss).toContain("max-width: calc(3 * var(--vt-split-stepper-inner) + 2 * var(--vt-stepper-stroke));")
   })
 
   it("inherits the username input's font, weight, stroke, fill, padding and focus treatment", () => {
