@@ -94,3 +94,21 @@ describe("Studio stepper single-shell geometry regression", () => {
     expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
   })
 })
+
+
+describe("Studio split stepper uses the stationary SplitLeftButton base", () => {
+  it("shares the canonical split-left button geometry and static shadow without press-motion", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf("/* Studio Controls-owned stepper family styles moved from primitive sidecars. */")
+    const stepperCss = css.slice(start)
+    expect(stepperCss).toContain(".vt-studio-split-stepper::before")
+    expect(stepperCss).toContain("transform: translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px))")
+    expect(stepperCss).toContain("grid-template-columns: minmax(0,1fr) var(--vt-studio-control-height)")
+    expect(stepperCss).toContain("border: var(--vt-studio-control-stroke) solid #000")
+    expect(stepperCss).toContain("border-radius: var(--vt-studio-control-radius)")
+    expect(stepperCss).toContain("width: var(--vt-studio-control-height)")
+    expect(stepperCss).toContain("background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))")
+    expect(stepperCss).not.toMatch(/\.vt-studio-split-stepper:hover[^}]*transform:/s)
+    expect(stepperCss).not.toMatch(/\.vt-studio-split-stepper:active[^}]*transform:/s)
+  })
+})
