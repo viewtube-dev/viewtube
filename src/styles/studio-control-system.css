@@ -575,10 +575,10 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 .vt-studio-44-switch{width:75.68px;height:44px}
 .vt-studio-44-switch.is-round{border-radius:999px}
 .vt-studio-44-switch.is-rect{border-radius:7.333px}
-.vt-studio-44-handle{position:absolute;top:3.667px;left:3.667px;width:36.667px;height:36.667px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:translateX(0);transition: 0, .2, 1);height:44px}
+.vt-studio-44-handle{position:absolute;top:3.667px;left:3.667px;width:36.667px;height:36.667px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:translateX(0);transition:transform .22s cubic-bezier(.4,0,.2,1),background-color .22s ease-out}
 .vt-studio-44-choice.is-round{border-radius:50%}
 .vt-studio-44-choice.is-rect{border-radius:7.333px}
-.vt-studio-44-choice .vt-studio-44-dot{display:block;width:33px;height:33px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:scale(0);opacity:0;transition: 1.56, .64, 1), opacity .15s ease;opacity:1}
+.vt-studio-44-choice .vt-studio-44-dot{display:block;width:33px;height:33px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:scale(0);opacity:0;transition:transform .22s cubic-bezier(.34,1.56,.64,1),opacity .15s ease,background-color .22s ease}
 .vt-studio-44-choice.is-checkbox svg{width:96%;height:96%;stroke:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;transition: stroke-dashoffset .22s cubic-bezier(.4, 0, .2, 1), stroke .22s ease}
 .vt-studio-44-choice.is-checkbox.is-on svg{stroke-dashoffset:0}
 .vt-studio-44-switch.is-color-swap.is-on, .vt-studio-44-choice.is-color-swap.is-on{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
@@ -1019,7 +1019,7 @@ button.vt-studio-44-switch.is-rect { border-radius: 7.333px; }
   height: 36.667px;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   transform: translateX(0);
-  transition: 0, .2, 1), background-color .22s ease-out;
+  transition: transform .22s cubic-bezier(.4,0,.2,1), background-color .22s ease-out;
 }
 .vt-studio-44-switch.is-round .vt-studio-44-handle { border-radius: 50%; }
 .vt-studio-44-switch.is-rect .vt-studio-44-handle { border-radius: 3.667px; }
@@ -1038,7 +1038,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   transform: scale(0);
   opacity: 0;
-  transition: 1.56, .64, 1), opacity .15s ease, background-color .22s ease;
+  transition: transform .22s cubic-bezier(.34,1.56,.64,1), opacity .15s ease, background-color .22s ease;
 }
 .vt-studio-44-choice.is-radio.is-round .vt-studio-44-dot { border-radius: 50%; }
 .vt-studio-44-choice.is-radio.is-rect .vt-studio-44-dot { border-radius: 1.833px; }
