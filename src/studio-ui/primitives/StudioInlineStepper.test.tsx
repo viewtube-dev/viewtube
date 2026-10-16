@@ -94,3 +94,22 @@ describe("Studio stepper single-shell geometry regression", () => {
     expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
   })
 })
+
+
+describe("Studio split stepper numeric field contract", () => {
+  it("keeps a fixed 2:1 value-pane-to-rail ratio and inherits canonical text-input typography, fill, and focus treatment", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf("/* Split stepper uses the canonical SplitLeftButton shell/face geometry")
+    const stepperCss = css.slice(start)
+    expect(stepperCss).toMatch(/grid-template-columns:\\s*minmax\\(0,\\s*2fr\\)\\s+var\\(--vt-stepper-height\\)/)
+    expect(stepperCss).toMatch(/flex:\\s*0\\s+0\\s+calc\\(3\\s*\\*\\s*var\\(--vt-stepper-height/)
+    expect(stepperCss).toContain("font-family: var(--vt-studio-control-font-family);")
+    expect(stepperCss).toContain("font-weight: var(--vt-studio-control-font-weight);")
+    expect(stepperCss).toContain("text-transform: var(--vt-studio-control-text-transform);")
+    expect(stepperCss).toContain("letter-spacing: var(--vt-studio-control-letter-spacing);")
+    expect(stepperCss).toContain("background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity), transparent);")
+    expect(stepperCss).toContain("-webkit-text-stroke: .5px var(--vt-stepper-primary);")
+    expect(stepperCss).toContain("outline: var(--vt-studio-control-secondary-outline-width) solid var(--vt-stepper-secondary);")
+    expect(stepperCss).toContain("box-shadow: inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-stepper-primary)")
+  })
+})
