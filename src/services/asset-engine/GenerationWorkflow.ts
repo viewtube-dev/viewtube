@@ -1,6 +1,7 @@
 import {
  getContentBuild,
 } from "./ContentBuildRepository"
+import { assertContentBuildCapability } from "./ContentBuildCapabilities"
 import {
  operationRecordFromGenerationRequest,
  operationRecordFromToolReceipt,
@@ -132,30 +133,9 @@ const assertCanonicalScope = (input: {
  * receipts must not mutate that lifecycle implicitly. Re-open the build through
  * an explicit canonical stage transition before generating again.
  */
-// Explicit allowlist: unknown/future stages must not inherit generation permission
-// simply because they were not added to a denylist.
-export const GENERATION_ALLOWED_STAGES = [
- "idea",
- "research",
- "concept",
- "outline",
- "script",
- "storyboard",
- "media",
- "package",
- "edit",
- "review",
- "launch",
- "scheduled",
-] as const
-
 const assertGenerationStageAllowed = (build: ReturnType<typeof getContentBuild>) => {
  if (!build) throw new Error("Generation requires an existing canonical ContentBuild.")
- if (!(GENERATION_ALLOWED_STAGES as readonly string[]).includes(build.stage)) {
-  throw new Error(
-   `Generation is not allowed while ContentBuild ${build.id} is in stage ${build.stage}; the canonical stage is not in the generation allowlist.`,
-  )
- }
+ assertContentBuildCapability(build, "generate")
 }
 
 export const prepareGenerationRequest = (input: {
