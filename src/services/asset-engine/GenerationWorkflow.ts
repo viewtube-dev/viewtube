@@ -126,6 +126,22 @@ const assertCanonicalScope = (input: {
  return build
 }
 
+/**
+ * Conservative finalization guard: once a build is published or has moved into
+ * post-publication measurement/learning/archive, new generation requests and
+ * receipts must not mutate that lifecycle implicitly. Re-open the build through
+ * an explicit canonical stage transition before generating again.
+ */
+const assertGenerationStageAllowed = (build: ReturnType<typeof getContentBuild>) => {
+ if (!build) throw new Error("Generation requires an existing canonical ContentBuild.")
+ const blockedStages = new Set(["published", "monitor", "evaluation", "learning", "archived"])
+ if (blockedStages.has(build.stage)) {
+  throw new Error(
+   `Generation is not allowed while ContentBuild ${build.id} is in stage ${build.stage}; transition the canonical build to an editable stage first.`,
+  )
+ }
+}
+
 export const prepareGenerationRequest = (input: {
  contentBuildId: string
  channelId?: string | null
@@ -147,6 +163,7 @@ export const prepareGenerationRequest = (input: {
  workflowId?: string | null
 }): PreparedGenerationRequest => {
  const canonicalBuild = assertCanonicalScope(input)
+ assertGenerationStageAllowed(canonicalBuild)
  const channelId = canonicalBuild.channelId || input.channelId || null
  const projectId = canonicalBuild.legacyProjectId || input.projectId || null
  const requestedSlots = unique(input.requestedSlots || [input.targetSlot])
@@ -267,6 +284,7 @@ export const recordToolReceipt = (input: {
  if (!build) {
   throw new Error(`Unknown ContentBuild: ${input.request.contentBuildId}`)
  }
+ assertGenerationStageAllowed(build)
 
  const completedAt = new Date().toISOString()
  const receipt: ToolReceipt = {

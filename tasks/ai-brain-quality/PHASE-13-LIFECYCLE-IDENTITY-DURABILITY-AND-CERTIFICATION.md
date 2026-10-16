@@ -128,3 +128,10 @@ Regression tests cover direct calls from a disallowed `idea` stage and unresolve
 The browser-side `BrainOutcomeLedger` now treats `channelId + sourceRecordId` as an idempotency lookup, not permission to silently accept different payloads. If a retry changes an already-asserted source tool, outcome, summary, confidence, generation/asset identity, ContentBuild/project, ActionPacket/workflow/recommendation/experiment, publication transaction, approved snapshot/hash, published video, or publication identity, it fails closed with a field-specific conflict. Legacy records may be enriched when a lineage field was previously absent; an exact retry returns the original record ID. Focused tests cover exact retry, conflicting trace reuse, and legacy provenance enrichment.
 
 This guard complements the server-side stable-identity check. It does not replace authenticated cross-device replay against the real persistence service; that remains a release certification requirement.
+
+
+## Current-base implementation slice — post-publication generation guard
+
+The canonical `GenerationWorkflow` now rejects new generation request preparation and ToolReceipt recording when the canonical ContentBuild is in `published`, `monitor`, `evaluation`, `learning`, or `archived` stage. The check reads the canonical ContentBuild stage at both request preparation and receipt recording; a caller cannot bypass the guard by constructing a request object directly and attempting to record a receipt.
+
+Regression coverage exercises both the normal request-preparation path and a direct receipt call against a published build. This is a deliberately conservative post-publication guard, **not** the complete action-to-stage capability matrix or provider-dispatch enforcement required for Phase 13 certification. Stale-revision checks, workflow-blocker policy, other generation/edit/metadata/scheduling boundaries, and direct provider invocation paths remain to be mapped and tested.
