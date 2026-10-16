@@ -286,6 +286,21 @@ export const recordToolReceipt = (input: {
  }
  assertGenerationStageAllowed(build)
 
+ // A prepared request is tied to the exact canonical revision used to build its
+ // context manifest. Reject stale requests rather than recording output against
+ // a build that changed while generation was in flight.
+ if (input.request.contextRevision !== build.revision) {
+  throw new Error(
+   `Generation request revision is stale for ContentBuild ${build.id}: expected current revision ${build.revision}, received ${input.request.contextRevision}.`,
+  )
+ }
+ if (input.request.channelId && build.channelId && input.request.channelId !== build.channelId) {
+  throw new Error(`Generation request channel scope mismatch for ContentBuild ${build.id}.`)
+ }
+ if (input.request.projectId && build.legacyProjectId && input.request.projectId !== build.legacyProjectId) {
+  throw new Error(`Generation request project scope mismatch for ContentBuild ${build.id}.`)
+ }
+
  const completedAt = new Date().toISOString()
  const receipt: ToolReceipt = {
   schemaVersion: GENERATION_WORKFLOW_SCHEMA_VERSION,

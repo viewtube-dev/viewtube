@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import {
  createContentBuild,
  listContentBuildEvents,
+ setContentBuildStage,
 } from "./ContentBuildRepository"
 import {
  prepareGenerationRequest,
@@ -150,6 +151,34 @@ describe("GenerationWorkflow", () => {
   }
   expect(() => recordToolReceipt({ request, outputAssetIds: ["asset-after-publish"] }))
    .toThrow(/not allowed.*stage published/i)
+ })
+
+ it("rejects a stale generation request after the canonical build revision changes", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-stale-revision",
+   channelId: "channel-stale-revision",
+   legacyProjectId: "project-stale-revision",
+  })
+  const prepared = prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-stale-revision",
+   projectId: "project-stale-revision",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "new-option",
+   creatorIntent: "Generate a title from the captured revision.",
+  })
+
+  setContentBuildStage(build.id, "edit")
+
+  expect(() => recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-from-stale-context"],
+  })).toThrow(/revision is stale.*expected current revision/i)
+  expect(listContentBuildEvents(build.id).some(event =>
+   event.eventType === "tool.output.recorded" && event.outputAssetIds.includes("asset-from-stale-context")
+  )).toBe(false)
  })
 
  it("records a ToolReceipt in the existing ContentBuild event history", () => {
