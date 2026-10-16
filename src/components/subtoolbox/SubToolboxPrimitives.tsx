@@ -1257,26 +1257,25 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
           </SubToolboxRemovableTag>
         ))}
         {committingTag ? <span className="vt-subtoolbox-tag-morph" aria-hidden="true">{committingTag}</span> : null}
-        {!editing ? <button type="button" className="add" aria-label="Add tag" onClick={() => setEditing(true)}>{addIcon}</button> : null}
+        {editing ? (
+          <>
+            <SubToolboxInput20
+              controlSize="micro"
+              autoFocus
+              className="vt-subtoolbox-tag-editor-input"
+              aria-label="New tag"
+              value={draft}
+              placeholder="ADD TAG"
+              onChange={(event) => setDraft(event.target.value.toUpperCase())}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") save()
+                if (event.key === "Escape") { setDraft(""); setEditing(false) }
+              }}
+            />
+            <button type="button" className="submit" aria-label="Save tag" onClick={save}>{saveIcon}</button>
+          </>
+        ) : <button type="button" className="add" aria-label="Add tag" onClick={() => setEditing(true)}>{addIcon}</button>}
       </div>
-      {editing ? (
-        <>
-          <SubToolboxInput20
-            controlSize="micro"
-            autoFocus
-            className="vt-subtoolbox-tag-editor-input"
-            aria-label="New tag"
-            value={draft}
-            placeholder="ADD TAG"
-            onChange={(event) => setDraft(event.target.value.toUpperCase())}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") save()
-              if (event.key === "Escape") { setDraft(""); setEditing(false) }
-            }}
-          />
-          <button type="button" className="submit" aria-label="Save tag" onClick={save}>{saveIcon}</button>
-        </>
-      ) : null}
     </div>
   )
 }
