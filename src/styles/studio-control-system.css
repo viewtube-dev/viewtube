@@ -1123,8 +1123,8 @@ button[data-vt-studio-button="true"][data-size="compact"]::before {
   filter: none;
   transform: translate(var(--vt-studio-control-shadow-x, 1.5px), var(--vt-studio-control-shadow-y, 1.5px));
 }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
-button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:18px; --vt-studio-control-icon-stroke:1.65; }
 
 /* Comparison-only icon sizes. Stroke compensation assumes a 24-unit SVG viewBox. */
 button[data-vt-studio-button="true"][data-icon-size-variant="current"][data-size="standard"] { --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
@@ -1203,7 +1203,7 @@ button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-bu
 [data-vt-studio-button-icon] { display:grid; flex:0 0 auto; place-items:center; }
 button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
 
-/* Icon buttons default to the large production preset: 38px/1.9 standard and 24px/2 compact.
+/* Icon buttons default to the canonical preset: 28px/2.5 standard and 18px/1.65 compact.
    The current (28px/2.5, 18px/1.65) and moderate (34px/2.0588, 22px/1.35) values are opt-in presets. */
 button[data-vt-studio-icon-button="true"][data-icon-variant="v1"] {
   --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
@@ -1622,7 +1622,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
     inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary);
   transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
-/* Match the split-left default large icon preset: 38px/1.9 standard and 24px/2 compact. */
+/* Match the split-left canonical icon preset: 28px/2.5 standard and 18px/1.65 compact. */
 .vt-studio-username-input[data-size="standard"] {
   --vt-studio-control-icon-size: 38px;
   --vt-studio-control-icon-stroke: 1.9;

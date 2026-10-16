@@ -82,7 +82,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   lineHeight: 0.86,
   shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
   squareIconButtonDefaults: {
-    geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
+    geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default icon preset is 28px / 2.5 stroke standard and 18px / 1.65 stroke compact. Moderate (34px/22px) and large (38px/24px) icon presets remain opt-in variants.",
     v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
     v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
     v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
@@ -438,7 +438,7 @@ const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: Re
 /** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
 export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
   ({
-    icon, iconPreset, label, variant = "v1", effect = "standard", iconSizeVariant = "large", activeIcon, badge, tooltip, success = false, animate = false,
+    icon, iconPreset, label, variant = "v1", effect = "standard", iconSizeVariant = "current", activeIcon, badge, tooltip, success = false, animate = false,
     sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
     disabled, ...props
   }, ref) => {
@@ -551,7 +551,7 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
 }
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
-  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "current", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
       <span
         aria-hidden="true"
