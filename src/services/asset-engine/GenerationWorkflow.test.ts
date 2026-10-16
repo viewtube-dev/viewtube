@@ -153,6 +153,26 @@ describe("GenerationWorkflow", () => {
    .toThrow(/not allowed.*stage published/i)
  })
 
+ it("fails closed for a stage that has not been explicitly authorized for generation", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-unknown-stage",
+   channelId: "channel-unknown-stage",
+   legacyProjectId: "project-unknown-stage",
+   stage: "future-stage" as never,
+  })
+
+  expect(() => prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-unknown-stage",
+   projectId: "project-unknown-stage",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "create",
+   creatorIntent: "An unknown lifecycle stage must not inherit permission.",
+  })).toThrow(/not allowed.*stage future-stage.*not in the generation allowlist/i)
+ })
+
  it("rejects a stale generation request after the canonical build revision changes", () => {
   const build = createContentBuild({
    id: "cb-generation-workflow-stale-revision",
