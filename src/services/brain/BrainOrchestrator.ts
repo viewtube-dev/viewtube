@@ -370,6 +370,15 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   visibleContext: input.visibleContext,
   artifactRefs: input.artifactRefs,
  }).catch(() => null)
+ const creatorContextMetadata = () => ({
+  creatorContextVersion: creatorContext?.version || null,
+  creatorProfileLoadedAt: creatorContext?.provenance.profileLoadedAt || null,
+  creatorSelectionUpdatedAt: creatorContext?.provenance.selectionUpdatedAt || null,
+  creatorContextProjectSource: creatorContext?.provenance.projectSource || null,
+  creatorStyleProfileAvailable: Boolean(creatorContext?.styleProfile),
+  channelKnowledgeRecordIds: (creatorContext?.channelKnowledge?.records || []).map((record) => record.id).slice(0, 50),
+  channelKnowledgeConflictIds: (creatorContext?.channelKnowledge?.contradictions || []).map((record) => record.id).slice(0, 50),
+ })
  const opportunityEvidence = evidenceIntelligence?.opportunityEvidence || []
  const algorithmAccess = wantsAlgorithmIntelligence && input.channelId
   ? await readAlgorithmIntelligenceForBrain({
@@ -556,6 +565,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
+    ...creatorContextMetadata(),
     contextBudget: context.budget,
     repairReasons: repairOutcome.reasons,
     repairAttempted: repairOutcome.attempted,
@@ -586,6 +596,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
+    ...creatorContextMetadata(),
     contextBudget: context.budget,
     evaluationId: evaluation.id,
     repairReasons: repairOutcome.reasons,
@@ -635,6 +646,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
+    ...creatorContextMetadata(),
     contextBudget: context.budget,
     repairReasons: [],
     repairAttempted: false,
@@ -665,6 +677,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
+    ...creatorContextMetadata(),
     contextBudget: context.budget,
     evaluationId: evaluation.id,
     repairReasons: [],
