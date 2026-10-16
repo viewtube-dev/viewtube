@@ -205,3 +205,13 @@ The continuation audit confirmed that phases 3–6 are already represented by ca
 - **Canonical workflow:** existing Asset Engine / ContentBuild / ActionPacket handoff path audited and retained.
 - **Not claimed:** server-enforced workspace authorization, durable cross-device operation queue, real batch processor integration, actual vision AI provider, end-to-end browser certification, merge or deployment.
 - **Next:** inspect exact-head CI, resolve failures, close authorization/storage and processor integration gates, verify browser flow and post-merge target.
+
+
+## Vault phase 8 server operation-store follow-up — 2026-10-15
+
+- **Implementation branch:** `vault/phase-8-operation-store-current`, created from the current integration head after PR #336 merged.
+- **Status:** server-side operation records and tests implemented in branch; exact-head CI pending; worker execution and persistent-disk configuration pending.
+- **Files:** `server/vault-operation-store.mjs`, `server/vault-operation-store.test.mjs`, updated `server/billing-server.mjs` and `package.json`.
+- **Security:** reuses the authenticated account-session resolver and per-user record isolation; returns 503 if `VAULT_OPERATION_STORAGE_DIR` is not configured.
+- **Limits:** records queued/cancelled/retried state but does not run media processors; persistent mounted storage, worker leases, race-safe claims and deployment restart tests remain required.
+- **Audit:** `docs/vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md`.
