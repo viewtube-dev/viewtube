@@ -421,13 +421,35 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
   onSelectedChange?: (selected: boolean) => void
 }
 
-/** Canonical icon pair mapping; feature presets use consistent Lucide SVGs rather than placeholder glyphs. */
+/** Sun and moon share the same 6.5-unit circular radius and center. */
+const StudioSunGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" data-vt-sun-moon-glyph="sun">
+    <circle cx="12" cy="12" r="6.5" data-vt-sun-moon-disc="true" />
+    <path d="M12 2v1.5M12 20.5V22M2 12h1.5M20.5 12H22M4.93 4.93 6 6M18 18l1.07 1.07M19.07 4.93 18 6M6 18l-1.07 1.07" />
+  </svg>
+)
+const StudioMoonGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" data-vt-sun-moon-glyph="moon">
+    <path d="M16.3 7.2A6.5 6.5 0 1 0 16.3 16.8A4.8 4.8 0 0 1 16.3 7.2Z" data-vt-sun-moon-disc="true" />
+  </svg>
+)
+/** The lock body never morphs. Only the separate shackle group rotates when unlocked. */
+const StudioLockUnlockGlyph = ({ unlocked = false }: { unlocked?: boolean }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" data-vt-lock-unlock-glyph="true">
+    <path d="M5 10h14v11H5z" data-vt-lock-body="true" />
+    <g data-vt-lock-shackle="true" data-unlocked={unlocked ? "true" : "false"} className={unlocked ? "is-unlocked" : undefined}>
+      <path d="M7 10V7a5 5 0 0 1 10 0v3" />
+    </g>
+  </svg>
+)
+
+/** Canonical icon pair mapping; feature presets use consistent SVG geometry rather than placeholder glyphs. */
 const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: React.ReactNode; activeIcon?: React.ReactNode } | undefined => {
   switch (preset) {
     case "heart": return { icon: <Heart />, activeIcon: <Heart /> }
     case "bell": return { icon: <Bell />, activeIcon: <Bell /> }
-    case "sun-moon": return { icon: <Sun />, activeIcon: <Moon /> }
-    case "lock-unlock": return { icon: <Lock />, activeIcon: <Unlock /> }
+    case "sun-moon": return { icon: <StudioSunGlyph />, activeIcon: <StudioMoonGlyph /> }
+    case "lock-unlock": return { icon: <StudioLockUnlockGlyph />, activeIcon: <StudioLockUnlockGlyph unlocked /> }
     case "download-check": return { icon: <Download />, activeIcon: <Check /> }
     case "refresh": return { icon: <RefreshCw /> }
     case "like": return { icon: <ThumbsUp />, activeIcon: <ThumbsUp /> }
@@ -502,6 +524,7 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         selected={selectable && isSelected}
         data-vt-studio-icon-button="true"
         data-icon-size-variant={iconSizeVariant}
+        data-control-size={sizeVariant}
         data-icon-variant={variant}
         data-icon-effect={effect}
         data-icon-preset={iconPreset}
@@ -514,12 +537,14 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
         onClick={handleClick}
       >
         <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
-          {effect === "flip" ? (
+          {effect === "lock-unlock" ? (
+            <span data-vt-square-icon-current><StudioLockUnlockGlyph unlocked={isSelected} /></span>
+          ) : effect === "flip" ? (
             <span data-vt-square-flip-inner>
               <span data-vt-square-flip-face="front">{resolvedIcon}</span>
               <span data-vt-square-flip-face="back">{alternateNode}</span>
             </span>
-          ) : effect === "morph" || effect === "rotated-toggle" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "lock-unlock" || effect === "download-success" ? (
+          ) : effect === "morph" || effect === "rotated-toggle" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "download-success" ? (
             <span data-vt-square-morph-inner>
               <span data-vt-square-morph-face="front">{resolvedIcon}</span>
               <span data-vt-square-morph-face="back">{alternateNode}</span>
