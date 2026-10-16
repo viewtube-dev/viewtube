@@ -64,5 +64,6 @@ This reference defines the target system; individual runtime capabilities must s
 
 - [Phases 0–2: canonical source, identity/selection, adaptive host](vault/VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md)
 - [Phases 3–6: inspection, operation receipts, media preflight, compare and governance](vault/VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md)
+- [Phases 7–10: cross-system workflow, authenticated operation records, batch operations and release gates](vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md)
 
-Both audit documents distinguish implemented code from pending CI, runtime, server-authorization, processor-health, durable-operation, and AI-provider verification.
+These audits distinguish implementation from pending CI, runtime, persistent-disk configuration, worker execution, processor-health, cross-system, and AI-provider verification. The server operation API fails closed without `VAULT_OPERATION_STORAGE_DIR` and is not a processing worker.

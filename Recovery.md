@@ -930,3 +930,16 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Phase 10 evidence:** prior release-gate run #1503 passed production build, local smoke, and Brain quality loop; typecheck, source governance, focused contracts, and full suite failed. That run predates the newest batch/documentation commits and does not verify the current head.
 - **Verification:** source writes returned commit SHAs and PR metadata was read back. No claim of merge, exact-head CI pass, browser certification, or deployment is made.
 - **Next action:** inspect the newest release-gate run; resolve branch-introduced errors; complete processor/lineage integration and server authorization/durability; certify browser flow; merge only when required gates pass; re-read target branch afterward.
+
+
+#### LOG-ID: REC-20261015-vault-phase-8-operation-store-followup-002
+
+- **Timestamp:** 2026-10-15 (exact execution time not asserted)
+- **Category:** VAULT / AUTHENTICATED SERVER OPERATION RECORDS
+- **Action:** Rebased the follow-up work onto the current `master/consolidated-feature-integration` line after PR #336 merged; added `server/vault-operation-store.mjs`, mounted authenticated `/api/vault/operations` routes in `server/billing-server.mjs`, added `server/vault-operation-store.test.mjs`, and registered `test:vault-operation-store`.
+- **Status:** IMPLEMENTED IN FOLLOW-UP BRANCH / EXACT-HEAD CI FAILED; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING.
+- **Security boundary:** Requests use the canonical authenticated account-session resolver; operation records are per-user, owner-checked, and fail closed unless `VAULT_OPERATION_STORAGE_DIR` is configured.
+- **Limit:** This persists lifecycle records but does not execute media jobs. Configure a persistent mounted disk, add worker leases and race-safe coordination, and verify restart recovery before production claims.
+- **Follow-up PR:** [#395](https://github.com/viewtube-dev/viewtube/pull/395), target `master/consolidated-feature-integration`.
+- **CI evidence:** exact-head run #1697 failed runtime lint, combined focused contracts, and full suite; production build, local smoke, Brain quality loop, source governance, typecheck, and the dedicated operation-store test passed. See the canonical phase audit for the observed failures. Vercel commit statuses were rate-limited, so deployment is not certified.
+- **Next:** reconcile the runtime lint and integration-test failures against the target branch, implement worker execution and safe claim/idempotency coordination, configure persistent deployment storage, and verify browser/deployment behavior before merge.

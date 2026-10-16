@@ -1098,3 +1098,27 @@ vault_workbench_phases_7_10:
     - "That run failed typecheck, source governance, focused contracts and full suite; it predates the newest head."
     - "No exact-head verification, merge, browser certification or deployment is claimed."
   next_action: "Run and inspect CI for the newest PR head, fix branch-introduced failures, resolve phase 8 prerequisites, complete real processor/lineage wiring and certify post-merge target."
+
+
+vault_phase_8_operation_store_current_base:
+  status: "IMPLEMENTED IN FOLLOW-UP BRANCH / EXACT-HEAD CI FAILED; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING"
+  date: "2026-10-15"
+  update_id: "REC-20261015-vault-phase-8-operation-store-followup-002"
+  title: "Authenticated Vault operation records on current integration base"
+  implementation_branch: "vault/phase-8-operation-store-current"
+  target_branch: "master/consolidated-feature-integration"
+  files:
+    - "server/vault-operation-store.mjs"
+    - "server/vault-operation-store.test.mjs"
+    - "server/billing-server.mjs"
+    - "package.json"
+    - "docs/vault/VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md"
+  security:
+    - "Uses canonical authenticated account-session resolver."
+    - "Per-user record directory, owner checks, private no-store responses and idempotency key."
+    - "Fails closed when VAULT_OPERATION_STORAGE_DIR is missing."
+  limits:
+    - "Durable operation records only; no media worker execution yet."
+    - "Requires persistent mounted disk and restart verification."
+    - "Filesystem idempotency requires race-safe coordination before multi-process scaling."
+  next_action: "Reconcile exact-head runtime lint and integration-test failures against the target branch; implement worker leases and race-safe claims; configure persistent storage and verify deployed restart recovery before merge."
