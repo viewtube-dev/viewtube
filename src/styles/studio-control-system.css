@@ -2547,11 +2547,12 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
 /* Split-left badge v2: static counterpart of StudioSplitLeftButton.
    One shell, one face, one rail, one divider; no nested duplicate borders. */
 .vt-studio-split-left-badge {
-  --vt-studio-badge-height: var(--vt-studio-control-height, 44px);
-  --vt-studio-badge-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-studio-badge-radius: var(--vt-studio-control-radius, 12px);
-  --vt-studio-badge-shadow-x: var(--vt-studio-control-shadow-x, 3px);
-  --vt-studio-badge-shadow-y: var(--vt-studio-control-shadow-y, 3px);
+  /* The badge consumes the same standard/compact tokens as interactive Studio controls. */
+  --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
+  --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
+  --vt-studio-badge-shadow-x: var(--vt-studio-44-button-shadow-x, 3px);
+  --vt-studio-badge-shadow-y: var(--vt-studio-44-button-shadow-y, 3px);
   position: relative;
   isolation: isolate;
   display: inline-flex;
@@ -2564,25 +2565,16 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   border-radius: var(--vt-studio-badge-radius);
   background: transparent;
   color: #000;
-  box-shadow: none;
+  box-shadow: var(--vt-studio-badge-shadow-x) var(--vt-studio-badge-shadow-y) 0 0 var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 65%, transparent));
   cursor: default;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 24px);
+  font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .9);
+  line-height: var(--vt-studio-control-line-height, .86);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: uppercase;
 }
-.vt-studio-split-left-badge::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  border: var(--vt-studio-badge-stroke) solid #000;
-  border-radius: inherit;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  transform: translate(var(--vt-studio-badge-shadow-x), var(--vt-studio-badge-shadow-y));
-}
+.vt-studio-split-left-badge::before { content: none; display: none; }
 .vt-studio-split-left-badge__face {
   position: relative;
   display: grid;
@@ -2608,9 +2600,9 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
 }
 .vt-studio-split-left-badge__rail > svg {
   display: block;
-  width: var(--vt-studio-control-icon-size, 28px);
-  height: var(--vt-studio-control-icon-size, 28px);
-  stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
+  width: var(--vt-studio-control-icon-size, 38px);
+  height: var(--vt-studio-control-icon-size, 38px);
+  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
 }
 .vt-studio-split-left-badge__label {
   display: flex;
@@ -2628,26 +2620,18 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   white-space: nowrap;
   -webkit-text-stroke: inherit;
 }
-.vt-studio-split-left-badge[data-size="compact"] {
-  --vt-studio-badge-height: 28px;
-  --vt-studio-badge-stroke: 2px;
-  --vt-studio-badge-radius: 10px;
-  --vt-studio-control-icon-size: 18px;
-  font-size: 18px;
+.vt-studio-split-left-badge:is([data-size="compact"], [data-size="micro"]) {
+  --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-badge-shadow-x: var(--vt-studio-28-button-shadow-x, 1.5px);
+  --vt-studio-badge-shadow-y: var(--vt-studio-28-button-shadow-y, 1.5px);
+  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2);
+  --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
+  --vt-studio-control-line-height: var(--vt-studio-28-line-height, .86);
 }
-.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label { padding-inline: 8px; }
-.vt-studio-split-left-badge[data-size="micro"] {
-  --vt-studio-badge-height: 14px;
-  --vt-studio-badge-stroke: 1px;
-  --vt-studio-badge-radius: 7px;
-  --vt-studio-control-icon-size: 9px;
-  --vt-studio-control-icon-stroke: 2;
-  font-size: 8px;
-  line-height: 1;
-  letter-spacing: 0;
-}
-.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__label { padding-inline: 3px; }
-.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail { border-right-width: 1px; }
+.vt-studio-split-left-badge:is([data-size="compact"], [data-size="micro"]) .vt-studio-split-left-badge__label { padding-inline: 8px; }
 
 /* Choice controls must occupy the full 44px standard control height. */
 .vt-studio-44-choice {
