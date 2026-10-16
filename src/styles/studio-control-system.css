@@ -2106,7 +2106,6 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   transition: background-color 150ms ease-out, outline-color 150ms ease-out;
 }
-.vt-studio-split-stepper::before { content: none; display: none; }
 .vt-studio-split-stepper[data-size="compact"] {
   --vt-stepper-height: var(--vt-studio-28-height, 28px);
   --vt-stepper-stroke: var(--vt-studio-28-stroke, 2px);
@@ -2521,7 +2520,6 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: uppercase;
 }
-.vt-studio-split-left-badge::before { content: none; display: none; }
 .vt-studio-split-left-badge__face {
   position: relative;
   display: grid;
