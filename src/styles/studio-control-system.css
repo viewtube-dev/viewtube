@@ -2549,7 +2549,7 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
 .vt-studio-split-left-badge {
   --vt-studio-badge-height: var(--vt-studio-control-height, 44px);
   --vt-studio-badge-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-studio-badge-radius: var(--vt-studio-control-radius, 12px);
+  --vt-studio-badge-radius: var(--vt-studio-control-radius, 6px);
   --vt-studio-badge-shadow-x: var(--vt-studio-control-shadow-x, 3px);
   --vt-studio-badge-shadow-y: var(--vt-studio-control-shadow-y, 3px);
   position: relative;
@@ -2574,14 +2574,10 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   text-transform: uppercase;
 }
 .vt-studio-split-left-badge::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  border: var(--vt-studio-badge-stroke) solid #000;
-  border-radius: inherit;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  transform: translate(var(--vt-studio-badge-shadow-x), var(--vt-studio-badge-shadow-y));
+  /* The previous translated pseudo-box duplicated the badge as a second opaque
+     rectangle. Split-left badges use one face only; never render a shadow shell. */
+  content: none;
+  display: none;
 }
 .vt-studio-split-left-badge__face {
   position: relative;
