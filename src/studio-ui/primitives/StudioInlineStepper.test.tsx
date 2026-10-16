@@ -99,7 +99,7 @@ describe("Studio stepper single-shell geometry regression", () => {
 describe("Studio split stepper uses the stationary SplitLeftButton base", () => {
   it("shares the canonical split-left button geometry and static shadow without press-motion", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = css.indexOf("/* Studio Controls-owned stepper family styles moved from primitive sidecars. */")
+    const start = css.indexOf("/* Split stepper uses the canonical SplitLeftButton shell/face geometry")
     const stepperCss = css.slice(start)
     expect(stepperCss).toContain(".vt-studio-split-stepper::before")
     expect(stepperCss).toMatch(/transform:\s*translate\(var\(--vt-studio-control-shadow-x,\s*3px\),\s*var\(--vt-studio-control-shadow-y,\s*3px\)\)/)
