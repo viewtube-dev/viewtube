@@ -2,9 +2,9 @@
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target:** `master/consolidated-feature-integration`  
-**Execution branch:** `vault/phases-0-1-2-workbench`  
-**Tracking PR:** [#336](https://github.com/viewtube-dev/viewtube/pull/336)  
-**Status:** Partial implementation in branch; production completion is not certified.
+**Execution branch:** `vault/phase-8-operation-store-current`  
+**Current tracking PR:** [#395](https://github.com/viewtube-dev/viewtube/pull/395) (foundation PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) merged)  
+**Status:** Phases 7–9 partially implemented; phase 10 remains pending exact-head and runtime certification.
 
 This audit deliberately separates source changes from system guarantees that cannot be established by a client-side implementation or documentation alone.
 
@@ -51,7 +51,7 @@ Required before closure:
 
 ## Phase 10 — Exact-head release certification
 
-Latest observed release-gate run before the phase 7–10 writes: [run #1503](https://github.com/viewtube-dev/viewtube/actions/runs/38776140823), head `1d636215d25dd50d714dc1a0911875827bc7bbfc).
+Latest completed exact-head run before the idempotency-conflict regression fix: [run #1695](https://github.com/viewtube-dev/viewtube/actions/runs/38823226151), head `cc2d016e1854a8e0fd621553a6391af16f1989b5`. The same base commit `3017d0c7df6d4b92f997db3692c41cdeebda38b5` has the same `static-quality` and `full-suite` failure categories, so those two failures are baseline integration debt rather than evidence of a regression from this PR. New focused operation-store tests passed on that run. A subsequent idempotency-conflict test/fix has been committed; its exact-head run must finish before reassessment.
 - Production build: **passed**.
 - Local smoke: **passed**.
 - Brain quality loop: **passed**.
