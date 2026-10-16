@@ -367,6 +367,36 @@ export const recordAnalyticsCheckpointForEvaluation = (
     } else {
       publicationEvaluationStatus = "skipped"
       publicationEvaluationError = evaluationResult.reason
+      recordAlgorithmIntelligenceEvent({
+        id: "publication-evaluation-blocked:" + identity.identity.publishTransactionId + ":" + input.checkpointId,
+        channelId: identity.identity.channelId,
+        projectId: identity.identity.projectId,
+        videoId: identity.identity.youtubeVideoId,
+        kind: "EVALUATION_BLOCKED",
+        sourceSystem: "evaluation",
+        sourceId: checkpointEvent.id,
+        parentEventIds: [checkpointEvent.id],
+        recommendationId: identity.identity.recommendationId || null,
+        actionPacketId: identity.identity.actionPacketId || null,
+        workflowId: identity.identity.workflowId || null,
+        evidenceIds: input.evidenceIds || [],
+        confidence: "low",
+        title: "Publication evaluation deferred",
+        summary: "Canonical publication evaluation skipped: " + evaluationResult.reason,
+        evaluationTargets: input.evaluationTargets || [],
+        checkpointAt: input.checkpointAt,
+        metadata: {
+          contentBuildId: identity.identity.contentBuildId,
+          publishTransactionId: identity.identity.publishTransactionId,
+          approvedSnapshotId: identity.identity.approvedSnapshotId,
+          approvedSnapshotHash: identity.identity.approvedSnapshotHash,
+          checkpointId: input.checkpointId,
+          selectedWindow: input.selectedWindow || canonical.selectedWindow,
+          evaluationStatus: "skipped",
+          skipReason: evaluationResult.reason,
+          evaluationBridge: "contentbuild-publication-analytics-v1",
+        },
+      })
     }
   } catch (cause) {
     publicationEvaluationStatus = "error"
