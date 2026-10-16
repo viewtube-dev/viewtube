@@ -2668,7 +2668,7 @@ button[data-vt-studio-icon-button="true"].is-effect-tooltip [data-vt-square-tool
 button[data-vt-studio-icon-button="true"] [data-vt-square-success-label] {
   min-height: 20px; padding: 0 10px; border: 3px solid #000; border-radius: 6px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 14px; font-weight: 1000; line-height: 1; letter-spacing: .055em; text-transform: uppercase; -webkit-text-stroke: 0;
+  font-size: 14px; font-weight: 1000; line-height: 1; letter-spacing: .055em; text-transform: uppercase; -webkit-text-stroke: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 button[data-vt-studio-icon-button="true"][data-size="compact"].is-effect-tooltip [data-vt-square-tooltip],
 button[data-vt-studio-icon-button="true"][data-size="compact"] [data-vt-square-success-label] {
