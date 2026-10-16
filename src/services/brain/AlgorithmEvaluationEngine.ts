@@ -73,6 +73,11 @@ const evaluateTarget = (target: AlgorithmEvaluationTarget, observation: Algorith
   return { metric: target.metric, status: "unavailable", baselineValue: null, observedValue: current, relativeChange: null, target, comparability }
  }
  const threshold = target.minimumRelativeChange ?? 0
+ // Relative change is undefined when the baseline is zero. Do not coerce that
+ // undefined delta to zero and silently classify it as a missed/met target.
+ if (target.targetValue == null && delta == null) {
+  return { metric: target.metric, status: "unavailable", baselineValue: baseline, observedValue: current, relativeChange: null, target, comparability }
+ }
  const met = target.targetValue != null
   ? target.direction === "increase" ? current >= target.targetValue : target.direction === "decrease" ? current <= target.targetValue : Math.abs(current - target.targetValue) <= Math.abs(target.targetValue) * Math.max(threshold, 0.01)
   : target.direction === "increase" ? (delta ?? 0) >= threshold
@@ -102,7 +107,7 @@ export const buildAlgorithmEvaluationLifecycleIdentity = (event: AlgorithmIntell
 })
 
 export const evaluateAlgorithmEvent = (input: { event: AlgorithmIntelligenceEvent; observations: AlgorithmMetricObservation[]; now?: number }): AlgorithmEvaluationResult => {
- const now = input.now || Date.now()
+ const now = input.now ?? Date.now()
  const targetResults = input.event.evaluationTargets.map((target) => evaluateTarget(target, input.observations.find((observation) => observation.metric === target.metric)))
  const available = targetResults.filter((result) => result.status !== "unavailable")
  const met = targetResults.filter((result) => result.status === "met").length
