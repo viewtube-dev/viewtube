@@ -940,6 +940,6 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Status:** IMPLEMENTED IN FOLLOW-UP BRANCH / EXACT-HEAD CI FAILED; WORKER EXECUTION AND DEPLOYMENT CONFIGURATION PENDING.
 - **Security boundary:** Requests use the canonical authenticated account-session resolver; operation records are per-user, owner-checked, and fail closed unless `VAULT_OPERATION_STORAGE_DIR` is configured.
 - **Limit:** This persists lifecycle records but does not execute media jobs. Configure a persistent mounted disk, add worker leases and race-safe coordination, and verify restart recovery before production claims.
-- **Follow-up PR:** [#395](https://github.com/viewtube-dev/viewtube/pull/395), target `master/consolidated-feature-integration`.
+- **Current migrated PR:** [#429](https://github.com/viewtube-dev/viewtube/pull/429), targeting `master/consolidated-feature-integration`; original PR #395 is closed as superseded.
 - **CI evidence:** exact-head run #1697 failed runtime lint, combined focused contracts, and full suite; production build, local smoke, Brain quality loop, source governance, typecheck, and the dedicated operation-store test passed. See the canonical phase audit for the observed failures. Vercel commit statuses were rate-limited, so deployment is not certified.
 - **Next:** reconcile the runtime lint and integration-test failures against the target branch, implement worker execution and safe claim/idempotency coordination, configure persistent deployment storage, and verify browser/deployment behavior before merge.
