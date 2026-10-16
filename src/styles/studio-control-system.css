@@ -2192,6 +2192,28 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 }
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button,
 .vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.vt-studio-split-stepper input.vt-studio-split-stepper-value:is(:focus, :focus-visible) {
+  background: transparent;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: .5px #000;
+  outline: none;
+  box-shadow: none;
+}
+.vt-studio-split-stepper input.vt-studio-split-stepper-value::placeholder {
+  color: var(--vt-stepper-primary);
+  -webkit-text-fill-color: var(--vt-stepper-primary);
+  -webkit-text-stroke: .5px var(--vt-stepper-primary);
+  opacity: 1;
+}
+.vt-studio-split-stepper:focus-within {
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-focus-fill-opacity, 70%), transparent);
+  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
+  box-shadow: inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
+    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary),
+    inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary);
+}
 .vt-studio-split-stepper.is-interacting {
   background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-focus-fill-opacity, 70%), transparent);
   outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
