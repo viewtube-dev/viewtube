@@ -92,3 +92,30 @@ test("Vault operation store rejects unsupported operations and invalid state tra
     await rm(root, { recursive: true, force: true });
   }
 });
+
+
+test("Vault operation store rejects an idempotency key reused for a different request", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "vault-operations-"));
+  try {
+    const first = await invoke({
+      method: "POST",
+      pathname: "/api/vault/operations",
+      userId: "user-a",
+      body: { sourceAssetId: "asset-1", operation: "image-transform", idempotencyKey: "same-key", parameters: { width: 640 } },
+      root,
+    });
+    assert.equal(first.status, 201);
+
+    const conflicting = await invoke({
+      method: "POST",
+      pathname: "/api/vault/operations",
+      userId: "user-a",
+      body: { sourceAssetId: "asset-2", operation: "video-trim", idempotencyKey: "same-key", parameters: { start: 3 } },
+      root,
+    });
+    assert.equal(conflicting.status, 409);
+    assert.equal(conflicting.body.error, "IDEMPOTENCY_KEY_CONFLICT");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
