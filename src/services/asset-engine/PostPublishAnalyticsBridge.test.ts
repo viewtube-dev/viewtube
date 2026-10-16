@@ -228,6 +228,18 @@ describe("Post-publish analytics bridge", () => {
     }))
   })
 
+  it("fails closed when the completed publish transaction event cannot be resolved", () => {
+    mocks.listContentBuildEvents.mockReturnValue([])
+
+    expect(() => recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })).toThrow(/requires the completed publish transaction event/)
+
+    expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
+    expect(mocks.appendContentBuildEvent).not.toHaveBeenCalled()
+  })
+
   it("reports snapshot-only project association instead of guessing a missing Project link", () => {
     mocks.getContentBuild.mockReturnValue({ ...build, legacyProjectId: null })
 
