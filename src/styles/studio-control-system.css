@@ -12,7 +12,7 @@
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: .86;
-  --vt-studio-control-shadow: var(--vt-studio-44-button-shadow-x, 3px);
+  
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
   --vt-studio-control-focus-outline-width: 3px;
@@ -22,7 +22,7 @@
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
-  --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary) 65%, transparent);
+  
   box-sizing: border-box;
 }
 
@@ -32,9 +32,9 @@
   --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
   --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000);
-  --vt-studio-control-shadow: var(--vt-studio-28-button-shadow-x, 1.5px);
+  
   --vt-studio-control-outline-stroke: 1px;
-  --vt-studio-control-hover-offset: .75px;
+
   --vt-studio-control-focus-outline-width: 2px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1px;
@@ -47,9 +47,9 @@
   --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
-  --vt-studio-control-shadow: var(--vt-studio-44-button-shadow-x, 3px);
+  
   --vt-studio-control-outline-stroke: 1.5px;
-  --vt-studio-control-hover-offset: 1.5px;
+
   --vt-studio-control-focus-outline-width: 3px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.5px;
@@ -78,7 +78,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   border: var(--vt-studio-control-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
   background: var(--vt-studio-control-accent);
-  box-shadow: var(--vt-studio-control-shadow) var(--vt-studio-control-shadow) 0 0 var(--vt-studio-control-shadow-color);
+  
   color: #000;
   cursor: pointer;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -89,7 +89,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   -webkit-text-stroke: 1px currentColor;
   padding: 0 1em;
   text-transform: uppercase;
-  transition: filter 150ms ease-out, transform 150ms ease-out, box-shadow 150ms ease-out;
+  
 }
 
 button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) { font-size: 24px; padding: 0 8px; }
@@ -131,7 +131,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  box-shadow: var(--vt-studio-control-shadow, 4px) var(--vt-studio-control-shadow, 4px) 0 0 var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
+  
   padding: 4px;
 }
 
@@ -153,7 +153,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   padding: 8px 10px;
   text-align: left;
   text-transform: uppercase;
-  box-shadow: none;
+  
   -webkit-text-stroke: .2px currentColor;
   transition: background-color 150ms ease-out, color 150ms ease-out;
 }
@@ -406,12 +406,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-legend-height: 44px;
   --vt-legend-stroke: 3px;
   --vt-legend-radius: 6px;
-  --vt-legend-shadow-offset: 3px;
+  
   --vt-legend-label-height: 20px;
   --vt-legend-label-font-size: 14px;
   --vt-legend-chevron-size: 28px;
   --vt-legend-count-size: 28px;
-  --vt-legend-shadow-color: var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
+  
   position: relative;
   z-index: 0;
   width: 100%;
@@ -420,7 +420,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   text-transform: uppercase;
 }
-.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height: 28px; --vt-legend-stroke: 2px; --vt-legend-shadow-offset: 1.5px; --vt-legend-radius: 4px; --vt-legend-label-height: 14px; --vt-legend-label-font-size: 9px; --vt-legend-chevron-size: 18px; --vt-legend-count-size: 19px; }
+.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height: 28px; --vt-legend-stroke: 2px;  --vt-legend-radius: 4px; --vt-legend-label-height: 14px; --vt-legend-label-font-size: 9px; --vt-legend-chevron-size: 18px; --vt-legend-count-size: 19px; }
 .vt-studio-legend-multi[data-open="true"] { z-index: 600; isolation: isolate; }
 .vt-studio-legend-anchor { position: relative; width: 100%; min-width: 0; padding-top: 0; }
 .vt-studio-legend-label {
@@ -435,11 +435,11 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   position: relative; display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0;
   height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   padding: 0 8px 0 12px; border: var(--vt-legend-stroke) solid #000;
-  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; box-shadow: none;
+  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; 
   cursor: pointer; font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase; transform: none; transition: none;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
-.vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active { box-shadow: none; transform: none; transition: none; }
+.vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active {    }
 .vt-studio-legend-trigger:focus-visible { outline: 2px solid var(--vt-legend-b); outline-offset: 0; }
 .vt-studio-legend-trigger:disabled { cursor: not-allowed; opacity: .5; }
 .vt-studio-legend-trigger-text { display: block; min-width: 0; width: 0; max-width: 100%; flex: 1 1 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
@@ -459,7 +459,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   overflow: auto; overscroll-behavior: contain; scrollbar-width: thin;
   border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   background: var(--vt-legend-a);
-  box-shadow: var(--vt-legend-shadow-offset) var(--vt-legend-shadow-offset) 0 0 var(--vt-legend-shadow-color);
+  
   padding: 4px; transform-origin: top center; animation: vt-legend-menu-open 160ms cubic-bezier(.2,.75,.2,1) both;
 }
 @keyframes vt-legend-menu-open { from { opacity: 0; transform: translateY(-5px) scaleY(.98); } to { opacity: 1; transform: translateY(0) scaleY(1); } }
@@ -503,9 +503,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
-  --vt-studio-44-button-shadow-x: 3px; --vt-studio-44-button-shadow-y: 3px;
+   
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
-  --vt-studio-28-button-shadow-x: 1px; --vt-studio-28-button-shadow-y: 1px;
+   
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
   --vt-studio-text-input-standard-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-text-input-compact-font-size: var(--vt-studio-28-font-size, 24px);
@@ -550,7 +550,7 @@ select[data-vt-studio-control="true"] {
   letter-spacing: -.02em;
   text-transform: uppercase;
   padding-left: 14px;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  
 }
 select[data-vt-studio-control="true"][data-size="compact"] { padding-left: 8px; font-size: 24px; }
 select[data-vt-studio-control="true"]:focus,
@@ -591,7 +591,7 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 .vt-studio-44-switch.is-color-swap.is-on,.vt-studio-44-choice.is-color-swap.is-on{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
 .vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,.vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-switch.is-black-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-black-indicator .vt-studio-44-dot{background:#000}
-.vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;box-shadow:0 1px 2.75px rgba(0,0,0,.15)}
+.vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;}
 .vt-studio-44-switch.is-solid.is-on,.vt-studio-44-choice.is-solid.is-on{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));outline-offset:3px}
 .vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:#fff;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.02em;line-height:.86}
@@ -612,14 +612,14 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 button.vt-studio-44-switch,
 button.vt-studio-44-choice {
   padding: 0 !important;
-  box-shadow: none !important;
+  
 }
 button.vt-studio-44-switch:hover:not(:disabled),
 button.vt-studio-44-choice:hover:not(:disabled),
 button.vt-studio-44-switch:active:not(:disabled),
 button.vt-studio-44-choice:active:not(:disabled) {
-  transform: none !important;
-  box-shadow: none !important;
+  
+  
 }
 
 button.vt-studio-44-switch:not(.is-on),
@@ -633,7 +633,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
   box-sizing: border-box !important;
   border: 0 !important;
   outline: 0;
-  box-shadow: none !important;
+  
   -webkit-text-stroke: 0 !important;
   filter: none;
   transform: none !important;
@@ -659,7 +659,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   min-width: 0;
   margin: 0;
   transform: none !important;
-  box-shadow: none !important;
+  
   vertical-align: middle;
 }
 [data-vt-studio-control="true"].vt-studio-44-word-toggle > button {
@@ -670,7 +670,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   max-width: 100%;
   margin: 0;
   transform: none !important;
-  box-shadow: none !important;
+  
 }
 
 /* Prevent the word-toggle catalog specimens from competing for horizontal space. */
@@ -755,7 +755,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown[data-open="true"] button[data-dropdown-trigger="true"] {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-  box-shadow: none !important;
+  
 }
 .vt-studio-dropdown-menu {
   top: 100% !important;
@@ -768,7 +768,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   border-bottom-left-radius: var(--vt-dropdown-radius, 6px) !important;
   border-bottom-right-radius: var(--vt-dropdown-radius, 6px) !important;
   background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #fff) !important;
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
+  
   padding: 3px !important;
 }
 .vt-studio-dropdown-option {
@@ -806,7 +806,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   border-radius: 3px !important;
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
-  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
+  
 }
 .vt-studio-dropdown-option:focus-visible { outline: 1.5px solid var(--pair-b, #ff7f6b) !important; outline-offset: -4px !important; }
 
@@ -878,7 +878,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   border-width: 2px !important;
   border-top-width: 0 !important;
   border-radius: 0 0 4px 4px !important;
-  box-shadow: 1.5px 1.5px 0 color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent) !important;
+  
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
   min-height: 28px !important;
@@ -922,8 +922,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   outline: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;
-  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-primary);
-  transition: background-color 150ms ease-out, color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
+  
+  
 }
 [data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
   min-height: var(--vt-studio-44-height);
@@ -974,8 +974,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   -webkit-text-stroke: .5px #000;
   outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset);
-  box-shadow: inset 0 0 0 var(--vt-field-stroke) var(--vt-field-primary),
-    0 0 0 var(--vt-field-focus-outline-width) color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
+  
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):is(:disabled, [readonly]) {
   cursor: not-allowed;
@@ -1003,7 +1002,7 @@ button.vt-studio-44-choice {
   height: 44px;
   border: 0 !important;
   outline: 0;
-  box-shadow: none !important;
+  
   -webkit-text-stroke: 0 !important;
   filter: none;
   transform: none !important;
@@ -1079,7 +1078,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 .vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,
 .vt-studio-44-choice.is-white-indicator .vt-studio-44-dot {
   background: #fff;
-  box-shadow: 0 1px 2.75px rgb(0 0 0 / 15%);
+  
 }
 .vt-studio-44-switch.is-black-indicator.is-on,
 .vt-studio-44-choice.is-black-indicator.is-on,
@@ -1107,21 +1106,21 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
 /* Canonical tactile motion tokens: 180ms general transition, 80ms press. */
 :root { --vt-studio-motion-button: 180ms; --vt-studio-motion-press: 80ms; }
-button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000; box-shadow:none; overflow:visible; transform:translate(0,0); transition:transform var(--vt-studio-motion-button) ease-out; }
+button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000;  overflow:visible; transform:translate(0,0);  }
 button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); opacity:1; transition:opacity var(--vt-studio-motion-button) ease-out; pointer-events:none; }
 /* Split-left uses one real offset shadow on its shell. A translated filled pseudo-box
    creates a second opaque silhouette behind the badge and can mispaint in nested
    stacking contexts, so this variant never renders the generic shadow layer. */
 button[data-vt-studio-button="true"][data-split-left="true"] {
-  box-shadow: var(--vt-studio-control-shadow-x,3px) var(--vt-studio-control-shadow-y,3px) 0 0 var(--vt-studio-control-shadow-color);
+  
 }
 button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }
-button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled) { box-shadow:none; }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }
+button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled) {  }
+button[data-vt-studio-button="true"][data-size="standard"] {   }
 /* Compact buttons use a single anchored 1.5px pseudo-element shadow. Never stack
    a second native box-shadow on the compact button shell or widen its silhouette. */
 button[data-vt-studio-button="true"][data-size="compact"] {
-  box-shadow: none !important;
+  
 }
 button[data-vt-studio-button="true"][data-size="compact"]::before {
   /* inset:0 already sizes this shadow to the button shell; explicit width:100%
@@ -1131,8 +1130,8 @@ button[data-vt-studio-button="true"][data-size="compact"]::before {
   filter: none;
   transform: translate(var(--vt-studio-control-shadow-x, 1.5px), var(--vt-studio-control-shadow-y, 1.5px));
 }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
-button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px;    --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px;    --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
 
 /* Comparison-only icon sizes. Stroke compensation assumes a 24-unit SVG viewBox. */
 button[data-vt-studio-button="true"][data-icon-size-variant="current"][data-size="standard"] { --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
@@ -1144,25 +1143,25 @@ button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="
 /* Separate prominent action family. Not a StudioButton size variant. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
-  --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px;
+
   appearance: none; box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
   min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 6px; background: transparent;
-  box-shadow: 3px 3px 0 var(--vt-studio-control-shadow-color); overflow: visible; color: #000;
-  transition: transform var(--vt-studio-motion-button,180ms) ease-out, box-shadow var(--vt-studio-motion-button,180ms) ease-out;
+   overflow: visible; color: #000;
+  
 }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; min-width: 0; min-height: 56px; height: 56px; padding: 10px 16px;
   border: 3px solid #000; border-radius: 6px;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); box-shadow: none; color: #000;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 20px; font-weight: 1000; line-height: .95; letter-spacing: -.02em;
   text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
-  transition: transform var(--vt-studio-motion-button,180ms) ease-out, background-color var(--vt-studio-motion-button,180ms) ease-out;
+  
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) { transform: translate(1.5px, 1.5px); }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) { box-shadow:none; transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); transition-duration:var(--vt-studio-motion-press,80ms); }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform:none; transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) {  }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {   transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] {  transition-duration:var(--vt-studio-motion-press,80ms); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
 @media (prefers-reduced-motion: reduce) {
@@ -1170,7 +1169,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] { transition: none !important; }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); box-shadow:none; color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0); transition:transform var(--vt-studio-motion-button,180ms) ease-out,background-color var(--vt-studio-motion-button,180ms) ease-out; }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0);  }
 /* Compact buttons may be stretched by grid/flex parents. Make the visible face
    occupy the same inline footprint as the shell that anchors its shadow; otherwise
    the shell shadow exposes the parent width beyond the intrinsic face (often 8px
@@ -1197,15 +1196,15 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
   padding-inline: 8px;
   font-size: 24px;
 }
-button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
-button[data-vt-studio-button="true"]:active:not(:disabled) { transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {  }
+button[data-vt-studio-button="true"]:active:not(:disabled) {  transition-duration:var(--vt-studio-motion-press,80ms); }
 button[data-vt-studio-button="true"]:active:not(:disabled)::before { opacity:0; transition-duration:var(--vt-studio-motion-press,80ms); }
 button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled)::before { opacity:0; }
-button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(0,0); transition-duration:var(--vt-studio-motion-press,80ms); }
+button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] {  transition-duration:var(--vt-studio-motion-press,80ms); }
 button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
 /* Selected faces switch to secondary, so their shadow must switch to the opposite primary color. */
-button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] {  }
 button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); max-width:var(--vt-studio-control-height); aspect-ratio:1 / 1; flex:0 0 var(--vt-studio-control-height); }
 button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { box-sizing:border-box; width:100%; min-width:100%; max-width:100%; height:100%; padding:0; flex:0 0 100%; }
@@ -1215,16 +1214,16 @@ button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:va
 /* Icon buttons default to the large production preset: 38px/1.9 standard and 24px/2 compact.
    The current (28px/2.5, 18px/1.65) and moderate (34px/2.0588, 22px/1.35) values are opt-in presets. */
 button[data-vt-studio-icon-button="true"][data-icon-variant="v1"] {
-  --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
+  
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] {
-  --vt-studio-control-shadow-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] {
-  --vt-studio-control-shadow-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
@@ -1379,13 +1378,13 @@ button[data-vt-studio-icon-button="true"].is-effect-notification [data-vt-square
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-icon-stage] {
   transform: rotate(-6deg);
-  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] [data-vt-square-icon-stage] {
   transform: rotate(84deg);
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-icon-current] {
-  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] [data-vt-square-icon-current] {
   transform: rotate(-84deg);
@@ -1402,7 +1401,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-morph-inner] {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 500ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"] [data-vt-square-flip-face],
 button[data-vt-studio-icon-button="true"] [data-vt-square-morph-face] {
@@ -1423,12 +1422,12 @@ button[data-vt-studio-icon-button="true"].is-effect-flip[data-icon-active="true"
 button[data-vt-studio-icon-button="true"] [data-vt-square-morph-face="back"] {
   opacity: 0;
   transform: scale(.5) rotate(-20deg);
-  transition: opacity 160ms ease-out, transform 220ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-morph[data-icon-active="true"] [data-vt-square-morph-face="front"] {
   opacity: 0;
   transform: scale(.5) rotate(20deg);
-  transition: opacity 160ms ease-out, transform 220ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-morph[data-icon-active="true"] [data-vt-square-morph-face="back"] {
   opacity: 1;
@@ -1457,12 +1456,12 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-success-label] {
   pointer-events: none;
   transform: translate(-50%,4px) scale(.96);
   transform-origin: bottom center;
-  transition: opacity 160ms ease-out, transform 180ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-tooltip:hover:not(:disabled) [data-vt-square-tooltip],
 button[data-vt-studio-icon-button="true"].is-effect-tooltip:focus-visible [data-vt-square-tooltip] {
   opacity: 1;
-  transform: translate(-50%,0) scale(1);
+  
 }
 button[data-vt-studio-icon-button="true"][data-success="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
@@ -1497,7 +1496,7 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   }
   button[data-vt-studio-icon-button="true"].is-effect-tooltip:hover [data-vt-square-tooltip],
   button[data-vt-studio-icon-button="true"].is-effect-tooltip:focus-visible [data-vt-square-tooltip] {
-    transform: translate(-50%,0);
+    
   }
 }
 
@@ -1532,11 +1531,7 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
 }
 .vt-studio-spectrum-tag.is-selected {
   transform: translateY(-1px);
-  box-shadow:
-    0 0 4px #fff,
-    0 0 8px color-mix(in srgb, var(--vt-spectrum-tag-fill) 92%, #fff),
-    0 0 14px color-mix(in srgb, var(--vt-spectrum-tag-fill) 78%, #fff),
-    0 0 22px color-mix(in srgb, var(--vt-spectrum-tag-color) 42%, #fff);
+  
 }
 .vt-studio-spectrum-tag:focus-visible {
   outline: 2px solid #000;
@@ -1625,10 +1620,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border: var(--vt-studio-control-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity), transparent);
-  box-shadow:
-    inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary),
-    inset 0 calc(0px - var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
-    inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary);
+  
   transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 /* Match the split-left default large icon preset: 38px/1.9 standard and 24px/2 compact. */
@@ -1677,7 +1669,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-  box-shadow: none !important;
+  
   outline: none !important;
   align-self: stretch;
 }
@@ -1688,11 +1680,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
   outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset);
-  box-shadow:
-    inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary),
-    inset 0 calc(0px - var(--vt-studio-control-stroke)) 0 0 var(--vt-field-primary),
-    inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary),
-    0 0 0 var(--vt-field-focus-outline-width) color-mix(in srgb, var(--vt-field-secondary) 30%, transparent);
+  
 }
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
   background: transparent !important;
@@ -1700,7 +1688,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   -webkit-text-fill-color: #000;
   -webkit-text-stroke: .5px #000;
   outline: none !important;
-  box-shadow: none !important;
+  
 }
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]::placeholder {
   color: var(--vt-field-primary);
@@ -1856,17 +1844,17 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border-radius: 4px;
   background: var(--pair-a, #fa618a);
   color: #000;
-  box-shadow: 1.5px 1.5px 0 0 color-mix(in srgb, var(--pair-b, #4ee4be) 45%, transparent);
+  
   cursor: pointer;
-  transition: filter 180ms ease-out, transform 180ms ease-out, box-shadow 180ms ease-out;
+  
 }
 .vt-studio-tag-editor__square-action:hover:not(:disabled) {
-  filter: brightness(.97);
-  transform: translateY(1px);
+  
+  
 }
 .vt-studio-tag-editor__square-action:active:not(:disabled) {
-  box-shadow: none;
-  transform: translate(4px,4px);
+  
+  
 }
 .vt-studio-tag-editor__square-action:focus-visible {
   outline: 3px solid var(--pair-a, #fa618a);
@@ -1930,7 +1918,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   }
   .vt-studio-closeable-badge[data-entering="true"] { transform: none; }
   .vt-studio-tag-editor__square-action:hover:not(:disabled),
-  .vt-studio-tag-editor__square-action:active:not(:disabled) { transform: none; }
+  .vt-studio-tag-editor__square-action:active:not(:disabled) {  }
 }
 
 
@@ -2025,7 +2013,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border-radius: var(--vt-stepper-radius);
   background: var(--vt-stepper-secondary);
   color: #000;
-  box-shadow: none;
+  
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
 }
 .vt-studio-inline-stepper {
@@ -2065,7 +2053,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   cursor: pointer;
   background: var(--vt-stepper-secondary);
   color: #000;
-  box-shadow: none;
+  
   transition: background-color 180ms ease-out, color 180ms ease-out, opacity 180ms ease-out;
 }
 .vt-studio-inline-stepper__button svg {
@@ -2087,13 +2075,13 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  box-shadow: none;
+  
   font-variant-numeric: tabular-nums;
 }
 .vt-studio-inline-stepper__value::-webkit-inner-spin-button,
 .vt-studio-inline-stepper__value::-webkit-outer-spin-button { appearance: none; margin: 0; }
-.vt-studio-inline-stepper__button:hover:not(:disabled) { filter: brightness(.94); }
-.vt-studio-inline-stepper__button:active:not(:disabled) { transform: translateY(var(--vt-studio-control-click-offset, 1px)); }
+.vt-studio-inline-stepper__button:hover:not(:disabled) {  }
+.vt-studio-inline-stepper__button:active:not(:disabled) {  }
 .vt-studio-inline-stepper__button:focus-visible,
 .vt-studio-inline-stepper__value:focus-visible {
   outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
@@ -2144,11 +2132,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border-radius: var(--vt-stepper-radius);
   background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
   color: var(--vt-stepper-primary);
-  box-shadow:
-    var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0 var(--vt-studio-control-shadow-color, var(--vt-stepper-secondary)),
-    inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
-    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary),
-    inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary);
+  
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   transition: background-color 150ms ease-out, outline-color 150ms ease-out, box-shadow 150ms ease-out;
 }
@@ -2180,10 +2164,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   border-radius: 0 !important;
   outline: none !important;
   background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;
-  box-shadow:
-    inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
-    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary),
-    inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary);
+  
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
   -webkit-text-stroke: .5px #000;
@@ -2210,17 +2191,13 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   -webkit-text-fill-color: #000 !important;
   -webkit-text-stroke: .5px #000;
   outline: none !important;
-  box-shadow: none !important;
+  
 }
 .vt-studio-split-stepper:focus-within {
   background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-focus-fill-opacity, 15%), transparent);
   outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
-  box-shadow:
-    inset 0 var(--vt-stepper-stroke) 0 0 var(--vt-stepper-primary),
-    inset 0 calc(0px - var(--vt-stepper-stroke)) 0 0 var(--vt-stepper-primary),
-    inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary),
-    0 0 0 var(--vt-studio-control-focus-outline-width, 3px) color-mix(in srgb, var(--vt-stepper-secondary) 30%, transparent);
+  
 }
 .vt-studio-split-stepper-rail {
   position: relative;
@@ -2235,7 +2212,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   overflow: hidden;
   border-left: var(--vt-stepper-stroke) solid #000;
   background: var(--vt-stepper-secondary);
-  box-shadow: none;
+  
 }
 .vt-studio-split-stepper-rail button {
   appearance: none;
@@ -2255,7 +2232,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   color: #000;
   cursor: pointer;
   touch-action: manipulation;
-  box-shadow: none;
+  
   transform: none !important;
   transition: none !important;
 }
@@ -2344,14 +2321,14 @@ button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-act
   color: var(--pair-a, #36e0f6);
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-inner] {
-  transition: transform 380ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] [data-vt-square-morph-inner] {
   transform: rotate(180deg);
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-face="front"],
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-face="back"] {
-  transition: opacity 180ms ease-out, transform 220ms ease-out;
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-face="back"],
 button[data-vt-studio-icon-button="true"].is-effect-unlock [data-vt-square-morph-face="back"],
@@ -2490,7 +2467,7 @@ button[data-vt-studio-icon-button="true"].is-effect-refresh[data-pop="true"] [da
 button[data-vt-studio-icon-button="true"].is-effect-sun-moon [data-vt-square-morph-face],
 button[data-vt-studio-icon-button="true"].is-effect-lock-unlock [data-vt-square-morph-face],
 button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-square-morph-face] {
-  transition: opacity 180ms ease-out, transform 240ms cubic-bezier(.2,.8,.2,1);
+  
 }
 button[data-vt-studio-icon-button="true"].is-effect-sun-moon[data-icon-active="true"] [data-vt-square-morph-face="front"],
 button[data-vt-studio-icon-button="true"].is-effect-lock-unlock[data-icon-active="true"] [data-vt-square-morph-face="front"],
@@ -2551,8 +2528,8 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
   --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
   --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
-  --vt-studio-badge-shadow-x: var(--vt-studio-44-button-shadow-x, 3px);
-  --vt-studio-badge-shadow-y: var(--vt-studio-44-button-shadow-y, 3px);
+  
+  
   position: relative;
   isolation: isolate;
   display: inline-flex;
@@ -2565,7 +2542,7 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   border-radius: var(--vt-studio-badge-radius);
   background: transparent;
   color: #000;
-  box-shadow: var(--vt-studio-badge-shadow-x) var(--vt-studio-badge-shadow-y) 0 0 var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 65%, transparent));
+  
   cursor: default;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-size: var(--vt-studio-control-font-size, 38px);
@@ -2624,8 +2601,8 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
   --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
   --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
-  --vt-studio-badge-shadow-x: var(--vt-studio-28-button-shadow-x, 1.5px);
-  --vt-studio-badge-shadow-y: var(--vt-studio-28-button-shadow-y, 1.5px);
+  
+  
   --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
   --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2);
   --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
@@ -2645,7 +2622,7 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
 /* Follow-up visual certification: icon geometry, fixed-label parity, and lingering heart feedback. */
 button[data-vt-studio-icon-button="true"][data-icon-preset="lock-unlock"] [data-vt-square-morph-face] svg { overflow: visible; }
 button[data-vt-studio-icon-button="true"][data-icon-preset="lock-unlock"] [data-vt-square-morph-face] [data-vt-lock-shackle] {
-  transform-box: view-box; transform-origin: 12px 10px; transition: transform 220ms cubic-bezier(.2,.8,.2,1);
+  transform-box: view-box; transform-origin: 12px 10px; 
 }
 button[data-vt-studio-icon-button="true"][data-icon-preset="sun-moon"] [data-vt-square-morph-face] svg { width: 100%; height: 100%; overflow: visible; }
 /* Tooltips use the exact fixed-label token values, by size. */
@@ -2682,4 +2659,16 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-
   button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-pop-on-activation[data-pop="true"] svg path,
   button[data-vt-studio-icon-button="true"].is-effect-heart-pop[data-pop="true"]::after,
   button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-preset="heart"][data-pop="true"]::after { animation-duration: .01ms !important; }
+}
+
+
+/* Button-owned optional shadow feature. Flat is the default; no hover/press movement. */
+button[data-vt-button-shadow="true"] {
+  --vt-button-shadow-x: 3px;
+  --vt-button-shadow-y: 3px;
+  box-shadow: var(--vt-button-shadow-x) var(--vt-button-shadow-y) 0 0 var(--vt-button-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent));
+}
+button[data-vt-button-shadow="true"][data-size="compact"] {
+  --vt-button-shadow-x: 1.5px;
+  --vt-button-shadow-y: 1.5px;
 }
