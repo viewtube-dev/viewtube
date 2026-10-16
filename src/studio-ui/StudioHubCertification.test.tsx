@@ -84,6 +84,23 @@ describe("Studio Hub canonical controls", () => {
     expect(splitStepper).not.toContain('translate(var(--vt-studio-control-shadow-x')
   })
 
+  it("uses canonical standard and compact tokens for split-left badges without a duplicate shadow shell", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const badge = css.slice(css.indexOf(".vt-studio-split-left-badge {"), css.indexOf("/* Choice controls must occupy the full 44px standard control height. */"))
+
+    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-44-height, 44px)")
+    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px)")
+    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-44-radius, 6px)")
+    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-28-height, 28px)")
+    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px)")
+    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-28-radius, 4px)")
+    expect(badge).toContain(".vt-studio-split-left-badge::before { content: none; display: none; }")
+    expect(badge).toContain("box-shadow: var(--vt-studio-badge-shadow-x) var(--vt-studio-badge-shadow-y) 0 0")
+    expect(badge).not.toContain('translate(var(--vt-studio-badge-shadow-x')
+    expect(badge).not.toContain("--vt-studio-badge-radius: 10px")
+    expect(badge).not.toContain("--vt-studio-badge-radius: 7px")
+  })
+
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
     const html = renderToStaticMarkup(
       <StudioDropdown
