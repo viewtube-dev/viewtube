@@ -285,6 +285,8 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   selected?: boolean
   /** Explicit geometry variant for the confirmed 44px and 28px button family. */
   heightVariant?: "44" | "28"
+  /** Opt in to the button-owned shadow effect. Disabled by default. */
+  shadow?: boolean
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
@@ -295,6 +297,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
       loading = false,
       selected = false,
       heightVariant,
+      shadow = false,
       disabled,
       children,
       type = "button",
@@ -316,6 +319,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
         data-vt-studio-button="true"
+        data-vt-button-shadow={shadow ? "true" : undefined}
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
         aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
@@ -336,16 +340,19 @@ StudioButton.displayName = "StudioButton"
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tone?: StudioControlTone
   loading?: boolean
+  /** Opt in to the button-owned shadow effect. Disabled by default. */
+  shadow?: boolean
 }
 
 export const StudioActionButton = React.forwardRef<HTMLButtonElement, StudioActionButtonProps>(
-  ({ tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
+  ({ tone = "accent", loading = false, shadow = false, disabled, children, type = "button", ...props }, ref) => (
     <button
       ref={ref}
       type={type}
       {...props}
       data-vt-studio-control="true"
       data-vt-studio-action-button="true"
+      data-vt-button-shadow={shadow ? "true" : undefined}
       data-tone={tone}
       aria-busy={loading || undefined}
       disabled={disabled || loading}
