@@ -360,6 +360,31 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/zoom-out/SKILL.md",
       "computedHash": "8357aeaece3b709c442eab67e64b86844e05e2f1ea95b109565eba50b6def36e"
+    },
+    "tailwindcss": {
+      "source": "hairyf/skills",
+      "sourceType": "github",
+      "skillPath": "skills/tailwindcss/SKILL.md"
+    },
+    "tailwindcss-advanced-layouts": {
+      "source": "JosiahSiegel/claude-plugin-marketplace",
+      "sourceType": "github",
+      "skillPath": "skills/tailwindcss-advanced-layouts/SKILL.md"
+    },
+    "unocss": {
+      "source": "antfu/skills",
+      "sourceType": "github",
+      "skillPath": "skills/unocss/SKILL.md"
+    },
+    "tailwind-css-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "skills/tailwind-css-patterns/SKILL.md"
+    },
+    "css-animation-creator": {
+      "source": "OneWave-AI/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/css-animation-creator/SKILL.md"
     }
   }
 }
