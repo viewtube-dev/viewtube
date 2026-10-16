@@ -382,7 +382,7 @@ describe("Post-publish analytics bridge", () => {
       sourceSystem: "evaluation",
       channelId: "channel-1",
       videoId: "youtube-123",
-      parentEventIds: expect.arrayContaining(["checkpoint-event-1"]),
+      parentEventIds: expect.arrayContaining(["post-publish-checkpoint:build-1:youtube-123:day-7-missing-video"]),
       metadata: expect.objectContaining({
         evaluationStatus: "skipped",
         skipReason: "published-video-not-found-in-canonical-videos-dataset",
