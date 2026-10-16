@@ -367,7 +367,8 @@ export const recordAnalyticsCheckpointForEvaluation = (
     } else {
       publicationEvaluationStatus = "skipped"
       publicationEvaluationError = evaluationResult.reason
-      recordAlgorithmIntelligenceEvent({
+      if (identity.identity.channelId) {
+        recordAlgorithmIntelligenceEvent({
         id: "publication-evaluation-blocked:" + identity.identity.publishTransactionId + ":" + input.checkpointId,
         channelId: identity.identity.channelId,
         projectId: identity.identity.projectId,
@@ -396,7 +397,8 @@ export const recordAnalyticsCheckpointForEvaluation = (
           skipReason: evaluationResult.reason,
           evaluationBridge: "contentbuild-publication-analytics-v1",
         },
-      })
+        })
+      }
     }
   } catch (cause) {
     publicationEvaluationStatus = "error"
