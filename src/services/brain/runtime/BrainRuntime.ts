@@ -71,7 +71,11 @@ export const runBrainTask = async (
    channelId: input.channelId,
    projectId: input.projectId || input.project?.id || (typeof visibleContext.projectId === "string" ? visibleContext.projectId : null),
    contentBuildId: typeof visibleContext.contentBuildId === "string" ? visibleContext.contentBuildId : input.project?.contentBuildId || null,
-   videoId: typeof visibleContext.videoId === "string" ? visibleContext.videoId : null,
+   videoId: typeof visibleContext.videoId === "string"
+    ? visibleContext.videoId
+    : typeof visibleContext.selectedVideoId === "string"
+     ? visibleContext.selectedVideoId
+     : null,
   },
   userText: input.userText,
   contextSections: [
