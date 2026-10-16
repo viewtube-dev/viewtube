@@ -335,6 +335,113 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected heightVariant="28">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioSplitLeftButton icon={<Settings2 />} selected disabled heightVariant="28">split-left</StudioSplitLeftButton></div>
     </Family>
     <Family
+      title="Button + Split-left · Complete Variant Matrix"
+      nonDefaultSettings={[
+        "These specimens use the production StudioButton and StudioSplitLeftButton exports, never library-only replicas.",
+        "Both button families support standard 44px and compact 28px geometry with accent, neutral, danger, warning, and success tones.",
+        "Selected, disabled, and loading states are shown independently so state styling is not confused with semantic tone.",
+        "Press motion translates the control by the shared shadow offset and collapses the shadow; release returns to rest. Keyboard focus, disabled semantics, and reduced-motion behavior remain canonical."
+      ]}
+      provenance={<Provenance primitive="StudioButton / StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · 28px compact · five semantic tones · selected / disabled / loading · shared tactile press motion" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>STANDARD · SEMANTIC TONES</span>
+        <div className="vt-confirmed-square-variant-grid">
+          {(["accent", "neutral", "danger", "warning", "success"] as const).map(tone => <StudioButton key={tone} heightVariant="44" tone={tone}>{tone}</StudioButton>)}
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>COMPACT · SEMANTIC TONES</span>
+        <div className="vt-confirmed-square-variant-grid">
+          {(["accent", "neutral", "danger", "warning", "success"] as const).map(tone => <StudioButton key={tone} heightVariant="28" tone={tone}>{tone}</StudioButton>)}
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>SPLIT-LEFT · FIVE TONES</span>
+        <div className="vt-confirmed-square-variant-grid">
+          {(["accent", "neutral", "danger", "warning", "success"] as const).map(tone => <StudioSplitLeftButton key={tone} icon={<Settings2 aria-hidden="true" />} heightVariant="44" tone={tone}>{tone}</StudioSplitLeftButton>)}
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>STATE VARIANTS · SELECTED / DISABLED / LOADING</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioButton heightVariant="44" selected>selected</StudioButton>
+          <StudioButton heightVariant="44" disabled>disabled</StudioButton>
+          <StudioButton heightVariant="44" loading>loading</StudioButton>
+          <StudioSplitLeftButton icon={<Check aria-hidden="true" />} heightVariant="44" selected>selected</StudioSplitLeftButton>
+          <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} heightVariant="44" disabled>disabled</StudioSplitLeftButton>
+          <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} heightVariant="44" loading>loading</StudioSplitLeftButton>
+        </div>
+      </div>
+    </Family>
+    <Family
+      title="Square Icon Button · All Presets + Animations"
+      nonDefaultSettings={[
+        "All examples mount StudioSquareIconButton directly. V1–V4 remain independent visual skins; effect and icon preset do not change the outer control geometry.",
+        "Every canonical preset is represented: heart, bell, sun/moon, lock/unlock, download/check, refresh, and like.",
+        "Every supported effect is represented: standard, notification, pop-on-activation, heart-pop, bell-ring, like, unlock, download, rotated-toggle, sun-moon, lock-unlock, download-success, refresh, flip, tooltip, morph, and success.",
+        "Activate the specimens to exercise stateful feedback. Heart-pop uses a heavier ripple and black fill that fades back over three seconds; unlock moves only the shackle; sun/moon share the aligned 6.5-unit disc radius.",
+        "Tooltips and success labels use the fixed-label typography contract. Success is a specimen state only; product flows must set success only after the associated operation succeeds.",
+        "All variants retain accessible names, focus indicators, disabled behavior, canonical press motion, and reduced-motion safeguards."
+      ]}
+      provenance={<Provenance primitive="StudioSquareIconButton · complete preset/effect matrix" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="V1–V4 · 44×44px / 28×28px · 7 presets · all 17 effect modes · shared labels and motion" imports={["src/studio-ui/index.ts", "src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>CANONICAL ICON PRESETS · INTERACTIVE</span>
+        <div className="vt-confirmed-square-variant-grid">
+          {([
+            { preset: "heart", label: "Heart" },
+            { preset: "bell", label: "Bell" },
+            { preset: "sun-moon", label: "Sun / moon" },
+            { preset: "lock-unlock", label: "Lock / unlock" },
+            { preset: "download-check", label: "Download / check" },
+            { preset: "refresh", label: "Refresh" },
+            { preset: "like", label: "Like" },
+          ] as const).map(item => <StudioSquareIconButton key={item.preset} iconPreset={item.preset} label={item.label} variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />)}
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>HEART + STATE FEEDBACK · CLICK TO REPLAY</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioSquareIconButton iconPreset="heart" label="Heart pop ripple" effect="heart-pop" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="heart" label="Heart activation" effect="pop-on-activation" variant="v3" animate sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="bell" label="Bell ring" effect="bell-ring" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="like" label="Like feedback" effect="like" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>TRANSITIONS · CLICK TO TOGGLE</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioSquareIconButton iconPreset="sun-moon" label="Sun moon transition" effect="sun-moon" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="lock-unlock" label="Lock shackle transition" effect="lock-unlock" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="download-check" label="Download check transition" effect="download" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="download-check" label="Download success" effect="download-success" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="refresh" label="Refresh transition" effect="refresh" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="bell" label="Rotated toggle" effect="rotated-toggle" variant="v3" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>CONTEXT + OUTCOME EFFECTS</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} activeIcon={<Check aria-hidden="true" />} label="3D flip" effect="flip" variant="v1" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} activeIcon={<Sparkles aria-hidden="true" />} label="Morph" effect="morph" variant="v2" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="bell" label="Notification count" effect="notification" badge={3} variant="v1" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="refresh" label="Tooltip label" effect="tooltip" tooltip="REFRESH ITEM" variant="v2" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="download-check" label="Success label" effect="success" success tooltip="SAVED" variant="v1" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="refresh" label="Standard icon button" effect="standard" variant="v4" sizeVariant="standard" data-vt-library-component="StudioSquareIconButton" />
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>COMPACT · PRESET AND EFFECT GEOMETRY</span>
+        <div className="vt-confirmed-square-variant-grid">
+          <StudioSquareIconButton iconPreset="heart" label="Compact heart ripple" effect="heart-pop" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="sun-moon" label="Compact sun moon" effect="sun-moon" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="lock-unlock" label="Compact lock unlock" effect="lock-unlock" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+          <StudioSquareIconButton iconPreset="download-check" label="Compact download success" effect="download-success" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
+        </div>
+      </div>
+    </Family>
+    <Family
       title="Play/Pause Split-left Button · 44px + 28px"
       nonDefaultSettings={[
         "This is the interactive color-swap split-left variant: activation swaps the icon, label, and selected palette state while keeping the measured label region stable.",
