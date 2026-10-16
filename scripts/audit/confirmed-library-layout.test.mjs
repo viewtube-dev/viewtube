@@ -41,7 +41,7 @@ test("standalone text inputs provide standard, compact, and disabled specimens",
 test("global defaults use real borders and stable focus outlines without field shadows", () => {
   assert.match(controlStyles, /outline:\s*var\(--vt-studio-control-focus-outline-width/);
   assert.doesNotMatch(controlStyles, /(?:input|textarea)[^{}]*\{[^}]*box-shadow\s*:/s);
-  assert.match(catalog, /Focus measurement note:/);
+  assert.match(catalog, /Focus rule:/);
 });
 
 test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
