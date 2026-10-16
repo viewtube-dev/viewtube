@@ -121,3 +121,10 @@ This improves the recommendation-to-publication lineage edge; it does not by its
 The canonical publishing transaction boundary now re-reads the current ContentBuild before creating a *new* transaction and fails closed unless its stage is one of `package`, `edit`, `review`, `launch`, or `scheduled`. It also refuses a new transaction when the canonical ContentBuild has unresolved workflow blockers. Existing transactions for the same final render still take the idempotent resume path before this new-transaction guard, preserving safe retries.
 
 Regression tests cover direct calls from a disallowed `idea` stage and unresolved blockers. This is a publication-boundary enforcement slice, not proof that every generation, editing, metadata, scheduling, and learning action is covered by the full stage capability matrix; those boundaries still require an explicit action-to-stage policy and direct-call tests.
+
+
+## Local outcome replay identity guard
+
+The browser-side `BrainOutcomeLedger` now treats `channelId + sourceRecordId` as an idempotency lookup, not permission to silently accept different payloads. If a retry changes an already-asserted source tool, outcome, summary, confidence, generation/asset identity, ContentBuild/project, ActionPacket/workflow/recommendation/experiment, publication transaction, approved snapshot/hash, published video, or publication identity, it fails closed with a field-specific conflict. Legacy records may be enriched when a lineage field was previously absent; an exact retry returns the original record ID. Focused tests cover exact retry, conflicting trace reuse, and legacy provenance enrichment.
+
+This guard complements the server-side stable-identity check. It does not replace authenticated cross-device replay against the real persistence service; that remains a release certification requirement.
