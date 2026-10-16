@@ -1218,15 +1218,23 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
 }) => {
   const [editing, setEditing] = React.useState(false)
   const [draft, setDraft] = React.useState("")
+  const [committingTag, setCommittingTag] = React.useState("")
   const save = () => {
     const next = draft.trim().toUpperCase()
-    if (next && !tags.includes(next)) onTagsChange?.([...tags, next])
+    if (!next) { setDraft(""); setEditing(false); return }
+    if (tags.includes(next)) { setDraft(""); setEditing(false); return }
+    setCommittingTag(next)
+    onTagsChange?.([...tags, next])
     setDraft("")
-    setEditing(false)
+    // Keep the input mounted during its exit transition so the text can morph into the badge.
+    window.setTimeout(() => {
+      setCommittingTag("")
+      setEditing(false)
+    }, 360)
   }
 
   return (
-    <div className={classes("vt-subtoolbox-tag-editor", editing && "is-editing", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
+    <div className={classes("vt-subtoolbox-tag-editor", editing && "is-editing", committingTag && "is-committing", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
       {label ? <strong className="vt-subtoolbox-tag-editor-label">{label}</strong> : null}
       <div className="vt-subtoolbox-tag-editor-tags">
         {tags.map((tag) => renderTag ? renderTag(tag, () => onTagsChange?.(tags.filter((item) => item !== tag))) : spectrum ? (
@@ -1248,6 +1256,7 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
             {tag}
           </SubToolboxRemovableTag>
         ))}
+        {committingTag ? <span className="vt-subtoolbox-tag-morph" aria-hidden="true">{committingTag}</span> : null}
         {!editing ? <button type="button" className="add" aria-label="Add tag" onClick={() => setEditing(true)}>{addIcon}</button> : null}
       </div>
       {editing ? (
@@ -1255,6 +1264,7 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
           <SubToolboxInput20
             controlSize="micro"
             autoFocus
+            className="vt-subtoolbox-tag-editor-input"
             aria-label="New tag"
             value={draft}
             placeholder="ADD TAG"
