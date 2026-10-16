@@ -68,11 +68,11 @@ describe("BrainRuntime", () => {
   })
 
   expect(runBrainTurn).toHaveBeenCalledTimes(1)
-  expect(runBrainTurn).toHaveBeenCalledWith(expect.objectContaining({
+  const [turnInput] = runBrainTurn.mock.calls[0]
+  expect(turnInput).toMatchObject({
    channelId: "channel-1",
    userText: "What should I make next?",
    snapshot,
-   systemPrompt: expect.stringContaining("ASSISTANT CONTINUITY TRACE"),
    growthContext,
    recentTurns: [],
    history: [],
@@ -82,9 +82,21 @@ describe("BrainRuntime", () => {
    currentResearcher: undefined,
    projectId: "project-1",
    analyticsWindow: "90d",
-   visibleContext: { selectedVideoId: "video-1", contentBuildId: "cb-1" },
    artifactRefs: ["asset-1", "asset-1", "asset-2"],
-  }))
+  })
+  expect(turnInput.systemPrompt).toContain("ASSISTANT CONTINUITY TRACE")
+  expect(turnInput.visibleContext).toMatchObject({
+   selectedVideoId: "video-1",
+   contentBuildId: "cb-1",
+   assistantContinuityTrace: {
+    version: "vt-brain-assistant-trace-v1",
+    scope: {
+     channelId: "channel-1",
+     projectId: "project-1",
+     contentBuildId: "cb-1",
+    },
+   },
+  })
   expect(result).toEqual({
    ...orchestratorResult,
    runtime: {
