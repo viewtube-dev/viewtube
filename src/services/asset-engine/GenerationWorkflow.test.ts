@@ -125,7 +125,7 @@ describe("GenerationWorkflow", () => {
    targetSlot: "title",
    mode: "new-option",
    creatorIntent: "Generate a new title after publication.",
-  })).toThrow(/not allowed.*stage published/i)
+  })).toThrow(/does not allow capability generate.*published/i)
 
   const request = {
    schemaVersion: 1 as const,
@@ -150,7 +150,7 @@ describe("GenerationWorkflow", () => {
    requestedAt: new Date().toISOString(),
   }
   expect(() => recordToolReceipt({ request, outputAssetIds: ["asset-after-publish"] }))
-   .toThrow(/not allowed.*stage published/i)
+   .toThrow(/does not allow capability generate.*published/i)
  })
 
  it("fails closed for a stage that has not been explicitly authorized for generation", () => {
@@ -170,7 +170,7 @@ describe("GenerationWorkflow", () => {
    targetSlot: "title",
    mode: "create",
    creatorIntent: "An unknown lifecycle stage must not inherit permission.",
-  })).toThrow(/not allowed.*stage future-stage.*not in the generation allowlist/i)
+  })).toThrow(/does not allow capability generate.*future-stage/i)
  })
 
 
