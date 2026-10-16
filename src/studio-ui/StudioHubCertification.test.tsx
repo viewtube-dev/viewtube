@@ -45,6 +45,23 @@ describe("Studio Hub canonical controls", () => {
     expect(html).toContain('data-height-variant="28"')
   })
 
+  it("uses the global standard/compact icon tokens for split-left controls and keeps smaller presets opt-in", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("--vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px)")
+    expect(css).toContain("--vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9)")
+    expect(css).toContain("--vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px)")
+    expect(css).toContain("--vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2.0)")
+    expect(css).toContain('[data-split-left="true"][data-icon-size-variant="current"]')
+    expect(css).toContain('[data-split-left="true"][data-icon-size-variant="moderate"]')
+
+    const standard = renderToStaticMarkup(<StudioSplitLeftButton icon={<span>i</span>}>Standard</StudioSplitLeftButton>)
+    const compact = renderToStaticMarkup(<StudioSplitLeftButton icon={<span>i</span>} sizeVariant="compact">Compact</StudioSplitLeftButton>)
+    expect(standard).toContain('data-size="standard"')
+    expect(compact).toContain('data-size="compact"')
+    expect(standard).toContain('data-icon-size-variant="large"')
+    expect(compact).toContain('data-icon-size-variant="large"')
+  })
+
   it("defines one final field and split-left geometry contract", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     // Assert across the current layered stylesheet; the old "1. Canonical field family" marker was retired.
