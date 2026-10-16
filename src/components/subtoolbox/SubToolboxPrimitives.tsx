@@ -1225,9 +1225,9 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
     if (tags.includes(next)) { setDraft(""); setEditing(false); return }
     setCommittingTag(next)
     onTagsChange?.([...tags, next])
-    setDraft("")
-    // Keep the input mounted during its exit transition so the text can morph into the badge.
+    // Preserve the text for the full morph; clear it only after the transition finishes.
     window.setTimeout(() => {
+      setDraft("")
       setCommittingTag("")
       setEditing(false)
     }, 360)
