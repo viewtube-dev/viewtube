@@ -515,3 +515,23 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
     expect(actionBlock).not.toContain("4px 4px 0 0")
   })
 })
+
+
+describe("canonical Studio icon-size defaults", () => {
+  it("keeps the large 38px/24px icon preset as the default and the smaller presets opt-in", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Default square" />
+        <StudioSplitLeftButton icon={<span>ICON</span>}>Default split</StudioSplitLeftButton>
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Current opt-in" iconSizeVariant="current" />
+        <StudioSquareIconButton icon={<span>ICON</span>} label="Moderate opt-in" iconSizeVariant="moderate" />
+      </>,
+    )
+    expect(html.match(/data-icon-size-variant="large"/g)).toHaveLength(2)
+    expect(html).toContain('data-icon-size-variant="current"')
+    expect(html).toContain('data-icon-size-variant="moderate"')
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
+    expect(css).toContain('data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0;')
+  })
+})
