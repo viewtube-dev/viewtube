@@ -2047,6 +2047,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   line-height: var(--vt-studio-control-line-height, .86);
 }
 .vt-studio-inline-stepper__button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2067,6 +2068,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-inline-stepper__decrement { border-right: var(--vt-stepper-stroke) solid #000; }
 .vt-studio-inline-stepper__increment { border-left: var(--vt-stepper-stroke) solid #000; }
 .vt-studio-inline-stepper__value {
+  position: relative;
   appearance: textfield;
   -moz-appearance: textfield;
   padding: 0 2px;
@@ -2176,31 +2178,9 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   height: 100%;
   min-height: 0;
   overflow: hidden;
+  border-left: var(--vt-stepper-stroke) solid #000;
   background: var(--vt-stepper-secondary);
   box-shadow: none;
-}
-.vt-studio-split-stepper-rail::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--vt-stepper-stroke);
-  background: #000;
-}
-.vt-studio-split-stepper-rail::before {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  pointer-events: none;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: var(--vt-stepper-stroke);
-  transform: translateY(-50%);
-  background: #000;
 }
 .vt-studio-split-stepper-rail button {
   display: grid;
@@ -2231,6 +2211,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   color: #000;
   stroke-width: 3.2;
 }
+.vt-studio-split-stepper-rail button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }
 .vt-studio-split-stepper-rail button:hover:not(:disabled) { filter: brightness(.94); }
 .vt-studio-split-stepper-rail button:active:not(:disabled) { filter: brightness(.88); }
 .vt-studio-split-stepper-rail button:focus-visible { outline: 2px solid #000; outline-offset: -3px; z-index: 4; }
