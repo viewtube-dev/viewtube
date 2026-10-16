@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildGoldenChannelFixture, restorationRichSpec } from "../fixtures";
 import { runBrainTurn } from "../BrainOrchestrator";
+import { resolveCreatorContext } from "../CreatorContextResolver";
 import type { CreatorGrowthContext } from "../../../types";
 import type { StructuredBrainModelOutput } from "../../gemini";
 
@@ -96,9 +97,30 @@ const run = (modelGenerator: (input: unknown) => Promise<StructuredBrainModelOut
 describe("Brain generation quality loop", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(resolveCreatorContext).mockResolvedValue(null as never);
   });
 
   it("accepts a repaired candidate only after independent validation and records repair provenance", async () => {
+    vi.mocked(resolveCreatorContext).mockResolvedValue({
+      version: "vt-creator-context-v1",
+      channelId: "channel-restoration",
+      controls: {} as never,
+      profile: { loadedAt: "2026-10-15T00:00:00.000Z" } as never,
+      channelKnowledge: {
+        records: [{ id: "knowledge-record-1" }],
+        contradictions: [{ id: "knowledge-conflict-1" }],
+      } as never,
+      styleProfile: {} as never,
+      project: null,
+      surface: null,
+      selection: null,
+      evidenceRefs: [],
+      provenance: {
+        profileLoadedAt: "2026-10-15T00:00:00.000Z",
+        selectionUpdatedAt: "2026-10-15T00:01:00.000Z",
+        projectSource: "canonical_project",
+      },
+    } as never);
     const generator = vi.fn()
       .mockResolvedValueOnce(output("analytics_diagnosis"))
       .mockResolvedValueOnce(output("strategy_brief"));
@@ -122,6 +144,13 @@ describe("Brain generation quality loop", () => {
       channelId: null,
       projectId: null,
       contentBuildId: null,
+      creatorContextVersion: "vt-creator-context-v1",
+      creatorProfileLoadedAt: "2026-10-15T00:00:00.000Z",
+      creatorSelectionUpdatedAt: "2026-10-15T00:01:00.000Z",
+      creatorContextProjectSource: "canonical_project",
+      creatorStyleProfileAvailable: true,
+      channelKnowledgeRecordIds: ["knowledge-record-1"],
+      channelKnowledgeConflictIds: ["knowledge-conflict-1"],
       contextBudget: expect.any(Object),
       evaluationId: expect.any(String),
       repaired: true,
@@ -165,6 +194,10 @@ describe("Brain generation quality loop", () => {
       repaired: false,
       contextResolverVersion: "brain-context-resolution-v1",
       outputSchemaVersion: "structured-brain-output-v1",
+      creatorContextVersion: null,
+      creatorContextProjectSource: null,
+      channelKnowledgeRecordIds: [],
+      channelKnowledgeConflictIds: [],
       modelIdentityStatus: "generator_identity_unavailable",
       evidenceIds: expect.any(Array),
       contextBudget: expect.any(Object),
