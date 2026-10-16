@@ -128,3 +128,14 @@ Regression tests cover direct calls from a disallowed `idea` stage and unresolve
 The browser-side `BrainOutcomeLedger` now treats `channelId + sourceRecordId` as an idempotency lookup, not permission to silently accept different payloads. If a retry changes an already-asserted source tool, outcome, summary, confidence, generation/asset identity, ContentBuild/project, ActionPacket/workflow/recommendation/experiment, publication transaction, approved snapshot/hash, published video, or publication identity, it fails closed with a field-specific conflict. Legacy records may be enriched when a lineage field was previously absent; an exact retry returns the original record ID. Focused tests cover exact retry, conflicting trace reuse, and legacy provenance enrichment.
 
 This guard complements the server-side stable-identity check. It does not replace authenticated cross-device replay against the real persistence service; that remains a release certification requirement.
+
+## Current-base implementation slice — explicit blocked-evaluation lineage
+
+The post-publish checkpoint bridge now writes a stable `EVALUATION_BLOCKED` event to the existing Algorithm Intelligence ledger when canonical publication evaluation is skipped.
+
+- The idempotency key is derived from the immutable publish transaction ID and checkpoint ID.
+- The event retains the exact channel, project, verified video, checkpoint event ancestry, recommendation/ActionPacket/workflow IDs, approved snapshot/hash, evidence IDs, selected window, and machine-readable skip reason.
+- The bridge response still exposes the original skip reason; the event makes the gap queryable by Brain diagnostics without pretending that an evaluation succeeded.
+- Regression coverage asserts stable event identity, channel/video scope, checkpoint ancestry, approved snapshot hash, and the exact canonical-evaluation skip reason.
+
+This closes the observability gap for skipped evaluations, but it is not full Phase 13 certification. Authenticated cross-device persistence, all-producer ancestry, full action-boundary policy coverage, provider-backed E2E verification, and same-head release gates remain outstanding.
