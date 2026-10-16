@@ -21,6 +21,7 @@ import {
   listContentBuildMetadataHistory,
   recordContentBuildMetadataChange,
   resetContentBuildRepositoryForTests,
+  updateContentBuild,
 } from "./asset-engine/ContentBuildRepository"
 import {
   beginPublishTransaction,
@@ -143,7 +144,15 @@ describe("post-publication analytics and metadata intelligence golden path", () 
       id: "cb-golden",
       channelId: "channel-golden",
       legacyProjectId: "project-golden",
+      stage: "package",
     })
+    // A previous golden-path run may leave this stable ID in jsdom's window storage.
+    // Re-establish the canonical publishable fixture rather than trusting create-if-absent.
+    updateContentBuild("cb-golden", current => ({
+      ...current,
+      stage: "package",
+      workflow: { ...current.workflow, blockerIds: [] },
+    }))
   })
 
   afterEach(() => {
