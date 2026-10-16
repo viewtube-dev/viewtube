@@ -4819,3 +4819,35 @@
   .vt-subtoolbox-tag-editor.is-committing input[aria-label="New tag"],
   .vt-subtoolbox-tag-morph { animation-duration: 1ms; }
 }
+
+
+/* Keep the morphing text and badge in the exact same layout slot. */
+.vt-subtoolbox-tag-entry {
+  position: relative;
+  display: inline-flex;
+  flex: 0 1 auto;
+  min-width: 6ch;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.vt-subtoolbox-tag-entry > input,
+.vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-editor-input {
+  width: 100%;
+  min-width: 6ch;
+}
+.vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-morph {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 22px;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-morph {
+  animation: vt-tag-badge-enter 360ms cubic-bezier(.2,.75,.25,1) both;
+}
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > input,
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-editor-input {
+  animation: vt-tag-input-exit 360ms cubic-bezier(.2,.75,.25,1) forwards;
+}
