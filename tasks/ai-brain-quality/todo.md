@@ -177,3 +177,13 @@
 - [ ] Run the durable-store Node tests independently before the Studio controls gate; the focused script now orders these tests before the known failing Studio gate.
 - [ ] Validate PostgreSQL-backed persistence and authenticated channel isolation against a real test database.
 - [ ] Complete stable-ID lifecycle propagation and production data verification before certification.
+
+## Creator-context turn receipt provenance — current integration follow-up
+
+- [x] Record the canonical Creator Context envelope version and profile/selection timestamps in successful, repaired, validation-fallback, and provider-error turn/learning receipts.
+- [x] Preserve project-context source, style-profile availability, and bounded channel-knowledge/contradiction IDs without storing raw creator communications or inventing revision/model identifiers.
+- [x] Add a populated-context regression fixture for the Brain quality loop.
+- [ ] Verify exact-head focused Brain tests, typecheck, build, and release gates.
+- [ ] Verify provider-served model identity only if the provider adapter exposes it.
+- [ ] Propagate canonical project/ContentBuild revisions only from authoritative source contracts.
+- [ ] Full phase certification remains blocked by live caller reachability, consent/persistence E2E, full-suite/runtime-lint debt, and real lifecycle lineage validation.
