@@ -51,7 +51,18 @@ describe("BrainRuntime", () => {
    surface: "ai-brain",
    projectId: "project-1",
    analyticsWindow: "90d",
-   visibleContext: { selectedVideoId: "video-1", contentBuildId: "cb-1" },
+   visibleContext: expect.objectContaining({
+    selectedVideoId: "video-1",
+    contentBuildId: "cb-1",
+    assistantContinuityTrace: expect.objectContaining({
+     version: "vt-brain-assistant-trace-v1",
+     scope: expect.objectContaining({
+      channelId: "channel-1",
+      projectId: "project-1",
+      contentBuildId: "cb-1",
+     }),
+    }),
+   }),
    artifactRefs: ["asset-1", "asset-1", "asset-2"],
    requestedOutput: "strategy brief",
   })
@@ -61,7 +72,7 @@ describe("BrainRuntime", () => {
    channelId: "channel-1",
    userText: "What should I make next?",
    snapshot,
-   systemPrompt: expect.stringContaining("system"),
+   systemPrompt: expect.stringContaining("ASSISTANT CONTINUITY TRACE"),
    growthContext,
    recentTurns: [],
    history: [],
