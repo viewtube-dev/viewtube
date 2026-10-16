@@ -38,9 +38,10 @@ test("standalone text inputs provide standard, compact, and disabled specimens",
   assert.match(catalog, /28px compact · disabled[\s\S]*?sizeVariant="compact"[^>]*disabled/);
 });
 
-test("global defaults distinguish the measured focus shadow from the CSS outline", () => {
-  assert.match(controls, /visible focus accent at 0px offset[\s\S]*?computed CSS outline itself measured 1px/);
-  assert.match(catalog, /Focus measurement note:[\s\S]*?These are separate layers/);
+test("global defaults use real borders and stable focus outlines without field shadows", () => {
+  assert.match(controlStyles, /outline:\s*var\(--vt-studio-control-focus-outline-width/);
+  assert.doesNotMatch(controlStyles, /(?:input|textarea)[^{}]*\{[^}]*box-shadow\s*:/s);
+  assert.match(catalog, /Focus measurement note:/);
 });
 
 test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
@@ -91,7 +92,7 @@ test("Studio buttons stay stationary and shadows are opt-in on the button surfac
   assert.doesNotMatch(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][^{}]*\{[^}]*box-shadow:/);
 });
 
-test("split-left buttons do not clip the stationary shadow or expose a wrapper border", () => {
+test("split-left buttons retain a stable surface and canonical face border", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*overflow:\s*visible/);
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-button-face\][^\n]*border:\s*var\(--vt-studio-control-stroke\) solid #000/);
