@@ -89,13 +89,22 @@ All variants below are registered under the existing **Square Icon Button** fami
 
 ### Confirmed interaction effects
 
-- **Pop on activation** — opt-in feedback; does not animate on mount.
-- **Notification badge** — optional count/status badge with feedback when the value changes.
+- **Pop on activation** — one-shot inner-icon feedback; never animates on mount.
+- **Notification badge** — optional count/status badge; count changes can pulse the badge.
+- **Heart pop** — temporary black heart fill over 3 seconds plus a heavier, layered perimeter ripple; never a persistent selected state.
+- **Bell ring** — bell rotation, alert-dot pop, and expanding perimeter ripple.
+- **Like** — activation pop plus live count increment.
+- **Refresh** — activation-triggered spin with scale response.
+- **Sun / moon** — persistent selected toggle with aligned glyph geometry and inner-stage transition.
+- **Lock / unlock** — persistent selected toggle; the lock body remains fixed and only the shackle moves.
+- **Download / check** — outcome-driven completion state; success is set only after the operation succeeds.
 - **Rotated toggle** — opt-in selected-state rotation.
 - **3D flip** — two-face flip; alternate icon supplied by the caller.
-- **Tooltip** — contextual label on hover/focus with accessible description.
+- **Tooltip** — contextual fixed-label-style label on hover/focus with accessible description.
 - **Morph** — icon crossfade/scale/rotation with an alternate icon.
-- **Success** — outcome-driven success state, checkmark and optional polite status announcement.
+- **Success** — outcome-driven checkmark and optional polite status announcement.
+
+The Confirmed Primitive Library renders each interaction family at both 44px standard and 28px compact using the production StudioSquareIconButton. The square outer geometry remains owned by StudioButton; effects are opt-in and honor reduced-motion preferences.
 
 ### Inherited geometry and rules
 
