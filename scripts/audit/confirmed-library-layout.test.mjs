@@ -219,7 +219,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact A · closed trigger and count"));
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
-  assert.match(catalog, /56px with a 3px border, 6px radius[\s\S]*?remains stationary on hover and press[\s\S]*?button-owned shadow is off by default/);
+  assert.match(catalog, /Its height is fixed at 56px with a 3px border and 6px radius[\s\S]*?The control remains stationary on hover and press[\s\S]*?optional button-owned shadow is off by default/);
 });
 
 test("word-toggle settings distinguish displayed words from the boolean value", () => {
