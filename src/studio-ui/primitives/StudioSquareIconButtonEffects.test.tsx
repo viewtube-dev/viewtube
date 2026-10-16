@@ -37,8 +37,8 @@ describe("StudioSquareIconButton interaction effects", () => {
     const shadowSelectors = [...css.matchAll(/([^{}]+)\\{[^{}]*\\bbox-shadow\\s*:/g)].map(match => match[1].trim())
     expect(shadowSelectors.length).toBeGreaterThan(0)
     expect(shadowSelectors.every(selector =>
-      selector.includes("button[data-vt-button-shadow=\\"true\\"]") ||
-      (selector.includes("button[data-vt-studio-icon-button=\\"true\\"]") && selector.includes("::after")),
+      selector.includes('button[data-vt-button-shadow="true"]') ||
+      (selector.includes('button[data-vt-studio-icon-button="true"]') && selector.includes("::after")),
     )).toBe(true)
     expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\btransform\s*:/s)
     expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\bbox-shadow\s*:/s)
