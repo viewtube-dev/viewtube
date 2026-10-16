@@ -1544,11 +1544,13 @@ export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({
     {...props}
     data-vt-studio-control="true"
     data-vt-studio-split-left-badge="true"
+    data-vt-library-component="StudioSplitLeftBadge"
     data-size={sizeVariant}
     className={["vt-studio-split-left-badge", className].filter(Boolean).join(" ")}
   >
-    <span className="vt-studio-split-left-badge__rail" aria-hidden="true">{icon}</span>
-    <span className="vt-studio-split-left-badge__label">{children}</span>
+    <span className="vt-studio-split-left-badge__face">
+      <span className="vt-studio-split-left-badge__rail" aria-hidden="true">{icon}</span>
+      <span className="vt-studio-split-left-badge__label">{children}</span>
+    </span>
   </span>
-);
-StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
+);StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
