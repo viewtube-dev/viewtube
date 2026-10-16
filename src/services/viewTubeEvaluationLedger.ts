@@ -123,7 +123,7 @@ export const hydrateBrainLearningRecords = (input: {
  * in the same current canonical analytics snapshot and channel scope. Missing
  * rows are not converted to zeroes or guessed from title/date similarity.
  */
-export const createPublicationEvaluationRecord = (input: {
+export const createPublicationEvaluationRecordWithDiagnostics = (input: {
  publicationIdentity: ContentBuildPublicationIdentity
  selectedWindow: AnalyticsWindow
  source: string
@@ -143,7 +143,7 @@ export const createPublicationEvaluationRecord = (input: {
   !identity.publishTransactionId ||
   !identity.approvedSnapshotId ||
   !identity.approvedSnapshotHash
- ) return null
+ ) return { status: "skipped", reason: "invalid-publication-identity" } as const
 
  const receipt = listContentBuildEvents(identity.contentBuildId).find((event) => {
   if (event.eventType !== "youtube.state.changed" ||
@@ -175,7 +175,7 @@ export const createPublicationEvaluationRecord = (input: {
   currentRows.channelId !== identity.channelId ||
   evidence.channelId !== identity.channelId ||
   dataset.channelId !== identity.channelId
- ) return null
+ ) return { status: "skipped", reason: "invalid-publication-identity" } as const
  const rowIndex = dataset.rows.findIndex((row) =>
   ["videoId", "video_id", "videoIdExternal", "video_id_external", "id"]
    .some((key) => row[key] === identity.youtubeVideoId)
@@ -273,6 +273,16 @@ export const createPublicationEvaluationRecord = (input: {
   causalAssessment: input.causalAssessment || "insufficient_evidence",
   idempotencyKey: `publication-evaluation:${identity.publishTransactionId}:${dataset.snapshotId}:${evidence.selectedWindow}`,
  })
+}
+
+
+/** Backwards-compatible record-only API. Call the diagnostic variant when a caller
+ * must distinguish missing canonical evidence from a successful evaluation. */
+export const createPublicationEvaluationRecord = (
+ input: Parameters<typeof createPublicationEvaluationRecordWithDiagnostics>[0],
+): EvaluationRecord | null => {
+ const result = createPublicationEvaluationRecordWithDiagnostics(input)
+ return result.status === "created" ? result.record : null
 }
 
 export const listEvaluationRecords = () => read<EvaluationRecord>(EVAL_KEY)
