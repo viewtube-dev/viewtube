@@ -75,8 +75,43 @@ export const listBrainOutcomes = (channelId?: string | null) => {
 
 export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | "createdAt">) => {
  if (input.sourceRecordId) {
-  const existing = read().find((record) => record.channelId === input.channelId && record.sourceRecordId === input.sourceRecordId)
-  if (existing) { void enqueueBrainLearningRecord(existing.channelId, "brainOutcome", existing); return existing }
+  const records = read()
+  const existing = records.find((record) => record.channelId === input.channelId && record.sourceRecordId === input.sourceRecordId)
+  if (existing) {
+   // A source-record retry is idempotent only for the same logical outcome.
+   // Conflicting identity must not be hidden by returning an older local row.
+   const immutableFields = [
+    "sourceToolId", "targetToolId", "outcome", "summary", "confidence",
+    "traceId", "assetId", "assetType", "contentBuildId", "projectId",
+    "actionPacketId", "workflowId", "recommendationId", "experimentId",
+    "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
+    "publishedVideoId", "publicationIdentity",
+   ] as const
+   for (const field of immutableFields) {
+    const previous = existing[field]
+    const requested = input[field]
+    if (previous != null && requested != null && JSON.stringify(previous) !== JSON.stringify(requested)) {
+     throw new Error(`Brain outcome sourceRecordId ${input.sourceRecordId} was reused with conflicting ${field}.`)
+    }
+   }
+   const enrichableFields = [
+    "targetToolId", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
+    "actionPacketId", "workflowId", "recommendationId", "experimentId",
+    "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
+    "publishedVideoId", "publicationIdentity",
+   ] as const
+   const enriched = { ...existing }
+   let changed = false
+   for (const field of enrichableFields) {
+    if (enriched[field] == null && input[field] != null) {
+     ;(enriched as Record<string, unknown>)[field] = input[field]
+     changed = true
+    }
+   }
+   if (changed) write(records.map((record) => record.id === existing.id ? enriched : record))
+   void enqueueBrainLearningRecord(enriched.channelId, "brainOutcome", enriched)
+   return enriched
+  }
  }
  const record: BrainOutcomeRecord = {
   ...input,
