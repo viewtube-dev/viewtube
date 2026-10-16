@@ -34,7 +34,7 @@ describe("StudioSquareIconButton interaction effects", () => {
     expect(squareShadowHtml).toContain('data-vt-button-shadow="true"')
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-button-shadow="true"]')
-    const shadowSelectors = [...css.matchAll(/([^{}]+)\\{[^{}]*\\bbox-shadow\\s*:/g)].map(match => match[1].trim())
+    const shadowSelectors = [...css.matchAll(/([^{}]+)\{[^{}]*\bbox-shadow\s*:/g)].map(match => match[1].trim())
     expect(shadowSelectors.length).toBeGreaterThan(0)
     expect(shadowSelectors.every(selector =>
       selector.includes('button[data-vt-button-shadow="true"]') ||
