@@ -101,10 +101,21 @@ test("Vault operation store rejects an idempotency key reused for a different re
       method: "POST",
       pathname: "/api/vault/operations",
       userId: "user-a",
-      body: { sourceAssetId: "asset-1", operation: "image-transform", idempotencyKey: "same-key", parameters: { width: 640 } },
+      body: { sourceAssetId: "asset-1", operation: "image-transform", idempotencyKey: "same-key", parameters: { dimensions: { width: 640, height: 360 } } },
       root,
     });
     assert.equal(first.status, 201);
+
+    const equivalent = await invoke({
+      method: "POST",
+      pathname: "/api/vault/operations",
+      userId: "user-a",
+      body: { sourceAssetId: "asset-1", operation: "image-transform", idempotencyKey: "same-key", parameters: { dimensions: { height: 360, width: 640 } } },
+      root,
+    });
+    assert.equal(equivalent.status, 200);
+    assert.equal(equivalent.body.reused, true);
+    assert.equal(equivalent.body.operation.id, first.body.operation.id);
 
     const conflicting = await invoke({
       method: "POST",
