@@ -207,7 +207,7 @@ test("confirmed library describes the actual default icon preset and component-s
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(controls, /iconSizeVariant = "large"/);
   assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
-  assert.match(css, /Icon buttons default to the canonical preset: 28px\/2\.5 standard and 18px\/1\.65 compact/);
+  assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
   assert.match(catalog, /1\.5px compact button shadow/);
   assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the canonical preset/);
   assert.match(catalog, /rectangular 44px switches and rectangular radios use reference-specific 7\.333px radii/);
