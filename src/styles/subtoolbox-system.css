@@ -4727,3 +4727,127 @@
   max-width: 100%;
   justify-self: stretch;
 }
+
+
+/* Tag editor: compact 22px removable badges with matching 20px Inter typography. */
+.vt-subtoolbox-removable-tag {
+  --tag-h: 22px;
+  box-sizing: border-box;
+  height: 22px;
+  min-height: 22px;
+  gap: 4px;
+  padding: 0 3px 0 8px;
+  border: 2px solid var(--vt-tag-color, var(--pair-a, #36e0f6));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vt-tag-color, var(--pair-a, #36e0f6)) 18%, white);
+  color: var(--vt-tag-color, var(--pair-a, #36e0f6));
+  font-family: var(--vt-studio-toolbox-font, Inter, sans-serif);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.vt-subtoolbox-removable-tag button {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--vt-tag-color, var(--pair-a, #36e0f6));
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+.vt-subtoolbox-removable-tag button svg { width: 12px; height: 12px; stroke-width: 3; }
+.vt-subtoolbox-tag-editor > input,
+.vt-subtoolbox-tag-editor .vt-subtoolbox-tag-editor-input,
+.vt-subtoolbox-tag-editor input[aria-label="New tag"] {
+  min-width: 6ch;
+  height: 22px;
+  min-height: 22px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border: 2px solid var(--pair-a, #36e0f6);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--pair-a, #36e0f6) 18%, white);
+  color: var(--pair-a, #36e0f6);
+  font-family: var(--vt-studio-toolbox-font, Inter, sans-serif);
+  font-size: 20px !important;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  outline: 0;
+  box-shadow: none;
+}
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-editor-input,
+.vt-subtoolbox-tag-editor.is-committing input[aria-label="New tag"] {
+  animation: vt-tag-input-exit 360ms cubic-bezier(.2,.75,.25,1) forwards;
+  pointer-events: none;
+}
+.vt-subtoolbox-tag-morph {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  min-height: 22px;
+  padding: 0 8px;
+  border: 2px solid var(--vt-tag-color, var(--pair-a, #36e0f6));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vt-tag-color, var(--pair-a, #36e0f6)) 18%, white);
+  color: var(--vt-tag-color, var(--pair-a, #36e0f6));
+  font: 900 20px/1 var(--vt-studio-toolbox-font, Inter, sans-serif);
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: vt-tag-badge-enter 360ms cubic-bezier(.2,.75,.25,1) both;
+}
+@keyframes vt-tag-input-exit {
+  0% { opacity: 1; transform: translateX(0); color: var(--pair-a, #36e0f6); background: color-mix(in srgb, var(--pair-a, #36e0f6) 18%, white); }
+  55% { opacity: .35; color: var(--vt-tag-color, var(--pair-a, #36e0f6)); background: transparent; }
+  100% { opacity: 0; transform: translateX(28px); color: var(--vt-tag-color, var(--pair-a, #36e0f6)); background: transparent; border-color: transparent; box-shadow: none; }
+}
+@keyframes vt-tag-badge-enter {
+  0% { opacity: 0; transform: translateX(-28px) scale(.94); background: transparent; border-color: transparent; }
+  55% { opacity: .7; }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-editor-input,
+  .vt-subtoolbox-tag-editor.is-committing input[aria-label="New tag"],
+  .vt-subtoolbox-tag-morph { animation-duration: 1ms; }
+}
+
+
+/* Keep the morphing text and badge in the exact same layout slot. */
+.vt-subtoolbox-tag-entry {
+  position: relative;
+  display: inline-flex;
+  flex: 0 1 auto;
+  min-width: 6ch;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.vt-subtoolbox-tag-entry > input,
+.vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-editor-input {
+  width: 100%;
+  min-width: 6ch;
+}
+.vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-morph {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 22px;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-morph {
+  animation: vt-tag-badge-enter 360ms cubic-bezier(.2,.75,.25,1) both;
+}
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > input,
+.vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-editor-input {
+  animation: vt-tag-input-exit 360ms cubic-bezier(.2,.75,.25,1) forwards;
+}

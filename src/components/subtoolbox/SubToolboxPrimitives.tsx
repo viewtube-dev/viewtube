@@ -1218,15 +1218,23 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
 }) => {
   const [editing, setEditing] = React.useState(false)
   const [draft, setDraft] = React.useState("")
+  const [committingTag, setCommittingTag] = React.useState("")
   const save = () => {
     const next = draft.trim().toUpperCase()
-    if (next && !tags.includes(next)) onTagsChange?.([...tags, next])
-    setDraft("")
-    setEditing(false)
+    if (!next) { setDraft(""); setEditing(false); return }
+    if (tags.includes(next)) { setDraft(""); setEditing(false); return }
+    setCommittingTag(next)
+    onTagsChange?.([...tags, next])
+    // Preserve the text for the full morph; clear it only after the transition finishes.
+    window.setTimeout(() => {
+      setDraft("")
+      setCommittingTag("")
+      setEditing(false)
+    }, 360)
   }
 
   return (
-    <div className={classes("vt-subtoolbox-tag-editor", editing && "is-editing", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
+    <div className={classes("vt-subtoolbox-tag-editor", editing && "is-editing", committingTag && "is-committing", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} {...props}>
       {label ? <strong className="vt-subtoolbox-tag-editor-label">{label}</strong> : null}
       <div className="vt-subtoolbox-tag-editor-tags">
         {tags.map((tag) => renderTag ? renderTag(tag, () => onTagsChange?.(tags.filter((item) => item !== tag))) : spectrum ? (
@@ -1248,25 +1256,28 @@ export const SubToolboxTagEditor: React.FC<SubToolboxTagEditorProps> = ({
             {tag}
           </SubToolboxRemovableTag>
         ))}
-        {!editing ? <button type="button" className="add" aria-label="Add tag" onClick={() => setEditing(true)}>{addIcon}</button> : null}
+        {editing ? (
+          <>
+            <span className="vt-subtoolbox-tag-entry">
+              {committingTag ? <span className="vt-subtoolbox-tag-morph" aria-hidden="true">{committingTag}</span> : null}
+              <SubToolboxInput20
+              controlSize="micro"
+              autoFocus
+              className="vt-subtoolbox-tag-editor-input"
+              aria-label="New tag"
+              value={draft}
+              placeholder="ADD TAG"
+              onChange={(event) => setDraft(event.target.value.toUpperCase())}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") save()
+                if (event.key === "Escape") { setDraft(""); setEditing(false) }
+              }}
+              />
+            </span>
+            <button type="button" className="submit" aria-label="Save tag" onClick={save}>{saveIcon}</button>
+          </>
+        ) : <button type="button" className="add" aria-label="Add tag" onClick={() => setEditing(true)}>{addIcon}</button>}
       </div>
-      {editing ? (
-        <>
-          <SubToolboxInput20
-            controlSize="micro"
-            autoFocus
-            aria-label="New tag"
-            value={draft}
-            placeholder="ADD TAG"
-            onChange={(event) => setDraft(event.target.value.toUpperCase())}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") save()
-              if (event.key === "Escape") { setDraft(""); setEditing(false) }
-            }}
-          />
-          <button type="button" className="submit" aria-label="Save tag" onClick={save}>{saveIcon}</button>
-        </>
-      ) : null}
     </div>
   )
 }
