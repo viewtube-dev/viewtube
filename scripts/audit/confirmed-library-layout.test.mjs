@@ -185,20 +185,19 @@ test("word toggle library has three skins, one standard toggle per row, and cent
   assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variant > small\s*\{[\s\S]*?text-align:\s*center/);
 });
 
-test("compact Studio button shadow and typography tokens match the effective control CSS", () => {
+test("compact Studio button geometry is independent from optional button-owned shadows", () => {
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
-  assert.match(css, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1\.5px;[^}]*--vt-studio-control-shadow-y:\s*1\.5px/);
-  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1px;[^}]*--vt-studio-control-shadow-y:\s*1px/);
+  assert.match(css, /button\[data-vt-button-shadow="true"\]\s*\{[^}]*box-shadow:/);
+  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]::before/);
+  assert.doesNotMatch(css, /--vt-studio-control-shadow-[xy]\s*:/);
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
-  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86/);
+  assert.doesNotMatch(tokens, /buttonShadowX|buttonShadowY|hoverOffsetPx|clickOffsetPx/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
-  assert.match(css, /--vt-studio-motion-button:\s*180ms;\s*--vt-studio-motion-press:\s*80ms/);
-  assert.match(tokens, /standard: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
-  assert.match(tokens, /compact: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
-  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*150ms\)|var\(--vt-studio-motion-press,\s*300ms\)/);
+  assert.doesNotMatch(css, /--vt-studio-motion-button|--vt-studio-motion-press/);
+  assert.doesNotMatch(tokens, /hoverTransitionMs|clickTransitionMs/);
 });
 
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
@@ -208,7 +207,7 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(controls, /iconSizeVariant = "large"/);
   assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
-  assert.match(catalog, /1\.5px compact button shadow/);
+  assert.match(catalog, /button-owned shadow.*off by default|optional button shadow.*off by default/i);
   assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
   assert.match(catalog, /rectangular 44px switches and rectangular radios use reference-specific 7\.333px radii/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
@@ -220,7 +219,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact A · closed trigger and count"));
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
-  assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
+  assert.match(catalog, /56px with a 3px border, 6px radius[\s\S]*?no hover or press movement[\s\S]*?button-owned shadow is off by default/);
 });
 
 test("word-toggle settings distinguish displayed words from the boolean value", () => {
