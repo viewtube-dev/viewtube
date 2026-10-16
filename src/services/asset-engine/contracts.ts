@@ -155,6 +155,10 @@ export interface ContentBuildPublicationIdentity {
  workflowId?: string | null
  recommendationId?: string | null
  experimentId?: string | null
+ /** Stable producer outcome IDs linked to the exact selected assets at publication time. */
+ assetOutcomeRecordIds?: string[]
+ /** Generation traces for the selected assets; missing traces are not fabricated. */
+ generationTraceIds?: string[]
  idempotencyKey: string
  publishedAt: string | null
 }

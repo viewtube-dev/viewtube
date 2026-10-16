@@ -33,8 +33,9 @@ describe("standalone Studio text fields in the UI Reference Library", () => {
   it("keeps confirmed buttons and word toggles in explicit layout families", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('vt-confirmed-button-family')
-    expect(html).toContain('is-word-toggle-44')
-    expect(html).toContain('is-word-toggle-28')
+    expect(html).toContain('vt-confirmed-word-toggle-family')
+    expect(html).toContain('44PX STANDARD')
+    expect(html).toContain('28PX COMPACT')
   })
 
 })

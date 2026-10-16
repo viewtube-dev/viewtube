@@ -84,3 +84,40 @@ Phase 13 is complete only when every workstream has acceptance evidence on the s
 Implemented foundations now include typed durable learning-record persistence, user/channel isolation, queue-and-hydrate behavior for outcomes/evaluations/candidates, default-off communication capture consent, legacy raw-text redaction, capability-specific required evidence, conservative context budgeting, exact project-ID resolution, and the attribution detail panel.
 
 Acceptance is still blocked on database-backed integration tests, complete stable-ID propagation through every production writer, browser verification, and the broader release-gates baseline. Do not mark this phase complete from unit tests or build success alone.
+
+## Current-base implementation slice — durable identity conflict guard
+
+A focused Phase 13 implementation now hardens the existing authenticated learning-record store without adding another store or changing the channel/user ownership model.
+
+- Stable identity fields are compared when a record with the same scoped identity (user, channel, record type, and record ID) is written again.
+- Reusing a record ID with a conflicting asserted source/trace/asset, project, ActionPacket, recommendation, publication transaction, video, approved snapshot, or evaluation identity is rejected instead of silently overwriting the prior record.
+- Missing legacy identity fields may be enriched by a later write; two non-empty, conflicting identities may not.
+- Legitimate lifecycle transitions remain supported when immutable identity is preserved, such as an evaluation moving from pending to resolved.
+- PostgreSQL writes serialize by scoped record key using a transaction-scoped advisory lock before reading and updating, so concurrent first-write/retry races are checked against the persisted record.
+- Regression tests cover conflict rejection, preservation of the original record, and an allowed pending-to-positive evaluation update.
+
+This slice is **not Phase 13 certification**. Remaining gates still include current-head CI, server/database-backed integration coverage, full producer-to-learning ancestry, direct action-boundary capability enforcement, consent redaction verification across devices, browser/E2E evidence, and the production-host/served-commit check.
+
+## Consent-retention regression added
+
+The server persistence suite now verifies that an existing channel-scoped creator-communication event containing legacy raw text is replaced by a sanitized version with the same stable event ID, and that a subsequent durable read contains no raw message text. This validates the server store's replacement behavior; a full authenticated cross-device purge/reload flow is still required for certification.
+
+The focused Brain persistence contract suite also exercises rehydration of a channel-scoped outcome after local browser data is cleared, confirming that the durable response restores the stable outcome ID, producer record ID, and generation trace. This is a mocked authenticated-endpoint integration contract; live database and two-device browser certification remain separate gates.
+
+## Current-base implementation slice — publication producer ancestry
+
+The publication receipt now preserves the stable producer outcome IDs and generation trace IDs for the exact selected assets, in addition to the existing channel/project/ContentBuild, ActionPacket/workflow/recommendation/experiment, approved snapshot/hash, transaction and video identity.
+
+- The bridge reads outcomes only for the matching channel and selected asset IDs.
+- Outcome record IDs and trace IDs are deduplicated and sorted for deterministic receipts.
+- Unselected assets are excluded.
+- Retry handling restores ancestry already recorded on the immutable receipt and unions any still-available producer IDs, so a missing browser-local outcome does not erase previously recorded provenance.
+- Regression coverage verifies selected-asset filtering, trace continuity, metadata persistence and retry restoration.
+
+This improves the recommendation-to-publication lineage edge; it does not by itself prove that every upstream recommendation/creator-decision writer supplied its stable IDs or that downstream records are durable across devices.
+
+## Current-base implementation slice — publish action-boundary guard
+
+The canonical publishing transaction boundary now re-reads the current ContentBuild before creating a *new* transaction and fails closed unless its stage is one of `package`, `edit`, `review`, `launch`, or `scheduled`. It also refuses a new transaction when the canonical ContentBuild has unresolved workflow blockers. Existing transactions for the same final render still take the idempotent resume path before this new-transaction guard, preserving safe retries.
+
+Regression tests cover direct calls from a disallowed `idea` stage and unresolved blockers. This is a publication-boundary enforcement slice, not proof that every generation, editing, metadata, scheduling, and learning action is covered by the full stage capability matrix; those boundaries still require an explicit action-to-stage policy and direct-call tests.

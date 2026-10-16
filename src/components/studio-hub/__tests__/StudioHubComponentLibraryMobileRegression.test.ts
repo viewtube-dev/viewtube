@@ -238,7 +238,7 @@ describe("Studio Hub Component Library mobile regression", () => {
     const manifestation = read("src/components/projects/ProjectManifestation.tsx")
     const projectCss = read("src/styles/project-manifestation.css")
     const metadataCss = read("src/styles/subtoolbox-system.css")
-    expect(manifestation).toContain("<SubToolboxSplitDropdown")
+    expect(manifestation).toContain("<LegendMultiDropdown")
     expect(manifestation).not.toContain("<SubToolboxSelect")
     expect(manifestation).toContain('className="vt-project-manifestation-actions"')
     expect(read("src/components/metadata/CanonicalMetadataSections.tsx")).toContain('<SubToolboxActions columns={3} forceRow className="vt-metadata-field-actions mt-2">')

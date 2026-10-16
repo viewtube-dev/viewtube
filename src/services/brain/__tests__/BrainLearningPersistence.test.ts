@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { enqueueBrainLearningRecord, flushBrainLearningPersistence } from "../BrainLearningPersistence"
+import { enqueueBrainLearningRecord, flushBrainLearningPersistence, hydrateBrainLearningFromPersistence } from "../BrainLearningPersistence"
+import { listBrainOutcomes } from "../BrainOutcomeLedger"
 
 const makeStorage = () => {
  const values = new Map<string, string>()
@@ -72,3 +73,44 @@ describe("BrainLearningPersistence", () => {
  })
 
 })
+
+ it("rehydrates channel-scoped outcomes from durable storage after local browser data is lost", async () => {
+  const storage = makeStorage()
+  vi.stubGlobal("window", { localStorage: storage, dispatchEvent: vi.fn() })
+  vi.stubGlobal("localStorage", storage)
+  const durableRecord = {
+   recordType: "brainOutcome",
+   record: {
+    id: "durable-outcome-after-reload",
+    channelId: "channel-rehydration",
+    outcome: "completed",
+    sourceRecordId: "asset-outcome-1",
+    traceId: "generation-trace-1",
+    createdAt: 123,
+   },
+  }
+  const fetchMock = vi.fn(async (url: string) => {
+   if (String(url).includes("channelId=channel-rehydration")) {
+    return new Response(JSON.stringify({ learningRecords: [durableRecord] }), { status: 200 })
+   }
+   return new Response(JSON.stringify({ learningRecords: [] }), { status: 200 })
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  const result = await hydrateBrainLearningFromPersistence("channel-rehydration")
+
+  expect(result).toMatchObject({
+   channelId: "channel-rehydration",
+   hydrated: 1,
+   persisted: 0,
+   pending: 0,
+   authenticated: true,
+  })
+  expect(listBrainOutcomes("channel-rehydration")).toContainEqual(expect.objectContaining({
+   id: "durable-outcome-after-reload",
+   channelId: "channel-rehydration",
+   sourceRecordId: "asset-outcome-1",
+   traceId: "generation-trace-1",
+  }))
+  expect(fetchMock).toHaveBeenCalledTimes(1)
+ })

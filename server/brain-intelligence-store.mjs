@@ -153,30 +153,85 @@ export const listPersistedBrainLearningRecords = async ({ userId, channelId }) =
 export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, records }) => {
   await initBrainIntelligenceStore();
   const allowedTypes = new Set(["assetOutcome", "brainOutcome", "evaluation", "learningCandidate"]);
+  const identityFields = {
+    assetOutcome: ["sourceRecordId", "traceId", "assetId", "assetType", "projectId", "contentBuildId", "generationId"],
+    brainOutcome: ["sourceRecordId", "traceId", "assetId", "projectId", "actionPacketId", "workflowId", "recommendationId", "experimentId"],
+    evaluation: ["projectId", "source", "recommendation", "actionPacketId", "workflowId", "recommendationId", "experimentId", "publishTransactionId", "contentBuildId", "youtubeVideoId", "approvedSnapshotId", "approvedSnapshotHash", "selectedWindow"],
+    learningCandidate: ["projectId", "evaluationRecordId", "source", "recommendation", "selectedWindow"],
+  };
+  const hasIdentityValue = (value) => value !== undefined && value !== null && value !== "";
+  const assertIdentityCompatible = (existing, incoming) => {
+    if (!existing || !incoming || existing.recordType !== incoming.recordType) return;
+    for (const field of identityFields[incoming.recordType] || []) {
+      const previous = existing.record?.[field];
+      const next = incoming.record?.[field];
+      // Missing legacy fields may be enriched, but two asserted identities may not conflict.
+      if (hasIdentityValue(previous) && hasIdentityValue(next) && JSON.stringify(previous) !== JSON.stringify(next)) {
+        throw new Error(`Brain learning identity conflict for ${incoming.recordType}:${incoming.record.id} (${field}).`);
+      }
+    }
+  };
+  const preserveMissingIdentity = (existing, incoming) => {
+    if (!existing || !incoming || existing.recordType !== incoming.recordType) return incoming;
+    const record = { ...incoming.record };
+    for (const field of identityFields[incoming.recordType] || []) {
+      if (!hasIdentityValue(record[field]) && hasIdentityValue(existing.record?.[field])) {
+        record[field] = existing.record[field];
+      }
+    }
+    return { ...incoming, record };
+  };
   const unique = new Map();
   for (const item of Array.isArray(records) ? records : []) {
     if (!item || !allowedTypes.has(item.recordType) || !item.record
       || typeof item.record.id !== "string" || !item.record.id.trim()
       || item.record.channelId !== channelId) continue;
-    unique.set(`${item.recordType}:${item.record.id}`, item);
+    const key = `${item.recordType}:${item.record.id}`;
+    const previous = unique.get(key);
+    assertIdentityCompatible(previous, item);
+    unique.set(key, preserveMissingIdentity(previous, item));
   }
   const rows = [...unique.values()].slice(0, 1000);
   const recordKey = (item) => `${item.recordType}:${item.record.id}`;
   if (!pool) {
     const key = scope(userId, channelId);
     const map = memoryLearningRecords.get(key) || new Map();
-    rows.forEach((item) => map.set(recordKey(item), item));
+    for (const item of rows) {
+      const previous = map.get(recordKey(item));
+      assertIdentityCompatible(previous, item);
+      map.set(recordKey(item), preserveMissingIdentity(previous, item));
+    }
     memoryLearningRecords.set(key, map);
     return rows.length;
   }
   for (const item of rows) {
-    await pool.query(
-      `INSERT INTO viewtube_brain_learning_records(viewtube_user_id,channel_id,record_id,record)
-       VALUES($1,$2,$3,$4::jsonb)
-       ON CONFLICT(viewtube_user_id,channel_id,record_id)
-       DO UPDATE SET record=EXCLUDED.record,updated_at=NOW()`,
-      [userId, channelId, recordKey(item), JSON.stringify(item)],
-    );
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      // Serialize same-user/channel/record writes, including first-insert races.
+      await client.query("SELECT pg_advisory_xact_lock(hashtext($1))", [`${userId}:${channelId}:${recordKey(item)}`]);
+      const existing = await client.query(
+        `SELECT record FROM viewtube_brain_learning_records
+         WHERE viewtube_user_id=$1 AND channel_id=$2 AND record_id=$3 FOR UPDATE`,
+        [userId, channelId, recordKey(item)],
+      );
+      const previous = existing.rows[0]?.record;
+      if (previous) assertIdentityCompatible(previous, item);
+      const durableItem = preserveMissingIdentity(previous, item);
+      await client.query(
+        `INSERT INTO viewtube_brain_learning_records(viewtube_user_id,channel_id,record_id,record)
+         VALUES($1,$2,$3,$4::jsonb)
+         ON CONFLICT(viewtube_user_id,channel_id,record_id)
+         DO UPDATE SET record=EXCLUDED.record,updated_at=NOW()`,
+        [userId, channelId, recordKey(item), JSON.stringify(durableItem)],
+      );
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
   }
   return rows.length;
 };
