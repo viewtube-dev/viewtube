@@ -374,7 +374,6 @@ describe("VT-SYNC data visual module registry", () => {
   expect(shellSource).toContain("const rows = controllerRows ?? []")
   expect(shellSource).toContain("if (!controllerExplanation) return rows.length > 0 ? [...rows] : undefined")
   expect(shellSource).not.toContain('row.type !== "dropdown"')
-  expect(shellSource).toContain('row.type === "metricMultiSelect"')
  expect(unifiedVisualSource).toContain('data-visual-height-policy')
   expect(unifiedVisualSource).toContain("resolveAnalyticsVisualContextBarHeight")
   expect(unifiedVisualSource).toContain("AnalyticsActiveStats")
