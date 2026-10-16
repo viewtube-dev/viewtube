@@ -64,6 +64,10 @@ Bring GenerationRecord, ActionPacket, ToolReceipt, render/generation/research op
 ### Publishing continuity and recovery
 Freeze approved publish intent, make retries idempotent/recoverable, reconcile remote YouTube state and preserve exact asset/metadata identity into outcome measurement.
 
+### Evidence lineage reconstruction and diagnostics
+
+The existing ContentBuild event stream and Algorithm Intelligence event ledger remain the canonical records. `src/services/asset-engine/EvidenceLineageDiagnostics.ts` provides a read-only ancestry reconstruction over those owners and explicitly reports missing parents, duplicate record IDs, cycles, and unresolved evidence references. It is a diagnostic projection, not a second persistence store or workflow orchestrator. A complete result is scoped to records visible in those existing ledgers; external evidence references and browser-only durability are not certified by the projection alone.
+
 ### Outcome / Evaluation / Learning closure
 Standardize producer contracts, evaluation targets/checkpoints, comparability and governed learning promotion across Publisher, Projects, Editor, Community, experiments and Brain actions.
 
