@@ -149,7 +149,7 @@ describe("ContentBuild repository", () => {
 
   const parent = appendContentBuildEvent({
    contentBuildId: "cb-delayed-lineage",
-   eventType: "recommendation.created" as never,
+   eventType: "analysis.completed",
    idempotencyKey: "lineage-parent",
   })
   expect(parent.id).toBe("event:lineage-parent")
