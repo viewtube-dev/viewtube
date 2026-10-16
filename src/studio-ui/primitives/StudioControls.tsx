@@ -4,7 +4,7 @@ import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, ChevronsDown, ChevronsUp, Download, Heart, Lock, Minus, Moon, Plus, RefreshCw, Sun, ThumbsUp, Unlock } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, ChevronsDown, ChevronsUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
