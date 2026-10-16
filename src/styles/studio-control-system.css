@@ -2580,6 +2580,7 @@ button[data-vt-studio-icon-button="true"].is-effect-download-success [data-vt-sq
   border: var(--vt-studio-badge-stroke) solid #000;
   border-radius: inherit;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  transform: translate(var(--vt-studio-badge-shadow-x), var(--vt-studio-badge-shadow-y));
 }
 .vt-studio-split-left-badge__face {
   position: relative;
