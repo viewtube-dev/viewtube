@@ -99,10 +99,11 @@ describe("Studio stepper single-shell geometry regression", () => {
 describe("Studio split stepper numeric field contract", () => {
   it("keeps a fixed 2:1 value-pane-to-rail ratio and inherits canonical text-input typography, fill, and focus treatment", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = css.indexOf("/* Split stepper uses the canonical SplitLeftButton shell/face geometry")
-    const stepperCss = css.slice(start)
-    expect(stepperCss).toMatch(/grid-template-columns:\\s*minmax\\(0,\\s*2fr\\)\\s+var\\(--vt-stepper-height\\)/)
-    expect(stepperCss).toMatch(/flex:\\s*0\\s+0\\s+calc\\(3\\s*\\*\\s*var\\(--vt-stepper-height/)
+    const start = css.indexOf("/* Split stepper: stationary SplitLeftButton shell")
+    const end = css.indexOf(".vt-studio-split-stepper-rail {", start)
+    const stepperCss = css.slice(start, end)
+    expect(stepperCss).toMatch(/grid-template-columns:\s*minmax\(0,\s*2fr\)\s+var\(--vt-stepper-height\)/)
+    expect(stepperCss).toMatch(/flex:\s*0\s+0\s+calc\(3\s*\*\s*var\(--vt-stepper-height/)
     expect(stepperCss).toContain("font-family: var(--vt-studio-control-font-family);")
     expect(stepperCss).toContain("font-weight: var(--vt-studio-control-font-weight);")
     expect(stepperCss).toContain("text-transform: var(--vt-studio-control-text-transform);")
