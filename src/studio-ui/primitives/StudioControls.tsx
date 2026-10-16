@@ -95,7 +95,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       like: "ThumbsUp icon; pair with like for pop feedback and a live activation count.",
     },
     effects: {
-      standard: "No additional motion; shared Studio press, hover, focus and disabled behavior only.",
+      standard: "No additional motion; controls stay stationary while focus and disabled states remain accessible.",
       notification: "Optional positioned badge; count/status pop and icon shake. Supply badge only when a real count/status exists.",
       popOnActivation: "One-shot inner icon pop; with the heart preset, also briefly fills the heart and emits an expanding secondary-color border ripple.",
       heartPop: "Temporary heart fill, pop, and expanding/fading paired-color border ripple; never persists as selected state.",
