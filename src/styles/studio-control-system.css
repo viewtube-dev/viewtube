@@ -2936,13 +2936,9 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   text-align: center;
   justify-content: center;
   align-items: center;
-  font-family: var(--vt-studio-control-font-family);
-  font-size: var(--vt-studio-control-font-size);
-  font-weight: var(--vt-studio-control-font-weight);
-  line-height: var(--vt-studio-control-line-height);
-  letter-spacing: var(--vt-studio-control-letter-spacing);
-  text-transform: var(--vt-studio-control-text-transform);
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke);
+  font: inherit;
+  letter-spacing: inherit;
+  -webkit-text-stroke: inherit;
 }
 :where(
   button[data-vt-studio-button="true"] [data-vt-studio-split-rail],
@@ -3060,6 +3056,13 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   overflow: hidden;
   border: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
   border-radius: var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px));
+  font-family: var(--vt-studio-control-font-family);
+  font-size: var(--vt-studio-control-font-size);
+  font-weight: var(--vt-studio-control-font-weight);
+  line-height: var(--vt-studio-control-line-height);
+  letter-spacing: var(--vt-studio-control-letter-spacing);
+  text-transform: var(--vt-studio-control-text-transform);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) currentColor;
 }
 .vt-studio-split-left-badge__face,
 .vt-studio-split-right-badge__face,
