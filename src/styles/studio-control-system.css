@@ -1156,7 +1156,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
   
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) { transform: translate(1.5px, 1.5px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {    }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform:none;  }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
@@ -2712,9 +2711,8 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-
 }
 
 
-/* Canonical button-only default effects — consolidated from the CSS/layout skills.
-   Shadows and visual-state transitions belong to the button primitives only.
-   Never move the control box, face, label, or hit target to simulate a press. */
+/* Canonical Studio button defaults: the control shell and hit target remain stationary.
+   Approved icon-only effects are scoped to their own inner layers. */
 button[data-vt-studio-button="true"],
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   
@@ -2722,8 +2720,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   
 }
 
-/* Use one real shadow on the stationary button shell, not a translated duplicate.
-   Keep square-icon pseudo-elements available for their explicitly approved icon effects. */
+/* Remove legacy offset-face layers; approved square-icon effects remain opt-in and local. */
 button[data-vt-studio-button="true"]:not([data-vt-studio-icon-button="true"])::before {
   content: none !important;
   display: none !important;
@@ -2736,7 +2733,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
 button[data-vt-studio-button="true"]:hover:not(:disabled),
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) {
   transform: none !important;
-  filter: brightness(.98);
 }
 button[data-vt-studio-button="true"]:active:not(:disabled),
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {
