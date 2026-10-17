@@ -56,12 +56,12 @@ const CanonicalControlFamilies: React.FC = () => {
     </Family>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
-      nonDefaultSettings={["This is an informational badge using split-left rail anatomy, not an action button.","Standard is 44px / 3px stroke; compact 28px / 2px; micro is a 14px / 1px-stroke density exception.","The badge uses a 44px pill radius and does not use the button activation contract.","Standard, compact, and global 14px micro sizes use the shared split-badge foundation; all badge labels center like StudioButton and all sides use the global 4px spacing unit."]}
+      nonDefaultSettings={["This is an informational badge using split-left rail anatomy, not an action button.","Standard is 44px / 3px stroke; compact 28px / 2px; micro is a 14px / 1px-stroke density exception.","The badge uses a 44px pill radius and does not use the button activation contract.","Standard, compact, and global 14px micro sizes use the shared split-badge foundation; all badge labels center like StudioButton. The 4px layout-spacing rule applies only between rows, columns, and sibling components; it does not set internal padding, insets, icon-to-label spacing, or primitive geometry."]}
       provenance={<Provenance
         primitive="StudioSplitLeftBadge"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="44px standard / 28px compact / 14px micro · 4px all-side spacing unit · centered labels · no shadows or transitions"
+        tokens="44px standard / 28px compact / 14px micro · 4px external row/column/component gap only · centered labels · no shadows or transitions"
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
