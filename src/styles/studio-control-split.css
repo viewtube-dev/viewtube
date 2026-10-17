@@ -303,3 +303,9 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
 .vt-studio-split-stepper-actions button {
   position: relative;
 }
+
+.vt-studio-split-stepper-actions button:focus-visible {
+  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
+  outline-offset: -2px;
+  z-index: 1;
+}
