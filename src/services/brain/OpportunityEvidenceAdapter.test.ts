@@ -329,6 +329,7 @@ describe("canonical tool-chain registration for Opportunity Radar → Tactics En
       channelId: "channel-1",
       videoId: "video-1",
       entity: "Measured candidate",
+      metric: "views",
       kind: "performance_candidate" as const,
       validationState: "accepted" as const,
       createdAt: "2026-10-17T12:00:00.000Z",
