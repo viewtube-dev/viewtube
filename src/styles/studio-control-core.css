@@ -64,3 +64,9 @@
 .vt-studio-split-face[data-vt-studio-split="left"] { grid-template-columns: auto minmax(0, 1fr); }
 .vt-studio-split-face[data-vt-studio-split="right"] { grid-template-columns: minmax(0, 1fr) auto; }
 .vt-studio-split-face[data-vt-studio-split="double"] { grid-template-columns: auto minmax(0, 1fr) auto; }
+
+/* The face wrapper is a single full-width grid child inside StudioButton. */
+.vt-studio-split-face[data-vt-studio-split] {
+  grid-column: 1 / -1;
+  justify-self: stretch;
+}
