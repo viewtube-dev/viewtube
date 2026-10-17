@@ -125,3 +125,24 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
     }
   }).sort((a, b) => b.sourceIds.length - a.sourceIds.length || a.id.localeCompare(b.id))
 }
+
+/** Adapter from the existing YouTube comment-thread shape; source records remain owned by the comment controller/API. */
+export const projectCommentThreadsToAudienceFeedback = (
+  threads: Array<{
+    id?: string
+    snippet?: { videoId?: string; topLevelComment?: { id?: string; snippet?: { textOriginal?: string; textDisplay?: string; publishedAt?: string } } }
+  }>,
+  channelId?: string | null,
+): AudienceFeedbackRecord[] => threads.flatMap((thread) => {
+  const comment = thread.snippet?.topLevelComment
+  const sourceId = comment?.id || thread.id
+  if (!sourceId) return []
+  return [{
+    sourceId,
+    source: "comment" as const,
+    text: comment?.snippet?.textOriginal ?? comment?.snippet?.textDisplay ?? "",
+    channelId: channelId || null,
+    videoId: thread.snippet?.videoId || null,
+    observedAt: comment?.snippet?.publishedAt || null,
+  }]
+})
