@@ -162,6 +162,11 @@ describe("generateAsset", () => {
    constitution: ASSET_CONSTITUTION_VERSION,
    community_post: "community-post-v1",
   })
+  expect(result.trace.promptVersions).toMatchObject({
+   prompt_family: "community",
+   context_composer: ASSET_CONTEXT_COMPOSITION_VERSION,
+  })
+  expect(result.trace.promptVersions).not.toHaveProperty("context_resolver")
   expect(result.record.promptReceipt).toMatchObject({
    schemaVersion: "brain-prompt-run-receipt-v1",
    promptFamily: "community",
