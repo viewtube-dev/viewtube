@@ -11,6 +11,21 @@ const plainText = (value: string) => {
  return new DOMParser().parseFromString(value, "text/html").documentElement.textContent || value
 }
 
+const CommentAvatar: React.FC<{ name: string; src?: string; creator?: boolean }> = ({ name, src, creator = false }) => {
+ const [failed, setFailed] = React.useState(false)
+ const initial = plainText(name || "Viewer").trim().replace(/^@+/, "").charAt(0).toUpperCase() || "?"
+ return <div aria-label={name + " profile picture"} className={"relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-black text-xs font-black " + (creator ? "bg-[#BFE9FF]" : "bg-[#FFE4F2"])}>
+  <span aria-hidden="true">{initial}</span>
+  {src && !failed && <img src={src} alt="" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full object-cover" onError={() => setFailed(true)} />}
+ </div>
+}
+
+const formatCommentDate = (value?: string) => {
+ if (!value) return ""
+ const date = new Date(value)
+ return Number.isNaN(date.getTime()) ? "" : date.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
+}
+
 export const CommentResponder: React.FC = () => {
  const context = useCreatorEngagementContext()
  const comments = useCommentResponderController(context)
@@ -87,24 +102,47 @@ export const CommentResponder: React.FC = () => {
   </div>
 
   <div className="flex flex-col gap-2 sm:gap-4 lg:gap-6 min-w-0">
-   <SubToolbox title="Current Comment" icon={<MessageCircle />} collapsible isOpenInitial>
-    {snippet ? <div className="border-[3px] border-black rounded-2xl bg-[#FFF9E8] p-5">
-     <div className="flex items-center justify-between gap-3"><strong className="min-w-0 truncate text-sm">{plainText(snippet.authorDisplayName || "Viewer")}</strong><span className="shrink-0 text-[9px] font-black uppercase opacity-45">{Number(snippet.likeCount || 0).toLocaleString()} Likes</span></div>
-     <p className="mt-4 whitespace-pre-wrap break-words text-base font-bold leading-snug">{plainText(snippet.textDisplay || snippet.textOriginal || "")}</p>
-    </div> : <div className="min-h-24 sm:min-h-32 lg:min-h-44 grid place-items-center border-[3px] border-black rounded-xl sm:rounded-2xl bg-white/60 opacity-50 font-black uppercase text-center p-3 sm:p-4 lg:p-6">{dataState === "disconnected" ? "Connect your channel to load comments." : dataState === "loading" ? "Loading comments…" : dataState === "error" ? "Comments unavailable. Use refresh or reconnect and try again." : "No comment selected."}</div>}
-    {comments.error && context.connected && <div role="alert" className="mt-4 border-[3px] border-black bg-[#FFB158] p-3 rounded-xl text-xs font-black">{comments.error}</div>}
+   <SubToolbox title="Conversation Thread" icon={<MessagesSquare />} collapsible isOpenInitial>
+    {thread && snippet ? <div aria-label="Comment conversation thread" className="max-h-[min(62vh,640px)] space-y-4 overflow-y-auto p-1">
+     <article className="flex min-w-0 items-start gap-2 sm:gap-3" data-comment-message="original">
+      <CommentAvatar name={plainText(snippet.authorDisplayName || "Viewer")} src={snippet.authorProfileImageUrl} />
+      <div className="min-w-0 flex-1">
+       <div className="mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px] font-black uppercase">
+        <span className="break-words">{plainText(snippet.authorDisplayName || "Viewer")}</span>
+        <span className="font-bold normal-case opacity-50">{formatCommentDate(snippet.publishedAt || snippet.updatedAt)}</span>
+        <span className="ml-auto shrink-0 opacity-50">{Number(snippet.likeCount || 0).toLocaleString()} likes</span>
+       </div>
+       <div className="comment-responder-message-bubble w-fit max-w-full rounded-2xl rounded-tl-sm border-2 border-black bg-[#FFF9E8] px-3 py-3 text-sm font-bold leading-relaxed whitespace-pre-wrap break-words">{plainText(snippet.textDisplay || snippet.textOriginal || "")}</div>
+       <div className="mt-1 text-[9px] font-black uppercase tracking-wide opacity-45">Original comment</div>
+      </div>
+     </article>
+     {replies.map((reply: any, index: number) => {
+      const replySnippet = reply.snippet || {}
+      const authorName = plainText(replySnippet.authorDisplayName || "Reply")
+      const isCreatorReply = String(replySnippet.authorChannelId?.value || "") === String(context.channelId || "")
+      const replyText = plainText(replySnippet.textDisplay || replySnippet.textOriginal || "")
+      return <article key={reply.id || index} data-comment-message="reply" className={"flex min-w-0 items-start gap-2 sm:gap-3 " + (isCreatorReply ? "flex-row-reverse" : "")}>
+       <CommentAvatar name={authorName} src={replySnippet.authorProfileImageUrl} creator={isCreatorReply} />
+       <div className={"min-w-0 flex-1 " + (isCreatorReply ? "text-right" : "")}>
+        <div className={"mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px] font-black uppercase " + (isCreatorReply ? "justify-end" : "")}>
+         <span className="break-words">{authorName}{isCreatorReply ? " · You" : ""}</span>
+         <span className="font-bold normal-case opacity-50">{formatCommentDate(replySnippet.publishedAt || replySnippet.updatedAt)}</span>
+        </div>
+        <div className={"comment-responder-message-bubble inline-block max-w-full rounded-2xl border-2 border-black px-3 py-3 text-left text-sm font-bold leading-relaxed whitespace-pre-wrap break-words " + (isCreatorReply ? "rounded-tr-sm bg-[#DDF4FF]" : "rounded-tl-sm bg-white")}>{replyText}</div>
+       </div>
+      </article>
+     })}
+     {replies.length === 0 && <p className="ml-11 text-[10px] font-bold uppercase tracking-wide opacity-45">No replies yet — start the conversation below.</p>}
+    </div> : <div className="min-h-24 sm:min-h-32 grid place-items-center rounded-xl border-2 border-dashed border-black/30 bg-white/60 p-4 text-center text-xs font-black uppercase opacity-60">{dataState === "disconnected" ? "Connect your channel to load comments." : dataState === "loading" ? "Loading conversation…" : dataState === "error" ? "Conversation unavailable. Refresh and try again." : "No comment selected."}</div>}
+    {comments.error && context.connected && <div role="alert" className="mt-3 rounded-xl border-[3px] border-black bg-[#FFB158] p-3 text-xs font-black">{comments.error}</div>}
    </SubToolbox>
-
-   {replies.length > 0 && <SubToolbox title={`Reply History · ${replies.length}`} icon={<MessagesSquare />} collapsible isOpenInitial={comments.tab === "history"}>
-    <div className="max-h-64 overflow-y-auto space-y-2" style={{ contentVisibility: "auto" }}>{replies.map((reply: any, index: number) => <div key={reply.id || index} className="border-[2px] border-black rounded-xl p-3 bg-white"><div className="text-[9px] font-black uppercase opacity-45">{plainText(reply.snippet?.authorDisplayName || "Reply")}</div><p className="mt-1 text-xs font-bold whitespace-pre-wrap break-words">{plainText(reply.snippet?.textDisplay || "")}</p></div>)}</div>
-   </SubToolbox>}
 
    <SubToolbox title={comments.tab === "history" ? "Follow-Up Reply" : "Reply Composer"} icon={<Sparkles />} collapsible isOpenInitial>
     <label htmlFor="comment-reply-copy" className="text-[10px] font-black uppercase">Reply</label>
     <StudioTextArea id="comment-reply-copy" name="commentReply" value={comments.replyText} onChange={(event) => comments.setReplyText(event.target.value)} placeholder={!context.connected ? "Connect your YouTube channel to reply…" : comments.tab === "history" ? "Add a follow-up reply…" : "Write or generate a reply…"} className="mt-2 min-h-[110px] sm:min-h-[130px] lg:min-h-[150px]" disabled={!context.connected || !thread} />
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-2 sm:mt-4">
-     <SubToolboxInnerActionButton label={comments.generating ? "Working…" : comments.replyText.trim() ? "Refine" : "Draft"} iconName="sparkles" tone="yellow" disabled={!context.connected || !thread || comments.generating} onClick={comments.draftReply} />
-     <SubToolboxInnerActionButton label="Suggest Video" iconName="link" tone="cyan" disabled={!context.connected || !thread || comments.generating} onClick={comments.suggestVideo} />
+     <SubToolboxInnerActionButton label={comments.generating ? "Working…" : comments.replyText.trim() ? "Refine" : "Generate"} iconName="sparkles" tone="yellow" disabled={!context.connected || !thread || comments.generating} onClick={comments.draftReply} />
+     <SubToolboxInnerActionButton label="Suggest Videos" iconName="link" tone="cyan" disabled={!context.connected || !thread || comments.generating} onClick={comments.suggestVideo} />
     </div>
    </SubToolbox>
 
