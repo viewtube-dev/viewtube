@@ -97,6 +97,36 @@ describe("generateAsset", () => {
   expect(result.trace.failureReason).toMatch(/does not allow capability generate.*published/i)
  })
 
+ it("blocks provider dispatch when the active prompt family lacks its creator instruction", async () => {
+  const { runner, calls } = makeRunner([goodPlan])
+  const result = await generateAsset({
+   request: { ...request, instruction: "   " },
+   strategy: communityPostStrategy,
+   evidence,
+   runner,
+   styleProfile: null,
+  })
+
+  expect(calls).toHaveLength(0)
+  expect(result.record.status).toBe("failed")
+  expect(result.trace.failureReason).toContain("required context missing: creator_instruction")
+ })
+
+ it("blocks provider dispatch when request constraints do not match the asset strategy", async () => {
+  const { runner, calls } = makeRunner([goodPlan])
+  const result = await generateAsset({
+   request: { ...request, assetType: "script" },
+   strategy: communityPostStrategy,
+   evidence,
+   runner,
+   styleProfile: null,
+  })
+
+  expect(calls).toHaveLength(0)
+  expect(result.record.status).toBe("failed")
+  expect(result.trace.failureReason).toContain("required context missing: asset_constraints")
+ })
+
  it("rechecks ContentBuild revision immediately before provider dispatch", async () => {
   const build = createContentBuild({
    id: "cb-asset-generator-stale-dispatch",

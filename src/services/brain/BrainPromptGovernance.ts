@@ -201,3 +201,22 @@ export const validateBrainPromptRunReceipt = (receipt: BrainPromptRunReceipt): s
  if (!Number.isFinite(Date.parse(receipt.generatedAt))) issues.push("generatedAt must be a valid timestamp")
  return issues
 }
+
+/** Validate the context inventory assembled for one actual model call, not just its receipt metadata. */
+export const validateBrainPromptFamilyContext = (
+ family: BrainPromptFamily,
+ availableContext: string[],
+ presentForbiddenContext: string[] = [],
+): string[] => {
+ const definition = BRAIN_PROMPT_FAMILIES[family]
+ const available = new Set(availableContext)
+ const forbiddenPresent = new Set(presentForbiddenContext)
+ return [
+  ...definition.requiredContext
+   .filter((context) => !available.has(context))
+   .map((context) => `required context missing: ${context}`),
+  ...definition.forbiddenContext
+   .filter((context) => forbiddenPresent.has(context))
+   .map((context) => `forbidden context present: ${context}`),
+ ]
+}

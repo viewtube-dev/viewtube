@@ -31,7 +31,7 @@ import { auditNumericClaims } from "./numericClaims"
 import type { ModelResolution } from "./modelRouting"
 import { getContentBuild } from "../asset-engine/ContentBuildRepository"
 import { assertContentBuildCapability } from "../asset-engine/ContentBuildCapabilities"
-import { buildBrainPromptRunReceipt, promptFamilyForAsset, validateBrainPromptRunReceipt, type BrainPromptRunReceipt } from "./BrainPromptGovernance"
+import { buildBrainPromptRunReceipt, promptFamilyForAsset, validateBrainPromptFamilyContext, validateBrainPromptRunReceipt, type BrainPromptRunReceipt } from "./BrainPromptGovernance"
 import { formatBrainOutputValidationIssues, validateBrainStructuredOutput } from "./BrainOutputValidation"
 import {
  buildStylePromptSection,
@@ -344,6 +344,33 @@ export const generateAsset = async <TOutput>(input: {
  const style = input.styleProfile !== undefined
   ? input.styleProfile
   : resolveStyleProfile({ channelId: request.channelId, assetType: request.assetType })
+ const hasInputValue = (...keys: string[]): boolean => keys.some((key) => {
+  const value = request.inputs?.[key]
+  if (typeof value === "string") return Boolean(value.trim())
+  if (Array.isArray(value)) return value.length > 0
+  if (value && typeof value === "object") return Object.keys(value).length > 0
+  return value !== undefined && value !== null && value !== false
+ })
+ const availablePromptContext = [
+  ...(request.instruction.trim() ? ["creator_instruction", "creator_goal"] : []),
+  ...(request.assetType === strategy.assetType && strategy.schema ? ["asset_constraints"] : []),
+  ...(hasInputValue("contentPromise", "content_promise", "topic", "videoTopic", "videoTitle", "outline", "script") ? ["content_promise"] : []),
+  ...(evidence.summary.trim() && evidence.refs.length ? ["relevant_evidence"] : []),
+  ...(style ? ["creator_voice"] : []),
+  ...(hasInputValue("currentMetadata", "metadata", "transcript", "duration", "videoDuration", "title", "description", "timestamps") ? ["current_metadata"] : []),
+  ...(hasInputValue("publishConstraints", "schedule", "visibility", "audience", "playlist", "publishAt", "plannedPublishAt") ? ["publish_constraints"] : []),
+  ...(hasInputValue("schedule") ? ["publishing_schedule"] : []),
+  ...(hasInputValue("projectContext", "projectDetails", "projectAssets") ? ["project_context", "project_assets"] : []),
+  ...(hasInputValue("targetEntity", "targetId") ? ["target_entity"] : []),
+  ...(hasInputValue("allowedOperations") ? ["allowed_operations"] : []),
+  ...(hasInputValue("sourceProvenance") && evidence.refs.length ? ["source_provenance"] : []),
+  ...(hasInputValue("reportingWindow", "dateRange", "window") ? ["reporting_window"] : []),
+  ...(hasInputValue("audienceEvidence") ? ["audience_evidence"] : []),
+  ...(hasInputValue("revenueEvidence") ? ["revenue_evidence"] : []),
+  ...(hasInputValue("researchQuestion") ? ["research_question"] : []),
+ ]
+ const promptFamily = promptFamilyForAsset(strategy.assetType)
+ const promptFamilyContextIssues = validateBrainPromptFamilyContext(promptFamily, availablePromptContext)
 
  const trace = beginBrainTrace({
   kind: "asset",
@@ -416,6 +443,9 @@ export const generateAsset = async <TOutput>(input: {
   // A stage/revision change while the first request was in flight cannot authorize
   // a second provider request against stale lifecycle context.
   assertProviderDispatchAllowed()
+  if (promptFamilyContextIssues.length) {
+   throw new Error(`Prompt family ${promptFamily} contract failed: ${promptFamilyContextIssues.join("; ")}`)
+  }
   const systemInstruction = buildSystemInstruction({
    evidence,
    style,
