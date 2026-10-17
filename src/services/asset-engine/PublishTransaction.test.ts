@@ -197,7 +197,12 @@ describe("PublishTransaction",()=>{
 
  it("rejects a new publication transaction when the canonical ContentBuild stage does not permit publishing",()=>{
   updateContentBuild("cb-publish",current=>({...current,stage:"idea"}))
-  expect(()=>beginPublishTransaction(projection())).toThrow(/ContentBuild stage "idea" does not allow a new publication transaction/)
+  expect(()=>beginPublishTransaction(projection())).toThrow(/ContentBuild stage "idea" does not allow capability publish/)
+ })
+
+ it("fails closed for an unrecognized ContentBuild stage at the publication boundary",()=>{
+  updateContentBuild("cb-publish",current=>({...current,stage:"future-stage" as never}))
+  expect(()=>beginPublishTransaction(projection())).toThrow(/does not allow capability publish.*cb-publish/i)
  })
 
  it("rejects publication when the canonical ContentBuild has unresolved blockers",()=>{

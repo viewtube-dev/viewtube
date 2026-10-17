@@ -1,5 +1,7 @@
 import type { PublishingPackageProjection } from "../asset-engine/PublishingPackageProjection"
 import type { ContentBuildYouTubeBinding } from "../asset-engine/contracts"
+import { getContentBuild } from "../asset-engine/ContentBuildRepository"
+import { assertContentBuildCapability } from "../asset-engine/ContentBuildCapabilities"
 import {
  beginPublishTransaction,
  completePublishStep,
@@ -29,6 +31,16 @@ const extractVideoId=(value:unknown):string|null=>{
 export const beginYouTubePublishing=(projection:PublishingPackageProjection,identity?:{workflowId?:string|null;operationId?:string|null;actionPacketId?:string|null;recommendationId?:string|null;experimentId?:string|null})=>
  beginPublishTransaction(projection,"video-publisher",identity)
 
+const assertProviderDispatchAllowed = (transaction: ContentBuildPublishTransaction) => {
+ const build = getContentBuild(transaction.contentBuildId)
+ if (!build) throw new Error("Provider dispatch requires an existing canonical ContentBuild.")
+ assertContentBuildCapability(build, "publish")
+ const blockers = build.workflow?.blockerIds || []
+ if (blockers.length) {
+  throw new Error(`ContentBuild has blockers preventing provider dispatch: ${blockers.join(", ")}`)
+ }
+}
+
 /**
  * Crash-safe upload boundary. If a prior attempt already persisted a YouTube ID,
  * the remote upload is never repeated.
@@ -45,6 +57,7 @@ export const uploadPublishTransactionVideo=async(input:{
  if(transaction.steps["upload-video"]?.status==="completed") {
   throw new Error("Upload step completed without a persisted YouTube video ID; manual recovery is required before retry.")
  }
+ assertProviderDispatchAllowed(transaction)
  try{
   const uploaded=await uploadUnifiedVideo(input.file,input.metadata,input.onProgress)
   const videoId=extractVideoId(uploaded)
@@ -67,6 +80,7 @@ export const runPublishTransactionStep=async<T>(input:{
  const transaction=getPublishTransaction(input.transactionId)
  if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId)
  if(transaction.steps[input.step]?.status==="completed")return transaction
+ assertProviderDispatchAllowed(transaction)
  try{
   const result=await input.execute(transaction)
   return completePublishStep({transactionId:transaction.id,step:input.step,receipt:input.receipt?.(result),youtubeBinding:input.youtubeBinding?.(result,transaction),toolId:"video-publisher"})
@@ -81,6 +95,7 @@ export const verifyPublishTransactionRemoteState=async(transactionId:string)=>{
  if(!transaction)throw new Error("Unknown publish transaction: "+transactionId)
  if(transaction.steps["verify-remote-state"]?.status==="completed")return transaction
  if(!transaction.youtubeVideoId)throw new Error("Cannot verify remote state before a YouTube video ID is bound.")
+ assertProviderDispatchAllowed(transaction)
  try{
   const remote=await getUnifiedVideo(transaction.youtubeVideoId)
   return completePublishStep({transactionId,step:"verify-remote-state",youtubeVideoId:transaction.youtubeVideoId,receipt:{verified:true,remote},youtubeBinding:{lastVerifiedAt:new Date().toISOString()},toolId:"video-publisher"})
