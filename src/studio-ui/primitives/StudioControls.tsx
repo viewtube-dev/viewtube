@@ -60,6 +60,28 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     compactFontSize: 14,
     rationale: "Multiline reading/writing surface uses a dedicated type scale while retaining canonical field geometry.",
   },
+  switchChoiceGeometry: {
+    owner: "StudioSwitch / StudioRadio / StudioCheckbox / StudioXCheckbox",
+    globalRuleException: true,
+    switchTrack: "75.68px × 44px standard reference (about 1.72:1)",
+    switchHandle: "36.667px square with 3.667px inset",
+    choiceFootprints: "Radio and checkbox outer footprints remain 1:1",
+    rationale: "Switch track geometry is not square; radio and checkbox faces are square. Keep these families distinct.",
+  },
+  iconPresetSizes: {
+    owner: "StudioSquareIconButton / StudioCircleIconButton",
+    globalRuleException: true,
+    default: "38px / 1.9 stroke standard; 24px / 2.0 stroke compact",
+    optIn: "34px / 22px moderate and 28px / 18px current presets",
+    rationale: "Smaller icon presets are opt-in and must not silently replace the production default.",
+  },
+  floatingLabelPresentation: {
+    owner: "StudioTextInput / StudioTextArea",
+    globalRuleException: false,
+    variants: "Simple, floating-label, and fixed-label presentations share the same underlying field family",
+    raisedLabel: "Floating label raises to 80% of resting type; input raised label is 14.4px standard / 11.2px compact",
+    rationale: "Label presentation does not create a second field geometry or focus system.",
+  },
   prominentAction: {
     globalRuleException: true,
     height: 56,
