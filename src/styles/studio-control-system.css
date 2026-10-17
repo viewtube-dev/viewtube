@@ -3913,3 +3913,129 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   justify-content: center;
   text-align: center;
 }
+
+
+/* Canonical split-badge geometry contract.
+   The outer shell owns the only border/radius. Inner fills stay square and are
+   clipped by that shell, so no interior segment can render a second pill edge.
+   Width is parent-filling for split badges; buttons keep their own documented
+   auto/full-row layout contract. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px)));
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__face { grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr); }
+.vt-studio-split-right-badge__face { grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)); }
+.vt-studio-double-split-badge__face {
+  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  flex: 0 0 var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  width: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0;
+  border-right: 0;
+  border-left: 0;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-double-split-badge__rail:first-child {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+}
+.vt-studio-double-split-badge__rail:last-child {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+}
+.vt-studio-split-left-badge__rail { border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000; }
+.vt-studio-split-right-badge__rail { border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000; }
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  align-self: stretch;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vt-studio-split-left-badge[data-size="standard"],
+.vt-studio-split-right-badge[data-size="standard"],
+.vt-studio-double-split-badge[data-size="standard"] {
+  --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
+  --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
+  --vt-studio-control-height: var(--vt-studio-44-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
+  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
+}
+.vt-studio-split-left-badge[data-size="compact"],
+.vt-studio-split-right-badge[data-size="compact"],
+.vt-studio-double-split-badge[data-size="compact"] {
+  --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
+  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
+}
+.vt-studio-split-left-badge[data-size="micro"],
+.vt-studio-split-right-badge[data-size="micro"],
+.vt-studio-double-split-badge[data-size="micro"] {
+  --vt-studio-badge-height: var(--vt-studio-14-height, 14px);
+  --vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px);
+  --vt-studio-badge-radius: var(--vt-studio-14-radius, 2px);
+  --vt-studio-control-height: var(--vt-studio-14-height, 14px);
+  --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-14-radius, 2px);
+  --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px);
+  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px);
+}
+.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge[data-size="compact"] .vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge[data-size="compact"] .vt-studio-double-split-badge__label { padding-inline: var(--vt-studio-space-unit, 4px); }
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__label { padding-inline: var(--vt-studio-space-unit, 4px); }
