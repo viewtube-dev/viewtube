@@ -3824,3 +3824,69 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   display: grid;
   place-items: center;
 }
+
+
+/* Apply fixed-ratio rules to the actual canonical switch, choice, and word-toggle DOM. */
+.vt-studio-44-switch {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-self: center;
+}
+.vt-studio-44-switch .vt-studio-44-handle {
+  display: grid;
+  place-items: center;
+}
+.vt-studio-44-choice {
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.vt-studio-44-choice.is-radio {
+  border-radius: 50%;
+}
+.vt-studio-44-choice.is-checkbox {
+  border-radius: var(--vt-studio-control-radius, 6px);
+}
+.vt-studio-44-choice > svg,
+.vt-studio-44-choice > .vt-studio-44-dot {
+  display: block;
+  place-self: center;
+  margin: auto;
+}
+.vt-studio-word-toggle {
+  box-sizing: border-box;
+}
+.vt-studio-word-toggle > * {
+  box-sizing: border-box;
+}
+button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button,
+button[data-vt-studio-circle-icon-button="true"] {
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+}
+button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button > [data-vt-studio-button-face],
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
+  display: grid;
+  place-items: center;
+  margin: 0;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: flex;
+  align-items: stretch;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
+  justify-content: center;
+  text-align: center;
+  font-weight: 1000 !important;
+}
