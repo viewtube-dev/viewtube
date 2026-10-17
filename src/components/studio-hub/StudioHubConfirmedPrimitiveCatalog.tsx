@@ -227,6 +227,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <section className="vt-confirmed-family vt-confirmed-defaults-combined">
       <h3>Canonical + Global Defaults · All Component Sizes</h3>
       <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 38px / 24px input text · 18px / 14px textarea text · 1.5px compact button shadow</p>
+      <p><a href="https://github.com/viewtube-dev/viewtube/blob/fix%2Fstudio-control-catalog-phases-1-4-2026-10-17/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults &amp; exception index ↗</a></p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show full defaults and exceptions</summary>
       <div className="vt-confirmed-size-grid">
