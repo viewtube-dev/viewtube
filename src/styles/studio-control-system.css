@@ -2829,3 +2829,54 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
 .vt-studio-split-stepper:focus-within {
   box-shadow: none !important;
 }
+
+
+/* Stepper fields compose the canonical username-input foundation while retaining
+   the existing grid slots. Empty icon rails are hidden, never duplicated. */
+.vt-studio-inline-stepper__field-shell,
+.vt-studio-split-stepper__field-shell { display: contents; }
+.vt-studio-inline-stepper__field-shell > [data-vt-studio-username-rail],
+.vt-studio-split-stepper__field-shell > [data-vt-studio-username-rail] { display: none !important; }
+.vt-studio-inline-stepper__field-shell input,
+.vt-studio-split-stepper__field-shell input { min-width: 0; }
+.vt-studio-inline-stepper {
+  grid-template-columns: var(--vt-inline-stepper-side) minmax(0, 2fr) var(--vt-inline-stepper-side);
+  width: calc(4 * var(--vt-stepper-height) - 6 * var(--vt-stepper-stroke));
+  min-width: 0;
+  max-width: 100%;
+}
+.vt-studio-inline-stepper button.vt-studio-inline-stepper__button,
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up,
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down {
+  box-sizing: border-box; width: 100%; min-width: 0; min-height: 0; height: 100%;
+  padding: 0; border: 0; border-radius: 0; box-shadow: none !important;
+  background: var(--vt-stepper-secondary); color: #000;
+  transform: none !important; transition: none !important;
+}
+.vt-studio-inline-stepper button.vt-studio-inline-stepper__button > [data-vt-studio-button-face],
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up > [data-vt-studio-button-face],
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down > [data-vt-studio-button-face] {
+  display: block; width: 100%; height: 100%; min-height: 0;
+}
+.vt-studio-inline-stepper button.vt-studio-inline-stepper__button [data-vt-studio-split-rail],
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up [data-vt-studio-split-rail],
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down [data-vt-studio-split-rail] {
+  display: grid; box-sizing: border-box; place-items: center; flex: 1 1 auto;
+  width: 100%; height: 100%; border: 0; background: transparent;
+}
+.vt-studio-inline-stepper button.vt-studio-inline-stepper__button [data-vt-studio-split-label],
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up [data-vt-studio-split-label],
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down [data-vt-studio-split-label] { display: none; }
+.vt-studio-inline-stepper button.vt-studio-inline-stepper__button [data-vt-studio-split-rail] > svg,
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up [data-vt-studio-split-rail] > svg,
+.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down [data-vt-studio-split-rail] > svg {
+  width: min(var(--vt-studio-control-icon-size, 24px), 70%);
+  height: min(var(--vt-studio-control-icon-size, 24px), 70%);
+  stroke: #000; color: #000;
+}
+.vt-studio-split-stepper input.vt-studio-split-stepper-value,
+.vt-studio-inline-stepper__value {
+  border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+}
+.vt-studio-inline-stepper:focus-within,
+.vt-studio-split-stepper:focus-within { box-shadow: none !important; }

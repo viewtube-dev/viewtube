@@ -573,16 +573,18 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
   icon: React.ReactNode
 }
 
+/** Shared split-left geometry used by actionable buttons and static badges. */
+const StudioSplitLeftContent: React.FC<{ icon?: React.ReactNode; children?: React.ReactNode; className?: string; labelClassName?: string }> = ({ icon, children, className, labelClassName }) => (
+  <>
+    <span aria-hidden="true" data-vt-studio-split-rail className={className}>{icon}</span>
+    <span data-vt-studio-split-label className={labelClassName}>{children}</span>
+  </>
+)
+
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
-      <span
-        aria-hidden="true"
-        data-vt-studio-split-rail
-      >
-        {icon}
-      </span>
-      <span data-vt-studio-split-label>{children}</span>
+      <StudioSplitLeftContent icon={icon}>{children}</StudioSplitLeftContent>
     </StudioButton>
   ),
 )
@@ -1111,21 +1113,22 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
       setDraft(String(Number.isFinite(value) ? value : 0))
       return
     }
-    const normalized = normalizeStudioInlineStepperValue(parsed, 0, step, min, max)
+    const normalized = normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)
     setDraft(String(normalized))
     if (normalized !== value) onValueChange(normalized)
-  }, [draft, max, min, onValueChange, step, value])
+  }, [draft, max, min, onValueChange, safeStep, value])
 
   const adjust = React.useCallback((direction: -1 | 1) => {
     const parsedDraft = draft.trim() === "" ? Number.NaN : Number(draft)
     const base = Number.isFinite(parsedDraft) ? parsedDraft : value
-    const next = normalizeStudioInlineStepperValue(base, direction, step, min, max)
+    const next = normalizeStudioInlineStepperValue(base, direction, safeStep, min, max)
     setDraft(String(next))
     if (next !== value) onValueChange(next)
-  }, [draft, max, min, onValueChange, step, value])
+  }, [draft, max, min, onValueChange, safeStep, value])
 
   const currentForBounds = Number.isFinite(value) ? value : 0
   const validBounds = min <= max
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
 
   return (
     <div
@@ -1140,25 +1143,23 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
       aria-label={ariaLabel}
       style={style}
     >
-      <button
-        type="button"
+      <StudioSplitLeftButton icon={<Minus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
         className="vt-studio-inline-stepper__button vt-studio-inline-stepper__decrement"
-        aria-label={`Decrease ${ariaLabel}`}
-        disabled={disabled || !validBounds || currentForBounds <= min}
-        onClick={() => adjust(-1)}
-      >
-        <Minus aria-hidden="true" focusable="false" />
-      </button>
-      <input
-        className="vt-studio-inline-stepper__value"
+        aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds <= min}
+        onClick={() => adjust(-1)} />
+      <StudioUsernameInput
+        icon={<span />}
+        sizeVariant={size === "compact" ? "compact" : "standard"}
+        className="vt-studio-inline-stepper__field-shell"
+        inputClassName="vt-studio-inline-stepper__value"
         type="number"
         inputMode="decimal"
         aria-label={ariaLabel}
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
         max={Number.isFinite(max) ? max : undefined}
-        step={step > 0 && Number.isFinite(step) ? step : 1}
-        disabled={disabled}
+        step={safeStep}
+        disabled={disabled || !validBounds}
         onFocus={() => setFocused(true)}
         onBlur={() => { setFocused(false); commit() }}
         onChange={event => {
@@ -1167,7 +1168,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
           if (!nextDraft.trim()) return
           const parsed = Number(nextDraft)
           if (!Number.isFinite(parsed)) return
-          onValueChange(normalizeStudioInlineStepperValue(parsed, 0, step, min, max))
+          onValueChange(normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max))
         }}
         onKeyDown={event => {
           if (event.key === "Enter") {
@@ -1177,15 +1178,10 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
           }
         }}
       />
-      <button
-        type="button"
+      <StudioSplitLeftButton icon={<Plus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
         className="vt-studio-inline-stepper__button vt-studio-inline-stepper__increment"
-        aria-label={`Increase ${ariaLabel}`}
-        disabled={disabled || !validBounds || currentForBounds >= max}
-        onClick={() => adjust(1)}
-      >
-        <Plus aria-hidden="true" focusable="false" />
-      </button>
+        aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds >= max}
+        onClick={() => adjust(1)} />
     </div>
   )
 }
@@ -1296,9 +1292,12 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
       aria-label={ariaLabel}
       style={style}
     >
-      <input
+      <StudioUsernameInput
+        icon={<span />}
+        sizeVariant={size === "compact" ? "compact" : "standard"}
+        className="vt-studio-split-stepper__field-shell"
+        inputClassName="vt-studio-split-stepper-value"
         type="number"
-        className="vt-studio-split-stepper-value"
         aria-label={ariaLabel}
         inputMode="decimal"
         value={draft}
@@ -1321,18 +1320,18 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
         }}
       />
       <div className="vt-studio-split-stepper-rail">
-        <button type="button" className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
+        <StudioSplitLeftButton icon={<ChevronsUp aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
+          className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
           disabled={disabled || !validBounds || value >= max}
           onPointerDown={(event) => beginHold(1, event)}
           onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
-          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }}
-        ><ChevronsUp aria-hidden="true" /></button>
-        <button type="button" className="vt-studio-split-stepper-down" aria-label={`Decrease ${ariaLabel}`}
+          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }} />
+        <StudioSplitLeftButton icon={<ChevronsDown aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
+          className="vt-studio-split-stepper-down" aria-label={`Decrease ${ariaLabel}`}
           disabled={disabled || !validBounds || value <= min}
           onPointerDown={(event) => beginHold(-1, event)}
           onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
-          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }}
-        ><ChevronsDown aria-hidden="true" /></button>
+          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }} />
       </div>
     </div>
   )
