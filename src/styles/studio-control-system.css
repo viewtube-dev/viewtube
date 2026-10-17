@@ -3545,3 +3545,31 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Split-stepper contract: the numeric face is exactly twice the action rail.
+   Keep the rail at one control-height wide at both 44px and 28px sizes. */
+[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
+  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
+}
+.vt-studio-split-stepper-actions {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+}
+.vt-studio-split-stepper-actions button:first-child {
+  border-bottom: var(--vt-stepper-stroke) solid #000;
+}
+.vt-studio-split-stepper-actions button + button {
+  border-top: 0;
+}
+.vt-studio-split-stepper-actions svg {
+  width: min(var(--vt-studio-control-icon-size, 28px), 72%);
+  height: min(var(--vt-studio-control-icon-size, 28px), 72%);
+}
+.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-actions svg {
+  width: min(var(--vt-studio-control-icon-size, 16px), 72%);
+  height: min(var(--vt-studio-control-icon-size, 16px), 72%);
+}
