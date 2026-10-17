@@ -3482,3 +3482,54 @@ button[data-vt-studio-button="true"]:active,
 button[data-vt-studio-button="true"]:focus-visible {
   transform: none;
 }
+
+
+/* Restored canonical interaction motion: animate only the control's inner state,
+   never its footprint, border geometry, or surrounding layout. */
+.vt-studio-44-switch,
+.vt-studio-44-switch .vt-studio-44-handle,
+.vt-studio-44-choice,
+.vt-studio-44-choice .vt-studio-44-dot,
+.vt-studio-44-choice.is-checkbox svg,
+.vt-studio-44-word-handle {
+  transition:
+    background-color 180ms ease-out,
+    border-color 180ms ease-out,
+    color 180ms ease-out,
+    transform 220ms cubic-bezier(.2, .8, .2, 1),
+    opacity 160ms ease-out;
+}
+.vt-studio-44-choice.is-checkbox svg {
+  transition:
+    stroke-dashoffset 220ms cubic-bezier(.2, .8, .2, 1),
+    stroke 180ms ease-out,
+    opacity 160ms ease-out;
+}
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  transition:
+    top 180ms ease-out,
+    left 180ms ease-out,
+    padding 180ms ease-out,
+    border-radius 180ms ease-out,
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    font-size 180ms ease-out,
+    transform 180ms ease-out,
+    outline-color 180ms ease-out;
+}
+.vt-studio-floating-field > :is(input, textarea) {
+  transition: background-color 180ms ease-out, border-color 180ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-44-switch,
+  .vt-studio-44-switch .vt-studio-44-handle,
+  .vt-studio-44-choice,
+  .vt-studio-44-choice .vt-studio-44-dot,
+  .vt-studio-44-choice.is-checkbox svg,
+  .vt-studio-44-word-handle,
+  .vt-studio-floating-field > .vt-studio-floating-field-label,
+  .vt-studio-floating-field > :is(input, textarea) {
+    transition: none !important;
+    animation: none !important;
+  }
+}
