@@ -56,6 +56,8 @@ describe("canonical Studio text-field primitives", () => {
     expect(controlStyles).toContain("@media (prefers-reduced-motion: reduce)")
     expect(controlStyles).toContain("transition: none !important")
     expect(controlStyles).toContain("box-shadow: inset")
+    const fields = read("src/styles/studio-control-fields.css")
+    expect(fields).toContain("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary);")
   })
 
   it("keeps Studio facades pointed at the canonical input implementations", () => {
