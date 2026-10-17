@@ -7,6 +7,7 @@ import test from "node:test"
 const root = process.cwd()
 const contract = JSON.parse(readFileSync(resolve(root, "src/studio-ui/studio-control-size-tiers.json"), "utf8"))
 const generatedCss = readFileSync(resolve(root, "src/styles/studio-control-vars.generated.css"), "utf8")
+const controlCss = readFileSync(resolve(root, "src/styles/studio-control-system.css"), "utf8")
 
 test("standard, compact, and micro size tiers retain distinct canonical geometry", () => {
   assert.deepEqual(
@@ -35,6 +36,13 @@ test("generated CSS defines every size tier with valid dimensional units", () =>
     assert.ok(generatedCss.includes(`--vt-studio-${prefix}-font-size: ${tokens.fontSize}px;`))
     assert.ok(generatedCss.includes(`--vt-studio-${prefix}-icon-size: ${tokens.iconSize}px;`))
   }
+})
+
+test("Studio control system imports the generated token sheet and maps micro to its own tier", () => {
+  assert.ok(controlCss.startsWith("/* Studio Hub control ownership boundary."))
+  assert.ok(controlCss.includes('@import "./studio-control-vars.generated.css";'))
+  assert.ok(controlCss.includes('--vt-studio-badge-height: var(--vt-studio-14-height, 14px)'))
+  assert.ok(!controlCss.includes('.vt-studio-split-left-badge:is([data-size="compact"], [data-size="micro"])'))
 })
 
 test("generated stylesheet is reproducible from the canonical JSON source", () => {
