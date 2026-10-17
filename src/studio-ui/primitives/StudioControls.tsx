@@ -595,11 +595,16 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
   icon: React.ReactNode
 }
 
+/** One label primitive shared by actionable split buttons and static split badges. */
+const StudioSplitLabel: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <span data-vt-studio-split-label className={className}>{children}</span>
+)
+
 /** Shared split-left geometry used by actionable buttons and static badges. */
 const StudioSplitLeftContent: React.FC<{ icon?: React.ReactNode; children?: React.ReactNode; className?: string; labelClassName?: string }> = ({ icon, children, className, labelClassName }) => (
   <>
     <span aria-hidden="true" data-vt-studio-split-rail className={className}>{icon}</span>
-    <span data-vt-studio-split-label className={labelClassName}>{children}</span>
+    <StudioSplitLabel className={labelClassName}>{children}</StudioSplitLabel>
   </>
 )
 
@@ -1610,7 +1615,7 @@ const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
       data-size={sizeVariant} className={[rootClass, className].filter(Boolean).join(" ")}>
       <span className={faceClass}>
         {layout !== "right" && <span className={railClass} aria-hidden="true">{iconLeft}</span>}
-        <span className={labelClass}>{children}</span>
+        <StudioSplitLabel className={labelClass}>{children}</StudioSplitLabel>
         {layout !== "left" && <span className={railClass} aria-hidden="true">{iconRight}</span>}
       </span>
     </span>
