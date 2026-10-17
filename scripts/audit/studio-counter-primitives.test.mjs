@@ -72,3 +72,14 @@ test("counter catalog groups primary and secondary palettes in centered per-size
   assert.match(styles, /color-mix\(in srgb, #fff 50%, var\(--pair-a\) 50%\)/);
   assert.match(styles, /-webkit-text-stroke:\s*1px var\(--vt-studio-control-accent, var\(--pair-a\)\)/);
 });
+
+test("Studio counter hold behavior is wired to pointer events for touch and mouse", () => {
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 4);
+  assert.match(component, /setPointerCapture\(event\.pointerId\)/);
+  assert.match(component, /onPointerCancel: stop/);
+  assert.match(component, /const base = currentRef\.current/);
+  assert.match(component, /max = 100/);
+  assert.match(styles, /touch-action:\s*none/);
+  assert.match(styles, /color-mix\(in srgb, white 50%, var\(--pair-a\)\)/);
+  assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
+});
