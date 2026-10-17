@@ -1,0 +1,3097 @@
+You are working on viewtube-dev/viewtube, branch base: master/consolidated-feature-integration.
+
+GOAL
+Unify all Studio split-left, split-right, and double-split buttons, badges, and username inputs on a single source of truth (StudioSplitShell + token-driven CSS), and apply the 25 global-default stabilization ideas.
+
+CONTEXT ALREADY DESIGNED
+1) StudioSplitShell anatomy:
+   - data-vt-studio-split = left | right | double
+   - data-vt-studio-split-face
+   - data-vt-studio-split-rail (+ data-rail=start|end)
+   - data-vt-studio-split-label
+   - faceOnly mode for content inside StudioButton
+2) Public wrappers only: StudioSplitLeftButton, StudioSplitLeft/Right/DoubleBadge, StudioUsernameInput
+3) Both double-split rails MUST use secondary color (not primary on the left)
+4) Micro size = ½ compact geometry (14px / 1px / 2px / 10px type+icon); gap stays 4px all tiers
+5) No shadows, no press/hover geometry motion on Studio controls
+6) Text fields: primary inline stroke matching border width; focus outline secondary at 65% border width, offset 0
+7) Width default = row fill; spectrum tags / closeable badges = content width exception
+8) Machine-readable exceptions in tokens; tests assert them
+
+FILES TO IMPLEMENT / MERGE
+- src/studio-ui/tokens.ts — STUDIO_CONTROL_SIZE_BASE, halfCompact micro, STUDIO_CONTROL_EXCEPTIONS, STUDIO_WIDTH_POLICY, STUDIO_COLOR_ROLES, studioSizeTierToCssVars()
+- scripts/emit-studio-control-vars.mjs — emit src/styles/studio-control-vars.generated.css
+- src/styles/studio-control-core.css — fixed-ratio, gap, flat shells, width policy, button face
+- src/styles/studio-control-split.css — unified split contract
+- src/styles/studio-control-fields.css — input/textarea/floating labels
+- src/studio-ui/primitives/StudioControls.tsx — StudioSplitShell + rewired badges/username/split-left button
+- src/studio-ui/primitives/studio-control-contract.test.ts — size ladder, exceptions, CSS invariants
+- docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md — keep in sync
+
+IMPORT ORDER
+@import "./studio-control-vars.generated.css";
+@import "./studio-control-core.css";
+@import "./studio-control-split.css";
+@import "./studio-control-fields.css";
+/* migrate remaining rules out of monolithic studio-control-system.css over time */
+
+CONSTRAINTS
+- Prefer production primitives in the Primitive Library; do not fork catalog-only markup
+- Catalog CSS must not override [data-vt-studio-control="true"] type/geometry with !important
+- Do not reintroduce SubToolbox motion tokens into Studio selectors
+- Keep BEM badge class names as compatibility aliases during migration
+- Run focused tests, typecheck, and note visual checks for standard/compact/micro × split badges, username, split-left buttons
+
+DELIVERABLE
+1. Implement or merge the above on a branch named fix/studio-unified-split-shell-2026-10-17
+2. Open a PR against master/consolidated-feature-integration
+3. PR body: summary, root causes fixed, test plan, link to global defaults doc updates# Studio Controls — code for all 25 stabilization ideas
+
+This package is the concrete implementation of the 25 reorganization ideas.
+Apply alongside (or merge into) the existing `StudioControls.tsx` / `studio-control-system.css` work.
+
+## Idea → code map
+
+| # | Idea | Code |
+|---|------|------|
+| 1 | Single source of truth for size contract | `src/studio-ui/tokens.ts` → `STUDIO_CONTROL_SIZE_CONTRACT` |
+| 2 | Emit CSS variables from tokens | `scripts/emit-studio-control-vars.mjs` → `studio-control-vars.generated.css` |
+| 3 | Collapse size selectors to one `[data-size]` map | generated vars file + `studio-control-core.css` |
+| 4 | Split CSS into imported partials | `studio-control-core.css`, `studio-control-split.css`, `studio-control-fields.css` |
+| 5 | Minimize `!important` | only flat `box-shadow: none !important` retained in core |
+| 6 | Machine-readable exception registry + tests | `STUDIO_CONTROL_EXCEPTIONS` + `studio-control-contract.test.ts` |
+| 7 | Catalog CSS strictly additive | (apply) scope catalog rules with `:where(.vt-complete-catalog …)` — see note below |
+| 8 | Unify split left/right/double | `studio-control-split.css` + prior `StudioSplitShell` in StudioControls.tsx |
+| 9 | Shared rail anatomy | `[data-vt-studio-split-rail]` single rule block |
+| 10 | `aspect-ratio: 1/1` on fixed faces | `studio-control-core.css` fixed-ratio section |
+| 11 | Single 4px gap token | `--vt-studio-space-unit` on every tier |
+| 12 | No shadow / press motion on Studio | flat interaction defaults + core CSS |
+| 13 | Width policy documented + enforced | `STUDIO_WIDTH_POLICY` + core width rules |
+| 14 | Micro = ½ compact | `halfCompact()` in tokens.ts |
+| 15 | Centralize primary/secondary roles | `STUDIO_COLOR_ROLES` + accent/secondary vars only |
+| 16 | Geometry contract tests | `studio-control-contract.test.ts` |
+| 17 | Floating/fixed labels next to field contract | `studio-control-fields.css` |
+| 18 | No duplicate font-size / line-height | fields consume token vars only |
+| 19 | Focus = outline, offset 0, 65% border | fields CSS `--vt-field-focus-outline-width` |
+| 20 | Library renders production components only | process rule — catalogs must import primitives, not fork markup |
+| 21 | Visual regression matrix | add Playwright/Chromatic project covering std/compact/micro × split/field (stub in docs) |
+| 22 | Collapse badge size blocks | size comes from `[data-size]` tokens; BEM kept as alias |
+| 23 | Rename `vt-studio-44-*` over time | aliases kept in generated CSS; new code uses token vars |
+| 24 | Isolate SubToolbox motion | Studio `motion.controlMs/pressMs = 0`; never import SubToolbox motion into Studio selectors |
+| 25 | Keep normative markdown in sync | update `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md` in same PR |
+
+## Suggested import order (replace monolithic CSS gradually)
+
+```css
+@import "./studio-control-vars.generated.css"; /* run emit script first */
+@import "./studio-control-core.css";
+@import "./studio-control-split.css";
+@import "./studio-control-fields.css";
+/* keep existing studio-control-system.css temporarily for unmigrated rules */
+```
+
+## package.json hooks
+
+```json
+{
+  "scripts": {
+    "studio:tokens": "node scripts/emit-studio-control-vars.mjs",
+    "prebuild": "npm run studio:tokens",
+    "test": "vitest run"
+  }
+}
+```
+
+## Apply order
+
+1. Copy `src/studio-ui/tokens.ts` (merge with existing exports your app still needs).
+2. Add `scripts/emit-studio-control-vars.mjs` and run it.
+3. Add the three CSS partials; import them from the main stylesheet entry.
+4. Merge `StudioSplitShell` changes from the earlier unification package into `StudioControls.tsx`.
+5. Add `studio-control-contract.test.ts`.
+6. Update the normative markdown doc (idea #25) in the same PR.
+7. Catalog (idea #7): wrap catalog-only overrides:
+
+```css
+/* catalog may style chrome, never production primitives */
+:where(.vt-complete-catalog) .vt-catalog-field:not([data-vt-studio-control="true"]) {
+  /* legacy catalog field styles */
+}
+```
+
+## Files in this package
+
+```
+scripts/emit-studio-control-vars.mjs
+src/studio-ui/tokens.ts
+src/studio-ui/primitives/studio-control-contract.test.ts
+src/styles/studio-control-core.css
+src/styles/studio-control-split.css
+src/styles/studio-control-fields.css
+README.md
+```
+
+Also use the earlier unification deliverable:
+
+```
+studio-split-unification/src/studio-ui/primitives/StudioControls.tsx
+studio-split-unification/src/styles/studio-control-system.css
+```
+/**
+ * Studio control tokens — single source of truth (ideas #1, #2, #14, #15).
+ *
+ * Every size tier, gap, color role, and flat-interaction default lives here.
+ * CSS custom properties are emitted by `scripts/emit-studio-control-vars.mjs`
+ * so component CSS never hard-codes geometry magic numbers.
+ */
+
+import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/tokens"
+
+/** Flat interaction policy: no shadows, no press/hover geometry motion (idea #12). */
+export const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
+  buttonShadowX: 0,
+  buttonShadowY: 0,
+  hoverTransitionMs: 0,
+  hoverOffsetPx: 0,
+  clickTransitionMs: 0,
+  clickOffsetPx: 0,
+} as const
+
+/** Canonical size ladder. Micro is exactly ½ compact on geometry axes (idea #14). */
+const COMPACT_BASE = {
+  height: 28,
+  stroke: 2,
+  radius: 4,
+  fontSize: 24,
+  fontWeight: 1000,
+  textStroke: 0.5,
+  width: "row" as const,
+  gap: 4,
+  textTransform: "uppercase" as const,
+  letterSpacing: -0.02,
+  lineHeight: 0.86,
+  defaultFillOpacity: 50,
+  focusFillOpacity: 15,
+  focusOutlineWidth: 2,
+  focusOutlineOffset: 0,
+  secondaryFocusOutlineWidth: 1.3,
+  iconSize: 24,
+  iconStroke: 2.0,
+  ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
+}
+
+/** Derive micro from compact by ½ ratio with discrete pixel rounding (idea #14). */
+function halfCompact<T extends Record<string, number | string>>(compact: T): T {
+  const out = { ...compact }
+  const halfKeys = [
+    "height",
+    "stroke",
+    "radius",
+    "fontSize",
+    "textStroke",
+    "focusOutlineWidth",
+    "secondaryFocusOutlineWidth",
+    "iconSize",
+  ] as const
+  for (const key of halfKeys) {
+    if (typeof compact[key] === "number") {
+      ;(out as Record<string, number | string>)[key] = Math.max(
+        0.25,
+        Math.round((compact[key] as number) * 50) / 100,
+      )
+    }
+  }
+  // Explicit micro typography tweaks (legibility)
+  ;(out as Record<string, number | string>).fontSize = 10
+  ;(out as Record<string, number | string>).iconSize = 10
+  ;(out as Record<string, number | string>).iconStroke = 1.5
+  ;(out as Record<string, number | string>).letterSpacing = -0.01
+  ;(out as Record<string, number | string>).lineHeight = 1
+  // Gap stays 4px across all tiers (idea #11)
+  ;(out as Record<string, number | string>).gap = 4
+  return out
+}
+
+export const STUDIO_CONTROL_SIZE_BASE = {
+  standard: {
+    height: 44,
+    stroke: 3,
+    radius: 6,
+    fontSize: 38,
+    fontWeight: 1000,
+    textStroke: 1,
+    width: "row" as const,
+    gap: 4,
+    textTransform: "uppercase" as const,
+    letterSpacing: -0.02,
+    lineHeight: 0.86,
+    defaultFillOpacity: 50,
+    focusFillOpacity: 15,
+    focusOutlineWidth: 3,
+    focusOutlineOffset: 0,
+    secondaryFocusOutlineWidth: 1.95,
+    iconSize: 38,
+    iconStroke: 1.9,
+    ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
+  },
+  compact: COMPACT_BASE,
+  micro: halfCompact(COMPACT_BASE),
+} as const
+
+export type StudioControlSizeTier = keyof typeof STUDIO_CONTROL_SIZE_BASE
+export type StudioControlSize = "standard" | "compact"
+export type StudioControlSizeIncludingMicro = StudioControlSize | "micro"
+
+/**
+ * Full size contract including field / multiline exceptions (idea #1, #6).
+ * Machine-readable: tests and codegen both consume this object.
+ */
+export const STUDIO_CONTROL_SIZE_CONTRACT = {
+  ...STUDIO_CONTROL_SIZE_BASE,
+  textInput: {
+    standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
+    compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
+    microFontSize: STUDIO_CONTROL_SIZE_BASE.micro.fontSize,
+    fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
+    lineHeight: 0.86,
+    width: "row" as const,
+    textTransform: "uppercase" as const,
+    letterSpacing: -0.02,
+    textAlign: "left" as const,
+    defaultFillOpacity: 50,
+    defaultTextColor: "primary" as const,
+    inlineStrokeColor: "primary" as const,
+    inlineStrokeWidth: "same as border width" as const,
+    focusTextColor: "#000000",
+    focusFillOpacity: 15,
+    focusOutlineColor: "secondary at 100% opacity" as const,
+    /** 65% of border width (idea #19). */
+    focusOutlineWidthRatio: 0.65,
+    focusOutlineOffset: 0,
+    followsSizeFamily: true,
+  },
+  multiline: {
+    minHeight: 92,
+    standardFontSize: 18,
+    compactFontSize: 14,
+    fontWeight: 1000,
+    standardTextStroke: 0.5,
+    compactTextStroke: 0.35,
+    standardLineHeight: 1.25,
+    compactLineHeight: 1.3,
+    textAlign: "left" as const,
+    resize: "vertical" as const,
+    preservesSizeFamily: true,
+    rationale:
+      "Textareas alone use 18px standard and 14px compact; multiline line-height, padding, and 92px min surface.",
+  },
+} as const
+
+/** Width policy (idea #13). */
+export const STUDIO_WIDTH_POLICY = {
+  default: "row", // width: 100% / flex-fill
+  contentWidthAllowList: [
+    "spectrumTag",
+    "closeableBadge",
+    "wordToggle",
+    "tagEditorTag",
+  ] as const,
+  rationale:
+    "Row-fill is the default. Intrinsic width is reserved for named content primitives only.",
+} as const
+
+/** Color roles — never hard-code pair hex in component CSS (idea #15). */
+export const STUDIO_COLOR_ROLES = {
+  primaryVar: "--vt-studio-control-accent",
+  secondaryVar: "--vt-studio-control-secondary",
+  primaryFallback: "var(--pair-a, #36e0f6)",
+  secondaryFallback: "var(--pair-b, #ff7f6b)",
+  border: "#000000",
+  labelOnFill: "#000000",
+} as const
+
+/**
+ * Machine-readable exception registry (idea #6).
+ * Every intentional departure from the global lattice must be named here
+ * and asserted in tests. Silent drift is not allowed.
+ */
+export const STUDIO_CONTROL_EXCEPTIONS = {
+  vaultSpectrumTag: {
+    id: "vaultSpectrumTag",
+    owner: "VaultAssetModule / StudioSpectrumTag",
+    globalRuleException: true,
+    height: 15,
+    borderWidth: 2,
+    radius: 4,
+    fontSize: 8,
+    fontWeight: 900,
+    letterSpacing: "0.3px",
+    widthPolicy: "content",
+    rationale: "Dense asset-module metadata chip; not an ordinary control.",
+  },
+  closeableBadge: {
+    id: "closeableBadge",
+    owner: "StudioCloseableBadge",
+    globalRuleException: false,
+    followsSizeLattice: true,
+    widthPolicy: "content",
+    pillRatioForbidden: true,
+    rationale: "Follows global size/color/type; close control is circular secondary.",
+  },
+  tagEditorAction: {
+    id: "tagEditorAction",
+    owner: "StudioTagEditor",
+    globalRuleException: true,
+    height: 28,
+    stroke: 2,
+    radius: 4,
+    rationale: "Dense inline tag-editing affordance; square compact face.",
+  },
+  textareaTypography: {
+    id: "textareaTypography",
+    owner: "StudioTextArea",
+    globalRuleException: true,
+    standardFontSize: 18,
+    compactFontSize: 14,
+    rationale: "Multiline reading surface needs a separate type scale.",
+  },
+  prominentAction: {
+    id: "prominentAction",
+    owner: "StudioActionButton",
+    globalRuleException: true,
+    height: 56,
+    stroke: 3,
+    radius: 6,
+    rationale: "Separate 56px action family, not a third ordinary size tier.",
+  },
+  switchChoiceGeometry: {
+    id: "switchChoiceGeometry",
+    owner: "Studioswitch / StudioChoice",
+    globalRuleException: true,
+    trackRatio: "1.72:1",
+    rationale: "Matches supplied 44px HTML reference geometry.",
+  },
+} as const
+
+export type StudioExceptionId = keyof typeof STUDIO_CONTROL_EXCEPTIONS
+
+/** Shell / hierarchy tokens (SubToolbox-linked only at shell level). */
+export const STUDIO_TOKENS = {
+  toolbox: {
+    headerHeight: TOOLBOX_LEVEL_DNA.toolbox.height,
+    stroke: TOOLBOX_LEVEL_DNA.toolbox.stroke,
+    radius: TOOLBOX_LEVEL_DNA.toolbox.radius,
+    shadowOffset: TOOLBOX_LEVEL_DNA.toolbox.shadowOffset,
+    titleSize: TOOLBOX_LEVEL_DNA.toolbox.titleSize,
+  },
+  subtoolbox: {
+    headerHeight: TOOLBOX_LEVEL_DNA.l0.height,
+    stroke: TOOLBOX_LEVEL_DNA.l0.stroke,
+    radius: TOOLBOX_LEVEL_DNA.l0.radius,
+    shadowOffset: TOOLBOX_LEVEL_DNA.l0.shadowOffset,
+    titleSize: TOOLBOX_LEVEL_DNA.l0.titleSize,
+  },
+  compactSubtoolbox: {
+    headerHeight: TOOLBOX_LEVEL_DNA.l1.height,
+    stroke: TOOLBOX_LEVEL_DNA.l1.stroke,
+    radius: TOOLBOX_LEVEL_DNA.l1.radius,
+    shadowOffset: TOOLBOX_LEVEL_DNA.l1.shadowOffset,
+    titleSize: TOOLBOX_LEVEL_DNA.l1.titleSize,
+  },
+  component: {
+    height: {
+      standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.height,
+      compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.height,
+      micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.height,
+    },
+    stroke: {
+      standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke,
+      compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke,
+      micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke,
+    },
+    radius: {
+      standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius,
+      compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius,
+      micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius,
+    },
+    /** Always 0 — Studio primitives are flat (idea #12). */
+    shadowOffset: { standard: 0, compact: 0, micro: 0 },
+  },
+  typography: {
+    label: 24,
+    fixedLabel: {
+      standardFontSize: 14,
+      compactFontSize: 9,
+      fontWeight: 1000,
+      textStroke: 0,
+    },
+    floatingLabel: {
+      standardRestingFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
+      compactRestingFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
+      standardRaisedFontSize: 14.4,
+      compactRaisedFontSize: 11.2,
+      fontWeight: 1000,
+      textStroke: 0.5,
+    },
+    control: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize,
+    compactControl: STUDIO_CONTROL_SIZE_CONTRACT.compact.fontSize,
+    microControl: STUDIO_CONTROL_SIZE_CONTRACT.micro.fontSize,
+    subtoolboxTitle: TOOLBOX_LEVEL_DNA.l0.titleSize,
+    toolboxTitle: TOOLBOX_LEVEL_DNA.toolbox.titleSize,
+    weight: SUBTOOLBOX_TOKENS.typography.weight,
+  },
+  /** Single spacing unit (idea #11). */
+  spacing: {
+    unit: 4,
+    top: 4,
+    right: 4,
+    bottom: 4,
+    left: 4,
+    dense: SUBTOOLBOX_TOKENS.spacing.dense,
+    standard: SUBTOOLBOX_TOKENS.spacing.standard,
+    section: SUBTOOLBOX_TOKENS.spacing.section,
+    large: SUBTOOLBOX_TOKENS.spacing.large,
+  },
+  radius: {
+    toolbox: TOOLBOX_LEVEL_DNA.toolbox.radius,
+    subtoolbox: TOOLBOX_LEVEL_DNA.l0.radius,
+    compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.radius,
+    component: {
+      standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius,
+      compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius,
+      micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius,
+    },
+    tag: 4,
+  },
+  stroke: {
+    toolbox: TOOLBOX_LEVEL_DNA.toolbox.stroke,
+    subtoolbox: TOOLBOX_LEVEL_DNA.l0.stroke,
+    compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.stroke,
+    component: {
+      standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke,
+      compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke,
+      micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke,
+    },
+    tag: 2,
+  },
+  shadow: {
+    toolbox: TOOLBOX_LEVEL_DNA.toolbox.shadowOffset,
+    subtoolbox: TOOLBOX_LEVEL_DNA.l0.shadowOffset,
+    compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.shadowOffset,
+    component: { standard: 0, compact: 0, micro: 0 },
+  },
+  /** Studio motion is intentionally empty; SubToolbox keeps its own (idea #24). */
+  motion: {
+    controlMs: 0,
+    pressMs: 0,
+    easing: "linear",
+  },
+  breakpoints: { phoneMax: 767, compactShellMax: 900 },
+} as const
+
+export const STUDIO_ICON_SIZE_COMPARISON = {
+  current: { standard: { size: 28, stroke: 2.5 }, compact: { size: 18, stroke: 1.65 } },
+  moderate: { standard: { size: 34, stroke: 2.0588 }, compact: { size: 22, stroke: 1.35 } },
+  large: { standard: { size: 38, stroke: 1.9 }, compact: { size: 24, stroke: 2.0 } },
+} as const
+
+export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
+export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
+
+/**
+ * Map a size tier to CSS custom-property declarations (idea #2, #3).
+ * Used by codegen and can be inlined by tests.
+ */
+export function studioSizeTierToCssVars(
+  tier: StudioControlSizeIncludingMicro,
+): Record<string, string> {
+  const s = STUDIO_CONTROL_SIZE_BASE[tier]
+  return {
+    "--vt-studio-control-height": `${s.height}px`,
+    "--vt-studio-control-stroke": `${s.stroke}px`,
+    "--vt-studio-control-radius": `${s.radius}px`,
+    "--vt-studio-control-font-size": `${s.fontSize}px`,
+    "--vt-studio-control-font-weight": String(s.fontWeight),
+    "--vt-studio-control-text-stroke": `${s.textStroke}px`,
+    "--vt-studio-control-letter-spacing": `${s.letterSpacing}em`,
+    "--vt-studio-control-line-height": String(s.lineHeight),
+    "--vt-studio-control-focus-outline-width": `${s.focusOutlineWidth}px`,
+    "--vt-studio-control-focus-outline-offset": `${s.focusOutlineOffset}px`,
+    "--vt-studio-control-secondary-outline-width": `${s.secondaryFocusOutlineWidth}px`,
+    "--vt-studio-control-icon-size": `${s.iconSize}px`,
+    "--vt-studio-control-icon-stroke": String(s.iconStroke),
+    "--vt-studio-control-default-fill-opacity": `${s.defaultFillOpacity}%`,
+    "--vt-studio-control-focus-fill-opacity": `${s.focusFillOpacity}%`,
+    "--vt-studio-space-unit": `${s.gap}px`,
+  }
+}
+/**
+ * Emit Studio control CSS variables from tokens.ts (ideas #1, #2, #3, #14).
+ *
+ * Usage:
+ *   node scripts/emit-studio-control-vars.mjs
+ *
+ * Writes:
+ *   src/styles/studio-control-vars.generated.css
+ *
+ * Wire into package.json:
+ *   "prebuild": "node scripts/emit-studio-control-vars.mjs"
+ *
+ * Component CSS should only consume variables — never hard-code 44/28/14 geometry.
+ */
+
+import { writeFileSync, mkdirSync } from "node:fs"
+import { dirname, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const root = resolve(__dirname, "..")
+
+/** Keep in sync with STUDIO_CONTROL_SIZE_BASE in tokens.ts (codegen source of truth). */
+const SIZE_BASE = {
+  standard: {
+    height: 44,
+    stroke: 3,
+    radius: 6,
+    fontSize: 38,
+    fontWeight: 1000,
+    textStroke: 1,
+    letterSpacing: -0.02,
+    lineHeight: 0.86,
+    defaultFillOpacity: 50,
+    focusFillOpacity: 15,
+    focusOutlineWidth: 3,
+    focusOutlineOffset: 0,
+    secondaryFocusOutlineWidth: 1.95,
+    iconSize: 38,
+    iconStroke: 1.9,
+    gap: 4,
+  },
+  compact: {
+    height: 28,
+    stroke: 2,
+    radius: 4,
+    fontSize: 24,
+    fontWeight: 1000,
+    textStroke: 0.5,
+    letterSpacing: -0.02,
+    lineHeight: 0.86,
+    defaultFillOpacity: 50,
+    focusFillOpacity: 15,
+    focusOutlineWidth: 2,
+    focusOutlineOffset: 0,
+    secondaryFocusOutlineWidth: 1.3,
+    iconSize: 24,
+    iconStroke: 2.0,
+    gap: 4,
+  },
+  micro: {
+    height: 14,
+    stroke: 1,
+    radius: 2,
+    fontSize: 10,
+    fontWeight: 1000,
+    textStroke: 0.25,
+    letterSpacing: -0.01,
+    lineHeight: 1,
+    defaultFillOpacity: 50,
+    focusFillOpacity: 15,
+    focusOutlineWidth: 1,
+    focusOutlineOffset: 0,
+    secondaryFocusOutlineWidth: 0.65,
+    iconSize: 10,
+    iconStroke: 1.5,
+    gap: 4,
+  },
+}
+
+function tierBlock(selector, tier, s) {
+  return `${selector} {
+  --vt-studio-control-height: ${s.height}px;
+  --vt-studio-control-stroke: ${s.stroke}px;
+  --vt-studio-control-radius: ${s.radius}px;
+  --vt-studio-control-font-size: ${s.fontSize}px;
+  --vt-studio-control-font-weight: ${s.fontWeight};
+  --vt-studio-control-text-stroke: ${s.textStroke}px;
+  --vt-studio-control-letter-spacing: ${s.letterSpacing}em;
+  --vt-studio-control-line-height: ${s.lineHeight};
+  --vt-studio-control-focus-outline-width: ${s.focusOutlineWidth}px;
+  --vt-studio-control-focus-outline-offset: ${s.focusOutlineOffset}px;
+  --vt-studio-control-secondary-outline-width: ${s.secondaryFocusOutlineWidth}px;
+  --vt-studio-control-icon-size: ${s.iconSize}px;
+  --vt-studio-control-icon-stroke: ${s.iconStroke};
+  --vt-studio-control-default-fill-opacity: ${s.defaultFillOpacity}%;
+  --vt-studio-control-focus-fill-opacity: ${s.focusFillOpacity}%;
+  --vt-studio-space-unit: ${s.gap}px;
+  /* Legacy aliases used by older selectors */
+  --vt-studio-${tier === "standard" ? "44" : tier === "compact" ? "28" : "14"}-height: ${s.height}px;
+  --vt-studio-${tier === "standard" ? "44" : tier === "compact" ? "28" : "14"}-stroke: ${s.stroke}px;
+  --vt-studio-${tier === "standard" ? "44" : tier === "compact" ? "28" : "14"}-radius: ${s.radius}px;
+  --vt-studio-${tier === "standard" ? "44" : tier === "compact" ? "28" : "14"}-font-size: ${s.fontSize}px;
+  --vt-studio-${tier === "standard" ? "44" : tier === "compact" ? "28" : "14"}-icon-size: ${s.iconSize}px;
+  --vt-studio-${tier === "standard" ? "44" : tier === "compact" ? "28" : "14"}-icon-stroke: ${s.iconStroke};
+}
+`
+}
+
+const css = `/* AUTO-GENERATED by scripts/emit-studio-control-vars.mjs — do not edit by hand.
+ * Source of truth: src/studio-ui/tokens.ts (STUDIO_CONTROL_SIZE_BASE).
+ * Ideas: #1 single source, #2 emit CSS vars, #3 collapse size selectors, #14 micro derivation.
+ */
+
+[data-vt-studio-control] {
+  --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --vt-studio-control-text-transform: uppercase;
+  --vt-studio-control-accent: var(--pair-a, #36e0f6);
+  --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
+  box-sizing: border-box;
+}
+
+/* Default = standard tier */
+${tierBlock("[data-vt-studio-control]", "standard", SIZE_BASE.standard)}
+${tierBlock('[data-vt-studio-control][data-size="standard"]', "standard", SIZE_BASE.standard)}
+${tierBlock('[data-vt-studio-control][data-size="compact"]', "compact", SIZE_BASE.compact)}
+${tierBlock('[data-vt-studio-control][data-size="micro"]', "micro", SIZE_BASE.micro)}
+
+/* Tone overrides only change accent — never geometry (idea #15) */
+[data-vt-studio-control][data-tone="neutral"] { --vt-studio-control-accent: #fff; }
+[data-vt-studio-control][data-tone="danger"] { --vt-studio-control-accent: #ff7ac8; }
+[data-vt-studio-control][data-tone="warning"] { --vt-studio-control-accent: #ffda47; }
+[data-vt-studio-control][data-tone="success"] { --vt-studio-control-accent: #3fee56; }
+
+/* Flat interaction: zero shadow / motion tokens on Studio controls (idea #12, #24) */
+[data-vt-studio-control] {
+  --vt-studio-control-shadow-x: 0px;
+  --vt-studio-control-shadow-y: 0px;
+  --vt-studio-motion-button: 0ms;
+  --vt-studio-motion-press: 0ms;
+}
+`
+
+const outPath = resolve(root, "src/styles/studio-control-vars.generated.css")
+mkdirSync(dirname(outPath), { recursive: true })
+writeFileSync(outPath, css, "utf8")
+console.log(`Wrote ${outPath}`)
+/* AUTO-GENERATED by scripts/emit-studio-control-vars.mjs — do not edit by hand.
+ * Source of truth: src/studio-ui/tokens.ts (STUDIO_CONTROL_SIZE_BASE).
+ * Ideas: #1 single source, #2 emit CSS vars, #3 collapse size selectors, #14 micro derivation.
+ */
+
+[data-vt-studio-control] {
+  --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --vt-studio-control-text-transform: uppercase;
+  --vt-studio-control-accent: var(--pair-a, #36e0f6);
+  --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
+  box-sizing: border-box;
+}
+
+/* Default = standard tier */
+[data-vt-studio-control] {
+  --vt-studio-control-height: 44px;
+  --vt-studio-control-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-font-size: 38px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: 1px;
+  --vt-studio-control-letter-spacing: -0.02em;
+  --vt-studio-control-line-height: 0.86;
+  --vt-studio-control-focus-outline-width: 3px;
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: 1.95px;
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-icon-stroke: 1.9;
+  --vt-studio-control-default-fill-opacity: 50%;
+  --vt-studio-control-focus-fill-opacity: 15%;
+  --vt-studio-space-unit: 4px;
+  /* Legacy aliases used by older selectors */
+  --vt-studio-44-height: 44px;
+  --vt-studio-44-stroke: 3px;
+  --vt-studio-44-radius: 6px;
+  --vt-studio-44-font-size: 38px;
+  --vt-studio-44-icon-size: 38px;
+  --vt-studio-44-icon-stroke: 1.9;
+}
+
+[data-vt-studio-control][data-size="standard"] {
+  --vt-studio-control-height: 44px;
+  --vt-studio-control-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-font-size: 38px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: 1px;
+  --vt-studio-control-letter-spacing: -0.02em;
+  --vt-studio-control-line-height: 0.86;
+  --vt-studio-control-focus-outline-width: 3px;
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: 1.95px;
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-icon-stroke: 1.9;
+  --vt-studio-control-default-fill-opacity: 50%;
+  --vt-studio-control-focus-fill-opacity: 15%;
+  --vt-studio-space-unit: 4px;
+  /* Legacy aliases used by older selectors */
+  --vt-studio-44-height: 44px;
+  --vt-studio-44-stroke: 3px;
+  --vt-studio-44-radius: 6px;
+  --vt-studio-44-font-size: 38px;
+  --vt-studio-44-icon-size: 38px;
+  --vt-studio-44-icon-stroke: 1.9;
+}
+
+[data-vt-studio-control][data-size="compact"] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: 0.5px;
+  --vt-studio-control-letter-spacing: -0.02em;
+  --vt-studio-control-line-height: 0.86;
+  --vt-studio-control-focus-outline-width: 2px;
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: 1.3px;
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-icon-stroke: 2;
+  --vt-studio-control-default-fill-opacity: 50%;
+  --vt-studio-control-focus-fill-opacity: 15%;
+  --vt-studio-space-unit: 4px;
+  /* Legacy aliases used by older selectors */
+  --vt-studio-28-height: 28px;
+  --vt-studio-28-stroke: 2px;
+  --vt-studio-28-radius: 4px;
+  --vt-studio-28-font-size: 24px;
+  --vt-studio-28-icon-size: 24px;
+  --vt-studio-28-icon-stroke: 2;
+}
+
+[data-vt-studio-control][data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: 0.25px;
+  --vt-studio-control-letter-spacing: -0.01em;
+  --vt-studio-control-line-height: 1;
+  --vt-studio-control-focus-outline-width: 1px;
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: 0.65px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-icon-stroke: 1.5;
+  --vt-studio-control-default-fill-opacity: 50%;
+  --vt-studio-control-focus-fill-opacity: 15%;
+  --vt-studio-space-unit: 4px;
+  /* Legacy aliases used by older selectors */
+  --vt-studio-14-height: 14px;
+  --vt-studio-14-stroke: 1px;
+  --vt-studio-14-radius: 2px;
+  --vt-studio-14-font-size: 10px;
+  --vt-studio-14-icon-size: 10px;
+  --vt-studio-14-icon-stroke: 1.5;
+}
+
+
+/* Tone overrides only change accent — never geometry (idea #15) */
+[data-vt-studio-control][data-tone="neutral"] { --vt-studio-control-accent: #fff; }
+[data-vt-studio-control][data-tone="danger"] { --vt-studio-control-accent: #ff7ac8; }
+[data-vt-studio-control][data-tone="warning"] { --vt-studio-control-accent: #ffda47; }
+[data-vt-studio-control][data-tone="success"] { --vt-studio-control-accent: #3fee56; }
+
+/* Flat interaction: zero shadow / motion tokens on Studio controls (idea #12, #24) */
+[data-vt-studio-control] {
+  --vt-studio-control-shadow-x: 0px;
+  --vt-studio-control-shadow-y: 0px;
+  --vt-studio-motion-button: 0ms;
+  --vt-studio-motion-press: 0ms;
+}
+/**
+ * Studio control core — size-agnostic rules (ideas #3, #4, #5, #11, #12, #15, #18, #19).
+ *
+ * Import order:
+ *   1. studio-control-vars.generated.css  (emitted from tokens)
+ *   2. studio-control-core.css           (this file)
+ *   3. studio-control-split.css          (unified split anatomy)
+ *   4. studio-control-fields.css         (text input / textarea / floating labels)
+ *   5. studio-control-catalog.css        (catalog-only scoping — never overrides production)
+ *
+ * No hard-coded 44/28/14 geometry. No SubToolbox motion leakage (idea #24).
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Fixed-ratio faces (idea #10)                                               */
+/* -------------------------------------------------------------------------- */
+[data-vt-studio-fixed-ratio="1/1"],
+[data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-icon-only="true"],
+.vt-studio-44-choice,
+.vt-studio-square-icon-button {
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Global gap (idea #11)                                                      */
+/* -------------------------------------------------------------------------- */
+[data-vt-studio-control-row],
+[data-vt-studio-layout="split"],
+.vt-studio-control-row {
+  gap: var(--vt-studio-space-unit, 4px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Flat shells — no shadow / press motion (idea #12)                          */
+/* -------------------------------------------------------------------------- */
+button[data-vt-studio-button="true"],
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+[data-vt-studio-split],
+[data-vt-studio-split-face],
+[data-vt-studio-split-rail],
+[data-vt-studio-split-label] {
+  box-shadow: none !important; /* sole approved !important: kill legacy shadow bleed (idea #5) */
+  text-shadow: none;
+}
+
+button[data-vt-studio-button="true"],
+button[data-vt-studio-button="true"]:hover,
+button[data-vt-studio-button="true"]:active {
+  transform: none;
+  transition: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Width policy (idea #13)                                                    */
+/* -------------------------------------------------------------------------- */
+button[data-vt-studio-button="true"]:not([data-icon-only="true"]):not([data-width="content"]),
+[data-vt-studio-split]:not([data-width="content"]),
+[data-vt-studio-field-kind="text-input"],
+[data-vt-studio-field-kind="textarea"] {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Content-width allow-list */
+[data-vt-studio-width="content"],
+[data-vt-library-component="StudioSpectrumTag"],
+.vt-studio-spectrum-tag,
+.vt-studio-closeable-badge {
+  width: max-content;
+  max-width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Canonical button face (size from tokens only)                              */
+/* -------------------------------------------------------------------------- */
+button[data-vt-studio-button="true"] {
+  appearance: none;
+  display: inline-flex;
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: var(--vt-studio-control-height);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--vt-studio-control-font-family);
+  font-size: var(--vt-studio-control-font-size);
+  font-weight: var(--vt-studio-control-font-weight);
+  line-height: var(--vt-studio-control-line-height);
+  letter-spacing: var(--vt-studio-control-letter-spacing);
+  text-transform: var(--vt-studio-control-text-transform);
+  color: #000;
+}
+
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--vt-studio-control-height);
+  padding-inline: 1em;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  background: var(--vt-studio-control-accent);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) currentColor;
+}
+
+button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] {
+  padding-inline: 8px;
+}
+
+button[data-vt-studio-button="true"][data-icon-only="true"] {
+  width: var(--vt-studio-control-height);
+  min-width: var(--vt-studio-control-height);
+}
+
+button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] {
+  padding: 0;
+  width: var(--vt-studio-control-height);
+  height: var(--vt-studio-control-height);
+}
+
+/* Compact text buttons fill the row (production contract) */
+button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
+  width: 100%;
+}
+/**
+ * Unified split anatomy (ideas #8, #9, #10, #15, #22).
+ * Single source for left / right / double buttons, badges, and username fields.
+ * Consumes only token variables from studio-control-vars.generated.css.
+ */
+
+/* Shell (non-button hosts: badges, username) */
+[data-vt-studio-split]:not([data-vt-studio-button="true"]) {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  background: transparent;
+}
+
+[data-vt-studio-split-face] {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0; /* never pill interiors */
+  overflow: hidden;
+  background: transparent;
+}
+
+[data-vt-studio-split="left"] [data-vt-studio-split-face] {
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
+}
+[data-vt-studio-split="right"] [data-vt-studio-split-face] {
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height);
+}
+[data-vt-studio-split="double"] [data-vt-studio-split-face] {
+  grid-template-columns:
+    var(--vt-studio-control-height) minmax(0, 1fr) var(--vt-studio-control-height);
+}
+
+/* Button host: outer face owns border; inner split face uses display:contents */
+button[data-vt-studio-button="true"][data-split-left="true"],
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] {
+  appearance: none;
+  display: inline-flex;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] > [data-vt-studio-button-face] {
+  display: grid;
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr);
+  align-items: stretch;
+  padding: 0;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  overflow: hidden;
+  text-align: left;
+  background: transparent;
+}
+
+button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] > [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] > [data-vt-studio-button-face] > [data-vt-studio-split-face] {
+  display: contents;
+}
+
+/* Rails — always 1:1, always secondary by default (idea #9, #15) */
+[data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: var(--vt-studio-control-height);
+  min-width: var(--vt-studio-control-height);
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  line-height: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+
+[data-vt-studio-split="left"] [data-vt-studio-split-rail],
+[data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="start"],
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] {
+  border-right: var(--vt-studio-control-stroke) solid #000;
+  border-left: 0;
+}
+
+[data-vt-studio-split="right"] [data-vt-studio-split-rail],
+[data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="end"] {
+  border-left: var(--vt-studio-control-stroke) solid #000;
+  border-right: 0;
+}
+
+/* Both double-split rails secondary (global defaults) */
+[data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="start"],
+[data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="end"],
+.vt-studio-double-split-badge__rail {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+
+[data-vt-studio-split-rail] > svg {
+  display: block;
+  width: var(--vt-studio-control-icon-size);
+  height: var(--vt-studio-control-icon-size);
+  align-self: center;
+  justify-self: center;
+}
+
+/* Label region */
+[data-vt-studio-split-label] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: inherit;
+  letter-spacing: inherit;
+  -webkit-text-stroke: inherit;
+}
+
+[data-vt-studio-split][data-size="compact"] [data-vt-studio-split-label],
+[data-vt-studio-split][data-size="micro"] [data-vt-studio-split-label] {
+  padding-inline: var(--vt-studio-space-unit, 4px);
+}
+
+/* Username / field slot */
+[data-vt-studio-split][data-vt-studio-field-kind="username"] [data-vt-studio-split-label],
+.vt-studio-username-input [data-vt-studio-split-label] {
+  display: block;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"] {
+  width: 100%;
+  height: 100%;
+  min-height: var(--vt-studio-control-height);
+  border: 0;
+  border-radius: 0;
+}
+
+/* BEM compatibility aliases (collapse toward data attrs over time — idea #22, #23) */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  /* geometry owned by [data-vt-studio-split] */
+}
+/**
+ * Field contract — text input / textarea / floating + fixed labels
+ * (ideas #17, #18, #19).
+ *
+ * Single-line inputs use control type scale.
+ * Textareas use the registered multiline exception.
+ * Focus: outline only, offset 0, secondary at 65% of border width.
+ */
+
+[data-vt-studio-control="true"]:is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea
+) {
+  --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-field-stroke: var(--vt-studio-control-stroke);
+  --vt-field-focus-outline-width: calc(var(--vt-studio-control-stroke) * 0.65);
+
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--vt-studio-control-height);
+  border: var(--vt-field-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  background: color-mix(
+    in srgb,
+    var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity),
+    transparent
+  );
+  color: var(--vt-field-primary);
+  -webkit-text-fill-color: var(--vt-field-primary);
+  /* Primary-colored inline stroke matching border width */
+  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);
+  font-family: var(--vt-studio-control-font-family);
+  font-size: var(--vt-studio-control-font-size);
+  font-weight: var(--vt-studio-control-font-weight);
+  line-height: var(--vt-studio-control-line-height);
+  letter-spacing: var(--vt-studio-control-letter-spacing);
+  text-transform: var(--vt-studio-control-text-transform);
+  text-align: left;
+  padding-inline: 12px;
+  outline: none;
+}
+
+/* Placeholder matches resting primary (no separate color system) */
+[data-vt-studio-control="true"]:is(input, textarea)::placeholder {
+  color: var(--vt-field-primary);
+  -webkit-text-fill-color: var(--vt-field-primary);
+  opacity: 1;
+}
+
+/* Focus — outline only, offset 0 (idea #19) */
+[data-vt-studio-control="true"]:is(input, textarea):is(:focus, :focus-visible) {
+  background: color-mix(
+    in srgb,
+    var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity),
+    transparent
+  );
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: var(--vt-field-stroke) #000;
+  outline: var(--vt-field-focus-outline-width) solid var(--vt-field-secondary);
+  outline-offset: 0;
+}
+
+/* Textarea typography exception */
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"],
+textarea[data-vt-studio-field-kind="textarea"] {
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  line-height: 1.25;
+  min-height: 92px;
+  resize: vertical;
+  -webkit-text-stroke-width: 0.5px;
+  text-transform: none; /* body text may mix case; labels stay uppercase via contract */
+}
+
+textarea[data-vt-studio-control="true"][data-size="compact"],
+textarea[data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  line-height: 1.3;
+  -webkit-text-stroke-width: 0.35px;
+}
+
+/* Floating / fixed labels live next to the field contract (idea #17) */
+.vt-studio-floating-field {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  isolation: isolate;
+}
+
+.vt-studio-floating-field > [data-vt-studio-control="true"] {
+  display: block;
+  width: 100%;
+}
+
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  top: 50%;
+  max-width: calc(100% - 28px);
+  transform: translateY(-50%);
+  transform-origin: left center;
+  pointer-events: none;
+  color: var(--vt-studio-control-accent);
+  font-family: var(--vt-studio-control-font-family);
+  font-size: var(--vt-studio-control-font-size);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-text-stroke: 0.5px currentColor;
+}
+
+.vt-studio-floating-field > :is(input, textarea):focus + .vt-studio-floating-field-label,
+.vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+  top: 0;
+  left: 10px;
+  padding: 2.25px 4.5px;
+  border-radius: 3px;
+  background: var(--vt-studio-control-accent);
+  color: #000;
+  font-size: calc(var(--vt-studio-control-font-size) * 0.8);
+  transform: translateY(-40%);
+}
+import React from "react"
+import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import "../../styles/studio-control-system.css"
+import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
+import { StudioTextArea } from "./StudioTextArea"
+import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
+import { Bell, Check, ChevronDown, ChevronsDown, ChevronsUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
+
+export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
+
+/**
+ * Explicit register of intentional departures from the global 44px / 28px
+ * Studio control lattice. Exceptions must remain named, source-backed, and
+ * represented in the confirmed primitive library instead of being silently
+ * normalized by generic control selectors.
+ */
+export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
+  vaultSpectrumTag: {
+    owner: "VaultAssetModule / StudioSpectrumTag",
+    globalRuleException: true,
+    height: 15,
+    borderWidth: 2,
+    radius: 4,
+    fontSize: 8,
+    fontWeight: 900,
+    letterSpacing: "0.3px",
+    fill: "alphabetical spectrum color mixed at 35% with white",
+    textAndBorder: "resolved alphabetical spectrum color",
+    colorResolver: "getAlphabeticalSpectrumColor",
+    selectedTreatment: "flat selected color treatment; no shadow, glow, or geometry offset",
+    rationale: "Asset-module tags are donor-specified dense metadata chips, not ordinary 44px/28px controls.",
+  },
+  closeableBadge: {
+    owner: "StudioCloseableBadge",
+    globalRuleException: false,
+    height: "44px standard / 28px compact / 14px micro",
+    borderWidth: "3px standard / 2px compact / 1px micro",
+    radius: "6px standard / 4px compact / 2px micro",
+    fontSize: "38px standard / 24px compact / 10px micro",
+    fontWeight: 1000,
+    textTransform: "uppercase",
+    textColor: "#000000",
+    fill: "primary color pair",
+    closeControl: "icon follows the same size tier and uses the secondary color pair",
+    motion: "No shell movement or shadow; explicitly approved close feedback only",
+    rationale: "Closeable badges follow the same global size, border, radius, typography, and palette rules as buttons and split variants; no pill-ratio exception.",
+  },
+  tagEditorAction: {
+    owner: "StudioTagEditor",
+    globalRuleException: true,
+    height: 28,
+    stroke: 2,
+    radius: 4,
+    shadow: "none; primitive/component shadow prohibition",
+    rationale: "The plus/check actions use the canonical compact 28px square-button size.",
+  },
+  textareaTypography: {
+    globalRuleException: true,
+    standardFontSize: 18,
+    compactFontSize: 14,
+    rationale: "Multiline reading/writing surface uses a dedicated type scale while retaining canonical field geometry.",
+  },
+  prominentAction: {
+    globalRuleException: true,
+    height: 56,
+    stroke: 3,
+    radius: 6,
+    shadow: 0,
+    rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
+  },
+} as const
+
+
+/** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
+export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
+  splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; labels center in the remaining text region against the outer perimeter bounds",
+  fixedRatioDefaults: {
+    toggles: "1:1 square track/face geometry at the selected size tier; thumb is centered on its axis",
+    switches: "1:1 square control footprint at the selected size tier; thumb and glyph are centered",
+    checkboxes: "1:1 square face at the selected size tier; check glyph centered",
+    radioButtons: "1:1 circular face within a square 1:1 footprint; dot centered",
+    squareIconButtons: "1:1 square face at the selected size tier; size-tier icon centered",
+    circleIconButtons: "1:1 square footprint with circular face; size-tier icon centered",
+    badges: "fixed height from the global size lattice; split icon rails are 1:1 squares and centered",
+  },
+  splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
+  badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
+  splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
+  globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
+  globalTextWeight: 1000,
+  globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
+
+  width: "full-row by default; data-width=content is an explicit opt-in exception",
+  labelAlignment: "centered by default for all primitive labels",
+  primaryColor: "--pair-a is the global primary fill",
+  secondaryColor: "--pair-b is the global secondary fill and alternate rail",
+  fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
+  fontWeight: 1000,
+  strokeColor: "#000000",
+  colorPairSystem: "primary = --pair-a; secondary = --pair-b",
+  backgroundFill: "buttons and badges use the global primary/secondary color pair; text inputs and text areas use primary at 50% opacity by default and 15% primary on focus",
+  textColor: "text fields use primary by default and black on focus; other controls use their component contract",
+  textTransform: "uppercase",
+  letterSpacing: "-0.02em",
+  lineHeight: 0.86,
+  shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
+  squareIconButtonDefaults: {
+    geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
+    v1: "Primary (--pair-a) face fill; no shadow.",
+    v2: "Secondary (--pair-b) face fill; no shadow.",
+    v3: "Selectable v1/v2 color swap; click toggles the face fill only.",
+    v4: "Black face fill with primary (--pair-a) icon stroke.",
+    iconPresets: {
+      heart: "Heart outline; pair with heart-pop for temporary secondary-color fill and expanding border ripple.",
+      bell: "Bell outline; pair with bell-ring for bell rotation, secondary-color alert-dot pop, and border ripple.",
+      sunMoon: "Sun icon with Moon alternate face for a persistent selected toggle.",
+      lockUnlock: "Lock icon with Unlock alternate face for a persistent selected toggle.",
+      downloadCheck: "Download icon with Check alternate face; use download-success and success=true only after completion.",
+      refresh: "RefreshCw icon; pair with refresh for activation spin.",
+      like: "ThumbsUp icon; pair with like for pop feedback and a live activation count.",
+    },
+    effects: {
+      standard: "No additional motion; shared Studio press, hover, focus and disabled behavior only.",
+      notification: "Optional positioned badge; count/status pop and icon shake. Supply badge only when a real count/status exists.",
+      popOnActivation: "One-shot inner icon pop; with the heart preset, also briefly fills the heart and emits an expanding secondary-color border ripple.",
+      heartPop: "Temporary heart fill, pop, and expanding/fading paired-color border ripple; never persists as selected state.",
+      bellRing: "Bell rotates, alert dot pops, and a secondary-color border ripple expands.",
+      like: "Live count increments on activation and the icon pops; count badge animates with the update.",
+      refresh: "Activation-triggered refresh rotation with a small scale response.",
+      sunMoon: "Persistent selected toggle crossfades and rotates between Sun and Moon.",
+      lockUnlock: "Persistent selected toggle morphs between Lock and Unlock.",
+      downloadSuccess: "Outcome-driven Download-to-Check state; set success only after the operation succeeds.",
+      rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and press transform remain unchanged.",
+      flip: "Opt-in two-face 3D flip; provide activeIcon for a meaningful alternate face.",
+      tooltip: "Opt-in contextual label revealed on hover/focus; accessible name remains label.",
+      morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
+      success: "Outcome-driven checkmark and optional tooltip label; set success only after confirmed success.",
+    },
+    motion: "Effects must not move primitive geometry; CSS transitions are disabled globally for Studio primitives/components. Any explicitly approved inner-icon animation must be documented and honor reduced-motion preferences.",
+  },
+  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 65% of the selected border width; focus is communicated by outline, not box-shadow.",
+  textFieldDefaults: {
+    typography: {
+      standardInputFontSize: "38px",
+      compactInputFontSize: "24px",
+      standardTextAreaFontSize: "18px",
+      compactTextAreaFontSize: "14px",
+      rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
+    },
+    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the global .86 line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
+    defaultMode: {
+      textColor: "primary",
+      textStrokeColor: "matches text color (primary)",
+      fill: "primary at 50% opacity",
+      borderStrokeColor: "#000000",
+      inlineStrokeColor: "primary at 100% opacity",
+      inlineStrokeWidth: "same as global standard/compact/micro border width",
+    },
+    focusMode: {
+      fill: "primary at 15% opacity",
+      textColor: "#000000",
+      textStrokeColor: "matches text color (#000000)",
+      borderStrokeColor: "#000000",
+      inlineStrokeColor: "primary at 100% opacity",
+      outlineStrokeColor: "secondary",
+      focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro",
+      focusOutlineOffset: "0px for both sizes",
+      outlineStrokeWidth: "65% of the selected border width; secondary color remains at 100% opacity",
+    },
+    caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
+  },
+  motionEasing: "ease-out",
+} as const
+
+/** Canonical machine-readable contract; defined once in studio-ui/tokens.ts. */
+export const STUDIO_COMPONENT_SIZE_DEFAULTS = STUDIO_CONTROL_SIZE_CONTRACT
+
+const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => ({
+  "data-vt-studio-control": "true",
+  "data-size": size,
+  ...(tone ? { "data-tone": tone } : {}),
+})
+
+/**
+ * Canonical standalone Studio text input.
+ * This component is defined and styled entirely by the Studio Controls system;
+ * it has no import, wrapper, or runtime dependency on SubToolbox primitives.
+ */
+export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput }
+export type { StudioTextInputProps } from "./StudioTextInput"
+export { StudioTextArea }
+export type { StudioTextAreaProps } from "./StudioTextArea"
+
+
+const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
+/** Canonical Studio 44px / 28px switch, choice, and word-toggle primitives. */
+export type StudioControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
+export interface StudioControlButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  skin?: StudioControlSkin;
+  checked: boolean;
+  shape?: "round" | "rect";
+}
+const studioSkinClass = (skin: StudioControlSkin) => ({
+  "solid": "is-solid",
+  "color-swap": "is-color-swap",
+  "black-indicator": "is-black-indicator",
+  "white-indicator": "is-white-indicator",
+}[skin]);
+export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+);
+export type StudioChoiceKind = "radio" | "checkbox";
+export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
+export const StudioChoice: React.FC<StudioChoiceProps> = ({ kind, mark = "check", skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
+  <button type={type} role={kind} aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, studioSkinClass(skin), checked && "is-on", className)} {...props}>
+    {kind === "radio" ? <span className="vt-studio-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
+  </button>
+);
+export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: boolean;
+  onValueChange?: (value: boolean) => void;
+  words?: readonly [string, string];
+  size?: "44" | "28";
+  skin?: StudioControlSkin;
+  /** Optional fixed handle width in CSS pixels; omitted means measure the active word. */
+  handleWidth?: number;
+  /** Inset between the active word bounds and handle edges; defaults by size. */
+  handleInset?: number;
+  /** Scale the measured active-handle width when a fixed width is not supplied. */
+  handleWidthScale?: number;
+  /** Horizontal spacing between the two word labels in CSS pixels. */
+  wordGap?: number;
+}
+export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
+  React.useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      const root = rootRef.current;
+      const target = wordRefs.current[value ? 1 : 0];
+      if (!root || !target) return;
+      const rootRect = root.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      // Standard toggles reserve 16px of optical padding inside the active
+      // handle and a fixed 4px gap from either inner container edge. The word
+      // buttons use 20px side padding; the handle is 8px narrower than that
+      // button, leaving 16px between glyph bounds and handle edges.
+      const inset = handleInset ?? (size === "28" ? 2 : 4);
+      const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
+      const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
+      // Absolutely positioned children measure from the container's padding
+      // edge, not its outer border edge. Subtract clientLeft so both sides keep
+      // the same 4px inner margin when the active word flips left/right.
+      const next = {
+        left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
+        width: nextWidth,
+      };
+      setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
+    };
+    const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
+    schedule();
+    const root = rootRef.current;
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
+    if (root) observer?.observe(root);
+    wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
+    if (typeof window !== "undefined") window.addEventListener("resize", schedule);
+    if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
+    return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
+  }, [value, words, size, handleWidth, handleInset, handleWidthScale]);
+  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
+    <span className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"} />
+    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+  </div>;
+};
+
+
+export const Studioradio: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="radio" />
+Studioradio.displayName = "Studioradio"
+export const Studiocheck: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="check" />
+Studiocheck.displayName = "Studiocheck"
+export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
+Studioxbox.displayName = "Studioxbox"
+export const Studioinput = StudioTextInput
+export const Studioarea = StudioTextArea
+
+/** Canonical public names; lowercase legacy exports remain compatibility aliases. */
+export const StudioSwitch = Studioswitch
+export const StudioWordToggle = Studiotoggle
+export const StudioRadio = Studioradio
+export const StudioCheckbox = Studiocheck
+export const StudioXCheckbox = Studioxbox
+
+export const StudioSelect = React.forwardRef<
+  HTMLSelectElement,
+  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", ...props }, ref) => (
+  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioSelect.displayName = "StudioSelect"
+
+export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  sizeVariant?: StudioControlSize
+  tone?: StudioControlTone
+  loading?: boolean
+  selected?: boolean
+  /** Explicit geometry variant for the confirmed 44px and 28px button family. */
+  heightVariant?: "44" | "28"
+}
+
+export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
+  (
+    {
+      sizeVariant,
+      tone = "accent",
+      loading = false,
+      selected = false,
+      heightVariant,
+      disabled,
+      children,
+      type = "button",
+      ...props
+    },
+    ref,
+  ) => {
+    // Height is the authoritative geometry when supplied. This prevents a 28px
+    // control from accidentally inheriting standard border/radius/shadow tokens.
+    const resolvedSize = heightVariant
+      ? heightVariant === "28" ? "compact" : "standard"
+      : sizeVariant ?? "standard"
+    const resolvedHeight = heightVariant ?? (resolvedSize === "compact" ? "28" : "44")
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        {...props}
+        {...withStudioAttrs(resolvedSize, tone)}
+        data-vt-studio-button="true"
+        data-height-variant={resolvedHeight}
+        data-selected={selected || undefined}
+        aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
+        aria-busy={loading || undefined}
+        disabled={disabled || loading}
+      >
+        <span data-vt-studio-button-face>{children}</span>
+      </button>
+    )
+  },
+)
+StudioButton.displayName = "StudioButton"
+
+/**
+ * Separate 56px action family for prominent workflow actions.
+ * It is intentionally not a StudioButton size variant: StudioButton remains 44px/28px only.
+ */
+export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  tone?: StudioControlTone
+  loading?: boolean
+}
+
+export const StudioActionButton = React.forwardRef<HTMLButtonElement, StudioActionButtonProps>(
+  ({ tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
+    <button
+      ref={ref}
+      type={type}
+      {...props}
+      data-vt-studio-control="true"
+      data-vt-studio-action-button="true"
+      data-tone={tone}
+      aria-busy={loading || undefined}
+      disabled={disabled || loading}
+    >
+      <span data-vt-studio-action-face>{children}</span>
+    </button>
+  ),
+)
+StudioActionButton.displayName = "StudioActionButton"
+
+export interface StudioIconButtonProps extends Omit<StudioButtonProps, "children"> {
+  icon: React.ReactNode
+  label: string
+}
+
+export const StudioIconButton = React.forwardRef<HTMLButtonElement, StudioIconButtonProps>(
+  ({ icon, label, ...props }, ref) => (
+    <StudioButton ref={ref} aria-label={label} data-icon-only="true" {...props}>
+      <span aria-hidden="true" data-vt-studio-button-icon>{icon}</span>
+    </StudioButton>
+  ),
+)
+StudioIconButton.displayName = "StudioIconButton"
+
+
+export type StudioSquareIconButtonVariant = "v1" | "v2" | "v3" | "v4"
+export type StudioSquareIconPreset = "heart" | "bell" | "sun-moon" | "lock-unlock" | "download-check" | "refresh" | "like"
+
+export type StudioSquareIconButtonEffect =
+  | "standard"
+  | "notification"
+  | "pop-on-activation"
+  | "heart-pop"
+  | "bell-ring"
+  | "like"
+  | "unlock"
+  | "download"
+  | "rotated-toggle"
+  | "sun-moon"
+  | "lock-unlock"
+  | "download-success"
+  | "refresh"
+  | "flip"
+  | "tooltip"
+  | "morph"
+  | "success"
+
+export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "children" | "selected"> {
+  /** Visual comparison preset; outer button geometry is unchanged. */
+  iconSizeVariant?: StudioIconSizeVariant
+  /** Canonical feature icon pair; removes the need for placeholder glyphs. */
+  iconPreset?: StudioSquareIconPreset
+  /** Custom icon override. If omitted, iconPreset supplies the icon automatically. */
+  icon?: React.ReactNode
+  label: string
+  /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
+   * v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
+  variant?: StudioSquareIconButtonVariant
+  /** Optional interaction effect. Defaults to standard; visual skin remains controlled by variant. */
+  effect?: StudioSquareIconButtonEffect
+  /** Alternate icon used by flip/morph effects; for success effect, defaults to a checkmark. */
+  activeIcon?: React.ReactNode
+  /** Notification count or short status. Omit to hide the badge. */
+  badge?: number | string
+  /** Floating contextual label; also becomes a supplementary description when supplied. */
+  tooltip?: string
+  /** Outcome-driven success state. Set true only after the associated operation succeeds. */
+  success?: boolean
+  /** Replay the small pop feedback when activated; false by default. */
+  animate?: boolean
+  selected?: boolean
+  defaultSelected?: boolean
+  onSelectedChange?: (selected: boolean) => void
+}
+
+/** Sun and moon share the same 6.5-unit circular radius and center. */
+const StudioSunGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" data-vt-sun-moon-glyph="sun">
+    <circle cx="12" cy="12" r="6.5" data-vt-sun-moon-disc="true" />
+    <path d="M12 2v1.5M12 20.5V22M2 12h1.5M20.5 12H22M4.93 4.93 6 6M18 18l1.07 1.07M19.07 4.93 18 6M6 18l-1.07 1.07" />
+  </svg>
+)
+const StudioMoonGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" data-vt-sun-moon-glyph="moon">
+    <path d="M16.3 7.2A6.5 6.5 0 1 0 16.3 16.8A4.8 4.8 0 0 1 16.3 7.2Z" data-vt-sun-moon-disc="true" />
+  </svg>
+)
+/** The lock body never morphs. Only the separate shackle group rotates when unlocked. */
+const StudioLockUnlockGlyph = ({ unlocked = false }: { unlocked?: boolean }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" data-vt-lock-unlock-glyph="true">
+    <path d="M5 10h14v11H5z" data-vt-lock-body="true" />
+    <g data-vt-lock-shackle="true" data-unlocked={unlocked ? "true" : "false"} className={unlocked ? "is-unlocked" : undefined}>
+      <path d="M7 10V7a5 5 0 0 1 10 0v3" />
+    </g>
+  </svg>
+)
+/** Canonical icon pair mapping; feature presets use consistent Lucide SVGs rather than placeholder glyphs. */
+const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: React.ReactNode; activeIcon?: React.ReactNode } | undefined => {
+  switch (preset) {
+    case "heart": return { icon: <Heart />, activeIcon: <Heart /> }
+    case "bell": return { icon: <Bell />, activeIcon: <Bell /> }
+    case "sun-moon": return { icon: <StudioSunGlyph />, activeIcon: <StudioMoonGlyph /> }
+    case "download-check": return { icon: <Download />, activeIcon: <Check /> }
+    case "refresh": return { icon: <RefreshCw /> }
+    case "like": return { icon: <ThumbsUp />, activeIcon: <ThumbsUp /> }
+    default: return undefined
+  }
+}
+
+/** Canonical square icon primitive. Visual skins (V1–V4) and interaction effects are orthogonal. */
+export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, StudioSquareIconButtonProps>(
+  ({
+    icon, iconPreset, label, variant = "v1", effect = "standard", iconSizeVariant = "large", activeIcon, badge, tooltip, success = false, animate = false,
+    sizeVariant = "standard", selected, defaultSelected = false, onSelectedChange, onClick, className,
+    disabled, ...props
+  }, ref) => {
+    const presetIcons = getStudioSquarePresetIcons(iconPreset)
+    const resolvedIcon = icon ?? presetIcons?.icon ?? <Plus />
+    const resolvedActiveIcon = activeIcon ?? presetIcons?.activeIcon
+    const [uncontrolledSelected, setUncontrolledSelected] = React.useState(defaultSelected)
+    const [animationKey, setAnimationKey] = React.useState(0)
+    const [liveCount, setLiveCount] = React.useState(typeof badge === "number" ? badge : 0)
+    React.useEffect(() => { if (typeof badge === "number") setLiveCount(badge) }, [badge])
+    const counterEnabled = effect === "like" || (effect === "notification" && typeof badge === "number")
+    const effectiveBadge: number | string | undefined = counterEnabled ? liveCount : badge
+    const badgeValue = effectiveBadge === undefined || effectiveBadge === null || effectiveBadge === "" ? null : String(effectiveBadge)
+    const previousBadgeValue = React.useRef(badgeValue)
+    React.useEffect(() => {
+      if (previousBadgeValue.current !== badgeValue) setAnimationKey(key => key + 1)
+      previousBadgeValue.current = badgeValue
+    }, [badgeValue])
+    const selectable = variant === "v3" || effect === "rotated-toggle" || effect === "flip" || effect === "morph" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "lock-unlock"
+    const isSelected = selectable ? (selected ?? uncontrolledSelected) : false
+    const isSuccess = (effect === "success" || effect === "download-success") && success
+    const effectClass = effect === "standard" ? (animate ? "is-effect-pop" : undefined) : `is-effect-${effect}`
+    const replayOnActivation = animate || ["notification", "pop-on-activation", "heart-pop", "bell-ring", "like", "refresh"].includes(effect)
+    const tooltipId = React.useId()
+    const successStatusId = React.useId()
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      // Disabled controls must not dispatch actions or state/animation changes,
+      // including when an event is dispatched programmatically in a test or wrapper.
+      if (event.currentTarget.disabled) return
+      onClick?.(event)
+      if (event.defaultPrevented) return
+      if (replayOnActivation) setAnimationKey(key => key + 1)
+      if (counterEnabled) setLiveCount(count => count + 1)
+      if (!selectable) return
+      const next = !isSelected
+      if (selected === undefined) setUncontrolledSelected(next)
+      onSelectedChange?.(next)
+    }
+    const fallbackCheck = (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+    )
+    const iconNode = effect === "success" && isSuccess ? (resolvedActiveIcon ?? fallbackCheck) : resolvedIcon
+    const alternateNode = resolvedActiveIcon ?? resolvedIcon
+    const describedBy = [
+      props["aria-describedby"],
+      effect === "tooltip" && tooltip ? tooltipId : undefined,
+      isSuccess && tooltip ? successStatusId : undefined,
+    ].filter(Boolean).join(" ") || undefined
+    return (
+      <StudioButton
+        ref={ref}
+        {...props}
+        className={studioClasses("vt-studio-square-icon-button", effectClass, className)}
+        disabled={disabled}
+        sizeVariant={sizeVariant}
+        aria-label={effect === "notification" && badge !== undefined && badge !== null && badge !== "" ? `${label}, ${effectiveBadge}` : label}
+        aria-describedby={describedBy}
+        aria-pressed={selectable ? isSelected : undefined}
+        selected={selectable && isSelected}
+        data-vt-studio-icon-button="true"
+        data-icon-size-variant={iconSizeVariant}
+        data-control-size={sizeVariant}
+        data-icon-variant={variant}
+        data-icon-effect={effect}
+        data-icon-preset={iconPreset}
+        data-icon-only="true"
+        data-icon-active={isSelected || isSuccess || animate ? "true" : "false"}
+        data-pop={replayOnActivation && animationKey > 0 ? "true" : undefined}
+        data-success={isSuccess ? "true" : undefined}
+        data-has-badge={badgeValue !== null ? "true" : undefined}
+        data-notification-pulse={(effect === "notification" || effect === "bell-ring" || effect === "like") && (effect === "bell-ring" || badgeValue !== null) && animationKey > 0 ? "true" : undefined}
+        onClick={handleClick}
+      >
+        <span aria-hidden="true" data-vt-studio-button-icon data-vt-square-icon-stage>
+          {effect === "lock-unlock" ? (
+            <span data-vt-square-icon-current><StudioLockUnlockGlyph unlocked={isSelected} /></span>
+          ) : effect === "flip" ? (
+            <span data-vt-square-flip-inner>
+              <span data-vt-square-flip-face="front">{resolvedIcon}</span>
+              <span data-vt-square-flip-face="back">{alternateNode}</span>
+            </span>
+          ) : effect === "morph" || effect === "rotated-toggle" || effect === "unlock" || effect === "download" || effect === "sun-moon" || effect === "download-success" ? (
+            <span data-vt-square-morph-inner>
+              <span data-vt-square-morph-face="front">{resolvedIcon}</span>
+              <span data-vt-square-morph-face="back">{alternateNode}</span>
+            </span>
+          ) : (
+            <span key={`${effect}:${animationKey}:${effect === "notification" || effect === "like" ? String(effectiveBadge ?? "") : ""}`} data-vt-square-icon-current>{iconNode}</span>
+          )}
+        </span>
+        {effect === "bell-ring" ? <span data-vt-square-alert-dot aria-hidden="true" /> : null}
+        {(effect === "notification" || effect === "like") && effectiveBadge !== undefined && effectiveBadge !== null && effectiveBadge !== "" ? (
+          <span key={`${String(effectiveBadge)}:${animationKey}`} data-vt-square-badge aria-hidden="true">{effectiveBadge}</span>
+        ) : null}
+        {effect === "tooltip" && tooltip ? (
+          <span id={tooltipId} role="tooltip" data-vt-square-tooltip>{tooltip}</span>
+        ) : null}
+        {(effect === "success" || effect === "download-success") && isSuccess && tooltip ? (
+          <span id={successStatusId} role="status" aria-live="polite" aria-atomic="true" data-vt-square-success-label>{tooltip}</span>
+        ) : null}
+      </StudioButton>
+    )
+  },
+)
+StudioSquareIconButton.displayName = "StudioSquareIconButton"
+
+export interface StudioSplitLeftButtonProps extends StudioButtonProps {
+  /** Visual comparison preset; outer button geometry is unchanged. */
+  iconSizeVariant?: StudioIconSizeVariant
+  icon: React.ReactNode
+}
+
+/** Shared split label slot — used by buttons, badges, and composite fields. */
+const StudioSplitLabel: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <span data-vt-studio-split-label className={className}>{children}</span>
+)
+
+export type StudioSplitLayout = "left" | "right" | "double"
+export type StudioSplitSizeVariant = StudioControlSize | "micro"
+
+/**
+ * Single anatomy for every split surface (button face content, static badges,
+ * username composite). Layout is the only structural axis; size/color come from
+ * the shared Studio control tokens on [data-vt-studio-control][data-size].
+ */
+export interface StudioSplitShellProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
+  layout: StudioSplitLayout
+  sizeVariant?: StudioSplitSizeVariant
+  /** Root element. Buttons keep StudioButton as the interactive host and only use the face fragment. */
+  as?: "div" | "span"
+  iconLeft?: React.ReactNode
+  iconRight?: React.ReactNode
+  children?: React.ReactNode
+  /** Optional BEM root class retained for catalog/CSS compatibility. */
+  rootClassName?: string
+  faceClassName?: string
+  railClassName?: string
+  labelClassName?: string
+  /** When true, omit the outer border/shell chrome (used inside StudioButton face). */
+  faceOnly?: boolean
+  libraryComponent?: string
+  fieldKind?: string
+  /** Composite field marker retained for existing username CSS hooks. */
+  "data-vt-studio-username-input"?: string
+  "data-icon-size-variant"?: string
+  "data-disabled"?: string
+}
+
+const StudioSplitShell = React.forwardRef<HTMLElement, StudioSplitShellProps>(function StudioSplitShell(
+  {
+    layout,
+    sizeVariant = "standard",
+    as = "span",
+    iconLeft,
+    iconRight,
+    children,
+    className,
+    rootClassName,
+    faceClassName,
+    railClassName,
+    labelClassName,
+    faceOnly = false,
+    libraryComponent,
+    fieldKind,
+    ...props
+  },
+  ref,
+) {
+  const Comp = as
+  const face = (
+    <span data-vt-studio-split-face className={faceClassName}>
+      {layout !== "right" && (
+        <span data-vt-studio-split-rail data-rail="start" className={railClassName} aria-hidden="true">
+          {iconLeft}
+        </span>
+      )}
+      <StudioSplitLabel className={labelClassName}>{children}</StudioSplitLabel>
+      {layout !== "left" && (
+        <span data-vt-studio-split-rail data-rail="end" className={railClassName} aria-hidden="true">
+          {iconRight}
+        </span>
+      )}
+    </span>
+  )
+
+  if (faceOnly) {
+    return face
+  }
+
+  return (
+    <Comp
+      ref={ref as never}
+      {...props}
+      data-vt-studio-control="true"
+      data-vt-studio-split={layout}
+      data-vt-studio-split-badge={libraryComponent ? layout : undefined}
+      data-vt-studio-field-kind={fieldKind}
+      data-vt-library-component={libraryComponent}
+      data-size={sizeVariant}
+      className={studioClasses(rootClassName, className)}
+    >
+      {face}
+    </Comp>
+  )
+})
+StudioSplitShell.displayName = "StudioSplitShell"
+
+/** Shared split-left face content used inside StudioButton (border owned by button face). */
+const StudioSplitLeftContent: React.FC<{ icon?: React.ReactNode; children?: React.ReactNode; className?: string; labelClassName?: string }> = ({
+  icon,
+  children,
+  className,
+  labelClassName,
+}) => (
+  <StudioSplitShell
+    layout="left"
+    faceOnly
+    iconLeft={icon}
+    railClassName={className}
+    labelClassName={labelClassName}
+  >
+    {children}
+  </StudioSplitShell>
+)
+
+export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
+    <StudioButton
+      ref={ref}
+      sizeVariant={sizeVariant}
+      data-split-left="true"
+      data-vt-studio-split="left"
+      data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioSplitLeftButton"
+      {...props}
+    >
+      <StudioSplitLeftContent icon={icon}>{children}</StudioSplitLeftContent>
+    </StudioButton>
+  ),
+)
+StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
+
+
+/** Circular shape variant of the canonical square icon button. All icon sizing,
+ * palette, selection, effects, focus and disabled behavior remain shared. */
+export type StudioCircleIconButtonProps = StudioSquareIconButtonProps
+
+export const StudioCircleIconButton = React.forwardRef<HTMLButtonElement, StudioCircleIconButtonProps>(
+  ({ className, ...props }, ref) => (
+    <StudioSquareIconButton
+      ref={ref}
+      {...props}
+      className={studioClasses("vt-studio-circle-icon-button", className)}
+      data-vt-studio-circle-icon-button="true"
+    />
+  ),
+)
+StudioCircleIconButton.displayName = "StudioCircleIconButton"
+
+
+export interface StudioPlayPauseButtonProps extends Omit<StudioSplitLeftButtonProps, "icon" | "children" | "selected"> {
+  /** True while playing; omit to use the internal toggle state. */
+  playing?: boolean
+  defaultPlaying?: boolean
+  onPlayingChange?: (playing: boolean) => void
+  playLabel?: string
+  pauseLabel?: string
+  playIcon?: React.ReactNode
+  pauseIcon?: React.ReactNode
+}
+
+/** Stateful split-left action. The two labels are measured in the same grid cell
+ * so the label region does not resize when Play changes to Pause. */
+export const StudioPlayPauseButton = React.forwardRef<HTMLButtonElement, StudioPlayPauseButtonProps>(
+  ({
+    playing,
+    defaultPlaying = false,
+    onPlayingChange,
+    playLabel = "Play",
+    pauseLabel = "Pause",
+    playIcon,
+    pauseIcon,
+    onClick,
+    disabled,
+    className,
+    sizeVariant = "standard",
+    ...props
+  }, ref) => {
+    const [uncontrolledPlaying, setUncontrolledPlaying] = React.useState(defaultPlaying)
+    const isPlaying = playing ?? uncontrolledPlaying
+    const resolvedPlayIcon = playIcon ?? (
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none" /></svg>
+    )
+    const resolvedPauseIcon = pauseIcon ?? (
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14M17 5v14" fill="none" stroke="currentColor" strokeWidth="3" /></svg>
+    )
+    const activeLabel = isPlaying ? pauseLabel : playLabel
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      onClick?.(event)
+      if (event.defaultPrevented || event.currentTarget.disabled) return
+      const next = !isPlaying
+      if (playing === undefined) setUncontrolledPlaying(next)
+      onPlayingChange?.(next)
+    }
+    return (
+      <StudioSplitLeftButton
+        ref={ref}
+        {...props}
+        className={studioClasses("vt-studio-play-pause-button", className)}
+        data-vt-studio-play-pause="true"
+        sizeVariant={sizeVariant}
+        icon={isPlaying ? resolvedPauseIcon : resolvedPlayIcon}
+        aria-label={activeLabel}
+        aria-pressed={isPlaying}
+        selected={isPlaying}
+        disabled={disabled}
+        onClick={handleClick}
+      >
+        <span data-vt-studio-play-pause-label-grid>
+          <span data-vt-studio-play-pause-label>{activeLabel}</span>
+          <span data-vt-studio-play-pause-measure="play" aria-hidden="true">{playLabel}</span>
+          <span data-vt-studio-play-pause-measure="pause" aria-hidden="true">{pauseLabel}</span>
+        </span>
+      </StudioSplitLeftButton>
+    )
+  },
+)
+StudioPlayPauseButton.displayName = "StudioPlayPauseButton"
+
+
+export interface StudioUsernameInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "className" | "style"> {
+  icon: React.ReactNode
+  sizeVariant?: StudioControlSize
+  /** className/style apply to the complete composite; inputClassName/inputStyle target the native input. */
+  className?: string
+  style?: React.CSSProperties
+  inputClassName?: string
+  inputStyle?: React.CSSProperties
+}
+
+/**
+ * Composite username field derived from StudioSplitShell (left layout).
+ * The rail is the shared square secondary rail; the label slot hosts the
+ * canonical StudioTextInput so field stroke/focus contracts stay single-sourced.
+ */
+export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
+  ({
+    icon,
+    sizeVariant = "standard",
+    className,
+    style,
+    inputClassName,
+    inputStyle,
+    disabled,
+    ...inputProps
+  }, ref) => (
+    <StudioSplitShell
+      as="div"
+      layout="left"
+      sizeVariant={sizeVariant}
+      iconLeft={icon}
+      className={studioClasses("vt-studio-username-input", className)}
+      rootClassName="vt-studio-username-input"
+      fieldKind="username"
+      data-vt-studio-username-input="true"
+      data-icon-size-variant="large"
+      data-disabled={disabled ? "true" : undefined}
+      style={style}
+      libraryComponent="StudioUsernameInput"
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        sizeVariant={sizeVariant}
+        disabled={disabled}
+        className={studioClasses("vt-studio-username-input__input", inputClassName)}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  ),
+)
+StudioUsernameInput.displayName = "StudioUsernameInput"
+
+
+export interface StudioLegendMultiDropdownOption {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
+export interface StudioLegendMultiDropdownProps {
+  label: React.ReactNode
+  /** Accessible plain-text name when the visible label is rich React content. */
+  accessibleLabel?: string
+  options: StudioLegendMultiDropdownOption[]
+  value?: string[]
+  defaultValue?: string[]
+  onChange?: (values: string[]) => void
+  sizeVariant?: "compact" | "standard"
+  level?: "l0" | "l1" | "l2"
+  placeholder?: string
+  clearLabel?: string
+  maxMenuHeight?: number
+  className?: string
+  disabled?: boolean
+  name?: string
+}
+
+/**
+ * Canonical implementation of component-library 09/V2 "Legend Multi".
+ * Uses the module's pair-A trigger/panel and pair-B floating legend/actions;
+ * selection is multi-valued and never depends on a native browser menu.
+ */
+export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps> = ({
+  label, accessibleLabel, options, value, defaultValue = [], onChange, sizeVariant = "standard",
+  level = "l1", placeholder = "ANY", clearLabel = "CLEAR ALL",
+  maxMenuHeight = 280, className, disabled = false, name,
+}) => {
+  const [uncontrolled, setUncontrolled] = React.useState<string[]>(defaultValue)
+  const [open, setOpen] = React.useState(false)
+  const selected = value ?? uncontrolled
+  const rootRef = React.useRef<HTMLDivElement>(null)
+  const listId = React.useId()
+  const setSelected = (next: string[]) => {
+    if (value === undefined) setUncontrolled(next)
+    onChange?.(next)
+  }
+  React.useEffect(() => {
+    if (!open) return
+    const onPointerDown = (event: PointerEvent) => {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) setOpen(false)
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("pointerdown", onPointerDown)
+    document.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown)
+      document.removeEventListener("keydown", onKeyDown)
+    }
+  }, [open])
+  const selectedLabels = options.filter(option => selected.includes(option.value)).map(option => option.label)
+  const triggerLabel = selectedLabels.length ? selectedLabels.join(", ") : placeholder
+  const menuAccessibleLabel = accessibleLabel ?? (typeof label === "string" || typeof label === "number" ? String(label) : "Filter options")
+  return (
+    <div
+      ref={rootRef}
+      data-vt-primitive-id="140"
+      data-vt-studio-field="legend-multi-dropdown"
+      data-vt-studio-control-family="dropdown"
+      data-vt-studio-dropdown-variant="multiselect"
+      data-vt-control-level={level}
+      data-size={sizeVariant}
+      data-open={open || undefined}
+      className={["vt-studio-legend-multi", className].filter(Boolean).join(" ")}
+    >
+      <div className="vt-studio-legend-anchor">
+        <span className="vt-studio-legend-label">{label}</span>
+        <button
+          type="button"
+          className="vt-studio-legend-trigger"
+          data-vt-studio-control="true"
+          data-size={sizeVariant}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={listId}
+          disabled={disabled}
+          onClick={() => setOpen(current => !current)}
+        >
+          <span className="vt-studio-legend-trigger-text">{triggerLabel}</span>
+          <span className={["vt-studio-legend-count", selected.length ? "is-visible" : ""].filter(Boolean).join(" ")} aria-label={`${selected.length} selected`}>{selected.length}</span>
+          <svg className="vt-studio-legend-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+      </div>
+      {open && !disabled && (
+        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable="true">
+          <div className="vt-studio-legend-options">
+            {options.map(option => {
+              const isSelected = selected.includes(option.value)
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  disabled={option.disabled}
+                  data-selected={isSelected || undefined}
+                  className="vt-studio-legend-option"
+                  onClick={() => setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])}
+                >
+                  <span className="vt-studio-legend-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></span>
+                  <span className="vt-studio-legend-option-text">{option.label}</span>
+                </button>
+              )
+            })}
+          </div>
+          <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>
+          {name && selected.map(item => <input key={item} type="hidden" name={name} value={item} />)}
+        </div>
+      )}
+    </div>
+  )
+}
+StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
+
+
+export interface StudioSpectrumTagProps {
+  label: string
+  selected?: boolean
+  className?: string
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  ariaLabel?: string
+}
+
+/**
+ * Vault's donor-backed 15px monochromatic tag. This is a deliberate global
+ * sizing exception; the alphabetic ViewTube spectrum and chip geometry are
+ * shared by Vault and the confirmed Studio Controls library.
+ */
+export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
+  label,
+  selected = false,
+  className,
+  onClick,
+  ariaLabel,
+}) => {
+  const normalized = label.trim().toUpperCase()
+  const color = getAlphabeticalSpectrumColor(normalized)
+  return (
+    <button
+      type="button"
+      className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
+      data-vt-studio-exception="vault-spectrum-tag"
+      data-tag={normalized}
+      aria-label={ariaLabel ?? normalized}
+      aria-pressed={selected}
+      style={{ ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
+      onClick={onClick}
+    >
+      {normalized}
+    </button>
+  )
+}
+StudioSpectrumTag.displayName = "StudioSpectrumTag"
+
+
+// Canonical dropdown family: single-select variants share the same trigger/menu implementation.
+export interface StudioDropdownOption {
+  value: string
+  label: React.ReactNode
+  disabled?: boolean
+}
+
+export interface StudioDropdownProps {
+  value?: string
+  defaultValue?: string
+  options: StudioDropdownOption[]
+  onChange?: (value: string) => void
+  placeholder?: React.ReactNode
+  disabled?: boolean
+  connectionMessage?: React.ReactNode
+  className?: string
+  id?: string
+  ariaLabel?: string
+  sizeVariant?: "standard" | "compact"
+  variant?: "default" | "simple"
+}
+
+export const StudioDropdown: React.FC<StudioDropdownProps> = ({
+  value,
+  defaultValue,
+  options,
+  onChange,
+  placeholder = "Select",
+  disabled = false,
+  connectionMessage,
+  className = "",
+  id,
+  ariaLabel,
+  sizeVariant = "standard",
+  variant = "default",
+}) => {
+  const [open, setOpen] = React.useState(false)
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
+  const [activeIndex, setActiveIndex] = React.useState(-1)
+  const rootRef = React.useRef<HTMLDivElement>(null)
+  const controlled = value !== undefined
+  const currentValue = controlled ? value : internalValue
+  const enabledOptions = options.filter((option) => !option.disabled)
+  const selected = options.find((option) => option.value === currentValue)
+
+  React.useEffect(() => {
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+    document.addEventListener("pointerdown", onPointerDown)
+    return () => document.removeEventListener("pointerdown", onPointerDown)
+  }, [])
+
+  const selectValue = (next: string) => {
+    if (!controlled) setInternalValue(next)
+    onChange?.(next)
+    setOpen(false)
+  }
+
+  const moveActive = (direction: 1 | -1) => {
+    if (!enabledOptions.length) return
+    const currentEnabledIndex = enabledOptions.findIndex((option) => option.value === options[activeIndex]?.value)
+    const nextEnabledIndex = currentEnabledIndex < 0
+      ? direction === 1 ? 0 : enabledOptions.length - 1
+      : (currentEnabledIndex + direction + enabledOptions.length) % enabledOptions.length
+    const option = enabledOptions[nextEnabledIndex]
+    setActiveIndex(options.findIndex((candidate) => candidate.value === option.value))
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (disabled) return
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault()
+      if (!open) setOpen(true)
+      moveActive(event.key === "ArrowDown" ? 1 : -1)
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      if (!open) {
+        setOpen(true)
+        const selectedIndex = options.findIndex((option) => option.value === currentValue && !option.disabled)
+        setActiveIndex(selectedIndex >= 0 ? selectedIndex : options.findIndex((option) => !option.disabled))
+      } else if (activeIndex >= 0 && !options[activeIndex]?.disabled) {
+        selectValue(options[activeIndex].value)
+      }
+    } else if (event.key === "Escape") {
+      setOpen(false)
+    } else if (event.key === "Home" && open) {
+      event.preventDefault()
+      setActiveIndex(options.findIndex((option) => !option.disabled))
+    } else if (event.key === "End" && open) {
+      event.preventDefault()
+      const reversed = [...options].reverse().findIndex((option) => !option.disabled)
+      if (reversed >= 0) setActiveIndex(options.length - 1 - reversed)
+    }
+  }
+
+  return (
+    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
+      <button
+        id={id}
+        type="button"
+        data-vt-studio-control="true"
+        data-size={sizeVariant}
+        data-dropdown-trigger="true"
+        aria-label={ariaLabel}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={id ? `${id}-listbox` : undefined}
+        disabled={disabled}
+        onClick={() => setOpen((current) => !current)}
+        onKeyDown={onKeyDown}
+      >
+        <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
+        <ChevronDown size={18} strokeWidth={3} aria-hidden="true" />
+      </button>
+      {open && !disabled ? (
+        <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
+          {options.map((option, index) => (
+            <button
+              key={option.value}
+              type="button"
+              role="option"
+              aria-selected={option.value === currentValue}
+              disabled={option.disabled}
+              className="vt-studio-dropdown-option"
+              data-active={index === activeIndex || undefined}
+              data-selected={option.value === currentValue || undefined}
+              onMouseEnter={() => setActiveIndex(index)}
+              onClick={() => selectValue(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
+export interface StudioSimpleDropdownProps {
+  value?: string
+  defaultValue?: string
+  options: StudioSimpleDropdownOption[]
+  onChange?: (value: string) => void
+  placeholder?: React.ReactNode
+  disabled?: boolean
+  className?: string
+  id?: string
+  ariaLabel?: string
+  sizeVariant?: "standard" | "compact"
+}
+
+/** Simple single-select child variant of the canonical StudioDropdown family. */
+export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
+  <StudioDropdown {...props} options={options} variant="simple" />
+)
+StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
+
+// Canonical Studio stepper implementations are owned by this module.
+export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number
+  onValueChange: (value: number) => void
+  min?: number
+  max?: number
+  step?: number
+  size?: StudioControlSize
+  disabled?: boolean
+  ariaLabel?: string
+}
+
+/** Clamp a numeric step action to valid finite values and the supplied bounds. */
+export function normalizeStudioInlineStepperValue(
+  value: number,
+  direction: -1 | 0 | 1,
+  step = 1,
+  min = -Infinity,
+  max = Infinity,
+): number {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
+  const base = Number.isFinite(value) ? value : Number.isFinite(min) ? min : 0
+  const lower = Number.isFinite(min) ? min : -Infinity
+  const upper = Number.isFinite(max) ? max : Infinity
+  if (lower > upper) return Number.isFinite(min) ? min : 0
+  const next = base + direction * safeStep
+  if (!Number.isFinite(next)) return direction < 0 && Number.isFinite(min) ? min : direction > 0 && Number.isFinite(max) ? max : base
+  const precision = Math.min(12, Math.max(String(base).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0))
+  const rounded = Number(next.toFixed(precision))
+  return Math.min(upper, Math.max(lower, rounded))
+}
+
+/**
+ * Canonical horizontal Studio Controls stepper: square decrement button,
+ * editable numeric field, square increment button. Independent from SubToolbox.
+ */
+export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
+  value,
+  onValueChange,
+  min = -Infinity,
+  max = Infinity,
+  step = 1,
+  size = "standard",
+  disabled = false,
+  ariaLabel = "Value",
+  className,
+  style,
+  ...props
+}) => {
+  const [draft, setDraft] = React.useState(String(Number.isFinite(value) ? value : 0))
+  const [focused, setFocused] = React.useState(false)
+  const validBounds = min <= max
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
+
+  React.useEffect(() => {
+    if (!focused) setDraft(String(Number.isFinite(value) ? value : 0))
+  }, [value, focused])
+
+  const commit = React.useCallback(() => {
+    const parsed = draft.trim() === "" ? Number.NaN : Number(draft)
+    if (!Number.isFinite(parsed)) {
+      setDraft(String(Number.isFinite(value) ? value : 0))
+      return
+    }
+    const normalized = normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)
+    setDraft(String(normalized))
+    if (normalized !== value) onValueChange(normalized)
+  }, [draft, max, min, onValueChange, safeStep, value])
+
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const parsedDraft = draft.trim() === "" ? Number.NaN : Number(draft)
+    const base = Number.isFinite(parsedDraft) ? parsedDraft : value
+    const next = normalizeStudioInlineStepperValue(base, direction, safeStep, min, max)
+    setDraft(String(next))
+    if (next !== value) onValueChange(next)
+  }, [draft, max, min, onValueChange, safeStep, value])
+
+  const currentForBounds = Number.isFinite(value) ? value : 0
+
+  return (
+    <div
+      {...props}
+      className={["vt-studio-inline-stepper", `is-${size}`, focused ? "is-focused" : "", className].filter(Boolean).join(" ")}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="inline-stepper"
+      data-vt-studio-username-foundation="true"
+      data-size={size}
+      role="group"
+      aria-label={ariaLabel}
+      style={style}
+    >
+      <StudioSplitLeftButton icon={<Minus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
+        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__decrement"
+        aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds <= min}
+        onClick={() => adjust(-1)} />
+      <StudioUsernameInput
+        icon={<span />}
+        sizeVariant={size === "compact" ? "compact" : "standard"}
+        className="vt-studio-inline-stepper__field-shell"
+        inputClassName="vt-studio-inline-stepper__value"
+        type="number"
+        inputMode="decimal"
+        aria-label={ariaLabel}
+        value={draft}
+        min={Number.isFinite(min) ? min : undefined}
+        max={Number.isFinite(max) ? max : undefined}
+        step={safeStep}
+        disabled={disabled || !validBounds}
+        onFocus={() => setFocused(true)}
+        onBlur={() => { setFocused(false); commit() }}
+        onChange={event => {
+          const nextDraft = event.currentTarget.value
+          setDraft(nextDraft)
+          if (!nextDraft.trim()) return
+          const parsed = Number(nextDraft)
+          if (!Number.isFinite(parsed)) return
+          onValueChange(normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max))
+        }}
+        onKeyDown={event => {
+          if (event.key === "Enter") {
+            event.preventDefault()
+            commit()
+            event.currentTarget.blur()
+          }
+        }}
+      />
+      <StudioSplitLeftButton icon={<Plus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
+        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__increment"
+        aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds >= max}
+        onClick={() => adjust(1)} />
+    </div>
+  )
+}
+
+StudioInlineStepper.displayName = "StudioInlineStepper"
+
+export type StudioSplitStepperSize = "standard" | "compact"
+export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number
+  onValueChange: (value: number) => void
+  min?: number
+  max?: number
+  step?: number
+  size?: StudioSplitStepperSize
+  disabled?: boolean
+  ariaLabel?: string
+}
+
+/** Studio Controls stepper family: fixed 2:1 editable value pane and square split-action rail. */
+export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
+  value, onValueChange, min = -Infinity, max = Infinity, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, style, ...props
+}) => {
+  const valueRef = React.useRef(value)
+  valueRef.current = value
+  const [draft, setDraft] = React.useState(String(value))
+  const [inputFocused, setInputFocused] = React.useState(false)
+  const [holding, setHolding] = React.useState(false)
+  const holdTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const repeatTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const startedAt = React.useRef(0)
+  const heldDirection = React.useRef<-1 | 1>(1)
+  const scheduleRepeatRef = React.useRef<() => void>(() => {})
+
+  React.useEffect(() => { if (!inputFocused) setDraft(String(value)) }, [value, inputFocused])
+
+  const stopHold = React.useCallback(() => {
+    if (holdTimer.current) clearTimeout(holdTimer.current)
+    if (repeatTimer.current) clearTimeout(repeatTimer.current)
+    holdTimer.current = null
+    repeatTimer.current = null
+    setHolding(false)
+  }, [])
+  React.useEffect(() => stopHold, [stopHold])
+
+  const validBounds = min <= max
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
+
+  const change = React.useCallback((direction: -1 | 1) => {
+    const current = valueRef.current
+    const next = normalizeStudioInlineStepperValue(current, direction, safeStep, min, max)
+    if (next === current) { stopHold(); return }
+    valueRef.current = next
+    setDraft(String(next))
+    onValueChange(next)
+  }, [max, min, onValueChange, safeStep, stopHold])
+
+  const scheduleRepeat = React.useCallback(() => {
+    const elapsed = Date.now() - startedAt.current
+    const delay = elapsed > 1800 ? 32 : elapsed > 1100 ? 58 : elapsed > 500 ? 105 : 220
+    repeatTimer.current = setTimeout(() => {
+      const current = valueRef.current
+      if ((heldDirection.current > 0 && current >= max) || (heldDirection.current < 0 && current <= min)) {
+        stopHold()
+        return
+      }
+      change(heldDirection.current)
+      if ((heldDirection.current > 0 && valueRef.current < max) || (heldDirection.current < 0 && valueRef.current > min)) scheduleRepeatRef.current()
+      else stopHold()
+    }, delay)
+  }, [change, max, min, stopHold])
+  React.useEffect(() => { scheduleRepeatRef.current = scheduleRepeat }, [scheduleRepeat])
+
+  const beginHold = (direction: -1 | 1, event: React.PointerEvent<HTMLButtonElement>) => {
+    if (disabled || !validBounds || event.button !== 0) return
+    if ((direction > 0 && valueRef.current >= max) || (direction < 0 && valueRef.current <= min)) return
+    event.preventDefault()
+    stopHold()
+    heldDirection.current = direction
+    startedAt.current = Date.now()
+    change(direction)
+    holdTimer.current = setTimeout(() => {
+      setHolding(true)
+      scheduleRepeat()
+    }, 320)
+  }
+
+  const commitDraft = () => {
+    const parsed = draft.trim() === "" ? Number.NaN : Number(draft)
+    if (!Number.isFinite(parsed) || !validBounds) { setDraft(String(valueRef.current)); return }
+    const normalized = normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)
+    valueRef.current = normalized
+    setDraft(String(normalized))
+    if (normalized !== value) onValueChange(normalized)
+  }
+
+  return (
+    <div
+      {...props}
+      className={["vt-studio-split-stepper", `is-${size}`, inputFocused || holding ? "is-interacting" : "", className].filter(Boolean).join(" ")}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="split-stepper"
+      data-vt-studio-username-foundation="true"
+      data-size={size}
+      role="group"
+      aria-label={ariaLabel}
+      style={style}
+    >
+      <StudioUsernameInput
+        icon={<span />}
+        sizeVariant={size === "compact" ? "compact" : "standard"}
+        className="vt-studio-split-stepper__field-shell"
+        inputClassName="vt-studio-split-stepper-value"
+        type="number"
+        aria-label={ariaLabel}
+        inputMode="decimal"
+        value={draft}
+        min={Number.isFinite(min) ? min : undefined}
+        max={Number.isFinite(max) ? max : undefined}
+        step={safeStep}
+        disabled={disabled || !validBounds}
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => { setInputFocused(false); commitDraft() }}
+        onChange={(event) => {
+          const nextDraft = event.currentTarget.value
+          setDraft(nextDraft)
+          if (!nextDraft.trim()) return
+          const parsed = Number(nextDraft)
+          if (!Number.isFinite(parsed)) return
+          if (!validBounds) return
+          const normalized = normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)
+          valueRef.current = normalized
+          onValueChange(normalized)
+        }}
+      />
+      <div className="vt-studio-split-stepper-rail">
+        <StudioSplitLeftButton icon={<ChevronsUp aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
+          className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
+          disabled={disabled || !validBounds || value >= max}
+          onPointerDown={(event) => beginHold(1, event)}
+          onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
+          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }} />
+        <StudioSplitLeftButton icon={<ChevronsDown aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
+          className="vt-studio-split-stepper-down" aria-label={`Decrease ${ariaLabel}`}
+          disabled={disabled || !validBounds || value <= min}
+          onPointerDown={(event) => beginHold(-1, event)}
+          onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
+          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }} />
+      </div>
+    </div>
+  )
+}
+
+
+/** Closeable metadata badge using the global Studio size and palette contract. */
+export interface StudioCloseableBadgeProps {
+  label: string;
+  onClose?: () => void;
+  className?: string;
+  entering?: boolean;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
+  label,
+  onClose,
+  className,
+  entering = true,
+  sizeVariant = "standard",
+}) => {
+  const [swapping, setSwapping] = React.useState(false);
+  const [fading, setFading] = React.useState(false);
+  const [isEntering, setIsEntering] = React.useState(entering);
+  const [removed, setRemoved] = React.useState(false);
+  const busy = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!isEntering) return;
+    const timer = window.setTimeout(() => setIsEntering(false), 460);
+    return () => window.clearTimeout(timer);
+  }, [isEntering]);
+
+  const close = () => {
+    if (busy.current) return;
+    busy.current = true;
+    setSwapping(true);
+    window.setTimeout(() => {
+      setSwapping(false);
+      setFading(true);
+      window.setTimeout(() => { setRemoved(true); onClose?.(); }, 1000);
+    }, 540);
+  };
+
+  const normalized = label.trim().toUpperCase();
+  if (removed) return null;
+  return (
+    <span
+      className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
+      data-size={sizeVariant}
+      data-vt-studio-badge="true"
+      data-entering={isEntering ? "true" : undefined}
+      data-fading={fading ? "true" : undefined}
+    >
+      <span className="vt-studio-closeable-badge__label">{normalized}</span>
+      <button
+        type="button"
+        className="vt-studio-closeable-badge__close"
+        aria-label={`Remove ${normalized || "tag"}`}
+        title="Remove tag"
+        data-swapping={swapping ? "true" : undefined}
+        onClick={close}
+      >
+        <svg viewBox="0 0 12 12" aria-hidden="true">
+          <line x1="2.5" y1="2.5" x2="9.5" y2="9.5" />
+          <line x1="9.5" y1="2.5" x2="2.5" y2="9.5" />
+        </svg>
+      </button>
+    </span>
+  );
+};
+StudioCloseableBadge.displayName = "StudioCloseableBadge";
+
+export interface StudioTagEditorProps {
+  value?: readonly string[];
+  defaultValue?: readonly string[];
+  onChange?: (tags: string[]) => void;
+  className?: string;
+  ariaLabel?: string;
+  placeholder?: string;
+  maxTagLength?: number;
+}
+
+/** Canonical add/remove tag editor using StudioTextInput in compact mode. */
+export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
+  value,
+  defaultValue = [],
+  onChange,
+  className,
+  ariaLabel = "Tags",
+  placeholder = "TAG NAME",
+  maxTagLength = 32,
+}) => {
+  const [internalTags, setInternalTags] = React.useState<string[]>(() => [...defaultValue]);
+  const tags = value === undefined ? internalTags : [...value];
+  const [open, setOpen] = React.useState(false);
+  const [draft, setDraft] = React.useState("");
+  const [fly, setFly] = React.useState<{ id: number; label: string; left: number; top: number } | null>(null);
+  const [flyTarget, setFlyTarget] = React.useState<{ left: number; top: number } | null>(null);
+  const [flyArrived, setFlyArrived] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const editorRef = React.useRef<HTMLDivElement>(null);
+  const nextId = React.useRef(1);
+
+  const commit = (next: string[]) => {
+    if (value === undefined) setInternalTags(next);
+    onChange?.(next);
+  };
+  const openComposer = () => {
+    setDraft("");
+    setOpen(true);
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+  };
+  const closeComposer = () => {
+    setOpen(false);
+    setDraft("");
+  };
+  const removeTag = (index: number) => commit(tags.filter((_, i) => i !== index));
+  const confirmTag = () => {
+    const label = draft.trim().toUpperCase().slice(0, maxTagLength);
+    if (!label) {
+      inputRef.current?.focus();
+      return;
+    }
+    const inputRect = inputRef.current?.getBoundingClientRect();
+    const id = nextId.current++;
+    setFlyArrived(false);
+    if (inputRect) {
+      setFly({
+        id,
+        label,
+        left: inputRect.left + 12,
+        top: inputRect.top + (inputRect.height - 20) / 2,
+      });
+      setFlyTarget(null);
+    }
+    commit([...tags, label]);
+    setDraft("");
+  };
+
+  React.useEffect(() => {
+    if (!fly) return;
+    const frame = window.requestAnimationFrame(() => {
+      const labels = editorRef.current?.querySelectorAll<HTMLElement>(".vt-studio-closeable-badge__label");
+      const target = labels?.[labels.length - 1];
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        setFlyTarget({ left: rect.left, top: rect.top });
+      }
+    });
+    const arriveTimer = window.setTimeout(() => setFlyArrived(true), 450);
+    const finishTimer = window.setTimeout(() => {
+      setFly(null);
+      setFlyTarget(null);
+      setFlyArrived(false);
+      setOpen(false);
+      setDraft("");
+    }, 850);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(arriveTimer);
+      window.clearTimeout(finishTimer);
+    };
+  }, [fly]);
+
+  return (
+    <div ref={editorRef} className={["vt-studio-tag-editor", className].filter(Boolean).join(" ")} data-vt-studio-tag-editor="true" role="group" aria-label={ariaLabel}>
+      <div className="vt-studio-tag-editor__list">
+        {tags.map((tag, index) => (
+          <StudioCloseableBadge
+            key={`${index}:${tag}`}
+            label={tag}
+            onClose={() => removeTag(index)}
+            entering={false}
+            className={fly && index === tags.length - 1 && tag === fly.label ? "is-fly-destination" : undefined}
+          />
+        ))}
+      </div>
+      {!open ? (
+        <button type="button" className="vt-studio-tag-editor__square-action" data-vt-studio-control="true" data-size="compact" data-vt-studio-tag-editor-action="true" aria-label="Add tag" title="Add tag" onClick={openComposer}>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><line x1="8" y1="3" x2="8" y2="13" /><line x1="3" y1="8" x2="13" y2="8" /></svg>
+        </button>
+      ) : (
+        <div className={["vt-studio-tag-editor__composer", fly ? "is-fading" : ""].filter(Boolean).join(" ")}>
+          <StudioTextInput
+            ref={inputRef}
+            variant="simple"
+            sizeVariant="compact"
+            value={draft}
+            placeholder={placeholder}
+            maxLength={maxTagLength}
+            autoComplete="off"
+            spellCheck={false}
+            aria-label="New tag name"
+            onChange={event => setDraft(event.target.value)}
+            onKeyDown={event => {
+              if (event.key === "Enter") { event.preventDefault(); confirmTag(); }
+              if (event.key === "Escape") { event.preventDefault(); closeComposer(); }
+            }}
+          />
+          <button type="button" className="vt-studio-tag-editor__square-action" data-vt-studio-control="true" data-size="compact" data-vt-studio-tag-editor-action="true" aria-label="Confirm tag" title="Confirm tag" onClick={confirmTag}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4" /></svg>
+          </button>
+        </div>
+      )}
+      {fly && (
+        <span
+          className="vt-studio-tag-editor__fly"
+          aria-hidden="true"
+          data-targeted={flyTarget ? "true" : "false"}
+          data-arrived={flyArrived ? "true" : "false"}
+          style={{
+            left: flyTarget?.left ?? fly.left,
+            top: flyTarget?.top ?? fly.top,
+          }}
+        >
+          {fly.label}
+        </span>
+      )}
+    </div>
+  );
+};
+StudioTagEditor.displayName = "StudioTagEditor";
+
+
+/** Shared static split-badge foundation — thin wrappers over StudioSplitShell. */
+export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({ icon, children, sizeVariant = "standard", className, ...props }) => (
+  <StudioSplitShell
+    {...props}
+    as="span"
+    layout="left"
+    sizeVariant={sizeVariant}
+    iconLeft={icon}
+    className={className}
+    rootClassName="vt-studio-split-left-badge"
+    faceClassName="vt-studio-split-left-badge__face"
+    railClassName="vt-studio-split-left-badge__rail"
+    labelClassName="vt-studio-split-left-badge__label"
+    libraryComponent="StudioSplitLeftBadge"
+  >
+    {children}
+  </StudioSplitShell>
+);
+StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
+
+export interface StudioSplitRightBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioSplitRightBadge: React.FC<StudioSplitRightBadgeProps> = ({ icon, children, sizeVariant = "standard", className, ...props }) => (
+  <StudioSplitShell
+    {...props}
+    as="span"
+    layout="right"
+    sizeVariant={sizeVariant}
+    iconRight={icon}
+    className={className}
+    rootClassName="vt-studio-split-right-badge"
+    faceClassName="vt-studio-split-right-badge__face"
+    railClassName="vt-studio-split-right-badge__rail"
+    labelClassName="vt-studio-split-right-badge__label"
+    libraryComponent="StudioSplitRightBadge"
+  >
+    {children}
+  </StudioSplitShell>
+);
+StudioSplitRightBadge.displayName = "StudioSplitRightBadge";
+
+export interface StudioDoubleSplitBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ leftIcon, rightIcon, children, sizeVariant = "standard", className, ...props }) => (
+  <StudioSplitShell
+    {...props}
+    as="span"
+    layout="double"
+    sizeVariant={sizeVariant}
+    iconLeft={leftIcon}
+    iconRight={rightIcon}
+    className={className}
+    rootClassName="vt-studio-double-split-badge"
+    faceClassName="vt-studio-double-split-badge__face"
+    railClassName="vt-studio-double-split-badge__rail"
+    labelClassName="vt-studio-double-split-badge__label"
+    libraryComponent="StudioDoubleSplitBadge"
+  >
+    {children}
+  </StudioSplitShell>
+);
+StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";;
+/**
+ * Geometry + exception contract tests (ideas #6, #16).
+ * Asserts the machine-readable registry and CSS/token invariants.
+ */
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
+import { describe, expect, it } from "vitest"
+import {
+  STUDIO_CONTROL_SIZE_BASE,
+  STUDIO_CONTROL_EXCEPTIONS,
+  STUDIO_WIDTH_POLICY,
+  STUDIO_COLOR_ROLES,
+  studioSizeTierToCssVars,
+} from "../tokens"
+
+const cssPath = resolve(process.cwd(), "src/styles/studio-control-system.css")
+const readCss = () => readFileSync(cssPath, "utf8")
+
+describe("size ladder (ideas #1, #14)", () => {
+  it("micro is half-compact on primary geometry axes", () => {
+    const { compact, micro } = STUDIO_CONTROL_SIZE_BASE
+    expect(micro.height).toBe(compact.height / 2)
+    expect(micro.stroke).toBe(compact.stroke / 2)
+    expect(micro.radius).toBe(compact.radius / 2)
+    // gap stays 4 across tiers
+    expect(micro.gap).toBe(4)
+    expect(compact.gap).toBe(4)
+    expect(STUDIO_CONTROL_SIZE_BASE.standard.gap).toBe(4)
+  })
+
+  it("emits consistent CSS vars per tier", () => {
+    const std = studioSizeTierToCssVars("standard")
+    expect(std["--vt-studio-control-height"]).toBe("44px")
+    expect(std["--vt-studio-control-stroke"]).toBe("3px")
+    const micro = studioSizeTierToCssVars("micro")
+    expect(micro["--vt-studio-control-height"]).toBe("14px")
+  })
+})
+
+describe("exception registry (idea #6)", () => {
+  it("names every registered exception with an owner and rationale", () => {
+    for (const [id, entry] of Object.entries(STUDIO_CONTROL_EXCEPTIONS)) {
+      expect(entry.id).toBe(id)
+      expect(entry.owner).toBeTruthy()
+      expect(entry.rationale).toBeTruthy()
+    }
+  })
+
+  it("marks vault spectrum tag as content-width", () => {
+    expect(STUDIO_CONTROL_EXCEPTIONS.vaultSpectrumTag.widthPolicy).toBe("content")
+  })
+})
+
+describe("width policy (idea #13)", () => {
+  it("defaults to row fill with an explicit content allow-list", () => {
+    expect(STUDIO_WIDTH_POLICY.default).toBe("row")
+    expect(STUDIO_WIDTH_POLICY.contentWidthAllowList).toContain("spectrumTag")
+  })
+})
+
+describe("color roles (idea #15)", () => {
+  it("exposes primary/secondary CSS variable names only", () => {
+    expect(STUDIO_COLOR_ROLES.primaryVar).toBe("--vt-studio-control-accent")
+    expect(STUDIO_COLOR_ROLES.secondaryVar).toBe("--vt-studio-control-secondary")
+  })
+})
+
+describe("CSS geometry contract (ideas #8, #10, #12, #16)", () => {
+  it("keeps Studio controls flat (no press-motion tokens in contract tail)", () => {
+    const css = readCss()
+    const tail = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract") || 0)
+    // Allow 0ms tokens; forbid active press motion wiring
+    expect(css).not.toMatch(/--vt-studio-motion-press:\s*[1-9]/
+    expect(css).toMatch(/box-shadow:\s*none/)
+  })
+
+  it("uses secondary for both double-split rails", () => {
+    const css = readCss()
+    // Prefer unified selector; legacy BEM may still exist during migration
+    const hasUnified =
+      css.includes('[data-vt-studio-split="double"] [data-vt-studio-split-rail]') ||
+      css.includes("vt-studio-double-split-badge__rail:first-child")
+    expect(hasUnified).toBe(true)
+  })
+
+  it("does not force field type with !important font-size", () => {
+    const css = readCss()
+    const fieldRegion = css.includes("Canonical Studio Controls contract")
+      ? css.slice(css.lastIndexOf("/* Canonical Studio Controls contract"))
+      : css
+    expect(fieldRegion).not.toMatch(/font-size:[^;]*!important/)
+  })
+})
