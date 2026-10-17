@@ -3520,11 +3520,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   line-height: 1.1;
   -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
-.vt-studio-floating-field > .vt-studio-floating-field-label {
-  transition: top 180ms ease, transform 180ms ease, font-size 180ms ease,
-    padding 180ms ease, color 180ms ease, background-color 180ms ease,
-    border-color 180ms ease;
-}
+/* Floating-label transitions are owned by studio-control-motion.css. */
 .vt-studio-floating-field > :is(input, textarea) {
   transition: background-color 160ms ease, color 160ms ease,
     border-color 160ms ease, box-shadow 160ms ease;
