@@ -89,14 +89,14 @@ describe("StudioSplitStepper username-input foundation", () => {
 describe("Studio stepper single-shell geometry regression", () => {
   it("clips all inline stepper layers inside one compact root instead of letting child surfaces stack outward", () => {
     const css = readStudioControlCss()
-    expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*overflow:\s*hidden;/s)
-    expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*max-width:\s*100%;/s)
-    expect(css).toMatch(/\.vt-studio-inline-stepper__button\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper,\s*\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*hidden;/s)
+    expect(css).toMatch(/\[data-vt-studio-control="true"\]\[data-vt-studio-split="double"\]\.vt-studio-inline-stepper\s*\{[^}]*max-width:\s*100%;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper__rail\s*\{[^}]*position:\s*relative;/s)
     expect(css).toMatch(/\.vt-studio-inline-stepper__value\s*\{[^}]*position:\s*relative;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*hidden;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*width:\s*calc\(3\s*\*\s*var\(--vt-stepper-height\)\s*\+\s*2\s*\*\s*var\(--vt-stepper-stroke\)\);/s)
     expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*overflow:\s*hidden;/s)
-    expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper-actions button\s*\{[^}]*position:\s*relative;/s)
   })
 })
 
