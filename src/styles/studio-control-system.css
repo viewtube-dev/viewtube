@@ -1784,19 +1784,18 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   align-items: center;
   gap: 6px;
   width: max-content;
-  height: var(--vt-studio-control-height, 44px);
-  padding: 0 4px;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
-  background: var(--vt-studio-primary, var(--pair-a, #36e0f6));
-  color: #000;
-  font: 1000 var(--vt-studio-control-font-size, 38px)/.86 Inter, ui-sans-serif, system-ui, sans-serif;
+  height: 20px;
+  padding: 0 2px 0 8px;
+  border-radius: 999px;
+  background: var(--vt-badge-primary);
+  color: var(--vt-badge-text);
+  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
   user-select: none;
   vertical-align: middle;
-  
+  transition: opacity 1s ease-out;
 }
 .vt-studio-closeable-badge[data-entering="true"] {
   animation: vt-studio-badge-enter 450ms cubic-bezier(.22,1,.36,1) both;
@@ -1807,11 +1806,10 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 }
 .vt-studio-closeable-badge__label {
   display: inline-block;
-  color: #000;
-  font: 1000 var(--vt-studio-control-font-size, 38px)/.86 Inter, ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -.02em;
+  color: var(--vt-badge-text);
+  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .02em;
   text-transform: uppercase;
-  text-align: center;
 }
 .vt-studio-closeable-badge__close {
   box-sizing: border-box;
@@ -1828,7 +1826,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   background: var(--vt-badge-secondary);
   color: var(--vt-badge-primary);
   cursor: pointer;
-  
+  transition: background-color 60ms linear, color 60ms linear;
 }
 .vt-studio-closeable-badge__close:focus-visible {
   outline: 2px solid #000;

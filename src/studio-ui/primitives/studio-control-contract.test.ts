@@ -65,4 +65,29 @@ describe("Studio control global contract", () => {
     expect(controls).not.toContain("studio-library-audit-fixes.css");
   });
 
+
+  it("preserves the original 20px animated closeable pill tag design", () => {
+    const css = read("src/styles/studio-control-system.css");
+    const start = css.indexOf(".vt-studio-closeable-badge {");
+    const end = css.indexOf(".vt-studio-tag-editor {", start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    const badge = css.slice(start, end);
+    expect(badge).toContain("height: 20px");
+    expect(badge).toContain("width: max-content");
+    expect(badge).toContain("border-radius: 999px");
+    expect(badge).toContain("padding: 0 2px 0 8px");
+    expect(badge).toContain("font: 1000 16px/20px");
+    expect(badge).toContain("color-mix(in srgb, var(--vt-badge-primary) 50%, #fff)");
+    expect(badge).not.toMatch(/\n\s*border:\s/);
+    expect(badge).toContain("background: var(--vt-badge-primary)");
+    expect(badge).toContain("flex: 0 0 16px");
+    expect(badge).toContain("border-radius: 50%");
+    expect(badge).toContain("animation: vt-studio-badge-swap 180ms linear 3");
+    expect(badge).toContain("@keyframes vt-studio-badge-enter");
+    expect(badge).toContain("@keyframes vt-studio-badge-swap");
+    expect(badge).not.toContain("--vt-studio-control-height");
+    expect(badge).not.toContain("--vt-studio-control-stroke");
+  });
+
 });
