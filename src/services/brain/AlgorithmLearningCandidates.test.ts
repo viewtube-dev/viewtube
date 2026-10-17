@@ -5,14 +5,14 @@ import { recordAlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLe
 
 const STORAGE_KEY = "vt_algorithm_intelligence_events_v1"
 
-const recordOutcome = (id: string, status: "positive" | "negative" | "neutral" | "mixed") =>
+const recordOutcome = (id: string, status: "positive" | "negative" | "neutral" | "mixed", recommendationId = "recommendation:shared") =>
  recordAlgorithmIntelligenceEvent({
   id,
   channelId: "channel-learning-threshold",
   kind: "OUTCOME_MEASURED",
   sourceSystem: "workflow",
   sourceId: "same-recommendation",
-  recommendationId: "recommendation:shared",
+  recommendationId,
   title: "Measured recommendation outcome",
   summary: "Test outcome",
   confidence: "medium",
@@ -34,7 +34,7 @@ describe("AlgorithmLearningCandidates evidence threshold", () => {
   const [candidate] = deriveAlgorithmLearningCandidates("channel-learning-threshold")
 
   expect(candidate).toMatchObject({
-   sampleSize: 4,
+   sampleSize: 2,
    positiveRate: 1,
    status: "insufficient_evidence",
    confidence: "low",
@@ -55,5 +55,21 @@ describe("AlgorithmLearningCandidates evidence threshold", () => {
    status: "candidate",
    confidence: "medium",
   })
+ })
+
+ it("keeps recommendations with shared suffixes in separate evidence cohorts", () => {
+  recordOutcome("alpha-1", "positive", "recommendation:alpha:shared")
+  recordOutcome("alpha-2", "positive", "recommendation:alpha:shared")
+  recordOutcome("beta-1", "positive", "recommendation:beta:shared")
+  recordOutcome("beta-2", "positive", "recommendation:beta:shared")
+
+  const candidates = deriveAlgorithmLearningCandidates("channel-learning-threshold")
+
+  expect(candidates).toHaveLength(2)
+  expect(candidates.map((candidate) => candidate.status)).toEqual([
+   "insufficient_evidence",
+   "insufficient_evidence",
+  ])
+  expect(candidates.map((candidate) => candidate.sampleSize)).toEqual([2, 2])
  })
 })

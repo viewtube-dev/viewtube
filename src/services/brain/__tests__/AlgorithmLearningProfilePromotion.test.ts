@@ -31,6 +31,7 @@ const mocks = vi.hoisted(() => {
   readBrainUserControls: vi.fn((_channelId?: string): any => ({ enabled: true, personalization: true, learnFromInteractions: true })),
   shouldBrainLearnFromInteraction: vi.fn((_controls?: any): boolean => true),
   listApprovedAlgorithmLearningCandidates: vi.fn((_channelId?: string): any[] => [{ candidate, sourceEvent, review }]),
+  listAlgorithmIntelligenceEvents: vi.fn((_input?: any): any[] => []),
   recordAlgorithmIntelligenceEvent: vi.fn((input?: any): any => ({ id: input?.id || "promotion-event-1", ...input })),
  }
 })
@@ -49,6 +50,7 @@ vi.mock("../AlgorithmLearningGovernance", () => ({
 }))
 
 vi.mock("../AlgorithmIntelligenceEventLedger", () => ({
+ listAlgorithmIntelligenceEvents: mocks.listAlgorithmIntelligenceEvents,
  recordAlgorithmIntelligenceEvent: mocks.recordAlgorithmIntelligenceEvent,
 }))
 
@@ -61,6 +63,8 @@ describe("AlgorithmLearningProfilePromotion", () => {
   mocks.shouldBrainLearnFromInteraction.mockClear()
   mocks.listApprovedAlgorithmLearningCandidates.mockClear()
   mocks.recordAlgorithmIntelligenceEvent.mockClear()
+  mocks.listAlgorithmIntelligenceEvents.mockReset()
+  mocks.listAlgorithmIntelligenceEvents.mockReturnValue([])
   mocks.shouldBrainLearnFromInteraction.mockReturnValue(true)
   mocks.listApprovedAlgorithmLearningCandidates.mockReturnValue([
    { candidate: mocks.candidate, sourceEvent: mocks.sourceEvent, review: mocks.review },
@@ -102,6 +106,28 @@ describe("AlgorithmLearningProfilePromotion", () => {
   })
   expect(result.status).toBe("not_approved_for_profile_review")
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+ })
+
+ it("does not teach the same candidate twice after durable promotion", async () => {
+  const priorPromotion = {
+   id: `algorithm-learning-promoted:${mocks.candidate.id}`,
+   channelId: "channel-1",
+   kind: "LEARNING_PROMOTED",
+   sourceId: mocks.candidate.id,
+   metadata: { durableProfileMutation: true, promotion: { allowed: true, claimId: "existing-claim" } },
+  }
+  mocks.listAlgorithmIntelligenceEvents.mockReturnValue([priorPromotion])
+
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+
+  expect(result.status).toBe("already_promoted")
+  expect(result.event).toBe(priorPromotion)
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+  expect(mocks.recordAlgorithmIntelligenceEvent).not.toHaveBeenCalled()
  })
 
  it("reuses the existing Brain teaching path after both approvals", async () => {
