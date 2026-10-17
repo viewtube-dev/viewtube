@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
-import { getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
+import { createContentBuild, getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
 import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
 import { createVersionedAsset } from "./assetEngine"
 import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
@@ -22,6 +22,7 @@ describe("Publisher metadata project persistence", () => {
     localStorage.clear()
     resetVideoPackageRepositoryForTests()
     resetContentBuildRepositoryForTests()
+    createContentBuild({ id: project.contentBuildId, legacyProjectId: project.id, legacyProjectName: project.name })
   })
 
   it("saves title, description and tags into the canonical ContentBuild and Video Package", () => {
