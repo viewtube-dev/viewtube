@@ -57,6 +57,7 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(view).toContain("comment-responder-message-bubble")
   expect(view).toContain("comment-responder-avatar")
   expect(view).toContain("publishedAt")
+  expect(view).toContain("data-comment-video-context")
   expect(view).not.toContain('SubToolbox title="Current Comment"')
   expect(view).not.toContain('SubToolbox title={`Reply History · ${replies.length}`}')
  })
