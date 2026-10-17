@@ -292,3 +292,13 @@ Evidence checked at the current branch head:
 **Why this matters:** the legacy checker will fail at its first missing-file read unless CI supplies those files outside the repository. The runtime links are also not portable to a browser/deployed client. Do not paper over this by weakening the guard assertions or by generating 15 duplicate planning documents without confirming they remain authoritative.
 
 **Next safe implementation step:** reconcile the guard script and runtime registry with the actual canonical documentation source. Either restore the legacy docs as tracked, owned artifacts, or migrate checks and links to the consolidated source with explicit per-tool anchors and equivalent coverage. Add a regression test for generated links and the guard's required inputs before deleting the old contract. Then run the guard script, focused tests, typecheck, full suite, and build in a real checkout. None of those commands was executed in this GitHub API session.
+
+### Individual tool implementation prompt pack — 2026-10-17
+
+Created `docs/plans/studio-hub-tool-prompts/` with a README and 13 self-contained execution prompts, one for each canonical Studio Hub capability. Each prompt gives a default build/combine/merge decision, identifies likely existing implementation to inspect, states the tool-specific transformation and boundaries, and requires implementation, regression tests, handoff/persistence verification, and honest validation reporting.
+
+Prompt index: `docs/plans/studio-hub-tool-prompts/README.md`.
+
+The prompts intentionally do not prescribe 13 independent pages. They direct implementation agents to verify the branch's current code and adjust the disposition only when source evidence supports it. They also enforce reuse of Brain, Projects/ContentBuild, Asset Engine/Vault, Analytics Canon, Publisher/Manager boundaries, and the separate roles of the SuperTool surface registry and tool-chain capability registry.
+
+**Status:** prompt documents are committed. This is an implementation-ready work queue, not evidence that the 13 tool capabilities have been implemented or tested. Runtime tests/typecheck/build still require execution in a real checkout.
