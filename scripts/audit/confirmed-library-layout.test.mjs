@@ -77,9 +77,8 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 test("non-default settings explain the real public props in plain language", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
   assert.ok(catalog.includes("Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors."));
-  assert.ok(catalog.includes("Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors."));
   assert.ok(catalog.includes("Circle icon buttons scale the large preset to 80%."));
-  assert.ok(catalog.includes("Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors."));
+  assert.ok(catalog.includes("Search/number, input mode, autocomplete, max length, disabled/read-only behavior, and native caret are field-specific options."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
