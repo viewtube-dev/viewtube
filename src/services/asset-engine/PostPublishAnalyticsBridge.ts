@@ -153,7 +153,7 @@ export const recordPostPublishIdentity = (
   if (existingReceipt) {
     const receiptMetadata = existingReceipt.metadata as Record<string, unknown> | undefined
     const decisionIdentityPairs = [
-      ["operationId", transaction.operationId || transaction.id],
+      ["operationId", transaction.operationId],
       ["actionPacketId", input.actionPacketId || transaction.actionPacketId],
       ["workflowId", input.workflowId || transaction.workflowId],
       ["recommendationId", input.recommendationId || transaction.recommendationId],
