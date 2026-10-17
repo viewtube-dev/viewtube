@@ -2571,105 +2571,6 @@ button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle].is-unlocked {
 }
 
 
-/* Split-left badge v2: static counterpart of StudioSplitLeftButton.
-   One shell, one face, one rail, one divider; no nested duplicate borders. */
-.vt-studio-split-left-badge {
-  /* The badge consumes the same standard/compact tokens as interactive Studio controls. */
-  --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
-  --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
-  --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
-  
-  
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  box-sizing: border-box;
-  min-width: 0;
-  min-height: var(--vt-studio-badge-height);
-  max-width: 100%;
-  vertical-align: middle;
-  border: 0;
-  border-radius: var(--vt-studio-badge-radius);
-  background: transparent;
-  color: #000;
-  
-  cursor: default;
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .86);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
-  text-transform: uppercase;
-}
-.vt-studio-split-left-badge::before { content: none; display: none; }
-.vt-studio-split-left-badge__face {
-  position: relative;
-  display: grid;
-  grid-template-columns: var(--vt-studio-badge-height) minmax(0, 1fr);
-  align-items: stretch;
-  min-width: 0;
-  min-height: var(--vt-studio-badge-height);
-  margin: 0;
-  border: var(--vt-studio-badge-stroke) solid #000;
-  border-radius: inherit;
-  overflow: hidden;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
-.vt-studio-split-left-badge__rail {
-  display: grid;
-  box-sizing: border-box;
-  width: var(--vt-studio-badge-height);
-  min-width: var(--vt-studio-badge-height);
-  min-height: 100%;
-  place-items: center;
-  border-right: var(--vt-studio-badge-stroke) solid #000;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-.vt-studio-split-left-badge__rail > svg {
-  display: block;
-  width: var(--vt-studio-control-icon-size, 38px);
-  height: var(--vt-studio-control-icon-size, 38px);
-  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
-}
-.vt-studio-split-left-badge__label {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  padding: 0 10px;
-  overflow: hidden;
-  color: #000;
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: inherit;
-  letter-spacing: inherit;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  -webkit-text-stroke: inherit;
-}
-.vt-studio-split-left-badge[data-size="compact"] {
-  --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
-  --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
-  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2);
-  --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
-  --vt-studio-control-line-height: var(--vt-studio-28-line-height, .86);
-}
-.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label { padding-inline: 8px; }
-.vt-studio-split-left-badge[data-size="micro"] {
-  --vt-studio-badge-height: var(--vt-studio-14-height, 14px);
-  --vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px);
-  --vt-studio-badge-radius: var(--vt-studio-14-radius, 2px);
-  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-14-icon-stroke, 1.5);
-  --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px);
-  --vt-studio-control-font-weight: var(--vt-studio-14-font-weight, 1000);
-  --vt-studio-control-line-height: var(--vt-studio-14-line-height, 1);
-  --vt-studio-control-letter-spacing: -.01em;
-}
-.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__label { padding-inline: 4px; }
-
 /* Choice controls must occupy the full 44px standard control height. */
 .vt-studio-44-choice {
   box-sizing: border-box;
@@ -2880,99 +2781,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   --vt-studio-control-icon-size: 10px;
   --vt-studio-control-icon-stroke: 1.5;
   min-height: 14px;
-}
-
-/* Shared split-badge foundation: button-equivalent label centering, stable geometry,
-   and one shared spacing contract for split-left, split-right, and double-split badges. */
-.vt-studio-split-left-badge,
-.vt-studio-split-right-badge,
-.vt-studio-double-split-badge {
-  display: inline-flex;
-  box-sizing: border-box;
-  align-items: stretch;
-  min-width: 0;
-  padding: 0;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, 6px));
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  color: #000;
-  
-  transform: none !important;
-  
-}
-.vt-studio-split-left-badge__face,
-.vt-studio-split-right-badge__face,
-.vt-studio-double-split-badge__face {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: stretch;
-  width: 100%;
-  min-width: 0;
-  min-height: inherit;
-  box-sizing: border-box;
-  
-}
-.vt-studio-split-left-badge__rail,
-.vt-studio-split-right-badge__rail,
-.vt-studio-double-split-badge__rail {
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
-  min-width: var(--vt-studio-control-height, 44px);
-  padding: 0 var(--vt-studio-space-unit, 4px);
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-split-right-badge__rail {
-  grid-column: 2;
-  grid-row: 1;
-  border-right: 0;
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-split-left-badge__label,
-.vt-studio-split-right-badge__label,
-.vt-studio-double-split-badge__label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-width: 0;
-  padding: var(--vt-studio-space-top, 4px) var(--vt-studio-space-right, 4px)
-    var(--vt-studio-space-bottom, 4px) var(--vt-studio-space-left, 4px);
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .86);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
-  text-transform: uppercase;
-}
-.vt-studio-split-right-badge__face {
-  grid-template-columns: minmax(0, 1fr) auto;
-}
-.vt-studio-double-split-badge__face {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-}
-.vt-studio-double-split-badge__rail:last-child {
-  border-right: 0;
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-split-left-badge[data-size="compact"],
-.vt-studio-split-right-badge[data-size="compact"],
-.vt-studio-double-split-badge[data-size="compact"] {
-  --vt-studio-control-height: 28px;
-  --vt-studio-control-stroke: 2px;
-  --vt-studio-control-radius: 4px;
-  --vt-studio-control-font-size: 24px;
-  --vt-studio-control-icon-size: 24px;
-}
-.vt-studio-split-left-badge[data-size="micro"],
-.vt-studio-split-right-badge[data-size="micro"],
-.vt-studio-double-split-badge[data-size="micro"] {
-  --vt-studio-control-height: 14px;
-  --vt-studio-control-stroke: 1px;
-  --vt-studio-control-radius: 2px;
-  --vt-studio-control-font-size: 10px;
-  --vt-studio-control-icon-size: 10px;
-  --vt-studio-control-space-unit: 4px;
 }
 
 /* No hard-coded elevation or motion on Studio primitives/components. Geometry and
@@ -3623,48 +3431,6 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
   width: calc(var(--vt-studio-control-icon-size, 38px) * .55);
   height: calc(var(--vt-studio-control-icon-size, 38px) * .55);
 }
-.vt-studio-split-left-badge__label,
-.vt-studio-split-right-badge__label,
-.vt-studio-double-split-badge__label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  text-align: center;
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: 1000;
-}
-.vt-studio-split-left-badge__rail,
-.vt-studio-split-right-badge__rail,
-.vt-studio-double-split-badge__rail {
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  height: 100%;
-  min-height: var(--vt-studio-control-height, 44px);
-  aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
-  border-width: var(--vt-studio-control-stroke, 3px);
-}
-.vt-studio-split-left-badge__rail > svg,
-.vt-studio-split-right-badge__rail > svg,
-.vt-studio-double-split-badge__rail > svg {
-  width: var(--vt-studio-control-icon-size, 38px);
-  height: var(--vt-studio-control-icon-size, 38px);
-  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
-}
-.vt-studio-split-left-badge__face > :first-child,
-.vt-studio-split-right-badge__face > :last-child {
-  border-inline-start: 0;
-}
-.vt-studio-double-split-badge__face > :first-child {
-  border-inline-end: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-double-split-badge__face > :last-child {
-  border-inline-start: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-
 /* Text-input-only rules: left-aligned, vertically centered text; primary text/fill
    and a primary inline stroke in the default state. Focus uses 15% primary fill,
    black text, and a full-opacity secondary outline at 65% of the border width. */
@@ -3890,26 +3656,134 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   place-items: center;
   margin: 0;
 }
-.vt-studio-split-left-badge__face,
-.vt-studio-split-right-badge__face,
-.vt-studio-double-split-badge__face {
-  display: flex;
-  align-items: stretch;
-}
-.vt-studio-split-left-badge__label,
-.vt-studio-split-right-badge__label,
-.vt-studio-double-split-badge__label {
-  flex: 1 1 auto;
-  min-width: 0;
-  align-self: stretch;
-  justify-content: center;
-  text-align: center;
-  font-weight: 1000 !important;
-}
-
-
 /* Canonical split-left label centering rule: icon rail stays square; label centers in remaining flexible region. */
 button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] {
   justify-content: center;
   text-align: center;
 }
+
+
+/* Canonical split-badge geometry contract.
+   The outer shell owns the only border/radius. Inner fills stay square and are
+   clipped by that shell, so no interior segment can render a second pill edge.
+   Width is parent-filling for split badges; buttons keep their own documented
+   auto/full-row layout contract. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px)));
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__face { grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr); }
+.vt-studio-split-right-badge__face { grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)); }
+.vt-studio-double-split-badge__face {
+  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  flex: 0 0 var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  width: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0;
+  border-right: 0;
+  border-left: 0;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-double-split-badge__rail:first-child {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+}
+.vt-studio-double-split-badge__rail:last-child {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+}
+.vt-studio-split-left-badge__rail { border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000; }
+.vt-studio-split-right-badge__rail { border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000; }
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  align-self: stretch;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vt-studio-split-left-badge[data-size="standard"],
+.vt-studio-split-right-badge[data-size="standard"],
+.vt-studio-double-split-badge[data-size="standard"] {
+  --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
+  --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
+  --vt-studio-control-height: var(--vt-studio-44-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
+  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
+}
+.vt-studio-split-left-badge[data-size="compact"],
+.vt-studio-split-right-badge[data-size="compact"],
+.vt-studio-double-split-badge[data-size="compact"] {
+  --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
+  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
+}
+.vt-studio-split-left-badge[data-size="micro"],
+.vt-studio-split-right-badge[data-size="micro"],
+.vt-studio-double-split-badge[data-size="micro"] {
+  --vt-studio-badge-height: var(--vt-studio-14-height, 14px);
+  --vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px);
+  --vt-studio-badge-radius: var(--vt-studio-14-radius, 2px);
+  --vt-studio-control-height: var(--vt-studio-14-height, 14px);
+  --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-14-radius, 2px);
+  --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px);
+  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px);
+}
+.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge[data-size="compact"] .vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge[data-size="compact"] .vt-studio-double-split-badge__label { padding-inline: var(--vt-studio-space-unit, 4px); }
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__label { padding-inline: var(--vt-studio-space-unit, 4px); }
