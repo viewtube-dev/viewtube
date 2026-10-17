@@ -54,9 +54,12 @@ describe("OpportunityEvidenceAdapter", () => {
   expect(result).toHaveLength(2)
   expect(result[0]).toMatchObject({
    channelId: "channel-a",
-   kind: "catalog_gap",
+   kind: "performance_candidate",
    evidenceIds: ["ev-top"],
   })
+  // In-sample ranking is not proof of a catalog gap or measured trend.
+  expect(result.every((item) => item.kind === "performance_candidate")).toBe(true)
+  expect(result.every((item) => item.baselineValue === null && item.relativeDelta === null)).toBe(true)
   expect(result.every((item) => item.confidence >= 0 && item.confidence <= 100)).toBe(true)
   expect(result.every((item) => item.impactScore >= 0 && item.impactScore <= 100)).toBe(true)
  })
@@ -190,6 +193,9 @@ describe("buildOpportunityEvidenceFromCanonicalBundle", () => {
 
   expect(result).toHaveLength(2)
   expect(result[0].evidenceIds).toEqual(["snapshot-canonical-1:videos:1"])
+  expect(result[0].kind).toBe("performance_candidate")
+  expect(result[0].baselineValue).toBeNull()
+  expect(result[0].relativeDelta).toBeNull()
   expect(result[0].currentValue).toBe(240)
   expect(result[0].provenance).toMatchObject({
    sourceOwner: "analytics-canon",
