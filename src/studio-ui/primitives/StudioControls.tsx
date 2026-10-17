@@ -1349,18 +1349,20 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
 }
 
 
-/** Closeable metadata pill with the shared primary/secondary pair and donor-defined motion. */
+/** Closeable metadata badge using the global Studio size and palette contract. */
 export interface StudioCloseableBadgeProps {
   label: string;
   onClose?: () => void;
   className?: string;
   entering?: boolean;
+  sizeVariant?: "standard" | "compact" | "micro";
 }
 export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   label,
   onClose,
   className,
   entering = true,
+  sizeVariant = "standard",
 }) => {
   const [swapping, setSwapping] = React.useState(false);
   const [fading, setFading] = React.useState(false);
@@ -1390,6 +1392,7 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   return (
     <span
       className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
+      data-size={sizeVariant}
       data-vt-studio-badge="true"
       data-entering={isEntering ? "true" : undefined}
       data-fading={fading ? "true" : undefined}
