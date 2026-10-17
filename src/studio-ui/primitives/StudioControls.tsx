@@ -1141,8 +1141,9 @@ const useStudioCounterHold = (
   }, []);
   React.useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const onPointerDown = React.useCallback((event: React.PointerEvent<HTMLButtonElement>) => {
-    if (disabled || event.button !== 0) return;
+    if (disabled || (event.pointerType === "mouse" && event.button !== 0)) return;
     if (timer.current) clearTimeout(timer.current);
+    try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* Embedded webviews may not support pointer capture. */ }
     held.current = false;
     suppressClick.current = false;
     startedAt.current = Date.now();
@@ -1170,8 +1171,8 @@ const useStudioCounterHold = (
     } else if (!disabled) adjust(direction);
   }, [adjust, direction, disabled]);
   return { isHolding, events: {
-    onPointerDown, onPointerUp: stop, onPointerLeave: stop,
-    onPointerCancel: stop, onBlur: stop, onClick,
+    onPointerDown, onPointerUp: stop, onPointerLeave: (event: React.PointerEvent<HTMLButtonElement>) => { if (event.pointerType === "mouse") stop(); },
+    onPointerCancel: stop, onLostPointerCapture: stop, onBlur: stop, onClick,
   }};
 };
 
@@ -1196,19 +1197,24 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const validBounds = min <= max;
   const current = Number.isFinite(value) ? value : 0;
-  const adjust = (direction: -1 | 1) => {
-    const precision = Math.min(12, Math.max(String(current).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
-    const next = Number((current + direction * safeStep).toFixed(precision));
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const base = currentRef.current;
+    const precision = Math.min(12, Math.max(String(base).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
+    const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
-  };
+  }, [max, min, onValueChange, safeStep]);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max);
   return (
     <StudioSplitShell
       layout="double"
       sizeVariant={size}
       className={studioClasses("vt-studio-counter", `is-${size}`, className)}
       railClassName="vt-studio-counter__rail"
-      leftRailContent={<button type="button" className="vt-studio-counter__button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onClick={() => adjust(-1)}><Minus aria-hidden="true" focusable="false" /></button>}
-      rightRailContent={<button type="button" className="vt-studio-counter__button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} onClick={() => adjust(1)}><Plus aria-hidden="true" focusable="false" /></button>}
+      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><Minus aria-hidden="true" focusable="false" /></button>}
+      rightRailContent={<button type="button" className={`vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><Plus aria-hidden="true" focusable="false" /></button>}
       shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
     >
       <span className="vt-studio-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
@@ -1226,11 +1232,16 @@ export const StudioRightCounter: React.FC<StudioCounterProps> = ({
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const validBounds = min <= max;
   const current = Number.isFinite(value) ? value : 0;
-  const adjust = (direction: -1 | 1) => {
-    const precision = Math.min(12, Math.max(String(current).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
-    const next = Number((current + direction * safeStep).toFixed(precision));
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const base = currentRef.current;
+    const precision = Math.min(12, Math.max(String(base).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
+    const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
-  };
+  }, [max, min, onValueChange, safeStep]);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max);
   return (
     <StudioSplitShell
       layout="right"
@@ -1238,8 +1249,8 @@ export const StudioRightCounter: React.FC<StudioCounterProps> = ({
       className={studioClasses("vt-studio-right-counter", `is-${size}`, className)}
       railClassName="vt-studio-right-counter__rail"
       rightRailContent={<span className="vt-studio-right-counter__actions">
-        <button type="button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} onClick={() => adjust(1)}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onClick={() => adjust(-1)}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
       shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-right-counter", "data-vt-library-component": "StudioRightCounter" }}
     >
