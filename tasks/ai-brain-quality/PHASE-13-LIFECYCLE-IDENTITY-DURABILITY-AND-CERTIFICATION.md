@@ -181,10 +181,18 @@ A regression test redacts a legacy event, replays the original raw object as if 
 This verifies the local merge/redaction contract. It does not prove a live PostgreSQL purge or authenticated two-device deletion/reload; those remain separate certification gates.
 
 
-## Provider-dispatch revalidation — 2026-10-17
+## Durable learning-record identity coverage — 2026-10-17
 
-The governed AssetGenerator now accepts canonical ContentBuild identity and captured revision for lifecycle-bound generation. When supplied, it re-reads the current build and rechecks channel/project scope, the shared `generate` capability, and exact revision immediately before every provider call, including repair calls. A post-publication stage, unknown build, mismatched scope, incomplete lifecycle identity, or stale revision prevents the runner from being invoked; the generation result records failure rather than representing blocked dispatch as a provider result.
+The server-side authenticated learning-record store now compares the complete lifecycle identity envelope on retries, not only producer/project/ActionPacket IDs. Asset outcomes, Brain outcomes, evaluations, and learning candidates protect publication transaction, approved snapshot ID/hash, published/YouTube video identity, publication identity, analytics checkpoint IDs, evidence IDs, and their applicable generation/recommendation/evaluation ancestry. Missing legacy fields may still be enriched; two asserted conflicting identities are rejected before replacing the durable row.
 
-Concept + Scene Studio now carries the prepared GenerationRequest's ContentBuild ID and revision into both concept and scene provider requests. Regression tests assert that a published build and a stale revision cause zero provider calls.
+Regression coverage attempts to reuse stable Brain outcome and evaluation IDs with a different published video or approved snapshot hash and verifies the original canonical record remains intact.
 
-**Boundary:** this is client-side pre-dispatch enforcement for ContentBuild-bound AssetGenerator requests, not authenticated server-side authorization against a modified client. Callers that omit ContentBuild identity still use the existing non-ContentBuild generation path. The remaining certification work includes auditing every lifecycle-bound generator caller, authenticated server enforcement for external provider actions, durable cross-device replay against live persistence, full consent/retention purge verification, provider-backed attribution, and same-head release-gate repair.
+This expands the in-memory/server-store contract and PostgreSQL write guard. A live database-backed concurrent-write test and authenticated two-device hydration/replay remain required; this slice alone does not certify Phase 13.
+
+## Server-side retention guard — 2026-10-17
+
+The Brain intelligence store now prevents stale client retries from restoring raw creator communication after redaction. The in-memory fallback merges same-ID records with monotonic privacy semantics; the PostgreSQL upsert applies the same rule atomically in its conflict-update expression. If either the stored or incoming creator-communication event marks `rawCommunicationTextRetained: false`, the persisted result drops `communicationText` and keeps the redacted marker.
+
+Regression coverage writes a legacy raw event, writes its sanitized replacement, then replays the stale raw event and asserts that the stored projection remains text-free with its fingerprint intact.
+
+The in-memory regression is covered by the store test; the PostgreSQL SQL path still needs a live database-backed integration test under concurrent retries before certification.

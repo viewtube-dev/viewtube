@@ -319,6 +319,14 @@ Evidence
 
 Traceability should support debugging, evaluation, rollback and creator explanation without exposing private chain-of-thought.
 
+
+
+### Evidence lineage reconstruction and integrity
+
+The read-only diagnostic entry point `inspectContentBuildEvidenceLineage(contentBuildId, rootRecordId)` in `src/services/asset-engine/EvidenceLineageDiagnostics.ts` reconstructs ancestry from the canonical ContentBuild event stream and the existing Algorithm Intelligence event ledger. It reports `complete`, `incomplete`, `unverified`, or `invalid` rather than silently treating absent parent/evidence references as verified.
+
+This is a projection over existing owners, not a new event store. ContentBuild events now have an optional typed `parentEventIds` field; the existing event writer preserves these links, allows delayed parents, rejects self/circular ancestry, and rejects idempotency replays that change recorded parent links. Legacy `metadata.parentEventIds` is still read as a compatibility fallback. The diagnostic detects duplicate IDs, cycles, missing parent/root references, and evidence IDs that are not resolvable within the reconstructed graph. External evidence not represented in these two ledgers remains explicitly unverified; this diagnostic does not claim that it can verify every analytics-canon or external record. The current browser/localStorage persistence boundary remains distinct from server-authoritative durability and must not be described as cross-device or restart-safe until separately proven.
+
 ## Reachability and operational health
 
 Definitions and registries do not prove production reachability.

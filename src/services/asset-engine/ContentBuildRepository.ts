@@ -118,6 +118,27 @@ const writeEvents = (events: ContentBuildEvent[]) => {
  }
 }
 
+const contentBuildEventParents = (event: ContentBuildEvent): string[] => {
+ const legacyParents = (event.metadata as Record<string, unknown> | undefined)?.parentEventIds
+ const parents = event.parentEventIds ?? (Array.isArray(legacyParents) ? legacyParents : [])
+ return [...new Set(parents.filter((id): id is string => typeof id === "string" && id.trim().length > 0))]
+}
+
+const wouldCreateContentBuildEventCycle = (
+ candidateId: string,
+ parentIds: string[],
+ events: ContentBuildEvent[],
+): boolean => {
+ const parentsById = new Map(events.map(event => [event.id, contentBuildEventParents(event)]))
+ const reachesCandidate = (currentId: string, visited: Set<string>): boolean => {
+  if (currentId === candidateId) return true
+  if (visited.has(currentId)) return false
+  visited.add(currentId)
+  return (parentsById.get(currentId) || []).some(parentId => reachesCandidate(parentId, visited))
+ }
+ return parentIds.some(parentId => reachesCandidate(parentId, new Set()))
+}
+
 export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
  contentBuildId: string
  eventType: ContentBuildEventType
@@ -132,6 +153,7 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
  inputAssetIds?: string[]
  outputAssetIds?: string[]
  evidenceIds?: string[]
+ parentEventIds?: string[]
  generationRecordId?: string | null
  actionPacketId?: string | null
  traceId?: string | null
@@ -140,6 +162,7 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
 }): ContentBuildEvent<T> => {
  const events = readEvents()
  const idempotencyKey = input.idempotencyKey?.trim() || null
+ const normalizedParents = [...new Set((input.parentEventIds || []).filter(id => typeof id === "string" && id.trim().length > 0))]
  if (idempotencyKey) {
   const existing = events.find(event =>
    event.idempotencyKey === idempotencyKey ||
@@ -150,15 +173,19 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
     existing.contentBuildId !== input.contentBuildId ||
     existing.eventType !== input.eventType ||
     (existing.entityType || null) !== (input.entityType || null) ||
-    (input.entityId !== undefined && (existing.entityId || null) !== (input.entityId || null))
+    (input.entityId !== undefined && (existing.entityId || null) !== (input.entityId || null)) ||
+    (input.parentEventIds !== undefined && contentBuildEventParents(existing).slice().sort().join("\\0") !== normalizedParents.slice().sort().join("\\0"))
    ) {
     throw new Error("ContentBuild event idempotency key was reused for a different event.")
    }
    return existing as ContentBuildEvent<T>
   }
  }
+ const id = idempotencyKey ? `event:${encodeURIComponent(idempotencyKey)}` : uuid()
+ if (normalizedParents.includes(id)) throw new Error("ContentBuild event cannot be its own parent.")
+ if (wouldCreateContentBuildEventCycle(id, normalizedParents, events)) throw new Error("ContentBuild event parent references would create circular provenance.")
  const event: ContentBuildEvent<T> = {
-  id: idempotencyKey ? `event:${encodeURIComponent(idempotencyKey)}` : uuid(),
+  id,
   idempotencyKey,
   contentBuildId: input.contentBuildId,
   timestamp: input.timestamp || nowIso(),
@@ -173,6 +200,7 @@ export const appendContentBuildEvent = <T = Record<string, unknown>>(input: {
   inputAssetIds: input.inputAssetIds || [],
   outputAssetIds: input.outputAssetIds || [],
   evidenceIds: input.evidenceIds || [],
+  parentEventIds: normalizedParents,
   generationRecordId: input.generationRecordId || null,
   actionPacketId: input.actionPacketId || null,
   traceId: input.traceId || null,
