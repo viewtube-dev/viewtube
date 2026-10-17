@@ -1428,6 +1428,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
       />
     </StudioSplitShell>
   )
+}
 
 
 /** Closeable metadata badge using the global Studio size and palette contract. */
