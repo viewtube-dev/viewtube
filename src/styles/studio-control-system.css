@@ -3420,3 +3420,39 @@ button[data-vt-studio-button="true"][data-size="compact"]:is([data-split-left="t
   padding-inline: 8px;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) #000;
 }
+
+
+/* Restored motion for selection controls and floating labels.
+   Shell buttons remain stationary; these are internal state transitions only. */
+@media (prefers-reduced-motion: no-preference) {
+  .vt-studio-44-switch,
+  .vt-studio-44-switch .vt-studio-44-handle,
+  .vt-studio-44-choice,
+  .vt-studio-44-choice .vt-studio-44-dot,
+  .vt-studio-44-choice.is-checkbox svg {
+    transition:
+      background-color 180ms ease-out,
+      transform 180ms ease-out,
+      opacity 180ms ease-out,
+      stroke-dashoffset 180ms ease-out;
+  }
+
+  .vt-studio-floating-field > .vt-studio-floating-field-label {
+    transition: top 180ms ease-out, left 180ms ease-out,
+      font-size 180ms ease-out, padding 180ms ease-out,
+      background-color 180ms ease-out, color 180ms ease-out,
+      transform 180ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-44-switch,
+  .vt-studio-44-switch .vt-studio-44-handle,
+  .vt-studio-44-choice,
+  .vt-studio-44-choice .vt-studio-44-dot,
+  .vt-studio-44-choice.is-checkbox svg,
+  .vt-studio-floating-field > .vt-studio-floating-field-label {
+    transition: none !important;
+    animation: none !important;
+  }
+}
