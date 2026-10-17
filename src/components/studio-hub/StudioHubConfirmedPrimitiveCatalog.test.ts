@@ -85,6 +85,22 @@ describe("confirmed Studio button primitive library", () => {
   })
 
 
+  it("applies the definitive contract to the confirmed catalog and actual primitive shells", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    const css = read("src/styles/studio-control-system.css")
+    expect(catalog).toContain("Global first: --pair-a primary / --pair-b secondary")
+    expect(catalog).toContain("no shell shadows, transitions, or hover/press movement")
+    expect(catalog).toContain("Inputs left aligned")
+    expect(catalog).toContain("MULTILINE TEXTAREA · REGISTERED EXCEPTION")
+    expect(css).toContain("Confirmed Primitive Library enforcement layer (2026-10-17)")
+    expect(css).toContain("box-shadow: none !important")
+    expect(css).toContain("text-shadow: none !important")
+    expect(css).toContain("transition: none !important")
+    expect(css).toContain("transform: none !important")
+    expect(css).toContain("aspect-ratio: 1 / 1")
+    expect(css).toContain("text-align: left")
+  })
+
   it("documents fixed-ratio control defaults and enforces heavy badge typography", () => {
     const controls = read("src/studio-ui/primitives/StudioControls.tsx")
     const css = read("src/styles/studio-control-system.css")
