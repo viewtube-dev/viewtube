@@ -47,16 +47,14 @@ export const classifyAudienceIntent = (text: string | null | undefined): { inten
   return { intent: matches[0].intent, confidence: matches[0].confidence }
 }
 
-const targetFor = (intent: AudienceIntent, sourceKinds: AudienceFeedbackSource[]): string[] => {
+const targetFor = (intent: AudienceIntent, _sourceKinds: AudienceFeedbackSource[]): string[] => {
   if (intent === "unknown") return []
-  // Only name destinations registered in VIEWTUBE_TOOL_CAPABILITIES. These are
-  // advisory routes; building a signal never creates or persists a handoff.
-  const targets: string[] = ["ai-brain"]
-  if (["request", "desire"].includes(intent)) targets.push("project-calendar")
-  if (["complaint", "praise"].includes(intent)) targets.push("tactics-engine")
-  if (sourceKinds.includes("comment")) targets.push("comment-responder")
-  if (sourceKinds.includes("community-post")) targets.push("community-posts")
-  return [...new Set(targets)]
+  // Destinations are advisory and must accept evidence payloads before a real
+  // proposal packet can be created. Source tools are not destinations.
+  if (intent === "request" || intent === "desire") return ["ai-brain", "opportunity-radar"]
+  if (intent === "complaint" || intent === "praise") return ["ai-brain", "tactics-engine"]
+  if (intent === "confusion") return ["ai-brain", "content-analysis"]
+  return ["ai-brain"]
 }
 
 const parseDate = (value: string | null | undefined): number | null => {
@@ -105,6 +103,9 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
       "Only supplied source records are represented; this is not a complete audience sample.",
     ]
     if (intent === "unknown") limitations.push("Insufficient unambiguous text evidence to classify this observation.")
+    if (intent === "request" || intent === "desire") {
+      limitations.push("Content Architect and Experiment Lab are not registered as canonical handoff receivers; their routing is unavailable rather than simulated.")
+    }
     if (!times.length) limitations.push("Source timestamps are missing or invalid.")
     if (group.records.some((record) => !record.channelId)) limitations.push("One or more source records have no channel scope.")
     return {

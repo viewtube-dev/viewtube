@@ -42,6 +42,10 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(view).toContain("signal.sourceReferences.length")
   expect(view).toContain("Suggested destinations (advisory)")
   expect(view).toContain("not verified intent")
+  expect(view).toContain("comments.proposeAudienceSignal(signal.id)")
+  expect(view).toContain("Queue a pending evidence proposal for review")
+  expect(controller).toContain("approvalState: \"pending\"")
+  expect(controller).toContain("loadViewTubeActionPacket(packet.id)")
   expect(view).not.toContain("persistViewTubeActionPacket")
  })
 

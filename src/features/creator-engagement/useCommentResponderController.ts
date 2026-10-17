@@ -5,6 +5,8 @@ import { fetchAllSimpleCommentThreads, fetchSimpleOwnedVideo, postSimpleCommentR
 import { readBrainUserControls } from "../../services/brain/BrainUserControls"
 import type { CommentResponderController, CommentResponderTab, CreatorEngagementContext } from "./types"
 import { audiencePulseSignalToBrainClaim, buildAudiencePulseSignals, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
+import { buildAudiencePulseProposalPacket } from "./audiencePulseHandoff"
+import { loadViewTubeActionPacket, persistViewTubeActionPacket } from "../../services/viewTubeToolChains"
 
 export const resolveSuggestedVideoId = (
  suggestedVideoId: unknown,
@@ -36,6 +38,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
  const [currentIndex, setCurrentIndex] = useState(0)
  const [fetchedVideoData, setFetchedVideoData] = useState<Record<string, any>>({})
  const [inboundImageUrl, setInboundImageUrl] = useState<string | null>(null)
+ const [proposedAudienceSignalIds, setProposedAudienceSignalIds] = useState<Set<string>>(new Set())
  const fetchedRef = useRef<Record<string, any>>({})
  const metadataInFlight = useRef(new Set<string>())
  const requestGeneration = useRef(0)
@@ -134,6 +137,19 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
   () => audienceSignals.map(audiencePulseSignalToBrainClaim),
   [audienceSignals],
  )
+
+ const proposeAudienceSignal = (signalId: string): boolean => {
+  const signal = audienceSignals.find((candidate) => candidate.id === signalId)
+  if (!signal) return false
+  const packet = buildAudiencePulseProposalPacket(signal)
+  if (!packet) return false
+
+  // Stable packet IDs and the canonical packet cache prevent repeat clicks from
+  // enqueueing the same signal proposal more than once in this browser.
+  if (!loadViewTubeActionPacket(packet.id)) persistViewTubeActionPacket(packet)
+  setProposedAudienceSignalIds((current) => new Set(current).add(signal.id))
+  return true
+ }
  const partitions = useMemo(() => partitionCommentThreads(threads, context.channelId), [context.channelId, threads])
  const unreplied = partitions.unreplied
  const replied = partitions.replied
@@ -246,7 +262,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
  }
 
  return {
-  tab, setTab, loading, error, threads, audienceSignals, audienceEvidenceClaims, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
+  tab, setTab, loading, error, threads, audienceSignals, audienceEvidenceClaims, proposedAudienceSignalIds, proposeAudienceSignal, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
   replyText: currentId ? replyText[currentId] || "" : "",
   setReplyText: (value) => currentId && setReplyTextById((current) => ({ ...current, [currentId]: value })),
   generating: generatingIds.has(currentId), fetchedVideoData, inboundImageUrl,

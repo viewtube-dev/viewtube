@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { audiencePulseSignalToBrainClaim, buildAudiencePulseSignals, classifyAudienceIntent, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
 import { VIEWTUBE_TOOL_CAPABILITIES } from "../../services/viewTubeToolChains"
+import { buildAudiencePulseProposalPacket } from "./audiencePulseHandoff"
 
 describe("classifyAudienceIntent", () => {
   it("classifies explicit requests with bounded confidence", () => {
@@ -104,7 +105,8 @@ describe("buildAudiencePulseSignals", () => {
     ])
 
     expect(signal.intent).toBe("desire")
-    expect(signal.suggestedTargets).toEqual(["ai-brain", "project-calendar", "comment-responder"])
+    expect(signal.suggestedTargets).toEqual(["ai-brain", "opportunity-radar"])
+    expect(signal.limitations).toContain("Content Architect and Experiment Lab are not registered as canonical handoff receivers; their routing is unavailable rather than simulated.")
     expect(signal).not.toHaveProperty("publish")
     expect(signal).not.toHaveProperty("execute")
   })
@@ -140,6 +142,37 @@ describe("buildAudiencePulseSignals", () => {
     expect(audiencePulseSignalToBrainClaim(signal).value).toBe(2)
   })
 
+})
+
+describe("buildAudiencePulseProposalPacket", () => {
+  it("creates a stable pending evidence proposal only for compatible canonical receivers", () => {
+    const [signal] = buildAudiencePulseSignals([
+      { sourceId: "c-proposal", source: "comment", text: "Could you make a tutorial?", channelId: "ch-proposal", videoId: "v-proposal" },
+    ])
+    const packet = buildAudiencePulseProposalPacket(signal)
+
+    expect(packet).not.toBeNull()
+    expect(packet?.id).toBe(`audience-pulse-proposal:${encodeURIComponent(signal.id)}`)
+    expect(packet?.sourceToolId).toBe("comment-responder")
+    expect(packet?.payloadKind).toBe("evidence")
+    expect(packet?.intent).toBe("propose")
+    expect(packet?.approvalState).toBe("pending")
+    expect(packet?.suggestedTargets).toEqual(["ai-brain", "opportunity-radar"])
+    expect(packet?.evidence).toEqual(signal.evidenceIds)
+    expect(packet?.provenance).toContain("source:comment:c-proposal")
+    for (const targetId of packet?.suggestedTargets || []) {
+      const target = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === targetId)
+      expect(target?.accepts).toContain("evidence")
+    }
+  })
+
+  it("does not create a proposal for unknown or evidence-free signals", () => {
+    const [signal] = buildAudiencePulseSignals([
+      { sourceId: "c-unknown", source: "comment", text: "Interesting", channelId: "ch-proposal" },
+    ])
+    expect(buildAudiencePulseProposalPacket(signal)).toBeNull()
+    expect(buildAudiencePulseProposalPacket({ ...signal, intent: "request", evidenceIds: [] })).toBeNull()
+  })
 })
 
 describe("audiencePulseSignalToBrainClaim", () => {
