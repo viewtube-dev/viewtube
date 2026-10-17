@@ -62,44 +62,44 @@ describe("Studio Hub canonical controls", () => {
     expect(compact).toContain('data-icon-size-variant="large"')
   })
 
-  it("defines one final field and split-left geometry contract", () => {
+  it("defines one canonical field and split-left geometry contract", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    // Assert across the current layered stylesheet; the old "1. Canonical field family" marker was retired.
-    const finalContract = css
-
-    expect(finalContract).toContain("caret-shape: block")
-    expect(finalContract).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
-    expect(finalContract).toContain("--vt-studio-control-hover-offset:.75px")
-    expect(finalContract).toContain("--vt-studio-control-icon-size:18px")
-    expect(finalContract).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button')
+    expect(css).toContain("caret-shape: block")
+    expect(css).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
+    expect(css).not.toContain("--vt-studio-control-hover-offset:.75px")
+    expect(css).toContain("--vt-studio-control-icon-size:24px")
+    expect(css).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button')
   })
 
-  it("renders split-left and split-stepper shadows as real shell shadows, not filled overlay layers", () => {
+
+  it("keeps split-left and split-stepper shells flat and stationary", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] {')
     expect(css).toContain('.vt-studio-split-stepper::before { content: none; display: none; }')
-    const splitStepper = css.slice(css.indexOf(".vt-studio-split-stepper {"), css.indexOf('.vt-studio-split-stepper[data-size="compact"]'))
-    expect(splitStepper).toContain('var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0')
-    expect(splitStepper).not.toContain('translate(var(--vt-studio-control-shadow-x')
+    expect(css).toContain("box-shadow: none !important;")
+    expect(css).toContain("transition: none !important;")
+    expect(css).not.toContain("var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0")
+    expect(css).not.toContain("translate(var(--vt-studio-control-shadow-x")
   })
 
-  it("uses canonical standard and compact tokens for split-left badges without a duplicate shadow shell", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const badge = css.slice(css.indexOf(".vt-studio-split-left-badge {"), css.indexOf("/* Choice controls must occupy the full 44px standard control height. */"))
 
-    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-44-height, 44px)")
-    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px)")
-    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-44-radius, 6px)")
-    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-28-height, 28px)")
-    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px)")
-    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-28-radius, 4px)")
-    expect(badge).toContain(".vt-studio-split-left-badge::before { content: none; display: none; }")
-    expect(badge).toContain("box-shadow: var(--vt-studio-badge-shadow-x) var(--vt-studio-badge-shadow-y) 0 0")
-    expect(badge).not.toContain('translate(var(--vt-studio-badge-shadow-x')
+  it("uses token-owned geometry and secondary rails for split badges", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const badge = css.slice(css.indexOf("/* Canonical split-badge geometry contract"))
+    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-44-height)")
+    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-44-stroke)")
+    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-44-radius)")
+    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-28-height)")
+    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-28-stroke)")
+    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-28-radius)")
+    expect(badge).toContain(".vt-studio-double-split-badge__rail:first-child {\n  background: var(--vt-studio-control-secondary);")
+    expect(badge).toContain(".vt-studio-double-split-badge__rail:last-child {\n  background: var(--vt-studio-control-secondary);")
+    expect(badge).not.toContain("#36e0f6")
+    expect(badge).not.toContain("#ff7f6b")
     expect(badge).not.toContain("--vt-studio-badge-radius: 10px")
     expect(badge).not.toContain("--vt-studio-badge-radius: 7px")
   })
+
 
   it("keeps disconnected dropdown messaging inside the canonical trigger", () => {
     const html = renderToStaticMarkup(
