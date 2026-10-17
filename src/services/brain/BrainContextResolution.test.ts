@@ -33,7 +33,7 @@ describe("Brain context resolution", () => {
  it("reports capability-required sections that are absent instead of silently treating them as available", () => {
   const result = resolveBrainContextSections([
    "System prompt",
-   "\\nCREATOR CONTROL POLICY\\nAnalytics evidence access is enabled.",
+   "\nCREATOR CONTROL POLICY\nAnalytics evidence access is enabled.",
   ], {
    userText: "Analyze my channel views",
    maximumCharacters: 2000,
@@ -48,7 +48,7 @@ describe("Brain context resolution", () => {
  it("caps context to an explicitly supplied model window while reserving output and safety tokens", () => {
   const result = resolveBrainContextSections([
    "System prompt",
-   "\\nCHANNEL EVIDENCE\\n" + "e".repeat(5000),
+   "\nCHANNEL EVIDENCE\n" + "e".repeat(5000),
   ], {
    userText: "Analyze my channel views",
    maximumCharacters: 5000,
@@ -76,11 +76,11 @@ describe("Brain context resolution", () => {
 
 describe("required context integrity", () => {
  it("omits a required section as a whole when the remaining budget cannot fit it", () => {
-  const requiredPolicy = "\\nCREATOR CONTROL POLICY\\n" + "permission rules ".repeat(30)
+  const requiredPolicy = "\nCREATOR CONTROL POLICY\n" + "permission rules ".repeat(30)
   const result = resolveBrainContextSections([
    "System prompt",
    requiredPolicy,
-   "\\nCHANNEL EVIDENCE\\n" + "evidence ".repeat(100),
+   "\nCHANNEL EVIDENCE\n" + "evidence ".repeat(100),
   ], { userText: "Analyze my channel views", maximumCharacters: 100 })
 
   expect(result.selectedSectionIds).toContain("system_prompt")
