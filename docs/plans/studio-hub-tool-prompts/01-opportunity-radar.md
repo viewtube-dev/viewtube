@@ -1,23 +1,27 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Opportunity Radar
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+COMBINE AND COMPLETE the existing Opportunity Radar widget and Brain opportunity intelligence; do not create a second discovery engine.
 
 ## Core transformation
-TRANSFORM
+Signals → evidence-backed opportunities
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/views/dashboard/widgets/OpportunityRadarWidget.tsx`
+- `src/services/brain/OpportunityIntelligence.ts`
+- `src/services/brain/OpportunityEvidenceAdapter.ts`
+- `src/services/analytics-canon/contracts.ts`
+- `src/services/brain/BrainEvidenceContract.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Audit both Brain evidence-pack and Analytics Canon adapters. Preserve source snapshot, window, dataset status, evidence IDs, freshness, confidence scale, and null baselines. Distinguish performance_candidate from a true catalog_gap; do not claim trends or demand without comparable baselines or taxonomy/demand evidence. Add ranking, watchlist/status lifecycle only by extending canonical records, not a parallel store. Handoff accepted opportunities into existing Projects/ContentBuild identity.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
