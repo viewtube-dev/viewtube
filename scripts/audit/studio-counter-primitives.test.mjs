@@ -18,9 +18,15 @@ test("StudioCounter is a new button-only double-split primitive across all three
   assert.match(styles, /\.vt-studio-counter\s*\{\s*--vt-studio-counter-width:\s*176px;/)
   assert.match(styles, /\.vt-studio-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*112px;/)
   assert.match(styles, /\.vt-studio-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*56px;/)
-  assert.match(styles, /\.vt-studio-counter__button svg\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/s)
+  assert.match(styles, /\.vt-studio-counter__button svg\s*\{[^}]*width:\s*var\(--vt-studio-counter-icon-size, 38px\);[^}]*height:\s*var\(--vt-studio-counter-icon-size, 38px\);/s)
+  assert.match(styles, /\.vt-studio-counter\[data-size="compact"\][\s\S]*?--vt-studio-counter-icon-size:\s*24px;/)
+  assert.match(styles, /\.vt-studio-counter\[data-size="micro"\][\s\S]*?--vt-studio-counter-icon-size:\s*6px;/)
+  assert.match(styles, /\.vt-studio-counter\.is-reversed[\s\S]*?background:\s*var\(--pair-b\)/)
   assert.match(styles, /\.vt-studio-counter\[data-vt-studio-split="double"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
-  for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  for (const size of ["standard", "compact", "micro"]) {
+    assert.match(catalog, new RegExp('StudioCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+    assert.match(catalog, new RegExp('StudioCounter className="is-reversed" value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  }
 })
 
 test("StudioRightCounter is a new button-only split-right primitive with a divided action rail", () => {
@@ -37,8 +43,12 @@ test("StudioRightCounter is a new button-only split-right primitive with a divid
   assert.match(styles, /\.vt-studio-right-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/)
   assert.match(styles, /\.vt-studio-right-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/)
   assert.match(styles, /\.vt-studio-right-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/)
-  assert.match(styles, /\.vt-studio-right-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
+  assert.match(styles, /\.vt-studio-right-counter__actions button svg\s*\{[^}]*width:\s*var\(--vt-studio-counter-icon-size, 38px\);[^}]*height:\s*var\(--vt-studio-counter-icon-size, 38px\);/s)
+  assert.match(styles, /\.vt-studio-right-counter\.is-reversed[\s\S]*?background:\s*var\(--pair-b\)/)
   assert.match(styles, /\.vt-studio-right-counter\[data-vt-studio-split="right"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
   assert.match(styles, /\.vt-studio-right-counter__actions button:first-child\s*\{[^}]*border-bottom:[^}]+/s)
-  for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioRightCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  for (const size of ["standard", "compact", "micro"]) {
+    assert.match(catalog, new RegExp('StudioRightCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+    assert.match(catalog, new RegExp('StudioRightCounter className="is-reversed" value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  }
 })
