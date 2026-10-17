@@ -26,7 +26,7 @@ import { toolboxSystem } from "../components/toolboxSystem"
 import { PostActionReflection } from "../components/PostActionReflection"
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
-import type { OpportunityTacticsPacket, TacticProposal } from "../services/brain/OpportunityIntelligence"
+import { validateTacticProposal, type OpportunityTacticsPacket, type TacticProposal } from "../services/brain/OpportunityIntelligence"
 import { SubToolboxButton } from "../components/subtoolbox/SubToolboxPrimitives"
 import {
  StudioActionButton,
@@ -147,6 +147,9 @@ const ActionableTactics: React.FC<{
  const [tactics, setTactics] = useState<Tactic[]>([])
  const [incomingOpportunity, setIncomingOpportunity] = useState<OpportunityTacticsPacket | null>(null)
  const [linkedProposals, setLinkedProposals] = useState<TacticProposal[]>([])
+ const validLinkedProposalCount = incomingOpportunity
+  ? linkedProposals.filter((proposal) => validateTacticProposal(incomingOpportunity, proposal).length === 0).length
+  : 0
  const [filterText, setFilterText] = useState("")
  const [toast, setToast] = useState<string | null>(null)
  const [input, setInput] = useState<CreatorStrategyInput>({
@@ -242,7 +245,7 @@ const ActionableTactics: React.FC<{
       <div className="mt-1 text-lg font-black">{incomingOpportunity.entity || incomingOpportunity.opportunityId}</div>
       <div className="mt-1 text-xs font-bold">Source {incomingOpportunity.opportunityId} · {incomingOpportunity.evidenceIds.length} evidence reference(s) · {incomingOpportunity.provenance.window || "window unknown"}</div>
       <p className="mt-2 text-xs font-semibold">Generated tactics remain proposals. No project, experiment, or external action is created by generating them.</p>
-      {linkedProposals.length > 0 && <p className="mt-2 text-xs font-black uppercase">{linkedProposals.length} linked tactic draft(s) · all pending creator review</p>}
+      {linkedProposals.length > 0 && <p className="mt-2 text-xs font-black uppercase">{linkedProposals.length} linked tactic draft(s) · {validLinkedProposalCount} ready for review · all pending creator review</p>}
      </div>
     )}
     <div className={toolboxSystem.shellRow}>
