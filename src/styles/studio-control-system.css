@@ -3642,3 +3642,30 @@ html body .vt-studio-username-input > [data-vt-studio-split-label] > input[data-
   box-shadow: none !important;
   background: transparent !important;
 }
+
+
+/* Split-left face: remove the inner grid track's default minimum and make
+   the text pane occupy the entire remainder after the square icon rail.
+   The previous inline-flex label could shrink to its content width, exposing
+   a white gap at the right; selected state uses the same full-width geometry. */
+html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] {
+  display: grid !important;
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr) !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
+  display: flex !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  flex: 1 1 auto !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  justify-content: center;
+  overflow: hidden;
+}
