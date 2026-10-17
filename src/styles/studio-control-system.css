@@ -645,7 +645,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
   border: 0 !important;
   outline: 0;
   
-  -webkit-text-stroke: 0 !important;
   filter: none;
   transform: none !important;
   min-height: 0 !important;
@@ -1050,7 +1049,6 @@ button.vt-studio-44-choice {
   border: 0 !important;
   outline: 0;
   
-  -webkit-text-stroke: 0 !important;
   filter: none;
   transform: none !important;
   cursor: pointer;
