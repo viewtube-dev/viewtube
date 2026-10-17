@@ -140,7 +140,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
       success: "Outcome-driven checkmark and optional tooltip label; set success only after confirmed success.",
     },
-    motion: "Effects must not move primitive geometry; CSS transitions are disabled globally for Studio primitives/components. Any explicitly approved inner-icon animation must be documented and honor reduced-motion preferences.",
+    motion: "Outer shell geometry stays stationary and flat; approved inner indicators, labels, and icons may animate through studio-control-motion.css and must honor reduced-motion preferences.",
   },
   focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 65% of the selected border width; focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
