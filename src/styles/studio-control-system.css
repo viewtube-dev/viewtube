@@ -3502,3 +3502,41 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-counter *, .vt-studio-right-counter * { scroll-behavior: auto; }
 }
+
+/* Counter catalog specimens pair each palette on the same centered size row. */
+.vt-confirmed-counter-row-grid--paired {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  width: 100%;
+}
+.vt-confirmed-counter-row-grid--paired > .vt-confirmed-counter-specimen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.vt-confirmed-counter-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+/* Half-white tint against the number area's own palette, like text-field typography. */
+.vt-studio-counter__value,
+.vt-studio-right-counter__value {
+  color: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0 transparent;
+  transition: background-color 140ms ease, color 140ms ease, -webkit-text-stroke-color 140ms ease;
+}
+/* Match text-field focus semantics while a counter action is pressed or held. */
+.vt-studio-counter:has(.vt-studio-counter__button:is(:active, [data-press-holding="true"])) .vt-studio-counter__value,
+.vt-studio-right-counter:has(.vt-studio-right-counter__actions button:is(:active, [data-press-holding="true"])) .vt-studio-right-counter__value {
+  background: color-mix(in srgb, var(--pair-a) 50%, transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: 1px var(--pair-a);
+}
