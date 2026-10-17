@@ -3503,40 +3503,52 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   .vt-studio-counter *, .vt-studio-right-counter * { scroll-behavior: auto; }
 }
 
-/* Counter catalog specimens pair each palette on the same centered size row. */
-.vt-confirmed-counter-row-grid--paired {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 18px;
-  width: 100%;
-}
-.vt-confirmed-counter-row-grid--paired > .vt-confirmed-counter-specimen {
+/* Each counter size gets its own centered row; palette variants stay adjacent. */
+.vt-confirmed-counter-size-rows {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+.vt-confirmed-counter-size-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
   text-align: center;
+}
+.vt-confirmed-counter-size-row > small {
+  display: block;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: .06em;
 }
 .vt-confirmed-counter-pair {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  width: max-content;
+  max-width: 100%;
 }
-/* Half-white tint against the number area's own palette, like text-field typography. */
+/* Resting numerals are a 50% white tint mixed with their own number-area color. */
 .vt-studio-counter__value,
 .vt-studio-right-counter__value {
   color: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke: 0 transparent;
-  transition: background-color 140ms ease, color 140ms ease, -webkit-text-stroke-color 140ms ease;
+  transition: background-color 140ms ease, color 140ms ease, -webkit-text-stroke-color 140ms ease, box-shadow 140ms ease;
 }
-/* Match text-field focus semantics while a counter action is pressed or held. */
+/* Press/hold follows the text-field focus treatment: half-opacity field fill,
+   full-strength accent inline stroke, and black numeral fill. */
 .vt-studio-counter:has(.vt-studio-counter__button:is(:active, [data-press-holding="true"])) .vt-studio-counter__value,
 .vt-studio-right-counter:has(.vt-studio-right-counter__actions button:is(:active, [data-press-holding="true"])) .vt-studio-right-counter__value {
   background: color-mix(in srgb, var(--pair-a) 50%, transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: 1px var(--pair-a);
+  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
 }
