@@ -72,6 +72,42 @@ describe("BrainLearningPersistence", () => {
   expect(fetchMock).toHaveBeenCalledOnce()
  })
 
+ it("preserves records enqueued while an earlier batch is awaiting server acknowledgement", async () => {
+  const storage = makeStorage()
+  vi.stubGlobal("window", { localStorage: storage })
+  vi.stubGlobal("localStorage", storage })
+
+  let resolveInFlight: ((response: Response) => void) | undefined
+  let call = 0
+  const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
+   call += 1
+   if (call === 1 || call === 3) return new Response("{}", { status: 401 })
+   if (call === 2) {
+    return await new Promise<Response>((resolve) => { resolveInFlight = resolve })
+   }
+   return new Response(JSON.stringify({
+    learningRecordCount: (JSON.parse(String(init?.body || "{}")).learningRecords || []).length,
+   }), { status: 200 })
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  await enqueueBrainLearningRecord("channel-a", "brainOutcome", {
+   id: "outcome-first", channelId: "channel-a", outcome: "completed",
+  })
+  const inFlight = flushBrainLearningPersistence("channel-a")
+  await Promise.resolve()
+  await enqueueBrainLearningRecord("channel-a", "brainOutcome", {
+   id: "outcome-second", channelId: "channel-a", outcome: "completed",
+  })
+
+  resolveInFlight?.(new Response(JSON.stringify({ learningRecordCount: 1 }), { status: 200 }))
+  const result = await inFlight
+
+  expect(result).toMatchObject({ persisted: 1, pending: 1, authenticated: true })
+  const storedQueue = JSON.parse(String(storage.getItem("vt_brain_learning_persistence_queue_v1")))
+  expect(storedQueue.map((item: { record: { id: string } }) => item.record.id)).toEqual(["outcome-second"])
+ })
+
 })
 
  it("rehydrates channel-scoped outcomes from durable storage after local browser data is lost", async () => {
