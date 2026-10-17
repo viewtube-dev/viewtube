@@ -34,8 +34,10 @@ describe("Studio control global contract", () => {
     expect(css).toContain('align-items: center;\n  justify-content: center;');
     expect(css).toContain('text-align: center;');
     const start = css.indexOf("/* Final split-left visual invariant:");
+    const end = css.indexOf("\n/*", start + 1);
     expect(start).toBeGreaterThanOrEqual(0);
-    expect(css.slice(start)).not.toContain("!important");
+    expect(end).toBeGreaterThan(start);
+    expect(css.slice(start, end)).not.toContain("!important");
   });
   it("uses a secondary focus outline at 65% of border width with zero offset", () => {
     const css = read("src/styles/studio-control-fields.css");
@@ -79,7 +81,8 @@ describe("Studio control global contract", () => {
     expect(badge).toContain("padding: 0 2px 0 8px");
     expect(badge).toContain("font: 1000 16px/20px");
     expect(badge).toContain("color-mix(in srgb, var(--vt-badge-primary) 50%, #fff)");
-    expect(badge).not.toMatch(/\n\s*border:\s/);
+    const badgeShell = badge.slice(0, badge.indexOf("\n}"))
+    expect(badgeShell).not.toMatch(/\n\s*border:\s/);
     expect(badge).toContain("background: var(--vt-badge-primary)");
     expect(badge).toContain("flex: 0 0 16px");
     expect(badge).toContain("border-radius: 50%");

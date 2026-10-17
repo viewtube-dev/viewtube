@@ -2877,12 +2877,11 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 }
 
 
-/* Single global effect policy: Studio primitives/components are flat and motionless.
-   Use outlines and paint/state changes, never shadows, fake-shadow layers, or transitions. */
-[data-vt-studio-control],
+/* Global shell policy: keep surfaces flat without suppressing inner-state motion.
+   Motion belongs to control indicators/labels in studio-control-motion.css; shells stay stationary. */
+[data-vt-studio-control]:not(input):not(textarea):not(select),
 [data-vt-studio-button],
 [data-vt-studio-action-button],
-[data-vt-studio-control] *,
 [data-vt-studio-control]::before,
 [data-vt-studio-control]::after,
 [data-vt-studio-button]::before,
@@ -2900,8 +2899,6 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 .vt-studio-tag-editor__square-action {
   box-shadow: none !important;
   text-shadow: none !important;
-  transition: none !important;
-  transform: none !important;
 }
 
 
@@ -2930,7 +2927,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 :where(
   button[data-vt-studio-button="true"],
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
-  [data-vt-studio-control="true"]:is(input, textarea, select),
   .vt-studio-split-left-badge,
   .vt-studio-split-right-badge,
   .vt-studio-double-split-badge,
@@ -2942,7 +2938,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 ) {
   box-shadow: none !important;
   text-shadow: none !important;
-  transition: none !important;
   transform: none !important;
   translate: none !important;
 }

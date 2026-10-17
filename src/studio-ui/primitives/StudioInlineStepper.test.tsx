@@ -89,14 +89,14 @@ describe("StudioSplitStepper username-input foundation", () => {
 describe("Studio stepper single-shell geometry regression", () => {
   it("clips all inline stepper layers inside one compact root instead of letting child surfaces stack outward", () => {
     const css = readStudioControlCss()
-    expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*overflow:\s*hidden;/s)
-    expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*max-width:\s*100%;/s)
-    expect(css).toMatch(/\.vt-studio-inline-stepper__button\s*\{[^}]*position:\s*relative;/s)
-    expect(css).toMatch(/\.vt-studio-inline-stepper__value\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper,\s*\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*hidden;/s)
+    expect(css).toMatch(/\[data-vt-studio-control="true"\]\[data-vt-studio-split="double"\]\.vt-studio-inline-stepper\s*\{[^}]*max-width:\s*100%;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper__rail\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-inline-stepper__value,\s*\.vt-studio-split-stepper-value\s*\{[^}]*position:\s*relative;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*hidden;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*width:\s*calc\(3\s*\*\s*var\(--vt-stepper-height\)\s*\+\s*2\s*\*\s*var\(--vt-stepper-stroke\)\);/s)
     expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*overflow:\s*hidden;/s)
-    expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper-actions button\s*\{[^}]*position:\s*relative;/s)
   })
 })
 
@@ -121,7 +121,7 @@ describe("split stepper value pane geometry and username-input styling", () => {
     expect(splitCss).toContain("padding: 0 14px !important;")
     expect(splitCss).toContain("background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;")
     expect(splitCss).toContain("-webkit-text-fill-color: #000 !important;")
-    expect(splitCss).toContain("-webkit-text-stroke: .5px #000;")
+    expect(splitCss).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;")
     expect(splitCss).toContain("inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary)")
     expect(splitCss).toContain(".vt-studio-split-stepper:focus-within")
     expect(splitCss).toContain("background: transparent !important;")

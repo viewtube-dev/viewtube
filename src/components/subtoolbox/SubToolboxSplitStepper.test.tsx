@@ -4,7 +4,6 @@ import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioSplitStepper } from "../../studio-ui/primitives/StudioControls"
-
 const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -12,9 +11,7 @@ const readStudioControlCss = () => [
   "studio-control-split.css",
   "studio-control-fields.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
-
 const css = readStudioControlCss()
-
 describe("StudioSplitStepper", () => {
   it("renders a native editable number field and accessible rail actions", () => {
     const html = renderToStaticMarkup(<StudioSplitStepper value={5} onValueChange={() => {}} />)
@@ -25,7 +22,6 @@ describe("StudioSplitStepper", () => {
     expect(html).toContain('aria-label="Increase Value"')
     expect(html).toContain('aria-label="Decrease Value"')
   })
-
   it("uses canonical Studio Controls sizing and a fixed 2:1 value pane", () => {
     expect(css).toContain("var(--vt-studio-control-height, 44px)")
     expect(css).toContain("var(--vt-studio-control-stroke, 3px)")
@@ -39,14 +35,11 @@ describe("StudioSplitStepper", () => {
     expect(inputRule).toMatch(/border-radius:\s*0(?:\s*!important)?;/)
     expect(inputRule).toMatch(/border:\s*0(?:\s*!important)?;/)
   })
-
   it("centers the rail divider and gives both actions equal rows", () => {
-    expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/s)
-    expect(css).toContain(".vt-studio-split-stepper-rail button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
-    expect(css).toContain(".vt-studio-split-stepper-rail button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
-    expect(css).toContain(".vt-studio-split-stepper-rail button:focus-visible { outline: 3px solid")
+    expect(css).toMatch(/\.vt-studio-split-stepper-actions\s*\{[^}]*grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper-actions button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-stepper-stroke\) solid #000;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper-actions button:focus-visible\s*\{[^}]*outline:\s*var\(--vt-stepper-focus\) solid/s)
   })
-
   it("preserves draft editing, bounds, controlled synchronization and hold-repeat behavior", () => {
     expect(source).toContain("if (!inputFocused) setDraft(String(value))")
     expect(source).toContain("normalizeStudioInlineStepperValue(parsed, 0, safeStep, min, max)")
