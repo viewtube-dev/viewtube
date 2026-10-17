@@ -150,6 +150,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [missingFields, setMissingFields] = useState({ concept: false, niche: false })
   const [insightsImported, setInsightsImported] = useState(false)
   const [publishRefresh, setPublishRefresh] = useState(0)
+  const [publishHandoffIdentity, setPublishHandoffIdentity] = useState<Pick<ViewTubeActionPacket, "operationId" | "workflowId" | "id" | "recommendationId" | "experimentId"> | null>(null)
   const [publishBusy, setPublishBusy] = useState(false)
   const [publishError, setPublishError] = useState<string | null>(null)
   const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -378,7 +379,13 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const beginOrResumePublishing = () => {
     if (!publishState.projection) return
     try {
-      beginYouTubePublishing(publishState.projection)
+      beginYouTubePublishing(publishState.projection, publishHandoffIdentity ? {
+        operationId: publishHandoffIdentity.operationId || `legacy:${publishHandoffIdentity.id}`,
+        workflowId: publishHandoffIdentity.workflowId || `legacy:${publishHandoffIdentity.id}`,
+        actionPacketId: publishHandoffIdentity.id,
+        recommendationId: publishHandoffIdentity.recommendationId || null,
+        experimentId: publishHandoffIdentity.experimentId || null,
+      } : undefined)
       setPublishError(null)
       setPublishRefresh(value => value + 1)
     } catch (error) {
@@ -504,6 +511,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
 
   const handleMetadataMasterHandoff = (packet: ViewTubeActionPacket) => {
     if (packet.sourceToolId !== "metadata-master") return
+    setPublishHandoffIdentity(packet)
     const payload = packet.payload as { title?: string; description?: string; tags?: string[] }
     if (payload.title) setPublishTitle(payload.title)
     if (payload.description) setPublishDescription(payload.description)
