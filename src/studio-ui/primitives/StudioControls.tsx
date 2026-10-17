@@ -1556,7 +1556,7 @@ StudioTagEditor.displayName = "StudioTagEditor";
 
 
 /** Static split-left status/metadata badge. Unlike action buttons it is never raised,
- * animated, or given a shadow. Micro is a 14px catalog-only density variant. */
+ * animated, or given a shadow. Micro is the independent 14px badge density tier; it is not an interactive button size. */
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
