@@ -88,7 +88,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
   globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
-  globalTextAlignment: "center for buttons, badges, and split labels; single-line text inputs align right; text areas align left",
+  globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
 
   width: "full-row by default; data-width=content is an explicit opt-in exception",
   labelAlignment: "centered by default for all primitive labels",
