@@ -15,7 +15,7 @@
     opacity 160ms ease-out;
 }
 
-.vt-studio-44-choice.is-checkbox svg {
+.vt-studio-44-choice.is-checkbox svg path {
   transition:
     stroke-dashoffset 220ms cubic-bezier(.2, .8, .2, 1),
     stroke 180ms ease-out,
@@ -45,6 +45,7 @@
   .vt-studio-44-choice,
   .vt-studio-44-choice .vt-studio-44-dot,
   .vt-studio-44-choice.is-checkbox svg,
+  .vt-studio-44-choice.is-checkbox svg path,
   .vt-studio-44-word-handle,
   .vt-studio-floating-field > .vt-studio-floating-field-label,
   .vt-studio-floating-field > :is(input, textarea) {
