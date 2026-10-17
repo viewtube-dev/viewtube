@@ -170,3 +170,12 @@ The capability matrix currently enforces generation at request/receipt boundarie
 The YouTube publication bridge now re-reads the canonical ContentBuild and checks the shared `publish` capability plus unresolved workflow blockers immediately before upload, each uncompleted transaction-step provider call, and remote-state verification. Completed steps retain their idempotent early return, so a retry does not repeat an already-completed remote action. New regression tests assert that a published build and a blocked build stop provider calls before the transport is invoked.
 
 This closes a concrete client-side provider-dispatch gap for the YouTube publication transaction bridge. It is not server authorization: the client-side stage store is not a security boundary against a modified client. Production authorization still needs authenticated server enforcement for every provider operation, and the broader lifecycle persistence/consent/end-to-end certification criteria remain open.
+
+
+## Server-side retention guard — 2026-10-17
+
+The Brain intelligence store now prevents stale client retries from restoring raw creator communication after redaction. The in-memory fallback merges same-ID records with monotonic privacy semantics; the PostgreSQL upsert applies the same rule atomically in its conflict-update expression. If either the stored or incoming creator-communication event marks `rawCommunicationTextRetained: false`, the persisted result drops `communicationText` and keeps the redacted marker.
+
+Regression coverage writes a legacy raw event, writes its sanitized replacement, then replays the stale raw event and asserts that the stored projection remains text-free with its fingerprint intact.
+
+The in-memory regression is covered by the store test; the PostgreSQL SQL path still needs a live database-backed integration test under concurrent retries before certification.
