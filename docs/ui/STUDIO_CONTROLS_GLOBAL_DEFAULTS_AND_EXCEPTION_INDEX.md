@@ -76,6 +76,7 @@ A fixed ratio belongs to the actual control face, indicator, rail, or segment. I
 | Split-left button/badge | Square icon rail: 1:1 at selected tier; remaining label area flexes | Secondary rail by default, size-tier icon centered; label centered in remaining region |
 | Split-right badge | Square action rail: 1:1 at selected tier; label region flexes | Secondary rail by default, centered icon and centered label |
 | Double-split badge | Two square rails, each 1:1 at selected tier; flexible label region between | Both rails secondary by default; centered icons; exactly two shared dividers |
+| Unified split shell | `StudioSplitShell` is the single left/right/double anatomy used by split-left buttons, split badges, and username inputs; button uses `faceOnly`, username uses the field slot | One size-token owner for rail dimensions, divider stroke, centered label typography, shell radius, and clipping; BEM class names remain compatibility hooks |
 | Close control within closeable badge | Circular 1:1 face sized from the badge's tier | Secondary fill; icon centered; does not reintroduce a pill ratio for the badge |
 
 ## 4. Text-content-width primitive families
@@ -95,6 +96,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 
 ### Single-line input (default)
 
+- Typography ownership: the native input value/placeholder remains 38px standard / 24px compact. Floating-label presentation scales only the raised label to its registered 80% size; it must never shrink the native input text.
 - Alignment: left; vertically centered.
 - Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, 0.86 line-height.
 - Geometry: 44px / 28px high, 3px / 2px border, 6px / 4px radius.
