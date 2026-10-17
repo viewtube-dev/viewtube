@@ -1,0 +1,21 @@
+/* Supplemental motion for controls introduced after the original selection-control rules.
+   The base stylesheet owns switch/radio/checkbox/floating-label transitions. */
+.vt-studio-44-word-handle {
+  transition:
+    transform 220ms cubic-bezier(.2, .8, .2, 1),
+    background-color 180ms ease-out,
+    border-color 180ms ease-out,
+    color 180ms ease-out;
+}
+
+.vt-studio-floating-field > :is(input, textarea) {
+  transition: background-color 180ms ease-out, border-color 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-44-word-handle,
+  .vt-studio-floating-field > :is(input, textarea) {
+    transition: none !important;
+    animation: none !important;
+  }
+}
