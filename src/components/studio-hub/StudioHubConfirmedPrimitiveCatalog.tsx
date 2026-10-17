@@ -349,9 +349,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "These specimens use the production StudioButton and StudioSplitLeftButton exports, never library-only replicas.",
         "Both button families support standard 44px and compact 28px geometry with accent, neutral, danger, warning, and success tones.",
         "Selected, disabled, and loading states are shown independently so state styling is not confused with semantic tone.",
-        "Press motion translates the control by the shared shadow offset and collapses the shadow; release returns to rest. Keyboard focus, disabled semantics, and reduced-motion behavior remain canonical."
+        "The control stays stationary on hover and press. Shadow is off by default and only an explicit button-owned opt-in may enable it. Keyboard focus, disabled semantics, and reduced-motion behavior remain canonical."
       ]}
-      provenance={<Provenance primitive="StudioButton / StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · 28px compact · five semantic tones · selected / disabled / loading · shared tactile press motion" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
+      provenance={<Provenance primitive="StudioButton / StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · 28px compact · five semantic tones · selected / disabled / loading · flat/stationary controls; explicit button-owned shadow opt-in only" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
         <span>STANDARD · SEMANTIC TONES</span>
