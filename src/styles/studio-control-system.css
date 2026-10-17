@@ -3172,6 +3172,125 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 }
 
 
+
+/* Split-badge border ownership fix (2026-10-17).
+   The outer badge owns the only perimeter border. The face is a layout wrapper;
+   rails paint only their internal divider. Disable legacy pseudo-faces/shadow
+   copies so every split badge renders with one perimeter and one divider per rail. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  position: relative;
+  display: inline-flex;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.vt-studio-split-left-badge::before,
+.vt-studio-split-left-badge::after,
+.vt-studio-split-right-badge::before,
+.vt-studio-split-right-badge::after,
+.vt-studio-double-split-badge::before,
+.vt-studio-double-split-badge::after,
+.vt-studio-split-left-badge__face::before,
+.vt-studio-split-left-badge__face::after,
+.vt-studio-split-right-badge__face::before,
+.vt-studio-split-right-badge__face::after,
+.vt-studio-double-split-badge__face::before,
+.vt-studio-double-split-badge__face::after {
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  height: 100%;
+  min-height: 0;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  background: transparent;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  align-self: stretch;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-double-split-badge__rail:not(:last-child) {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+  border-left: 0 !important;
+}
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail:last-child {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+  border-right: 0 !important;
+}
+/* At micro density each icon rail is a true 14×14 square; it must not inherit
+   the wider standard/compact minimum rail width or 4px horizontal padding. */
+.vt-studio-split-left-badge[data-size="micro"],
+.vt-studio-split-right-badge[data-size="micro"],
+.vt-studio-double-split-badge[data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-font-weight: 1000;
+  height: 14px;
+  min-height: 14px;
+  max-height: 14px;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__face {
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr);
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail {
+  width: 12px;
+  min-width: 12px;
+  max-width: 12px;
+  height: 12px;
+  min-height: 12px;
+  max-height: 12px;
+  align-self: center;
+  justify-self: center;
+  flex: 0 0 12px;
+  padding: 0 !important;
+  aspect-ratio: 1 / 1;
+  border-radius: 0 !important;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:not(:last-child) {
+  border-right-width: 1px !important;
+}
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:last-child {
+  border-left-width: 1px !important;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail > *,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail > *,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail > * {
+  width: 10px;
+  height: 10px;
+  max-width: 70%;
+  max-height: 70%;
+}
+
 /* Canonical row-fill and typography contract.
    Standard/compact/micro share the same 4px spacing unit and weight-1000 type.
    Controls fill their assigned grid/flex cell by default; opt into intrinsic
