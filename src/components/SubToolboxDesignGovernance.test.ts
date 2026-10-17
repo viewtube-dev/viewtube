@@ -736,7 +736,7 @@ describe("compact Studio button shell and face width regression", () => {
 })
 
 
-describe("Studio control defaults stay canonical and motionless", () => {
+describe("Studio control defaults stay canonical with stationary shells", () => {
  it("does not retain legacy hover-offset tokens or action-button movement", () => {
   const studioCss = studioControlStyles()
   const studioTokens = source("src/studio-ui/tokens.ts")
