@@ -147,9 +147,13 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("var(--vt-studio-primary, var(--vt-pair-a")
     expect(css).toContain("var(--vt-studio-secondary, var(--vt-pair-b")
     expect(css).toContain(".vt-studio-split-right-badge__label")
-    expect(css).toContain("flex:1 1 0%")
-    expect(css).toContain("text-overflow:ellipsis")
-    expect(css).toContain("white-space:nowrap")
+    expect(css).toContain("grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height")
+    expect(css).toContain("[data-vt-studio-split-label]")
+    expect(css).toContain("text-overflow: ellipsis")
+    expect(css).toContain("white-space: nowrap")
+    const labelBlock = css.slice(css.indexOf(".vt-studio-split-left-badge__label,"), css.indexOf('.vt-studio-split-left-badge[data-size="standard"]'))
+    expect(labelBlock).not.toContain("flex: 1 1 0%")
+    expect(labelBlock).not.toContain("width: 0")
   })
 
   it("enforces global primary/secondary palette, centered labels, 1000 weight, and full-row defaults", () => {
