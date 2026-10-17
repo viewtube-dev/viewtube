@@ -3,7 +3,7 @@
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
 **Reviewed:** 2026-10-17  
 **Repository:** `viewtube-dev/viewtube`  
-**Work branch:** `fix/studio-controls-catalog-current-integration-2026-10-17`  
+**Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
 **Rendered reference:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 

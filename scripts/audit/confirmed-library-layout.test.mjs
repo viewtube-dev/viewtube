@@ -24,12 +24,12 @@ test("confirmed library uses the requested four skin names without changing skin
 });
 
 test("confirmed catalog CSS owns layout, not production control faces", () => {
-  const rules = [...styles.matchAll(/(^|\\n)([^{}\\n]+)\\s*\\{([^{}]*)\\}/g)];
-  const faceProperties = /(?:^|;)\\s*(?:border|border-radius|background(?:-color)?|box-shadow|font-size|font-family|font-weight|height|min-height|max-height|padding|color|text-transform|-webkit-text-stroke)\\s*:/;
+  const rules = [...styles.matchAll(/(^|\n)([^{}\n]+)\s*\{([^{}]*)\}/g)];
+  const faceProperties = /(?:^|;)\s*(?:border|border-radius|background(?:-color)?|box-shadow|font-size|font-family|font-weight|height|min-height|max-height|padding|color|text-transform|-webkit-text-stroke)\s*:/;
   const violations = rules
     .map((match) => ({ selector: match[2].trim(), body: match[3] }))
-    .map(({ selector, body }) => ({ selector: selector.replace(/:not\\([^)]*\\)/g, ""), body }))
-    .filter(({ selector }) => selector.includes("vt-confirmed") && /(?:\\.vt-studio-|data-vt-studio-control|data-vt-studio-button)/.test(selector))
+    .map(({ selector, body }) => ({ selector: selector.replace(/:not\([^)]*\)/g, ""), body }))
+    .filter(({ selector }) => selector.includes("vt-confirmed") && /(?:\.vt-studio-|data-vt-studio-control|data-vt-studio-button)/.test(selector))
     .filter(({ body }) => faceProperties.test(body))
     .map(({ selector }) => selector);
   assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
