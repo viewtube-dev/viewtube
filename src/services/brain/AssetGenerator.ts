@@ -29,6 +29,8 @@ import type { Schema } from "@google/genai"
 import { beginBrainTrace, type BrainTrace } from "./BrainTrace"
 import { auditNumericClaims } from "./numericClaims"
 import type { ModelResolution } from "./modelRouting"
+import { getContentBuild } from "../asset-engine/ContentBuildRepository"
+import { assertContentBuildCapability } from "../asset-engine/ContentBuildCapabilities"
 import { buildBrainPromptRunReceipt, promptFamilyForAsset, validateBrainPromptRunReceipt, type BrainPromptRunReceipt } from "./BrainPromptGovernance"
 import { formatBrainOutputValidationIssues, validateBrainStructuredOutput } from "./BrainOutputValidation"
 import {
@@ -106,6 +108,10 @@ export const EMPTY_ASSET_EVIDENCE: AssetEvidence = {
 
 export interface AssetRequest {
  channelId: string
+ /** Canonical lifecycle identity for provider-side stage/revision revalidation. */
+ contentBuildId?: string
+ /** Captured ContentBuild revision; required whenever contentBuildId is supplied. */
+ contextRevision?: number
  /** Shared operation identity supplied by the orchestration/handoff layer. */
  operationId?: string
  workflowId?: string
@@ -374,7 +380,32 @@ export const generateAsset = async <TOutput>(input: {
   },
  }
 
+ const assertProviderDispatchAllowed = () => {
+  // Non-ContentBuild previews remain supported. Once a request claims a canonical
+  // lifecycle identity, however, both its ID and captured revision are mandatory.
+  if (!request.contentBuildId && request.contextRevision === undefined) return
+  if (!request.contentBuildId || request.contextRevision === undefined) {
+   throw new Error("Provider dispatch requires both ContentBuild ID and captured revision.")
+  }
+  const build = getContentBuild(request.contentBuildId)
+  if (!build) throw new Error(`Provider dispatch denied: unknown ContentBuild ${request.contentBuildId}.`)
+  if (build.channelId && build.channelId !== request.channelId) {
+   throw new Error(`Provider dispatch denied: channel scope mismatch for ContentBuild ${build.id}.`)
+  }
+  if (request.projectId && build.legacyProjectId && request.projectId !== build.legacyProjectId) {
+   throw new Error(`Provider dispatch denied: project scope mismatch for ContentBuild ${build.id}.`)
+  }
+  assertContentBuildCapability(build, "generate")
+  if (build.revision !== request.contextRevision) {
+   throw new Error(`Provider dispatch denied: ContentBuild ${build.id} revision is stale; expected current revision ${build.revision}, received ${request.contextRevision}.`)
+  }
+ }
+
  const callModel = async (repairInstructions: string[]) => {
+  // Revalidate immediately before each provider call, including the repair call.
+  // A stage/revision change while the first request was in flight cannot authorize
+  // a second provider request against stale lifecycle context.
+  assertProviderDispatchAllowed()
   const systemInstruction = buildSystemInstruction({
    evidence,
    style,
