@@ -948,9 +948,9 @@ Every substantial conversation must actively search for bugs, code-structure pro
 ## REC-20261016-publisher-render-api-001 — Publisher API startup blocker
 
 - **Status:** BLOCKED — live API returns HTTP 502; service configuration correction requires authenticated Render dashboard access.
-- **Target:** Vdev Render Publisher service `srv-db4rukd9fdbs73amd2gg`, deployed commit `74f14ad3ca43805b617a6a354d2b3e6e6b9d134f` on `master/consolidated-feature-integration`.
+- **Target:** Vdev Render Publisher service `srv-db4rukd9fdbs73amd2gg` (latest deployment `dep-db9ba72jnfac73bldn2g`, Live at last check), deployed commit `74f14ad3ca43805b617a6a354d2b3e6e6b9d134f` on `master/consolidated-feature-integration`.
 - **Verified evidence:** public dashboard renders; `/api/release` and `/api/auth-session` returned HTTP 502; Render logs showed Vite proxy `ECONNREFUSED` for `/api/auth-session` and `/api/youtube/playlists`.
 - **Cause assessment:** service start command is `npm run preview -- --host 0.0.0.0 --port $PORT`, while repository provides `npm run start:production` to start the API server and web preview together. This is the high-confidence configuration mismatch to remediate.
 - **Required action:** authenticate to Render, change the Publisher start command to `npm run start:production`, deploy manually, and verify the three API routes and startup logs.
-- **Limitations:** no production settings changed; no deployment triggered; repository test suite remains unverified because the execution environment could not resolve github.com for a clone.
+- **Limitations:** no production settings changed or deployment triggered by this work; Render subsequently recorded a manual deployment on the same source commit, which still uses the Vite-only start command; repository test suite remains unverified because the execution environment could not resolve github.com for a clone.
 - **Artifact:** `docs/recovery/Publisher-Render-API-Startup-Blocker-2026-10-16.md`.
