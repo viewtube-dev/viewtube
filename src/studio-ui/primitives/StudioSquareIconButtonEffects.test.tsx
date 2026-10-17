@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { StudioSquareIconButton } from "./StudioControls"
+import { StudioButton, StudioSquareIconButton } from "./StudioControls"
 import { STUDIO_CONTROL_SIZE_CONTRACT } from "../tokens"
 
 describe("StudioSquareIconButton interaction effects", () => {
@@ -15,17 +15,33 @@ describe("StudioSquareIconButton interaction effects", () => {
       stroke: 3,
       radius: 6,
       iconSize: 38,
-      buttonShadowX: 3,
-      buttonShadowY: 3,
     })
     expect(STUDIO_CONTROL_SIZE_CONTRACT.compact).toMatchObject({
       height: 28,
       stroke: 2,
       radius: 4,
       iconSize: 24,
-      buttonShadowX: 1.5,
-      buttonShadowY: 1.5,
     })
+  })
+
+
+  it("keeps controls flat by default and exposes shadows only as an explicit button primitive feature", () => {
+    const flatHtml = renderToStaticMarkup(<StudioButton>Flat</StudioButton>)
+    const shadowHtml = renderToStaticMarkup(<StudioButton shadow>Opt-in shadow</StudioButton>)
+    const squareShadowHtml = renderToStaticMarkup(<StudioSquareIconButton label="Shadow icon" icon={icon} shadow />)
+    expect(flatHtml).not.toContain('data-vt-button-shadow="true"')
+    expect(shadowHtml).toContain('data-vt-button-shadow="true"')
+    expect(squareShadowHtml).toContain('data-vt-button-shadow="true"')
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain('button[data-vt-button-shadow="true"]')
+    const shadowSelectors = [...css.matchAll(/([^{}]+)\{[^{}]*\bbox-shadow\s*:/g)].map(match => match[1].trim())
+    expect(shadowSelectors.length).toBeGreaterThan(0)
+    expect(shadowSelectors.every(selector =>
+      selector.includes('button[data-vt-button-shadow="true"]') ||
+      (selector.includes('button[data-vt-studio-icon-button="true"]') && selector.includes("::after")),
+    )).toBe(true)
+    expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\btransform\s*:/s)
+    expect(css).not.toMatch(/button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\bbox-shadow\s*:/s)
   })
 
   it("preserves canonical square geometry while rendering optional effects", () => {

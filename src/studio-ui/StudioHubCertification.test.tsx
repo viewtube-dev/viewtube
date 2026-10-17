@@ -69,22 +69,22 @@ describe("Studio Hub canonical controls", () => {
 
     expect(finalContract).toContain("caret-shape: block")
     expect(finalContract).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
-    expect(finalContract).toContain("--vt-studio-control-hover-offset:.75px")
+    expect(finalContract).not.toContain("--vt-studio-control-hover-offset")
     expect(finalContract).toContain("--vt-studio-control-icon-size:18px")
     expect(finalContract).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button')
   })
 
-  it("renders split-left and split-stepper shadows as real shell shadows, not filled overlay layers", () => {
+  it("keeps split-left and split-stepper geometry stable without pseudo-shadow layers", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] {')
-    expect(css).toContain('.vt-studio-split-stepper::before { content: none; display: none; }')
+    expect(css).not.toContain('button[data-vt-studio-button="true"][data-split-left="true"]::before')
+    expect(css).not.toContain(".vt-studio-split-stepper::before")
+    expect(css).toContain('button[data-vt-button-shadow="true"]')
     const splitStepper = css.slice(css.indexOf(".vt-studio-split-stepper {"), css.indexOf('.vt-studio-split-stepper[data-size="compact"]'))
-    expect(splitStepper).toContain('var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0')
-    expect(splitStepper).not.toContain('translate(var(--vt-studio-control-shadow-x')
+    expect(splitStepper).not.toContain("box-shadow")
+    expect(splitStepper).not.toContain("--vt-studio-control-shadow-x")
   })
 
-  it("uses canonical standard and compact tokens for split-left badges without a duplicate shadow shell", () => {
+  it("uses canonical standard and compact tokens for flat split-left badges", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const badge = css.slice(css.indexOf(".vt-studio-split-left-badge {"), css.indexOf("/* Choice controls must occupy the full 44px standard control height. */"))
 
@@ -94,9 +94,9 @@ describe("Studio Hub canonical controls", () => {
     expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-28-height, 28px)")
     expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px)")
     expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-28-radius, 4px)")
-    expect(badge).toContain(".vt-studio-split-left-badge::before { content: none; display: none; }")
-    expect(badge).toContain("box-shadow: var(--vt-studio-badge-shadow-x) var(--vt-studio-badge-shadow-y) 0 0")
-    expect(badge).not.toContain('translate(var(--vt-studio-badge-shadow-x')
+    expect(badge).not.toContain(".vt-studio-split-left-badge::before")
+    expect(badge).not.toContain("box-shadow")
+    expect(badge).not.toContain("--vt-studio-badge-shadow")
     expect(badge).not.toContain("--vt-studio-badge-radius: 10px")
     expect(badge).not.toContain("--vt-studio-badge-radius: 7px")
   })

@@ -7,7 +7,9 @@ const read = (file: string) => fs.readFileSync(path.resolve(process.cwd(), file)
 describe("confirmed Studio button primitive library", () => {
   it("uses real StudioButton and StudioSplitLeftButton exports", () => {
     const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
-    expect(catalog).toContain('import { StudioButton, StudioSplitLeftButton } from "../../studio-ui"')
+    expect(catalog).toContain("StudioButton,")
+    expect(catalog).toContain("StudioSplitLeftButton,")
+    expect(catalog).toContain('from "../../studio-ui/primitives/StudioControls"')
     expect(catalog).toContain('title="StudioButton"')
     expect(catalog).toContain('title="StudioSplitLeftButton"')
     expect(catalog).toContain('heightVariant="44"')
@@ -27,10 +29,10 @@ describe("confirmed Studio button primitive library", () => {
     expect(css).toContain("border-radius: 44px")
     expect(css).toContain("height: 44px")
     expect(css).toContain(".vt-studio-44-choice.is-checkbox { border-radius: 44px; }")
-    expect(css).toContain('data-height-variant="44"')
-    expect(css).toContain('data-height-variant="28"')
-    expect(css).toContain('font-size: 14px !important')
-    expect(css).toContain('data-height-variant="28"] [data-vt-studio-split-rail]')
+    expect(controls).toContain("data-height-variant={resolvedHeight}")
+    expect(css).toContain(':has([data-height-variant="28"])')
+    expect(css).toContain("--vt-studio-floating-label-size-compact")
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"][data-split-left="true"] [data-vt-studio-split-rail]')
   })
 
   it("mounts a third confirmed-primitives toolbox without changing the other tracks", () => {

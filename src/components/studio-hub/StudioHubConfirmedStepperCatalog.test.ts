@@ -8,31 +8,34 @@ describe("confirmed split stepper primitive family", () => {
   it("renders the canonical stepper in the confirmed library at standard and compact sizes", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
 
-    expect(catalog).toContain('import { SubToolboxSplitStepper } from "../subtoolbox/SubToolboxSplitStepper"')
+    expect(catalog).toContain("StudioSplitStepper,")
+    expect(catalog).toContain('from "../../studio-ui/primitives/StudioControls"')
     expect(catalog).toContain('title="Split Stepper · 44px + 28px"')
     expect(catalog).toContain('size="standard"')
     expect(catalog).toContain('size="compact"')
-    expect(catalog).toContain('data-vt-library-component="SubToolboxSplitStepper"')
+    expect(catalog).toContain('data-vt-library-component="StudioSplitStepper"')
     expect(catalog).toContain("<ConfirmedStepperFamily />")
   })
 
   it("uses the confirmed Studio Controls dimensions and typography for both sizes", () => {
-    const css = source("src/components/subtoolbox/subtoolbox-split-stepper.css")
+    const css = source("src/styles/studio-control-system.css")
 
-    expect(css).toContain("--vt-studio-28-height, 28px")
-    expect(css).toContain("--vt-studio-44-height, 44px")
-    expect(css).toContain("--vt-studio-28-stroke, 2px")
-    expect(css).toContain("--vt-studio-44-stroke, 3px")
-    expect(css).toContain("--vt-studio-28-radius, 4px")
-    expect(css).toContain("--vt-studio-44-radius, 6px")
-    expect(css).toContain("--vt-stepper-font-size: 24px")
-    expect(css).toContain("--vt-stepper-font-size: 38px")
+    expect(css).toContain("--vt-stepper-height: var(--vt-studio-28-height, 28px)")
+    expect(css).toContain("--vt-stepper-height: var(--vt-studio-44-height, 44px)")
+    expect(css).toContain("--vt-stepper-stroke: var(--vt-studio-28-stroke, 2px)")
+    expect(css).toContain("--vt-stepper-stroke: var(--vt-studio-44-stroke, 3px)")
+    expect(css).toContain("--vt-stepper-radius: var(--vt-studio-28-radius, 4px)")
+    expect(css).toContain("--vt-stepper-radius: var(--vt-studio-44-radius, 6px)")
+    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px) !important")
+    expect(css).toContain("font-size: var(--vt-studio-control-font-size, 38px) !important")
   })
 
   it("supports pointer hold repeat and keyboard activation without double-stepping pointer clicks", () => {
-    const component = source("src/components/subtoolbox/SubToolboxSplitStepper.tsx")
+    const component = source("src/studio-ui/primitives/StudioControls.tsx")
 
-    expect(component).toContain("setTimeout(scheduleRepeat, 360)")
+    expect(component).toContain("setHolding(true)")
+    expect(component).toContain("}, 320)")
+    expect(component).toContain("scheduleRepeatRef.current()")
     expect(component).toContain("event.detail === 0")
     expect(component).toContain("onPointerUp={stopHold}")
     expect(component).toContain("onPointerCancel={stopHold}")

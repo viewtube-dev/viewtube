@@ -38,9 +38,10 @@ test("standalone text inputs provide standard, compact, and disabled specimens",
   assert.match(catalog, /28px compact · disabled[\s\S]*?sizeVariant="compact"[^>]*disabled/);
 });
 
-test("global defaults distinguish the measured focus shadow from the CSS outline", () => {
-  assert.match(controls, /visible focus accent at 0px offset[\s\S]*?computed CSS outline itself measured 1px/);
-  assert.match(catalog, /Focus measurement note:[\s\S]*?These are separate layers/);
+test("global defaults use real borders and stable focus outlines without field shadows", () => {
+  assert.match(controlStyles, /outline:\s*var\(--vt-studio-control-focus-outline-width/);
+  assert.doesNotMatch(controlStyles, /(?:input|textarea)[^{}]*\{[^}]*box-shadow\s*:/s);
+  assert.match(catalog, /Focus rule:/);
 });
 
 test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
@@ -83,16 +84,15 @@ test("non-default settings explain the real public props in plain language", () 
 });
 
 
-test("button shadows stay on the stationary outer control while the face moves", () => {
+test("Studio buttons stay stationary and shadows are opt-in on the button surface", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*box-shadow:\s*none/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][\s\S]*?box-shadow:\s*3px 3px 0/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][\s\S]*?box-shadow:\s*none/);
+  assert.doesNotMatch(fieldCss, /button\[data-vt-studio-button="true"\]::before/);
+  assert.match(fieldCss, /button\[data-vt-button-shadow="true"\]\s*\{[^}]*box-shadow:/);
+  assert.doesNotMatch(fieldCss, /button[^{}]*:(?:hover|active)[^{}]*\{[^}]*\btransform\s*:/s);
+  assert.doesNotMatch(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][^{}]*\{[^}]*box-shadow:/);
 });
 
-test("split-left buttons do not clip the stationary shadow or expose a wrapper border", () => {
+test("split-left buttons retain a stable surface and canonical face border", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\][^\n]*overflow:\s*visible/);
   assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-button-face\][^\n]*border:\s*var\(--vt-studio-control-stroke\) solid #000/);
@@ -185,20 +185,19 @@ test("word toggle library has three skins, one standard toggle per row, and cent
   assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variant > small\s*\{[\s\S]*?text-align:\s*center/);
 });
 
-test("compact Studio button shadow and typography tokens match the effective control CSS", () => {
+test("compact Studio button geometry is independent from optional button-owned shadows", () => {
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
-  assert.match(css, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1\.5px;[^}]*--vt-studio-control-shadow-y:\s*1\.5px/);
-  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1px;[^}]*--vt-studio-control-shadow-y:\s*1px/);
+  assert.match(css, /button\[data-vt-button-shadow="true"\]\s*\{[^}]*box-shadow:/);
+  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]::before/);
+  assert.doesNotMatch(css, /--vt-studio-control-shadow-[xy]\s*:/);
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
-  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86/);
+  assert.doesNotMatch(tokens, /buttonShadowX|buttonShadowY|hoverOffsetPx|clickOffsetPx/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
-  assert.match(css, /--vt-studio-motion-button:\s*180ms;\s*--vt-studio-motion-press:\s*80ms/);
-  assert.match(tokens, /standard: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
-  assert.match(tokens, /compact: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
-  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*150ms\)|var\(--vt-studio-motion-press,\s*300ms\)/);
+  assert.doesNotMatch(css, /--vt-studio-motion-button|--vt-studio-motion-press/);
+  assert.doesNotMatch(tokens, /hoverTransitionMs|clickTransitionMs/);
 });
 
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
@@ -208,7 +207,7 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(controls, /iconSizeVariant = "large"/);
   assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
-  assert.match(catalog, /1\.5px compact button shadow/);
+  assert.match(catalog, /button-owned shadow.*off by default|optional button shadow.*off by default/i);
   assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
   assert.match(catalog, /rectangular 44px switches and rectangular radios use reference-specific 7\.333px radii/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
@@ -220,7 +219,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact A · closed trigger and count"));
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
-  assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
+  assert.match(catalog, /Its height is fixed at 56px with a 3px border and 6px radius[\s\S]*?The control remains stationary on hover and press[\s\S]*?optional button-owned shadow is off by default/);
 });
 
 test("word-toggle settings distinguish displayed words from the boolean value", () => {
