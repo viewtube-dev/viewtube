@@ -3,11 +3,22 @@
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
 **Reviewed:** 2026-10-17  
 **Repository:** `viewtube-dev/viewtube`  
-**Work branch:** `fix/studio-unified-split-shell-2026-10-17`  
+**Work branch:** `fix/studio-controls-catalog-current-integration-2026-10-17`  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
 **Rendered reference:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
 > This document is the normative reference for Studio primitives. Historical notes and old audit snapshots elsewhere in this file are superseded by this section. When implementation differs, treat it as drift to fix—not as a new default—unless an exception is explicitly registered below and represented in the Confirmed Primitive Library.
+
+## Confirmed catalog ownership and certification
+
+The Confirmed Primitive Library is a production-component specimen and provenance surface—not a second control implementation. Specimens import real primitives from `src/studio-ui/primitives/StudioControls.tsx`. The catalog stylesheet owns family cards, grids, specimen arrangement, and disclosure panels; production control geometry, typography, fill, stroke, shadow, and motion belong to the Studio token/control stylesheet system.
+
+**NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
+
+Micro is already represented by the existing token ladder and is reserved for the informational split-left badge. It must not be introduced as a general interactive-button size. Do not add a second token generator or duplicate generated stylesheet when the current source already owns the contract.
+
+A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
+
 
 ## 1. Global defaults — independent of size
 
