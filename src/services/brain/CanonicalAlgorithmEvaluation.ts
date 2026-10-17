@@ -236,6 +236,9 @@ export const resolveAlgorithmMetricFromCanonicalCatalog = (input: {
    }
   }
 
+  // Sample rows are a display/evidence excerpt, not necessarily the full dataset.
+  // Never turn a truncated sample into a channel-level sum or average.
+  if (dataset.rowCount > dataset.sampleRows.length) continue
   for (const fieldRule of input.rule.fields) {
    const values = dataset.sampleRows
     .map((row) => numericValue(row[fieldRule.field]))
