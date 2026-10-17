@@ -3170,3 +3170,145 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
     translate: none !important;
   }
 }
+
+
+/* Canonical row-fill and typography contract.
+   Standard/compact/micro share the same 4px spacing unit and weight-1000 type.
+   Controls fill their assigned grid/flex cell by default; opt into intrinsic
+   text width with data-width="content". Shape controls retain explicit geometry. */
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"], [data-vt-studio-dropdown], .vt-studio-floating-field, .vt-studio-fixed-label-field, .vt-studio-inline-stepper, .vt-studio-split-stepper, .vt-studio-spectrum-tag, .vt-studio-tag-editor__square-action) {
+  --vt-studio-space-unit: 4px;
+  --vt-studio-space-top: var(--vt-studio-space-unit);
+  --vt-studio-space-right: var(--vt-studio-space-unit);
+  --vt-studio-space-bottom: var(--vt-studio-space-unit);
+  --vt-studio-space-left: var(--vt-studio-space-unit);
+  min-width: 0;
+}
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  input[data-vt-studio-control="true"],
+  textarea[data-vt-studio-control="true"],
+  select[data-vt-studio-control="true"],
+  [data-vt-studio-dropdown],
+  .vt-studio-floating-field,
+  .vt-studio-fixed-label-field,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-spectrum-tag
+):not([data-width="content"]):not([data-layout="intrinsic"]) {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  input[data-vt-studio-control="true"],
+  textarea[data-vt-studio-control="true"],
+  select[data-vt-studio-control="true"],
+  [data-vt-studio-dropdown],
+  .vt-studio-floating-field,
+  .vt-studio-fixed-label-field,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-spectrum-tag
+)[data-width="content"],
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  input[data-vt-studio-control="true"],
+  textarea[data-vt-studio-control="true"],
+  select[data-vt-studio-control="true"]
+)[data-layout="intrinsic"] {
+  width: max-content;
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+/* Three explicit size tiers: 44/28/14px faces with proportional type stroke. */
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="standard"] {
+  --vt-studio-control-height: 44px;
+  --vt-studio-control-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-font-size: 38px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: 1px;
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-gap: 4px;
+}
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="compact"] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: .5px;
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-gap: 4px;
+}
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: .25px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-gap: 4px;
+}
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  select[data-vt-studio-control="true"],
+  .vt-studio-legend-trigger,
+  .vt-studio-legend-option,
+  .vt-studio-legend-clear
+) {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+/* Text-bearing fields deliberately do not inherit button typography. */
+:where(input[data-vt-studio-control="true"], .vt-studio-floating-field > input) {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+:where(textarea[data-vt-studio-control="true"], .vt-studio-floating-field.is-textarea > textarea, .vt-studio-fixed-label-field > textarea) {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-textarea-font-size, 18px);
+  font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-textarea-text-stroke, .5px) currentColor;
+  line-height: var(--vt-studio-textarea-line-height, 1.25);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="compact"] > textarea, .vt-studio-fixed-label-field[data-size="compact"] > textarea {
+  --vt-studio-textarea-font-size: 14px;
+  --vt-studio-textarea-text-stroke: .35px;
+  --vt-studio-textarea-line-height: 1.3;
+}
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  -webkit-text-stroke: .5px currentColor;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-studio-fixed-label-field > .vt-studio-fixed-field-label {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  -webkit-text-stroke: 0 currentColor;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
