@@ -1122,3 +1122,20 @@ vault_phase_8_operation_store_current_base:
     - "Requires persistent mounted disk and restart verification."
     - "Filesystem idempotency requires race-safe coordination before multi-process scaling."
   next_action: "Reconcile exact-head runtime lint and integration-test failures against the target branch; implement worker leases and race-safe claims; configure persistent storage and verify deployed restart recovery before merge."
+
+
+recent_work_log:
+  - id: "REC-20261016-publisher-render-api-001"
+    status: "BLOCKED"
+    category: "DEPLOYMENT / FAILURE"
+    action: "Verified Publisher dashboard availability and identified API startup configuration mismatch."
+    source: "Read-only public browser check; Render deployment metadata and application logs; current integration branch source."
+    evidence:
+      - "Publisher dashboard renders but /api/release and /api/auth-session return HTTP 502."
+      - "Render logs show Vite proxy ECONNREFUSED for /api/auth-session and /api/youtube/playlists."
+      - "Render start command runs Vite preview only; repository has start:production launcher that starts API and web preview."
+    artifact: "docs/recovery/Publisher-Render-API-Startup-Blocker-2026-10-16.md"
+    external_identifier: "Render service srv-db4rukd9fdbs73amd2gg; deployment dep-db9an2vavr4c73dbpb4g"
+    result: "API outage confirmed; corrective start-command change requires authenticated Render dashboard session."
+    next_action: "Set start command to npm run start:production, deploy manually, verify API routes, then continue end-to-end lifecycle certification."
+    verification: "Dashboard shell observed; API HTTP 502 observed; no service settings changed and no deployment triggered."

@@ -77,3 +77,5 @@ Do not create a new document for an existing subject. Update or consolidate its 
 - [Publisher metadata persistence plan](plans/VIEWTUBE_PUBLISHER_METADATA_PROJECT_PACKAGE_PERSISTENCE_PLAN_2026-10-08.md) — current implementation state and remaining verification gates.
 - [Publisher/Manager channel-connected controls plan](plans/VIEWTUBE_PUBLISHER_MANAGER_CHANNEL_CONNECTED_CONTROLS_PLAN_2026-10-09.md) — four-state visibility workflow, channel playlists, location autocomplete, audience/AI semantics, API boundaries, implementation slices, and acceptance criteria.
 - [Publisher metadata and Render conversation record](recovery/Conversation-Publisher-Metadata-Render-2026-10-09.md) — decisions, implementation summary, deployment evidence, known blockers, and next steps.
+
+- [Publisher Render API Startup Blocker](recovery/Publisher-Render-API-Startup-Blocker-2026-10-16.md) — live Publisher dashboard loads, but API routes return HTTP 502; documents the confirmed start-command mismatch, remediation, and remaining certification blockers.

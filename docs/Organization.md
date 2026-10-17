@@ -402,3 +402,5 @@ No destructive cleanup is authorized merely because this infrastructure exists. 
 **Merge aggressively at the knowledge level; migrate conservatively at the filesystem level.**
 
 The desired end state is fewer documents, fewer folders, fewer competing authorities, better cross-linking, and more preserved information — not simply fewer files.
+
+- [Publisher Render API Startup Blocker](recovery/Publisher-Render-API-Startup-Blocker-2026-10-16.md) — live Publisher dashboard loads, but API routes return HTTP 502; documents the confirmed start-command mismatch, remediation, and remaining certification blockers.
