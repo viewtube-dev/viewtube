@@ -15,16 +15,16 @@ describe("StudioSquareIconButton interaction effects", () => {
       stroke: 3,
       radius: 6,
       iconSize: 38,
-      buttonShadowX: 3,
-      buttonShadowY: 3,
+      buttonShadowX: 0,
+      buttonShadowY: 0,
     })
     expect(STUDIO_CONTROL_SIZE_CONTRACT.compact).toMatchObject({
       height: 28,
       stroke: 2,
       radius: 4,
       iconSize: 24,
-      buttonShadowX: 1.5,
-      buttonShadowY: 1.5,
+      buttonShadowX: 0,
+      buttonShadowY: 0,
     })
   })
 
@@ -96,8 +96,8 @@ describe("StudioSquareIconButton interaction effects", () => {
     expect(css).toContain("320ms ease-in-out")
     expect(css).toContain('is-effect-notification[data-notification-pulse="true"]')
     expect(css).not.toContain('is-effect-notification[data-has-badge="true"]:not(:disabled) [data-vt-square-icon-current]')
-    expect(css).toContain("450ms cubic-bezier(.2,.8,.2,1)")
-    expect(css).toContain("500ms cubic-bezier(.2,.8,.2,1)")
+    expect(css).not.toContain("450ms cubic-bezier(.2,.8,.2,1)")
+    expect(css).not.toContain("500ms cubic-bezier(.2,.8,.2,1)")
     expect(css).toContain("outline: var(--vt-studio-control-focus-outline-width)")
     expect(css).toContain("outline-offset: var(--vt-studio-control-focus-outline-offset)")
     expect(css).toContain('button[data-vt-studio-icon-button="true"] *')
