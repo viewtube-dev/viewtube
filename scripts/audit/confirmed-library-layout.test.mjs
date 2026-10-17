@@ -234,7 +234,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact A · closed trigger and count"));
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
-  assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
+  assert.match(catalog, /Dedicated 56px prominent-action exception with 20px label typography and 3px offset shadow/);
 });
 
 test("word-toggle boolean behavior is specified by the production primitive, not catalog prose", () => {
