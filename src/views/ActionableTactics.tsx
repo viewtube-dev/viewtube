@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
  Zap,
  Search,
@@ -24,6 +24,9 @@ import {
 } from "../components/Toolbox"
 import { toolboxSystem } from "../components/toolboxSystem"
 import { PostActionReflection } from "../components/PostActionReflection"
+import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
+import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
+import { validateTacticProposal, type OpportunityTacticsPacket, type TacticProposal } from "../services/brain/OpportunityIntelligence"
 import { SubToolboxButton } from "../components/subtoolbox/SubToolboxPrimitives"
 import {
  StudioActionButton,
@@ -142,6 +145,11 @@ const ActionableTactics: React.FC<{
  const [isOpen, setIsOpen] = useState(isOpenInitial)
  const [loading, setLoading] = useState(false)
  const [tactics, setTactics] = useState<Tactic[]>([])
+ const [incomingOpportunity, setIncomingOpportunity] = useState<OpportunityTacticsPacket | null>(null)
+ const [linkedProposals, setLinkedProposals] = useState<TacticProposal[]>([])
+ const validLinkedProposalCount = incomingOpportunity
+  ? linkedProposals.filter((proposal) => validateTacticProposal(incomingOpportunity, proposal).length === 0).length
+  : 0
  const [filterText, setFilterText] = useState("")
  const [toast, setToast] = useState<string | null>(null)
  const [input, setInput] = useState<CreatorStrategyInput>({
@@ -155,6 +163,27 @@ const ActionableTactics: React.FC<{
   avoidTopics: "",
  })
 
+ const handleIncomingPacket = useCallback((packet: ViewTubeActionPacket) => {
+  if (packet.sourceToolId !== "opportunity-radar" || packet.payloadKind !== "evidence") return
+  const payload = packet.payload as Partial<OpportunityTacticsPacket> | null
+  if (!payload || payload.schemaVersion !== "vt-opportunity-tactics-handoff-v1"
+   || payload.validationState !== "accepted"
+   || typeof payload.opportunityId !== "string"
+   || typeof payload.channelId !== "string"
+   || !Array.isArray(payload.evidenceIds)) return
+  const opportunity = payload as OpportunityTacticsPacket
+  setIncomingOpportunity(opportunity)
+  setInput((current) => ({
+   ...current,
+   topic: (opportunity.entity || opportunity.opportunityId) + " — accepted opportunity " + opportunity.opportunityId,
+   avoidTopics: [
+    current.avoidTopics,
+    "Radar evidence IDs: " + opportunity.evidenceIds.join(", ") + ".",
+    "Snapshot/window: " + (opportunity.provenance.sourceSnapshotId || "unknown") + " / " + (opportunity.provenance.window || "unknown") + ".",
+    "Limitations: " + opportunity.limitations.join(" ") + " Treat all tactics as hypotheses; do not claim causality.",
+   ].filter(Boolean).join("\n"),
+  }))
+ }, [])
  useEffect(() => {
   if (toast) {
    const timer = setTimeout(() => setToast(null), 3000)
@@ -167,6 +196,22 @@ const ActionableTactics: React.FC<{
   try {
    const result = await generateActionableTactics(input)
    setTactics(result)
+   setLinkedProposals(incomingOpportunity ? result.map((tactic, index): TacticProposal => ({
+    id: "tactic:" + incomingOpportunity.opportunityId + ":" + (index + 1),
+    sourceOpportunityId: incomingOpportunity.opportunityId,
+    channelId: incomingOpportunity.channelId,
+    evidenceIds: [...incomingOpportunity.evidenceIds],
+    targetOutcome: tactic.title,
+    actionSteps: [tactic.action],
+    prerequisites: [],
+    expectedImpact: { hypothesis: tactic.whyItWorks, confidence: null, horizon: null },
+    risks: [...incomingOpportunity.limitations, "Expected impact is a hypothesis and has not been measured."],
+    successMetrics: incomingOpportunity.metric
+     ? [{ metricId: incomingOpportunity.metric, targetDirection: "increase", guardrail: false }]
+     : [],
+    approvalState: "pending",
+    operationId: null,
+   })) : [])
   } catch (error) {
    console.error(error)
   } finally {
@@ -193,6 +238,16 @@ const ActionableTactics: React.FC<{
    isOpen={isOpen}
    onToggle={() => setIsOpen(!isOpen)}>
    <div className="animate-fade-in">
+    <ViewTubeHandoffReceiver targetToolId="tactics-engine" onPacket={handleIncomingPacket} />
+    {incomingOpportunity && (
+     <div className="mb-4 rounded-xl border-[3px] border-black bg-[#E7FFB0] p-4 shadow-[4px_4px_0_#000]">
+      <div className="text-[10px] font-black uppercase tracking-widest">Accepted Opportunity · Tactic Draft Context</div>
+      <div className="mt-1 text-lg font-black">{incomingOpportunity.entity || incomingOpportunity.opportunityId}</div>
+      <div className="mt-1 text-xs font-bold">Source {incomingOpportunity.opportunityId} · {incomingOpportunity.evidenceIds.length} evidence reference(s) · {incomingOpportunity.provenance.window || "window unknown"}</div>
+      <p className="mt-2 text-xs font-semibold">Generated tactics remain proposals. No project, experiment, or external action is created by generating them.</p>
+      {linkedProposals.length > 0 && <p className="mt-2 text-xs font-black uppercase">{linkedProposals.length} linked tactic draft(s) · {validLinkedProposalCount} ready for review · all pending creator review</p>}
+     </div>
+    )}
     <div className={toolboxSystem.shellRow}>
      {/* Left Column: Input Form */}
      <div className={toolboxSystem.inputColumn}>

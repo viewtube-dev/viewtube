@@ -241,3 +241,136 @@ describe("buildOpportunityEvidenceFromCanonicalBundle", () => {
   }
  })
 })
+
+
+describe("Opportunity Radar to Tactics Engine handoff contract", () => {
+  it("fails closed until an opportunity has been accepted", async () => {
+    const { buildOpportunityTacticsPacket } = await import("./OpportunityIntelligence")
+    const opportunity = {
+      id: "op-1", kind: "performance_candidate" as const, channelId: "channel-1",
+      evidenceIds: ["ev-1"], confidence: 70, impactScore: 80,
+      provenance: { sourceOwner: "analytics-canon" as const, sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d", datasetStatus: "available" },
+    }
+    expect(buildOpportunityTacticsPacket({ opportunity, lifecycleState: "reviewed", createdAt: "2026-10-17T12:00:00.000Z" }))
+      .toMatchObject({ ok: false, code: "opportunity_not_accepted" })
+  })
+
+  it("preserves canonical evidence and source provenance in an accepted packet", async () => {
+    const { buildOpportunityTacticsPacket } = await import("./OpportunityIntelligence")
+    const opportunity = {
+      id: "op-1", kind: "performance_candidate" as const, channelId: "channel-1",
+      evidenceIds: ["ev-1", "ev-2"], confidence: 70, impactScore: 80,
+      baselineValue: null, relativeDelta: null,
+      provenance: { sourceOwner: "analytics-canon" as const, sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d", datasetStatus: "available" },
+    }
+    const result = buildOpportunityTacticsPacket({ opportunity, lifecycleState: "accepted", createdAt: "2026-10-17T12:00:00.000Z" })
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.packet).toMatchObject({
+      schemaVersion: "vt-opportunity-tactics-handoff-v1",
+      opportunityId: "op-1", channelId: "channel-1", validationState: "accepted",
+      evidenceIds: ["ev-1", "ev-2"],
+      provenance: { sourceOwner: "analytics-canon", sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d" },
+    })
+    expect(result.packet.limitations).toContain("Baseline and relative change are unknown.")
+  })
+
+  it("rejects accepted opportunities without evidence IDs", async () => {
+    const { buildOpportunityTacticsPacket } = await import("./OpportunityIntelligence")
+    expect(buildOpportunityTacticsPacket({
+      opportunity: { id: "op-1", kind: "performance_candidate" as const, channelId: "channel-1", evidenceIds: [], confidence: 50, impactScore: 50 },
+      lifecycleState: "accepted", createdAt: "2026-10-17T12:00:00.000Z",
+    })).toMatchObject({ ok: false, code: "missing_evidence" })
+  })
+
+  it("rejects mismatched tactic source/evidence and requires creator approval plus operation identity", async () => {
+    const { buildOpportunityTacticsPacket, validateTacticProposal, canDispatchTacticProposal } = await import("./OpportunityIntelligence")
+    const opportunity = {
+      id: "op-1", kind: "performance_candidate" as const, channelId: "channel-1",
+      evidenceIds: ["ev-1", "ev-2"], confidence: 70, impactScore: 80,
+    }
+    const result = buildOpportunityTacticsPacket({ opportunity, lifecycleState: "accepted", createdAt: "2026-10-17T12:00:00.000Z" })
+    if (!result.ok) throw new Error("fixture packet should be valid")
+    const tactic = {
+      id: "tactic-1", sourceOpportunityId: "op-1", channelId: "channel-1", evidenceIds: ["ev-1"],
+      targetOutcome: "Improve qualified watch time", actionSteps: ["Draft a follow-up"],
+      prerequisites: [], expectedImpact: { hypothesis: "May improve watch time", confidence: 0.55, horizon: "28d" },
+      risks: ["Relative ranking is not causal evidence"],
+      successMetrics: [{ metricId: "watch_time", targetDirection: "increase", guardrail: false }],
+      approvalState: "pending" as const, operationId: null,
+    }
+    expect(validateTacticProposal(result.packet, { ...tactic, sourceOpportunityId: "other" }))
+      .toContain("Tactic source opportunity does not match the accepted opportunity.")
+    expect(validateTacticProposal(result.packet, { ...tactic, evidenceIds: ["unknown"] }))
+      .toContain("Tactic references evidence outside the accepted opportunity packet.")
+    expect(canDispatchTacticProposal(result.packet, tactic).allowed).toBe(false)
+    expect(canDispatchTacticProposal(result.packet, { ...tactic, approvalState: "approved" }).allowed).toBe(false)
+    expect(canDispatchTacticProposal(result.packet, { ...tactic, approvalState: "approved", operationId: "op:channel-1:tactic-1" }))
+      .toEqual({ allowed: true, reasons: [] })
+  })
+})
+
+
+describe("canonical tool-chain registration for Opportunity Radar → Tactics Engine", () => {
+  it("keeps the Radar tool distinct and routes accepted packets to Tactics Engine for review", async () => {
+    const { VIEWTUBE_TOOL_CAPABILITIES, VIEWTUBE_SUGGESTED_TOOL_CHAINS, createOpportunityTacticsActionPacket } =
+      await import("../viewTubeToolChains")
+    const radar = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === "opportunity-radar")
+    const tactics = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === "tactics-engine")
+    const chain = VIEWTUBE_SUGGESTED_TOOL_CHAINS.find((item) => item.id === "opportunity-radar-to-tactics")
+
+    expect(radar).toMatchObject({ kind: "studio-tool", status: "partial", produces: ["evidence"] })
+    expect(tactics).toMatchObject({ kind: "studio-tool", accepts: expect.arrayContaining(["evidence"]) })
+    expect(chain?.steps.map((step) => step.toolId)).toEqual(["opportunity-radar", "tactics-engine", "project-calendar"])
+
+    const packet = {
+      schemaVersion: "vt-opportunity-tactics-handoff-v1" as const,
+      opportunityId: "op-accepted",
+      channelId: "channel-1",
+      videoId: "video-1",
+      entity: "Measured candidate",
+      metric: "views",
+      kind: "performance_candidate" as const,
+      validationState: "accepted" as const,
+      createdAt: "2026-10-17T12:00:00.000Z",
+      evidenceIds: ["ev-1"],
+      confidence: 70,
+      impactScore: 80,
+      currentValue: 1200,
+      baselineValue: null,
+      relativeDelta: null,
+      provenance: { sourceOwner: "analytics-canon" as const, sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d", datasetStatus: "available" },
+      limitations: ["Baseline and relative change are unknown."],
+    }
+    const actionPacket = createOpportunityTacticsActionPacket(packet)
+    expect(actionPacket).toMatchObject({
+      sourceToolId: "opportunity-radar",
+      payloadKind: "evidence",
+      suggestedTargets: ["tactics-engine"],
+      intent: "propose",
+      approvalState: "pending",
+      evidence: ["ev-1"],
+      idempotencyKey: "opportunity-tactics:channel-1:op-accepted:snapshot-1",
+    })
+    expect(actionPacket.payload).toEqual(packet)
+  })
+})
+
+  it("refuses malformed or unaccepted packets at the canonical action-packet boundary", async () => {
+    const { createOpportunityTacticsActionPacket } = await import("../viewTubeToolChains")
+    const valid = {
+      schemaVersion: "vt-opportunity-tactics-handoff-v1" as const,
+      opportunityId: "op-accepted", channelId: "channel-1", videoId: null, entity: "Candidate", metric: "views",
+      kind: "performance_candidate" as const, validationState: "accepted" as const,
+      createdAt: "2026-10-17T12:00:00.000Z", evidenceIds: ["ev-1"], confidence: 70, impactScore: 80,
+      currentValue: 1200, baselineValue: null, relativeDelta: null,
+      provenance: { sourceOwner: "analytics-canon" as const, sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d", datasetStatus: "available" },
+      limitations: [],
+    }
+    expect(() => createOpportunityTacticsActionPacket({ ...valid, validationState: "reviewed" } as any)).toThrow(
+      "Only accepted opportunities with canonical evidence can be handed to Tactics Engine.",
+    )
+    expect(() => createOpportunityTacticsActionPacket({ ...valid, evidenceIds: [] })).toThrow(
+      "Only accepted opportunities with canonical evidence can be handed to Tactics Engine.",
+    )
+  })
