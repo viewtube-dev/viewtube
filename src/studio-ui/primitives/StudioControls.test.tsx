@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioSplitLeftBadge, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
 import { STUDIO_CONTROL_SIZE_CONTRACT } from "../tokens"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
@@ -566,6 +566,17 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 
 
 describe("canonical micro badge size contract", () => {
+  it("renders standard, compact, and micro as explicit badge sizes", () => {
+    const standard = renderToStaticMarkup(<StudioSplitLeftBadge>READY</StudioSplitLeftBadge>)
+    const compact = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="compact">READY</StudioSplitLeftBadge>)
+    const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro">READY</StudioSplitLeftBadge>)
+
+    expect(standard).toContain('data-size="standard"')
+    expect(compact).toContain('data-size="compact"')
+    expect(micro).toContain('data-size="micro"')
+  })
+
+
   it("defines micro as an independent 14px tier rather than aliasing compact", () => {
     const micro = STUDIO_CONTROL_SIZE_CONTRACT.micro
     expect(micro).toMatchObject({ height: 14, stroke: 1, radius: 2, fontSize: 10, iconSize: 10 })
