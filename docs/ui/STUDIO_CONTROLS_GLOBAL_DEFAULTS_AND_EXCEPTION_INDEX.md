@@ -3,8 +3,8 @@
 **Status:** PR #288 source-parity edits reconciled directly onto `master/consolidated-feature-integration`; CI and rendered verification pending  
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Current work branch:** `master/consolidated-feature-integration` (reconciled confirmed-catalog fidelity and default-style parity edits from PR #288)  
-**Last reviewed:** 2026-10-15  
+**Current work branch:** `fix/studio-control-catalog-phases-1-4-2026-10-17` (draft PR #515; integration target unchanged)  
+**Last reviewed:** 2026-10-17  
 **Canonical implementation:** `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`  
 **Confirmed component gallery:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
@@ -35,6 +35,26 @@ These changes were carried over as targeted edits rather than merging PR #288's 
 | Icon effects | Notification count and success state are static gallery previews | They are not real notification counts or live successful operations |
 
 The source regression command is `npm run test:confirmed-library-layout`. Assertions now cover the compact shadow, shared tracking/motion tokens, default icon metrics, actual specimen states, and static-preview labels. **Source assertions are not visual certification.** Test execution, typecheck, CSS parsing, production build, and rendered browser checks remain required.
+
+## 1B. Catalog ownership and micro badge exception — 2026-10-17
+
+The Confirmed Primitive Library is a certification and provenance surface, not a second control implementation. Its specimens import production primitives from `src/studio-ui/primitives/StudioControls.tsx`; its CSS owns family cards, grids, disclosure panels, and specimen arrangement only. Control geometry, type, border, fill, shadow, and motion remain owned by `src/studio-ui/tokens.ts` and `src/styles/studio-control-system.css`.
+
+The editable size authority is `STUDIO_CONTROL_SIZE_CONTRACT` in `tokens.ts`. `scripts/emit-studio-control-vars.mjs` derives the CSS custom properties consumed by the stylesheet from that TypeScript object; the generated CSS is not an independent source. Run `npm run generate:studio-control-vars` after changing tier values and `npm run check:studio-control-vars` to detect drift.
+
+The 14px **micro** tier is reserved for the static split-left badge. It is not part of `StudioControlSize` and must not become a general interactive-button size.
+
+| Tier / exception | Contract |
+|---|---|
+| Standard | 44px height, 3px stroke, 6px radius, 38px text/icon preset |
+| Compact | 28px height, 2px stroke, 4px radius, 24px text/icon preset |
+| Micro badge only | 14px height, 1px stroke, 2px radius, 10px text/icon preset; no shadow or action motion |
+| Textarea | 18px / 14px multiline typography and 92px minimum writing surface |
+| Prominent action | 56px height and dedicated 20px label typography |
+| Vault spectrum tag | 15px dense metadata exception |
+| Closeable badge / tag editor | 20px badge / 32px tag-editor action exceptions |
+
+The Confirmed catalog's **NON-DEFAULT SETTINGS** lists only departures from shared defaults. Standard and compact geometry, ordinary states, and generic behavior belong in the shared defaults reference or component API documentation, not repeated under every family. Source-string checks guard catalog registration and provenance; they do not certify computed styles or rendered visuals.
 
 ## 2. Global defaults shared by both sizes
 
