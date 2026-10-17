@@ -95,6 +95,8 @@ describe("confirmed Studio button primitive library", () => {
     expect(css).toContain("font-weight: 1000 !important")
     expect(css).toContain("aspect-ratio: 1 / 1")
     expect(css).toContain("place-items: center")
+    expect(css).toContain("Canonical split-left label centering rule")
+    expect(css).toContain("justify-content: center;")
   })
 
 })
