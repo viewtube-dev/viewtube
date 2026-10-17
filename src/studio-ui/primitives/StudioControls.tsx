@@ -1120,7 +1120,7 @@ export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ opti
 StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
 // Canonical Studio stepper implementations are owned by this module.
-export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
   value: number
   onValueChange: (value: number) => void
   min?: number
@@ -1277,7 +1277,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
 StudioInlineStepper.displayName = "StudioInlineStepper"
 
 export type StudioSplitStepperSize = "standard" | "compact"
-export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
   value: number
   onValueChange: (value: number) => void
   min?: number
