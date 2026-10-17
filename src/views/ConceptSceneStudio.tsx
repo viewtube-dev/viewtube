@@ -172,6 +172,10 @@ const ConceptSceneStudio: React.FC<ConceptSceneStudioProps> = ({
     context: { channelId },
     brief: { ...brief },
     ...(contentContext?.build.legacyProjectId ? { projectId: contentContext.build.legacyProjectId } : {}),
+    ...(prepared ? {
+     contentBuildId: prepared.request.contentBuildId,
+     contextRevision: prepared.request.contextRevision,
+    } : {}),
    })
    const output = generated.record.output
    const conceptsFromBrain: ConceptDirection[] | null = output?.concepts?.length === 3
@@ -283,6 +287,10 @@ const ConceptSceneStudio: React.FC<ConceptSceneStudioProps> = ({
     sceneCount,
     scriptBeats,
     ...(contentContext?.build.legacyProjectId ? { projectId: contentContext.build.legacyProjectId } : {}),
+    ...(prepared ? {
+     contentBuildId: prepared.request.contentBuildId,
+     contextRevision: prepared.request.contextRevision,
+    } : {}),
    })
    const output = generated.record.output
    const validRoles: ProductionScene["role"][] = ["HOOK","SETUP","PROOF","ESCALATION","PIVOT","PAYOFF"]
