@@ -27,7 +27,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     fill: "alphabetical spectrum color mixed at 35% with white",
     textAndBorder: "resolved alphabetical spectrum color",
     colorResolver: "getAlphabeticalSpectrumColor",
-    selectedTreatment: "1px upward offset plus four-layer white/color glow",
+    selectedTreatment: "flat selected color treatment; no shadow, glow, or geometry offset",
     rationale: "Asset-module tags are donor-specified dense metadata chips, not ordinary 44px/28px controls.",
   },
   closeableBadge: {
@@ -40,7 +40,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     textTransform: "uppercase",
     textColor: "primary mixed 50% with white",
     closeControl: "16px secondary-filled circle with primary X",
-    motion: "450ms enter scale/fade; 3x 180ms close-color swap; 1s fade removal",
+    motion: "CSS transitions disabled by global Studio rule; no movement or shadow effects",
     rationale: "Closeable metadata tags are intentionally dense 20px pills with a 16px circular close action, not ordinary 44px/28px controls.",
   },
   tagEditorAction: {
@@ -49,7 +49,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 28,
     stroke: 2,
     radius: 4,
-    shadow: "1.5px compact offset secondary-color at 45% opacity",
+    shadow: "none; primitive/component shadow prohibition",
     rationale: "The plus/check actions use the canonical compact 28px square-button size.",
   },
   textareaTypography: {
@@ -63,7 +63,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 56,
     stroke: 3,
     radius: 6,
-    shadow: 3,
+    shadow: 0,
     rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
   },
 } as const
@@ -80,7 +80,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
   lineHeight: 0.86,
-  shadowPolicy: "Current CSS behavior: ordinary buttons and square/circle icon buttons use offset shadows (3px standard / 1.5px compact) plus hover/press transforms; StudioActionButton uses a 3px offset shadow and separate hover/press transforms. Floating dropdown panels may use a stationary panel shadow; triggers/options do not use the ordinary button-press contract. Tag-editor actions and selected Vault spectrum tags have separately registered shadow/glow treatments. Text fields use black outer borders and primary-color inset strokes. Token hover/press offsets are currently zero, so token metadata does not match effective button CSS.",
+  shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
     v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
@@ -113,7 +113,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
       success: "Outcome-driven checkmark and optional tooltip label; set success only after confirmed success.",
     },
-    motion: "Effects are opt-in and scoped to inner layers; reduced-motion suppresses animation without suppressing state feedback.",
+    motion: "Effects must not move primitive geometry; CSS transitions are disabled globally for Studio primitives/components. Any explicitly approved inner-icon animation must be documented and honor reduced-motion preferences.",
   },
   focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
   textFieldDefaults: {
