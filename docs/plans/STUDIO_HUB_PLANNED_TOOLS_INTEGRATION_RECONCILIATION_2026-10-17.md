@@ -115,3 +115,52 @@ These are recommended ownership decisions, not authorization to delete source fi
 This reconciliation is based on the canonical architecture documents and target-branch tree/source paths. It is not yet a full call-graph audit of every route, service implementation, persistence adapter, feature flag, or runtime user flow. In particular, exact current ownership for Revenue Architect, Channel Simulator, Experiment Lab, and Video Genome must be confirmed by searching all relevant source and tests before implementation or removal decisions are finalized.
 
 **Safe next action:** perform the file-level consumer/call-site audit for P0 and convert each confirmed gap into a small implementation task with tests. Do not start by scaffolding all 13 tools.
+
+
+## 7. File-level source audit — confirmed implementation details
+
+This pass inspected the architecture and selected service/component implementations directly. These are source-backed findings, not claims that the whole application has been executed.
+
+### Existing foundations to retain
+
+| Capability | Confirmed source | Finding | Integration decision |
+|---|---|---|---|
+| Opportunity evidence normalization | `src/services/brain/OpportunityIntelligence.ts`, `OpportunityEvidenceAdapter.ts` | Opportunities already map to both `DerivedSignal` and `AlgorithmSignal`; adapters consume Brain evidence packs and Analytics Canon bundles, retain evidence IDs, reporting window, snapshot and dataset status. | Extend this path; do not add a second opportunity or analytics store. |
+| Brain evidence quality and epistemic state | `src/services/brain/BrainEvidenceContract.ts` | A read-only claim projection already tracks scope, freshness, confidence, provenance, missingness and conflicts. | Reuse it for every tool's evidence/decision contract; don't create another generic claim schema. |
+| Project-to-production continuity | `src/services/asset-engine/ProjectContentBuildBridge.ts` | Project data maps into a ContentBuild profile and lifecycle stage, with profile/stage changes synchronized into the repository. | Make ContentBuild the shared project-production identity; avoid tool-specific project mirrors. |
+| Content build history, variants and published-video binding | `src/services/asset-engine/ContentBuildRepository.ts` | Repository APIs cover events, metadata history, asset relations/versions, variant groups/selections and binding a YouTube video. | Extend the existing lifecycle and audit trail; don't add a parallel package-history database. |
+| Analytics contracts | `src/services/analytics-canon/contracts.ts` | Canonical dataset status, coverage, source and evidence bundle types already exist. | Use Analytics Canon as the common measured-data boundary. |
+| Script authoring and Brain integration | `src/features/script-architect/useScriptArchitect.ts`, `src/features/script-architect/scriptBrainRuntime.ts`, `scriptProjectStore.ts` | Script Architect already uses Brain task requests, project storage, import/export, quality/budget helpers and ContentBuild tool context. | Integrate concept and story stages into this workflow rather than creating another script editor or store. |
+| Video generation contracts | `src/features/video-director/generationContracts.ts` plus Video Director provider/project modules | Typed generation requests, provider jobs, preflight issues, cost estimates and idempotency-key support are present. | Asset Forge should orchestrate these contracts and Asset Engine provenance rather than reimplement generation. |
+| Metadata package lifecycle | `src/services/metadataMaster.ts` | Metadata packages already support strategy, variants, scoring, validation, finalization, local persistence and handoff payloads. | Keep Metadata Master a shared capability used by Publisher and Manager, not a competing tool destination. |
+| Audience/community actions | `src/features/creator-engagement/useCommentResponderController.ts`, `useCommunityPostController.ts`, `communityPostStore.ts`, plus their component entry points | Dedicated controller/store boundaries exist for distinct response and community-post actions. | Share audience evidence and learning; preserve separate action flows and their own persistence/confirmation behavior. |
+
+### Concrete gaps and risks to verify or fix before adding tools
+
+1. **Opportunity classification is currently broader than the evidence proves.** Both adapters emit `kind: "catalog_gap"` for every eligible measured video. The score uses relative views, recency and metric coverage; it does not itself compare against a content taxonomy, demand signal, peer baseline or explicit catalog coverage. That is a useful *catalog performance candidate* ranking, but it is not sufficient by itself to claim a content gap or emerging demand. Rename/reclassify only with compatibility checks, or add a distinct evidence-backed candidate type and a test proving the stronger claim.
+2. **Opportunity baselines are not populated in the inspected adapters.** They currently emit `baselineValue: null` and `relativeDelta: null`. Do not present their rank as measured growth or a trend. A future trend opportunity must require a comparable baseline/window and preserve the comparison contract.
+3. **Confidence scales need a boundary check.** Opportunity evidence uses integer 0–100 confidence, while `BrainEvidenceContract` clamps its claim confidence to 0–1. Any handoff between these contracts needs an explicit conversion and tests; do not pass the numeric value through unchanged.
+4. **Workflow recipes are a partial handoff map, not the canonical 13-tool orchestration.** `src/services/brain/BrainWorkflowRecipes.ts` contains five recipes with legacy/source tool IDs (audience signal → idea, idea → packaging, retention → revision, vault → editor, shorts → editor). Reconcile these IDs and transitions against the actual registered tool IDs/routes before expanding the recipe set. Keep existing handoffs working while introducing aliases or migrations.
+5. **Metadata Master currently has browser-local persistence in the inspected implementation.** `saveMetadataMasterPackage` and `listMetadataMasterPackages` use `window.localStorage`. Before treating packages as portable project records, verify synchronization/backup and the intended persistence owner; bridge to ContentBuild/project persistence only if the current storage contract does not already cover that need.
+6. **Component wrappers are not separate implementations.** `src/components/MediaAnalyzer.tsx` is a compatibility export of `src/views/MediaAnalyzer`. Avoid counting or replacing wrappers as independent tools; trace route imports and all consumers first.
+
+### Revised execution order
+
+**P0-A — Registry and call-site inventory (read-only).** For each canonical tool, record: registered tool ID, route/page, primary component, service/controller, storage owner, upstream/downstream handoffs, feature flags, tests, and evidence contract. Search for legacy IDs in `BrainWorkflowRecipes` and tool registration before changing any IDs. Mark each item `implemented`, `partial`, `disconnected`, `planned`, `duplicate`, or `obsolete`, with file/line evidence.
+
+**P0-B — Evidence correctness first.** Add or strengthen tests for opportunity classification, missing baseline, channel/snapshot/window scope, partial/unavailable datasets, freshness and confidence conversion. Separate a ranked *candidate* from a validated *opportunity*. Do not add UI work.
+
+**P1 — One lifecycle and handoff contract.** Ensure Concept/Script/Video Director actions preserve project and ContentBuild IDs, operation/generation identity, source evidence IDs, selected variant, and provenance through approved publish snapshot → published video binding → Analytics Canon → evaluation/outcome → Brain evidence. Extend existing contracts only where the call-site audit demonstrates a missing field or broken edge.
+
+**P2 — Connect workflows already represented in code.** Wire existing workflow recipes to the actual registered tool IDs and confirm both producer and receiver consume the same handoff payload. Add round-trip/compatibility tests. Avoid adding recipes that merely duplicate an existing transition under another name.
+
+**P3 — Add only verified missing engines.** Video Genome normalization, explicit experiment exposure/assignment, causal evidence grading, scenario simulation, and revenue planning remain candidates, not assumed absences. Search all services, routes, tests, and docs before creating each.
+
+**P4 — Consolidate after consumer migration.** Remove obsolete code only when repository-wide consumer search is clean and replacement behavior is covered by tests. Do not delete compatibility exports, stores, or legacy IDs solely because a newer architecture document names a canonical tool.
+
+### Verification status
+
+- Source inspection completed for the files listed above.
+- No application code changed in this pass.
+- No local build, typecheck, or test suite was run through this GitHub-only inspection path.
+- The next implementation should begin with the opportunity evidence classification/confidence tests and the registry/call-site inventory, not a new tool scaffold.
