@@ -205,3 +205,35 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   color: #000;
   stroke: #000;
 }
+
+
+/* Play/pause split buttons share the same single-perimeter anatomy. */
+button[data-vt-studio-play-pause="true"] > [data-vt-studio-button-face] {
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+  box-shadow: none;
+}
+button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
+  border: 0;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: 0;
+}
+
+/* Split badges use one black perimeter; interior rail fills are never pills. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge,
+.vt-studio-split-shell {
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail,
+[data-vt-studio-split-rail] {
+  border-radius: 0;
+  color: #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
