@@ -2151,18 +2151,21 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
 }
 .vt-studio-inline-stepper[data-size="compact"] {
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
   --vt-stepper-height: var(--vt-studio-compact-height, 28px);
   --vt-stepper-stroke: var(--vt-studio-compact-stroke, 2px);
   --vt-stepper-radius: var(--vt-studio-compact-radius, 4px);
   --vt-inline-stepper-side: var(--vt-studio-compact-height, 28px);
 }
 .vt-studio-inline-stepper[data-size="standard"] {
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
   --vt-stepper-height: var(--vt-studio-standard-height, 44px);
   --vt-stepper-stroke: var(--vt-studio-standard-stroke, 3px);
   --vt-stepper-radius: var(--vt-studio-standard-radius, 6px);
   --vt-inline-stepper-side: var(--vt-studio-standard-height, 44px);
 }
 .vt-studio-inline-stepper[data-size="micro"] {
+  --vt-studio-control-height: var(--vt-studio-micro-height, 14px);
   --vt-stepper-height: var(--vt-studio-micro-height, 14px);
   --vt-stepper-stroke: var(--vt-studio-micro-stroke, 1px);
   --vt-stepper-radius: var(--vt-studio-micro-radius, 2px);
