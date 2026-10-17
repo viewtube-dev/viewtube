@@ -11,7 +11,7 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 } as const
 
 /** Compact geometry source; micro is mechanically derived from this object. */
-const STUDIO_CONTROL_SIZE_BASE_COMPACT = { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS } as const
+const STUDIO_CONTROL_SIZE_BASE_COMPACT = { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS } as const
 
 function halfCompact<T extends Record<string, number | string>>(compact: T): T {
   const result = { ...compact } as Record<string, number | string>
@@ -24,13 +24,12 @@ function halfCompact<T extends Record<string, number | string>>(compact: T): T {
   result.iconStroke = 1.5
   result.letterSpacing = -0.01
   result.lineHeight = 1
-  result.gap = 4
   return result as T
 }
 
 /** Canonical Studio size values are defined before derived contracts to avoid self-reference during initialization. */
 export const STUDIO_CONTROL_SIZE_BASE = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: STUDIO_CONTROL_SIZE_BASE_COMPACT,
   /** Micro derives from half the compact geometry, with a legibility floor for text/icon. */
   micro: halfCompact(STUDIO_CONTROL_SIZE_BASE_COMPACT),
@@ -67,8 +66,8 @@ export const STUDIO_TOKENS = {
     toolboxTitle: TOOLBOX_LEVEL_DNA.toolbox.titleSize,
     weight: SUBTOOLBOX_TOKENS.typography.weight,
   },
-  /** Studio primitive spacing contract: each side defaults to one 4px unit; components may compose multiples explicitly. */
-  spacing: { unit: 4, top: 4, right: 4, bottom: 4, left: 4, dense: SUBTOOLBOX_TOKENS.spacing.dense, standard: SUBTOOLBOX_TOKENS.spacing.standard, section: SUBTOOLBOX_TOKENS.spacing.section, large: SUBTOOLBOX_TOKENS.spacing.large },
+  /** Four-pixel unit is for external gaps between sibling rows, columns, and components only; never an implicit inset. */
+  spacing: { unit: 4, dense: SUBTOOLBOX_TOKENS.spacing.dense, standard: SUBTOOLBOX_TOKENS.spacing.standard, section: SUBTOOLBOX_TOKENS.spacing.section, large: SUBTOOLBOX_TOKENS.spacing.large },
   radius: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.radius, subtoolbox: TOOLBOX_LEVEL_DNA.l0.radius, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.radius, component: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius }, tag: 4 },
   stroke: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.stroke, subtoolbox: TOOLBOX_LEVEL_DNA.l0.stroke, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.stroke, component: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke }, tag: 2 },
   shadow: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.shadowOffset, subtoolbox: TOOLBOX_LEVEL_DNA.l0.shadowOffset, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.shadowOffset, component: { standard: 0, compact: 0, micro: 0 } },
@@ -119,6 +118,5 @@ export function studioSizeTierToCssVars(size: keyof typeof STUDIO_CONTROL_SIZE_B
     "--vt-studio-control-radius": `${tier.radius}px`,
     "--vt-studio-control-font-size": `${tier.fontSize}px`,
     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
-    "--vt-studio-control-gap": "4px",
   };
 }
