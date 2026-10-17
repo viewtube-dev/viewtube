@@ -29,8 +29,7 @@ test("split value pane has squared inner edge and rail owns the vertical seam", 
   const inputRule = styles.match(/\.vt-studio-split-stepper input\.vt-studio-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
   assert.match(inputRule, /border-radius:\s*0/)
   assert.match(inputRule, /border:\s*0/)
-  assert.doesNotMatch(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:\s*var\(--vt-stepper-stroke\)/s)
-  assert.match(styles, /\.vt-studio-split-stepper \.vt-studio-split-stepper-rail\s*\{[^}]*border:\s*0/s)
+  assert.match(styles, /\[data-vt-studio-control="true"\]\[data-vt-studio-split="right"\]\.vt-studio-split-stepper > \[data-vt-studio-split-rail\]\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:\s*var\(--vt-stepper-stroke\) solid #000/s)
   assert.match(styles, /\.vt-studio-split-stepper-actions button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-stepper-stroke\) solid #000/s)
 })
 
