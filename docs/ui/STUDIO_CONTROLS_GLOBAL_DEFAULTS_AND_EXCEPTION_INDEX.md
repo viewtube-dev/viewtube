@@ -131,7 +131,9 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Prominent action button | Separate 56px action family, 3px stroke, 6px radius, no shadow | Workflow emphasis is not a third size tier of ordinary 44px/28px controls |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
-| Floating-label variants | Labels add presentation only; native field geometry, type scale, alignment, focus, and textarea behavior remain owned by the field primitive | Prevents a second field family and duplicate borders/focus rings |
+| Floating-label variants | Labels add presentation only; simple, floating-label, and fixed-label variants share the field family; raised input labels are 14.4px standard / 11.2px compact | Prevents a second field family and duplicate borders/focus rings |
+| Switch/choice geometry | Standard switch track 75.68×44px (about 1.72:1), 36.667px square handle with 3.667px inset; radio/checkbox footprints remain 1:1 | Keeps the switch's actual rectangular track distinct from square choice controls |
+| Icon preset sizes | Large/default is 38px / 1.9 standard and 24px / 2.0 compact; 34px/22px and 28px/18px are opt-in | Prevents optional icon density from silently replacing the production default |
 
 ## 7. Global prohibitions and governance
 
@@ -154,6 +156,8 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 - Effective style rules: `src/styles/studio-control-system.css`
 - Production primitive specimens: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`
 - Catalog-only presentation: `src/components/studio-hub/studio-hub-primitive-catalogs.css`
+
+**Spacing invariant:** the 4px spacing token applies only between rows, columns, and sibling components. It does not set top/right/bottom/left padding, field insets, icon-label gaps, or any internal primitive geometry.
 
 **Verification status:** This document records the intended canonical contract. Do not infer that all runtime visuals are certified until the checks and browser verification in §7 have actually passed.
 
