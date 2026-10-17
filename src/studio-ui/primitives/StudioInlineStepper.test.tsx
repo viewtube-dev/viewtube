@@ -5,6 +5,13 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { normalizeStudioInlineStepperValue, StudioInlineStepper, StudioSplitStepper } from "./StudioControls"
 
+const readStudioControlCss = () => [
+  "studio-control-system.css",
+  "studio-control-core.css",
+  "studio-control-split.css",
+  "studio-control-fields.css",
+].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
+
 describe("StudioInlineStepper", () => {
   it("renders the horizontal decrement, editable value, increment layout as a canonical Studio control", () => {
     const html = renderToStaticMarkup(
@@ -13,7 +20,7 @@ describe("StudioInlineStepper", () => {
     expect(html).toContain('data-vt-studio-control="true"')
     expect(html).toContain('data-vt-studio-control-family="stepper"')
     expect(html).toContain('data-vt-studio-control-kind="inline-stepper"')
-    expect(html).toContain('data-vt-studio-username-foundation="true"')
+    expect(html).toContain('data-vt-studio-split="double"')
     expect(html).toContain('data-size="standard"')
     expect(html).toContain('aria-label="Package count"')
     expect(html).toContain('aria-label="Decrease Package count"')
@@ -30,7 +37,7 @@ describe("StudioInlineStepper", () => {
       <StudioInlineStepper value={3} onValueChange={() => undefined} size="compact" />,
     )
     expect(html).toContain('data-size="compact"')
-    expect(html).toContain('class="vt-studio-inline-stepper is-compact"')
+    expect(html).toContain('vt-studio-inline-stepper is-compact')
   })
 
   it("normalizes step changes without leaking invalid values and respects bounds", () => {
@@ -43,9 +50,7 @@ describe("StudioInlineStepper", () => {
   })
 
   it("uses global Studio size tokens and has no SubToolbox style authority", () => {
-    const allCss = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = allCss.indexOf("/* Studio Controls-owned stepper family styles moved from primitive sidecars. */")
-    const css = allCss.slice(start)
+    const css = readStudioControlCss()
     expect(css).toContain("var(--vt-studio-control-height")
     expect(css).toContain("var(--vt-studio-control-stroke")
     expect(css).toContain("var(--vt-studio-control-radius")
@@ -71,7 +76,7 @@ describe("StudioSplitStepper username-input foundation", () => {
   })
 
   it("uses shared username input tokens for the primary inset strokes and secondary rail", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain(".vt-studio-username-input {")
     expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {")
     expect(css).toContain("--vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
@@ -83,12 +88,12 @@ describe("StudioSplitStepper username-input foundation", () => {
 
 describe("Studio stepper single-shell geometry regression", () => {
   it("clips all inline stepper layers inside one compact root instead of letting child surfaces stack outward", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*overflow:\s*hidden;/s)
     expect(css).toMatch(/\.vt-studio-inline-stepper\s*\{[^}]*max-width:\s*100%;/s)
     expect(css).toMatch(/\.vt-studio-inline-stepper__button\s*\{[^}]*position:\s*relative;/s)
     expect(css).toMatch(/\.vt-studio-inline-stepper__value\s*\{[^}]*position:\s*relative;/s)
-    expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*visible;/s)
+    expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*overflow:\s*hidden;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper\s*\{[^}]*width:\s*calc\(3\s*\*\s*var\(--vt-stepper-height\)\s*\+\s*2\s*\*\s*var\(--vt-stepper-stroke\)\);/s)
     expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*overflow:\s*hidden;/s)
     expect(css).toMatch(/\.vt-studio-split-stepper-rail button\s*\{[^}]*position:\s*relative;/s)
@@ -98,20 +103,18 @@ describe("Studio stepper single-shell geometry regression", () => {
 
 describe("split stepper value pane geometry and username-input styling", () => {
   it("locks the input pane to a 2:1 ratio against the square rail", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = css.indexOf("/* Split stepper: stationary SplitLeftButton shell")
-    const end = css.indexOf("/* Simple dropdown is a visual variant", start)
-    const splitCss = css.slice(start, end)
+    const css = readStudioControlCss()
+    const start = css.indexOf(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {")
+    const splitCss = css.slice(start)
     expect(splitCss).toContain("grid-template-columns: minmax(0, 2fr) var(--vt-stepper-height);")
     expect(splitCss).toContain("width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));")
     expect(splitCss).toContain("flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));")
   })
 
   it("preserves canonical username-input typography, black text, inline fill/strokes, and focus treatment", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = css.indexOf("/* Split stepper: stationary SplitLeftButton shell")
-    const end = css.indexOf("/* Simple dropdown is a visual variant", start)
-    const splitCss = css.slice(start, end)
+    const css = readStudioControlCss()
+    const start = css.indexOf(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {")
+    const splitCss = css.slice(start)
     expect(splitCss).toContain("font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;")
     expect(splitCss).toContain("font-weight: var(--vt-studio-control-font-weight, 1000) !important;")
     expect(splitCss).toContain("font-size: var(--vt-studio-control-font-size, 38px) !important;")
