@@ -125,7 +125,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(inputModule.includes("StudioTextInput"));
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.ok(catalog.includes("Studio Text Input · Simple + Floating + Fixed Label"));
-  assert.ok(catalog.includes("Single-line input typography is 38px standard / 24px compact"));
+  assert.ok(catalog.includes("SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact"));
   assert.match(catalog, /Studio Text Area · Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?Textarea-only typography is 18px standard \/ 14px compact/);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
@@ -209,7 +209,7 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
   assert.match(catalog, /default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
   assert.match(catalog, /Icon presets:<\/b> the default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
-  assert.match(controls, /Switch\/choice geometry.*7\.333px radii/);
+  assert.match(css, /button\.vt-studio-44-choice\.is-rect\s*\{\s*border-radius:\s*7\.333px/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
 });
