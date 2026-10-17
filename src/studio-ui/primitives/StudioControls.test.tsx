@@ -7,6 +7,13 @@ import { StudioSplitLeftButton, StudioSquareIconButton, StudioCircleIconButton, 
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
+const readStudioControlCss = () => [
+  "studio-control-system.css",
+  "studio-control-core.css",
+  "studio-control-split.css",
+  "studio-control-fields.css",
+].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
+
 describe("standalone Studio text fields", () => {
   it("renders the standard text input with only canonical Studio field markers", () => {
     const html = renderToStaticMarkup(<StudioTextInput aria-label="Title" placeholder="Enter title" />)
@@ -50,7 +57,7 @@ describe("standalone Studio text fields", () => {
 
 describe("global defaults govern the effective primitive CSS", () => {
   it("uses secondary color for both double-split rails and keeps rail faces square", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const css = readStudioControlCss();
     const split = css.slice(css.indexOf("/* Unified split shell."));
     expect(split).toContain('.vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-rail]');
     expect(split).toContain("Both double-split rails use secondary by contract.");
@@ -62,7 +69,7 @@ describe("global defaults govern the effective primitive CSS", () => {
   });
 
   it("does not use important declarations to force canonical field type or width", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const css = readStudioControlCss();
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract"));
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"));
     expect(fields).not.toMatch(/font-size:[^;]*!important/);
@@ -72,7 +79,7 @@ describe("global defaults govern the effective primitive CSS", () => {
   });
 
   it("lets compact text buttons fill their row by default while keeping icon-only faces square", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const css = readStudioControlCss();
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {');
     const compact = css.slice(css.indexOf('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {'));
     const rule = compact.slice(0, compact.indexOf("}"));
@@ -95,7 +102,7 @@ describe("Studio text field library entries", () => {
 
 describe("compact Studio button row-fill sizing", () => {
   it("fills the available row for compact text buttons while preserving square icon-only geometry", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {')
     const compact = css.slice(css.indexOf('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {'))
     const rule = compact.slice(0, compact.indexOf("}"))
@@ -106,7 +113,7 @@ describe("compact Studio button row-fill sizing", () => {
   })
 
   it("preserves explicit full-width split-left and fixed-square icon button geometry", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height);')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before {')
@@ -131,7 +138,7 @@ describe("confirmed square icon button library entry", () => {
 })
 describe("canonical Studio field, selection, and action contracts", () => {
   it("keeps default and placeholder field typography primary and identical", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
     expect(fields).toContain("color: var(--vt-field-primary);")
@@ -145,7 +152,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
   })
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
     expect(contract).toContain("width: 75.68px")
     expect(contract).toContain("width: 36.667px")
@@ -165,7 +172,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
   })
 
   it("keeps fixed label boxes on the secondary pair and canonical controls flat", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
     expect(css).not.toContain('.vt-studio-fixed-label-field:focus-within > .vt-studio-fixed-field-label')
@@ -187,7 +194,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
 
 
   it("keeps canonical Studio button shells stationary without shadow or press-motion tokens", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
     expect(contract).not.toContain("--vt-studio-motion-button")
     expect(contract).not.toContain("--vt-studio-motion-press")
@@ -212,7 +219,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(css).toContain("transition-duration:var(--vt-subtoolbox-motion-press,80ms)")
     expect(css).not.toContain("translate(var(--vt-subtoolbox-shadow-offset")
     expect(css).toContain("@media (prefers-reduced-motion: reduce)")
-    expect(readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")).toContain(".vt-studio-legend-trigger:active")
+    expect(readStudioControlCss()).toContain(".vt-studio-legend-trigger:active")
   })
 })
 
@@ -240,7 +247,7 @@ describe("Studio text-field module ownership and typography", () => {
   })
 
   it("uses global 38px/24px input typography and 18px/14px textarea typography without important overrides", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("--vt-studio-44-font-size: 38px")
     expect(css).toContain("--vt-studio-28-font-size: 24px")
     expect(css).toContain("font-size: var(--vt-studio-control-font-size);")
@@ -282,7 +289,7 @@ describe("canonical square icon button family", () => {
   })
 
   it("defines opposite fill/shadow pairs, selectable inversion, and the black/primary-icon variant", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"]')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v4"]')
@@ -319,7 +326,7 @@ describe("shared Studio icon-size comparison contract", () => {
   })
 
   it("defines the requested icon dimensions while preserving standard and compact border geometry", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('data-icon-size-variant="moderate"][data-size="standard"] { --vt-studio-control-icon-size:34px')
     expect(css).toContain('data-icon-size-variant="moderate"][data-size="compact"] { --vt-studio-control-icon-size:22px')
     expect(css).toContain('data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
@@ -355,7 +362,7 @@ describe("shared Studio icon-size comparison contract", () => {
 
 describe("tactile button press accessibility and exclusion contract", () => {
   it("keeps keyboard focus visible and prevents disabled controls from depressing", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('button[data-vt-studio-button="true"]:focus-visible { outline:3px solid')
     expect(css).toContain('button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }')
     expect(css).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }')
@@ -365,7 +372,7 @@ describe("tactile button press accessibility and exclusion contract", () => {
   })
 
   it("keeps dropdown triggers and options outside the extruded-button press selectors", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('.vt-studio-dropdown button[data-dropdown-trigger="true"]')
     expect(css).toContain('.vt-studio-dropdown-option:focus-visible')
     expect(css).toContain('.vt-studio-dropdown-menu')
@@ -377,7 +384,7 @@ describe("tactile button press accessibility and exclusion contract", () => {
   })
 
   it("keeps standard/compact icon metrics tokenized without displacement or shadow offsets", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).not.toContain("--vt-studio-control-shadow-x")
     expect(css).not.toContain("--vt-studio-control-shadow-y")
     expect(css).toContain('--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
@@ -434,7 +441,7 @@ describe("documented global-rule exception: Vault Spectrum Tags", () => {
     expect(exception.fontWeight).toBe(900)
     expect(exception.letterSpacing).toBe("0.3px")
     expect(exception.colorResolver).toBe("getAlphabeticalSpectrumColor")
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain(".vt-studio-spectrum-tag {")
     expect(css).toContain("height: 15px;")
     expect(css).toContain("border: 2px solid var(--vt-spectrum-tag-color);")
@@ -471,7 +478,7 @@ describe("Studio Play/Pause Split-Left Button", () => {
 
 describe("floating label geometry and circular icon scale", () => {
   it("floats labels at 80% scale with the border crossing the 40% height line", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("transform: translateY(-40%)")
     expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
@@ -480,13 +487,13 @@ describe("floating label geometry and circular icon scale", () => {
   })
 
   it("matches the floating-label secondary focus stroke width and color to the compact focus outline", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))')
     expect(css).toContain('outline-width: var(--vt-studio-control-focus-outline-width, 2px)')
   })
 
   it("scales circle-button SVG icons to 80% without changing the canonical button size", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] [data-vt-square-icon-current] svg')
     expect(css).toContain("width: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
     expect(css).toContain("height: calc(var(--vt-studio-control-icon-size, 28px) * .8)")
@@ -519,7 +526,7 @@ describe("Studio Username Split-Left Input", () => {
   })
 
   it("uses the primary inline stroke at the selected border width without important overrides", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const start = css.indexOf('.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"] {')
     const end = css.indexOf('.vt-studio-username-input[data-disabled="true"]', start)
     const fieldRules = css.slice(start, end)
@@ -530,7 +537,7 @@ describe("Studio Username Split-Left Input", () => {
   })
 
   it("keeps the composite outline and inset strokes on the wrapper without a button shadow or seam", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('.vt-studio-username-input:focus-within')
     expect(css).toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
     expect(css).toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
@@ -565,7 +572,7 @@ describe("confirmed Studio primitive catalog ownership", () => {
 
 describe("canonical Studio dropdown menu visual contract", () => {
   it("keeps the multi-select panel primary-filled with white rows and secondary selected rows", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const optionStart = css.indexOf(".vt-studio-legend-option {")
     const optionEnd = css.indexOf("}", optionStart)
     const optionBlock = css.slice(optionStart, optionEnd)
@@ -582,7 +589,7 @@ describe("canonical Studio dropdown menu visual contract", () => {
 describe("Studio Controls owns dropdown and stepper implementations", () => {
   it("keeps the simple dropdown and both stepper variants inside the canonical StudioControls module", async () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(controls).toContain("export const StudioSimpleDropdown")
     expect(controls).toContain("export const StudioSplitStepper")
     expect(controls).toContain("export const StudioInlineStepper")
@@ -597,7 +604,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 
   it("uses the canonical compact square-button size for tag editor actions", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(controls).toContain('data-size="compact" data-vt-studio-tag-editor-action="true"')
     expect(css).toContain(".vt-studio-tag-editor__square-action[data-size=\"compact\"]")
     expect(css).toContain("width: 28px")
@@ -611,7 +618,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 
 describe("Studio text input and split-left badge typography parity", () => {
   it("uses the size token for the actual input and excludes catalog demo typography overrides", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const catalogCss = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
     const input = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextInput.tsx"), "utf8")
     const fieldRule = css.slice(
@@ -640,7 +647,7 @@ describe("Studio text input and split-left badge typography parity", () => {
 
   it("uses one shared split-label primitive and typography inherited from its size owner", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(controls).toContain("const StudioSplitShell: React.FC<StudioSplitShellProps>")
     expect(controls).toContain("<StudioSplitShell layout=\"left\" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>")
     expect(controls).toContain("<StudioSplitShell layout={layout} sizeVariant={sizeVariant}")
