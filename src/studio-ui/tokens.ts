@@ -99,5 +99,5 @@ export function studioSizeTierToCssVars(size: keyof typeof STUDIO_CONTROL_SIZE_B
     "--vt-studio-control-font-size": `${tier.fontSize}px`,
     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
     "--vt-studio-control-gap": "4px",
-  } as React.CSSProperties;
+  };
 }
