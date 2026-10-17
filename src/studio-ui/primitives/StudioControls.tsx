@@ -1354,6 +1354,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
       data-vt-studio-control="true"
       data-vt-studio-control-family="stepper"
       data-vt-studio-control-kind="split-stepper"
+      data-vt-studio-split="right"
       data-vt-studio-username-foundation="true"
       data-size={size}
       role="group"
