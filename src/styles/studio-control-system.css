@@ -8,7 +8,6 @@
   --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
-  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
@@ -34,7 +33,6 @@
   --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
   --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000);
-  --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px);
   
   --vt-studio-control-outline-stroke: 1px;
   --vt-studio-control-focus-outline-width: 2px;
@@ -50,7 +48,6 @@
   --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
-  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
   
   --vt-studio-control-outline-stroke: 1.5px;
   --vt-studio-control-focus-outline-width: 3px;
@@ -2931,6 +2928,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 :where(
   [data-vt-studio-split-label]
 ) {
+  display: flex;
   box-sizing: border-box;
   min-width: 0;
   text-align: center;
@@ -3127,8 +3125,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 .vt-studio-split-right-badge__label,
 .vt-studio-double-split-badge__label {
   box-sizing: border-box;
-  flex: 1 1 0%;
-  width: 0;
   min-width: 0;
   max-width: 100%;
   align-self: stretch;
