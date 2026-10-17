@@ -9,27 +9,27 @@ const mocks = vi.hoisted(() => ({
   captureCanonicalLifecycleObservations: vi.fn(),
 }))
 
-vi.mock("./AlgorithmIntelligenceEventLedger", () => ({
+vi.mock("../AlgorithmIntelligenceEventLedger", () => ({
   listAlgorithmIntelligenceEvents: mocks.listAlgorithmIntelligenceEvents,
 }))
-vi.mock("./AlgorithmEvaluationEngine", () => ({
+vi.mock("../AlgorithmEvaluationEngine", () => ({
   recordAlgorithmEvaluation: mocks.recordAlgorithmEvaluation,
 }))
-vi.mock("./AlgorithmLearningCandidates", () => ({
+vi.mock("../AlgorithmLearningCandidates", () => ({
   recordAlgorithmLearningCandidates: mocks.recordAlgorithmLearningCandidates,
 }))
-vi.mock("./CanonicalAlgorithmEvaluation", () => ({
+vi.mock("../CanonicalAlgorithmEvaluation", () => ({
   buildCanonicalEvaluationEvidence: mocks.buildCanonicalEvaluationEvidence,
 }))
-vi.mock("./AlgorithmLifecycleBaseline", () => ({
+vi.mock("../AlgorithmLifecycleBaseline", () => ({
   hydrateEvaluationTargetsWithLifecycleCohorts: mocks.hydrateEvaluationTargetsWithLifecycleCohorts,
 }))
-vi.mock("./AlgorithmLifecycleObservationStore", () => ({
+vi.mock("../AlgorithmLifecycleObservationStore", () => ({
   captureCanonicalLifecycleObservations: mocks.captureCanonicalLifecycleObservations,
 }))
 
-import { listDueAlgorithmEvaluations } from "./BrainEvaluationLoop"
-import type { AlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
+import { listDueAlgorithmEvaluations } from "../BrainEvaluationLoop"
+import type { AlgorithmIntelligenceEvent } from "../AlgorithmIntelligenceEventLedger"
 
 const makeEvent = (overrides: Partial<AlgorithmIntelligenceEvent> = {}): AlgorithmIntelligenceEvent => ({
   id: "recommendation-zero",
