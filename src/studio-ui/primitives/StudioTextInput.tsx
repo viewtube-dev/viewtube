@@ -1,6 +1,6 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
-import "../../styles/studio-control-system.css"
+import "../../styles/studio-control-entry.css"
 
 const withStudioAttrs = (size: StudioControlSize) => ({
   "data-vt-studio-control": "true",
