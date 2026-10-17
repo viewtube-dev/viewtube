@@ -5,6 +5,13 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { normalizeStudioInlineStepperValue, StudioInlineStepper, StudioSplitStepper } from "./StudioControls"
 
+const readStudioControlCss = () => [
+  "studio-control-system.css",
+  "studio-control-core.css",
+  "studio-control-split.css",
+  "studio-control-fields.css",
+].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
+
 describe("StudioInlineStepper", () => {
   it("renders the horizontal decrement, editable value, increment layout as a canonical Studio control", () => {
     const html = renderToStaticMarkup(
@@ -43,9 +50,7 @@ describe("StudioInlineStepper", () => {
   })
 
   it("uses global Studio size tokens and has no SubToolbox style authority", () => {
-    const allCss = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const start = allCss.indexOf("/* Studio Controls-owned stepper family styles moved from primitive sidecars. */")
-    const css = allCss.slice(start)
+    const css = readStudioControlCss()
     expect(css).toContain("var(--vt-studio-control-height")
     expect(css).toContain("var(--vt-studio-control-stroke")
     expect(css).toContain("var(--vt-studio-control-radius")
@@ -71,7 +76,7 @@ describe("StudioSplitStepper username-input foundation", () => {
   })
 
   it("uses shared username input tokens for the primary inset strokes and secondary rail", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain(".vt-studio-username-input {")
     expect(css).toContain(".vt-studio-inline-stepper,\n.vt-studio-split-stepper {")
     expect(css).toContain("--vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
