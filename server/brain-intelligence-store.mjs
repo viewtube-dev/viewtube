@@ -48,6 +48,25 @@ CREATE INDEX IF NOT EXISTS viewtube_brain_learning_records_channel_idx
 
 const scope = (userId, channelId) => `${userId}:${channelId}`;
 
+const mergeBrainEventPreservingRedaction = (existing, incoming) => {
+  const merged = { ...(existing || {}), ...(incoming || {}) };
+  const existingMetadata = existing?.metadata && typeof existing.metadata === "object" ? existing.metadata : {};
+  const incomingMetadata = incoming?.metadata && typeof incoming.metadata === "object" ? incoming.metadata : {};
+  const isCreatorCommunication = existing?.kind === "CREATOR_COMMUNICATION_CLASSIFIED"
+    || incoming?.kind === "CREATOR_COMMUNICATION_CLASSIFIED";
+  const redactionIsMonotonic = existingMetadata.rawCommunicationTextRetained === false
+    || incomingMetadata.rawCommunicationTextRetained === false;
+  if (!isCreatorCommunication || !redactionIsMonotonic) return merged;
+
+  const metadata = { ...existingMetadata, ...incomingMetadata };
+  delete metadata.communicationText;
+  metadata.rawCommunicationTextRetained = false;
+  if (!metadata.communicationTextFingerprint) {
+    delete metadata.communicationTextFingerprint;
+  }
+  return { ...merged, metadata };
+};
+
 export const initBrainIntelligenceStore = async () => {
   if (initialized) return;
   if (!DATABASE_URL) {
@@ -82,7 +101,10 @@ export const upsertPersistedBrainEvents = async ({ userId, channelId, events }) 
   if (!pool) {
     const key = scope(userId, channelId);
     const map = memoryEvents.get(key) || new Map();
-    rows.forEach((event) => map.set(event.id, event));
+    rows.forEach((event) => {
+      const previous = map.get(event.id);
+      map.set(event.id, mergeBrainEventPreservingRedaction(previous, event));
+    });
     memoryEvents.set(key, map);
     return rows.length;
   }
@@ -91,7 +113,28 @@ export const upsertPersistedBrainEvents = async ({ userId, channelId, events }) 
       `INSERT INTO viewtube_brain_intelligence_events(viewtube_user_id,channel_id,event_id,event)
        VALUES($1,$2,$3,$4::jsonb)
        ON CONFLICT(viewtube_user_id,channel_id,event_id)
-       DO UPDATE SET event=EXCLUDED.event,updated_at=NOW()`,
+       DO UPDATE SET event = CASE
+         WHEN (
+           viewtube_brain_intelligence_events.event->>'kind' = 'CREATOR_COMMUNICATION_CLASSIFIED'
+           OR EXCLUDED.event->>'kind' = 'CREATOR_COMMUNICATION_CLASSIFIED'
+         ) AND (
+           viewtube_brain_intelligence_events.event->'metadata'->>'rawCommunicationTextRetained' = 'false'
+           OR EXCLUDED.event->'metadata'->>'rawCommunicationTextRetained' = 'false'
+         )
+         THEN jsonb_set(
+           viewtube_brain_intelligence_events.event || EXCLUDED.event,
+           '{metadata}',
+           (
+             (
+               COALESCE(viewtube_brain_intelligence_events.event->'metadata', '{}'::jsonb)
+               || COALESCE(EXCLUDED.event->'metadata', '{}'::jsonb)
+             ) - 'communicationText'
+           ) || '{"rawCommunicationTextRetained":false}'::jsonb,
+           true
+         )
+         ELSE EXCLUDED.event
+       END,
+       updated_at=NOW()`,
       [userId, channelId, event.id, JSON.stringify(event)],
     );
   }
