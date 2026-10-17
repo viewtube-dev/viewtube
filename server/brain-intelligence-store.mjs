@@ -153,11 +153,44 @@ export const listPersistedBrainLearningRecords = async ({ userId, channelId }) =
 export const upsertPersistedBrainLearningRecords = async ({ userId, channelId, records }) => {
   await initBrainIntelligenceStore();
   const allowedTypes = new Set(["assetOutcome", "brainOutcome", "evaluation", "learningCandidate"]);
+  const publicationIdentityFields = [
+    "publishTransactionId",
+    "approvedSnapshotId",
+    "approvedSnapshotHash",
+    "publishedVideoId",
+    "youtubeVideoId",
+    "publicationIdentity",
+    "analyticsCheckpointIds",
+    "evidenceIds",
+  ];
+  const recommendationIdentityFields = [
+    "sourceRecordId",
+    "traceId",
+    "assetId",
+    "assetType",
+    "projectId",
+    "contentBuildId",
+    "generationId",
+    "actionPacketId",
+    "workflowId",
+    "recommendationId",
+    "experimentId",
+  ];
   const identityFields = {
-    assetOutcome: ["sourceRecordId", "traceId", "assetId", "assetType", "projectId", "contentBuildId", "generationId"],
-    brainOutcome: ["sourceRecordId", "traceId", "assetId", "projectId", "actionPacketId", "workflowId", "recommendationId", "experimentId"],
-    evaluation: ["projectId", "source", "recommendation", "actionPacketId", "workflowId", "recommendationId", "experimentId", "publishTransactionId", "contentBuildId", "youtubeVideoId", "approvedSnapshotId", "approvedSnapshotHash", "selectedWindow"],
-    learningCandidate: ["projectId", "evaluationRecordId", "source", "recommendation", "selectedWindow"],
+    assetOutcome: [...recommendationIdentityFields, ...publicationIdentityFields, "evaluationRecordId"],
+    brainOutcome: [...recommendationIdentityFields, ...publicationIdentityFields],
+    evaluation: [
+      "projectId", "source", "recommendation", "actionPacketId", "workflowId",
+      "recommendationId", "experimentId", "publishTransactionId", "contentBuildId",
+      "youtubeVideoId", "approvedSnapshotId", "approvedSnapshotHash", "selectedWindow",
+      "analyticsCheckpointIds", "evidenceIds", "publicationIdentity",
+    ],
+    learningCandidate: [
+      "projectId", "evaluationRecordId", "source", "recommendation", "selectedWindow",
+      "actionPacketId", "workflowId", "recommendationId", "experimentId",
+      "publishTransactionId", "contentBuildId", "youtubeVideoId", "approvedSnapshotId",
+      "approvedSnapshotHash", "analyticsCheckpointIds", "evidenceIds", "publicationIdentity",
+    ],
   };
   const hasIdentityValue = (value) => value !== undefined && value !== null && value !== "";
   const assertIdentityCompatible = (existing, incoming) => {
