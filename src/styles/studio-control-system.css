@@ -3035,6 +3035,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  height: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
   min-height: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
   grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr);
   align-items: stretch;
@@ -3120,7 +3121,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   height: 100%;
   align-items: center;
   justify-content: center;
-  padding-inline: var(--vt-studio-space-unit, 4px);
+  padding-inline: 10px;
   overflow: hidden;
   border: 0;
   border-radius: 0;
@@ -3162,6 +3163,8 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 .vt-studio-split-left-badge[data-size="micro"],
 .vt-studio-split-right-badge[data-size="micro"],
 .vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-14-height, 14px); --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-14-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-14-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-14-text-stroke, .25px); }
+.vt-studio-split-left-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="compact"] > [data-vt-studio-split-label] { padding-inline: 8px; }
+.vt-studio-split-left-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="micro"] > [data-vt-studio-split-label] { padding-inline: 2px; }
 .vt-studio-split-left-badge,
 .vt-studio-split-right-badge,
 .vt-studio-double-split-badge { flex: 1 1 auto; }
