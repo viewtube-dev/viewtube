@@ -51,12 +51,18 @@ const CanonicalControlFamilies: React.FC = () => {
   const [words, setWords] = React.useState<boolean[]>(Array(6).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
-    <Family title="44px Switches" nonDefaultSettings={["Default state is OFF; selected state moves the indicator and changes the active treatment.","Round and rectangular shapes alter track/handle geometry, not the 44px height.","SOLID is the default skin; COLOR SWAP, BLACK, and WHITE are explicit alternate selected-indicator skins.","Disabled switches are non-interactive and muted; transitions and reduced-motion overrides are component-specific."]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="75.68×44px track; shared four-skin variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="44px Switches" nonDefaultSettings={[
+        "Alternate selected-indicator skins: COLOR SWAP, BLACK, and WHITE.",
+        "Round and rectangular variants change track/handle geometry.",
+      ]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="75.68×44px track; shared four-skin variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-control-row" key={shape}><strong>{shape === "round" ? "ROUND" : "RECTANGULAR"}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div></div>)}</div>
     </Family>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
-      nonDefaultSettings={["This is an informational badge using split-left rail anatomy, not an action button.","Standard is 44px / 3px stroke; compact 28px / 2px; micro is a 14px / 1px-stroke density exception.","The badge uses the canonical size-family radii: 6px standard, 4px compact, and 2px micro. It does not use the button activation contract.","Standard, compact, and global 14px micro sizes use the shared split-badge foundation; all badge labels center like StudioButton and all sides use the global 4px spacing unit."]}
+      nonDefaultSettings={[
+        "Informational split-left badge, not an action button.",
+        "Badge-only micro exception: 14px height, 1px stroke, 2px radius, and 10px type/icons; it is not an interactive-control size.",
+      ]}
       provenance={<Provenance
         primitive="StudioSplitLeftBadge"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
@@ -103,10 +109,15 @@ const CanonicalControlFamilies: React.FC = () => {
         <StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="micro">MICRO DOUBLE</StudioDoubleSplitBadge>
       </div>
     </Family>
-    <Family title="44px Radio + Checkbox" nonDefaultSettings={["Radio, checkmark checkbox, and wide-X checkbox are separate public controls with different selection marks.","Shape changes the outer control; wide-X changes the mark, not the geometry family.","SOLID is default; COLOR SWAP, BLACK, and WHITE are explicit selected-indicator variants. Disabled controls cannot be changed."]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="44px Radio + Checkbox" nonDefaultSettings={[
+        "Radio, checkmark checkbox, and wide-X checkbox remain distinct public selection-mark variants.",
+        "Alternate selected-indicator skins: COLOR SWAP, BLACK, and WHITE.",
+      ]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}</div>
     </Family>
-    <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={["Standard is 44px; size 28 selects the 28px compact version.","SOLID is default; COLOR SWAP and BLACK are alternate active-handle treatments.","False selects the first word and true the second; custom words change labels, not the boolean state contract."]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={[
+        "Alternate active-handle skins: COLOR SWAP and BLACK.",
+      ]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => {
         return <div className="vt-confirmed-control-row" key={item.size}>
           <strong>{item.label}</strong>
@@ -153,7 +164,10 @@ const ConfirmedInlineStepperFamily: React.FC = () => {
   return (
     <Family
       title="Inline Stepper · 44px + 28px"
-      nonDefaultSettings={["Horizontal decrement / editable value / increment composition with square side actions and a 1:2:1 layout.","Standard 44px and compact 28px use shared Studio size, stroke, radius, typography, and color-pair tokens.","Typing, step/min/max bounds, and accessible action labels are supported. This horizontal primitive is distinct from the vertical-rail StudioSplitStepper."]}
+      nonDefaultSettings={[
+        "Horizontal decrement / editable value / increment composition with a 1:2:1 layout.",
+        "Distinct from the vertical-rail StudioSplitStepper.",
+      ]}
       provenance={<Provenance
         primitive="StudioInlineStepper"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
@@ -185,7 +199,9 @@ const ConfirmedStepperFamily: React.FC = () => {
   return (
     <Family
       title="Split Stepper · 44px + 28px"
-      nonDefaultSettings={["Standard is 44px; compact is 28px. Width is fixed rather than auto/full-width.","The value pane uses a 2:1 width-to-height proportion; the right rail contains two vertically stacked 2:1 buttons.","Typing, bounds, step, disabled state, primary inline stroke/fill, and chevron sizing are component-specific. The family is documented as shadowless; verify cascading CSS before certification."]}
+      nonDefaultSettings={[
+        "Fixed-width 2:1 value/rail geometry with two vertically stacked rail actions.",
+      ]}
       provenance={<Provenance
         primitive="StudioSplitStepper"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
@@ -274,7 +290,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </ul>
       <p><strong>Audit status:</strong> this library records the canonical global defaults. A primitive is not certified until its production rendering, tokens, effective CSS, and responsive/accessibility behavior agree with this contract.</p>
     </section>
-    <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={["Standard/compact are 44px/28px with 3px/2px strokes and 6px/4px radii; simple is default, floating/fixed labels are variants of one native input.","Single-line type is 38px/24px, weight 1000, line-height .86. Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors.","Search/number, input mode, autocomplete, max length, disabled/read-only behavior, and native caret are field-specific options. Verify focus accents in a browser."]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native input family with simple and floating-label variants; standard 44px / compact 28px geometry and global 38px / 24px typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
+        "Floating and fixed-label presentations share one native input.",
+        "Raised labels shrink to 80%; compact B reverses the paired colors.",
+      ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native input family with simple and floating-label variants; standard 44px / compact 28px geometry and global 38px / 24px typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextInput</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant"><span>28px compact A · StudioTextInput</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px A" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div><div className="vt-confirmed-variant"><span>28px compact · disabled</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input 28px disabled" placeholder="TYPE HERE" disabled data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · 44px standard · A</span><StudioTextInput variant="floating-label" floatingLabelVariant="a" label="TITLE" aria-label="Studio floating-label input standard A" sizeVariant="standard" data-vt-library-component="StudioTextInput" /></div>
@@ -284,7 +303,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · A</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact A" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextInput className="is-reverse-colors" variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact B reverse colors" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
     </Family>
-    <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={["Text areas keep a 92px minimum writing surface; textarea-only typography is 18px standard / 14px compact, with multiline line-height, padding, and vertical resize.","Simple is default; floating/fixed labels are presentation variants of one native textarea. Raised labels shrink to 80%; compact B reverses paired colors without shrinking the textarea value text.","Rows, disabled/read-only behavior, and label association remain native. Selected size still controls border/radius; typography is the registered exception."]} provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native textarea family with simple and floating-label variants; 92px minimum surface and standard 18px / compact 14px multiline typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
+        "Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface.",
+      ]} provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native textarea family with simple and floating-label variants; 92px minimum surface and standard 18px / compact 14px multiline typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · 44px standard · A</span><StudioTextArea variant="floating-label" floatingLabelVariant="a" label="DESCRIPTION" aria-label="Studio floating-label textarea standard A" rows={4} data-vt-library-component="StudioTextArea" /></div>
@@ -296,18 +317,26 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
-    <Family title="Button" nonDefaultSettings={["Ordinary buttons default to 44px; explicit compact selects 28px. Accent is default; neutral/danger/warning/success are semantic alternatives.","Selected changes face color; disabled blocks activation; loading exposes busy state and blocks activation.","Legacy effect declarations are overridden by the canonical flat-control contract; no shell shadow, transition, hover movement, or press movement is intended."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Button"  provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton sizeVariant="standard">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton sizeVariant="compact" tone="neutral">button</StudioButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected sizeVariant="standard">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioButton selected sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioButton selected disabled sizeVariant="compact">button</StudioButton></div>
     </Family>
-    <Family title="Icon Button · 44px + 28px" nonDefaultSettings={["Icon-only wrapper over StudioButton, not a parallel skin; label provides accessible name and icon is hidden from assistive technology.","Geometry, tones, selected/disabled/loading/focus states, shadow, hover and press behavior are inherited from StudioButton.","Large icon preset is default; current and moderate sizes are opt-in. Effective button CSS retains shadow/motion despite zero-offset token metadata."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px; shared StudioButton interaction contract." imports={["src/studio-ui/index.ts"]} />}><div className="vt-confirmed-variant is-full-row"><span>44px standard · semantic tones</span><div className="vt-confirmed-square-variant-grid">{(["accent","neutral","danger","warning","success"] as const).map(tone => <StudioIconButton key={tone} icon={<Settings2 aria-hidden="true" />} label={tone + " action"} tone={tone} sizeVariant="standard" data-vt-library-component="StudioIconButton" />)}</div></div><div className="vt-confirmed-variant is-full-row"><span>28px compact · semantic tones</span><div className="vt-confirmed-square-variant-grid">{(["accent","neutral","danger","warning","success"] as const).map(tone => <StudioIconButton key={tone} icon={<Settings2 aria-hidden="true" />} label={tone + " compact action"} tone={tone} sizeVariant="compact" data-vt-library-component="StudioIconButton" />)}</div></div><div className="vt-confirmed-variant"><span>Selected</span><StudioIconButton icon={<Check aria-hidden="true" />} label="Selected icon action" selected sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div><div className="vt-confirmed-variant"><span>Disabled</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled icon action" disabled sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div><div className="vt-confirmed-variant"><span>Loading</span><StudioIconButton icon={<Sparkles aria-hidden="true" />} label="Loading icon action" loading sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div></Family>
-    <Family title="Prominent Action · 56px" nonDefaultSettings={["StudioActionButton is a separate 56px family, not a third ordinary-button size; it uses 3px stroke, 6px radius, no shadow, and 20px Inter/1000 label.","Legacy declarations are overridden by the canonical flat-control contract; browser computed-style verification is still required.","Loading exposes busy state; disabled blocks interaction. Reduced-motion rules disable transitions but do not alter geometry."]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Icon Button · 44px + 28px" nonDefaultSettings={[
+        "Icon-only wrapper over StudioButton; the label provides the accessible name and the icon is decorative.",
+        "Current and moderate icon presets are opt-in.",
+      ]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px; shared StudioButton interaction contract." imports={["src/studio-ui/index.ts"]} />}><div className="vt-confirmed-variant is-full-row"><span>44px standard · semantic tones</span><div className="vt-confirmed-square-variant-grid">{(["accent","neutral","danger","warning","success"] as const).map(tone => <StudioIconButton key={tone} icon={<Settings2 aria-hidden="true" />} label={tone + " action"} tone={tone} sizeVariant="standard" data-vt-library-component="StudioIconButton" />)}</div></div><div className="vt-confirmed-variant is-full-row"><span>28px compact · semantic tones</span><div className="vt-confirmed-square-variant-grid">{(["accent","neutral","danger","warning","success"] as const).map(tone => <StudioIconButton key={tone} icon={<Settings2 aria-hidden="true" />} label={tone + " compact action"} tone={tone} sizeVariant="compact" data-vt-library-component="StudioIconButton" />)}</div></div><div className="vt-confirmed-variant"><span>Selected</span><StudioIconButton icon={<Check aria-hidden="true" />} label="Selected icon action" selected sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div><div className="vt-confirmed-variant"><span>Disabled</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled icon action" disabled sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div><div className="vt-confirmed-variant"><span>Loading</span><StudioIconButton icon={<Sparkles aria-hidden="true" />} label="Loading icon action" loading sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div></Family>
+    <Family title="Prominent Action · 56px" nonDefaultSettings={[
+        "Dedicated 56px action family with 20px label typography; it is not a third ordinary-button size.",
+      ]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>56px prominent workflow action</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
     </Family>
 
-    <Family title="Square Icon Button · 44px + 28px" nonDefaultSettings={["StudioSquareIconButton is the canonical square counterpart to the split-left rail: 44×44 standard / 28×28 compact.","V1–V4 skins change fill and icon color only; they do not add shell shadows or movement. Circle icons use 80% of the large preset (30.4px/1.9 standard; 19.2px/2.0 compact).","Effects are opt-in and limited to documented inner-icon feedback; notification needs a real count/status and success must follow actual operation success."]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; seven opt-in inner-icon effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
+    <Family title="Square Icon Button · 44px + 28px" nonDefaultSettings={[
+        "V1–V4 skins change fill and icon color only.",
+        "Inner-icon feedback effects are opt-in; success styling must follow a real successful operation.",
+      ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; seven opt-in inner-icon effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row">
         <span>44px standard · variants 1–4</span>
         <div className="vt-confirmed-square-variant-grid">
@@ -347,7 +376,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
-    <Family title="Split-left" nonDefaultSettings={["Split-left defaults to 44px; compact is 28px. Accent is default; neutral/danger/warning/success are semantic alternatives.","Selected swaps face and rail colors; disabled blocks activation; loading reports busy state.","The fixed icon rail and size/tone/state behavior are production CSS contracts. Split-left uses StudioButton's shell and centered label contract; legacy size-specific effects are overridden by the global flat-control contract."]} provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px icons explicitly enlarged; selected state swaps module-pair fills." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <Family title="Split-left" nonDefaultSettings={[
+        "Selected state swaps face and icon-rail colors.",
+        "Fixed icon rail and centered label are component-specific anatomy.",
+      ]} provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px icons explicitly enlarged; selected state swaps module-pair fills." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioSplitLeftButton icon={<Sparkles />} sizeVariant="standard" data-vt-library-component="StudioSplitLeftButton">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioSplitLeftButton icon={<Sparkles />} sizeVariant="compact">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioSplitLeftButton icon={<Sparkles />} tone="neutral" sizeVariant="compact">split-left</StudioSplitLeftButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected sizeVariant="standard">split-left</StudioSplitLeftButton></div>
@@ -355,7 +387,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Button + Split-left · Complete Variant Matrix"
-      nonDefaultSettings={["Specimens use production StudioButton and StudioSplitLeftButton exports, with standard/compact sizes and five semantic tones.","Selected, disabled, and loading are separate states, not tones.","The canonical flat-control contract overrides legacy shell shadows and press movement; focus and reduced-motion still require browser verification."]}
+      
       provenance={<Provenance primitive="StudioButton / StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · 28px compact · five semantic tones · selected / disabled / loading · shared tactile press motion" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
@@ -390,7 +422,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Square Icon Button · All Presets + Animations"
-      nonDefaultSettings={["All examples mount StudioSquareIconButton directly; V1–V4 skins, icon presets, and effects are separate options.","Preset coverage includes heart, bell, sun/moon, lock/unlock, download/check, refresh, and like; effects include pop/ripple, notification, rotate, flip, morph, tooltip, and success.","Effects are stateful and opt-in. Success is demonstration-only unless the product operation actually succeeded; accessibility and reduced-motion behavior remain required."]}
+      nonDefaultSettings={[
+        "Icon presets and inner-icon effects are opt-in variants.",
+        "Success is demonstration-only unless the product operation actually succeeded.",
+      ]}
       provenance={<Provenance primitive="StudioSquareIconButton · complete preset/effect matrix" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="V1–V4 · 44×44px / 28×28px · 7 presets · all 17 effect modes · shared labels and motion" imports={["src/studio-ui/index.ts", "src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
@@ -452,7 +487,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Play/Pause Split-left Button · 44px + 28px"
-      nonDefaultSettings={["Activation swaps icon, label, and selected palette state while reserving width so Play/Pause does not resize the control.","Uncontrolled state is default; playing/onPlayingChange enables parent-controlled state and aria-pressed reflects current state.","Standard is 44px and compact 28px; selected coloring and label reservation are family-specific, not global defaults."]}
+      nonDefaultSettings={[
+        "Reserves label width so Play/Pause does not resize the control.",
+        "Supports uncontrolled or parent-controlled playback state.",
+      ]}
       provenance={<Provenance primitive="StudioPlayPauseButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Canonical StudioSplitLeftButton composition; stable Play/Pause label geometry; selected-color swap; 44px / 28px sizes." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
@@ -470,7 +508,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Circle Icon Button · 44px + 28px"
-      nonDefaultSettings={["Circle is a shape variant of StudioSquareIconButton and shares palette, preset, disabled, and focus behavior without adding shell shadow or press movement.","Standard is 44×44px; compact 28×28px; icons use 80% of large preset dimensions.","V1–V4 skins and documented inner-icon effects are inherited opt-in variants; circular shape does not create a new size family."]}
+      nonDefaultSettings={[
+        "Circular shape uses 80% of the canonical large icon preset: 30.4px / 1.9 stroke standard and 19.2px / 2.0 compact.",
+      ]}
       provenance={<Provenance primitive="StudioCircleIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Circular shape wrapper over StudioSquareIconButton; shared V1–V4, sizing, effects, and accessibility contracts." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
@@ -495,7 +535,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Username Split-left Input · 44px + 28px"
-      nonDefaultSettings={["The left icon rail is part of the field, not an action button; documented contract has no button shadow or press movement.","Rail uses large icon preset: 38px/1.9 standard and 24px/2.0 compact.","Editable area reuses StudioTextInput; wrapper owns focus outline/border. Native props/ref are forwarded. Verify CSS has not introduced button-like movement or shadow."]}
+      nonDefaultSettings={[
+        "Icon rail is part of the field, not an action button.",
+        "Wrapper owns the focus outline/border; editable area reuses StudioTextInput.",
+      ]}
       provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Composite of canonical StudioTextInput and split-left icon rail; 44px / 28px geometry; no shadow; wrapper focus ring." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
@@ -513,7 +556,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Dropdown"
-      nonDefaultSettings={["Trigger is 44px by default; compact is 28px. l0/l1/l2 level is independent from trigger size.","Disabled trigger cannot open; controlled/uncontrolled value, placeholder, clear label, max panel height, keyboard focus and disabled options are production behaviors.","Menu rows/options are not button-press surfaces; the floating panel may have its own stationary shadow. Verify stacking, keyboard navigation and narrow-screen layout."]}
+      nonDefaultSettings={[
+        "Fixed floating label and multi-select count are dropdown-specific.",
+        "Menu options are not button-press surfaces; the floating panel has its own stationary surface treatment.",
+      ]}
       provenance={<Provenance
         primitive="StudioLegendMultiDropdown · 140"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
@@ -574,7 +620,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Global Rules Exceptions · Vault Spectrum Tags"
-      nonDefaultSettings={["Registered 15px dense metadata chip, not a general-purpose 44px/28px control; border/text use alphabetical spectrum color and fill mixes it with white at 35%.","Color resolves from the first A–Z letter using getAlphabeticalSpectrumColor and the 12-stop palette.","Selected state uses flat color/border feedback only; no movement or glow is permitted under the global flat-control contract."]}
+      nonDefaultSettings={[
+        "Dense metadata exception: 15px height, spectrum-derived border/text, 35% color fill, and opt-in selected glow.",
+      ]}
       provenance={<Provenance
         primitive="StudioSpectrumTag"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
@@ -646,7 +694,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Global Rules Exceptions · Closeable Badge + Tag Editor"
-      nonDefaultSettings={["Closeable badges are a dedicated 20px full-pill exception at every density: no border, 16px 1000-weight uppercase text, content width, and primary-pair color mixed 50% with white.","The 16px close control is a secondary-pair circle; closing swaps its colors, fades the badge out, then removes it. Reduced-motion disables the visual animation.","Tag-editor plus/check actions use the canonical compact 28px square with 2px stroke and 4px radius. Enter confirms; Escape cancels."]}
+      nonDefaultSettings={[
+        "Closeable badge exception: 20px pill with 16px label and a secondary-pair close affordance.",
+        "Tag-editor action geometry must match the registered exception in the production token/CSS contract.",
+      ]}
       provenance={<Provenance
         primitive="StudioCloseableBadge / StudioTagEditor"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
@@ -668,7 +719,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Simple Dropdown · Single Selection"
-      nonDefaultSettings={["Plain single-choice dropdown with no top-left label, checkbox rows, or multi-select behavior.","Closed control/options inherit Studio typography and color-pair tokens; trigger uses 44px standard / 28px compact sizing.","Keyboard selection, disabled options and optional placeholder are supported. Panel/option styling is separate from the trigger's button interaction contract."]}
+      nonDefaultSettings={[
+        "Single-selection menu without checkbox rows, multi-select behavior, or a top-left label.",
+      ]}
       provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row">
