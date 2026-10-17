@@ -66,6 +66,11 @@ export interface AssetOutcome {
  editRatio?: number
  /** Links the outcome back to the generating turn. */
  traceId: string
+ /** Shared orchestration identity from the generation request, when supplied. */
+ operationId?: string
+ workflowId?: string
+ contentBuildId?: string
+ contextRevision?: number
  /** Caller-supplied key makes retries of one creator action idempotent. */
  idempotencyKey?: string
  /** Canonical publication provenance, attached only after publication is verified. */
@@ -281,6 +286,10 @@ export const recordAssetOutcome = async (input: {
     }
    : {}),
   traceId: asset.traceId,
+  ...(asset.operationId ? { operationId: asset.operationId } : {}),
+  ...(asset.workflowId ? { workflowId: asset.workflowId } : {}),
+  ...(asset.contentBuildId ? { contentBuildId: asset.contentBuildId } : {}),
+  ...(asset.contextRevision !== undefined ? { contextRevision: asset.contextRevision } : {}),
   ...(input.idempotencyKey ? { idempotencyKey: input.idempotencyKey } : {}),
  }
 
@@ -297,6 +306,10 @@ export const recordAssetOutcome = async (input: {
    summary: `${asset.assetType} ${input.kind}${input.note ? `: ${input.note}` : ""}`,
    evidence: asset.evidenceRefs,
    sourceRecordId: outcome.id,
+   operationId: outcome.operationId,
+   workflowId: outcome.workflowId,
+   contentBuildId: outcome.contentBuildId,
+   contextRevision: outcome.contextRevision,
    traceId: outcome.traceId,
    assetId: asset.id,
    assetType: asset.assetType,

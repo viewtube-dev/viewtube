@@ -19,6 +19,9 @@ export interface BrainOutcomeRecord {
  experimentId?: string | null
  /** Stable identity of the producer record that emitted this outcome. */
  sourceRecordId?: string | null
+ /** Shared orchestration identity from the producing operation, when available. */
+ operationId?: string | null
+ contextRevision?: number | null
  /** Generation trace and asset identity, when this outcome came from Asset Engine. */
  traceId?: string | null
  assetId?: string | null
@@ -82,7 +85,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    // Conflicting identity must not be hidden by returning an older local row.
    const immutableFields = [
     "sourceToolId", "targetToolId", "outcome", "summary", "confidence",
-    "traceId", "assetId", "assetType", "contentBuildId", "projectId",
+    "operationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
     "actionPacketId", "workflowId", "recommendationId", "experimentId",
     "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
     "publishedVideoId", "publicationIdentity",
@@ -95,7 +98,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
     }
    }
    const enrichableFields = [
-    "targetToolId", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
+    "targetToolId", "operationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
     "actionPacketId", "workflowId", "recommendationId", "experimentId",
     "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
     "publishedVideoId", "publicationIdentity",
@@ -138,6 +141,8 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    actionPacketId: input.actionPacketId || null,
    workflowId: input.workflowId || null,
    sourceRecordId: input.sourceRecordId || null,
+   operationId: input.operationId || null,
+   contextRevision: input.contextRevision ?? null,
    traceId: input.traceId || null,
    assetId: input.assetId || null,
    assetType: input.assetType || null,

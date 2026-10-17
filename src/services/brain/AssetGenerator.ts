@@ -168,6 +168,11 @@ export interface AssetRecord<TOutput = unknown> {
  id: string
  channelId: string
  projectId?: string
+ /** Canonical lifecycle and orchestration identity carried from the request. */
+ contentBuildId?: string
+ contextRevision?: number
+ operationId?: string
+ workflowId?: string
  assetType: AssetType
  status: AssetStatus
  output?: TOutput
@@ -364,6 +369,10 @@ export const generateAsset = async <TOutput>(input: {
   id: assetId,
   channelId: request.channelId,
   ...(request.projectId ? { projectId: request.projectId } : {}),
+  ...(request.contentBuildId ? { contentBuildId: request.contentBuildId } : {}),
+  ...(request.contextRevision !== undefined ? { contextRevision: request.contextRevision } : {}),
+  ...(request.operationId ? { operationId: request.operationId } : {}),
+  ...(request.workflowId ? { workflowId: request.workflowId } : {}),
   assetType: request.assetType,
   status: "failed",
   createdAt: new Date().toISOString(),
