@@ -1,23 +1,26 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Causal Intelligence
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+BUILD as a guarded analytical capability on top of Analytics Canon and Experiment Lab; do not ship a standalone causal engine until data supports it.
 
 ## Core transformation
-TRANSFORM
+Observed outcome + design/context → ranked explanations with causal-strength labels
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/services/analytics-canon/contracts.ts`
+- `src/services/brain/BrainEvidenceContract.ts`
+- `src/services/brain/OpportunityIntelligence.ts`
+- `src/services/longformOptimizationComparison.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Audit whether the data has comparable baselines, exposure windows, confounder controls, and experiment links. Separate correlation, temporal association, plausible hypothesis, quasi-experimental evidence, and validated causal evidence in types and UI copy. Every explanation must cite source rows/snapshots/windows and list alternatives/limitations. If identification assumptions are unmet, return hypotheses and uncertainty rather than causal claims. Feed validated learnings back to Experiment Lab and Brain with provenance.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
