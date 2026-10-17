@@ -139,7 +139,8 @@ export const recordPostPublishIdentity = (
     idempotencyKey: identityKey,
     publishedAt: input.publishedAt || build.youtube?.publishedAt || null,
   }
-  const existingReceipt = listContentBuildEvents(build.id).find(event =>
+  const lifecycleEvents = listContentBuildEvents(build.id)
+  const existingReceipt = lifecycleEvents.find(event =>
     event.eventType === "youtube.state.changed" &&
     event.entityType === "publish-identity-receipt" &&
     event.entityId === transaction.id &&
@@ -186,6 +187,14 @@ export const recordPostPublishIdentity = (
     }
   }
 
+  const transactionCompletionEvent = lifecycleEvents.find(event =>
+    event.eventType === "publish.transaction.completed" &&
+    event.entityId === transaction.id
+  )
+  if (!transactionCompletionEvent) {
+    throw new Error("Post-publish identity requires the completed publish transaction event in ContentBuild history.")
+  }
+
   const binding = bindYouTubeVideo({
     idempotencyKey: bindingKey,
     contentBuildId: build.id,
@@ -216,6 +225,7 @@ export const recordPostPublishIdentity = (
     resultingState: binding.youtube || null,
     inputAssetIds: assetIds,
     outputAssetIds: [videoId],
+    parentEventIds: [transactionCompletionEvent.id],
     timestamp: input.publishedAt || undefined,
     metadata: {
       operationId: transaction.operationId || transaction.id,
