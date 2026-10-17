@@ -4,6 +4,7 @@ import { generatePerfectReply, recommendVideoForComment } from "../../services/g
 import { fetchAllSimpleCommentThreads, fetchSimpleOwnedVideo, postSimpleCommentReply, toSimpleVideoDetails } from "../../services/simpleYouTubeApi"
 import { readBrainUserControls } from "../../services/brain/BrainUserControls"
 import type { CommentResponderController, CommentResponderTab, CreatorEngagementContext } from "./types"
+import { audiencePulseSignalToBrainClaim, buildAudiencePulseSignals, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
 
 export const resolveSuggestedVideoId = (
  suggestedVideoId: unknown,
@@ -125,6 +126,14 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
   return () => window.removeEventListener("vt_dashboard_generated_image", onBridge as EventListener)
  }, [])
 
+ const audienceSignals = useMemo(
+  () => buildAudiencePulseSignals(projectCommentThreadsToAudienceFeedback(threads, context.channelId)),
+  [context.channelId, threads],
+ )
+ const audienceEvidenceClaims = useMemo(
+  () => audienceSignals.map(audiencePulseSignalToBrainClaim),
+  [audienceSignals],
+ )
  const partitions = useMemo(() => partitionCommentThreads(threads, context.channelId), [context.channelId, threads])
  const unreplied = partitions.unreplied
  const replied = partitions.replied
@@ -237,7 +246,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
  }
 
  return {
-  tab, setTab, loading, error, threads, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
+  tab, setTab, loading, error, threads, audienceSignals, audienceEvidenceClaims, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
   replyText: currentId ? replyText[currentId] || "" : "",
   setReplyText: (value) => currentId && setReplyTextById((current) => ({ ...current, [currentId]: value })),
   generating: generatingIds.has(currentId), fetchedVideoData, inboundImageUrl,
