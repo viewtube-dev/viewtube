@@ -154,7 +154,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("[data-vt-studio-split-label]")
     expect(css).toContain("text-overflow: ellipsis")
     expect(css).toContain("white-space: nowrap")
-    const labelBlock = css.slice(css.indexOf(".vt-studio-split-left-badge__label,"), css.indexOf('.vt-studio-split-left-badge[data-size="standard"]'))
+    const labelBlock = css.slice(css.indexOf(".vt-studio-split-left-badge__label,"), css.indexOf(".vt-studio-split-shell > [data-vt-studio-split-field]"))
     expect(labelBlock).not.toContain("flex: 1 1 0%")
     expect(labelBlock).not.toContain("width: 0")
   })
