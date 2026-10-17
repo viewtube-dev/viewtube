@@ -12,7 +12,7 @@
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: .86;
-  --vt-studio-control-shadow: var(--vt-studio-44-button-shadow-x, 3px);
+  
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
   --vt-studio-control-focus-outline-width: 3px;
@@ -22,7 +22,7 @@
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
-  --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary) 65%, transparent);
+  
   box-sizing: border-box;
 }
 
@@ -32,7 +32,7 @@
   --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
   --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000);
-  --vt-studio-control-shadow: var(--vt-studio-28-button-shadow-x, 1.5px);
+  
   --vt-studio-control-outline-stroke: 1px;
   --vt-studio-control-hover-offset: .75px;
   --vt-studio-control-focus-outline-width: 2px;
@@ -47,7 +47,7 @@
   --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
-  --vt-studio-control-shadow: var(--vt-studio-44-button-shadow-x, 3px);
+  
   --vt-studio-control-outline-stroke: 1.5px;
   --vt-studio-control-hover-offset: 1.5px;
   --vt-studio-control-focus-outline-width: 3px;
@@ -406,12 +406,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-legend-height: 44px;
   --vt-legend-stroke: 3px;
   --vt-legend-radius: 6px;
-  --vt-legend-shadow-offset: 3px;
+  
   --vt-legend-label-height: 20px;
   --vt-legend-label-font-size: 14px;
   --vt-legend-chevron-size: 28px;
   --vt-legend-count-size: 28px;
-  --vt-legend-shadow-color: var(--vt-studio-control-shadow-color, rgb(0 0 0 / .3));
+  
   position: relative;
   z-index: 0;
   width: 100%;
@@ -420,7 +420,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   text-transform: uppercase;
 }
-.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height: 28px; --vt-legend-stroke: 2px; --vt-legend-shadow-offset: 1.5px; --vt-legend-radius: 4px; --vt-legend-label-height: 14px; --vt-legend-label-font-size: 9px; --vt-legend-chevron-size: 18px; --vt-legend-count-size: 19px; }
+.vt-studio-legend-multi[data-size="compact"] { --vt-legend-height: 28px; --vt-legend-stroke: 2px;  --vt-legend-radius: 4px; --vt-legend-label-height: 14px; --vt-legend-label-font-size: 9px; --vt-legend-chevron-size: 18px; --vt-legend-count-size: 19px; }
 .vt-studio-legend-multi[data-open="true"] { z-index: 600; isolation: isolate; }
 .vt-studio-legend-anchor { position: relative; width: 100%; min-width: 0; padding-top: 0; }
 .vt-studio-legend-label {
@@ -503,9 +503,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
-  --vt-studio-44-button-shadow-x: 3px; --vt-studio-44-button-shadow-y: 3px;
+   
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
-  --vt-studio-28-button-shadow-x: 1px; --vt-studio-28-button-shadow-y: 1px;
+   
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
   --vt-studio-text-input-standard-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-text-input-compact-font-size: var(--vt-studio-28-font-size, 24px);
@@ -1107,7 +1107,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 /* Canonical tactile motion tokens: 180ms general transition, 80ms press. */
 :root { --vt-studio-motion-button: 180ms; --vt-studio-motion-press: 80ms; }
 button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000;  overflow:visible; transform:translate(0,0);  }
-button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color); transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px)); opacity:1;  pointer-events:none; }
+button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color);  opacity:1;  pointer-events:none; }
 /* Split-left uses one real offset shadow on its shell. A translated filled pseudo-box
    creates a second opaque silhouette behind the badge and can mispaint in nested
    stacking contexts, so this variant never renders the generic shadow layer. */
@@ -1116,7 +1116,7 @@ button[data-vt-studio-button="true"][data-split-left="true"] {
 }
 button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }
 button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled) {  }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }
+button[data-vt-studio-button="true"][data-size="standard"] {   }
 /* Compact buttons use a single anchored 1.5px pseudo-element shadow. Never stack
    a second native box-shadow on the compact button shell or widen its silhouette. */
 button[data-vt-studio-button="true"][data-size="compact"] {
@@ -1128,10 +1128,10 @@ button[data-vt-studio-button="true"][data-size="compact"]::before {
   width: auto;
   height: auto;
   filter: none;
-  transform: translate(var(--vt-studio-control-shadow-x, 1.5px), var(--vt-studio-control-shadow-y, 1.5px));
+  
 }
-button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-shadow:3px; --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
-button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-shadow:1.5px; --vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px; --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
+button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px;    --vt-studio-control-hover-offset:1.5px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
+button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px;    --vt-studio-control-hover-offset:.75px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
 
 /* Comparison-only icon sizes. Stroke compensation assumes a 24-unit SVG viewBox. */
 button[data-vt-studio-button="true"][data-icon-size-variant="current"][data-size="standard"] { --vt-studio-control-icon-size:28px; --vt-studio-control-icon-stroke:2.5; }
@@ -1143,7 +1143,7 @@ button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="
 /* Separate prominent action family. Not a StudioButton size variant. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   --vt-studio-control-height: 56px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px;
-  --vt-studio-control-shadow: 3px; --vt-studio-control-hover-offset: 1.5px;
+   --vt-studio-control-hover-offset: 1.5px;
   appearance: none; box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
   min-height: 56px; height: 56px; padding: 0; border: 0; border-radius: 6px; background: transparent;
    overflow: visible; color: #000;
@@ -1160,7 +1160,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   
 }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) { transform: translate(1.5px, 1.5px); }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {  transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px));  }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {    }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform:none;  }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
@@ -1196,15 +1196,15 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
   padding-inline: 8px;
   font-size: 24px;
 }
-button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] { transform:translate(var(--vt-studio-control-hover-offset,1.5px),var(--vt-studio-control-hover-offset,1.5px)); }
-button[data-vt-studio-button="true"]:active:not(:disabled) { transform:translate(var(--vt-studio-control-shadow-x,3px),var(--vt-studio-control-shadow-y,3px));  }
+button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {  }
+button[data-vt-studio-button="true"]:active:not(:disabled) {   }
 button[data-vt-studio-button="true"]:active:not(:disabled)::before { opacity:0;  }
 button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled)::before { opacity:0; }
 button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(0,0);  }
 button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
 /* Selected faces switch to secondary, so their shadow must switch to the opposite primary color. */
-button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] { --vt-studio-control-shadow-color: var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] {  }
 button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); max-width:var(--vt-studio-control-height); aspect-ratio:1 / 1; flex:0 0 var(--vt-studio-control-height); }
 button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { box-sizing:border-box; width:100%; min-width:100%; max-width:100%; height:100%; padding:0; flex:0 0 100%; }
@@ -1214,16 +1214,16 @@ button[data-vt-studio-button="true"] [data-vt-studio-button-icon] svg { width:va
 /* Icon buttons default to the large production preset: 38px/1.9 standard and 24px/2 compact.
    The current (28px/2.5, 18px/1.65) and moderate (34px/2.0588, 22px/1.35) values are opt-in presets. */
 button[data-vt-studio-icon-button="true"][data-icon-variant="v1"] {
-  --vt-studio-control-shadow-color: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 65%, transparent);
+  
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] {
-  --vt-studio-control-shadow-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] {
-  --vt-studio-control-shadow-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
@@ -2580,8 +2580,8 @@ button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle].is-unlocked {
   --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
   --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
   --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
-  --vt-studio-badge-shadow-x: var(--vt-studio-44-button-shadow-x, 3px);
-  --vt-studio-badge-shadow-y: var(--vt-studio-44-button-shadow-y, 3px);
+  
+  
   position: relative;
   isolation: isolate;
   display: inline-flex;
@@ -2653,8 +2653,8 @@ button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle].is-unlocked {
   --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
   --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
   --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
-  --vt-studio-badge-shadow-x: var(--vt-studio-28-button-shadow-x, 1.5px);
-  --vt-studio-badge-shadow-y: var(--vt-studio-28-button-shadow-y, 1.5px);
+  
+  
   --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
   --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2);
   --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
@@ -2746,8 +2746,8 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:activ
 }
 button[data-vt-studio-button="true"][data-size="compact"],
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="compact"] {
-  --vt-studio-control-shadow-x: var(--vt-studio-28-button-shadow-x, 1.5px);
-  --vt-studio-control-shadow-y: var(--vt-studio-28-button-shadow-y, 1.5px);
+  
+  
 }
 
 /* Explicit non-button exceptions: these are fields/indicators, not button faces.
@@ -2874,7 +2874,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   --vt-studio-control-line-height: 1;
   --vt-studio-control-icon-size: 10px;
   --vt-studio-control-icon-stroke: 1.5;
-  --vt-studio-control-shadow: 0px;
+  
   --vt-studio-control-hover-offset: 0px;
   min-height: 14px;
 }
@@ -3054,4 +3054,22 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
   box-shadow: none !important;
   text-shadow: none !important;
   transition: none !important;
+}
+
+
+/* Retire legacy pseudo-faces that existed only to paint offset shadow copies.
+   Keep approved square-icon after-layer animation hooks intact. */
+button[data-vt-studio-button="true"]::before,
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::before,
+[data-vt-studio-control]:not(button[data-vt-studio-icon-button="true"])::before,
+.vt-studio-split-left-badge::before,
+.vt-studio-split-left-badge::after,
+.vt-studio-split-right-badge::before,
+.vt-studio-split-right-badge::after,
+.vt-studio-double-split-badge::before,
+.vt-studio-double-split-badge::after,
+.vt-studio-legend-multi::before,
+.vt-studio-legend-multi::after {
+  content: none !important;
+  display: none !important;
 }
