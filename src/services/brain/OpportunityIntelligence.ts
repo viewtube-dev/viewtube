@@ -232,7 +232,7 @@ export const validateTacticProposal = (
  if (!tactic.evidenceIds.length || tactic.evidenceIds.some((id) => !evidence.has(id))) {
   errors.push("Tactic references evidence outside the accepted opportunity packet.")
  }
- if (!tactic.targetOutcome.trim() || !tactic.actionSteps.some((step) => step.trim())) {
+ if (!tactic.targetOutcome.trim() || !tactic.actionSteps.some((step) => step.trim().length > 0)) {
   errors.push("A tactic needs a target outcome and at least one actionable step.")
  }
  if (!tactic.successMetrics.length || tactic.successMetrics.some((metric) => !metric.metricId.trim())) {
