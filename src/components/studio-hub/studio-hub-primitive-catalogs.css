@@ -342,7 +342,7 @@
    ========================================================================== */
 
 /* 06 / 07 — Split Left + Head/Tail: exact-square rail, level type and icon DNA. */
-.vt-complete-catalog .vt-catalog-split-primitive{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])){
   width:100%!important;
   height:var(--h)!important;
   min-height:var(--h)!important;
@@ -351,16 +351,16 @@
   font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui))!important;
   letter-spacing:-.055em!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail]{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])) [data-vt-studio-split-rail]{
   width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;
   height:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important;
   border-right-width:var(--stroke)!important;display:grid!important;place-items:center!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-label]{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])) [data-vt-studio-split-label]{
   min-width:0!important;display:grid!important;place-items:center!important;
   padding:0 calc(var(--h)*.16)!important;font:inherit!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive svg,
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])) svg,
 .vt-complete-catalog .vt-catalog-stepper svg,
 .vt-complete-catalog .vt-catalog-pagination svg{
   width:calc(var(--h)*.55)!important;height:calc(var(--h)*.55)!important;
@@ -1080,10 +1080,10 @@
    ========================================================================== */
 
 /* Split Left Button uses the same exact square left rail as Split Menu. */
-.vt-complete-catalog .vt-catalog-split-primitive{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])){
   grid-template-columns:var(--h) minmax(0,1fr)!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail]{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])) [data-vt-studio-split-rail]{
   width:var(--h)!important;
   min-width:var(--h)!important;
   max-width:var(--h)!important;
@@ -1611,13 +1611,13 @@
 /* Primitive 20 Text Input specimens use the canonical Studio Controls styles.
    Only constrain specimen width here; geometry, typography, colors, borders and focus
    are owned by studio-control-system.css for both the 44px and 28px variants. */
-.vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text[data-vt-studio-control="true"] {
-  width:var(--vt-catalog-standard-inline,260px)!important;
+ .vt-complete-catalog :is([data-vt-family="Text Input"],[data-vt-family="20 Simple Text Input"]) .vt-catalog-field.is-simple-text:not([data-vt-studio-control="true"]) {
+  width:var(--vt-catalog-standard-inline,260px);
 }
 
 /* A full-size 44px split rail must not inherit a small icon/viewBox presentation.
    Enlarge the rendered SVG and preserve its natural viewBox instead of clipping it. */
-.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail] svg{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])) [data-vt-studio-split-rail] svg{
   display:block!important;
   width:72%!important;height:72%!important;max-width:none!important;max-height:none!important;
   overflow:visible!important;stroke-width:3.5!important;flex:none!important;
@@ -1626,7 +1626,7 @@
 .vt-complete-catalog .vt-catalog-demo.is-l1 .vt-catalog-split-primitive [data-vt-studio-split-rail] svg{
   width:76%!important;height:76%!important;stroke-width:3.75!important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive [data-vt-studio-split-rail]{
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"])) [data-vt-studio-split-rail]{
   overflow:visible!important;
 }
 
@@ -2152,7 +2152,7 @@
    renders border/background/typography on the dedicated face span. The older
    catalog specimen rules targeted the button itself and its first child; keep
    the library examples aligned with the same production anatomy. */
-.vt-complete-catalog .vt-catalog-split-primitive[data-vt-studio-button="true"] {
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"]))[data-vt-studio-button="true"] {
   display: flex !important;
   width: 100% !important;
   height: var(--h) !important;
@@ -2165,7 +2165,7 @@
   transform: none !important;
   overflow: visible !important;
 }
-.vt-complete-catalog .vt-catalog-split-primitive[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+.vt-complete-catalog .vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"]))[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
   display: grid !important;
   grid-template-columns: var(--h) minmax(0, 1fr) !important;
   box-sizing: border-box !important;
