@@ -191,3 +191,50 @@ describe("AlgorithmEvaluationEngine lifecycle identity", () => {
   })
  })
 })
+
+
+describe("AlgorithmEvaluationEngine zero-baseline safeguards", () => {
+ it("does not claim a relative-change outcome when the baseline is zero", () => {
+  const result = evaluateAlgorithmEvent({
+   event: event({
+    evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 0, minimumRelativeChange: 0.1 }],
+    checkpointAt: 1_000,
+   }),
+   observations: [{ metric: "views", value: 12, observedAt: 2_000, evidenceId: "views-current" }],
+   now: 2_000,
+  })
+
+  expect(result.status).toBe("insufficient_data")
+  expect(result.targetResults[0]).toMatchObject({
+   status: "unavailable",
+   baselineValue: 0,
+   observedValue: 12,
+   relativeChange: null,
+  })
+ })
+
+ it("honors an explicit target value when the baseline is zero", () => {
+  const result = evaluateAlgorithmEvent({
+   event: event({
+    evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 0, targetValue: 10 }],
+    checkpointAt: 1_000,
+   }),
+   observations: [{ metric: "views", value: 12, observedAt: 2_000 }],
+   now: 2_000,
+  })
+
+  expect(result.status).toBe("positive")
+  expect(result.targetResults[0].status).toBe("met")
+ })
+
+ it("respects an explicitly supplied zero evaluation timestamp", () => {
+  const result = evaluateAlgorithmEvent({
+   event: event({ checkpointAt: 1 }),
+   observations: [{ metric: "ctr", value: 0.05, observedAt: 0 }],
+   now: 0,
+  })
+
+  expect(result.status).toBe("pending")
+  expect(result.evaluatedAt).toBe(0)
+ })
+})
