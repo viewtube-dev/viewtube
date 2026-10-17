@@ -518,6 +518,17 @@ describe("Studio Username Split-Left Input", () => {
     expect(renderToStaticMarkup(<StudioUsernameInput icon={<span>U</span>} sizeVariant="compact" aria-label="Compact username" />)).toContain('data-size="compact"')
   })
 
+  it("uses the primary inline stroke at the selected border width without important overrides", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const start = css.indexOf('.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"] {')
+    const end = css.indexOf('.vt-studio-username-input[data-disabled="true"]', start)
+    const fieldRules = css.slice(start, end)
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary)")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-field-stroke) #000")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-field-stroke) #8b8b8b")
+    expect(fieldRules).not.toContain("!important")
+  })
+
   it("keeps the composite outline and inset strokes on the wrapper without a button shadow or seam", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('.vt-studio-username-input:focus-within')
