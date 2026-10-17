@@ -170,3 +170,12 @@ The capability matrix currently enforces generation at request/receipt boundarie
 The YouTube publication bridge now re-reads the canonical ContentBuild and checks the shared `publish` capability plus unresolved workflow blockers immediately before upload, each uncompleted transaction-step provider call, and remote-state verification. Completed steps retain their idempotent early return, so a retry does not repeat an already-completed remote action. New regression tests assert that a published build and a blocked build stop provider calls before the transport is invoked.
 
 This closes a concrete client-side provider-dispatch gap for the YouTube publication transaction bridge. It is not server authorization: the client-side stage store is not a security boundary against a modified client. Production authorization still needs authenticated server enforcement for every provider operation, and the broader lifecycle persistence/consent/end-to-end certification criteria remain open.
+
+
+## Provider-dispatch revalidation — 2026-10-17
+
+The governed AssetGenerator now accepts canonical ContentBuild identity and captured revision for lifecycle-bound generation. When supplied, it re-reads the current build and rechecks channel/project scope, the shared `generate` capability, and exact revision immediately before every provider call, including repair calls. A post-publication stage, unknown build, mismatched scope, incomplete lifecycle identity, or stale revision prevents the runner from being invoked; the generation result records failure rather than representing blocked dispatch as a provider result.
+
+Concept + Scene Studio now carries the prepared GenerationRequest's ContentBuild ID and revision into both concept and scene provider requests. Regression tests assert that a published build and a stale revision cause zero provider calls.
+
+**Boundary:** this is client-side pre-dispatch enforcement for ContentBuild-bound AssetGenerator requests, not authenticated server-side authorization against a modified client. Callers that omit ContentBuild identity still use the existing non-ContentBuild generation path. The remaining certification work includes auditing every lifecycle-bound generator caller, authenticated server enforcement for external provider actions, durable cross-device replay against live persistence, full consent/retention purge verification, provider-backed attribution, and same-head release-gate repair.
