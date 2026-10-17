@@ -44,9 +44,39 @@ CREATE TABLE IF NOT EXISTS viewtube_brain_learning_records (
   PRIMARY KEY(viewtube_user_id,channel_id,record_id)
 );
 CREATE INDEX IF NOT EXISTS viewtube_brain_learning_records_channel_idx
-  ON viewtube_brain_learning_records(viewtube_user_id,channel_id,updated_at DESC);`;
+  ON viewtube_brain_learning_records(viewtube_user_id,channel_id,updated_at DESC);
+-- One-time server-side purge for legacy creator messages that predate client redaction.
+UPDATE viewtube_brain_intelligence_events
+SET event = jsonb_set(
+  event,
+  '{metadata}',
+  (
+    (COALESCE(event->'metadata', '{}'::jsonb) - 'communicationText')
+    || jsonb_build_object(
+      'rawCommunicationTextRetained', false,
+      'retentionPolicy', COALESCE(
+        NULLIF(event->'metadata'->>'retentionPolicy', ''),
+        'classification-only-server-redaction-v1'
+      )
+    )
+  ),
+  true
+), updated_at = NOW()
+WHERE event->>'kind' = 'CREATOR_COMMUNICATION_CLASSIFIED'
+  AND event->'metadata' ? 'communicationText';`;
 
 const scope = (userId, channelId) => `${userId}:${channelId}`;
+
+const sanitizeBrainEventForPersistence = (event) => {
+  if (event?.kind !== "CREATOR_COMMUNICATION_CLASSIFIED") return event;
+  const metadata = { ...(event.metadata && typeof event.metadata === "object" ? event.metadata : {}) };
+  delete metadata.communicationText;
+  metadata.rawCommunicationTextRetained = false;
+  metadata.retentionPolicy = typeof metadata.retentionPolicy === "string" && metadata.retentionPolicy
+    ? metadata.retentionPolicy
+    : "classification-only-server-redaction-v1";
+  return { ...event, metadata };
+};
 
 const mergeBrainEventPreservingRedaction = (existing, incoming) => {
   const merged = { ...(existing || {}), ...(incoming || {}) };
@@ -94,7 +124,10 @@ export const listPersistedBrainEvents = async ({ userId, channelId }) => {
 
 export const upsertPersistedBrainEvents = async ({ userId, channelId, events }) => {
   await initBrainIntelligenceStore();
-  const rows = (Array.isArray(events) ? events : []).filter((event) => event?.id && event?.channelId === channelId).slice(0, 2500);
+  const rows = (Array.isArray(events) ? events : [])
+    .filter((event) => event?.id && event?.channelId === channelId)
+    .map(sanitizeBrainEventForPersistence)
+    .slice(0, 2500);
   if (!pool) {
     const key = scope(userId, channelId);
     const map = memoryEvents.get(key) || new Map();
