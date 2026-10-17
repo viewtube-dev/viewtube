@@ -1,7 +1,7 @@
 import { teachAIBrainExplicitly } from "../aiBrainSelfImprovement"
 import { readBrainUserControls, shouldBrainLearnFromInteraction } from "./BrainUserControls"
 import { listApprovedAlgorithmLearningCandidates } from "./AlgorithmLearningGovernance"
-import { recordAlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
+import { listAlgorithmIntelligenceEvents, recordAlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
 
 export interface AlgorithmLearningPromotionRequest {
  channelId: string
@@ -52,6 +52,21 @@ export const promoteApprovedAlgorithmLearningToProfile = async (
  }
 
  const { candidate, sourceEvent, review } = row
+ const priorPromotion = listAlgorithmIntelligenceEvents({
+  channelId: input.channelId,
+  kind: "LEARNING_PROMOTED",
+ }).find((event) =>
+  event.sourceId === candidate.id && event.metadata?.durableProfileMutation === true,
+ )
+ if (priorPromotion) {
+  return {
+   status: "already_promoted" as const,
+   candidate,
+   event: priorPromotion,
+   claim: priorPromotion.metadata?.promotion ?? null,
+  }
+ }
+
  const teaching = await teachAIBrainExplicitly({
   channelId: input.channelId,
   summary: candidate.statement,
