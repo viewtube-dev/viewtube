@@ -61,7 +61,7 @@ describe("buildAudiencePulseSignals", () => {
 
     expect(signals).toHaveLength(2)
     expect(signals[0].sourceIds).toEqual(["c1", "c2"])
-    expect(signals[0].evidenceIds).toEqual(["c1", "c2"])
+    expect(signals[0].evidenceIds).toEqual(["comment:c1", "comment:c2"])
     expect(signals[0].sourceWindow).toEqual({
       start: "2026-10-01T10:00:00.000Z",
       end: "2026-10-02T10:00:00.000Z",
@@ -113,6 +113,23 @@ describe("buildAudiencePulseSignals", () => {
     }
   })
 
+  it("keeps same-ID records from different source systems distinct in provenance and counts", () => {
+    const [signal] = buildAudiencePulseSignals([
+      { sourceId: "shared-id", source: "comment", text: "Could you explain this?", channelId: "ch1" },
+      { sourceId: "shared-id", source: "community-post", text: "Could you explain this?", channelId: "ch1" },
+    ])
+
+    expect(signal.sourceIds).toEqual(["shared-id"])
+    expect(signal.sourceReferences).toEqual([
+      { source: "comment", sourceId: "shared-id" },
+      { source: "community-post", sourceId: "shared-id" },
+    ])
+    expect(signal.evidenceIds).toEqual(["comment:shared-id", "community-post:shared-id"])
+    expect(signal.sourceKinds).toEqual(["comment", "community-post"])
+    expect(signal.sourceReferences).toHaveLength(2)
+    expect(audiencePulseSignalToBrainClaim(signal).value).toBe(2)
+  })
+
 })
 
 describe("audiencePulseSignalToBrainClaim", () => {
@@ -124,7 +141,7 @@ describe("audiencePulseSignalToBrainClaim", () => {
 
     expect(claim.epistemicState).toBe("INFERRED")
     expect(claim.value).toBe(1)
-    expect(claim.provenance.evidenceIds).toEqual(["c9"])
+    expect(claim.provenance.evidenceIds).toEqual(["comment:c9"])
     expect(claim.provenance.sourceVersion).toBe("audience-pulse-patterns-v1")
     expect(claim.freshness).toBe("unknown")
     expect(claim.timeframe?.start).toBe("2026-10-01T10:00:00.000Z")
