@@ -65,6 +65,12 @@ export const CommentResponder: React.FC = () => {
       <p className="mt-2 break-words text-[10px] font-bold">Evidence IDs: {signal.evidenceIds.join(", ")}</p>
       {(signal.sourceWindow.start || signal.sourceWindow.end) && <p className="mt-1 text-[10px]">Source window: {signal.sourceWindow.start || "unknown"} — {signal.sourceWindow.end || "unknown"}</p>}
       {signal.suggestedTargets.length > 0 && <p className="mt-2 break-words text-[10px]"><strong>Suggested destinations (advisory):</strong> {signal.suggestedTargets.join(" · ")}</p>}
+      {signal.intent !== "unknown" && <div className="mt-3 space-y-2">
+       <p className="text-[10px] opacity-70">Queue a pending evidence proposal for review. This does not run a reply, community post, experiment, or publication.</p>
+       <StudioButton type="button" tone="accent" disabled={comments.proposedAudienceSignalIds.has(signal.id)} onClick={() => comments.proposeAudienceSignal(signal.id)}>
+        {comments.proposedAudienceSignalIds.has(signal.id) ? "Proposal queued for review" : "Queue review proposal"}
+       </StudioButton>
+      </div>}
       {signal.limitations.length > 0 && <ul className="mt-2 list-disc space-y-1 pl-4 text-[10px] opacity-70">{signal.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>}
      </article>)}
     </div> : <p className="rounded-xl border-2 border-dashed border-black/30 p-4 text-xs font-bold">No classifiable audience patterns in the loaded comments. Ambiguous feedback remains visible in the source queue and is not assigned an intent.</p>}
