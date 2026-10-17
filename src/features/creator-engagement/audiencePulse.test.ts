@@ -121,6 +121,8 @@ describe("buildAudiencePulseSignals", () => {
     for (const signal of signals) {
       for (const target of signal.suggestedTargets) {
         expect(registeredTargets.has(target), `unregistered suggested target: ${target}`).toBe(true)
+        const capability = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === target)
+        expect(capability?.accepts, `destination does not accept evidence: ${target}`).toContain("evidence")
       }
     }
   })
@@ -152,7 +154,13 @@ describe("buildAudiencePulseProposalPacket", () => {
     const packet = buildAudiencePulseProposalPacket(signal)
 
     expect(packet).not.toBeNull()
-    expect(packet?.id).toBe(`audience-pulse-proposal:${encodeURIComponent(signal.id)}`)
+    expect(packet?.id).toMatch(/^audience-pulse-proposal:/)
+    expect(buildAudiencePulseProposalPacket(signal)?.id).toBe(packet?.id)
+    const updatedEvidence = buildAudiencePulseProposalPacket({
+      ...signal,
+      evidenceIds: [...signal.evidenceIds, "comment:new-evidence"],
+    })
+    expect(updatedEvidence?.id).not.toBe(packet?.id)
     expect(packet?.sourceToolId).toBe("comment-responder")
     expect(packet?.payloadKind).toBe("evidence")
     expect(packet?.intent).toBe("propose")
