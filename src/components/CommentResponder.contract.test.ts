@@ -58,6 +58,8 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(view).toContain("comment-responder-avatar")
   expect(view).toContain("publishedAt")
   expect(view).toContain("data-comment-video-context")
+  expect(view).toContain('role="region" tabIndex={0} aria-label="Comment conversation thread"')
+  expect(view).toContain("context.channelThumbnail : undefined")
   expect(view).not.toContain('SubToolbox title="Current Comment"')
   expect(view).not.toContain('SubToolbox title={`Reply History · ${replies.length}`}')
  })
