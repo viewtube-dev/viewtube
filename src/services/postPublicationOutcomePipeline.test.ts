@@ -236,6 +236,31 @@ describe("post-publication outcome pipeline", () => {
     }))
   })
 
+  it("evaluates a recommendation whose checkpoint timestamp is zero", async () => {
+    mocks.listAlgorithmIntelligenceEvents.mockImplementation(({ kind }: { kind?: string }) =>
+      kind === "OUTCOME_MEASURED" ? [] : [{
+        id: "recommendation-zero-checkpoint",
+        channelId: "channel-1",
+        videoId: "video-1",
+        kind: "RECOMMENDATION_CREATED",
+        checkpointAt: 0,
+        evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100 }],
+        metadata: { contentBuildId: "build-1" },
+        parentEventIds: [],
+      }]
+    )
+
+    const result = await runPostPublicationOutcomePipeline({
+      channelId: "channel-1",
+      now: new Date("2026-10-15T12:00:00.000Z"),
+    })
+
+    expect(mocks.recordAlgorithmEvaluation).toHaveBeenCalledWith(expect.objectContaining({
+      sourceEventId: "recommendation-zero-checkpoint",
+    }))
+    expect(result.recommendationEvaluations).toBe(1)
+  })
+
   it("does not query or join another channel's publication history", async () => {
     const result = await runPostPublicationOutcomePipeline({
       channelId: "channel-other",
