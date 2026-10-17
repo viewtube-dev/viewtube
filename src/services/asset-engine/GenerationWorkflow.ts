@@ -1,6 +1,7 @@
 import {
  getContentBuild,
 } from "./ContentBuildRepository"
+import { assertContentBuildCapability } from "./ContentBuildCapabilities"
 import {
  operationRecordFromGenerationRequest,
  operationRecordFromToolReceipt,
@@ -134,12 +135,7 @@ const assertCanonicalScope = (input: {
  */
 const assertGenerationStageAllowed = (build: ReturnType<typeof getContentBuild>) => {
  if (!build) throw new Error("Generation requires an existing canonical ContentBuild.")
- const blockedStages = new Set(["published", "monitor", "evaluation", "learning", "archived"])
- if (blockedStages.has(build.stage)) {
-  throw new Error(
-   `Generation is not allowed while ContentBuild ${build.id} is in stage ${build.stage}; transition the canonical build to an editable stage first.`,
-  )
- }
+ assertContentBuildCapability(build, "generate")
 }
 
 export const prepareGenerationRequest = (input: {

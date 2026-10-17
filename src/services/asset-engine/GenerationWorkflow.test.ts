@@ -125,7 +125,7 @@ describe("GenerationWorkflow", () => {
    targetSlot: "title",
    mode: "new-option",
    creatorIntent: "Generate a new title after publication.",
-  })).toThrow(/not allowed.*stage published/i)
+  })).toThrow(/does not allow capability generate.*published/i)
 
   const request = {
    schemaVersion: 1 as const,
@@ -150,7 +150,47 @@ describe("GenerationWorkflow", () => {
    requestedAt: new Date().toISOString(),
   }
   expect(() => recordToolReceipt({ request, outputAssetIds: ["asset-after-publish"] }))
-   .toThrow(/not allowed.*stage published/i)
+   .toThrow(/does not allow capability generate.*published/i)
+ })
+
+ it("fails closed for a stage that has not been explicitly authorized for generation", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-unknown-stage",
+   channelId: "channel-unknown-stage",
+   legacyProjectId: "project-unknown-stage",
+   stage: "future-stage" as never,
+  })
+
+  expect(() => prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-unknown-stage",
+   projectId: "project-unknown-stage",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "create",
+   creatorIntent: "An unknown lifecycle stage must not inherit permission.",
+  })).toThrow(/does not allow capability generate.*future-stage/i)
+ })
+
+
+ it("uses the canonical capability matrix to deny generation after publication and on unknown stages", () => {
+  const published = createContentBuild({
+   id: "cb-capability-published",
+   channelId: "channel-capability",
+   legacyProjectId: "project-capability",
+   stage: "published",
+  })
+  expect(() => prepareGenerationRequest({
+   contentBuildId: published.id,
+   channelId: "channel-capability",
+   projectId: "project-capability",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "create",
+   creatorIntent: "Must be denied after publish.",
+  })).toThrow(/does not allow capability generate/i)
  })
 
  it("rejects a stale generation request after the canonical build revision changes", () => {
