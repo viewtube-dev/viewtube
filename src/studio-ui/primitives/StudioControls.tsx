@@ -595,23 +595,49 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
   icon: React.ReactNode
 }
 
-/** One label primitive shared by actionable split buttons and static split badges. */
-const StudioSplitLabel: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className }) => (
-  <span data-vt-studio-split-label className={className}>{children}</span>
-)
-
-/** Shared split-left geometry used by actionable buttons and static badges. */
-const StudioSplitLeftContent: React.FC<{ icon?: React.ReactNode; children?: React.ReactNode; className?: string; labelClassName?: string }> = ({ icon, children, className, labelClassName }) => (
-  <>
-    <span aria-hidden="true" data-vt-studio-split-rail className={className}>{icon}</span>
-    <StudioSplitLabel className={labelClassName}>{children}</StudioSplitLabel>
-  </>
-)
+/** Shared split anatomy for left, right, and double-split controls.
+ * Buttons render only face contents; badges and composite fields render the shell. */
+type StudioSplitLayout = "left" | "right" | "double"
+interface StudioSplitShellProps {
+  layout: StudioSplitLayout
+  sizeVariant?: StudioControlSize
+  iconLeft?: React.ReactNode
+  iconRight?: React.ReactNode
+  children?: React.ReactNode
+  faceOnly?: boolean
+  fieldSlot?: boolean
+  className?: string
+  labelClassName?: string
+  railClassName?: string
+  railProps?: React.HTMLAttributes<HTMLSpanElement>
+  shellProps?: React.HTMLAttributes<HTMLSpanElement>
+}
+const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
+  layout, sizeVariant = "standard", iconLeft, iconRight, children,
+  faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps, shellProps,
+}) => {
+  const content = (
+    <>
+      {layout !== "right" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconLeft}</span>}
+      {fieldSlot
+        ? <span data-vt-studio-split-field>{children}</span>
+        : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
+      {layout !== "left" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconRight}</span>}
+    </>
+  )
+  if (faceOnly) return content
+  return (
+    <span {...shellProps} data-vt-studio-control="true" data-vt-studio-split={layout}
+      data-size={sizeVariant} className={studioClasses("vt-studio-split-shell", className)}>
+      {content}
+    </span>
+  )
+}
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
-      <StudioSplitLeftContent icon={icon}>{children}</StudioSplitLeftContent>
+    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
+      <StudioSplitShell layout="left" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>{children}</StudioSplitShell>
     </StudioButton>
   ),
 )
@@ -732,16 +758,21 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
     disabled,
     ...inputProps
   }, ref) => (
-    <div
+    <StudioSplitShell
+      layout="left"
+      sizeVariant={sizeVariant}
+      iconLeft={icon}
+      fieldSlot
       className={studioClasses("vt-studio-username-input", className)}
-      data-vt-studio-control="true"
-      data-vt-studio-username-input="true"
-      data-size={sizeVariant}
-      data-icon-size-variant="large"
-      data-disabled={disabled ? "true" : undefined}
-      style={style}
+      railClassName="vt-studio-username-input__rail"
+      railProps={{ "data-vt-studio-username-rail": "true" }}
+      shellProps={{
+        "data-vt-studio-username-input": "true",
+        "data-icon-size-variant": "large",
+        "data-disabled": disabled ? "true" : undefined,
+        style,
+      }}
     >
-      <span data-vt-studio-username-rail="true" aria-hidden="true">{icon}</span>
       <StudioTextInput
         {...inputProps}
         ref={ref}
@@ -750,7 +781,7 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
         className={studioClasses("vt-studio-username-input__input", inputClassName)}
         style={inputStyle}
       />
-    </div>
+    </StudioSplitShell>
   ),
 )
 StudioUsernameInput.displayName = "StudioUsernameInput"
@@ -1584,8 +1615,7 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
 StudioTagEditor.displayName = "StudioTagEditor";
 
 
-/** Shared static split-badge foundation. All split variants share the same face,
- * typography, 4px spacing unit, centering rule, and shadow/motion-free geometry. */
+/** BEM class names are retained for compatibility; anatomy is shared with buttons and username fields. */
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
@@ -1603,23 +1633,22 @@ const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
 }) => {
   const rootClass = layout === "left" ? "vt-studio-split-left-badge"
     : layout === "right" ? "vt-studio-split-right-badge" : "vt-studio-double-split-badge";
-  const faceClass = layout === "left" ? "vt-studio-split-left-badge__face"
-    : layout === "right" ? "vt-studio-split-right-badge__face" : "vt-studio-double-split-badge__face";
   const railClass = layout === "left" ? "vt-studio-split-left-badge__rail"
     : layout === "right" ? "vt-studio-split-right-badge__rail" : "vt-studio-double-split-badge__rail";
   const labelClass = layout === "left" ? "vt-studio-split-left-badge__label"
     : layout === "right" ? "vt-studio-split-right-badge__label" : "vt-studio-double-split-badge__label";
   return (
-    <span {...props} data-vt-studio-control="true" data-vt-studio-split-badge={layout}
-      data-vt-library-component={layout === "left" ? "StudioSplitLeftBadge" : layout === "right" ? "StudioSplitRightBadge" : "StudioDoubleSplitBadge"}
-      data-size={sizeVariant} className={[rootClass, className].filter(Boolean).join(" ")}>
-      <span className={faceClass}>
-        {layout !== "right" && <span className={railClass} aria-hidden="true">{iconLeft}</span>}
-        <StudioSplitLabel className={labelClass}>{children}</StudioSplitLabel>
-        {layout !== "left" && <span className={railClass} aria-hidden="true">{iconRight}</span>}
-      </span>
-    </span>
-  );
+    <StudioSplitShell layout={layout} sizeVariant={sizeVariant}
+      iconLeft={iconLeft} iconRight={iconRight}
+      className={studioClasses(rootClass, className)} railClassName={railClass} labelClassName={labelClass}
+      shellProps={{
+        ...props,
+        "data-vt-studio-split-badge": layout,
+        "data-vt-library-component": layout === "left" ? "StudioSplitLeftBadge" : layout === "right" ? "StudioSplitRightBadge" : "StudioDoubleSplitBadge",
+      }}>
+      {children}
+    </StudioSplitShell>
+  )
 };
 export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({ icon, ...props }) =>
   <StudioSplitBadgeBase {...props} layout="left" iconLeft={icon} />;
