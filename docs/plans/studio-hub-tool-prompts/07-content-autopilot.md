@@ -1,23 +1,28 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Content Autopilot
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+ADD as a derivative-opportunity workflow over published content, Projects, Shorts, Asset Engine, and Publisher; only make a standalone tool if it owns a genuinely distinct end-to-end workflow.
 
 ## Core transformation
-TRANSFORM
+Published assets + outcomes → ranked derivative/follow-up packages
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/services/viewTubeToolChains.ts`
+- `src/services/productionHandoffContracts.ts`
+- `src/services/asset-engine/ContentBuildRepository.ts`
+- `src/services/vaultAdapter.ts`
+- `src/services/postPublicationOutcomePipeline.ts`
+- `src/services/brain/OpportunityIntelligence.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Trace published-video identity, available clip/asset derivatives, existing Shorts extraction/editor routes, publishing packages, and post-publication outcomes. Generate proposals for shorts, follow-ups, FAQs/resources, series extensions, experiments, or revenue experiments with source-video IDs and evidence. Create Project/ContentBuild records only after creator acceptance; reuse the Publisher for publication and Vault for assets. No autonomous external writes and no duplicate strategy engine.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
