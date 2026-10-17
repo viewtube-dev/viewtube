@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "studio:tokens": "node scripts/emit-studio-control-vars.mjs",
     "audit:reach": "node scripts/audit/reach.mjs",
     "audit:ai-systems": "node scripts/audit/ai-systems-governance.mjs",
     "test:ai-systems-governance": "node --test scripts/audit/ai-systems-governance.test.mjs",
