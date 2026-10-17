@@ -12,7 +12,7 @@ const tiers = [
   ["compact", "28"],
   ["micro", "14"],
 ]
-const px = new Set(["height", "stroke", "radius", "iconSize", "buttonShadowX", "buttonShadowY"])
+const px = new Set(["height", "stroke", "radius", "fontSize", "iconSize", "buttonShadowX", "buttonShadowY"])
 const cssProperty = {
   height: "height",
   stroke: "stroke",
