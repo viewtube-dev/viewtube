@@ -127,7 +127,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   max-height: 280px;
   overflow-y: auto;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, 6px));
+  border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   
   padding: 4px;
@@ -2893,7 +2893,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   min-width: 0;
   padding: 0;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
+  border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, 6px));
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
   
