@@ -299,6 +299,8 @@ export interface ContentBuildEvent<T = Record<string, unknown>> {
  inputAssetIds: string[]
  outputAssetIds: string[]
  evidenceIds: string[]
+ /** Explicit causal parents; absent parents are allowed during delayed/out-of-order delivery and reported by diagnostics. */
+ parentEventIds?: string[]
  generationRecordId?: string | null
  actionPacketId?: string | null
  traceId?: string | null
