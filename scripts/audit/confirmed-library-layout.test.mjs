@@ -211,7 +211,7 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(catalog, /Icon presets:<\/b> the default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
   assert.match(css, /button\.vt-studio-44-choice\.is-rect\s*\{\s*border-radius:\s*7\.333px/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
-  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*letterSpacing:\s*-0\.02/);
 });
 
 test("catalog labels dropdown and action specimens according to their actual initial state and CSS", () => {
