@@ -41,3 +41,11 @@
 [data-vt-studio-control="true"][data-vt-studio-split] [data-vt-studio-split-label] {
   padding-inline: var(--vt-studio-control-gap, 4px);
 }
+
+/* A face-only split shell is nested inside StudioButton but follows the same grid. */
+[data-vt-studio-control="true"] [data-vt-studio-split-face] [data-vt-studio-split-rail] {
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  border-radius: 0;
+}
