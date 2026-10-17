@@ -67,7 +67,8 @@ describe("buildAudiencePulseSignals", () => {
       start: "2026-10-01T10:00:00.000Z",
       end: "2026-10-02T10:00:00.000Z",
     })
-    expect(signals[0].suggestedTargets).toContain("comment-responder")
+    expect(signals[0].suggestedTargets).toContain("opportunity-radar")
+    expect(signals[0].suggestedTargets).not.toContain("comment-responder")
     expect(signals[1].videoId).toBe("v2")
   })
 
