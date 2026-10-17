@@ -91,6 +91,8 @@ describe("confirmed Studio button primitive library", () => {
     expect(catalog).toContain("Global first: --pair-a primary / --pair-b secondary")
     expect(catalog).toContain("no shell shadows, transitions, or hover/press movement")
     expect(catalog).toContain("Inputs left aligned")
+    expect(catalog).toContain("4px spacing between rows, columns, and sibling components only")
+    expect(css).not.toContain("--vt-studio-control-gap: 4px")
     expect(catalog).toContain("MULTILINE TEXTAREA · REGISTERED EXCEPTION")
     expect(css).toContain("Confirmed Primitive Library enforcement layer (2026-10-17)")
     expect(css).toContain("box-shadow: none !important")
