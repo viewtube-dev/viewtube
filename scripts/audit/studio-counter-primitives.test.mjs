@@ -62,3 +62,13 @@ test("counter palette variants are paired by size and centered, with max 100", (
   assert.match(styles, /-webkit-text-stroke:\s*1px var\(--pair-a\)/);
   assert.match(styles, /background:\s*color-mix\(in srgb, var\(--pair-a\) 50%, transparent\)/);
 });
+
+test("counter catalog groups primary and secondary palettes in centered per-size rows and uses 0–100", () => {
+  assert.match(catalog, /vt-confirmed-counter-size-rows/);
+  assert.match(catalog, /vt-confirmed-counter-size-row/);
+  assert.doesNotMatch(catalog, /vt-confirmed-counter-row-grid--paired/);
+  assert.equal((catalog.match(/max={100}/g) || []).length >= 12, true);
+  assert.match(styles, /justify-content:\s*center;[\s\S]*align-items:\s*center/);
+  assert.match(styles, /color-mix\(in srgb, #fff 50%, var\(--pair-a\) 50%\)/);
+  assert.match(styles, /-webkit-text-stroke:\s*1px var\(--vt-studio-control-accent, var\(--pair-a\)\)/);
+});
