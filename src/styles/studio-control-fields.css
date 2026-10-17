@@ -141,7 +141,7 @@ html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
-  caret-color: #000;
+  caret-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   -webkit-text-stroke-color: #000 !important;
 }
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="standard"],
