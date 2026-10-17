@@ -278,3 +278,17 @@ Added `normalizeBrainConfidence(value, sourceScale)` to `BrainEvidenceContract.t
 Commits: `c02973908755fbb30a8ebbdc7b39c7b7cf4a490a` (contract helper) and `2d0c0673d236fa34ec64bbd47f13f5bb637c28d4` (tests).
 
 **Scope note:** this establishes and tests the conversion boundary; it does not yet prove every opportunity-to-claim path calls it. That requires tracing actual consumers and wiring the helper only where a producer's 0–100 scale is confirmed. Runtime tests/typecheck/build remain unexecuted because this GitHub-backed work session has no checked-out project runtime.
+
+### Runtime documentation-link and guard-script audit — 2026-10-17
+
+A follow-up branch-tree audit confirmed the portability concern is more than a machine-specific URL: the checked-in runtime registry and its guard script refer to a legacy documentation tree that is **not present in the current branch tree**.
+
+Evidence checked at the current branch head:
+- `src/services/superToolRuntimePlanRegistry.ts` still builds `file://` URLs from `/Users/cwb/Downloads/viewtube/viewtubeX/docs/VT Brain`.
+- `scripts/check-super-tool-agent-cycle.mjs` reads `docs/VT Brain/super-tool-agent-plans/phase-1/` and the Phase 3 optimization report as mandatory inputs.
+- A recursive Git tree scan of the branch head found the guard script and runtime registry, but no `docs/VT Brain`, `super-tool-agent-plans/phase-1`, or `VIEWTUBEX_SUPER_TOOL_AGENT_OPTIMIZATION_REPORTS.md` path.
+- The canonical reconciliation document does exist at `docs/plans/STUDIO_HUB_PLANNED_TOOLS_INTEGRATION_RECONCILIATION_2026-10-17.md`.
+
+**Why this matters:** the legacy checker will fail at its first missing-file read unless CI supplies those files outside the repository. The runtime links are also not portable to a browser/deployed client. Do not paper over this by weakening the guard assertions or by generating 15 duplicate planning documents without confirming they remain authoritative.
+
+**Next safe implementation step:** reconcile the guard script and runtime registry with the actual canonical documentation source. Either restore the legacy docs as tracked, owned artifacts, or migrate checks and links to the consolidated source with explicit per-tool anchors and equivalent coverage. Add a regression test for generated links and the guard's required inputs before deleting the old contract. Then run the guard script, focused tests, typecheck, full suite, and build in a real checkout. None of those commands was executed in this GitHub API session.
