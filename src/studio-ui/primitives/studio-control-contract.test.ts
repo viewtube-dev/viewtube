@@ -93,4 +93,15 @@ describe("Studio control global contract", () => {
     expect(badge).not.toContain("--vt-studio-control-stroke");
   });
 
+
+  it("keeps field typography in the canonical rules without a late important override layer", () => {
+    const css = read("src/styles/studio-control-fields.css");
+    expect(css).not.toContain("Final global field contract:");
+    expect(css).not.toContain("!important");
+    expect(css).toContain("--vt-studio-control-text-stroke, 1px");
+    expect(css).toContain("--vt-studio-control-text-stroke, 0.5px");
+    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
+    expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
+    expect(css).toContain("outline-offset: 0");
+  });
 });
