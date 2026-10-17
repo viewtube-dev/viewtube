@@ -114,6 +114,7 @@ export interface OpportunityTacticsPacket {
  channelId: string
  videoId: string | null
  entity: string | null
+ metric: string | null
  kind: OpportunityKind
  validationState: "accepted"
  createdAt: string
@@ -179,6 +180,7 @@ export const buildOpportunityTacticsPacket = (input: {
    channelId: opportunity.channelId.trim(),
    videoId: opportunity.videoId || null,
    entity: opportunity.entity || null,
+   metric: opportunity.metric || null,
    kind: opportunity.kind,
    validationState: "accepted",
    createdAt: new Date(timestamp).toISOString(),
