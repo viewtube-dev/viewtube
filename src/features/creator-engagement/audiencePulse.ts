@@ -21,6 +21,7 @@ export interface AudiencePulseSignal {
   projectId: string | null
   sourceIds: string[]
   sourceKinds: AudienceFeedbackSource[]
+  sourceReferences: Array<{ source: AudienceFeedbackSource; sourceId: string }>
   evidenceIds: string[]
   sourceWindow: { start: string | null; end: string | null }
   confidence: number | null
@@ -93,8 +94,10 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
 
   return [...groups.entries()].map(([key, group]) => {
     const times = group.records.map((record) => parseDate(record.observedAt)).filter((value): value is number => value !== null).sort((a, b) => a - b)
-    const sourceIds = [...new Set(group.records.map((record) => record.sourceId))]
-    const sourceKinds = [...new Set(group.records.map((record) => record.source))]
+    const sourceReferences = [...new Map(group.records.map((record) => [`${record.source}:${record.sourceId}`, { source: record.source, sourceId: record.sourceId }])).values()]
+    const sourceIds = [...new Set(sourceReferences.map((record) => record.sourceId))]
+    const sourceKinds = [...new Set(sourceReferences.map((record) => record.source))]
+    const evidenceIds = sourceReferences.map((record) => `${record.source}:${record.sourceId}`)
     const intent = group.intent
     const limitations = [
       "Intent is a conservative text-pattern inference, not a verified statement of audience intent.",
@@ -111,7 +114,8 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
       projectId: group.records[0].projectId || null,
       sourceIds,
       sourceKinds,
-      evidenceIds: sourceIds,
+      sourceReferences,
+      evidenceIds,
       sourceWindow: {
         start: times.length ? new Date(times[0]).toISOString() : null,
         end: times.length ? new Date(times[times.length - 1]).toISOString() : null,
@@ -121,7 +125,7 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
         : null,
       interpretation: intent === "unknown"
         ? "Unclassified audience observation; review the source before taking action."
-        : `${intent[0].toUpperCase()}${intent.slice(1)} signal from ${sourceIds.length} distinct source record(s).`,
+        : `${intent[0].toUpperCase()}${intent.slice(1)} signal from ${sourceReferences.length} distinct source record(s).`,
       suggestedTargets: targetFor(intent, sourceKinds),
       limitations,
     }
@@ -167,7 +171,7 @@ export const audiencePulseSignalToBrainClaim = (
     ? "Unclassified audience observation"
     : `Audience ${signal.intent} signal`,
   metric: "source-record-count",
-  value: signal.sourceIds.length,
+  value: signal.sourceReferences.length,
   unit: "source-records",
   timeframe: signal.sourceWindow.start || signal.sourceWindow.end
     ? { kind: "source-observed-window", start: signal.sourceWindow.start, end: signal.sourceWindow.end }
