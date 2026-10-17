@@ -167,18 +167,18 @@ describe("canonical Studio field, selection, and action contracts", () => {
     expect(contract).not.toContain("transition-duration:300ms")
   })
 
-  it("applies the same physical depression model to SubToolbox and split-action buttons while excluding menu triggers", () => {
+  it("keeps SubToolbox button state feedback stationary and excludes menu triggers", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
     expect(css).toContain("--vt-subtoolbox-motion-button:180ms")
     expect(css).toContain("--vt-subtoolbox-motion-press:80ms")
     expect(css).toContain(".vt-subtoolbox-button:active:not(:disabled)")
     expect(css).toContain("box-shadow:none")
-    expect(css).toContain("translate(var(--vt-subtoolbox-inner-shadow")
+    expect(css).not.toContain("translate(var(--vt-subtoolbox-inner-shadow")
     expect(css).toContain(".vt-subtoolbox-split-action:active:not(:disabled)")
     expect(css).toContain(".vt-subtoolbox-icon-button:active:not(:disabled)")
     expect(css).toContain(".vt-subtoolbox-media-control:active:not(:disabled)")
     expect(css).toContain("transition-duration:var(--vt-subtoolbox-motion-press,80ms)")
-    expect(css).toContain("translate(var(--vt-subtoolbox-shadow-offset")
+    expect(css).not.toContain("translate(var(--vt-subtoolbox-shadow-offset")
     expect(css).toContain("@media (prefers-reduced-motion: reduce)")
     expect(readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")).toContain(".vt-studio-legend-trigger:active")
   })
