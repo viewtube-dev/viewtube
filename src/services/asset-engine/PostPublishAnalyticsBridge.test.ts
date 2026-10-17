@@ -212,7 +212,8 @@ describe("Post-publish analytics bridge", () => {
     expect(mocks.appendContentBuildEvent).toHaveBeenCalledWith(expect.objectContaining({
       eventType: "youtube.state.changed",
       entityType: "publish-identity-receipt",
-      parentEventIds: ["publish-completed-event"],      metadata: expect.objectContaining({
+      parentEventIds: ["publish-completed-event"],
+      metadata: expect.objectContaining({
         publishTransactionId: "publish-tx-1",
         approvedSnapshotId: "snapshot-1",
         approvedSnapshotHash: "hash-1",
