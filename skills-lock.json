@@ -364,27 +364,32 @@
     "tailwindcss": {
       "source": "hairyf/skills",
       "sourceType": "github",
-      "skillPath": "skills/tailwindcss/SKILL.md"
+      "skillPath": "skills/tailwindcss/SKILL.md",
+      "computedHash": "c2fa19b055945dc89ee0cbf154138f680237fd6d7d3263cbf0977f9e4def1eeb"
     },
     "tailwindcss-advanced-layouts": {
       "source": "JosiahSiegel/claude-plugin-marketplace",
       "sourceType": "github",
-      "skillPath": "skills/tailwindcss-advanced-layouts/SKILL.md"
+      "skillPath": "skills/tailwindcss-advanced-layouts/SKILL.md",
+      "computedHash": "17b976c7e8391635ec545d4ce76e99d3281765bde3f25836321f83062071a230"
     },
     "unocss": {
       "source": "antfu/skills",
       "sourceType": "github",
-      "skillPath": "skills/unocss/SKILL.md"
+      "skillPath": "skills/unocss/SKILL.md",
+      "computedHash": "ccf4a1e26e1c8df7fbfe899725beb361abaf7bd01d1fb9ebefc64b9224b030c7"
     },
     "tailwind-css-patterns": {
       "source": "giuseppe-trisciuoglio/developer-kit",
       "sourceType": "github",
-      "skillPath": "skills/tailwind-css-patterns/SKILL.md"
+      "skillPath": "skills/tailwind-css-patterns/SKILL.md",
+      "computedHash": "63984406824ef934b457d34db25a5892b5375a82e31845159e6e97179c5acf4c"
     },
     "css-animation-creator": {
       "source": "OneWave-AI/claude-skills",
       "sourceType": "github",
-      "skillPath": "skills/css-animation-creator/SKILL.md"
+      "skillPath": "skills/css-animation-creator/SKILL.md",
+      "computedHash": "97d349397756051a050e93bc07ebeec43a49bc09b497d3a0a80ffbfce55800b8"
     }
   }
 }
