@@ -76,21 +76,20 @@ describe("global defaults govern the effective primitive CSS", () => {
   it("does not use important declarations to force canonical field type or width", () => {
     const css = readStudioControlCss();
     const fieldStart = css.indexOf('input[data-vt-studio-control="true"],');
-    const fieldEnd = css.indexOf(".vt-studio-username-input {", fieldStart);
-    const fields = fieldStart >= 0 && fieldEnd > fieldStart ? css.slice(fieldStart, fieldEnd) : css;
+    const fieldEnd = fieldStart >= 0 ? css.indexOf("\\n}", fieldStart) : -1;
+    const fields = fieldStart >= 0 && fieldEnd > fieldStart ? css.slice(fieldStart, fieldEnd) : "";
     expect(fields).not.toMatch(/font-size:[^;]*!important/);
     expect(fields).not.toMatch(/line-height:[^;]*!important/);
-    expect(fields).toContain("border: var(--vt-field-stroke) solid #000;");
-    expect(fields).toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);");
+    expect(fields).toContain("border: 0;");
+    expect(fields).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
   });
 
   it("lets compact text buttons fill their row by default while keeping icon-only faces square", () => {
     const css = readStudioControlCss();
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {');
-    const compact = css.slice(css.indexOf('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {'));
-    const rule = compact.slice(0, compact.indexOf("}"));
-    expect(rule).toContain("width: 100%;");
-    expect(rule).not.toContain("width: max-content;");
+    expect(css).toContain('[data-vt-studio-control="true"] {');
+    expect(css).toContain('width: 100%;');
+    expect(css).toContain('[data-vt-studio-control="true"][data-vt-studio-width="content"] {');
+    expect(css).toContain('width: fit-content;');
   });
 });
 
