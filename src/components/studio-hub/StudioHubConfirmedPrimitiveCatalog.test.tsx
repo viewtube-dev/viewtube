@@ -156,7 +156,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("white-space: nowrap")
     const labelBlock = css.slice(css.indexOf(".vt-studio-split-left-badge__label,"), css.indexOf(".vt-studio-split-shell > [data-vt-studio-split-field]"))
     expect(labelBlock).not.toContain("flex: 1 1 0%")
-    expect(labelBlock).not.toMatch(/(?:^|\\n)\\s*width:\\s*0(?:;|\\s|$)/)
+    expect(labelBlock).not.toMatch(/(?:^|\n)\s*width:\s*0(?:;|\s|$)/)
   })
 
   it("enforces global primary/secondary palette, centered labels, 1000 weight, and full-row defaults", () => {
