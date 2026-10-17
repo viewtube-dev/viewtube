@@ -243,16 +243,15 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       if (!root || !target) return;
       const rootRect = root.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
-      // Standard toggles reserve 16px of optical padding inside the active
-      // handle and a fixed 4px gap from either inner container edge. The word
-      // buttons use 20px side padding; the handle is 8px narrower than that
-      // button, leaving 16px between glyph bounds and handle edges.
+      // The handle has component-specific optical inset/padding. This is not the
+      // global 4px layout-spacing rule, which applies only between rows,
+      // columns, and sibling components. Word-toggle geometry stays explicit.
       const inset = handleInset ?? (size === "28" ? 2 : 4);
       const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
       const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
       // Absolutely positioned children measure from the container's padding
       // edge, not its outer border edge. Subtract clientLeft so both sides keep
-      // the same 4px inner margin when the active word flips left/right.
+      // the same component-specific inner margin when the active word flips left/right.
       const next = {
         left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
         width: nextWidth,
@@ -1580,7 +1579,7 @@ StudioTagEditor.displayName = "StudioTagEditor";
 
 
 /** Shared static split-badge foundation. All split variants share the same face,
- * typography, 4px spacing unit, centering rule, and shadow/motion-free geometry. */
+ * typography, external layout spacing rule, centering, and shadow/motion-free geometry. */
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
