@@ -109,7 +109,7 @@ test("split-left buttons do not clip the stationary shadow or expose a wrapper b
 
 test("single-line inputs use global 38px/24px typography while textareas alone use 18px/14px", () => {
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
-  const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+  const css = controlStyles;
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
   const inputModule = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
   const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
@@ -208,7 +208,7 @@ test("canonical Studio button tokens and CSS agree on flat stationary defaults",
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
-  const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+  const css = controlStyles;
   assert.match(controls, /iconSizeVariant = "large"/);
   assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
