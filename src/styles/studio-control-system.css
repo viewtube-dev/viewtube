@@ -3420,3 +3420,39 @@ button[data-vt-studio-button="true"][data-size="compact"]:is([data-split-left="t
   padding-inline: 8px;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) #000;
 }
+
+
+/* Canonical layout-only spacing: never apply this token as primitive padding/inset. */
+:root {
+  --vt-studio-space-unit: 4px;
+}
+[data-vt-studio-control-row],
+.vt-confirmed-badge-layout,
+.vt-confirmed-badge-micro-stack {
+  gap: var(--vt-studio-space-unit, 4px);
+}
+
+/* Content-width is opt-in; ordinary controls continue to fill their row. */
+[data-vt-studio-width="content"],
+.vt-studio-spectrum-tag,
+.vt-studio-closeable-badge {
+  width: max-content;
+  max-width: 100%;
+}
+
+/* Canonical Studio primitives remain flat and motionless. */
+button[data-vt-studio-button="true"],
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  box-shadow: none;
+  text-shadow: none;
+  transition: none;
+  translate: none;
+}
+button[data-vt-studio-button="true"]:hover,
+button[data-vt-studio-button="true"]:active,
+button[data-vt-studio-button="true"]:focus-visible {
+  transform: none;
+}
