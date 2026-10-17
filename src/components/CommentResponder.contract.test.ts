@@ -33,7 +33,7 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(view).toContain("Connect YouTube Channel")
   expect(view).toContain("comments.reconnect")
   expect(view).toContain('SubToolbox title="Comment Queue"')
-  expect(view).toContain('SubToolbox title="Current Comment"')
+  expect(view).toContain('SubToolbox title="Conversation Thread"')
   expect(view).toContain('SubToolbox title={comments.tab === "history" ? "Follow-Up Reply" : "Reply Composer"}')
  })
  it("renders inspectable Audience Pulse signals without implying a handoff was executed", () => {
