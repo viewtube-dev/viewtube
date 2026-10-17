@@ -94,7 +94,7 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
 
   return [...groups.entries()].map(([key, group]) => {
     const times = group.records.map((record) => parseDate(record.observedAt)).filter((value): value is number => value !== null).sort((a, b) => a - b)
-    const sourceReferences = [...new Map(group.records.map((record) => [`${record.source}:${record.sourceId}`, { source: record.source, sourceId: record.sourceId }])).values()]
+    const sourceReferences = [...new Map<string, { source: AudienceFeedbackSource; sourceId: string }>(group.records.map((record) => [`${record.source}:${record.sourceId}`, { source: record.source, sourceId: record.sourceId }] as const)).values()]
     const sourceIds = [...new Set(sourceReferences.map((record) => record.sourceId))]
     const sourceKinds = [...new Set(sourceReferences.map((record) => record.source))]
     const evidenceIds = sourceReferences.map((record) => `${record.source}:${record.sourceId}`)
@@ -129,7 +129,7 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
       suggestedTargets: targetFor(intent, sourceKinds),
       limitations,
     }
-  }).sort((a, b) => b.sourceIds.length - a.sourceIds.length || a.id.localeCompare(b.id))
+  }).sort((a, b) => b.sourceReferences.length - a.sourceReferences.length || a.id.localeCompare(b.id))
 }
 
 /** Adapter from the existing YouTube comment-thread shape; source records remain owned by the comment controller/API. */
