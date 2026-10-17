@@ -3613,3 +3613,32 @@ html body .vt-studio-floating-field > input[data-vt-studio-control="true"][data-
 html body .vt-studio-floating-field > .vt-studio-floating-field-label {
   pointer-events: none;
 }
+
+
+/* Username split-left composite owns the only outer border and inset stroke.
+   The nested canonical StudioTextInput must remain a borderless, transparent
+   text surface; prevent generic field rules from drawing a second frame. */
+html body .vt-studio-username-input > input.vt-studio-username-input__input[data-vt-studio-control="true"],
+html body .vt-studio-username-input > [data-vt-studio-split-field] > input[data-vt-studio-control="true"],
+html body .vt-studio-username-input > [data-vt-studio-split-label] > input[data-vt-studio-control="true"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-sizing: border-box !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  min-width: 0;
+  min-height: 100%;
+  height: 100%;
+}
+html body .vt-studio-username-input > input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body .vt-studio-username-input > [data-vt-studio-split-field] > input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body .vt-studio-username-input > [data-vt-studio-split-label] > input[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
