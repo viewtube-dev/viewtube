@@ -65,6 +65,14 @@ export const createViewTubeActionPacket=<T,>(input:Omit<ViewTubeActionPacket<T>,
 export const createOpportunityTacticsActionPacket = (
  opportunity: OpportunityTacticsPacket,
 ): ViewTubeActionPacket<OpportunityTacticsPacket> => {
+ if (opportunity.schemaVersion !== "vt-opportunity-tactics-handoff-v1"
+  || opportunity.validationState !== "accepted"
+  || !opportunity.opportunityId?.trim()
+  || !opportunity.channelId?.trim()
+  || !Array.isArray(opportunity.evidenceIds)
+  || !opportunity.evidenceIds.some((id) => typeof id === "string" && id.trim())) {
+  throw new Error("Only accepted opportunities with canonical evidence can be handed to Tactics Engine.")
+ }
  const stableIdentity = `opportunity-tactics:${opportunity.channelId}:${opportunity.opportunityId}:${opportunity.provenance.sourceSnapshotId || "unknown-snapshot"}`
  return createViewTubeActionPacket<OpportunityTacticsPacket>({
   sourceToolId: "opportunity-radar",
