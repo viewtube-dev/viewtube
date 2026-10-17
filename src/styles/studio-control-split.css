@@ -22,13 +22,13 @@
   justify-content: center;
   min-width: var(--vt-studio-control-height, 44px);
   width: var(--vt-studio-control-height, 44px);
-  color: var(--vt-studio-control-secondary, var(--pair-b));
+  color: #000000;
   background: var(--vt-studio-control-secondary, var(--pair-b));
   border-radius: 0;
   box-shadow: none;
 }
 [data-vt-studio-control="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] {
-  color: var(--vt-studio-control-secondary, var(--pair-b));
+  color: #000000;
   background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 [data-vt-studio-control="true"] [data-vt-studio-split-label],
