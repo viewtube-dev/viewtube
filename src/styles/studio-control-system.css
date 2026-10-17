@@ -2186,8 +2186,139 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   height: min(var(--vt-studio-compact-icon-size, 16px), 70%);
 }
 
-/* Split stepper: stationary SplitLeftButton shell, with a fixed 2:1 value pane-to-rail ratio.
-   The editable pane inherits canonical Studio text-input/username-input typography and focus treatment. */
+/* Split stepper: canonical SplitRightBadge shell with stacked increase/decrease actions. */
+[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
+  grid-template-columns: minmax(0, 2fr) var(--vt-stepper-height);
+  flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
+  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
+  max-width: 100%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  color: #000;
+}
+.vt-studio-split-stepper[data-size="compact"] {
+  --vt-stepper-height: var(--vt-studio-compact-height, 28px);
+  --vt-stepper-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-stepper-radius: var(--vt-studio-compact-radius, 4px);
+}
+.vt-studio-split-stepper[data-size="standard"] {
+  --vt-stepper-height: var(--vt-studio-standard-height, 44px);
+  --vt-stepper-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-stepper-radius: var(--vt-studio-standard-radius, 6px);
+}
+.vt-studio-split-stepper [data-vt-studio-split-field] {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.vt-studio-split-stepper input.vt-studio-split-stepper-value {
+  appearance: textfield;
+  -moz-appearance: textfield;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: .5px #000;
+  caret-color: #000;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  line-height: var(--vt-studio-control-line-height, .86);
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  text-transform: var(--vt-studio-control-text-transform, uppercase);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.vt-studio-split-stepper[data-size="compact"] input.vt-studio-split-stepper-value {
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  padding-inline: 8px;
+}
+.vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button,
+.vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vt-studio-split-stepper input.vt-studio-split-stepper-value:focus-visible {
+  background: transparent;
+  outline: none;
+}
+.vt-studio-split-stepper:focus-within {
+  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
+}
+.vt-studio-split-stepper .vt-studio-split-stepper-rail {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: var(--vt-stepper-secondary);
+}
+.vt-studio-split-stepper-actions {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.vt-studio-split-stepper-actions button {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.vt-studio-split-stepper-actions button:first-child {
+  border-bottom: var(--vt-stepper-stroke) solid #000;
+}
+.vt-studio-split-stepper-actions svg {
+  display: block;
+  width: min(var(--vt-studio-control-icon-size, 28px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 28px), 100%);
+  max-width: 100%;
+  max-height: 100%;
+  color: #000;
+  stroke: #000;
+  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
+}
+.vt-studio-split-stepper-actions button:focus-visible {
+  outline: 3px solid var(--vt-stepper-secondary);
+  outline-offset: -3px;
+  z-index: 2;
+}
+.vt-studio-split-stepper-actions button:disabled {
+  cursor: not-allowed;
+  opacity: .35;
+}
+
+
 .vt-studio-split-stepper {
   --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
