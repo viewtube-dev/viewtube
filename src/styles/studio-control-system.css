@@ -2927,7 +2927,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 :where(
   button[data-vt-studio-button="true"],
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
-  [data-vt-studio-control="true"]:is(input, textarea, select),
   .vt-studio-split-left-badge,
   .vt-studio-split-right-badge,
   .vt-studio-double-split-badge,
@@ -2939,7 +2938,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 ) {
   box-shadow: none !important;
   text-shadow: none !important;
-  transition: none !important;
   transform: none !important;
   translate: none !important;
 }
