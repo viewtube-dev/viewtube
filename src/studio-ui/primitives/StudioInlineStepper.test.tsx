@@ -121,7 +121,7 @@ describe("split stepper value pane geometry and username-input styling", () => {
     expect(splitCss).toContain("padding: 0 14px !important;")
     expect(splitCss).toContain("background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;")
     expect(splitCss).toContain("-webkit-text-fill-color: #000 !important;")
-    expect(splitCss).toContain("-webkit-text-stroke: .5px #000;")
+    expect(splitCss).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;")
     expect(splitCss).toContain("inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary)")
     expect(splitCss).toContain(".vt-studio-split-stepper:focus-within")
     expect(splitCss).toContain("background: transparent !important;")
