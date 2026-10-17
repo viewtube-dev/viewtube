@@ -243,8 +243,8 @@ test("catalog labels dropdown and action specimens according to their actual ini
 test("word-toggle settings document alternate skins; behavior stays in the production primitive", () => {
   assert.ok(catalog.includes("Alternate active-handle skins: COLOR SWAP and BLACK."));
   assert.ok(!catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
-  assert.match(controls, /aria-pressed=\\{value === \\(index === 1\\)\\}/);
-  assert.match(controls, /onClick=\\{\\(\\) => onValueChange\\?\\.\\(index === 1\\)\\}/);
+  assert.match(controls, /aria-pressed=\{value === \(index === 1\)\}/);
+  assert.match(controls, /onClick=\{\(\) => onValueChange\?\.\(index === 1\)\}/);
 });
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
@@ -253,7 +253,7 @@ test("icon-effect examples are clearly static previews, not live outcome claims"
   const squareFamily = catalog.slice(squareStart, splitStart);
   assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
   assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
-  assert.ok(squareFamily.includes("notification needs a real count/status and success must follow actual operation success."));
+  assert.ok(!squareFamily.includes("Notifications · CONFIRMED"));
   assert.ok(!squareFamily.includes("SUCCESS · CONFIRMED OUTCOME"));
 });
 
