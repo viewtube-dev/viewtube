@@ -646,12 +646,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Global Rules Exceptions · Closeable Badge + Tag Editor"
-      nonDefaultSettings={["Closeable badges are registered 20px pills with 16px uppercase Inter/1000 labels and a 16px close circle; pill uses primary fill and label uses primary mixed 50% with white.","Close action swaps circle/X colors three times at 180ms per cycle then fades for one second; this is badge-specific animation.","Tag-editor plus/check actions are 28px compact squares with 2px stroke, 4px radius, and 1.5px secondary-color offset shadow at 45%. Enter confirms; Escape cancels; reduced-motion removes nonessential animation."]}
+      nonDefaultSettings={["Closeable badges follow global standard/compact/micro sizing (44px/28px/14px), proportional border/radius/type/icon sizing, 1000 weight, centered labels, and primary/secondary palette; they are not pill-shaped.","The close control uses the same selected size tier; focus stays visible and no shadow or geometry movement is allowed.","Tag-editor plus/check actions use the canonical compact 28px square with 2px stroke and 4px radius. Enter confirms; Escape cancels."]}
       provenance={<Provenance
         primitive="StudioCloseableBadge / StudioTagEditor"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens={`Badge H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.closeableBadge.height}px · label ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.closeableBadge.fontSize}px / ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.closeableBadge.fontWeight} · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
+        tokens={`Badge follows global 44px / 28px / 14px size tiers · weight 1000 · no pill ratio · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
