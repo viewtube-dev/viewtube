@@ -236,6 +236,36 @@ describe("post-publication outcome pipeline", () => {
     }))
   })
 
+  it("retries provisional insufficient-data outcomes when analytics is processed again", async () => {
+    mocks.listAlgorithmIntelligenceEvents.mockImplementation(({ kind }: { kind?: string }) =>
+      kind === "OUTCOME_MEASURED"
+        ? [{
+            id: "outcome-provisional",
+            parentEventIds: ["recommendation-1"],
+            metadata: { evaluation: { status: "insufficient_data" } },
+          }]
+        : [{
+            id: "recommendation-1",
+            channelId: "channel-1",
+            videoId: "video-1",
+            kind: "RECOMMENDATION_CREATED",
+            checkpointAt: Date.parse("2026-10-10T12:00:00.000Z"),
+            evaluationTargets: [{ metric: "views", direction: "increase", baselineValue: 100 }],
+            metadata: { contentBuildId: "build-1" },
+            parentEventIds: [],
+          }]
+    )
+
+    await runPostPublicationOutcomePipeline({
+      channelId: "channel-1",
+      now: new Date("2026-10-15T12:00:00.000Z"),
+    })
+
+    expect(mocks.recordAlgorithmEvaluation).toHaveBeenCalledWith(expect.objectContaining({
+      sourceEventId: "recommendation-1",
+    }))
+  })
+
   it("evaluates a recommendation whose checkpoint timestamp is zero", async () => {
     mocks.listAlgorithmIntelligenceEvents.mockImplementation(({ kind }: { kind?: string }) =>
       kind === "OUTCOME_MEASURED" ? [] : [{
