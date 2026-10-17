@@ -646,12 +646,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <Family
       title="Global Rules Exceptions · Closeable Badge + Tag Editor"
-      nonDefaultSettings={["Closeable badges follow global standard/compact/micro sizing (44px/28px/14px), proportional border/radius/type/icon sizing, 1000 weight, centered labels, and primary/secondary palette; they are not pill-shaped.","The close control uses the same selected size tier; focus stays visible and no shadow or geometry movement is allowed.","Tag-editor plus/check actions use the canonical compact 28px square with 2px stroke and 4px radius. Enter confirms; Escape cancels."]}
+      nonDefaultSettings={["Closeable badges are a dedicated 20px full-pill exception at every density: no border, 16px 1000-weight uppercase text, content width, and primary-pair color mixed 50% with white.","The 16px close control is a secondary-pair circle; closing swaps its colors, fades the badge out, then removes it. Reduced-motion disables the visual animation.","Tag-editor plus/check actions use the canonical compact 28px square with 2px stroke and 4px radius. Enter confirms; Escape cancels."]}
       provenance={<Provenance
         primitive="StudioCloseableBadge / StudioTagEditor"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens={`Badge follows global 44px / 28px / 14px size tiers · weight 1000 · no pill ratio · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
+        tokens={`Closeable badge H 20px · full pill · no border · 16px type · primary color mixed 50% with white · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
