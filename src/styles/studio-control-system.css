@@ -3453,3 +3453,37 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
   letter-spacing: -.02em;
   text-transform: uppercase;
 }
+
+
+/* Global Studio primitive defaults (2026-10-17).
+   Ordinary primitives share the paired palette, centered labels, 1000 weight,
+   and full-row sizing. Named geometry exceptions opt out explicitly. */
+[data-vt-studio-control="true"] {
+  --vt-studio-primary: var(--pair-a, #36e0f6);
+  --vt-studio-secondary: var(--pair-b, #ff7f6b);
+  font-weight: 1000 !important;
+  text-align: center;
+}
+[data-vt-studio-control="true"]:not([data-width="content"]):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-44-word-toggle):not([data-vt-studio-square-icon-button="true"]) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-44-word-toggle) {
+  justify-content: center;
+}
+[data-vt-studio-control="true"][data-tone="primary"],
+[data-vt-studio-control="true"]:not([data-tone]):not([data-variant="secondary"]):not([data-skin="secondary"]) {
+  --vt-studio-control-accent: var(--vt-studio-primary);
+}
+[data-vt-studio-control="true"][data-tone="secondary"],
+[data-vt-studio-control="true"][data-variant="secondary"],
+[data-vt-studio-control="true"][data-skin="secondary"] {
+  --vt-studio-control-accent: var(--vt-studio-secondary);
+}
+[data-vt-studio-control="true"] > [data-vt-studio-control-label] {
+  min-width: 0;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
