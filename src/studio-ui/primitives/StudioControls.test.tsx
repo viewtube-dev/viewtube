@@ -618,6 +618,8 @@ describe("Studio text input and split-left badge typography parity", () => {
     expect(catalogCss).not.toMatch(/\.vt-complete-catalog \.vt-catalog-field:focus\s*\{\s*background:#fff/)
     expect(catalogCss).toContain(".vt-confirmed-split-left-badge-family > span:not(.vt-studio-split-left-badge)")
     expect(catalogCss).not.toContain(".vt-confirmed-split-left-badge-family > span {")
+    expect(catalogCss).toContain('.vt-confirmed-variant > span:not([data-vt-studio-control="true"])')
+    expect(catalogCss).not.toContain(".vt-confirmed-variant > span {")
   })
 
   it("uses one shared split-label primitive and typography inherited from its size owner", () => {
