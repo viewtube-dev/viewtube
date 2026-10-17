@@ -3168,12 +3168,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 .vt-studio-split-left-badge,
 .vt-studio-split-right-badge,
 .vt-studio-double-split-badge { flex: 1 1 auto; }
-.vt-studio-split-left-badge[data-size="compact"] > [data-vt-studio-split-label],
-.vt-studio-split-right-badge[data-size="compact"] > [data-vt-studio-split-label],
-.vt-studio-double-split-badge[data-size="compact"] > [data-vt-studio-split-label],
-.vt-studio-split-left-badge[data-size="micro"] > [data-vt-studio-split-label],
-.vt-studio-split-right-badge[data-size="micro"] > [data-vt-studio-split-label],
-.vt-studio-double-split-badge[data-size="micro"] > [data-vt-studio-split-label] { padding-inline: var(--vt-studio-space-unit, 4px); }
+
 
 
 /* Canonical single-line input typography. Floating-label size belongs to the
