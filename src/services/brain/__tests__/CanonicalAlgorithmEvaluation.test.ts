@@ -147,6 +147,21 @@ describe("CanonicalAlgorithmEvaluation", () => {
   expect(result).toBeNull()
  })
 
+ it("does not aggregate a truncated sample as a complete channel metric", () => {
+  const result = resolveAlgorithmMetricFromCanonicalCatalog({
+   snapshotId: "snapshot-truncated",
+   rule: rule("qualified_views"),
+   catalog: [{
+    id: "videos",
+    status: "available",
+    rowCount: 12000,
+    sampleRows: [{ videoId: "video-1", views: 100 }],
+    metrics: {},
+   }] as any,
+  })
+  expect(result).toBeNull()
+ })
+
  it("keeps workflow-completion concepts out of the analytics metric registry", () => {
   expect(CANONICAL_ALGORITHM_METRIC_RULES.some((candidate) => candidate.metric === "diagnosis_complete")).toBe(false)
  })
