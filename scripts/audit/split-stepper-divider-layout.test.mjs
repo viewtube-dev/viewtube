@@ -49,6 +49,7 @@ test("inline stepper is built on the canonical double-split shell with interacti
   assert.doesNotMatch(inline, /<StudioSplitLeftButton/)
   assert.doesNotMatch(inline, /<StudioUsernameInput/)
   assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*grid-template-columns:\s*var\(--vt-inline-stepper-side\) minmax\(40px, 1fr\) var\(--vt-inline-stepper-side\)/s)
+  assert.match(styles, /\[data-vt-studio-control="true"\]\[data-vt-studio-split="double"\]\.vt-studio-inline-stepper\s*\{/)
   assert.match(styles, /--vt-inline-stepper-side:\s*var\(--vt-studio-control-height, 44px\)/)
   assert.match(styles, /\.vt-studio-inline-stepper__value\s*\{[^}]*border:\s*0/s)
   assert.match(styles, /\.vt-studio-inline-stepper__rail\s*\{[^}]*cursor:\s*pointer/s)
