@@ -121,6 +121,8 @@ describe("buildAudiencePulseSignals", () => {
     for (const signal of signals) {
       for (const target of signal.suggestedTargets) {
         expect(registeredTargets.has(target), `unregistered suggested target: ${target}`).toBe(true)
+        const capability = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === target)
+        expect(capability?.accepts, `destination does not accept evidence: ${target}`).toContain("evidence")
       }
     }
   })
