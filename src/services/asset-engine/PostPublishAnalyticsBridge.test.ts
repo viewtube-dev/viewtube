@@ -183,7 +183,6 @@ describe("Post-publish analytics bridge", () => {
       youtubeVideoId: "youtube-123",
       approvedSnapshotId: "snapshot-1",
       approvedSnapshotHash: "hash-1",
-      operationId: "publish-tx-1",
       idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
       operationId: "publish-tx-1",
       actionPacketId: "action-packet-1",
