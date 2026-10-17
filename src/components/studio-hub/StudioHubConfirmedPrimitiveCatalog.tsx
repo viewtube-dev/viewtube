@@ -178,18 +178,10 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
       />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
-        <div className="vt-confirmed-counter-row-grid">
-          <div className="vt-confirmed-counter-specimen"><small>44px standard</small><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard counter" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>28px compact</small><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact counter" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>14px micro</small><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro counter" /></div>
-        </div>
-      </div>
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row vt-confirmed-counter-row-secondary">
-        <strong>SECONDARY COLOR · REVERSED PALETTE</strong>
-        <div className="vt-confirmed-counter-row-grid">
-          <div className="vt-confirmed-counter-specimen"><small>44px standard · secondary</small><StudioCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard counter secondary palette" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>28px compact · secondary</small><StudioCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact counter secondary palette" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>14px micro · secondary</small><StudioCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro counter secondary palette" /></div>
+        <div className="vt-confirmed-counter-row-grid vt-confirmed-counter-row-grid--paired">
+          <div className="vt-confirmed-counter-specimen"><small>44px standard · primary / secondary</small><div className="vt-confirmed-counter-pair"><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard counter" /><StudioCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-specimen"><small>28px compact · primary / secondary</small><div className="vt-confirmed-counter-pair"><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact counter" /><StudioCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-specimen"><small>14px micro · primary / secondary</small><div className="vt-confirmed-counter-pair"><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro counter" /><StudioCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro counter secondary palette" /></div></div>
         </div>
       </div>
     </Family>
@@ -217,18 +209,10 @@ const ConfirmedStudioRightCounterFamily: React.FC = () => {
       />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
-        <div className="vt-confirmed-counter-row-grid">
-          <div className="vt-confirmed-counter-specimen"><small>44px standard</small><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard right counter" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>28px compact</small><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact right counter" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>14px micro</small><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro right counter" /></div>
-        </div>
-      </div>
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row vt-confirmed-counter-row-secondary">
-        <strong>SECONDARY COLOR · REVERSED PALETTE</strong>
-        <div className="vt-confirmed-counter-row-grid">
-          <div className="vt-confirmed-counter-specimen"><small>44px standard · secondary</small><StudioRightCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard right counter secondary palette" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>28px compact · secondary</small><StudioRightCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact right counter secondary palette" /></div>
-          <div className="vt-confirmed-counter-specimen"><small>14px micro · secondary</small><StudioRightCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro right counter secondary palette" /></div>
+        <div className="vt-confirmed-counter-row-grid vt-confirmed-counter-row-grid--paired">
+          <div className="vt-confirmed-counter-specimen"><small>44px standard · primary / secondary</small><div className="vt-confirmed-counter-pair"><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard right counter" /><StudioRightCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard right counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-specimen"><small>28px compact · primary / secondary</small><div className="vt-confirmed-counter-pair"><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact right counter" /><StudioRightCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact right counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-specimen"><small>14px micro · primary / secondary</small><div className="vt-confirmed-counter-pair"><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro right counter" /><StudioRightCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro right counter secondary palette" /></div></div>
         </div>
       </div>
     </Family>
