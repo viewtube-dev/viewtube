@@ -56,6 +56,11 @@ The 14px **micro** tier is reserved for the static split-left badge. It is not p
 
 The Confirmed catalog's **NON-DEFAULT SETTINGS** lists only departures from shared defaults. Standard and compact geometry, ordinary states, and generic behavior belong in the shared defaults reference or component API documentation, not repeated under every family. Source-string checks guard catalog registration and provenance; they do not certify computed styles or rendered visuals.
 
+### Confirmed-family promotion gate
+
+A family may be described as **source-confirmed** only when the same change includes: (1) a real production primitive export, (2) a specimen importing that export rather than a local redraw, (3) TSX/CSS/token/import provenance, (4) concise exception-only settings, and (5) API/render regression coverage plus a catalog-CSS ownership check. Full visual certification additionally requires computed-style/browser evidence at standard, compact, and relevant exception sizes. Until that evidence exists, “confirmed” is a catalog track label—not proof that the family has passed visual regression.
+
+
 ## 2. Global defaults shared by both sizes
 
 | Property | Global default / policy | Application |
