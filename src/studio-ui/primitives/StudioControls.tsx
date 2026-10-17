@@ -1208,7 +1208,6 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
     "aria-label": ariaLabel,
     "data-vt-studio-control-kind": "inline-stepper",
     "data-vt-studio-control-family": "stepper",
-    "data-vt-studio-username-foundation": undefined,
     style,
   } as React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 
