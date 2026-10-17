@@ -81,11 +81,12 @@ export const buildAudiencePulseSignals = (records: AudienceFeedbackRecord[]): Au
   const groups = new Map<string, { intent: AudienceIntent; records: AudienceFeedbackRecord[]; confidences: number[] }>()
   for (const record of unique.values()) {
     const classification = classifyAudienceIntent(record.text)
-    const scope = [record.channelId || "unscoped", record.videoId || "no-video", record.projectId || "no-project"].join(":")
+    const scope = [record.channelId || null, record.videoId || null, record.projectId || null]
+    // JSON tuple keys prevent delimiter-containing IDs from merging unrelated scopes.
     // Unknown observations are deliberately not clustered into a false shared theme.
     const key = classification.intent === "unknown"
-      ? `${scope}:unknown:${record.source}:${record.sourceId}`
-      : `${scope}:${classification.intent}`
+      ? JSON.stringify([...scope, "unknown", record.source, record.sourceId])
+      : JSON.stringify([...scope, classification.intent])
     const group = groups.get(key) || { intent: classification.intent, records: [], confidences: [] }
     group.records.push(record)
     if (classification.confidence !== null) group.confidences.push(classification.confidence)
