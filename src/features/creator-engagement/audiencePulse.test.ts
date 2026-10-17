@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildAudiencePulseSignals, classifyAudienceIntent, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
+import { audiencePulseSignalToBrainClaim, buildAudiencePulseSignals, classifyAudienceIntent, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
 
 describe("classifyAudienceIntent", () => {
   it("classifies explicit requests with bounded confidence", () => {
@@ -96,5 +96,33 @@ describe("buildAudiencePulseSignals", () => {
     expect(signal.suggestedTargets).toEqual(["content-architect", "comment-responder"])
     expect(signal).not.toHaveProperty("publish")
     expect(signal).not.toHaveProperty("execute")
+  })
+})
+
+describe("audiencePulseSignalToBrainClaim", () => {
+  it("preserves evidence provenance and distinguishes inferred intent from observed unknowns", () => {
+    const [signal] = buildAudiencePulseSignals([
+      { sourceId: "c9", source: "comment", text: "Could you explain this?", channelId: "ch1", videoId: "v1", observedAt: "2026-10-01T10:00:00Z" },
+    ])
+    const claim = audiencePulseSignalToBrainClaim(signal)
+
+    expect(claim.epistemicState).toBe("INFERRED")
+    expect(claim.value).toBe(1)
+    expect(claim.provenance.evidenceIds).toEqual(["c9"])
+    expect(claim.provenance.sourceVersion).toBe("audience-pulse-patterns-v1")
+    expect(claim.freshness).toBe("unknown")
+    expect(claim.timeframe?.start).toBe("2026-10-01T10:00:00.000Z")
+  })
+
+  it("does not claim intent or confidence when the text is ambiguous", () => {
+    const [signal] = buildAudiencePulseSignals([
+      { sourceId: "c10", source: "comment", text: "Interesting", channelId: "ch1" },
+    ])
+    const claim = audiencePulseSignalToBrainClaim(signal)
+
+    expect(claim.epistemicState).toBe("OBSERVED")
+    expect(claim.confidence).toBeNull()
+    expect(claim.value).toBe(1)
+    expect(claim.timeframe).toBeNull()
   })
 })
