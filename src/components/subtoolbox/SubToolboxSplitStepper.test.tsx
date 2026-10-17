@@ -6,7 +6,14 @@ import { describe, expect, it } from "vitest"
 import { StudioSplitStepper } from "../../studio-ui/primitives/StudioControls"
 
 const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+const readStudioControlCss = () => [
+  "studio-control-system.css",
+  "studio-control-core.css",
+  "studio-control-split.css",
+  "studio-control-fields.css",
+].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
+
+const css = readStudioControlCss()
 
 describe("StudioSplitStepper", () => {
   it("renders a native editable number field and accessible rail actions", () => {
