@@ -120,7 +120,8 @@ describe("OperationRecord v1", () => {
    completedAt: "2026-10-15T10:00:00.000Z",
   }, { channelId: "channel-1" })
   expect(record.status).toBe("succeeded")
-  expect(record.operationId).toBe("request-1")
+  expect(record.operationId).toBe("operation-1")
+  expect(record.metadata.requestId).toBe("request-1")
   expect(record.lineage.assetIds).toEqual(["source-1", "output-1"])
   expect(record.lineage.generationRecordId).toBe("generation-1")
   expect(record.lineage.toolReceiptId).toBe("receipt-1")
