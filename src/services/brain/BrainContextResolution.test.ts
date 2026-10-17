@@ -25,7 +25,8 @@ describe("Brain context resolution", () => {
   expect(result.characterCount).toBeLessThanOrEqual(180)
   expect(result.omittedSectionIds.length).toBeGreaterThan(0)
   expect(result.selectedSectionIds).toContain("system_prompt")
-  expect(result.selectedSectionIds).toContain("channel_evidence")
+  expect(result.selectedSectionIds).not.toContain("channel_evidence")
+  expect(result.omittedSectionIds).toContain("channel_evidence:required_context_does_not_fit")
   expect(result.selectedSectionIds).not.toContain("current_public_research")
  })
 
@@ -69,5 +70,23 @@ describe("Brain context resolution", () => {
   })
   expect(result.omittedSectionIds).toContain("channel_knowledge:duplicate")
   expect(result.selectedSectionIds.filter((id) => id === "channel_knowledge")).toHaveLength(1)
+ })
+})
+
+
+describe("required context integrity", () => {
+ it("omits a required section as a whole when the remaining budget cannot fit it", () => {
+  const requiredPolicy = "\\nCREATOR CONTROL POLICY\\n" + "permission rules ".repeat(30)
+  const result = resolveBrainContextSections([
+   "System prompt",
+   requiredPolicy,
+   "\\nCHANNEL EVIDENCE\\n" + "evidence ".repeat(100),
+  ], { userText: "Analyze my channel views", maximumCharacters: 100 })
+
+  expect(result.selectedSectionIds).toContain("system_prompt")
+  expect(result.selectedSectionIds).not.toContain("creator_control_policy")
+  expect(result.omittedSectionIds).toContain("creator_control_policy:required_context_does_not_fit")
+  expect(result.text).not.toContain("permission rules")
+  expect(result.characterCount).toBeLessThanOrEqual(result.maximumCharacters)
  })
 })
