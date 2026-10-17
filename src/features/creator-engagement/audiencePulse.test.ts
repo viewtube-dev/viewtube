@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildAudiencePulseSignals, classifyAudienceIntent } from "./audiencePulse"
+import { buildAudiencePulseSignals, classifyAudienceIntent, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
 
 describe("classifyAudienceIntent", () => {
   it("classifies explicit requests with bounded confidence", () => {
@@ -20,6 +20,32 @@ describe("classifyAudienceIntent", () => {
       intent: "unknown",
       confidence: null,
     })
+  })
+})
+
+describe("projectCommentThreadsToAudienceFeedback", () => {
+  it("adapts existing YouTube comment threads without replacing canonical IDs", () => {
+    const records = projectCommentThreadsToAudienceFeedback([
+      {
+        id: "thread-1",
+        snippet: {
+          videoId: "video-1",
+          topLevelComment: {
+            id: "comment-1",
+            snippet: { textOriginal: "Could you explain this?", publishedAt: "2026-10-01T10:00:00Z" },
+          },
+        },
+      },
+    ], "channel-1")
+
+    expect(records).toEqual([{
+      sourceId: "comment-1",
+      source: "comment",
+      text: "Could you explain this?",
+      channelId: "channel-1",
+      videoId: "video-1",
+      observedAt: "2026-10-01T10:00:00Z",
+    }])
   })
 })
 
