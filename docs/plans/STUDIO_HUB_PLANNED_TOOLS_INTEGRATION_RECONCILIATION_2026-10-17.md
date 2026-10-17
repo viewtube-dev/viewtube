@@ -164,3 +164,38 @@ This pass inspected the architecture and selected service/component implementati
 - No application code changed in this pass.
 - No local build, typecheck, or test suite was run through this GitHub-only inspection path.
 - The next implementation should begin with the opportunity evidence classification/confidence tests and the registry/call-site inventory, not a new tool scaffold.
+
+
+## 8. Runtime registry and handoff audit — additional verified findings
+
+### Two registries represent different tool universes
+
+The repository has at least two distinct runtime inventories, and they should not be flattened into one list without a migration plan:
+
+- `src/services/superToolRegistry.ts` defines SuperTool IDs such as `creator-canvas-os`, `audience-loop-studio`, `packaging-lab-pro`, `project-command-kanban`, `cinematic-analytics-lab`, and `retention-autopsy-experiment-engine`.
+- `src/services/viewTubeToolChains.ts` separately defines operational capabilities such as `video-manager`, `video-publisher`, `metadata-master`, `content-analysis`, `thumbnail-studio`, `community-posts`, `comment-responder`, `project-calendar`, `storyboard-studio`, `vault`, `video-editor`, and `ai-brain`.
+
+These lists have different purposes: SuperTools are larger work surfaces, while tool-chain capabilities describe payload acceptance, production handoffs, and mutation boundaries. Do not replace one registry with the other. The missing integration is an explicit, tested mapping between canonical Studio Hub capabilities and the existing surface/capability IDs.
+
+### Existing handoff architecture is stronger than the current recipe coverage
+
+- `src/services/brain/BrainSuperToolBridge.ts` validates source and destination IDs against the SuperTool registry, creates a canonical SuperTool action packet, carries evidence IDs, and emits a Brain signal.
+- `src/services/viewTubeToolChains.ts` defines typed action packets with workflow/operation IDs, evidence, provenance, approved snapshot identity, prompt recipe identity, explicit intent and approval state. Persistence also creates generation records and queues Brain handoffs.
+- `src/services/productionHandoffContracts.ts` validates destination payload compatibility, required context, snapshot hashes, prompt recipe version pairing, and creator approval/idempotency requirements for external writes.
+
+The highest-value next change is to test and connect these contracts at the boundary, not create a third handoff format. Specifically, each recipe needs to prove that the destination capability exists, accepts the payload, and retains project/content-build/evidence/operation identity. Existing tests cover parts of the contracts but the inspected recipe file itself defines five handoffs and does not show a direct mapping to the 13 proposed product tools.
+
+### Reachability checks exist; product-tool coverage checks do not yet establish equivalence
+
+`src/app/__tests__/superToolViewRegistry.test.ts` already checks that mountable IDs have views, names, route reality, and no stale internalTool address. This is useful reachability governance. It does not prove that every canonical product capability is implemented, or that a proposed tool is backed by a production service rather than a prototype. Reuse this test family and add a capability mapping/coverage contract instead of building a second registry test harness.
+
+### Implementation priorities sharpened
+
+1. Add a **canonical capability-to-runtime mapping** (data-only mapping, no new tool runtime) connecting the 13 proposed product capabilities to existing SuperTool surfaces, operational capabilities, canonical services, and owning lifecycle stages. Every entry should state whether the capability is native, composed, partial, or genuinely missing.
+2. Add **recipe contract tests** across both handoff systems. Reject nonexistent destinations, incompatible payload kinds, missing evidence/project identity where required, and unapproved external writes. Keep compatibility aliases for legacy IDs until consumer migration is proven.
+3. Fix the **opportunity evidence claim boundary** with an additive, compatibility-aware classification contract and tests. Until a comparable baseline or explicit taxonomy/demand evidence exists, output must be described as a measured performance candidate, not a validated catalog gap or growth trend. Preserve channel, snapshot, selected window, dataset status, and source evidence references.
+4. Only after these contracts are verified should tool-specific gaps be implemented.
+
+### Scope and verification note
+
+This remains a source-backed design/integration audit. The GitHub API inspection path did not provide a checked-out working tree, so no application test command has been executed and no runtime behavior is being claimed as verified. The next code change should be made in a local or connected repository workspace where the focused Vitest tests and typecheck can be run before commit.
