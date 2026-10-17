@@ -1202,6 +1202,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
       data-vt-studio-control="true"
       data-vt-studio-control-family="stepper"
       data-vt-studio-control-kind="inline-stepper"
+      data-vt-studio-split="double"
       data-vt-studio-username-foundation="true"
       data-size={size}
       role="group"
@@ -1209,7 +1210,8 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
       style={style}
     >
       <StudioSplitLeftButton icon={<Minus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
-        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__decrement"
+        className="vt-studio-inline-stepper__rail vt-studio-inline-stepper__decrement"
+        data-rail="start"
         aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds <= min}
         onClick={() => adjust(-1)} />
       <StudioUsernameInput
@@ -1244,7 +1246,8 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
         }}
       />
       <StudioSplitLeftButton icon={<Plus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
-        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__increment"
+        className="vt-studio-inline-stepper__rail vt-studio-inline-stepper__increment"
+        data-rail="end"
         aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds >= max}
         onClick={() => adjust(1)} />
     </div>
@@ -1385,6 +1388,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
         }}
       />
       <div className="vt-studio-split-stepper-rail">
+        <div className="vt-studio-split-stepper-actions">
         <StudioSplitLeftButton icon={<ChevronsUp aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
           className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
           disabled={disabled || !validBounds || value >= max}
@@ -1397,6 +1401,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
           onPointerDown={(event) => beginHold(-1, event)}
           onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
           onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }} />
+        </div>
       </div>
     </div>
   )
