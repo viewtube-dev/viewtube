@@ -62,11 +62,12 @@
     "test:confirmed-library-layout": "node --test scripts/audit/confirmed-library-layout.test.mjs",
     "start:production": "node scripts/production-stack.mjs",
     "test:production-stack": "node --test scripts/production-stack.test.mjs server/brain-intelligence-store.test.mjs server/brain-learning-store.test.mjs",
-    "test:studio-controls": "vitest run src/studio-ui/primitives/StudioInlineStepper.test.tsx src/components/studio-hub/StudioHubConfirmedInlineStepperCatalog.test.tsx src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.tsx src/studio-ui/primitives/StudioControls.test.tsx src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx src/components/CommentResponder.contract.test.ts src/studio-ui/StudioHubCertification.test.tsx src/components/subtoolbox/SubToolboxSplitStepper.test.tsx && npm run test:split-stepper-divider-layout && npm run test:confirmed-library-layout src/studio-ui/primitives/StudioControls.react-hooks.test.ts",
+    "test:studio-controls": "vitest run src/studio-ui/primitives/StudioInlineStepper.test.tsx src/components/studio-hub/StudioHubConfirmedInlineStepperCatalog.test.tsx src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.tsx src/studio-ui/primitives/StudioControls.test.tsx src/studio-ui/primitives/StudioSquareIconButtonEffects.test.tsx src/studio-ui/primitives/StudioSquareIconButtonInteraction.test.tsx src/components/CommentResponder.contract.test.ts src/studio-ui/StudioHubCertification.test.tsx src/components/subtoolbox/SubToolboxSplitStepper.test.tsx && npm run test:split-stepper-divider-layout && npm run test:confirmed-library-layout src/studio-ui/primitives/StudioControls.react-hooks.test.ts && npm run test:studio-button-default-effects",
     "test:brain-quality-loop-contract": "node --test scripts/audit/brain-quality-loop-contract.test.mjs",
     "test:brain-quality-loop": "vitest run src/services/brain/__tests__/brainQualityLoop.test.ts",
     "test:prompt-registry-governance": "node --test scripts/audit/prompt-registry-governance.test.mjs",
-    "test:vault-operation-store": "node --test server/vault-operation-store.test.mjs"
+    "test:vault-operation-store": "node --test server/vault-operation-store.test.mjs",
+    "test:studio-button-default-effects": "node --test scripts/audit/studio-button-default-effects.test.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
