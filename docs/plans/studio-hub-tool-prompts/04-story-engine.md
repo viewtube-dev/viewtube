@@ -1,23 +1,27 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Story Engine
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+COMBINE narrative/retention planning into the existing Script Architect + Video Director + ContentBuild workflow; build a StoryGraph capability, not a competing editor.
 
 ## Core transformation
-TRANSFORM
+Concept → executable narrative and production blueprint
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/features/script-architect`
+- `src/features/video-director/generationContracts.ts`
+- `src/services/asset-engine/ContentBuildRepository.ts`
+- `src/services/asset-engine/ProjectContentBuildBridge.ts`
+- `src/services/productionHandoffContracts.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Audit existing script, scene, beat, production, and handoff models. Reuse or extend canonical contracts to represent premise, promise, hook, beats, escalation, retention hypotheses, payoff, CTA, visual/audio requirements, and production readiness. Map beats to existing scenes/assets and preserve project/contentBuild IDs. Do not add a second timeline/editor or make retention claims without evidence. Handoff approved blueprints to Video Director/editor and Asset Forge.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
