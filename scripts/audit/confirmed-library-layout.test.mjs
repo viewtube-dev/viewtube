@@ -194,8 +194,8 @@ test("canonical Studio button tokens and CSS agree on flat stationary defaults",
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
   assert.match(tokens, /STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS\s*=\s*\{[^}]*buttonShadowX:\s*0,[^}]*buttonShadowY:\s*0,[^}]*hoverTransitionMs:\s*0,[^}]*hoverOffsetPx:\s*0,[^}]*clickTransitionMs:\s*0,[^}]*clickOffsetPx:\s*0/);
   assert.match(tokens, /standard: \{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
-  assert.match(tokens, /compact: \{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
-  assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /compact: STUDIO_CONTROL_SIZE_BASE_COMPACT/);
+  assert.match(tokens, /textInput:\s*\{[^\n]*letterSpacing:\s*-0\.02/);
   assert.match(css, /--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1\.9;/);
   assert.match(css, /--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2\.0;/);
 });
