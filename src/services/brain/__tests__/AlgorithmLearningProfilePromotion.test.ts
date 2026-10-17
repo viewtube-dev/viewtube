@@ -50,6 +50,7 @@ vi.mock("../AlgorithmLearningGovernance", () => ({
 }))
 
 vi.mock("../AlgorithmIntelligenceEventLedger", () => ({
+ listAlgorithmIntelligenceEvents: mocks.listAlgorithmIntelligenceEvents,
  recordAlgorithmIntelligenceEvent: mocks.recordAlgorithmIntelligenceEvent,
 }))
 
