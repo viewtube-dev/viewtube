@@ -179,3 +179,20 @@ The canonical AlgorithmIntelligenceEventLedger now treats creator-communication 
 A regression test redacts a legacy event, replays the original raw object as if it came from a stale server snapshot, then attempts a same-ID update carrying the old message; the final event remains text-free.
 
 This verifies the local merge/redaction contract. It does not prove a live PostgreSQL purge or authenticated two-device deletion/reload; those remain separate certification gates.
+
+
+## Durable learning-record identity coverage — 2026-10-17
+
+The server-side authenticated learning-record store now compares the complete lifecycle identity envelope on retries, not only producer/project/ActionPacket IDs. Asset outcomes, Brain outcomes, evaluations, and learning candidates protect publication transaction, approved snapshot ID/hash, published/YouTube video identity, publication identity, analytics checkpoint IDs, evidence IDs, and their applicable generation/recommendation/evaluation ancestry. Missing legacy fields may still be enriched; two asserted conflicting identities are rejected before replacing the durable row.
+
+Regression coverage attempts to reuse stable Brain outcome and evaluation IDs with a different published video or approved snapshot hash and verifies the original canonical record remains intact.
+
+This expands the in-memory/server-store contract and PostgreSQL write guard. A live database-backed concurrent-write test and authenticated two-device hydration/replay remain required; this slice alone does not certify Phase 13.
+
+## Server-side retention guard — 2026-10-17
+
+The Brain intelligence store now prevents stale client retries from restoring raw creator communication after redaction. The in-memory fallback merges same-ID records with monotonic privacy semantics; the PostgreSQL upsert applies the same rule atomically in its conflict-update expression. If either the stored or incoming creator-communication event marks `rawCommunicationTextRetained: false`, the persisted result drops `communicationText` and keeps the redacted marker.
+
+Regression coverage writes a legacy raw event, writes its sanitized replacement, then replays the stale raw event and asserts that the stored projection remains text-free with its fingerprint intact.
+
+The in-memory regression is covered by the store test; the PostgreSQL SQL path still needs a live database-backed integration test under concurrent retries before certification.
