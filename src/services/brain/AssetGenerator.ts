@@ -389,7 +389,7 @@ export const generateAsset = async <TOutput>(input: {
  trace.recordPromptVersion("constitution", ASSET_CONSTITUTION_VERSION)
  trace.recordPromptVersion(strategy.assetType, strategy.promptVersion)
  trace.recordPromptVersion("prompt_family", promptFamilyForAsset(strategy.assetType))
- trace.recordPromptVersion("context_resolver", "brain-context-resolution-v1")
+ trace.recordPromptVersion("context_composer", ASSET_CONTEXT_COMPOSITION_VERSION)
  if (style) trace.recordStyle({ styleProfileId: style.id })
 
  const assetId = makeAssetId()
