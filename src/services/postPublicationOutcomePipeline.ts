@@ -86,8 +86,8 @@ const recommendationsFor = (
   (event.kind === "RECOMMENDATION_CREATED" || event.kind === "RECOMMENDATION_EXECUTED") &&
   event.videoId === videoId &&
   event.metadata?.contentBuildId === contentBuildId &&
-  Boolean(event.checkpointAt) &&
-  (event.checkpointAt || 0) <= now &&
+  event.checkpointAt != null &&
+  event.checkpointAt <= now &&
   event.evaluationTargets.length > 0
 )
 
@@ -253,7 +253,11 @@ export const runPostPublicationOutcomePipeline = async (input: {
           const alreadyMeasured = listAlgorithmIntelligenceEvents({
             channelId: input.channelId,
             kind: "OUTCOME_MEASURED",
-          }).some(event => event.parentEventIds.includes(recommendation.id))
+          }).some(event => {
+            if (!event.parentEventIds.includes(recommendation.id)) return false
+            const status = (event.metadata?.evaluation as { status?: string } | undefined)?.status || ""
+            return ["positive", "neutral", "negative", "mixed"].includes(status)
+          })
           if (alreadyMeasured) continue
           recordAlgorithmEvaluation({
             sourceEventId: recommendation.id,

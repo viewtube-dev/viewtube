@@ -10,6 +10,14 @@ The canonical `AlgorithmEvaluationEngine` previously used a null relative-change
 
 The evaluation timestamp also now uses nullish coalescing, preserving an explicitly supplied timestamp of zero for deterministic replay/tests.
 
+## Second correctness fix: zero-valued checkpoint scheduling
+
+`BrainEvaluationLoop` also used truthiness checks for `now`, `maximum`, and `checkpointAt`. This silently replaced a deterministic timestamp of `0` with wall-clock time and excluded a checkpoint scheduled exactly at epoch zero. It now uses nullish defaults and an explicit non-null checkpoint check, and preserves the actual checkpoint in due-time and overdue calculations. A dedicated regression test covers a checkpoint at `0`.
+
+## Retry correctness: provisional recommendation outcomes
+
+The post-publication pipeline previously treated any existing `OUTCOME_MEASURED` event as final. That could strand a recommendation after an `insufficient_data` evaluation, even when later canonical analytics became available. It now suppresses duplicate work only for terminal measured statuses (`positive`, `neutral`, `negative`, `mixed`) and permits provisional insufficient-data outcomes to be retried. Regression coverage was added.
+
 ## Regression coverage
 
 Added tests for:
