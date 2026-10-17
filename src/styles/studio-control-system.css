@@ -3727,3 +3727,100 @@ button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-butt
 button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
 }
+
+
+/* Global fixed-ratio contract: only the explicitly named face geometry is fixed;
+   the control's outer row can still expand to the available width. */
+:where(
+  [data-vt-studio-split-badge],
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail,
+  button[data-vt-studio-icon-button="true"],
+  button[data-vt-studio-circle-icon-button="true"],
+  .vt-studio-closeable-badge__close
+) {
+  box-sizing: border-box;
+}
+:where(
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail,
+  button[data-vt-studio-icon-button="true"] > [data-vt-studio-button-face]
+) {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
+  padding: 0;
+}
+:where(
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail
+) {
+  background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+:where(
+  .vt-studio-split-left-badge__rail > svg,
+  .vt-studio-split-right-badge__rail > svg,
+  .vt-studio-double-split-badge__rail > svg,
+  button[data-vt-studio-icon-button="true"] > [data-vt-studio-button-face] svg
+) {
+  width: var(--vt-studio-control-icon-size, 38px);
+  height: var(--vt-studio-control-icon-size, 38px);
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: auto;
+}
+:where(
+  .vt-studio-closeable-badge,
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge,
+  [data-vt-studio-badge="true"]
+) {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000 !important;
+  font-synthesis: none;
+  text-align: center;
+}
+:where(
+  .vt-studio-closeable-badge__label,
+  .vt-studio-split-left-badge__label,
+  .vt-studio-split-right-badge__label,
+  .vt-studio-double-split-badge__label
+) {
+  font-family: inherit;
+  font-weight: 1000 !important;
+  font-synthesis: none;
+  text-align: center;
+}
+:where(
+  input[data-vt-studio-control="true"][type="checkbox"],
+  input[data-vt-studio-control="true"][type="radio"],
+  button[data-vt-studio-switch="true"],
+  [data-vt-studio-switch="true"],
+  [data-vt-studio-toggle="true"]
+) {
+  flex-shrink: 0;
+}
+:where(
+  button[data-vt-studio-icon-button="true"],
+  button[data-vt-studio-circle-icon-button="true"]
+) {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
+  aspect-ratio: 1 / 1;
+  border-radius: 50% !important;
+  display: grid;
+  place-items: center;
+}
