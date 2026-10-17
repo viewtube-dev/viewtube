@@ -4,6 +4,7 @@ import {
  buildBrainPromptRunReceipt,
  promptFamilyForAsset,
  validateBrainPromptRunReceipt,
+ validateBrainPromptFamilyContext,
 } from "../BrainPromptGovernance"
 
 describe("Brain prompt governance", () => {
@@ -44,5 +45,19 @@ describe("Brain prompt governance", () => {
    "outputSchemaVersion is required", "repairCount must be a non-negative integer",
    "generatedAt must be a valid timestamp",
   ]))
+ })
+})
+
+
+describe("Brain prompt family runtime contracts", () => {
+ it("reports missing required context and present forbidden context", () => {
+  expect(validateBrainPromptFamilyContext("community", ["asset_constraints"], ["engagement_bait"])).toEqual([
+   "required context missing: creator_instruction",
+   "forbidden context present: engagement_bait",
+  ])
+ })
+
+ it("accepts a family only when its required context is available", () => {
+  expect(validateBrainPromptFamilyContext("community", ["creator_instruction", "asset_constraints"], [])).toEqual([])
  })
 })
