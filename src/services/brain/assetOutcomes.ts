@@ -68,13 +68,12 @@ export interface AssetOutcome {
  traceId: string
  /** Shared orchestration identity from the generation request, when supplied. */
  operationId?: string
- workflowId?: string
- contentBuildId?: string
+ workflowId?: string | null
+ contentBuildId?: string | null
  contextRevision?: number
  /** Caller-supplied key makes retries of one creator action idempotent. */
  idempotencyKey?: string
  /** Canonical publication provenance, attached only after publication is verified. */
- contentBuildId?: string
  projectId?: string
  publishTransactionId?: string
  approvedSnapshotId?: string
@@ -82,7 +81,6 @@ export interface AssetOutcome {
  publishedVideoId?: string
  publicationIdentity?: ContentBuildPublicationIdentity
  actionPacketId?: string | null
- workflowId?: string | null
  recommendationId?: string | null
  experimentId?: string | null
  analyticsCheckpointIds?: string[]
