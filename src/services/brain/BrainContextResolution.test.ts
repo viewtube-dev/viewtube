@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { resolveBrainContextSections } from "./BrainContextResolution"
+import { getBrainContextBlockingIssues, resolveBrainContextSections } from "./BrainContextResolution"
 
 describe("Brain context resolution", () => {
  it("prioritizes task-relevant context while keeping readable source order", () => {
@@ -88,5 +88,27 @@ describe("required context integrity", () => {
   expect(result.omittedSectionIds).toContain("creator_control_policy:required_context_does_not_fit")
   expect(result.text).not.toContain("permission rules")
   expect(result.characterCount).toBeLessThanOrEqual(result.maximumCharacters)
+ })
+})
+
+
+describe("required context generation gate", () => {
+ it("blocks model generation when required evidence is missing or does not fit", () => {
+  expect(getBrainContextBlockingIssues([
+   "required_evidence_missing:channel_evidence",
+   "creator_style:truncated",
+   "creator_control_policy:required_context_does_not_fit",
+  ])).toEqual([
+   "required_evidence_missing:channel_evidence",
+   "creator_control_policy:required_context_does_not_fit",
+  ])
+ })
+
+ it("allows generation when only optional context was omitted", () => {
+  expect(getBrainContextBlockingIssues([
+   "recent_conversation",
+   "public_niche_knowledge:truncated",
+   "channel_knowledge:duplicate",
+  ])).toEqual([])
  })
 })
