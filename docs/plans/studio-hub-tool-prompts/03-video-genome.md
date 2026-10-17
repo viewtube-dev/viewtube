@@ -1,23 +1,27 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Video Genome
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+BUILD as a reusable analysis capability first; expose it as a separate destination only if current Content Analysis/Analytics surfaces cannot provide a clear owner.
 
 ## Core transformation
-TRANSFORM
+Videos + analytics + transcript/structure evidence → versioned content-pattern records
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/services/contentAnalysis.ts`
+- `src/services/analytics-canon/contracts.ts`
+- `src/services/longformOptimization.ts`
+- `src/services/brain/BrainEvidenceContract.ts`
+- `src/services/brain/OpportunityIntelligence.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Trace canonical video inventory, transcript/scene analysis, metric windows, and content-analysis outputs before adding a schema. Model observations separately from interpretations and validated knowledge; every pattern needs source video IDs, timestamps/segments where available, metric window, sample size, confidence, and provenance. Never infer causality from correlation or generalize from one video. Feed patterns to Content Architect, Story Engine, Experiment Lab, and Brain through typed evidence handoffs.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
