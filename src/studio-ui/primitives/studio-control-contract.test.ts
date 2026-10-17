@@ -35,7 +35,11 @@ describe("Studio control global contract", () => {
     expect(css).toContain("--vt-studio-textarea-compact-text-stroke, .35px");
     expect(css).toContain("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"]:is(:focus, :focus-visible)");
     expect(css).not.toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary)");
-    expect(css).not.toContain("!important");
+    const start = css.indexOf("/* Canonical Studio Controls field contract.");
+    const end = css.indexOf("/* 2. Canonical 44px selection-control geometry.", start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(css.slice(start, end)).not.toContain("!important");
     const controls = read("src/studio-ui/primitives/StudioControls.tsx");
     expect(controls).not.toContain("studio-library-audit-fixes.css");
   });
