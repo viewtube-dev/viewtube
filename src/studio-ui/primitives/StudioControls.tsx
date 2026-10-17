@@ -74,6 +74,17 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; labels center in the remaining text region against the outer perimeter bounds",
+  fixedRatioDefaults: {
+    toggles: "1:1 square track/face geometry at the selected size tier; thumb is centered on its axis",
+    switches: "1:1 square control footprint at the selected size tier; thumb and glyph are centered",
+    checkboxes: "1:1 square face at the selected size tier; check glyph centered",
+    radioButtons: "1:1 circular face within a square 1:1 footprint; dot centered",
+    squareIconButtons: "1:1 square face at the selected size tier; size-tier icon centered",
+    circleIconButtons: "1:1 square footprint with circular face; size-tier icon centered",
+    badges: "fixed height from the global size lattice; split icon rails are 1:1 squares and centered",
+  },
+  splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
+  badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
   globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
