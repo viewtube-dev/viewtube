@@ -3552,3 +3552,41 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   -webkit-text-fill-color: #000;
   -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
 }
+
+
+/* Counter value area follows the same focus contract as Studio text fields. */
+.vt-studio-counter__value,
+.vt-studio-right-counter__value {
+  background: color-mix(in srgb, white 50%, var(--pair-a));
+  color: color-mix(in srgb, white 50%, var(--pair-a));
+  -webkit-text-fill-color: color-mix(in srgb, white 50%, var(--pair-a));
+  -webkit-text-stroke: 1px color-mix(in srgb, white 50%, var(--pair-a));
+  transition: background-color 120ms ease, color 120ms ease, -webkit-text-stroke-color 120ms ease;
+}
+.vt-studio-counter:has(.vt-studio-counter__button:is(:active, :focus-visible, [data-press-holding="true"])) .vt-studio-counter__value,
+.vt-studio-right-counter:has(.vt-studio-right-counter__actions button:is(:active, :focus-visible, [data-press-holding="true"])) .vt-studio-right-counter__value {
+  background: color-mix(in srgb, var(--pair-a) 50%, transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: 1px #000;
+  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--pair-b);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
+}
+.vt-studio-counter:has(.vt-studio-counter__button:is(:active, :focus-visible, [data-press-holding="true"])) .vt-studio-counter__value,
+.vt-studio-right-counter:has(.vt-studio-right-counter__actions button:is(:active, :focus-visible, [data-press-holding="true"])) .vt-studio-right-counter__value {
+  box-shadow: inset 0 0 0 1px var(--pair-b);
+}
+.vt-studio-counter__button,
+.vt-studio-right-counter__actions button {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.vt-studio-counter__button:focus-visible,
+.vt-studio-right-counter__actions button:focus-visible {
+  outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--pair-b);
+  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-counter__value, .vt-studio-right-counter__value { transition: none; }
+}
