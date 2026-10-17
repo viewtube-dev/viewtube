@@ -42,17 +42,17 @@ export const listDueAlgorithmEvaluations = (input: {
  now?: number
  maximum?: number
 }): DueAlgorithmEvaluation[] => {
- const now = input.now || Date.now()
- const maximum = Math.max(1, Math.min(100, input.maximum || 25))
+ const now = input.now ?? Date.now()
+ const maximum = Math.max(1, Math.min(100, input.maximum ?? 25))
  const measuredParents = terminallyMeasuredParentIds(input.channelId)
  return listAlgorithmIntelligenceEvents({ channelId: input.channelId })
   .filter((event) => EVALUATABLE_KINDS.has(event.kind))
-  .filter((event) => Boolean(event.checkpointAt) && (event.checkpointAt || 0) <= now)
+  .filter((event) => event.checkpointAt != null && event.checkpointAt <= now)
   .filter((event) => !measuredParents.has(event.id))
   .map((event) => ({
    event,
-   dueAt: event.checkpointAt || event.createdAt,
-   overdueByMs: Math.max(0, now - (event.checkpointAt || event.createdAt)),
+   dueAt: event.checkpointAt ?? event.createdAt,
+   overdueByMs: Math.max(0, now - (event.checkpointAt ?? event.createdAt)),
    requiredMetrics: [...new Set(event.evaluationTargets.map((target) => target.metric))],
   }))
   .sort((left, right) => right.overdueByMs - left.overdueByMs)
