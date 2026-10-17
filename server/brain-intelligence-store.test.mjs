@@ -55,6 +55,29 @@ test("lifecycle observations remain user and channel scoped", async () => {
   assert.equal(rows[0].metric, "views");
 });
 
+test("server persistence strips raw creator communication on the first write", async () => {
+  const userId = "test-user-server-redaction-first-write";
+  const channelId = "channel-server-redaction-first-write";
+  const rawText = "Private creator text must never reach durable storage.";
+  await upsertPersistedBrainEvents({
+    userId,
+    channelId,
+    events: [{
+      id: "creator-communication:first-write",
+      channelId,
+      kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+      metadata: { communicationId: "first-write", communicationText: rawText },
+    }],
+  });
+
+  const rows = await listPersistedBrainEvents({ userId, channelId });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].metadata.communicationText, undefined);
+  assert.equal(rows[0].metadata.rawCommunicationTextRetained, false);
+  assert.equal(rows[0].metadata.retentionPolicy, "classification-only-server-redaction-v1");
+  assert.equal(JSON.stringify(rows[0]).includes(rawText), false);
+});
+
 test("server persistence never restores creator text after the record is redacted", async () => {
   const userId = "test-user-monotonic-redaction";
   const channelId = "channel-monotonic-redaction";
