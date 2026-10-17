@@ -51,8 +51,15 @@ export interface BrainEvidenceHealth {
  limitations: string[]
 }
 
-const clampConfidence = (value: number | null | undefined): number | null =>
- typeof value === "number" && Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : null
+/** Normalize confidence only when the producer scale is known; Brain claims use 0..1. */
+export const normalizeBrainConfidence = (
+ value: number | null | undefined,
+ sourceScale: "unit" | "percent" = "unit",
+): number | null => {
+ if (typeof value !== "number" || !Number.isFinite(value)) return null
+ const normalized = sourceScale === "percent" ? value / 100 : value
+ return Math.max(0, Math.min(1, normalized))
+}
 
 const epistemicStateFor = (record: EvidenceRecord): BrainEpistemicState => {
  if (record.epistemicState === "missing") return "MISSING"
@@ -88,7 +95,7 @@ export const projectEvidenceRecordToBrainClaim = (record: EvidenceRecord): Brain
   } : null,
   freshness: record.freshness,
   epistemicState,
-  confidence: clampConfidence(record.confidence),
+  confidence: normalizeBrainConfidence(record.confidence),
   provenance: {
    evidenceIds: [...new Set(record.provenance.evidenceIds)],
    sourceRoute: record.provenance.sourceRoute || null,
