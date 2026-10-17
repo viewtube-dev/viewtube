@@ -1,6 +1,10 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import "../../styles/studio-control-system.css"
+import "../../styles/studio-control-vars.generated.css"
+import "../../styles/studio-control-core.css"
+import "../../styles/studio-control-split.css"
+import "../../styles/studio-control-fields.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
@@ -618,11 +622,11 @@ const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
 }) => {
   const content = (
     <>
-      {layout !== "right" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconLeft}</span>}
+      {layout !== "right" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="start" className={railClassName}>{iconLeft}</span>}
       {fieldSlot
         ? <span data-vt-studio-split-field>{children}</span>
         : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
-      {layout !== "left" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconRight}</span>}
+      {layout !== "left" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</span>}
     </>
   )
   if (faceOnly) return content
