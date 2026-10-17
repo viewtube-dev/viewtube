@@ -44,13 +44,14 @@ describe("AlgorithmLearningCandidates evidence threshold", () => {
  it("allows a candidate only after at least three decisive outcomes meet the positive-rate threshold", () => {
   recordOutcome("positive-1", "positive")
   recordOutcome("positive-2", "positive")
+  recordOutcome("positive-3", "positive")
   recordOutcome("negative-1", "negative")
 
   const [candidate] = deriveAlgorithmLearningCandidates("channel-learning-threshold")
 
   expect(candidate).toMatchObject({
-   sampleSize: 3,
-   positiveRate: 2 / 3,
+   sampleSize: 4,
+   positiveRate: 3 / 4,
    status: "candidate",
    confidence: "medium",
   })
