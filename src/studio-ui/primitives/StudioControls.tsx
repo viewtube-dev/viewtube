@@ -1237,7 +1237,6 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
     >
       <input
         className="vt-studio-inline-stepper__value"
-        data-vt-studio-control="true"
         data-vt-studio-field-kind="stepper-value"
         data-size={size}
         type="number"
