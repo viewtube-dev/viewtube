@@ -3613,7 +3613,7 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
   min-width: var(--vt-studio-control-icon-size, 38px);
   height: var(--vt-studio-control-icon-size, 38px);
   flex-basis: var(--vt-studio-control-icon-size, 38px);
-  border-radius: var(--vt-studio-control-radius, 6px);
+  border-radius: 50%;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
   color: #000;
