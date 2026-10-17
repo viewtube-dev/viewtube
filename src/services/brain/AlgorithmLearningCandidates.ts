@@ -44,7 +44,7 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
   const key = event.primingStepId
    ? `priming:${event.primingStepId}`
    : event.recommendationId
-    ? `recommendation:${event.recommendationId.split(":").slice(-1)[0]}`
+    ? `recommendation:${event.recommendationId}`
     : `${event.sourceSystem}:${event.sourceId || "unknown"}`
   const rows = groups.get(key) || []
   rows.push(event)
@@ -52,12 +52,15 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
  })
 
  return [...groups.entries()].map(([key, rows]) => {
-  const results = rows.map(extractEvaluation).filter(Boolean) as AlgorithmEvaluationResult[]
-  const positives = results.filter((result) => result.status === "positive").length
-  const negatives = results.filter((result) => result.status === "negative").length
+  const evaluatedRows = rows
+   .map((event) => ({ event, result: extractEvaluation(event) }))
+   .filter((row): row is { event: AlgorithmIntelligenceEvent; result: AlgorithmEvaluationResult } => row.result !== null)
+  const decisiveRows = evaluatedRows.filter(({ result }) => result.status === "positive" || result.status === "negative")
+  const positives = decisiveRows.filter(({ result }) => result.status === "positive").length
+  const negatives = decisiveRows.filter(({ result }) => result.status === "negative").length
   const decisive = positives + negatives
   const positiveRate = decisive ? positives / decisive : 0
-  const sampleSize = results.length
+  const sampleSize = decisive
   const status = decisive >= 3 && positiveRate >= .67 ? "candidate" as const : "insufficient_evidence" as const
   const category = categoryFor(rows[0])
   const label = rows[0].primingStepId || rows[0].recommendationId || rows[0].sourceId || key
@@ -69,8 +72,8 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
     ? `${label} has produced positive measured outcomes in ${positives}/${decisive || sampleSize} decisive evaluations.`
     : `${label} does not yet have enough repeated measured evidence for durable channel learning.`,
    confidence: confidenceFor(decisive, positiveRate),
-   sourceEventIds: rows.map((row) => row.id),
-   evidenceIds: [...new Set(rows.flatMap((row) => row.evidenceIds))],
+   sourceEventIds: decisiveRows.map(({ event }) => event.id),
+   evidenceIds: [...new Set(decisiveRows.flatMap(({ event }) => event.evidenceIds))],
    sampleSize,
    positiveRate,
    status,
