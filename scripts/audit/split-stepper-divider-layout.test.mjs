@@ -15,7 +15,7 @@ test("canonical Studio Controls owns the split stepper and keeps native numeric 
   assert.match(component, /<ChevronsDown aria-hidden="true" \/>/)
 })
 
-test("both steppers share the username-input primary/secondary design foundation", () => {
+test("stepper variants retain shared palette tokens while the split stepper keeps its username-input foundation", () => {
   assert.match(styles, /\.vt-studio-username-input\s*\{/)
   assert.match(styles, /\.vt-studio-inline-stepper,\s*\.vt-studio-split-stepper\s*\{[^}]*--vt-stepper-primary:/s)
   assert.match(styles, /background:\s*color-mix\(in srgb, var\(--vt-stepper-primary\) var\(--vt-studio-control-default-fill-opacity, 50%\), transparent\)/)
@@ -48,7 +48,8 @@ test("inline stepper is built on the canonical double-split shell with interacti
   assert.match(inline, /data-vt-studio-control-kind="inline-stepper"/)
   assert.doesNotMatch(inline, /<StudioSplitLeftButton/)
   assert.doesNotMatch(inline, /<StudioUsernameInput/)
-  assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*grid-template-columns:\s*var\(--vt-studio-control-height, 44px\) minmax\(40px, 1fr\) var\(--vt-studio-control-height, 44px\)/s)
+  assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*grid-template-columns:\s*var\(--vt-inline-stepper-side\) minmax\(40px, 1fr\) var\(--vt-inline-stepper-side\)/s)
+  assert.match(styles, /--vt-inline-stepper-side:\s*var\(--vt-studio-control-height, 44px\)/)
   assert.match(styles, /\.vt-studio-inline-stepper__value\s*\{[^}]*border:\s*0/s)
   assert.match(styles, /\.vt-studio-inline-stepper__rail\s*\{[^}]*cursor:\s*pointer/s)
 })
@@ -59,5 +60,5 @@ test("inline stepper remains a single shell with no nested shell or duplicate pe
   const inline = component.slice(inlineStart, inlineEnd)
   assert.equal((inline.match(/<StudioSplitShell/g) ?? []).length, 1)
   assert.doesNotMatch(inline, /<StudioSplitLeftButton|<StudioUsernameInput/)
-  assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/s)
+  assert.match(styles, /\.vt-studio-inline-stepper,\s*\.vt-studio-split-stepper\s*\{[^}]*border:\s*var\(--vt-stepper-stroke\) solid #000/s)
 })
