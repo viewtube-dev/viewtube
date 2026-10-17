@@ -3487,3 +3487,60 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
   text-align: center;
   overflow-wrap: anywhere;
 }
+
+
+/* Global split geometry defaults (2026-10-17).
+   Split segments are equal square-ratio cells by default. The outer perimeter
+   defines the label's centering bounds; orb1/orb2 dividers belong to the shared
+   segment boundary, never to a label or a second overlapping pseudo-layer. */
+[data-vt-studio-control="true"][data-vt-studio-split-badge],
+[data-vt-studio-control="true"][data-vt-studio-split-burface],
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  --vt-studio-split-divider-width: var(--vt-studio-control-stroke, 3px);
+  --vt-studio-split-segment-ratio: 1;
+  box-sizing: border-box;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  flex: 0 0 auto;
+  min-width: 0;
+  aspect-ratio: var(--vt-studio-split-segment-ratio, 1);
+  box-sizing: border-box;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Outer edges are the centering reference. Orb1/orb2 are the shared internal
+   dividers; keep each divider on the boundary between neighboring segments. */
+.vt-studio-split-left-badge__face > :first-child,
+.vt-studio-split-right-badge__face > :first-child,
+.vt-studio-double-split-badge__face > :first-child {
+  border-inline-end: var(--vt-studio-split-divider-width) solid var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-double-split-badge__face > :last-child {
+  border-inline-start: 0;
+}
