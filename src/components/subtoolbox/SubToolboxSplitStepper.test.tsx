@@ -25,8 +25,8 @@ describe("StudioSplitStepper", () => {
     expect(css).toContain("var(--vt-studio-control-radius, 6px)")
     expect(css).toContain("grid-template-columns: minmax(0, 2fr) var(--vt-stepper-height)")
     expect(css).toContain("box-shadow: none;")
-    expect(css).toContain("width: 70%;")
-    expect(css).toContain("height: 70%;")
+    expect(css).toContain("width: min(var(--vt-studio-control-icon-size, 24px), 70%);")
+    expect(css).toContain("height: min(var(--vt-studio-control-icon-size, 24px), 70%);")
     expect(css).toContain("var(--vt-studio-control-default-fill-opacity, 50%)")
     const inputRule = css.match(/\.vt-studio-split-stepper input\.vt-studio-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
     expect(inputRule).toMatch(/border-radius:\s*0(?:\s*!important)?;/)
