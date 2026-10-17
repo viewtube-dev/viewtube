@@ -55,6 +55,41 @@ test("lifecycle observations remain user and channel scoped", async () => {
   assert.equal(rows[0].metric, "views");
 });
 
+test("server persistence never restores creator text after the record is redacted", async () => {
+  const userId = "test-user-monotonic-redaction";
+  const channelId = "channel-monotonic-redaction";
+  const eventId = "creator-communication:channel-monotonic-redaction:legacy-1";
+  const rawText = "Private creator message that must remain purged.";
+  const baseEvent = {
+    id: eventId,
+    channelId,
+    kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+    metadata: { communicationId: "legacy-1", communicationText: rawText },
+  };
+  const redactedEvent = {
+    ...baseEvent,
+    summary: "Creator communication classified; legacy raw text redacted.",
+    metadata: {
+      communicationId: "legacy-1",
+      communicationTextFingerprint: "0123456789abcdef",
+      rawCommunicationTextRetained: false,
+      retentionPolicy: "classification-and-fingerprint-only-v1",
+    },
+  };
+
+  await upsertPersistedBrainEvents({ userId, channelId, events: [baseEvent] });
+  await upsertPersistedBrainEvents({ userId, channelId, events: [redactedEvent] });
+  // A stale browser may retry the pre-redaction event after an offline period.
+  await upsertPersistedBrainEvents({ userId, channelId, events: [baseEvent] });
+
+  const rows = await listPersistedBrainEvents({ userId, channelId });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].metadata.communicationText, undefined);
+  assert.equal(rows[0].metadata.rawCommunicationTextRetained, false);
+  assert.equal(rows[0].metadata.communicationTextFingerprint, "0123456789abcdef");
+  assert.equal(JSON.stringify(rows[0]).includes(rawText), false);
+});
+
 test("legacy creator communication redaction replaces previously persisted raw metadata", async () => {
   const userId = "test-user-communication-redaction";
   const channelId = "channel-communication-redaction";
