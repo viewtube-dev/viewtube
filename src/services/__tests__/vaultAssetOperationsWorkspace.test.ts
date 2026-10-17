@@ -42,7 +42,7 @@ describe("Vault corrected tool ownership", () => {
 
   const state = readVaultWorkspaceState()
   expect(state.assetOperationsMode).toBe("search")
-  expect(state.visibleModules).toContain("asset-operations")
+  expect(state.visibleModules).not.toContain("asset-operations")
   expect(state.visibleModules).toContain("import-tags")
   expect(state.visibleModules).toContain("text-editor")
   expect(state.moduleOrder).toContain("import-tags")
@@ -57,7 +57,7 @@ describe("Vault corrected tool ownership", () => {
   }))
 
   const state = readVaultWorkspaceState()
-  expect(state.visibleModules.filter((id) => id === "asset-operations")).toHaveLength(1)
+  expect(state.visibleModules.filter((id) => id === "asset-operations")).toHaveLength(0)
   expect(state.visibleModules.filter((id) => id === "import-tags")).toHaveLength(1)
   expect(state.visibleModules.filter((id) => id === "text-editor")).toHaveLength(1)
   expect(state.visibleModules).not.toContain("spectrum-tags")
