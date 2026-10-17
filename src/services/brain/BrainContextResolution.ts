@@ -157,7 +157,7 @@ export const resolveBrainContextSections = (
   const separatorCost = chosen.size ? 1 : 0
   const remaining = maximumCharacters - used - separatorCost
   if (remaining <= 0) {
-   omittedSectionIds.push(candidate.id)
+   omittedSectionIds.push(candidate.required ? `${candidate.id}:required_context_does_not_fit` : candidate.id)
    continue
   }
   if (candidate.text.length <= remaining) {
