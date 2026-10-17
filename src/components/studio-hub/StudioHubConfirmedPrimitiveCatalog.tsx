@@ -232,7 +232,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
       <h3 id="vt-confirmed-global-defaults-title">Global Defaults · Current Source Contract</h3>
-      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 3px / 2px borders · 6px / 4px radii · Inter 1000 uppercase · 38px / 24px single-line input text · 18px / 14px textarea text</p>
+      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 14px micro · 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show current defaults, effective CSS behavior, and exceptions</summary>
         <div className="vt-confirmed-size-grid">
