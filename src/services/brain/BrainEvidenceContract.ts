@@ -138,8 +138,10 @@ export const summarizeBrainEvidenceHealth = (
   groups.set(key, values)
  }
  const conflictingClaimKeys = [...groups.entries()].filter(([, values]) => values.size > 1).map(([key]) => key)
+ const conflictingKeys = new Set(conflictingClaimKeys)
  const usableClaims = scoped.filter(({ claim, scope }) =>
   (!requested || scope === "exact" || scope === "not_requested")
+  && !conflictingKeys.has(claimKey(claim))
   && claim.epistemicState !== "MISSING"
   && claim.epistemicState !== "CONFLICTING"
   && claim.epistemicState !== "STALE"
