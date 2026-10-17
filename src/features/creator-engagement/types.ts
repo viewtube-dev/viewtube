@@ -81,7 +81,7 @@ export interface CommentResponderController {
  threads: any[]
  audienceSignals: AudiencePulseSignal[]
  audienceEvidenceClaims: BrainEvidenceClaim[]
- proposedAudienceSignalIds: Set<string>
+ isAudienceSignalProposed: (signalId: string) => boolean
  proposeAudienceSignal: (signalId: string) => boolean
  displayThreads: any[]
  currentThread: any | null
