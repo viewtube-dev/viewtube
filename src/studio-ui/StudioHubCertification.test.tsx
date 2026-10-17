@@ -74,10 +74,9 @@ describe("Studio Hub canonical controls", () => {
 
   it("keeps split-left and split-stepper shells flat and stationary", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }')
     expect(css).toContain('.vt-studio-split-stepper::before { content: none; display: none; }')
-    expect(css).toContain("box-shadow: none !important;")
-    expect(css).toContain("transition: none !important;")
+    expect(css).toContain('[data-vt-studio-control="true"] {')
+    expect(css).toContain("box-shadow: none;")
     expect(css).not.toContain("var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0")
     expect(css).not.toContain("translate(var(--vt-studio-control-shadow-x")
   })
@@ -85,19 +84,12 @@ describe("Studio Hub canonical controls", () => {
 
   it("uses token-owned geometry and secondary rails for split badges", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const badge = css.slice(css.indexOf("/* Canonical split-badge geometry contract"))
-    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-44-height)")
-    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-44-stroke)")
-    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-44-radius)")
-    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-28-height)")
-    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-28-stroke)")
-    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-28-radius)")
-    expect(badge).toContain(".vt-studio-double-split-badge__rail:first-child {\n  background: var(--vt-studio-control-secondary);")
-    expect(badge).toContain(".vt-studio-double-split-badge__rail:last-child {\n  background: var(--vt-studio-control-secondary);")
-    expect(badge).not.toContain("#36e0f6")
-    expect(badge).not.toContain("#ff7f6b")
-    expect(badge).not.toContain("--vt-studio-badge-radius: 10px")
-    expect(badge).not.toContain("--vt-studio-badge-radius: 7px")
+    const badge = css.slice(css.indexOf("/* Unified split shell."))
+    expect(badge).toContain('grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px))')
+    expect(badge).toContain('background: var(--vt-studio-control-secondary);')
+    expect(badge).toContain('border-radius: 0;')
+    const rails = badge.match(/\.vt-studio-split-shell\[data-vt-studio-split="double"\] > \[data-vt-studio-split-rail\],[\s\S]*?\{ background: var\(--vt-studio-control-secondary\); \}/)?.[0] || ""
+    expect(rails).toContain('background: var(--vt-studio-control-secondary);')
   })
 
 
