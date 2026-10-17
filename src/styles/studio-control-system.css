@@ -3671,8 +3671,10 @@ html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button + b
 .vt-studio-counter,
 .vt-studio-right-counter {
   display: grid;
-  width: 100%;
+  width: calc(3 * var(--vt-studio-control-height, 44px) + 2 * var(--vt-studio-control-stroke, 3px));
+  max-width: 100%;
   min-width: 0;
+  flex: 0 0 auto;
   box-sizing: border-box;
   grid-template-rows: minmax(0, 1fr);
   height: var(--vt-studio-control-height, 44px);
@@ -3784,8 +3786,9 @@ html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button + b
 .vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg,
 .vt-studio-right-counter[data-size="compact"] .vt-studio-right-counter__actions button svg { width: 24px; height: 24px; }
-.vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg,
- .vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 6px; height: 6px; stroke-width: 1.5; }
+ .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 10px; height: 10px; stroke-width: 1.5; }
+.vt-studio-right-counter:not([data-size="compact"]) .vt-studio-right-counter__actions button svg { width: 26px; height: 26px; }
+.vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 10px; height: 10px; stroke-width: 1.5; }
 .vt-studio-counter button:focus-visible,
 .vt-studio-right-counter button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
 .vt-studio-counter button:disabled,
