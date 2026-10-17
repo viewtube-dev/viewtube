@@ -3291,6 +3291,28 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   max-height: 70%;
 }
 
+
+/* Split badge palette + label containment correction (2026-10-17).
+   Labels occupy only the central segment; rails use the global primary/secondary pair. */
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+ display:flex; width:100%; min-width:0; align-items:stretch; overflow:hidden;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+ display:block; flex:1 1 0%; min-width:0; width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; box-sizing:border-box;
+}
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail { flex:0 0 auto; position:relative; z-index:1; }
+.vt-studio-double-split-badge__rail:first-child { background:var(--vt-studio-primary, var(--vt-pair-a, #d946ef)) !important; color:var(--vt-studio-primary-foreground, #000) !important; }
+.vt-studio-double-split-badge__rail:last-child { background:var(--vt-studio-secondary, var(--vt-pair-b, #22d3ee)) !important; color:var(--vt-studio-secondary-foreground, #000) !important; }
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:first-child { background:var(--vt-studio-primary, var(--vt-pair-a, #d946ef)) !important; }
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:last-child { background:var(--vt-studio-secondary, var(--vt-pair-b, #22d3ee)) !important; }
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label { position:relative; z-index:0; flex:1 1 0%; min-width:0; width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-inline:4px; }
+
 /* Canonical row-fill and typography contract.
    Standard/compact/micro share the same 4px spacing unit and weight-1000 type.
    Controls fill their assigned grid/flex cell by default; opt into intrinsic
