@@ -3897,3 +3897,80 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   justify-content: center;
   text-align: center;
 }
+
+/* Confirmed Primitive Library enforcement layer (2026-10-17).
+   Apply the documented contract to the real canonical DOM, not only to catalog
+   descriptions. Keep inner SVG animation opt-ins intact; primitive shells never
+   cast shadows or translate on hover/press. */
+:where(
+  [data-vt-studio-control="true"],
+  [data-vt-studio-button="true"],
+  [data-vt-studio-action-button="true"],
+  [data-vt-studio-badge="true"],
+  .vt-studio-44-switch,
+  .vt-studio-44-choice,
+  .vt-studio-word-toggle,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-closeable-badge,
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge,
+  .vt-studio-floating-field,
+  .vt-studio-fixed-label-field
+) {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+}
+:where(
+  [data-vt-studio-control="true"],
+  [data-vt-studio-button="true"],
+  [data-vt-studio-action-button="true"],
+  [data-vt-studio-badge="true"],
+  .vt-studio-44-switch,
+  .vt-studio-44-choice,
+  .vt-studio-word-toggle,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-closeable-badge,
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge
+):is(:hover, :active) {
+  transform: none !important;
+}
+:where(
+  [data-vt-studio-control="true"],
+  [data-vt-studio-button="true"],
+  [data-vt-studio-action-button="true"],
+  [data-vt-studio-badge="true"],
+  .vt-studio-44-switch,
+  .vt-studio-44-choice,
+  .vt-studio-word-toggle,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-closeable-badge,
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge
+)::before,
+:where(
+  [data-vt-studio-control="true"],
+  [data-vt-studio-button="true"],
+  [data-vt-studio-action-button="true"],
+  [data-vt-studio-badge="true"],
+  .vt-studio-44-switch,
+  .vt-studio-44-choice,
+  .vt-studio-word-toggle,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-closeable-badge,
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge
+)::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
