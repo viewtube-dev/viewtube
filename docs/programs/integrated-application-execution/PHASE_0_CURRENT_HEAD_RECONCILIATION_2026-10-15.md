@@ -99,3 +99,28 @@ No PR-triggered workflow run was returned for the inspected base SHA `040046e5c9
 **Phase 0 is partially complete.** Branch provenance, existing source/test anchors, known donor/PR cautions and a dependency-ordered proof plan are recorded. Test/build execution, full current-head PR status revalidation, runtime/authenticated workflows, UI screenshot analysis, canonical task reconciliation and a release receipt remain outstanding.
 
 No claim is made that the Integrated Application Program is complete or production-certified.
+
+
+## 10. Exact-head CI evidence — 2026-10-16
+
+A subsequent release-gates workflow run, [38830391099](https://github.com/viewtube-dev/viewtube/actions/runs/38830391099), completed on the Phase 0 PR branch. This run supersedes the earlier queued-only snapshot above for the Phase 0 PR's validation state.
+
+| Gate | Result | Evidence |
+|---|---|---|
+| `typecheck` | Passed | `static-quality` reached the lint step after typecheck succeeded. |
+| `lint:runtime` | Failed | ESLint reported **2,250 errors and 158 warnings** across runtime source; examples include `react-refresh/only-export-components`, `react-hooks/set-state-in-effect`, and `@typescript-eslint/no-explicit-any`. |
+| `test:focused` and account tests | Passed | `focused-contracts` completed successfully. |
+| Brain quality loop | Passed | Both quality-loop contract and test steps succeeded. |
+| Source governance | Passed | Confirmed-library layout, route/CSS/quarantine/source/privacy checks, AI systems governance, Brain runtime snapshot, and convergence governance passed. |
+| Production build | Passed | `npm run build` succeeded. |
+| Local smoke | Passed | Local release endpoint and smoke checks succeeded. |
+| Full Vitest suite | Failed | Existing tests fail in mobile component-library regression expectations, production button catalog expectations, confirmed catalog text expectations, and `src/services/brain/__tests__/BrainRuntime.test.ts` continuity-context assertions. |
+
+### Interpretation and next actions
+
+- The core focused contract suite and build are green, but that does **not** override the failing full suite or runtime lint.
+- Several component-library failures assert exact legacy/catalog markup that differs from the current rendered/source contract. Reconcile those tests against the canonical component/defaults authorities before changing production behavior; do not blindly restore obsolete strings or primitives.
+- The BrainRuntime failure reports a missing ContentBuild/video continuity association in the mocked orchestrator input. The current source inspection shows a fallback from `selectedVideoId` to the continuity trace's video identity, so the failure needs reproduction against the exact tested commit before modifying the implementation. No speculative code change is made from the log alone.
+- Do not attempt to clear the lint gate by disabling broad rules or hiding files. Triage lint findings by file/rule family, separate baseline debt from regressions introduced by a focused change, and preserve meaningful static checks.
+- Phase 0 remains a reconciliation/documentation PR, not the implementation PR for these defects. The next implementation PR should fix one reproducible behavior with a regression test and include exact-head focused verification. Runtime lint and full-suite failures remain explicit release blockers.
+
