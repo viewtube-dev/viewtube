@@ -76,7 +76,7 @@ describe("global defaults govern the effective primitive CSS", () => {
   it("does not use important declarations to force canonical field type or width", () => {
     const css = readStudioControlCss();
     const fieldStart = css.indexOf('input[data-vt-studio-control="true"],');
-    const fieldEnd = fieldStart >= 0 ? css.indexOf("\\n}", fieldStart) : -1;
+    const fieldEnd = fieldStart >= 0 ? css.indexOf("\n}", fieldStart) : -1;
     const fields = fieldStart >= 0 && fieldEnd > fieldStart ? css.slice(fieldStart, fieldEnd) : "";
     expect(fields).not.toMatch(/font-size:[^;]*!important/);
     expect(fields).not.toMatch(/line-height:[^;]*!important/);
