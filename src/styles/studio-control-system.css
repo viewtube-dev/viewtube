@@ -3441,7 +3441,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-right-counter.is-reversed .vt-studio-right-counter__rail[data-rail="end"] { border-color: #000; }
 .vt-studio-right-counter.is-reversed .vt-studio-right-counter__actions button:first-child { border-bottom-color: #000; }
 
-/* Counter affordance polish: +/− and chevrons are 150% larger with heavier strokes. */
+/* Counter affordance polish: +/− and chevrons are enlarged with heavier strokes. */
 .vt-studio-counter__button svg {
   width: 36px;
   height: 36px;
@@ -3449,15 +3449,15 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   transform-origin: center;
 }
 .vt-studio-right-counter__actions button svg {
-  width: 21px;
-  height: 21px;
+  width: 42px;
+  height: 42px;
   stroke-width: 3.75;
   transform-origin: center;
 }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 24px; height: 24px; stroke-width: 3; }
-.vt-studio-right-counter[data-size="compact"] .vt-studio-right-counter__actions button svg { width: 15px; height: 15px; stroke-width: 3; }
+.vt-studio-right-counter[data-size="compact"] .vt-studio-right-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 2.25; }
-.vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 7.5px; height: 7.5px; stroke-width: 2.25; }
+.vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
 .vt-studio-counter__button:active svg,
 .vt-studio-right-counter__actions button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
 .vt-studio-counter__button.is-holding svg,
@@ -3489,7 +3489,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   box-sizing: border-box;
 }
-.vt-studio-right-counter__actions button:first-child { border-bottom: 1px solid #000; }
+.vt-studio-right-counter__actions button:first-child { border-bottom: var(--vt-studio-control-stroke, 3px) solid #000; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-counter__button:active svg,
   .vt-studio-right-counter__actions button:active svg,
