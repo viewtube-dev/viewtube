@@ -2,6 +2,8 @@
    These rules intentionally require [data-vt-studio-control] so widget/dashboard
    CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
 
+@import "./studio-control-vars.generated.css";
+
 [data-vt-studio-control] {
   --vt-studio-control-height: var(--vt-studio-44-height, 44px);
   --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
