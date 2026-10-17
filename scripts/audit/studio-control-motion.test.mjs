@@ -11,6 +11,7 @@ test("Studio selection controls animate only their inner state", () => {
     ".vt-studio-44-switch .vt-studio-44-handle",
     ".vt-studio-44-choice .vt-studio-44-dot",
     ".vt-studio-44-choice.is-checkbox svg",
+    ".vt-studio-44-choice.is-checkbox svg path",
     ".vt-studio-44-word-handle",
   ]) {
     assert.ok(css.includes(selector), `missing state-motion selector: ${selector}`)
