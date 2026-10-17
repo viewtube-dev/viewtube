@@ -64,6 +64,15 @@ export const PHASE_ONE_BRAIN_BINDINGS: BrainCapabilityBinding[] = [
   status: "wired",
  },
  {
+  id: "audience-pulse",
+  routes: ["/studio", "/studio#community-posts", "/studio#comment-responder"],
+  sourceOfTruth: "features/creator-engagement canonical comment threads + community engagement records; audiencePulse read-only projection",
+  reads: ["source feedback IDs", "channel/video/project scope", "source timestamps", "feedback text when available"],
+  writes: ["none; produces in-memory evidence-backed signal projections only"],
+  externalSideEffect: false,
+  status: "integration-ready",
+ },
+ {
   id: "comment-responder",
   routes: ["/studio"],
   sourceOfTruth: "features/creator-engagement/useCommentResponderController + youtubeService",
