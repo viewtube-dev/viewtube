@@ -266,7 +266,7 @@ describe("shared Studio icon-size comparison contract", () => {
         <StudioSquareIconButton icon={<span>ICON</span>} label="Moderate" iconSizeVariant="moderate" />
         <StudioSquareIconButton icon={<span>ICON</span>} label="Large" iconSizeVariant="large" sizeVariant="compact" />
         <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="moderate">Moderate split</StudioSplitLeftButton>
-        <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="large" heightVariant="28">Large compact split</StudioSplitLeftButton>
+        <StudioSplitLeftButton icon={<span>ICON</span>} iconSizeVariant="large" sizeVariant="compact">Large compact split</StudioSplitLeftButton>
       </>,
     )
     expect(html.match(/data-icon-size-variant="current"/g)).toHaveLength(1)
