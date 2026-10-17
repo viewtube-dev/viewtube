@@ -28,3 +28,19 @@ Added tests for:
 ## Certification limits
 
 These changes address evaluation correctness only. They do not establish full end-to-end production verification, provider connectivity, server-authoritative persistence, governed Brain promotion, or deployed-commit certification. Those remain pending focused CI, integration tests, and live environment verification.
+
+## Third correctness fix: event lineage timestamps
+
+The event ledger also used truthiness fallbacks for an existing event's `createdAt` and when merging durable history. Both now use nullish defaults, preserving a valid epoch-zero timestamp instead of rewriting it to the current clock. Dedicated regression tests cover update and merge behavior. The two new regression test files are included in the `test:focused` script.
+
+## CI evidence reviewed
+
+The available GitHub Actions release-gate run (run 1858) reported:
+- **PASS:** TypeScript typecheck.
+- **PASS:** production build.
+- **PASS:** local smoke, Brain quality-loop contract, and source-governance jobs.
+- **FAIL:** focused-contracts, including assertions in Studio component-library tests and a Brain runtime snapshot test outside the files changed for these timestamp safeguards.
+- **FAIL:** static-quality; the runtime lint step reported 2,250 errors and 158 warnings across the repository.
+- **FAIL:** full-suite; the retrieved logs include failures in existing Studio component-library and Brain runtime tests.
+
+This is a run associated with the earlier revision, not proof that the latest timestamp-regression commits pass. The latest commit has not yet produced a retrievable workflow run through the available GitHub connector. Do not treat the changes as CI-certified until the current head's focused tests, full suite, and required gates have run successfully.
