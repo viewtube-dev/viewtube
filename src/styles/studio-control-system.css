@@ -3427,6 +3427,19 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 5px; height: 5px; stroke-width: 1.5; }
 .vt-studio-counter button:focus-visible,
 .vt-studio-right-counter button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
+/* Secondary palette variants reverse the canonical A/B color roles without changing geometry. */
+.vt-studio-counter.is-reversed [data-vt-studio-split-rail],
+.vt-studio-right-counter.is-reversed [data-vt-studio-split-rail] { background: var(--pair-a); }
+.vt-studio-counter.is-reversed .vt-studio-counter__rail,
+.vt-studio-right-counter.is-reversed .vt-studio-right-counter__rail { background: var(--pair-a); }
+.vt-studio-counter.is-reversed .vt-studio-counter__button,
+.vt-studio-right-counter.is-reversed .vt-studio-right-counter__actions button { background: var(--pair-a); color: #000; }
+.vt-studio-counter.is-reversed .vt-studio-counter__value,
+.vt-studio-right-counter.is-reversed .vt-studio-right-counter__value { background: var(--pair-b); color: #000; }
+.vt-studio-counter.is-reversed .vt-studio-counter__rail[data-rail="start"],
+.vt-studio-counter.is-reversed .vt-studio-counter__rail[data-rail="end"],
+.vt-studio-right-counter.is-reversed .vt-studio-right-counter__rail[data-rail="end"] { border-color: #000; }
+.vt-studio-right-counter.is-reversed .vt-studio-right-counter__actions button:first-child { border-bottom-color: #000; }
 .vt-studio-counter button:disabled,
 .vt-studio-right-counter button:disabled { opacity: .4; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
