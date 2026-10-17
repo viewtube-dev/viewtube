@@ -94,7 +94,7 @@ export interface CommentResponderController {
  inboundImageUrl: string | null
  canPostReply: boolean
  refresh: () => Promise<void>
- draftReply: () => Promise<void>
+ draftReply: (mode?: "generate" | "refine") => Promise<void>
  suggestVideo: () => Promise<void>
  postReply: () => Promise<void>
  reconnect: () => Promise<void>
