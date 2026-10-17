@@ -1554,27 +1554,62 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
 StudioTagEditor.displayName = "StudioTagEditor";
 
 
-/** Static split-left status/metadata badge. Unlike action buttons it is never raised,
- * animated, or given a shadow. Micro is a 14px catalog-only density variant. */
+/** Shared static split-badge foundation. All split variants share the same face,
+ * typography, 4px spacing unit, centering rule, and shadow/motion-free geometry. */
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
   sizeVariant?: "standard" | "compact" | "micro";
 }
-export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({
-  icon, children, sizeVariant = "standard", className, ...props
-}) => (
-  <span
-    {...props}
-    data-vt-studio-control="true"
-    data-vt-studio-split-left-badge="true"
-    data-vt-library-component="StudioSplitLeftBadge"
-    data-size={sizeVariant}
-    className={["vt-studio-split-left-badge", className].filter(Boolean).join(" ")}
-  >
-    <span className="vt-studio-split-left-badge__face">
-      <span className="vt-studio-split-left-badge__rail" aria-hidden="true">{icon}</span>
-      <span className="vt-studio-split-left-badge__label">{children}</span>
+interface StudioSplitBadgeBaseProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  layout: "left" | "right" | "double";
+  iconLeft?: React.ReactNode;
+  iconRight?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
+  layout, iconLeft, iconRight, children, sizeVariant = "standard", className, ...props
+}) => {
+  const rootClass = layout === "left" ? "vt-studio-split-left-badge"
+    : layout === "right" ? "vt-studio-split-right-badge" : "vt-studio-double-split-badge";
+  const faceClass = layout === "left" ? "vt-studio-split-left-badge__face"
+    : layout === "right" ? "vt-studio-split-right-badge__face" : "vt-studio-double-split-badge__face";
+  const railClass = layout === "left" ? "vt-studio-split-left-badge__rail"
+    : layout === "right" ? "vt-studio-split-right-badge__rail" : "vt-studio-double-split-badge__rail";
+  const labelClass = layout === "left" ? "vt-studio-split-left-badge__label"
+    : layout === "right" ? "vt-studio-split-right-badge__label" : "vt-studio-double-split-badge__label";
+  return (
+    <span {...props} data-vt-studio-control="true" data-vt-studio-split-badge={layout}
+      data-vt-library-component={layout === "left" ? "StudioSplitLeftBadge" : layout === "right" ? "StudioSplitRightBadge" : "StudioDoubleSplitBadge"}
+      data-size={sizeVariant} className={[rootClass, className].filter(Boolean).join(" ")}>
+      <span className={faceClass}>
+        {layout !== "right" && <span className={railClass} aria-hidden="true">{iconLeft}</span>}
+        <span className={labelClass}>{children}</span>
+        {layout !== "left" && <span className={railClass} aria-hidden="true">{iconRight}</span>}
+      </span>
     </span>
-  </span>
-);StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
+  );
+};
+export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({ icon, ...props }) =>
+  <StudioSplitBadgeBase {...props} layout="left" iconLeft={icon} />;
+StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
+
+export interface StudioSplitRightBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioSplitRightBadge: React.FC<StudioSplitRightBadgeProps> = ({ icon, ...props }) =>
+  <StudioSplitBadgeBase {...props} layout="right" iconRight={icon} />;
+StudioSplitRightBadge.displayName = "StudioSplitRightBadge";
+
+export interface StudioDoubleSplitBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ leftIcon, rightIcon, ...props }) =>
+  <StudioSplitBadgeBase {...props} layout="double" iconLeft={leftIcon} iconRight={rightIcon} />;
+StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";
