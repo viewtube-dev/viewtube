@@ -2742,8 +2742,6 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-
    Never move the control box, face, label, or hit target to simulate a press. */
 button[data-vt-studio-button="true"],
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
-  --vt-studio-control-shadow-x: var(--vt-studio-control-shadow-x, 3px);
-  --vt-studio-control-shadow-y: var(--vt-studio-control-shadow-y, 3px);
   box-shadow: var(--vt-studio-control-shadow-x) var(--vt-studio-control-shadow-y) 0 0
     var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent)) !important;
   transform: none !important;
