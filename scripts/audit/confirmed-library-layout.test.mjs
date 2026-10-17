@@ -115,7 +115,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
   const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
   assert.match(tokens, /standard:\s*\{[^}]*fontSize:\s*38/);
-  assert.match(tokens, /compact:\s*\{[^}]*fontSize:\s*24/);
+  assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*fontSize:\s*24/);
   assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize,\s*compactFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
   assert.match(tokens, /inlineStrokeWidth: "same as border width"/);
   assert.match(css, /font-size:\s*var\(--vt-studio-control-font-size\);/);
