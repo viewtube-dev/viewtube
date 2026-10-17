@@ -127,4 +127,25 @@ describe("confirmed composite primitive catalog", () => {
     expect(catalog).not.toContain("Current CSS translates outer action 1.5px on hover")
   })
 
+
+  it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
+    const catalog = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(css).toContain('data-width="content"')
+    expect(css).toContain("width: 100%")
+    expect(css).toContain('--vt-studio-control-text-stroke: 1px')
+    expect(css).toContain('--vt-studio-control-text-stroke: .5px')
+    expect(css).toContain('--vt-studio-control-text-stroke: .25px')
+    expect(css).toContain("--vt-studio-textarea-font-size: 14px")
+    expect(css).toContain(".vt-studio-floating-field > .vt-studio-floating-field-label")
+    expect(css).toContain(".vt-studio-fixed-label-field > .vt-studio-fixed-field-label")
+    expect(tokens).toContain('width: "row"')
+    expect(tokens).toContain("standardTextStroke: 1")
+    expect(tokens).toContain("compactTextStroke: 0.5")
+    expect(tokens).toContain("fontWeight: 1000")
+    expect(catalog).toContain("row-fill by default")
+    expect(catalog).toContain("data-width=&quot;content&quot;")
+  })
+
 })
