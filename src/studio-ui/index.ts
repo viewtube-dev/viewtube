@@ -30,10 +30,7 @@ export {
   StudioChoice,
   StudioLegendMultiDropdown,
   StudioNumberInput,
-  StudioInlineStepper,
-  StudioSplitStepper,
   StudioSimpleDropdown,
-  normalizeStudioInlineStepperValue,
   StudioSearchInput,
   StudioSelect,
   StudioSplitLeftButton,
@@ -74,8 +71,6 @@ export type {
   StudioWordToggleProps,
   StudioTextInputProps,
   StudioTextAreaProps,
-  StudioInlineStepperProps,
-  StudioSplitStepperProps,
   StudioSimpleDropdownProps,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
