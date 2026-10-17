@@ -14,6 +14,11 @@ const readStudioControlCss = () => [
   "studio-control-fields.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
+const canonicalTail = (css: string) => {
+  const start = css.lastIndexOf("/* Canonical Studio Controls contract");
+  return start >= 0 ? css.slice(start) : css;
+};
+
 describe("standalone Studio text fields", () => {
   it("renders the standard text input with only canonical Studio field markers", () => {
     const html = renderToStaticMarkup(<StudioTextInput aria-label="Title" placeholder="Enter title" />)
@@ -70,7 +75,7 @@ describe("global defaults govern the effective primitive CSS", () => {
 
   it("does not use important declarations to force canonical field type or width", () => {
     const css = readStudioControlCss();
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract"));
+    const contract = canonicalTail(css);
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"));
     expect(fields).not.toMatch(/font-size:[^;]*!important/);
     expect(fields).not.toMatch(/line-height:[^;]*!important/);
@@ -139,7 +144,7 @@ describe("confirmed square icon button library entry", () => {
 describe("canonical Studio field, selection, and action contracts", () => {
   it("keeps default and placeholder field typography primary and identical", () => {
     const css = readStudioControlCss()
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    const contract = canonicalTail(css)
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
     expect(fields).toContain("color: var(--vt-field-primary);")
     expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-primary);")
@@ -153,7 +158,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
     const css = readStudioControlCss()
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    const contract = canonicalTail(css)
     expect(contract).toContain("width: 75.68px")
     expect(contract).toContain("width: 36.667px")
     expect(contract).toContain("transform: translateX(31.68px)")
@@ -195,7 +200,7 @@ describe("canonical Studio field, selection, and action contracts", () => {
 
   it("keeps canonical Studio button shells stationary without shadow or press-motion tokens", () => {
     const css = readStudioControlCss()
-    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract (single authoritative tail)."))
+    const contract = canonicalTail(css)
     expect(contract).not.toContain("--vt-studio-motion-button")
     expect(contract).not.toContain("--vt-studio-motion-press")
     expect(contract).not.toContain('button[data-vt-studio-button="true"]::before {')
