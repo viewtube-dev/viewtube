@@ -114,4 +114,17 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("transition: none !important")
   })
 
+
+  it("declares the canonical flat and stationary primitive contract", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("Confirmed Primitive flat-control contract (2026-10-16)")
+    expect(css).toContain("box-shadow: none !important")
+    expect(css).toContain("transition: none !important")
+    expect(css).toContain("translate: none !important")
+    expect(css).toContain("prefers-reduced-motion: reduce")
+    const catalog = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(catalog).toContain("flat and stationary")
+    expect(catalog).not.toContain("Current CSS translates outer action 1.5px on hover")
+  })
+
 })
