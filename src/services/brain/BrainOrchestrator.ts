@@ -38,7 +38,7 @@ import {
  shouldUseCurrentGrounding,
 } from "./BrainCapabilityRegistry"
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
-import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
+import { BRAIN_CONTEXT_RESOLVER_VERSION, getBrainContextBlockingIssues } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence } from "./EvidenceIntelligenceResolver"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
@@ -464,9 +464,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   let response = buildFallback(input.userText, input.snapshot, input.growthContext)
   let status: "complete" | "fallback" = "fallback"
   let generationPath: BrainGenerationPath = "basic_guidance"
-  let fallbackReason: BrainFallbackReason | undefined = input.allowModel ? undefined : "model_disabled"
-  let repairOutcome: BrainRepairOutcome = { attempted: false, succeeded: false, reasons: [] }
-  if (input.allowModel) {
+  const blockingContextIssues = getBrainContextBlockingIssues(context.budget.omittedSections)
+  let fallbackReason: BrainFallbackReason | undefined = !input.allowModel
+   ? "model_disabled"
+   : blockingContextIssues.length
+    ? "validation_failed"
+    : undefined
+  let repairOutcome: BrainRepairOutcome = {
+   attempted: false,
+   succeeded: false,
+   reasons: blockingContextIssues,
+  }
+  if (input.allowModel && blockingContextIssues.length === 0) {
    const output = await withTimeout((input.modelGenerator || generateStructuredBrainResponse)({
     history: (input.history || []).slice(-8),
     userText: input.userText,
