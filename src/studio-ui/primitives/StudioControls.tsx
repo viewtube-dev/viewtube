@@ -617,19 +617,27 @@ interface StudioSplitShellProps {
   labelClassName?: string
   railClassName?: string
   railProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  interactiveRails?: boolean
+  startRailProps?: React.ButtonHTMLAttributes<HTMLButtonElement> & StudioDataAttributeProps
+  endRailProps?: React.ButtonHTMLAttributes<HTMLButtonElement> & StudioDataAttributeProps
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 }
 const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps, shellProps,
+  interactiveRails = false, startRailProps, endRailProps,
 }) => {
   const content = (
     <>
-      {layout !== "right" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="start" className={railClassName}>{iconLeft}</span>}
+      {layout !== "right" && (interactiveRails
+        ? <button {...startRailProps} type="button" data-vt-studio-split-rail data-rail="start" className={railClassName}>{iconLeft}</button>
+        : <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="start" className={railClassName}>{iconLeft}</span>)}
       {fieldSlot
         ? <span data-vt-studio-split-field>{children}</span>
         : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
-      {layout !== "left" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</span>}
+      {layout !== "left" && (interactiveRails
+        ? <button {...endRailProps} type="button" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</button>
+        : <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</span>)}
     </>
   )
   if (faceOnly) return <span data-vt-studio-split-face="true" data-vt-studio-split={layout} data-size={sizeVariant} className="vt-studio-split-face">{content}</span>
@@ -1194,29 +1202,45 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
   }, [draft, max, min, onValueChange, safeStep, value])
 
   const currentForBounds = Number.isFinite(value) ? value : 0
+  const shellProps = {
+    ...props,
+    role: "group",
+    "aria-label": ariaLabel,
+    "data-vt-studio-control-kind": "inline-stepper",
+    "data-vt-studio-control-family": "stepper",
+    "data-vt-studio-username-foundation": undefined,
+    style,
+  } as React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 
   return (
-    <div
-      {...props}
+    <StudioSplitShell
+      layout="double"
+      sizeVariant={size}
+      iconLeft={<Minus aria-hidden="true" focusable="false" />}
+      iconRight={<Plus aria-hidden="true" focusable="false" />}
+      interactiveRails
       className={["vt-studio-inline-stepper", `is-${size}`, focused ? "is-focused" : "", className].filter(Boolean).join(" ")}
-      data-vt-studio-control="true"
-      data-vt-studio-control-family="stepper"
-      data-vt-studio-control-kind="inline-stepper"
-      data-vt-studio-username-foundation="true"
-      data-size={size}
-      role="group"
-      aria-label={ariaLabel}
-      style={style}
+      railClassName="vt-studio-inline-stepper__rail"
+      startRailProps={{
+        "aria-label": `Decrease ${ariaLabel}`,
+        disabled: disabled || !validBounds || currentForBounds <= min,
+        onClick: () => adjust(-1),
+        "data-vt-studio-stepper-action": "decrement",
+      }}
+      endRailProps={{
+        "aria-label": `Increase ${ariaLabel}`,
+        disabled: disabled || !validBounds || currentForBounds >= max,
+        onClick: () => adjust(1),
+        "data-vt-studio-stepper-action": "increment",
+      }}
+      shellProps={shellProps}
+      fieldSlot
     >
-      <StudioSplitLeftButton icon={<Minus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
-        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__decrement"
-        aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds <= min}
-        onClick={() => adjust(-1)} />
-      <StudioUsernameInput
-        icon={<span />}
-        sizeVariant={size === "compact" ? "compact" : "standard"}
-        className="vt-studio-inline-stepper__field-shell"
-        inputClassName="vt-studio-inline-stepper__value"
+      <input
+        className="vt-studio-inline-stepper__value"
+        data-vt-studio-control="true"
+        data-vt-studio-field-kind="stepper-value"
+        data-size={size}
         type="number"
         inputMode="decimal"
         aria-label={ariaLabel}
@@ -1243,14 +1267,9 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
           }
         }}
       />
-      <StudioSplitLeftButton icon={<Plus aria-hidden="true" focusable="false" />} iconSizeVariant="moderate" sizeVariant={size}
-        className="vt-studio-inline-stepper__button vt-studio-inline-stepper__increment"
-        aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || currentForBounds >= max}
-        onClick={() => adjust(1)} />
-    </div>
+    </StudioSplitShell>
   )
 }
-
 StudioInlineStepper.displayName = "StudioInlineStepper"
 
 export type StudioSplitStepperSize = "standard" | "compact"
