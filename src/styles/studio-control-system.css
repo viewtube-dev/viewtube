@@ -3573,3 +3573,14 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   width: min(var(--vt-studio-control-icon-size, 16px), 72%);
   height: min(var(--vt-studio-control-icon-size, 16px), 72%);
 }
+
+
+/* Default split-left state: primary fill belongs to the text/label pane;
+   the icon rail remains secondary. Selected/pressed state colors stay owned
+   by the existing selected-state rules above. */
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]):not([data-selected="true"]):not([aria-pressed="true"]) > [data-vt-studio-button-face] [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+}
