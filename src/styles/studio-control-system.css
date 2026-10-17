@@ -3557,10 +3557,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 /* Counter value area follows the same focus contract as Studio text fields. */
 .vt-studio-counter__value,
 .vt-studio-right-counter__value {
-  background: color-mix(in srgb, white 50%, var(--pair-a));
+  background: var(--pair-a);
   color: color-mix(in srgb, white 50%, var(--pair-a));
-  -webkit-text-fill-color: color-mix(in srgb, white 50%, var(--pair-a));
-  -webkit-text-stroke: 1px color-mix(in srgb, white 50%, var(--pair-a));
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0 transparent;
   transition: background-color 120ms ease, color 120ms ease, -webkit-text-stroke-color 120ms ease;
 }
 .vt-studio-counter:has(.vt-studio-counter__button:is(:active, :focus-visible, [data-press-holding="true"])) .vt-studio-counter__value,
