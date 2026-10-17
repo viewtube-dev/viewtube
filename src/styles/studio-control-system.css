@@ -2880,3 +2880,158 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
 }
 .vt-studio-inline-stepper:focus-within,
 .vt-studio-split-stepper:focus-within { box-shadow: none !important; }
+
+
+/* Global Studio spacing and micro-size contract.
+   Spacing is a 4px unit on all four sides; layouts may use explicit multiples.
+   Micro controls are 14px high with proportional 1px stroke / 2px radius / 10px icon and type. */
+[data-vt-studio-control] {
+  --vt-studio-space-unit: 4px;
+  --vt-studio-space-top: var(--vt-studio-space-unit);
+  --vt-studio-space-right: var(--vt-studio-space-unit);
+  --vt-studio-space-bottom: var(--vt-studio-space-unit);
+  --vt-studio-space-left: var(--vt-studio-space-unit);
+}
+[data-vt-studio-control][data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-font-weight: 900;
+  --vt-studio-control-letter-spacing: -.01em;
+  --vt-studio-control-line-height: 1;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-icon-stroke: 1.5;
+  --vt-studio-control-shadow: 0px;
+  --vt-studio-control-hover-offset: 0px;
+  min-height: 14px;
+}
+
+/* Shared split-badge foundation: button-equivalent label centering, stable geometry,
+   and one shared spacing contract for split-left, split-right, and double-split badges. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: stretch;
+  min-width: 0;
+  padding: 0;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: inherit;
+  box-sizing: border-box;
+  box-shadow: none !important;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-width: var(--vt-studio-control-height, 44px);
+  padding: 0 var(--vt-studio-space-unit, 4px);
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-split-right-badge__rail {
+  grid-column: 2;
+  grid-row: 1;
+  border-right: 0;
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
+  padding: var(--vt-studio-space-top, 4px) var(--vt-studio-space-right, 4px)
+    var(--vt-studio-space-bottom, 4px) var(--vt-studio-space-left, 4px);
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  line-height: var(--vt-studio-control-line-height, .86);
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  text-transform: uppercase;
+}
+.vt-studio-split-right-badge__face {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.vt-studio-double-split-badge__face {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+.vt-studio-double-split-badge__rail:last-child {
+  border-right: 0;
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-split-left-badge[data-size="compact"],
+.vt-studio-split-right-badge[data-size="compact"],
+.vt-studio-double-split-badge[data-size="compact"] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-icon-size: 24px;
+}
+.vt-studio-split-left-badge[data-size="micro"],
+.vt-studio-split-right-badge[data-size="micro"],
+.vt-studio-double-split-badge[data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-space-unit: 4px;
+}
+
+/* No hard-coded elevation or motion on Studio primitives/components. Geometry and
+   state feedback must not be simulated with shadow layers, transforms, or transitions.
+   Any future exception must be token-backed, documented, and explicitly approved. */
+[data-vt-studio-control],
+[data-vt-studio-button],
+[data-vt-studio-action-button],
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge,
+.vt-studio-inline-stepper,
+.vt-studio-split-stepper,
+.vt-studio-dropdown-menu,
+.vt-studio-closeable-badge,
+.vt-studio-tag-editor,
+.vt-studio-tag-editor__square-action {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+}
+[data-vt-studio-control]::before,
+[data-vt-studio-control]::after,
+[data-vt-studio-button]::before,
+[data-vt-studio-button]::after,
+[data-vt-studio-action-button]::before,
+[data-vt-studio-action-button]::after,
+.vt-studio-split-left-badge::before,
+.vt-studio-split-left-badge::after,
+.vt-studio-split-right-badge::before,
+.vt-studio-split-right-badge::after,
+.vt-studio-double-split-badge::before,
+.vt-studio-double-split-badge::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+}
