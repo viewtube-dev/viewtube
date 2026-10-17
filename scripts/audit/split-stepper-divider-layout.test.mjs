@@ -12,8 +12,10 @@ test("canonical Studio Controls owns the split stepper and keeps native numeric 
   assert.match(component, /"data-vt-library-component": "StudioSplitRightBadge"/)
   assert.match(component, /<input[\s\S]*?type="number"/)
   assert.match(component, /data-size=\{size\}/)
-  assert.match(component, /<ChevronsUp aria-hidden="true" \/>/)
-  assert.match(component, /<ChevronsDown aria-hidden="true" \/>/)
+  assert.match(component, /<ChevronUp aria-hidden="true" \/>/)
+  assert.doesNotMatch(component, /<ChevronsUp aria-hidden="true" \/>/)
+  assert.match(component, /<ChevronDownSingle aria-hidden="true" \/>/)
+  assert.doesNotMatch(component, /<ChevronsDown aria-hidden="true" \/>/)
 })
 
 test("split stepper shares palette tokens and uses the canonical split-right rail", () => {
@@ -31,6 +33,7 @@ test("split value pane has squared inner edge and rail owns the vertical seam", 
   assert.match(inputRule, /border:\s*0/)
   assert.match(styles, /\[data-vt-studio-control="true"\]\[data-vt-studio-split="right"\]\.vt-studio-split-stepper > \[data-vt-studio-split-rail\]\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:\s*var\(--vt-stepper-stroke\) solid #000/s)
   assert.match(styles, /\.vt-studio-split-stepper-actions button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-stepper-stroke\) solid #000/s)
+  assert.match(styles, /grid-template-columns:\s*minmax\(0, 2fr\) minmax\(0, 1fr\) !important/)
 })
 
 test("horizontal divider is centered, both actions have equal rows, and repeat stops at bounds", () => {
