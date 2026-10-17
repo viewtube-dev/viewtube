@@ -165,7 +165,11 @@ export const resolveBrainContextSections = (
    used += candidate.text.length + separatorCost
    continue
   }
-  if (remaining > 0 && (candidate.required || remaining >= 160)) {
+  if (candidate.required) {
+   // Required instructions/evidence are atomic: a partial policy or clipped evidence
+   // section must not masquerade as fully available context.
+   omittedSectionIds.push(`${candidate.id}:required_context_does_not_fit`)
+  } else if (remaining >= 160) {
    chosen.set(candidate.index, { id: candidate.id, text: candidate.text.slice(0, remaining) })
    used += remaining + separatorCost
    omittedSectionIds.push(`${candidate.id}:truncated`)
