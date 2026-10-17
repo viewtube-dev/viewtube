@@ -199,3 +199,54 @@ The highest-value next change is to test and connect these contracts at the boun
 ### Scope and verification note
 
 This remains a source-backed design/integration audit. The GitHub API inspection path did not provide a checked-out working tree, so no application test command has been executed and no runtime behavior is being claimed as verified. The next code change should be made in a local or connected repository workspace where the focused Vitest tests and typecheck can be run before commit.
+
+
+## Follow-up source audit — handoff integrity and evidence semantics (2026-10-17)
+
+This follow-up inspected the actual implementations on the target branch, rather than inferring readiness from filenames or route labels.
+
+### 1. Brain workflow recipes: registry validity is only the first gate
+
+`src/services/brain/BrainWorkflowRecipes.ts` currently declares these five handoffs:
+
+| Recipe | Source SuperTool | Destination SuperTool | Payload | Integration check |
+|---|---|---|---|---|
+| Audience signal → idea | `audience-loop-studio` | `creator-canvas-os` | audienceSignal | Verify the concept receiver can consume the signal as structured input and retains evidence IDs. |
+| Idea → packaging | `creator-canvas-os` | `packaging-lab-pro` | concept, hook | Verify package generation uses the same project/ContentBuild identity and the selected concept. |
+| Retention → project revision | `retention-autopsy-experiment-engine` | `project-command-kanban` | diagnosis, recommendedChanges | Verify recommendations become project tasks and any proposed experiment remains a proposal until approved. |
+| Vault → editor | `creator-vault-os` | `timeline-asset-vault-dock` | assetIds, sceneIntent | Verify asset IDs resolve against canonical Vault records and editor usage records lineage. |
+| Shorts → editor | `shorts-extraction-studio` | `motion-scene-builder` | clipIds, editBrief | Verify clips resolve to real source media and the destination hands off to VT_E1 rather than inventing a second editor state. |
+
+All ten source/destination IDs are present in the SuperTool registry. That is necessary but insufficient: `createBrainSuperToolHandoff` confirms both IDs exist, then creates a SuperTool action packet and emits a Brain signal. It does not itself validate the domain-specific payload against the destination's capability schema. Destination validation and external-write safeguards therefore must remain in the production handoff/receiver contracts.
+
+**Implementation rule:** retain these recipes as orchestration adapters, but add receiver-level contract tests for payload shape, canonical identity, evidence preservation, destination compatibility, and approval semantics. Do not add another handoff format.
+
+### 2. Opportunity evidence: current type and meaning are misaligned
+
+`OpportunityEvidenceAdapter.ts` emits `kind: "catalog_gap"` for every eligible measured video from both the Brain evidence-pack and Analytics Canon adapters. Both adapters can provide current metric values, coverage, source evidence IDs, and (for canonical rows) snapshot/window/dataset provenance. Neither inspected adapter establishes a comparable baseline or explicit topic-demand/catalog-taxonomy coverage; both emit `baselineValue: null` and `relativeDelta: null`.
+
+The existing `OpportunityIntelligence.ts` maps `catalog_gap` to the generic `unknown` AlgorithmSignal kind, which avoids falsely claiming a known algorithm event but does not correct the upstream label. Existing tests explicitly expect `catalog_gap`, so changing the label is a compatibility change, not a harmless rename.
+
+**Implementation rule:** add tests for the semantic boundary before changing the union or serialized values. A measured video candidate may be ranked by observed performance/recency/metric coverage, but must not be represented as a validated content gap or measured trend without the missing comparison evidence. Preserve old persisted records and add a deliberate compatibility mapping if the kind is migrated. Confidence values also need one explicit conversion boundary: Opportunity Intelligence uses a 0–100 scale while Brain claim projections use 0–1.
+
+### 3. Tool-chain registry: distinguish registered capability from proven end-to-end behavior
+
+`src/services/viewTubeToolChains.ts` defines payload kinds, capability IDs, routes, mutation classes, approval states, packet identity, and suggested chains. It is a different layer from `superToolRegistry.ts`: SuperTools describe larger product/work surfaces; tool-chain capabilities describe what payloads a workflow node accepts/produces and how it may mutate state. Keep both layers and connect them through explicit mappings/contracts rather than replacing one registry with the other.
+
+Suggested chains cover metadata-to-publish, thumbnail-to-publish, generated-image-to-community-poll, script-to-production, analysis-to-packaging, comment-to-content, video-to-next-video, tactic-to-experiment, and asset-to-editor. Treat these as proposed workflow paths until each step is verified against live producer/receiver behavior and shared operation identity.
+
+### 4. Portability defect to trace before editing
+
+`src/services/superToolRuntimePlanRegistry.ts` hardcodes `/Users/cwb/Downloads/viewtube/viewtubeX/docs/VT Brain` and emits `file://` links through `buildSuperToolDocHref`. This cannot resolve on other developer machines or deployed clients. Before replacing it, trace every consumer and the intended runtime (browser, local app, or documentation viewer); then choose repository-relative/hosted links appropriate to that runtime and test links for missing targets. Do not blindly replace the base with another machine path.
+
+### 5. Test and execution status
+
+The repository's `package.json` identifies Vitest, `npm run typecheck`, and `npm run build` as available validation commands. This audit was performed through GitHub source APIs without a checked-out working tree or package installation, so no test, typecheck, build, or browser workflow has been executed in this phase. Do not treat the existence of test files or a source review as a passing validation result.
+
+### Next execution sequence
+
+1. Add focused tests for opportunity semantics, missing baselines, channel/snapshot/window scope, partial/unavailable datasets, and 0–100 ↔ 0–1 confidence conversion.
+2. Add Brain recipe receiver contract tests that prove IDs, payload schemas, evidence, project/ContentBuild identity, idempotency, and approval requirements survive each handoff.
+3. Build the canonical Studio Hub capability → SuperTool surface → tool-chain capability → service/controller → persistence owner map. Mark each edge as verified, partial, disconnected, or planned.
+4. Fix the absolute documentation path only after consumer/runtime tracing and tests.
+5. Run the focused suites, then typecheck, full Vitest suite, and production build in an actual checkout. Remove or merge code only after consumer search and replacement tests demonstrate parity.
