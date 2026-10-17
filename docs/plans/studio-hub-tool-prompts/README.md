@@ -9,6 +9,7 @@
 - **Combine:** connect existing features into one end-to-end workflow under a clear owner.
 - **Merge:** consolidate overlapping tools/capabilities and preserve compatibility for existing consumers.
 - **Shared capability:** implement as a service/mode/report within an existing owner rather than a new destination.
+- Studio Hub tools are distinct product/tool surfaces. They may call, reuse, or expose features and functions supplied by dashboard widgets, but must not be merged with, absorbed into, or substituted for widgets. A widget remains independently usable and registered/rendered; share underlying services/contracts where appropriate.
 - A planned tool is not automatically a separate page. UI work is not the focus of this prompt pack; first establish domain contracts, integration, persistence, handoffs, and tests.
 
 ## Individual prompts
@@ -39,7 +40,7 @@
 - Treat current disposition as a source-verified hypothesis to validate during each prompt, not permission to duplicate code.
 
 ## Execution order
-1. Opportunity Radar — canonical opportunity inputs and lifecycle.
+1. Opportunity Radar + Tactics Engine handoff — canonical opportunity inputs/lifecycle, then a typed handoff into the separate Tactics Engine tool.
 2. Content Architect — accepted opportunity → project/content concept.
 3. Video Genome — evidence-backed pattern extraction.
 4. Story Engine — concept → narrative/production blueprint.
@@ -60,7 +61,7 @@ These are starting ownership decisions to verify against live consumers before d
 
 | Existing tool/capability | Target relationship | Guardrail |
 |---|---|---|
-| Opportunity Radar widget + Brain opportunity adapters | Opportunity Radar | One canonical opportunity pipeline; no duplicate scoring/store. |
+| Opportunity Radar Studio Hub tool + Opportunity Radar widget + Brain opportunity adapters | Keep the widget and Studio Hub tool distinct; reuse shared opportunity services/contracts. Connect the distinct Tactics Engine through a typed handoff. | One canonical opportunity pipeline; no duplicate scoring/store, and never merge the tool surface with the widget surface. |
 | Script Architect + hook generation | Content Architect and Story Engine modes/capabilities | Architect owns concept; Story Engine owns narrative/beat blueprint. Keep Video Director as production execution owner. |
 | Content Analysis + analytics outputs | Video Genome, pre-publication analysis, post-publication analysis | Reuse Analytics Canon and evidence contracts; do not equate patterns with causality. |
 | Video Director | Remains production-direction owner; consumes Story Engine output | Do not replace it with another editor or production surface. |
@@ -69,7 +70,7 @@ These are starting ownership decisions to verify against live consumers before d
 | Thumbnail Studio + End-Screen Architect | Thumbnail Studio remains packaging owner; end-screen becomes a capability unless evidence proves separate ownership | Do not create competing packaging stores. |
 | Publishing Package + Video Publisher | Publishing Package remains a Publisher subworkflow | Video Publisher owns unpublished publication preparation; Video Manager owns already-published video metadata. |
 | Pre-Launch Priming | Keep as a pre-publication activation workflow, integrated with Audience Pulse/Publisher | Do not merge it into generic strategy without proving workflow parity. |
-| Tactics Engine | Remains action/intervention owner; hands off to Experiment Lab and Projects | It does not replace Creator Strategy Engine's cross-tool synthesis. |
+| Tactics Engine | Remains a distinct action/intervention tool; receives validated opportunities from Opportunity Radar and hands approved plans to Experiment Lab and Projects | Group the Radar-to-Tactics workflow in planning and handoff mapping, but do not merge Tactics Engine with Opportunity Radar, widgets, or Creator Strategy Engine. |
 | Content Autopilot + Shorts extraction/editor routes | Content Autopilot proposes derivatives; existing Shorts/editor path performs production | No parallel editor or autonomous publishing. |
 | Revenue Opportunity Map + scenario planning | Revenue Architect shares Channel Simulator scenario logic | Do not maintain separate scenario engines. |
 | Channel Flywheel + cross-tool strategic synthesis | Flywheel is a diagnostic capability; Creator Strategy Engine prioritizes actions | Brain remains the canonical evidence and learning owner. |
