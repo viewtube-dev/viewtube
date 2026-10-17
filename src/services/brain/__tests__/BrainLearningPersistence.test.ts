@@ -75,7 +75,7 @@ describe("BrainLearningPersistence", () => {
  it("preserves records enqueued while an earlier batch is awaiting server acknowledgement", async () => {
   const storage = makeStorage()
   vi.stubGlobal("window", { localStorage: storage })
-  vi.stubGlobal("localStorage", storage })
+  vi.stubGlobal("localStorage", storage)
 
   let resolveInFlight: ((response: Response) => void) | undefined
   let call = 0
