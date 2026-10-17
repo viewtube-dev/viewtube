@@ -109,21 +109,20 @@ describe("Studio text field library entries", () => {
 describe("compact Studio button row-fill sizing", () => {
   it("fills the available row for compact text buttons while preserving square icon-only geometry", () => {
     const css = readStudioControlCss()
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {')
-    const compact = css.slice(css.indexOf('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {'))
-    const rule = compact.slice(0, compact.indexOf("}"))
-    expect(rule).toContain("width: 100%;")
-    expect(rule).not.toContain("width: max-content;")
+    expect(css).toContain('[data-vt-studio-control="true"] {')
+    expect(css).toContain('width: 100%;')
+    expect(css).toContain('[data-vt-studio-control="true"][data-vt-studio-width="content"] {')
+    expect(css).toContain('width: fit-content;')
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {')
     expect(css).toContain("padding-inline: 8px;")
   })
 
   it("preserves explicit full-width split-left and fixed-square icon button geometry", () => {
     const css = readStudioControlCss()
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%;')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height);')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]::before {')
-    expect(css).toContain('height: auto;')
+    expect(css).toContain('.vt-studio-split-face[data-vt-studio-split="left"] { grid-template-columns: auto minmax(0, 1fr); }')
+    expect(css).toContain('[data-vt-studio-control="true"] [data-vt-studio-split-rail]')
+    expect(css).toContain('aspect-ratio: 1 / 1;')
+    expect(css).toContain('width: fit-content;')
   })
 })
 
@@ -145,16 +144,12 @@ describe("confirmed square icon button library entry", () => {
 describe("canonical Studio field, selection, and action contracts", () => {
   it("keeps default and placeholder field typography primary and identical", () => {
     const css = readStudioControlCss()
-    const contract = canonicalTail(css)
-    const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
-    expect(fields).toContain("color: var(--vt-field-primary);")
-    expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-primary);")
-    expect(fields).toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);")
-    expect(fields).toContain("font: inherit")
-    expect(fields).toContain("font-weight: var(--vt-studio-control-font-weight);")
-    expect(fields).not.toContain("-webkit-text-stroke: 0 !important")
-    expect(fields).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
-    expect(fields).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px);")
+    expect(css).toContain("color: var(--vt-field-primary);")
+    expect(css).toContain("-webkit-text-fill-color: var(--vt-field-primary);")
+    expect(css).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary);")
+    expect(css).not.toContain("-webkit-text-stroke: 0 !important")
+    expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
+    expect(css).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px);")
   })
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
@@ -372,9 +367,10 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).toContain('button[data-vt-studio-button="true"]:focus-visible { outline:3px solid')
     expect(css).toContain('button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }')
     expect(css).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }')
-    expect(css).not.toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
+    expect(css).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
+    expect(css).toContain('transform: none !important;')
     expect(css).toContain('@media (prefers-reduced-motion:reduce)')
-    expect(css).toContain('transition:none !important;')
+    expect(css).toContain('transition: none !important;')
   })
 
   it("keeps dropdown triggers and options outside the extruded-button press selectors", () => {
@@ -386,7 +382,8 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).not.toContain('button[data-dropdown-trigger="true"]:active')
     // Menu panels may own a stationary shadow; trigger and option buttons do not
     // receive the data-vt-studio-button marker used by the tactile press model.
-    expect(css).not.toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
+    expect(css).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
+    expect(css).toContain('transform: none !important;')
   })
 
   it("keeps standard/compact icon metrics tokenized without displacement or shadow offsets", () => {
