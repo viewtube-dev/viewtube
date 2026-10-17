@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { VideoAsset } from "../../services/videoAssets"
+import type { AudiencePulseSignal } from "./audiencePulse"
 
 export type CommunityPostType = "text" | "image" | "poll" | "image-poll" | "video"
 export type CommunityPostMode = "write" | "create"
@@ -77,6 +78,7 @@ export interface CommentResponderController {
  loading: boolean
  error: string | null
  threads: any[]
+ audienceSignals: AudiencePulseSignal[]
  displayThreads: any[]
  currentThread: any | null
  currentIndex: number
