@@ -28,6 +28,7 @@ describe("confirmed Studio primitive certification catalog", () => {
     expect(controls).toContain("sizeVariant?: StudioBadgeSize")
     expect(tokens).toContain('micro: { height: 14, stroke: 1, radius: 2, fontSize: 10')
     expect(tokens).toContain('export type StudioBadgeSize = StudioControlSize | "micro"')
+    expect(tokens).toContain('export type StudioControlSize = "standard" | "compact"')
     expect(css).toContain('.vt-studio-split-left-badge[data-size="micro"]')
     expect(css).toContain("--vt-studio-badge-height: var(--vt-studio-14-height, 14px)")
     expect(css).toContain("--vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px)")
