@@ -323,8 +323,12 @@ test("non-default settings and TSX/CSS/import provenance are collapsed by defaul
   assert.match(styles, /\.vt-confirmed-source-details\s*\{/);
 });
 
-test("confirmed component and variant labels are visually constrained to one line and 40ch", () => {
-  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+test("confirmed captions are one line while Studio primitive roots retain token typography", () => {
+  assert.match(styles, /\.vt-confirmed-variant > span:not\(\[data-vt-studio-control="true"\]\)\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+  assert.doesNotMatch(styles, /\.vt-confirmed-variant > span\s*\{/);
+  assert.match(styles, /\.vt-confirmed-split-left-badge-family > span:not\(\.vt-studio-split-left-badge\)\s*\{/);
+  assert.match(styles, /\.vt-complete-catalog \.vt-catalog-field:not\(\[data-vt-studio-control="true"\]\)\s*\{/);
+  assert.doesNotMatch(styles, /\.vt-complete-catalog \.vt-catalog-field\s*\{/);
   assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
 });
 
