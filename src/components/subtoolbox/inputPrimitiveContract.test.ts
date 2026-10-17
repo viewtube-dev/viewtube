@@ -63,6 +63,8 @@ describe("canonical Studio text-field primitives", () => {
   it("keeps Studio facades pointed at the canonical input implementations", () => {
     const controls = read("src/studio-ui/primitives/StudioControls.tsx")
     const index = read("src/studio-ui/index.ts")
+    const input = read("src/studio-ui/primitives/StudioTextInput.tsx")
+    const area = read("src/studio-ui/primitives/StudioTextArea.tsx")
     expect(controls).toContain("StudioInput = StudioTextInput")
     expect(controls).toContain("Studioarea = StudioTextArea")
     expect(index).toContain("StudioTextInput")
