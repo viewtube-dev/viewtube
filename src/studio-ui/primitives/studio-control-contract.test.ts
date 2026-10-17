@@ -24,6 +24,19 @@ describe("Studio control global contract", () => {
     expect(css).toContain('[data-vt-studio-split-rail][data-rail="end"]');
     expect(css).toContain("[data-vt-studio-split-rail] > svg *");
   });
+  it("keeps split-left button rails black and vertically centers icon and label", () => {
+    const css = read("src/styles/studio-control-system.css");
+    expect(css).toContain('button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face]');
+    expect(css).toContain('grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr)');
+    expect(css).toContain('place-items: center');
+    expect(css).toContain('border-right: var(--vt-studio-control-stroke) solid #000');
+    expect(css).toContain('color: #000;\n  stroke: #000;');
+    expect(css).toContain('align-items: center;\n  justify-content: center;');
+    expect(css).toContain('text-align: center;');
+    const start = css.indexOf("/* Final split-left visual invariant:");
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(css.slice(start)).not.toContain("!important");
+  });
   it("uses a secondary focus outline at 65% of border width with zero offset", () => {
     const css = read("src/styles/studio-control-fields.css");
     expect(css).toContain("* .65");
