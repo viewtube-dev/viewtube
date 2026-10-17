@@ -1,23 +1,28 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Asset Forge
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+BUILD as a workflow/orchestration capability over Asset Engine and Vault; never create another asset repository.
 
 ## Core transformation
-TRANSFORM
+Production blueprint → asset requirements, matches, gaps, and linked package
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/services/asset-engine`
+- `src/services/vaultAdapter.ts`
+- `src/services/vaultProjectHandoff.ts`
+- `src/services/vaultReadiness.ts`
+- `src/services/vaultManifest.ts`
+- `src/services/productionHandoffContracts.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Trace asset identity, Vault storage, generated-artifact ingestion, project links, licensing/rights metadata, and editor handoffs. Produce an asset requirement manifest with required/optional state, source/rights/provenance, existing match IDs, missing items, and readiness. Store binaries and canonical asset records only in existing Asset Engine/Vault. Ensure generated assets enter via existing ingestion and approved handoffs preserve asset IDs and project/contentBuild identity.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
