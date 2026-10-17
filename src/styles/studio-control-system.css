@@ -72,7 +72,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   min-height: var(--vt-studio-control-height);
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--vt-studio-space-unit, 4px);
   border: var(--vt-studio-control-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
   background: var(--vt-studio-control-accent);
@@ -503,6 +503,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
+  --vt-studio-14-height: 14px; --vt-studio-14-stroke: 1px; --vt-studio-14-radius: 2px; --vt-studio-14-font-size: 10px; --vt-studio-14-font-weight: 1000; --vt-studio-14-icon-size: 10px; --vt-studio-14-icon-stroke: 1.5;
    
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
@@ -908,7 +909,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity), transparent);
   color: var(--vt-field-primary);
   -webkit-text-fill-color: var(--vt-field-primary);
-  -webkit-text-stroke: .5px var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);
   caret-color: var(--vt-field-primary);
   caret-shape: block;
   font-family: var(--vt-studio-control-font-family);
@@ -935,12 +936,12 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
   height: var(--vt-studio-control-height);
 }
 input[data-vt-studio-control="true"][data-size="standard"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  font-size: var(--vt-studio-text-input-standard-font-size, 38px) !important;
-  line-height: var(--vt-studio-control-line-height, .86) !important;
+  font-size: var(--vt-studio-text-input-standard-font-size, 38px);
+  line-height: var(--vt-studio-control-line-height, .86);
 }
 input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  font-size: var(--vt-studio-text-input-compact-font-size, 24px) !important;
-  line-height: var(--vt-studio-control-line-height, .86) !important;
+  font-size: var(--vt-studio-text-input-compact-font-size, 24px);
+  line-height: var(--vt-studio-control-line-height, .86);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   display: block;
@@ -948,20 +949,22 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   min-height: var(--vt-studio-textarea-min-height, 92px);
   resize: vertical;
   padding: 10px 12px;
-  font-size: var(--vt-studio-textarea-standard-font-size, 18px) !important;
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, .5px) var(--vt-field-primary);
   line-height: var(--vt-studio-textarea-standard-line-height, 1.25);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   min-height: var(--vt-studio-textarea-min-height, 92px);
   padding: 8px 10px;
-  font-size: var(--vt-studio-textarea-compact-font-size, 14px) !important;
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) var(--vt-field-primary);
   line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea)::placeholder {
   color: var(--vt-field-primary);
   -webkit-text-fill-color: var(--vt-field-primary);
-  -webkit-text-stroke: .5px var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);
   font: inherit;
   opacity: 1;
 }
@@ -969,7 +972,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: .5px #000;
+  -webkit-text-stroke: var(--vt-field-stroke) #000;
   outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset);
   
@@ -1104,7 +1107,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
 /* Canonical tactile motion tokens: 180ms general transition, 80ms press. */
 :root { --vt-studio-motion-button: 180ms; --vt-studio-motion-press: 80ms; }
-button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:auto; max-width:100%; min-width:0; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000;  overflow:visible; transform:translate(0,0);  }
+button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:100%; max-width:100%; min-width:0; flex:1 1 auto; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000;  overflow:visible; transform:translate(0,0);  }
 button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color);  opacity:1;  pointer-events:none; }
 /* Split-left uses one real offset shadow on its shell. A translated filled pseudo-box
    creates a second opaque silhouette behind the badge and can mispaint in nested
@@ -1165,7 +1168,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {  }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0);  }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0);  }
 /* Compact buttons may be stretched by grid/flex parents. Make the visible face
    occupy the same inline footprint as the shell that anchors its shadow; otherwise
    the shell shadow exposes the parent width beyond the intrinsic face (often 8px
@@ -1177,18 +1180,18 @@ button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:r
    own explicit full-width / fixed-square geometry below. */
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
   box-sizing: border-box;
-  width: max-content;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
   padding: 0; /* The shell owns geometry; the inner face owns the 8px text inset. */
-  flex: 0 1 auto;
+  flex: 1 1 auto;
 }
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {
   box-sizing: border-box;
-  width: auto;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   padding-inline: 8px;
   font-size: 24px;
 }
@@ -3677,8 +3680,8 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
-  border: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
-  border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px)));
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
 }
 .vt-studio-split-left-badge__face,
 .vt-studio-split-right-badge__face,
@@ -3692,10 +3695,10 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   border-radius: 0;
   overflow: hidden;
 }
-.vt-studio-split-left-badge__face { grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr); }
-.vt-studio-split-right-badge__face { grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)); }
+.vt-studio-split-left-badge__face { grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr); }
+.vt-studio-split-right-badge__face { grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height); }
 .vt-studio-double-split-badge__face {
-  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr) var(--vt-studio-control-height);
 }
 .vt-studio-split-left-badge__rail,
 .vt-studio-split-right-badge__rail,
@@ -3704,8 +3707,8 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   display: grid;
   place-items: center;
   align-self: stretch;
-  flex: 0 0 var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
-  width: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  flex: 0 0 var(--vt-studio-control-height);
+  width: var(--vt-studio-control-height);
   min-width: 0;
   max-width: 100%;
   height: auto;
@@ -3715,21 +3718,31 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   border-radius: 0;
   border-right: 0;
   border-left: 0;
+  line-height: 0;
 }
 .vt-studio-split-left-badge__rail,
 .vt-studio-split-right-badge__rail {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary);
 }
 .vt-studio-double-split-badge__rail:first-child {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  background: var(--vt-studio-control-secondary);
+  border-right: var(--vt-studio-control-stroke) solid #000;
 }
 .vt-studio-double-split-badge__rail:last-child {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  background: var(--vt-studio-control-secondary);
+  border-left: var(--vt-studio-control-stroke) solid #000;
 }
-.vt-studio-split-left-badge__rail { border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000; }
-.vt-studio-split-right-badge__rail { border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000; }
+.vt-studio-split-left-badge__rail { border-right: var(--vt-studio-control-stroke) solid #000; }
+.vt-studio-split-right-badge__rail { border-left: var(--vt-studio-control-stroke) solid #000; }
+.vt-studio-split-left-badge__rail > svg,
+.vt-studio-split-right-badge__rail > svg,
+.vt-studio-double-split-badge__rail > svg {
+  display: block;
+  width: var(--vt-studio-control-icon-size);
+  height: var(--vt-studio-control-icon-size);
+  align-self: center;
+  justify-self: center;
+}
 .vt-studio-split-left-badge__label,
 .vt-studio-split-right-badge__label,
 .vt-studio-double-split-badge__label {
@@ -3741,45 +3754,45 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   align-self: stretch;
   overflow: hidden;
   border-radius: 0;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .vt-studio-split-left-badge[data-size="standard"],
 .vt-studio-split-right-badge[data-size="standard"],
 .vt-studio-double-split-badge[data-size="standard"] {
-  --vt-studio-badge-height: var(--vt-studio-44-height, 44px);
-  --vt-studio-badge-stroke: var(--vt-studio-44-stroke, 3px);
-  --vt-studio-badge-radius: var(--vt-studio-44-radius, 6px);
-  --vt-studio-control-height: var(--vt-studio-44-height, 44px);
-  --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
-  --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
-  --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
-  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
+  --vt-studio-badge-height: var(--vt-studio-44-height);
+  --vt-studio-badge-stroke: var(--vt-studio-44-stroke);
+  --vt-studio-badge-radius: var(--vt-studio-44-radius);
+  --vt-studio-control-height: var(--vt-studio-44-height);
+  --vt-studio-control-stroke: var(--vt-studio-44-stroke);
+  --vt-studio-control-radius: var(--vt-studio-44-radius);
+  --vt-studio-control-font-size: var(--vt-studio-44-font-size);
+  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size);
 }
 .vt-studio-split-left-badge[data-size="compact"],
 .vt-studio-split-right-badge[data-size="compact"],
 .vt-studio-double-split-badge[data-size="compact"] {
-  --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
-  --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
-  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
-  --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
-  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
+  --vt-studio-badge-height: var(--vt-studio-28-height);
+  --vt-studio-badge-stroke: var(--vt-studio-28-stroke);
+  --vt-studio-badge-radius: var(--vt-studio-28-radius);
+  --vt-studio-control-height: var(--vt-studio-28-height);
+  --vt-studio-control-stroke: var(--vt-studio-28-stroke);
+  --vt-studio-control-radius: var(--vt-studio-28-radius);
+  --vt-studio-control-font-size: var(--vt-studio-28-font-size);
+  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size);
 }
 .vt-studio-split-left-badge[data-size="micro"],
 .vt-studio-split-right-badge[data-size="micro"],
 .vt-studio-double-split-badge[data-size="micro"] {
-  --vt-studio-badge-height: var(--vt-studio-14-height, 14px);
-  --vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px);
-  --vt-studio-badge-radius: var(--vt-studio-14-radius, 2px);
-  --vt-studio-control-height: var(--vt-studio-14-height, 14px);
-  --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-14-radius, 2px);
-  --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px);
-  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px);
+  --vt-studio-badge-height: var(--vt-studio-14-height);
+  --vt-studio-badge-stroke: var(--vt-studio-14-stroke);
+  --vt-studio-badge-radius: var(--vt-studio-14-radius);
+  --vt-studio-control-height: var(--vt-studio-14-height);
+  --vt-studio-control-stroke: var(--vt-studio-14-stroke);
+  --vt-studio-control-radius: var(--vt-studio-14-radius);
+  --vt-studio-control-font-size: var(--vt-studio-14-font-size);
+  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size);
 }
 .vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label,
 .vt-studio-split-right-badge[data-size="compact"] .vt-studio-split-right-badge__label,
