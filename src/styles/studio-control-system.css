@@ -3,6 +3,7 @@
    CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
 
 [data-vt-studio-control] {
+  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
   --vt-studio-control-height: var(--vt-studio-44-height, 44px);
   --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
   --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
