@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { EvidenceRecord } from "./EvidenceRecord"
 import {
  assessBrainEvidenceScope,
+ normalizeBrainConfidence,
  projectEvidenceRecordToBrainClaim,
  summarizeBrainEvidenceHealth,
 } from "./BrainEvidenceContract"
@@ -24,6 +25,15 @@ const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
 })
 
 describe("Brain evidence contract", () => {
+ it("normalizes confidence only with an explicit source scale", () => {
+  expect(normalizeBrainConfidence(0.72)).toBe(0.72)
+  expect(normalizeBrainConfidence(72, "percent")).toBe(0.72)
+  expect(normalizeBrainConfidence(100, "percent")).toBe(1)
+  expect(normalizeBrainConfidence(-20, "percent")).toBe(0)
+  expect(normalizeBrainConfidence(140, "percent")).toBe(1)
+  expect(normalizeBrainConfidence(Number.NaN, "percent")).toBeNull()
+  expect(normalizeBrainConfidence(null, "percent")).toBeNull()
+ })
  it("projects canonical provenance and scope without replacing the source record", () => {
   const source = record()
   const claim = projectEvidenceRecordToBrainClaim(source)
