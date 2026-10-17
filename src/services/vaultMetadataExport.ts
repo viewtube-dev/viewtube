@@ -2,7 +2,7 @@ import type { VaultAsset } from "../types"
 
 const csvCell = (value: unknown): string => {
  const text = value == null ? "" : String(value)
- if (!/[",\n\r]/.test(text)) return text
+ if (!/[",\n\r;]/.test(text)) return text
  return `"${text.replace(/"/g, '""')}"`
 }
 

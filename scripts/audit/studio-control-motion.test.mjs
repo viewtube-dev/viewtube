@@ -40,11 +40,18 @@ test("reduced-motion users receive no motion from the restored controls", () => 
   }
 })
 
-test("motion stylesheet loads after the canonical Studio control stylesheet", () => {
-  const baseIndex = entry.indexOf('import "../styles/studio-control-system.css"')
-  const motionIndex = entry.indexOf('import "../styles/studio-control-motion.css"')
-  assert.ok(baseIndex >= 0, "canonical stylesheet import must exist")
-  assert.ok(motionIndex > baseIndex, "motion stylesheet must load after canonical styles")
+test("canonical split stylesheets load in dependency order before motion", () => {
+  const expected = [
+    'import "../styles/studio-control-system.css"',
+    'import "../styles/studio-control-vars.generated.css"',
+    'import "../styles/studio-control-core.css"',
+    'import "../styles/studio-control-split.css"',
+    'import "../styles/studio-control-fields.css"',
+    'import "../styles/studio-control-motion.css"',
+  ]
+  const positions = expected.map((statement) => entry.indexOf(statement))
+  assert.ok(positions.every((position) => position >= 0), "all canonical Studio stylesheets must be imported")
+  assert.deepEqual(positions, [...positions].sort((a, b) => a - b), "Studio stylesheet imports must preserve token → core → split → fields → motion order")
 })
 
 test("restored motion does not add shell movement or shadow effects", () => {

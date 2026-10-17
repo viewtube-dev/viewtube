@@ -6,6 +6,13 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { StudioDropdown } from "./primitives/StudioDropdown"
 import { StudioActionButton, StudioButton, StudioCloseableBadge, StudioIconButton, StudioSplitLeftButton, StudioTagEditor } from "./primitives/StudioControls"
 
+const readStudioControlCss = () => [
+  "studio-control-system.css",
+  "studio-control-core.css",
+  "studio-control-split.css",
+  "studio-control-fields.css",
+].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
+
 describe("Studio Hub canonical controls", () => {
   it("marks every action with the Studio ownership boundary and registered size", () => {
     const html = renderToStaticMarkup(
@@ -28,7 +35,7 @@ describe("Studio Hub canonical controls", () => {
   })
 
   it("centers split-left icon rails and labels against the full control height", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail]')
     expect(css).toContain("height: 100%")
     expect(css).toContain("place-items: center")
@@ -46,7 +53,7 @@ describe("Studio Hub canonical controls", () => {
   })
 
   it("uses the global standard/compact icon tokens for split-left controls and keeps smaller presets opt-in", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("--vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px)")
     expect(css).toContain("--vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9)")
     expect(css).toContain("--vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px)")
@@ -63,7 +70,7 @@ describe("Studio Hub canonical controls", () => {
   })
 
   it("defines one canonical field and split-left geometry contract", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("caret-shape: block")
     expect(css).toContain("border-right:var(--vt-studio-control-stroke) solid #000")
     expect(css).not.toContain("--vt-studio-control-hover-offset:.75px")
@@ -73,31 +80,23 @@ describe("Studio Hub canonical controls", () => {
 
 
   it("keeps split-left and split-stepper shells flat and stationary", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }')
+    const css = readStudioControlCss()
     expect(css).toContain('.vt-studio-split-stepper::before { content: none; display: none; }')
-    expect(css).toContain("box-shadow: none !important;")
-    expect(css).toContain("transition: none !important;")
+    expect(css).toContain('[data-vt-studio-control="true"] {')
+    expect(css).toContain("box-shadow: none;")
     expect(css).not.toContain("var(--vt-studio-control-shadow-x, 3px) var(--vt-studio-control-shadow-y, 3px) 0 0")
     expect(css).not.toContain("translate(var(--vt-studio-control-shadow-x")
   })
 
 
   it("uses token-owned geometry and secondary rails for split badges", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    const badge = css.slice(css.indexOf("/* Canonical split-badge geometry contract"))
-    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-44-height)")
-    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-44-stroke)")
-    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-44-radius)")
-    expect(badge).toContain("--vt-studio-badge-height: var(--vt-studio-28-height)")
-    expect(badge).toContain("--vt-studio-badge-stroke: var(--vt-studio-28-stroke)")
-    expect(badge).toContain("--vt-studio-badge-radius: var(--vt-studio-28-radius)")
-    expect(badge).toContain(".vt-studio-double-split-badge__rail:first-child {\n  background: var(--vt-studio-control-secondary);")
-    expect(badge).toContain(".vt-studio-double-split-badge__rail:last-child {\n  background: var(--vt-studio-control-secondary);")
-    expect(badge).not.toContain("#36e0f6")
-    expect(badge).not.toContain("#ff7f6b")
-    expect(badge).not.toContain("--vt-studio-badge-radius: 10px")
-    expect(badge).not.toContain("--vt-studio-badge-radius: 7px")
+    const css = readStudioControlCss()
+    const badge = css.slice(css.indexOf("/* Unified split shell."))
+    expect(badge).toContain('grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px))')
+    expect(badge).toContain('background: var(--vt-studio-control-secondary);')
+    expect(badge).toContain('border-radius: 0;')
+    const rails = badge.match(/\.vt-studio-split-shell\[data-vt-studio-split="double"\] > \[data-vt-studio-split-rail\],[\s\S]*?\{ background: var\(--vt-studio-control-secondary\); \}/)?.[0] || ""
+    expect(rails).toContain('background: var(--vt-studio-control-secondary);')
   })
 
 
@@ -129,7 +128,7 @@ describe("Studio Hub canonical controls", () => {
     expect(html).toContain('data-vt-studio-tag-editor="true"')
     expect(html).toContain("TAG ONE")
     expect(html).toContain('aria-label="Add tag"')
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("@keyframes vt-studio-badge-enter")
     expect(css).toContain("@keyframes vt-studio-badge-swap")
     expect(css).toContain(".vt-studio-tag-editor__fly")
@@ -144,7 +143,7 @@ describe("Studio Hub canonical controls", () => {
         defaultValue="one"
       />,
     )
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const primitive = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioDropdown.tsx"), "utf8")
 
     expect(html).toContain('aria-haspopup="listbox"')

@@ -126,13 +126,15 @@ export const readVaultWorkspaceState = (): VaultWorkspaceState => {
   const legacyWorkspace = parsed.importTagsMode == null
   const visibleSeed = legacyWorkspace
    ? [...rawVisible, "import-tags", "text-editor", "health-center", "image-workbench", "video-workbench"]
-   : [...rawVisible, "image-workbench", "video-workbench", ...(rawOrder.includes("health-center") ? [] : ["health-center"]), ...(rawOrder.includes("relationship-review") ? [] : ["relationship-review"])]
+   : rawVisible
   const orderSeed = legacyWorkspace
    ? [...rawOrder, "import-tags", "text-editor"]
    : rawOrder
   const visibleModules = normalizeModules(visibleSeed)
   const storedOrder = normalizeModules(orderSeed)
-  const moduleOrder = [...storedOrder, ...DEFAULT_VAULT_MODULE_ORDER.filter((id) => !storedOrder.includes(id))]
+  const moduleOrder = storedOrder.length > 0
+   ? storedOrder
+   : [...DEFAULT_VAULT_MODULE_ORDER]
 
   const rawOperationsMode = String(parsed.assetOperationsMode || "")
   const assetOperationsMode: VaultAssetOperationsMode = (

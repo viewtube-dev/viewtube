@@ -15,6 +15,9 @@ const productionSubtoolboxConsumers = [
 ]
 
 const source = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8")
+const studioControlStyles = () => [
+  "studio-control-system.css", "studio-control-core.css", "studio-control-split.css", "studio-control-fields.css",
+].map((file) => source("src/styles/" + file)).join("\n")
 
 describe("subtoolbox design governance", () => {
  it.each(productionSubtoolboxConsumers)("keeps %s on the canonical nested shell", (path) => {
@@ -201,7 +204,7 @@ describe("subtoolbox design governance", () => {
 
  it("locks Video Manager spacing and level hierarchy to the new mobile authority", () => {
   const manager = source("src/views/VideoManager.tsx")
-  const systemCss = source("src/styles/studio-control-system.css")
+  const systemCss = studioControlStyles()
   const toolbox = source("src/components/Toolbox.tsx")
   const toolboxCss = source("src/styles/toolbox-system.css")
   const primitiveCss = source("src/styles/subtoolbox-system.css")
@@ -366,7 +369,7 @@ describe("subtoolbox design governance", () => {
  })
 
  it("keeps legacy Studio field wrappers on the same inherited pair and field-state contract", () => {
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
 
   expect(studioCss).toContain("--vt-studio-control-accent: var(--pair-a")
   expect(studioCss).toContain("--vt-studio-control-secondary: var(--pair-b")
@@ -512,7 +515,7 @@ describe("subtoolbox design governance", () => {
  it("uses ViewTube Minimal as the canonical default control contract", () => {
   const tokenSource = source("src/components/subtoolbox/tokens.ts")
   const subtoolboxCss = source("src/styles/subtoolbox-system.css")
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
 
   expect(tokenSource).toContain("controlLetterSpacingEm: -0.035")
   expect(tokenSource).toContain("controlLineHeight: 0.86")
@@ -615,7 +618,7 @@ describe("subtoolbox design governance", () => {
 
   it("keeps confirmed Studio controls authored and styled in the canonical system", () => {
     const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
-    const studioCss = source("src/styles/studio-control-system.css")
+    const studioCss = studioControlStyles()
     const publicIndex = source("src/studio-ui/index.ts")
     const subtoolboxPrimitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
     const subtoolboxCss = source("src/styles/subtoolbox-system.css")
@@ -637,7 +640,7 @@ describe("subtoolbox design governance", () => {
 
  
  it("keeps Studio phases 3–5 aligned across controls, dropdowns, and the Confirmed Library", () => {
-   const studioCss = source("src/styles/studio-control-system.css")
+   const studioCss = studioControlStyles()
    const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
    const catalogCss = source("src/components/studio-hub/studio-hub-primitive-catalogs.css")
@@ -667,7 +670,7 @@ describe("subtoolbox design governance", () => {
    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
    const catalogCss = source("src/components/studio-hub/studio-hub-primitive-catalogs.css")
    const studioControls = source("src/studio-ui/primitives/StudioControls.tsx")
-   const studioCss = source("src/styles/studio-control-system.css")
+   const studioCss = studioControlStyles()
 
    for (const component of ["StudioSwitch", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioWordToggle", "StudioTextInput", "StudioTextArea", "StudioButton", "StudioActionButton", "StudioSplitLeftButton", "StudioLegendMultiDropdown"]) {
      expect(catalog).toContain(component)
@@ -704,14 +707,14 @@ describe("subtoolbox design governance", () => {
 
 describe("compact Studio button shell and face width regression", () => {
  it("excludes modern StudioButton shells from the legacy compact-control padding rule", () => {
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
   const legacyCompactRule = studioCss.match(/button\[data-vt-studio-control\]\[data-size="compact"\][^{]*\{[^}]*\}/s)?.[0] ?? ""
 
   expect(legacyCompactRule).toContain(':not([data-vt-studio-button="true"])')
  })
 
  it("keeps compact shell padding at zero and the face/shadow anchored to the same shell width", () => {
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
   const compactShellRule = studioCss.match(/button\[data-vt-studio-button="true"\]\[data-size="compact"\]:not\(\[data-split-left="true"\]\):not\(\[data-icon-only="true"\]\) \{[^}]*\}/s)?.[0] ?? ""
 
   expect(compactShellRule).toMatch(/padding:\s*0(?:;| !important;)/)
@@ -735,7 +738,7 @@ describe("compact Studio button shell and face width regression", () => {
 
 describe("Studio control defaults stay canonical and motionless", () => {
  it("does not retain legacy hover-offset tokens or action-button movement", () => {
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
   const studioTokens = source("src/studio-ui/tokens.ts")
 
   expect(studioCss).not.toContain("--vt-studio-control-hover-offset")
@@ -762,7 +765,7 @@ describe("Studio control defaults stay canonical and motionless", () => {
 
 describe("Studio split badges, textarea strokes, and size tokens", () => {
  it("uses size-family radii in the final shared split-badge cascade", () => {
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
   const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
 
   expect(canonical).toContain("border-radius: var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px))")
@@ -771,7 +774,7 @@ describe("Studio split badges, textarea strokes, and size tokens", () => {
  })
 
  it("applies primary inline text strokes to textareas and black strokes on focus", () => {
-  const studioCss = source("src/styles/studio-control-system.css")
+  const studioCss = studioControlStyles()
   expect(studioCss).toContain('--vt-studio-textarea-text-stroke, .5px) var(--vt-field-primary, var(--pair-a, #36e0f6))')
   expect(studioCss).toContain('--vt-studio-textarea-text-stroke, .5px) #000')
   expect(studioCss).toContain('--vt-studio-textarea-text-stroke: .35px')
@@ -788,7 +791,7 @@ describe("Studio split badges, textarea strokes, and size tokens", () => {
 
 describe("canonical split badge geometry and color ownership", () => {
   it("uses one outer radius and square clipped interior fills for every split badge", () => {
-    const studioCss = source("src/styles/studio-control-system.css")
+    const studioCss = studioControlStyles()
     const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
     expect(canonical).toContain("width: 100%;")
     expect(canonical).toContain("overflow: hidden;")
@@ -800,7 +803,7 @@ describe("canonical split badge geometry and color ownership", () => {
   })
 
   it("keeps split-right secondary fill inside a fixed, token-sized rail", () => {
-    const studioCss = source("src/styles/studio-control-system.css")
+    const studioCss = studioControlStyles()
     const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
     const railRule = canonical.match(/\.vt-studio-split-left-badge__rail,\s*\.vt-studio-split-right-badge__rail,\s*\.vt-studio-double-split-badge__rail\s*\{[^}]*\}/s)?.[0] ?? ""
     expect(railRule).toContain("flex: 0 0 var(--vt-studio-control-height")
@@ -810,7 +813,7 @@ describe("canonical split badge geometry and color ownership", () => {
   })
 
   it("colors the double-split left rail primary and right rail secondary", () => {
-    const studioCss = source("src/styles/studio-control-system.css")
+    const studioCss = studioControlStyles()
     const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
     expect(canonical).toContain(".vt-studio-double-split-badge__rail:first-child")
     expect(canonical).toContain("background: var(--vt-studio-control-accent, var(--vt-studio-primary, var(--pair-a, #36e0f6)));")

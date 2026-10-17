@@ -83,7 +83,6 @@ export const selectProjectVideoPackageThumbnail = (
   setContentBuildSelection(project.contentBuildId, "thumbnail", asset.id, {
     toolId: sourceToolId,
     actorType: "creator",
-    final: true,
   })
 
   const videoPackage = ensureVideoPackageForProject(project, input)
