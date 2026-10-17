@@ -91,18 +91,19 @@ export const CommentResponder: React.FC = () => {
     </div> : <p className="rounded-xl border-2 border-dashed border-black/30 p-4 text-xs font-bold">No classifiable audience patterns in the loaded comments. Ambiguous feedback remains visible in the source queue and is not assigned an intent.</p>}
    </SubToolbox>
 
-   <SubToolbox title="Video Context" icon={<MessageCircle />} collapsible isOpenInitial>
-    {thread ? <div className="grid grid-cols-[120px_1fr] gap-4 min-w-0">
-     <div className="aspect-video border-[3px] border-black rounded-xl overflow-hidden bg-gray-100">{thumbnail ? <img src={thumbnail} width={320} height={180} alt={`Thumbnail for ${videoTitle}`} className="w-full h-full object-cover" /> : <div className="w-full h-full grid place-items-center"><Loader2 className="animate-spin" /></div>}</div>
-     <div className="min-w-0"><p className="text-[9px] font-black uppercase opacity-45">Commented On</p><h3 className="font-black text-base leading-tight break-words">{videoTitle}</h3>{commentUrl && <a href={commentUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 text-[10px] font-black uppercase underline"><ExternalLink size={13} aria-hidden="true" />Go to Comment</a>}</div>
-    </div> : <p className="p-6 text-center font-black uppercase opacity-35">{context.connected ? "Select a comment to see its video." : "Video context will appear after you connect your channel."}</p>}
-   </SubToolbox>
-
    {comments.inboundImageUrl && <SubToolbox title="Received Image" icon={<Link2 />} collapsible isOpenInitial={false}><div className="flex items-center gap-3"><StudioTextArea readOnly value={comments.inboundImageUrl} aria-label="Received image URL" className="min-h-[72px]" /><StudioButton type="button" onClick={() => navigator.clipboard.writeText(comments.inboundImageUrl || "")}>Copy URL</StudioButton></div></SubToolbox>}
   </div>
 
   <div className="flex flex-col gap-2 sm:gap-4 lg:gap-6 min-w-0">
    <SubToolbox title="Conversation Thread" icon={<MessagesSquare />} collapsible isOpenInitial>
+    {thread && <div data-comment-video-context className="mb-4 grid min-w-0 grid-cols-[112px_minmax(0,1fr)] items-center gap-3 rounded-xl border-2 border-black bg-white p-2 sm:grid-cols-[140px_minmax(0,1fr)]">
+     <div className="aspect-video overflow-hidden rounded-lg border-2 border-black bg-gray-100">{thumbnail ? <img src={thumbnail} width={320} height={180} alt={"Thumbnail for " + videoTitle} className="h-full w-full object-cover" /> : <div className="grid h-full w-full place-items-center"><Loader2 className="animate-spin" /></div>}</div>
+     <div className="min-w-0">
+      <p className="text-[9px] font-black uppercase tracking-wide opacity-50">Commented on this video</p>
+      <h3 className="mt-1 break-words text-sm font-black leading-tight">{videoTitle}</h3>
+      {commentUrl && <a href={commentUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] font-black uppercase underline"><ExternalLink size={12} aria-hidden="true" />Open on YouTube</a>}
+     </div>
+    </div>}
     {thread && snippet ? <div aria-label="Comment conversation thread" className="max-h-[min(62vh,640px)] space-y-4 overflow-y-auto p-1">
      <article className="flex min-w-0 items-start gap-2 sm:gap-3" data-comment-message="original">
       <CommentAvatar name={plainText(snippet.authorDisplayName || "Viewer")} src={snippet.authorProfileImageUrl} />
