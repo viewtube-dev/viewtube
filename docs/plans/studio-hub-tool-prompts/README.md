@@ -54,3 +54,24 @@
 13. Creator Strategy Engine — governed cross-tool synthesis and next-best move.
 
 Order is a dependency suggestion, not a claim that earlier steps are complete. Each prompt must report real blockers and status.
+## Existing-tool consolidation map
+
+These are starting ownership decisions to verify against live consumers before deleting or relocating anything.
+
+| Existing tool/capability | Target relationship | Guardrail |
+|---|---|---|
+| Opportunity Radar widget + Brain opportunity adapters | Opportunity Radar | One canonical opportunity pipeline; no duplicate scoring/store. |
+| Script Architect + hook generation | Content Architect and Story Engine modes/capabilities | Architect owns concept; Story Engine owns narrative/beat blueprint. Keep Video Director as production execution owner. |
+| Content Analysis + analytics outputs | Video Genome, pre-publication analysis, post-publication analysis | Reuse Analytics Canon and evidence contracts; do not equate patterns with causality. |
+| Video Director | Remains production-direction owner; consumes Story Engine output | Do not replace it with another editor or production surface. |
+| Asset Engine + Vault | Asset Forge orchestration capability | Asset Engine/Vault remain the canonical asset stores. |
+| Audience Studio + Community Posts + Comment Responder | Audience Pulse capabilities | Preserve source post/comment identity and creator approval for writes. |
+| Thumbnail Studio + End-Screen Architect | Thumbnail Studio remains packaging owner; end-screen becomes a capability unless evidence proves separate ownership | Do not create competing packaging stores. |
+| Publishing Package + Video Publisher | Publishing Package remains a Publisher subworkflow | Video Publisher owns unpublished publication preparation; Video Manager owns already-published video metadata. |
+| Pre-Launch Priming | Keep as a pre-publication activation workflow, integrated with Audience Pulse/Publisher | Do not merge it into generic strategy without proving workflow parity. |
+| Tactics Engine | Remains action/intervention owner; hands off to Experiment Lab and Projects | It does not replace Creator Strategy Engine's cross-tool synthesis. |
+| Content Autopilot + Shorts extraction/editor routes | Content Autopilot proposes derivatives; existing Shorts/editor path performs production | No parallel editor or autonomous publishing. |
+| Revenue Opportunity Map + scenario planning | Revenue Architect shares Channel Simulator scenario logic | Do not maintain separate scenario engines. |
+| Channel Flywheel + cross-tool strategic synthesis | Flywheel is a diagnostic capability; Creator Strategy Engine prioritizes actions | Brain remains the canonical evidence and learning owner. |
+
+**Migration safety:** these relationships are not permission to delete an existing tool. Each execution prompt must search consumers, define compatibility/adapters, test the replacement path, and only then remove redundant implementation.
