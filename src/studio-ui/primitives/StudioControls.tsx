@@ -1120,6 +1120,61 @@ export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ opti
 StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
 // Canonical Studio stepper implementations are owned by this module.
+/** Pointer hold-repeat shared by the canonical counter buttons. */
+const useStudioCounterHold = (
+  direction: -1 | 1, current: number, min: number, max: number, step: number,
+  adjust: (direction: -1 | 1) => void, disabled: boolean,
+) => {
+  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const startedAt = React.useRef(0);
+  const held = React.useRef(false);
+  const suppressClick = React.useRef(false);
+  const [isHolding, setIsHolding] = React.useState(false);
+  const stop = React.useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+    if (held.current) suppressClick.current = true;
+    held.current = false;
+    setIsHolding(false);
+  }, []);
+  React.useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  const onPointerDown = React.useCallback((event: React.PointerEvent<HTMLButtonElement>) => {
+    if (disabled || event.button !== 0) return;
+    if (timer.current) clearTimeout(timer.current);
+    held.current = false;
+    suppressClick.current = false;
+    startedAt.current = Date.now();
+    timer.current = setTimeout(() => {
+      held.current = true;
+      setIsHolding(true);
+      const repeat = () => {
+        if (!held.current) return;
+        const value = currentRef.current;
+        const atBound = direction > 0 ? value >= max : value <= min;
+        if (atBound) { stop(); return; }
+        adjust(direction);
+        const elapsed = Date.now() - startedAt.current;
+        const remaining = direction > 0 ? max - value : value - min;
+        const nearBound = Number.isFinite(remaining) && remaining <= step * 4;
+        const delay = nearBound ? 190 : Math.max(42, 145 - Math.floor(elapsed / 900) * 18);
+        timer.current = setTimeout(repeat, delay);
+      };
+      repeat();
+    }, 380);
+  }, [adjust, direction, disabled, max, min, step, stop]);
+  const onClick = React.useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    if (suppressClick.current) {
+      event.preventDefault(); event.stopPropagation(); suppressClick.current = false;
+    } else if (!disabled) adjust(direction);
+  }, [adjust, direction, disabled]);
+  return { isHolding, events: {
+    onPointerDown, onPointerUp: stop, onPointerLeave: stop,
+    onPointerCancel: stop, onBlur: stop, onClick,
+  }};
+};
+
 /** Independent button-only counter primitives. These deliberately do not compose either legacy stepper. */
 export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
   value: number;
