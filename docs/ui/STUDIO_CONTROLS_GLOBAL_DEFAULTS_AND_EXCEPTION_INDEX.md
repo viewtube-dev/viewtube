@@ -11,7 +11,7 @@
 
 ## 1. Global defaults — independent of size
 
-These rules apply first. The selected size tier changes dimensions, not the meaning of the shared color, alignment, typography, or layout rules.
+These rules apply first. The selected size tier changes dimensions, not the meaning of the shared color, alignment, typography, or layout rules. The global 4px spacing rule is exclusively for gaps between rows, columns, and sibling components; it does not prescribe internal padding, control insets, icon-to-label spacing, switch-handle geometry, or any other within-primitive measurement.
 
 | Property | Canonical default |
 |---|---|
@@ -52,7 +52,7 @@ The size tier determines height, border stroke, radius, typography, icon size, a
 | Icon size | 38px | 24px | 10px |
 | Default icon stroke | 1.9px | 2px | 1.5px |
 | Secondary focus-outline width (when applicable) | 1.95px | 1.3px | 0.65px |
-| Standard gap token | 4px | 4px | 4px |
+| Layout spacing between rows, columns, and sibling components only | 4px | 4px | 4px |
 | Text transform | Uppercase | Uppercase | Uppercase |
 | Letter spacing | -0.02em | -0.02em | -0.01em |
 | Line height | 0.86 | 0.86 | 1.0 |
