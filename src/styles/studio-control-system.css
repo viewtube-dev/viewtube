@@ -2877,8 +2877,8 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 }
 
 
-/* Single global effect policy: Studio primitives/components are flat and motionless.
-   Use outlines and paint/state changes, never shadows, fake-shadow layers, or transitions. */
+/* Global shell policy: keep surfaces flat without suppressing inner-state motion.
+   Motion belongs to control indicators/labels in studio-control-motion.css; shells stay stationary. */
 [data-vt-studio-control],
 [data-vt-studio-button],
 [data-vt-studio-action-button],
@@ -2900,8 +2900,6 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 .vt-studio-tag-editor__square-action {
   box-shadow: none !important;
   text-shadow: none !important;
-  transition: none !important;
-  transform: none !important;
 }
 
 
