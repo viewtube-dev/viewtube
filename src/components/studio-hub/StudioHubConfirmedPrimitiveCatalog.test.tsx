@@ -156,7 +156,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("white-space: nowrap")
     const labelBlock = css.slice(css.indexOf(".vt-studio-split-left-badge__label,"), css.indexOf(".vt-studio-split-shell > [data-vt-studio-split-field]"))
     expect(labelBlock).not.toContain("flex: 1 1 0%")
-    expect(labelBlock).not.toContain("width: 0")
+    expect(labelBlock).not.toMatch(/(?:^|\\n)\\s*width:\\s*0(?:;|\\s|$)/)
   })
 
   it("enforces global primary/secondary palette, centered labels, 1000 weight, and full-row defaults", () => {
@@ -180,8 +180,11 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("aspect-ratio: 1 / 1;")
     expect(css).toContain("align-items: center")
     expect(css).toContain("justify-content: center")
-    expect(css).toContain("Outer edges are the centering reference")
-    expect(css).toContain("orb1/orb2 are the shared internal")
+    expect(css).toContain(".vt-studio-split-shell > [data-vt-studio-split-rail]")
+    expect(css).toContain("justify-content: center")
+    expect(css).toContain("text-align: center")
+    expect(css).toContain("border-right: var(--vt-studio-control-stroke")
+    expect(css).toContain("border-left: var(--vt-studio-control-stroke")
     expect(controls).toContain('splitSegmentRatio: "square-ratio by default; segment labels center against the outer perimeter bounds"')
     expect(controls).toContain('splitDividers: "orb1/orb2 use shared internal segment-boundary dividers, never label-owned borders"')
   })
