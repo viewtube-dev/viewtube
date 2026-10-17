@@ -137,8 +137,8 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(inputModule.includes("StudioTextInput"));
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.ok(catalog.includes("Studio Text Input · Simple + Floating + Fixed Label"));
-  assert.ok(catalog.includes("Single-line input typography is 38px standard / 24px compact"));
-  assert.match(catalog, /Studio Text Area · Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?Textarea-only typography is 18px standard \/ 14px compact/);
+  assert.ok(!catalog.includes("Single-line input typography is 38px standard / 24px compact"), "global input typography belongs in the defaults strip, not per-family exception notes");
+  assert.match(catalog, /Studio Text Area · Simple \+ Floating \+ Fixed Label[\s\S]*?Multiline-only exception: 18px standard \/ 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface/);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
@@ -237,9 +237,12 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
 });
 
-test("word-toggle settings distinguish displayed words from the boolean value", () => {
-  assert.ok(catalog.includes("The first word is selected when the value is false; selecting the second word changes the value to true."));
-  assert.ok(catalog.includes("Custom words change the displayed labels, not the boolean state contract."));
+test("word-toggle boolean behavior is specified by the production primitive, not catalog prose", () => {
+  const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  assert.match(controls, /aria-pressed=\{value === \(index === 1\)\}/);
+  assert.match(controls, /onClick=\{\(\) => onValueChange\?\.\(index === 1\)\}/);
+  assert.ok(!catalog.includes("The first word is selected when the value is false; selecting the second word changes the value to true."));
+  assert.ok(!catalog.includes("Custom words change the displayed labels, not the boolean state contract."));
 });
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
