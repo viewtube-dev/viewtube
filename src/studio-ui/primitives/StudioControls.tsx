@@ -629,7 +629,7 @@ const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
       {layout !== "left" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</span>}
     </>
   )
-  if (faceOnly) return content
+  if (faceOnly) return <span data-vt-studio-split-face="true" data-vt-studio-split={layout} data-size={sizeVariant} className="vt-studio-split-face">{content}</span>
   return (
     <span {...shellProps} data-vt-studio-control="true" data-vt-studio-split={layout}
       data-size={sizeVariant} className={studioClasses("vt-studio-split-shell", className)}>
@@ -1445,6 +1445,7 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
       className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
       data-size={sizeVariant}
       data-vt-studio-badge="true"
+      data-vt-studio-width="content"
       data-entering={isEntering ? "true" : undefined}
       data-fading={fading ? "true" : undefined}
     >
