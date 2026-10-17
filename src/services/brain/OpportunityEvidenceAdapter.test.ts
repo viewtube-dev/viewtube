@@ -309,3 +309,48 @@ describe("Opportunity Radar to Tactics Engine handoff contract", () => {
       .toEqual({ allowed: true, reasons: [] })
   })
 })
+
+
+describe("canonical tool-chain registration for Opportunity Radar → Tactics Engine", () => {
+  it("keeps the Radar tool distinct and routes accepted packets to Tactics Engine for review", async () => {
+    const { VIEWTUBE_TOOL_CAPABILITIES, VIEWTUBE_SUGGESTED_TOOL_CHAINS, createOpportunityTacticsActionPacket } =
+      await import("../viewTubeToolChains")
+    const radar = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === "opportunity-radar")
+    const tactics = VIEWTUBE_TOOL_CAPABILITIES.find((tool) => tool.id === "tactics-engine")
+    const chain = VIEWTUBE_SUGGESTED_TOOL_CHAINS.find((item) => item.id === "opportunity-radar-to-tactics")
+
+    expect(radar).toMatchObject({ kind: "studio-tool", status: "partial", produces: ["evidence"] })
+    expect(tactics).toMatchObject({ kind: "studio-tool", accepts: expect.arrayContaining(["evidence"]) })
+    expect(chain?.steps.map((step) => step.toolId)).toEqual(["opportunity-radar", "tactics-engine", "project-calendar"])
+
+    const packet = {
+      schemaVersion: "vt-opportunity-tactics-handoff-v1" as const,
+      opportunityId: "op-accepted",
+      channelId: "channel-1",
+      videoId: "video-1",
+      entity: "Measured candidate",
+      kind: "performance_candidate" as const,
+      validationState: "accepted" as const,
+      createdAt: "2026-10-17T12:00:00.000Z",
+      evidenceIds: ["ev-1"],
+      confidence: 70,
+      impactScore: 80,
+      currentValue: 1200,
+      baselineValue: null,
+      relativeDelta: null,
+      provenance: { sourceOwner: "analytics-canon" as const, sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d", datasetStatus: "available" },
+      limitations: ["Baseline and relative change are unknown."],
+    }
+    const actionPacket = createOpportunityTacticsActionPacket(packet)
+    expect(actionPacket).toMatchObject({
+      sourceToolId: "opportunity-radar",
+      payloadKind: "evidence",
+      suggestedTargets: ["tactics-engine"],
+      intent: "propose",
+      approvalState: "pending",
+      evidence: ["ev-1"],
+      idempotencyKey: "opportunity-tactics:channel-1:op-accepted:snapshot-1",
+    })
+    expect(actionPacket.payload).toEqual(packet)
+  })
+})
