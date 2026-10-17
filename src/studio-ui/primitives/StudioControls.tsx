@@ -80,7 +80,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
   lineHeight: 0.86,
-  shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
+  shadowPolicy: "Current CSS behavior: ordinary buttons and square/circle icon buttons use offset shadows (3px standard / 1.5px compact) plus hover/press transforms; StudioActionButton uses a 3px offset shadow and separate hover/press transforms. Floating dropdown panels may use a stationary panel shadow; triggers/options do not use the ordinary button-press contract. Tag-editor actions and selected Vault spectrum tags have separately registered shadow/glow treatments. Text fields use black outer borders and primary-color inset strokes. Token hover/press offsets are currently zero, so token metadata does not match effective button CSS.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
     v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
