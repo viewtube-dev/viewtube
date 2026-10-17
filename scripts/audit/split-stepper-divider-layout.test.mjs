@@ -45,7 +45,7 @@ test("inline stepper is built on the canonical double-split shell with interacti
   assert.match(inline, /<StudioSplitShell[\s\S]*?layout="double"/)
   assert.match(inline, /interactiveRails/)
   assert.match(component, /data-vt-studio-split-rail data-rail="start"/)
-  assert.match(inline, /data-vt-studio-control-kind="inline-stepper"/)
+  assert.match(inline, /"data-vt-studio-control-kind": "inline-stepper"/)
   assert.doesNotMatch(inline, /<StudioSplitLeftButton/)
   assert.doesNotMatch(inline, /<StudioUsernameInput/)
   assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*grid-template-columns:\s*var\(--vt-inline-stepper-side\) minmax\(40px, 1fr\) var\(--vt-inline-stepper-side\)/s)
