@@ -1,23 +1,27 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Content Architect
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+MERGE the planned concept-development tool with Script Architect and the existing project/content-build planning path; retain a distinct capability, not a duplicate script app.
 
 ## Core transformation
-TRANSFORM
+Opportunity + creator context → structured content concept
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/features/script-architect/useScriptArchitect.ts`
+- `src/features/script-architect/scriptBrainRuntime.ts`
+- `src/features/script-architect/scriptProjectStore.ts`
+- `src/services/asset-engine/ProjectContentBuildBridge.ts`
+- `src/services/asset-engine/ContentBuildRepository.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Inspect Script Architect, project planning, hook generation, and ContentBuild contracts. Make concept brief, audience promise, format, hook candidates, creator constraints, evidence links, and next action part of the canonical project/content-build record. Keep opportunity discovery in Opportunity Radar and narrative beat execution in Story Engine/Video Director. Preserve existing script workflows through adapters or migration, not parallel stores.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
