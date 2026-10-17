@@ -27,7 +27,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     fill: "alphabetical spectrum color mixed at 35% with white",
     textAndBorder: "resolved alphabetical spectrum color",
     colorResolver: "getAlphabeticalSpectrumColor",
-    selectedTreatment: "1px upward offset plus four-layer white/color glow",
+    selectedTreatment: "flat selected color treatment; no shadow, glow, or geometry offset",
     rationale: "Asset-module tags are donor-specified dense metadata chips, not ordinary 44px/28px controls.",
   },
   closeableBadge: {
@@ -40,7 +40,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     textTransform: "uppercase",
     textColor: "primary mixed 50% with white",
     closeControl: "16px secondary-filled circle with primary X",
-    motion: "450ms enter scale/fade; 3x 180ms close-color swap; 1s fade removal",
+    motion: "CSS transitions disabled by global Studio rule; no movement or shadow effects",
     rationale: "Closeable metadata tags are intentionally dense 20px pills with a 16px circular close action, not ordinary 44px/28px controls.",
   },
   tagEditorAction: {
@@ -49,7 +49,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 28,
     stroke: 2,
     radius: 4,
-    shadow: "1.5px compact offset secondary-color at 45% opacity",
+    shadow: "none; primitive/component shadow prohibition",
     rationale: "The plus/check actions use the canonical compact 28px square-button size.",
   },
   textareaTypography: {
@@ -63,7 +63,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 56,
     stroke: 3,
     radius: 6,
-    shadow: 3,
+    shadow: 0,
     rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
   },
 } as const
@@ -80,12 +80,12 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
   lineHeight: 0.86,
-  shadowPolicy: "Current CSS behavior: ordinary buttons and square/circle icon buttons use offset shadows (3px standard / 1.5px compact) plus hover/press transforms; StudioActionButton uses a 3px offset shadow and separate hover/press transforms. Floating dropdown panels may use a stationary panel shadow; triggers/options do not use the ordinary button-press contract. Tag-editor actions and selected Vault spectrum tags have separately registered shadow/glow treatments. Text fields use black outer borders and primary-color inset strokes. Token hover/press offsets are currently zero, so token metadata does not match effective button CSS.",
+  shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
-    v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
-    v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
-    v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
+    v1: "Primary (--pair-a) face fill; no shadow.",
+    v2: "Secondary (--pair-b) face fill; no shadow.",
+    v3: "Selectable v1/v2 color swap; click toggles the face fill only.",
     v4: "Black face fill with primary (--pair-a) icon stroke.",
     iconPresets: {
       heart: "Heart outline; pair with heart-pop for temporary secondary-color fill and expanding border ripple.",
@@ -113,9 +113,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
       success: "Outcome-driven checkmark and optional tooltip label; set success only after confirmed success.",
     },
-    motion: "Effects are opt-in and scoped to inner layers; reduced-motion suppresses animation without suppressing state feedback.",
+    motion: "Effects must not move primitive geometry; CSS transitions are disabled globally for Studio primitives/components. Any explicitly approved inner-icon animation must be documented and honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
+  focusOutline: "Text inputs and text areas use a visible secondary-color outline with zero offset; focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
@@ -140,10 +140,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "visible secondary-color accent box shadow: 3px standard / 2px compact (last live audit)",
+      focusOutlineWidth: "visible secondary-color outline: 3px standard / 2px compact",
       focusOutlineOffset: "0px for both sizes",
-      outlineStrokeWidth: "computed CSS outline measured 1px in the last live audit; reconcile with declared token before visual certification",
-      outlineShadowColor: "secondary",
+      outlineStrokeWidth: "uses the global focus outline width token: 3px standard / 2px compact",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
   },
@@ -1554,27 +1553,62 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
 StudioTagEditor.displayName = "StudioTagEditor";
 
 
-/** Static split-left status/metadata badge. Unlike action buttons it is never raised,
- * animated, or given a shadow. Micro is a 14px catalog-only density variant. */
+/** Shared static split-badge foundation. All split variants share the same face,
+ * typography, 4px spacing unit, centering rule, and shadow/motion-free geometry. */
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
   sizeVariant?: "standard" | "compact" | "micro";
 }
-export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({
-  icon, children, sizeVariant = "standard", className, ...props
-}) => (
-  <span
-    {...props}
-    data-vt-studio-control="true"
-    data-vt-studio-split-left-badge="true"
-    data-vt-library-component="StudioSplitLeftBadge"
-    data-size={sizeVariant}
-    className={["vt-studio-split-left-badge", className].filter(Boolean).join(" ")}
-  >
-    <span className="vt-studio-split-left-badge__face">
-      <span className="vt-studio-split-left-badge__rail" aria-hidden="true">{icon}</span>
-      <span className="vt-studio-split-left-badge__label">{children}</span>
+interface StudioSplitBadgeBaseProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  layout: "left" | "right" | "double";
+  iconLeft?: React.ReactNode;
+  iconRight?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
+  layout, iconLeft, iconRight, children, sizeVariant = "standard", className, ...props
+}) => {
+  const rootClass = layout === "left" ? "vt-studio-split-left-badge"
+    : layout === "right" ? "vt-studio-split-right-badge" : "vt-studio-double-split-badge";
+  const faceClass = layout === "left" ? "vt-studio-split-left-badge__face"
+    : layout === "right" ? "vt-studio-split-right-badge__face" : "vt-studio-double-split-badge__face";
+  const railClass = layout === "left" ? "vt-studio-split-left-badge__rail"
+    : layout === "right" ? "vt-studio-split-right-badge__rail" : "vt-studio-double-split-badge__rail";
+  const labelClass = layout === "left" ? "vt-studio-split-left-badge__label"
+    : layout === "right" ? "vt-studio-split-right-badge__label" : "vt-studio-double-split-badge__label";
+  return (
+    <span {...props} data-vt-studio-control="true" data-vt-studio-split-badge={layout}
+      data-vt-library-component={layout === "left" ? "StudioSplitLeftBadge" : layout === "right" ? "StudioSplitRightBadge" : "StudioDoubleSplitBadge"}
+      data-size={sizeVariant} className={[rootClass, className].filter(Boolean).join(" ")}>
+      <span className={faceClass}>
+        {layout !== "right" && <span className={railClass} aria-hidden="true">{iconLeft}</span>}
+        <span className={labelClass}>{children}</span>
+        {layout !== "left" && <span className={railClass} aria-hidden="true">{iconRight}</span>}
+      </span>
     </span>
-  </span>
-);StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
+  );
+};
+export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({ icon, ...props }) =>
+  <StudioSplitBadgeBase {...props} layout="left" iconLeft={icon} />;
+StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
+
+export interface StudioSplitRightBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioSplitRightBadge: React.FC<StudioSplitRightBadgeProps> = ({ icon, ...props }) =>
+  <StudioSplitBadgeBase {...props} layout="right" iconRight={icon} />;
+StudioSplitRightBadge.displayName = "StudioSplitRightBadge";
+
+export interface StudioDoubleSplitBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  children: React.ReactNode;
+  sizeVariant?: "standard" | "compact" | "micro";
+}
+export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ leftIcon, rightIcon, ...props }) =>
+  <StudioSplitBadgeBase {...props} layout="double" iconLeft={leftIcon} iconRight={rightIcon} />;
+StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";

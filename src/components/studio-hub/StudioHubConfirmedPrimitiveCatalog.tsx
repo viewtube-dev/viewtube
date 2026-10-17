@@ -14,6 +14,8 @@ import {
   StudioSplitStepper,
   StudioSplitLeftButton,
   StudioSplitLeftBadge,
+  StudioSplitRightBadge,
+  StudioDoubleSplitBadge,
   StudioSquareIconButton,
   StudioPlayPauseButton,
   StudioCircleIconButton,
@@ -54,12 +56,12 @@ const CanonicalControlFamilies: React.FC = () => {
     </Family>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
-      nonDefaultSettings={["This is an informational badge using split-left rail anatomy, not an action button.","Standard is 44px / 3px stroke; compact 28px / 2px; micro is a 14px / 1px-stroke density exception.","The badge uses a 44px pill radius and does not use the button activation contract.","Standard/compact cover full, half, and quarter rows; micro specimens are local to this library module, not global control sizes."]}
+      nonDefaultSettings={["This is an informational badge using split-left rail anatomy, not an action button.","Standard is 44px / 3px stroke; compact 28px / 2px; micro is a 14px / 1px-stroke density exception.","The badge uses a 44px pill radius and does not use the button activation contract.","Standard, compact, and global 14px micro sizes use the shared split-badge foundation; all badge labels center like StudioButton and all sides use the global 4px spacing unit."]}
       provenance={<Provenance
         primitive="StudioSplitLeftBadge"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="44px standard / 28px compact / 14px micro · 44px pill radius · flat and motionless"
+        tokens="44px standard / 28px compact / 14px micro · 4px all-side spacing unit · centered labels · no shadows or transitions"
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
@@ -92,6 +94,13 @@ const CanonicalControlFamilies: React.FC = () => {
           <div className="is-two">{["2×1 A", "2×1 B"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="micro">{label}</StudioSplitLeftBadge>)}</div>
           <div className="is-four">{["A", "B", "C", "D"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="micro">{label}</StudioSplitLeftBadge>)}</div>
         </div>
+        <span>SPLIT-RIGHT BADGE · SHARED FOUNDATION</span>
+        <StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">RIGHT ALIGNED RAIL</StudioSplitRightBadge>
+        <span>DOUBLE-SPLIT BADGE · SHARED FOUNDATION</span>
+        <StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">CENTERED LABEL</StudioDoubleSplitBadge>
+        <span>COMPACT + MICRO VARIANTS</span>
+        <StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="compact">COMPACT RIGHT</StudioSplitRightBadge>
+        <StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="micro">MICRO DOUBLE</StudioDoubleSplitBadge>
       </div>
     </Family>
     <Family title="44px Radio + Checkbox" nonDefaultSettings={["Radio, checkmark checkbox, and wide-X checkbox are separate public controls with different selection marks.","Shape changes the outer control; wide-X changes the mark, not the geometry family.","SOLID is default; COLOR SWAP, BLACK, and WHITE are explicit selected-indicator variants. Disabled controls cannot be changed."]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
