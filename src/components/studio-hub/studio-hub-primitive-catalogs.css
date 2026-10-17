@@ -2586,7 +2586,7 @@
 }
 .vt-confirmed-variants { gap: 7px; }
 .vt-confirmed-variant { gap: 3px; }
-.vt-confirmed-variant > span {
+.vt-confirmed-variant > span:not([data-vt-studio-control="true"]) {
   display: block; max-width: 40ch; overflow: hidden; text-overflow: ellipsis;
   white-space: nowrap; font-size: 10px; line-height: 1.15;
 }
