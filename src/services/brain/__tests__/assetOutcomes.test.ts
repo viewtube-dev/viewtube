@@ -25,6 +25,8 @@ const makeAsset = async (body = "Gearbox is back together. Splines were the prob
  const result = await generateAsset<CommunitySinglePost>({
   request: {
    channelId: "channel-1",
+   operationId: "operation-test-1",
+   workflowId: "workflow-test-1",
    assetType: "community_post",
    instruction: "Post about the gearbox.",
    inputs: { postType: "text" },
@@ -93,6 +95,7 @@ describe("recordAssetOutcome", () => {
   const asset = await makeAsset()
   const outcome = await recordAssetOutcome({ assetId: asset.id, kind: "accepted" })
   expect(outcome?.assetId).toBe(asset.id)
+  expect(outcome).toMatchObject({ operationId: "operation-test-1", workflowId: "workflow-test-1" })
   expect(listAssetOutcomes({ channelId: "channel-1" })).toHaveLength(1)
  })
 
@@ -104,7 +107,11 @@ describe("recordAssetOutcome", () => {
   const summary = summarizeBrainOutcomes("channel-1")
   expect(summary.total).toBe(1)
   expect(summary.accepted).toBe(1)
-  expect(listBrainOutcomes("channel-1")[0].sourceToolId).toBe("audience-loop-studio")
+  expect(listBrainOutcomes("channel-1")[0]).toMatchObject({
+   sourceToolId: "audience-loop-studio",
+   operationId: "operation-test-1",
+   workflowId: "workflow-test-1",
+  })
  })
 
  it("maps a rejection through to the ledger as negative", async () => {
