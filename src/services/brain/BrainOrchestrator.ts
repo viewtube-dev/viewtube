@@ -464,7 +464,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   let response = buildFallback(input.userText, input.snapshot, input.growthContext)
   let status: "complete" | "fallback" = "fallback"
   let generationPath: BrainGenerationPath = "basic_guidance"
-  const blockingContextIssues = getBrainContextBlockingIssues(context.budget.omittedSections)
+  const blockingContextIssues = getBrainContextBlockingIssues(context.budget.omittedSections || [])
   let fallbackReason: BrainFallbackReason | undefined = !input.allowModel
    ? "model_disabled"
    : blockingContextIssues.length
