@@ -32,9 +32,17 @@ describe("Comment Responder Studio Hub contract", () => {
  it("offers connection as an action while preserving the normal tool", () => {
   expect(view).toContain("Connect YouTube Channel")
   expect(view).toContain("comments.reconnect")
-  expect(view).toContain('SubToolbox title="Comment Queue"')
-  expect(view).toContain('SubToolbox title="Conversation Thread"')
-  expect(view).toContain('SubToolbox title={comments.tab === "history" ? "Follow-Up Reply" : "Reply Composer"}')
+  expect(view).toContain('SubToolbox title="Comment Responder"')
+  expect(view).not.toContain('SubToolbox title="Comment Queue"')
+  expect(view).not.toContain('SubToolbox title="Conversation Thread"')
+  expect(view).toContain('data-comment-queue-controls')
+  expect(view).toContain('aria-label="Comment queue filter"')
+  expect(view).toContain('aria-label="Previous and next comments"')
+  expect(view).toContain('data-comment-reply-composer')
+  expect(view).toContain('aria-label="Reply writing actions"')
+  expect(view).toContain('Load previous reply into composer')
+  expect(view).toContain('Select to edit as a new reply draft')
+  expect(view).toContain('event.key === "Enter" && !event.shiftKey')
  })
  it("renders inspectable Audience Pulse signals without implying a handoff was executed", () => {
   expect(view).toContain('SubToolbox title="Audience Pulse"')
@@ -66,7 +74,8 @@ describe("Comment Responder Studio Hub contract", () => {
 
  it("makes generation, refinement, and video suggestions explicit contextual actions", () => {
   expect(view).toContain('comments.replyText.trim() ? "Refine" : "Generate"')
-  expect(view).toContain('label="Suggest Videos"')
+  expect(view).toContain('>Suggest Videos</StudioSplitLeftButton>')
+  expect(view).toContain('>Post</StudioSplitLeftButton>')
   expect(view).toContain("comments.draftReply")
   expect(view).toContain("comments.suggestVideo")
  })
