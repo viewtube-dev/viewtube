@@ -36,6 +36,7 @@ describe("StudioSplitStepper", () => {
   it("centers the rail divider and gives both actions equal rows", () => {
     expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/s)
     expect(css).toContain(".vt-studio-split-stepper-rail button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
+    expect(css).toContain(".vt-studio-split-stepper-rail button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
     expect(css).toContain(".vt-studio-split-stepper-rail button:focus-visible { outline: 3px solid")
   })
 
