@@ -141,6 +141,17 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("border-left-width: 1px !important")
   })
 
+  it("uses primary/secondary rail colors and contains split-right/double-split labels", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("Split badge palette + label containment correction (2026-10-17)")
+    expect(css).toContain("var(--vt-studio-primary, var(--vt-pair-a")
+    expect(css).toContain("var(--vt-studio-secondary, var(--vt-pair-b")
+    expect(css).toContain(".vt-studio-split-right-badge__label")
+    expect(css).toContain("flex:1 1 0%")
+    expect(css).toContain("text-overflow:ellipsis")
+    expect(css).toContain("white-space:nowrap")
+  })
+
   it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
