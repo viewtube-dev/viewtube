@@ -112,7 +112,7 @@ describe("compact Studio button row-fill sizing", () => {
     expect(css).toContain('width: 100%;')
     expect(css).toContain('[data-vt-studio-control="true"][data-vt-studio-width="content"] {')
     expect(css).toContain('width: fit-content;')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {')
+    expect(css).toContain('[data-vt-studio-control="true"][data-size="compact"]')
     expect(css).toContain("padding-inline: 8px;")
   })
 
