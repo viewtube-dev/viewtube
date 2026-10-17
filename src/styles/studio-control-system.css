@@ -3688,3 +3688,42 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
   outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
+
+
+/* Final alignment pass: button faces and split labels obey the same global palette and centering contract. */
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+  box-sizing: border-box;
+  border-width: var(--vt-studio-control-stroke, 3px);
+  border-color: #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-primary, var(--pair-a, #36e0f6));
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  text-align: center;
+}
+button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-icon-stroke: 2;
+}
+button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button-face] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-icon-stroke: 1.5;
+}
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] {
+  justify-content: center;
+  text-align: center;
+}
+button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+}
