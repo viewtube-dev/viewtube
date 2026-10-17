@@ -1,5 +1,5 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioBadgeSize, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import "../../styles/studio-control-system.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
@@ -1560,7 +1560,7 @@ StudioTagEditor.displayName = "StudioTagEditor";
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioBadgeSize;
 }
 export const StudioSplitLeftBadge: React.FC<StudioSplitLeftBadgeProps> = ({
   icon, children, sizeVariant = "standard", className, ...props
