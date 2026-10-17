@@ -1254,7 +1254,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
       else stopHold()
     }, delay)
   }, [change, max, min, stopHold])
-  scheduleRepeatRef.current = scheduleRepeat
+  React.useEffect(() => { scheduleRepeatRef.current = scheduleRepeat }, [scheduleRepeat])
 
   const beginHold = (direction: -1 | 1, event: React.PointerEvent<HTMLButtonElement>) => {
     if (disabled || !validBounds || event.button !== 0) return

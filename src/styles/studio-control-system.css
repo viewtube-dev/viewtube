@@ -2260,7 +2260,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  border-left: var(--vt-stepper-stroke) solid #000;
+  border-left: 0;
   background: var(--vt-stepper-secondary);
   box-shadow: none;
 }
