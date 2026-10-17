@@ -627,7 +627,8 @@ describe("Studio text input and split-left badge typography parity", () => {
       css.indexOf('[data-vt-studio-control="true"]:is(input:not([type="checkbox"])'),
       css.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]'),
     )
-    expect(fieldRule).toContain("font-size: var(--vt-studio-control-font-size)")
+    expect(fieldRule).toContain("font-size: var(--vt-studio-44-font-size, 38px)")
+    expect(fieldRule).toContain("font-size: var(--vt-studio-28-font-size, 24px)")
     expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-standard-font-size")
     expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-compact-font-size")
     expect(input).toContain('data-vt-studio-field-kind="text-input"')
