@@ -397,7 +397,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-text-stroke: var(--vt-field-stroke) #8b8b8b;
+  -webkit-text-stroke: 0;
   pointer-events: none;
 }
 /* Focus styling belongs to the field surface. Permanent label boxes stay unchanged;
@@ -1700,7 +1700,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:focus-visible::placeholder {
   color: #8b8b8b;
   -webkit-text-fill-color: #8b8b8b;
-  -webkit-text-stroke: 0;
+  -webkit-text-stroke: var(--vt-field-stroke) #8b8b8b;
 }
 .vt-studio-username-input[data-disabled="true"] {
   cursor: not-allowed;
