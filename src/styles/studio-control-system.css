@@ -2811,14 +2811,8 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
 
 /* Center split-left action labels in the same usable text region as StudioButton.
    The icon rail and its divider occupy their own column and never bias the label. */
-button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label],
 button[data-vt-studio-button="true"] [data-vt-studio-split-label] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
   width: 100%;
-  text-align: center;
 }
 button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] > *,
 button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
