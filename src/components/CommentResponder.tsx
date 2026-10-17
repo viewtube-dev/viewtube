@@ -52,6 +52,24 @@ export const CommentResponder: React.FC = () => {
     {!context.connected && <div className="mt-2 sm:mt-3"><SubToolboxGridActionButton label="Connect YouTube Channel" iconName="link" tone="green" onClick={comments.reconnect} /></div>}
    </SubToolbox>
 
+   <SubToolbox title="Audience Pulse" icon={<Sparkles />} collapsible isOpenInitial={false}>
+    <p className="mb-3 text-[10px] font-bold uppercase opacity-60">Read-only patterns from the loaded comment records. Intent is inferred, not verified.</p>
+    {comments.audienceSignals.length ? <div className="space-y-2">
+     {comments.audienceSignals.map((signal) => <article key={signal.id} data-audience-pulse-signal={signal.id} className="min-w-0 rounded-xl border-2 border-black bg-white p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+       <strong className="text-xs font-black uppercase">{signal.intent}</strong>
+       <span className="text-[10px] font-bold uppercase">{signal.sourceReferences.length} source record{signal.sourceReferences.length === 1 ? "" : "s"}</span>
+      </div>
+      <p className="mt-2 text-xs font-bold">{signal.interpretation}</p>
+      {signal.confidence !== null && <p className="mt-1 text-[10px] font-bold">Pattern confidence (not verified intent): {Math.round(signal.confidence * 100)}%</p>}
+      <p className="mt-2 break-words text-[10px] font-bold">Evidence IDs: {signal.evidenceIds.join(", ")}</p>
+      {(signal.sourceWindow.start || signal.sourceWindow.end) && <p className="mt-1 text-[10px]">Source window: {signal.sourceWindow.start || "unknown"} — {signal.sourceWindow.end || "unknown"}</p>}
+      {signal.suggestedTargets.length > 0 && <p className="mt-2 break-words text-[10px]"><strong>Suggested destinations (advisory):</strong> {signal.suggestedTargets.join(" · ")}</p>}
+      {signal.limitations.length > 0 && <ul className="mt-2 list-disc space-y-1 pl-4 text-[10px] opacity-70">{signal.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>}
+     </article>)}
+    </div> : <p className="rounded-xl border-2 border-dashed border-black/30 p-4 text-xs font-bold">No classifiable audience patterns in the loaded comments. Ambiguous feedback remains visible in the source queue and is not assigned an intent.</p>}
+   </SubToolbox>
+
    <SubToolbox title="Video Context" icon={<MessageCircle />} collapsible isOpenInitial>
     {thread ? <div className="grid grid-cols-[120px_1fr] gap-4 min-w-0">
      <div className="aspect-video border-[3px] border-black rounded-xl overflow-hidden bg-gray-100">{thumbnail ? <img src={thumbnail} width={320} height={180} alt={`Thumbnail for ${videoTitle}`} className="w-full h-full object-cover" /> : <div className="w-full h-full grid place-items-center"><Loader2 className="animate-spin" /></div>}</div>

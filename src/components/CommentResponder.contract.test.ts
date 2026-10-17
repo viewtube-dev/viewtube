@@ -36,4 +36,13 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(view).toContain('SubToolbox title="Current Comment"')
   expect(view).toContain('SubToolbox title={comments.tab === "history" ? "Follow-Up Reply" : "Reply Composer"}')
  })
+ it("renders inspectable Audience Pulse signals without implying a handoff was executed", () => {
+  expect(view).toContain('SubToolbox title="Audience Pulse"')
+  expect(view).toContain("comments.audienceSignals")
+  expect(view).toContain("signal.sourceReferences.length")
+  expect(view).toContain("Suggested destinations (advisory)")
+  expect(view).toContain("not verified intent")
+  expect(view).not.toContain("persistViewTubeActionPacket")
+ })
+
 })
