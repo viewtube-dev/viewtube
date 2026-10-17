@@ -127,7 +127,7 @@ export const recordAlgorithmIntelligenceEvent = (
   evidenceIds: [...new Set([...(existing?.evidenceIds || []), ...(input.evidenceIds || [])])],
   evaluationTargets: input.evaluationTargets || existing?.evaluationTargets || [],
   metadata: { ...(existing?.metadata || {}), ...(input.metadata || {}) },
-  createdAt: existing?.createdAt || Date.now(),
+  createdAt: existing?.createdAt ?? Date.now(),
  }
  write([event, ...events.filter((candidate) => candidate.id !== event.id)], [event])
  return event
@@ -162,7 +162,7 @@ export const upsertAlgorithmIntelligenceEvents = (incoming: AlgorithmIntelligenc
    evidenceIds: [...new Set([...(event.evidenceIds || []), ...(current.evidenceIds || [])])],
    evaluationTargets: current.evaluationTargets?.length ? current.evaluationTargets : event.evaluationTargets || [],
    metadata: { ...(event.metadata || {}), ...(current.metadata || {}) },
-   createdAt: Math.min(event.createdAt || Date.now(), current.createdAt || Date.now()),
+   createdAt: Math.min(event.createdAt ?? Date.now(), current.createdAt ?? Date.now()),
   } : event)
  })
  const next = [...byId.values()].sort((left, right) => right.createdAt - left.createdAt)
