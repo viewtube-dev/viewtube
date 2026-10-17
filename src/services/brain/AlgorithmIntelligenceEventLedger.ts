@@ -100,6 +100,27 @@ const persistDurably = (events: AlgorithmIntelligenceEvent[]) => {
  }).catch(() => undefined)
 }
 
+/**
+ * Privacy redaction is monotonic: once an event has declared that raw creator
+ * communication is not retained, stale hydrated copies or later updates must
+ * never reintroduce the message text.
+ */
+const mergeEventMetadata = (
+ base: Record<string, unknown> | undefined,
+ updates: Record<string, unknown> | undefined,
+): Record<string, unknown> => {
+ const merged = { ...(base || {}), ...(updates || {}) }
+ if (base?.rawCommunicationTextRetained === false || updates?.rawCommunicationTextRetained === false) {
+  delete merged.communicationText
+  merged.rawCommunicationTextRetained = false
+  const fingerprint = updates?.communicationTextFingerprint ?? base?.communicationTextFingerprint
+  if (typeof fingerprint === "string" && fingerprint) merged.communicationTextFingerprint = fingerprint
+  const retentionPolicy = updates?.retentionPolicy ?? base?.retentionPolicy
+  if (typeof retentionPolicy === "string" && retentionPolicy) merged.retentionPolicy = retentionPolicy
+ }
+ return merged
+}
+
 const write = (events: AlgorithmIntelligenceEvent[], durableEvents: AlgorithmIntelligenceEvent[] | null = events) => {
  if (!canUseStorage()) return
  const bounded = events.slice(0, 2000)
@@ -126,7 +147,7 @@ export const recordAlgorithmIntelligenceEvent = (
   parentEventIds: [...new Set([...(existing?.parentEventIds || []), ...(input.parentEventIds || [])])],
   evidenceIds: [...new Set([...(existing?.evidenceIds || []), ...(input.evidenceIds || [])])],
   evaluationTargets: input.evaluationTargets || existing?.evaluationTargets || [],
-  metadata: { ...(existing?.metadata || {}), ...(input.metadata || {}) },
+  metadata: mergeEventMetadata(existing?.metadata, input.metadata),
   createdAt: existing?.createdAt || Date.now(),
  }
  write([event, ...events.filter((candidate) => candidate.id !== event.id)], [event])
@@ -161,7 +182,7 @@ export const upsertAlgorithmIntelligenceEvents = (incoming: AlgorithmIntelligenc
    parentEventIds: [...new Set([...(event.parentEventIds || []), ...(current.parentEventIds || [])])],
    evidenceIds: [...new Set([...(event.evidenceIds || []), ...(current.evidenceIds || [])])],
    evaluationTargets: current.evaluationTargets?.length ? current.evaluationTargets : event.evaluationTargets || [],
-   metadata: { ...(event.metadata || {}), ...(current.metadata || {}) },
+   metadata: mergeEventMetadata(event.metadata, current.metadata),
    createdAt: Math.min(event.createdAt || Date.now(), current.createdAt || Date.now()),
   } : event)
  })

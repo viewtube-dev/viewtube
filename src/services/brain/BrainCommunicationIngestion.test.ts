@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from "vitest"
 import { classifyCreatorCommunication, recordCreatorCommunicationEvidence, redactLegacyCreatorCommunicationText } from "./BrainCommunicationIngestion"
-import { listAlgorithmIntelligenceEvents, recordAlgorithmIntelligenceEvent } from "./AlgorithmIntelligenceEventLedger"
+import { listAlgorithmIntelligenceEvents, recordAlgorithmIntelligenceEvent, upsertAlgorithmIntelligenceEvents } from "./AlgorithmIntelligenceEventLedger"
 import { DEFAULT_BRAIN_USER_CONTROLS, writeBrainUserControls } from "./BrainUserControls"
 
 describe("classifyCreatorCommunication", () => {
@@ -85,6 +85,50 @@ describe("recordCreatorCommunicationEvidence privacy and consent", () => {
   expect(event?.metadata.communicationText).toBeUndefined()
   expect(event?.metadata.rawCommunicationTextRetained).toBe(false)
   expect(event?.summary).not.toContain("Always keep the thumbnail text-free.")
+ })
+
+ it("keeps legacy text redacted when stale server records hydrate or later updates reuse the event ID", () => {
+  const privateText = "Private legacy message that must remain purged."
+  const legacyEvent = recordAlgorithmIntelligenceEvent({
+   id: "creator-communication:channel-a:monotonic-redaction",
+   channelId: "channel-a",
+   projectId: null,
+   kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+   sourceSystem: "communication",
+   sourceId: "monotonic-redaction",
+   parentEventIds: [],
+   evidenceIds: ["monotonic-redaction"],
+   confidence: "high",
+   title: "Creator communication: instruction",
+   summary: "Legacy creator communication.",
+   metadata: { communicationText: privateText, communicationId: "monotonic-redaction" },
+  })
+
+  expect(redactLegacyCreatorCommunicationText("channel-a")).toBe(1)
+
+  // Simulate a stale server snapshot that still contains the pre-redaction payload.
+  upsertAlgorithmIntelligenceEvents([legacyEvent])
+  // Also simulate a later writer attempting to update the same event ID with old text.
+  recordAlgorithmIntelligenceEvent({
+   id: legacyEvent.id,
+   channelId: "channel-a",
+   projectId: null,
+   kind: "CREATOR_COMMUNICATION_CLASSIFIED",
+   sourceSystem: "communication",
+   sourceId: "monotonic-redaction",
+   parentEventIds: [],
+   evidenceIds: ["monotonic-redaction"],
+   confidence: "high",
+   title: "Creator communication: instruction",
+   summary: "Legacy creator communication.",
+   metadata: { communicationText: privateText, communicationId: "monotonic-redaction" },
+  })
+
+  const event = listAlgorithmIntelligenceEvents({ channelId: "channel-a" })
+   .find((item) => item.id === legacyEvent.id)
+  expect(event?.metadata.communicationText).toBeUndefined()
+  expect(event?.metadata.rawCommunicationTextRetained).toBe(false)
+  expect(JSON.stringify(event)).not.toContain(privateText)
  })
 
  it("keeps retries idempotent and rejects reuse of a communication ID for different text", () => {

@@ -170,3 +170,12 @@ The capability matrix currently enforces generation at request/receipt boundarie
 The YouTube publication bridge now re-reads the canonical ContentBuild and checks the shared `publish` capability plus unresolved workflow blockers immediately before upload, each uncompleted transaction-step provider call, and remote-state verification. Completed steps retain their idempotent early return, so a retry does not repeat an already-completed remote action. New regression tests assert that a published build and a blocked build stop provider calls before the transport is invoked.
 
 This closes a concrete client-side provider-dispatch gap for the YouTube publication transaction bridge. It is not server authorization: the client-side stage store is not a security boundary against a modified client. Production authorization still needs authenticated server enforcement for every provider operation, and the broader lifecycle persistence/consent/end-to-end certification criteria remain open.
+
+
+## Consent/retention hardening — monotonic legacy-text redaction — 2026-10-17
+
+The canonical AlgorithmIntelligenceEventLedger now treats creator-communication redaction as monotonic. Once a record asserts `rawCommunicationTextRetained: false`, local event updates and server hydration merges delete `communicationText` rather than allowing a stale raw server copy or later writer to restore it. The redacted marker and available fingerprint/retention policy are preserved.
+
+A regression test redacts a legacy event, replays the original raw object as if it came from a stale server snapshot, then attempts a same-ID update carrying the old message; the final event remains text-free.
+
+This verifies the local merge/redaction contract. It does not prove a live PostgreSQL purge or authenticated two-device deletion/reload; those remain separate certification gates.
