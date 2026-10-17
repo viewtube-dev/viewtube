@@ -2257,7 +2257,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
 }
-.vt-studio-split-stepper .vt-studio-split-stepper-rail {
+[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper > [data-vt-studio-split-rail].vt-studio-split-stepper-rail {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -2266,7 +2266,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   min-height: 0;
   padding: 0;
   overflow: hidden;
-  border: 0;
+  border-right: 0;
+  border-left: var(--vt-stepper-stroke) solid #000;
   border-radius: 0;
   background: var(--vt-stepper-secondary);
 }
