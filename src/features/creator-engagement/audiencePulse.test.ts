@@ -152,7 +152,13 @@ describe("buildAudiencePulseProposalPacket", () => {
     const packet = buildAudiencePulseProposalPacket(signal)
 
     expect(packet).not.toBeNull()
-    expect(packet?.id).toBe(`audience-pulse-proposal:${encodeURIComponent(signal.id)}`)
+    expect(packet?.id).toMatch(/^audience-pulse-proposal:/)
+    expect(buildAudiencePulseProposalPacket(signal)?.id).toBe(packet?.id)
+    const updatedEvidence = buildAudiencePulseProposalPacket({
+      ...signal,
+      evidenceIds: [...signal.evidenceIds, "comment:new-evidence"],
+    })
+    expect(updatedEvidence?.id).not.toBe(packet?.id)
     expect(packet?.sourceToolId).toBe("comment-responder")
     expect(packet?.payloadKind).toBe("evidence")
     expect(packet?.intent).toBe("propose")
