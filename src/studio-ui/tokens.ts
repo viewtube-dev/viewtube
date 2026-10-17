@@ -5,6 +5,8 @@ import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/t
 export const STUDIO_CONTROL_SIZE_CONTRACT = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.5, buttonShadowX: 3, buttonShadowY: 3, hoverTransitionMs: 180, hoverOffsetPx: 0, clickTransitionMs: 80, clickOffsetPx: 0, iconSize: 38, iconStroke: 1.9 },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 1.5, buttonShadowY: 1.5, hoverTransitionMs: 180, hoverOffsetPx: 0, clickTransitionMs: 80, clickOffsetPx: 0, iconSize: 24, iconStroke: 2.0 },
+  /** Micro is a badge-only density tier; it never inherits compact geometry or action effects. */
+  micro: { height: 14, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 10, iconStroke: 1.5 },
   /** Single-line text inputs inherit the canonical global standard/compact control typography. */
   textInput: { standardFontSize: 38, compactFontSize: 24, fontWeight: 1000, lineHeight: 0.86, textTransform: "uppercase", letterSpacing: -0.02, followsSizeFamily: true },
   /** Multiline exception: taller writing surface while preserving the chosen standard/compact geometry. */
@@ -48,4 +50,5 @@ export const STUDIO_ICON_SIZE_COMPARISON = {
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
 export type StudioControlSize = "standard" | "compact"
+export type StudioBadgeSize = StudioControlSize | "micro"
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
