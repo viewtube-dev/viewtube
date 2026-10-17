@@ -3380,7 +3380,6 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   --vt-studio-control-font-weight: 1000;
   --vt-studio-control-text-stroke: 1px;
   --vt-studio-control-icon-size: 38px;
-  --vt-studio-control-gap: 4px;
 }
 :where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="compact"] {
   --vt-studio-control-height: 28px;
