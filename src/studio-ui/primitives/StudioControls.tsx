@@ -71,6 +71,10 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
 
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
+  width: "full-row by default; data-width=content is an explicit opt-in exception",
+  labelAlignment: "centered by default for all primitive labels",
+  primaryColor: "--pair-a is the global primary fill",
+  secondaryColor: "--pair-b is the global secondary fill and alternate rail",
   fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
   fontWeight: 1000,
   strokeColor: "#000000",
