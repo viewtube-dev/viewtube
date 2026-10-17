@@ -185,8 +185,8 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("text-align: center")
     expect(css).toContain("border-right: var(--vt-studio-control-stroke")
     expect(css).toContain("border-left: var(--vt-studio-control-stroke")
-    expect(controls).toContain('splitSegmentRatio: "square-ratio by default; segment labels center against the outer perimeter bounds"')
-    expect(controls).toContain('splitDividers: "orb1/orb2 use shared internal segment-boundary dividers, never label-owned borders"')
+    expect(controls).toContain('splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; labels center in the remaining text region against the outer perimeter bounds"')
+    expect(controls).toContain('splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges"')
   })
 
   it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
