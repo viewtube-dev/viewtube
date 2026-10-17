@@ -74,6 +74,9 @@ describe("Comment Responder Studio Hub contract", () => {
 
  it("makes generation, refinement, and video suggestions explicit contextual actions", () => {
   expect(view).toContain('>Generate</StudioSplitLeftButton>')
+  expect(view).toContain('comments.draftReply("generate")')
+  expect(view).toContain('comments.draftReply("refine")')
+  expect(controller).toContain('mode === "refine" ? replyText[currentId]?.trim() || "" : ""')
   expect(view).toContain('>Refine</StudioSplitLeftButton>')
   expect(view).toContain('>Suggest Videos</StudioSplitLeftButton>')
   expect(view).toContain('aria-label="Post reply"')
