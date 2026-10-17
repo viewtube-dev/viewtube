@@ -1189,7 +1189,7 @@ export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanEl
 
 /** Three-part counter: square decrement, 2:1 display, square increment. */
 export const StudioCounter: React.FC<StudioCounterProps> = ({
-  value, onValueChange, min = -Infinity, max = Infinity, step = 1,
+  value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
   className, ...props
 }) => {
@@ -1219,7 +1219,7 @@ StudioCounter.displayName = "StudioCounter";
 
 /** Right-rail counter: 2:1 display plus a square rail with two equal button cells. */
 export const StudioRightCounter: React.FC<StudioCounterProps> = ({
-  value, onValueChange, min = -Infinity, max = Infinity, step = 1,
+  value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
   className, ...props
 }) => {
