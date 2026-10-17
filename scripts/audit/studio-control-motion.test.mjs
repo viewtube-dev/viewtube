@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 
 const css = readFileSync("src/styles/studio-control-motion.css", "utf8")
+const system = readFileSync("src/styles/studio-control-system.css", "utf8")
 const entry = readFileSync("src/studio-ui/index.ts", "utf8")
 
 test("Studio selection controls animate only their inner state", () => {
@@ -17,6 +18,16 @@ test("Studio selection controls animate only their inner state", () => {
   assert.match(css, /background-color\s+180ms/)
   assert.match(css, /transform\s+220ms/)
   assert.match(css, /stroke-dashoffset\s+220ms/)
+})
+
+test("flat-shell policy does not suppress inner field motion or inline strokes", () => {
+  assert.doesNotMatch(system, /\[data-vt-studio-control="true"\]:is\(input, textarea, select\)/)
+  const shellPolicyStart = system.indexOf("/* Global shell policy:")
+  const shellPolicyEnd = system.indexOf("\n}", shellPolicyStart)
+  assert.ok(shellPolicyStart >= 0 && shellPolicyEnd > shellPolicyStart)
+  const shellPolicy = system.slice(shellPolicyStart, shellPolicyEnd)
+  assert.doesNotMatch(shellPolicy, /transition:\s*none\s*!important/)
+  assert.doesNotMatch(shellPolicy, /\[data-vt-studio-control\]\s*\*/)
 })
 
 test("floating labels and field feedback have transitions", () => {
