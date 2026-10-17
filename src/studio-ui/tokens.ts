@@ -3,14 +3,14 @@ import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/t
 /** Studio shell tokens may reference SubToolbox hierarchy geometry; standalone controls use the independent contract below. */
 /** Studio control shells are flat and motionless: no shadows, transitions, or press/hover geometry offsets. */
 export const STUDIO_CONTROL_SIZE_CONTRACT = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.5, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 38, iconStroke: 1.9 },
-  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 24, iconStroke: 2.0 },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.5, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 38, iconStroke: 1.9 },
+  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 24, iconStroke: 2.0 },
   /** Dense micro tier: 14px face with proportionally reduced stroke, radius, typography and icon. */
-  micro: { height: 14, stroke: 1, radius: 2, fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: -0.01, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 10, iconStroke: 1.5 },
+  micro: { height: 14, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textStroke: 0.25, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.01, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1, buttonShadowX: 0, buttonShadowY: 0, hoverTransitionMs: 0, hoverOffsetPx: 0, clickTransitionMs: 0, clickOffsetPx: 0, iconSize: 10, iconStroke: 1.5 },
   /** Single-line text inputs inherit the canonical global standard/compact control typography. */
-  textInput: { standardFontSize: 38, compactFontSize: 24, fontWeight: 1000, lineHeight: 0.86, textTransform: "uppercase", letterSpacing: -0.02, followsSizeFamily: true },
+  textInput: { standardFontSize: 38, compactFontSize: 24, fontWeight: 1000, standardTextStroke: 1, compactTextStroke: 0.5, lineHeight: 0.86, width: "row", textTransform: "uppercase", letterSpacing: -0.02, followsSizeFamily: true },
   /** Multiline exception: taller writing surface while preserving the chosen standard/compact geometry. */
-  multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardLineHeight: 1.25, compactLineHeight: 1.3, resize: "vertical", preservesSizeFamily: true, rationale: "Textareas alone use 18px standard and 14px compact; they additionally use multiline line-height, padding, and a 92px minimum surface." },
+  multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardTextStroke: 0.5, compactTextStroke: 0.35, standardLineHeight: 1.25, compactLineHeight: 1.3, resize: "vertical", preservesSizeFamily: true, rationale: "Textareas alone use 18px standard and 14px compact; they additionally use multiline line-height, padding, and a 92px minimum surface." },
 } as const
 
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
@@ -27,6 +27,8 @@ export const STUDIO_TOKENS = {
   },
   typography: {
     label: 24,
+    fixedLabel: { standardFontSize: 14, compactFontSize: 9, fontWeight: 1000, textStroke: 0 },
+    floatingLabel: { standardRestingFontSize: 38, compactRestingFontSize: 24, standardRaisedFontSize: 14.4, compactRaisedFontSize: 11.2, fontWeight: 1000, textStroke: 0.5 },
     control: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize,
     compactControl: STUDIO_CONTROL_SIZE_CONTRACT.compact.fontSize,
     subtoolboxTitle: TOOLBOX_LEVEL_DNA.l0.titleSize,

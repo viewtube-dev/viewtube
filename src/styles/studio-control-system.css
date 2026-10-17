@@ -3074,3 +3074,473 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   content: none !important;
   display: none !important;
 }
+
+
+/* Confirmed Primitive flat-control contract (2026-10-16).
+   Global defaults: stationary geometry, no shell shadows, no CSS transitions.
+   Named visual effects are restricted to inner icon artwork and must honor
+   prefers-reduced-motion. Floating dropdown surfaces are separately owned. */
+:where(
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
+  [data-vt-studio-control="true"]:is(input, textarea, select),
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-tag-editor__square-action,
+  .vt-studio-spectrum-tag,
+  .vt-studio-dropdown-trigger
+) {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+  transform: none !important;
+  translate: none !important;
+}
+:where(
+  button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face],
+  .vt-studio-split-left-badge__face,
+  .vt-studio-split-right-badge__face,
+  .vt-studio-double-split-badge__face,
+  .vt-studio-tag-editor__square-action
+) {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+  transform: none !important;
+  translate: none !important;
+}
+:where(
+  button[data-vt-studio-button="true"]:hover:not(:disabled),
+  button[data-vt-studio-button="true"]:active:not(:disabled),
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled),
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled)
+) {
+  box-shadow: none !important;
+  transform: none !important;
+  translate: none !important;
+  filter: none !important;
+}
+:where(
+  button[data-vt-studio-button="true"] [data-vt-studio-split-label],
+  button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label],
+  .vt-studio-split-left-badge__label,
+  .vt-studio-split-right-badge__label,
+  .vt-studio-double-split-badge__label
+) {
+  box-sizing: border-box;
+  min-width: 0;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+:where(
+  button[data-vt-studio-button="true"] [data-vt-studio-split-rail],
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail
+) {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+:where([data-vt-studio-control="true"]) {
+  --vt-studio-space-unit: 4px;
+  --vt-studio-space-top: var(--vt-studio-space-unit);
+  --vt-studio-space-right: var(--vt-studio-space-unit);
+  --vt-studio-space-bottom: var(--vt-studio-space-unit);
+  --vt-studio-space-left: var(--vt-studio-space-unit);
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(
+    button[data-vt-studio-button="true"],
+    button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
+    .vt-studio-split-left-badge,
+    .vt-studio-split-right-badge,
+    .vt-studio-double-split-badge,
+    .vt-studio-tag-editor__square-action,
+    .vt-studio-spectrum-tag
+  ) {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    translate: none !important;
+  }
+}
+
+
+
+/* Split-badge border ownership fix (2026-10-17).
+   The outer badge owns the only perimeter border. The face is a layout wrapper;
+   rails paint only their internal divider. Disable legacy pseudo-faces/shadow
+   copies so every split badge renders with one perimeter and one divider per rail. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  position: relative;
+  display: inline-flex;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.vt-studio-split-left-badge::before,
+.vt-studio-split-left-badge::after,
+.vt-studio-split-right-badge::before,
+.vt-studio-split-right-badge::after,
+.vt-studio-double-split-badge::before,
+.vt-studio-double-split-badge::after,
+.vt-studio-split-left-badge__face::before,
+.vt-studio-split-left-badge__face::after,
+.vt-studio-split-right-badge__face::before,
+.vt-studio-split-right-badge__face::after,
+.vt-studio-double-split-badge__face::before,
+.vt-studio-double-split-badge__face::after {
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  height: 100%;
+  min-height: 0;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  background: transparent;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  align-self: stretch;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-double-split-badge__rail:not(:last-child) {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+  border-left: 0 !important;
+}
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail:last-child {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+  border-right: 0 !important;
+}
+/* At micro density each icon rail is a true 14×14 square; it must not inherit
+   the wider standard/compact minimum rail width or 4px horizontal padding. */
+.vt-studio-split-left-badge[data-size="micro"],
+.vt-studio-split-right-badge[data-size="micro"],
+.vt-studio-double-split-badge[data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-font-weight: 1000;
+  height: 14px;
+  min-height: 14px;
+  max-height: 14px;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__face {
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr);
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail {
+  width: 12px;
+  min-width: 12px;
+  max-width: 12px;
+  height: 12px;
+  min-height: 12px;
+  max-height: 12px;
+  align-self: center;
+  justify-self: center;
+  flex: 0 0 12px;
+  padding: 0 !important;
+  aspect-ratio: 1 / 1;
+  border-radius: 0 !important;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:not(:last-child) {
+  border-right-width: 1px !important;
+}
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:last-child {
+  border-left-width: 1px !important;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail > *,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail > *,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail > * {
+  width: 10px;
+  height: 10px;
+  max-width: 70%;
+  max-height: 70%;
+}
+
+
+/* Split badge palette + label containment correction (2026-10-17).
+   Labels occupy only the central segment; rails use the global primary/secondary pair. */
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+ display:flex; width:100%; min-width:0; align-items:stretch; overflow:hidden;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+ display:block; flex:1 1 0%; min-width:0; width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; box-sizing:border-box;
+}
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail { flex:0 0 auto; position:relative; z-index:1; }
+.vt-studio-double-split-badge__rail:first-child { background:var(--vt-studio-primary, var(--vt-pair-a, #d946ef)) !important; color:var(--vt-studio-primary-foreground, #000) !important; }
+.vt-studio-double-split-badge__rail:last-child { background:var(--vt-studio-secondary, var(--vt-pair-b, #22d3ee)) !important; color:var(--vt-studio-secondary-foreground, #000) !important; }
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:first-child { background:var(--vt-studio-primary, var(--vt-pair-a, #d946ef)) !important; }
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail:last-child { background:var(--vt-studio-secondary, var(--vt-pair-b, #22d3ee)) !important; }
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label { position:relative; z-index:0; flex:1 1 0%; min-width:0; width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-inline:4px; }
+
+/* Canonical row-fill and typography contract.
+   Standard/compact/micro share the same 4px spacing unit and weight-1000 type.
+   Controls fill their assigned grid/flex cell by default; opt into intrinsic
+   text width with data-width="content". Shape controls retain explicit geometry. */
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"], [data-vt-studio-dropdown], .vt-studio-floating-field, .vt-studio-fixed-label-field, .vt-studio-inline-stepper, .vt-studio-split-stepper, .vt-studio-spectrum-tag, .vt-studio-tag-editor__square-action) {
+  --vt-studio-space-unit: 4px;
+  --vt-studio-space-top: var(--vt-studio-space-unit);
+  --vt-studio-space-right: var(--vt-studio-space-unit);
+  --vt-studio-space-bottom: var(--vt-studio-space-unit);
+  --vt-studio-space-left: var(--vt-studio-space-unit);
+  min-width: 0;
+}
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  input[data-vt-studio-control="true"],
+  textarea[data-vt-studio-control="true"],
+  select[data-vt-studio-control="true"],
+  [data-vt-studio-dropdown],
+  .vt-studio-floating-field,
+  .vt-studio-fixed-label-field,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-spectrum-tag
+):not([data-width="content"]):not([data-layout="intrinsic"]) {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  input[data-vt-studio-control="true"],
+  textarea[data-vt-studio-control="true"],
+  select[data-vt-studio-control="true"],
+  [data-vt-studio-dropdown],
+  .vt-studio-floating-field,
+  .vt-studio-fixed-label-field,
+  .vt-studio-inline-stepper,
+  .vt-studio-split-stepper,
+  .vt-studio-spectrum-tag
+)[data-width="content"],
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  input[data-vt-studio-control="true"],
+  textarea[data-vt-studio-control="true"],
+  select[data-vt-studio-control="true"]
+)[data-layout="intrinsic"] {
+  width: max-content;
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+/* Three explicit size tiers: 44/28/14px faces with proportional type stroke. */
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="standard"] {
+  --vt-studio-control-height: 44px;
+  --vt-studio-control-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-font-size: 38px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: 1px;
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-gap: 4px;
+}
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="compact"] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: .5px;
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-gap: 4px;
+}
+:where([data-vt-studio-control="true"], [data-vt-studio-button="true"], [data-vt-studio-action-button="true"])[data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-font-weight: 1000;
+  --vt-studio-control-text-stroke: .25px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-gap: 4px;
+}
+:where(
+  button[data-vt-studio-control="true"],
+  button[data-vt-studio-button="true"],
+  button[data-vt-studio-action-button="true"],
+  select[data-vt-studio-control="true"],
+  .vt-studio-legend-trigger,
+  .vt-studio-legend-option,
+  .vt-studio-legend-clear
+) {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+/* Text-bearing fields deliberately do not inherit button typography. */
+:where(input[data-vt-studio-control="true"], .vt-studio-floating-field > input) {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+:where(textarea[data-vt-studio-control="true"], .vt-studio-floating-field.is-textarea > textarea, .vt-studio-fixed-label-field > textarea) {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-textarea-font-size, 18px);
+  font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-textarea-text-stroke, .5px) currentColor;
+  line-height: var(--vt-studio-textarea-line-height, 1.25);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="compact"] > textarea, .vt-studio-fixed-label-field[data-size="compact"] > textarea {
+  --vt-studio-textarea-font-size: 14px;
+  --vt-studio-textarea-text-stroke: .35px;
+  --vt-studio-textarea-line-height: 1.3;
+}
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  -webkit-text-stroke: .5px currentColor;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-studio-fixed-label-field > .vt-studio-fixed-field-label {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  -webkit-text-stroke: 0 currentColor;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+
+/* Global Studio primitive defaults (2026-10-17).
+   Ordinary primitives share the paired palette, centered labels, 1000 weight,
+   and full-row sizing. Named geometry exceptions opt out explicitly. */
+[data-vt-studio-control="true"] {
+  --vt-studio-primary: var(--pair-a, #36e0f6);
+  --vt-studio-secondary: var(--pair-b, #ff7f6b);
+  font-weight: 1000 !important;
+  text-align: center;
+}
+[data-vt-studio-control="true"]:not([data-width="content"]):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-44-word-toggle):not([data-vt-studio-square-icon-button="true"]) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+[data-vt-studio-control="true"]:not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-44-word-toggle) {
+  justify-content: center;
+}
+[data-vt-studio-control="true"][data-tone="primary"],
+[data-vt-studio-control="true"]:not([data-tone]):not([data-variant="secondary"]):not([data-skin="secondary"]) {
+  --vt-studio-control-accent: var(--vt-studio-primary);
+}
+[data-vt-studio-control="true"][data-tone="secondary"],
+[data-vt-studio-control="true"][data-variant="secondary"],
+[data-vt-studio-control="true"][data-skin="secondary"] {
+  --vt-studio-control-accent: var(--vt-studio-secondary);
+}
+[data-vt-studio-control="true"] > [data-vt-studio-control-label] {
+  min-width: 0;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+
+/* Global split geometry defaults (2026-10-17).
+   Split segments are equal square-ratio cells by default. The outer perimeter
+   defines the label's centering bounds; orb1/orb2 dividers belong to the shared
+   segment boundary, never to a label or a second overlapping pseudo-layer. */
+[data-vt-studio-control="true"][data-vt-studio-split-badge],
+[data-vt-studio-control="true"][data-vt-studio-split-burface],
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  --vt-studio-split-divider-width: var(--vt-studio-control-stroke, 3px);
+  --vt-studio-split-segment-ratio: 1;
+  box-sizing: border-box;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  flex: 0 0 auto;
+  min-width: 0;
+  aspect-ratio: var(--vt-studio-split-segment-ratio, 1);
+  box-sizing: border-box;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Outer edges are the centering reference. Orb1/orb2 are the shared internal
+   dividers; keep each divider on the boundary between neighboring segments. */
+.vt-studio-split-left-badge__face > :first-child,
+.vt-studio-split-right-badge__face > :first-child,
+.vt-studio-double-split-badge__face > :first-child {
+  border-inline-end: var(--vt-studio-split-divider-width) solid var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-double-split-badge__face > :last-child {
+  border-inline-start: 0;
+}
