@@ -34,7 +34,7 @@ describe("Studio control global contract", () => {
     expect(css).toContain('align-items: center;\n  justify-content: center;');
     expect(css).toContain('text-align: center;');
     const start = css.indexOf("/* Final split-left visual invariant:");
-    const end = css.indexOf("\\n/*", start + 1);
+    const end = css.indexOf("\n/*", start + 1);
     expect(start).toBeGreaterThanOrEqual(0);
     expect(end).toBeGreaterThan(start);
     expect(css.slice(start, end)).not.toContain("!important");
