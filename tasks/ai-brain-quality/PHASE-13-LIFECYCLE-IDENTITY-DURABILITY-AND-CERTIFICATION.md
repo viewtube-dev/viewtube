@@ -156,3 +156,10 @@ Regression coverage adds a direct request-preparation case for an unrecognized s
 ## Shared ContentBuild capability policy — implementation extension
 
 Generation and new publication-transaction creation now call the same canonical `assertContentBuildCapability` policy. The policy is an explicit stage-to-capability matrix; unknown stages fail closed. Publication retains its existing blocker check and idempotent-resume behavior. Generation request preparation and receipt recording both consult the same policy. Regression coverage exercises the shared generation denial path. This centralizes two critical action boundaries, but does not yet establish that every editing, metadata, scheduling, and provider dispatch route uses the matrix; those caller paths and release gates remain open.
+
+
+## Post-merge verification follow-up — 2026-10-17
+
+The shared ContentBuild capability matrix was merged through PR #431. The subsequent release-gate run still reported failures: the publish-guard test expected the pre-matrix error wording, the full suite exposed Studio/CSS contract drift, and runtime lint reports a large repository-wide backlog. The publish-guard assertion is being reconciled with the canonical matrix error contract here; no release certification is claimed until a fresh same-head run passes or every remaining failure is repaired and reverified.
+
+The capability matrix currently enforces generation at request/receipt boundaries and publishing at new transaction creation. Provider-backed lifecycle attribution, authenticated cross-device replay against live persistence, full consent/retention purge verification, and full action-to-stage coverage remain outstanding acceptance gates.
