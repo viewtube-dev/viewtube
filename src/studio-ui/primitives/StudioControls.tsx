@@ -83,9 +83,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
-    v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
-    v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
-    v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
+    v1: "Primary (--pair-a) face fill; no shadow.",
+    v2: "Secondary (--pair-b) face fill; no shadow.",
+    v3: "Selectable v1/v2 color swap; click toggles the face fill only.",
     v4: "Black face fill with primary (--pair-a) icon stroke.",
     iconPresets: {
       heart: "Heart outline; pair with heart-pop for temporary secondary-color fill and expanding border ripple.",
@@ -115,7 +115,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Effects must not move primitive geometry; CSS transitions are disabled globally for Studio primitives/components. Any explicitly approved inner-icon animation must be documented and honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
+  focusOutline: "Text inputs and text areas use a visible secondary-color outline with zero offset; focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
@@ -140,7 +140,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "visible secondary-color accent box shadow: 3px standard / 2px compact (last live audit)",
+      focusOutlineWidth: "visible secondary-color outline: 3px standard / 2px compact"
       focusOutlineOffset: "0px for both sizes",
       outlineStrokeWidth: "computed CSS outline measured 1px in the last live audit; reconcile with declared token before visual certification",
       outlineShadowColor: "secondary",
