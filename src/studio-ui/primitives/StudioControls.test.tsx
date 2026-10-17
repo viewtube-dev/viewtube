@@ -51,10 +51,10 @@ describe("standalone Studio text fields", () => {
 describe("global defaults govern the effective primitive CSS", () => {
   it("uses secondary color for both double-split rails and keeps rail faces square", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
-    const split = css.slice(css.indexOf("/* Canonical split-badge geometry contract"));
-    const doubleSplit = split.slice(split.indexOf(".vt-studio-double-split-badge__rail:first-child"), split.indexOf(".vt-studio-split-left-badge__rail {"));
-    expect(doubleSplit).not.toContain("var(--pair-a");
-    expect(doubleSplit.match(/background: var\(--vt-studio-control-secondary/g)?.length).toBe(2);
+    const split = css.slice(css.indexOf("/* Unified split shell."));
+    expect(split).toContain('.vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-rail]');
+    expect(split).toContain("Both double-split rails use secondary by contract.");
+    expect(split).not.toContain("background: var(--vt-studio-control-accent, var(--vt-studio-primary, var(--pair-a");
     expect(split).toContain("border-radius: 0;");
     expect(split).toContain("place-items: center;");
     expect(split).not.toContain("#ff7f6b");
@@ -612,6 +612,9 @@ describe("Studio text input and split-left badge typography parity", () => {
     expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-compact-font-size")
     expect(input).toContain('data-vt-studio-field-kind="text-input"')
     expect(css).toContain("--vt-studio-floating-label-size: var(--vt-studio-44-font-size, 38px)")
+    expect(css).toContain("input[data-vt-studio-control=\"true\"][data-vt-studio-field-kind=\"text-input\"]")
+    expect(css).toContain("font-size: var(--vt-studio-44-font-size, 38px)")
+    expect(css).toContain("input[data-vt-studio-control=\"true\"][data-vt-studio-field-kind=\"text-input\"][data-size=\"compact\"]")
     expect(css).not.toContain("--vt-studio-text-input-standard-font-size")
     expect(css).not.toContain("--vt-studio-text-input-compact-font-size")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
@@ -627,10 +630,11 @@ describe("Studio text input and split-left badge typography parity", () => {
   it("uses one shared split-label primitive and typography inherited from its size owner", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(controls).toContain("<StudioSplitLabel className={labelClassName}>{children}</StudioSplitLabel>")
-    expect(controls).toContain("<StudioSplitLabel className={labelClass}>{children}</StudioSplitLabel>")
+    expect(controls).toContain("const StudioSplitShell: React.FC<StudioSplitShellProps>")
+    expect(controls).toContain("<StudioSplitShell layout=\"left\" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>")
+    expect(controls).toContain("<StudioSplitShell {...props} layout={layout} sizeVariant={sizeVariant}")
     expect(css).toContain("[data-vt-studio-split-label]")
-    expect(css).toContain("font: inherit")
+    expect(css).toContain("font-size: var(--vt-studio-control-font-size, 38px)")
     const badgeRule = css.slice(css.indexOf(".vt-studio-split-left-badge,"))
     expect(badgeRule).toContain("font-size: var(--vt-studio-control-font-size)")
     expect(badgeRule).toContain("font-weight: var(--vt-studio-control-font-weight)")
