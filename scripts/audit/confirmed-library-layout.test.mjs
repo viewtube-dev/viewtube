@@ -46,8 +46,8 @@ test("global defaults distinguish the secondary focus outline from field text st
 
 test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*38px/);
-  assert.match(fieldCss, /--vt-studio-floating-label-size-compact:\s*24px/);
+  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-44-font-size,\s*38px\)/);
+  assert.match(fieldCss, /--vt-studio-floating-label-size-compact:\s*var\(--vt-studio-28-font-size,\s*24px\)/);
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
   assert.match(fieldCss, /translateY\(-40%\)/);
   assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
@@ -76,10 +76,9 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 
 test("non-default settings explain the real public props in plain language", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
-  assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
   assert.ok(catalog.includes("Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors."));
-  assert.ok(catalog.includes("Circle icons use 80% of the default large preset: 30.4px/1.9 stroke standard and 19.2px/2.0 compact; current and moderate presets remain opt-in."));
-  assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
+  assert.ok(catalog.includes("Circle icon buttons scale the large preset to 80%."));
+  assert.ok(catalog.includes("Search/number, input mode, autocomplete, max length, disabled/read-only behavior, and native caret are field-specific options."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
@@ -114,10 +113,11 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.match(tokens, /compact:\s*\{[^}]*fontSize:\s*24/);
   assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize,\s*compactFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
   assert.match(tokens, /inlineStrokeWidth: "same as border width"/);
-  assert.match(css, /--vt-studio-text-input-standard-font-size:\s*var\(--vt-studio-44-font-size,\s*38px\);\s*--vt-studio-text-input-compact-font-size:\s*var\(--vt-studio-28-font-size,\s*24px\)/);
+  assert.match(css, /font-size:\s*var\(--vt-studio-control-font-size\);/);
+  assert.doesNotMatch(css, /--vt-studio-text-input-standard-font-size|--vt-studio-text-input-compact-font-size/);
   assert.match(tokens, /multiline:\s*\{\s*minHeight:\s*92,\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\s*\{\s*font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*38px\);/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\s*\{\s*font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*24px\);/);
+  assert.match(css, /--vt-studio-44-font-size:\s*38px/);
+  assert.match(css, /--vt-studio-28-font-size:\s*24px/);
   assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\);/);
   assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\[data-size="compact"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\);/);
   assert.ok(controls.includes('standardInputFontSize: "38px"'));
@@ -125,7 +125,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(inputModule.includes("StudioTextInput"));
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.ok(catalog.includes("Studio Text Input · Simple + Floating + Fixed Label"));
-  assert.ok(catalog.includes("Single-line input typography is 38px standard / 24px compact"));
+  assert.ok(catalog.includes("SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact"));
   assert.match(catalog, /Studio Text Area · Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?Textarea-only typography is 18px standard \/ 14px compact/);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
@@ -192,8 +192,9 @@ test("canonical Studio button tokens and CSS agree on flat stationary defaults",
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   assert.doesNotMatch(css, /--vt-studio-control-shadow-x|--vt-studio-control-shadow-y|--vt-studio-motion-button|--vt-studio-motion-press/);
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
-  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*0, buttonShadowY:\s*0/);
-  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*0, buttonShadowY:\s*0/);
+  assert.match(tokens, /STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS\s*=\s*\{[^}]*buttonShadowX:\s*0,[^}]*buttonShadowY:\s*0,[^}]*hoverTransitionMs:\s*0,[^}]*hoverOffsetPx:\s*0,[^}]*clickTransitionMs:\s*0,[^}]*clickOffsetPx:\s*0/);
+  assert.match(tokens, /standard: \{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
+  assert.match(tokens, /compact: \{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(css, /--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1\.9;/);
   assert.match(css, /--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2\.0;/);
@@ -207,8 +208,8 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
   assert.match(catalog, /default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
-  assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
-  assert.match(controls, /Switch\/choice geometry.*7\.333px radii/);
+  assert.match(catalog, /Icon presets:<\/b> the default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
+  assert.match(css, /button\.vt-studio-44-choice\.is-rect\s*\{\s*border-radius:\s*7\.333px/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
 });
@@ -223,7 +224,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
 
 test("word-toggle settings distinguish displayed words from the boolean value", () => {
   assert.ok(catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
-  assert.ok(catalog.includes("Custom words change the displayed labels, not the boolean state contract."));
+  assert.ok(catalog.includes("SOLID is default; COLOR SWAP and BLACK are alternate active-handle treatments."));
 });
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
@@ -323,8 +324,12 @@ test("non-default settings and TSX/CSS/import provenance are collapsed by defaul
   assert.match(styles, /\.vt-confirmed-source-details\s*\{/);
 });
 
-test("confirmed component and variant labels are visually constrained to one line and 40ch", () => {
-  assert.match(styles, /\.vt-confirmed-variant > span\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+test("confirmed captions are one line while Studio primitive roots retain token typography", () => {
+  assert.match(styles, /\.vt-confirmed-variant > span:not\(\[data-vt-studio-control="true"\]\)\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+  assert.doesNotMatch(styles, /\.vt-confirmed-variant > span\s*\{/);
+  assert.match(styles, /\.vt-confirmed-split-left-badge-family > span:not\(\.vt-studio-split-left-badge\)\s*\{/);
+  assert.match(styles, /\.vt-complete-catalog \.vt-catalog-field:not\(\[data-vt-studio-control="true"\]\)\s*\{/);
+  assert.doesNotMatch(styles, /\.vt-complete-catalog \.vt-catalog-field\s*\{/);
   assert.match(styles, /\.vt-confirmed-family > h3\s*\{[^}]*max-width:\s*40ch[^}]*white-space:\s*nowrap/s);
 });
 
