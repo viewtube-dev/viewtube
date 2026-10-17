@@ -4,6 +4,7 @@ import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioSplitLeftButton, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { STUDIO_CONTROL_SIZE_CONTRACT } from "../tokens"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -560,5 +561,24 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
     expect(actionBlock).not.toContain("32px")
     expect(actionBlock).toContain("box-shadow: 1.5px 1.5px 0 0")
     expect(actionBlock).not.toContain("4px 4px 0 0")
+  })
+})
+
+
+describe("canonical micro badge size contract", () => {
+  it("defines micro as an independent 14px tier rather than aliasing compact", () => {
+    const micro = (STUDIO_CONTROL_SIZE_CONTRACT as Record<string, any>).micro
+    expect(micro).toMatchObject({ height: 14, stroke: 1, radius: 2, fontSize: 10, iconSize: 10 })
+    expect(micro).not.toBe(STUDIO_CONTROL_SIZE_CONTRACT.compact)
+  })
+
+  it("maps micro badge geometry and typography to dedicated micro tokens", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const micro = css.slice(css.indexOf('.vt-studio-split-left-badge[data-size="micro"]'))
+    expect(micro).toContain("--vt-studio-badge-height: var(--vt-studio-14-height, 14px)")
+    expect(micro).toContain("--vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px)")
+    expect(micro).toContain("--vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px)")
+    expect(micro).toContain("--vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px)")
+    expect(micro).toContain("box-shadow: none")
   })
 })
