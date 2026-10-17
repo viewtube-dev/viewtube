@@ -64,6 +64,17 @@ describe("Brain evidence contract", () => {
   expect(health.confidence).toBe("insufficient")
  })
 
+ it("excludes contradictory same-scope claims from usable evidence", () => {
+  const first = projectEvidenceRecordToBrainClaim(record({ id: "views-a", value: 42 }))
+  const second = projectEvidenceRecordToBrainClaim(record({ id: "views-b", value: 99 }))
+  const health = summarizeBrainEvidenceHealth([first, second], { channelId: "channel-1" })
+
+  expect(health.conflictingClaimKeys).toHaveLength(1)
+  expect(health.usableClaims).toBe(0)
+  expect(health.coverageRatio).toBe(0)
+  expect(health.confidence).toBe("insufficient")
+ })
+
  it("reports stale evidence and conflicting same-scope values explicitly", () => {
   const stale = projectEvidenceRecordToBrainClaim(record({
    id: "stale-views",
