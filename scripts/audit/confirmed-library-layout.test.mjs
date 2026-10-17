@@ -18,6 +18,17 @@ test("confirmed library uses the requested four skin names without changing skin
   assert.ok(!catalog.includes('label: "5 · WHITE INDICATOR"'));
 });
 
+test("confirmed catalog CSS owns layout, not production control faces", () => {
+  const rules = [...styles.matchAll(/(^|\\n)([^{}\\n]+)\\s*\\{([^{}]*)\\}/g)];
+  const faceProperties = /(?:^|;)\\s*(?:border|border-radius|background(?:-color)?|box-shadow|font-size|font-family|font-weight|height|min-height|max-height|padding|color|text-transform|-webkit-text-stroke)\\s*:/;
+  const violations = rules
+    .map((match) => ({ selector: match[2].trim(), body: match[3] }))
+    .filter(({ selector }) => selector.includes("vt-confirmed") && /vt-studio-|data-vt-studio/.test(selector))
+    .filter(({ body }) => faceProperties.test(body))
+    .map(({ selector }) => selector);
+  assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
+});
+
 test("switch and choice skin families retain four-column rows at every viewport", () => {
   assert.match(styles, /\.vt-confirmed-control-variants\s*\{[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
   assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants\s*\{\s*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\) !important/);
