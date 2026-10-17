@@ -8,7 +8,8 @@ const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 test("canonical Studio Controls owns the split stepper and keeps native numeric editing", () => {
   assert.match(component, /export const StudioSplitStepper/)
   assert.match(component, /data-vt-studio-control-kind="split-stepper"/)
-  assert.match(component, /data-vt-studio-username-foundation="true"/)
+  assert.match(component, /data-vt-studio-split="right"/)
+  assert.match(component, /data-vt-library-component="StudioSplitRightBadge"/)
   assert.match(component, /<input[\s\S]*?type="number"/)
   assert.match(component, /data-size=\{size\}/)
   assert.match(component, /<ChevronsUp aria-hidden="true" \/>/)
@@ -16,19 +17,21 @@ test("canonical Studio Controls owns the split stepper and keeps native numeric 
 })
 
 test("stepper variants retain shared palette tokens while the split stepper keeps its username-input foundation", () => {
-  assert.match(styles, /\.vt-studio-username-input\s*\{/)
+  assert.match(styles, /\.vt-studio-split-right-badge\s*\{/)
   assert.match(styles, /\.vt-studio-inline-stepper,\s*\.vt-studio-split-stepper\s*\{[^}]*--vt-stepper-primary:/s)
   assert.match(styles, /background:\s*color-mix\(in srgb, var\(--vt-stepper-primary\) var\(--vt-studio-control-default-fill-opacity, 50%\), transparent\)/)
-  assert.match(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*background:\s*var\(--vt-stepper-secondary\)/s)
+  assert.match(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/s)
   assert.match(styles, /\.vt-studio-split-stepper\s*\{[^}]*box-shadow:\s*none/s)
+  assert.match(component, /rightRailContent=/)
 })
 
 test("split value pane has squared inner edge and rail owns the vertical seam", () => {
   const inputRule = styles.match(/\.vt-studio-split-stepper input\.vt-studio-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
   assert.match(inputRule, /border-radius:\s*0/)
   assert.match(inputRule, /border:\s*0/)
-  assert.doesNotMatch(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:/s)
-  assert.match(styles, /\.vt-studio-split-stepper-rail::after\s*\{[^}]*left:\s*0[^}]*top:\s*0[^}]*bottom:\s*0[^}]*width:\s*var\(--vt-stepper-stroke\)/s)
+  assert.doesNotMatch(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:\s*var\(--vt-stepper-stroke\)/s)
+  assert.match(styles, /\.vt-studio-split-stepper-rail\s*\{[^}]*border-left:\s*0/s)
+  assert.match(styles, /\.vt-studio-split-stepper-rail button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-stepper-stroke\) solid #000/s)
 })
 
 test("horizontal divider is centered, both actions have equal rows, and repeat stops at bounds", () => {
@@ -36,6 +39,7 @@ test("horizontal divider is centered, both actions have equal rows, and repeat s
   assert.match(styles, /grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/)
   assert.match(component, /if \(\(heldDirection\.current > 0 && valueRef\.current < max\) \|\| \(heldDirection\.current < 0 && valueRef\.current > min\)\) scheduleRepeatRef\.current\(\)/)
   assert.match(styles, /\.vt-studio-split-stepper-rail button:focus-visible\s*\{\s*outline:\s*3px solid/)
+  assert.doesNotMatch(component.slice(component.indexOf("export const StudioSplitStepper"), component.indexOf("StudioSplitStepper.displayName")), /<StudioUsernameInput|<StudioSplitLeftButton/)
 })
 
 test("inline stepper is built on the canonical double-split shell with interactive square rails", () => {
