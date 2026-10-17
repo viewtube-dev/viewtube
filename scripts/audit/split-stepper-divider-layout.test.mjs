@@ -38,7 +38,12 @@ test("horizontal divider is centered, both actions have equal rows, and repeat s
   assert.match(styles, /grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/)
   assert.match(component, /if \(\(heldDirection\.current > 0 && valueRef\.current < max\) \|\| \(heldDirection\.current < 0 && valueRef\.current > min\)\) scheduleRepeatRef\.current\(\)/)
   assert.match(styles, /\.vt-studio-split-stepper-actions button:focus-visible\s*\{\s*outline:\s*3px solid/)
-  assert.doesNotMatch(component.slice(component.indexOf("export const StudioSplitStepper"), component.indexOf("StudioSplitStepper.displayName")), /<StudioUsernameInput|<StudioSplitLeftButton/)
+  const splitStart = component.indexOf("export const StudioSplitStepper")
+  const splitEnd = component.indexOf("/** Closeable metadata badge", splitStart)
+  const splitStepper = component.slice(splitStart, splitEnd)
+  assert.doesNotMatch(splitStepper, /<StudioUsernameInput|<StudioSplitLeftButton/)
+  assert.match(splitStepper, /rightRailContent=/)
+  assert.match(splitStepper, /className="vt-studio-split-stepper-rail"/)
 })
 
 test("inline stepper is built on the canonical double-split shell with interactive square rails", () => {
