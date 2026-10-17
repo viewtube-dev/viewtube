@@ -1662,19 +1662,19 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   flex: 1 1 auto;
   width: 100%;
   min-width: 0;
-  min-height: 0 !important;
+  min-height: 0;
   height: 100%;
   margin: 0;
-  padding: 0 12px 0 14px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  
-  outline: none !important;
+  padding: 0 12px 0 14px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);
+  outline: none;
   align-self: stretch;
 }
 .vt-studio-username-input[data-size="compact"] input.vt-studio-username-input__input[data-vt-studio-control="true"] {
-  padding-inline: 8px !important;
+  padding-inline: 8px;
 }
 .vt-studio-username-input:focus-within {
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
@@ -1683,24 +1683,24 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   
 }
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
-  background: transparent !important;
+  background: transparent;
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: .5px #000;
-  outline: none !important;
+  -webkit-text-stroke: var(--vt-field-stroke) #000;
+  outline: none;
   
 }
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]::placeholder {
   color: var(--vt-field-primary);
   -webkit-text-fill-color: var(--vt-field-primary);
-  -webkit-text-stroke: .5px var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);
   opacity: 1;
 }
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:focus::placeholder,
 .vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"]:focus-visible::placeholder {
   color: #8b8b8b;
   -webkit-text-fill-color: #8b8b8b;
-  -webkit-text-stroke: 0;
+  -webkit-text-stroke: var(--vt-field-stroke) #8b8b8b;
 }
 .vt-studio-username-input[data-disabled="true"] {
   cursor: not-allowed;
