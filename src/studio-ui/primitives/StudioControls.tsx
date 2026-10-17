@@ -617,6 +617,7 @@ interface StudioSplitShellProps {
   labelClassName?: string
   railClassName?: string
   railProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  rightRailContent?: React.ReactNode
   interactiveRails?: boolean
   startRailProps?: React.ButtonHTMLAttributes<HTMLButtonElement> & StudioDataAttributeProps
   endRailProps?: React.ButtonHTMLAttributes<HTMLButtonElement> & StudioDataAttributeProps
@@ -625,7 +626,7 @@ interface StudioSplitShellProps {
 const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps, shellProps,
-  interactiveRails = false, startRailProps, endRailProps,
+  interactiveRails = false, startRailProps, endRailProps, rightRailContent,
 }) => {
   const content = (
     <>
@@ -635,9 +636,11 @@ const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
       {fieldSlot
         ? <span data-vt-studio-split-field>{children}</span>
         : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
-      {layout !== "left" && (interactiveRails
-        ? <button {...endRailProps} type="button" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</button>
-        : <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</span>)}
+      {layout !== "left" && (rightRailContent !== undefined
+        ? <span {...railProps} data-vt-studio-split-rail data-rail="end" className={railClassName}>{rightRailContent}</span>
+        : interactiveRails
+          ? <button {...endRailProps} type="button" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</button>
+          : <span {...railProps} aria-hidden="true" data-vt-studio-split-rail data-rail="end" className={railClassName}>{iconRight}</span>)}
     </>
   )
   if (faceOnly) return <span data-vt-studio-split-face="true" data-vt-studio-split={layout} data-size={sizeVariant} className="vt-studio-split-face">{content}</span>
