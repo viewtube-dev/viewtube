@@ -40,18 +40,22 @@ test("reduced-motion users receive no motion from the restored controls", () => 
   }
 })
 
-test("canonical split stylesheets load in dependency order before motion", () => {
+test("the canonical Studio stylesheet entry imports all layers in dependency order", () => {
+  const entryCss = readFileSync("src/styles/studio-control-entry.css", "utf8")
   const expected = [
-    'import "../styles/studio-control-system.css"',
-    'import "../styles/studio-control-vars.generated.css"',
-    'import "../styles/studio-control-core.css"',
-    'import "../styles/studio-control-split.css"',
-    'import "../styles/studio-control-fields.css"',
-    'import "../styles/studio-control-motion.css"',
+    '@import "./studio-control-system.css";',
+    '@import "./studio-control-vars.generated.css";',
+    '@import "./studio-control-core.css";',
+    '@import "./studio-control-split.css";',
+    '@import "./studio-control-fields.css";',
+    '@import "./studio-control-motion.css";',
   ]
-  const positions = expected.map((statement) => entry.indexOf(statement))
+  const positions = expected.map((statement) => entryCss.indexOf(statement))
   assert.ok(positions.every((position) => position >= 0), "all canonical Studio stylesheets must be imported")
-  assert.deepEqual(positions, [...positions].sort((a, b) => a - b), "Studio stylesheet imports must preserve token → core → split → fields → motion order")
+  assert.deepEqual(positions, [...positions].sort((a, b) => a - b), "Studio CSS must preserve system → tokens → core → split → fields → motion order")
+  assert.ok(entry.includes('import "../styles/studio-control-entry.css"'), "Studio library index must use the canonical stylesheet entry")
+  assert.ok(readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8").includes('import "../../styles/studio-control-entry.css"'))
+  assert.ok(readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8").includes('import "../../styles/studio-control-entry.css"'))
 })
 
 test("restored motion does not add shell movement or shadow effects", () => {
