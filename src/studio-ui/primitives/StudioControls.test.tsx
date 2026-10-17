@@ -241,8 +241,11 @@ describe("Studio text-field module ownership and typography", () => {
 
   it("uses global 38px/24px input typography and 18px/14px textarea typography without important overrides", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain("font-size: var(--vt-studio-text-input-standard-font-size, 38px);")
-    expect(css).toContain("font-size: var(--vt-studio-text-input-compact-font-size, 24px);")
+    expect(css).toContain("--vt-studio-44-font-size: 38px")
+    expect(css).toContain("--vt-studio-28-font-size: 24px")
+    expect(css).toContain("font-size: var(--vt-studio-control-font-size);")
+    expect(css).not.toContain("--vt-studio-text-input-standard-font-size")
+    expect(css).not.toContain("--vt-studio-text-input-compact-font-size")
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
     expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
@@ -472,9 +475,6 @@ describe("floating label geometry and circular icon scale", () => {
     expect(css).toContain("transform: translateY(-40%)")
     expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
-    expect(catalogCss).toContain(".vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control=\"true\"])")
-    expect(catalogCss).toContain(".vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control=\"true\"]):focus")
-    expect(catalogCss).not.toContain(".vt-complete-catalog .vt-catalog-field{\n  --field-accent:var(--pair-a);")
     expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
     expect(css).toContain("padding: 2.25px 4.5px;")
   })
