@@ -355,3 +355,22 @@ describe("canonical tool-chain registration for Opportunity Radar → Tactics En
     expect(actionPacket.payload).toEqual(packet)
   })
 })
+
+  it("refuses malformed or unaccepted packets at the canonical action-packet boundary", async () => {
+    const { createOpportunityTacticsActionPacket } = await import("../viewTubeToolChains")
+    const valid = {
+      schemaVersion: "vt-opportunity-tactics-handoff-v1" as const,
+      opportunityId: "op-accepted", channelId: "channel-1", videoId: null, entity: "Candidate", metric: "views",
+      kind: "performance_candidate" as const, validationState: "accepted" as const,
+      createdAt: "2026-10-17T12:00:00.000Z", evidenceIds: ["ev-1"], confidence: 70, impactScore: 80,
+      currentValue: 1200, baselineValue: null, relativeDelta: null,
+      provenance: { sourceOwner: "analytics-canon" as const, sourceSnapshotId: "snapshot-1", datasetId: "videos", window: "90d", datasetStatus: "available" },
+      limitations: [],
+    }
+    expect(() => createOpportunityTacticsActionPacket({ ...valid, validationState: "reviewed" } as any)).toThrow(
+      "Only accepted opportunities with canonical evidence can be handed to Tactics Engine.",
+    )
+    expect(() => createOpportunityTacticsActionPacket({ ...valid, evidenceIds: [] })).toThrow(
+      "Only accepted opportunities with canonical evidence can be handed to Tactics Engine.",
+    )
+  })
