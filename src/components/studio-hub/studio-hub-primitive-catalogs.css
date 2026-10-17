@@ -2678,7 +2678,7 @@
   gap: 7px;
   min-width: 0;
 }
-.vt-confirmed-split-left-badge-family > span {
+.vt-confirmed-split-left-badge-family > span:not(.vt-studio-split-left-badge) {
   font-size: 10px;
   font-weight: 1000;
   letter-spacing: .03em;
