@@ -128,6 +128,19 @@ describe("confirmed composite primitive catalog", () => {
   })
 
 
+  it("keeps split badges to one perimeter border and square micro rails", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("Split-badge border ownership fix (2026-10-17)")
+    expect(css).toContain(".vt-studio-split-left-badge__face::before")
+    expect(css).toContain("content: none !important")
+    expect(css).toContain('data-size="micro"] .vt-studio-split-left-badge__rail')
+    expect(css).toContain("width: 12px")
+    expect(css).toContain("height: 12px")
+    expect(css).toContain("aspect-ratio: 1 / 1")
+    expect(css).toContain("border-right-width: 1px !important")
+    expect(css).toContain("border-left-width: 1px !important")
+  })
+
   it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
