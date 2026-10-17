@@ -2723,18 +2723,6 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-
 }
 
 
-/* Button-owned optional shadow feature. Flat is the default; no hover/press movement. */
-button[data-vt-button-shadow="true"] {
-  --vt-button-shadow-x: 3px;
-  --vt-button-shadow-y: 3px;
-  box-shadow: var(--vt-button-shadow-x) var(--vt-button-shadow-y) 0 0 var(--vt-button-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent));
-}
-button[data-vt-button-shadow="true"][data-size="compact"] {
-  --vt-button-shadow-x: 1.5px;
-  --vt-button-shadow-y: 1.5px;
-}
-
-
 /* Canonical Studio interaction policy: flat and stationary by default.
    Keep icon-internal animation and floating-label feedback in their own component rules.
    Do not add generic hover/press transforms, filters, shadows, or transitions. */
