@@ -33,7 +33,7 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(view).toContain("Connect YouTube Channel")
   expect(view).toContain("comments.reconnect")
   expect(view).toContain('SubToolbox title="Comment Queue"')
-  expect(view).toContain('SubToolbox title="Current Comment"')
+  expect(view).toContain('SubToolbox title="Conversation Thread"')
   expect(view).toContain('SubToolbox title={comments.tab === "history" ? "Follow-Up Reply" : "Reply Composer"}')
  })
  it("renders inspectable Audience Pulse signals without implying a handoff was executed", () => {
@@ -48,6 +48,27 @@ describe("Comment Responder Studio Hub contract", () => {
   expect(handoff).toContain('approvalState: "pending"')
   expect(controller).toContain("loadViewTubeActionPacket(packet.id)")
   expect(view).not.toContain("persistViewTubeActionPacket")
+ })
+
+
+ it("renders a conversation-first thread with participant avatars and message bubbles", () => {
+  expect(view).toContain('SubToolbox title="Conversation Thread"')
+  expect(view).toContain("authorProfileImageUrl")
+  expect(view).toContain("comment-responder-message-bubble")
+  expect(view).toContain("comment-responder-avatar")
+  expect(view).toContain("publishedAt")
+  expect(view).toContain("data-comment-video-context")
+  expect(view).toContain('role="region" tabIndex={0} aria-label="Comment conversation thread"')
+  expect(view).toContain("context.channelThumbnail : undefined")
+  expect(view).not.toContain('SubToolbox title="Current Comment"')
+  expect(view).not.toContain('SubToolbox title={`Reply History · ${replies.length}`}')
+ })
+
+ it("makes generation, refinement, and video suggestions explicit contextual actions", () => {
+  expect(view).toContain('comments.replyText.trim() ? "Refine" : "Generate"')
+  expect(view).toContain('label="Suggest Videos"')
+  expect(view).toContain("comments.draftReply")
+  expect(view).toContain("comments.suggestVideo")
  })
 
 })
