@@ -42,3 +42,13 @@ test("StudioRightCounter is a new button-only split-right primitive with a divid
   assert.match(styles, /\.vt-studio-right-counter__actions button:first-child\s*\{[^}]*border-bottom:[^}]+/s)
   for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioRightCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
+
+test("counter affordances have hold-repeat, enlarged icons, activation motion, and aligned right divider", () => {
+  assert.match(component, /useStudioCounterHold/);
+  assert.match(component, /onPointerDown/);
+  assert.match(component, /data-press-holding/);
+  assert.match(styles, /width:\s*36px;\s*height:\s*36px;\s*stroke-width:\s*3\.75;/);
+  assert.match(styles, /vt-studio-counter-pop/);
+  assert.match(styles, /vt-studio-counter-hold-pulse/);
+  assert.match(styles, /vt-studio-right-counter__actions button:first-child \{ border-bottom: 1px solid #000; \}/);
+});
