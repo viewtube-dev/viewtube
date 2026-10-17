@@ -10,14 +10,19 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
   clickOffsetPx: 0,
 } as const
 
-/** One canonical size ladder for Studio controls; documented exceptions live below. */
-export const STUDIO_CONTROL_SIZE_CONTRACT = {
+/** Canonical Studio size values are defined before derived contracts to avoid self-reference during initialization. */
+const STUDIO_CONTROL_SIZE_BASE = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   /** Dense micro tier: 14px face with proportionally reduced stroke, radius, typography and icon. */
   micro: { height: 14, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textStroke: 0.25, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.01, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.65, iconSize: 10, iconStroke: 1.5, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+} as const
+
+/** One canonical size ladder for Studio controls; documented exceptions live below. */
+export const STUDIO_CONTROL_SIZE_CONTRACT = {
+  ...STUDIO_CONTROL_SIZE_BASE,
   /** Single-line text inputs inherit the canonical global standard/compact control typography. */
-  textInput: { standardFontSize: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize, compactFontSize: STUDIO_CONTROL_SIZE_CONTRACT.compact.fontSize, fontWeight: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontWeight, standardTextStroke: STUDIO_CONTROL_SIZE_CONTRACT.standard.textStroke, compactTextStroke: STUDIO_CONTROL_SIZE_CONTRACT.compact.textStroke, lineHeight: 0.86, width: "row", textTransform: "uppercase", letterSpacing: -0.02, textAlign: "left", defaultFillOpacity: 50, defaultTextColor: "primary", inlineStrokeColor: "primary", inlineStrokeWidth: "same as border width", focusTextColor: "#000000", focusFillOpacity: 15, focusOutlineColor: "secondary at 100% opacity", focusOutlineWidth: "65% of border width", followsSizeFamily: true },
+  textInput: { standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize, compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize, fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight, standardTextStroke: STUDIO_CONTROL_SIZE_BASE.standard.textStroke, compactTextStroke: STUDIO_CONTROL_SIZE_BASE.compact.textStroke, lineHeight: 0.86, width: "row", textTransform: "uppercase", letterSpacing: -0.02, textAlign: "left", defaultFillOpacity: 50, defaultTextColor: "primary", inlineStrokeColor: "primary", inlineStrokeWidth: "same as border width", focusTextColor: "#000000", focusFillOpacity: 15, focusOutlineColor: "secondary at 100% opacity", focusOutlineWidth: "65% of border width", followsSizeFamily: true },
   /** Multiline exception: taller writing surface while preserving the chosen standard/compact geometry. */
   multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardTextStroke: 0.5, compactTextStroke: 0.35, standardLineHeight: 1.25, compactLineHeight: 1.3, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas alone use 18px standard and 14px compact; they additionally use multiline line-height, padding, and a 92px minimum surface." },
 } as const
