@@ -1,6 +1,6 @@
 import React from "react"
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ExternalLink, Link2, Loader2, MessageCircle, MessagesSquare, RefreshCw, Sparkles, ThumbsUp } from "lucide-react"
+import { ExternalLink, Link2, Loader2, MessagesSquare, RefreshCw, Sparkles, ThumbsUp } from "lucide-react"
 import { buildYouTubeCommentUrl } from "../services/youtube/commentHandoff"
 import { SubToolbox, SubToolboxGridActionButton, SubToolboxInnerActionButton } from "./Toolbox"
 import { StudioButton, StudioSquareIconButton, StudioSplitLeftButton, StudioTextArea } from "../studio-ui"
@@ -12,11 +12,12 @@ const plainText = (value: string) => {
 }
 
 const CommentAvatar: React.FC<{ name: string; src?: string; creator?: boolean }> = ({ name, src, creator = false }) => {
- const [failed, setFailed] = React.useState(false)
+ const [failedSrc, setFailedSrc] = React.useState<string | null>(null)
  const initial = plainText(name || "Viewer").trim().replace(/^@+/, "").charAt(0).toUpperCase() || "?"
+ const showImage = Boolean(src && failedSrc !== src)
  return <div role="img" aria-label={name + " profile picture"} className={"comment-responder-avatar relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-black text-xs font-black " + (creator ? "bg-[#BFE9FF]" : "bg-[#FFE4F2]")}>
-  <span aria-hidden="true">{initial}</span>
-  {src && !failed && <img src={src} alt="" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full object-cover" onError={() => setFailed(true)} />}
+  {!showImage && <span aria-hidden="true">{initial}</span>}
+  {showImage && <img src={src} alt="" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full object-cover" onError={() => setFailedSrc(src || null)} />}
  </div>
 }
 
