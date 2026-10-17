@@ -803,6 +803,8 @@ export interface GeneratedScript {
  timeline: TimelineSection[]
  sections: ScriptSectionDraft[]
  fullScript: string
+ /** Imported documents remain a single prose block when edits are stitched back together. */
+ preserveSectionHeadings?: boolean
  visualSuggestions: VisualSuggestion[]
  shortsIdeas: ShortIdea[]
  /** Fields the model inferred because the creator left them blank. */
