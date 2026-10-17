@@ -109,3 +109,5 @@ The system optimizes for **clarity, reuse, low duplication, and easy agent navig
 ## Active implementation plans
 
 - [Publisher/Manager channel-connected controls plan](../plans/VIEWTUBE_PUBLISHER_MANAGER_CHANNEL_CONNECTED_CONTROLS_PLAN_2026-10-09.md) — next metadata-control slice on the system-convergence branch.
+
+- [Publisher Render API Startup Blocker](Publisher-Render-API-Startup-Blocker-2026-10-16.md) — live Publisher dashboard loads, but API routes return HTTP 502; documents the confirmed start-command mismatch, remediation, and remaining certification blockers.
