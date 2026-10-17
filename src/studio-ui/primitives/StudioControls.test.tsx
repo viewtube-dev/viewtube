@@ -356,7 +356,7 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).toContain('button[data-vt-studio-button="true"]:focus-visible { outline:3px solid')
     expect(css).toContain('button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }')
     expect(css).toContain('button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }')
-    expect(css).toContain(':active:not(:disabled)')
+    expect(css).not.toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
     expect(css).toContain('@media (prefers-reduced-motion:reduce)')
     expect(css).toContain('transition:none !important;')
   })
@@ -370,14 +370,13 @@ describe("tactile button press accessibility and exclusion contract", () => {
     expect(css).not.toContain('button[data-dropdown-trigger="true"]:active')
     // Menu panels may own a stationary shadow; trigger and option buttons do not
     // receive the data-vt-studio-button marker used by the tactile press model.
-    expect(css).toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
+    expect(css).not.toContain('button[data-vt-studio-button="true"]:active:not(:disabled)')
   })
 
-  it("locks standard/compact displacement to the corresponding shadow offsets and icon metrics", () => {
+  it("keeps standard/compact icon metrics tokenized without displacement or shadow offsets", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-shadow-x:3px; --vt-studio-control-shadow-y:3px; }')
-    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"] {')
-    expect(css).toContain('--vt-studio-control-shadow-x:1.5px; --vt-studio-control-shadow-y:1.5px;')
+    expect(css).not.toContain("--vt-studio-control-shadow-x")
+    expect(css).not.toContain("--vt-studio-control-shadow-y")
     expect(css).toContain('--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9;')
     expect(css).toContain('--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0;')
     expect(css).toContain('button[data-vt-studio-icon-button="true"][data-icon-variant="v2"]')
