@@ -29,13 +29,13 @@ describe("StudioSplitStepper", () => {
     expect(css).toContain("height: 70%;")
     expect(css).toContain("var(--vt-studio-control-default-fill-opacity, 50%)")
     const inputRule = css.match(/\.vt-studio-split-stepper input\.vt-studio-split-stepper-value[^}]*\{([^}]*)\}/)?.[1] ?? ""
-    expect(inputRule).toContain("border-radius: 0;")
-    expect(inputRule).toContain("border: 0;")
+    expect(inputRule).toMatch(/border-radius:\s*0(?:\s*!important)?;/)
+    expect(inputRule).toMatch(/border:\s*0(?:\s*!important)?;/)
   })
 
   it("centers the rail divider and gives both actions equal rows", () => {
     expect(css).toMatch(/\.vt-studio-split-stepper-rail\s*\{[^}]*grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/s)
-    expect(css).toMatch(/\.vt-studio-split-stepper-rail::before\s*\{[^}]*top:\s*50%/s)
+    expect(css).toContain(".vt-studio-split-stepper-rail button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
     expect(css).toContain(".vt-studio-split-stepper-rail button:focus-visible { outline: 3px solid")
   })
 
