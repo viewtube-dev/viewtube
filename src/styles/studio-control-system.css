@@ -3642,3 +3642,37 @@ html body .vt-studio-username-input > [data-vt-studio-split-label] > input[data-
   box-shadow: none !important;
   background: transparent !important;
 }
+
+
+/* Split-left label pane must occupy and paint the entire second grid track.
+   Do not let intrinsic flex sizing leave unpainted strips at either edge.
+   Apply the same geometry to selected/inverse-color variants; only the fill
+   changes, never the label pane's width or inset. */
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
+  display: flex !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  flex: 1 1 auto !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  margin: 0 !important;
+  padding-inline: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  overflow: hidden;
+}
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]):is([data-selected="true"], [aria-pressed="true"]) > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"])[data-disabled="true"] > [data-vt-studio-button-face] > [data-vt-studio-split-label],
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]):disabled > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] > [data-vt-studio-split-label] > * {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
