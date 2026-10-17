@@ -1,23 +1,26 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Channel Simulator
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+IMPLEMENT as a scenario/planning capability inside Creator Strategy Engine or Revenue Architect first; promote to a separate tool only if the model has independently testable value.
 
 ## Core transformation
-TRANSFORM
+Current channel state + explicit assumptions → scenario ranges and sensitivities
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/services/channelPlanningIntelligence.ts`
+- `src/services/projectPlanningIntelligence.ts`
+- `src/services/analytics-canon/contracts.ts`
+- `src/services/brain/BrainEvidenceContract.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Inspect existing channel planning, forecasts, analytics metrics, and monetization scenarios. Prefer transparent ranges/sensitivity analysis over point predictions. Each scenario must store assumptions, input window, data sufficiency, model/version, uncertainty, and scenario comparison. No guaranteed outcome language or fabricated inputs. Reuse canonical project and strategy decisions; test calibration/backtesting where historical data permits before presenting estimates as forecasts.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
