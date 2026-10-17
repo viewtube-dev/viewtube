@@ -270,3 +270,11 @@ This is intentionally a narrow, compatibility-aware correction. It does not clai
 2. Add contract coverage for confidence normalization between the 0–100 opportunity scale and the 0–1 Brain claim scale; do not silently reinterpret one as the other.
 3. Add producer/receiver contract tests for the five Brain recipes and verify canonical asset/video/project IDs, evidence IDs, workflow/operation identity, and approval requirements.
 4. Trace the runtime consumers of `buildSuperToolDocHref`; replace the machine-specific `file://` base with a portable documentation target only after choosing the correct browser/deployed destination.
+
+### Confidence-scale contract follow-through — 2026-10-17
+
+Added `normalizeBrainConfidence(value, sourceScale)` to `BrainEvidenceContract.ts`. Brain claims use a normalized 0–1 scale; producers whose contract is explicitly 0–100 must pass `"percent"` rather than being silently clamped as if already normalized. Missing and non-finite values remain null, and finite values are bounded to the target scale. Regression assertions cover unit-scale pass-through, percent conversion, boundary clamping, NaN, and null.
+
+Commits: `c02973908755fbb30a8ebbdc7b39c7b7cf4a490a` (contract helper) and `2d0c0673d236fa34ec64bbd47f13f5bb637c28d4` (tests).
+
+**Scope note:** this establishes and tests the conversion boundary; it does not yet prove every opportunity-to-claim path calls it. That requires tracing actual consumers and wiring the helper only where a producer's 0–100 scale is confirmed. Runtime tests/typecheck/build remain unexecuted because this GitHub-backed work session has no checked-out project runtime.
