@@ -11,7 +11,7 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 } as const
 
 /** Canonical Studio size values are defined before derived contracts to avoid self-reference during initialization. */
-const STUDIO_CONTROL_SIZE_BASE = {
+export const STUDIO_CONTROL_SIZE_BASE = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   /** Dense micro tier: 14px face with proportionally reduced stroke, radius, typography and icon. */
@@ -66,5 +66,38 @@ export const STUDIO_ICON_SIZE_COMPARISON = {
 } as const
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
-export type StudioControlSize = "standard" | "compact"
+export type StudioControlSize = "standard" | "compact" | "micro"
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
+
+
+/** Machine-readable exceptions: only spectrum tags and closeable badges may shrink to content width. */
+export const STUDIO_CONTROL_EXCEPTIONS = {
+  spectrumTag: { width: "content", reason: "Dense spectrum metadata tag; catalog-approved exception." },
+  closeableBadge: { width: "content", reason: "Badge label plus close affordance sizes to its content." },
+} as const;
+
+export const STUDIO_WIDTH_POLICY = {
+  default: "row",
+  exceptions: ["spectrumTag", "closeableBadge"],
+  attribute: "data-vt-studio-width=content",
+} as const;
+
+export const STUDIO_COLOR_ROLES = {
+  primary: "var(--pair-a)",
+  secondary: "var(--pair-b)",
+  doubleSplitStartRail: "secondary",
+  doubleSplitEndRail: "secondary",
+  focusOutline: { color: "secondary", opacity: 0.65, offset: 0 },
+} as const;
+
+export function studioSizeTierToCssVars(size: keyof typeof STUDIO_CONTROL_SIZE_BASE) {
+  const tier = STUDIO_CONTROL_SIZE_BASE[size];
+  return {
+    "--vt-studio-control-height": `${tier.height}px`,
+    "--vt-studio-control-stroke": `${tier.stroke}px`,
+    "--vt-studio-control-radius": `${tier.radius}px`,
+    "--vt-studio-control-font-size": `${tier.fontSize}px`,
+    "--vt-studio-control-icon-size": `${tier.iconSize}px`,
+    "--vt-studio-control-gap": "4px",
+  } as React.CSSProperties;
+}
