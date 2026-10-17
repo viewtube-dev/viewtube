@@ -1,6 +1,6 @@
 # Publisher Render API Startup Blocker
 
-Status: BLOCKED pending Render service configuration update.
+Status: BLOCKED pending Render service configuration update. Latest Render deployment at last check: `dep-db9ba72jnfac73bldn2g` (Live, same source commit; still uses the Vite-only start command).
 
 The Publisher dashboard at https://publisher-3n7h.onrender.com/ renders, but `/api/release` and `/api/auth-session` returned HTTP 502 during a read-only browser check. Render application logs showed Vite proxy `ECONNREFUSED` errors for `/api/auth-session` and `/api/youtube/playlists`.
 
