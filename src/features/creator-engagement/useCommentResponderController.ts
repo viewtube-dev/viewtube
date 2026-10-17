@@ -180,7 +180,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
   return { sourceVideoId, sourceTitle, candidateVideos }
  }
 
- const draftReply = async () => {
+ const draftReply = async (mode: "generate" | "refine" = "refine") => {
   if (!currentThread) return
   const controls = readBrainUserControls()
   if (!controls.allowComments) {
@@ -198,7 +198,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
     context.channelName || "Content Creation",
     candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
     context.brain,
-    replyText[currentId]?.trim() || "",
+    mode === "refine" ? replyText[currentId]?.trim() || "" : "",
    )
    const suggestedVideoId = resolveSuggestedVideoId(result.suggestedVideoId, candidateVideos, sourceVideoId)
    const reply = suggestedVideoId
