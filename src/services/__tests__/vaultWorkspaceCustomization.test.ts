@@ -28,7 +28,7 @@ describe("Vault workspace customization", () => {
 
  it("keeps all core modules visible by default", () => {
   expect(DEFAULT_VAULT_WORKSPACE_STATE.visibleModules).toContain("asset-library")
-  expect(DEFAULT_VAULT_WORKSPACE_STATE.visibleModules).toContain("import-station")
+  expect(DEFAULT_VAULT_WORKSPACE_STATE.visibleModules).toContain("import-tags")
   expect(DEFAULT_VAULT_WORKSPACE_STATE.visibleModules).toContain("inspector")
  })
 })
