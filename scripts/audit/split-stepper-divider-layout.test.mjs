@@ -35,5 +35,5 @@ test("horizontal divider is centered, both actions have equal rows, and repeat s
   assert.match(styles, /\.vt-studio-split-stepper-rail::before\s*\{[^}]*left:\s*0[^}]*right:\s*0[^}]*top:\s*50%/s)
   assert.match(styles, /grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/)
   assert.match(component, /if \(\(heldDirection\.current > 0 && valueRef\.current < max\) \|\| \(heldDirection\.current < 0 && valueRef\.current > min\)\) scheduleRepeat\(\)/)
-  assert.match(styles, /\.vt-studio-split-stepper-rail button:focus-visible\s*\{\s*outline:\s*2px solid/)
+  assert.match(styles, /\.vt-studio-split-stepper-rail button:focus-visible\s*\{\s*outline:\s*3px solid/)
 })
