@@ -8,7 +8,7 @@ import "../../styles/studio-control-fields.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronsDown, ChevronsUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronDown as ChevronDownSingle, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -1379,14 +1379,14 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
             onPointerDown={(event) => beginHold(1, event)}
             onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
             onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }}>
-            <ChevronsUp aria-hidden="true" />
+            <ChevronUp aria-hidden="true" />
           </button>
           <button type="button" className="vt-studio-split-stepper-down" aria-label={"Decrease " + ariaLabel}
             disabled={disabled || !validBounds || value <= min}
             onPointerDown={(event) => beginHold(-1, event)}
             onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
             onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }}>
-            <ChevronsDown aria-hidden="true" />
+            <ChevronDownSingle aria-hidden="true" />
           </button>
         </div>
       }
