@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
+import { createContentBuild, getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
 import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
 import { findVideoPackageByProject, resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
 import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
@@ -22,6 +22,7 @@ describe("Publisher metadata package options", () => {
     localStorage.clear()
     resetVideoPackageRepositoryForTests()
     resetContentBuildRepositoryForTests()
+    createContentBuild({ id: project.contentBuildId, legacyProjectId: project.id, legacyProjectName: project.name })
   })
 
   it("preserves an explicitly unset Audience value in a saved metadata option", () => {
