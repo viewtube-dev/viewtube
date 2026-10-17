@@ -2672,7 +2672,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle].is-unlocked {
   white-space: nowrap;
   -webkit-text-stroke: inherit;
 }
-.vt-studio-split-left-badge:is([data-size="compact"], [data-size="micro"]) {
+.vt-studio-split-left-badge[data-size="compact"] {
   --vt-studio-badge-height: var(--vt-studio-28-height, 28px);
   --vt-studio-badge-stroke: var(--vt-studio-28-stroke, 2px);
   --vt-studio-badge-radius: var(--vt-studio-28-radius, 4px);
@@ -2683,7 +2683,25 @@ button[data-vt-studio-icon-button="true"] [data-vt-lock-shackle].is-unlocked {
   --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-control-line-height: var(--vt-studio-28-line-height, .86);
 }
-.vt-studio-split-left-badge:is([data-size="compact"], [data-size="micro"]) .vt-studio-split-left-badge__label { padding-inline: 8px; }
+.vt-studio-split-left-badge[data-size="compact"] .vt-studio-split-left-badge__label { padding-inline: 8px; }
+
+/* Micro is a real 14px badge tier, not a compact alias. Keep it static and shadow-free. */
+.vt-studio-split-left-badge[data-size="micro"] {
+  --vt-studio-badge-height: var(--vt-studio-14-height, 14px);
+  --vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px);
+  --vt-studio-badge-radius: var(--vt-studio-14-radius, 2px);
+  --vt-studio-badge-shadow-x: 0px;
+  --vt-studio-badge-shadow-y: 0px;
+  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-14-icon-stroke, 1.5);
+  --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px);
+  --vt-studio-control-font-weight: var(--vt-studio-14-font-weight, 1000);
+  --vt-studio-control-line-height: var(--vt-studio-14-line-height, 1);
+  box-shadow: none;
+}
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__label { padding-inline: 2px; }
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__face { min-height: 14px; }
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail { min-height: 12px; }
 
 /* Choice controls must occupy the full 44px standard control height. */
 .vt-studio-44-choice {
