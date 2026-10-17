@@ -5,7 +5,8 @@
   gap: 0;
   overflow: hidden;
   border-radius: var(--vt-studio-control-radius, 6px);
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-accent, var(--pair-a));
+  /* Outer perimeter always belongs to the shell and is never pair-colored. */
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
 }
 [data-vt-studio-control="true"][data-vt-studio-split="left"] {
   grid-template-columns: auto minmax(0, 1fr);
@@ -17,33 +18,70 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
 }
 [data-vt-studio-control="true"] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: stretch;
   min-width: var(--vt-studio-control-height, 44px);
   width: var(--vt-studio-control-height, 44px);
-  color: var(--vt-studio-control-secondary, var(--pair-b));
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  /* Rail fill is secondary; icon and glyphs are always black. */
+  color: #000;
   background: var(--vt-studio-control-secondary, var(--pair-b));
+  border: 0;
   border-radius: 0;
   box-shadow: none;
+  line-height: 1;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail][data-rail="start"] {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail][data-rail="end"] {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail] > svg {
+  display: block;
+  flex: 0 0 auto;
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  margin: auto;
+  color: #000;
+  stroke: #000;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail] > svg * {
+  stroke: #000;
 }
 [data-vt-studio-control="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] {
-  color: var(--vt-studio-control-secondary, var(--pair-b));
+  color: #000;
   background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 [data-vt-studio-control="true"] [data-vt-studio-split-label],
 [data-vt-studio-control="true"] [data-vt-studio-split-field] {
+  box-sizing: border-box;
   min-width: 0;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 [data-vt-studio-control="true"][data-vt-studio-split] [data-vt-studio-split-label] {
-  padding-inline: var(--vt-studio-split-label-inset, 0px);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #000;
+  text-align: center;
+  line-height: var(--vt-studio-control-line-height, .86);
 }
 
 /* A face-only split shell is nested inside StudioButton but follows the same grid. */
 [data-vt-studio-control="true"] [data-vt-studio-split-face] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
   width: var(--vt-studio-control-height, 44px);
   min-width: var(--vt-studio-control-height, 44px);
   height: 100%;

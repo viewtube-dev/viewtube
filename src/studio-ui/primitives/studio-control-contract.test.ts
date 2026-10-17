@@ -16,6 +16,13 @@ describe("Studio control global contract", () => {
     expect(css.match(/background: var\(--vt-studio-control-secondary/g)?.length).toBeGreaterThanOrEqual(2);
     expect(css).toContain("border-radius: 0");
     expect(css).toContain("box-shadow: none");
+    expect(css).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
+    expect(css).toContain("color: #000;");
+    expect(css).toContain("align-items: center;");
+    expect(css).toContain("justify-content: center;");
+    expect(css).toContain('[data-vt-studio-split-rail][data-rail="start"]');
+    expect(css).toContain('[data-vt-studio-split-rail][data-rail="end"]');
+    expect(css).toContain("[data-vt-studio-split-rail] > svg *");
   });
   it("uses a secondary focus outline at 65% of border width with zero offset", () => {
     const css = read("src/styles/studio-control-fields.css");
