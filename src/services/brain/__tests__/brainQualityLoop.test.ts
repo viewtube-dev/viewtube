@@ -50,7 +50,7 @@ vi.mock("../../gemini", () => ({
 vi.mock("../BrainContextBroker", () => ({
   buildBrainContextPack: vi.fn(() => ({
     systemInstruction: "Use the supplied evidence. Do not invent metrics.",
-    budget: { usedCharacters: 100, maximumCharacters: 12000 },
+    budget: { usedCharacters: 100, maximumCharacters: 12000, omittedSections: [] },
   })),
 }));
 
