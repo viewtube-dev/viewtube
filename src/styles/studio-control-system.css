@@ -3482,3 +3482,77 @@ button[data-vt-studio-button="true"]:active,
 button[data-vt-studio-button="true"]:focus-visible {
   transform: none;
 }
+
+
+/* =============================================================================
+   AUTHORITATIVE PRIMITIVE RESTORATION — 2026-10-17
+   Field typography uses the same 44/28 global type scale as the reference
+   library. Text strokes follow the primary inline color, not the outer border.
+   Motion is restored for selection controls and floating labels; reduced-motion
+   remains respected below.
+   ============================================================================= */
+
+input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"],
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  text-shadow: none;
+}
+input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
+  font-size: var(--vt-studio-44-font-size, 38px);
+  line-height: .86;
+  letter-spacing: -.02em;
+}
+input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
+  font-size: var(--vt-studio-28-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  font-size: var(--vt-studio-textarea-standard-font-size, 28px);
+  line-height: 1.12;
+  padding: 10px 12px;
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: var(--vt-studio-textarea-compact-font-size, 18px);
+  line-height: 1.1;
+  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  transition: top 180ms ease, transform 180ms ease, font-size 180ms ease,
+    padding 180ms ease, color 180ms ease, background-color 180ms ease,
+    border-color 180ms ease;
+}
+.vt-studio-floating-field > :is(input, textarea) {
+  transition: background-color 160ms ease, color 160ms ease,
+    border-color 160ms ease, box-shadow 160ms ease;
+}
+.vt-studio-44-switch,
+.vt-studio-44-switch .vt-studio-44-handle {
+  transition: background-color 180ms ease, transform 220ms cubic-bezier(.2,.8,.2,1),
+    border-radius 180ms ease;
+}
+.vt-studio-44-choice,
+.vt-studio-44-choice .vt-studio-44-dot {
+  transition: background-color 160ms ease, transform 180ms cubic-bezier(.2,.8,.2,1),
+    opacity 140ms ease, border-radius 160ms ease;
+}
+.vt-studio-44-choice.is-checkbox svg {
+  transition: stroke-dashoffset 220ms cubic-bezier(.2,.8,.2,1),
+    stroke 160ms ease, opacity 140ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-floating-field > .vt-studio-floating-field-label,
+  .vt-studio-floating-field > :is(input, textarea),
+  .vt-studio-44-switch,
+  .vt-studio-44-switch .vt-studio-44-handle,
+  .vt-studio-44-choice,
+  .vt-studio-44-choice .vt-studio-44-dot,
+  .vt-studio-44-choice.is-checkbox svg {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
