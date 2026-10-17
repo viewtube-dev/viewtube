@@ -146,3 +146,37 @@ export const projectCommentThreadsToAudienceFeedback = (
     observedAt: comment?.snippet?.publishedAt || null,
   }]
 })
+
+/** Project a signal into the existing Brain evidence contract; this is a projection, not a second evidence store. */
+export const audiencePulseSignalToBrainClaim = (
+  signal: AudiencePulseSignal,
+): import("../../services/brain/BrainEvidenceContract").BrainEvidenceClaim => ({
+  id: signal.id,
+  sourceOwner: "creator-engagement",
+  sourceId: signal.id,
+  sourceSnapshotId: null,
+  channelId: signal.channelId,
+  projectId: signal.projectId,
+  contentBuildId: null,
+  videoId: signal.videoId,
+  entityType: "audience-signal",
+  entityId: signal.id,
+  claim: signal.intent === "unknown"
+    ? "Unclassified audience observation"
+    : `Audience ${signal.intent} signal`,
+  metric: "source-record-count",
+  value: signal.sourceIds.length,
+  unit: "source-records",
+  timeframe: signal.sourceWindow.start || signal.sourceWindow.end
+    ? { kind: "source-observed-window", start: signal.sourceWindow.start, end: signal.sourceWindow.end }
+    : null,
+  freshness: "unknown",
+  epistemicState: signal.intent === "unknown" ? "OBSERVED" : "INFERRED",
+  confidence: signal.confidence,
+  provenance: {
+    evidenceIds: [...signal.evidenceIds],
+    sourceRoute: "/studio#comment-responder",
+    sourceVersion: "audience-pulse-patterns-v1",
+  },
+  limitations: [...signal.limitations],
+})
