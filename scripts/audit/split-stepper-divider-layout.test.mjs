@@ -37,3 +37,27 @@ test("horizontal divider is centered, both actions have equal rows, and repeat s
   assert.match(component, /if \(\(heldDirection\.current > 0 && valueRef\.current < max\) \|\| \(heldDirection\.current < 0 && valueRef\.current > min\)\) scheduleRepeatRef\.current\(\)/)
   assert.match(styles, /\.vt-studio-split-stepper-rail button:focus-visible\s*\{\s*outline:\s*3px solid/)
 })
+
+test("inline stepper is built on the canonical double-split shell with interactive square rails", () => {
+  const inlineStart = component.indexOf("export const StudioInlineStepper")
+  const inlineEnd = component.indexOf('StudioInlineStepper.displayName', inlineStart)
+  const inline = component.slice(inlineStart, inlineEnd)
+  assert.match(inline, /<StudioSplitShell[\s\S]*?layout="double"/)
+  assert.match(inline, /interactiveRails/)
+  assert.match(inline, /data-vt-studio-split-rail/)
+  assert.match(inline, /data-vt-studio-control-kind="inline-stepper"/)
+  assert.doesNotMatch(inline, /<StudioSplitLeftButton/)
+  assert.doesNotMatch(inline, /<StudioUsernameInput/)
+  assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*grid-template-columns:\s*var\(--vt-studio-control-height, 44px\) minmax\(40px, 1fr\) var\(--vt-studio-control-height, 44px\)/s)
+  assert.match(styles, /\.vt-studio-inline-stepper__value\s*\{[^}]*border:\s*0/s)
+  assert.match(styles, /\.vt-studio-inline-stepper__rail\s*\{[^}]*cursor:\s*pointer/s)
+})
+
+test("inline stepper remains a single shell with no nested shell or duplicate perimeter", () => {
+  const inlineStart = component.indexOf("export const StudioInlineStepper")
+  const inlineEnd = component.indexOf('StudioInlineStepper.displayName', inlineStart)
+  const inline = component.slice(inlineStart, inlineEnd)
+  assert.equal((inline.match(/<StudioSplitShell/g) ?? []).length, 1)
+  assert.doesNotMatch(inline, /<StudioSplitLeftButton|<StudioUsernameInput/)
+  assert.match(styles, /\.vt-studio-inline-stepper\s*\{[^}]*border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/s)
+})
