@@ -104,7 +104,7 @@ export const CommentResponder: React.FC = () => {
       {commentUrl && <a href={commentUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] font-black uppercase underline"><ExternalLink size={12} aria-hidden="true" />Open on YouTube</a>}
      </div>
     </div>}
-    {thread && snippet ? <div aria-label="Comment conversation thread" className="max-h-[min(62vh,640px)] space-y-4 overflow-y-auto p-1">
+    {thread && snippet ? <div role="region" tabIndex={0} aria-label="Comment conversation thread" className="max-h-[min(62vh,640px)] space-y-4 overflow-y-auto p-1">
      <article className="flex min-w-0 items-start gap-2 sm:gap-3" data-comment-message="original">
       <CommentAvatar name={plainText(snippet.authorDisplayName || "Viewer")} src={snippet.authorProfileImageUrl} />
       <div className="min-w-0 flex-1">
@@ -123,7 +123,7 @@ export const CommentResponder: React.FC = () => {
       const isCreatorReply = String(replySnippet.authorChannelId?.value || "") === String(context.channelId || "")
       const replyText = plainText(replySnippet.textDisplay || replySnippet.textOriginal || "")
       return <article key={reply.id || index} data-comment-message="reply" className={"flex min-w-0 items-start gap-2 sm:gap-3 " + (isCreatorReply ? "flex-row-reverse" : "")}>
-       <CommentAvatar name={authorName} src={replySnippet.authorProfileImageUrl} creator={isCreatorReply} />
+       <CommentAvatar name={authorName} src={replySnippet.authorProfileImageUrl || (isCreatorReply ? context.channelThumbnail : undefined)} creator={isCreatorReply} />
        <div className={"min-w-0 flex-1 " + (isCreatorReply ? "text-right" : "")}>
         <div className={"mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px] font-black uppercase " + (isCreatorReply ? "justify-end" : "")}>
          <span className="break-words">{authorName}{isCreatorReply ? " · You" : ""}</span>
