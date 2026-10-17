@@ -19,8 +19,8 @@ test("confirmed library uses the requested four skin names without changing skin
 });
 
 test("confirmed catalog CSS owns layout, not production control faces", () => {
-  const rules = [...styles.matchAll(/(^|\\n)([^{}\\n]+)\\s*\\{([^{}]*)\\}/g)];
-  const faceProperties = /(?:^|;)\\s*(?:border|border-radius|background(?:-color)?|box-shadow|font-size|font-family|font-weight|height|min-height|max-height|padding|color|text-transform|-webkit-text-stroke)\\s*:/;
+  const rules = [...styles.matchAll(/(^|\n)([^{}\n]+)\s*\{([^{}]*)\}/g)];
+  const faceProperties = /(?:^|;)\s*(?:border|border-radius|background(?:-color)?|box-shadow|font-size|font-family|font-weight|height|min-height|max-height|padding|color|text-transform|-webkit-text-stroke)\s*:/;
   const violations = rules
     .map((match) => ({ selector: match[2].trim(), body: match[3] }))
     .filter(({ selector }) => selector.includes("vt-confirmed") && /vt-studio-|data-vt-studio/.test(selector))
