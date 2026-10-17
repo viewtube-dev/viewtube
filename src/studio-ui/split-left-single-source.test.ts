@@ -28,11 +28,12 @@ describe("canonical Studio split-left button ownership", () => {
 
   it("uses the shared standard/compact geometry and prevents stacked split shadows", () => {
     const component = read("src/studio-ui/primitives/StudioControls.tsx")
-    const css = read("src/styles/studio-split-left-consistency.css")
+    const css = read("src/styles/studio-control-system.css")
     expect(component).toContain('sizeVariant = "standard"')
     expect(component).toContain('data-split-left="true"')
-    expect(component).toContain("Separate 56px action family")
-    expect(css).toContain("filter: none !important")
-    expect(css).toContain("button.vt-subtoolbox-split-button:active:not(:disabled)")
+    expect(component).toContain('heightVariant?: "44" | "28"')
+    const buttonRule = css.match(/button\[data-vt-studio-button="true"\]\[data-split-left="true"\]\s*\{([^}]*)\}/s)?.[1] ?? ""
+    expect(css).toContain('button[data-vt-studio-button="true"][data-split-left="true"]')
+    expect(buttonRule).not.toContain("filter: drop-shadow")
   })
 })
