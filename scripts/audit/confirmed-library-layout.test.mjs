@@ -239,6 +239,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
 
 test("word-toggle boolean behavior is specified by the production primitive, not catalog prose", () => {
   const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+  const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
   assert.match(controls, /aria-pressed=\{value === \(index === 1\)\}/);
   assert.match(controls, /onClick=\{\(\) => onValueChange\?\.\(index === 1\)\}/);
   assert.ok(!catalog.includes("The first word is selected when the value is false; selecting the second word changes the value to true."));
