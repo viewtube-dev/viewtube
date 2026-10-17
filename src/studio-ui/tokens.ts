@@ -13,9 +13,9 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 /** Canonical Studio size values are defined before derived contracts to avoid self-reference during initialization. */
 export const STUDIO_CONTROL_SIZE_BASE = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
-  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
-  /** Dense micro tier: 14px face with proportionally reduced stroke, radius, typography and icon. */
-  micro: { height: 14, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textStroke: 0.25, width: "row", gap: 4, textTransform: "uppercase", letterSpacing: -0.01, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.65, iconSize: 10, iconStroke: 1.5, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  compact: STUDIO_CONTROL_SIZE_BASE_COMPACT,
+  /** Micro derives from half the compact geometry, with a legibility floor for text/icon. */
+  micro: halfCompact(STUDIO_CONTROL_SIZE_BASE_COMPACT),
 } as const
 
 /** One canonical size ladder for Studio controls; documented exceptions live below. */
@@ -72,13 +72,16 @@ export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox
 
 /** Machine-readable exceptions: only spectrum tags and closeable badges may shrink to content width. */
 export const STUDIO_CONTROL_EXCEPTIONS = {
-  spectrumTag: { width: "content", reason: "Dense spectrum metadata tag; catalog-approved exception." },
-  closeableBadge: { width: "content", reason: "Badge label plus close affordance sizes to its content." },
+  spectrumTag: { id: "spectrumTag", owner: "VaultAssetModule / StudioSpectrumTag", width: "content", rationale: "Dense spectrum metadata tag; catalog-approved exception." },
+  closeableBadge: { id: "closeableBadge", owner: "StudioCloseableBadge", width: "content", rationale: "Badge label plus close affordance sizes to its content." },
+  wordToggle: { id: "wordToggle", owner: "StudioWordToggle", width: "content", rationale: "Content-sized segmented word toggle." },
+  tagEditorTag: { id: "tagEditorTag", owner: "StudioTagEditor", width: "content", rationale: "Individual removable tag in the tag editor." },
 } as const;
 
 export const STUDIO_WIDTH_POLICY = {
   default: "row",
-  exceptions: ["spectrumTag", "closeableBadge"],
+  contentWidthAllowList: ["spectrumTag", "closeableBadge", "wordToggle", "tagEditorTag"],
+  exceptions: ["spectrumTag", "closeableBadge", "wordToggle", "tagEditorTag"],
   attribute: "data-vt-studio-width=content",
 } as const;
 
