@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { audiencePulseSignalToBrainClaim, buildAudiencePulseSignals, classifyAudienceIntent, projectCommentThreadsToAudienceFeedback } from "./audiencePulse"
+import { VIEWTUBE_TOOL_CAPABILITIES } from "../../services/viewTubeToolChains"
 
 describe("classifyAudienceIntent", () => {
   it("classifies explicit requests with bounded confidence", () => {
@@ -93,10 +94,25 @@ describe("buildAudiencePulseSignals", () => {
     ])
 
     expect(signal.intent).toBe("desire")
-    expect(signal.suggestedTargets).toEqual(["content-architect", "comment-responder"])
+    expect(signal.suggestedTargets).toEqual(["ai-brain", "project-calendar", "comment-responder"])
     expect(signal).not.toHaveProperty("publish")
     expect(signal).not.toHaveProperty("execute")
   })
+  it("only suggests destinations registered in the canonical tool capability registry", () => {
+    const registeredTargets = new Set(VIEWTUBE_TOOL_CAPABILITIES.map((tool) => tool.id))
+    const signals = buildAudiencePulseSignals([
+      { sourceId: "c11", source: "comment", text: "Could you make a tutorial?", channelId: "ch1" },
+      { sourceId: "c12", source: "comment", text: "This is broken", channelId: "ch1" },
+      { sourceId: "p11", source: "community-post", text: "I want more videos about this", channelId: "ch1" },
+    ])
+
+    for (const signal of signals) {
+      for (const target of signal.suggestedTargets) {
+        expect(registeredTargets.has(target), `unregistered suggested target: ${target}`).toBe(true)
+      }
+    }
+  })
+
 })
 
 describe("audiencePulseSignalToBrainClaim", () => {
