@@ -39,7 +39,7 @@
   justify-content: center;
 }
 [data-vt-studio-control="true"][data-vt-studio-split] [data-vt-studio-split-label] {
-  padding-inline: var(--vt-studio-control-gap, 4px);
+  padding-inline: var(--vt-studio-split-label-inset, 0px);
 }
 
 /* A face-only split shell is nested inside StudioButton but follows the same grid. */
