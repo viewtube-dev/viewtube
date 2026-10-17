@@ -8,7 +8,7 @@ import "../../styles/studio-control-fields.css"
 import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronsDown, ChevronsUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -1388,7 +1388,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
             onLostPointerCapture={stopHold}
             onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }}
           >
-            <ChevronsUp aria-hidden="true" focusable="false" />
+            <ChevronUp aria-hidden="true" focusable="false" />
           </button>
           <button
             type="button"
@@ -1402,7 +1402,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
             onLostPointerCapture={stopHold}
             onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }}
           >
-            <ChevronsDown aria-hidden="true" focusable="false" />
+            <ChevronDown aria-hidden="true" focusable="false" />
           </button>
         </div>
       }
