@@ -44,6 +44,7 @@ describe("Project Video Package bridge", () => {
   beforeEach(() => {
     resetVideoPackageRepositoryForTests()
     resetContentBuildRepositoryForTests()
+    createContentBuild({ id: project.contentBuildId, legacyProjectId: project.id, legacyProjectName: project.name })
     createContentBuild({ id: "cb-a", legacyProjectId: "project-a", legacyProjectName: "Project A" })
   })
 
