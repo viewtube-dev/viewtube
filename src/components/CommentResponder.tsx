@@ -14,7 +14,7 @@ const plainText = (value: string) => {
 const CommentAvatar: React.FC<{ name: string; src?: string; creator?: boolean }> = ({ name, src, creator = false }) => {
  const [failed, setFailed] = React.useState(false)
  const initial = plainText(name || "Viewer").trim().replace(/^@+/, "").charAt(0).toUpperCase() || "?"
- return <div aria-label={name + " profile picture"} className={"relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-black text-xs font-black " + (creator ? "bg-[#BFE9FF]" : "bg-[#FFE4F2"])}>
+ return <div aria-label={name + " profile picture"} className={"comment-responder-avatar relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-black text-xs font-black " + (creator ? "bg-[#BFE9FF]" : "bg-[#FFE4F2"])}>
   <span aria-hidden="true">{initial}</span>
   {src && !failed && <img src={src} alt="" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full object-cover" onError={() => setFailed(true)} />}
  </div>
