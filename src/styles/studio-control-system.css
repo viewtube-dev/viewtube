@@ -2879,7 +2879,7 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 
 /* Global shell policy: keep surfaces flat without suppressing inner-state motion.
    Motion belongs to control indicators/labels in studio-control-motion.css; shells stay stationary. */
-[data-vt-studio-control],
+[data-vt-studio-control]:not(input):not(textarea):not(select),
 [data-vt-studio-button],
 [data-vt-studio-action-button],
 [data-vt-studio-control]::before,
