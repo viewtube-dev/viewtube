@@ -28,6 +28,20 @@ describe("classifyCreatorCommunication", () => {
   expect(result.requiresGovernedReview).toBe(true)
  })
 
+ it("does not classify ordinary copular feedback as a factual performance claim", () => {
+  const result = classifyCreatorCommunication("This is a good title.")
+  expect(result.labels).not.toContain("factual_claim")
+  expect(result.labels).toContain("style_feedback")
+  expect(result.durableMemoryPromoted).toBe(false)
+ })
+
+ it("still recognizes explicit evidence and causal language as claims requiring verification", () => {
+  const result = classifyCreatorCommunication("Analytics shows retention increased because the thumbnail changed.")
+  expect(result.labels).toContain("factual_claim")
+  expect(result.durableMemoryPromoted).toBe(false)
+  expect(result.requiresGovernedReview).toBe(true)
+ })
+
  it("leaves neutral text unclassified instead of inventing a fact", () => {
   const result = classifyCreatorCommunication("Hello, can you help me?")
   expect(result.labels).toEqual([])
