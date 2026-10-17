@@ -219,19 +219,14 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(compound).toContain("export const SubToolboxTagActionRow")
   })
 
-  it("registers the requested production button families as live component-library examples", () => {
+  it("registers only the canonical production button primitives as live library examples", () => {
     const catalog = read("src/components/studio-hub/StudioHubProductionButtonCatalog.tsx")
-    const primitives = read("src/components/subtoolbox/SubToolboxPrimitives.tsx")
-    const toolbox = read("src/components/Toolbox.tsx")
-    for (const family of [
-      "SubToolboxButton", "SubToolboxIconButton", "SubToolboxIconTextButton",
-      "SubToolboxSplitButton", "StudioSplitLeftButton", "StudioButton",
-      "SubToolboxSelectableTag", "SubToolboxInnerActionButton", "SubToolboxActions",
-      "SubToolboxRefineButtonBase", "SubToolboxGridActionButton",
-    ]) expect(catalog).toContain(family)
-    expect(primitives).toContain("export const SubToolboxIconTextButton")
-    expect(toolbox).toContain("export const SubToolboxRefineButtonBase")
+    expect(catalog).toContain("import { StudioButton, StudioSplitLeftButton } from \"../../studio-ui/primitives/StudioControls\"")
+    expect(catalog).toContain('name="StudioButton"')
+    expect(catalog).toContain('name="StudioSplitLeftButton"')
     expect(catalog).toContain('data-vt-production-button-catalog="true"')
+    expect(catalog).not.toContain("SubToolboxIconTextButton")
+    expect(catalog).not.toContain("SubToolboxSplitButton")
   })
 
   it("uses a menu dropdown and full-width responsive action rows in Project Manifestation", () => {
