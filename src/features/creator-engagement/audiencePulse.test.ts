@@ -70,6 +70,16 @@ describe("buildAudiencePulseSignals", () => {
     expect(signals[1].videoId).toBe("v2")
   })
 
+  it("does not merge different scopes when IDs contain key delimiters", () => {
+    const signals = buildAudiencePulseSignals([
+      { sourceId: "a", source: "comment", text: "Could you explain this?", channelId: "channel:one", videoId: "video", projectId: "project" },
+      { sourceId: "b", source: "comment", text: "Could you explain this?", channelId: "channel", videoId: "one:video", projectId: "project" },
+    ])
+
+    expect(signals).toHaveLength(2)
+    expect(new Set(signals.map((signal) => signal.channelId))).toEqual(new Set(["channel:one", "channel"]))
+  })
+
   it("preserves unknown observations without inventing intent or action targets", () => {
     const [signal] = buildAudiencePulseSignals([
       { sourceId: "p1", source: "community-post", text: "Interesting", channelId: "ch1" },
