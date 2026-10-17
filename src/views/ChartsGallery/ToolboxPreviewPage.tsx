@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { ArrowLeft, LayoutGrid, Layers, RadioTower } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
 import type { ChartConfig } from "../../types"
-import { getMasterRows } from "../../services/analytics/Selectors"
+import { useCanonicalRows } from "../../services/analytics-canon"
 import { ChannelyticsChartToolbox } from "../../components/ChannelyticsChartToolbox"
 import { RenderChart } from "../../components/ChartEngine"
 
@@ -86,11 +86,12 @@ const toPreviewRow = (row: any, index: number): PreviewRow => {
 
 const ToolboxPreviewPage: React.FC = () => {
  const { brain } = useBrain()
+ const canonicalRows = useCanonicalRows("lifetime")
  const [sourceMode, setSourceMode] = useState<PreviewSourceMode>("canonical_api")
 
  const canonicalApiRows = useMemo(
-  () => getMasterRows("lifetime", "api").map((row, index) => toPreviewRow(row, index)),
-  [],
+  () => canonicalRows.map((row, index) => toPreviewRow(row, index)),
+  [canonicalRows],
  )
 
  const uploadedHybridRows = useMemo(() => {
