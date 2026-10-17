@@ -166,6 +166,20 @@ describe("confirmed composite primitive catalog", () => {
     expect(controls).toContain('labelAlignment: "centered by default for all primitive labels"')
   })
 
+  it("enforces square-ratio split segments, outer-edge label centering, and shared orb dividers", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    expect(css).toContain("Global split geometry defaults (2026-10-17)")
+    expect(css).toContain("--vt-studio-split-segment-ratio: 1")
+    expect(css).toContain("aspect-ratio: var(--vt-studio-split-segment-ratio, 1)")
+    expect(css).toContain("align-items: center")
+    expect(css).toContain("justify-content: center")
+    expect(css).toContain("Outer edges are the centering reference")
+    expect(css).toContain("orb1/orb2 are the shared internal")
+    expect(controls).toContain('splitSegmentRatio: "square-ratio by default; segment labels center against the outer perimeter bounds"')
+    expect(controls).toContain('splitDividers: "orb1/orb2 use shared internal segment-boundary dividers, never label-owned borders"')
+  })
+
   it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
