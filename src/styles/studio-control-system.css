@@ -2882,7 +2882,6 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 [data-vt-studio-control],
 [data-vt-studio-button],
 [data-vt-studio-action-button],
-[data-vt-studio-control] *,
 [data-vt-studio-control]::before,
 [data-vt-studio-control]::after,
 [data-vt-studio-button]::before,
