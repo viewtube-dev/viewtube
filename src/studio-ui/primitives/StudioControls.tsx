@@ -1365,26 +1365,48 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   }
 
   return (
-    <div
-      {...props}
-      className={["vt-studio-split-stepper", `is-${size}`, inputFocused || holding ? "is-interacting" : "", className].filter(Boolean).join(" ")}
-      data-vt-studio-control="true"
-      data-vt-studio-control-family="stepper"
-      data-vt-studio-control-kind="split-stepper"
-      data-vt-studio-username-foundation="true"
-      data-size={size}
-      role="group"
-      aria-label={ariaLabel}
-      style={style}
+    <StudioSplitShell
+      layout="right"
+      sizeVariant={size}
+      fieldSlot
+      className={["vt-studio-split-stepper", "is-" + size, inputFocused || holding ? "is-interacting" : "", className].filter(Boolean).join(" ")}
+      railClassName="vt-studio-split-stepper-rail"
+      railProps={{ "data-vt-library-component": "StudioSplitRightBadge" }}
+      rightRailContent={
+        <div className="vt-studio-split-stepper-actions">
+          <button type="button" className="vt-studio-split-stepper-up" aria-label={"Increase " + ariaLabel}
+            disabled={disabled || !validBounds || value >= max}
+            onPointerDown={(event) => beginHold(1, event)}
+            onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
+            onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }}>
+            <ChevronsUp aria-hidden="true" />
+          </button>
+          <button type="button" className="vt-studio-split-stepper-down" aria-label={"Decrease " + ariaLabel}
+            disabled={disabled || !validBounds || value <= min}
+            onPointerDown={(event) => beginHold(-1, event)}
+            onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
+            onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }}>
+            <ChevronsDown aria-hidden="true" />
+          </button>
+        </div>
+      }
+      shellProps={{
+        ...props,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "stepper",
+        "data-vt-studio-control-kind": "split-stepper",
+        "data-vt-library-component": "StudioSplitRightBadge",
+        style,
+      }}
     >
-      <StudioUsernameInput
-        icon={<span />}
-        sizeVariant={size === "compact" ? "compact" : "standard"}
-        className="vt-studio-split-stepper__field-shell"
-        inputClassName="vt-studio-split-stepper-value"
+      <input
+        className="vt-studio-split-stepper-value"
+        data-vt-studio-field-kind="stepper-value"
+        data-size={size}
         type="number"
-        aria-label={ariaLabel}
         inputMode="decimal"
+        aria-label={ariaLabel}
         value={draft}
         min={Number.isFinite(min) ? min : undefined}
         max={Number.isFinite(max) ? max : undefined}
@@ -1404,23 +1426,8 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
           onValueChange(normalized)
         }}
       />
-      <div className="vt-studio-split-stepper-rail">
-        <StudioSplitLeftButton icon={<ChevronsUp aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
-          className="vt-studio-split-stepper-up" aria-label={`Increase ${ariaLabel}`}
-          disabled={disabled || !validBounds || value >= max}
-          onPointerDown={(event) => beginHold(1, event)}
-          onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
-          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current < max) change(1) }} />
-        <StudioSplitLeftButton icon={<ChevronsDown aria-hidden="true" />} iconSizeVariant="moderate" sizeVariant={size}
-          className="vt-studio-split-stepper-down" aria-label={`Decrease ${ariaLabel}`}
-          disabled={disabled || !validBounds || value <= min}
-          onPointerDown={(event) => beginHold(-1, event)}
-          onPointerUp={stopHold} onPointerLeave={stopHold} onPointerCancel={stopHold} onLostPointerCapture={stopHold}
-          onClick={(event) => { if (event.detail === 0 && !disabled && valueRef.current > min) change(-1) }} />
-      </div>
-    </div>
+    </StudioSplitShell>
   )
-}
 
 
 /** Closeable metadata badge using the global Studio size and palette contract. */
