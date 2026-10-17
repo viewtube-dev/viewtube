@@ -4,41 +4,38 @@ import path from "node:path"
 
 const read = (file: string) => fs.readFileSync(path.resolve(process.cwd(), file), "utf8")
 
-describe("confirmed Studio button primitive library", () => {
-  it("uses real StudioButton and StudioSplitLeftButton exports", () => {
+describe("confirmed Studio primitive certification catalog", () => {
+  it("mounts production primitives from the canonical StudioControls module", () => {
     const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
-    expect(catalog).toContain('import { StudioButton, StudioSplitLeftButton } from "../../studio-ui"')
+    expect(catalog).toContain('from "../../studio-ui/primitives/StudioControls"')
+    for (const primitive of ["StudioButton", "StudioSplitLeftButton", "StudioSplitLeftBadge", "StudioTextInput", "StudioTextArea"]) {
+      expect(catalog).toContain(primitive)
+    }
     expect(catalog).toContain('title="StudioButton"')
     expect(catalog).toContain('title="StudioSplitLeftButton"')
-    expect(catalog).toContain('heightVariant="44"')
-    expect(catalog).toContain('heightVariant="28"')
   })
 
-  it("defines matching typography and 44px/28px production variants", () => {
+  it("documents standard, compact, and badge-only micro through the public size contract", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
     const controls = read("src/studio-ui/primitives/StudioControls.tsx")
+    const tokens = read("src/studio-ui/tokens.ts")
     const css = read("src/styles/studio-control-system.css")
-    expect(controls).toContain('heightVariant?: "44" | "28"')
-    expect(controls).toContain('sizeVariant = "standard"')
-    expect(controls).toContain("StudioSplitLeftBadge")
-    expect(css).toContain(".vt-studio-split-left-badge")
-    expect(css).toContain("box-shadow: none !important")
-    expect(css).toContain("transition: none !important")
-    expect(css).toContain('data-size="micro"')
+
+    expect(catalog).toContain('title="Split-left Badge · Standard + Compact + Micro"')
+    expect(catalog).toContain('sizeVariant="standard"')
+    expect(catalog).toContain('sizeVariant="compact"')
+    expect(catalog).toContain('sizeVariant="micro"')
+    expect(controls).toContain("sizeVariant?: StudioBadgeSize")
+    expect(tokens).toContain('micro: { height: 14, stroke: 1, radius: 2, fontSize: 10')
+    expect(tokens).toContain('export type StudioBadgeSize = StudioControlSize | "micro"')
     expect(css).toContain('.vt-studio-split-left-badge[data-size="micro"]')
     expect(css).toContain("--vt-studio-badge-height: var(--vt-studio-14-height, 14px)")
     expect(css).toContain("--vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px)")
     expect(css).toContain("--vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px)")
     expect(css).not.toContain('.vt-studio-split-left-badge:is([data-size="compact"], [data-size="micro"])')
-    expect(css).toContain("border-radius: 44px")
-    expect(css).toContain("height: 44px")
-    expect(css).toContain(".vt-studio-44-choice.is-checkbox { border-radius: 44px; }")
-    expect(css).toContain('data-height-variant="44"')
-    expect(css).toContain('data-height-variant="28"')
-    expect(css).toContain('font-size: 14px !important')
-    expect(css).toContain('data-height-variant="28"] [data-vt-studio-split-rail]')
   })
 
-  it("mounts a third confirmed-primitives toolbox without changing the other tracks", () => {
+  it("keeps the confirmed track separate from hardcoded and migration-oriented tracks", () => {
     const library = read("src/components/ToolboxUIReferenceLibrary.tsx")
     expect(library).toContain('track="hardcoded"')
     expect(library).toContain('track="primitive"')
@@ -46,28 +43,13 @@ describe("confirmed Studio button primitive library", () => {
     expect(library).toContain("StudioHubConfirmedPrimitiveCatalog")
   })
 
-  it("places split-left badge specimens in the confirmed primitive library", () => {
+  it("discloses production provenance and labels actual global-rule exceptions", () => {
     const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
-    expect(catalog).toContain("StudioSplitLeftBadge")
-    expect(catalog).toContain('title="Split-left Badge · Standard + Compact + Micro"')
-    expect(catalog).toContain("STANDARD · FULL ROW")
-    expect(catalog).toContain("STANDARD · HALF ROW")
-    expect(catalog).toContain("STANDARD · QUARTER ROW · 4×1")
-    expect(catalog).toContain("COMPACT · QUARTER ROW · 4×1")
-    expect(catalog).toContain("MICRO · LEFT HALF ONLY · 1×1 / 2×1 / 4×1")
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx")
     expect(catalog).toContain('tsx="src/studio-ui/primitives/StudioControls.tsx"')
     expect(catalog).toContain('css="src/styles/studio-control-system.css"')
-  })
-
-  it("documents source paths, token settings and importing files", () => {
-    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
-    for (const value of [
-      "src/studio-ui/primitives/StudioControls.tsx",
-      "src/styles/studio-control-system.css",
-      "src/components/CommunityPostGenerator.tsx",
-      "src/views/VideoDirector.tsx",
-      "44px / 28px",
-      "3px black stroke",
-    ]) expect(catalog).toContain(value)
+    expect(catalog).toContain("Global Rules Exceptions · Vault Spectrum Tags")
+    expect(catalog).toContain("Global Rules Exceptions · Closeable Badge + Tag Editor")
+    expect(controls).toContain("STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS")
   })
 })
