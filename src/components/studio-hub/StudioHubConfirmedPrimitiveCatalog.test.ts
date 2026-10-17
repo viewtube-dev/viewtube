@@ -3,6 +3,9 @@ import fs from "node:fs"
 import path from "node:path"
 
 const read = (file: string) => fs.readFileSync(path.resolve(process.cwd(), file), "utf8")
+const readStudioControlCss = () => [
+  "studio-control-system.css", "studio-control-core.css", "studio-control-split.css", "studio-control-fields.css",
+].map((file) => read("src/styles/" + file)).join("\n")
 
 describe("confirmed Studio button primitive library", () => {
   it("uses real StudioButton and StudioSplitLeftButton exports", () => {
@@ -16,7 +19,7 @@ describe("confirmed Studio button primitive library", () => {
 
   it("defines matching typography and 44px/28px production variants", () => {
     const controls = read("src/studio-ui/primitives/StudioControls.tsx")
-    const css = read("src/styles/studio-control-system.css")
+    const css = readStudioControlCss()
     expect(controls).toContain('heightVariant?: "44" | "28"')
     expect(controls).toContain('sizeVariant = "standard"')
     expect(controls).toContain("StudioSplitLeftBadge")
@@ -69,7 +72,7 @@ describe("confirmed Studio button primitive library", () => {
   it("enforces the global size, palette, badge shape, and field focus contract", () => {
     const controls = read("src/studio-ui/primitives/StudioControls.tsx")
     const tokens = read("src/studio-ui/tokens.ts")
-    const css = read("src/styles/studio-control-system.css")
+    const css = readStudioControlCss()
     expect(controls).toContain('sizeVariant?: "standard" | "compact" | "micro"')
     expect(controls).toContain('globalRuleException: false')
     expect(controls).toContain('focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro"')
@@ -87,7 +90,7 @@ describe("confirmed Studio button primitive library", () => {
 
   it("documents fixed-ratio control defaults and enforces heavy badge typography", () => {
     const controls = read("src/studio-ui/primitives/StudioControls.tsx")
-    const css = read("src/styles/studio-control-system.css")
+    const css = readStudioControlCss()
     for (const rule of ["fixedRatioDefaults:", "radioButtons:", "squareIconButtons:", "circleIconButtons:", "splitIconRailColor:", "badgeTypography:"]) {
       expect(controls).toContain(rule)
     }
