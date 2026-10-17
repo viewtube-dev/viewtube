@@ -48,6 +48,39 @@ describe("standalone Studio text fields", () => {
   })
 })
 
+describe("global defaults govern the effective primitive CSS", () => {
+  it("uses secondary color for both double-split rails and keeps rail faces square", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const split = css.slice(css.indexOf("/* Canonical split-badge geometry contract"));
+    const doubleSplit = split.slice(split.indexOf(".vt-studio-double-split-badge__rail:first-child"), split.indexOf(".vt-studio-split-left-badge__rail {"));
+    expect(doubleSplit).not.toContain("var(--pair-a");
+    expect(doubleSplit.match(/background: var\(--vt-studio-control-secondary/g)?.length).toBe(2);
+    expect(split).toContain("border-radius: 0;");
+    expect(split).toContain("place-items: center;");
+    expect(split).not.toContain("#ff7f6b");
+    expect(split).not.toContain("#36e0f6");
+  });
+
+  it("does not use important declarations to force canonical field type or width", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const contract = css.slice(css.lastIndexOf("/* Canonical Studio Controls contract"));
+    const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"));
+    expect(fields).not.toMatch(/font-size:[^;]*!important/);
+    expect(fields).not.toMatch(/line-height:[^;]*!important/);
+    expect(fields).toContain("border: var(--vt-field-stroke) solid #000;");
+    expect(fields).toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);");
+  });
+
+  it("lets compact text buttons fill their row by default while keeping icon-only faces square", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {');
+    const compact = css.slice(css.indexOf('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {'));
+    const rule = compact.slice(0, compact.indexOf("}"));
+    expect(rule).toContain("width: 100%;");
+    expect(rule).not.toContain("width: max-content;");
+  });
+});
+
 describe("Studio text field library entries", () => {
   it("renders the standalone Studio text input and textarea as distinct catalog specimens", () => {
     const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />);
