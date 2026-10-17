@@ -1638,10 +1638,11 @@ const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
   const labelClass = layout === "left" ? "vt-studio-split-left-badge__label"
     : layout === "right" ? "vt-studio-split-right-badge__label" : "vt-studio-double-split-badge__label";
   return (
-    <StudioSplitShell {...props} layout={layout} sizeVariant={sizeVariant}
+    <StudioSplitShell layout={layout} sizeVariant={sizeVariant}
       iconLeft={iconLeft} iconRight={iconRight}
       className={studioClasses(rootClass, className)} railClassName={railClass} labelClassName={labelClass}
       shellProps={{
+        ...props,
         "data-vt-studio-split-badge": layout,
         "data-vt-library-component": layout === "left" ? "StudioSplitLeftBadge" : layout === "right" ? "StudioSplitRightBadge" : "StudioDoubleSplitBadge",
       }}>
