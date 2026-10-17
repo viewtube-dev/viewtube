@@ -758,3 +758,29 @@ describe("Studio control defaults stay canonical and motionless", () => {
   expect(catalog).toContain("6px standard, 4px compact, and 2px micro")
  })
 })
+
+
+describe("Studio split badges, textarea strokes, and size tokens", () => {
+ it("uses size-family radii in the final shared split-badge cascade", () => {
+  const studioCss = source("src/styles/studio-control-system.css")
+  const sharedBadgeRule = studioCss.match(/\.vt-studio-split-left-badge,\s*\.vt-studio-split-right-badge,\s*\.vt-studio-double-split-badge\s*\{[^}]*\}/s)?.[0] ?? ""
+
+  expect(sharedBadgeRule).toContain("var(--vt-studio-badge-radius, var(--vt-studio-control-radius, 6px))")
+  expect(studioCss).toContain('.vt-studio-split-left-badge[data-size="micro"]')
+  expect(studioCss).toContain("--vt-studio-badge-radius: var(--vt-studio-14-radius, 2px)")
+ })
+
+ it("applies primary inline text strokes to textareas and black strokes on focus", () => {
+  const studioCss = source("src/styles/studio-control-system.css")
+  expect(studioCss).toContain('--vt-studio-textarea-text-stroke, .5px) var(--vt-field-primary, var(--pair-a, #36e0f6))')
+  expect(studioCss).toContain('--vt-studio-textarea-text-stroke, .5px) #000')
+  expect(studioCss).toContain('--vt-studio-textarea-text-stroke: .35px')
+ })
+
+ it("does not self-reference the size contract while it is initializing", () => {
+  const studioTokens = source("src/studio-ui/tokens.ts")
+  expect(studioTokens).toContain("const STUDIO_CONTROL_SIZE_BASE")
+  expect(studioTokens).toContain("standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize")
+  expect(studioTokens).not.toContain("standardFontSize: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize")
+ })
+})
