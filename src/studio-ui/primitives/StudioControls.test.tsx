@@ -599,7 +599,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 
 
 describe("Studio text input and split-left badge typography parity", () => {
-  it("uses the size token as the actual input text size, not the floating-label text", () => {
+  it("uses the size token for the actual input and excludes catalog demo typography overrides", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const catalogCss = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
     const input = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextInput.tsx"), "utf8")
@@ -613,16 +613,21 @@ describe("Studio text input and split-left badge typography parity", () => {
     expect(input).toContain('data-vt-studio-field-kind="text-input"')
     expect(css).toContain("--vt-studio-floating-label-size: 38px")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+    expect(catalogCss).toContain('.vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control="true"])')
+    expect(catalogCss).not.toMatch(/\.vt-complete-catalog \.vt-catalog-field\s*\{\s*--field-accent:var\(--pair-a\)/)
+    expect(catalogCss).not.toMatch(/\.vt-complete-catalog \.vt-catalog-field:focus\s*\{\s*background:#fff/)
   })
 
-  it("shares the button split-label typography contract with static split-left badges", () => {
+  it("uses one shared split-label primitive and typography inherited from its size owner", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(controls).toContain("<StudioSplitLabel className={labelClassName}>{children}</StudioSplitLabel>")
     expect(controls).toContain("<StudioSplitLabel className={labelClass}>{children}</StudioSplitLabel>")
-    expect(controls.match(/<StudioSplitLabel className=\{labelClassName\}>\{children\}<\\\/StudioSplitLabel>/)?.length).toBe(1)
-    expect(css).toContain('.vt-studio-split-left-badge,')
-    expect(css).toContain('font-size: var(--vt-studio-control-font-size)')
-    expect(css).toContain('font: inherit')
-    expect(css).toContain('[data-vt-studio-split-label]')
+    expect(css).toContain("[data-vt-studio-split-label]")
+    expect(css).toContain("font: inherit")
+    const badgeRule = css.slice(css.indexOf(".vt-studio-split-left-badge,"))
+    expect(badgeRule).toContain("font-size: var(--vt-studio-control-font-size)")
+    expect(badgeRule).toContain("font-weight: var(--vt-studio-control-font-weight)")
+    expect(badgeRule).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke)")
   })
 })
