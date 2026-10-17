@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-vi.mock("./BrainIntelligencePersistence", () => ({
+vi.mock("../BrainIntelligencePersistence", () => ({
   persistBrainIntelligence: vi.fn().mockResolvedValue(undefined),
 }))
 
@@ -10,7 +10,7 @@ import {
   upsertAlgorithmIntelligenceEvents,
   listAlgorithmIntelligenceEvents,
   type AlgorithmIntelligenceEvent,
-} from "./AlgorithmIntelligenceEventLedger"
+} from "../AlgorithmIntelligenceEventLedger"
 
 const event = (overrides: Partial<AlgorithmIntelligenceEvent> = {}): AlgorithmIntelligenceEvent => ({
   id: "event-zero-time",
