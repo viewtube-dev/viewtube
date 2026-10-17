@@ -1,0 +1,48 @@
+/* Canonical Studio control defaults. Kept separate from legacy widget styling. */
+[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  box-shadow: none;
+  transition-property: color, background-color, border-color, outline-color;
+  transition-duration: 0ms;
+  gap: var(--vt-studio-control-gap, 4px);
+}
+[data-vt-studio-control="true"]:hover,
+[data-vt-studio-control="true"]:active {
+  transform: none;
+  box-shadow: none;
+}
+[data-vt-studio-control="true"][data-size="standard"] {
+  --vt-studio-control-height: var(--vt-studio-standard-height);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size);
+}
+[data-vt-studio-control="true"][data-size="compact"] {
+  --vt-studio-control-height: var(--vt-studio-compact-height);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius);
+  --vt-studio-control-font-size: var(--vt-studio-compact-font-size);
+  --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size);
+}
+[data-vt-studio-control="true"][data-size="micro"] {
+  --vt-studio-control-height: var(--vt-studio-micro-height);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius);
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size);
+  --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size);
+}
+[data-vt-studio-control="true"] {
+  min-width: 0;
+  width: 100%;
+}
+[data-vt-studio-control="true"][data-vt-studio-width="content"] {
+  width: fit-content;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-face] {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  transform: none;
+}
