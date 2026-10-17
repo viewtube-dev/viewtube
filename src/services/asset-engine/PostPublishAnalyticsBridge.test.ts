@@ -183,6 +183,7 @@ describe("Post-publish analytics bridge", () => {
       youtubeVideoId: "youtube-123",
       approvedSnapshotId: "snapshot-1",
       approvedSnapshotHash: "hash-1",
+      operationId: "publish-tx-1",
       idempotencyKey: "post-publish-identity:publish-tx-1:hash-1",
       actionPacketId: "action-packet-1",
       workflowId: "workflow-1",
@@ -224,6 +225,23 @@ describe("Post-publish analytics bridge", () => {
         experimentId: "experiment-1",
         assetOutcomeRecordIds: ["outcome-thumbnail", "outcome-title"],
         generationTraceIds: ["trace-thumbnail", "trace-title"],
+      }),
+    }))
+  })
+
+  it("carries the transaction operationId into the immutable publication identity receipt", () => {
+    mocks.getPublishTransaction.mockReturnValue({ ...transaction, operationId: "operation-publish-1" })
+
+    const result = recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })
+
+    expect(result.identity.operationId).toBe("operation-publish-1")
+    expect(mocks.appendContentBuildEvent).toHaveBeenCalledWith(expect.objectContaining({
+      entityType: "publish-identity-receipt",
+      metadata: expect.objectContaining({
+        operationId: "operation-publish-1",
       }),
     }))
   })
