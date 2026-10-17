@@ -5,6 +5,13 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioHubConfirmedPrimitiveCatalog } from "./StudioHubConfirmedPrimitiveCatalog"
 
+const readStudioControlCss = () => [
+  "studio-control-system.css",
+  "studio-control-core.css",
+  "studio-control-split.css",
+  "studio-control-fields.css",
+].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
+
 describe("confirmed composite primitive catalog", () => {
   it("registers the production Play/Pause split-left control at standard and compact sizes", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
@@ -54,7 +61,7 @@ describe("confirmed composite primitive catalog", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('data-vt-studio-control="true"')
     expect(html).toContain('data-size="compact"')
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('.vt-studio-tag-editor__fly[data-targeted="true"] { opacity: 1; }')
     expect(css).toContain('.vt-studio-tag-editor__fly[data-arrived="true"] { opacity: 0; }')
   })
@@ -107,7 +114,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("SPLIT-RIGHT BADGE · SHARED FOUNDATION")
     expect(html).toContain("DOUBLE-SPLIT BADGE · SHARED FOUNDATION")
     expect(html).toContain('data-size="micro"')
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("--vt-studio-space-unit: 4px")
     expect(css).toContain('[data-size="micro"]')
     expect(css).toContain("box-shadow: none !important")
@@ -116,7 +123,7 @@ describe("confirmed composite primitive catalog", () => {
 
 
   it("declares the canonical flat and stationary primitive contract", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("Confirmed Primitive flat-control contract (2026-10-16)")
     expect(css).toContain("box-shadow: none !important")
     expect(css).toContain("transition: none !important")
@@ -129,7 +136,7 @@ describe("confirmed composite primitive catalog", () => {
 
 
   it("keeps split badges to one perimeter border and square micro rails", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain('.vt-studio-split-shell[data-vt-studio-split="double"]')
     expect(css).toContain("border-radius: 0;")
     expect(css).toContain("aspect-ratio: 1 / 1;")
@@ -139,7 +146,7 @@ describe("confirmed composite primitive catalog", () => {
   })
 
   it("uses primary/secondary rail colors and contains split-right/double-split labels", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     expect(css).toContain("--vt-studio-control-accent: var(--pair-a")
     expect(css).toContain("--vt-studio-control-secondary: var(--pair-b")
     expect(css).toContain(".vt-studio-split-right-badge__label")
@@ -153,7 +160,7 @@ describe("confirmed composite primitive catalog", () => {
   })
 
   it("enforces global primary/secondary palette, centered labels, 1000 weight, and full-row defaults", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain("--vt-studio-control-accent: var(--pair-a")
     expect(css).toContain("--vt-studio-control-secondary: var(--pair-b")
@@ -166,7 +173,7 @@ describe("confirmed composite primitive catalog", () => {
   })
 
   it("enforces square-ratio split segments, outer-edge label centering, and shared orb dividers", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain('.vt-studio-split-shell[data-vt-studio-split="double"]')
     expect(css).toContain("grid-template-columns: var(--vt-studio-control-height")
@@ -180,7 +187,7 @@ describe("confirmed composite primitive catalog", () => {
   })
 
   it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const css = readStudioControlCss()
     const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
     const catalog = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(css).toContain('data-vt-studio-width="content"')
