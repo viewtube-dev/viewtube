@@ -603,6 +603,9 @@ export interface StudioSplitLeftButtonProps extends StudioButtonProps {
 /** Shared split anatomy for left, right, and double-split controls.
  * Buttons render only face contents; badges and composite fields render the shell. */
 type StudioSplitLayout = "left" | "right" | "double"
+type StudioDataAttributeProps = {
+  [key: `data-${string}`]: string | undefined
+}
 interface StudioSplitShellProps {
   layout: StudioSplitLayout
   sizeVariant?: StudioControlSize
@@ -614,8 +617,8 @@ interface StudioSplitShellProps {
   className?: string
   labelClassName?: string
   railClassName?: string
-  railProps?: React.HTMLAttributes<HTMLSpanElement>
-  shellProps?: React.HTMLAttributes<HTMLSpanElement>
+  railProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 }
 const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
