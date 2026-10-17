@@ -567,7 +567,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 
 describe("canonical micro badge size contract", () => {
   it("defines micro as an independent 14px tier rather than aliasing compact", () => {
-    const micro = (STUDIO_CONTROL_SIZE_CONTRACT as Record<string, any>).micro
+    const micro = STUDIO_CONTROL_SIZE_CONTRACT.micro
     expect(micro).toMatchObject({ height: 14, stroke: 1, radius: 2, fontSize: 10, iconSize: 10 })
     expect(micro).not.toBe(STUDIO_CONTROL_SIZE_CONTRACT.compact)
   })
