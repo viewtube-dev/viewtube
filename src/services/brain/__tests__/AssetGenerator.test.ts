@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import {
  ASSET_CONSTITUTION_VERSION,
+ ASSET_CONTEXT_COMPOSITION_VERSION,
  generateAsset,
  getGeneratedAsset,
  listGeneratedAssets,
@@ -165,6 +166,7 @@ describe("generateAsset", () => {
    schemaVersion: "brain-prompt-run-receipt-v1",
    promptFamily: "community",
    promptVersion: "community-post-v1",
+   contextResolverVersion: ASSET_CONTEXT_COMPOSITION_VERSION,
    outputSchemaVersion: "community-post-plan-v1",
    traceId: result.trace.id,
    outputId: result.record.id,

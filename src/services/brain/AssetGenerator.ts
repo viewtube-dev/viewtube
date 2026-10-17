@@ -73,6 +73,7 @@ export const ASSET_CONSTITUTION = [
 ].join("\n")
 
 export const ASSET_CONSTITUTION_VERSION = "asset-constitution-v1"
+export const ASSET_CONTEXT_COMPOSITION_VERSION = "asset-context-composition-v1"
 
 export interface RubricFinding {
  /** Rule that failed, e.g. "post_count". */
@@ -491,7 +492,7 @@ export const generateAsset = async <TOutput>(input: {
    promptFamily: promptFamilyForAsset(strategy.assetType),
    promptVersion: strategy.promptVersion,
    constitutionVersion: ASSET_CONSTITUTION_VERSION,
-   contextResolverVersion: "brain-context-resolution-v1",
+   contextResolverVersion: ASSET_CONTEXT_COMPOSITION_VERSION,
    outputSchemaVersion: strategy.outputSchemaVersion || `${strategy.assetType}-schema-v1`,
    requestedModel: response.model?.requested || null,
    servedModel: response.model?.served || null,
