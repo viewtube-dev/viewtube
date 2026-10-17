@@ -12,6 +12,7 @@
       "@/*": ["src/*"]
     },
     "esModuleInterop": true,
+    "resolveJsonModule": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
