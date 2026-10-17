@@ -147,6 +147,21 @@ describe("CanonicalAlgorithmEvaluation", () => {
   expect(result).toBeNull()
  })
 
+ it("returns no metric when only a partial row sample is present", () => {
+  const result = resolveAlgorithmMetricFromCanonicalCatalog({
+   snapshotId: "snapshot-sample",
+   rule: rule("qualified_views"),
+   catalog: [{
+    id: "videos",
+    status: "available",
+    rowCount: 12000,
+    sampleRows: [{ videoId: "video-1", views: 100 }],
+    metrics: {},
+   }] as any,
+  })
+  expect(result).toBeNull()
+ })
+
  it("keeps workflow-completion concepts out of the analytics metric registry", () => {
   expect(CANONICAL_ALGORITHM_METRIC_RULES.some((candidate) => candidate.metric === "diagnosis_complete")).toBe(false)
  })
