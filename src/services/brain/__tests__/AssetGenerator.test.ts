@@ -12,6 +12,7 @@ import {
 } from "../AssetGenerator"
 import { communityPostStrategy, type CommunityPostPlan } from "../assetStrategies/communityPost"
 import { createStyleProfile } from "../StyleProfile"
+import { createContentBuild, setContentBuildStage } from "../../asset-engine/ContentBuildRepository"
 
 const terseSamples = [
  { text: "Pulled the head off. Bearings were shot. Rebuilt it in a day." },
@@ -74,6 +75,49 @@ beforeEach(() => {
 })
 
 describe("generateAsset", () => {
+ it("blocks provider dispatch for a post-publication ContentBuild before calling the runner", async () => {
+  const build = createContentBuild({
+   id: "cb-asset-generator-published-dispatch",
+   channelId: "channel-1",
+   legacyProjectId: "project-1",
+   stage: "published",
+  })
+  const { runner, calls } = makeRunner([goodPlan])
+  const result = await generateAsset({
+   request: { ...request, projectId: "project-1", contentBuildId: build.id, contextRevision: build.revision },
+   strategy: communityPostStrategy,
+   evidence,
+   runner,
+   styleProfile: null,
+  })
+
+  expect(calls).toHaveLength(0)
+  expect(result.record.status).toBe("failed")
+  expect(result.trace.failureReason).toMatch(/does not allow capability generate.*published/i)
+ })
+
+ it("rechecks ContentBuild revision immediately before provider dispatch", async () => {
+  const build = createContentBuild({
+   id: "cb-asset-generator-stale-dispatch",
+   channelId: "channel-1",
+   legacyProjectId: "project-1",
+  })
+  const capturedRevision = build.revision
+  setContentBuildStage(build.id, "edit")
+  const { runner, calls } = makeRunner([goodPlan])
+  const result = await generateAsset({
+   request: { ...request, projectId: "project-1", contentBuildId: build.id, contextRevision: capturedRevision },
+   strategy: communityPostStrategy,
+   evidence,
+   runner,
+   styleProfile: null,
+  })
+
+  expect(calls).toHaveLength(0)
+  expect(result.record.status).toBe("failed")
+  expect(result.trace.failureReason).toMatch(/revision is stale/i)
+ })
+
  it("delivers a clean asset and records a joinable asset id", async () => {
   const { runner } = makeRunner([goodPlan])
   const result = await generateAsset({
