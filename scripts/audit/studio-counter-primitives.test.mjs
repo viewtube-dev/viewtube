@@ -83,3 +83,14 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
   assert.match(styles, /color-mix\(in srgb, white 50%, var\(--pair-a\)\)/);
   assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
 });
+
+test("Studio counter press-and-hold is wired for touch and mouse", () => {
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 4);
+  assert.match(component, /setPointerCapture\(event\.pointerId\)/);
+  assert.match(component, /onPointerCancel: stop/);
+  assert.match(component, /const base = currentRef\.current/);
+  assert.match(component, /max = 100/);
+  assert.match(styles, /touch-action:\s*none/);
+  assert.match(styles, /color-mix\(in srgb, white 50%, var\(--pair-a\)\)/);
+  assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
+});
