@@ -19,10 +19,10 @@ describe("canonical Studio text-field primitives", () => {
 
     expect(input).toContain("export const StudioTextInput = React.forwardRef")
     expect(area).toContain("export const StudioTextArea = React.forwardRef")
-    expect(input).toContain('"data-vt-studio-control": "true"')
-    expect(area).toContain('"data-vt-studio-control": "true"')
-    expect(input).toContain('"data-size": size')
-    expect(area).toContain('"data-size": size')
+    expect(input).toContain('data-vt-studio-control="true"')
+    expect(area).toContain('data-vt-studio-control="true"')
+    expect(input).toContain("data-size={size}")
+    expect(area).toContain("data-size={size}")
     expect(controls).toContain('export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput }')
     expect(controls).toContain('export { StudioTextArea }')
   })
@@ -32,7 +32,7 @@ describe("canonical Studio text-field primitives", () => {
     const area = read("src/studio-ui/primitives/StudioTextArea.tsx")
     const catalog = read("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
 
-    for (const variant of ['variant: "floating-label"', 'variant: "fixed-label"']) {
+    for (const variant of ['"floating-label"', '"fixed-label"']) {
       expect(input).toContain(variant)
       expect(area).toContain(variant)
     }
@@ -65,6 +65,7 @@ describe("canonical Studio text-field primitives", () => {
     expect(controls).toContain("Studioarea = StudioTextArea")
     expect(index).toContain("StudioTextInput")
     expect(index).toContain("StudioTextArea")
-    expect(controls).not.toContain("sizeClass(")
+    expect(input).not.toContain("sizeClass(")
+    expect(area).not.toContain("sizeClass(")
   })
 })
