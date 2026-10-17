@@ -69,7 +69,6 @@ export const flushBrainLearningPersistence = async (channelId?: string): Promise
  let authenticated = true
  for (let offset = 0; offset < pending.length; offset += 200) {
   const batch = pending.slice(offset, offset + 200)
-  const currentQueue = readQueue()
   try {
    const response = await fetch(endpoint(String(batch[0]?.record.channelId || channelId || "")), {
     method: "PUT",
@@ -88,7 +87,9 @@ export const flushBrainLearningPersistence = async (channelId?: string): Promise
     break
    }
    const sentKeys = new Set(batch.map(queueKey))
-   writeQueue(currentQueue.filter((item) => !sentKeys.has(queueKey(item))))
+   // Re-read after the network await: new records may have been enqueued while this batch was in flight.
+   // Filtering the pre-request snapshot would silently discard those concurrent records.
+   writeQueue(readQueue().filter((item) => !sentKeys.has(queueKey(item))))
    persisted += batch.length
   } catch {
    authenticated = false
