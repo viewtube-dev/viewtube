@@ -130,3 +130,41 @@ textarea[data-vt-studio-control="true"][data-size="compact"]:is(:focus, :focus-v
 .vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label {
   outline-color: #000;
 }
+
+
+/* Final global field contract: the focused glyph fill/stroke is black, while
+   the colored inline stroke remains on the field itself. This deliberately
+   outranks earlier typography selectors used by gallery and wrapper variants. */
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: #000;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="standard"],
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="standard"] {
+  font-size: var(--vt-studio-44-font-size, 38px);
+  line-height: var(--vt-studio-44-line-height, .86);
+  -webkit-text-stroke-width: var(--vt-studio-44-text-stroke, 1px);
+}
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="compact"],
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="compact"] {
+  font-size: var(--vt-studio-28-font-size, 24px);
+  line-height: var(--vt-studio-28-line-height, .86);
+  -webkit-text-stroke-width: var(--vt-studio-28-text-stroke, .5px);
+}
+html body textarea[data-vt-studio-control="true"][data-size="standard"],
+html body [data-vt-studio-control="true"] textarea[data-size="standard"] {
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  line-height: var(--vt-studio-textarea-standard-line-height, 1.25);
+  -webkit-text-stroke-width: var(--vt-studio-textarea-standard-text-stroke, .5px);
+}
+html body textarea[data-vt-studio-control="true"][data-size="compact"],
+html body [data-vt-studio-control="true"] textarea[data-size="compact"] {
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
+  -webkit-text-stroke-width: var(--vt-studio-textarea-compact-text-stroke, .35px);
+}
