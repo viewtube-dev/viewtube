@@ -2694,61 +2694,55 @@ button[data-vt-button-shadow="true"][data-size="compact"] {
 }
 
 
-/* Canonical button-only default effects — consolidated from the CSS/layout skills.
-   Shadows and visual-state transitions belong to the button primitives only.
-   Never move the control box, face, label, or hit target to simulate a press. */
+/* Canonical Studio interaction policy: flat and stationary by default.
+   Keep icon-internal animation and floating-label feedback in their own component rules.
+   Do not add generic hover/press transforms, filters, shadows, or transitions. */
 button[data-vt-studio-button="true"],
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
-  box-shadow: var(--vt-studio-control-shadow-x) var(--vt-studio-control-shadow-y) 0 0
-    var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent)) !important;
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
+.vt-studio-inline-stepper > button,
+.vt-studio-split-stepper button,
+.vt-studio-tag-editor__square-action {
+  box-shadow: none !important;
   transform: none !important;
-  transition: box-shadow 150ms ease-out, background-color 150ms ease-out,
-    color 150ms ease-out, border-color 150ms ease-out, filter 150ms ease-out,
-    opacity 150ms ease-out !important;
+  filter: none !important;
+  transition: none !important;
 }
-
-/* Use one real shadow on the stationary button shell, not a translated duplicate.
-   Keep square-icon pseudo-elements available for their explicitly approved icon effects. */
-button[data-vt-studio-button="true"]:not([data-vt-studio-icon-button="true"])::before {
+button[data-vt-studio-button="true"]::before,
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::before {
   content: none !important;
   display: none !important;
 }
 button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   transform: none !important;
-  transition: background-color 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out !important;
+  transition: none !important;
 }
 button[data-vt-studio-button="true"]:hover:not(:disabled),
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) {
-  transform: none !important;
-  filter: brightness(.98);
-}
 button[data-vt-studio-button="true"]:active:not(:disabled),
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled),
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled),
+.vt-studio-inline-stepper > button:hover:not(:disabled),
+.vt-studio-inline-stepper > button:active:not(:disabled),
+.vt-studio-split-stepper button:hover:not(:disabled),
+.vt-studio-split-stepper button:active:not(:disabled),
+.vt-studio-tag-editor__square-action:hover:not(:disabled),
+.vt-studio-tag-editor__square-action:active:not(:disabled) {
+  box-shadow: none !important;
   transform: none !important;
-  box-shadow: 1px 1px 0 0 var(--vt-studio-control-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent)) !important;
+  filter: none !important;
+  transition: none !important;
 }
-button[data-vt-studio-button="true"][data-size="compact"],
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="compact"] {
-  --vt-studio-control-shadow-x: var(--vt-studio-28-button-shadow-x, 1.5px);
-  --vt-studio-control-shadow-y: var(--vt-studio-28-button-shadow-y, 1.5px);
-}
-
-/* Explicit non-button exceptions: these are fields/indicators, not button faces.
-   Preserve visible focus via outlines rather than shadow strokes. */
 [data-vt-studio-control]:is(input, textarea, select),
 .vt-studio-inline-stepper__value,
 .vt-studio-split-stepper__value {
   box-shadow: none !important;
-  transition: background-color 150ms ease-out, color 150ms ease-out,
-    border-color 150ms ease-out, outline-color 150ms ease-out !important;
+  transition: none !important;
 }
 [data-vt-studio-control]:is(input, textarea, select):focus-visible,
 .vt-studio-inline-stepper__value:focus-visible,
 .vt-studio-split-stepper__value:focus-visible {
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid
-    var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 1px;
+  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0;
   box-shadow: none !important;
 }
 .vt-studio-split-left-badge,
@@ -2760,19 +2754,22 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   transform: none !important;
   transition: none !important;
 }
-/* Stepper action cells change the value, but do not inherit button press motion/elevation. */
-.vt-studio-inline-stepper > button,
-.vt-studio-split-stepper > button,
-.vt-studio-split-stepper button {
-  box-shadow: none !important;
-  transform: none !important;
-  transition: none !important;
+/* Only explicit button API opt-in may render a shadow; it never animates or shifts. */
+button[data-vt-button-shadow="true"] {
+  --vt-button-shadow-x: 3px;
+  --vt-button-shadow-y: 3px;
+  box-shadow: var(--vt-button-shadow-x) var(--vt-button-shadow-y) 0 0 var(--vt-button-shadow-color, color-mix(in srgb, var(--pair-b, #ff7f6b) 45%, transparent)) !important;
+}
+button[data-vt-button-shadow="true"][data-size="compact"] {
+  --vt-button-shadow-x: 1.5px;
+  --vt-button-shadow-y: 1.5px;
 }
 @media (prefers-reduced-motion: reduce) {
   button[data-vt-studio-button="true"],
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
   button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
-  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-    transition: none !important;
-  }
+  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face],
+  .vt-studio-inline-stepper > button,
+  .vt-studio-split-stepper button,
+  .vt-studio-tag-editor__square-action { transition: none !important; }
 }
