@@ -84,4 +84,17 @@ describe("confirmed Studio button primitive library", () => {
     expect(css).not.toMatch(/\.vt-studio-closeable-badge\s*\{[^}]*height:\s*20px;[^}]*border-radius:\s*999px/s)
   })
 
+
+  it("documents fixed-ratio control defaults and enforces heavy badge typography", () => {
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx")
+    const css = read("src/styles/studio-control-system.css")
+    for (const rule of ["fixedRatioDefaults:", "radioButtons:", "squareIconButtons:", "circleIconButtons:", "splitIconRailColor:", "badgeTypography:"]) {
+      expect(controls).toContain(rule)
+    }
+    expect(css).toContain("Global fixed-ratio contract")
+    expect(css).toContain("font-weight: 1000 !important")
+    expect(css).toContain("aspect-ratio: 1 / 1")
+    expect(css).toContain("place-items: center")
+  })
+
 })
