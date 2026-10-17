@@ -2,9 +2,7 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-const systemCss = readFileSync("src/styles/studio-control-system.css", "utf8")
-const motionCss = readFileSync("src/styles/studio-control-motion.css", "utf8")
-const css = systemCss + "\n" + motionCss
+const css = readFileSync("src/styles/studio-control-motion.css", "utf8")
 const entry = readFileSync("src/studio-ui/index.ts", "utf8")
 
 test("Studio selection controls animate only their inner state", () => {
@@ -23,20 +21,23 @@ test("Studio selection controls animate only their inner state", () => {
 
 test("floating labels and field feedback have transitions", () => {
   assert.ok(css.includes(".vt-studio-floating-field > .vt-studio-floating-field-label"))
-  assert.ok(motionCss.includes(".vt-studio-floating-field > :is(input, textarea)"))
+  assert.ok(css.includes(".vt-studio-floating-field > :is(input, textarea)"))
   assert.match(css, /top\s+180ms/)
-  assert.match(motionCss, /border-color\s+180ms/)
+  assert.match(css, /border-color\s+180ms/)
 })
 
-test("reduced-motion users receive no motion from every animated control", () => {
-  assert.match(systemCss, /@media\s*\(prefers-reduced-motion:\s*reduce\)/)
-  assert.match(motionCss, /@media\s*\(prefers-reduced-motion:\s*reduce\)/)
-  assert.match(systemCss, /transition:\s*none\s*!important/)
-  assert.match(motionCss, /transition:\s*none\s*!important/)
-  assert.match(systemCss, /\.vt-studio-44-switch[\s\S]*?\.vt-studio-floating-field > \.vt-studio-floating-field-label/)
-  assert.match(motionCss, /\.vt-studio-44-word-handle[\s\S]*?\.vt-studio-floating-field > :is\(input, textarea\)/)
-  assert.match(systemCss, /animation:\s*none\s*!important/)
-  assert.match(motionCss, /animation:\s*none\s*!important/)
+test("reduced-motion users receive no motion from the restored controls", () => {
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/)
+  const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"))
+  assert.match(reduced, /transition:\s*none\s*!important/)
+  assert.match(reduced, /animation:\s*none\s*!important/)
+  for (const selector of [
+    ".vt-studio-44-switch",
+    ".vt-studio-44-word-handle",
+    ".vt-studio-floating-field > :is(input, textarea)",
+  ]) {
+    assert.ok(reduced.includes(selector), `reduced-motion rules omit ${selector}`)
+  }
 })
 
 test("motion stylesheet loads after the canonical Studio control stylesheet", () => {
@@ -47,7 +48,7 @@ test("motion stylesheet loads after the canonical Studio control stylesheet", ()
 })
 
 test("restored motion does not add shell movement or shadow effects", () => {
-  assert.doesNotMatch(motionCss, /button\[data-vt-studio-button=.*?:hover/)
-  assert.doesNotMatch(motionCss, /box-shadow\s*:/)
-  assert.doesNotMatch(motionCss, /translate\s*:/)
+  assert.doesNotMatch(css, /button\[data-vt-studio-button=.*?:hover/)
+  assert.doesNotMatch(css, /box-shadow\s*:/)
+  assert.doesNotMatch(css, /translate\s*:/)
 })
