@@ -81,7 +81,7 @@ describe("confirmed Studio button primitive library", () => {
     expect(css).toContain('text-align: right')
     expect(css).toContain('color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent)')
     expect(css).toContain('outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-field-secondary')
-    expect(css).not.toMatch(/\\.vt-studio-closeable-badge\\s*\\{[^}]*height:\\s*20px;[^}]*border-radius:\\s*999px/s)
+    expect(css).not.toMatch(/\.vt-studio-closeable-badge\s*\{[^}]*height:\s*20px;[^}]*border-radius:\s*999px/s)
   })
 
 })
