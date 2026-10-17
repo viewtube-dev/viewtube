@@ -27,7 +27,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     fill: "alphabetical spectrum color mixed at 35% with white",
     textAndBorder: "resolved alphabetical spectrum color",
     colorResolver: "getAlphabeticalSpectrumColor",
-    selectedTreatment: "1px upward offset plus four-layer white/color glow",
+    selectedTreatment: "paired-color fill and border state; no shadow or glow",
     rationale: "Asset-module tags are donor-specified dense metadata chips, not ordinary 44px/28px controls.",
   },
   closeableBadge: {
@@ -49,7 +49,6 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 28,
     stroke: 2,
     radius: 4,
-    shadow: "1.5px compact offset secondary-color at 45% opacity",
     rationale: "The plus/check actions use the canonical compact 28px square-button size.",
   },
   textareaTypography: {
@@ -63,7 +62,6 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     height: 56,
     stroke: 3,
     radius: 6,
-    shadow: 3,
     rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
   },
 } as const
@@ -80,12 +78,12 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
   lineHeight: 0.86,
-  shadowPolicy: "Hard offset shadows belong to buttons and floating dropdown panels. Dropdown triggers and menu options have no button shadow or press-motion; a floating menu panel may use its own stationary panel shadow. Text fields use black outer borders and primary-color inset strokes.",
+  interactionPolicy: "Studio controls are flat and position-stable by default. Optional shadow effects are owned by button primitives only and are disabled by default. Fields use real borders and visible focus outlines; hover and press never displace controls.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
-    v1: "Primary (--pair-a) face fill with secondary (--pair-b) offset shadow.",
-    v2: "Secondary (--pair-b) face fill with primary (--pair-a) offset shadow.",
-    v3: "Selectable v1/v2 color swap; click toggles the face and opposite-color shadow together.",
+    v1: "Primary (--pair-a) face fill with secondary (--pair-b) color pairing; no shadow by default.",
+    v2: "Secondary (--pair-b) face fill with primary (--pair-a) color pairing; no shadow by default.",
+    v3: "Selectable v1/v2 color swap; click toggles the face colors without moving the button.",
     v4: "Black face fill with primary (--pair-a) icon stroke.",
     iconPresets: {
       heart: "Heart outline; pair with heart-pop for temporary secondary-color fill and expanding border ripple.",
@@ -97,7 +95,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       like: "ThumbsUp icon; pair with like for pop feedback and a live activation count.",
     },
     effects: {
-      standard: "No additional motion; shared Studio press, hover, focus and disabled behavior only.",
+      standard: "No additional motion; controls stay stationary while focus and disabled states remain accessible.",
       notification: "Optional positioned badge; count/status pop and icon shake. Supply badge only when a real count/status exists.",
       popOnActivation: "One-shot inner icon pop; with the heart preset, also briefly fills the heart and emits an expanding secondary-color border ripple.",
       heartPop: "Temporary heart fill, pop, and expanding/fading paired-color border ripple; never persists as selected state.",
@@ -107,7 +105,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       sunMoon: "Persistent selected toggle crossfades and rotates between Sun and Moon.",
       lockUnlock: "Persistent selected toggle morphs between Lock and Unlock.",
       downloadSuccess: "Outcome-driven Download-to-Check state; set success only after the operation succeeds.",
-      rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and press transform remain unchanged.",
+      rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and position remain unchanged.",
       flip: "Opt-in two-face 3D flip; provide activeIcon for a meaningful alternate face.",
       tooltip: "Opt-in contextual label revealed on hover/focus; accessible name remains label.",
       morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
@@ -115,7 +113,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Effects are opt-in and scoped to inner layers; reduced-motion suppresses animation without suppressing state feedback.",
   },
-  focusOutline: "Text inputs and text areas use a secondary-color visible focus accent at 0px offset; the last live audit measured its box shadow at 3px standard / 2px compact while the computed CSS outline itself measured 1px. Treat the outline and accent shadow as separate layers.",
+  focusOutline: "Text inputs and text areas use a visible secondary-color focus outline at zero offset; the control retains real border geometry without a shadow layer.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
@@ -140,10 +138,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "visible secondary-color accent box shadow: 3px standard / 2px compact (last live audit)",
+      focusOutlineWidth: "visible secondary-color outline: 3px standard / 2px compact",
       focusOutlineOffset: "0px for both sizes",
       outlineStrokeWidth: "computed CSS outline measured 1px in the last live audit; reconcile with declared token before visual certification",
-      outlineShadowColor: "secondary",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
   },
@@ -285,6 +282,8 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   selected?: boolean
   /** Explicit geometry variant for the confirmed 44px and 28px button family. */
   heightVariant?: "44" | "28"
+  /** Opt in to the button-owned shadow effect. Disabled by default. */
+  shadow?: boolean
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
@@ -295,6 +294,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
       loading = false,
       selected = false,
       heightVariant,
+      shadow = false,
       disabled,
       children,
       type = "button",
@@ -303,7 +303,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     ref,
   ) => {
     // Height is the authoritative geometry when supplied. This prevents a 28px
-    // control from accidentally inheriting standard border/radius/shadow tokens.
+    // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
       ? heightVariant === "28" ? "compact" : "standard"
       : sizeVariant ?? "standard"
@@ -316,6 +316,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
         data-vt-studio-button="true"
+        data-vt-button-shadow={shadow ? "true" : undefined}
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
         aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
@@ -336,16 +337,19 @@ StudioButton.displayName = "StudioButton"
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tone?: StudioControlTone
   loading?: boolean
+  /** Opt in to the button-owned shadow effect. Disabled by default. */
+  shadow?: boolean
 }
 
 export const StudioActionButton = React.forwardRef<HTMLButtonElement, StudioActionButtonProps>(
-  ({ tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
+  ({ tone = "accent", loading = false, shadow = false, disabled, children, type = "button", ...props }, ref) => (
     <button
       ref={ref}
       type={type}
       {...props}
       data-vt-studio-control="true"
       data-vt-studio-action-button="true"
+      data-vt-button-shadow={shadow ? "true" : undefined}
       data-tone={tone}
       aria-busy={loading || undefined}
       disabled={disabled || loading}
@@ -401,8 +405,7 @@ export interface StudioSquareIconButtonProps extends Omit<StudioButtonProps, "ch
   /** Custom icon override. If omitted, iconPreset supplies the icon automatically. */
   icon?: React.ReactNode
   label: string
-  /** v1: primary fill / secondary shadow; v2: secondary fill / primary shadow;
-   * v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
+  /** v1: primary fill; v2: secondary fill; v3: click-to-toggle between v1 and v2; v4: black fill / primary icon. */
   variant?: StudioSquareIconButtonVariant
   /** Optional interaction effect. Defaults to standard; visual skin remains controlled by variant. */
   effect?: StudioSquareIconButtonEffect
