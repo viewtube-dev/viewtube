@@ -228,5 +228,7 @@ export const applyGeneratedSections = (
 ): GeneratedScript => ({
  ...result,
  sections,
- fullScript: stitchFullScript(sections),
+ fullScript: result.preserveSectionHeadings === false
+  ? sections.filter((section) => section.script.trim()).map((section) => section.script).join("\n\n")
+  : stitchFullScript(sections),
 })
