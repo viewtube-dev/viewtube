@@ -586,7 +586,7 @@ describe("canonical micro badge size contract", () => {
   it("maps micro badge geometry and typography to dedicated micro tokens", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const microStart = css.indexOf('.vt-studio-split-left-badge[data-size="micro"]')
-    const microEnd = css.indexOf("\\n}", microStart) + 2
+    const microEnd = css.indexOf("\n}", microStart) + 2
     const micro = css.slice(microStart, microEnd)
     expect(micro).toContain("--vt-studio-badge-height: var(--vt-studio-14-height, 14px)")
     expect(micro).toContain("--vt-studio-badge-stroke: var(--vt-studio-14-stroke, 1px)")
