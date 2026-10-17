@@ -21,9 +21,19 @@ describe("Studio control global contract", () => {
     expect(css).toContain("* .65");
     expect(css).toContain("outline-offset: 0");
   });
+  it("keeps catalog styles additive around production Studio controls", () => {
+    const catalog = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
+    expect(catalog).toContain('.vt-catalog-split-primitive:not(:has([data-vt-studio-control="true"]))');
+    expect(catalog).not.toContain('.vt-catalog-field.is-simple-text[data-vt-studio-control="true"] {\n  width:');
+  });
   it("documents content-width exceptions instead of silently overriding row fill", () => {
     const tokens = read("src/studio-ui/tokens.ts");
     expect(tokens).toContain("STUDIO_CONTROL_EXCEPTIONS");
     expect(tokens).toContain("STUDIO_WIDTH_POLICY");
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx");
+    expect(controls).toContain('data-vt-studio-split-face="true"');
+    expect(controls).toContain('data-rail="start"');
+    expect(controls).toContain('data-rail="end"');
+    expect(controls).toContain('data-vt-studio-width="content"');
   });
 });
