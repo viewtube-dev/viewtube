@@ -645,7 +645,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
   border: 0 !important;
   outline: 0;
   
-  -webkit-text-stroke: 0 !important;
   filter: none;
   transform: none !important;
   min-height: 0 !important;
@@ -1050,7 +1049,6 @@ button.vt-studio-44-choice {
   border: 0 !important;
   outline: 0;
   
-  -webkit-text-stroke: 0 !important;
   filter: none;
   transform: none !important;
   cursor: pointer;
@@ -3455,4 +3453,20 @@ button[data-vt-studio-button="true"][data-size="compact"]:is([data-split-left="t
     transition: none !important;
     animation: none !important;
   }
+}
+
+
+/* The split stepper has no shell pseudo-face; all visual layers remain inside its one border. */
+.vt-studio-split-stepper::before { content: none; display: none; }
+
+/* Micro badge rails remain square and use the canonical 12px micro tier. */
+.vt-studio-split-left-badge[data-size="micro"] .vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge[data-size="micro"] .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge[data-size="micro"] .vt-studio-double-split-badge__rail {
+  box-sizing: border-box;
+  width: 12px;
+  min-width: 12px;
+  height: 12px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 12px;
 }
