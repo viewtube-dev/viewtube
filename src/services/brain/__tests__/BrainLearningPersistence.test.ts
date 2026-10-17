@@ -108,8 +108,6 @@ describe("BrainLearningPersistence", () => {
   expect(storedQueue.map((item: { record: { id: string } }) => item.record.id)).toEqual(["outcome-second"])
  })
 
-})
-
  it("rehydrates channel-scoped outcomes from durable storage after local browser data is lost", async () => {
   const storage = makeStorage()
   vi.stubGlobal("window", { localStorage: storage, dispatchEvent: vi.fn() })
@@ -150,3 +148,4 @@ describe("BrainLearningPersistence", () => {
   }))
   expect(fetchMock).toHaveBeenCalledTimes(1)
  })
+})
