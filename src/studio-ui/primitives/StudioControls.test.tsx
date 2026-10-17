@@ -93,14 +93,16 @@ describe("Studio text field library entries", () => {
   });
 });
 
-describe("compact Studio button intrinsic sizing", () => {
-  it("sizes compact text buttons from intrinsic content instead of a circular 100% face width", () => {
+describe("compact Studio button row-fill sizing", () => {
+  it("fills the available row for compact text buttons while preserving square icon-only geometry", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {')
-    expect(css).toContain('width: max-content;')
+    const compact = css.slice(css.indexOf('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {'))
+    const rule = compact.slice(0, compact.indexOf("}"))
+    expect(rule).toContain("width: 100%;")
+    expect(rule).not.toContain("width: max-content;")
     expect(css).toContain('button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) > [data-vt-studio-button-face] {')
-    expect(css).toContain('width: auto;')
-    expect(css).toContain('padding-inline: 8px;')
+    expect(css).toContain("padding-inline: 8px;")
   })
 
   it("preserves explicit full-width split-left and fixed-square icon button geometry", () => {
@@ -134,12 +136,12 @@ describe("canonical Studio field, selection, and action contracts", () => {
     const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"))
     expect(fields).toContain("color: var(--vt-field-primary);")
     expect(fields).toContain("-webkit-text-fill-color: var(--vt-field-primary);")
-    expect(fields).toContain("-webkit-text-stroke: .5px var(--vt-field-primary);")
+    expect(fields).toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary);")
     expect(fields).toContain("font: inherit")
     expect(fields).toContain("font-weight: var(--vt-studio-control-font-weight);")
     expect(fields).not.toContain("-webkit-text-stroke: 0 !important")
-    expect(fields).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px) !important")
-    expect(fields).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px) !important")
+    expect(fields).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
+    expect(fields).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px);")
   })
 
   it("uses the supplied 44px control geometry and explicit indicator colors", () => {
@@ -240,14 +242,14 @@ describe("Studio text-field module ownership and typography", () => {
     expect(areaModule.StudioTextArea).toBeDefined()
   })
 
-  it("uses global 38px/24px input typography and 18px/14px textarea typography", () => {
+  it("uses global 38px/24px input typography and 18px/14px textarea typography without important overrides", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="standard"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-standard-font-size, 38px\) !important/)
-    expect(css).toMatch(/input\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-text-input-compact-font-size, 24px\) !important/)
+    expect(css).toContain("font-size: var(--vt-studio-text-input-standard-font-size, 38px);")
+    expect(css).toContain("font-size: var(--vt-studio-text-input-compact-font-size, 24px);")
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
-    expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px) !important")
-    expect(css).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px) !important")
+    expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
+    expect(css).toContain("font-size: var(--vt-studio-textarea-compact-font-size, 14px);")
   })
 })
 
