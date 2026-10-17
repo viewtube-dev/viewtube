@@ -99,4 +99,19 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("28px compact")
   })
 
+
+  it("registers shared split-right and double-split badges and the global spacing/micro contracts", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('data-vt-studio-split-badge="right"')
+    expect(html).toContain('data-vt-studio-split-badge="double"')
+    expect(html).toContain("SPLIT-RIGHT BADGE · SHARED FOUNDATION")
+    expect(html).toContain("DOUBLE-SPLIT BADGE · SHARED FOUNDATION")
+    expect(html).toContain('data-size="micro"')
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("--vt-studio-space-unit: 4px")
+    expect(css).toContain('[data-size="micro"]')
+    expect(css).toContain("box-shadow: none !important")
+    expect(css).toContain("transition: none !important")
+  })
+
 })
