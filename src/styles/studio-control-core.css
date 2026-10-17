@@ -46,3 +46,21 @@
   box-shadow: none;
   transform: none;
 }
+
+/* Fixed square geometry for single-icon faces and rails (idea #10). */
+[data-vt-studio-control="true"] [data-vt-studio-split-rail],
+[data-vt-studio-control="true"] [data-vt-studio-split-face] [data-vt-studio-split-rail] {
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+}
+.vt-studio-split-face[data-vt-studio-split] {
+  display: grid;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  gap: 0;
+}
+.vt-studio-split-face[data-vt-studio-split="left"] { grid-template-columns: auto minmax(0, 1fr); }
+.vt-studio-split-face[data-vt-studio-split="right"] { grid-template-columns: minmax(0, 1fr) auto; }
+.vt-studio-split-face[data-vt-studio-split="double"] { grid-template-columns: auto minmax(0, 1fr) auto; }
