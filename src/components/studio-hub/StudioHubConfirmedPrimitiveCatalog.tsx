@@ -158,7 +158,7 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
   </section>
 )
 
-const ConfirmedInlineStepperFamily: React.FC = () => {
+const ConfirmedStudioCounterFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(22)
   const [compactValue, setCompactValue] = React.useState(3)
   const [microValue, setMicroValue] = React.useState(7)
@@ -177,18 +177,18 @@ const ConfirmedInlineStepperFamily: React.FC = () => {
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
-        <div className="vt-confirmed-stepper-row-grid">
-          <div className="vt-confirmed-stepper-specimen"><small>44px standard</small><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard counter" /></div>
-          <div className="vt-confirmed-stepper-specimen"><small>28px compact</small><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact counter" /></div>
-          <div className="vt-confirmed-stepper-specimen"><small>14px micro</small><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro counter" /></div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+        <div className="vt-confirmed-counter-row-grid">
+          <div className="vt-confirmed-counter-specimen"><small>44px standard</small><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>28px compact</small><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>14px micro</small><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro counter" /></div>
         </div>
       </div>
     </Family>
   )
 }
 
-const ConfirmedStepperFamily: React.FC = () => {
+const ConfirmedStudioRightCounterFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(5)
   const [compactValue, setCompactValue] = React.useState(3)
   const [microValue, setMicroValue] = React.useState(8)
@@ -208,11 +208,11 @@ const ConfirmedStepperFamily: React.FC = () => {
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
-        <div className="vt-confirmed-stepper-row-grid">
-          <div className="vt-confirmed-stepper-specimen"><small>44px standard</small><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard right counter" /></div>
-          <div className="vt-confirmed-stepper-specimen"><small>28px compact</small><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact right counter" /></div>
-          <div className="vt-confirmed-stepper-specimen"><small>14px micro</small><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro right counter" /></div>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+        <div className="vt-confirmed-counter-row-grid">
+          <div className="vt-confirmed-counter-specimen"><small>44px standard</small><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard right counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>28px compact</small><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact right counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>14px micro</small><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro right counter" /></div>
         </div>
       </div>
     </Family>
@@ -708,8 +708,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioSimpleDropdown aria-label="Example three-set dropdown" defaultValue="three" options={[{ value: "one", label: "One set" }, { value: "three", label: "Three sets" }, { value: "five", label: "Five sets" }]} />
       </div>
     </Family>
-    <ConfirmedInlineStepperFamily />
-    <ConfirmedStepperFamily />
+    <ConfirmedStudioCounterFamily />
+    <ConfirmedStudioRightCounterFamily />
   </div>
 )
 

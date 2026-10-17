@@ -2033,10 +2033,11 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 
 /* Studio Controls-owned stepper family styles moved from primitive sidecars. */
 /* Studio steppers share the Split-Left Username Input visual foundation:
-   primary translucent value surface, opaque secondary action rail, inset primary
-   strokes, black compound dividers, and no resting drop shadow. */
-.vt-studio-inline-stepper,
-.vt-studio-split-stepper {
+   primary translucent value surface,
+opaque secondary action rail,
+inset primary
+   strokes,
+black compound dividers{
   --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
@@ -2056,269 +2057,6 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   color: #000;
   
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-}
-[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
-  --vt-inline-stepper-side: var(--vt-studio-control-height, 44px);
-  display: grid;
-  grid-template-columns: var(--vt-inline-stepper-side) minmax(40px, 1fr) var(--vt-inline-stepper-side);
-  flex: 0 1 auto;
-  width: fit-content;
-  max-width: 100%;
-  min-width: 0;
-  padding: 0;
-}
-.vt-studio-inline-stepper__rail {
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  align-self: stretch;
-  width: var(--vt-inline-stepper-side);
-  min-width: var(--vt-inline-stepper-side);
-  height: 100%;
-  min-height: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: var(--vt-stepper-secondary);
-  color: #000;
-  cursor: pointer;
-  appearance: none;
-  box-shadow: none;
-  line-height: 1;
-}
-.vt-studio-inline-stepper__rail[data-rail="start"] {
-  border-right: var(--vt-stepper-stroke) solid #000;
-}
-.vt-studio-inline-stepper__rail[data-rail="end"] {
-  border-left: var(--vt-stepper-stroke) solid #000;
-}
-.vt-studio-inline-stepper__rail svg {
-  display: block;
-  width: min(var(--vt-studio-control-icon-size, 28px), 70%);
-  height: min(var(--vt-studio-control-icon-size, 28px), 70%);
-  color: #000;
-  stroke: #000;
-}
-.vt-studio-inline-stepper__rail svg * {
-  stroke: #000;
-}
-.vt-studio-inline-stepper__value {
-  box-sizing: border-box;
-  align-self: stretch;
-  display: block;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  height: 100%;
-  margin: 0;
-  padding: 0 2px;
-  border: 0;
-  border-radius: 0;
-  outline: 0;
-  appearance: textfield;
-  -moz-appearance: textfield;
-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  text-transform: var(--vt-studio-control-text-transform, uppercase);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
-  line-height: var(--vt-studio-control-line-height, .86);
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-.vt-studio-inline-stepper__value::-webkit-inner-spin-button,
-.vt-studio-inline-stepper__value::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.vt-studio-inline-stepper__rail:disabled,
-.vt-studio-inline-stepper__value:disabled {
-  cursor: not-allowed;
-  opacity: .45;
-}
-.vt-studio-inline-stepper__rail:focus-visible,
-.vt-studio-inline-stepper__value:focus-visible {
-  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
-  outline-offset: var(--vt-studio-control-focus-outline-offset, 0);
-  z-index: 1;
-}
-.vt-studio-inline-stepper.is-focused {
-  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
-  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
-}
-.vt-studio-inline-stepper[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-  --vt-stepper-height: var(--vt-studio-compact-height, 28px);
-  --vt-stepper-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-stepper-radius: var(--vt-studio-compact-radius, 4px);
-  --vt-inline-stepper-side: var(--vt-studio-compact-height, 28px);
-}
-.vt-studio-inline-stepper[data-size="standard"] {
-  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
-  --vt-stepper-height: var(--vt-studio-standard-height, 44px);
-  --vt-stepper-stroke: var(--vt-studio-standard-stroke, 3px);
-  --vt-stepper-radius: var(--vt-studio-standard-radius, 6px);
-  --vt-inline-stepper-side: var(--vt-studio-standard-height, 44px);
-}
-.vt-studio-inline-stepper[data-size="micro"] {
-  --vt-studio-control-height: var(--vt-studio-micro-height, 14px);
-  --vt-stepper-height: var(--vt-studio-micro-height, 14px);
-  --vt-stepper-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-stepper-radius: var(--vt-studio-micro-radius, 2px);
-  --vt-inline-stepper-side: var(--vt-studio-micro-height, 14px);
-}
-.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
-  font-size: var(--vt-studio-micro-font-size, 10px);
-}
-.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__rail svg {
-  width: min(var(--vt-studio-micro-icon-size, 10px), 70%);
-  height: min(var(--vt-studio-micro-icon-size, 10px), 70%);
-}
-.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value {
-  font-size: var(--vt-studio-compact-font-size, 24px);
-}
-.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__rail svg {
-  width: min(var(--vt-studio-compact-icon-size, 16px), 70%);
-  height: min(var(--vt-studio-compact-icon-size, 16px), 70%);
-}
-
-/* Split stepper: canonical SplitRightBadge shell with stacked increase/decrease actions. */
-[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
-  grid-template-columns: minmax(0, 2fr) var(--vt-stepper-height);
-  flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
-  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
-  max-width: 100%;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  color: #000;
-}
-.vt-studio-split-stepper[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-  --vt-stepper-height: var(--vt-studio-compact-height, 28px);
-  --vt-stepper-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-stepper-radius: var(--vt-studio-compact-radius, 4px);
-}
-.vt-studio-split-stepper[data-size="standard"] {
-  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
-  --vt-stepper-height: var(--vt-studio-standard-height, 44px);
-  --vt-stepper-stroke: var(--vt-studio-standard-stroke, 3px);
-  --vt-stepper-radius: var(--vt-studio-standard-radius, 6px);
-}
-.vt-studio-split-stepper [data-vt-studio-split-field] {
-  display: block;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-}
-.vt-studio-split-stepper input.vt-studio-split-stepper-value {
-  appearance: textfield;
-  -moz-appearance: textfield;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  min-height: 0;
-  margin: 0;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 0;
-  outline: none;
-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: .5px #000;
-  caret-color: #000;
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .86);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
-  text-transform: var(--vt-studio-control-text-transform, uppercase);
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-.vt-studio-split-stepper[data-size="compact"] input.vt-studio-split-stepper-value {
-  font-size: var(--vt-studio-compact-font-size, 24px);
-  padding-inline: 8px;
-}
-.vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button,
-.vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.vt-studio-split-stepper input.vt-studio-split-stepper-value:focus-visible {
-  background: transparent;
-  outline: none;
-}
-.vt-studio-split-stepper:focus-within {
-  outline: var(--vt-studio-control-secondary-outline-width, 1.5px) solid var(--vt-stepper-secondary);
-  outline-offset: var(--vt-studio-control-focus-outline-offset, 0px);
-}
-[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper > [data-vt-studio-split-rail].vt-studio-split-stepper-rail {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  min-height: 0;
-  padding: 0;
-  overflow: hidden;
-  border-right: 0;
-  border-left: var(--vt-stepper-stroke) solid #000;
-  border-radius: 0;
-  background: var(--vt-stepper-secondary);
-}
-.vt-studio-split-stepper-actions {
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-}
-.vt-studio-split-stepper-actions button {
-  appearance: none;
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: #000;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.vt-studio-split-stepper-actions button:first-child {
-  border-bottom: var(--vt-stepper-stroke) solid #000;
-}
-.vt-studio-split-stepper-actions svg {
-  display: block;
-  width: min(var(--vt-studio-control-icon-size, 28px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 28px), 100%);
-  max-width: 100%;
-  max-height: 100%;
-  color: #000;
-  stroke: #000;
-  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
-}
-.vt-studio-split-stepper-actions button:focus-visible {
-  outline: 3px solid var(--vt-stepper-secondary);
-  outline-offset: -3px;
-  z-index: 2;
-}
-.vt-studio-split-stepper-actions button:disabled {
-  cursor: not-allowed;
-  opacity: .35;
 }
 
 
@@ -2700,17 +2438,14 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   
 }
 
-/* Explicit non-button exceptions: these are fields/indicators, not button faces.
+/* Explicit non-button exceptions: these are fields/indicators,
+not button faces.
    Preserve visible focus via outlines rather than shadow strokes. */
-[data-vt-studio-control]:is(input, textarea, select),
-.vt-studio-inline-stepper__value,
-.vt-studio-split-stepper-value {
+[data-vt-studio-control]:is(input, textarea, select){
   
   
 }
-[data-vt-studio-control]:is(input, textarea, select):focus-visible,
-.vt-studio-inline-stepper__value:focus-visible,
-.vt-studio-split-stepper__value:focus-visible {
+[data-vt-studio-control]:is(input, textarea, select):focus-visible{
   outline: var(--vt-studio-control-focus-outline-width, 2px) solid
     var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 1px;
@@ -2725,10 +2460,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   transform: none !important;
   
 }
-/* Stepper action cells change the value, but do not inherit button press motion/elevation. */
-.vt-studio-inline-stepper > button,
-.vt-studio-split-stepper > button,
-.vt-studio-split-stepper button {
+/* Stepper action cells change the value{
   
   transform: none !important;
   
@@ -2743,65 +2475,14 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
 }
 
 
-/* Stepper rail icons use a shared proportional box, not glyph-specific intrinsic sizing. */
-.vt-studio-split-stepper-rail svg {
+/* Stepper rail icons use a shared proportional box{
   width: 70%;
   height: 70%;
-}
-.vt-studio-split-stepper:focus-within {
-  
 }
 
 
 /* Stepper fields compose the canonical username-input foundation while retaining
-   the existing grid slots. Empty icon rails are hidden, never duplicated. */
-.vt-studio-inline-stepper__field-shell,
-.vt-studio-split-stepper__field-shell { display: contents; }
-.vt-studio-inline-stepper__field-shell > [data-vt-studio-username-rail],
-.vt-studio-split-stepper__field-shell > [data-vt-studio-username-rail] { display: none !important; }
-.vt-studio-inline-stepper__field-shell input,
-.vt-studio-split-stepper__field-shell input { min-width: 0; }
-.vt-studio-inline-stepper {
-  grid-template-columns: var(--vt-inline-stepper-side) minmax(0, 2fr) var(--vt-inline-stepper-side);
-  width: calc(4 * var(--vt-stepper-height) - 6 * var(--vt-stepper-stroke));
-  min-width: 0;
-  max-width: 100%;
-}
-.vt-studio-inline-stepper button.vt-studio-inline-stepper__button,
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up,
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down {
-  box-sizing: border-box; width: 100%; min-width: 0; min-height: 0; height: 100%;
-  padding: 0; border: 0; border-radius: 0; 
-  background: var(--vt-stepper-secondary); color: #000;
-  transform: none !important; 
-}
-.vt-studio-inline-stepper button.vt-studio-inline-stepper__button > [data-vt-studio-button-face],
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up > [data-vt-studio-button-face],
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down > [data-vt-studio-button-face] {
-  display: block; width: 100%; height: 100%; min-height: 0;
-}
-.vt-studio-inline-stepper button.vt-studio-inline-stepper__button [data-vt-studio-split-rail],
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up [data-vt-studio-split-rail],
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down [data-vt-studio-split-rail] {
-  display: grid; box-sizing: border-box; place-items: center; flex: 1 1 auto;
-  width: 100%; height: 100%; border: 0; background: transparent;
-}
-.vt-studio-inline-stepper button.vt-studio-inline-stepper__button [data-vt-studio-split-label],
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up [data-vt-studio-split-label],
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down [data-vt-studio-split-label] { display: none; }
-.vt-studio-inline-stepper button.vt-studio-inline-stepper__button [data-vt-studio-split-rail] > svg,
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-up [data-vt-studio-split-rail] > svg,
-.vt-studio-split-stepper-rail button.vt-studio-split-stepper-down [data-vt-studio-split-rail] > svg {
-  width: min(var(--vt-studio-control-icon-size, 24px), 70%);
-  height: min(var(--vt-studio-control-icon-size, 24px), 70%);
-  stroke: #000; color: #000;
-}
-.vt-studio-split-stepper input.vt-studio-split-stepper-value,
-.vt-studio-inline-stepper__value {
-  border: 0 !important; border-radius: 0 !important; 
-}
-.vt-studio-inline-stepper:focus-within,
-.vt-studio-split-stepper:focus-within {  }
+   the existing grid slots. Empty icon rails are hidden{ display: contents; }
 
 
 /* Global Studio spacing and micro-size contract.
@@ -2828,20 +2509,22 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
 }
 
 /* No hard-coded elevation or motion on Studio primitives/components. Geometry and
-   state feedback must not be simulated with shadow layers, transforms, or transitions.
-   Any future exception must be token-backed, documented, and explicitly approved. */
+   state feedback must not be simulated with shadow layers,
+transforms,
+or transitions.
+   Any future exception must be token-backed,
+documented,
+and explicitly approved. */
 [data-vt-studio-control],
 [data-vt-studio-button],
 [data-vt-studio-action-button],
 .vt-studio-split-left-badge,
 .vt-studio-split-right-badge,
 .vt-studio-double-split-badge,
-.vt-studio-inline-stepper,
-.vt-studio-split-stepper,
 .vt-studio-dropdown-menu,
 .vt-studio-closeable-badge,
 .vt-studio-tag-editor,
-.vt-studio-tag-editor__square-action {
+.vt-studio-tag-editor__square-action{
   
   
   
@@ -2893,12 +2576,10 @@ button[data-vt-studio-button="true"] [data-vt-studio-split-label] > * {
 .vt-studio-split-left-badge,
 .vt-studio-split-right-badge,
 .vt-studio-double-split-badge,
-.vt-studio-inline-stepper,
-.vt-studio-split-stepper,
 .vt-studio-dropdown-menu,
 .vt-studio-closeable-badge,
 .vt-studio-tag-editor,
-.vt-studio-tag-editor__square-action {
+.vt-studio-tag-editor__square-action{
   box-shadow: none !important;
   text-shadow: none !important;
 }
@@ -2923,21 +2604,8 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 
 
 /* Confirmed Primitive flat-control contract (2026-10-16).
-   Global defaults: stationary geometry, no shell shadows, no CSS transitions.
-   Named visual effects are restricted to inner icon artwork and must honor
-   prefers-reduced-motion. Floating dropdown surfaces are separately owned. */
-:where(
-  button[data-vt-studio-button="true"],
-  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
-  .vt-studio-split-left-badge,
-  .vt-studio-split-right-badge,
-  .vt-studio-double-split-badge,
-  .vt-studio-inline-stepper,
-  .vt-studio-split-stepper,
-  .vt-studio-tag-editor__square-action,
-  .vt-studio-spectrum-tag,
-  .vt-studio-dropdown-trigger
-) {
+   Global defaults: stationary geometry,
+no shell shadows{
   box-shadow: none !important;
   text-shadow: none !important;
   transform: none !important;
@@ -3545,34 +3213,6 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 
 
-/* Split-stepper contract: the numeric face is exactly twice the action rail.
-   Keep the rail at one control-height wide at both 44px and 28px sizes. */
-[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
-  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke));
-}
-.vt-studio-split-stepper-actions {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0;
-}
-.vt-studio-split-stepper-actions button:first-child {
-  border-bottom: var(--vt-stepper-stroke) solid #000;
-}
-.vt-studio-split-stepper-actions button + button {
-  border-top: 0;
-}
-.vt-studio-split-stepper-actions svg {
-  width: min(var(--vt-studio-control-icon-size, 28px), 72%);
-  height: min(var(--vt-studio-control-icon-size, 28px), 72%);
-}
-.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-actions svg {
-  width: min(var(--vt-studio-control-icon-size, 16px), 72%);
-  height: min(var(--vt-studio-control-icon-size, 16px), 72%);
-}
-
-
 /* Default split-left state: primary fill belongs to the text/label pane;
    the icon rail remains secondary. Selected/pressed state colors stay owned
    by the existing selected-state rules above. */
@@ -3637,32 +3277,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: 0 !important;
   justify-content: center;
   overflow: hidden;
-}
-
-
-/* Reassert the split-stepper contract after legacy control rules: exact 2:1
-   numeric-face/action-rail ratio and an explicit separator between actions. */
-html body [data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
-  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke)) !important;
-  flex: 0 0 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke)) !important;
-}
-html body .vt-studio-split-stepper .vt-studio-split-stepper-actions {
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) !important;
-  gap: 0 !important;
-}
-html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button {
-  min-width: 0;
-  min-height: 0;
-  border: 0 !important;
-  border-radius: 0 !important;
-}
-html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button:first-child {
-  border-bottom: var(--vt-stepper-stroke, 3px) solid #000 !important;
-}
-html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button + button {
-  border-top: 0 !important;
 }
 
 
