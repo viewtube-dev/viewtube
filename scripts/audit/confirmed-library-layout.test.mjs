@@ -94,7 +94,7 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 test("non-default settings document exceptions instead of restating the global size lattice", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
   assert.ok(catalog.includes("Raised labels shrink to 80%; compact B reverses the paired colors."));
-  assert.ok(catalog.includes("Circular shape uses 80% of the canonical large icon preset: 30.4px / 1.9 stroke standard and 19.2px / 2.0 stroke compact."));
+  assert.ok(catalog.includes("Circular shape uses 80% of the canonical large icon preset: 30.4px / 1.9 stroke standard and 19.2px / 2.0 compact."));
   assert.ok(!catalog.includes("Standard/compact are 44px/28px with 3px/2px strokes and 6px/4px radii"));
   assert.ok(!catalog.includes("Search/number, input mode, autocomplete, max length, disabled/read-only behavior, and native caret are field-specific options."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
@@ -144,7 +144,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.ok(catalog.includes("Studio Text Input · Standalone + Simple + Floating + Fixed Label"));
   assert.ok(catalog.includes("SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact"));
-  assert.match(catalog, /Studio Text Area · Standalone \+ Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?textarea-only typography is 18px standard \/ 14px compact/i);
+  assert.match(catalog, /Studio Text Area · Standalone \\+ Simple \\+ Floating \\+ Fixed Label[\\s\\S]*?Multiline-only exception: 18px standard \\/ 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface/i);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
