@@ -237,3 +237,7 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
   color: #000;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
+
+
+/* Split steppers own one stationary shell; suppress legacy pseudo-faces that could stack borders. */
+.vt-studio-split-stepper::before { content: none; display: none; }
