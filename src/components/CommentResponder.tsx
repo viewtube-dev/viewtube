@@ -1,6 +1,6 @@
 import React from "react"
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChevronLeft, ChevronRight, ExternalLink, Link2, Loader2, MessagesSquare, RefreshCw, Sparkles } from "lucide-react"
+import { ChevronLeft, ChevronRight, ExternalLink, Link2, Loader2, MessagesSquare, RefreshCw, Send, Sparkles } from "lucide-react"
 import { buildYouTubeCommentUrl } from "../services/youtube/commentHandoff"
 import { SubToolbox, SubToolboxGridActionButton } from "./Toolbox"
 import { StudioButton, StudioSquareIconButton, StudioSplitLeftButton, StudioTextArea } from "../studio-ui"
@@ -92,12 +92,12 @@ export const CommentResponder: React.FC = () => {
     <label htmlFor="comment-reply-copy" className="mb-1 block text-[10px] font-black uppercase">Reply · Enter to post</label>
     <div className="flex items-end gap-2">
      <StudioTextArea id="comment-reply-copy" name="commentReply" value={comments.replyText} onChange={(event) => comments.setReplyText(event.target.value)} onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); if (comments.canPostReply && comments.replyText.trim() && !comments.loading) void comments.postReply(); } }} placeholder={!context.connected ? "Connect your YouTube channel to reply…" : comments.tab === "history" ? "Write a follow-up reply…" : "Write or generate a reply…"} className="min-h-[54px] flex-1" disabled={!context.connected || !thread} />
-     <StudioSquareIconButton type="button" label={comments.canPostReply ? "Post reply" : context.connected ? "Reconnect channel" : "Connect channel"} icon={<ExternalLink size={17} />} onClick={comments.canPostReply ? comments.postReply : comments.reconnect} disabled={comments.canPostReply ? (!thread || !comments.replyText.trim() || comments.loading) : false} tone="accent" />
+     <StudioSquareIconButton type="button" label={comments.canPostReply ? "Post reply" : context.connected ? "Reconnect channel" : "Connect channel"} icon={comments.canPostReply ? <Send size={17} /> : <Link2 size={17} />} onClick={comments.canPostReply ? comments.postReply : comments.reconnect} disabled={comments.canPostReply ? (!thread || !comments.replyText.trim() || comments.loading) : false} tone="accent" />
     </div>
     <div role="group" aria-label="Reply writing actions" className="mt-3 grid grid-cols-3 gap-1 sm:gap-2">
-     <StudioSplitLeftButton type="button" icon={<Sparkles size={16} />} tone="warning" disabled={!context.connected || !thread || comments.generating} onClick={comments.draftReply}>{comments.generating ? "Working…" : comments.replyText.trim() ? "Refine" : "Generate"}</StudioSplitLeftButton>
-     <StudioSplitLeftButton type="button" icon={<Link2 size={16} />} tone="neutral" disabled={!context.connected || !thread || comments.generating} onClick={comments.suggestVideo}>Suggest Videos</StudioSplitLeftButton>
-     <StudioSplitLeftButton type="button" icon={<ExternalLink size={16} />} tone="accent" disabled={comments.canPostReply ? (!thread || !comments.replyText.trim() || comments.loading) : false} onClick={comments.canPostReply ? comments.postReply : comments.reconnect}>{comments.canPostReply ? "Post" : "Reconnect"}</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<Sparkles size={16} />} tone="warning" disabled={!context.connected || !thread || comments.generating} onClick={comments.draftReply}>Generate</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<RefreshCw size={16} />} tone="neutral" disabled={!context.connected || !thread || comments.generating || !comments.replyText.trim()} onClick={comments.draftReply}>Refine</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<Link2 size={16} />} tone="accent" disabled={!context.connected || !thread || comments.generating} onClick={comments.suggestVideo}>Suggest Videos</StudioSplitLeftButton>
     </div>
    </div>
    {comments.error && context.connected && <div role="alert" className="mt-3 rounded-lg border-[3px] border-black bg-[#FFB158] p-3 text-xs font-black">{comments.error}</div>}
