@@ -95,8 +95,8 @@ export const CommentResponder: React.FC = () => {
      <StudioSquareIconButton type="button" label={comments.canPostReply ? "Post reply" : context.connected ? "Reconnect channel" : "Connect channel"} icon={comments.canPostReply ? <Send size={17} /> : <Link2 size={17} />} onClick={comments.canPostReply ? comments.postReply : comments.reconnect} disabled={comments.canPostReply ? (!thread || !comments.replyText.trim() || comments.loading) : false} tone="accent" />
     </div>
     <div role="group" aria-label="Reply writing actions" className="mt-3 grid grid-cols-3 gap-1 sm:gap-2">
-     <StudioSplitLeftButton type="button" icon={<Sparkles size={16} />} tone="warning" disabled={!context.connected || !thread || comments.generating} onClick={comments.draftReply}>Generate</StudioSplitLeftButton>
-     <StudioSplitLeftButton type="button" icon={<RefreshCw size={16} />} tone="neutral" disabled={!context.connected || !thread || comments.generating || !comments.replyText.trim()} onClick={comments.draftReply}>Refine</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<RefreshCw size={16} />} tone="neutral" disabled={!context.connected || !thread || comments.generating || !comments.replyText.trim()} onClick={() => comments.draftReply("refine")}>Refine</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<Sparkles size={16} />} tone="warning" disabled={!context.connected || !thread || comments.generating} onClick={() => comments.draftReply("generate")}>Generate</StudioSplitLeftButton>
      <StudioSplitLeftButton type="button" icon={<Link2 size={16} />} tone="accent" disabled={!context.connected || !thread || comments.generating} onClick={comments.suggestVideo}>Suggest Videos</StudioSplitLeftButton>
     </div>
    </div>
