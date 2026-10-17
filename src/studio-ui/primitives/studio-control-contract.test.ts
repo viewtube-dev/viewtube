@@ -26,4 +26,24 @@ describe("Studio control global contract", () => {
     expect(tokens).toContain("STUDIO_CONTROL_EXCEPTIONS");
     expect(tokens).toContain("STUDIO_WIDTH_POLICY");
   });
+  it("loads the confirmed visual audit fixes after the shared control styles", () => {
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx");
+    expect(controls.indexOf('import "../../styles/studio-control-system.css"')).toBeLessThan(controls.indexOf('import "../../styles/studio-library-audit-fixes.css"'));
+    expect(controls).toContain('import "../../styles/studio-library-audit-fixes.css"');
+  });
+  it("keeps split rail glyphs black and vertically centers split labels", () => {
+    const css = read("src/styles/studio-library-audit-fixes.css");
+    expect(css).toContain("stroke: #000");
+    expect(css).toContain("fill: #000");
+    expect(css).toContain("align-items: center");
+    expect(css).toContain("border-color: #000 !important");
+  });
+  it("preserves textarea-specific 18px/14px typography and thin primary strokes", () => {
+    const css = read("src/styles/studio-library-audit-fixes.css");
+    expect(css).toContain("--vt-studio-textarea-standard-font-size, 18px");
+    expect(css).toContain("--vt-studio-textarea-compact-font-size, 14px");
+    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, .5px");
+    expect(css).toContain("--vt-studio-textarea-compact-text-stroke, .35px");
+    expect(css).toContain("::placeholder");
+  });
 });
