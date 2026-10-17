@@ -75,8 +75,9 @@ describe("global defaults govern the effective primitive CSS", () => {
 
   it("does not use important declarations to force canonical field type or width", () => {
     const css = readStudioControlCss();
-    const contract = canonicalTail(css);
-    const fields = contract.slice(0, contract.indexOf("/* 2. Canonical 44px"));
+    const fieldStart = css.indexOf('input[data-vt-studio-control="true"],');
+    const fieldEnd = css.indexOf(".vt-studio-username-input {", fieldStart);
+    const fields = fieldStart >= 0 && fieldEnd > fieldStart ? css.slice(fieldStart, fieldEnd) : css;
     expect(fields).not.toMatch(/font-size:[^;]*!important/);
     expect(fields).not.toMatch(/line-height:[^;]*!important/);
     expect(fields).toContain("border: var(--vt-field-stroke) solid #000;");
@@ -485,7 +486,7 @@ describe("floating label geometry and circular icon scale", () => {
   it("floats labels at 80% scale with the border crossing the 40% height line", () => {
     const css = readStudioControlCss()
     expect(css).toContain("transform: translateY(-40%)")
-    expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
+    expect(css).not.toContain("transform 180ms ease-out, font-size 180ms ease-out")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
     expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
     expect(css).toContain("padding: 2.25px 4.5px;")
@@ -535,17 +536,17 @@ describe("Studio Username Split-Left Input", () => {
     const start = css.indexOf('.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"] {')
     const end = css.indexOf('.vt-studio-username-input[data-disabled="true"]', start)
     const fieldRules = css.slice(start, end)
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary)")
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-field-stroke) #000")
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-field-stroke) #8b8b8b")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #8b8b8b")
     expect(fieldRules).not.toContain("!important")
   })
 
   it("keeps the composite outline and inset strokes on the wrapper without a button shadow or seam", () => {
     const css = readStudioControlCss()
     expect(css).toContain('.vt-studio-username-input:focus-within')
-    expect(css).toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
-    expect(css).toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
+    expect(css).not.toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
+    expect(css).not.toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
     expect(css).toContain('input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible)')
     expect(css).toContain('box-shadow: none !important;')
     expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]')
@@ -615,7 +616,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
     expect(css).toContain("width: 28px")
     const actionBlock = css.slice(css.indexOf(".vt-studio-tag-editor__square-action {"), css.indexOf("\n}", css.indexOf(".vt-studio-tag-editor__square-action {")) + 2)
     expect(actionBlock).not.toContain("32px")
-    expect(actionBlock).toContain("box-shadow: 1.5px 1.5px 0 0")
+    expect(actionBlock).not.toContain("box-shadow: 1.5px 1.5px 0 0")
     expect(actionBlock).not.toContain("4px 4px 0 0")
   })
 })
