@@ -56,9 +56,9 @@ const RULES: Array<{ label: CreatorCommunicationLabel; pattern: RegExp; rational
  { label: "preference", pattern: /\b(i prefer|my preference|i like|i dislike|i hate|i'd rather|i would rather|i want this to|prefer .{1,60} over)\b/i, rationale: "Explicit preference language." },
  { label: "instruction", pattern: /\b(always|please|must|should|keep|use|make sure|from now on|change this|set the|write|create|generate|replace|add|remove)\b/i, rationale: "Directive or requested action language." },
  { label: "goal", pattern: /\b(goal|aim|target|objective|trying to|want to grow|increase .{1,40}|improve .{1,40})\b/i, rationale: "Goal or target language." },
- { label: "style_feedback", pattern: /\b(style|tone|thumbnail|font|colour|color|visual|pacing|voice|text-free|uppercase|lowercase|composition|layout)\b/i, rationale: "Creator style or presentation language." },
+ { label: "style_feedback", pattern: /\b(style|tone|title|thumbnail|script|description|metadata|font|colour|color|visual|pacing|voice|text-free|uppercase|lowercase|composition|layout)\b/i, rationale: "Creator style or presentation language." },
  { label: "criticism", pattern: /\b(too [a-z]+|weak|poor|bad|missed the point|doesn't work|does not work|confusing|unhelpful|disappointing)\b/i, rationale: "Critical or corrective evaluation language." },
- { label: "factual_claim", pattern: /\b(is|are|was|were|because|caused|increased|decreased|shows|means|measured|the result)\b/i, rationale: "Statement presented as a factual or causal claim; verification remains separate." },
+ { label: "factual_claim", pattern: /\b(because|caused|led to|resulted in|increased|decreased|shows|demonstrates|measured|the result|data indicates|evidence suggests|according to analytics)\b/i, rationale: "Statement presented as a factual or causal claim; verification remains separate." },
 ]
 
 export const classifyCreatorCommunication = (text: string): CreatorCommunicationClassification => {
