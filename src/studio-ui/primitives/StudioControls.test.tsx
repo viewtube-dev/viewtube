@@ -472,6 +472,9 @@ describe("floating label geometry and circular icon scale", () => {
     expect(css).toContain("transform: translateY(-40%)")
     expect(css).toContain("transform 180ms ease-out, font-size 180ms ease-out")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+    expect(catalogCss).toContain(".vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control=\"true\"])")
+    expect(catalogCss).toContain(".vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control=\"true\"]):focus")
+    expect(catalogCss).not.toContain(".vt-complete-catalog .vt-catalog-field{\n  --field-accent:var(--pair-a);")
     expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
     expect(css).toContain("padding: 2.25px 4.5px;")
   })
@@ -598,6 +601,7 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 describe("Studio text input and split-left badge typography parity", () => {
   it("uses the size token as the actual input text size, not the floating-label text", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const catalogCss = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
     const input = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextInput.tsx"), "utf8")
     const fieldRule = css.slice(
       css.indexOf('[data-vt-studio-control="true"]:is(input:not([type="checkbox"])'),
@@ -616,11 +620,9 @@ describe("Studio text input and split-left badge typography parity", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(controls).toContain("<StudioSplitLabel className={labelClass}>{children}</StudioSplitLabel>")
     expect(controls.match(/<StudioSplitLabel className=\{labelClassName\}>\{children\}<\\\/StudioSplitLabel>/)?.length).toBe(1)
-    expect(css).toContain('.vt-studio-split-left-badge__label,')
+    expect(css).toContain('.vt-studio-split-left-badge,')
     expect(css).toContain('font-size: var(--vt-studio-control-font-size)')
-    expect(css).toContain('font-weight: var(--vt-studio-control-font-weight)')
-    expect(css).toContain('line-height: var(--vt-studio-control-line-height)')
-    expect(css).toContain('text-transform: var(--vt-studio-control-text-transform)')
-    expect(css).toContain('-webkit-text-stroke: var(--vt-studio-control-text-stroke)')
+    expect(css).toContain('font: inherit')
+    expect(css).toContain('[data-vt-studio-split-label]')
   })
 })
