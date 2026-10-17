@@ -614,7 +614,8 @@ describe("Studio text input and split-left badge typography parity", () => {
   it("shares the button split-label typography contract with static split-left badges", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(controls).toContain('<span data-vt-studio-split-label className={labelClass}>{children}</span>')
+    expect(controls).toContain("<StudioSplitLabel className={labelClass}>{children}</StudioSplitLabel>")
+    expect(controls.match(/<StudioSplitLabel className=\{labelClassName\}>\{children\}<\\\/StudioSplitLabel>/)?.length).toBe(1)
     expect(css).toContain('.vt-studio-split-left-badge__label,')
     expect(css).toContain('font-size: var(--vt-studio-control-font-size)')
     expect(css).toContain('font-weight: var(--vt-studio-control-font-weight)')
