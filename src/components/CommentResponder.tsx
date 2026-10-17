@@ -1,6 +1,6 @@
 import React from "react"
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ExternalLink, Link2, Loader2, MessagesSquare, RefreshCw, Sparkles } from "lucide-react"
+import { ChevronLeft, ChevronRight, ExternalLink, Link2, Loader2, MessagesSquare, RefreshCw, Sparkles } from "lucide-react"
 import { buildYouTubeCommentUrl } from "../services/youtube/commentHandoff"
 import { SubToolbox, SubToolboxGridActionButton } from "./Toolbox"
 import { StudioButton, StudioSquareIconButton, StudioSplitLeftButton, StudioTextArea } from "../studio-ui"
@@ -58,8 +58,8 @@ export const CommentResponder: React.FC = () => {
      <StudioButton type="button" aria-pressed={comments.tab === "history"} tone={comments.tab === "history" ? "accent" : "neutral"} onClick={() => comments.setTab("history")}>Old / Replied · {comments.tab === "history" ? comments.displayThreads.length : ""}</StudioButton>
     </div>
     <div role="group" aria-label="Previous and next comments" className="grid min-w-0 flex-1 grid-cols-2 gap-1">
-     <StudioSplitLeftButton type="button" aria-label="Previous comment" disabled={!context.connected || comments.currentIndex === 0} onClick={() => comments.setCurrentIndex(Math.max(0, comments.currentIndex - 1))}>Previous</StudioSplitLeftButton>
-     <StudioSplitLeftButton type="button" aria-label="Next comment" disabled={!context.connected || comments.currentIndex >= comments.displayThreads.length - 1} onClick={() => comments.setCurrentIndex(Math.min(comments.displayThreads.length - 1, comments.currentIndex + 1))}>Next</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<ChevronLeft size={16} />} aria-label="Previous comment" disabled={!context.connected || comments.currentIndex === 0} onClick={() => comments.setCurrentIndex(Math.max(0, comments.currentIndex - 1))}>Previous</StudioSplitLeftButton>
+     <StudioSplitLeftButton type="button" icon={<ChevronRight size={16} />} aria-label="Next comment" disabled={!context.connected || comments.currentIndex >= comments.displayThreads.length - 1} onClick={() => comments.setCurrentIndex(Math.min(comments.displayThreads.length - 1, comments.currentIndex + 1))}>Next</StudioSplitLeftButton>
     </div>
     <StudioSquareIconButton type="button" label={context.connected ? "Refresh comments" : "Connect YouTube channel"} icon={context.connected ? <RefreshCw size={17} className={comments.loading ? "animate-spin" : ""} /> : <Link2 size={17} />} onClick={context.connected ? comments.refresh : comments.reconnect} disabled={context.connected && comments.loading} tone="accent" animate />
    </div>
