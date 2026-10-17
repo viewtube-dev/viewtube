@@ -2,41 +2,29 @@
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Work type:** source/runtime integration; no unrelated UI/CSS redesign.
+**Scope:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-IMPLEMENT as a scenario/planning capability inside Creator Strategy Engine or Revenue Architect first; promote to a separate tool only if the model has independently testable value.
+IMPLEMENT as a scenario capability inside Creator Strategy Engine or Revenue Architect first; separate tool only if independently testable value is proven.
 
 ## Core transformation
 Current channel state + explicit assumptions → scenario ranges and sensitivities
 
-## Required repository investigation
-Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
-
-## Existing implementation to inspect and reuse
+## Inspect and reuse
 - `src/services/channelPlanningIntelligence.ts`
 - `src/services/projectPlanningIntelligence.ts`
 - `src/services/analytics-canon/contracts.ts`
 - `src/services/brain/BrainEvidenceContract.ts`
 
-## Tool-specific implementation requirements
-Inspect existing channel planning, forecasts, analytics metrics, and monetization scenarios. Prefer transparent ranges/sensitivity analysis over point predictions. Each scenario must store assumptions, input window, data sufficiency, model/version, uncertainty, and scenario comparison. No guaranteed outcome language or fabricated inputs. Reuse canonical project and strategy decisions; test calibration/backtesting where historical data permits before presenting estimates as forecasts.
+## Tool-specific requirements
+Inspect existing planning, forecast, analytics and monetization scenarios. Prefer ranges/sensitivity analysis to point predictions. Store assumptions, input window, data sufficiency, model/version, uncertainty and comparison. No guarantees or fabricated inputs. Reuse canonical project/strategy decisions; backtest when historical data permits before calling outputs forecasts.
 
-## Shared implementation rules
-1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
-2. Treat the proposed disposition above as the starting hypothesis. If source evidence proves a better combine/merge/build decision, document the evidence and update the decision before implementing.
-3. Trace every handoff producer and receiver. Verify payload schema, source evidence/provenance, project/content-build identity, workflow/operation/idempotency identity, destination compatibility, and approval requirements. Registry presence alone does not prove an end-to-end handoff works.
-4. Keep observations, interpretations, predictions, and validated findings distinct. Preserve source snapshot/window, confidence scale, missingness, uncertainty, and compatibility for existing persisted records. Never invent evidence or imply causality/forecast certainty unsupported by data.
-5. Follow test-driven development: add or update focused regression tests before behavior changes; test success, missing/partial data, legacy records, invalid payloads, and safety/approval boundaries as applicable. Then run focused tests, typecheck, relevant integration tests, full test suite, and production build if the environment allows. Report commands and actual results; never claim unrun checks passed.
-6. Remove duplicate/obsolete code only after searching all consumers and proving replacement parity with tests. Avoid mass renames and unrelated refactors.
-7. Update the canonical tool inventory/mapping and this tool’s acceptance notes so planned vs implemented vs verified status stays honest.
+## Execution contract
+Inspect live branch files, callers, consumers, tests, registries, routes and persistence before editing. Confirm the smallest viable implementation, then implement it; do not stop at an audit. Treat the disposition above as a hypothesis and revise it only with source evidence. Reuse canonical contracts, IDs, service/controller logic and persistence owners. Do not create parallel registries/stores/domain models or a competing page without proving the need.
 
-## Deliverables
-- A working implementation or a clearly evidenced blocker with the remaining code-level steps (not just recommendations).
-- Focused regression tests for the primary transformation and at least one failure/uncertainty boundary.
-- Explicit mapping to canonical upstream inputs and downstream handoffs.
-- Updated docs only where they are the authoritative source; no duplicate planning files.
-- A concise completion report listing files changed, integration choice, tests run/passed/blocked, and known limitations.
+Trace producer and receiver compatibility, payload schema, evidence/provenance, project/content-build identity, workflow/operation/idempotency identity, destination compatibility and approval requirements. Registry presence alone does not prove an end-to-end handoff. Keep observation, interpretation, prediction and validated findings distinct; preserve uncertainty, missingness, source window and confidence scale.
 
-## Definition of done
-The tool performs its primary transformation using real canonical inputs, returns inspectable structured outputs with provenance, persists through the correct existing owner, hands off a compatible packet to the next tool, respects user approvals, and has automated regression coverage. If any of these are not possible with available source data, the implementation must expose the limitation rather than simulate success.
+Use test-driven development: add focused regression coverage before behavior changes, including partial/missing data, legacy records, invalid payloads and approval boundaries as relevant. Run focused tests, typecheck, relevant integration tests, full suite and build if the environment allows. Report actual commands/results; never claim unrun checks passed. Remove obsolete code only after consumer search and tested replacement parity. Update the authoritative inventory/mapping without creating duplicate planning docs.
+
+## Deliverables and acceptance
+Deliver working behavior (or a precisely evidenced blocker), focused regression tests, explicit upstream/downstream mapping, canonical persistence and compatible handoffs, and a concise changed-files/test-status report. Done means real canonical inputs produce inspectable outputs with provenance, correct persistence, compatible handoff and approval safety. If evidence/data is unavailable, expose the limitation rather than simulating success.
