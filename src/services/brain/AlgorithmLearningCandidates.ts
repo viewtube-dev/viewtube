@@ -58,7 +58,7 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
   const decisive = positives + negatives
   const positiveRate = decisive ? positives / decisive : 0
   const sampleSize = results.length
-  const status = sampleSize >= 3 && positiveRate >= .67 ? "candidate" as const : "insufficient_evidence" as const
+  const status = decisive >= 3 && positiveRate >= .67 ? "candidate" as const : "insufficient_evidence" as const
   const category = categoryFor(rows[0])
   const label = rows[0].primingStepId || rows[0].recommendationId || rows[0].sourceId || key
   return {
@@ -68,7 +68,7 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
    statement: status === "candidate"
     ? `${label} has produced positive measured outcomes in ${positives}/${decisive || sampleSize} decisive evaluations.`
     : `${label} does not yet have enough repeated measured evidence for durable channel learning.`,
-   confidence: confidenceFor(sampleSize, positiveRate),
+   confidence: confidenceFor(decisive, positiveRate),
    sourceEventIds: rows.map((row) => row.id),
    evidenceIds: [...new Set(rows.flatMap((row) => row.evidenceIds))],
    sampleSize,
