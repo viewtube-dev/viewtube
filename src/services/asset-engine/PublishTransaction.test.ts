@@ -200,6 +200,11 @@ describe("PublishTransaction",()=>{
   expect(()=>beginPublishTransaction(projection())).toThrow(/ContentBuild stage "idea" does not allow capability publish/)
  })
 
+ it("fails closed for an unrecognized ContentBuild stage at the publication boundary",()=>{
+  updateContentBuild("cb-publish",current=>({...current,stage:"future-stage" as never}))
+  expect(()=>beginPublishTransaction(projection())).toThrow(/does not allow capability publish.*cb-publish/i)
+ })
+
  it("rejects publication when the canonical ContentBuild has unresolved blockers",()=>{
   updateContentBuild("cb-publish",current=>({...current,workflow:{...current.workflow,blockerIds:["asset-review-required"]}}))
   expect(()=>beginPublishTransaction(projection())).toThrow(/blockers preventing publication: asset-review-required/)
