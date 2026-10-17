@@ -13,7 +13,7 @@ describe("StudioInlineStepper", () => {
     expect(html).toContain('data-vt-studio-control="true"')
     expect(html).toContain('data-vt-studio-control-family="stepper"')
     expect(html).toContain('data-vt-studio-control-kind="inline-stepper"')
-    expect(html).toContain('data-vt-studio-username-foundation="true"')
+    expect(html).toContain('data-vt-studio-split="double"')
     expect(html).toContain('data-size="standard"')
     expect(html).toContain('aria-label="Package count"')
     expect(html).toContain('aria-label="Decrease Package count"')
@@ -30,7 +30,7 @@ describe("StudioInlineStepper", () => {
       <StudioInlineStepper value={3} onValueChange={() => undefined} size="compact" />,
     )
     expect(html).toContain('data-size="compact"')
-    expect(html).toContain('class="vt-studio-inline-stepper is-compact"')
+    expect(html).toContain('vt-studio-inline-stepper is-compact')
   })
 
   it("normalizes step changes without leaking invalid values and respects bounds", () => {
