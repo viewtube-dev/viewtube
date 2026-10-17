@@ -38,9 +38,10 @@ test("standalone text inputs provide standard, compact, and disabled specimens",
   assert.match(catalog, /28px compact · disabled[\s\S]*?sizeVariant="compact"[^>]*disabled/);
 });
 
-test("global defaults distinguish the measured focus shadow from the CSS outline", () => {
-  assert.match(controls, /visible focus accent at 0px offset[\s\S]*?computed CSS outline itself measured 1px/);
-  assert.match(catalog, /Focus measurement note:[\s\S]*?These are separate layers/);
+test("global defaults distinguish the secondary focus outline from field text stroke", () => {
+  assert.match(controls, /focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline/);
+  assert.match(controlStyles, /outline: var\(--vt-field-outline-stroke\) solid var\(--vt-field-secondary\)/);
+  assert.doesNotMatch(controls, /computed CSS outline itself measured 1px/);
 });
 
 test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
@@ -51,7 +52,7 @@ test("floating labels use balanced box spacing, 40% border alignment, and 80% fl
   assert.match(fieldCss, /translateY\(-40%\)/);
   assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
   assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-floating-label-size-compact\)/);
-  assert.match(fieldCss, /transition:[^;]*font-size/);
+  assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field-label\s*\{[^}]*transition:/s);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
@@ -76,20 +77,20 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
 test("non-default settings explain the real public props in plain language", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
   assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
-  assert.ok(catalog.includes("Floating labels match normal input text size in the field area, then smoothly shrink to 80% in the raised label box; the black field border crosses the box at 40% of its height. Labels remain associated with their native input."));
+  assert.ok(catalog.includes("Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors."));
   assert.ok(catalog.includes("Circle icons use 80% of the default large preset: 30.4px/1.9 stroke standard and 19.2px/2.0 compact; current and moderate presets remain opt-in."));
   assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
 
-test("button shadows stay on the stationary outer control while the face moves", () => {
+test("canonical Studio buttons have no default shell shadow or press movement", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*box-shadow:\s*none/);
-  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][\s\S]*?box-shadow:\s*3px 3px 0/);
-  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][\s\S]*?box-shadow:\s*none/);
+  assert.doesNotMatch(fieldCss, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*background:\s*var\(--vt-studio-control-shadow-color/);
+  assert.doesNotMatch(fieldCss, /button\[data-vt-studio-button="true"\]:active:not\(:disabled\) > \[data-vt-studio-button-face\][^\n]*transform:\s*translate/);
+  assert.doesNotMatch(fieldCss, /--vt-studio-control-shadow-x|--vt-studio-control-shadow-y/);
+  assert.match(fieldCss, /button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-button-face\][^}]*border:\s*var\(--vt-studio-control-stroke\) solid #000/);
+  assert.match(fieldCss, /button\[data-vt-studio-control="true"\]\[data-vt-studio-action-button="true"\][\s\S]*?min-height:\s*56px/);
 });
 
 test("split-left buttons do not clip the stationary shadow or expose a wrapper border", () => {
@@ -111,13 +112,14 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
   assert.match(tokens, /standard:\s*\{[^}]*fontSize:\s*38/);
   assert.match(tokens, /compact:\s*\{[^}]*fontSize:\s*24/);
-  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*38,\s*compactFontSize:\s*24/);
+  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize,\s*compactFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
+  assert.match(tokens, /inlineStrokeWidth: "same as border width"/);
   assert.match(css, /--vt-studio-text-input-standard-font-size:\s*var\(--vt-studio-44-font-size,\s*38px\);\s*--vt-studio-text-input-compact-font-size:\s*var\(--vt-studio-28-font-size,\s*24px\)/);
   assert.match(tokens, /multiline:\s*\{\s*minHeight:\s*92,\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\s*\{\s*font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*38px\) !important/);
-  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\s*\{\s*font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*24px\) !important/);
-  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\) !important/);
-  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\[data-size="compact"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\) !important/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="standard"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\s*\{\s*font-size:\s*var\(--vt-studio-text-input-standard-font-size,\s*38px\);/);
+  assert.match(css, /input\[data-vt-studio-control="true"\]\[data-size="compact"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\s*\{\s*font-size:\s*var\(--vt-studio-text-input-compact-font-size,\s*24px\);/);
+  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\);/);
+  assert.match(css, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]\[data-size="compact"\]\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\);/);
   assert.ok(controls.includes('standardInputFontSize: "38px"'));
   assert.ok(controls.includes('compactInputFontSize: "24px"'));
   assert.ok(inputModule.includes("StudioTextInput"));
@@ -185,20 +187,16 @@ test("word toggle library has three skins, one standard toggle per row, and cent
   assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variant > small\s*\{[\s\S]*?text-align:\s*center/);
 });
 
-test("compact Studio button shadow and typography tokens match the effective control CSS", () => {
+test("canonical Studio button tokens and CSS agree on flat stationary defaults", () => {
   const css = readFileSync("src/styles/studio-control-system.css", "utf8");
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
-  assert.match(css, /button\[data-vt-studio-button="true"\]::before\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*transform:\s*translate\(var\(--vt-studio-control-shadow-x/);
-  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1\.5px;[^}]*--vt-studio-control-shadow-y:\s*1\.5px/);
-  assert.doesNotMatch(css, /button\[data-vt-studio-button="true"\]\[data-size="compact"\]\s*\{[^}]*--vt-studio-control-shadow-x:\s*1px;[^}]*--vt-studio-control-shadow-y:\s*1px/);
+  assert.doesNotMatch(css, /--vt-studio-control-shadow-x|--vt-studio-control-shadow-y|--vt-studio-motion-button|--vt-studio-motion-press/);
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
-  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*1\.5, buttonShadowY:\s*1\.5/);
-  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*0, buttonShadowY:\s*0/);
+  assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02, lineHeight:\s*0\.86[^}]*buttonShadowX:\s*0, buttonShadowY:\s*0/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
-  assert.match(css, /--vt-studio-motion-button:\s*180ms;\s*--vt-studio-motion-press:\s*80ms/);
-  assert.match(tokens, /standard: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
-  assert.match(tokens, /compact: \{[^}]*hoverTransitionMs: 180[^}]*clickTransitionMs: 80/);
-  assert.doesNotMatch(css, /var\(--vt-studio-motion-button,\s*150ms\)|var\(--vt-studio-motion-press,\s*300ms\)/);
+  assert.match(css, /--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1\.9;/);
+  assert.match(css, /--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2\.0;/);
 });
 
 test("confirmed library describes the actual default icon preset and component-specific geometry", () => {
@@ -208,9 +206,9 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(controls, /iconSizeVariant = "large"/);
   assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
   assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
-  assert.match(catalog, /1\.5px compact button shadow/);
+  assert.match(catalog, /default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
   assert.match(catalog, /Icon metrics:<\/b> button-family icons default to the large production preset/);
-  assert.match(catalog, /rectangular 44px switches and rectangular radios use reference-specific 7\.333px radii/);
+  assert.match(controls, /Switch\/choice geometry.*7\.333px radii/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(tokens, /compact: \{[^}]*letterSpacing:\s*-0\.02/);
 });
@@ -220,11 +218,11 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact A · closed trigger and count"));
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
-  assert.match(catalog, /56px with a 3px border, 6px radius, and 3px offset shadow[\s\S]*?hover translates the outer action by 1\.5px[\s\S]*?active translates it by 3px while suppressing the shadow/);
+  assert.ok(catalog.includes("StudioActionButton is a separate 56px action family; global flat-control contract removes shell shadows, transitions, and hover/press movement."));
 });
 
 test("word-toggle settings distinguish displayed words from the boolean value", () => {
-  assert.ok(catalog.includes("The first word is selected when the value is false; selecting the second word changes the value to true."));
+  assert.ok(catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
   assert.ok(catalog.includes("Custom words change the displayed labels, not the boolean state contract."));
 });
 
@@ -234,13 +232,13 @@ test("icon-effect examples are clearly static previews, not live outcome claims"
   const squareFamily = catalog.slice(squareStart, splitStart);
   assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
   assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
-  assert.ok(squareFamily.includes("notification accepts a real count/status; success must only be set after the operation succeeds."));
+  assert.ok(squareFamily.includes("notification needs a real count/status and success must follow actual operation success."));
   assert.ok(!squareFamily.includes("SUCCESS · CONFIRMED OUTCOME"));
 });
 
 test("global defaults use a compact collapsed panel with an explicit expand affordance", () => {
   assert.ok(catalog.includes('className="vt-confirmed-defaults-details"'));
-  assert.ok(catalog.includes("Show full defaults and exceptions"));
+  assert.ok(catalog.includes("Show current defaults, effective CSS behavior, and exceptions"));
   assert.match(styles, /\.vt-confirmed-defaults-details\s*\{/);
 });
 
@@ -298,9 +296,10 @@ test("alphabetical tag colors interpolate continuously between canonical palette
   assert.match(palette, /interpolateSpectrumColor\(resolveAlphabeticalSpectrumPosition\(label\)\)/);
 });
 
-test("44px checkmark and X checkboxes use the canonical 6px corner radius", () => {
-  assert.match(controlStyles, /\.vt-studio-44-choice\.is-checkbox\.is-rect\s*\{[^}]*border-radius:\s*var\(--vt-studio-44-radius,\s*6px\)\s*!important/s);
-  assert.match(catalog, /checkmark and X checkboxes use the standard 6px radius/);
+test("44px switch/choice controls use the registered rectangular reference radius", () => {
+  assert.match(controlStyles, /button\.vt-studio-44-choice\.is-rect\s*\{[^}]*border-radius:\s*7\.333px/s);
+  assert.ok(catalog.includes("CHECKMARK CHECKBOX"));
+  assert.ok(catalog.includes("WIDE-X CHECKBOX"));
 });
 
 

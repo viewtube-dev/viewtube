@@ -1105,32 +1105,20 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 }
 
 /* 3. Canonical Studio buttons: only standard 44px and compact 28px. */
-/* Canonical tactile motion tokens: 180ms general transition, 80ms press. */
-:root { --vt-studio-motion-button: 180ms; --vt-studio-motion-press: 80ms; }
-button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:100%; max-width:100%; min-width:0; flex:1 1 auto; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000;  overflow:visible; transform:translate(0,0);  }
-button[data-vt-studio-button="true"]::before { content:""; position:absolute; z-index:0; inset:0; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-shadow-color);  opacity:1;  pointer-events:none; }
-/* Split-left uses one real offset shadow on its shell. A translated filled pseudo-box
-   creates a second opaque silhouette behind the badge and can mispaint in nested
-   stacking contexts, so this variant never renders the generic shadow layer. */
+button[data-vt-studio-button="true"] { appearance:none; position:relative; isolation:isolate; box-sizing:border-box; display:inline-flex; width:100%; max-width:100%; min-width:0; flex:1 1 auto; height:var(--vt-studio-control-height); min-height:var(--vt-studio-control-height); padding:0; border:0; border-radius:var(--vt-studio-control-radius); background:transparent; color:#000;  overflow:visible; transform:none;  }
+
+/* Split-left uses a shared square rail and a flexible label region; no shadow layer. */
 button[data-vt-studio-button="true"][data-split-left="true"] {
   
 }
-button[data-vt-studio-button="true"][data-split-left="true"]::before { content:none; display:none; }
-button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled) {  }
+
+
 button[data-vt-studio-button="true"][data-size="standard"] {   }
-/* Compact buttons use a single anchored 1.5px pseudo-element shadow. Never stack
-   a second native box-shadow on the compact button shell or widen its silhouette. */
+
 button[data-vt-studio-button="true"][data-size="compact"] {
   
 }
-button[data-vt-studio-button="true"][data-size="compact"]::before {
-  /* inset:0 already sizes this shadow to the button shell; explicit width:100%
-     can over-constrain absolute positioning and create a wider silhouette. */
-  width: auto;
-  height: auto;
-  filter: none;
-  
-}
+
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
 
@@ -1150,7 +1138,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   
 }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-  box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--vt-studio-space-unit, 4px);
   width: 100%; min-width: 0; min-height: 56px; height: 56px; padding: 10px 16px;
   border: 3px solid #000; border-radius: 6px;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
@@ -1159,8 +1147,8 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   text-transform: uppercase; -webkit-text-stroke: .5px currentColor;
   
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {    }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) > [data-vt-studio-action-face] { transform:none;  }
+
+
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
 @media (prefers-reduced-motion: reduce) {
@@ -1168,16 +1156,8 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {  }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:translate(0,0);  }
-/* Compact buttons may be stretched by grid/flex parents. Make the visible face
-   occupy the same inline footprint as the shell that anchors its shadow; otherwise
-   the shell shadow exposes the parent width beyond the intrinsic face (often 8px
-   per side). Icon-only and split-left variants retain their explicit geometry below. */
-/* Resolve compact button width from its intrinsic content instead of a percentage
-   width whose containing inline-flex shell is itself auto-sized. The previous
-   width:100% + flex-grow combination could shrink the visible face inside the
-   shell by its horizontal padding. Split-left and square controls keep their
-   own explicit full-width / fixed-square geometry below. */
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:1000; line-height:.86; letter-spacing:-.02em; text-transform:uppercase; -webkit-text-stroke:.5px currentColor; transform:none;  }
+/* Compact text buttons follow the global row-fill default. Icon-only controls retain their fixed square geometry. */
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
   box-sizing: border-box;
   width: 100%;
@@ -1195,15 +1175,15 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
   padding-inline: 8px;
   font-size: 24px;
 }
-button[data-vt-studio-button="true"]:hover:not(:disabled) > [data-vt-studio-button-face] {  }
-button[data-vt-studio-button="true"]:active:not(:disabled) {   }
-button[data-vt-studio-button="true"]:active:not(:disabled)::before { opacity:0;  }
-button[data-vt-studio-button="true"][data-split-left="true"]:active:not(:disabled)::before { opacity:0; }
-button[data-vt-studio-button="true"]:active:not(:disabled) > [data-vt-studio-button-face] { transform:translate(0,0);  }
+
+
+
+
+
 button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
-/* Selected faces switch to secondary, so their shadow must switch to the opposite primary color. */
-button[data-vt-studio-button="true"][data-selected="true"], button[data-vt-studio-button="true"][aria-pressed="true"] {  }
+/* Selected faces switch to the secondary pair without changing geometry. */
+
 button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); max-width:var(--vt-studio-control-height); aspect-ratio:1 / 1; flex:0 0 var(--vt-studio-control-height); }
 button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { box-sizing:border-box; width:100%; min-width:100%; max-width:100%; height:100%; padding:0; flex:0 0 100%; }
@@ -1556,8 +1536,9 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   
 }
 .vt-studio-spectrum-tag.is-selected {
-  transform: translateY(-1px);
-  
+  background: var(--vt-spectrum-tag-color);
+  color: #000;
+  transform: none;
 }
 .vt-studio-spectrum-tag:focus-visible {
   outline: 2px solid #000;
@@ -1566,8 +1547,8 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   z-index: 2;
 }
 @media (prefers-reduced-motion: reduce) {
-  .vt-studio-spectrum-tag {  }
-  .vt-studio-spectrum-tag.is-selected { transform: none; }
+  .vt-studio-spectrum-tag,
+  .vt-studio-spectrum-tag.is-selected { animation: none; transition: none; transform: none; }
 }
 
 
