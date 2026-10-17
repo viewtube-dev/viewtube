@@ -30,6 +30,8 @@ describe("Studio control global contract", () => {
     const controls = read("src/studio-ui/primitives/StudioControls.tsx");
     expect(controls.indexOf('import "../../styles/studio-control-system.css"')).toBeLessThan(controls.indexOf('import "../../styles/studio-library-audit-fixes.css"'));
     expect(controls).toContain('import "../../styles/studio-library-audit-fixes.css"');
+    const catalog = read("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx");
+    expect(catalog.indexOf('import "./studio-hub-primitive-catalogs.css"')).toBeLessThan(catalog.indexOf('import "../../styles/studio-library-audit-fixes.css"'));
   });
   it("keeps split rail glyphs black and vertically centers split labels", () => {
     const css = read("src/styles/studio-library-audit-fixes.css");
