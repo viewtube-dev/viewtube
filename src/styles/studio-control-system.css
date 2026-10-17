@@ -1242,7 +1242,7 @@ button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; 
 button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] { display:grid; box-sizing:border-box; grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr); align-items:stretch; justify-content:stretch; padding:0; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); overflow:hidden; text-align:left; }
 button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] { box-sizing:border-box; display:grid; place-items:center; align-self:stretch; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); height:100%; border-right:var(--vt-studio-control-stroke) solid #000; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] > svg { display:block; width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); min-width:var(--vt-studio-control-icon-size,28px); min-height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
-button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] { display:flex; align-items:center; min-width:0; height:100%; padding-inline:10px; overflow:hidden; color:#000; font:inherit; letter-spacing:inherit; text-align:left; text-overflow:ellipsis; white-space:nowrap; -webkit-text-stroke:inherit; }
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] { display:flex; align-items:center; justify-content:center; min-width:0; height:100%; padding-inline:10px; overflow:hidden; color:#000; font:inherit; letter-spacing:inherit; text-align:center; text-overflow:ellipsis; white-space:nowrap; -webkit-text-stroke:inherit; }
 button[data-vt-studio-button="true"][data-size="compact"][data-split-left="true"] [data-vt-studio-split-label] { padding-inline:8px; }
 button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
@@ -1770,12 +1770,13 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   align-items: center;
   gap: 6px;
   width: max-content;
-  height: 20px;
-  padding: 0 2px 0 8px;
-  border-radius: 999px;
-  background: var(--vt-badge-primary);
-  color: var(--vt-badge-text);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  height: var(--vt-studio-control-height, 44px);
+  padding: 0 4px;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-primary, var(--pair-a, #36e0f6));
+  color: #000;
+  font: 1000 var(--vt-studio-control-font-size, 38px)/.86 Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1792,10 +1793,11 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 }
 .vt-studio-closeable-badge__label {
   display: inline-block;
-  color: var(--vt-badge-text);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: .02em;
+  color: #000;
+  font: 1000 var(--vt-studio-control-font-size, 38px)/.86 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.02em;
   text-transform: uppercase;
+  text-align: center;
 }
 .vt-studio-closeable-badge__close {
   box-sizing: border-box;
@@ -3543,4 +3545,355 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
 }
 .vt-studio-double-split-badge__face > :last-child {
   border-inline-start: 0;
+}
+
+
+/* Canonical primitive + text-field token contract (2026-10-17).
+   Badges, buttons, text inputs, and split variants share the same size lattice.
+   No badge uses a pill/aspect-ratio exception; only circular icon controls remain circular. */
+:where(.vt-studio-closeable-badge, .vt-studio-split-left-badge, .vt-studio-split-right-badge, .vt-studio-double-split-badge, [data-vt-studio-badge="true"]) {
+  --vt-studio-primary: var(--pair-a, #36e0f6);
+  --vt-studio-secondary: var(--pair-b, #ff7f6b);
+  box-sizing: border-box;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  text-align: center;
+}
+:where(.vt-studio-closeable-badge, .vt-studio-split-left-badge, .vt-studio-split-right-badge, .vt-studio-double-split-badge)[data-size="standard"],
+.vt-studio-closeable-badge:not([data-size]),
+[data-vt-studio-badge="true"]:not([data-size]) {
+  --vt-studio-control-height: 44px;
+  --vt-studio-control-stroke: 3px;
+  --vt-studio-control-radius: 6px;
+  --vt-studio-control-font-size: 38px;
+  --vt-studio-control-icon-size: 38px;
+  --vt-studio-control-icon-stroke: 1.9;
+}
+:where(.vt-studio-closeable-badge, .vt-studio-split-left-badge, .vt-studio-split-right-badge, .vt-studio-double-split-badge)[data-size="compact"],
+.vt-studio-closeable-badge[data-size="compact"] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-icon-stroke: 2;
+}
+:where(.vt-studio-closeable-badge, .vt-studio-split-left-badge, .vt-studio-split-right-badge, .vt-studio-double-split-badge)[data-size="micro"] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-icon-stroke: 1.5;
+}
+.vt-studio-closeable-badge {
+  display: inline-flex;
+  align-items: center;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-primary, var(--pair-a, #36e0f6));
+  color: #000;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  line-height: .86;
+  font-weight: 1000;
+  letter-spacing: -.02em;
+  padding-inline: 4px;
+}
+.vt-studio-closeable-badge__label {
+  color: #000;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-align: center;
+}
+.vt-studio-closeable-badge__close {
+  width: var(--vt-studio-control-icon-size, 38px);
+  min-width: var(--vt-studio-control-icon-size, 38px);
+  height: var(--vt-studio-control-icon-size, 38px);
+  flex-basis: var(--vt-studio-control-icon-size, 38px);
+  border-radius: 50%;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-closeable-badge__close svg {
+  width: calc(var(--vt-studio-control-icon-size, 38px) * .55);
+  height: calc(var(--vt-studio-control-icon-size, 38px) * .55);
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  text-align: center;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail {
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  min-height: var(--vt-studio-control-height, 44px);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border-width: var(--vt-studio-control-stroke, 3px);
+}
+.vt-studio-split-left-badge__rail > svg,
+.vt-studio-split-right-badge__rail > svg,
+.vt-studio-double-split-badge__rail > svg {
+  width: var(--vt-studio-control-icon-size, 38px);
+  height: var(--vt-studio-control-icon-size, 38px);
+  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
+}
+.vt-studio-split-left-badge__face > :first-child,
+.vt-studio-split-right-badge__face > :last-child {
+  border-inline-start: 0;
+}
+.vt-studio-double-split-badge__face > :first-child {
+  border-inline-end: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-double-split-badge__face > :last-child {
+  border-inline-start: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+
+/* Text-input-only rules: left-aligned, vertically centered text; primary text/fill
+   and a primary inline stroke in the default state. Focus uses 15% primary fill,
+   black text, and a full-opacity secondary outline at 65% of the border width. */
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
+  text-align: left;
+  align-content: center;
+  padding-block: 0;
+  -webkit-text-stroke: var(--vt-studio-control-stroke, 3px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])):is(:focus, :focus-visible) {
+  -webkit-text-stroke: var(--vt-studio-control-stroke, 3px) #000;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+[data-vt-studio-control="true"]:is(textarea) {
+  text-align: left;
+  vertical-align: top;
+  -webkit-text-stroke: var(--vt-studio-textarea-text-stroke, .5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+[data-vt-studio-control="true"]:is(textarea):is(:focus, :focus-visible) {
+  -webkit-text-stroke: var(--vt-studio-textarea-text-stroke, .5px) #000;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+
+
+/* Final alignment pass: button faces and split labels obey the same global palette and centering contract. */
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+  box-sizing: border-box;
+  border-width: var(--vt-studio-control-stroke, 3px);
+  border-color: #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-primary, var(--pair-a, #36e0f6));
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  text-align: center;
+}
+button[data-vt-studio-button="true"][data-size="compact"] > [data-vt-studio-button-face] {
+  --vt-studio-control-height: 28px;
+  --vt-studio-control-stroke: 2px;
+  --vt-studio-control-radius: 4px;
+  --vt-studio-control-font-size: 24px;
+  --vt-studio-control-icon-size: 24px;
+  --vt-studio-control-icon-stroke: 2;
+}
+button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button-face] {
+  --vt-studio-control-height: 14px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-icon-size: 10px;
+  --vt-studio-control-icon-stroke: 1.5;
+}
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] {
+  justify-content: center;
+  text-align: center;
+}
+button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+}
+
+
+/* Global fixed-ratio contract: only the explicitly named face geometry is fixed;
+   the control's outer row can still expand to the available width. */
+:where(
+  [data-vt-studio-split-badge],
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail,
+  button[data-vt-studio-icon-button="true"],
+  button[data-vt-studio-circle-icon-button="true"],
+  .vt-studio-closeable-badge__close
+) {
+  box-sizing: border-box;
+}
+:where(
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail,
+  button[data-vt-studio-icon-button="true"] > [data-vt-studio-button-face]
+) {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
+  padding: 0;
+}
+:where(
+  .vt-studio-split-left-badge__rail,
+  .vt-studio-split-right-badge__rail,
+  .vt-studio-double-split-badge__rail
+) {
+  background: var(--vt-studio-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+:where(
+  .vt-studio-split-left-badge__rail > svg,
+  .vt-studio-split-right-badge__rail > svg,
+  .vt-studio-double-split-badge__rail > svg,
+  button[data-vt-studio-icon-button="true"] > [data-vt-studio-button-face] svg
+) {
+  width: var(--vt-studio-control-icon-size, 38px);
+  height: var(--vt-studio-control-icon-size, 38px);
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: auto;
+}
+:where(
+  .vt-studio-closeable-badge,
+  .vt-studio-split-left-badge,
+  .vt-studio-split-right-badge,
+  .vt-studio-double-split-badge,
+  [data-vt-studio-badge="true"]
+) {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000 !important;
+  font-synthesis: none;
+  text-align: center;
+}
+:where(
+  .vt-studio-closeable-badge__label,
+  .vt-studio-split-left-badge__label,
+  .vt-studio-split-right-badge__label,
+  .vt-studio-double-split-badge__label
+) {
+  font-family: inherit;
+  font-weight: 1000 !important;
+  font-synthesis: none;
+  text-align: center;
+}
+:where(
+  input[data-vt-studio-control="true"][type="checkbox"],
+  input[data-vt-studio-control="true"][type="radio"],
+  button[data-vt-studio-switch="true"],
+  [data-vt-studio-switch="true"],
+  [data-vt-studio-toggle="true"]
+) {
+  flex-shrink: 0;
+}
+:where(
+  button[data-vt-studio-icon-button="true"],
+  button[data-vt-studio-circle-icon-button="true"]
+) {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
+  aspect-ratio: 1 / 1;
+  border-radius: 50% !important;
+  display: grid;
+  place-items: center;
+}
+
+
+/* Apply fixed-ratio rules to the actual canonical switch, choice, and word-toggle DOM. */
+.vt-studio-44-switch {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-self: center;
+}
+.vt-studio-44-switch .vt-studio-44-handle {
+  display: grid;
+  place-items: center;
+}
+.vt-studio-44-choice {
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.vt-studio-44-choice.is-radio {
+  border-radius: 50%;
+}
+.vt-studio-44-choice.is-checkbox {
+  border-radius: var(--vt-studio-control-radius, 6px);
+}
+.vt-studio-44-choice > svg,
+.vt-studio-44-choice > .vt-studio-44-dot {
+  display: block;
+  place-self: center;
+  margin: auto;
+}
+.vt-studio-word-toggle {
+  box-sizing: border-box;
+}
+.vt-studio-word-toggle > * {
+  box-sizing: border-box;
+}
+button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button,
+button[data-vt-studio-circle-icon-button="true"] {
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+}
+button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button > [data-vt-studio-button-face],
+button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] {
+  display: grid;
+  place-items: center;
+  margin: 0;
+}
+.vt-studio-split-left-badge__face,
+.vt-studio-split-right-badge__face,
+.vt-studio-double-split-badge__face {
+  display: flex;
+  align-items: stretch;
+}
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
+  justify-content: center;
+  text-align: center;
+  font-weight: 1000 !important;
+}
+
+
+/* Canonical split-left label centering rule: icon rail stays square; label centers in remaining flexible region. */
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-label] {
+  justify-content: center;
+  text-align: center;
 }

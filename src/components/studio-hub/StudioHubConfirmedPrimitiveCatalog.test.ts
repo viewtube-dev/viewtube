@@ -65,4 +65,38 @@ describe("confirmed Studio button primitive library", () => {
       "3px black stroke",
     ]) expect(catalog).toContain(value)
   })
+
+  it("enforces the global size, palette, badge shape, and field focus contract", () => {
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx")
+    const tokens = read("src/studio-ui/tokens.ts")
+    const css = read("src/styles/studio-control-system.css")
+    expect(controls).toContain('sizeVariant?: "standard" | "compact" | "micro"')
+    expect(controls).toContain('globalRuleException: false')
+    expect(controls).toContain('focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro"')
+    expect(tokens).toContain('textAlign: "left"')
+    expect(tokens).toContain('focusOutlineWidth: "65% of border width"')
+    expect(css).toContain("Canonical primitive + text-field token contract (2026-10-17)")
+    expect(css).toContain('height: var(--vt-studio-control-height, 44px)')
+    expect(css).toContain('border-radius: var(--vt-studio-control-radius, 6px)')
+    expect(css).toContain('text-align: left')
+    expect(css).toContain('color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent)')
+    expect(css).toContain('outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-field-secondary')
+    expect(css).not.toMatch(/\.vt-studio-closeable-badge\s*\{[^}]*height:\s*20px;[^}]*border-radius:\s*999px/s)
+  })
+
+
+  it("documents fixed-ratio control defaults and enforces heavy badge typography", () => {
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx")
+    const css = read("src/styles/studio-control-system.css")
+    for (const rule of ["fixedRatioDefaults:", "radioButtons:", "squareIconButtons:", "circleIconButtons:", "splitIconRailColor:", "badgeTypography:"]) {
+      expect(controls).toContain(rule)
+    }
+    expect(css).toContain("Global fixed-ratio contract")
+    expect(css).toContain("font-weight: 1000 !important")
+    expect(css).toContain("aspect-ratio: 1 / 1")
+    expect(css).toContain("place-items: center")
+    expect(css).toContain("Canonical split-left label centering rule")
+    expect(css).toContain("justify-content: center;")
+  })
+
 })

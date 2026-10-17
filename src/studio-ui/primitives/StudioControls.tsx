@@ -32,16 +32,18 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   },
   closeableBadge: {
     owner: "StudioCloseableBadge",
-    globalRuleException: true,
-    height: 20,
-    radius: 999,
-    fontSize: 16,
+    globalRuleException: false,
+    height: "44px standard / 28px compact / 14px micro",
+    borderWidth: "3px standard / 2px compact / 1px micro",
+    radius: "6px standard / 4px compact / 2px micro",
+    fontSize: "38px standard / 24px compact / 10px micro",
     fontWeight: 1000,
     textTransform: "uppercase",
-    textColor: "primary mixed 50% with white",
-    closeControl: "16px secondary-filled circle with primary X",
-    motion: "CSS transitions disabled by global Studio rule; no movement or shadow effects",
-    rationale: "Closeable metadata tags are intentionally dense 20px pills with a 16px circular close action, not ordinary 44px/28px controls.",
+    textColor: "#000000",
+    fill: "primary color pair",
+    closeControl: "icon follows the same size tier and uses the secondary color pair",
+    motion: "No shell movement or shadow; explicitly approved close feedback only",
+    rationale: "Closeable badges follow the same global size, border, radius, typography, and palette rules as buttons and split variants; no pill-ratio exception.",
   },
   tagEditorAction: {
     owner: "StudioTagEditor",
@@ -71,8 +73,22 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
 
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
-  splitSegmentRatio: "square-ratio by default; segment labels center against the outer perimeter bounds",
-  splitDividers: "orb1/orb2 use shared internal segment-boundary dividers, never label-owned borders",
+  splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; labels center in the remaining text region against the outer perimeter bounds",
+  fixedRatioDefaults: {
+    toggles: "1:1 square track/face geometry at the selected size tier; thumb is centered on its axis",
+    switches: "1:1 square control footprint at the selected size tier; thumb and glyph are centered",
+    checkboxes: "1:1 square face at the selected size tier; check glyph centered",
+    radioButtons: "1:1 circular face within a square 1:1 footprint; dot centered",
+    squareIconButtons: "1:1 square face at the selected size tier; size-tier icon centered",
+    circleIconButtons: "1:1 square footprint with circular face; size-tier icon centered",
+    badges: "fixed height from the global size lattice; split icon rails are 1:1 squares and centered",
+  },
+  splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
+  badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
+  splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
+  globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
+  globalTextWeight: 1000,
+  globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
 
   width: "full-row by default; data-width=content is an explicit opt-in exception",
   labelAlignment: "centered by default for all primitive labels",
@@ -82,7 +98,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   fontWeight: 1000,
   strokeColor: "#000000",
   colorPairSystem: "primary = --pair-a; secondary = --pair-b",
-  backgroundFill: "primary (--pair-a) is the default component fill; text inputs and text areas use primary at 50% opacity; solid/selected family states must be explicit",
+  backgroundFill: "buttons and badges use the global primary/secondary color pair; text inputs and text areas use primary at 50% opacity by default and 15% primary on focus",
   textColor: "text fields use primary by default and black on focus; other controls use their component contract",
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
@@ -122,7 +138,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Effects must not move primitive geometry; CSS transitions are disabled globally for Studio primitives/components. Any explicitly approved inner-icon animation must be documented and honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a visible secondary-color outline with zero offset; focus is communicated by outline, not box-shadow.",
+  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 65% of the selected border width; focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
@@ -138,7 +154,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       fill: "primary at 50% opacity",
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
-      inlineStrokeWidth: "same as global standard/compact border width",
+      inlineStrokeWidth: "same as global standard/compact/micro border width",
     },
     focusMode: {
       fill: "primary at 15% opacity",
@@ -147,9 +163,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "visible secondary-color outline: 3px standard / 2px compact",
+      focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro",
       focusOutlineOffset: "0px for both sizes",
-      outlineStrokeWidth: "uses the global focus outline width token: 3px standard / 2px compact",
+      outlineStrokeWidth: "65% of the selected border width; secondary color remains at 100% opacity",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
   },
@@ -1344,18 +1360,20 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
 }
 
 
-/** Closeable metadata pill with the shared primary/secondary pair and donor-defined motion. */
+/** Closeable metadata badge using the global Studio size and palette contract. */
 export interface StudioCloseableBadgeProps {
   label: string;
   onClose?: () => void;
   className?: string;
   entering?: boolean;
+  sizeVariant?: "standard" | "compact" | "micro";
 }
 export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   label,
   onClose,
   className,
   entering = true,
+  sizeVariant = "standard",
 }) => {
   const [swapping, setSwapping] = React.useState(false);
   const [fading, setFading] = React.useState(false);
@@ -1385,6 +1403,7 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   return (
     <span
       className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
+      data-size={sizeVariant}
       data-vt-studio-badge="true"
       data-entering={isEntering ? "true" : undefined}
       data-fading={fading ? "true" : undefined}
