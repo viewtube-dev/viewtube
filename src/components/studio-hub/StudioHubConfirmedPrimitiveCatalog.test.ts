@@ -13,8 +13,9 @@ describe("confirmed Studio button primitive library", () => {
     expect(catalog).toContain('import { StudioButton, StudioSplitLeftButton } from "../../studio-ui"')
     expect(catalog).toContain('title="StudioButton"')
     expect(catalog).toContain('title="StudioSplitLeftButton"')
-    expect(catalog).toContain('heightVariant="44"')
-    expect(catalog).toContain('heightVariant="28"')
+    expect(catalog).toContain('sizeVariant="standard"')
+    expect(catalog).toContain('sizeVariant="compact"')
+    expect(catalog).not.toContain("heightVariant=")
   })
 
   it("defines matching typography and 44px/28px production variants", () => {

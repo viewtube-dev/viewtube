@@ -23,6 +23,18 @@ test("confirmed library uses the requested four skin names without changing skin
   assert.ok(!catalog.includes('label: "5 · WHITE INDICATOR"'));
 });
 
+test("confirmed catalog CSS owns layout, not production control faces", () => {
+  const rules = [...styles.matchAll(/(^|\\n)([^{}\\n]+)\\s*\\{([^{}]*)\\}/g)];
+  const faceProperties = /(?:^|;)\\s*(?:border|border-radius|background(?:-color)?|box-shadow|font-size|font-family|font-weight|height|min-height|max-height|padding|color|text-transform|-webkit-text-stroke)\\s*:/;
+  const violations = rules
+    .map((match) => ({ selector: match[2].trim(), body: match[3] }))
+    .map(({ selector, body }) => ({ selector: selector.replace(/:not\\([^)]*\\)/g, ""), body }))
+    .filter(({ selector }) => selector.includes("vt-confirmed") && /(?:\\.vt-studio-|data-vt-studio-control|data-vt-studio-button)/.test(selector))
+    .filter(({ body }) => faceProperties.test(body))
+    .map(({ selector }) => selector);
+  assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
+});
+
 test("switch and choice skin families retain four-column rows at every viewport", () => {
   assert.match(styles, /\.vt-confirmed-control-variants\s*\{[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
   assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants\s*\{\s*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\) !important/);
@@ -79,11 +91,12 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][\s\S]*?data-size="compact"[^\n]*:is\(:focus, :focus-visible\)/);
 });
 
-test("non-default settings explain the real public props in plain language", () => {
+test("non-default settings document exceptions instead of restating the global size lattice", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
-  assert.ok(catalog.includes("Floating labels shrink to 80%; fixed labels remain raised; B variants reverse paired colors."));
-  assert.ok(catalog.includes("Circle icon buttons scale the large preset to 80%."));
-  assert.ok(catalog.includes("Search/number, input mode, autocomplete, max length, disabled/read-only behavior, and native caret are field-specific options."));
+  assert.ok(catalog.includes("Raised labels shrink to 80%; compact B reverses the paired colors."));
+  assert.ok(catalog.includes("Circular shape uses 80% of the canonical large icon preset: 30.4px / 1.9 stroke standard and 19.2px / 2.0 compact."));
+  assert.ok(!catalog.includes("Standard/compact are 44px/28px with 3px/2px strokes and 6px/4px radii"));
+  assert.ok(!catalog.includes("Search/number, input mode, autocomplete, max length, disabled/read-only behavior, and native caret are field-specific options."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
@@ -131,7 +144,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.ok(areaModule.includes("StudioTextArea"));
   assert.ok(catalog.includes("Studio Text Input · Standalone + Simple + Floating + Fixed Label"));
   assert.ok(catalog.includes("SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact"));
-  assert.match(catalog, /Studio Text Area · Standalone \+ Simple \+ Floating \+ Fixed Label[\s\S]*?Text areas keep a 92px minimum writing surface[\s\S]*?textarea-only typography is 18px standard \/ 14px compact/i);
+  assert.match(catalog, /Studio Text Area · Standalone \+ Simple \+ Floating \+ Fixed Label[\s\S]*?Multiline-only exception: 18px standard \/ 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface/i);
   assert.doesNotMatch(catalog, /Text is 18px standard and 14px compact, matching the labeled-input and textarea families/);
 });
 
@@ -224,12 +237,14 @@ test("catalog labels dropdown and action specimens according to their actual ini
   assert.ok(catalog.includes("28px compact A · closed trigger and count"));
   assert.ok(catalog.includes("28px compact B · closed trigger and count"));
   assert.ok(!catalog.includes("open menu · multiselect"));
-  assert.ok(catalog.includes("StudioActionButton is a separate 56px action family; global flat-control contract removes shell shadows, transitions, and hover/press movement."));
+  assert.ok(catalog.includes("Dedicated 56px action family with 20px label typography; it is not a third ordinary-button size."));
 });
 
-test("word-toggle settings distinguish displayed words from the boolean value", () => {
-  assert.ok(catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
-  assert.ok(catalog.includes("SOLID is default; COLOR SWAP and BLACK are alternate active-handle treatments."));
+test("word-toggle settings document alternate skins; behavior stays in the production primitive", () => {
+  assert.ok(catalog.includes("Alternate active-handle skins: COLOR SWAP and BLACK."));
+  assert.ok(!catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
+  assert.match(controls, /aria-pressed=\\{value === \\(index === 1\\)\\}/);
+  assert.match(controls, /onClick=\\{\\(\\) => onValueChange\\?\\.\\(index === 1\\)\\}/);
 });
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
