@@ -77,7 +77,7 @@ export const buildOpportunityEvidenceFromBrainPack = (input: {
 
    return {
     id: `brain-catalog:${video.id}`,
-    kind: "catalog_gap",
+    kind: "performance_candidate",
     channelId: input.channelId,
     videoId: video.id,
     entity: video.title,
@@ -184,7 +184,7 @@ export const buildOpportunityEvidenceFromCanonicalBundle = (input: {
 
   return {
    id: `canonical-catalog:${input.bundle.snapshotId}:${videoId}`,
-   kind: "catalog_gap",
+   kind: "performance_candidate",
    channelId,
    videoId,
    entity: title,
