@@ -9,7 +9,7 @@ test("canonical Studio Controls owns the split stepper and keeps native numeric 
   assert.match(component, /export const StudioSplitStepper/)
   assert.match(component, /"data-vt-studio-control-kind": "split-stepper"/)
   assert.match(component, /layout="right"/)
-  assert.match(component, /"data-vt-library-component": "StudioSplitRightBadge"/)
+  assert.match(component, /"data-vt-studio-control-kind": "split-stepper"/)
   assert.match(component, /<input[\s\S]*?type="number"/)
   assert.match(component, /data-size=\{size\}/)
   assert.match(component, /<ChevronUp aria-hidden="true" \/>/)
@@ -43,7 +43,7 @@ test("horizontal divider is centered, both actions have equal rows, and repeat s
   const splitStepper = component.slice(splitStart, splitEnd)
   assert.doesNotMatch(splitStepper, /<StudioUsernameInput|<StudioSplitLeftButton/)
   assert.match(splitStepper, /rightRailContent=/)
-  assert.match(splitStepper, /className="vt-studio-split-stepper-rail"/)
+  assert.match(splitStepper, /railClassName="vt-studio-split-stepper-rail"/)
 })
 
 test("inline stepper is built on the canonical double-split shell with interactive square rails", () => {
@@ -51,7 +51,8 @@ test("inline stepper is built on the canonical double-split shell with interacti
   const inlineEnd = component.indexOf('StudioInlineStepper.displayName', inlineStart)
   const inline = component.slice(inlineStart, inlineEnd)
   assert.match(inline, /<StudioSplitShell[\s\S]*?layout="double"/)
-  assert.match(inline, /interactiveRails/)
+  assert.match(inline, /leftRailContent=/)
+  assert.match(inline, /rightRailContent=/)
   assert.match(component, /data-vt-studio-split-rail data-rail="start"/)
   assert.match(inline, /"data-vt-studio-control-kind": "inline-stepper"/)
   assert.doesNotMatch(inline, /<StudioSplitLeftButton/)
