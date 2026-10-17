@@ -3664,11 +3664,11 @@ textarea[data-size="compact"], .vt-studio-floating-field.is-textarea[data-size="
   border-inline-start: var(--vt-studio-control-stroke, 3px) solid #000;
 }
 
-/* Text-input-only rules: right-aligned, vertically centered text; primary text/fill
+/* Text-input-only rules: left-aligned, vertically centered text; primary text/fill
    and a primary inline stroke in the default state. Focus uses 15% primary fill,
    black text, and a full-opacity secondary outline at 65% of the border width. */
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
-  text-align: right;
+  text-align: left;
   align-content: center;
   padding-block: 0;
   -webkit-text-stroke: var(--vt-studio-control-stroke, 3px) var(--vt-field-primary, var(--pair-a, #36e0f6));
