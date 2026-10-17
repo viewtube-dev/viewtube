@@ -2057,7 +2057,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
 }
-.vt-studio-inline-stepper {
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
   --vt-inline-stepper-side: var(--vt-studio-control-height, 44px);
   display: grid;
   grid-template-columns: var(--vt-inline-stepper-side) minmax(40px, 1fr) var(--vt-inline-stepper-side);
