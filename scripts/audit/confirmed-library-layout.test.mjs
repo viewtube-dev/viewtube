@@ -73,12 +73,15 @@ test("floating-label Compact B variant is explicit and only adds the scoped seco
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\][\s\S]*?data-size="compact"[^\n]*:is\(:focus, :focus-visible\)/);
 });
 
-test("non-default settings explain the real public props in plain language", () => {
+test("non-default settings list real exceptions instead of restating the global lattice", () => {
   assert.ok(catalog.includes('variant="floating-label"'));
-  assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
-  assert.ok(catalog.includes("Floating labels match normal input text size in the field area, then smoothly shrink to 80% in the raised label box; the black field border crosses the box at 40% of its height. Labels remain associated with their native input."));
-  assert.ok(catalog.includes("Circle icons use 80% of the default large preset: 30.4px/1.9 stroke standard and 19.2px/2.0 compact; current and moderate presets remain opt-in."));
-  assert.ok(catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
+  assert.ok(catalog.includes("Micro is a badge-only 14px density exception with 1px stroke and 10px type/icons; it is not a global interactive-control size."));
+  assert.ok(catalog.includes("Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface."));
+  assert.ok(catalog.includes("Dedicated 56px prominent-action exception with 20px label typography and 3px offset shadow; this is not a third ordinary-button size."));
+  assert.ok(catalog.includes("Circular shape uses 80% of the canonical large icon preset: 30.4px / 1.9 stroke standard and 19.2px / 2.0 compact."));
+  assert.ok(catalog.includes("Dense metadata exception: 15px height, spectrum-derived border/text, 35% color fill, and opt-in selected glow."));
+  assert.ok(!catalog.includes("Floating label A is the default pair-A treatment; compact floating label B reverses the paired colors and adds a zero-offset 2px secondary-color focus stroke."));
+  assert.ok(!catalog.includes("Standard 44px and compact 28px sizes consume the global Studio Controls size, stroke, radius, typography, and color-pair tokens."));
   assert.ok(!catalog.includes("overlayLabel accepts custom field context"));
 });
 
