@@ -140,7 +140,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "visible secondary-color outline: 3px standard / 2px compact"
+      focusOutlineWidth: "visible secondary-color outline: 3px standard / 2px compact",
       focusOutlineOffset: "0px for both sizes",
       outlineStrokeWidth: "computed CSS outline measured 1px in the last live audit; reconcile with declared token before visual certification",
       outlineShadowColor: "secondary",
