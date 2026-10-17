@@ -943,3 +943,14 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Current migrated PR:** [#429](https://github.com/viewtube-dev/viewtube/pull/429), targeting `master/consolidated-feature-integration`; original PR #395 is closed as superseded.
 - **CI evidence:** exact-head run #1697 failed runtime lint, combined focused contracts, and full suite; production build, local smoke, Brain quality loop, source governance, typecheck, and the dedicated operation-store test passed. See the canonical phase audit for the observed failures. Vercel commit statuses were rate-limited, so deployment is not certified.
 - **Next:** reconcile the runtime lint and integration-test failures against the target branch, implement worker execution and safe claim/idempotency coordination, configure persistent deployment storage, and verify browser/deployment behavior before merge.
+
+
+## REC-20261016-publisher-render-api-001 — Publisher API startup blocker
+
+- **Status:** BLOCKED — live API returns HTTP 502; service configuration correction requires authenticated Render dashboard access.
+- **Target:** Vdev Render Publisher service `srv-db4rukd9fdbs73amd2gg`, deployed commit `74f14ad3ca43805b617a6a354d2b3e6e6b9d134f` on `master/consolidated-feature-integration`.
+- **Verified evidence:** public dashboard renders; `/api/release` and `/api/auth-session` returned HTTP 502; Render logs showed Vite proxy `ECONNREFUSED` for `/api/auth-session` and `/api/youtube/playlists`.
+- **Cause assessment:** service start command is `npm run preview -- --host 0.0.0.0 --port $PORT`, while repository provides `npm run start:production` to start the API server and web preview together. This is the high-confidence configuration mismatch to remediate.
+- **Required action:** authenticate to Render, change the Publisher start command to `npm run start:production`, deploy manually, and verify the three API routes and startup logs.
+- **Limitations:** no production settings changed; no deployment triggered; repository test suite remains unverified because the execution environment could not resolve github.com for a clone.
+- **Artifact:** `docs/recovery/Publisher-Render-API-Startup-Blocker-2026-10-16.md`.
