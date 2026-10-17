@@ -183,6 +183,12 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
           <div className="vt-confirmed-counter-specimen"><small>28px compact</small><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact counter" /></div>
           <div className="vt-confirmed-counter-specimen"><small>14px micro</small><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro counter" /></div>
         </div>
+        <small>REVERSED PALETTE · A/B INVERTED</small>
+        <div className="vt-confirmed-counter-row-grid">
+          <div className="vt-confirmed-counter-specimen"><small>44px standard reversed</small><StudioCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard reversed counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>28px compact reversed</small><StudioCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact reversed counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>14px micro reversed</small><StudioCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro reversed counter" /></div>
+        </div>
       </div>
     </Family>
   )
@@ -213,6 +219,12 @@ const ConfirmedStudioRightCounterFamily: React.FC = () => {
           <div className="vt-confirmed-counter-specimen"><small>44px standard</small><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard right counter" /></div>
           <div className="vt-confirmed-counter-specimen"><small>28px compact</small><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact right counter" /></div>
           <div className="vt-confirmed-counter-specimen"><small>14px micro</small><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro right counter" /></div>
+        </div>
+        <small>REVERSED PALETTE · A/B INVERTED</small>
+        <div className="vt-confirmed-counter-row-grid">
+          <div className="vt-confirmed-counter-specimen"><small>44px standard reversed</small><StudioRightCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard reversed right counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>28px compact reversed</small><StudioRightCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact reversed right counter" /></div>
+          <div className="vt-confirmed-counter-specimen"><small>14px micro reversed</small><StudioRightCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro reversed right counter" /></div>
         </div>
       </div>
     </Family>
