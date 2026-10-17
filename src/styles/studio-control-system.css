@@ -2781,7 +2781,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
    Preserve visible focus via outlines rather than shadow strokes. */
 [data-vt-studio-control]:is(input, textarea, select),
 .vt-studio-inline-stepper__value,
-.vt-studio-split-stepper__value {
+.vt-studio-split-stepper-value {
   box-shadow: none !important;
   transition: background-color 150ms ease-out, color 150ms ease-out,
     border-color 150ms ease-out, outline-color 150ms ease-out !important;
@@ -2818,4 +2818,14 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
     transition: none !important;
   }
+}
+
+
+/* Stepper rail icons use a shared proportional box, not glyph-specific intrinsic sizing. */
+.vt-studio-split-stepper-rail svg {
+  width: 70%;
+  height: 70%;
+}
+.vt-studio-split-stepper:focus-within {
+  box-shadow: none !important;
 }

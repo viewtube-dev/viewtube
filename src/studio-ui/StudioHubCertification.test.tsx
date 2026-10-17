@@ -51,8 +51,8 @@ describe("Studio Hub canonical controls", () => {
     expect(css).toContain("--vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9)")
     expect(css).toContain("--vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px)")
     expect(css).toContain("--vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2.0)")
-    expect(css).toContain('[data-split-left="true"][data-icon-size-variant="current"]')
-    expect(css).toContain('[data-split-left="true"][data-icon-size-variant="moderate"]')
+    expect(css).toContain('[data-icon-size-variant="large"][data-size="standard"]')
+    expect(css).toContain('[data-icon-size-variant="moderate"]')
 
     const standard = renderToStaticMarkup(<StudioSplitLeftButton icon={<span>i</span>}>Standard</StudioSplitLeftButton>)
     const compact = renderToStaticMarkup(<StudioSplitLeftButton icon={<span>i</span>} sizeVariant="compact">Compact</StudioSplitLeftButton>)
