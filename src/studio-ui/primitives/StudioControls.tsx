@@ -1222,6 +1222,7 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   const repeatTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = React.useRef(0)
   const heldDirection = React.useRef<-1 | 1>(1)
+  const scheduleRepeatRef = React.useRef<() => void>(() => {})
 
   React.useEffect(() => { if (!inputFocused) setDraft(String(value)) }, [value, inputFocused])
 
@@ -1256,10 +1257,11 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
         return
       }
       change(heldDirection.current)
-      if ((heldDirection.current > 0 && valueRef.current < max) || (heldDirection.current < 0 && valueRef.current > min)) scheduleRepeat()
+      if ((heldDirection.current > 0 && valueRef.current < max) || (heldDirection.current < 0 && valueRef.current > min)) scheduleRepeatRef.current()
       else stopHold()
     }, delay)
   }, [change, max, min, stopHold])
+  scheduleRepeatRef.current = scheduleRepeat
 
   const beginHold = (direction: -1 | 1, event: React.PointerEvent<HTMLButtonElement>) => {
     if (disabled || !validBounds || event.button !== 0) return
