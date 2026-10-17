@@ -784,3 +784,37 @@ describe("Studio split badges, textarea strokes, and size tokens", () => {
   expect(studioTokens).not.toContain("standardFontSize: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize")
  })
 })
+
+
+describe("canonical split badge geometry and color ownership", () => {
+  it("uses one outer radius and square clipped interior fills for every split badge", () => {
+    const studioCss = source("src/styles/studio-control-system.css")
+    const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
+    expect(canonical).toContain("width: 100%;")
+    expect(canonical).toContain("overflow: hidden;")
+    expect(canonical).toContain("border-radius: 0;")
+    expect(canonical).toContain("border: 0;")
+    expect(canonical).toContain("var(--vt-studio-44-radius, 6px)")
+    expect(canonical).toContain("var(--vt-studio-28-radius, 4px)")
+    expect(canonical).toContain("var(--vt-studio-14-radius, 2px)")
+  })
+
+  it("keeps split-right secondary fill inside a fixed, token-sized rail", () => {
+    const studioCss = source("src/styles/studio-control-system.css")
+    const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
+    const railRule = canonical.match(/\.vt-studio-split-left-badge__rail,\s*\.vt-studio-split-right-badge__rail,\s*\.vt-studio-double-split-badge__rail\s*\{[^}]*\}/s)?.[0] ?? ""
+    expect(railRule).toContain("flex: 0 0 var(--vt-studio-control-height")
+    expect(railRule).toContain("overflow: hidden;")
+    expect(railRule).toContain("padding: 0;")
+    expect(canonical).toContain(".vt-studio-split-right-badge__rail { border-left:")
+  })
+
+  it("colors the double-split left rail primary and right rail secondary", () => {
+    const studioCss = source("src/styles/studio-control-system.css")
+    const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
+    expect(canonical).toContain(".vt-studio-double-split-badge__rail:first-child")
+    expect(canonical).toContain("background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));")
+    expect(canonical).toContain(".vt-studio-double-split-badge__rail:last-child")
+    expect(canonical).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));")
+  })
+})
