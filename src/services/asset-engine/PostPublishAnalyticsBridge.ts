@@ -129,7 +129,8 @@ export const recordPostPublishIdentity = (
     approvedSnapshotId: snapshot.id,
     approvedSnapshotHash: snapshot.hash,
     selectedVariantAssetIds: assetIds,
-    correlationId: input.correlationId || transaction.id,
+    correlationId: input.correlationId || transaction.operationId || transaction.id,
+    operationId: transaction.operationId || transaction.id,
     actionPacketId: input.actionPacketId || transaction.actionPacketId || null,
     workflowId: input.workflowId || transaction.workflowId || null,
     recommendationId: input.recommendationId || transaction.recommendationId || null,
@@ -152,6 +153,7 @@ export const recordPostPublishIdentity = (
   if (existingReceipt) {
     const receiptMetadata = existingReceipt.metadata as Record<string, unknown> | undefined
     const decisionIdentityPairs = [
+      ["operationId", transaction.operationId],
       ["actionPacketId", input.actionPacketId || transaction.actionPacketId],
       ["workflowId", input.workflowId || transaction.workflowId],
       ["recommendationId", input.recommendationId || transaction.recommendationId],
