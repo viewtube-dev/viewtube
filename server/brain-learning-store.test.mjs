@@ -77,6 +77,73 @@ test("learning writes reject conflicting stable identity reuse without replacing
   assert.equal(rows[0].record.traceId, "trace-original");
 });
 
+test("publication and evaluation lineage fields are immutable across stable learning-record retries", async () => {
+  const userId = "learning-test-publication-identity";
+  const channelId = "learning-channel-publication-identity";
+  const originalOutcome = {
+    recordType: "brainOutcome",
+    record: {
+      id: "outcome-publication-identity",
+      channelId,
+      sourceRecordId: "asset-outcome-1",
+      traceId: "trace-1",
+      contentBuildId: "build-1",
+      publishTransactionId: "publish-1",
+      approvedSnapshotHash: "snapshot-hash-1",
+      publishedVideoId: "video-1",
+      analyticsCheckpointIds: ["checkpoint-1"],
+      evidenceIds: ["evidence-1"],
+    },
+  };
+  await upsertPersistedBrainLearningRecords({ userId, channelId, records: [originalOutcome] });
+
+  await assert.rejects(
+    upsertPersistedBrainLearningRecords({
+      userId,
+      channelId,
+      records: [{
+        ...originalOutcome,
+        record: { ...originalOutcome.record, publishedVideoId: "video-conflict" },
+      }],
+    }),
+    /Brain learning identity conflict.*publishedVideoId/,
+  );
+
+  const originalEvaluation = {
+    recordType: "evaluation",
+    record: {
+      id: "evaluation-publication-identity",
+      channelId,
+      projectId: "project-1",
+      publishTransactionId: "publish-1",
+      contentBuildId: "build-1",
+      youtubeVideoId: "video-1",
+      approvedSnapshotId: "snapshot-1",
+      approvedSnapshotHash: "snapshot-hash-1",
+      analyticsCheckpointIds: ["checkpoint-1"],
+      evidenceIds: ["evidence-1"],
+      outcome: "pending",
+    },
+  };
+  await upsertPersistedBrainLearningRecords({ userId, channelId, records: [originalEvaluation] });
+
+  await assert.rejects(
+    upsertPersistedBrainLearningRecords({
+      userId,
+      channelId,
+      records: [{
+        ...originalEvaluation,
+        record: { ...originalEvaluation.record, approvedSnapshotHash: "snapshot-hash-conflict" },
+      }],
+    }),
+    /Brain learning identity conflict.*approvedSnapshotHash/,
+  );
+
+  const rows = await listPersistedBrainLearningRecords({ userId, channelId });
+  assert.equal(rows.find((row) => row.record.id === originalOutcome.record.id)?.record.publishedVideoId, "video-1");
+  assert.equal(rows.find((row) => row.record.id === originalEvaluation.record.id)?.record.approvedSnapshotHash, "snapshot-hash-1");
+});
+
 test("learning lifecycle updates may change outcome state while preserving stable evaluation identity", async () => {
   const userId = "learning-test-lifecycle-update";
   const channelId = "learning-channel-lifecycle-update";
