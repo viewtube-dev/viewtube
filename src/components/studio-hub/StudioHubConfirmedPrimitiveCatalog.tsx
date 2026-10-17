@@ -10,8 +10,8 @@ import {
   StudioCheckbox,
   StudioXCheckbox,
   StudioLegendMultiDropdown,
-  StudioInlineStepper,
-  StudioSplitStepper,
+  StudioCounter,
+  StudioRightCounter,
   StudioSplitLeftButton,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
@@ -161,32 +161,27 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
 const ConfirmedInlineStepperFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(22)
   const [compactValue, setCompactValue] = React.useState(3)
+  const [microValue, setMicroValue] = React.useState(7)
   return (
     <Family
-      title="Inline Stepper · 44px + 28px"
+      title="StudioCounter · Standard + Compact + Micro"
       nonDefaultSettings={[
-        "Horizontal decrement / editable value / increment composition with a 1:2:1 layout.",
-        "Distinct from the vertical-rail StudioSplitStepper.",
+        "New independent button-only counter primitive; not composed from legacy steppers.",
+        "Square decrement/increment rails with a 2:1 read-only numeric display.",
       ]}
       provenance={<Provenance
-        primitive="StudioInlineStepper"
+        primitive="StudioCounter"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="Horizontal 1:2:1 layout · global 44px/28px size lattice · shared Studio color pair and focus treatment."
+        tokens="Double-split badge foundation · 44px / 28px / 14px · square rails · 2:1 display · buttons-only value control."
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
-        <span>Standard + compact · interactive horizontal comparison</span>
         <div className="vt-confirmed-stepper-row-grid">
-          <div className="vt-confirmed-stepper-specimen">
-            <small>44px standard · horizontal</small>
-            <StudioInlineStepper value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard inline stepper" data-vt-library-component="StudioInlineStepper" />
-          </div>
-          <div className="vt-confirmed-stepper-specimen">
-            <small>28px compact · horizontal</small>
-            <StudioInlineStepper value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact inline stepper" data-vt-library-component="StudioInlineStepper" />
-          </div>
+          <div className="vt-confirmed-stepper-specimen"><small>44px standard</small><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard counter" /></div>
+          <div className="vt-confirmed-stepper-specimen"><small>28px compact</small><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact counter" /></div>
+          <div className="vt-confirmed-stepper-specimen"><small>14px micro</small><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro counter" /></div>
         </div>
       </div>
     </Family>
@@ -196,47 +191,28 @@ const ConfirmedInlineStepperFamily: React.FC = () => {
 const ConfirmedStepperFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(5)
   const [compactValue, setCompactValue] = React.useState(3)
+  const [microValue, setMicroValue] = React.useState(8)
   return (
     <Family
-      title="Split Stepper · 44px + 28px"
+      title="StudioRightCounter · Standard + Compact + Micro"
       nonDefaultSettings={[
-        "Fixed-width 2:1 value/rail geometry with two vertically stacked rail actions.",
+        "New independent button-only counter primitive; not composed from legacy steppers.",
+        "2:1 read-only numeric display and square right rail with two equal action cells.",
+        "Single chevrons and a horizontal divider between the action buttons.",
       ]}
       provenance={<Provenance
-        primitive="StudioSplitStepper"
+        primitive="StudioRightCounter"
         tsx="src/studio-ui/primitives/StudioControls.tsx"
         css="src/styles/studio-control-system.css"
-        tokens="2:1 value/rail geometry; 44px standard and 28px compact; shared Studio size tokens."
+        tokens="Split-right badge foundation · 44px / 28px / 14px · 2:1 display-to-square-rail ratio."
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-stepper-row">
-        <span>Standard + compact · interactive comparison</span>
         <div className="vt-confirmed-stepper-row-grid">
-          <div className="vt-confirmed-stepper-specimen">
-            <small>44px standard · interactive</small>
-            <StudioSplitStepper
-              value={standardValue}
-              onValueChange={setStandardValue}
-              size="standard"
-              min={0}
-              max={99}
-              ariaLabel="Standard Studio split stepper value"
-              data-vt-library-component="StudioSplitStepper"
-            />
-          </div>
-          <div className="vt-confirmed-stepper-specimen">
-            <small>28px compact · interactive</small>
-            <StudioSplitStepper
-              value={compactValue}
-              onValueChange={setCompactValue}
-              size="compact"
-              min={0}
-              max={99}
-              ariaLabel="Compact Studio split stepper value"
-              data-vt-library-component="StudioSplitStepper"
-            />
-          </div>
+          <div className="vt-confirmed-stepper-specimen"><small>44px standard</small><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={99} ariaLabel="Standard right counter" /></div>
+          <div className="vt-confirmed-stepper-specimen"><small>28px compact</small><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={99} ariaLabel="Compact right counter" /></div>
+          <div className="vt-confirmed-stepper-specimen"><small>14px micro</small><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={99} ariaLabel="Micro right counter" /></div>
         </div>
       </div>
     </Family>

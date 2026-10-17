@@ -1447,6 +1447,81 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   )
 }
 
+/** Independent button-only counter primitives. These deliberately do not compose either legacy stepper. */
+export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+}
+
+/** Three-part counter: square decrement, 2:1 display, square increment. */
+export const StudioCounter: React.FC<StudioCounterProps> = ({
+  value, onValueChange, min = -Infinity, max = Infinity, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, ...props
+}) => {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const validBounds = min <= max;
+  const current = Number.isFinite(value) ? value : 0;
+  const adjust = (direction: -1 | 1) => {
+    const precision = Math.min(12, Math.max(String(current).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
+    const next = Number((current + direction * safeStep).toFixed(precision));
+    onValueChange(Math.min(max, Math.max(min, next)));
+  };
+  return (
+    <StudioSplitShell
+      layout="double"
+      sizeVariant={size}
+      className={studioClasses("vt-studio-counter", `is-${size}`, className)}
+      railClassName="vt-studio-counter__rail"
+      leftRailContent={<button type="button" className="vt-studio-counter__button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onClick={() => adjust(-1)}><Minus aria-hidden="true" focusable="false" /></button>}
+      rightRailContent={<button type="button" className="vt-studio-counter__button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} onClick={() => adjust(1)}><Plus aria-hidden="true" focusable="false" /></button>}
+      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
+    >
+      <span className="vt-studio-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+    </StudioSplitShell>
+  );
+};
+StudioCounter.displayName = "StudioCounter";
+
+/** Right-rail counter: 2:1 display plus a square rail with two equal button cells. */
+export const StudioRightCounter: React.FC<StudioCounterProps> = ({
+  value, onValueChange, min = -Infinity, max = Infinity, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, ...props
+}) => {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const validBounds = min <= max;
+  const current = Number.isFinite(value) ? value : 0;
+  const adjust = (direction: -1 | 1) => {
+    const precision = Math.min(12, Math.max(String(current).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
+    const next = Number((current + direction * safeStep).toFixed(precision));
+    onValueChange(Math.min(max, Math.max(min, next)));
+  };
+  return (
+    <StudioSplitShell
+      layout="right"
+      sizeVariant={size}
+      className={studioClasses("vt-studio-right-counter", `is-${size}`, className)}
+      railClassName="vt-studio-right-counter__rail"
+      rightRailContent={<span className="vt-studio-right-counter__actions">
+        <button type="button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} onClick={() => adjust(1)}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onClick={() => adjust(-1)}><ChevronDown aria-hidden="true" focusable="false" /></button>
+      </span>}
+      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-right-counter", "data-vt-library-component": "StudioRightCounter" }}
+    >
+      <span className="vt-studio-right-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+    </StudioSplitShell>
+  );
+};
+StudioRightCounter.displayName = "StudioRightCounter";
+
+
 /** Closeable metadata badge using the global Studio size and palette contract. */
 export interface StudioCloseableBadgeProps {
   label: string;
