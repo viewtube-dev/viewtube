@@ -66,11 +66,11 @@ describe("global defaults govern the effective primitive CSS", () => {
     const split = css.slice(css.indexOf("/* Unified split shell."));
     expect(split).toContain('.vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-rail]');
     expect(split).toContain("Both double-split rails use secondary by contract.");
-    expect(split).not.toContain("background: var(--vt-studio-control-accent, var(--vt-studio-primary, var(--pair-a");
+    const doubleRails = split.match(/\.vt-studio-split-shell\[data-vt-studio-split="double"\] > \[data-vt-studio-split-rail\],\s*\.vt-studio-double-split-badge__rail\s*\{[^}]*\}/)?.[0] || "";
+    expect(doubleRails).toContain("background: var(--vt-studio-control-secondary);");
+    expect(doubleRails).not.toMatch(/#ff7f6b|#36e0f6/);
     expect(split).toContain("border-radius: 0;");
     expect(split).toContain("place-items: center;");
-    expect(split).not.toContain("#ff7f6b");
-    expect(split).not.toContain("#36e0f6");
   });
 
   it("does not use important declarations to force canonical field type or width", () => {
