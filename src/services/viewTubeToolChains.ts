@@ -2,6 +2,7 @@ import { createGenerationRecord, updateGenerationRecord } from "./generationStor
 import { operationRecordFromActionPacket } from "./operations/OperationRecord"
 import { ingestGenerationArtifacts } from "./vaultAdapter"
 import { enqueueBrainHandoffs } from "./brainHandoffInbox"
+import type { OpportunityTacticsPacket } from "./brain/OpportunityIntelligence"
 import {
  appendContentBuildEvent,
  attachAssetToContentBuild,
@@ -36,6 +37,7 @@ export const VIEWTUBE_TOOL_CAPABILITIES: ViewTubeToolCapability[] = [
  {id:"end-screen-architect",label:"End-Screen Architect",kind:"studio-tool",route:"/studio",accepts:["video","analysis","metadata"],produces:["metadata","script","video"],status:"ready",description:"Design next-video end-screen flows and outro copy."},
  {id:"pre-launch-priming",label:"Pre-Launch Priming",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","analysis"],produces:["tactic","metadata","project"],status:"ready",description:"Turn a prepared upload into a pre-launch execution plan."},
  {id:"hook-generator",label:"Hook Generator",kind:"studio-tool",route:"/studio",accepts:["script","video","analysis","tactic","metadata"],produces:["hook","script"],status:"ready",description:"Generate opening hooks from context, evidence and strategy."},
+ {id:"opportunity-radar",label:"Opportunity Radar",kind:"studio-tool",route:"/studio",accepts:["video","analysis","evidence"],produces:["evidence"],status:"partial",description:"Discover and rank candidates from governed evidence; the dashboard widget remains independently registered."},
  {id:"tactics-engine",label:"Tactics Engine",kind:"studio-tool",route:"/studio",accepts:["analysis","evidence","video","metadata"],produces:["tactic","project"],status:"ready",description:"Convert channel evidence and strategy into concrete creator actions."},
  {id:"project-calendar",label:"Projects + Calendar",kind:"project",route:"/projects",accepts:["script","storyboard","project","calendar-item","tactic","asset"],produces:["project","calendar-item"],status:"ready",description:"Schedule and organize production work."},
  {id:"storyboard-studio",label:"Storyboard Studio",kind:"project",route:"/storyboard-studio",accepts:["script","project","image","asset"],produces:["storyboard","image","asset"],status:"ready",description:"Turn scripts and project context into visual scene plans."},
@@ -51,6 +53,7 @@ export const VIEWTUBE_SUGGESTED_TOOL_CHAINS: ViewTubeSuggestedToolChain[] = [
  {id:"analysis-to-packaging",title:"Analysis → Metadata Master → Packaging",description:"Turn evidence about a video or channel into a coordinated publication package.",startsWith:["content-analysis","ai-brain"],steps:[{toolId:"content-analysis",purpose:"Identify evidence-backed strengths, weaknesses and opportunities"},{toolId:"metadata-master",purpose:"Turn evidence into a coherent, comparable publication package"},{toolId:"thumbnail-studio",purpose:"Create the selected visual packaging direction"},{toolId:"pre-launch-priming",purpose:"Prepare the chosen package for launch"}],outcome:"One evidence trail connects content understanding, metadata packaging, thumbnail creation and launch."},
  {id:"comment-to-content",title:"Audience Request → Content",description:"Convert useful audience demand into a planned creator project.",startsWith:["comment-responder"],steps:[{toolId:"comment-responder",purpose:"Identify a useful request or recurring audience question"},{toolId:"ai-brain",purpose:"Assess channel fit and supporting evidence"},{toolId:"project-calendar",purpose:"Create and schedule the content project"},{toolId:"storyboard-studio",purpose:"Develop the production plan",optional:true}],outcome:"A viewer request becomes a traceable content project."},
  {id:"video-to-next-video",title:"Video → Next Video Funnel",description:"Use the creator catalog and analysis to create a deliberate viewer path.",startsWith:["video-manager","content-analysis"],steps:[{toolId:"video-manager",purpose:"Choose the source video"},{toolId:"content-analysis",purpose:"Determine viewer intent and strongest related content"},{toolId:"end-screen-architect",purpose:"Design the next-video handoff and outro"},{toolId:"video-manager",purpose:"Associate the resulting end-screen plan with the video"}],outcome:"A source video gets an evidence-backed next-video path."},
+ {id:"opportunity-radar-to-tactics",title:"Opportunity Radar → Tactics Engine",description:"Turn a creator-accepted, evidence-backed opportunity into a reviewable tactic proposal without merging either tool identity.",startsWith:["opportunity-radar"],steps:[{toolId:"opportunity-radar",purpose:"Review evidence, limitations and accept or reject the candidate"},{toolId:"tactics-engine",purpose:"Prepare a tactic proposal linked to the accepted opportunity"},{toolId:"project-calendar",purpose:"Create execution work only after creator approval",optional:true}],outcome:"A traceable opportunity-to-tactic proposal with canonical evidence and approval boundaries."},
  {id:"tactic-to-experiment",title:"Tactic → Creative Experiment",description:"Turn strategic advice into something the creator can actually test.",startsWith:["tactics-engine","ai-brain"],steps:[{toolId:"tactics-engine",purpose:"Select a concrete tactic"},{toolId:"hook-generator",purpose:"Create a hook variant for the tactic",optional:true},{toolId:"thumbnail-studio",purpose:"Create a packaging variant for the tactic",optional:true},{toolId:"project-calendar",purpose:"Track the experiment and its deadline"}],outcome:"A recommendation becomes a measurable creator experiment."},
  {id:"asset-to-editor",title:"Vault Asset → Editor",description:"Send reusable creator assets directly into production.",startsWith:["vault"],steps:[{toolId:"vault",purpose:"Select the source asset"},{toolId:"video-editor",purpose:"Insert or stage the asset in the active edit"}],outcome:"A Vault asset arrives in the editor with provenance intact."},
 ]
@@ -58,6 +61,36 @@ export const getViewTubeToolCapability=(id:string)=>VIEWTUBE_TOOL_CAPABILITIES.f
 export const getCompatibleHandoffTargets=(packet:Pick<ViewTubeActionPacket,"sourceToolId"|"payloadKind">)=>VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==packet.sourceToolId&&tool.accepts.includes(packet.payloadKind))
 export const getSuggestedChainsForTool=(toolId:string)=>VIEWTUBE_SUGGESTED_TOOL_CHAINS.filter(chain=>chain.startsWith.includes(toolId)||chain.steps.some(step=>step.toolId===toolId))
 export const createViewTubeActionPacket=<T,>(input:Omit<ViewTubeActionPacket<T>,"id"|"version"|"createdAt"|"suggestedTargets"|"identityMode">&{suggestedTargets?:string[]}):ViewTubeActionPacket<T>=>{const compatible=VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==input.sourceToolId&&tool.accepts.includes(input.payloadKind)).map(tool=>tool.id);return{...input,id:crypto.randomUUID(),version:1,workflowId:input.workflowId||crypto.randomUUID(),operationId:input.operationId||crypto.randomUUID(),intent:input.intent||"prepare",approvalState:input.approvalState||"not-required",identityMode:"canonical",suggestedTargets:input.suggestedTargets||compatible,createdAt:Date.now()}}
+/** Convert an accepted Radar packet to the canonical, review-required action-packet envelope. */
+export const createOpportunityTacticsActionPacket = (
+ opportunity: OpportunityTacticsPacket,
+): ViewTubeActionPacket<OpportunityTacticsPacket> => {
+ const stableIdentity = `opportunity-tactics:${opportunity.channelId}:${opportunity.opportunityId}:${opportunity.provenance.sourceSnapshotId || "unknown-snapshot"}`
+ return createViewTubeActionPacket<OpportunityTacticsPacket>({
+  sourceToolId: "opportunity-radar",
+  sourceKind: "studio-tool",
+  payloadKind: "evidence",
+  title: `Tactics proposal: ${opportunity.entity || opportunity.opportunityId}`,
+  summary: "Accepted opportunity packet ready for Tactics Engine review; no tactic or project has been executed.",
+  payload: opportunity,
+  channelId: opportunity.channelId,
+  videoId: opportunity.videoId,
+  evidence: [...opportunity.evidenceIds],
+  provenance: [
+   `sourceOwner:${opportunity.provenance.sourceOwner || "unknown"}`,
+   `snapshot:${opportunity.provenance.sourceSnapshotId || "unknown"}`,
+   `window:${opportunity.provenance.window || "unknown"}`,
+   `datasetStatus:${opportunity.provenance.datasetStatus || "unknown"}`,
+  ],
+  suggestedTargets: ["tactics-engine"],
+  workflowId: stableIdentity,
+  operationId: stableIdentity,
+  idempotencyKey: stableIdentity,
+  intent: "propose",
+  approvalState: "pending",
+ })
+}
+
 export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>) => {
  packet = { ...packet, workflowId:packet.workflowId||`legacy:${packet.id}`, operationId:packet.operationId||`legacy:${packet.id}`, intent:packet.intent||"prepare", approvalState:packet.approvalState||"not-required", identityMode:packet.identityMode||"legacy-derived" }
  cachePacket(packet as ViewTubeActionPacket)
