@@ -2162,6 +2162,19 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   --vt-stepper-radius: var(--vt-studio-44-radius, 6px);
   --vt-inline-stepper-side: var(--vt-studio-44-height, 44px);
 }
+.vt-studio-inline-stepper[data-size="micro"] {
+  --vt-stepper-height: var(--vt-studio-14-height, 14px);
+  --vt-stepper-stroke: var(--vt-studio-14-stroke, 1px);
+  --vt-stepper-radius: var(--vt-studio-14-radius, 2px);
+  --vt-inline-stepper-side: var(--vt-studio-14-height, 14px);
+}
+.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
+  font-size: var(--vt-studio-14-font-size, 10px);
+}
+.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__rail svg {
+  width: min(var(--vt-studio-14-icon-size, 10px), 70%);
+  height: min(var(--vt-studio-14-icon-size, 10px), 70%);
+}
 .vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value {
   font-size: var(--vt-studio-28-font-size, 24px);
 }
