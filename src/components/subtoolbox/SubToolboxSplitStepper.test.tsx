@@ -42,9 +42,9 @@ describe("StudioSplitStepper", () => {
 
   it("centers the rail divider and gives both actions equal rows", () => {
     expect(css).toMatch(/\.vt-studio-split-stepper-actions\s*\{[^}]*grid-template-rows:\s*repeat\(2, minmax\(0, 1fr\)\)/s)
+    expect(css).toMatch(/\\.vt-studio-split-stepper-actions button:first-child\\s*\\{[^}]*border-bottom:\\s*var\\(--vt-stepper-stroke\\) solid #000;/s)
     expect(css).toContain(".vt-studio-split-stepper-actions button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
-    expect(css).toContain(".vt-studio-split-stepper-actions button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }")
-    expect(css).toContain(".vt-studio-split-stepper-actions button:focus-visible { outline: var(--vt-stepper-focus) solid")
+    expect(css).toMatch(/\\.vt-studio-split-stepper-actions button:focus-visible\\s*\\{[^}]*outline:\\s*var\\(--vt-stepper-focus\\) solid/s)
   })
 
   it("preserves draft editing, bounds, controlled synchronization and hold-repeat behavior", () => {
