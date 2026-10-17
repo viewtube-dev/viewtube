@@ -152,6 +152,20 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain("white-space:nowrap")
   })
 
+  it("enforces global primary/secondary palette, centered labels, 1000 weight, and full-row defaults", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    expect(css).toContain("Global Studio primitive defaults (2026-10-17)")
+    expect(css).toContain("--vt-studio-primary: var(--pair-a")
+    expect(css).toContain("--vt-studio-secondary: var(--pair-b")
+    expect(css).toContain("font-weight: 1000 !important")
+    expect(css).toContain("text-align: center")
+    expect(css).toContain('width: 100%')
+    expect(css).toContain('[data-width="content"]')
+    expect(controls).toContain('width: "full-row by default; data-width=content is an explicit opt-in exception"')
+    expect(controls).toContain('labelAlignment: "centered by default for all primitive labels"')
+  })
+
   it("documents and enforces row-fill defaults, three size tiers, and distinct field typography", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
