@@ -3,7 +3,7 @@
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
 **Reviewed:** 2026-10-17  
 **Repository:** `viewtube-dev/viewtube`  
-**Work branch:** `fix/studio-primitive-global-size-and-field-contract-2026-10-17`  
+**Work branch:** `fix/studio-unified-split-shell-2026-10-17`  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
 **Rendered reference:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
@@ -165,3 +165,28 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 
 The material below this point is retained for provenance only. Its dated findings, prior defaults, and incomplete plans do not override the definitive contract above. Where historical entries disagree with §§1–8, §§1–8 win and the implementation must be reconciled.
 
+
+
+## Unified split-shell stabilization update — 2026-10-17
+
+The split-left button, split-left/right/double badges, and username composite input use the shared `StudioSplitShell` anatomy in `src/studio-ui/primitives/StudioControls.tsx`. The shell exposes `data-vt-studio-split=left|right|double`, `data-vt-studio-split-rail` with `data-rail=start|end`, and `data-vt-studio-split-label`. Button face-only mode reuses the same rail/label markup inside `StudioButton`.
+
+### Stabilized defaults
+
+- Standard / compact / micro face geometry: 44px / 28px / 14px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
+- Inter-component gap remains 4px for all tiers; micro is half the compact geometry.
+- Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
+- Both rails in a double split use the secondary color role.
+- Text-field focus uses a secondary outline at 65% of border width and zero offset.
+- Width defaults to row fill. Content width is opt-in through `data-vt-studio-width="content"` for spectrum tags and closeable badges only.
+- The generated CSS variables are maintained by `scripts/emit-studio-control-vars.mjs`; generated output is committed at `src/styles/studio-control-vars.generated.css`.
+
+### Contract files
+
+- `src/studio-ui/tokens.ts`: size ladder, width exceptions, color roles and CSS-var projection.
+- `src/styles/studio-control-core.css`: flat geometry, size tiers and width policy.
+- `src/styles/studio-control-split.css`: shared split grid, rail and label contract.
+- `src/styles/studio-control-fields.css`: inline field stroke and focus contract.
+- `src/studio-ui/primitives/studio-control-contract.test.ts`: focused invariants for size tiers, double rails, focus treatment and exception registration.
+
+Visual verification is still required in the running app for standard/compact/micro split badges, username input, and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
