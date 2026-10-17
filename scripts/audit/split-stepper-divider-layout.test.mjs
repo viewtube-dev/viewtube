@@ -12,8 +12,8 @@ test("canonical Studio Controls owns the split stepper and keeps native numeric 
   assert.match(component, /"data-vt-library-component": "StudioSplitRightBadge"/)
   assert.match(component, /<input[\s\S]*?type="number"/)
   assert.match(component, /data-size=\{size\}/)
-  assert.match(component, /<ChevronsUp aria-hidden="true" \/>/)
-  assert.match(component, /<ChevronsDown aria-hidden="true" \/>/)
+  assert.match(component, /<ChevronUp aria-hidden="true" \/>/)
+  assert.match(component, /<ChevronDown aria-hidden="true" \/>/)
 })
 
 test("split stepper shares palette tokens and uses the canonical split-right rail", () => {
