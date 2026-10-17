@@ -29,6 +29,7 @@ test("flat-shell policy does not suppress inner field motion or inline strokes",
   const shellPolicy = system.slice(shellPolicyStart, shellPolicyEnd)
   assert.doesNotMatch(shellPolicy, /transition:\s*none\s*!important/)
   assert.doesNotMatch(shellPolicy, /\[data-vt-studio-control\]\s*\*/)
+  assert.ok(shellPolicy.includes("[data-vt-studio-control]:not(input):not(textarea):not(select)"), "field controls must be excluded from flat-shell shadow suppression")
 })
 
 test("floating labels and field feedback have transitions", () => {
