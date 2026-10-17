@@ -52,3 +52,13 @@ test("counter affordances have hold-repeat, enlarged icons, activation motion, a
   assert.match(styles, /vt-studio-counter-hold-pulse/);
   assert.match(styles, /vt-studio-right-counter__actions button:first-child \{ border-bottom: 1px solid #000; \}/);
 });
+
+test("counter palette variants are paired by size and centered, with max 100", () => {
+  assert.match(catalog, /vt-confirmed-counter-row-grid--paired/);
+  assert.match(catalog, /vt-confirmed-counter-pair/);
+  assert.doesNotMatch(catalog, /Studio(?:Right)?Counter[^>]+max=\{99\}/);
+  assert.match(styles, /justify-content:\s*center;[\s\S]*align-items:\s*flex-start;/);
+  assert.match(styles, /color-mix\(in srgb, #fff 50%, var\(--pair-a\) 50%\)/);
+  assert.match(styles, /-webkit-text-stroke:\s*1px var\(--pair-a\)/);
+  assert.match(styles, /background:\s*color-mix\(in srgb, var\(--pair-a\) 50%, transparent\)/);
+});
