@@ -48,9 +48,11 @@ export const classifyAudienceIntent = (text: string | null | undefined): { inten
 
 const targetFor = (intent: AudienceIntent, sourceKinds: AudienceFeedbackSource[]): string[] => {
   if (intent === "unknown") return []
-  const targets: string[] = []
-  if (["request", "confusion", "desire"].includes(intent)) targets.push("content-architect")
-  if (["complaint", "praise"].includes(intent)) targets.push("experiment-lab")
+  // Only name destinations registered in VIEWTUBE_TOOL_CAPABILITIES. These are
+  // advisory routes; building a signal never creates or persists a handoff.
+  const targets: string[] = ["ai-brain"]
+  if (["request", "desire"].includes(intent)) targets.push("project-calendar")
+  if (["complaint", "praise"].includes(intent)) targets.push("tactics-engine")
   if (sourceKinds.includes("comment")) targets.push("comment-responder")
   if (sourceKinds.includes("community-post")) targets.push("community-posts")
   return [...new Set(targets)]
