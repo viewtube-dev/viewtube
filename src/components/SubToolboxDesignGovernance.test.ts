@@ -731,3 +731,27 @@ describe("compact Studio button shell and face width regression", () => {
   expect(miniOverride).toContain("box-shadow:none!important;")
  })
 })
+
+
+describe("Studio control defaults stay canonical and motionless", () => {
+ it("does not retain legacy hover-offset tokens or action-button movement", () => {
+  const studioCss = source("src/styles/studio-control-system.css")
+  const studioTokens = source("src/studio-ui/tokens.ts")
+
+  expect(studioCss).not.toContain("--vt-studio-control-hover-offset")
+  expect(studioCss).not.toContain("transform: translate(1.5px, 1.5px)")
+  expect(studioCss).not.toContain("filter: brightness(.98)")
+  expect(studioTokens).toContain("const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS")
+  expect(studioTokens.match(/buttonShadowX:\s*0/g) || []).toHaveLength(1)
+ })
+
+ it("keeps the canonical Studio size lattice distinct from toolbox structural levels", () => {
+  const studioTokens = source("src/studio-ui/tokens.ts")
+  const toolboxTokens = source("src/components/subtoolbox/tokens.ts")
+
+  expect(studioTokens).toContain("standard: { height: 44, stroke: 3, radius: 6")
+  expect(studioTokens).toContain("compact: { height: 28, stroke: 2, radius: 4")
+  expect(studioTokens).toContain("micro: { height: 14, stroke: 1, radius: 2")
+  expect(toolboxTokens).toContain("l1: {\n    height: 48,")
+ })
+})
