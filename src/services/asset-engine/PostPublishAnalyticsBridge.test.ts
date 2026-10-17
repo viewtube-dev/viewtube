@@ -229,6 +229,23 @@ describe("Post-publish analytics bridge", () => {
     }))
   })
 
+  it("carries the transaction operationId into the immutable publication identity receipt", () => {
+    mocks.getPublishTransaction.mockReturnValue({ ...transaction, operationId: "operation-publish-1" })
+
+    const result = recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })
+
+    expect(result.identity.operationId).toBe("operation-publish-1")
+    expect(mocks.appendContentBuildEvent).toHaveBeenCalledWith(expect.objectContaining({
+      entityType: "publish-identity-receipt",
+      metadata: expect.objectContaining({
+        operationId: "operation-publish-1",
+      }),
+    }))
+  })
+
   it("fails closed when the completed publish transaction event cannot be resolved", () => {
     mocks.listContentBuildEvents.mockReturnValue([])
 
