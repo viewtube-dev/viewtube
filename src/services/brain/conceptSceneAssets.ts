@@ -18,11 +18,15 @@ export const generateConceptDirections = async (input: {
  context: CreatorChannelContext
  brief: Record<string, unknown>
  projectId?: string
+ contentBuildId?: string
+ contextRevision?: number
 }): Promise<AssetGenerationResult<ConceptForgeOutput>> => {
  const evidence = buildChannelAssetEvidence(input.context, conceptDirectionStrategy.evidenceClasses)
  return generateAsset<ConceptForgeOutput>({
   request: {
    channelId: input.context.channelId,
+   ...(input.contentBuildId ? { contentBuildId: input.contentBuildId } : {}),
+   ...(input.contextRevision !== undefined ? { contextRevision: input.contextRevision } : {}),
    assetType: "concept_direction",
    instruction: "Forge three distinct production-ready creative directions from this brief.",
    ...(input.projectId ? { projectId: input.projectId } : {}),
@@ -41,11 +45,15 @@ export const generateScenePlan = async (input: {
  sceneCount: number
  scriptBeats?: string[]
  projectId?: string
+ contentBuildId?: string
+ contextRevision?: number
 }): Promise<AssetGenerationResult<ScenePlanOutput>> => {
  const evidence = buildChannelAssetEvidence(input.context, scenePlanStrategy.evidenceClasses)
  return generateAsset<ScenePlanOutput>({
   request: {
    channelId: input.context.channelId,
+   ...(input.contentBuildId ? { contentBuildId: input.contentBuildId } : {}),
+   ...(input.contextRevision !== undefined ? { contextRevision: input.contextRevision } : {}),
    assetType: "scene_plan",
    instruction: "Convert the selected creative direction into an editable production scene blueprint.",
    ...(input.projectId ? { projectId: input.projectId } : {}),
