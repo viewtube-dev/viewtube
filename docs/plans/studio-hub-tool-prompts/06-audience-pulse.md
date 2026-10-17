@@ -1,23 +1,26 @@
-# Individual implementation prompt — TOOL_TITLE
+# Individual implementation prompt — Audience Pulse
 
 **Repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Work type:** source/runtime integration; no unrelated UI/CSS redesign.
 
 ## Mission
-DECISION
+MERGE audience signals, community posts, and comment response under the existing Audience Studio/community capability boundary; avoid a second audience database.
 
 ## Core transformation
-TRANSFORM
+Audience behavior/feedback → evidence-backed relationship signals and approved actions
 
 ## Required repository investigation
 Before editing, inspect the live branch versions of the existing feature, service, store, type, registry, routes, docs, tests, and consumers listed below. Search all callers and downstream readers; do not trust stale code-search excerpts. Confirm the real implementation status and data ownership. Record the smallest viable implementation path, then execute it—do not stop after an audit or a plan.
 
 ## Existing implementation to inspect and reuse
-REUSE
+- `src/features/creator-engagement`
+- `src/services/brain/BrainEvidenceContract.ts`
+- `src/services/brainHandoffInbox.ts`
+- `src/services/viewTubeToolChains.ts`
 
 ## Tool-specific implementation requirements
-INSTRUCTIONS
+Inspect existing audience/community/comment stores and controllers. Reuse source comment/post/video IDs and distinguish raw feedback, clustered signal, inferred intent, and creator-approved action. Support request, confusion, praise, complaint, desire, and relationship opportunity only where evidence supports them. Route content ideas to Opportunity Radar/Content Architect, experiments to Experiment Lab, and replies/posts through existing user-approval/external-write boundaries. Do not auto-publish or duplicate source feedback.
 
 ## Shared implementation rules
 1. Reuse canonical contracts, registries, service/controller logic, persistence owners, and existing project/video/asset IDs. Extend existing code when ownership matches; do not introduce a parallel registry, duplicate store, shadow domain model, or competing page without proving the need.
