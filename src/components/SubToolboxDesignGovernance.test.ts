@@ -763,9 +763,9 @@ describe("Studio control defaults stay canonical and motionless", () => {
 describe("Studio split badges, textarea strokes, and size tokens", () => {
  it("uses size-family radii in the final shared split-badge cascade", () => {
   const studioCss = source("src/styles/studio-control-system.css")
-  const sharedBadgeRule = studioCss.match(/\.vt-studio-split-left-badge,\s*\.vt-studio-split-right-badge,\s*\.vt-studio-double-split-badge\s*\{[^}]*\}/s)?.[0] ?? ""
+  const canonical = studioCss.slice(studioCss.lastIndexOf("Canonical split-badge geometry contract."))
 
-  expect(sharedBadgeRule).toContain("var(--vt-studio-badge-radius, var(--vt-studio-control-radius, 6px))")
+  expect(canonical).toContain("border-radius: var(--vt-studio-badge-radius, var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px)))")
   expect(studioCss).toContain('.vt-studio-split-left-badge[data-size="micro"]')
   expect(studioCss).toContain("--vt-studio-badge-radius: var(--vt-studio-14-radius, 2px)")
  })
