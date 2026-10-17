@@ -138,16 +138,22 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
   [audienceSignals],
  )
 
+ const isAudienceSignalProposed = (signalId: string): boolean => {
+  const signal = audienceSignals.find((candidate) => candidate.id === signalId)
+  const packet = signal ? buildAudiencePulseProposalPacket(signal) : null
+  return Boolean(packet && (proposedAudienceSignalIds.has(packet.id) || loadViewTubeActionPacket(packet.id)))
+ }
+
  const proposeAudienceSignal = (signalId: string): boolean => {
   const signal = audienceSignals.find((candidate) => candidate.id === signalId)
   if (!signal) return false
   const packet = buildAudiencePulseProposalPacket(signal)
   if (!packet) return false
 
-  // Stable packet IDs and the canonical packet cache prevent repeat clicks from
-  // enqueueing the same signal proposal more than once in this browser.
+  // Stable packet IDs include the evidence snapshot, so repeat clicks dedupe but
+  // a refreshed signal with new evidence can be proposed as a new review packet.
   if (!loadViewTubeActionPacket(packet.id)) persistViewTubeActionPacket(packet)
-  setProposedAudienceSignalIds((current) => new Set(current).add(signal.id))
+  setProposedAudienceSignalIds((current) => new Set(current).add(packet.id))
   return true
  }
  const partitions = useMemo(() => partitionCommentThreads(threads, context.channelId), [context.channelId, threads])
@@ -262,7 +268,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
  }
 
  return {
-  tab, setTab, loading, error, threads, audienceSignals, audienceEvidenceClaims, proposedAudienceSignalIds, proposeAudienceSignal, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
+  tab, setTab, loading, error, threads, audienceSignals, audienceEvidenceClaims, isAudienceSignalProposed, proposeAudienceSignal, displayThreads, currentThread, currentIndex: safeIndex, setCurrentIndex,
   replyText: currentId ? replyText[currentId] || "" : "",
   setReplyText: (value) => currentId && setReplyTextById((current) => ({ ...current, [currentId]: value })),
   generating: generatingIds.has(currentId), fetchedVideoData, inboundImageUrl,
