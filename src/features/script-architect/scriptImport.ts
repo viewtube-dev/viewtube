@@ -31,6 +31,7 @@ export function buildImportedScript(source: string, fileName = 'Imported Script'
       lockedFragmentIds: [],
     }],
     fullScript,
+    preserveSectionHeadings: false,
     visualSuggestions: [],
     shortsIdeas: [],
     assumptions: ['Imported from a local text file; no AI generation or timestamp inference was performed.'],
