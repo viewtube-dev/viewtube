@@ -250,3 +250,23 @@ The repository's `package.json` identifies Vitest, `npm run typecheck`, and `npm
 3. Build the canonical Studio Hub capability → SuperTool surface → tool-chain capability → service/controller → persistence owner map. Mark each edge as verified, partial, disconnected, or planned.
 4. Fix the absolute documentation path only after consumer/runtime tracing and tests.
 5. Run the focused suites, then typecheck, full Vitest suite, and production build in an actual checkout. Remove or merge code only after consumer search and replacement tests demonstrate parity.
+
+
+## Implementation follow-through — opportunity semantics (2026-10-17)
+
+A first application-code correction has now been committed on `master/consolidated-feature-integration`:
+
+- `adecd066a3667a27eb7f0658bef0b5b9ac4a1037` — add `performance_candidate` to the opportunity kind contract and keep its algorithm-signal projection conservative (`unknown`), alongside the legacy `catalog_gap` value for compatibility.
+- `c64cfa078187b3ff17906b9d0b91a3d79fab7919` — both Brain-pack and Analytics Canon adapters now label newly derived metric-ranked rows `performance_candidate`, not `catalog_gap`.
+- `08a8a6cfef0892cf10091b917500a6dd03b1fe48` — adapter tests now assert the new kind and explicitly assert that missing baselines and relative deltas remain null.
+
+This is intentionally a narrow, compatibility-aware correction. It does not claim that relative in-sample scores are a content gap, a growth trend, or a causal finding. Existing persisted `catalog_gap` values remain representable; a separate migration should only be considered after the actual persistence and downstream consumer paths are enumerated.
+
+**Validation status:** source changes and test assertions were committed through the GitHub Contents API. The test suite, typecheck, and build have not been executed in a checked-out runtime, so these commits are not yet described as verified. The GitHub code-search index still returns a stale commit for some searches; branch-ref file fetches and the branch commit list are the source of truth for this update.
+
+### Next application phase
+
+1. Validate the focused opportunity adapter tests, then typecheck to catch exhaustive-switch/type consumers.
+2. Add contract coverage for confidence normalization between the 0–100 opportunity scale and the 0–1 Brain claim scale; do not silently reinterpret one as the other.
+3. Add producer/receiver contract tests for the five Brain recipes and verify canonical asset/video/project IDs, evidence IDs, workflow/operation identity, and approval requirements.
+4. Trace the runtime consumers of `buildSuperToolDocHref`; replace the machine-specific `file://` base with a portable documentation target only after choosing the correct browser/deployed destination.
