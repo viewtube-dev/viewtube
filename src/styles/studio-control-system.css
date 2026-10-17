@@ -3482,3 +3482,36 @@ button[data-vt-studio-button="true"]:active,
 button[data-vt-studio-button="true"]:focus-visible {
   transform: none;
 }
+
+
+/* Confirmed split-stepper layout contract: editable value pane is exactly
+   twice the width of the complete right action rail; actions share a visible
+   horizontal separator that survives the legacy stepper selectors below. */
+html body [data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+  width: calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke)) !important;
+  flex: 0 1 calc(3 * var(--vt-stepper-height) + 2 * var(--vt-stepper-stroke)) !important;
+  max-width: 100%;
+}
+html body .vt-studio-split-stepper .vt-studio-split-stepper-actions {
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) !important;
+  width: 100%;
+  height: 100%;
+}
+html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button {
+  min-width: 0;
+  min-height: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button:first-child {
+  border-bottom: var(--vt-stepper-stroke, 3px) solid #000 !important;
+}
+html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button + button {
+  border-top: 0 !important;
+}
+html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button > svg {
+  width: min(var(--vt-studio-control-icon-size, 28px), 70%);
+  height: min(var(--vt-studio-control-icon-size, 28px), 70%);
+}
