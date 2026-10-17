@@ -121,7 +121,20 @@ describe("Post-publish analytics bridge", () => {
     mocks.getApprovedPublishSnapshot.mockReturnValue(snapshot)
     mocks.verifyApprovedPublishSnapshot.mockReturnValue(true)
     mocks.getContentBuild.mockReturnValue(build)
-    mocks.listContentBuildEvents.mockReturnValue([])
+    mocks.listContentBuildEvents.mockReturnValue([{
+      id: "publish-completed-event",
+      contentBuildId: "build-1",
+      timestamp: "2026-10-01T00:00:00.000Z",
+      eventType: "publish.transaction.completed",
+      entityType: "publish-transaction",
+      entityId: "publish-tx-1",
+      actorType: "tool",
+      inputAssetIds: [],
+      outputAssetIds: [],
+      evidenceIds: [],
+      parentEventIds: [],
+      metadata: { youtubeVideoId: "youtube-123" },
+    }])
     mocks.listAssetOutcomes.mockReturnValue([])
     mocks.bindYouTubeVideo.mockReturnValue({ ...build, youtube: { videoId: "youtube-123", status: "published" } })
     mocks.appendContentBuildEvent.mockImplementation((input) => ({
@@ -199,7 +212,7 @@ describe("Post-publish analytics bridge", () => {
     expect(mocks.appendContentBuildEvent).toHaveBeenCalledWith(expect.objectContaining({
       eventType: "youtube.state.changed",
       entityType: "publish-identity-receipt",
-      metadata: expect.objectContaining({
+      parentEventIds: ["publish-completed-event"],      metadata: expect.objectContaining({
         publishTransactionId: "publish-tx-1",
         approvedSnapshotId: "snapshot-1",
         approvedSnapshotHash: "hash-1",
@@ -213,6 +226,19 @@ describe("Post-publish analytics bridge", () => {
       }),
     }))
   })
+
+  it("fails closed when the completed publish transaction event cannot be resolved", () => {
+    mocks.listContentBuildEvents.mockReturnValue([])
+
+    expect(() => recordPostPublishIdentity({
+      transactionId: "publish-tx-1",
+      videoId: "youtube-123",
+    })).toThrow(/requires the completed publish transaction event/)
+
+    expect(mocks.bindYouTubeVideo).not.toHaveBeenCalled()
+    expect(mocks.appendContentBuildEvent).not.toHaveBeenCalled()
+  })
+
 
   it("reports snapshot-only project association instead of guessing a missing Project link", () => {
     mocks.getContentBuild.mockReturnValue({ ...build, legacyProjectId: null })
