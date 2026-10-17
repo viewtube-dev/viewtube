@@ -71,3 +71,8 @@ test("inline stepper remains a single shell with no nested shell or duplicate pe
   assert.doesNotMatch(inline, /<StudioSplitLeftButton|<StudioUsernameInput/)
   assert.match(styles, /\.vt-studio-inline-stepper,\s*\.vt-studio-split-stepper\s*\{[^}]*border:\s*var\(--vt-stepper-stroke\) solid #000/s)
 })
+
+test("split stepper enforces the 2:1 value-to-rail ratio after legacy CSS and keeps the action divider", () => {
+  assert.match(styles, /html body \[data-vt-studio-control="true"\]\[data-vt-studio-split="right"\]\.vt-studio-split-stepper\s*\{[^}]*grid-template-columns:\s*minmax\(0, 2fr\) minmax\(0, 1fr\) !important/s)
+  assert.match(styles, /html body \.vt-studio-split-stepper \.vt-studio-split-stepper-actions > button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-stepper-stroke, 3px\) solid #000 !important/s)
+})
