@@ -748,10 +748,13 @@ describe("Studio control defaults stay canonical and motionless", () => {
  it("keeps the canonical Studio size lattice distinct from toolbox structural levels", () => {
   const studioTokens = source("src/studio-ui/tokens.ts")
   const toolboxTokens = source("src/components/subtoolbox/tokens.ts")
+  const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
 
   expect(studioTokens).toContain("standard: { height: 44, stroke: 3, radius: 6")
   expect(studioTokens).toContain("compact: { height: 28, stroke: 2, radius: 4")
   expect(studioTokens).toContain("micro: { height: 14, stroke: 1, radius: 2")
   expect(toolboxTokens).toContain("l1: {\n    height: 48,")
+  expect(catalog).not.toContain("44px pill radius")
+  expect(catalog).toContain("6px standard, 4px compact, and 2px micro")
  })
 })
