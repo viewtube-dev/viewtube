@@ -1536,8 +1536,9 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   
 }
 .vt-studio-spectrum-tag.is-selected {
-  transform: translateY(-1px);
-  
+  background: var(--vt-spectrum-tag-color);
+  color: #000;
+  transform: none;
 }
 .vt-studio-spectrum-tag:focus-visible {
   outline: 2px solid #000;
@@ -1546,8 +1547,8 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   z-index: 2;
 }
 @media (prefers-reduced-motion: reduce) {
-  .vt-studio-spectrum-tag {  }
-  .vt-studio-spectrum-tag.is-selected { transform: none; }
+  .vt-studio-spectrum-tag,
+  .vt-studio-spectrum-tag.is-selected { animation: none; transition: none; transform: none; }
 }
 
 
