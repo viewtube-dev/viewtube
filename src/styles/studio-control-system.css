@@ -3422,9 +3422,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__value,
 .vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 16px; height: 16px; }
-.vt-studio-right-counter[data-size="compact"] .vt-studio-right-counter__actions button svg { width: 10px; height: 10px; }
+.vt-studio-right-counter[data-size="compact"] .vt-studio-right-counter__actions button svg { width: 30px; height: 30px; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 8px; height: 8px; stroke-width: 1.5; }
-.vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 5px; height: 5px; stroke-width: 1.5; }
+.vt-studio-right-counter[data-size="micro"] .vt-studio-right-counter__actions button svg { width: 15px; height: 15px; stroke-width: 1.5; }
 .vt-studio-counter button:focus-visible,
 .vt-studio-right-counter button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
 /* Secondary palette variants reverse the canonical A/B color roles without changing geometry. */
