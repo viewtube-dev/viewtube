@@ -86,8 +86,8 @@ const recommendationsFor = (
   (event.kind === "RECOMMENDATION_CREATED" || event.kind === "RECOMMENDATION_EXECUTED") &&
   event.videoId === videoId &&
   event.metadata?.contentBuildId === contentBuildId &&
-  Boolean(event.checkpointAt) &&
-  (event.checkpointAt || 0) <= now &&
+  event.checkpointAt != null &&
+  event.checkpointAt <= now &&
   event.evaluationTargets.length > 0
 )
 
