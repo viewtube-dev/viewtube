@@ -1102,6 +1102,8 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
 }) => {
   const [draft, setDraft] = React.useState(String(Number.isFinite(value) ? value : 0))
   const [focused, setFocused] = React.useState(false)
+  const validBounds = min <= max
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
 
   React.useEffect(() => {
     if (!focused) setDraft(String(Number.isFinite(value) ? value : 0))
@@ -1127,8 +1129,6 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
   }, [draft, max, min, onValueChange, safeStep, value])
 
   const currentForBounds = Number.isFinite(value) ? value : 0
-  const validBounds = min <= max
-  const safeStep = Number.isFinite(step) && step > 0 ? step : 1
 
   return (
     <div
