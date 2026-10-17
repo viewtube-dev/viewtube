@@ -48,4 +48,15 @@ describe("Studio control global contract", () => {
     expect(css).toContain("--vt-studio-textarea-compact-text-stroke, .35px");
     expect(css).toContain("::placeholder");
   });
+
+  it("preserves the dedicated closeable-badge chip design and all three size tiers", () => {
+    const css = read("src/styles/studio-library-audit-fixes.css");
+    expect(css).toContain(".vt-studio-closeable-badge[data-size=\"standard\"]");
+    expect(css).toContain(".vt-studio-closeable-badge[data-size=\"compact\"]");
+    expect(css).toContain(".vt-studio-closeable-badge[data-size=\"micro\"]");
+    expect(css).toContain("width: max-content");
+    expect(css).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
+    expect(css).toContain("background: var(--vt-studio-primary, var(--pair-a, #36e0f6))");
+    expect(css).toContain("border-radius: 50%");
+  });
 });
