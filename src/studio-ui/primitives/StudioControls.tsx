@@ -71,6 +71,9 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
 
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
+  splitSegmentRatio: "square-ratio by default; segment labels center against the outer perimeter bounds",
+  splitDividers: "orb1/orb2 use shared internal segment-boundary dividers, never label-owned borders",
+
   width: "full-row by default; data-width=content is an explicit opt-in exception",
   labelAlignment: "centered by default for all primitive labels",
   primaryColor: "--pair-a is the global primary fill",
