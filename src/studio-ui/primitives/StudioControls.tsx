@@ -609,19 +609,20 @@ interface StudioSplitShellProps {
   className?: string
   labelClassName?: string
   railClassName?: string
+  railProps?: React.HTMLAttributes<HTMLSpanElement>
   shellProps?: React.HTMLAttributes<HTMLSpanElement>
 }
 const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
-  faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, shellProps,
+  faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps, shellProps,
 }) => {
   const content = (
     <>
-      {layout !== "right" && <span aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconLeft}</span>}
+      {layout !== "right" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconLeft}</span>}
       {fieldSlot
         ? <span data-vt-studio-split-field>{children}</span>
         : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
-      {layout !== "left" && <span aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconRight}</span>}
+      {layout !== "left" && <span {...railProps} aria-hidden="true" data-vt-studio-split-rail className={railClassName}>{iconRight}</span>}
     </>
   )
   if (faceOnly) return content
@@ -764,6 +765,7 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
       fieldSlot
       className={studioClasses("vt-studio-username-input", className)}
       railClassName="vt-studio-username-input__rail"
+      railProps={{ "data-vt-studio-username-rail": "true" }}
       shellProps={{
         "data-vt-studio-username-input": "true",
         "data-icon-size-variant": "large",
