@@ -593,3 +593,33 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
     expect(actionBlock).not.toContain("4px 4px 0 0")
   })
 })
+
+
+describe("Studio text input and split-left badge typography parity", () => {
+  it("uses the size token as the actual input text size, not the floating-label text", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const input = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextInput.tsx"), "utf8")
+    const fieldRule = css.slice(
+      css.indexOf('[data-vt-studio-control="true"]:is(input:not([type="checkbox"])'),
+      css.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]'),
+    )
+    expect(fieldRule).toContain("font-size: var(--vt-studio-control-font-size)")
+    expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-standard-font-size")
+    expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-compact-font-size")
+    expect(input).toContain('data-vt-studio-field-kind="text-input"')
+    expect(css).toContain("--vt-studio-floating-label-size: 38px")
+    expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+  })
+
+  it("shares the button split-label typography contract with static split-left badges", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(controls).toContain('<span data-vt-studio-split-label className={labelClass}>{children}</span>')
+    expect(css).toContain('.vt-studio-split-left-badge__label,')
+    expect(css).toContain('font-size: var(--vt-studio-control-font-size)')
+    expect(css).toContain('font-weight: var(--vt-studio-control-font-weight)')
+    expect(css).toContain('line-height: var(--vt-studio-control-line-height)')
+    expect(css).toContain('text-transform: var(--vt-studio-control-text-transform)')
+    expect(css).toContain('-webkit-text-stroke: var(--vt-studio-control-text-stroke)')
+  })
+})
