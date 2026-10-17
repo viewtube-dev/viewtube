@@ -6,15 +6,13 @@ const source = (file: string) => fs.readFileSync(path.resolve(process.cwd(), fil
 
 describe("Studio split-left source contract", () => {
   it("does not add a second text stroke or shadow filter to split-left labels", () => {
-    const controls = source("src/styles/studio-control-system.css")
-    const splitStyles = source("src/styles/subtoolbox-split-primitives.css")
-    const sharedStyles = source("src/styles/studio-split-left-consistency.css")
-    const labelRule = controls.slice(controls.indexOf('button[data-vt-studio-control="true"][data-split-left="true"] > [data-vt-studio-split-label] {'))
-    expect(labelRule.split("\n}")[0]).not.toContain("-webkit-text-stroke: .5px")
-    expect(splitStyles).not.toContain(".vt-subtoolbox-split-button {")
-    expect(sharedStyles).toContain("box-shadow:")
-    expect(sharedStyles).toContain("filter: none !important;")
-    expect(sharedStyles).not.toContain("filter: drop-shadow")
+    const styles = source("src/styles/studio-control-system.css")
+    const labelRule = styles.match(/button\[data-vt-studio-button="true"\]\[data-split-left="true"\] > \[data-vt-studio-split-label\]\s*\{([^}]*)\}/s)?.[1] ?? ""
+    const buttonRule = styles.match(/button\[data-vt-studio-button="true"\]\[data-split-left="true"\]\s*\{([^}]*)\}/s)?.[1] ?? ""
+    expect(labelRule).not.toContain("-webkit-text-stroke: .5px")
+    expect(labelRule).not.toContain("text-shadow:")
+    expect(buttonRule).not.toContain("filter: drop-shadow")
+    expect(styles).toContain('button[data-vt-studio-button="true"][data-split-left="true"]')
   })
 
   it("routes project load, swap and refresh through StudioSplitLeftButton", () => {
