@@ -194,7 +194,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(css).toContain(".vt-studio-fixed-label-field > .vt-studio-fixed-field-label")
     expect(tokens).toContain('width: "row"')
     expect(tokens).toContain('inlineStrokeWidth: "same as border width"')
-    expect(tokens).toContain("compactTextStroke: 0.5")
+    expect(tokens).toContain("compactTextStroke: 0.35")
     expect(tokens).toContain("fontWeight: 1000")
     expect(catalog).toContain("row-fill by default")
     expect(catalog).toContain("data-width=&quot;content&quot;")
