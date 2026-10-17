@@ -150,6 +150,8 @@ export interface ContentBuildPublicationIdentity {
  approvedSnapshotHash: string
  selectedVariantAssetIds: string[]
  correlationId: string
+ /** Stable operation identity captured by the publication transaction. */
+ operationId?: string | null
  /** Decision/action identity that led to this exact publication, when supplied. */
  actionPacketId?: string | null
  workflowId?: string | null
