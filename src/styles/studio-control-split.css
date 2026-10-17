@@ -274,7 +274,7 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
-  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary);
+  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary) !important;
 }
 
 .vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value,
