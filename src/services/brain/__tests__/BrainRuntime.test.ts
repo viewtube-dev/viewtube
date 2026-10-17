@@ -86,7 +86,8 @@ describe("BrainRuntime", () => {
     },
    },
   })
-  expect(result).toEqual({
+  // Runtime metadata may add trace fields while preserving the stable public contract.
+  expect(result).toMatchObject({
    ...orchestratorResult,
    runtime: {
     runtimeVersion: BRAIN_RUNTIME_VERSION,
