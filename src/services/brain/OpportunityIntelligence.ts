@@ -4,6 +4,7 @@ import type { DerivedSignal } from "./EvidenceRecord"
 export type OpportunityKind =
  | "emerging_search"
  | "catalog_gap"
+ | "performance_candidate"
  | "audience_interest"
  | "session_adjacency"
  | "topic_resurgence"
@@ -77,7 +78,8 @@ export const opportunityToAlgorithmSignal = (opportunity: OpportunityEvidence): 
    case "packaging_opportunity": return "packaging_decline"
    case "audience_interest": return "traffic_expansion"
    case "format_opportunity": return "traffic_expansion"
-   case "catalog_gap": return "unknown"
+   case "catalog_gap":
+   case "performance_candidate": return "unknown"
   }
  })()
 
