@@ -104,4 +104,20 @@ describe("Studio control global contract", () => {
     expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
     expect(css).toContain("outline-offset: 0");
   });
+  it("keeps both double-split slider rails opposite the center fill and uses a smaller white handle", () => {
+    const css = read("src/styles/studio-control-system.css");
+    const start = css.indexOf("/* StudioDoubleSplitSlider —");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const slider = css.slice(start);
+    expect(slider).toContain(".vt-studio-double-split-slider .vt-studio-double-split-slider__rail");
+    expect(slider).toContain(".vt-studio-double-split-slider .vt-studio-double-split-slider__reset,");
+    expect(slider).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(slider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
+    expect(slider).toContain("width: max(7px, calc(var(--vt-studio-control-height, 44px) * .44));");
+    expect(slider).toContain("height: max(12px, calc(var(--vt-studio-control-height, 44px) * .78));");
+    expect(slider).toContain("border-radius: calc(var(--vt-studio-slider-radius) * .5);");
+    expect(slider.match(/background: #fff;/g)?.length).toBeGreaterThanOrEqual(2);
+    expect(slider).toContain(".vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset");
+    expect(slider).toContain("background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));");
+  });
 });

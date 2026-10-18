@@ -3540,13 +3540,13 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 
 
-/* StudioDoubleSplitSlider — L1 slider track/readout composition on the shared
-   double-split shell, with the rectangular handle from the v2 slider variant. */
+/* StudioDoubleSplitSlider — double-split rails contrast with the center fill.
+   The rectangular v2 handle stays compact, white, and black-outlined. */
 .vt-studio-double-split-slider {
   /* Taller, wider handle scales with the component; micro keeps usable minimums. */
   --vt-studio-slider-track-height: max(6px, calc(var(--vt-studio-control-height, 44px) * .428571));
-  --vt-studio-slider-thumb-width: max(7px, calc(var(--vt-studio-control-height, 44px) * .5));
-  --vt-studio-slider-thumb-height: max(12px, calc(var(--vt-studio-control-height, 44px) * .857143));
+  --vt-studio-slider-thumb-width: max(7px, calc(var(--vt-studio-control-height, 44px) * .44));
+  --vt-studio-slider-thumb-height: max(12px, calc(var(--vt-studio-control-height, 44px) * .78));
   --vt-studio-slider-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-studio-slider-radius: var(--vt-studio-control-radius, 6px);
   /* Outer split sections and the central track surface deliberately contrast. */
@@ -3566,7 +3566,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   color: #000;
   font: inherit;
   line-height: 1;
@@ -3629,8 +3629,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: var(--vt-studio-slider-thumb-height);
   margin-top: calc((var(--vt-studio-slider-track-height) - var(--vt-studio-slider-thumb-height)) / 2);
   border: var(--vt-studio-slider-stroke) solid #000;
-  border-radius: var(--vt-studio-slider-radius);
-  background: #000;
+  border-radius: calc(var(--vt-studio-slider-radius) * .5);
+  background: #fff;
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-track {
   height: var(--vt-studio-slider-track-height);
@@ -3648,8 +3648,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   width: var(--vt-studio-slider-thumb-width);
   height: var(--vt-studio-slider-thumb-height);
   border: var(--vt-studio-slider-stroke) solid #000;
-  border-radius: var(--vt-studio-slider-radius);
-  background: #000;
+  border-radius: calc(var(--vt-studio-slider-radius) * .5);
+  background: #fff;
 }
 .vt-studio-double-split-slider input[type="range"]:focus-visible {
   outline: var(--vt-studio-slider-stroke) solid var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
@@ -3690,6 +3690,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset {
-  background: var(--vt-studio-control-secondary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));
   color: #000;
 }
