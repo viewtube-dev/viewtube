@@ -1,33 +1,38 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
-const system = readFileSync("src/styles/studio-control-system.css", "utf8");
-const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
+const input = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+const css = readFileSync("src/styles/studio-text-input.css", "utf8");
+const main = readFileSync("src/main.tsx", "utf8");
+const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 
-// Raised input labels are 80% of input typography, not textarea typography.
-assert.match(system, /\.vt-studio-floating-field:not\(\.is-textarea\)[\s\S]*?font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
-assert.doesNotMatch(system, /font-size:\s*(?:14\.4|11\.2)px/);
-assert.match(tokens, /floatingLabel:\s*\{[^}]*standardRestingFontSize:\s*38,[^}]*compactRestingFontSize:\s*24,[^}]*standardRaisedFontSize:\s*30\.4,[^}]*compactRaisedFontSize:\s*19\.2/s);
+// The foundation is exactly one native input primitive with no label branches.
+assert.match(input, /export const StudioTextInput = React\.forwardRef/);
+assert.match(input, /className=\{\["vt-studio-text-input", className\]/);
+assert.match(input, /data-size=\{sizeVariant\}/);
+assert.match(input, /data-vt-studio-control="true"/);
+assert.doesNotMatch(input, /floating-label|fixed-label|vt-studio-floating-field|vt-studio-fixed-label-field|<label\b|studio-control-entry\.css/);
 
-// Native input typography has one shared rule in system CSS and consumes the
-// size token assigned by data-size. Fields CSS must not re-declare input sizes.
-assert.match(system, /\[data-vt-studio-control="true"\]:is\(input:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\)\s*\{[^}]*font-size:\s*var\(--vt-studio-control-font-size\)[^}]*line-height:\s*var\(--vt-studio-control-line-height,\s*0\.86\)/s);
-assert.doesNotMatch(system, /input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\s*\{[^}]*font-size:/s);
-// Fields CSS now has a deliberate, high-specificity final authority for the
-// native input itself. Literal sizes prevent token fallbacks from shrinking it.
-assert.match(fields, /html body input\[data-vt-studio-control="true"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)[\s\S]*?font-size:\s*38px;[\s\S]*?line-height:\s*0\.86/s);
-assert.match(fields, /html body input\[data-vt-studio-control="true"\]\[data-size="compact"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)[\s\S]*?font-size:\s*24px;[\s\S]*?line-height:\s*0\.86/s);
-assert.match(fields, /html body input\[data-vt-studio-control="true"\]\[data-size="micro"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)[\s\S]*?font-size:\s*10px;[\s\S]*?line-height:\s*1;/s);
-assert.match(fields, /html body textarea\[data-vt-studio-control="true"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\)/s);
-assert.match(fields, /html body textarea\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\)/s);
+// Each size maps to the required literal input font-size and expected geometry.
+assert.match(css, /input\.vt-studio-text-input\[data-size="standard"\][\s\S]*?--vt-studio-input-height:[^;]*44px[^;]*;[\s\S]*?--vt-studio-input-font-size:\s*38px;/);
+assert.match(css, /input\.vt-studio-text-input\[data-size="compact"\][\s\S]*?--vt-studio-input-height:[^;]*28px[^;]*;[\s\S]*?--vt-studio-input-font-size:\s*24px;/);
+assert.match(css, /input\.vt-studio-text-input\[data-size="micro"\][\s\S]*?--vt-studio-input-height:[^;]*14px[^;]*;[\s\S]*?--vt-studio-input-font-size:\s*10px;/);
+assert.match(css, /html body input\.vt-studio-text-input\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-input-font-size,\s*38px\)/);
+assert.doesNotMatch(css, /textarea|floating-field-label|fixed-field-label/);
 
-// Label typography is independently scoped to the label element.
-assert.match(system, /\.vt-studio-floating-field > \.vt-studio-floating-field-label[\s\S]*?font-size:\s*var\(--vt-studio-floating-label-size\)/);
-assert.match(system, /\.vt-studio-floating-field:not\(\.is-textarea\) > :is\(input, textarea\):focus \+ \.vt-studio-floating-field-label[\s\S]*?font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
+// Root loads the old shared controls first and the plain input foundation after it.
+assert.ok(main.indexOf("import './index.css'") < main.indexOf("import './styles/studio-text-input.css'"));
+assert.ok(main.indexOf("import './styles/studio-control-fields.css'") < main.indexOf("import './styles/studio-text-input.css'"));
+assert.doesNotMatch(controls.slice(0, 900), /studio-control-entry\.css|studio-control-fields\.css/);
 
-// The textarea-only exception remains 18px / 14px.
-assert.match(fields, /font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\)/);
-assert.match(fields, /font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\)/);
+// Catalog shows only plain standard and compact specimens; no label specimens.
+const inputFamilyStart = catalog.indexOf('<Family title="Studio Text Input');
+const textareaFamilyStart = catalog.indexOf('<Family title="Studio Text Area', inputFamilyStart);
+assert.ok(inputFamilyStart >= 0 && textareaFamilyStart > inputFamilyStart);
+const inputFamily = catalog.slice(inputFamilyStart, textareaFamilyStart);
+assert.match(inputFamily, /StudioTextInput sizeVariant="standard"/);
+assert.match(inputFamily, /StudioTextInput sizeVariant="compact"/);
+assert.doesNotMatch(inputFamily, /floating-label|fixed-label|label="TITLE"/);
 
-console.log("Studio floating-label/input typography contract: PASS");
+console.log("Studio plain text input foundation contract: PASS");
