@@ -8,7 +8,7 @@ input.vt-studio-text-input {
   padding: 0 12px;
   border-style: solid;
   border-color: #000;
-  border-radius: 6px;
+  border-radius: var(--vt-studio-standard-radius, 6px);
   background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent);
   color: var(--pair-a, #36e0f6);
   -webkit-text-fill-color: var(--pair-a, #36e0f6);
@@ -26,23 +26,23 @@ input.vt-studio-text-input {
 
 input.vt-studio-text-input,
 input.vt-studio-text-input[data-size="standard"] {
-  height: 44px;
-  border-width: 3px;
-  font-size: 38px;
+  height: var(--vt-studio-standard-height, 44px);
+  border-width: var(--vt-studio-standard-stroke, 3px);
+  font-size: var(--vt-studio-standard-font-size, 38px);
 }
 
 input.vt-studio-text-input[data-size="compact"] {
-  height: 28px;
-  border-width: 2px;
-  border-radius: 4px;
-  font-size: 24px;
+  height: var(--vt-studio-compact-height, 28px);
+  border-width: var(--vt-studio-compact-stroke, 2px);
+  border-radius: var(--vt-studio-compact-radius, 4px);
+  font-size: var(--vt-studio-compact-font-size, 24px);
 }
 
 input.vt-studio-text-input[data-size="micro"] {
-  height: 14px;
-  border-width: 1px;
-  border-radius: 2px;
-  font-size: 10px;
+  height: var(--vt-studio-micro-height, 14px);
+  border-width: var(--vt-studio-micro-stroke, 1px);
+  border-radius: var(--vt-studio-micro-radius, 2px);
+  font-size: var(--vt-studio-micro-font-size, 10px);
 }
 
 input.vt-studio-text-input::placeholder {
