@@ -4,6 +4,9 @@ import { readFileSync } from "node:fs";
 
 const inputCss = readFileSync("src/styles/studio-text-input.css", "utf8");
 const generatedVars = readFileSync("src/styles/studio-control-vars.generated.css", "utf8");
+const fieldCss = readFileSync("src/styles/studio-control-fields.css", "utf8");
+const inputPrimitive = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+const textareaPrimitive = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
 
 test("plain Studio input geometry consumes the generated size tokens", () => {
   const expectedTokens = [
@@ -44,4 +47,19 @@ test("plain Studio input retains the explicit standard, compact, and micro size 
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="standard"\]/);
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="compact"\]/);
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="micro"\]/);
+});
+
+test("primary inline glyph stroke is declared separately from the outer field border", () => {
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary\)/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-textarea-standard-text-stroke, 0\.5px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-textarea-compact-text-stroke, 0\.35px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /:is\(:focus, :focus-visible\)[\s\S]*?-webkit-text-stroke-color:\s*#000/);
+  assert.match(inputPrimitive, /data-vt-studio-control="true"/);
+  assert.match(textareaPrimitive, /"data-vt-studio-control": "true"/);
+});
+
+test("the new regression test is wired into the normal Studio controls test command", () => {
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+  assert.equal(packageJson.scripts["test:studio-input-token-ownership"], "node --test scripts/audit/studio-input-token-ownership.test.mjs");
+  assert.ok(packageJson.scripts["test:studio-controls"].includes("npm run test:studio-input-token-ownership"));
 });
