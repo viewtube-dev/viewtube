@@ -10,11 +10,12 @@ assert.match(system, /\.vt-studio-floating-field:not\(\.is-textarea\)[\s\S]*?fon
 assert.doesNotMatch(system, /font-size:\s*(?:14\.4|11\.2)px/);
 assert.match(tokens, /floatingLabel:\s*\{[^}]*standardRestingFontSize:\s*38,[^}]*compactRestingFontSize:\s*24,[^}]*standardRaisedFontSize:\s*30\.4,[^}]*compactRaisedFontSize:\s*19\.2/s);
 
-// Assert that the native editable input is explicitly sized, not just its label.
-assert.match(fields, /html body \.vt-studio-floating-field\.is-input > input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\][\s\S]*?font-size:\s*var\(--vt-studio-standard-font-size,\s*38px\)/);
-assert.match(fields, /html body \.vt-studio-floating-field\.is-input > input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-compact-font-size,\s*24px\)/);
-assert.match(fields, /html body \.vt-studio-fixed-label-field\.is-input > input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]/);
-assert.match(fields, /html body input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\[data-size="micro"\][\s\S]*?font-size:\s*var\(--vt-studio-micro-font-size,\s*10px\)/);
+// Native input typography has one shared rule in system CSS and consumes the
+// size token assigned by data-size. Fields CSS must not re-declare input sizes.
+assert.match(system, /\[data-vt-studio-control="true"\]:is\(input:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\)\s*\{[^}]*font-size:\s*var\(--vt-studio-control-font-size\)[^}]*line-height:\s*var\(--vt-studio-control-line-height,\s*0\.86\)/s);
+assert.doesNotMatch(system, /input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\s*\{[^}]*font-size:/s);
+assert.doesNotMatch(fields, /(?:input|\.is-input)[^{]*\{[^}]*font-size:\s*var\(--vt-studio-(?:standard|compact|micro)-font-size/s);
+assert.doesNotMatch(fields, /html body .*input.*font-size:\s*var\(--vt-studio-(?:standard|compact|micro)-font-size/s);
 
 // Label typography is independently scoped to the label element.
 assert.match(system, /\.vt-studio-floating-field > \.vt-studio-floating-field-label[\s\S]*?font-size:\s*var\(--vt-studio-floating-label-size\)/);
