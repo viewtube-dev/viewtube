@@ -130,3 +130,25 @@ textarea[data-vt-studio-control="true"][data-size="compact"]:is(:focus, :focus-v
 .vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label {
   outline-color: #000;
 }
+
+/* Authoritative input-text typography contract.
+   Target the native editable input itself (not the adjacent floating label).
+   These high-specificity rules are deliberately last in the field stylesheet
+   so floating/fixed/simple variants cannot let label sizing stand in for
+   entered-text sizing. Floating labels keep their separate rules in the system
+   stylesheet; textareas retain their independent 18px/14px exception. */
+html body .vt-studio-floating-field.is-input > input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"],
+html body .vt-studio-fixed-label-field.is-input > input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"],
+html body input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
+  font-size: var(--vt-studio-standard-font-size, 38px);
+}
+html body .vt-studio-floating-field.is-input > input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"],
+html body .vt-studio-fixed-label-field.is-input > input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"],
+html body input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
+  font-size: var(--vt-studio-compact-font-size, 24px);
+}
+html body .vt-studio-floating-field.is-input > input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="micro"],
+html body .vt-studio-fixed-label-field.is-input > input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="micro"],
+html body input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="micro"] {
+  font-size: var(--vt-studio-micro-font-size, 10px);
+}
