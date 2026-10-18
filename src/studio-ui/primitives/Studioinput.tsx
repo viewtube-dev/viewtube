@@ -1,10 +1,11 @@
 import React from "react"
-import type { StudioControlSize } from "../tokens"
 import "../../styles/studio-input.css"
 
+export type StudioinputSize = "standard" | "compact" | "micro"
+
 export type StudioinputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
-  /** Independent Studioinput primitive: standard 44px, compact 28px, micro 14px. */
-  sizeVariant?: StudioControlSize
+  /** Studioinput-owned size setting; independent of Studio control tokens. */
+  sizeVariant?: StudioinputSize
 }
 
 /**
@@ -28,9 +29,8 @@ export const Studioinput = React.forwardRef<HTMLInputElement, StudioinputProps>(
     <input
       ref={ref}
       type={type}
-      data-size={sizeVariant}
-      data-vt-studio-control="true"
-      data-vt-studio-field-kind="studioinput"
+      data-studioinput-size={sizeVariant}
+      data-studioinput="true"
       className={["vt-studio-input", className].filter(Boolean).join(" ")}
       placeholder={placeholder}
       spellCheck={spellCheck}
