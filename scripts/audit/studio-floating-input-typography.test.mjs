@@ -20,8 +20,8 @@ assert.ok(controls.includes('import { StudioTextInput, StudioInput } from "./Stu
 
 for (const [selector, size] of [
   ['input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "38px"],
-  ['input[data-vt-studio-control="true"][data-size="compact"]', "24px"],
-  ['input[data-vt-studio-control="true"][data-size="micro"]', "10px"],
+  ['input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "24px"],
+  ['input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "10px"],
   ['textarea[data-vt-studio-control="true"]', "18px"],
   ['textarea[data-vt-studio-control="true"][data-size="compact"]', "14px"],
 ]) {
