@@ -1,15 +1,15 @@
 import React from "react"
-import type { StudioControlSize } from "../tokens"
 import "../../styles/studio-input.css"
 
+/** Studioinput owns its size contract; it does not consume StudioControlSize or shared tokens. */
+export type StudioinputSize = "standard" | "compact" | "micro"
 export type StudioinputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
-  /** Independent Studioinput primitive: standard 44px, compact 28px, micro 14px. */
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioinputSize
 }
 
 /**
- * Standalone Studioinput primitive. It owns its class, data contract, and CSS;
- * it is deliberately not an alias or wrapper around StudioTextInput.
+ * Standalone Studioinput primitive.
+ * No StudioTextInput import, shared size-token import, or shared control-token marker.
  */
 export const Studioinput = React.forwardRef<HTMLInputElement, StudioinputProps>(
   (
@@ -29,7 +29,6 @@ export const Studioinput = React.forwardRef<HTMLInputElement, StudioinputProps>(
       ref={ref}
       type={type}
       data-size={sizeVariant}
-      data-vt-studio-control="true"
       data-vt-studio-field-kind="studioinput"
       className={["vt-studio-input", className].filter(Boolean).join(" ")}
       placeholder={placeholder}
