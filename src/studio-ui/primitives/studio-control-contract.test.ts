@@ -137,4 +137,15 @@ describe("Studio control global contract", () => {
     expect(slider).toContain(".vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset");
     expect(slider).toContain("background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));");
   });
+  it("keeps primary inline glyph strokes explicit for plain inputs and textareas", () => {
+    const inputCss = read("src/styles/studio-text-input.css");
+    const fieldCss = read("src/styles/studio-control-fields.css");
+
+    expect(inputCss).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));");
+    expect(inputCss).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;");
+    expect(fieldCss).toContain("-webkit-text-stroke-color: var(--vt-field-primary);");
+    expect(fieldCss).toContain("-webkit-text-stroke-width: var(--vt-studio-textarea-standard-text-stroke, 0.5px);");
+    expect(fieldCss).toContain("-webkit-text-stroke-width: var(--vt-studio-textarea-compact-text-stroke, 0.35px);");
+    expect(fieldCss).toContain("-webkit-text-stroke-color: #000;");
+  });
 });
