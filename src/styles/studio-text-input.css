@@ -15,6 +15,7 @@ input.vt-studio-text-input {
   caret-color: var(--pair-a, #36e0f6);
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 1000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: 1;
