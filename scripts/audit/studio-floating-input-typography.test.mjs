@@ -10,9 +10,15 @@ assert.match(system, /\.vt-studio-floating-field:not\(\.is-textarea\)[\s\S]*?fon
 assert.doesNotMatch(system, /font-size:\s*(?:14\.4|11\.2)px/);
 assert.match(tokens, /floatingLabel:\s*\{[^}]*standardRestingFontSize:\s*38,[^}]*compactRestingFontSize:\s*24,[^}]*standardRaisedFontSize:\s*30\.4,[^}]*compactRaisedFontSize:\s*19\.2/s);
 
-// Single-line input sizes stay 38px standard / 24px compact.
-assert.match(fields, /font-size:\s*var\(--vt-studio-standard-font-size,\s*38px\)/);
-assert.match(fields, /font-size:\s*var\(--vt-studio-compact-font-size,\s*24px\)/);
+// Assert that the native editable input is explicitly sized, not just its label.
+assert.match(fields, /html body \.vt-studio-floating-field\.is-input > input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\][\s\S]*?font-size:\s*var\(--vt-studio-standard-font-size,\s*38px\)/);
+assert.match(fields, /html body \.vt-studio-floating-field\.is-input > input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-compact-font-size,\s*24px\)/);
+assert.match(fields, /html body \.vt-studio-fixed-label-field\.is-input > input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]/);
+assert.match(fields, /html body input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\[data-size="micro"\][\s\S]*?font-size:\s*var\(--vt-studio-micro-font-size,\s*10px\)/);
+
+// Label typography is independently scoped to the label element.
+assert.match(system, /\.vt-studio-floating-field > \.vt-studio-floating-field-label[\s\S]*?font-size:\s*var\(--vt-studio-floating-label-size\)/);
+assert.match(system, /\.vt-studio-floating-field:not\(\.is-textarea\) > :is\(input, textarea\):focus \+ \.vt-studio-floating-field-label[\s\S]*?font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
 
 // The textarea-only exception remains 18px / 14px.
 assert.match(fields, /font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\)/);
