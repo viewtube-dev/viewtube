@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 
 const inputCss = readFileSync("src/styles/studio-text-input.css", "utf8");
 const generatedVars = readFileSync("src/styles/studio-control-vars.generated.css", "utf8");
+const fieldCss = readFileSync("src/styles/studio-control-fields.css", "utf8");
+const entryCss = readFileSync("src/styles/studio-control-entry.css", "utf8");
 
 test("plain Studio input geometry consumes the generated size tokens", () => {
   const expectedTokens = [
@@ -44,4 +46,12 @@ test("plain Studio input retains the explicit standard, compact, and micro size 
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="standard"\]/);
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="compact"\]/);
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="micro"\]/);
+});
+
+test("shared field CSS preserves primary inline glyph strokes for input and textarea", () => {
+  assert.ok(entryCss.includes('@import "./studio-control-fields.css";'));
+  assert.match(fieldCss, /html body input\[data-vt-studio-control="true"\][\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /html body textarea\[data-vt-studio-control="true"\][\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-textarea-standard-text-stroke, 0\.5px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /textarea\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-textarea-compact-text-stroke, 0\.35px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /:is\(:focus, :focus-visible\)[\s\S]*?-webkit-text-stroke-color:\s*#000/);
 });
