@@ -3822,8 +3822,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   --vt-studio-upload-step: clamp(4px, 1cqw, 6px);
   --vt-studio-upload-frame-inset: 5px;
   --vt-studio-upload-center-inset: calc(var(--vt-studio-upload-frame-inset) + 2px + 9 * var(--vt-studio-upload-step));
-  --vt-studio-upload-primary: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
-  --vt-studio-upload-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-upload-primary: var(--pair-a, #36e0f6);
+  --vt-studio-upload-secondary: var(--pair-b, #ff7f6b);
   position: relative;
   display: block;
   width: 100%;
