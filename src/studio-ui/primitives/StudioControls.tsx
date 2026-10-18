@@ -54,6 +54,15 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     shadow: "none; primitive/component shadow prohibition",
     rationale: "The plus/check actions use the canonical compact 28px square-button size.",
   },
+  uploadFrame: {
+    owner: "StudioUploadFrame",
+    globalRuleException: true,
+    geometry: "16:10 desktop canvas / 4:3 narrow-screen canvas; 12px outer radius; inset 2px black frame; 5px standard inner inset",
+    colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
+    behavior: "native file picker, drag/drop, image preview, filename announcement, disabled state, and reduced-motion support",
+    shadowPolicy: "none",
+    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
+  },
   textareaTypography: {
     globalRuleException: true,
     standardFontSize: 18,
