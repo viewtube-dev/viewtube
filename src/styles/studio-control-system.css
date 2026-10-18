@@ -115,17 +115,54 @@ button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigge
 [data-vt-studio-control][data-tone="success"] { --vt-studio-control-accent: #3fee56; }
 
 .vt-studio-dropdown {
+  --vt-studio-dropdown-rail-size: var(--vt-studio-control-height, 44px);
+  --vt-studio-dropdown-chevron-size: var(--vt-studio-control-icon-size, 38px);
   position: relative;
   width: 100%;
   min-width: 0;
 }
 
 button[data-vt-studio-control][data-dropdown-trigger="true"] {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-dropdown-rail-size);
+  align-items: stretch;
   width: 100%;
-  justify-content: space-between;
+  justify-content: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
   background: color-mix(in srgb, var(--vt-studio-control-accent) 50%, #fff);
   text-align: left;
 }
+.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] {
+  grid-template-columns: var(--vt-studio-dropdown-rail-size) minmax(0, 1fr);
+}
+.vt-studio-dropdown-chevron {
+  display: grid;
+  width: var(--vt-studio-dropdown-rail-size);
+  min-width: var(--vt-studio-dropdown-rail-size);
+  height: var(--vt-studio-dropdown-rail-size);
+  flex: 0 0 var(--vt-studio-dropdown-rail-size);
+  place-items: center;
+  align-self: stretch;
+  justify-self: stretch;
+  box-sizing: border-box;
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  color: #000;
+  pointer-events: none;
+}
+.vt-studio-dropdown-chevron svg {
+  display: block;
+  width: var(--vt-studio-dropdown-chevron-size);
+  height: var(--vt-studio-dropdown-chevron-size);
+  max-width: 100%;
+  max-height: 100%;
+}
+.vt-studio-dropdown-chevron.is-leading { border-left: 0; border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
+.vt-studio-dropdown.is-split-left [data-vt-studio-dropdown-value] { grid-column: 2; grid-row: 1; padding: 0 8px; }
+.vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; padding: 0 8px 0 12px; }
+.vt-studio-dropdown:not(.is-split-left) .vt-studio-dropdown-chevron.is-trailing { grid-column: 2; grid-row: 1; }
 
 [data-vt-studio-dropdown-value] {
   min-width: 0;
@@ -137,7 +174,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-dropdown-menu {
   position: absolute;
   z-index: 60;
-  top: calc(100% + 8px);
+  top: calc(100% + 4px);
   left: 0;
   width: 100%;
   max-height: 280px;
@@ -145,14 +182,13 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  
   padding: 4px;
 }
 
 .vt-studio-dropdown-option {
   display: flex;
   width: 100%;
-  min-height: 40px;
+  min-height: var(--vt-studio-control-height, 44px);
   align-items: center;
   border: 0;
   border-radius: calc(var(--vt-studio-control-radius, 6px) - 3px);
@@ -160,11 +196,11 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   color: #000;
   cursor: pointer;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 14px;
+  font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
   letter-spacing: -.02em;
-  line-height: 1;
-  padding: 8px 10px;
+  line-height: .86;
+  padding: 0 8px;
   text-align: left;
   text-transform: uppercase;
   
@@ -172,7 +208,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   
 }
 
-.vt-studio-dropdown-option + .vt-studio-dropdown-option { border-top: 2px solid #000; border-radius: 0; }
+.vt-studio-dropdown[data-size="compact"] { --vt-studio-dropdown-rail-size: 28px; --vt-studio-dropdown-chevron-size: 24px; }
+.vt-studio-dropdown[data-size="standard"] { --vt-studio-dropdown-rail-size: 44px; --vt-studio-dropdown-chevron-size: 38px; }
+.vt-studio-dropdown-option + .vt-studio-dropdown-option { border-top: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: 0; }
 .vt-studio-dropdown-option[data-active="true"] { background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 22%, #fff); }
 .vt-studio-dropdown-option[data-selected="true"] {
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
