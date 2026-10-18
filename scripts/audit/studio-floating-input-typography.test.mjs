@@ -18,15 +18,17 @@ for (const forbidden of ["floating-label", "fixed-label", "vt-studio-floating-fi
   assert.ok(!input.includes(forbidden), "plain input must not include " + forbidden);
 }
 
-// Studioinput is a separate primitive, not an alias to StudioTextInput.
-assert.ok(studioinput.includes('export const Studioinput = React.forwardRef'));
-assert.ok(studioinput.includes('"vt-studio-input"'));
-assert.ok(studioinput.includes('data-vt-studio-field-kind="studioinput"'));
-assert.ok(studioinput.includes('import "../../styles/studio-input.css"'));
+// Studioinput is isolated from StudioTextInput and all shared Studio tokens/settings.
+assert.ok(studioinput.includes('export type StudioinputSize = "standard" | "compact" | "micro"'));
+assert.ok(!studioinput.includes('from "../tokens"'));
 assert.ok(!studioinput.includes('from "./StudioTextInput"'));
+assert.ok(!studioinput.includes('data-vt-studio-control="true"'));
 assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="standard"]'));
 assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="compact"]'));
 assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="micro"]'));
+assert.ok(!studioinputCss.includes("--pair-a"));
+assert.ok(!studioinputCss.includes("--pair-b"));
+assert.ok(!studioinputCss.includes("--vt-studio-control"));
 assert.ok(!controls.includes("export const Studioinput = StudioTextInput"));
 assert.ok(controls.includes('import { Studioinput } from "./Studioinput"'));
 assert.ok(catalog.includes('title="Studioinput · Independent Input Primitive"'));
