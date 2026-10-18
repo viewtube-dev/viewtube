@@ -74,7 +74,7 @@ test("counter catalog groups primary and secondary palettes in centered per-size
 });
 
 test("Studio counter hold behavior is wired to pointer events for touch and mouse", () => {
-  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 4);
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 6);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
@@ -85,7 +85,7 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
 });
 
 test("Studio counter press-and-hold is wired for touch and mouse", () => {
-  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 4);
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 6);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
