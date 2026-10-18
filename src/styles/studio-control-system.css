@@ -480,7 +480,7 @@ button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigge
   
   --vt-legend-label-height: 20px;
   --vt-legend-label-font-size: 14px;
-  --vt-legend-chevron-size: 28px;
+  --vt-legend-chevron-size: var(--vt-studio-44-icon-size, 38px);
   --vt-legend-count-size: 28px;
   
   position: relative;
@@ -806,8 +806,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
    The !important declarations in this scoped block intentionally beat inherited
    legacy button/reset styles from host toolboxes; keep the overrides local to this
    external integration boundary until those host styles are removed at source. */
-.vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 6px; --vt-dropdown-font-size: 38px; --vt-studio-dropdown-rail-size: 44px; --vt-studio-dropdown-chevron-size: 38px; }
-.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 4px; --vt-dropdown-font-size: 24px; --vt-studio-dropdown-rail-size: 28px; --vt-studio-dropdown-chevron-size: 24px; }
+.vt-studio-dropdown { --vt-dropdown-height: var(--vt-studio-44-height, 44px); --vt-dropdown-stroke: var(--vt-studio-44-stroke, 3px); --vt-dropdown-radius: var(--vt-studio-44-radius, 6px); --vt-dropdown-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-dropdown-rail-size: var(--vt-studio-44-height, 44px); --vt-studio-dropdown-chevron-size: var(--vt-studio-44-icon-size, 38px); }
+.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: var(--vt-studio-28-height, 28px); --vt-dropdown-stroke: var(--vt-studio-28-stroke, 2px); --vt-dropdown-radius: var(--vt-studio-28-radius, 4px); --vt-dropdown-font-size: var(--vt-studio-28-font-size, 24px); --vt-studio-dropdown-rail-size: var(--vt-studio-28-height, 28px); --vt-studio-dropdown-chevron-size: var(--vt-studio-28-icon-size, 24px); }
 .vt-studio-dropdown button[data-dropdown-trigger="true"] {
   box-sizing: border-box;
   display: grid;
