@@ -3456,6 +3456,8 @@
    make the control itself mobile-safe instead of disabling pinch zoom.
    ========================================================================== */
 @media (max-width:767px), (hover:none) and (pointer:coarse) {
+  /* The 16px no-zoom guard is for legacy fields only. Studio primitives own
+     their type scale, including the independent Studioinput data marker. */
   [data-vt-toolbox] :is(
     input[type="text"],
     input[type="search"],
@@ -3467,12 +3469,13 @@
     input:not([type]),
     textarea,
     select
-  ) {
+  ):not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input) {
     font-size:16px!important;
     scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px);
   }
 
-  .vt-subtoolbox-input {
+  .vt-subtoolbox-input:not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input),
+  .vt-subtoolbox-labeled-control:not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input) {
     font-size:16px!important;
   }
 }
