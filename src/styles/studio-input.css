@@ -8,13 +8,13 @@ input.vt-studio-input {
   padding: 0 12px;
   border: 3px solid #000;
   border-radius: 6px;
-  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent);
-  color: var(--pair-a, #36e0f6);
-  -webkit-text-fill-color: var(--pair-a, #36e0f6);
-  caret-color: var(--pair-a, #36e0f6);
+  background: color-mix(in srgb, #36e0f6 50%, transparent);
+  color: #36e0f6;
+  -webkit-text-fill-color: #36e0f6;
+  caret-color: #36e0f6;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 1000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  -webkit-text-stroke: 1px currentColor;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: 1;
@@ -24,21 +24,21 @@ input.vt-studio-input {
 }
 
 input.vt-studio-input,
-input.vt-studio-input[data-size="standard"] {
+input.vt-studio-input[data-studioinput-size="standard"] {
   height: 44px;
   border-width: 3px;
   border-radius: 6px;
   font-size: 38px;
 }
 
-input.vt-studio-input[data-size="compact"] {
+input.vt-studio-input[data-studioinput-size="compact"] {
   height: 28px;
   border-width: 2px;
   border-radius: 4px;
   font-size: 24px;
 }
 
-input.vt-studio-input[data-size="micro"] {
+input.vt-studio-input[data-studioinput-size="micro"] {
   height: 14px;
   border-width: 1px;
   border-radius: 2px;
