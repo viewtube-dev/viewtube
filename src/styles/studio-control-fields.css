@@ -117,7 +117,7 @@ html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] textarea {
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  -webkit-text-stroke-color: var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary);
 }
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
@@ -125,11 +125,11 @@ html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type
 }
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] textarea {
-  -webkit-text-stroke-width: var(--vt-studio-textarea-standard-text-stroke, 0.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 html body textarea[data-vt-studio-control="true"][data-size="compact"],
 html body [data-vt-studio-control="true"] textarea[data-size="compact"] {
-  -webkit-text-stroke-width: var(--vt-studio-textarea-compact-text-stroke, 0.35px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 
 /* Focus changes only the glyph stroke to black; keep the secondary outline. */
