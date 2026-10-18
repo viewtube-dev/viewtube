@@ -23,24 +23,24 @@ test("StudioCounter is a new button-only double-split primitive across all three
   for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
-test("StudioRightCounter is a new button-only split-right primitive with a divided action rail", () => {
-  const start = component.indexOf("export const StudioRightCounter:")
-  const end = component.indexOf("StudioRightCounter.displayName", start)
+test("StudioSideCounter is a new button-only split-right primitive with a divided action rail", () => {
+  const start = component.indexOf("export const StudioSideCounter:")
+  const end = component.indexOf("StudioSideCounter.displayName", start)
   const source = component.slice(start, end)
   assert.ok(start >= 0 && end > start)
   assert.match(source, /layout="right"/)
-  assert.match(source, /data-vt-library-component": "StudioRightCounter"/)
-  assert.match(source, /<span className="vt-studio-right-counter__value"/)
+  assert.match(source, /data-vt-library-component": "StudioSideCounter"/)
+  assert.match(source, /<span className="vt-studio-side-counter__value"/)
   assert.match(source, /<ChevronUp/)
   assert.match(source, /<ChevronDown/)
   assert.doesNotMatch(source, /<input|StudioInlineStepper|StudioSplitStepper|normalizeStudioInlineStepperValue/)
-  assert.match(styles, /\.vt-studio-right-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/)
-  assert.match(styles, /\.vt-studio-right-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/)
-  assert.match(styles, /\.vt-studio-right-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/)
-  assert.match(styles, /\.vt-studio-right-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
-  assert.match(styles, /\.vt-studio-right-counter\[data-vt-studio-split="right"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
-  assert.match(styles, /\.vt-studio-right-counter__actions button:first-child\s*\{[^}]*border-bottom:[^}]+/s)
-  for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioRightCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  assert.match(styles, /\.vt-studio-side-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/)
+  assert.match(styles, /\.vt-studio-side-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/)
+  assert.match(styles, /\.vt-studio-side-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/)
+  assert.match(styles, /\.vt-studio-side-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
+  assert.match(styles, /\.vt-studio-side-counter\[data-vt-studio-split="right"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
+  assert.match(styles, /\.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:[^}]+/s)
+  for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioSideCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
 test("counter affordances have hold-repeat, enlarged icons, activation motion, and aligned right divider", () => {
@@ -50,7 +50,7 @@ test("counter affordances have hold-repeat, enlarged icons, activation motion, a
   assert.match(styles, /width:\s*36px;\s*height:\s*36px;\s*stroke-width:\s*3\.75;/);
   assert.match(styles, /vt-studio-counter-pop/);
   assert.match(styles, /vt-studio-counter-hold-pulse/);
-  assert.match(styles, /vt-studio-right-counter__actions button:first-child \{ border-bottom: 1px solid #000; \}/);
+  assert.match(styles, /vt-studio-side-counter__actions button:first-child \{ border-bottom: 1px solid #000; \}/);
 });
 
 test("counter palette variants are paired by size and centered, with max 100", () => {
@@ -74,7 +74,7 @@ test("counter catalog groups primary and secondary palettes in centered per-size
 });
 
 test("Studio counter hold behavior is wired to pointer events for touch and mouse", () => {
-  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 4);
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 6);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
@@ -85,7 +85,7 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
 });
 
 test("Studio counter press-and-hold is wired for touch and mouse", () => {
-  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 4);
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 6);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
@@ -99,6 +99,24 @@ test("both counter styles tint resting numeral fill and stroke against each pale
   assert.match(styles, /\.vt-studio-counter\.is-reversed[\s\S]*?-webkit-text-stroke-color:\s*color-mix\(in srgb, #fff 50%, var\(--pair-b\) 50%\)/);
   assert.match(styles, /\.vt-studio-counter:has\([\s\S]*?color:\s*#000;\s*-webkit-text-fill-color:\s*#000;\s*-webkit-text-stroke:\s*1px var\(--vt-studio-control-accent, var\(--pair-a\)\)/);
   assert.match(styles, /\.vt-studio-counter\.is-reversed:has\([\s\S]*?background:\s*color-mix\(in srgb, var\(--pair-b\) 50%, transparent\);\s*color:\s*#000;\s*-webkit-text-fill-color:\s*#000;\s*-webkit-text-stroke-color:\s*var\(--pair-b\)/);
-  assert.match(styles, /\.vt-studio-right-counter__value/);
-  assert.match(styles, /\.vt-studio-right-counter\.is-reversed[\s\S]*?-webkit-text-stroke-color:\s*color-mix\(in srgb, #fff 50%, var\(--pair-b\) 50%\)/);
+  assert.match(styles, /\.vt-studio-side-counter__value/);
+  assert.match(styles, /\.vt-studio-side-counter\.is-reversed[\s\S]*?-webkit-text-stroke-color:\s*color-mix\(in srgb, #fff 50%, var\(--pair-b\) 50%\)/);
+});
+
+test("StudioLeftCounter places the two-button action rail on the left and is available for opposite-palette catalog specimens", () => {
+  const start = component.indexOf("export const StudioLeftCounter:");
+  const end = component.indexOf("StudioLeftCounter.displayName", start);
+  const source = component.slice(start, end);
+  assert.ok(start >= 0 && end > start);
+  assert.match(source, /layout="left"/);
+  assert.match(source, /leftRailContent=/);
+  assert.match(source, /data-vt-library-component": "StudioLeftCounter"/);
+  assert.match(source, /"data-vt-studio-control-kind": "studio-left-counter"/);
+  assert.match(source, /<span className="vt-studio-side-counter__value"/);
+  assert.match(styles, /\.vt-studio-left-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/);
+  assert.match(styles, /\.vt-studio-left-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/);
+  assert.match(styles, /\.vt-studio-left-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/);
+  assert.match(styles, /\.vt-studio-left-counter__rail\[data-rail="start"\]\s*\{[^}]*border-right:/s);
+  assert.match(catalog, /StudioLeftCounter className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioSideCounter className="is-reversed"/);
 });

@@ -1,7 +1,7 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
-import { StudioRightCounter } from "../../studio-ui/primitives/StudioControls"
+import { StudioSideCounter } from "../../studio-ui/primitives/StudioControls"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -468,7 +468,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <StudioTextArea sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue="DESCRIPTION" aria-label="Textarea primitive" />
   }
   if (name === "Stepper") {
-    return <StudioRightCounter size={level === "l2" ? "compact" : "standard"} value={stepperValue} onValueChange={setStepperValue} ariaLabel="Demo value" />
+    return <StudioSideCounter size={level === "l2" ? "compact" : "standard"} value={stepperValue} onValueChange={setStepperValue} ariaLabel="Demo value" />
   }
   if (name === "Toggle") {
     return <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />
