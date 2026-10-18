@@ -298,6 +298,7 @@ Studiocheck.displayName = "Studiocheck"
 export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
 Studioxbox.displayName = "Studioxbox"
 export { Studioinput }
+export type { StudioinputProps } from "./Studioinput"
 export const Studioarea = StudioTextArea
 
 /** Canonical public names; lowercase legacy exports remain compatibility aliases. */
