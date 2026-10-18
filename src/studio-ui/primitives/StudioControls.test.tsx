@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -18,6 +18,29 @@ const canonicalTail = (css: string) => {
   const start = css.lastIndexOf("/* Canonical Studio Controls contract");
   return start >= 0 ? css.slice(start) : css;
 };
+
+describe("Studio radio build, orbit, and spiral motion contract", () => {
+  it("renders a cycling radio motion state and keeps the indicator SVG inside the stationary control", () => {
+    const html = renderToStaticMarkup(<StudioChoice kind="radio" aria-label="Animated radio" />)
+    expect(html).toContain('data-radio-motion="build"')
+    expect(html).toContain('data-radio-direction="on"')
+    expect(html).toContain('class="vt-studio-radio-motion"')
+    expect(html).toContain('class="vt-studio-radio-ring vt-studio-radio-ring-outer"')
+    expect(html).toContain('class="vt-studio-radio-spiral vt-studio-radio-spiral-a"')
+    expect(html).not.toContain('data-radio-motion="inward"')
+  })
+
+  it("defines reverse-off keyframes for all three radio motions and honors reduced motion", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
+    for (const motion of ["build", "orbit", "spiral"]) {
+      expect(css).toContain(`data-radio-motion="${motion}"`)
+      expect(css).toContain(`data-radio-direction="off"`)
+      expect(css).toContain(`vt-studio-radio-${motion}`)
+    }
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)")
+    expect(css).not.toContain("vt-studio-radio-inward")
+  })
+})
 
 describe("Studio dropdown chevron and split-left contract", () => {
   it("renders the split-left dropdown with a leading fixed chevron rail and shared listbox behavior", () => {

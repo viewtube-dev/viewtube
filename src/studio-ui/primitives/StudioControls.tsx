@@ -226,11 +226,68 @@ export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid
 );
 export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
-export const StudioChoice: React.FC<StudioChoiceProps> = ({ kind, mark = "check", skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
-  <button type={type} role={kind} aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, studioSkinClass(skin), checked && "is-on", className)} {...props}>
-    {kind === "radio" ? <span className="vt-studio-44-dot" aria-hidden="true" /> : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
-  </button>
-);
+const STUDIO_RADIO_MOTIONS = ["build", "orbit", "spiral"] as const
+type StudioRadioMotion = typeof STUDIO_RADIO_MOTIONS[number]
+export const StudioChoice: React.FC<StudioChoiceProps> = ({
+  kind, mark = "check", skin = "solid", checked, className, shape = "round",
+  type = "button", onClick, disabled, ...props
+}) => {
+  const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false)
+  const [motionIndex, setMotionIndex] = React.useState(0)
+  const [activeMotionIndex, setActiveMotionIndex] = React.useState(0)
+  const [motionDirection, setMotionDirection] = React.useState<"on" | "off">("on")
+  const isChecked = checked ?? uncontrolledChecked
+  const [motionRun, setMotionRun] = React.useState(0)
+  const handleChoiceClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+    onClick?.(event)
+    if (event.defaultPrevented || disabled) return
+    if (kind === "radio") {
+      setMotionDirection(isChecked ? "off" : "on")
+      if (isChecked) {
+        // Keep the last active motion selected so deselection reverses it.
+      } else {
+        // Capture the current motion for this activation, then queue the next
+        // of the three animations for the next activation cycle.
+        setActiveMotionIndex(motionIndex)
+        setMotionIndex(index => (index + 1) % STUDIO_RADIO_MOTIONS.length)
+      }
+      setMotionRun(run => run + 1)
+    }
+    if (checked === undefined) setUncontrolledChecked(value => !value)
+  }
+  const radioMotion = STUDIO_RADIO_MOTIONS[activeMotionIndex] as StudioRadioMotion
+  return (
+    <button
+      type={type}
+      role={kind}
+      aria-checked={isChecked}
+      data-vt-studio-control="true"
+      data-size="standard"
+      data-radio-motion={kind === "radio" ? radioMotion : undefined}
+      data-radio-direction={kind === "radio" ? motionDirection : undefined}
+      data-radio-motion-run={kind === "radio" ? motionRun : undefined}
+      className={studioClasses("vt-studio-44-choice", `is-${kind}`, `is-${shape}`, `is-${mark}`, studioSkinClass(skin), isChecked && "is-on", className)}
+      onClick={handleChoiceClick}
+      disabled={disabled}
+      {...props}
+    >
+      {kind === "radio" ? (
+        <svg className="vt-studio-radio-motion" viewBox="0 0 44 44" aria-hidden="true" key={motionRun}>
+          <g className="vt-studio-radio-rings">
+            <circle className="vt-studio-radio-ring vt-studio-radio-ring-outer" cx="22" cy="22" r="14.75" />
+            <circle className="vt-studio-radio-ring vt-studio-radio-ring-inner" cx="22" cy="22" r="8.25" />
+            <circle className="vt-studio-radio-core" cx="22" cy="22" r="3.75" />
+          </g>
+          <g className="vt-studio-radio-spirals">
+            <path className="vt-studio-radio-spiral vt-studio-radio-spiral-a" d="M22 22 C34 22 34 10 22 10 C10 10 10 34 22 34 C34 34 34 10 22 10" />
+            <path className="vt-studio-radio-spiral vt-studio-radio-spiral-b" d="M22 22 C10 22 10 34 22 34 C34 34 34 10 22 10 C10 10 10 34 22 34" />
+          </g>
+          <circle className="vt-studio-radio-solid" cx="22" cy="22" r="16.5" />
+        </svg>
+      ) : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
+    </button>
+  )
+}
 export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivElement> {
   value: boolean;
   onValueChange?: (value: boolean) => void;
