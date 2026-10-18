@@ -34,7 +34,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Baseline line-height | `0.86` for single-line controls; multiline areas use their registered line-height below |
 | Primary color | `--pair-a` |
 | Secondary color | `--pair-b` |
-| Default fill | Buttons, badges, and ordinary action faces use 100% primary fill unless the variant explicitly denotes secondary/alternate state |
+| Default fill | Fields use 50% primary fill at rest and 15% on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
 | Alternate / split-rail fill | Secondary color; split icon rails are secondary by default |
 | Default label color | Black (`#000`) unless a primitive/state contract explicitly specifies primary-colored text |
 | Default outer border | Black (`#000`) |
