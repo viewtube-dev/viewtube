@@ -16,18 +16,25 @@ for (const forbidden of ["floating-label", "fixed-label", "vt-studio-floating-fi
   assert.ok(!input.includes(forbidden), "plain input must not include " + forbidden);
 }
 
-// Size selectors set literal font sizes and matching geometry on the native input.
-assert.ok(css.includes('input.vt-studio-text-input[data-size="standard"]') || css.includes('input.vt-studio-text-input:not([data-size])'));
-assert.ok(css.includes('data-size="standard"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])'));
-assert.ok(css.includes('data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])'));
-assert.ok(css.includes('data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])'));
-assert.ok(css.includes("--vt-studio-input-height: var(--vt-studio-standard-height, 44px)"));
-assert.ok(css.includes("--vt-studio-input-height: var(--vt-studio-compact-height, 28px)"));
-assert.ok(css.includes("--vt-studio-input-height: var(--vt-studio-micro-height, 14px)"));
-assert.ok(css.includes("--vt-studio-input-font-size: 38px;") && css.includes("font-size: 38px;"));
-assert.ok(css.includes("--vt-studio-input-font-size: 24px;") && css.includes("font-size: 24px;"));
-assert.ok(css.includes("--vt-studio-input-font-size: 10px;") && css.includes("font-size: 10px;"));
-assert.ok(!css.includes("html body textarea") && !css.includes(".vt-studio-floating-field-label") && !css.includes(".vt-studio-fixed-field-label"));
+// The plain input stylesheet is the only native input font-size authority.
+assert.ok(css.includes('input.vt-studio-text-input[data-size="standard"]'));
+assert.ok(css.includes('font-size: 38px;'));
+assert.ok(css.includes('input.vt-studio-text-input[data-size="compact"]'));
+assert.ok(css.includes('font-size: 24px;'));
+assert.ok(css.includes('input.vt-studio-text-input[data-size="micro"]'));
+assert.ok(css.includes('font-size: 10px;'));
+assert.ok(!css.includes("textarea") && !css.includes(".vt-studio-floating-field-label") && !css.includes(".vt-studio-fixed-field-label"));
+
+function nativeInputFontSizeRules(stylesheet) {
+  return [...stylesheet.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter(([, selector, declarations]) =>
+      /font-size\s*:/.test(declarations) &&
+      /input\s*\[data-vt-studio-control\s*=\s*["']true["']\]/.test(selector) &&
+      !/textarea/.test(selector)
+    );
+}
+assert.deepEqual(nativeInputFontSizeRules(readFileSync("src/styles/studio-control-system.css", "utf8")), []);
+assert.deepEqual(nativeInputFontSizeRules(readFileSync("src/styles/studio-control-fields.css", "utf8")), []);
 
 // Root loads the old shared controls first and the plain input foundation after it.
 assert.ok(main.indexOf("import './index.css'") < main.indexOf("import './styles/studio-text-input.css'"));
