@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -18,6 +18,36 @@ const canonicalTail = (css: string) => {
   const start = css.lastIndexOf("/* Canonical Studio Controls contract");
   return start >= 0 ? css.slice(start) : css;
 };
+
+
+describe("canonical Studio upload frame", () => {
+  it("renders the standard upload frame with accessible file input and layered pair-color anatomy", () => {
+    const html = renderToStaticMarkup(<StudioUploadFrame aria-label="Upload media" />);
+    expect(html).toContain('data-vt-studio-upload-frame="true"');
+    expect(html).toContain('data-vt-library-component="StudioUploadFrame"');
+    expect(html).toContain('data-size="standard"');
+    expect(html).toContain('type="file"');
+    expect(html).toContain('aria-label="Upload media"');
+    expect(html).toContain('class="vt-studio-upload-frame__layers"');
+    expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
+    expect(html).toContain("DROP OR CHOOSE FILE");
+    expect(html).not.toContain("FA618A");
+    expect(html).not.toContain("4EE4BE");
+  });
+
+  it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
+    const html = renderToStaticMarkup(<StudioUploadFrame sizeVariant="compact" accept="image/*" aria-label="Compact upload" />);
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('accept="image/*"');
+    expect(css).toContain(".vt-studio-upload-frame");
+    expect(css).toContain("var(--pair-a");
+    expect(css).toContain("var(--pair-b");
+    expect(css).toContain("prefers-reduced-motion: reduce");
+    expect(css).toContain(".vt-studio-upload-frame.is-drag");
+    expect(css).toContain(".vt-studio-upload-frame.has-img");
+  });
+});
 
 describe("Studio radio build, orbit, and spiral motion contract", () => {
   it("renders the animated indicator inside the stationary 44px radio shell", () => {
