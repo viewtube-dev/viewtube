@@ -48,6 +48,10 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain("prefers-reduced-motion: reduce");
     expect(css).toContain(".vt-studio-upload-frame.is-drag");
     expect(css).toContain(".vt-studio-upload-frame.has-img");
+    const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
+    expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
+    expect(legacyCatalog).toContain("<StudioUploadFrame");
+    expect(legacyCatalog).not.toContain("SubToolboxFileTarget");
   });
 });
 
