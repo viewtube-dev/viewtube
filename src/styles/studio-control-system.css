@@ -38,7 +38,7 @@
   --vt-studio-control-outline-stroke: 1px;
   --vt-studio-control-focus-outline-width: 1.3px;
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1px;
+  --vt-studio-control-secondary-outline-width: 1.3px;
   --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
   --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2.0);
 }
@@ -53,7 +53,7 @@
   --vt-studio-control-outline-stroke: 1.5px;
   --vt-studio-control-focus-outline-width: 3px;
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.5px;
+  --vt-studio-control-secondary-outline-width: 1.95px;
   --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
 }
