@@ -1538,3 +1538,76 @@ export interface StudioDoubleSplitBadgeProps extends Omit<React.HTMLAttributes<H
 export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ leftIcon, rightIcon, ...props }) =>
   <StudioSplitBadgeBase {...props} layout="double" iconLeft={leftIcon} iconRight={rightIcon} />;
 StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";
+
+export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+}
+
+/**
+ * Range slider using the canonical double-split shell: secondary-color rails,
+ * L1-style filled track and readout, with the rectangular v2 range handle.
+ */
+export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = ({
+  value, onValueChange, min = 0, max = 100, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Slider value",
+  className, ...props
+}) => {
+  const validBounds = Number.isFinite(min) && Number.isFinite(max) && min < max;
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const current = Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : min;
+  const progress = validBounds ? ((current - min) / (max - min)) * 100 : 0;
+  const rangeStyle = { "--vt-studio-slider-progress": `${progress}%` } as React.CSSProperties;
+  const changeValue = (raw: string) => {
+    const nextValue = Number(raw);
+    if (Number.isFinite(nextValue) && validBounds) onValueChange(Math.min(max, Math.max(min, nextValue)));
+  };
+  return (
+    <StudioSplitShell
+      layout="double"
+      sizeVariant={size}
+      fieldSlot
+      className={studioClasses("vt-studio-double-split-slider", `is-${size}`, className)}
+      railClassName="vt-studio-double-split-slider__rail"
+      leftRailContent={
+        <button
+          type="button"
+          className="vt-studio-double-split-slider__reset"
+          aria-label={`Reset ${ariaLabel}`}
+          title={`Reset ${ariaLabel}`}
+          disabled={disabled || !validBounds || current === min}
+          onClick={() => onValueChange(min)}
+        >↺</button>
+      }
+      rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
+      shellProps={{
+        ...props,
+        "data-vt-studio-slider": "double-split",
+        "data-vt-library-component": "StudioDoubleSplitSlider",
+        "data-size": size,
+        "aria-disabled": disabled || !validBounds ? "true" : undefined,
+      }}
+    >
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={safeStep}
+        value={current}
+        disabled={disabled || !validBounds}
+        aria-label={ariaLabel}
+        className="vt-studio-double-split-slider__input"
+        style={rangeStyle}
+        onChange={(event) => changeValue(event.currentTarget.value)}
+      />
+    </StudioSplitShell>
+  );
+};
+StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
+
