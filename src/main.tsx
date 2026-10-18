@@ -1,12 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 // Studio fields share one canonical typography and geometry stylesheet entry.
-import './styles/studio-control-system.css'
-import './styles/studio-control-vars.generated.css'
-import './styles/studio-control-core.css'
-import './styles/studio-control-split.css'
-import './styles/studio-control-fields.css'
-import './styles/studio-control-motion.css'
+import './styles/studio-control-entry.css'
 // Install developer-console error/rejection capture before anything else runs.
 // Verbose request and long-task diagnostics stay disabled for normal users.
 import { installOnScreenDiagnostics } from './app/onScreenDiagnostics'
