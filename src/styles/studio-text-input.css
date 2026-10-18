@@ -1,79 +1,60 @@
-/**
- * Studio plain text input — foundation only.
- * One element. One type scale. No label variants. No textarea rules.
- */
+/* Single authority for plain Studio text input type.
+   No !important. No label/textarea rules. */
 
-:root {
-  --vt-studio-input-accent: var(--pair-a, #36e0f6);
-  --vt-studio-input-fill-opacity: 50%;
-}
-
-html body input.vt-studio-text-input[data-size="standard"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-html body input.vt-studio-text-input:not([data-size]):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  --vt-studio-input-height: var(--vt-studio-standard-height, 44px);
-  --vt-studio-input-stroke: var(--vt-studio-standard-stroke, 3px);
-  --vt-studio-input-radius: var(--vt-studio-standard-radius, 6px);
-  --vt-studio-input-font-size: 38px;
-  font-size: 38px;
-}
-
-html body input.vt-studio-text-input[data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  --vt-studio-input-height: var(--vt-studio-compact-height, 28px);
-  --vt-studio-input-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-studio-input-radius: var(--vt-studio-compact-radius, 4px);
-  --vt-studio-input-font-size: 24px;
-  font-size: 24px;
-}
-
-html body input.vt-studio-text-input[data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  --vt-studio-input-height: var(--vt-studio-micro-height, 14px);
-  --vt-studio-input-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-input-radius: var(--vt-studio-micro-radius, 2px);
-  --vt-studio-input-font-size: 10px;
-  font-size: 10px;
-}
-
-html body input.vt-studio-text-input {
+input.vt-studio-text-input {
   box-sizing: border-box;
   display: block;
   width: 100%;
-  min-width: 0;
-  height: var(--vt-studio-input-height, 44px);
   margin: 0;
   padding: 0 12px;
-  border: var(--vt-studio-input-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-input-radius, 6px);
-  background: color-mix(in srgb, var(--vt-studio-input-accent) var(--vt-studio-input-fill-opacity), transparent);
-  color: var(--vt-studio-input-accent);
-  -webkit-text-fill-color: var(--vt-studio-input-accent);
-  caret-color: var(--vt-studio-input-accent);
+  border-style: solid;
+  border-color: #000;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent);
+  color: var(--pair-a, #36e0f6);
+  -webkit-text-fill-color: var(--pair-a, #36e0f6);
+  caret-color: var(--pair-a, #36e0f6);
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: var(--vt-studio-input-font-size, 38px);
   font-weight: 1000;
-  line-height: 1;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  line-height: 1;
   outline: none;
   box-shadow: none;
   appearance: none;
-  -webkit-appearance: none;
 }
 
-html body input.vt-studio-text-input::placeholder {
-  color: var(--vt-studio-input-accent);
-  -webkit-text-fill-color: var(--vt-studio-input-accent);
+input.vt-studio-text-input,
+input.vt-studio-text-input[data-size="standard"] {
+  height: 44px;
+  border-width: 3px;
+  font-size: 38px;
+}
+
+input.vt-studio-text-input[data-size="compact"] {
+  height: 28px;
+  border-width: 2px;
+  border-radius: 4px;
+  font-size: 24px;
+}
+
+input.vt-studio-text-input[data-size="micro"] {
+  height: 14px;
+  border-width: 1px;
+  border-radius: 2px;
+  font-size: 10px;
+}
+
+input.vt-studio-text-input::placeholder {
+  color: inherit;
+  -webkit-text-fill-color: inherit;
   opacity: 1;
   font: inherit;
 }
 
-html body input.vt-studio-text-input:focus,
-html body input.vt-studio-text-input:focus-visible {
+input.vt-studio-text-input:focus,
+input.vt-studio-text-input:focus-visible {
   color: #000;
   -webkit-text-fill-color: #000;
   caret-color: #000;
-}
-
-html body input.vt-studio-text-input:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
 }
