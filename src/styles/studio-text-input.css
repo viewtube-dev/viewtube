@@ -1,5 +1,4 @@
-/* Single authority for plain Studio text input type.
-   No !important. No label/textarea rules. */
+/* Single authority for plain Studio text input typography. */
 
 input.vt-studio-text-input {
   box-sizing: border-box;
