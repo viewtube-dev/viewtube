@@ -234,6 +234,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
 }) => {
   const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false)
   const [motionIndex, setMotionIndex] = React.useState(0)
+  const [activeMotionIndex, setActiveMotionIndex] = React.useState(0)
   const [motionDirection, setMotionDirection] = React.useState<"on" | "off">("on")
   const isChecked = checked ?? uncontrolledChecked
   const [motionRun, setMotionRun] = React.useState(0)
@@ -242,12 +243,20 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
     if (event.defaultPrevented || disabled) return
     if (kind === "radio") {
       setMotionDirection(isChecked ? "off" : "on")
-      setMotionIndex(index => (index + (isChecked ? 1 : 0)) % STUDIO_RADIO_MOTIONS.length)
+      if (isChecked) {
+        // Reverse the exact motion that produced the selected state.
+        setActiveMotionIndex(motionIndex)
+      } else {
+        // Capture the current motion for this activation, then queue the next
+        // of the three animations for the next activation cycle.
+        setActiveMotionIndex(motionIndex)
+        setMotionIndex(index => (index + 1) % STUDIO_RADIO_MOTIONS.length)
+      }
       setMotionRun(run => run + 1)
     }
     if (checked === undefined) setUncontrolledChecked(value => !value)
   }
-  const radioMotion = STUDIO_RADIO_MOTIONS[motionIndex] as StudioRadioMotion
+  const radioMotion = STUDIO_RADIO_MOTIONS[activeMotionIndex] as StudioRadioMotion
   return (
     <button
       type={type}
