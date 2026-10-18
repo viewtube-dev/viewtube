@@ -926,10 +926,22 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
-[data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
-  font-size: var(--vt-studio-control-font-size);
+/* Single authority for single-line input type size.
+   Plain input subject + numeric fallbacks so a broken custom-property chain
+   cannot collapse to UA/inherited 16px. Floating labels are separate. */
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  font-size: var(--vt-studio-control-font-size, 38px);
   line-height: var(--vt-studio-control-line-height, 0.86);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary);
+}
+input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  font-size: var(--vt-studio-control-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 0.5px) var(--vt-field-primary);
+}
+input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  font-size: var(--vt-studio-control-font-size, 10px);
+  line-height: 1;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 0.25px) var(--vt-field-primary);
 }
 [data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
   min-height: var(--vt-studio-44-height);
@@ -940,11 +952,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   padding-inline: 8px;
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) { height: var(--vt-studio-control-height); }
-input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  font-size: var(--vt-studio-14-font-size, 10px);
-  line-height: 1;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) var(--vt-field-primary);
-}
+
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   display: block;
   height: auto;
