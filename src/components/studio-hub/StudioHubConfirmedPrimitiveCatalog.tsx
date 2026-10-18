@@ -12,7 +12,8 @@ import {
   StudioLegendMultiDropdown,
   StudioCounter,
   StudioDoubleSplitSlider,
-  StudioRightCounter,
+  StudioSideCounter,
+  StudioLeftCounter,
   StudioSplitLeftButton,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
@@ -211,25 +212,25 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
   )
 }
 
-const ConfirmedStudioRightCounterFamily: React.FC = () => {
+const ConfirmedStudioSideCounterFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(5)
   const [compactValue, setCompactValue] = React.useState(3)
   const [microValue, setMicroValue] = React.useState(8)
   return (
     <Family
-      title="StudioRightCounter · Standard + Compact + Micro"
+      title="StudioSideCounter · Standard + Compact + Micro"
       nonDefaultSettings={[
         "Independent button-only counter with 2:1 display and two-cell right action rail.",
         "Each size is a centered row with primary and secondary palette variants paired side-by-side.",
         "Catalog range is 0–100 for all counter sizes.",
       ]}
-      provenance={<Provenance primitive="StudioRightCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · split-right geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · right-side action rail geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
         <div className="vt-confirmed-counter-size-rows">
-          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioRightCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard right counter" /><StudioRightCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard right counter secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioRightCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact right counter" /><StudioRightCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact right counter secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-counter-pair"><StudioRightCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro right counter" /><StudioRightCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro right counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard right counter" /><StudioLeftCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard left counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact right counter" /><StudioLeftCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact left counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro right counter" /><StudioLeftCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro left counter secondary palette" /></div></div>
         </div>
       </div>
     </Family>
@@ -729,7 +730,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
-    <ConfirmedStudioRightCounterFamily />
+    <ConfirmedStudioSideCounterFamily />
   </div>
 )
 
