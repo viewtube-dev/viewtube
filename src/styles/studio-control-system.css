@@ -3574,8 +3574,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   /* Match the micro geometry ratios at every size: track 6/14, thumb width
      5/14, thumb height 9/14. Minimums preserve the micro dimensions. */
   --vt-studio-slider-track-height: max(6px, calc(var(--vt-studio-control-height, 44px) * .428571));
-  --vt-studio-slider-thumb-width: max(5px, calc(var(--vt-studio-control-height, 44px) * .357143));
-  --vt-studio-slider-thumb-height: max(9px, calc(var(--vt-studio-control-height, 44px) * .642857));
+  --vt-studio-slider-thumb-width: max(7px, calc(var(--vt-studio-control-height, 44px) * .50));
+  --vt-studio-slider-thumb-height: max(11px, calc(var(--vt-studio-control-height, 44px) * .857143));
   --vt-studio-slider-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-studio-slider-radius: var(--vt-studio-control-radius, 6px);
   /* Outer split sections and the central track surface deliberately contrast. */
@@ -3595,8 +3595,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   font: inherit;
   line-height: 1;
   -webkit-text-stroke: 0;
@@ -3638,7 +3638,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   outline: 0;
   background: linear-gradient(to right,
     var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) 0 var(--vt-studio-slider-progress, 0%),
-    var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) var(--vt-studio-slider-progress, 0%) 100%);
+    #fff var(--vt-studio-slider-progress, 0%) 100%);
   box-shadow: inset 0 0 0 var(--vt-studio-slider-stroke) #000;
   cursor: pointer;
 }
@@ -3656,7 +3656,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   margin-top: calc((var(--vt-studio-slider-track-height) - var(--vt-studio-slider-thumb-height)) / 2);
   border: var(--vt-studio-slider-stroke) solid #000;
   border-radius: var(--vt-studio-slider-radius);
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: #000;
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-track {
   height: var(--vt-studio-slider-track-height);
@@ -3673,7 +3673,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: var(--vt-studio-slider-thumb-height);
   border: var(--vt-studio-slider-stroke) solid #000;
   border-radius: var(--vt-studio-slider-radius);
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: #000;
 }
 .vt-studio-double-split-slider input[type="range"]:focus-visible {
   outline: var(--vt-studio-slider-stroke) solid var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
@@ -3709,7 +3709,15 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   --vt-studio-control-primary: var(--pair-b, #ff7f6b);
   --vt-studio-control-secondary: var(--pair-a, #36e0f6);
 }
+/* The reset icon contrasts with its own variant's rail fill. Reversed/top and
+   base/bottom palette specimens therefore swap icon color with the palette. */
+.vt-studio-double-split-slider .vt-studio-double-split-slider__reset {
+  color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
 .vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset,
 .vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__value {
   background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset {
+  color: var(--vt-studio-control-secondary, var(--pair-a, #36e0f6));
 }
