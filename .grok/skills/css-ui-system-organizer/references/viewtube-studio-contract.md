@@ -1,74 +1,75 @@
 # ViewTube Studio Controls — Contract Snapshot
 
-Snapshot supplied for this skill, dated 2026-10-17, for `master/consolidated-feature-integration`. Verify these details against the current branch before applying changes.
+Snapshot reconciled on 2026-10-18 against the current `master/consolidated-feature-integration` implementation. This is a reference aid, not authority over newer source or explicit user-confirmed decisions; re-check the live tokens, CSS import graph, and defaults index before changing production code.
 
 ## Expected source-of-truth locations
 
 - Tokens: `src/studio-ui/tokens.ts`
 - Primitives: `src/studio-ui/primitives/StudioControls.tsx`, `StudioTextInput.tsx`, `StudioTextArea.tsx`
-- CSS: `src/styles/studio-control-system.css` and its imported vars/core/split/fields files
+- CSS entry point: `src/styles/studio-control-entry.css`, importing `studio-control-system.css`, generated vars, core, split, fields, and motion styles
 - Defaults index: `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
 - Confirmed catalog: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`
 
 ## Global defaults (size-independent)
 
-- Font family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif
+- Font family: Inter, ui-sans-serif, system-ui, sans-serif
 - Weight: 1000
-- Text transform: uppercase for labels/tags
-- Letter spacing: -0.02em (micro may use -0.01em)
-- Single-line baseline line-height: 0.86
+- Text transform: uppercase where appropriate
+- Letter spacing: -0.02em
 - Primary: `--pair-a`; secondary: `--pair-b`
-- Default fill: 100% primary unless a named secondary/alternate variant applies
-- Alternate/split-rail fill: secondary
-- Default label color and outer border: black
+- Default field fill: 50% primary at rest; fields use 15% primary fill on focus where the focused-field contract applies
+- Solid 100% fills are named family/variant choices, not the global field default
+- Default field text: primary at rest, black while focused
+- Default outer field border: black; focus outline: secondary at 65% of border stroke, offset 0
 - Label/icon alignment: centered except text fields, which are left-aligned
-- Default width: row-fill (100% / flex)
-- Shadows, transitions, and transforms: none on shells and faces
-- Focus outline offset: 0; no layout shift
+- Default width: row-fill (100% / flex), with documented content-width exceptions
+- Shadows, transitions, and transforms: none on shells and faces unless a named exception is explicitly registered
+- Focus must not shift layout
 
 ## Size ladder
 
 | Property | Standard | Compact | Micro |
 |---|---:|---:|---:|
 | Height | 44px | 28px | 14px |
-| Stroke | 3px | 2px | 1px |
+| Border stroke | 3px | 2px | 1px |
 | Radius | 6px | 4px | 2px |
-| Font size | 38px | 24px | 10px |
-| Text stroke | 1px | 0.5px | 0.25px |
-| Icon size | 38px | 24px | 10px |
-| Icon stroke | 1.9px | 2px | 1.5px |
+| Single-line input font size | 38px | 24px | 10px |
+| Input text stroke | 1px | 0.5px | 0.25px |
 | Secondary focus outline | 1.95px | 1.3px | 0.65px |
-| Gap | 4px | 4px | 4px |
-| Line height | 0.86 | 0.86 | 1.0 |
+| Component gap | 4px | 4px | 4px |
 
-Micro is based on compact geometry with a legibility floor and is reserved for informational split-left badges, not general interactive controls. Confirm actual token calculations before changing values.
+Micro is reserved for informational split-left badges rather than general interactive controls. Treat family-specific icon dimensions and strokes as token-owned values; verify them in the current token module instead of assuming they match text dimensions.
 
 ## Fixed-ratio families
 
 - Square toggles, checkboxes, and icon buttons: 1:1 face at the selected tier
-- Switch reference geometry: 75.68 × 44; scale only where compact is explicitly supported
 - Radio: 1:1 footprint with circular indicator
-- Inline stepper: 1:2:1 (square action : flexible value : square action)
-- Split stepper: editable pane 2:1 relative to square action rail
-- Split-left/right/double-split: square rails 1:1; flexible label region; secondary rail by default
-- One shared `StudioSplitShell` anatomy for split-left buttons, split badges, and username inputs
+- Inline stepper: square action : flexible value : square action
+- Split stepper: editable pane at 2:1 relative to square action rail
+- Split-left/right/double-split: square rails, flexible label region, one shared divider per boundary
+- Prefer shared split-shell anatomy over duplicated one-off split markup
 
 ## Text fields
 
-- Single-line and multiline text are left-aligned.
-- Single-line fields inherit 38/24px typography and 44/28px geometry; 50% primary fill at rest, 15% primary fill on focus, primary text at rest, black text on focus, secondary outline at about 65% of border width, outline offset 0.
-- Multiline textarea exception: 18/14px type, 0.5/0.35 text stroke, line-height 1.25/1.3, minimum height 92px, vertical resize; same color/focus contract.
+- Single-line fields: 44/28px geometry and 38/24px typography (micro typography is a named 10px informational exception); left aligned
+- Text field text stroke is independent of the black outer border stroke
+- Fields: 50% primary fill at rest; 15% primary fill on focus where the field focus fill rule applies; primary text at rest and black text while focused
+- Focus outline: secondary color at 65% of the relevant border stroke; offset 0; no black glow or layout movement
+- Textarea-only typography exception: 18px standard / 14px compact, text stroke 0.5px / 0.35px, line-height 1.25 / 1.3, minimum height 92px, vertical resize
+- Floating/fixed labels have their own typography rules; never use label font size as evidence of native input font size
 
-## Named exceptions in this snapshot
+## Named exceptions
 
-- Vault spectrum tag: 15px high, 2px border, 4px radius, 8px type, weight 900, spectrum colors
-- Tag-editor plus/check actions: compact 28px square, no shadow
+- Vault spectrum tag: verify current registered dimensions, stroke, radius, typography, and color treatment in tokens and the defaults index before editing
+- Tag-editor actions and closeable badges: preserve their named family geometry and content-width policy
 - Textarea typography: multiline reading scale above
-- Prominent action button: separate 56px family, not a third ordinary size tier
-- Content-width allow-list: spectrumTag, closeableBadge, wordToggle, tagEditorTag
+- Prominent action button: separate family, not a third ordinary size tier
+- Content-width is an allow-list exception, never a blanket size-tier behavior
 
 ## Ownership rules
 
-- Catalog specimens import production primitives; they do not duplicate geometry.
-- Changing size must not change color roles, weight, centering, or row-fill.
-- Add each new exception to tokens, this index, and catalog together.
+- Tokens own numeric contracts; CSS owns presentation; TSX owns markup and data attributes
+- Catalog specimens import production primitives rather than duplicate their geometry
+- Changing size must not silently change color roles, text weight, alignment, or row-fill behavior
+- Every intentional exception must be reflected consistently in tokens, the defaults index, and the confirmed catalog
+- This snapshot is guidance, not permission to override newer implementation or user-confirmed requirements
