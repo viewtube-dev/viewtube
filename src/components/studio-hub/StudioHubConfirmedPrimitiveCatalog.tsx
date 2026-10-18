@@ -730,18 +730,18 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
-      title="Split-left Dropdown · Fixed Chevron Rail"
+      title="Split-left Dropdown · Secondary Icon Rail"
       nonDefaultSettings={[
-        "Single-select dropdown with a fixed square leading rail and chevron.",
-        "All dropdown variants use fixed side-aligned chevrons: 38px icon in the 44px standard rail and 24px icon in the 28px compact rail.",
+        "Split primitive with a secondary-color icon rail on the left and a fixed chevron on the opposite edge.",
+        "Simple dropdowns have no split section or divider; their chevrons stay fixed at the trailing edge. Split dropdowns use a secondary-color icon section on the left and keep the chevron at the far right.",
         "Menu options inherit the canonical 44px / 28px row heights and 3px / 2px divider strokes.",
       ]}
       provenance={<Provenance primitive="StudioSplitLeftDropdown / StudioDropdown / StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · fixed square chevron rails · consistent menu row ratio" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown">
-        <span>Standard · split-left chevron</span>
+        <span>Standard · secondary icon rail + trailing chevron</span>
         <StudioSplitLeftDropdown aria-label="Split-left dropdown example" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
-        <span>Compact · split-left chevron</span>
+        <span>Compact · secondary icon rail + trailing chevron</span>
         <StudioSplitLeftDropdown aria-label="Compact split-left dropdown example" sizeVariant="compact" defaultValue="three" options={[{ value: "one", label: "One set" }, { value: "three", label: "Three sets" }, { value: "five", label: "Five sets" }]} />
         <span>Simple dropdown · fixed trailing chevron</span>
         <StudioSimpleDropdown aria-label="Fixed trailing chevron example" sizeVariant="compact" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }, { value: "focused", label: "Focused" }]} />
