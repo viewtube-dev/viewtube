@@ -1236,7 +1236,7 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
 StudioCounter.displayName = "StudioCounter";
 
 /** Right-rail counter: 2:1 display plus a square rail with two equal button cells. */
-export const StudioRightCounter: React.FC<StudioCounterProps> = ({
+export const StudioSideCounter: React.FC<StudioCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
   className, ...props
@@ -1258,19 +1258,55 @@ export const StudioRightCounter: React.FC<StudioCounterProps> = ({
     <StudioSplitShell
       layout="right"
       sizeVariant={size}
-      className={studioClasses("vt-studio-right-counter", `is-${size}`, className)}
-      railClassName="vt-studio-right-counter__rail"
-      rightRailContent={<span className="vt-studio-right-counter__actions">
+      className={studioClasses("vt-studio-side-counter", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      rightRailContent={<span className="vt-studio-side-counter__actions">
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
         <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
-      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-right-counter", "data-vt-library-component": "StudioRightCounter" }}
+      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-right-counter", "data-vt-library-component": "StudioSideCounter" }}
     >
-      <span className="vt-studio-right-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
     </StudioSplitShell>
   );
 };
-StudioRightCounter.displayName = "StudioRightCounter";
+StudioSideCounter.displayName = "StudioSideCounter";
+
+export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
+  value, onValueChange, min = 0, max = 100, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, ...props
+}) => {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const validBounds = min <= max;
+  const current = Number.isFinite(value) ? value : 0;
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const base = currentRef.current;
+    const precision = Math.min(12, Math.max(String(base).split(".")[1]?.length ?? 0, String(safeStep).split(".")[1]?.length ?? 0));
+    const next = Number((base + direction * safeStep).toFixed(precision));
+    onValueChange(Math.min(max, Math.max(min, next)));
+  }, [max, min, onValueChange, safeStep]);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max);
+  return (
+    <StudioSplitShell
+      layout="left"
+      sizeVariant={size}
+      className={studioClasses("vt-studio-left-counter", `is-${size}`, className)}
+      railClassName="vt-studio-left-counter__rail"
+      leftRailContent={<span className="vt-studio-side-counter__actions">
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+      </span>}
+      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-right-counter", "data-vt-library-component": "StudioLeftCounter" }}
+    >
+      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+    </StudioSplitShell>
+  );
+};
+StudioLeftCounter.displayName = "StudioLeftCounter";
 
 
 /** Closeable metadata badge using the global Studio size and palette contract. */
