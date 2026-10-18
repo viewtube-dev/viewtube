@@ -4,7 +4,7 @@
 **Audit date:** 2026-10-18  
 **Scope:** token source, base control stylesheet, field-specific stylesheet, field primitives, global contract, and Confirmed Primitive Library source.
 
-This is a source-level audit only. No production CSS or primitive behavior has been changed, and no browser-rendered certification is claimed.
+This report records the source-level audit and the first targeted Phase 2 correction. The CSS/token/test/doc changes are committed on this work branch; browser-rendered certification is not claimed.
 
 ## Confirmed sources inspected
 
@@ -21,8 +21,8 @@ This is a source-level audit only. No production CSS or primitive behavior has b
 
 | ID | Finding | Evidence | Required resolution |
 |---|---|---|---|
-| A1 | Field focus offset conflicts with the canonical zero-offset rule. | The field-specific focus rules use `--vt-studio-control-focus-outline-offset`; the later generic `[data-vt-studio-control]:is(input, textarea, select):focus-visible` rule sets `outline-offset: 1px` in `studio-control-system.css`. | Remove the later override or align it with the canonical zero-offset variable. Add a regression assertion for the final cascade. |
-| A2 | Focus outline sizing has multiple owners and fallback values. | Field-specific rules use `--vt-field-outline-stroke`; the later generic focus-visible rule uses `--vt-studio-control-focus-outline-width`. Tokens specify 65% of selected border width (1.95px / 1.3px / 0.65px). | Establish one field-outline variable path that resolves to the 65% contract for each supported tier, with zero offset. Keep visible keyboard focus and avoid layout shifts. |
+| A1 | Field focus offset conflicted with the canonical zero-offset rule. | Import order is `studio-control-system.css` → generated vars → core → split → fields → motion. A late generic rule in `studio-control-system.css` used `outline-offset: 1px !important`, overriding the later field stylesheet. | Corrected the late generic field rule to zero offset and removed `!important`; added a scoped regression assertion. The unrelated close-button 1px focus offset remains an intentional exception. |
+| A2 | Focus outline sizing had repeated conflicting values (3px/2px and 1.95px/1.3px) in the same stylesheet. | Token object, initial variable block, later legacy variable block, and floating/fixed label wrappers duplicated focus widths. | Normalized the repeated token-backed declarations to 1.95px / 1.3px / 0.65px and zero offset. A focused source-contract test now guards the ratios; runtime test execution remains outstanding. |
 | A3 | Global fill documentation conflicts with the token contract. | `STUDIO_CONTROL_SIZE_BASE` sets `defaultFillOpacity: 50`; the size contract also sets text-input fill to 50%. The defaults index currently describes ordinary action faces as 100% primary fill. | Separate general Studio control defaults from explicitly solid variants. Update the documentation only after verifying the current approved family-by-family fill contract; do not change all fills globally. |
 | A4 | Text stroke is not the same thing as border stroke. | `studio-text-input.css` sets native input value stroke from `--vt-studio-control-text-stroke`, while input border width is tiered separately. Textarea value strokes use the registered 0.5px / 0.35px values. | Preserve the explicit text-stroke contract. Do not mechanically replace text-stroke width with the 3px / 2px / 1px outer border width. |
 | A5 | The plain input has a dedicated stylesheet with fixed geometry and typography values. | `StudioTextInput.tsx` imports `studio-text-input.css`; that file declares 44/28/14px height, 38/24/10px type, border widths, radius, fill, color, and focus text color. | Determine actual import/cascade ownership before consolidating; keep native input value typography separate from floating-label typography. Avoid introducing a second competing source. |
@@ -51,4 +51,4 @@ This is a source-level audit only. No production CSS or primitive behavior has b
 4. Run the repository's focused tests, relevant type/lint checks, and build on an executable checkout.
 5. Verify computed styles and screenshots for standard/compact input, textarea, floating-label variants, and focus states in browser before marking visual certification complete.
 
-**Gate status:** Phase 1 is partially complete. Source discrepancies are identified, but import-order tracing, baseline test/build, and family-by-family fill resolution remain open. No production styling changes should be made until those gates are satisfied.
+**Gate status:** Source inventory, CSS import-order tracing, and family-by-family fill reconciliation are complete. Phase 2 corrections are implemented in the branch: repeated focus widths normalized, the late field focus override fixed, regression assertions added, and fill documentation clarified. The focused test/build baseline has not been executed in this environment, and browser/computed-style verification remains open; do not mark runtime certification complete until CI or a local checkout runs the suite.
