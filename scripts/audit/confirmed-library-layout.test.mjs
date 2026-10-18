@@ -134,7 +134,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*fontSize:\s*24/);
   assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize,\s*compactFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
   assert.match(tokens, /inlineStrokeWidth: "same as border width"/);
-  assert.match(css, /font-size:\s*var\(--vt-studio-control-font-size\);/);
+  assert.match(css, /font-size:\s*var\(--vt-studio-control-font-size,\s*38px\);/);
   assert.doesNotMatch(css, /--vt-studio-text-input-standard-font-size|--vt-studio-text-input-compact-font-size/);
   assert.match(tokens, /multiline:\s*\{\s*minHeight:\s*92,\s*standardFontSize:\s*18,\s*compactFontSize:\s*14/);
   assert.match(css, /--vt-studio-44-font-size:\s*38px/);
