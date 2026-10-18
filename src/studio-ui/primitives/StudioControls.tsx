@@ -228,7 +228,7 @@ export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
 const STUDIO_RADIO_MOTIONS = ["build", "orbit", "spiral"] as const
 type StudioRadioMotion = typeof STUDIO_RADIO_MOTIONS[number]
-const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direction: "on" | "off"; run: number; checked: boolean }> = ({ motion, direction, run, checked }) => {
+const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direction: "on" | "off"; run: number; checked: boolean; onEmpty: () => void }> = ({ motion, direction, run, checked, onEmpty }) => {
   const svgRef = React.useRef<SVGSVGElement>(null)
   const progressRef = React.useRef(0)
 
@@ -327,6 +327,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
     if (reducedMotion.matches || duration === 0) {
       progressRef.current = target
       render(target)
+      if (target === 0) onEmpty()
       return
     }
 
@@ -337,6 +338,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
       progressRef.current = progress
       render(progress)
       if (fraction < 1) frame = requestAnimationFrame(tick)
+      else if (target === 0) onEmpty()
     }
     frame = requestAnimationFrame(tick)
     const onMotionPreferenceChange = (event: MediaQueryListEvent) => {
@@ -350,7 +352,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
       cancelAnimationFrame(frame)
       reducedMotion.removeEventListener?.("change", onMotionPreferenceChange)
     }
-  }, [motion, direction, run, checked])
+  }, [motion, direction, run, checked, onEmpty])
 
   return (
     <svg ref={svgRef} className="vt-studio-radio-motion" viewBox="0 0 44 44" aria-hidden="true">
@@ -378,19 +380,18 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
   const [motionDirection, setMotionDirection] = React.useState<"on" | "off">("on")
   const isChecked = checked ?? uncontrolledChecked
   const [motionRun, setMotionRun] = React.useState(0)
+  const [motionAtEmpty, setMotionAtEmpty] = React.useState(true)
   const handleChoiceClick: React.MouseEventHandler<HTMLButtonElement> = event => {
     onClick?.(event)
     if (event.defaultPrevented || disabled) return
     if (kind === "radio") {
       setMotionDirection(isChecked ? "off" : "on")
-      if (isChecked) {
-        // Keep the last active motion selected so deselection reverses it.
-      } else {
-        // Capture the current motion for this activation, then queue the next
-        // of the three animations for the next activation cycle.
+      if (!isChecked && motionAtEmpty) {
+        // Select the next motif only when the previous reverse has fully emptied.
         setActiveMotionIndex(motionIndex)
         setMotionIndex(index => (index + 1) % STUDIO_RADIO_MOTIONS.length)
       }
+      setMotionAtEmpty(false)
       setMotionRun(run => run + 1)
     }
     if (checked === undefined) setUncontrolledChecked(value => !value)
@@ -412,7 +413,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       {...props}
     >
       {kind === "radio" ? (
-        <StudioRadioMotion motion={radioMotion} direction={motionDirection} run={motionRun} checked={isChecked} />
+        <StudioRadioMotion motion={radioMotion} direction={motionDirection} run={motionRun} checked={isChecked} onEmpty={() => setMotionAtEmpty(true)} />
       ) : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
     </button>
   )
