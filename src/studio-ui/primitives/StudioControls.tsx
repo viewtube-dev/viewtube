@@ -346,6 +346,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
       cancelAnimationFrame(frame)
       progressRef.current = target
       render(target)
+      if (target === 0) onEmpty()
     }
     reducedMotion.addEventListener?.("change", onMotionPreferenceChange)
     return () => {
