@@ -991,7 +991,7 @@ export interface StudioDropdownProps {
   id?: string
   ariaLabel?: string
   sizeVariant?: "standard" | "compact"
-  variant?: "default" | "simple"
+  variant?: "default" | "simple" | "split-left"
 }
 
 export const StudioDropdown: React.FC<StudioDropdownProps> = ({
@@ -1069,7 +1069,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   }
 
   return (
-    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
+    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
       <button
         id={id}
         type="button"
@@ -1084,8 +1084,9 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         onClick={() => setOpen((current) => !current)}
         onKeyDown={onKeyDown}
       >
+        {variant === "split-left" ? <span className="vt-studio-dropdown-chevron is-leading" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
         <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
-        <ChevronDown size={18} strokeWidth={3} aria-hidden="true" />
+        {variant !== "split-left" ? <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
       </button>
       {open && !disabled ? (
         <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
@@ -1130,6 +1131,12 @@ export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ opti
   <StudioDropdown {...props} options={options} variant="simple" />
 )
 StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
+
+/** Single-select dropdown with a fixed square chevron rail on the left. */
+export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
+  <StudioDropdown {...props} variant="split-left" />
+)
+StudioSplitLeftDropdown.displayName = "StudioSplitLeftDropdown"
 
 // Canonical Studio stepper implementations are owned by this module.
 /** Pointer hold-repeat shared by the canonical counter buttons. */
