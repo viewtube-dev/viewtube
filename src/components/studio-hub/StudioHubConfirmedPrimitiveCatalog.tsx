@@ -170,7 +170,7 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
       title="StudioCounter · Standard + Compact + Micro"
       nonDefaultSettings={[
         "Independent button-only counter; no legacy stepper composition.",
-        "Each size is a centered row with primary and secondary palette variants paired side-by-side.",
+        "Each size pairs the primary right-side rail with an opposite-palette left-side rail.",
         "Catalog range is 0–100 for all counter sizes.",
       ]}
       provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
