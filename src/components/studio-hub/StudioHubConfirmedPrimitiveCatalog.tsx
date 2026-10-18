@@ -11,6 +11,7 @@ import {
   StudioXCheckbox,
   StudioLegendMultiDropdown,
   StudioCounter,
+  StudioDoubleSplitSlider,
   StudioRightCounter,
   StudioSplitLeftButton,
   StudioSplitLeftBadge,
@@ -177,6 +178,32 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard counter" /><StudioCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact counter" /><StudioCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-counter-pair"><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro counter" /><StudioCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro counter secondary palette" /></div></div>
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+
+const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
+  const [standardValue, setStandardValue] = React.useState(62)
+  const [compactValue, setCompactValue] = React.useState(38)
+  const [microValue, setMicroValue] = React.useState(7)
+  return (
+    <Family
+      title="StudioDoubleSplitSlider · Standard + Compact + Micro"
+      nonDefaultSettings={[
+        "L1 range-slider track and live numeric readout on the canonical double-split shell.",
+        "Rectangular v2 handle with a black structural stroke; no shell shadow or movement.",
+        "Standard, compact, and micro specimens use 0–100 values and paired palette variants.",
+      ]}
+      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+        <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
         </div>
       </div>
     </Family>
@@ -698,6 +725,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <ConfirmedStudioCounterFamily />
+    <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioRightCounterFamily />
   </div>
 )
