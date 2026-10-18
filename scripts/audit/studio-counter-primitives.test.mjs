@@ -111,6 +111,7 @@ test("StudioLeftCounter places the two-button action rail on the left and is ava
   assert.match(source, /layout="left"/);
   assert.match(source, /leftRailContent=/);
   assert.match(source, /data-vt-library-component": "StudioLeftCounter"/);
+  assert.match(source, /"data-vt-studio-control-kind": "studio-left-counter"/);
   assert.match(source, /<span className="vt-studio-side-counter__value"/);
   assert.match(styles, /\.vt-studio-left-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/);
   assert.match(styles, /\.vt-studio-left-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/);
