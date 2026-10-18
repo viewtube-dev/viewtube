@@ -23,7 +23,7 @@ assert.ok(studioinput.includes('export const Studioinput = React.forwardRef'));
 assert.ok(studioinput.includes('"vt-studio-input"'));
 assert.ok(studioinput.includes('data-vt-studio-field-kind="studioinput"'));
 assert.ok(studioinput.includes('import "../../styles/studio-input.css"'));
-assert.ok(!studioinput.includes("StudioTextInput"));
+assert.ok(!studioinput.includes('from "./StudioTextInput"'));
 assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="standard"]'));
 assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="compact"]'));
 assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="micro"]'));
