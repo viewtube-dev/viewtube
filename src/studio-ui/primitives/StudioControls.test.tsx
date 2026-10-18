@@ -20,25 +20,29 @@ const canonicalTail = (css: string) => {
 };
 
 describe("Studio radio build, orbit, and spiral motion contract", () => {
-  it("renders a cycling radio motion state and keeps the indicator SVG inside the stationary control", () => {
+  it("renders the animated indicator inside the stationary 44px radio shell", () => {
     const html = renderToStaticMarkup(<StudioChoice kind="radio" aria-label="Animated radio" />)
     expect(html).toContain('data-radio-motion="build"')
     expect(html).toContain('data-radio-direction="on"')
     expect(html).toContain('class="vt-studio-radio-motion"')
     expect(html).toContain('class="vt-studio-radio-ring vt-studio-radio-ring-outer"')
     expect(html).toContain('class="vt-studio-radio-spiral vt-studio-radio-spiral-a"')
+    expect(html).toContain('viewBox="0 0 44 44"')
+    expect(html).toContain('class="vt-studio-radio-solid"')
     expect(html).not.toContain('data-radio-motion="inward"')
   })
 
-  it("defines reverse-off keyframes for all three radio motions and honors reduced motion", () => {
+  it("uses centered SVG attribute animation, clips motion to the control, and honors reduced motion", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
-    for (const motion of ["build", "orbit", "spiral"]) {
-      expect(css).toContain(`data-radio-motion="${motion}"`)
-      expect(css).toContain(`data-radio-direction="off"`)
-      expect(css).toContain(`vt-studio-radio-${motion}`)
-    }
-    expect(css).toContain("@media (prefers-reduced-motion: reduce)")
-    expect(css).not.toContain("vt-studio-radio-inward")
+    expect(source).toContain("requestAnimationFrame")
+    expect(source).toContain("prefers-reduced-motion: reduce")
+    expect(source).toContain('translate(22 22) scale(')
+    expect(source).toContain('cx="22" cy="22"')
+    expect(css).toContain("overflow: hidden")
+    expect(css).not.toContain("@keyframes vt-studio-radio-build")
+    expect(css).not.toContain("@keyframes vt-studio-radio-orbit")
+    expect(css).not.toContain("@keyframes vt-studio-radio-spiral")
   })
 })
 
