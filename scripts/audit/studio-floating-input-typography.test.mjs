@@ -18,15 +18,15 @@ assert.ok(input.includes('import "../../styles/studio-control-entry.css"'));
 assert.ok(input.includes('data-vt-studio-control": "true"'));
 assert.ok(controls.includes('import { StudioTextInput, StudioInput } from "./StudioTextInput"'));
 
-for (const [selector, size] of [
-  ['input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "38px"],
-  ['input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "24px"],
-  ['input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "10px"],
-  ['textarea[data-vt-studio-control="true"]', "18px"],
-  ['textarea[data-vt-studio-control="true"][data-size="compact"]', "14px"],
+for (const [selector, declaration] of [
+  ['input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "font-size: var(--vt-studio-44-font-size, 38px)"],
+  ['input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "font-size: var(--vt-studio-28-font-size, 24px)"],
+  ['input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"])', "font-size: var(--vt-studio-14-font-size, 10px)"],
+  ['textarea[data-vt-studio-control="true"]', "font-size: var(--vt-studio-textarea-standard-font-size, 18px)"],
+  ['textarea[data-vt-studio-control="true"][data-size="compact"]', "font-size: var(--vt-studio-textarea-compact-font-size, 14px)"],
 ]) {
   assert.ok(fields.includes(selector), "missing native control selector: " + selector);
-  assert.ok(fields.includes("font-size: var(--vt-studio-" ) || fields.includes("font-size: " + size));
+  assert.ok(fields.includes(declaration), "missing expected typography declaration: " + declaration);
 }
 assert.ok(fields.includes("--vt-studio-44-font-size: 38px"));
 assert.ok(fields.includes("--vt-studio-28-font-size: 24px"));
