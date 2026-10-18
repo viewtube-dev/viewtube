@@ -1,6 +1,5 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
-import "../tokens"
 import "../../styles/studio-input.css"
 
 export type StudioinputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
