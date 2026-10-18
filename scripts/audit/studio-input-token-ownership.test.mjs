@@ -50,10 +50,10 @@ test("plain Studio input retains the explicit standard, compact, and micro size 
 });
 
 test("primary inline glyph stroke is declared separately from the outer field border", () => {
-  assert.match(fieldCss, /-webkit-text-stroke:\\s*var\\(--vt-studio-control-text-stroke, 1px\\)\\s*var\\(--vt-field-primary\\)/);
-  assert.match(fieldCss, /-webkit-text-stroke:\\s*var\\(--vt-studio-textarea-standard-text-stroke, 0\\.5px\\)\\s*var\\(--vt-field-primary/);
-  assert.match(fieldCss, /-webkit-text-stroke:\\s*var\\(--vt-studio-textarea-compact-text-stroke, 0\\.35px\\)\\s*var\\(--vt-field-primary/);
-  assert.match(fieldCss, /:is\\(:focus, :focus-visible\\)[\\s\\S]*?-webkit-text-stroke-color:\\s*#000/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary\)/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-textarea-standard-text-stroke, 0\.5px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-textarea-compact-text-stroke, 0\.35px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /:is\(:focus, :focus-visible\)[\s\S]*?-webkit-text-stroke-color:\s*#000/);
   assert.match(inputPrimitive, /data-vt-studio-control="true"/);
   assert.match(textareaPrimitive, /"data-vt-studio-control": "true"/);
 });
