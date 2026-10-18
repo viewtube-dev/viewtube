@@ -2,12 +2,12 @@ import React, { useState } from "react"
 import {
   Check, ChevronDown, ChevronLeft, ChevronRight, Circle, FileText, Image, Lightbulb,
   Menu, Minus, MoreHorizontal, Music, Plus, Search, Settings2, SlidersHorizontal,
-  Upload, Video, X,
+  Video, X,
 } from "lucide-react"
 import {
-  SubToolboxFileTarget, SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
+  SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-primitive-catalogs.css"
 
@@ -174,7 +174,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   if (name === "Vertical Scrollbar") return <div className={`vt-catalog-vscroll is-${level}`} style={style}><button type="button" aria-label="Scroll up" onClick={() => setScrollPos(v => Math.max(0,v-10))}><ChevronDown className="up"/></button><span><i style={{top:`${scrollPos}%`}}/></span><button type="button" aria-label="Scroll down" onClick={() => setScrollPos(v => Math.min(58,v+10))}><ChevronDown/></button></div>
   if (name === "Disabled Button") return <button disabled className={`vt-catalog-button is-${level} is-disabled`}>Disabled</button>
   if (name === "Disabled Split Button") return <button disabled className={`vt-catalog-disabled-split is-${level}`}><span>{icon}</span><b>Disabled</b></button>
-  if (name === "Upload Frame") return <div className={`vt-catalog-upload-authority is-${level}`} style={style}><SubToolboxFileTarget label="Drop or choose file" icon={<Upload />} minHeight={level === "l0" ? 176 : level === "l1" ? 144 : 112} /></div>
+  if (name === "Upload Frame") return <div className={`vt-catalog-upload-authority is-${level}`} style={style}><StudioUploadFrame sizeVariant={level === "l0" ? "standard" : "compact"} aria-label={`${level.toUpperCase()} upload frame example`} /></div>
   if (name === "Pagination") return <div className={`vt-catalog-pagination is-${level}`} style={style}><button type="button" aria-label="Previous page" onClick={() => setPage(v => Math.max(1,v-1))}><ChevronLeft/></button>{[1,2,3].map(p => <button type="button" key={p} className={page===p ? "is-on" : ""} aria-current={page===p ? "page" : undefined} onClick={() => setPage(p)}>{p}</button>)}<button type="button" aria-label="Next page" onClick={() => setPage(v => Math.min(3,v+1))}><ChevronRight/></button></div>
   if (name.startsWith("Vault ")) {
     const Icon = name.includes("Landscape") || name.includes("Portrait") ? Image : name.includes("Audio") ? Music : FileText
