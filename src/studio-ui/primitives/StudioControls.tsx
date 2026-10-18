@@ -4,7 +4,7 @@ import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, ListFilter, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -1084,9 +1084,9 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         onClick={() => setOpen((current) => !current)}
         onKeyDown={onKeyDown}
       >
-        {variant === "split-left" ? <span className="vt-studio-dropdown-chevron is-leading" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
+        {variant === "split-left" ? <span className="vt-studio-dropdown-split-icon" data-vt-studio-dropdown-split-icon aria-hidden="true"><ListFilter size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
         <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
-        {variant !== "split-left" ? <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
+        <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span>
       </button>
       {open && !disabled ? (
         <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
