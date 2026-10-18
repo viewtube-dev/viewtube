@@ -1294,7 +1294,7 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
     <StudioSplitShell
       layout="left"
       sizeVariant={size}
-      className={studioClasses("vt-studio-left-counter", `is-${size}`, className)}
+      className={studioClasses("vt-studio-side-counter", "vt-studio-left-counter", `is-${size}`, className)}
       railClassName="vt-studio-left-counter__rail"
       leftRailContent={<span className="vt-studio-side-counter__actions">
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
