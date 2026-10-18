@@ -109,3 +109,157 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
   line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
 }
+
+
+/* Oct 16 canonical Studio field typography authority.
+   Font sizes target native controls, never floating-label elements. */
+:root {
+  --vt-studio-44-font-size: 38px;
+  --vt-studio-28-font-size: 24px;
+  --vt-studio-14-font-size: 10px;
+  --vt-studio-textarea-standard-font-size: 18px;
+  --vt-studio-textarea-compact-font-size: 14px;
+}
+
+[data-vt-studio-control="true"]:is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  textarea
+) {
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  -webkit-text-fill-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 1000;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+}
+
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
+  display: block;
+  height: var(--vt-studio-control-height, 44px);
+  padding: 0 12px;
+  font-size: var(--vt-studio-44-font-size, 38px);
+  line-height: 0.86;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
+  font-size: var(--vt-studio-28-font-size, 24px);
+  -webkit-text-stroke: 0.5px var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
+  font-size: var(--vt-studio-14-font-size, 10px);
+  line-height: 1;
+  -webkit-text-stroke: 0.25px var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+input[data-vt-studio-control="true"]::placeholder {
+  color: inherit;
+  -webkit-text-fill-color: inherit;
+  opacity: 1;
+  font: inherit;
+}
+
+input[data-vt-studio-control="true"]:is(:focus, :focus-visible):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 15%, transparent);
+}
+
+textarea[data-vt-studio-control="true"] {
+  display: block;
+  height: auto;
+  min-height: 92px;
+  padding: 10px 12px;
+  resize: vertical;
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  line-height: 1.25;
+  -webkit-text-stroke: 0.5px var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+textarea[data-vt-studio-control="true"][data-size="compact"] {
+  padding: 8px 10px;
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  line-height: 1.3;
+  -webkit-text-stroke: 0.35px var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 15%, transparent);
+}
+
+.vt-studio-floating-field {
+  --vt-studio-floating-label-size: var(--vt-studio-44-font-size, 38px);
+  position: relative;
+  display: block;
+  width: 100%;
+  isolation: isolate;
+}
+
+.vt-studio-floating-field[data-size="compact"] {
+  --vt-studio-floating-label-size: var(--vt-studio-28-font-size, 24px);
+}
+
+.vt-studio-floating-field[data-size="micro"] {
+  --vt-studio-floating-label-size: var(--vt-studio-14-font-size, 10px);
+}
+
+.vt-studio-floating-field.is-textarea {
+  --vt-studio-floating-label-size: var(--vt-studio-textarea-standard-font-size, 18px);
+}
+
+.vt-studio-floating-field.is-textarea[data-size="compact"] {
+  --vt-studio-floating-label-size: var(--vt-studio-textarea-compact-font-size, 14px);
+}
+
+.vt-studio-floating-field > .vt-studio-floating-field-label {
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  top: 50%;
+  max-width: calc(100% - 28px);
+  padding: 0;
+  overflow: hidden;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--vt-studio-floating-label-size);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-text-stroke: 0.5px currentColor;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transform-origin: left center;
+}
+
+.vt-studio-floating-field.is-textarea > .vt-studio-floating-field-label {
+  top: 18px;
+  transform: none;
+}
+
+.vt-studio-floating-field > :is(input, textarea):is(:focus, :not(:placeholder-shown)) + .vt-studio-floating-field-label {
+  top: 0;
+  left: 10px;
+  padding: 2.25px 4.5px;
+  border-radius: 3px;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  font-size: calc(var(--vt-studio-floating-label-size) * 0.8);
+  -webkit-text-stroke: 0.5px currentColor;
+  transform: translateY(-40%);
+}
