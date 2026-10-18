@@ -24,6 +24,7 @@ import {
   StudioSwitch,
   StudioTextArea,
   StudioTextInput,
+  Studioinput,
   StudioWordToggle,
   StudioSpectrumTag,
   StudioCloseableBadge,
@@ -289,6 +290,14 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-text-input.css" tokens="Plain input only: standard 44px / 38px, compact 28px / 24px, micro 14px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-text-input.css"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · plain input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · plain input</span><StudioTextInput sizeVariant="compact" aria-label="Studio plain text input compact" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+    </Family>
+    <Family title="Studioinput · Independent Input Primitive" nonDefaultSettings={[
+        "Separate native-input primitive with its own TSX module, CSS class, field-kind marker, and typography rules.",
+        "Does not alias StudioTextInput and can evolve independently without changing the plain text-input foundation.",
+      ]} provenance={<Provenance primitive="Studioinput" tsx="src/studio-ui/primitives/Studioinput.tsx" css="src/styles/studio-input.css" tokens="Independent plain input: standard 44px / 38px, compact 28px / 24px, micro 14px / 10px." imports={["src/studio-ui/primitives/Studioinput.tsx", "src/styles/studio-input.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · Studioinput</span><Studioinput sizeVariant="standard" aria-label="Studioinput standard" placeholder="STUDIOINPUT" data-vt-library-component="Studioinput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>28px compact · Studioinput</span><Studioinput sizeVariant="compact" aria-label="Studioinput compact" placeholder="STUDIOINPUT" data-vt-library-component="Studioinput" /></div>
+      <div className="vt-confirmed-variant"><span>14px micro · Studioinput</span><Studioinput sizeVariant="micro" aria-label="Studioinput micro" placeholder="STUDIOINPUT" data-vt-library-component="Studioinput" /></div>
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface.",

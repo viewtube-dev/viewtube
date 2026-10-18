@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const input = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+const studioinput = readFileSync("src/studio-ui/primitives/Studioinput.tsx", "utf8");
+const studioinputCss = readFileSync("src/styles/studio-input.css", "utf8");
 const css = readFileSync("src/styles/studio-text-input.css", "utf8");
 const main = readFileSync("src/main.tsx", "utf8");
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
@@ -15,6 +17,20 @@ assert.ok(input.includes('data-vt-studio-control="true"'));
 for (const forbidden of ["floating-label", "fixed-label", "vt-studio-floating-field", "vt-studio-fixed-label-field", "<label", "studio-control-entry.css"]) {
   assert.ok(!input.includes(forbidden), "plain input must not include " + forbidden);
 }
+
+// Studioinput is a separate primitive, not an alias to StudioTextInput.
+assert.ok(studioinput.includes('export const Studioinput = React.forwardRef'));
+assert.ok(studioinput.includes('"vt-studio-input"'));
+assert.ok(studioinput.includes('data-vt-studio-field-kind="studioinput"'));
+assert.ok(studioinput.includes('import "../../styles/studio-input.css"'));
+assert.ok(!studioinput.includes('from "./StudioTextInput"'));
+assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="standard"]'));
+assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="compact"]'));
+assert.ok(studioinputCss.includes('input.vt-studio-input[data-size="micro"]'));
+assert.ok(!controls.includes("export const Studioinput = StudioTextInput"));
+assert.ok(controls.includes('import { Studioinput } from "./Studioinput"'));
+assert.ok(catalog.includes('title="Studioinput · Independent Input Primitive"'));
+assert.ok(catalog.includes('data-vt-library-component="Studioinput"'));
 
 // The plain input stylesheet is the only native input font-size authority.
 assert.ok(css.includes('input.vt-studio-text-input[data-size="standard"]'));
