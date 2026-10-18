@@ -46,12 +46,13 @@ describe("standalone Studio text fields", () => {
     expect(compact).toContain('data-size="compact"')
   })
 
-  it("renders fixed label-box variants through the canonical input and textarea families", () => {
-    const standardInput = renderToStaticMarkup(<StudioTextInput variant="fixed-label" label="TITLE" aria-label="Title" />)
-    const compactInput = renderToStaticMarkup(<StudioTextInput variant="fixed-label" label="TITLE" sizeVariant="compact" aria-label="Compact title" />)
+  it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
+    const standardInput = renderToStaticMarkup(<StudioTextInput aria-label="Title" />)
+    const compactInput = renderToStaticMarkup(<StudioTextInput sizeVariant="compact" aria-label="Compact title" />)
     const compactArea = renderToStaticMarkup(<StudioTextArea variant="fixed-label" label="DESCRIPTION" sizeVariant="compact" aria-label="Compact description" />)
-    expect(standardInput).toContain('data-vt-studio-field-variant="fixed-label"')
-    expect(standardInput).toContain('class="vt-studio-fixed-field-label"')
+    expect(standardInput).toContain('class="vt-studio-text-input"')
+    expect(standardInput).not.toContain("vt-studio-floating-field")
+    expect(standardInput).not.toContain("vt-studio-fixed-field-label")
     expect(standardInput).toContain('data-size="standard"')
     expect(compactInput).toContain('data-size="compact"')
     expect(compactArea).toContain('data-vt-studio-field-kind="textarea"')
@@ -235,24 +236,29 @@ describe("Studio primitive catalog control layout", () => {
 
 
 describe("Studio text-field module ownership and typography", () => {
-  it("exports each labeled field alongside its matching standalone field module", async () => {
+  it("exports the plain input and keeps label treatment out of its primitive module", async () => {
     const inputModule = await import("./StudioTextInput")
     const areaModule = await import("./StudioTextArea")
-    expect(inputModule.StudioTextInput).toBeDefined()
+    const html = renderToStaticMarkup(<StudioTextInput aria-label="Title" />)
+    const inputSource = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextInput.tsx"), "utf8")
     expect(inputModule.StudioTextInput).toBeDefined()
     expect(areaModule.StudioTextArea).toBeDefined()
-    expect(renderToStaticMarkup(<StudioTextInput variant="floating-label" label="Title" />)).toContain("vt-studio-floating-field")
+    expect(html).toContain('class="vt-studio-text-input"')
+    expect(html).not.toContain("vt-studio-floating-field")
+    expect(inputSource).not.toContain("studio-control-entry.css")
+    expect(inputSource).not.toContain("floating-label")
     expect(renderToStaticMarkup(<StudioTextArea variant="floating-label" label="Description" />)).toContain("vt-studio-floating-field")
-    expect(areaModule.StudioTextArea).toBeDefined()
   })
 
-  it("uses global 38px/24px input typography and 18px/14px textarea typography without important overrides", () => {
+  it("uses literal 38px/24px/10px input sizes and separate 18px/14px textarea typography", () => {
+    const inputCss = readFileSync(resolve(process.cwd(), "src/styles/studio-text-input.css"), "utf8")
     const css = readStudioControlCss()
-    expect(css).toContain("--vt-studio-44-font-size: 38px")
-    expect(css).toContain("--vt-studio-28-font-size: 24px")
-    expect(css).toContain("font-size: var(--vt-studio-control-font-size);")
-    expect(css).not.toContain("--vt-studio-text-input-standard-font-size")
-    expect(css).not.toContain("--vt-studio-text-input-compact-font-size")
+    expect(inputCss).toContain("font-size: 38px;")
+    expect(inputCss).toContain("font-size: 24px;")
+    expect(inputCss).toContain("font-size: 10px;")
+    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-standard-height, 44px)")
+    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-compact-height, 28px)")
+    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 14px)")
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
     expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
@@ -619,24 +625,17 @@ describe("Studio Controls owns dropdown and stepper implementations", () => {
 
 
 describe("Studio text input and split-left badge typography parity", () => {
-  it("uses the size token for the actual input and excludes catalog demo typography overrides", () => {
+  it("uses the isolated plain input typography and excludes catalog demo overrides", () => {
     const css = readStudioControlCss()
+    const inputCss = readFileSync(resolve(process.cwd(), "src/styles/studio-text-input.css"), "utf8")
     const catalogCss = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
     const input = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextInput.tsx"), "utf8")
-    const fieldRule = css.slice(
-      css.indexOf('[data-vt-studio-control="true"]:is(input:not([type="checkbox"])'),
-      css.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]'),
-    )
-    expect(fieldRule).toContain("font-size: var(--vt-studio-control-font-size)")
-    expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-standard-font-size")
-    expect(fieldRule).not.toContain("font-size: var(--vt-studio-text-input-compact-font-size")
-    expect(input).toContain('data-vt-studio-field-kind="text-input"')
-    expect(css).toContain("--vt-studio-floating-label-size: var(--vt-studio-44-font-size, 38px)")
-    expect(css).toContain("input[data-vt-studio-control=\"true\"][data-vt-studio-field-kind=\"text-input\"]")
-    expect(css).toContain("font-size: var(--vt-studio-44-font-size, 38px)")
-    expect(css).toContain("input[data-vt-studio-control=\"true\"][data-vt-studio-field-kind=\"text-input\"][data-size=\"compact\"]")
-    expect(css).not.toContain("--vt-studio-text-input-standard-font-size")
-    expect(css).not.toContain("--vt-studio-text-input-compact-font-size")
+    expect(input).toContain('className={["vt-studio-text-input", className]')
+    expect(input).not.toContain("studio-control-entry.css")
+    expect(inputCss).toContain("font-size: 38px;")
+    expect(inputCss).toContain("font-size: 24px;")
+    expect(inputCss).toContain("font-size: 10px;")
+    expect(inputCss).toContain('input.vt-studio-text-input[data-size="compact"]')
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
     expect(catalogCss).toContain('.vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control="true"])')
     expect(catalogCss).not.toMatch(/\.vt-complete-catalog \.vt-catalog-field\s*\{\s*--field-accent:var\(--pair-a\)/)

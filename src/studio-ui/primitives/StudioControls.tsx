@@ -1,11 +1,6 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
-import "../../styles/studio-control-system.css"
-import "../../styles/studio-control-vars.generated.css"
-import "../../styles/studio-control-core.css"
-import "../../styles/studio-control-split.css"
-import "../../styles/studio-control-fields.css"
-import { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput } from "./StudioTextInput"
+import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
@@ -186,11 +181,26 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
 })
 
 /**
- * Canonical standalone Studio text input.
- * This component is defined and styled entirely by the Studio Controls system;
- * it has no import, wrapper, or runtime dependency on SubToolbox primitives.
+ * Separate search and numeric controls remain compatible with existing consumers;
+ * the StudioTextInput foundation itself is intentionally only one plain input.
  */
-export { StudioTextInput, StudioInput, StudioSearchInput, StudioNumberInput }
+export const StudioSearchInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
+  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioSearchInput.displayName = "StudioSearchInput"
+
+export const StudioNumberInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
+  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioNumberInput.displayName = "StudioNumberInput"
+
+export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
 export { StudioTextArea }
 export type { StudioTextAreaProps } from "./StudioTextArea"
@@ -1442,7 +1452,6 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
         <div className={["vt-studio-tag-editor__composer", fly ? "is-fading" : ""].filter(Boolean).join(" ")}>
           <StudioTextInput
             ref={inputRef}
-            variant="simple"
             sizeVariant="compact"
             value={draft}
             placeholder={placeholder}
