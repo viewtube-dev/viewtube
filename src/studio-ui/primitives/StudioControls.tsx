@@ -244,8 +244,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
     if (kind === "radio") {
       setMotionDirection(isChecked ? "off" : "on")
       if (isChecked) {
-        // Reverse the exact motion that produced the selected state.
-        setActiveMotionIndex(motionIndex)
+        // Keep the last active motion selected so deselection reverses it.
       } else {
         // Capture the current motion for this activation, then queue the next
         // of the three animations for the next activation cycle.
