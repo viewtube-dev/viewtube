@@ -783,10 +783,14 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
    The !important declarations in this scoped block intentionally beat inherited
    legacy button/reset styles from host toolboxes; keep the overrides local to this
    external integration boundary until those host styles are removed at source. */
-.vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 6px; --vt-dropdown-font-size: 38px; }
-.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 4px; --vt-dropdown-font-size: 24px; }
+.vt-studio-dropdown { --vt-dropdown-height: 44px; --vt-dropdown-stroke: 3px; --vt-dropdown-radius: 6px; --vt-dropdown-font-size: 38px; --vt-studio-dropdown-rail-size: 44px; --vt-studio-dropdown-chevron-size: 38px; }
+.vt-studio-dropdown[data-size="compact"] { --vt-dropdown-height: 28px; --vt-dropdown-stroke: 2px; --vt-dropdown-radius: 4px; --vt-dropdown-font-size: 24px; --vt-studio-dropdown-rail-size: 28px; --vt-studio-dropdown-chevron-size: 24px; }
 .vt-studio-dropdown button[data-dropdown-trigger="true"] {
   box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-dropdown-rail-size);
+  align-items: stretch;
+  gap: 0;
   height: var(--vt-dropdown-height);
   min-height: var(--vt-dropdown-height);
   border-width: var(--vt-dropdown-stroke) !important;
@@ -797,7 +801,10 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   line-height: .86 !important;
   letter-spacing: -.02em !important;
   -webkit-text-stroke: .5px currentColor;
-  padding: 0 8px 0 14px;
+  padding: 0 !important;
+}
+.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] {
+  grid-template-columns: var(--vt-studio-dropdown-rail-size) minmax(0, 1fr);
 }
 .vt-studio-dropdown[data-open="true"] button[data-dropdown-trigger="true"] {
   border-bottom-left-radius: 0 !important;
