@@ -191,3 +191,9 @@ export const resolveBrainContextSections = (
   budgetSource,
  }
 }
+
+/** Required context omissions must prevent model calls; optional omissions are safe to degrade. */
+export const getBrainContextBlockingIssues = (omittedSectionIds: string[]): string[] =>
+ [...new Set(omittedSectionIds.filter((id) =>
+  id.startsWith("required_evidence_missing:") || id.endsWith(":required_context_does_not_fit"),
+ ))]

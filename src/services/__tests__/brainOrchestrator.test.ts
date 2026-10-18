@@ -230,6 +230,38 @@ describe("BrainOrchestrator", () => {
   expect(result.repairOutcome).toMatchObject({ attempted: true, succeeded: false })
  })
 
+
+ it("does not call the model when required context cannot fit the available budget", async () => {
+  const snapshot = makeSnapshot()
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const modelGenerator = vi.fn(async () => ({
+   headline: "Should not run",
+   keyInsight: "This output should never be used.",
+   body: "The model must not receive incomplete required context.",
+   mode: "strategy_brief",
+   modules: [],
+   actions: [],
+  } as StructuredBrainModelOutput))
+
+  const result = await runBrainTurn({
+   channelId: "required-context-budget-channel",
+   userText: "What should my next video be?",
+   snapshot,
+   growthContext,
+   systemPrompt: "Use channel evidence and respect creator controls.",
+   allowModel: true,
+   modelContextWindowTokens: 1,
+   reservedOutputTokens: 0,
+   contextSafetyMarginTokens: 0,
+   modelGenerator,
+  })
+
+  expect(modelGenerator).not.toHaveBeenCalled()
+  expect(result.generationPath).toBe("basic_guidance")
+  expect(result.fallbackReason).toBe("validation_failed")
+  expect(result.repairOutcome.reasons.some((reason) => reason.endsWith(":required_context_does_not_fit"))).toBe(true)
+ })
+
  it("keeps the first and repair timeouts bounded", () => {
   expect(BRAIN_MODEL_TIMEOUT_MS).toBe(30_000)
   expect(BRAIN_REPAIR_TIMEOUT_MS).toBe(20_000)
