@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioTextArea, StudioTextInput, StudioSpectrumTag, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -18,6 +18,29 @@ const canonicalTail = (css: string) => {
   const start = css.lastIndexOf("/* Canonical Studio Controls contract");
   return start >= 0 ? css.slice(start) : css;
 };
+
+describe("Studio dropdown chevron and split-left contract", () => {
+  it("renders the split-left dropdown with a leading fixed chevron rail and shared listbox behavior", () => {
+    const html = renderToStaticMarkup(<StudioSplitLeftDropdown aria-label="Mode" defaultValue="balanced" sizeVariant="compact" options={[{ value: "balanced", label: "Balanced" }, { value: "fast", label: "Fast" }]} />)
+    expect(html).toContain('data-vt-studio-dropdown-variant="split-left"')
+    expect(html).toContain('class="vt-studio-dropdown-chevron is-leading"')
+    expect(html).toContain('data-vt-studio-dropdown-chevron')
+    expect(html).not.toContain('class="vt-studio-dropdown-chevron is-trailing"')
+    expect(html).toContain('aria-haspopup="listbox"')
+    expect(html).toContain('data-size="compact"')
+  })
+
+  it("uses a fixed trailing chevron rail and canonical size ratio for regular dropdown menus", () => {
+    const html = renderToStaticMarkup(<StudioDropdown aria-label="Mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
+    expect(html).toContain('class="vt-studio-dropdown-chevron is-trailing"')
+    const css = readStudioControlCss()
+    expect(css).toContain('--vt-studio-dropdown-rail-size: 28px')
+    expect(css).toContain('--vt-studio-dropdown-chevron-size: 24px')
+    expect(css).toContain('--vt-studio-dropdown-rail-size: 44px')
+    expect(css).toContain('--vt-studio-dropdown-chevron-size: 38px')
+    expect(css).toContain('min-height: var(--vt-studio-control-height, 44px)')
+  })
+})
 
 describe("standalone Studio text fields", () => {
   it("renders the standard text input with only canonical Studio field markers", () => {
