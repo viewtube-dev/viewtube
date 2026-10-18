@@ -23,9 +23,9 @@ describe("Studio dropdown chevron and split-left contract", () => {
   it("renders the split-left dropdown with a leading fixed chevron rail and shared listbox behavior", () => {
     const html = renderToStaticMarkup(<StudioSplitLeftDropdown aria-label="Mode" defaultValue="balanced" sizeVariant="compact" options={[{ value: "balanced", label: "Balanced" }, { value: "fast", label: "Fast" }]} />)
     expect(html).toContain('data-vt-studio-dropdown-variant="split-left"')
-    expect(html).toContain('class="vt-studio-dropdown-chevron is-leading"')
+    expect(html).toContain('class="vt-studio-dropdown-split-icon"')
     expect(html).toContain('data-vt-studio-dropdown-chevron')
-    expect(html).not.toContain('class="vt-studio-dropdown-chevron is-trailing"')
+    expect(html).toContain('class="vt-studio-dropdown-chevron is-trailing"')
     expect(html).toContain('aria-haspopup="listbox"')
     expect(html).toContain('data-size="compact"')
   })
