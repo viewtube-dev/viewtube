@@ -94,3 +94,11 @@ test("Studio counter press-and-hold is wired for touch and mouse", () => {
   assert.match(styles, /color-mix\(in srgb, white 50%, var\(--pair-a\)\)/);
   assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
 });
+test("both counter styles tint resting numeral fill and stroke against each palette, then use black text while pressed or held", () => {
+  assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*color-mix\(in srgb, #fff 50%, var\(--pair-a\) 50%\)/);
+  assert.match(styles, /\.vt-studio-counter\.is-reversed[\s\S]*?-webkit-text-stroke-color:\s*color-mix\(in srgb, #fff 50%, var\(--pair-b\) 50%\)/);
+  assert.match(styles, /\.vt-studio-counter:has\([\s\S]*?color:\s*#000;\s*-webkit-text-fill-color:\s*#000;\s*-webkit-text-stroke:\s*1px var\(--vt-studio-control-accent, var\(--pair-a\)\)/);
+  assert.match(styles, /\.vt-studio-counter\.is-reversed:has\([\s\S]*?background:\s*color-mix\(in srgb, var\(--pair-b\) 50%, transparent\);\s*color:\s*#000;\s*-webkit-text-fill-color:\s*#000;\s*-webkit-text-stroke-color:\s*var\(--pair-b\)/);
+  assert.match(styles, /\.vt-studio-right-counter__value/);
+  assert.match(styles, /\.vt-studio-right-counter\.is-reversed[\s\S]*?-webkit-text-stroke-color:\s*color-mix\(in srgb, #fff 50%, var\(--pair-b\) 50%\)/);
+});

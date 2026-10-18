@@ -3536,17 +3536,35 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-right-counter__value {
   color: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
   -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: 0 transparent;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px)
+    color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
   transition: background-color 140ms ease, color 140ms ease, -webkit-text-stroke-color 140ms ease, box-shadow 140ms ease;
 }
+/* The reversed specimens tint numeral fill and outline against their own
+   secondary readout surface instead of retaining the primary-palette tint. */
+.vt-studio-counter.is-reversed .vt-studio-counter__value,
+.vt-studio-right-counter.is-reversed .vt-studio-right-counter__value {
+  color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke-color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
+}
 /* Press/hold follows the text-field focus treatment: half-opacity field fill,
-   full-strength accent inline stroke, and black numeral fill. */
+   black numeral fill, and a full-strength inline accent stroke. */
 .vt-studio-counter:has(.vt-studio-counter__button:is(:active, [data-press-holding="true"])) .vt-studio-counter__value,
 .vt-studio-right-counter:has(.vt-studio-right-counter__actions button:is(:active, [data-press-holding="true"])) .vt-studio-right-counter__value {
   background: color-mix(in srgb, var(--pair-a) 50%, transparent);
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
+}
+/* The reversed palette keeps the pressed text black while tinting its stroke
+   and translucent field fill from that variant's own secondary background. */
+.vt-studio-counter.is-reversed:has(.vt-studio-counter__button:is(:active, [data-press-holding="true"])) .vt-studio-counter__value,
+.vt-studio-right-counter.is-reversed:has(.vt-studio-right-counter__actions button:is(:active, [data-press-holding="true"])) .vt-studio-right-counter__value {
+  background: color-mix(in srgb, var(--pair-b) 50%, transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: var(--pair-b);
 }
 
 
