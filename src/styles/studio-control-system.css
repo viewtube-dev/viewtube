@@ -3430,11 +3430,18 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-right-counter__actions button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
 .vt-studio-counter__button.is-holding svg,
 .vt-studio-right-counter__actions button.is-holding svg { animation: vt-studio-counter-hold-pulse 1.15s ease-in-out infinite; }
-.vt-studio-counter__button[data-press-holding="true"],
-.vt-studio-right-counter__actions button[data-press-holding="true"] {
-  outline: 2px solid var(--pair-a);
-  outline-offset: -4px;
-  box-shadow: inset 0 0 0 1px #000;
+.vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"]),
+.vt-studio-right-counter__actions button:is(:active, .is-holding, [data-press-holding="true"]) {
+  outline: none;
+  box-shadow: none;
+  border-color: inherit;
+}
+
+/* Press/hold changes icon color only; button geometry and borders stay fixed. */
+.vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"]) svg,
+.vt-studio-right-counter__actions button:is(:active, .is-holding, [data-press-holding="true"]) svg {
+  color: #000;
+  stroke: #000;
 }
 @keyframes vt-studio-counter-pop {
   0% { transform: scale(1); }
@@ -3503,42 +3510,58 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   width: max-content;
   max-width: 100%;
 }
-/* Resting numerals are a 50% white tint mixed with their own number-area color. */
+/* Default numeral fill + stroke: 50% white mixed with the number-area surface. */
 .vt-studio-counter__value,
 .vt-studio-right-counter__value {
   color: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px)
     color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
-  transition: background-color 140ms ease, color 140ms ease, -webkit-text-stroke-color 140ms ease, box-shadow 140ms ease;
+  transition:
+    color 140ms ease,
+    -webkit-text-fill-color 140ms ease,
+    -webkit-text-stroke-color 140ms ease;
+  /* Keep value-area backgrounds stable while pressing, especially on right counters. */
 }
-/* The reversed specimens tint numeral fill and outline against their own
-   secondary readout surface instead of retaining the primary-palette tint. */
+
+/* Reversed variants tint against the secondary number-area surface. */
 .vt-studio-counter.is-reversed .vt-studio-counter__value,
 .vt-studio-right-counter.is-reversed .vt-studio-right-counter__value {
   color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke-color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
 }
-/* Press/hold follows the text-field focus treatment: half-opacity field fill,
-   black numeral fill, and a full-strength inline accent stroke. */
-.vt-studio-counter:has(.vt-studio-counter__button:is(:active, [data-press-holding="true"])) .vt-studio-counter__value,
-.vt-studio-right-counter:has(.vt-studio-right-counter__actions button:is(:active, [data-press-holding="true"])) .vt-studio-right-counter__value {
+
+/* Standard/left counter: click and hold use the same black numeral treatment. */
+.vt-studio-counter:has(
+  .vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"])
+) .vt-studio-counter__value {
   background: color-mix(in srgb, var(--pair-a) 50%, transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
 }
-/* The reversed palette keeps the pressed text black while tinting its stroke
-   and translucent field fill from that variant's own secondary background. */
-.vt-studio-counter.is-reversed:has(.vt-studio-counter__button:is(:active, [data-press-holding="true"])) .vt-studio-counter__value,
-.vt-studio-right-counter.is-reversed:has(.vt-studio-right-counter__actions button:is(:active, [data-press-holding="true"])) .vt-studio-right-counter__value {
+
+.vt-studio-counter.is-reversed:has(
+  .vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"])
+) .vt-studio-counter__value {
   background: color-mix(in srgb, var(--pair-b) 50%, transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: var(--pair-b);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
 }
 
+/* Right counter: numeral turns black, but the value-area background never changes. */
+.vt-studio-right-counter:has(
+  .vt-studio-right-counter__actions button:is(:active, .is-holding, [data-press-holding="true"])
+) .vt-studio-right-counter__value,
+.vt-studio-right-counter.is-reversed:has(
+  .vt-studio-right-counter__actions button:is(:active, .is-holding, [data-press-holding="true"])
+) .vt-studio-right-counter__value {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+}
 
 /* StudioDoubleSplitSlider — double-split rails contrast with the center fill.
    The rectangular v2 handle stays compact, white, and black-outlined. */
