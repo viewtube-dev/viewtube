@@ -8,7 +8,7 @@ const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimit
 
 test("StudioDoubleSplitSlider is built on the canonical double-split shell", () => {
   assert.match(controls, /export const StudioDoubleSplitSlider[\s\S]*?layout="double"/);
-  assert.match(controls, /data-vt-studio-slider="double-split"/);
+  assert.match(controls, /"data-vt-studio-slider": "double-split"/);
   assert.match(controls, /leftRailContent=\{[\s\S]*?rightRailContent=\{/);
 });
 
