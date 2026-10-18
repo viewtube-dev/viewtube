@@ -5,28 +5,30 @@ Target: `master/consolidated-feature-integration`
 
 ## Phase 1 — Inventory and reconcile
 
-- [ ] Trace token and CSS import ownership, including generated/split styles.
-- [ ] Inventory hard-coded dimensions, repeated custom properties, selector conflicts, `!important`, and unused variants/exports.
-- [ ] Compare tokens, CSS, primitives, exception registry, docs, and catalog.
-- [ ] Resolve the fill-opacity disagreement using the latest approved contract and rendered behavior.
-- [ ] Resolve focus-outline sizing and derivation discrepancies.
-- [ ] Record baseline tests/build and a discrepancy/resolution table.
+- [x] Trace token and CSS import ownership, including generated/split styles.
+- [x] Inventory hard-coded dimensions, repeated custom properties, selector conflicts, `!important`, and unused variants/exports in the field-focus path.
+- [x] Compare tokens, CSS, primitives, exception registry, docs, and catalog for the scoped field contract.
+- [x] Reconcile field fill (50% resting / 15% focused) against explicitly solid button/badge family exceptions.
+- [x] Resolve focus-outline sizing and derivation discrepancies (1.95px / 1.3px / 0.65px; offset 0).
+- [ ] Record executable baseline tests/build; no local execution environment or successful CI result has yet verified this branch.
 
 ### Checkpoint A
-- [ ] Every conflicting default has an evidence-backed resolution.
-- [ ] No production styling changed before contract reconciliation.
+- [x] Every conflicting default in the scoped field-focus/fill contract has an evidence-backed resolution.
+- [x] Production styling changed only after source and import-order reconciliation.
+- [ ] Baseline test/build result recorded.
 
 ## Phase 2 — Normalize tokens
 
-- [ ] Validate standard 44px, compact 28px, micro 14px contracts.
-- [ ] Verify micro derivation and explicit legibility overrides.
-- [ ] Centralize shared numeric contracts without creating a second token source.
-- [ ] Preserve 38px/24px input typography and the 18px/14px textarea exception.
-- [ ] Add/update focused size-contract and exception tests.
+- [x] Validate source declarations for standard 44px, compact 28px, micro 14px contracts.
+- [x] Verify micro focus-outline derivation and explicit text/icon legibility overrides.
+- [x] Normalize duplicated focus-outline widths without creating a second token source.
+- [x] Preserve 38px/24px input typography and the 18px/14px textarea exception.
+- [x] Add/update focused size-contract and exception tests.
+- [ ] Execute focused size-contract tests and typecheck/build; source edits alone are not test evidence.
 
 ### Checkpoint B
-- [ ] Token tests pass.
-- [ ] Exceptions are typed, named, justified, and limited to real departures.
+- [ ] Token tests pass (tests authored/updated but not executed).
+- [x] Exceptions remain typed, named, justified, and limited to real departures.
 
 ## Phase 3 — Consolidate CSS and primitive consumption
 
