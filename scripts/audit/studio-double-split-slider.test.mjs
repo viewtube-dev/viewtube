@@ -21,9 +21,14 @@ test("StudioDoubleSplitSlider exposes an accessible range with live value and re
 
 test("slider styling keeps the L1 track and rectangular v2 handle at all Studio sizes", () => {
   assert.match(styles, /\.vt-studio-double-split-slider input\[type="range"\]::-webkit-slider-thumb/);
-  assert.match(styles, /border-radius:\s*0/);
+  assert.match(styles, /--vt-studio-slider-radius:\s*var\(--vt-studio-control-radius,\s*6px\)/);
   assert.match(styles, /\.vt-studio-double-split-slider\[data-size="compact"\]/);
   assert.match(styles, /\.vt-studio-double-split-slider\[data-size="micro"\]/);
+  assert.match(styles, /--vt-studio-slider-track-height:\s*max\(6px,\s*calc\(var\(--vt-studio-control-height,\s*44px\)\s*\*\s*\.428571\)\)/);
+  assert.match(styles, /--vt-studio-slider-thumb-width:\s*max\(5px,\s*calc\(var\(--vt-studio-control-height,\s*44px\)\s*\*\s*\.357143\)\)/);
+  assert.match(styles, /--vt-studio-slider-thumb-height:\s*max\(9px,\s*calc\(var\(--vt-studio-control-height,\s*44px\)\s*\*\s*\.642857\)\)/);
+  assert.match(styles, /\.vt-studio-double-split-slider__reset,\s*\n\.vt-studio-double-split-slider \.vt-studio-double-split-slider__value[\s\S]*?background:\s*var\(--vt-studio-control-primary/);
+  assert.match(styles, /input\[type="range"\][\s\S]*?background:\s*linear-gradient\(to right,[\s\S]*?var\(--vt-studio-control-secondary/);
 });
 
 test("confirmed primitive catalog includes standard, compact, and micro slider specimens", () => {
