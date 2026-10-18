@@ -3470,7 +3470,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
 }
-/* Center the right counter's horizontal separator precisely between its two cells. */
+/* Center the side-counter horizontal separator precisely between its two cells. */
 .vt-studio-side-counter__actions {
   align-self: stretch;
   min-height: 0;
