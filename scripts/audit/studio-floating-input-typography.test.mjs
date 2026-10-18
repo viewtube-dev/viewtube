@@ -14,8 +14,13 @@ assert.match(tokens, /floatingLabel:\s*\{[^}]*standardRestingFontSize:\s*38,[^}]
 // size token assigned by data-size. Fields CSS must not re-declare input sizes.
 assert.match(system, /\[data-vt-studio-control="true"\]:is\(input:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)\)\s*\{[^}]*font-size:\s*var\(--vt-studio-control-font-size\)[^}]*line-height:\s*var\(--vt-studio-control-line-height,\s*0\.86\)/s);
 assert.doesNotMatch(system, /input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\s*\{[^}]*font-size:/s);
-assert.doesNotMatch(fields, /(?:input|\.is-input)[^{]*\{[^}]*font-size:\s*var\(--vt-studio-(?:standard|compact|micro)-font-size/s);
-assert.doesNotMatch(fields, /html body .*input.*font-size:\s*var\(--vt-studio-(?:standard|compact|micro)-font-size/s);
+// Fields CSS now has a deliberate, high-specificity final authority for the
+// native input itself. Literal sizes prevent token fallbacks from shrinking it.
+assert.match(fields, /html body input\[data-vt-studio-control="true"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)[\s\S]*?font-size:\s*38px;[\s\S]*?line-height:\s*0\.86/s);
+assert.match(fields, /html body input\[data-vt-studio-control="true"\]\[data-size="compact"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)[\s\S]*?font-size:\s*24px;[\s\S]*?line-height:\s*0\.86/s);
+assert.match(fields, /html body input\[data-vt-studio-control="true"\]\[data-size="micro"\]:not\(\[type="checkbox"\]\):not\(\[type="radio"\]\):not\(\[type="range"\]\)[\s\S]*?font-size:\s*10px;[\s\S]*?line-height:\s*1;/s);
+assert.match(fields, /html body textarea\[data-vt-studio-control="true"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-standard-font-size,\s*18px\)/s);
+assert.match(fields, /html body textarea\[data-vt-studio-control="true"\]\[data-size="compact"\][\s\S]*?font-size:\s*var\(--vt-studio-textarea-compact-font-size,\s*14px\)/s);
 
 // Label typography is independently scoped to the label element.
 assert.match(system, /\.vt-studio-floating-field > \.vt-studio-floating-field-label[\s\S]*?font-size:\s*var\(--vt-studio-floating-label-size\)/);
