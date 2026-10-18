@@ -290,16 +290,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   transform: translateY(-40%);
   transform-origin: left center;
 }
-/* Raised input labels use the same compact label-box type scale as the
-   matching standard/compact floating textarea. Resting input labels retain
-   their normal single-line input typography. */
+/* Raised input labels stay coupled to the input typography scale.
+   Standard: 38px input × 80% = 30.4px label. Compact: 24px × 80% = 19.2px.
+   Textarea label sizing is isolated to .is-textarea above and never leaks into inputs. */
 .vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
-  font-size: 14.4px; /* 18px standard textarea label scale × 80% */
-}
-.vt-studio-floating-field[data-size="compact"]:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field[data-size="compact"]:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
-  font-size: 11.2px; /* 14px compact textarea label scale × 80% */
+  font-size: calc(var(--vt-studio-floating-label-size) * .8);
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
