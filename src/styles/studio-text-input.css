@@ -8,26 +8,29 @@
   --vt-studio-input-fill-opacity: 50%;
 }
 
-input.vt-studio-text-input[data-size="standard"],
-input.vt-studio-text-input:not([data-size]) {
+html body input.vt-studio-text-input[data-size="standard"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body input.vt-studio-text-input:not([data-size]):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   --vt-studio-input-height: var(--vt-studio-standard-height, 44px);
   --vt-studio-input-stroke: var(--vt-studio-standard-stroke, 3px);
   --vt-studio-input-radius: var(--vt-studio-standard-radius, 6px);
   --vt-studio-input-font-size: 38px;
+  font-size: 38px;
 }
 
-input.vt-studio-text-input[data-size="compact"] {
+html body input.vt-studio-text-input[data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   --vt-studio-input-height: var(--vt-studio-compact-height, 28px);
   --vt-studio-input-stroke: var(--vt-studio-compact-stroke, 2px);
   --vt-studio-input-radius: var(--vt-studio-compact-radius, 4px);
   --vt-studio-input-font-size: 24px;
+  font-size: 24px;
 }
 
-input.vt-studio-text-input[data-size="micro"] {
+html body input.vt-studio-text-input[data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   --vt-studio-input-height: var(--vt-studio-micro-height, 14px);
   --vt-studio-input-stroke: var(--vt-studio-micro-stroke, 1px);
   --vt-studio-input-radius: var(--vt-studio-micro-radius, 2px);
   --vt-studio-input-font-size: 10px;
+  font-size: 10px;
 }
 
 html body input.vt-studio-text-input {
