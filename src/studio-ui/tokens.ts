@@ -44,6 +44,16 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
   multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardTextStroke: 0.5, compactTextStroke: 0.35, standardLineHeight: 1.25, compactLineHeight: 1.3, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas alone use 18px standard and 14px compact; they additionally use multiline line-height, padding, and a 92px minimum surface." },
 } as const
 
+/** Shared geometry for every Studio dropdown chevron and split-icon rail. */
+export const STUDIO_DROPDOWN_TOKENS = {
+  railSize: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.height, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.height, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.height },
+  iconSize: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.iconSize, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.iconSize, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.iconSize },
+  stroke: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke },
+  iconSide: "trailing",
+  splitIconSide: "leading",
+  simpleHasSplitRail: false,
+} as const
+
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
 export const STUDIO_TOKENS = {
   toolbox: { headerHeight: TOOLBOX_LEVEL_DNA.toolbox.height, stroke: TOOLBOX_LEVEL_DNA.toolbox.stroke, radius: TOOLBOX_LEVEL_DNA.toolbox.radius, shadowOffset: TOOLBOX_LEVEL_DNA.toolbox.shadowOffset, titleSize: TOOLBOX_LEVEL_DNA.toolbox.titleSize },
