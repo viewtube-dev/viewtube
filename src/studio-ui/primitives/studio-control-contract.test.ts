@@ -39,10 +39,23 @@ describe("Studio control global contract", () => {
     expect(end).toBeGreaterThan(start);
     expect(css.slice(start, end)).not.toContain("!important");
   });
-  it("uses a secondary focus outline at 65% of border width with zero offset", () => {
-    const css = read("src/styles/studio-control-fields.css");
-    expect(css).toContain("* .65");
-    expect(css).toContain("outline-offset: 0");
+  it("uses a secondary focus outline at 65% of border width with zero offset across all size tiers", () => {
+    const fields = read("src/styles/studio-control-fields.css");
+    const system = read("src/styles/studio-control-system.css");
+    const tokens = read("src/studio-ui/tokens.ts");
+
+    expect(fields).toContain("* .65");
+    expect(fields).toContain("outline-offset: 0");
+    expect(system).toContain("--vt-studio-control-focus-outline-width: 1.95px");
+    expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
+    expect(system).toContain("--vt-studio-control-focus-outline-width: .65px");
+    expect(system).toContain("outline-offset: 0;");
+    expect(system).not.toContain("outline-offset: 1px");
+    expect(system).not.toContain("outline-offset: 1px !important");
+    expect(tokens).toContain("focusOutlineWidth: 1.95");
+    expect(tokens).toContain("focusOutlineWidth: 1.3");
+    expect(tokens).toContain("secondaryFocusOutlineWidth: 1.3");
+    expect(tokens).toContain("secondaryFocusOutlineWidth: 1.95");
   });
   it("documents content-width exceptions instead of silently overriding row fill", () => {
     const tokens = read("src/studio-ui/tokens.ts");
