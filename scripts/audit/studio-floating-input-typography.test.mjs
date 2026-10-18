@@ -15,10 +15,11 @@ assert.match(input, /data-vt-studio-control="true"/);
 assert.doesNotMatch(input, /floating-label|fixed-label|vt-studio-floating-field|vt-studio-fixed-label-field|<label\b|studio-control-entry\.css/);
 
 // Each size maps to the required literal input font-size and expected geometry.
-assert.match(css, /input\.vt-studio-text-input\[data-size="standard"\][\s\S]*?--vt-studio-input-height:[^;]*44px[^;]*;[\s\S]*?--vt-studio-input-font-size:\s*38px;/);
-assert.match(css, /input\.vt-studio-text-input\[data-size="compact"\][\s\S]*?--vt-studio-input-height:[^;]*28px[^;]*;[\s\S]*?--vt-studio-input-font-size:\s*24px;/);
-assert.match(css, /input\.vt-studio-text-input\[data-size="micro"\][\s\S]*?--vt-studio-input-height:[^;]*14px[^;]*;[\s\S]*?--vt-studio-input-font-size:\s*10px;/);
-assert.match(css, /html body input\.vt-studio-text-input\s*\{[\s\S]*?font-size:\s*var\(--vt-studio-input-font-size,\s*38px\)/);
+// High-specificity selectors beat legacy data-vt-studio-control input rules.
+assert.match(css, /html body input\\.vt-studio-text-input\\[data-size="standard"\\]:not\\(\\[type="checkbox"\\]\\):not\\(\\[type="radio"\\]\\):not\\(\\[type="range"\\]\\)[\\s\\S]*?--vt-studio-input-height:[^;]*44px[^;]*;[\\s\\S]*?--vt-studio-input-font-size:\\s*38px;[\\s\\S]*?font-size:\\s*38px;/);
+assert.match(css, /html body input\\.vt-studio-text-input\\[data-size="compact"\\]:not\\(\\[type="checkbox"\\]\\):not\\(\\[type="radio"\\]\\):not\\(\\[type="range"\\]\\)[\\s\\S]*?--vt-studio-input-height:[^;]*28px[^;]*;[\\s\\S]*?--vt-studio-input-font-size:\\s*24px;[\\s\\S]*?font-size:\\s*24px;/);
+assert.match(css, /html body input\\.vt-studio-text-input\\[data-size="micro"\\]:not\\(\\[type="checkbox"\\]\\):not\\(\\[type="radio"\\]\\):not\\(\\[type="range"\\]\\)[\\s\\S]*?--vt-studio-input-height:[^;]*14px[^;]*;[\\s\\S]*?--vt-studio-input-font-size:\\s*10px;[\\s\\S]*?font-size:\\s*10px;/);
+assert.match(css, /html body input\\.vt-studio-text-input\\s*\\{[\\s\\S]*?font-size:\\s*var\\(--vt-studio-input-font-size,\\s*38px\\)/);
 assert.doesNotMatch(css, /textarea|floating-field-label|fixed-field-label/);
 
 // Root loads the old shared controls first and the plain input foundation after it.
