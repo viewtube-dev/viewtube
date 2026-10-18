@@ -28,5 +28,5 @@ test("slider styling keeps the L1 track and rectangular v2 handle at all Studio 
 
 test("confirmed primitive catalog includes standard, compact, and micro slider specimens", () => {
   assert.match(catalog, /StudioDoubleSplitSlider/);
-  assert.match(catalog, /StudioDoubleSplitSlider · Standard \\+ Compact \\+ Micro/);
+  assert.match(catalog, /StudioDoubleSplitSlider · Standard \+ Compact \+ Micro/);
 });
