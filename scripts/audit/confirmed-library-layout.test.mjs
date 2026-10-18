@@ -48,11 +48,14 @@ test("standard button specimens span a row and compact default/neutral variants 
   assert.ok(catalog.includes('28px compact · neutral tone'));
 });
 
-test("standalone text inputs provide standard, compact, and disabled specimens", () => {
-  assert.ok(catalog.includes('aria-label="Studio text input 44px"'));
-  assert.ok(catalog.includes('aria-label="Studio text input 28px A"'));
-  assert.ok(catalog.includes('aria-label="Studio text input 28px disabled"'));
-  assert.match(catalog, /28px compact · disabled[\s\S]*?sizeVariant="compact"[^>]*disabled/);
+test("StudioTextInput catalog includes simple, floating-label, and fixed-label variants", () => {
+  assert.ok(catalog.includes('aria-label="Studio plain text input standard"'));
+  assert.ok(catalog.includes('aria-label="Studio plain text input compact"'));
+  assert.ok(catalog.includes('aria-label="Studio floating-label input standard A"'));
+  assert.ok(catalog.includes('aria-label="Studio floating-label input compact B reverse colors"'));
+  assert.ok(catalog.includes('aria-label="Studio fixed-label input standard A"'));
+  assert.ok(catalog.includes('aria-label="Studio fixed-label input compact B reverse colors"'));
+  assert.match(catalog, /Studio Text Input · Standalone \+ Simple \+ Floating \+ Fixed Label/);
 });
 
 test("global defaults distinguish the secondary focus outline from field text stroke", () => {
