@@ -381,6 +381,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
   const isChecked = checked ?? uncontrolledChecked
   const [motionRun, setMotionRun] = React.useState(0)
   const [motionAtEmpty, setMotionAtEmpty] = React.useState(true)
+  const handleMotionEmpty = React.useCallback(() => setMotionAtEmpty(true), [])
   const handleChoiceClick: React.MouseEventHandler<HTMLButtonElement> = event => {
     onClick?.(event)
     if (event.defaultPrevented || disabled) return
@@ -413,7 +414,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       {...props}
     >
       {kind === "radio" ? (
-        <StudioRadioMotion motion={radioMotion} direction={motionDirection} run={motionRun} checked={isChecked} onEmpty={() => setMotionAtEmpty(true)} />
+        <StudioRadioMotion motion={radioMotion} direction={motionDirection} run={motionRun} checked={isChecked} onEmpty={handleMotionEmpty} />
       ) : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
     </button>
   )
