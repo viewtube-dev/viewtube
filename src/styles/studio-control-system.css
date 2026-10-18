@@ -16,9 +16,9 @@
   
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
-  --vt-studio-control-focus-outline-width: 3px;
+  --vt-studio-control-focus-outline-width: 1.95px;
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.5px;
+  --vt-studio-control-secondary-outline-width: 1.95px;
   --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
@@ -36,7 +36,7 @@
   --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000);
   
   --vt-studio-control-outline-stroke: 1px;
-  --vt-studio-control-focus-outline-width: 2px;
+  --vt-studio-control-focus-outline-width: 1.3px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1px;
   --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
@@ -58,6 +58,9 @@
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
 }
 [data-vt-studio-control][data-size="micro"] {
+  --vt-studio-control-focus-outline-width: .65px;
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: .65px;
   --vt-studio-control-height: var(--vt-studio-14-height, 14px);
   --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px);
   --vt-studio-control-radius: var(--vt-studio-14-radius, 2px);
@@ -2427,11 +2430,10 @@ not button faces.
   
   
 }
-[data-vt-studio-control]:is(input, textarea, select):focus-visible{
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid
-    var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 1px;
-  
+[data-vt-studio-control]:is(input, textarea, select):focus-visible {
+  outline: var(--vt-studio-control-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid
+    var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
 }
 .vt-studio-split-left-badge,
 .vt-studio-split-left-badge__face,
