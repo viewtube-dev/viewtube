@@ -57,13 +57,13 @@ html body [data-vt-studio-control="true"] textarea {
    text-stroke is independently tokenized and must never inherit border width. */
 html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
-  font-size: var(--vt-studio-control-font-size);
+  font-size: var(--vt-studio-standard-font-size, 38px);
   line-height: var(--vt-studio-control-line-height, 0.86);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="compact"],
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="compact"] {
-  font-size: var(--vt-studio-28-font-size, 24px);
+  font-size: var(--vt-studio-compact-font-size, 24px);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"])[data-size="micro"],
