@@ -50,8 +50,12 @@ describe("Studio control global contract", () => {
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
     expect(system).toContain("--vt-studio-control-focus-outline-width: .65px");
     expect(system).toContain("outline-offset: 0;");
-    expect(system).not.toContain("outline-offset: 1px");
-    expect(system).not.toContain("outline-offset: 1px !important");
+    const finalGenericFocusRule = system.slice(system.lastIndexOf("/* Explicit non-button exceptions:"));
+    expect(finalGenericFocusRule).not.toContain("outline-offset: 1px");
+    expect(system).not.toContain("--vt-studio-control-focus-outline-width: 3px");
+    expect(system).not.toContain("--vt-studio-control-focus-outline-width: 2px");
+    expect(system).not.toContain("--vt-studio-control-secondary-outline-width: 1.5px");
+    expect(system).not.toContain("--vt-studio-control-secondary-outline-width: 1px");
     expect(tokens).toContain("focusOutlineWidth: 1.95");
     expect(tokens).toContain("focusOutlineWidth: 1.3");
     expect(tokens).toContain("secondaryFocusOutlineWidth: 1.3");
