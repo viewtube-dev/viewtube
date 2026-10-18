@@ -69,3 +69,19 @@ assert.ok(inputFamily.includes('StudioTextInput sizeVariant="compact"'));
 assert.ok(!inputFamily.includes("floating-label") && !inputFamily.includes("fixed-label") && !inputFamily.includes('label="TITLE"'));
 
 console.log("Studio plain text input foundation contract: PASS");
+
+
+// Studioinput must not inherit StudioTextInput tokens, selectors, or runtime markers.
+const independentInput = readFileSync("src/studio-ui/primitives/Studioinput.tsx", "utf8");
+const independentCss = readFileSync("src/styles/studio-input.css", "utf8");
+assert.ok(independentInput.includes('export type StudioinputSize = "standard" | "compact" | "micro"'));
+assert.ok(!independentInput.includes('../tokens'));
+assert.ok(!independentInput.includes('StudioControlSize'));
+assert.ok(!independentInput.includes('data-vt-studio-control'));
+assert.ok(independentInput.includes('data-studioinput-size={sizeVariant}'));
+assert.ok(independentInput.includes('data-studioinput="true"'));
+assert.ok(!independentCss.includes('--pair-a'));
+assert.ok(!independentCss.includes('--vt-studio-control-text-stroke'));
+assert.ok(independentCss.includes('data-studioinput-size="standard"'));
+assert.ok(independentCss.includes('data-studioinput-size="compact"'));
+assert.ok(independentCss.includes('data-studioinput-size="micro"'));
