@@ -60,6 +60,7 @@
     "generate:capability-coverage": "node scripts/governance/build-capability-coverage.mjs",
     "consolidate:ideas": "node scripts/governance/consolidate-ideas.mjs",
     "test:studio-field-style-ownership": "node --test scripts/audit/studio-field-style-ownership.test.mjs",
+    "test:studio-floating-input-typography": "node --test scripts/audit/studio-floating-input-typography.test.mjs",
     "test:confirmed-library-layout": "node --test scripts/audit/confirmed-library-layout.test.mjs",
     "start:production": "node scripts/production-stack.mjs",
     "test:production-stack": "node --test scripts/production-stack.test.mjs server/brain-intelligence-store.test.mjs server/brain-learning-store.test.mjs",
