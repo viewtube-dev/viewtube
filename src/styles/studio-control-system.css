@@ -3818,6 +3818,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame {
   --vt-studio-upload-speed: 1;
+  --vt-studio-upload-angle: 0deg;
   --vt-studio-upload-step: clamp(4px, 1cqw, 6px);
   --vt-studio-upload-frame-inset: 5px;
   --vt-studio-upload-center-inset: calc(var(--vt-studio-upload-frame-inset) + 2px + 9 * var(--vt-studio-upload-step));
@@ -3832,7 +3833,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   isolation: isolate;
   border: 0;
   border-radius: 12px;
-  background: conic-gradient(from var(--vt-studio-upload-angle), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
+  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
   animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
   cursor: pointer;
   container-type: inline-size;
