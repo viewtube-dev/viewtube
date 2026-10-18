@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
+const system = readFileSync("src/styles/studio-control-system.css", "utf8");
 const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
 
 // Floating labels remain input labels: the raised size is 80% of the
