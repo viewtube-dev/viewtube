@@ -59,6 +59,12 @@ describe("Comment Responder Studio Hub contract", () => {
  })
 
 
+ it("uses compact Studio control sizes throughout the unified comment responder", () => {
+  expect(view).toContain('sizeVariant="compact"')
+  expect(view).toContain('heightVariant="28"')
+  expect(view).toContain('sizeVariant="compact" className="min-h-[54px] flex-1"')
+ })
+
  it("renders a conversation-first thread with participant avatars and message bubbles", () => {
   expect(view).toContain('SubToolbox title="Conversation Thread"')
   expect(view).toContain("authorProfileImageUrl")
