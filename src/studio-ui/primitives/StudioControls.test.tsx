@@ -33,6 +33,8 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain("DROP OR CHOOSE FILE");
     expect(html).not.toContain("FA618A");
     expect(html).not.toContain("4EE4BE");
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.colorPair).toContain("--pair-a");
   });
 
   it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
