@@ -284,12 +284,16 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </ul>
       <p><strong>Audit status:</strong> this library records the canonical global defaults. A primitive is not certified until its production rendering, tokens, effective CSS, and responsive/accessibility behavior agree with this contract.</p>
     </section>
-    <Family title="Studio Text Input · Plain Foundation" nonDefaultSettings={[
-        "Foundation only: one native input with explicit 38px / 24px / 10px text sizes.",
-        "Floating and fixed labels are intentionally hidden until rebuilt as wrappers.",
-      ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-text-input.css" tokens="Plain input only: standard 44px / 38px, compact 28px / 24px, micro 14px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-text-input.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · plain input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>28px compact · plain input</span><StudioTextInput sizeVariant="compact" aria-label="Studio plain text input compact" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+    <Family title="Studio Text Input · Simple + Floating + Fixed Label" nonDefaultSettings={[
+        "Canonical single-line input family: 38px / 24px / 10px native input typography.",
+        "Floating labels use the input scale at rest and 80% when raised; fixed labels remain permanently visible.",
+      ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-fields.css" tokens="One shared input family: standard 44px / 38px, compact 28px / 24px, micro 14px / 10px; labels are sized independently." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · simple</span><StudioTextInput sizeVariant="standard" aria-label="Studio text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>28px compact · simple</span><StudioTextInput sizeVariant="compact" aria-label="Studio text input compact" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · floating label</span><StudioTextInput variant="floating-label" label="TITLE" aria-label="Studio floating input standard" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>28px compact · floating label</span><StudioTextInput variant="floating-label" label="TITLE" sizeVariant="compact" aria-label="Studio floating input compact" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · fixed label</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input standard" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>28px compact · fixed label</span><StudioTextInput variant="fixed-label" label="TITLE" sizeVariant="compact" aria-label="Studio fixed-label input compact" data-vt-library-component="StudioTextInput" /></div>
     </Family>
     <Family title="Studioinput · Independent Input Primitive" nonDefaultSettings={[
         "Separate native-input primitive with its own TSX module, CSS class, field-kind marker, and typography rules.",
