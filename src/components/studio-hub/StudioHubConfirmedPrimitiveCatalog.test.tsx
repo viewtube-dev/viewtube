@@ -57,6 +57,17 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("vt-studio-tag-editor__square-action")
   })
 
+  it("registers StudioTextInput floating-label and fixed-label variants", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('data-vt-studio-field="floating-input"')
+    expect(html).toContain('data-vt-studio-field="fixed-label-input"')
+    expect(html).toContain('class="vt-studio-floating-field-label"')
+    expect(html).toContain('class="vt-studio-fixed-field-label"')
+    expect(html).toContain('aria-label="Studio floating-label input standard A"')
+    expect(html).toContain('aria-label="Studio fixed-label input standard A"')
+    expect(html).toContain('data-vt-floating-variant="b"')
+  })
+
   it("uses the canonical compact Studio text input and staged flight transition", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('data-vt-studio-control="true"')

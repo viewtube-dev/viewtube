@@ -14,9 +14,18 @@ assert.ok(input.includes("export const StudioTextInput = React.forwardRef"));
 assert.ok(input.includes('"vt-studio-text-input"'));
 assert.ok(input.includes("data-size={sizeVariant}"));
 assert.ok(input.includes('data-vt-studio-control="true"'));
-for (const forbidden of ["floating-label", "fixed-label", "vt-studio-floating-field", "vt-studio-fixed-label-field", "<label", "studio-control-entry.css"]) {
-  assert.ok(!input.includes(forbidden), "plain input must not include " + forbidden);
-}
+// The simple input remains the default, and the same primitive now owns both label wrappers.
+assert.ok(input.includes('variant?: "simple"'));
+assert.ok(input.includes('variant: "floating-label"'));
+assert.ok(input.includes('variant: "fixed-label"'));
+assert.ok(input.includes('className?: string'));
+assert.ok(input.includes('fieldClassName?: string'));
+assert.ok(input.includes('vt-studio-floating-field'));
+assert.ok(input.includes('vt-studio-fixed-label-field'));
+assert.ok(input.includes('vt-studio-floating-field-label'));
+assert.ok(input.includes('vt-studio-fixed-field-label'));
+assert.ok(input.includes('import "../../styles/studio-control-entry.css"'));
+assert.ok(input.includes('import "../../styles/studio-text-input.css"'));
 
 // Studioinput is a separate primitive, not an alias to StudioTextInput.
 assert.ok(studioinput.includes('export const Studioinput = React.forwardRef'));
@@ -34,12 +43,12 @@ assert.ok(catalog.includes('data-vt-library-component="Studioinput"'));
 
 // The plain input stylesheet is the only native input font-size authority.
 assert.ok(css.includes('input.vt-studio-text-input[data-size="standard"]'));
-assert.ok(css.includes('font-size: 38px;'));
+assert.ok(css.includes("font-size: var(--vt-studio-standard-font-size, 38px);"));
 assert.ok(css.includes('input.vt-studio-text-input[data-size="compact"]'));
-assert.ok(css.includes('font-size: 24px;'));
+assert.ok(css.includes("font-size: var(--vt-studio-compact-font-size, 24px);"));
 assert.ok(css.includes('input.vt-studio-text-input[data-size="micro"]'));
-assert.ok(css.includes('font-size: 10px;'));
-assert.ok(css.includes("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;"));
+assert.ok(css.includes("font-size: var(--vt-studio-micro-font-size, 10px);"));
+assert.ok(css.includes("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));"));
 assert.ok(!css.includes("textarea") && !css.includes(".vt-studio-floating-field-label") && !css.includes(".vt-studio-fixed-field-label"));
 
 function nativeInputFontSizeRules(stylesheet) {
@@ -66,9 +75,12 @@ assert.ok(inputFamilyStart >= 0 && textareaFamilyStart > inputFamilyStart);
 const inputFamily = catalog.slice(inputFamilyStart, textareaFamilyStart);
 assert.ok(inputFamily.includes('StudioTextInput sizeVariant="standard"'));
 assert.ok(inputFamily.includes('StudioTextInput sizeVariant="compact"'));
-assert.ok(!inputFamily.includes("floating-label") && !inputFamily.includes("fixed-label") && !inputFamily.includes('label="TITLE"'));
+assert.ok(inputFamily.includes('StudioTextInput variant="floating-label"'));
+assert.ok(inputFamily.includes('StudioTextInput variant="fixed-label"'));
+assert.ok(inputFamily.includes('floatingLabelVariant="b"'));
+assert.ok(inputFamily.includes('label="TITLE"'));
 
-console.log("Studio plain text input foundation contract: PASS");
+console.log("Studio text input simple/floating/fixed variant contract: PASS");
 
 
 // Studioinput must not inherit StudioTextInput tokens, selectors, or runtime markers.
