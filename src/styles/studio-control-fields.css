@@ -117,14 +117,4 @@ html body input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-i
   font-size: 38px;
   line-height: 0.86;
 }
-html body input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-html body input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
-  font-size: 24px;
-  line-height: 0.86;
-}
-html body input[data-vt-studio-control="true"][data-size="micro"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-html body input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="micro"] {
-  font-size: 10px;
-  line-height: 1;
-}
 
