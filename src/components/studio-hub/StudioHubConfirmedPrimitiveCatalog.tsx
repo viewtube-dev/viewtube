@@ -32,6 +32,7 @@ import {
   StudioTagEditor,
   StudioSimpleDropdown,
   StudioSplitLeftDropdown,
+  StudioUploadFrame,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
@@ -719,6 +720,22 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
         <span>Interactive Tag Editor · add, confirm, fly, and remove</span>
         <StudioTagEditor defaultValue={["Tag One", "Featured"]} />
+      </div>
+    </Family>
+    <Family
+      title="Upload Frame · Standard + Compact"
+      nonDefaultSettings={[
+        "Canvas component uses a 16:10 frame, switching to 4:3 on narrow screens.",
+        "Conic border, breathing layers, and image preview derive their colors from the active primary/secondary pair.",
+        "Native file picker, drag/drop, disabled state, image preview, and reduced-motion behavior are supported.",
+      ]}
+      provenance={<Provenance primitive="StudioUploadFrame" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Full-row canvas · pair A/B gradients · 16:10 desktop / 4:3 narrow-screen ratio" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame">
+        <span>Standard · default upload frame</span>
+        <StudioUploadFrame aria-label="Standard upload frame example" />
+        <span>Compact · image upload</span>
+        <StudioUploadFrame sizeVariant="compact" accept="image/*" aria-label="Compact image upload example" />
       </div>
     </Family>
     <Family
