@@ -3435,7 +3435,24 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   min-height: 0;
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
-.vt-studio-side-counter__actions button:first-child { border-bottom: var(--vt-studio-control-stroke, 3px) solid #000; }
+/* Center the divider's stroke itself on the exact half-height boundary.
+   A border-bottom sits entirely above its edge; translate it down by half its
+   thickness so a 3px stroke is centered at 1.5px, not anchored at 0px. */
+.vt-studio-side-counter__actions button:first-child {
+  position: relative;
+  border-bottom: 0;
+}
+.vt-studio-side-counter__actions button:first-child::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--vt-studio-control-stroke, 3px) / -2);
+  height: var(--vt-studio-control-stroke, 3px);
+  background: #000;
+  pointer-events: none;
+}
 .vt-studio-side-counter__actions button svg {
   display: block;
   flex: 0 0 auto;
@@ -3695,9 +3712,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
   outline: 0;
+  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   background: linear-gradient(to right,
-    var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) 0 var(--vt-studio-slider-progress, 0%),
-    #fff var(--vt-studio-slider-progress, 0%) 100%);
+    var(--vt-studio-slider-left-fill) 0 var(--vt-studio-slider-progress, 0%),
+    color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff) var(--vt-studio-slider-progress, 0%) 100%);
   border: var(--vt-studio-slider-stroke) solid #000;
   box-shadow: none;
   cursor: pointer;
