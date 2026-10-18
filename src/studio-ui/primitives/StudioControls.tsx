@@ -1452,7 +1452,6 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
         <div className={["vt-studio-tag-editor__composer", fly ? "is-fading" : ""].filter(Boolean).join(" ")}>
           <StudioTextInput
             ref={inputRef}
-            variant="simple"
             sizeVariant="compact"
             value={draft}
             placeholder={placeholder}
