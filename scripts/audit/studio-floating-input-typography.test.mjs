@@ -43,11 +43,11 @@ assert.ok(catalog.includes('data-vt-library-component="Studioinput"'));
 
 // The plain input stylesheet is the only native input font-size authority.
 assert.ok(css.includes('input.vt-studio-text-input[data-size="standard"]'));
-assert.ok(css.includes('font-size: 38px;'));
+assert.match(css, /font-size: var\\(--vt-studio-standard-font-size, 38px\\)/);
 assert.ok(css.includes('input.vt-studio-text-input[data-size="compact"]'));
-assert.ok(css.includes('font-size: 24px;'));
+assert.match(css, /font-size: var\\(--vt-studio-compact-font-size, 24px\\)/);
 assert.ok(css.includes('input.vt-studio-text-input[data-size="micro"]'));
-assert.ok(css.includes('font-size: 10px;'));
+assert.match(css, /font-size: var\\(--vt-studio-micro-font-size, 10px\\)/);
 assert.ok(css.includes("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));"));
 assert.ok(!css.includes("textarea") && !css.includes(".vt-studio-floating-field-label") && !css.includes(".vt-studio-fixed-field-label"));
 
