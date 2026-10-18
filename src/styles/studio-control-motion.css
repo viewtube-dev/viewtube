@@ -55,11 +55,18 @@
 }
 
 
-/* Radio selection motions: only the inner indicator animates; the 44px shell stays fixed. */
+/* Radio selection motions: SVG attributes animate around the fixed 22,22 center.
+   The 44px shell and its indicator viewport remain stationary and clipped. */
+.vt-studio-44-choice.is-radio {
+  overflow: hidden;
+  isolation: isolate;
+}
 .vt-studio-44-choice.is-radio .vt-studio-radio-motion {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  display: block;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  overflow: hidden;
   color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   pointer-events: none;
 }
@@ -75,55 +82,10 @@
   fill: currentColor;
   stroke: none;
 }
-.vt-studio-radio-motion .vt-studio-radio-solid { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.vt-studio-radio-motion .vt-studio-radio-solid { opacity: 0; }
 .vt-studio-radio-motion .vt-studio-radio-rings,
 .vt-studio-radio-motion .vt-studio-radio-spirals { opacity: 0; }
-.vt-studio-44-choice.is-radio.is-on .vt-studio-radio-motion .vt-studio-radio-solid { opacity: 1; }
-.vt-studio-44-choice.is-radio[data-radio-motion-run]:not([data-radio-motion-run="0"]) .vt-studio-radio-motion .vt-studio-radio-solid {
-  animation: vt-studio-radio-solid-in 1000ms ease-out both;
-}
-.vt-studio-44-choice.is-radio[data-radio-motion="build"][data-radio-direction="on"] .vt-studio-radio-rings { animation: vt-studio-radio-build 1000ms ease-out both; }
-.vt-studio-44-choice.is-radio[data-radio-motion="orbit"][data-radio-direction="on"] .vt-studio-radio-rings { animation: vt-studio-radio-orbit 1000ms ease-out both; }
-.vt-studio-44-choice.is-radio[data-radio-motion="spiral"][data-radio-direction="on"] .vt-studio-radio-spirals { animation: vt-studio-radio-spiral 1000ms ease-out both; }
-.vt-studio-44-choice.is-radio[data-radio-direction="off"] .vt-studio-radio-solid { animation: vt-studio-radio-solid-out 1000ms ease-in both; }
-.vt-studio-44-choice.is-radio[data-radio-direction="off"][data-radio-motion="build"] .vt-studio-radio-rings { animation: vt-studio-radio-build 1000ms ease-in reverse both; }
-.vt-studio-44-choice.is-radio[data-radio-direction="off"][data-radio-motion="orbit"] .vt-studio-radio-rings { animation: vt-studio-radio-orbit 1000ms ease-in reverse both; }
-.vt-studio-44-choice.is-radio[data-radio-direction="off"][data-radio-motion="spiral"] .vt-studio-radio-spirals { animation: vt-studio-radio-spiral 1000ms ease-in reverse both; }
-@keyframes vt-studio-radio-build {
-  0% { opacity: 0; }
-  12% { opacity: 1; }
-  24% { transform: scale(.24); opacity: 1; }
-  56% { transform: scale(1); opacity: 1; }
-  70%, 100% { opacity: 0; }
-}
-@keyframes vt-studio-radio-orbit {
-  0% { opacity: 0; transform: rotate(-110deg) scale(.6); }
-  20% { opacity: 1; }
-  72% { transform: rotate(110deg) scale(1); opacity: 1; }
-  100% { opacity: 0; }
-}
-@keyframes vt-studio-radio-spiral {
-  0% { opacity: 0; transform: rotate(-65deg) scale(.45); }
-  12% { opacity: 1; }
-  72% { opacity: 1; transform: rotate(135deg) scale(1); }
-  100% { opacity: 0; transform: rotate(200deg) scale(1); }
-}
-@keyframes vt-studio-radio-solid-in {
-  0% { opacity: 0; transform: scale(.24); }
-  64% { opacity: 0; transform: scale(.24); }
-  100% { opacity: 1; transform: scale(1); }
-}
-@keyframes vt-studio-radio-solid-out {
-  0% { opacity: 1; transform: scale(1); }
-  36% { opacity: 0; transform: scale(.24); }
-  100% { opacity: 0; transform: scale(.24); }
-}
 @media (prefers-reduced-motion: reduce) {
-  .vt-studio-44-choice.is-radio .vt-studio-radio-motion *,
-  .vt-studio-44-choice.is-radio[data-radio-motion-run]:not([data-radio-motion-run="0"]) .vt-studio-radio-motion .vt-studio-radio-solid {
-    animation: none !important;
-  }
   .vt-studio-44-choice.is-radio .vt-studio-radio-rings,
   .vt-studio-44-choice.is-radio .vt-studio-radio-spirals { display: none; }
-  .vt-studio-44-choice.is-radio.is-on .vt-studio-radio-motion .vt-studio-radio-solid { opacity: 1; transform: none; }
 }
