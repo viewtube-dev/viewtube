@@ -927,14 +927,9 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   -webkit-tap-highlight-color: transparent;
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
+  font-size: var(--vt-studio-control-font-size);
+  line-height: var(--vt-studio-control-line-height, 0.86);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary);
-  font-size: var(--vt-studio-44-font-size, 38px);
-  line-height: var(--vt-studio-44-line-height, .86);
-}
-[data-vt-studio-control="true"][data-size="compact"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
-  font-size: var(--vt-studio-28-font-size, 24px);
-  line-height: var(--vt-studio-28-line-height, .86);
-  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) var(--vt-field-primary);
 }
 [data-vt-studio-control="true"][data-size="standard"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
   min-height: var(--vt-studio-44-height);
@@ -2897,21 +2892,7 @@ no shell shadows{
 
 
 
-/* Canonical single-line input typography. Floating-label size belongs to the
-   label only; entered text always follows the same standard/compact size tokens. */
-input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
-  font-size: var(--vt-studio-44-font-size, 38px);
-  line-height: var(--vt-studio-control-line-height, .86);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
-}
-input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
-  font-size: var(--vt-studio-28-font-size, 24px);
-}
-input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="micro"] {
-  font-size: var(--vt-studio-14-font-size, 10px);
-  line-height: 1;
-}
+/* Single-line input typography is defined once above from --vt-studio-control-font-size. */
 
 /* The username input shares shell geometry but keeps the input fill translucent. */
 .vt-studio-split-shell.vt-studio-username-input {
