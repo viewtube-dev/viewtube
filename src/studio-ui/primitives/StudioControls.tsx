@@ -1500,6 +1500,11 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
 )
 StudioUsernameInput.displayName = "StudioUsernameInput"
 
+/** Canonical split-left text input alias for search and other icon-led fields. */
+export type StudioSplitLeftInputProps = StudioUsernameInputProps;
+export const StudioSplitLeftInput = StudioUsernameInput;
+
+
 
 export interface StudioLegendMultiDropdownOption {
   value: string
