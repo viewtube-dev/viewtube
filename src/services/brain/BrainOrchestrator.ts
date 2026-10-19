@@ -274,7 +274,7 @@ const buildFallback = (
 ): CreatorBrainResponse => {
  const text = buildCreatorBrainLocalFallback(userText, snapshot)
  const response = formatCreatorBrainResponse(text, snapshot, { requestText: userText })
- return { ...response, modules: formatCreatorGrowthModules(response, growthContext) }
+ return { ...response, modules: formatCreatorGrowthModules(response, growthContext, userText) }
 }
 
 const withTimeout = async <T>(promise: Promise<T>, milliseconds: number): Promise<T> =>
@@ -526,7 +526,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     systemInstruction: context.systemInstruction,
    }), BRAIN_MODEL_TIMEOUT_MS)
    response = fromStructuredOutput(output, input.snapshot)
-   response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext) }
+   response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
    status = "complete"
    generationPath = "model"
   }
@@ -558,7 +558,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot)
     const repairedCandidate = {
      ...repairedResponse,
-     modules: formatCreatorGrowthModules(repairedResponse, input.growthContext),
+     modules: formatCreatorGrowthModules(repairedResponse, input.growthContext, input.userText),
     }
     const repairedEvaluation = validateBrainResponse({
      response: repairedCandidate,
