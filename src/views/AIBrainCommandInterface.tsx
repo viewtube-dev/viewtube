@@ -1052,6 +1052,96 @@ const AIBrainCommandInterface: React.FC = () => {
   }
  }
 
+ const handleRetryInterruptedTurn = (message: ChatMessage, useFreshEvidence: boolean) => {
+  const userText = message.originalUserText || ""
+  if (!userText.trim() || busy || message.turnStatus !== "interrupted") return
+
+  setBusy(true)
+  setMessages((current) => current.map((item) => item.id === message.id
+   ? { ...item, text: "Retrying the original request…", turnStatus: "pending", response: undefined }
+   : item,
+  ))
+
+  void (async () => {
+   try {
+    const freshSnapshot = buildAIBrainContextSnapshot({
+     brain,
+     authState,
+     channelConnection,
+     brainMemory: getBrainMemory(),
+     brainOnboardingSnapshot: onboardingSnapshot,
+     recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
+     requestText: userText,
+    })
+    const turnSnapshot = !useFreshEvidence && message.evidencePack
+     ? { ...freshSnapshot, evidencePack: message.evidencePack }
+     : freshSnapshot
+    const turnGrowthContext = buildCreatorGrowthContext(
+     turnSnapshot,
+     recentTurns.filter((turn) => turn.id !== message.id),
+     learningEntries,
+    )
+    const systemPrompt = buildAIBrainSystemPrompt({
+     brain,
+     authState,
+     channelConnection,
+     brainMemory: getBrainMemory(),
+     brainOnboardingSnapshot: onboardingSnapshot,
+     recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
+     requestText: userText,
+     evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
+     creatorGrowthContext: turnGrowthContext,
+    })
+    const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
+    const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
+     || brain.projects.find((project) => project.status === "active")
+     || null
+
+    const result = await runBrainTask({
+     surface: "ai-brain",
+     channelId,
+     retryTurnId: message.id,
+     projectId: activeProject?.id || null,
+     project: activeProject,
+     projects: brain.projects,
+     visibleContext: activeProject ? {
+      contentBuildId: activeProject.contentBuildId || null,
+      title: activeProject.videoTitle || activeProject.name || null,
+      topic: activeProject.videoTitle || activeProject.name || null,
+      format: null,
+      plannedPublishAt: activeProject.publishDate || null,
+     } : null,
+     userText,
+     snapshot: turnSnapshot,
+     systemPrompt,
+     growthContext: turnGrowthContext,
+     recentTurns: recentTurns.filter((turn) => turn.id !== message.id),
+     history: historyPayload,
+     allowModel: canUseGemini,
+    })
+    setMessages((current) => current.map((item) => item.id === result.turn.id
+     ? {
+       ...item,
+       text: result.turn.assistantText,
+       response: result.response,
+       turnStatus: result.turn.status,
+       originalUserText: result.turn.rawUserMessage ?? userText,
+       evidencePack: turnSnapshot.evidencePack,
+       readiness: readinessForSnapshot(turnSnapshot),
+       contextMayBeStale: false,
+      }
+     : item,
+    ))
+    await refreshConversationTurns()
+   } catch (error) {
+    console.warn("[AIBrain] Interrupted response retry failed:", error)
+    await refreshConversationTurns()
+   } finally {
+    setBusy(false)
+   }
+  })()
+ }
+
  // Legacy routes fold into the one conversation by seeding an opening question the
  // Brain then routes internally, rather than selecting a mode. `/algorithm-architect`
  // redirects here with `?ask=algorithm-diagnosis`.
