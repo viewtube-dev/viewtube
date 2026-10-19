@@ -12,6 +12,8 @@ import { BrainQuestionPrompt } from "./BrainQuestionPrompt"
 import { BrainQuickActionCard } from "./BrainAnswerModules"
 import { BrainEvaluationInboxPanel } from "./BrainEvaluationInboxPanel"
 import { BrainScopeSummary } from "./BrainScopeSummary"
+import { BrainPromptPolicyPanel } from "./BrainPromptPolicyPanel"
+import { BrainOutcomeLearningCard } from "./BrainOutcomeLearningCard"
 
 const Panel: React.FC<{ title: string; tone: string; children: React.ReactNode }> = ({
  title,
@@ -88,6 +90,7 @@ export const BrainContextRail: React.FC<{
    aria-label="What the Brain currently knows"
   >
    <div className="col-span-full"><BrainScopeSummary channelId={channelId} /></div>
+   <div className="col-span-full"><BrainPromptPolicyPanel channelId={channelId} snapshot={snapshot} onEditPrompt={onEditPrompt} /></div>
    <Panel title="Profile coverage" tone="#36E0F6">
     <ul className="grid gap-1.5">
      {profileChecks.map((item) => (
@@ -148,6 +151,7 @@ export const BrainContextRail: React.FC<{
     maximumItems={compactGrid ? 3 : 5}
     compact={compactGrid}
    />
+   <div className="col-span-full"><BrainOutcomeLearningCard channelId={channelId} maximumItems={compactGrid ? 2 : 4} /></div>
 
    {quickActions.length ? (
     <Panel title="Do this next" tone="#C0F240">
