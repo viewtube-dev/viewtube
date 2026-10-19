@@ -25,12 +25,20 @@ export type EvidenceOwner =
  | "research"
  | "creator-confirmed"
 
-export type EvidenceEpistemicState =
- | "observed"
- | "derived"
- | "creator_confirmed"
- | "stale"
- | "missing"
+export const EVIDENCE_EPISTEMIC_STATES = [
+ "known",
+ "observed",
+ "calculated",
+ "user_provided",
+ "inferred",
+ "hypothesis",
+ "estimate",
+ "stale",
+ "missing",
+ "conflicting",
+] as const
+
+export type EvidenceEpistemicState = typeof EVIDENCE_EPISTEMIC_STATES[number]
 
 export interface EvidenceRecord {
  id: string
