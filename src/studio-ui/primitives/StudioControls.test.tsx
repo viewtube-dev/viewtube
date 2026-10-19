@@ -61,6 +61,11 @@ describe("canonical Studio upload frame", () => {
     expect(uploadedIconRules).not.toContain("left: 50%");
     expect(uploadedIconRules).not.toContain("translate: -50%");
     expect(uploadedIconRules).not.toContain("position: absolute");
+    expect(uploadedIconRules).not.toContain("overflow: hidden");
+    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
+    expect(css).toContain(".vt-studio-upload-frame__icon::before");
+    expect(css).toContain(".vt-studio-upload-frame__icon::after");
+    expect(css).not.toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
