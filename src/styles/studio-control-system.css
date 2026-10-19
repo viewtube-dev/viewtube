@@ -4761,3 +4761,55 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-vertical-word-toggle__word { transition: none !important; }
 }
+
+
+/* Read-only text display shares textarea tokens but never receives edit/focus states. */
+.vt-studio-text-box[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: var(--vt-studio-textarea-min-height, 92px);
+  margin: 0;
+  padding: var(--vt-studio-textarea-standard-padding-block, 10px) var(--vt-studio-textarea-standard-padding-inline, 12px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  line-height: .75;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  text-transform: uppercase;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+  cursor: text;
+}
+.vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
+  padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) currentColor;
+}
+.vt-studio-text-box[data-vt-studio-control="true"][data-size="micro"] {
+  padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
+  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) currentColor;
+}
+/* The textarea's description text uses the same 0.75 line-height contract. */
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
+  line-height: .75;
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  line-height: .75;
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
+  line-height: .75;
+  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+}
