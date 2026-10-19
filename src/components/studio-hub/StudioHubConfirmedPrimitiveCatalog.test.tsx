@@ -369,4 +369,3 @@ describe("responsive Studio upload frame", () => {
     expect(controls).toContain("inputRef.current?.click()");
   });
 });
-});
