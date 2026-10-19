@@ -2739,7 +2739,7 @@ const CreatorVaultOS: React.FC = () => {
            <StudioUploadFrame
             sizeVariant="standard"
             multiple
-            accept="image/*,video/*,audio/*,.pdf,.txt,.md,.json,.csv,.zip"
+            accept="*/*"
             aria-label="Vault asset import"
             prompt={importMode === "direct" ? "Drop or choose · import directly" : "Drop or choose · review in staging"}
             onFilesChange={(files) => { void stageFiles(files) }}
