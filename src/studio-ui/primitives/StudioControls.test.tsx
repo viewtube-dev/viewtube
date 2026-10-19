@@ -212,7 +212,7 @@ describe("standalone Studio text fields", () => {
   it("uses the shared 0.85 line-height token for textarea and text-box sizes", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(css).toContain("--vt-studio-textarea-line-height: .85;")
-    expect(css).not.toMatch(/line-height:\s*\.75\b/)
+    expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
     expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(5)
   })
 
