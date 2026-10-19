@@ -256,7 +256,7 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
         onValueChange={(next) => onValueChange?.(options[next ? 1 : 0]?.value ?? value)}
         words={words}
         size={size}
-        skin="solid"
+        skin="black-indicator"
         orientation="horizontal"
         verticalOnMobilePortrait
         className={classes(
@@ -264,7 +264,6 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
           "vt-toolbox-header-word-toggle",
           className,
         )}
-        style={{ ...style, background: "#ffffff" }}
         aria-label={props["aria-label"] ?? "Choose an option"}
         data-vt-header-toggle={level}
         data-vt-header-toggle-primitive="studio-word-toggle"
