@@ -1671,7 +1671,7 @@ export interface BrainOrchestratorResult {
 export type CreatorGrowthCapabilityStatus = "ready" | "partial" | "missing"
 
 export interface CreatorGrowthContext {
- profileConfidenceScore: number
+ profileCoverage: Array<{ id: string; label: string; complete: boolean }>
  currentGoal: string
  inferredNiche: string
  contentPillars: string[]
@@ -1687,7 +1687,7 @@ export interface CreatorGrowthContext {
  recentConversationFacts: string[]
  capabilities: Array<{
   id:
-   | "profile_confidence"
+   | "profile_coverage"
    | "creator_confirmation"
    | "top_performer_patterns"
    | "audience_promise"

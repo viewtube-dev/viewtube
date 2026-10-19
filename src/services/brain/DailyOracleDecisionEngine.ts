@@ -122,6 +122,8 @@ export const buildDailyOraclePlan = ({
  const topPattern = growth.topPerformerPatterns.find(Boolean)
  const currentGoal = short(growth.currentGoal || "")
  const brainAction = growth.dailyOracleActions.find(Boolean)
+ const confirmedProfileChecks = growth.profileCoverage.filter((item) => item.complete).length
+ const incompleteProfileChecks = growth.profileCoverage.filter((item) => !item.complete)
 
  if (evidence.daysSinceLatestUpload === null) {
   candidates.push(scoreCandidate({
@@ -170,7 +172,7 @@ export const buildDailyOraclePlan = ({
    taskText: `Build the next content decision around this proven pattern: ${short(topPattern, 160)}`,
    impact: 3,
    urgency: 2,
-   confidence: growth.profileConfidenceScore >= 70 ? 3 : 2,
+   confidence: confirmedProfileChecks >= 3 ? 3 : 2,
    effort: 2,
   }))
  }
@@ -198,7 +200,7 @@ export const buildDailyOraclePlan = ({
    taskText: short(brainAction, 180),
    impact: 2,
    urgency: 2,
-   confidence: Math.max(1, Math.min(3, Math.ceil(growth.profileConfidenceScore / 34))) as DailyOracleLevel,
+   confidence: Math.max(1, Math.min(3, confirmedProfileChecks)) as DailyOracleLevel,
    effort: 1,
   }))
  }
@@ -215,12 +217,12 @@ export const buildDailyOraclePlan = ({
   effort: 1,
  }))
 
- if (growth.profileConfidenceScore < 60) {
+ if (incompleteProfileChecks.length > 0) {
   candidates.push(scoreCandidate({
    id: "brain-context",
    title: "Strengthen the channel read",
    detail: "Give the Brain one confirmed goal, audience fact, or content preference so tomorrow’s ranking can use stronger creator context.",
-   evidence: `Brain profile read · ${Math.round(growth.profileConfidenceScore)}%`,
+   evidence: `Brain profile checklist · ${confirmedProfileChecks}/${growth.profileCoverage.length} checks confirmed`,
    taskText: "Add one confirmed goal, audience fact, or content preference to the Brain.",
    impact: 2,
    urgency: 1,
@@ -238,7 +240,7 @@ export const buildDailyOraclePlan = ({
   .filter((candidate) => candidate.id !== primary.id)
   .sort((a, b) => a.effort - b.effort || b.score - a.score)
  const evidencePriorityIds = [
-  growth.profileConfidenceScore < 60 ? "brain-context" : null,
+  incompleteProfileChecks.length ? "brain-context" : null,
   topPattern ? "repeat-pattern" : null,
   currentGoal && !/pick one measurable channel goal/i.test(currentGoal) ? "advance-goal" : null,
   "brain-daily",
