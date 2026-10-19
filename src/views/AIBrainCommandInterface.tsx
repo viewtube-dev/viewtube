@@ -48,6 +48,7 @@ import {
  listAIBrainConversationTurns,
  resumeAIBrainThread,
  saveAIBrainConversationTurn,
+ completeAIBrainTurn,
  sanitizeCreatorFacingBrainCopy,
  aiBrainThreadHasTurnsHint,
 } from "../services/aiBrainConversationStore"
@@ -60,6 +61,7 @@ import {
  captureAIBrainLearningEvent,
  listAIBrainLearningEntries,
  scoreAIBrainAnswerUsefulness,
+ dismissAIBrainLearning,
 } from "../services/aiBrainSelfImprovement"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
 import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
@@ -107,6 +109,15 @@ export type ChatMessage = {
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
  readiness?: AIBrainTurnReadiness
+ learningReceipt?: {
+  entryId: string
+  summary: string
+  detail: string
+  category: string
+  status: string
+  scope: string
+  createdAt: string
+ }
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
 }
@@ -429,6 +440,37 @@ export const BrainFeedbackControls: React.FC<{
  )
 }
 
+const BrainLearningReceiptCard: React.FC<{
+ message: ChatMessage
+ onCorrect: (message: ChatMessage) => void
+ onReject: (message: ChatMessage) => void
+}> = ({ message, onCorrect, onReject }) => {
+ const receipt = message.learningReceipt
+ if (!receipt) return null
+ const dismissed = receipt.status === "dismissed"
+ return (
+  <section aria-label="Learning receipt" className="grid gap-2 border-t-[2px] border-black bg-[#FFF8D6] p-3">
+   <div className="flex flex-wrap items-center justify-between gap-2">
+    <h4 className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
+    <span role="status" className="rounded-[5px] border-[1.5px] border-black bg-white px-2 py-0.5 text-[9px] font-black uppercase">{receipt.status}</span>
+   </div>
+   <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
+   {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
+   <dl className="grid gap-1 text-[10px] leading-4">
+    <div><dt className="inline font-black uppercase">Scope · </dt><dd className="inline">{receipt.scope === "durable_knowledge" ? "Confirmed durable knowledge" : "Learning ledger; not promoted to durable knowledge"}</dd></div>
+    <div><dt className="inline font-black uppercase">Category · </dt><dd className="inline">{receipt.category.replace(/_/g, " ")}</dd></div>
+    <div><dt className="inline font-black uppercase">Receipt ID · </dt><dd className="break-all font-mono">{receipt.entryId}</dd></div>
+   </dl>
+   {!dismissed ? (
+    <div className="flex flex-wrap gap-2">
+     <button type="button" onClick={() => onCorrect(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">Correct</button>
+     <button type="button" onClick={() => onReject(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FF7497] px-3 py-2 text-[10px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Reject</button>
+    </div>
+   ) : <p role="status" className="text-xs font-bold">This learning entry was rejected and will not be promoted.</p>}
+  </section>
+ )
+}
+
 const CreatorResponseCard: React.FC<{
  message: ChatMessage
  answeredQuestionIds: Set<string>
@@ -436,7 +478,9 @@ const CreatorResponseCard: React.FC<{
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
  onReviewHandoff: (message: ChatMessage, target: "thumbnail" | "metadata" | "projects") => void
  onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry }) => {
+ onCorrectReceipt: (message: ChatMessage) => void
+ onRejectReceipt: (message: ChatMessage) => void
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
  const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
@@ -445,6 +489,9 @@ const CreatorResponseCard: React.FC<{
   { key: "metadata" as const, label: "Prepare metadata draft", matches: /title|seo|description|tags|keyword|metadata|search opportunity/ },
   { key: "projects" as const, label: "Review in Projects", matches: /project|publish|package|content build|workflow|content plan/ },
  ].filter((option) => option.matches.test(handoffContext))
+ if (!response && message.learningReceipt) {
+  return <article className={assistantCardFrame}><BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /></article>
+ }
  if (!response) {
   const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
@@ -543,6 +590,7 @@ const CreatorResponseCard: React.FC<{
       </Link>
      ) : null}
    </div>
+   {message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
   </article>
  )
 }
@@ -857,7 +905,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }, [channelId])
 
  const visibleTurns = useMemo(
-  () => recentTurns.filter((turn) => (turn.response || turn.status === "interrupted") && !["feedback", "journal", "quick_action", "creator_intake", "question_module"].includes(String(turn.metadata?.source || ""))),
+  () => recentTurns.filter((turn) => (turn.response || turn.status === "interrupted" || Boolean(turn.metadata?.learningReceiptSnapshot)) && !["feedback", "journal", "quick_action", "creator_intake"].includes(String(turn.metadata?.source || ""))),
   [recentTurns],
  )
 
@@ -890,6 +938,9 @@ const AIBrainCommandInterface: React.FC = () => {
       : undefined,
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
+      : undefined,
+     learningReceipt: turn.metadata?.learningReceiptSnapshot && typeof turn.metadata.learningReceiptSnapshot === "object"
+      ? turn.metadata.learningReceiptSnapshot as NonNullable<ChatMessage["learningReceipt"]>
       : undefined,
     },
    ]),
@@ -1221,21 +1272,80 @@ const AIBrainCommandInterface: React.FC = () => {
     usefulnessScore: scoreAIBrainAnswerUsefulness({ response: message.response || message.text, feedback: rating }),
    },
   })
+  const feedbackAt = new Date().toISOString()
+  const receipt = learningEntry ? {
+   entryId: learningEntry.id,
+   summary: learningEntry.summary,
+   detail: learningEntry.detail,
+   category: learningEntry.category,
+   status: learningEntry.status,
+   scope: learningEntry.status === "promoted" ? "durable_knowledge" : "learning_ledger_not_durable",
+   createdAt: learningEntry.createdAt,
+  } : undefined
   await saveAIBrainConversationTurn({
    channelId,
    userText: `Feedback: ${rating.replace(/_/g, " ")}`,
    assistantText: message.response?.keyInsight || message.text,
    response: message.response,
    answerModules: message.response?.modules || [],
-   feedback: { messageId: message.id, rating, createdAt: new Date().toISOString() },
+   feedback: { messageId: message.id, rating, createdAt: feedbackAt },
    learningEntryIds: learningEntry ? [learningEntry.id] : [],
    metadata: { source: "feedback" },
   })
+  if (receipt) {
+   setMessages((current) => current.map((item) => item.id === message.id ? { ...item, learningReceipt: receipt } : item))
+   try {
+    await completeAIBrainTurn({
+     turnId: message.id,
+     status: "complete",
+     assistantText: message.text,
+     response: message.response,
+     answerModules: message.response?.modules || [],
+     feedback: { messageId: message.id, rating, createdAt: feedbackAt },
+     learningEntryIds: learningEntry ? [learningEntry.id] : [],
+     metadata: { learningReceiptSnapshot: receipt },
+    })
+   } catch {
+    // Local fallback responses may not have a persisted canonical turn ID.
+   }
+  }
   await refreshConversationTurns()
   if (rating === "ask_follow_up") {
    setInput(`Follow up on ${message.response?.headline || "this answer"}: `)
    composerRef.current?.focus()
   }
+ }
+
+ const handleCorrectReceipt = (message: ChatMessage) => {
+  const receipt = message.learningReceipt
+  if (!receipt) return
+  setInput(`Correct the saved Brain learning item ${receipt.entryId}. Current record: "${receipt.summary}" — "${receipt.detail}". Ask me what needs correcting; do not change the record until I provide the correction.`)
+  composerRef.current?.focus()
+ }
+
+ const handleRejectReceipt = (message: ChatMessage) => {
+  const receipt = message.learningReceipt
+  if (!receipt || receipt.status === "dismissed") return
+  void (async () => {
+   try {
+    const dismissed = await dismissAIBrainLearning(receipt.entryId)
+    if (!dismissed) return
+    const updatedReceipt = { ...receipt, status: dismissed.status, scope: "learning_ledger_not_durable" }
+    setLearningEntries((current) => current.map((entry) => entry.id === dismissed.id ? dismissed : entry))
+    setMessages((current) => current.map((item) => item.id === message.id ? { ...item, learningReceipt: updatedReceipt } : item))
+    await completeAIBrainTurn({
+     turnId: message.id,
+     status: "complete",
+     assistantText: message.text,
+     response: message.response,
+     answerModules: message.response?.modules || [],
+     metadata: { learningReceiptSnapshot: updatedReceipt },
+    })
+    await refreshConversationTurns()
+   } catch (error) {
+    console.warn("[AIBrain] Learning receipt rejection was not saved:", error)
+   }
+  })()
  }
 
  const handleAnswerQuestion = (question: CreatorBrainLearningQuestion, answer: string) => {
@@ -1411,6 +1521,8 @@ const AIBrainCommandInterface: React.FC = () => {
              onAnswerQuestion={handleAnswerQuestion}
              onReviewHandoff={handleReviewHandoff}
              onRetry={handleRetryInterruptedTurn}
+             onCorrectReceipt={handleCorrectReceipt}
+             onRejectReceipt={handleRejectReceipt}
             />
            ))}
            <div ref={bottomRef} aria-hidden="true" />

@@ -635,7 +635,18 @@ export const answerAIBrainQuestionModule = async (input: {
   assistantText: `Saved your answer for: ${input.question.question}`,
   questionAnswers: [answer],
   learningEntryIds: [entry.id],
-  metadata: { source: "question_module" },
+  metadata: {
+   source: "question_module",
+   learningReceiptSnapshot: {
+    entryId: entry.id,
+    summary: entry.summary,
+    detail: entry.detail,
+    category: entry.category,
+    status: entry.status,
+    scope: entry.status === "promoted" ? "durable_knowledge" : "learning_ledger_not_durable",
+    createdAt: entry.createdAt,
+   },
+  },
  })
  return answer
 }

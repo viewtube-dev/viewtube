@@ -141,6 +141,11 @@ describe("aiBrainConversationStore", () => {
   expect(answer.learningEntryId).toBeTruthy()
   expect(turns[0]?.questionAnswers[0]?.answer).toContain("Subscribers")
   expect(turns[0]?.metadata?.source).toBe("question_module")
+  expect(turns[0]?.metadata?.learningReceiptSnapshot).toMatchObject({
+   entryId: answer.learningEntryId,
+   status: "reflected",
+   scope: "learning_ledger_not_durable",
+  })
  })
 
  it("does not create a duplicate learning receipt when the same saved answer is submitted twice", async () => {
