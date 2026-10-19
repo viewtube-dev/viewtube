@@ -1060,7 +1060,7 @@ const AIBrainCommandInterface: React.FC = () => {
    const fallbackResponse = formatCreatorBrainResponse(fallbackText, turnSnapshot, { requestText: userText })
    const response = {
     ...fallbackResponse,
-    modules: formatCreatorGrowthModules(fallbackResponse, turnGrowthContext),
+    modules: formatCreatorGrowthModules(fallbackResponse, turnGrowthContext, userText),
     generationPath: "basic_guidance" as const,
     fallbackReason: "provider_error" as const,
    }
