@@ -570,8 +570,8 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     handleElement.style.background = fromColor;
     onValueChange?.(to);
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reducedMotion.matches) {
+    const reducedMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
       busyRef.current = false;
       latestValueRef.current = to;
       settle(to);
@@ -652,7 +652,9 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       schedule();
     };
     if (typeof window !== "undefined") window.addEventListener("resize", handleResize);
-    const reducedMotion = typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+    const reducedMotion = typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
     const handleMotionChange = () => { if (busyRef.current) cancelAnimation(value); };
     reducedMotion?.addEventListener?.("change", handleMotionChange);
     if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
