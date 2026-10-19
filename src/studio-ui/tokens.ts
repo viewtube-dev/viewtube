@@ -1,5 +1,23 @@
 import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/tokens"
 
+/** Shared dropdown chevron contract: the multi-select side chevron defines every dropdown's rail and glyph geometry. */
+export const STUDIO_DROPDOWN_TOKENS = {
+  railSize: { standard: 44, compact: 28 },
+  chevronSize: { standard: 28, compact: 18 },
+  chevronStroke: { standard: 2.5, compact: 1.65 },
+  railFill: "secondary",
+  splitIconFill: "black",
+  chevronPlacement: "trailing",
+} as const
+
+/** Shared counter/slider number-state contract. */
+export const STUDIO_COUNTER_NUMBER_TOKENS = {
+  defaultWhiteMixPercent: 50,
+  defaultStrokeColor: "same as default fill",
+  activeTextColor: "#000",
+  activeStrokeColor: "#000",
+} as const
+
 /** Studio control geometry is independent from Toolbox/SubToolbox structural levels. */
 const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
   buttonShadowX: 0,

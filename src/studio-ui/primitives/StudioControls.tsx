@@ -1,10 +1,10 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp, Upload } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -838,6 +838,10 @@ interface StudioSplitShellProps {
   labelClassName?: string
   railClassName?: string
   railProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  leftRailClassName?: string
+  rightRailClassName?: string
+  leftRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  rightRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
   leftRailContent?: React.ReactNode
   rightRailContent?: React.ReactNode
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
@@ -845,15 +849,16 @@ interface StudioSplitShellProps {
 const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps,
+  leftRailClassName, rightRailClassName, leftRailProps, rightRailProps,
   leftRailContent, rightRailContent, shellProps,
 }) => {
   const content = (
     <>
-      {layout !== "right" && <span {...railProps} aria-hidden={leftRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="start" className={railClassName}>{leftRailContent ?? iconLeft}</span>}
+      {layout !== "right" && <span {...railProps} {...leftRailProps} aria-hidden={leftRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="start" className={[railClassName, leftRailClassName].filter(Boolean).join(" ")}>{leftRailContent ?? iconLeft}</span>}
       {fieldSlot
         ? <span data-vt-studio-split-field>{children}</span>
         : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
-      {layout !== "left" && <span {...railProps} aria-hidden={rightRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="end" className={railClassName}>{rightRailContent ?? iconRight}</span>}
+      {layout !== "left" && <span {...railProps} {...rightRailProps} aria-hidden={rightRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="end" className={[railClassName, rightRailClassName].filter(Boolean).join(" ")}>{rightRailContent ?? iconRight}</span>}
     </>
   )
   if (faceOnly) return <span data-vt-studio-split-face="true" data-vt-studio-split={layout} data-size={sizeVariant} className="vt-studio-split-face">{content}</span>
@@ -1201,6 +1206,7 @@ export interface StudioDropdownProps {
   ariaLabel?: string
   sizeVariant?: "standard" | "compact"
   variant?: "default" | "simple" | "split-left"
+  splitIcon?: React.ReactNode
 }
 
 export const StudioDropdown: React.FC<StudioDropdownProps> = ({
@@ -1216,6 +1222,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   ariaLabel,
   sizeVariant = "standard",
   variant = "default",
+  splitIcon = <Settings2 aria-hidden="true" focusable="false" />,
 }) => {
   const [open, setOpen] = React.useState(false)
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
@@ -1285,6 +1292,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         data-vt-studio-control="true"
         data-size={sizeVariant}
         data-dropdown-trigger="true"
+        data-vt-studio-split={variant === "split-left" ? "left" : undefined}
         aria-label={ariaLabel}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -1293,9 +1301,36 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         onClick={() => setOpen((current) => !current)}
         onKeyDown={onKeyDown}
       >
-        {variant === "split-left" ? <span className="vt-studio-dropdown-chevron is-leading" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
-        <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
-        {variant !== "split-left" ? <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
+        {variant === "split-left" ? (
+          <StudioSplitShell
+            layout="double"
+            sizeVariant={sizeVariant}
+            iconLeft={splitIcon}
+            iconRight={
+              <ChevronDown
+                size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+              />
+            }
+            faceOnly
+            railClassName="vt-studio-dropdown-split-rail"
+            leftRailProps={{ "aria-hidden": true }}
+            rightRailClassName="vt-studio-dropdown-chevron is-trailing"
+            rightRailProps={{ "data-vt-studio-dropdown-chevron": "true", "aria-hidden": true }}
+          >
+            {connectionMessage ?? selected?.label ?? placeholder}
+          </StudioSplitShell>
+        ) : (
+          <>
+            <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
+            <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true">
+              <ChevronDown
+                size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+              />
+            </span>
+          </>
+        )}
       </button>
       {open && !disabled ? (
         <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
@@ -1341,7 +1376,7 @@ export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ opti
 )
 StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
-/** Single-select dropdown with a fixed square chevron rail on the left. */
+/** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
   <StudioDropdown {...props} variant="split-left" />
 )

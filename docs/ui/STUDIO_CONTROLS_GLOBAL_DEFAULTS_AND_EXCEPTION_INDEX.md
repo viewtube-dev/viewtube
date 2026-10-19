@@ -90,6 +90,15 @@ A fixed ratio belongs to the actual control face, indicator, rail, or segment. I
 | Unified split shell | `StudioSplitShell` is the single left/right/double anatomy used by split-left buttons, split badges, and username inputs; button uses `faceOnly`, username uses the field slot | One size-token owner for rail dimensions, divider stroke, centered label typography, shell radius, and clipping; BEM class names remain compatibility hooks |
 | Close control within closeable badge | Circular 1:1 face sized from the badge's tier | Secondary fill; icon centered; does not reintroduce a pill ratio for the badge |
 
+## Dropdown, counter, and slider shared contracts
+
+- **Dropdown chevrons:** one token-owned size/stroke source shared by the simple single-select, split-left dropdown, and Legend Multi dropdown. Standard glyph 28px / stroke 2.5; compact glyph 18px / stroke 1.65. The trailing chevron always occupies the right rail.
+- **Simple dropdown:** value pane plus trailing chevron only; it must not render a split rail.
+- **Split-left dropdown:** canonical split-shell outer border; fixed leading rail uses secondary fill and a centered black icon; the value pane flexes; a separate trailing rail contains the chevron. Do not put the chevron in the icon rail or add duplicate adjacent borders.
+- **Side counter action divider:** horizontal separator is a centered overlay at the 50% boundary, with thickness equal to the selected counter stroke token. It does not consume either action row's height.
+- **Counter / slider numeral state:** at rest, number fill and glyph stroke share the 50% white mix of the number-area background. On focus, press, or hold, number fill and stroke are both black. Right-counter value-area background remains unchanged while active.
+- These are shared contracts, not family-specific size exceptions. Tokens own dimensions and state colors, generated CSS variables mirror the token module, CSS owns the rendering, and the production primitive owns semantic markup.
+
 ## 4. Text-content-width primitive families
 
 These are content-driven components, not fixed-width row controls. Their intrinsic width is intentional; parent layout may still constrain them.
