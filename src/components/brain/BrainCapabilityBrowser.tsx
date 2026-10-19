@@ -6,7 +6,7 @@ import type { BrainCapabilityDefinition } from "../../types"
 import type { BrainUserControls } from "../../services/brain/BrainUserControls"
 
 export type BrainCapabilityAvailability = {
- status: "ready" | "needs-channel-data" | "blocked"
+ status: "ready" | "needs-channel-data" | "needs-project-context" | "blocked"
  label: string
  reason: string
 }
@@ -16,11 +16,12 @@ const ANALYTICS_CAPABILITIES = new Set([
  "analytics-diagnosis", "top-performer-mining",
 ])
 const PERSONALIZED_CAPABILITIES = new Set(["channel-profile", "journal-memory", "goal-coach"])
+const PROJECT_CAPABILITIES = new Set(["daily-oracle", "content-generation"])
 
 export const getBrainCapabilityAvailability = (
  capability: BrainCapabilityDefinition,
  controls: BrainUserControls,
- snapshot: Pick<AIBrainContextSnapshot, "inferredProfile">,
+ snapshot: Pick<AIBrainContextSnapshot, "inferredProfile" | "brain">,
 ): BrainCapabilityAvailability => {
  if (!controls.enabled) return { status: "blocked", label: "Brain is off", reason: "Enable Brain in its controls before launching a task." }
  if (ANALYTICS_CAPABILITIES.has(capability.id) && !controls.allowAnalytics) {
