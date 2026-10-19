@@ -545,6 +545,7 @@ export const answerAIBrainQuestionModule = async (input: {
   category: input.question.category,
   createdAt: nowIso(),
   learningEntryId: entry.id,
+  status: "valid",
  }
  await saveAIBrainConversationTurn({
   channelId: input.channelId || null,

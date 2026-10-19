@@ -289,6 +289,61 @@ describe("aiBrainCommandInterface", () => {
   expect(modules.map((module) => module.title).join(" ")).not.toMatch(/Profile Confidence|SEO Queue|What The Brain Learned|Best Next Action|Growth Read|Content Opportunity/i)
  })
 
+ it("reconciles saved goal and style answers before proposing learning questions", () => {
+  const buildSnapshotWithAnswers = (status: "valid" | "reopened") => buildAIBrainContextSnapshot({
+   brain: fallbackContext.brain,
+   authState: fallbackContext.authState,
+   channelConnection: fallbackContext.channelConnection,
+   brainMemory: {
+    ...fallbackContext.getBrainMemory(),
+    contentDNA: "",
+   },
+   recentConversationTurns: [{
+    id: "turn-saved-answers",
+    threadId: "thread-saved-answers",
+    channelId: null,
+    createdAt: "2026-07-14T00:01:00.000Z",
+    userText: "My goal is views and my style is cinematic.",
+    assistantText: "Saved those preferences.",
+    answerModules: [],
+    questionAnswers: [
+     {
+      id: "answer-goal",
+      questionId: "primary-goal",
+      channelId: null,
+      question: "Which result matters most this month?",
+      answer: "Views",
+      category: "creator_goal",
+      createdAt: "2026-07-14T00:01:00.000Z",
+      status,
+     },
+     {
+      id: "answer-style",
+      questionId: "content-style",
+      channelId: null,
+      question: "What should your videos feel like?",
+      answer: "Cinematic",
+      category: "content_style",
+      createdAt: "2026-07-14T00:01:00.000Z",
+      status,
+     },
+    ],
+    learningEntryIds: [],
+   }],
+   now: new Date("2026-07-14T00:02:00.000Z"),
+  })
+
+  const snapshot = buildSnapshotWithAnswers("valid")
+  const questions = buildBrainLearningQuestions(snapshot)
+
+  expect(snapshot.conversations.answeredQuestionIds).toEqual(["primary-goal", "content-style"])
+  expect(snapshot.conversations.answeredQuestionCategories).toEqual(["creator_goal", "content_style"])
+  expect(questions.some((question) => question.category === "creator_goal" || question.category === "content_style")).toBe(false)
+
+  const reopenedSnapshot = buildSnapshotWithAnswers("reopened")
+  expect(buildBrainLearningQuestions(reopenedSnapshot).some((question) => question.category === "creator_goal")).toBe(true)
+ })
+
  it("caps Brain learning questions at two creator-facing questions", () => {
   const snapshot = buildAIBrainContextSnapshot({
    brain: fallbackContext.brain,

@@ -1479,6 +1479,8 @@ export interface CreatorBrainResponse {
 export interface AIBrainQuestionAnswer {
  id: string
  questionId: string
+ /** Missing status is treated as valid for backward-compatible saved answers. */
+ status?: "valid" | "outdated" | "contradicted" | "reopened"
  channelId: string | null
  question: string
  answer: string
