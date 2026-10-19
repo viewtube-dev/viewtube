@@ -1,5 +1,5 @@
 import React from "react"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
@@ -842,20 +842,37 @@ describe("Studio counter divider alignment and slider counter hold", () => {
   });
 });
 
+describe("legacy Studioinput removal", () => {
+  it("keeps the canonical StudioTextInput while removing the legacy component, stylesheet, exports, and selectors", () => {
+    expect(existsSync(resolve(process.cwd(), "src/studio-ui/primitives/Studioinput.tsx"))).toBe(false);
+    expect(existsSync(resolve(process.cwd(), "src/styles/studio-input.css"))).toBe(false);
+    const controlsSource = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const publicIndex = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
+    expect(controlsSource).not.toMatch(/\bStudioinput(?:Props|Size)?\b/);
+    expect(publicIndex).not.toMatch(/\bStudioinput(?:Props|Size)?\b/);
+    expect(controlsSource).not.toMatch(/studio-input\.css|data-vt-studioinput|vt-studioinput/);
+    expect(StudioTextInput).toBeDefined();
+    const html = renderToStaticMarkup(<StudioTextInput aria-label="Canonical text input remains available" placeholder="TYPE HERE" />);
+    expect(html).toContain('aria-label="Canonical text input remains available"');
+    expect(html).toContain('placeholder="TYPE HERE"');
+  });
+});
+
 describe("Studio counter hold-repeat acceleration", () => {
-  it("smoothly accelerates from 128ms through 46ms to a 23ms maximum-rate interval", () => {
-    expect(getStudioCounterRepeatDelay(0, 30)).toBe(128);
-    expect(getStudioCounterRepeatDelay(520, 30)).toBe(46);
-    expect(getStudioCounterRepeatDelay(1220, 30)).toBe(23);
+  it("smoothly accelerates from a slower 150ms interval to 23ms in 520ms", () => {
+    expect(getStudioCounterRepeatDelay(0, 30)).toBe(150);
+    expect(getStudioCounterRepeatDelay(260, 30)).toBe(51);
+    expect(getStudioCounterRepeatDelay(520, 30)).toBe(23);
     expect(getStudioCounterRepeatDelay(2000, 30)).toBe(23);
   });
 
   it("starts a smooth boundary slowdown 16 steps from the bound while preserving full speed farther away", () => {
-    expect(getStudioCounterRepeatDelay(1220, 17)).toBe(23);
-    expect(getStudioCounterRepeatDelay(1220, 16)).toBe(23);
-    expect(getStudioCounterRepeatDelay(1220, 3)).toBe(75);
-    expect(getStudioCounterRepeatDelay(1220, 0)).toBe(75);
-    expect(getStudioCounterRepeatDelay(1220, Number.POSITIVE_INFINITY)).toBe(23);
+    expect(getStudioCounterRepeatDelay(900, 17)).toBe(23);
+    expect(getStudioCounterRepeatDelay(900, 16)).toBe(23);
+    expect(getStudioCounterRepeatDelay(900, 10)).toBeGreaterThan(23);
+    expect(getStudioCounterRepeatDelay(900, 3)).toBe(75);
+    expect(getStudioCounterRepeatDelay(900, 0)).toBe(75);
+    expect(getStudioCounterRepeatDelay(900, Number.POSITIVE_INFINITY)).toBe(23);
   });
 });
 
