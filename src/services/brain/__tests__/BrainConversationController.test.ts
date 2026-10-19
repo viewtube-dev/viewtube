@@ -87,10 +87,10 @@ describe("BrainConversationController", () => {
   const history = buildBrainConversationHistory([...hiddenSources, raw, turn("3", undefined, "older question", "older answer")]);
 
   expect(history.map((item) => item.parts[0].text)).toEqual([
-   "The API failed with an error",
-   "ordinary answer",
    "older question",
    "older answer",
+   "The API failed with an error",
+   "ordinary answer",
   ]);
  })
 
