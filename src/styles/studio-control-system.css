@@ -4119,12 +4119,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   box-sizing: border-box;
 }
-.vt-studio-side-counter__actions > button:first-child::after {
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
-}
-
 /* Give slider numbers more of their available split-face width. */
 .vt-studio-double-split-slider [data-vt-studio-split-field] {
   padding-inline: calc(var(--vt-studio-control-height, 44px) * .09);
