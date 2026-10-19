@@ -1,9 +1,10 @@
 import React from "react"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import * as StudioControlExports from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -13,6 +14,20 @@ const readStudioControlCss = () => [
   "studio-control-split.css",
   "studio-control-fields.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
+
+describe("legacy Studioinput removal", () => {
+  it("removes the standalone component and stylesheet while preserving canonical StudioTextInput", () => {
+    expect(existsSync(resolve(process.cwd(), "src/studio-ui/primitives/Studioinput.tsx"))).toBe(false);
+    expect(existsSync(resolve(process.cwd(), "src/styles/studio-input.css"))).toBe(false);
+    expect(Object.keys(StudioControlExports)).not.toContain("Studioinput");
+    expect(StudioTextInput).toBeDefined();
+    const controlsSource = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const publicIndex = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
+    expect(controlsSource).not.toMatch(/\bStudioinput(?:Props|Size)?\b/);
+    expect(publicIndex).not.toMatch(/\bStudioinput(?:Props|Size)?\b/);
+    expect(controlsSource).toContain('from "./StudioTextInput"');
+  });
+});
 
 const canonicalTail = (css: string) => {
   const start = css.lastIndexOf("/* Canonical Studio Controls contract");
