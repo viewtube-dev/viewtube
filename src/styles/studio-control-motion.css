@@ -17,12 +17,12 @@
 
 .vt-studio-44-choice.is-checkbox svg path {
   transition:
-    stroke-dashoffset 330ms cubic-bezier(.2, .8, .2, 1),
-    stroke 270ms ease-out,
-    opacity 240ms ease-out;
+    stroke-dashoffset 495ms cubic-bezier(.2, .8, .2, 1),
+    stroke 405ms ease-out,
+    opacity 360ms ease-out;
 }
 .vt-studio-44-choice.is-checkbox.is-xwide svg path:nth-child(2) {
-  transition-delay: 330ms, 0ms, 0ms;
+  transition-delay: 495ms, 0ms, 0ms;
 }
 
 .vt-studio-floating-field > .vt-studio-floating-field-label {
@@ -70,7 +70,7 @@
   height: 44px;
   flex: 0 0 44px;
   overflow: hidden;
-  color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: var(--pair-b, var(--vt-studio-control-secondary, #ff7f6b));
   pointer-events: none;
 }
 .vt-studio-radio-motion circle,
@@ -79,11 +79,17 @@
   stroke: currentColor;
   stroke-width: 3;
   stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 1px #000);
 }
 .vt-studio-radio-motion .vt-studio-radio-core,
 .vt-studio-radio-motion .vt-studio-radio-solid {
   fill: currentColor;
-  stroke: none;
+  stroke: #000;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
+  filter: none;
 }
 /* Opacity is driven by SVG presentation attributes in StudioRadioMotion.
    CSS opacity declarations here would override setAttribute() and hide every frame. */
