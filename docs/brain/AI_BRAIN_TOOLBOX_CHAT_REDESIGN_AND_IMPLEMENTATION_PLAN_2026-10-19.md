@@ -1,10 +1,10 @@
-# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–5
+# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–7
 
 **Date:** 2026-10-19  
 **Repository:** `viewtube-dev/viewtube`  
 **Target base:** `master/consolidated-feature-integration`  
-**Working branch:** `feat/brain-toolbox-phase-2-3`  
-**Status:** Phases 2–5 have implementation increments on the working branch: shared Studio evidence controls, responsive workspace navigation, multiline composer, and turn-scoped evidence ribbons/null-safe mini visuals. Automated tests and browser visual certification remain pending. The full feature overhaul remains staged.  
+**Working branch:** `feat/brain-prompts-handoffs-outcomes-phase-6-7`  
+**Status:** Phases 2–7 have incremental implementations across merged PR #733 and the current phase 6–7 branch. Registry/policy inspection and outcome/asset lineage surfaces are added; execution, persistence, coverage and browser certification remain open where explicitly noted. The full feature overhaul remains staged.  
 **Primary historical design donor:** [PR #241 Brain brainstorm and frontend design](https://github.com/viewtube-dev/viewtube/blob/bcc561d3c96e435252c1cc8ec544283030117322/docs/migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md)
 
 > This document consolidates the complete Brain UI overhaul proposal and the implementation sequence. The PR #241 design is a historical donor, not a current-state specification. Do not trust its old maturity percentages, route counts, model/provider assumptions, or “currently empty” assertions without rechecking the integration branch. Preserve its still-useful product requirements while following current source, tests, registries, and architecture contracts.
@@ -417,3 +417,38 @@ Target base: `master/consolidated-feature-integration`
 
 The GitHub connector can commit source and test files but cannot execute the repository's test runner or browser. The tests above are added but **not verified as passing**. Current known CI status includes Vercel build-rate-limit failures; these are infrastructure blockers, not evidence that application tests passed. Phases 4 and 5 are implementation increments, not fully certified phases. No deployment or production behavior is claimed.
 
+
+
+## Implementation update — Phases 6 and 7 (2026-10-19)
+
+Working branch: `feat/brain-prompts-handoffs-outcomes-phase-6-7`  
+Target base: `master/consolidated-feature-integration`  
+Predecessor: merged PR [#733](https://github.com/viewtube-dev/viewtube/pull/733)
+
+### Phase 6 — Prompts, settings, permissions and handoffs (increment delivered; acceptance remains open)
+
+- [x] Added `BrainPromptPolicyPanel` to the existing Brain context rail; it names the canonical prompt authority without importing documentation into runtime code or treating static registry metadata as proof of a turn's active prompt.
+- [x] Added a guided action that asks the existing Brain runtime to inspect the current resolver's active family/version, inherited defaults, creator overrides, context recipe and schema only where the runtime exposes them. This is a request path, not proof that the runtime currently exposes turn-specific prompt provenance.
+- [x] Exposed existing `BrainUserControls` policy fields through persisted controls, including master enablement, personalization, interaction learning, analytics/projects/comments/Vault/Publisher access, external-action approval, creator-communication capture and de-identified research contribution.
+- [x] Explicitly separate browser-local saved permission gates from current snapshot readiness for analyzed channel videos and active projects. The UI does not claim a permission means data was loaded or a capability ran.
+- [x] Keep publishing approval-gated and show creator-communication capture and research contribution as separate opt-in controls.
+- [ ] Verify policy event consumers, cross-tab synchronization, channel/global override behavior, and backend/durable policy persistence. The current control owner stores browser-local settings; this UI must not be represented as server-persisted policy.
+- [ ] Verify ActionPacket destination handoffs preserve action/workflow/operation/evidence IDs end-to-end and never imply approval or publication. No new handoff identity or approval mechanism is introduced by this increment.
+- [ ] Populate active prompt provenance from a turn-specific resolver/trace API rather than asking the model to describe it, before marking Prompt Studio complete.
+- [ ] Run focused tests, typecheck, full suite and browser accessibility/responsive checks.
+
+### Phase 7 — Outcomes and governed learning (increment delivered; acceptance remains open)
+
+- [x] Added `BrainOutcomeLearningCard` to the context rail using the existing `BrainOutcomeLedger` and `assetOutcomes` owners.
+- [x] Show general Brain outcomes separately from creator asset decisions so asset-level edits/acceptance/rejection/publication are not double-counted in the general outcome totals.
+- [x] Surface available project, ContentBuild, asset, ActionPacket, operation, trace, evidence and published-video lineage without reconstructing missing IDs from labels or URLs.
+- [x] Show edit ratio only when the canonical asset outcome record carries a numeric edit ratio; preserve missing lineage as an explicit state.
+- [x] Keep learning-candidate review and promotion in the existing Evaluation Inbox and governance/promotion path. The new card is observational; it does not mutate profile memory or promote candidates.
+- [ ] Audit producer coverage for creator edits, variant selection, recommendation acceptance/rejection, completed tasks, publication and analytics checkpoints. A display over existing ledgers does not prove every producer emits an outcome.
+- [ ] Verify publication observations join to the exact Project/ContentBuild/asset and approved publication identity, with measured outcomes kept separate from creator preference.
+- [ ] Verify correction, contradiction, expiry, consent/privacy exclusions, and learning candidate promotion gates against existing governance.
+- [ ] Run focused tests, asset outcome and publication lineage contracts, the full suite, and browser certification.
+
+### Verification state
+
+This increment has source and focused test files committed to the working branch. GitHub source operations do not execute Vitest, typecheck, lint or browser tests, so these tests are **not yet verified as passing**. The prior PR #733 CI run had a passing production build and local smoke check but failures in static quality, focused contracts, source governance, Brain quality loop and the full suite; those historical failures remain relevant and must not be described as resolved by this PR. No production deployment or end-to-end certification is claimed.
