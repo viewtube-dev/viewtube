@@ -4,6 +4,7 @@ import { buildOpportunityEvidenceFromBrainPack, buildOpportunityEvidenceFromCano
 
 const pack = (): AIBrainEvidencePack => ({
  promptVersion: "brain-chat-v2",
+ requestSpec: { count: null, formats: [], since: null, until: null, rankBy: "performance", filters: [], selectionMode: "both" },
  intent: "strategy",
  channelId: "channel-a",
  channelName: "History Workshop",
