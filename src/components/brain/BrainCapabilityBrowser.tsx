@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react"
 import { ArrowRight, Search, ShieldCheck, Sparkles } from "lucide-react"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../../services/brain/BrainCapabilityRegistry"
-import type { BrainCapabilityDefinition, CreatorBrainPromptCard } from "../../types"
+import type { BrainCapabilityDefinition } from "../../types"
 import type { BrainUserControls } from "../../services/brain/BrainUserControls"
 
 export type BrainCapabilityAvailability = {
