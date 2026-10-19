@@ -1637,10 +1637,9 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
 StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
 
 
-export interface StudioSpectrumTagProps {
+export interface StudioSpectrumTagProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children" | "aria-label" | "onClick"> {
   label: string
   selected?: boolean
-  className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
 }
@@ -1656,11 +1655,13 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   className,
   onClick,
   ariaLabel,
+  ...buttonProps
 }) => {
   const normalized = label.trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(normalized)
   return (
     <button
+      {...buttonProps}
       type="button"
       className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
       data-vt-studio-exception="vault-spectrum-tag"
@@ -2318,8 +2319,12 @@ StudioTagEditor.displayName = "StudioTagEditor";
 
 export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onChange" | "children"> {
   accept?: string;
-  prompt?: string;
+  prompt?: React.ReactNode;
+  label?: React.ReactNode;
+  icon?: React.ReactNode;
   sizeVariant?: "standard" | "compact";
+  level?: "l0" | "l1" | "l2";
+  minHeight?: number;
   disabled?: boolean;
   multiple?: boolean;
   onFileChange?: (file: File) => void;
@@ -2396,6 +2401,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
       data-size={sizeVariant}
+      style={{ ...style, ...(minHeight ? { minHeight } : {}) }}
       aria-disabled={disabled ? "true" : undefined}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -2438,11 +2444,11 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       </span>
       <span className="vt-studio-upload-frame__center">
         <span className="vt-studio-upload-frame__icon" aria-hidden="true">
-          <Upload />
+          {icon ?? <Upload />}
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
         {!previewUrl && (
-          <span className="vt-studio-upload-frame__label" aria-live="polite">{prompt}</span>
+          <span className="vt-studio-upload-frame__label" aria-live="polite">{label ?? prompt}</span>
         )}
       </span>
       <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--left" data-vt-studio-upload-split="left" aria-hidden="true">
