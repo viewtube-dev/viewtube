@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -855,6 +855,27 @@ describe("legacy Studioinput removal", () => {
     const html = renderToStaticMarkup(<StudioTextInput aria-label="Canonical text input remains available" placeholder="TYPE HERE" />);
     expect(html).toContain('aria-label="Canonical text input remains available"');
     expect(html).toContain('placeholder="TYPE HERE"');
+  });
+});
+
+
+
+describe("StudioVerticalWordToggle", () => {
+  it("renders the four palette variants at standard, compact, and micro typography tiers", () => {
+    const variants = ["primary-secondary", "black-fill", "primary-white-handle", "white-fill"] as const;
+    const html = variants.map(variant => renderToStaticMarkup(
+      <StudioVerticalWordToggle value={false} onValueChange={() => {}} sizeVariant="standard" variant={variant} aria-label={variant} />
+    )).join("");
+    expect(html).toContain('role="switch"');
+    expect(html).toContain('aria-checked="false"');
+    expect(html).toContain('data-vt-studio-vertical-word-toggle="true"');
+    expect(html).toContain('data-vertical-word-toggle-variant="black-fill"');
+    expect(html).toContain('data-vertical-word-toggle-variant="primary-white-handle"');
+    expect(html).toContain('data-vertical-word-toggle-variant="white-fill"');
+    expect(renderToStaticMarkup(<StudioVerticalWordToggle value={true} sizeVariant="compact" />)).toContain('data-size="compact"');
+    expect(renderToStaticMarkup(<StudioVerticalWordToggle value={false} sizeVariant="micro" />)).toContain('data-size="micro"');
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.globalRuleException).toBe(true);
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 14px");
   });
 });
 

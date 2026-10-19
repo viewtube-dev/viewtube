@@ -2871,3 +2871,81 @@
 .vt-confirmed-counter-size-row .vt-confirmed-slider-pair {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+
+
+/* Confirmed vertical word-toggle matrix: standard 2-up, compact 3-up, micro 2×2 at compact row two. */
+.vt-confirmed-vertical-word-toggle-family {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-vertical-word-toggle-size-row {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.vt-confirmed-vertical-word-toggle-size-row > strong {
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: 1000;
+  letter-spacing: -.02em;
+}
+.vt-confirmed-vertical-word-toggle-standard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-confirmed-vertical-word-toggle-compact {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-confirmed-vertical-word-toggle-specimen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  min-width: 0;
+  padding: 5px 3px;
+  border: 1px solid #d2d2d2;
+  border-radius: 4px;
+}
+.vt-confirmed-vertical-word-toggle-specimen > small {
+  min-height: 2.2em;
+  font-size: 8px;
+  line-height: 1.1;
+  font-weight: 1000;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-vertical-word-toggle-specimen > .vt-studio-vertical-word-toggle {
+  max-width: 100%;
+}
+.vt-confirmed-vertical-word-toggle-micro {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 5px;
+  min-width: 0;
+}
+.vt-confirmed-vertical-word-toggle-micro .vt-confirmed-vertical-word-toggle-specimen {
+  padding: 4px 2px;
+}
+.vt-confirmed-vertical-word-toggle-micro .vt-confirmed-vertical-word-toggle-specimen > small {
+  min-height: 1.1em;
+  font-size: 7px;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-vertical-word-toggle-family { gap: 6px; }
+  .vt-confirmed-vertical-word-toggle-standard { gap: 5px; }
+  .vt-confirmed-vertical-word-toggle-compact { gap: 4px; }
+  .vt-confirmed-vertical-word-toggle-specimen { padding: 4px 2px; }
+  .vt-confirmed-vertical-word-toggle-specimen > small { font-size: 7px; }
+}

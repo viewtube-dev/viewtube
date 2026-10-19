@@ -300,3 +300,38 @@ describe("confirmed counter specimen isolation", () => {
     expect(sideCounters).not.toContain("value={microValue} onValueChange={setMicroValue}")
   })
 })
+
+
+describe("confirmed vertical word-toggle primitive", () => {
+  it("registers the four palette variants across standard, compact, and micro size exceptions", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const css = readStudioControlCss();
+
+    expect(html).toContain("Vertical Word Toggle");
+    expect(html).toContain('data-vt-studio-vertical-word-toggle="true"');
+    expect(html).toContain('data-vertical-word-toggle-variant="black-fill"');
+    expect(html).toContain('data-vertical-word-toggle-variant="primary-white-handle"');
+    expect(html).toContain('data-vertical-word-toggle-variant="white-fill"');
+    expect(source).toContain("StudioVerticalWordToggle");
+    expect(source).toContain("vt-confirmed-vertical-word-toggle-standard");
+    expect(source).toContain("vt-confirmed-vertical-word-toggle-compact");
+    expect(source).toContain("vt-confirmed-vertical-word-toggle-micro");
+    expect(controls).toContain("export const StudioVerticalWordToggle");
+    expect(controls).toContain('verticalWordToggle:');
+    expect(css).toContain(".vt-studio-vertical-word-toggle");
+    expect(css).toContain("prefers-reduced-motion: reduce");
+  });
+
+  it("documents the vertical word-toggle height as a named exception while retaining global typography tokens", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8");
+    const css = readStudioControlCss();
+
+    expect(controls).toContain('height: "content-driven two-word stack; intentionally not 44px / 28px / 14px"');
+    expect(tokens).toContain("verticalWordToggle");
+    expect(css).toContain("--vt-studio-vertical-word-font-size");
+    expect(css).toContain(".vt-studio-vertical-word-toggle.is-micro");
+  });
+});

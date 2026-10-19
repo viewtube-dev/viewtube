@@ -374,3 +374,11 @@ The Confirmed Primitive Library must render production imports, not locally redr
 
 ### Catalog completeness rule
 For each family, display the production source paths, standard and compact sizes where supported, each meaningful visual skin, applicable interaction effects, and selected / disabled / loading / success states. Mark outcome-driven states clearly and never imply that a successful action occurred merely because a static success specimen is visible. The catalog may organize examples but must not own a competing visual implementation.
+
+
+## Vertical Studio word toggle — canonical primitive update · 2026-10-19
+
+- `StudioVerticalWordToggle` is a separate canonical primitive beside the existing horizontal `StudioWordToggle`; it is exported from `src/studio-ui/primitives/StudioControls.tsx` and styled only in `src/styles/studio-control-system.css`.
+- It inherits the Studio standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 44px / 28px / 14px.
+- The confirmed primitive catalog demonstrates four live variants with independent state: primary/secondary, black fill, primary fill with white handle, and white fill with black handle. Word color updates at animation start; the handle uses vertical expansion/release and color-wipe motion and honors reduced-motion preferences.
+- Gallery geometry is standard 2-up, compact 3-up, and micro 2×2 at the end of compact row two. Source-level tests cover the exported primitive, variant attributes, size tiers, and registered exception. Browser visual certification is still required before claiming pixel-perfect behavior.
