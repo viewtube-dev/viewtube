@@ -4791,3 +4791,21 @@
 .vt-subtoolbox-tag-editor.is-committing .vt-subtoolbox-tag-entry > .vt-subtoolbox-tag-editor-input {
   animation: vt-tag-input-exit 360ms cubic-bezier(.2,.75,.25,1) forwards;
 }
+
+/* String-only state copy delegates its surface to the canonical StudioTextBox.
+   Keep the legacy state wrapper semantic, but prevent a second frame/fill/shadow. */
+.vt-subtoolbox-state.has-studio-text-box {
+  display: block;
+  min-height: 0;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: inherit;
+  font-weight: inherit;
+  text-transform: none;
+}
+.vt-subtoolbox-state.has-studio-text-box > .vt-studio-text-box {
+  width: 100%;
+}
