@@ -7,6 +7,7 @@ const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const certification = readFileSync("src/studio-ui/StudioHubCertification.tsx", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8")
 const catalogStyles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8")
+const confirmedCatalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 
 test("side counter divider is centered on a true half-height boundary", () => {
   assert.match(styles, /\.vt-studio-side-counter__actions\s*\{[^}]*grid-template-rows:\s*minmax\(0, 1fr\) minmax\(0, 1fr\)/s)
@@ -49,7 +50,7 @@ test("switches, word toggles, radios, checkmarks and X boxes expose all four sha
   assert.match(styles, /\\.vt-studio-44-word-toggle\\.is-black-indicator \\.vt-studio-44-word-handle\\{[^}]*background:#000/s)
   assert.match(styles, /\\.vt-studio-44-word-toggle\\.is-white-indicator \\.vt-studio-44-word-handle\\{[^}]*background:#fff/s)
   assert.match(controls, /export type StudioControlSkin = "solid" \\| "color-swap" \\| "black-indicator" \\| "white-indicator"/)
-  assert.match(catalog, /Four state-fill\\/indicator variants: V1 half-primary to primary with secondary indicator; V2 primary to secondary with primary\\/secondary indicator swap; V3 half-primary to primary with white indicator; V4 half-primary to primary with black indicator/)
+  assert.match(confirmedCatalog, /Four state-fill\\/indicator variants: V1 half-primary to primary with secondary indicator; V2 primary to secondary with primary\\/secondary indicator swap; V3 half-primary to primary with white indicator; V4 half-primary to primary with black indicator/)
 })
 test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
   assert.doesNotMatch(certification, /label="Semantic appearances"/)
