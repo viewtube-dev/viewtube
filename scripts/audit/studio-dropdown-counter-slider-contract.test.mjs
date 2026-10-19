@@ -7,6 +7,7 @@ const component = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "u
 const css = readFileSync("src/styles/studio-control-system.css", "utf8")
 const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
+const fieldCss = readFileSync("src/styles/studio-text-input.css", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
@@ -94,4 +95,10 @@ test("split-left button label cell paints its full width instead of exposing a b
 test("compact dropdown trigger synchronizes split grid tracks and visible rail dimensions to 28px", () => {
   assert.match(css, /\.vt-studio-dropdown\[data-size="compact"\] button\[data-dropdown-trigger="true"\]\s*\{[^}]*--vt-studio-dropdown-rail-size:\s*var\(--vt-studio-compact-height, 28px\)[^}]*--vt-studio-control-height:\s*var\(--vt-studio-compact-height, 28px\)/s)
   assert.match(css, /\.vt-studio-dropdown\[data-size="compact"\] button\[data-dropdown-trigger="true"\] \.vt-studio-dropdown-split-rail,[\s\S]*?\.vt-studio-dropdown-chevron\s*\{[^}]*width:\s*var\(--vt-studio-compact-height, 28px\)[^}]*min-width:\s*var\(--vt-studio-compact-height, 28px\)/s)
+})
+
+
+test("Studio text fields use a rounded inset primary stroke instead of square gradient strips", () => {
+  assert.match(fieldCss, /box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/)
+  assert.doesNotMatch(fieldCss, /background-image:\s*[\s\S]*?linear-gradient\(var\(--vt-field-inline-primary/)
 })
