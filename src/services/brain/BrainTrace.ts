@@ -17,6 +17,7 @@
  */
 
 import type { ModelResolution } from "./modelRouting"
+import type { EvidenceRecord } from "./EvidenceRecord"
 
 export type BrainTraceKind = "question" | "asset" | "report" | "analysis"
 
@@ -29,6 +30,8 @@ export interface BrainTraceEvidence {
  returned: string[]
  /** Asked for and unavailable. The most diagnostic field in the trace. */
  missing: string[]
+ /** Typed, source-attributed records used by the operation, when available. */
+ records?: EvidenceRecord[]
 }
 
 export interface BrainTraceContext {
@@ -146,6 +149,24 @@ const makeTraceId = (): string =>
   ? `trace_${crypto.randomUUID()}`
   : `trace_${Date.now()}_${Math.random().toString(36).slice(2)}`
 
+const cloneTraceEvidence = (evidence: BrainTraceEvidence): BrainTraceEvidence => ({
+ requested: [...evidence.requested],
+ returned: [...evidence.returned],
+ missing: [...evidence.missing],
+ ...(evidence.records ? {
+  records: evidence.records.map(record => ({
+   ...record,
+   ...(record.missingness ? { missingness: [...record.missingness] } : {}),
+   ...(record.limitations ? { limitations: [...record.limitations] } : {}),
+   ...(record.window ? { window: { ...record.window } } : {}),
+   provenance: {
+    ...record.provenance,
+    evidenceIds: [...record.provenance.evidenceIds],
+   },
+  })),
+ } : {}),
+})
+
 export interface BrainTraceRecorder {
  readonly id: string
  /** Current snapshot. Useful in tests and for surfacing a running operation. */
@@ -195,7 +216,7 @@ export const beginBrainTrace = (input: {
 
  return {
   id: trace.id,
-  snapshot: () => ({ ...trace }),
+  snapshot: () => ({ ...trace, evidence: cloneTraceEvidence(trace.evidence) }),
   setIntent: ({ intent, taskProfileId }) => {
    if (intent) trace.intent = intent
    if (taskProfileId) trace.taskProfileId = taskProfileId
@@ -204,11 +225,12 @@ export const beginBrainTrace = (input: {
    trace.capabilitiesInvoked = [...new Set([...trace.capabilitiesInvoked, ...capabilityIds])]
   },
   recordEvidence: (evidence) => {
-   trace.evidence = {
+   trace.evidence = cloneTraceEvidence({
     requested: evidence.requested ?? trace.evidence.requested,
     returned: evidence.returned ?? trace.evidence.returned,
     missing: evidence.missing ?? trace.evidence.missing,
-   }
+    records: evidence.records ?? trace.evidence.records,
+   })
   },
   recordContext: (context) => {
    trace.context = { ...trace.context, ...context }
@@ -242,7 +264,7 @@ export const beginBrainTrace = (input: {
    trace.latencyMs = completedAt - startedAt
    if (completion?.outputRef) trace.outputRef = completion.outputRef
    if (completion?.failureReason) trace.failureReason = completion.failureReason
-   const finished = { ...trace }
+   const finished = { ...trace, evidence: cloneTraceEvidence(trace.evidence) }
    activeSink.write(finished)
    return finished
   },
