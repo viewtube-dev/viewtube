@@ -1500,6 +1500,11 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
 )
 StudioUsernameInput.displayName = "StudioUsernameInput"
 
+/** Canonical split-left icon input sharing the Studio username field shell. */
+export type StudioSplitLeftInputProps = StudioUsernameInputProps
+export const StudioSplitLeftInput = StudioUsernameInput
+StudioSplitLeftInput.displayName = "StudioSplitLeftInput"
+
 
 export interface StudioLegendMultiDropdownOption {
   value: string
@@ -1515,6 +1520,8 @@ export interface StudioLegendMultiDropdownProps {
   value?: string[]
   defaultValue?: string[]
   onChange?: (values: string[]) => void
+  /** Select one value and close the menu, or allow independent multi-selection. */
+  selectionMode?: "single" | "multiple"
   sizeVariant?: "compact" | "standard"
   level?: "l0" | "l1" | "l2"
   placeholder?: string
@@ -1531,7 +1538,7 @@ export interface StudioLegendMultiDropdownProps {
  * selection is multi-valued and never depends on a native browser menu.
  */
 export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps> = ({
-  label, accessibleLabel, options, value, defaultValue = [], onChange, sizeVariant = "standard",
+  label, accessibleLabel, options, value, defaultValue = [], onChange, selectionMode = "multiple", sizeVariant = "standard",
   level = "l1", placeholder = "ANY", clearLabel = "CLEAR ALL",
   maxMenuHeight = 280, className, disabled = false, name,
 }) => {
@@ -1568,7 +1575,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
       data-vt-primitive-id="140"
       data-vt-studio-field="legend-multi-dropdown"
       data-vt-studio-control-family="dropdown"
-      data-vt-studio-dropdown-variant="multiselect"
+      data-vt-studio-dropdown-variant={selectionMode === "single" ? "single-select" : "multiselect"}
       data-vt-control-level={level}
       data-size={sizeVariant}
       data-open={open || undefined}
@@ -1593,7 +1600,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
         </button>
       </div>
       {open && !disabled && (
-        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable="true">
+        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable={selectionMode === "multiple"}>
           <div className="vt-studio-legend-options">
             {options.map(option => {
               const isSelected = selected.includes(option.value)
@@ -1606,7 +1613,14 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
                   disabled={option.disabled}
                   data-selected={isSelected || undefined}
                   className="vt-studio-legend-option"
-                  onClick={() => setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])}
+                  onClick={() => {
+                    if (selectionMode === "single") {
+                      setSelected([option.value])
+                      setOpen(false)
+                      return
+                    }
+                    setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])
+                  }}
                 >
                   <span className="vt-studio-legend-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></span>
                   <span className="vt-studio-legend-option-text">{option.label}</span>
@@ -1614,7 +1628,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
               )
             })}
           </div>
-          <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>
+          {selectionMode === "multiple" && <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>}
           {name && selected.map(item => <input key={item} type="hidden" name={name} value={item} />)}
         </div>
       )}
@@ -2308,7 +2322,9 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
   prompt?: string;
   sizeVariant?: "standard" | "compact";
   disabled?: boolean;
+  multiple?: boolean;
   onFileChange?: (file: File) => void;
+  onFilesChange?: (files: FileList | null) => void;
 }
 
 /** Canonical pair-colored upload canvas with responsive breathing layers and an optional image preview. */
@@ -2317,7 +2333,9 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   prompt = "Drag or drop\nImage / video here · or click to upload",
   sizeVariant = "standard",
   disabled = false,
+  multiple = false,
   onFileChange,
+  onFilesChange,
   className,
   "aria-label": ariaLabel = "Upload: drag or drop an image or video here, or click to upload",
   ...labelProps
@@ -2346,26 +2364,28 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
     }, 1000);
   }, [disabled]);
 
-  const selectFile = React.useCallback((file?: File) => {
+  const selectFiles = React.useCallback((files?: FileList | null) => {
+    const file = files?.[0];
     if (!file || disabled) return;
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
     previewRef.current = file.type.startsWith("image/") ? URL.createObjectURL(file) : null;
     setPreviewUrl(previewRef.current);
     setSelectedName(file.name.length > 34 ? `${file.name.slice(0, 32)}…` : file.name);
     onFileChange?.(file);
-  }, [disabled, onFileChange]);
+    onFilesChange?.(files ?? null);
+  }, [disabled, onFileChange, onFilesChange]);
 
   const receiveDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     if (disabled) return;
     event.preventDefault();
     setDragging(false);
-    const file = event.dataTransfer.files?.[0];
-    if (!file) return;
+    const files = event.dataTransfer.files;
+    if (!files?.length) return;
     const input = inputRef.current;
     if (input) {
-      try { input.files = event.dataTransfer.files; } catch { /* FileList assignment is not supported by every browser. */ }
+      try { input.files = files; } catch { /* FileList assignment is not supported by every browser. */ }
     }
-    selectFile(file);
+    selectFiles(files);
   };
 
   return (
@@ -2401,9 +2421,10 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
         className="vt-studio-upload-frame__input"
         type="file"
         accept={accept}
+        multiple={multiple}
         disabled={disabled}
         aria-label={ariaLabel}
-        onChange={event => selectFile(event.currentTarget.files?.[0])}
+        onChange={event => selectFiles(event.currentTarget.files)}
       />
       <span className="vt-studio-upload-frame__inset" aria-hidden="true">
         <span className="vt-studio-upload-frame__layers">
