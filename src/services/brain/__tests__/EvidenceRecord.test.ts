@@ -253,7 +253,8 @@ describe("EvidenceRecord", () => {
   expect(result.reasons.join(" ")).toContain("stale")
  })
  it("fingerprints the exact ordered evidence records used by prompt and grading", () => {
-  const records = selectEvidenceRecordsForPrompt(projectCanonicalEvidenceRecords(bundle))
+  const selected = selectEvidenceRecordsForPrompt(projectCanonicalEvidenceRecords(bundle))
+  const records = [...selected, { ...selected[0], id: "second-evidence", metric: "likes", value: 42 }]
   const quality = buildBrainEvidenceRecordQuality(records, { expectedChannelId: "channel-1" })
   const reordered = buildBrainEvidenceRecordQuality([...records].reverse(), { expectedChannelId: "channel-1" })
   const changedValue = buildBrainEvidenceRecordQuality(records.map((record) => ({ ...record, value: 2801 })), { expectedChannelId: "channel-1" })
