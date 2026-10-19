@@ -61,11 +61,11 @@ test("textarea typography inherits input size tiers and uses only the .75 descri
 
 
 test("field focus outline width follows the selected field border width", () => {
-  assert.match(studioCss, /--vt-field-outline-stroke:\\s*var\\(--vt-field-stroke\\)/);
-  assert.match(studioCss, /--vt-studio-textarea-line-height:\\s*\\.75/);
-  assert.match(studioCss, /font-size:\\s*var\\(--vt-studio-standard-font-size, 38px\\)/);
-  assert.match(studioCss, /font-size:\\s*var\\(--vt-studio-compact-font-size, 24px\\)/);
-  assert.match(studioCss, /font-size:\\s*var\\(--vt-studio-micro-font-size, 10px\\)/);
+  assert.match(studioCss, /--vt-field-outline-stroke:\s*var\(--vt-field-stroke\)/);
+  assert.match(studioCss, /--vt-studio-textarea-line-height:\s*\.75/);
+  assert.match(studioCss, /font-size:\s*var\(--vt-studio-standard-font-size, 38px\)/);
+  assert.match(studioCss, /font-size:\s*var\(--vt-studio-compact-font-size, 24px\)/);
+  assert.match(studioCss, /font-size:\s*var\(--vt-studio-micro-font-size, 10px\)/);
 });
 
 test("StudioTextBox uses a half-width black border, matching inline and secondary strokes, and no shadow", () => {
@@ -73,25 +73,25 @@ test("StudioTextBox uses a half-width black border, matching inline and secondar
     studioCss.indexOf('.vt-studio-text-box[data-vt-studio-control="true"] {'),
     studioCss.indexOf('.vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {'),
   );
-  assert.match(textBoxBlock, /--studio-text-box-stroke-width:\\s*calc\\(var\\(--field-border-width\\) \\* 0\\.5\\)/);
-  assert.match(textBoxBlock, /border:\\s*var\\(--studio-text-box-stroke-width\\) solid #000/);
-  assert.match(textBoxBlock, /outline:\\s*var\\(--studio-text-box-stroke-width\\) solid var\\(--vt-field-secondary/);
-  assert.match(studioCss, /\\.vt-studio-text-box\\[data-vt-studio-control="true"\\]::before[\\s\\S]*?border:\\s*var\\(--studio-text-box-stroke-width\\) solid var\\(--vt-field-primary/);
+  assert.match(textBoxBlock, /--studio-text-box-stroke-width:\s*calc\(var\(--field-border-width\) \* 0\.5\)/);
+  assert.match(textBoxBlock, /border:\s*var\(--studio-text-box-stroke-width\) solid #000/);
+  assert.match(textBoxBlock, /outline:\s*var\(--studio-text-box-stroke-width\) solid var\(--vt-field-secondary/);
+  assert.match(studioCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]::before[\s\S]*?border:\s*var\(--studio-text-box-stroke-width\) solid var\(--vt-field-primary/);
   assert.doesNotMatch(textBoxBlock, /box-shadow/);
-  assert.match(textBoxBlock, /font-size:\\s*var\\(--vt-studio-standard-font-size, 38px\\)/);
-  assert.match(textBoxBlock, /line-height:\\s*\\.75/);
+  assert.match(textBoxBlock, /font-size:\s*var\(--vt-studio-standard-font-size, 38px\)/);
+  assert.match(textBoxBlock, /line-height:\s*\.75/);
 });
 
 test("Vault uses Studio Controls for spectrum tags, import toggles, search, upload, and display text", async () => {
   const vault = await readFile(new URL("../../src/views/CreatorVaultOS.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(vault, /SubToolboxAlphabeticalTag|SubToolboxFileTarget|SubToolboxTextArea/);
   assert.match(vault, /<StudioSpectrumTag/);
-  assert.match(vault, /<StudioWordToggle[\\s\\S]*?words=\\{\\["TAGS", "IMPORT"\\]\\}/);
-  assert.match(vault, /<StudioWordToggle[\\s\\S]*?words=\\{\\["DIRECT", "STAGED"\\]\\}/);
+  assert.match(vault, /<StudioWordToggle[\s\S]*?words=\{\["TAGS", "IMPORT"\]\}/);
+  assert.match(vault, /<StudioWordToggle[\s\S]*?words=\{\["DIRECT", "STAGED"\]\}/);
   assert.match(vault, /<StudioSplitLeftInput/);
   assert.match(vault, /<StudioUploadFrame/);
   assert.match(vault, /data-vault-sort-state-view-stack/);
-  assert.match(studioCss, /@media \\(max-width: 639px\\)[\\s\\S]*?--vt-legend-height:\\s*28px/);
+  assert.match(studioCss, /@media \(max-width: 639px\)[\s\S]*?--vt-legend-height:\s*28px/);
 });
 
 test("Studio Hub upload surfaces use StudioUploadFrame instead of SubToolboxFileTarget", async () => {
