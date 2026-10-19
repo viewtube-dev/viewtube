@@ -62,3 +62,20 @@ test("generated CSS variables stay synchronized with the canonical token module"
   assert.match(generated, /--vt-studio-number-active-color: #000/)
   assert.match(generated, /--vt-studio-number-active-stroke: #000/)
 })
+
+
+test("button, word-toggle, and switch fills follow the primary 50% idle / 100% selected contract", () => {
+  assert.match(css, /html body button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\]\s*\{[^}]*var\(--vt-studio-control-primary[^}]*50%, transparent\)[^}]*!important/s);
+  assert.match(css, /html body button\[data-vt-studio-button="true"\]:is\(\[data-selected="true"\], \[aria-pressed="true"\]\) > \[data-vt-studio-button-face\]\s*\{[^}]*background:\s*var\(--vt-studio-control-primary/s);
+  assert.match(css, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\s*\{[^}]*var\(--vt-studio-control-primary[^}]*50%, transparent\)[^}]*!important/s);
+  assert.match(css, /\.vt-studio-44-word-toggle button\.is-active\s*\{[^}]*background:\s*var\(--vt-studio-control-primary/s);
+  assert.match(css, /\.vt-studio-44-switch:not\(\.is-on\):not\(\.is-checked\):not\(\[aria-checked="true"\]\)\s*\{[^}]*var\(--vt-studio-control-primary[^}]*50%, transparent\)[^}]*!important/s);
+  assert.match(css, /\.vt-studio-44-switch:is\(\.is-on, \.is-checked, \[aria-checked="true"\]\)\s*\{[^}]*background:\s*var\(--vt-studio-control-primary/s);
+});
+
+test("split-left dropdown rail stays square and menu uses the shared border frame", () => {
+  assert.match(css, /\.vt-studio-dropdown\.is-split-left \.vt-studio-dropdown-split-rail\[data-rail="start"\]\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1[^}]*padding:\s*0[^}]*border-left:\s*0/s);
+  assert.match(css, /\.vt-studio-dropdown:not\(\.is-split-left\) \.vt-studio-dropdown-chevron\.is-trailing\s*\{[^}]*border:\s*0/s);
+  assert.match(css, /\.vt-studio-dropdown-menu\s*\{[^}]*border-width:\s*var\(--vt-studio-control-stroke, 3px\)[^}]*border-top-left-radius:\s*var\(--vt-studio-control-radius, 6px\)/s);
+});
+
