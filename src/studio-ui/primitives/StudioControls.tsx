@@ -1054,6 +1054,30 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
 )
 StudioButton.displayName = "StudioButton"
 
+/** Two-line text variant of the canonical 44px / 28px Studio button. */
+export interface StudioTwoLineButtonProps extends Omit<StudioButtonProps, "children"> {
+  /** First centered text row. Both rows inherit the shared Studio uppercase typography. */
+  firstLine: React.ReactNode
+  /** Second centered text row. */
+  secondLine: React.ReactNode
+}
+
+export const StudioTwoLineButton = React.forwardRef<HTMLButtonElement, StudioTwoLineButtonProps>(
+  ({ firstLine, secondLine, sizeVariant = "standard", ...props }, ref) => (
+    <StudioButton
+      {...props}
+      ref={ref}
+      sizeVariant={sizeVariant}
+      data-vt-studio-button-lines="two"
+    >
+      <span data-vt-studio-button-line="first">{firstLine}</span>
+      <span data-vt-studio-button-line="second">{secondLine}</span>
+    </StudioButton>
+  ),
+)
+StudioTwoLineButton.displayName = "StudioTwoLineButton"
+
+
 /**
  * Separate 56px action family for prominent workflow actions.
  * It is intentionally not a StudioButton size variant: StudioButton remains 44px/28px only.

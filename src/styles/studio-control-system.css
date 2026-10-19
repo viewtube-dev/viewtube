@@ -1333,6 +1333,42 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
 
 
 
+
+/* Two-line Studio button variants: equal vertical breathing room above, between,
+   and below the two text rows. The face keeps the canonical size-tier border/radius. */
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"] > [data-vt-studio-button-face] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 0;
+  padding: 0 8px;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"] [data-vt-studio-button-line] {
+  display: block;
+  flex: 0 0 auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  color: #000;
+}
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-size="standard"] [data-vt-studio-button-line] {
+  font-size: 18px;
+  -webkit-text-stroke: 1px currentColor;
+}
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-size="compact"] [data-vt-studio-button-line] {
+  font-size: 12px;
+  -webkit-text-stroke: .5px currentColor;
+}
+
 button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
 /* Selected faces switch to the secondary pair without changing geometry. */
