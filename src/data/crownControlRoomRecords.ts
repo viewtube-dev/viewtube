@@ -39,7 +39,7 @@ export interface CrownVerificationSnapshot {
 }
 
 export const CROWN_TASK_AUTHORITY: CrownTaskAuthoritySnapshot = {
-  authority: "/Users/cwb/Downloads/viewtube/ViewTube-Task-Index.html",
+  authority: "External Task Index (workspace-configured; path intentionally not embedded)",
   status: "external-authority",
   embedded: false,
   note: "The canonical Task Index is not committed into this runtime bundle. Crown may show mission task references, but it must not invent or mutate task status.",
