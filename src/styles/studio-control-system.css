@@ -4351,3 +4351,12 @@ html body .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[
 html body .vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle { background: #fff !important; }
 html body .vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle { background: #000 !important; }
 
+html body .vt-studio-44-choice.is-solid.is-checkbox svg,
+html body .vt-studio-44-choice.is-color-swap.is-checkbox svg {
+  stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-44-choice.is-color-swap.is-on.is-checkbox svg {
+  stroke: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-choice.is-white-indicator.is-checkbox svg { stroke: #fff !important; }
+html body .vt-studio-44-choice.is-black-indicator.is-checkbox svg { stroke: #000 !important; }
