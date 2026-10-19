@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -196,6 +196,19 @@ describe("standalone Studio text fields", () => {
     expect(compact).toContain('data-size="compact"')
   })
 
+  it("renders StudioTextBox as non-editable standard, compact, and micro display surfaces", () => {
+    const standard = renderToStaticMarkup(<StudioTextBox aria-label="Standard summary">First row{"\n"}Second row</StudioTextBox>)
+    const compact = renderToStaticMarkup(<StudioTextBox size="compact" aria-label="Compact summary">Compact content</StudioTextBox>)
+    const micro = renderToStaticMarkup(<StudioTextBox size="micro" aria-label="Micro summary">Micro content</StudioTextBox>)
+    expect(standard).toContain('data-vt-studio-field-kind="textarea-display"')
+    expect(standard).toContain('data-size="standard"')
+    expect(standard).toContain('First row')
+    expect(standard).toContain('Second row')
+    expect(standard).not.toContain('contenteditable="true"')
+    expect(compact).toContain('data-size="compact"')
+    expect(micro).toContain('data-size="micro"')
+  })
+
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
     const standardInput = renderToStaticMarkup(<StudioTextInput aria-label="Title" />)
     const compactInput = renderToStaticMarkup(<StudioTextInput sizeVariant="compact" aria-label="Compact title" />)
@@ -245,10 +258,14 @@ describe("global defaults govern the effective primitive CSS", () => {
 });
 
 describe("Studio text field library entries", () => {
-  it("renders the standalone Studio text input and textarea as distinct catalog specimens", () => {
+  it("renders the standalone Studio text input, textarea, and text box as distinct catalog specimens", () => {
     const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />);
     expect(html).toContain('data-vt-library-component="StudioTextInput"');
     expect(html).toContain('data-vt-library-component="StudioTextArea"');
+    expect(html).toContain('data-vt-library-component="StudioTextBox"');
+    expect(html).toContain('aria-label="Studio text box standard"');
+    expect(html).toContain('aria-label="Studio text box compact"');
+    expect(html).toContain('aria-label="Studio text box micro"');
     expect(html).toContain('aria-label="Canonical Studio text input"');
     expect(html).toContain('aria-label="Canonical Studio text area"');
     expect(html).toContain('data-vt-studio-icon-button="true"');
