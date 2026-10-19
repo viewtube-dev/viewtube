@@ -75,6 +75,13 @@ import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import {
+ BRAIN_SURFACE_SELECTION_EVENT,
+ clearBrainSurfaceSelection,
+ readBrainSurfaceSelection,
+ setBrainSurfaceSelectionLocked,
+ type BrainSurfaceSelection,
+} from "../services/brain/BrainSurfaceSelection"
 import type {
  AIBrainAnswerModule,
  AIBrainEvidencePack,
@@ -109,6 +116,7 @@ export type ChatMessage = {
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
  readiness?: AIBrainTurnReadiness
+ contextUsed?: BrainCreatorContextSnapshot
  learningReceipt?: {
   entryId: string
   summary: string
@@ -121,6 +129,169 @@ export type ChatMessage = {
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
 }
+
+export type BrainCreatorContextSnapshot = {
+ version: string | null
+ channelId: string | null
+ project: {
+  projectId: string
+  contentBuildId: string | null
+  title: string | null
+  topic: string | null
+  format: string | null
+  evidenceIds: string[]
+  source: string | null
+ } | null
+ selection: {
+  route: string
+  sourceId: string
+  label: string
+  projectId: string | null
+  videoId: string | null
+  commentId: string | null
+  dateRange: string | null
+  evidenceIds: string[]
+  updatedAt: string
+  locked: boolean
+ } | null
+ profileLoadedAt: string | null
+ styleProfileAvailable: boolean
+ styleProfile: {
+  id: string
+  scope: string
+  assetType: string | null
+  source: string
+  descriptor: {
+   voice: string
+   pacing: string
+   vocabulary: { prefer: string[]; avoid: string[] }
+   structure: string
+   openingPattern: string
+   closingPattern: string
+   productionQuality: string
+  }
+  exemplars: Array<{ id: string; sourceRef: string | null; text: string }>
+ } | null
+ knowledgeItems: Array<{
+  id: string
+  statement: string
+  knowledgeClass: string
+  lifecycleState: string
+  confirmationState: string | null
+  source: string
+  sourceId: string
+  evidenceRefs: string[]
+  status: "confirmed" | "inferred"
+ }>
+ conflictIds: string[]
+ evidenceRefs: string[]
+ projectSource: string | null
+}
+
+const BrainContextUsedDrawer: React.FC<{
+ contextUsed?: BrainCreatorContextSnapshot
+ onCorrectItem?: (id: string, statement: string) => void
+}> = ({ contextUsed, onCorrectItem }) => {
+ if (!contextUsed) return null
+ const selection = contextUsed.selection
+ const project = contextUsed.project
+ const items = [
+  { id: "channel", label: "Channel", value: contextUsed.channelId || "No channel ID", status: "confirmed" },
+  { id: "project", label: "Project", value: project ? `${project.title || project.projectId} · ${project.projectId}` : "No project in this answer's context", status: project?.source === "canonical_project" || project?.source === "canonical_project_content_build" ? "confirmed" : "inferred" },
+  { id: "content-build", label: "ContentBuild", value: project?.contentBuildId || "No linked ContentBuild", status: project?.contentBuildId ? "confirmed" : "temporary" },
+  { id: "selection", label: "Selected video / asset", value: selection ? `${selection.label} · ${selection.sourceId}` : "No selected video or asset was supplied", status: selection ? "temporary" : "inferred" },
+ ]
+ return (
+  <details className="w-full rounded-[7px] border-[2px] border-black bg-white">
+   <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
+    <PanelRight size={12} aria-hidden="true" /> Context used
+    <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
+   </summary>
+   <div className="grid gap-2 border-t-[2px] border-black p-2">
+    <ul className="grid gap-1">
+     {items.map((item) => (
+      <li key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
+       <span className="text-[9px] font-black uppercase">{item.label} · {item.status}</span>
+       <span className="break-words text-[10px] font-bold">{item.value}</span>
+      </li>
+     ))}
+    </ul>
+    {contextUsed.styleProfile ? (
+     <section>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Style profile used</h4>
+      <div className="mt-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] p-2">
+       <p className="text-[9px] font-black uppercase">{contextUsed.styleProfile.scope} · {contextUsed.styleProfile.source} · {contextUsed.styleProfile.id}</p>
+       {([
+        ["Voice", contextUsed.styleProfile.descriptor.voice],
+        ["Pacing", contextUsed.styleProfile.descriptor.pacing],
+        ["Structure", contextUsed.styleProfile.descriptor.structure],
+        ["Opening", contextUsed.styleProfile.descriptor.openingPattern],
+        ["Closing", contextUsed.styleProfile.descriptor.closingPattern],
+        ["Production bar", contextUsed.styleProfile.descriptor.productionQuality],
+       ] as Array<[string, string]>).filter(([, value]) => value).map(([label, value]) => (
+        <p key={label} className="mt-1 text-[10px] font-bold leading-4"><span className="font-black uppercase">{label} · </span>{sanitizeCreatorFacingBrainCopy(value)}</p>
+       ))}
+       {contextUsed.styleProfile.descriptor.vocabulary.prefer.length ? <p className="mt-1 text-[10px] font-bold">Prefer: {contextUsed.styleProfile.descriptor.vocabulary.prefer.join(", ")}</p> : null}
+       {contextUsed.styleProfile.descriptor.vocabulary.avoid.length ? <p className="mt-1 text-[10px] font-bold">Avoid: {contextUsed.styleProfile.descriptor.vocabulary.avoid.join(", ")}</p> : null}
+       {contextUsed.styleProfile.exemplars.map((exemplar) => (
+        <div key={exemplar.id} className="mt-1 border-t border-black/10 pt-1">
+         <p className="text-[9px] font-black uppercase">Example · {exemplar.sourceRef || exemplar.id}</p>
+         <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(exemplar.text)}</p>
+         <code className="break-all text-[8px] text-black/50">{exemplar.id}</code>
+        </div>
+       ))}
+      </div>
+     </section>
+    ) : null}
+    {contextUsed.knowledgeItems.length ? (
+     <section>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
+      <ul className="mt-1 grid gap-1">
+       {contextUsed.knowledgeItems.map((item) => (
+        <li key={item.id} className="rounded-[5px] border border-black/20 px-2 py-1">
+         <div className="text-[9px] font-black uppercase">{item.status} · {item.knowledgeClass.replace(/_/g, " ")}</div>
+         <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
+         <code className="block break-all text-[8px] text-black/55">{item.id}</code>
+         {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
+         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item.id, item.statement)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Correct context</button> : null}
+        </li>
+       ))}
+      </ul>
+     </section>
+    ) : null}
+    {contextUsed.conflictIds.length ? <p className="text-[10px] font-bold">Conflicting context records: {contextUsed.conflictIds.join(", ")}</p> : null}
+    {contextUsed.evidenceRefs.length ? <p className="break-words text-[9px] font-bold text-black/60">Context evidence IDs: {contextUsed.evidenceRefs.join(", ")}</p> : null}
+    <p className="text-[9px] font-bold text-black/45">Resolver {contextUsed.version || "unavailable"} · Profile loaded {contextUsed.profileLoadedAt || "time unavailable"} · Style profile {contextUsed.styleProfileAvailable ? "available" : "not included"}</p>
+   </div>
+  </details>
+ )
+}
+
+const BrainContextStrip: React.FC<{
+ channelLabel: string
+ projectLabel: string
+ contentBuildId: string | null
+ selection: BrainSurfaceSelection | null
+ onClearSelection: () => void
+ onToggleLock: () => void
+ onClearProject: () => void
+}> = ({ channelLabel, projectLabel, contentBuildId, selection, onClearSelection, onToggleLock, onClearProject }) => (
+ <section aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1.5 rounded-[7px] border-[2px] border-black bg-white p-2 shadow-[2px_2px_0_0_#000]">
+  <div className="flex flex-wrap items-center gap-1.5">
+   <span className="rounded-[4px] border border-black bg-[#36E0F6] px-1.5 py-1 text-[9px] font-black uppercase">Channel · {channelLabel}</span>
+   <span className="rounded-[4px] border border-black bg-[#3FEE56] px-1.5 py-1 text-[9px] font-black uppercase">Project · {projectLabel}</span>
+   <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-black uppercase">ContentBuild · {contentBuildId || "none"}</span>
+   <span className="min-w-0 rounded-[4px] border border-black bg-[#f8f8f4] px-1.5 py-1 text-[9px] font-black uppercase">Selected · {selection?.label || "none"}</span>
+  </div>
+  <div className="flex flex-wrap gap-1.5">
+   <button type="button" disabled={!selection} aria-pressed={Boolean(selection?.locked)} onClick={onToggleLock} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">
+    {selection?.locked ? "Unlock selection" : "Lock selection"}
+   </button>
+   <button type="button" disabled={!selection} onClick={onClearSelection} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear selection</button>
+   <button type="button" disabled={projectLabel === "none"} onClick={onClearProject} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear project</button>
+  </div>
+ </section>
+)
 
 const shellCard = "rounded-[16px] border-[4px] border-black bg-white shadow-[6px_6px_0_0_#000]"
 const innerCard = "rounded-[10px] border-[2px] border-black bg-white"
@@ -480,7 +651,8 @@ const CreatorResponseCard: React.FC<{
  onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
  onCorrectReceipt: (message: ChatMessage) => void
  onRejectReceipt: (message: ChatMessage) => void
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt }) => {
+ onCorrectContextItem: (id: string, statement: string) => void
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt, onCorrectContextItem }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
  const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
@@ -579,6 +751,7 @@ const CreatorResponseCard: React.FC<{
      {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
       <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
      ) : null}
+     <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
        to={message.handoff.route}
@@ -785,6 +958,8 @@ const AIBrainCommandInterface: React.FC = () => {
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
  const [contextRailOpen, setContextRailOpen] = useState(false)
+ const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
+ const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
  const composerRef = useRef<HTMLInputElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
@@ -853,6 +1028,20 @@ const AIBrainCommandInterface: React.FC = () => {
   () => dedupeInsightsAgainstActions(initialInsights, quickActions),
   [initialInsights, quickActions],
  )
+
+ useEffect(() => {
+  if (brain.activeProjectId) setProjectContextCleared(false)
+ }, [brain.activeProjectId])
+
+ useEffect(() => {
+  const syncSelection = (event?: Event) => {
+   const detail = event instanceof CustomEvent ? event.detail as BrainSurfaceSelection | null : null
+   setSurfaceSelection(detail || readBrainSurfaceSelection())
+  }
+  syncSelection()
+  window.addEventListener(BRAIN_SURFACE_SELECTION_EVENT, syncSelection as EventListener)
+  return () => window.removeEventListener(BRAIN_SURFACE_SELECTION_EVENT, syncSelection as EventListener)
+ }, [])
 
  useEffect(() => {
   setBrainControls(readBrainUserControls(channelId))
@@ -942,6 +1131,9 @@ const AIBrainCommandInterface: React.FC = () => {
      learningReceipt: turn.metadata?.learningReceiptSnapshot && typeof turn.metadata.learningReceiptSnapshot === "object"
       ? turn.metadata.learningReceiptSnapshot as NonNullable<ChatMessage["learningReceipt"]>
       : undefined,
+     contextUsed: turn.metadata?.creatorContextSnapshot && typeof turn.metadata.creatorContextSnapshot === "object"
+      ? turn.metadata.creatorContextSnapshot as BrainCreatorContextSnapshot
+      : undefined,
     },
    ]),
   )
@@ -1021,6 +1213,26 @@ const AIBrainCommandInterface: React.FC = () => {
   }
  }
 
+ const handleCorrectContextItem = (id: string, statement: string) => {
+  setInput(`Correct this AI Brain context item ${id}. Current statement: "${statement}". Ask me to confirm the correction, then route the updated preference/fact through the existing learning governance path. Do not silently replace the existing record.`)
+  composerRef.current?.focus()
+ }
+
+ const handleClearSurfaceSelection = () => {
+  clearBrainSurfaceSelection()
+  setSurfaceSelection(null)
+ }
+
+ const handleToggleSurfaceSelectionLock = () => {
+  const updated = setBrainSurfaceSelectionLocked(!surfaceSelection?.locked)
+  setSurfaceSelection(updated)
+ }
+
+ const handleClearActiveProject = () => {
+  setProjectContextCleared(true)
+  updateBrain({ activeProjectId: null })
+ }
+
  const handleSend = async (override?: string) => {
   const userText = override ?? input
   if (!userText.trim() || busy) return
@@ -1058,9 +1270,11 @@ const AIBrainCommandInterface: React.FC = () => {
     creatorGrowthContext: turnGrowthContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
-   const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
-    || brain.projects.find((project) => project.status === "active")
-    || null
+   const activeProject = projectContextCleared
+    ? null
+    : brain.projects.find((project) => project.id === brain.activeProjectId)
+     || brain.projects.find((project) => project.status === "active")
+     || null
    if (channelId) {
     const communicationControls = readBrainUserControls(channelId)
     if (communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions && communicationControls.captureCreatorCommunications) {
@@ -1101,7 +1315,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1201,6 +1415,7 @@ const AIBrainCommandInterface: React.FC = () => {
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
        readiness: readinessForSnapshot(turnSnapshot),
+       contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
        contextMayBeStale: false,
       }
      : item,
@@ -1503,7 +1718,16 @@ const AIBrainCommandInterface: React.FC = () => {
       </div>
       <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[minmax(0,1.45fr)_minmax(520px,1fr)]">
        <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-        <div className="grid min-h-0 flex-1 bg-white max-xl:min-h-[420px]">
+        <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white max-xl:min-h-[420px]">
+         <BrainContextStrip
+          channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
+          projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
+          contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || (typeof surfaceSelection?.context?.contentBuildId === "string" ? surfaceSelection.context.contentBuildId : null)}
+          selection={surfaceSelection}
+          onClearSelection={handleClearSurfaceSelection}
+          onToggleLock={handleToggleSurfaceSelectionLock}
+          onClearProject={handleClearActiveProject}
+         />
          {!hydrated && messages.length === 0 ? (
           <div className="min-h-0 flex-1" aria-hidden="true" />
          ) : messages.length === 0 ? (
@@ -1523,6 +1747,7 @@ const AIBrainCommandInterface: React.FC = () => {
              onRetry={handleRetryInterruptedTurn}
              onCorrectReceipt={handleCorrectReceipt}
              onRejectReceipt={handleRejectReceipt}
+             onCorrectContextItem={handleCorrectContextItem}
             />
            ))}
            <div ref={bottomRef} aria-hidden="true" />

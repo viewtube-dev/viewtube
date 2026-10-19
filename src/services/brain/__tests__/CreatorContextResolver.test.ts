@@ -68,6 +68,7 @@ describe("CreatorContextResolver", () => {
     projectId: "project-1",
     evidenceIds: ["asset-2", "selection-evidence"],
     updatedAt: "2026-09-26T10:01:00.000Z",
+    locked: true,
    },
   }, deps)
 
@@ -79,6 +80,7 @@ describe("CreatorContextResolver", () => {
   expect(result.project?.contentBuildId).toBe("content-1")
   expect(result.surface?.route).toBe("/projects")
   expect(result.selection?.sourceId).toBe("project-1")
+  expect(result.selection?.locked).toBe(true)
   expect(result.evidenceRefs).toEqual(["asset-1", "asset-2", "selection-evidence"])
  })
 
