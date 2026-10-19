@@ -4908,10 +4908,10 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   border-radius: 2px;
 }
 
-/* Double-split badge labels use half-size type and can wrap to two lines. */
-.vt-studio-double-split-badge > [data-vt-studio-split-label],
-.vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-label] {
-  font-size: calc(var(--vt-studio-control-font-size, var(--vt-studio-44-font-size, 38px)) * .5);
+/* Upload-frame prompt badge only: compact two-line label.
+   Do not apply upload-specific typography to shared double-split controls. */
+.vt-studio-upload-frame__label .vt-studio-upload-frame__badge-text {
+  font-size: .5em;
   line-height: .9;
   white-space: normal;
   overflow-wrap: anywhere;
