@@ -1243,6 +1243,7 @@ const AIBrainCommandInterface: React.FC = () => {
    return
   }
   setInput("")
+  if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
   // Append to the ongoing thread; the post-send refresh rebuilds it authoritatively.
@@ -1779,7 +1780,11 @@ const AIBrainCommandInterface: React.FC = () => {
             id="brain-composer"
             rows={1}
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(event) => {
+             event.currentTarget.style.height = "auto"
+             event.currentTarget.style.height = `${Math.min(event.currentTarget.scrollHeight, 144)}px`
+             setInput(event.target.value)
+            }}
             onKeyDown={(event) => {
              if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
              event.preventDefault()
