@@ -292,6 +292,7 @@ export interface RunBrainTurnInput {
  channelId?: string | null
  userText: string
  retryTurnId?: string
+ retryGenerationOnly?: boolean
  snapshot: AIBrainContextSnapshot
  systemPrompt: string
  growthContext: CreatorGrowthContext
@@ -462,7 +463,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   creatorContext,
  })
  try {
-  if (capabilities.some((capability) => capability.id === "niche-knowledge")) {
+  if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
     channelId: input.channelId,
     niche: input.snapshot.inferredProfile.niche,
@@ -478,7 +479,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     accessedAt: source.accessedAt,
    })))
   }
-  if (input.allowModel && nicheKnowledge?.canonicalNiche && shouldUseCurrentGrounding(input.userText)) {
+  if (!input.retryGenerationOnly && input.allowModel && nicheKnowledge?.canonicalNiche && shouldUseCurrentGrounding(input.userText)) {
    const grounded = readCachedCurrentNicheResearch(nicheKnowledge) || await (input.currentResearcher || groundCurrentNicheResearch)({
      canonicalNiche: nicheKnowledge.canonicalNiche,
      publicQuestion: input.userText,
@@ -599,7 +600,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
   }
-  const learning = await captureAIBrainLearningEvent({
+  const learning = input.retryGenerationOnly ? null : await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
    source: "copilot",
    summary: `Copilot conversation: ${input.userText}`,
@@ -639,7 +640,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    answerModules: response.modules,
    citations,
    evaluation,
-   learningEntryIds: [learning.id],
+   learningEntryIds: learning ? [learning.id] : [],
    metadata: {
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
