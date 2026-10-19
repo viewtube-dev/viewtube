@@ -1141,6 +1141,7 @@ const AIBrainCommandInterface: React.FC = () => {
      recentTurns: recentTurns.filter((turn) => turn.id !== message.id),
      history: historyPayload,
      allowModel: canUseGemini,
+     retryGenerationOnly: true,
     })
     setMessages((current) => current.map((item) => item.id === result.turn.id
      ? {
