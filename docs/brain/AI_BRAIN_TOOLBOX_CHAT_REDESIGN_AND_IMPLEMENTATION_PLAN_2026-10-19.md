@@ -1,10 +1,10 @@
-# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–3
+# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–5
 
 **Date:** 2026-10-19  
 **Repository:** `viewtube-dev/viewtube`  
 **Target base:** `master/consolidated-feature-integration`  
 **Working branch:** `feat/brain-toolbox-phase-2-3`  
-**Status:** Phase 1 source audit recorded; Phase 2 shared claim/evidence composition and Phase 3 responsive navigation integration implemented on the working branch. Automated tests and browser visual certification remain pending. The full feature overhaul remains staged.  
+**Status:** Phases 2–5 have implementation increments on the working branch: shared Studio evidence controls, responsive workspace navigation, multiline composer, and turn-scoped evidence ribbons/null-safe mini visuals. Automated tests and browser visual certification remain pending. The full feature overhaul remains staged.  
 **Primary historical design donor:** [PR #241 Brain brainstorm and frontend design](https://github.com/viewtube-dev/viewtube/blob/bcc561d3c96e435252c1cc8ec544283030117322/docs/migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md)
 
 > This document consolidates the complete Brain UI overhaul proposal and the implementation sequence. The PR #241 design is a historical donor, not a current-state specification. Do not trust its old maturity percentages, route counts, model/provider assumptions, or “currently empty” assertions without rechecking the integration branch. Preserve its still-useful product requirements while following current source, tests, registries, and architecture contracts.
@@ -385,4 +385,35 @@ Target base: `master/consolidated-feature-integration`
 ### Current evidence and limitations
 
 Source edits and test files are committed to the working branch. GitHub source operations do not execute Vitest, typecheck, lint, or browser tests, so no green-test or visual-certification claim is made here. Phase 3 is a first shell/navigation increment: the existing center conversation and right-side launchpad/context layout is retained rather than fully restructured into independent scroll containers. Follow-up work must finish route reachability, test/CI receipts, and responsive browser certification before this phase is considered fully certified.
+
+## Implementation update — Phases 4 and 5 (2026-10-19)
+
+Working branch: `feat/brain-toolbox-phase-2-3`  
+Target base: `master/consolidated-feature-integration`
+
+### Phase 4 — Chat and composer (increment delivered; acceptance remains open)
+
+- [x] Changed the single-line composer to an auto-growing multiline textarea with a bounded height.
+- [x] Enter sends; Shift+Enter inserts a newline; IME composition is not submitted. Keyboard behavior is covered by a focused unit test.
+- [x] Clear the composer height when a message is submitted, preserving the existing focus target and busy/send guard.
+- [x] Kept the existing registry-backed prompt library, capability browser, typed answer-module renderer, interrupted-turn retry path, feedback capture, and review-only handoffs as their current owners.
+- [x] Updated the shell contract test for the Phase 3 desktop navigation column and added a composer markup/help regression test.
+- [ ] Attachment upload, cancellation, prompt-family overrides, output-format controls, and a complete explicit execution-mode chooser are not implemented in this increment. Do not expose inert UI for these until supported by the canonical runtime/API.
+- [ ] Run focused and full tests, typecheck, and browser checks for multiline entry, mobile keyboard behavior, focus retention, and long prompt handling.
+
+### Phase 5 — Evidence and compact visuals (increment delivered; acceptance remains open)
+
+- [x] Added `BrainTurnEvidenceRibbon`, keyed by the stable chat turn ID, to separate prepared evidence count from response-cited evidence IDs.
+- [x] The ribbon displays the canonical evidence-pack status, capture timestamp when present, missing inputs, and the existing “Inspect evidence” drawer. It does not infer freshness from styling or timestamp age.
+- [x] Mounted the ribbon for response cards even when the pack has no evidence IDs, so missing/partial evidence does not hide the explanation affordance.
+- [x] Associated the existing “Context used” inspector with the same turn ID; context metadata and evidence citations remain separate.
+- [x] Fixed the mini trend visual to split at null/non-finite values rather than plotting missing values as zero. A measured zero remains a real point; an all-missing trend renders an explicit unavailable state.
+- [x] Added focused tests for prepared-vs-cited evidence, missing capture/evidence states, and null-vs-zero trend segmentation.
+- [ ] Extend claim-level citations to every structured answer/dashboard/widget surface only where the underlying payload carries canonical evidence IDs.
+- [ ] Verify the turn metadata is emitted by the canonical runtime for all response paths, including local fallback and retry, before expanding any “used” claim beyond the existing snapshot contract.
+- [ ] Run the focused tests, analytics visualization contracts, full suite, and browser visual certification.
+
+### Verification state
+
+The GitHub connector can commit source and test files but cannot execute the repository's test runner or browser. The tests above are added but **not verified as passing**. Current known CI status includes Vercel build-rate-limit failures; these are infrastructure blockers, not evidence that application tests passed. Phases 4 and 5 are implementation increments, not fully certified phases. No deployment or production behavior is claimed.
 
