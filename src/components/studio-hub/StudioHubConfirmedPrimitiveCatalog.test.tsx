@@ -224,18 +224,20 @@ describe("confirmed composite primitive catalog", () => {
 })
 
 
-it("consolidates button and square-icon modules while preserving icon variants and monochrome choices", () => {
+it("keeps one square-icon family, removes semantic-tone catalog modules, and retains monochrome choices", () => {
   const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-  const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
-  expect(source).not.toContain("Button + Split-left · Complete Variant Matrix")
-  expect(source).not.toContain('title="Icon Button · 44px + 28px"')
-  expect(source.match(/title="Square Icon Button · 44px \\+ 28px"/g)).toHaveLength(1)
-  expect(source).not.toContain("Square Icon Button · All Presets + Animations")
-  expect(source).not.toContain("StudioIconButton")
+  expect(html).not.toContain("Button + Split-left · Complete Variant Matrix")
+  expect(html.match(/Square Icon Button · 44px \+ 28px/g)).toHaveLength(1)
+  expect(html).not.toContain("Square Icon Button · All Presets + Animations")
   expect(html).toContain("Square icon button V1 primary fill")
   expect(html).toContain("HEART + STATE FEEDBACK")
   expect(html).toContain("BLACK")
   expect(html).toContain("WHITE")
+  expect(html).toContain("COUNTER-CONTROLLED · UP / DOWN")
+  const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+  expect(source).not.toContain("StudioIconButton")
+  expect(source).not.toContain('title="Icon Button · 44px + 28px"')
+  expect(source).toContain('const CHOICE_SKINS = CANONICAL_SKINS.filter(({ skin }) => skin === "black-indicator" || skin === "white-indicator")')
   const choiceFamily = source.slice(source.indexOf('<Family title="44px Radio + Checkbox"'), source.indexOf('<Family title="Word Toggles'))
   expect(choiceFamily).toContain("CHOICE_SKINS.map")
   expect(choiceFamily).not.toContain("CANONICAL_SKINS.map")
