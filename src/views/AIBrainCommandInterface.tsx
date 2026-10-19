@@ -821,7 +821,17 @@ const AIBrainCommandInterface: React.FC = () => {
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
   // Append to the ongoing thread; the post-send refresh rebuilds it authoritatively.
   setMessages((current) => [...current, userMessage])
+  let turnSnapshot: AIBrainContextSnapshot = snapshot
   try {
+   turnSnapshot = buildAIBrainContextSnapshot({
+    brain,
+    authState,
+    channelConnection,
+    brainMemory: getBrainMemory(),
+    brainOnboardingSnapshot: onboardingSnapshot,
+    recentConversationTurns: recentTurns,
+    requestText: userText,
+   })
    const systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
@@ -866,7 +876,7 @@ const AIBrainCommandInterface: React.FC = () => {
      plannedPublishAt: activeProject.publishDate || null,
     } : null,
     userText,
-    snapshot,
+    snapshot: turnSnapshot,
     systemPrompt,
     growthContext: creatorGrowthContext,
     recentTurns,
@@ -881,8 +891,8 @@ const AIBrainCommandInterface: React.FC = () => {
   } catch (error) {
    const message = error instanceof Error ? error.message : String(error)
    console.warn("[AIBrain] Copilot answer failed:", message)
-   const fallbackText = buildCreatorBrainLocalFallback(userText, snapshot)
-   const fallbackResponse = formatCreatorBrainResponse(fallbackText, snapshot, { requestText: userText })
+   const fallbackText = buildCreatorBrainLocalFallback(userText, turnSnapshot)
+   const fallbackResponse = formatCreatorBrainResponse(fallbackText, turnSnapshot, { requestText: userText })
    const response = {
     ...fallbackResponse,
     modules: formatCreatorGrowthModules(fallbackResponse, creatorGrowthContext),
