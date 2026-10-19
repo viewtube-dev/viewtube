@@ -1557,22 +1557,20 @@ export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "varian
 StudioSplitLeftDropdown.displayName = "StudioSplitLeftDropdown"
 
 // Canonical Studio stepper implementations are owned by this module.
-/** Smoothly accelerates from a deliberate 128ms repeat to 46ms, then 23ms;
- * easing starts 16 steps from a bound and only noticeably slows in the final few steps. */
+/** Shared hold-repeat timing.
+ * Starts at 150ms (slower than the prior 128ms), reaches 23ms in 520ms
+ * with one continuous ease-out curve, and smoothsteps to 75ms within the
+ * final three steps after beginning boundary easing 16 steps from the bound. */
 export const getStudioCounterRepeatDelay = (elapsedMs: number, remainingSteps: number) => {
-  const firstRamp = Math.min(1, Math.max(0, elapsedMs / 520));
-  const firstEase = 1 - Math.pow(1 - firstRamp, 2.2);
-  const mediumDelay = 128 - firstEase * 82;
-  const secondRamp = Math.min(1, Math.max(0, (elapsedMs - 520) / 700));
-  const secondEase = 1 - Math.pow(1 - secondRamp, 2);
-  const acceleratedDelay = 46 - secondEase * 23;
-  const fastDelay = elapsedMs < 520 ? mediumDelay : acceleratedDelay;
+  const accelerationProgress = Math.min(1, Math.max(0, elapsedMs / 520));
+  const accelerationEase = 1 - Math.pow(1 - accelerationProgress, 2.2);
+  const accelerationDelay = 150 - accelerationEase * 127;
   const boundaryProgress = Number.isFinite(remainingSteps)
     ? Math.min(1, Math.max(0, (16 - remainingSteps) / 13))
     : 0;
   const boundaryEase = boundaryProgress * boundaryProgress * (3 - 2 * boundaryProgress);
   const boundaryDelay = 23 + boundaryEase * 52;
-  return Math.round(Math.max(fastDelay, boundaryDelay));
+  return Math.round(Math.max(accelerationDelay, boundaryDelay));
 };
 
 /** Pointer hold-repeat shared by the canonical counter buttons. */
@@ -1583,6 +1581,8 @@ const useStudioCounterHold = (
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentRef = React.useRef(current);
   currentRef.current = current;
+  const latestRef = React.useRef({ min, max, step, adjust });
+  latestRef.current = { min, max, step, adjust };
   const startedAt = React.useRef(0);
   const held = React.useRef(false);
   const suppressClick = React.useRef(false);
@@ -1601,19 +1601,21 @@ const useStudioCounterHold = (
     try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* Embedded webviews may not support pointer capture. */ }
     held.current = false;
     suppressClick.current = false;
-    startedAt.current = Date.now();
     timer.current = setTimeout(() => {
+      startedAt.current = Date.now();
       held.current = true;
       setIsHolding(true);
       const repeat = () => {
         if (!held.current) return;
         const value = currentRef.current;
-        const atBound = direction > 0 ? value >= max : value <= min;
+        const latest = latestRef.current;
+        const atBound = direction > 0 ? value >= latest.max : value <= latest.min;
         if (atBound) { stop(); return; }
-        adjust(direction);
+        latest.adjust(direction);
+        const nextValue = Math.min(latest.max, Math.max(latest.min, value + direction * latest.step));
+        const remaining = direction > 0 ? latest.max - nextValue : nextValue - latest.min;
+        const remainingSteps = Number.isFinite(remaining) ? Math.max(0, remaining / latest.step) : Number.POSITIVE_INFINITY;
         const elapsed = Date.now() - startedAt.current;
-        const remaining = direction > 0 ? max - value : value - min;
-        const remainingSteps = Number.isFinite(remaining) ? Math.max(0, remaining / step) : Number.POSITIVE_INFINITY;
         const delay = getStudioCounterRepeatDelay(elapsed, remainingSteps);
         timer.current = setTimeout(repeat, delay);
       };
