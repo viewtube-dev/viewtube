@@ -64,11 +64,13 @@ test("generated CSS variables stay synchronized with the canonical token module"
 })
 
 
-test("word toggles and switches use a 50% primary idle surface and full primary selected surface", () => {
-  assert.match(css, /\.vt-studio-44-word-toggle:not\(\.is-on\)[^{]*\{[^}]*background:[^;]*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
-  assert.match(css, /\.vt-studio-44-word-toggle\.is-on[^}]*background:[^;]*var\(--vt-studio-control-primary/s);
-  assert.match(css, /\.vt-studio-44-switch:not\(\.is-on\)[^{]*\{[^}]*background:[^;]*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
-  assert.match(css, /\.vt-studio-44-switch\.(?:is-on|is-checked)[^{]*\{[^}]*background(?:-color)?:\s*var\(--vt-studio-control-primary/s);
+test("buttons, word toggles, and switches use 50% primary idle fill and full primary selected fill", () => {
+  assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^{]*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
+  assert.match(css, /button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^}]*background:\s*var\(--vt-studio-control-primary/s);
+  assert.match(css, /\.vt-studio-44-word-toggle\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
+  assert.match(css, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle[^}]*background:\s*var\(--vt-studio-control-primary/s);
+  assert.match(css, /\.vt-studio-44-switch:not\(\.is-on\):not\(\[aria-checked="true"\]\)[^{]*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
+  assert.match(css, /\.vt-studio-44-switch\.is-on[^}]*background:\s*var\(--vt-studio-control-primary/s);
   assert.doesNotMatch(css, /\.vt-studio-44-switch\.is-color-swap\.is-on\s*,\s*\.vt-studio-44-choice\.is-color-swap\.is-on\s*\{\s*background:\s*var\(--vt-studio-control-secondary/s);
 });
 
