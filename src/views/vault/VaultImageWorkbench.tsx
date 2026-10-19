@@ -1,5 +1,6 @@
 import React from "react"
 import { Image as ImageIcon } from "lucide-react"
+import { StudioTextBox } from "../../studio-ui/primitives/StudioControls"
 import { SubToolboxInnerActionButton } from "../../components/Toolbox"
 import {
   SubToolboxInput,
@@ -266,7 +267,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
   }
 
   if (asset.kind !== "image") {
-    return <SubToolboxStatePanel level="l1" state="empty" message="Select one image asset to use the Image Workbench." />
+    return <StudioTextBox size="standard" role="status" aria-live="polite">Select one image asset to use the Image Workbench.</StudioTextBox>
   }
 
   return (
