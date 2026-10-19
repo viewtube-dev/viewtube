@@ -200,7 +200,10 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
   value, options, onValueChange, level = "toolbox", className, style, ...props
 }) => {
   const rootRef = React.useRef<HTMLDivElement>(null)
-  const [size, setSize] = React.useState<"44" | "28">("44")
+  const [size, setSize] = React.useState<"44" | "28">(() => {
+    if (typeof window === "undefined") return "44"
+    return window.matchMedia("(orientation: portrait) and (max-width: 768px)").matches ? "28" : "44"
+  })
 
   React.useEffect(() => {
     if (typeof window === "undefined") return
