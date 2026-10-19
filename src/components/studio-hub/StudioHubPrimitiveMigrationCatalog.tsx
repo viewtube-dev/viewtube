@@ -103,7 +103,7 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton, StudioLegendMultiDropdown, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -598,7 +598,7 @@ const PrimitiveMigrationControl: React.FC<{
     />
   }
   if (name === "Split Search") {
-    return <SubToolboxSplitField level={level} variant="search" icon={<Search />} actionIcon={<X />} actionLabel="Clear search" onAction={() => setSearchQuery("")} inputProps={{ "aria-label": "Search", placeholder: "SEARCH", value: searchQuery, onChange: (event) => setSearchQuery(event.target.value) }} />
+    return <div className="flex min-w-0 items-center gap-1"><StudioSplitLeftInput sizeVariant={level === "l2" ? "compact" : "standard"} icon={<Search aria-hidden="true" />} aria-label="Search" placeholder="SEARCH" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} /><StudioSquareIconButton sizeVariant={level === "l2" ? "compact" : "standard"} icon={<X aria-hidden="true" />} label="Clear search" onClick={() => setSearchQuery("")} /></div>
   }
   if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
