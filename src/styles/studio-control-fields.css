@@ -149,7 +149,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 html body textarea[data-vt-studio-control="true"],
-html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 html body [data-vt-studio-control="true"] textarea {
   outline: 0 solid transparent;
   outline-offset: var(--vt-studio-focus-outline-offset, 0px);
