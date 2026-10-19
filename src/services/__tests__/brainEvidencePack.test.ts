@@ -96,5 +96,24 @@ describe("buildAIBrainEvidencePack", () => {
   expect(pack.requestSpec.filters).toEqual(["artillery"])
   expect(pack.requestSpec.rankBy).toBe("watchTime")
  })
+ it("names unavailable revenue instead of implying a revenue diagnosis is possible", () => {
+  const snapshot = normalizeVtSyncSnapshot({
+   source: "vt_sync",
+   channelId: "channel-revenue-missing",
+   channelName: "Example channel",
+   videos: [
+    { id: "video-views-only", title: "Views only", format: "long", publishedAt: "2026-08-01", metrics: { views: 1200 } },
+   ],
+   syncManifest: { stop_reason: "completed" },
+  })
+
+  const pack = buildAIBrainEvidencePack("How much revenue did my best video make?", snapshot)
+
+  expect(pack.requestSpec.rankBy).toBe("revenue")
+  expect(pack.availableMetrics).toContain("views")
+  expect(pack.availableMetrics).not.toContain("revenue")
+  expect(pack.missingInputs).toContain("revenue data")
+ })
+
 
 })
