@@ -238,6 +238,7 @@ export const BrainPromptLibrary: React.FC<{
 
  return (
   <section
+   aria-label="Prompt library"
    aria-labelledby={headingId}
    aria-busy={busy || undefined}
    className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white"
