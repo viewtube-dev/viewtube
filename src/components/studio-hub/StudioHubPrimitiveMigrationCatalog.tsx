@@ -23,7 +23,6 @@ import {
   SubToolboxDivider,
   SubToolboxDrawer,
   SubToolboxFieldLabel,
-  SubToolboxFileTarget,
   SubToolboxIconButton,
   SubToolboxInput,
   SubToolboxInput20,
@@ -104,7 +103,7 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton, StudioLegendMultiDropdown } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioLegendMultiDropdown, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
@@ -839,7 +838,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxDataStats level={level} label="TOTAL VIEWS" value="128,442" delta="+12.4%" variant="standard" />
   }
   if (name === "Upload Frame") {
-    return <SubToolboxFileTarget level={level} label="DROP OR CHOOSE FILE" icon={<Upload />} minHeight={level === "l0" ? 176 : level === "l1" ? 144 : 112} />
+    return <StudioUploadFrame sizeVariant={level === "l2" ? "compact" : "standard"} accept="image/*,video/*" aria-label="Studio Hub upload frame example" />
   }
   if (name.startsWith("Vault ")) {
     const moduleKind: VaultAssetModuleKind = name.includes("Audio")
