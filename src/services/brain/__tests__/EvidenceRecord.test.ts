@@ -86,11 +86,11 @@ describe("EvidenceRecord", () => {
    epistemicState: "observed",
    provenance: { evidenceIds: [`source-${index}`] },
   }))
-  const selected = selectEvidenceRecordsForPrompt(records, { maximumRecords: 5, maximumCharacters: 240 })
+  const selected = selectEvidenceRecordsForPrompt(records, { maximumRecords: 5, maximumCharacters: 800 })
 
   expect(selected.length).toBeGreaterThan(0)
   expect(selected.length).toBeLessThanOrEqual(5)
-  expect(selected.map(formatEvidenceRecordForPrompt).join("\\n").length).toBeLessThanOrEqual(240)
+  expect(selected.map(formatEvidenceRecordForPrompt).join("\n").length).toBeLessThanOrEqual(800)
   expect(selected.every((record) => records.includes(record))).toBe(true)
  })
 
