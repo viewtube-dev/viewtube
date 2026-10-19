@@ -241,7 +241,7 @@ describe("EvidenceRecord", () => {
  it("downgrades stale evidence to directional even when dimensions otherwise match", () => {
   const records = projectCanonicalEvidenceRecords({
    ...bundle,
-   datasets: [{ ...bundle.datasets[0], status: "STALE" }],
+   datasets: [{ ...bundle.datasets[0], status: "stale" }],
   })
   const left = records[0]
   const right = { ...left, id: "right", value: 3100 }
@@ -249,6 +249,6 @@ describe("EvidenceRecord", () => {
   const result = compareEvidenceRecords(left, right)
   expect(result.comparable).toBe(true)
   expect(result.level).toBe("directional")
-  expect(result.reasons.join(" ")).toContain("STALE")
+  expect(result.reasons.join(" ")).toContain("stale"
  })
 })
