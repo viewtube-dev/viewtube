@@ -727,10 +727,13 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
         value={value}
         onValueChange={onValueChange}
         words={words}
-        sizeVariant={size === "28" ? "compact" : "standard"}
+        sizeVariant={verticalOnMobilePortrait ? "compact" : size === "28" ? "compact" : "standard"}
         variant={skin === "white-indicator" ? "white-fill" : skin === "black-indicator" ? "black-fill" : "primary-secondary"}
         className={className}
-        style={style}
+        style={{
+          ...style,
+          ...(skin === "black-indicator" ? { background: "#000", borderColor: "#000" } : {}),
+        }}
         aria-label={typeof props["aria-label"] === "string" ? props["aria-label"] : undefined}
       />
     );
