@@ -1,6 +1,7 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
 import "../../styles/studio-control-entry.css"
+import "../../styles/studio-text-box.css"
 
 export type StudioTextBoxSize = StudioControlSize
 export type StudioTextBoxProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children"> & {
