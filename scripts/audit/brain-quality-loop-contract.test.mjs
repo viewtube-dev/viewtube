@@ -15,7 +15,7 @@ test("phase 5 quality loop has one bounded repair and independently validates it
   assert.match(orchestrator, /BRAIN_MODEL_TIMEOUT_MS\s*=\s*30_000/);
   assert.match(orchestrator, /BRAIN_REPAIR_TIMEOUT_MS\s*=\s*20_000/);
   assert.match(orchestrator, /if \(!evaluation\.passed && status === "complete"\)/);
-  assert.equal((orchestrator.match(/input\\.modelGenerator \\|\\| defaultBrainModelGateway\\.generateStructuredResponse/g) || []).length, 2,
+  assert.equal((orchestrator.match(/input\.modelGenerator \|\| defaultBrainModelGateway\.generateStructuredResponse/g) || []).length, 2,
     "one initial generation and at most one repair generation are allowed");
   assert.match(orchestrator, /const repairedEvaluation = validateBrainResponse\(/);
   assert.match(orchestrator, /if \(repairedEvaluation\.passed\)/);
