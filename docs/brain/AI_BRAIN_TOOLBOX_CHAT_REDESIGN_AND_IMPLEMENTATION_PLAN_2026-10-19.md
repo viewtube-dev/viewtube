@@ -1,10 +1,10 @@
-# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–2
+# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–3
 
 **Date:** 2026-10-19  
 **Repository:** `viewtube-dev/viewtube`  
 **Target base:** `master/consolidated-feature-integration`  
-**Working branch:** `feat/brain-toolbox-chat-phases-1-2`  
-**Status:** Phase 1 source audit recorded; Phase 2 first control migration and regression tests committed to this branch; CI and browser visual certification pending. The full feature overhaul remains staged.  
+**Working branch:** `feat/brain-toolbox-phase-2-3`  
+**Status:** Phase 1 source audit recorded; Phase 2 shared claim/evidence composition and Phase 3 responsive navigation integration implemented on the working branch. Automated tests and browser visual certification remain pending. The full feature overhaul remains staged.  
 **Primary historical design donor:** [PR #241 Brain brainstorm and frontend design](https://github.com/viewtube-dev/viewtube/blob/bcc561d3c96e435252c1cc8ec544283030117322/docs/migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md)
 
 > This document consolidates the complete Brain UI overhaul proposal and the implementation sequence. The PR #241 design is a historical donor, not a current-state specification. Do not trust its old maturity percentages, route counts, model/provider assumptions, or “currently empty” assertions without rechecking the integration branch. Preserve its still-useful product requirements while following current source, tests, registries, and architecture contracts.
