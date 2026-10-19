@@ -1737,6 +1737,7 @@ export interface StructuredBrainModelOutput {
  }>
  actions: string[]
  question?: string
+ modelIdentity?: { provider: "google-genai"; requestedModel: string; servedModel: string | null }
 }
 
 export const generateStructuredBrainResponse = async (input: {
