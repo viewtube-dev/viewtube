@@ -1,0 +1,35 @@
+/* Floating labels are shared by density, independently of entered-text type.
+ * Standard midpoint: (38 + 18) / 2 = 28px; raised at 80% = 22.4px.
+ * Compact midpoint: (24 + 14) / 2 = 19px; raised at 80% = 15.2px. */
+html body .vt-studio-floating-field {
+  --vt-studio-floating-label-size: 28px;
+  --vt-studio-floating-label-size-compact: 19px;
+}
+html body .vt-studio-floating-field[data-size="compact"] {
+  --vt-studio-floating-label-size: var(--vt-studio-floating-label-size-compact);
+}
+html body .vt-studio-floating-field > .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-floating-label-size);
+}
+html body .vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label,
+html body .vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+  font-size: calc(var(--vt-studio-floating-label-size) * .8);
+}
+/* Apply the same zero-offset, 65%-of-border secondary outline on both native
+ * field types for pointer focus as well as keyboard focus. Preserve backgrounds
+ * so the primary inner-perimeter paint remains intact. */
+html body :is(input.vt-studio-text-input, textarea[data-vt-studio-control="true"]):is(:focus, :focus-visible),
+html body :is(.vt-studio-floating-field, .vt-studio-fixed-label-field) > :is(input, textarea)[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+}
+/* Beat density-specific resting glyph-stroke declarations without changing
+ * textarea stroke thickness, text size, line height or writing-surface geometry. */
+html body textarea[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+}
