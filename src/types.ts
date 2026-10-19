@@ -1698,7 +1698,7 @@ export interface CreatorGrowthContext {
  recentConversationFacts: string[]
  capabilities: Array<{
   id:
-   | "profile_confidence"
+   | "profile_coverage_checklist"
    | "creator_confirmation"
    | "top_performer_patterns"
    | "audience_promise"
