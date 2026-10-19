@@ -2858,3 +2858,16 @@
   .vt-confirmed-choice-example-row { gap: 2px; }
   .vt-confirmed-paired-compact-row { gap: 4px; }
 }
+
+/* Variant specimens without inline captions should not reserve an empty caption row. */
+.vt-confirmed-control-family .vt-confirmed-word-toggle-standard > div,
+.vt-confirmed-control-family .vt-confirmed-word-toggle-compact > div {
+  grid-template-rows: auto;
+  justify-items: stretch;
+  align-content: start;
+  gap: 0;
+}
+/* Compact and micro slider palette pairs remain side-by-side at mobile widths. */
+.vt-confirmed-counter-size-row .vt-confirmed-slider-pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
