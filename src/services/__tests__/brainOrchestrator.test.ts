@@ -5,6 +5,7 @@ import { getVtSyncSnapshot } from "../../features/vt-sync-local"
 import { buildAIBrainContextSnapshot } from "../aiBrainCommandInterface"
 import { buildCreatorGrowthContext, resumeAIBrainThread } from "../aiBrainConversationStore"
 import { listAIBrainLearningEntries } from "../aiBrainSelfImprovement"
+import { resetBrainTraceSink, setBrainTraceSink, type BrainTrace } from "../brain/BrainTrace"
 import type { StructuredBrainModelOutput } from "../gemini"
 import {
  BRAIN_MODEL_TIMEOUT_MS,
