@@ -72,7 +72,8 @@ describe("aiBrainConversationStore", () => {
    userText: original,
   })
 
-  expect(pending.rawUserMessage).toBe(original);
+  expect(pending.rawUserMessage).toBe(original)
+  expect(pending.userText).toBe(original)
   expect(pending.displayUserMessage).not.toContain("API");
   expect(pending.displayUserMessage).not.toContain("failed");
   expect(pending.displayUserMessage).not.toContain("error");
