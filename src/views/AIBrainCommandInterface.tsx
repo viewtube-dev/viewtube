@@ -1090,16 +1090,43 @@ const AIBrainCommandInterface: React.FC = () => {
     usefulnessScore: scoreAIBrainAnswerUsefulness({ response: message.response || message.text, feedback: rating }),
    },
   })
+  const feedbackAt = new Date().toISOString()
+  const receipt = learningEntry ? {
+   entryId: learningEntry.id,
+   summary: learningEntry.summary,
+   detail: learningEntry.detail,
+   category: learningEntry.category,
+   status: learningEntry.status,
+   scope: learningEntry.status === "promoted" ? "durable_knowledge" : "learning_ledger_not_durable",
+   createdAt: learningEntry.createdAt,
+  } : undefined
   await saveAIBrainConversationTurn({
    channelId,
    userText: `Feedback: ${rating.replace(/_/g, " ")}`,
    assistantText: message.response?.keyInsight || message.text,
    response: message.response,
    answerModules: message.response?.modules || [],
-   feedback: { messageId: message.id, rating, createdAt: new Date().toISOString() },
+   feedback: { messageId: message.id, rating, createdAt: feedbackAt },
    learningEntryIds: learningEntry ? [learningEntry.id] : [],
    metadata: { source: "feedback" },
   })
+  if (receipt) {
+   setMessages((current) => current.map((item) => item.id === message.id ? { ...item, learningReceipt: receipt } : item))
+   try {
+    await completeAIBrainTurn({
+     turnId: message.id,
+     status: "complete",
+     assistantText: message.text,
+     response: message.response,
+     answerModules: message.response?.modules || [],
+     feedback: { messageId: message.id, rating, createdAt: feedbackAt },
+     learningEntryIds: learningEntry ? [learningEntry.id] : [],
+     metadata: { learningReceiptSnapshot: receipt },
+    })
+   } catch {
+    // Local fallback messages may not have a persisted canonical turn ID.
+   }
+  }
   await refreshConversationTurns()
   if (rating === "ask_follow_up") {
    setInput(`Follow up on ${message.response?.headline || "this answer"}: `)
