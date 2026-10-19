@@ -83,6 +83,23 @@ export const STUDIO_ICON_SIZE_COMPARISON = {
 } as const
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
+/** Shared dropdown chevron contract; all single and multi dropdowns consume these values. */
+export const STUDIO_DROPDOWN_TOKENS = {
+  chevronSize: {
+    standard: STUDIO_CONTROL_SIZE_BASE.standard.iconSize,
+    compact: STUDIO_CONTROL_SIZE_BASE.compact.iconSize,
+  },
+  chevronSide: "trailing",
+  splitRailIconSide: "leading",
+} as const
+
+/** Shared numeral-state contract for counters and range-slider readouts. */
+export const STUDIO_COUNTER_SLIDER_NUMBER_TOKENS = {
+  restingNumberWhiteMix: 50,
+  activeNumberColor: "#000000",
+  divider: { centeredOnCellBoundary: true, stroke: "control-stroke" },
+} as const
+
 export type StudioControlSize = "standard" | "compact" | "micro"
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
 
