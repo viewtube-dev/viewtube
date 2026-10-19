@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { StudioTextBox } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -2477,11 +2478,9 @@ const CreatorVaultOS: React.FC = () => {
          onOperationUpdated={() => setRefreshTick((current) => current + 1)}
         />
        ) : (
-        <SubToolboxStatePanel
-         level="l1"
-         state="empty"
-         message="Select one image asset in Asset Library to reveal its image editing and derivative tools."
-        />
+        <StudioTextBox size="standard" role="status" aria-live="polite">
+         Select one image asset in Asset Library to reveal its image editing and derivative tools.
+        </StudioTextBox>
        )}
       </SubToolbox>
 
@@ -2502,11 +2501,9 @@ const CreatorVaultOS: React.FC = () => {
          onOperationUpdated={() => setRefreshTick((current) => current + 1)}
         />
        ) : (
-        <SubToolboxStatePanel
-         level="l1"
-         state="empty"
-         message="Select one video asset in Asset Library to reveal its video processing and derivative tools."
-        />
+        <StudioTextBox size="standard" role="status" aria-live="polite">
+         Select one video asset in Asset Library to reveal its video processing and derivative tools.
+        </StudioTextBox>
        )}
       </SubToolbox>
 
@@ -2921,11 +2918,9 @@ const CreatorVaultOS: React.FC = () => {
             onClick={saveSelectedTextAsset}
            />
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="ready"
-            message="Create a new text asset, or select a text/Markdown document in the library to edit it here."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">
+            Create a new text asset, or select a text/Markdown document in the library to edit it here.
+           </StudioTextBox>
           )}
           <SubToolboxInnerActionButton
            label="Create New Text Asset"
