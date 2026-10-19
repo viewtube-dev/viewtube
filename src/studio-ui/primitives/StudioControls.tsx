@@ -315,7 +315,9 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
         opacity(solid, 0)
       }
       if (t === 1) {
-        opacity(rings, 0)
+        // Preserve the animated inner rings at rest; do not replace them with
+        // a nearly full-shell disk that obscures the indicator anatomy.
+        opacity(rings, 1)
         opacity(arms, 0)
         opacity(solid, 1)
         scale(solid, 1)
@@ -375,7 +377,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
         <path className="vt-studio-radio-spiral vt-studio-radio-spiral-a" d="" />
         <path className="vt-studio-radio-spiral vt-studio-radio-spiral-b" d="" />
       </g>
-      <circle className="vt-studio-radio-solid" cx="22" cy="22" r="16.5" opacity="0" />
+      <circle className="vt-studio-radio-solid" cx="22" cy="22" r="5.5" opacity="0" />
     </svg>
   )
 }
