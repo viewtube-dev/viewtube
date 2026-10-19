@@ -156,6 +156,22 @@ export type BrainCreatorContextSnapshot = {
  } | null
  profileLoadedAt: string | null
  styleProfileAvailable: boolean
+ styleProfile: {
+  id: string
+  scope: string
+  assetType: string | null
+  source: string
+  descriptor: {
+   voice: string
+   pacing: string
+   vocabulary: { prefer: string[]; avoid: string[] }
+   structure: string
+   openingPattern: string
+   closingPattern: string
+   productionQuality: string
+  }
+  exemplars: Array<{ id: string; sourceRef: string | null; text: string }>
+ } | null
  knowledgeItems: Array<{
   id: string
   statement: string
@@ -197,6 +213,33 @@ const BrainContextUsedDrawer: React.FC<{ contextUsed?: BrainCreatorContextSnapsh
       </li>
      ))}
     </ul>
+    {contextUsed.styleProfile ? (
+     <section>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Style profile used</h4>
+      <div className="mt-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] p-2">
+       <p className="text-[9px] font-black uppercase">{contextUsed.styleProfile.scope} · {contextUsed.styleProfile.source} · {contextUsed.styleProfile.id}</p>
+       {([
+        ["Voice", contextUsed.styleProfile.descriptor.voice],
+        ["Pacing", contextUsed.styleProfile.descriptor.pacing],
+        ["Structure", contextUsed.styleProfile.descriptor.structure],
+        ["Opening", contextUsed.styleProfile.descriptor.openingPattern],
+        ["Closing", contextUsed.styleProfile.descriptor.closingPattern],
+        ["Production bar", contextUsed.styleProfile.descriptor.productionQuality],
+       ] as Array<[string, string]>).filter(([, value]) => value).map(([label, value]) => (
+        <p key={label} className="mt-1 text-[10px] font-bold leading-4"><span className="font-black uppercase">{label} · </span>{sanitizeCreatorFacingBrainCopy(value)}</p>
+       ))}
+       {contextUsed.styleProfile.descriptor.vocabulary.prefer.length ? <p className="mt-1 text-[10px] font-bold">Prefer: {contextUsed.styleProfile.descriptor.vocabulary.prefer.join(", ")}</p> : null}
+       {contextUsed.styleProfile.descriptor.vocabulary.avoid.length ? <p className="mt-1 text-[10px] font-bold">Avoid: {contextUsed.styleProfile.descriptor.vocabulary.avoid.join(", ")}</p> : null}
+       {contextUsed.styleProfile.exemplars.map((exemplar) => (
+        <div key={exemplar.id} className="mt-1 border-t border-black/10 pt-1">
+         <p className="text-[9px] font-black uppercase">Example · {exemplar.sourceRef || exemplar.id}</p>
+         <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(exemplar.text)}</p>
+         <code className="break-all text-[8px] text-black/50">{exemplar.id}</code>
+        </div>
+       ))}
+      </div>
+     </section>
+    ) : null}
     {contextUsed.knowledgeItems.length ? (
      <section>
       <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
