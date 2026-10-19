@@ -428,7 +428,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   creatorProfileLoadedAt: creatorContext?.provenance.profileLoadedAt || null,
   creatorSelectionUpdatedAt: creatorContext?.provenance.selectionUpdatedAt || null,
   creatorContextProjectSource: creatorContext?.provenance.projectSource || null,
-  creatorStyleProfileAvailable: Boolean(creatorContext?.styleProfile),
+  creatorStyleProfileAvailable: Boolean(creatorContext?.styleProfile?.descriptor),
   channelKnowledgeRecordIds: (creatorContext?.channelKnowledge?.records || []).map((record) => record.id).slice(0, 50),
   channelKnowledgeConflictIds: (creatorContext?.channelKnowledge?.contradictions || []).map((record) => record.id).slice(0, 50),
   creatorContextSnapshot: {
@@ -456,14 +456,14 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     locked: creatorContext.selection.locked === true,
    } : null,
    profileLoadedAt: creatorContext?.provenance.profileLoadedAt || null,
-   styleProfileAvailable: Boolean(creatorContext?.styleProfile),
-   styleProfile: creatorContext?.styleProfile ? {
+   styleProfileAvailable: Boolean(creatorContext?.styleProfile?.descriptor),
+   styleProfile: creatorContext?.styleProfile?.descriptor ? {
     id: creatorContext.styleProfile.id,
     scope: creatorContext.styleProfile.scope,
     assetType: creatorContext.styleProfile.assetType || null,
     source: creatorContext.styleProfile.source,
     descriptor: creatorContext.styleProfile.descriptor,
-    exemplars: creatorContext.styleProfile.exemplars.slice(0, 5).map((exemplar) => ({
+    exemplars: (creatorContext.styleProfile.exemplars || []).slice(0, 5).map((exemplar) => ({
      id: exemplar.id,
      sourceRef: exemplar.sourceRef || null,
      text: exemplar.text,
