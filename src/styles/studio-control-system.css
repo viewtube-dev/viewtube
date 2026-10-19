@@ -4444,3 +4444,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   height: var(--vt-studio-compact-height, 28px);
   flex-basis: var(--vt-studio-compact-height, 28px);
 }
+
+
+/* Toolbox header word toggles use a neutral white track in every selection state.
+   The moving indicator keeps its Studio pair color; only the track is neutralized. */
+.vt-studio-44-word-toggle.vt-toolbox-header-toggle-replacement {
+  background: #fff !important;
+}

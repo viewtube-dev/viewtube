@@ -825,3 +825,16 @@ describe("canonical split badge geometry and color ownership", () => {
     expect(canonical).toContain("background: var(--vt-studio-control-secondary, var(--vt-studio-secondary, var(--pair-b, #ff7f6b)));")
   })
 })
+
+
+describe("Toolbox header word-toggle density and track color", () => {
+  it("keeps the header toggle white and switches to compact Studio size on portrait mobile", () => {
+    const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
+    const studioCss = source("src/styles/studio-control-system.css")
+
+    expect(primitives).toContain('(orientation: portrait) and (max-width: 768px)')
+    expect(primitives).toContain('setSize(portraitMobile.matches ? "28" : "44")')
+    expect(primitives).toContain('size={size}')
+    expect(studioCss).toMatch(/\.vt-studio-44-word-toggle\.vt-toolbox-header-toggle-replacement\s*\{[^}]*background:\s*#fff\s*!important/s)
+  })
+})
