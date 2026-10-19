@@ -1,29 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react"
-import promptRegistry from "../../../docs/specifications/prompt-registry.json"
+import React, { useEffect, useState } from "react"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import {
  readBrainUserControls,
  writeBrainUserControls,
  type BrainUserControls,
 } from "../../services/brain/BrainUserControls"
-
-type RegistryEntry = { family?: string; status?: string; id?: string }
-type PromptRegistryShape = {
- legacyPromptConstants?: RegistryEntry[]
- legacyGeminiExports?: RegistryEntry[]
- oracleTemplates?: RegistryEntry[]
- brainTaskProfiles?: RegistryEntry[]
- governedAssetStrategies?: RegistryEntry[]
-}
-const registry = promptRegistry as unknown as PromptRegistryShape
-const entries: RegistryEntry[] = [
- ...(registry.legacyPromptConstants || []),
- ...(registry.legacyGeminiExports || []),
- ...(registry.oracleTemplates || []),
- ...(registry.brainTaskProfiles || []),
- ...(registry.governedAssetStrategies || []),
-]
-const familyName = (value: string) => value.replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase())
 
 const POLICY_ROWS: Array<{ key: keyof BrainUserControls; label: string; detail: string }> = [
  { key: "enabled", label: "Brain enabled", detail: "Master gate for Brain actions." },
@@ -52,17 +33,7 @@ export const BrainPromptPolicyPanel: React.FC<{
   return () => window.removeEventListener("vt_brain_user_controls_changed", refresh)
  }, [channelId])
 
- const families = useMemo(() => {
-  const grouped = new Map<string, { count: number; statuses: Set<string> }>()
-  for (const entry of entries) {
-   const family = entry.family || "unclassified"
-   const current = grouped.get(family) || { count: 0, statuses: new Set<string>() }
-   current.count += 1
-   if (entry.status) current.statuses.add(entry.status)
-   grouped.set(family, current)
-  }
-  return [...grouped.entries()].sort(([a], [b]) => a.localeCompare(b))
- }, [])
+
 
  const update = (key: keyof BrainUserControls, value: boolean) => {
   const next = writeBrainUserControls({ ...controls, [key]: value }, channelId)
@@ -83,17 +54,9 @@ export const BrainPromptPolicyPanel: React.FC<{
    </header>
    <div className="grid gap-2 p-2">
     <div>
-     <h4 className="mb-1 text-[9px] font-[1000] uppercase">Prompt registry inventory</h4>
-     <p className="mb-1 text-[9px] font-bold text-black/60">Registry version: {String((promptRegistry as { version?: string }).version || "not declared")} · {entries.length} indexed prompt/task/strategy records. This inventory does not claim a prompt is active for a particular turn.</p>
-     <ul className="grid gap-1">
-      {families.map(([family, summary]) => (
-       <li key={family} className="flex items-center justify-between gap-2 border-b border-black/10 py-1 text-[9px]">
-        <span className="font-bold">{familyName(family)}</span>
-        <span className="font-black tabular-nums">{summary.count} records · {[...summary.statuses].map(familyName).join(", ") || "status not declared"}</span>
-       </li>
-      ))}
-     </ul>
-     {onEditPrompt ? <button type="button" onClick={() => onEditPrompt("Inspect the existing prompt registry and resolver for my next task. Explain the active prompt family/version, inherited defaults, any creator overrides, context recipe, output schema, and validation status only where the runtime exposes them. Do not infer active prompt state from the registry inventory.")} className="mt-2 min-h-9 w-full border-[2px] border-black bg-white px-2 text-[9px] font-[1000] uppercase hover:bg-[#36E0F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Inspect active prompt for next task</button> : null}
+     <h4 className="mb-1 text-[9px] font-[1000] uppercase">Canonical prompt authority</h4>
+     <p className="mb-1 text-[9px] font-bold leading-4 text-black/60">Prompt architecture is owned by docs/specifications/PROMPTS.md and docs/specifications/prompt-registry.json. The UI does not import documentation into runtime code or infer which prompt/version was active for a turn.</p>
+     {onEditPrompt ? <button type="button" onClick={() => onEditPrompt("Inspect the existing prompt resolver and runtime trace for my next task. Explain the active prompt family/version, inherited defaults, any creator overrides, context recipe, output schema, and validation status only where the canonical runtime exposes them. If active-turn provenance is unavailable, say so explicitly; do not infer it from documentation.")} className="mt-2 min-h-9 w-full border-[2px] border-black bg-white px-2 text-[9px] font-[1000] uppercase hover:bg-[#36E0F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Inspect active prompt for next task</button> : null}
     </div>
     <div className="border-t-[2px] border-black pt-2">
      <h4 className="mb-1 text-[9px] font-[1000] uppercase">Saved permission gates</h4>
