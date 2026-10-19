@@ -2658,7 +2658,7 @@ const CreatorVaultOS: React.FC = () => {
           </div>
          </section>
         ) : (
-         <SubToolboxStatePanel level="l1" state="empty" message="Select exactly two assets to compare their previews and metadata differences." />
+         <StudioTextBox size="standard" role="status" aria-live="polite">Select exactly two assets to compare their previews and metadata differences.</StudioTextBox>
         )}
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Versions</div>
@@ -3239,7 +3239,7 @@ const CreatorVaultOS: React.FC = () => {
            ))}
           </div>
          ) : (
-          <SubToolboxStatePanel level="l1" state="empty" message="No projects are available for packaging readiness review." />
+          <StudioTextBox size="standard" role="status" aria-live="polite">No projects are available for packaging readiness review.</StudioTextBox>
          )}
         </div>
         <div className="text-[10px] font-bold opacity-55">
