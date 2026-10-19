@@ -252,3 +252,26 @@ it("keeps one square-icon family and exposes all four canonical toggle/choice sk
   expect(css).toContain(".vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle")
   expect(css).toContain(".vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle")
 });
+
+
+describe("confirmed double-split slider specimen isolation", () => {
+  it("gives each standard, compact, and micro slider specimen an independent value state", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const family = source.slice(source.indexOf("const ConfirmedStudioDoubleSplitSliderFamily"), source.indexOf("const ConfirmedStudioSideCounterFamily"))
+
+    expect(family).toContain("const [standardA, setStandardA] = React.useState(62)")
+    expect(family).toContain("const [standardB, setStandardB] = React.useState(62)")
+    expect(family).toContain("const [standardC, setStandardC] = React.useState(62)")
+    expect(family).toContain("value={standardA} onValueChange={setStandardA} size=\"standard\" ariaLabel=\"Standard slider\"")
+    expect(family).toContain("value={standardB} onValueChange={setStandardB} size=\"standard\" ariaLabel=\"Standard slider secondary palette\"")
+    expect(family).toContain("value={standardC} onValueChange={setStandardC} size=\"standard\" leftControls=\"counter\" ariaLabel=\"Counter-controlled slider\"")
+
+    expect(family).toContain("const [compactA, setCompactA] = React.useState(38)")
+    expect(family).toContain("const [compactB, setCompactB] = React.useState(38)")
+    expect(family).toContain("const [microA, setMicroA] = React.useState(7)")
+    expect(family).toContain("const [microB, setMicroB] = React.useState(7)")
+    expect(family).not.toContain("value={standardValue} onValueChange={setStandardValue}")
+    expect(family).not.toContain("value={compactValue} onValueChange={setCompactValue}")
+    expect(family).not.toContain("value={microValue} onValueChange={setMicroValue}")
+  })
+})
