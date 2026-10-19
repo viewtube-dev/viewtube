@@ -1,10 +1,9 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
-import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -57,11 +56,21 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   uploadFrame: {
     owner: "StudioUploadFrame",
     globalRuleException: true,
-    geometry: "16:10 desktop canvas / 4:3 narrow-screen canvas; 12px outer radius; inset 2px black frame; 5px standard inner inset",
+    geometry: "16:9 canvas at every breakpoint; container-relative quarter strokes and breathing-layer spacing; responsive inset black frame; center image preview scales to 3x and its secondary ring clips slightly at the top/bottom",
     colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
-    behavior: "native file picker, drag/drop, image preview, filename announcement, disabled state, and reduced-motion support",
+    behavior: "native file picker after a 1s click pulse, drag/drop, left upload and right thumbnail split rails, two-line half-scale prompt, oversized circular image preview, bottom filename badge, hover breathing at 2x speed and extra saturation, disabled state, and reduced-motion support",
     shadowPolicy: "none",
     rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
+  },
+  verticalWordToggle: {
+    owner: "StudioVerticalWordToggle",
+    globalRuleException: true,
+    height: "content-driven two-word stack; intentionally not 44px / 28px / 14px",
+    typography: "inherits standard/compact/micro Studio text-size, weight, family, case, and letter-spacing tokens",
+    stroke: "standard 3px / compact 2px / micro 1px",
+    radius: "standard 6px / compact 4px / micro 2px",
+    motion: "vertical expand-and-release handle with a color wipe; word colors switch quickly at animation start; reduced-motion settles immediately",
+    rationale: "Two stacked word faces need a content-driven vertical surface; only height departs from the global size lattice.",
   },
   textareaTypography: {
     globalRuleException: true,
@@ -212,8 +221,38 @@ StudioNumberInput.displayName = "StudioNumberInput"
 
 export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
+
 export { StudioTextArea }
 export type { StudioTextAreaProps } from "./StudioTextArea"
+
+/** Read-only display surface that inherits the canonical textarea size tokens. */
+export type StudioTextBoxSize = StudioControlSize
+export type StudioTextBoxProps = Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "contentEditable" | "dangerouslySetInnerHTML" | "children"
+> & {
+  /** Plain display text; embedded line breaks are preserved. */
+  children?: string
+  /** Corresponding textarea typography and surface size. */
+  size?: StudioTextBoxSize
+}
+
+export const StudioTextBox = React.forwardRef<HTMLDivElement, StudioTextBoxProps>(
+  ({ children, size = "standard", className, ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      contentEditable={false}
+      className={studioClasses("vt-studio-text-box", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-field-kind="textarea-display"
+      data-size={size}
+    >
+      {children}
+    </div>
+  ),
+)
+StudioTextBox.displayName = "StudioTextBox"
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
@@ -454,50 +493,491 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   handleWidthScale?: number;
   /** Horizontal spacing between the two word labels in CSS pixels. */
   wordGap?: number;
+  /** Base orientation; horizontal remains the default. */
+  orientation?: "horizontal" | "vertical";
+  /** Automatically use the existing vertical variant on mobile portrait. */
+  verticalOnMobilePortrait?: boolean;
 }
-export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
+export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, orientation = "horizontal", verticalOnMobilePortrait = false, className, style, ...props }) => {
+  const [mobilePortrait, setMobilePortrait] = React.useState(false);
+  React.useEffect(() => {
+    if (!verticalOnMobilePortrait || typeof window === "undefined") return;
+    const media = window.matchMedia("(max-width: 768px) and (orientation: portrait)");
+    const sync = () => setMobilePortrait(media.matches);
+    sync();
+    media.addEventListener?.("change", sync);
+    return () => media.removeEventListener?.("change", sync);
+  }, [verticalOnMobilePortrait]);
+  const effectiveOrientation = verticalOnMobilePortrait && mobilePortrait ? "vertical" : orientation;
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const handleRef = React.useRef<HTMLSpanElement>(null);
+  const overlayRef = React.useRef<HTMLSpanElement>(null);
   const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const animationFrameRef = React.useRef(0);
+  const busyRef = React.useRef(false);
+  const animationTargetRef = React.useRef(value);
+  const latestValueRef = React.useRef(value);
+  const stepRef = React.useRef(0);
   const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
+
+  const getBounds = React.useCallback((index: number) => {
+    const root = rootRef.current;
+    const target = wordRefs.current[index];
+    if (!root || !target) return null;
+    const rootRect = root.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const inset = handleInset ?? (size === "28" ? 2 : 4);
+    const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
+    const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
+    return {
+      left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
+      width: nextWidth,
+    };
+  }, [handleInset, handleWidth, handleWidthScale, size]);
+
+  const setHandleBounds = React.useCallback((bounds: { left: number; width: number }) => {
+    const handleElement = handleRef.current;
+    if (!handleElement) return;
+    handleElement.style.setProperty("--vt-word-toggle-handle-left", `${bounds.left}px`);
+    handleElement.style.setProperty("--vt-word-toggle-handle-width", `${bounds.width}px`);
+    setHandle(current => Math.abs(current.left - bounds.left) < .5 && Math.abs(current.width - bounds.width) < .5
+      ? current
+      : bounds);
+  }, []);
+
+  const settle = React.useCallback((nextValue: boolean) => {
+    const target = getBounds(nextValue ? 1 : 0);
+    if (target) setHandleBounds(target);
+    const overlay = overlayRef.current;
+    if (overlay) {
+      overlay.style.display = "none";
+      overlay.style.clipPath = "";
+    }
+    const handleElement = handleRef.current;
+    if (handleElement) handleElement.style.background = "";
+  }, [getBounds, setHandleBounds]);
+
+  const cancelAnimation = React.useCallback((settledValue = value) => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(animationFrameRef.current);
+    busyRef.current = false;
+    animationTargetRef.current = settledValue;
+    latestValueRef.current = settledValue;
+    settle(settledValue);
+  }, [settle, value]);
+
+  const animateWordToggle = React.useCallback((to: boolean) => {
+    if (busyRef.current || to === latestValueRef.current) return;
+    const root = rootRef.current;
+    const handleElement = handleRef.current;
+    const overlay = overlayRef.current;
+    const source = getBounds(latestValueRef.current ? 1 : 0);
+    const destination = getBounds(to ? 1 : 0);
+    if (!root || !handleElement || !overlay || !source || !destination) {
+      onValueChange?.(to);
+      return;
+    }
+
+    const from = latestValueRef.current;
+    const velvet = Math.floor(stepRef.current / 2) % 2 === 1;
+    const duration = velvet ? 1250 : 1100;
+    const reachEnd = velvet ? 0.58 : 0.70;
+    const releaseStart = velvet ? 0.72 : 0.84;
+    const expandedLeft = Math.min(source.left, destination.left);
+    const expandedRight = Math.max(source.left + source.width, destination.left + destination.width);
+    const expandedWidth = expandedRight - expandedLeft;
+    const skinClass = root.classList;
+    const indicatorColor = (active: boolean) => {
+      if (skinClass.contains("is-black-indicator")) return "#000";
+      if (skinClass.contains("is-white-indicator")) return "#fff";
+      if (skinClass.contains("is-color-swap") && active) {
+        return "var(--vt-studio-control-accent, var(--pair-a, #36e0f6))";
+      }
+      return "var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))";
+    };
+    const fromColor = indicatorColor(from);
+    const toColor = indicatorColor(to);
+    const blendColors = (a: string, b: string, progress: number) => {
+      if (a === b) return a;
+      const toRgb = (color: string) => {
+        const probe = document.createElement("span");
+        probe.style.color = color;
+        root.appendChild(probe);
+        const resolved = getComputedStyle(probe).color;
+        probe.remove();
+        const channels = resolved.match(/[\\d.]+/g);
+        return channels ? channels.slice(0, 3).map(Number) : null;
+      };
+      const first = toRgb(a);
+      const second = toRgb(b);
+      if (!first || !second) return progress < 1 ? a : b;
+      return `rgb(${first.map((channel, index) => Math.round(channel + (second[index] - channel) * progress)).join(" ")})`;
+    };
+
+    stepRef.current += 1;
+    busyRef.current = true;
+    animationTargetRef.current = to;
+    root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
+    overlay.style.display = velvet ? "block" : "none";
+    overlay.style.background = toColor;
+    overlay.style.clipPath = "";
+    handleElement.style.background = fromColor;
+    onValueChange?.(to);
+
+    const reducedMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      busyRef.current = false;
+      latestValueRef.current = to;
+      settle(to);
+      return;
+    }
+
+    const started = performance.now();
+    const clamp = (number: number) => Math.max(0, Math.min(1, number));
+    const mix = (a: number, b: number, progress: number) => a + (b - a) * progress;
+    const smooth = (number: number) => {
+      const t = clamp(number);
+      return t * t * (3 - 2 * t);
+    };
+    const easeOut = (number: number) => 1 - Math.pow(1 - clamp(number), 3);
+    const easeInOut = (number: number) => {
+      const t = clamp(number);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+
+    const tick = (now: number) => {
+      const t = clamp((now - started) / duration);
+      const reach = (velvet ? easeOut : smooth)(t / reachEnd);
+      const release = (velvet ? smooth : easeInOut)((t - releaseStart) / (1 - releaseStart));
+      const left = t < releaseStart
+        ? mix(source.left, expandedLeft, reach)
+        : mix(expandedLeft, destination.left, release);
+      const width = t < releaseStart
+        ? mix(source.width, expandedWidth, reach)
+        : mix(expandedWidth, destination.width, release);
+      handleElement.style.setProperty("--vt-word-toggle-handle-left", `${left}px`);
+      handleElement.style.setProperty("--vt-word-toggle-handle-width", `${width}px`);
+
+      if (velvet) {
+        handleElement.style.background = fromColor;
+        const wipe = smooth((t - 0.80) / 0.20);
+        overlay.style.clipPath = to && !from
+          ? `inset(0 0 0 ${(1 - wipe) * 100}%)`
+          : `inset(0 ${(1 - wipe) * 100}% 0 0)`;
+      } else if (skinClass.contains("is-color-swap")) {
+        handleElement.style.background = blendColors(fromColor, toColor, smooth((t - 0.92) / 0.08));
+      } else {
+        handleElement.style.background = fromColor;
+      }
+
+      if (t < 1) {
+        animationFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        busyRef.current = false;
+        latestValueRef.current = to;
+        settle(to);
+      }
+    };
+    animationFrameRef.current = requestAnimationFrame(tick);
+  }, [getBounds, onValueChange, settle]);
+
   React.useEffect(() => {
     let frame = 0;
     const measure = () => {
-      const root = rootRef.current;
-      const target = wordRefs.current[value ? 1 : 0];
-      if (!root || !target) return;
-      const rootRect = root.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      // Standard toggles reserve 16px of optical padding inside the active
-      // handle and a fixed 4px gap from either inner container edge. The word
-      // buttons use 20px side padding; the handle is 8px narrower than that
-      // button, leaving 16px between glyph bounds and handle edges.
-      const inset = handleInset ?? (size === "28" ? 2 : 4);
-      const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
-      const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
-      // Absolutely positioned children measure from the container's padding
-      // edge, not its outer border edge. Subtract clientLeft so both sides keep
-      // the same 4px inner margin when the active word flips left/right.
-      const next = {
-        left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
-        width: nextWidth,
-      };
-      setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
+      if (busyRef.current) return;
+      const target = getBounds(value ? 1 : 0);
+      if (target) setHandleBounds(target);
     };
-    const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
+    const schedule = () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(measure);
+      } else measure();
+    };
+    latestValueRef.current = value;
+    if (!busyRef.current) animationTargetRef.current = value;
     schedule();
     const root = rootRef.current;
     const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
     if (root) observer?.observe(root);
     wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
-    if (typeof window !== "undefined") window.addEventListener("resize", schedule);
+    const handleResize = () => {
+      if (busyRef.current) cancelAnimation(value);
+      schedule();
+    };
+    if (typeof window !== "undefined") window.addEventListener("resize", handleResize);
+    const reducedMotion = typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+    const handleMotionChange = () => { if (busyRef.current) cancelAnimation(value); };
+    reducedMotion?.addEventListener?.("change", handleMotionChange);
     if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
-    return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
-  }, [value, words, size, handleWidth, handleInset, handleWidthScale]);
+    return () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        window.removeEventListener("resize", handleResize);
+      }
+      reducedMotion?.removeEventListener?.("change", handleMotionChange);
+      observer?.disconnect();
+    };
+  }, [value, words, size, handleWidth, handleInset, handleWidthScale, getBounds, setHandleBounds, cancelAnimation]);
+
+  if (effectiveOrientation === "vertical") {
+    return (
+      <StudioVerticalWordToggle
+        value={value}
+        onValueChange={onValueChange}
+        words={words}
+        sizeVariant={size === "28" ? "compact" : "standard"}
+        variant={skin === "white-indicator" ? "white-fill" : skin === "black-indicator" ? "black-fill" : "primary-secondary"}
+        className={className}
+        style={style}
+        aria-label={typeof props["aria-label"] === "string" ? props["aria-label"] : undefined}
+      />
+    );
+  }
+
   return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
-    <span className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"} />
-    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+    <span ref={handleRef} className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"}>
+      <span ref={overlayRef} className="vt-studio-44-word-handle-color" aria-hidden="true" />
+    </span>
+    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => animateWordToggle(index === 1)}>{word}</button>)}
   </div>;
 };
+
+
+
+export type StudioVerticalWordToggleVariant = "primary-secondary" | "black-fill" | "primary-white-handle" | "white-fill";
+export interface StudioVerticalWordToggleProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
+  value: boolean;
+  onValueChange?: (value: boolean) => void;
+  words?: readonly [string, string];
+  sizeVariant?: StudioControlSize;
+  variant?: StudioVerticalWordToggleVariant;
+}
+export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> = ({
+  value,
+  onValueChange,
+  words = ["WRITE", "CREATE"],
+  sizeVariant = "standard",
+  variant = "primary-secondary",
+  className,
+  style,
+  onClick,
+  "aria-label": ariaLabel,
+  ...props
+}) => {
+  const rootRef = React.useRef<HTMLButtonElement>(null);
+  const handleRef = React.useRef<HTMLSpanElement>(null);
+  const overlayRef = React.useRef<HTMLSpanElement>(null);
+  const wordRefs = React.useRef<Array<HTMLSpanElement | null>>([]);
+  const frameRef = React.useRef(0);
+  const busyRef = React.useRef(false);
+  const latestValueRef = React.useRef(value);
+  const stepRef = React.useRef(0);
+
+  const getBounds = React.useCallback((index: number) => {
+    const root = rootRef.current;
+    const word = wordRefs.current[index];
+    if (!root || !word) return null;
+    const rootRect = root.getBoundingClientRect();
+    const wordRect = word.getBoundingClientRect();
+    return { top: wordRect.top - rootRect.top - root.clientTop - 1, height: wordRect.height + 2 };
+  }, []);
+
+  const settle = React.useCallback((nextValue: boolean) => {
+    const bounds = getBounds(nextValue ? 1 : 0);
+    const handle = handleRef.current;
+    const overlay = overlayRef.current;
+    if (bounds && handle) {
+      handle.style.top = String(bounds.top) + "px";
+      handle.style.height = String(bounds.height) + "px";
+      handle.style.background = "";
+    }
+    if (overlay) {
+      overlay.style.display = "none";
+      overlay.style.clipPath = "";
+    }
+  }, [getBounds]);
+
+  const cancelAnimation = React.useCallback(() => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(frameRef.current);
+    busyRef.current = false;
+    settle(latestValueRef.current);
+  }, [settle]);
+
+  const animateToggle = React.useCallback((to: boolean) => {
+    const from = latestValueRef.current;
+    if (busyRef.current || to === from) return;
+    const root = rootRef.current;
+    const handle = handleRef.current;
+    const overlay = overlayRef.current;
+    const source = getBounds(from ? 1 : 0);
+    const destination = getBounds(to ? 1 : 0);
+    if (!root || !handle || !overlay || !source || !destination) {
+      latestValueRef.current = to;
+      onValueChange?.(to);
+      return;
+    }
+
+    const colorFor = (state: boolean) => {
+      if (variant === "primary-white-handle") return "#ffffff";
+      if (variant === "white-fill") return "#000000";
+      return state
+        ? "var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))"
+        : "var(--vt-studio-control-accent, var(--pair-a, #36e0f6))";
+    };
+    const fromColor = colorFor(from);
+    const toColor = colorFor(to);
+    const expandedTop = Math.min(source.top, destination.top);
+    const expandedBottom = Math.max(source.top + source.height, destination.top + destination.height);
+    const expandedHeight = expandedBottom - expandedTop;
+    const velvet = Math.floor(stepRef.current / 2) % 2 === 1;
+    const duration = velvet ? 1250 : 1100;
+    const reachEnd = velvet ? 0.58 : 0.70;
+    const releaseStart = velvet ? 0.72 : 0.84;
+
+    latestValueRef.current = to;
+    stepRef.current += 1;
+    busyRef.current = true;
+    root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
+    handle.style.background = fromColor;
+    overlay.style.background = toColor;
+    overlay.style.display = "block";
+    overlay.style.opacity = velvet ? "1" : "0";
+    overlay.style.clipPath = velvet ? "inset(100% 0 0 0)" : "none";
+    onValueChange?.(to);
+
+    const reducedMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      busyRef.current = false;
+      settle(to);
+      return;
+    }
+
+    const clamp = (number: number) => Math.max(0, Math.min(1, number));
+    const mix = (a: number, b: number, progress: number) => a + (b - a) * progress;
+    const smooth = (number: number) => { const t = clamp(number); return t * t * (3 - 2 * t); };
+    const easeOut = (number: number) => 1 - Math.pow(1 - clamp(number), 3);
+    const easeInOut = (number: number) => {
+      const t = clamp(number);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+    const started = performance.now();
+
+    const tick = (now: number) => {
+      const t = clamp((now - started) / duration);
+      const reach = (velvet ? easeOut : smooth)(t / reachEnd);
+      const release = (velvet ? smooth : easeInOut)((t - releaseStart) / (1 - releaseStart));
+      const top = t < releaseStart
+        ? mix(source.top, expandedTop, reach)
+        : mix(expandedTop, destination.top, release);
+      const height = t < releaseStart
+        ? mix(source.height, expandedHeight, reach)
+        : mix(expandedHeight, destination.height, release);
+      handle.style.top = String(top) + "px";
+      handle.style.height = String(height) + "px";
+      if (velvet) {
+        handle.style.background = fromColor;
+        const wipe = smooth((t - 0.80) / 0.20);
+        overlay.style.clipPath = to
+          ? "inset(" + String((1 - wipe) * 100) + "% 0 0 0)"
+          : "inset(0 0 " + String((1 - wipe) * 100) + "% 0)";
+      } else {
+        overlay.style.opacity = String(smooth((t - 0.92) / 0.08));
+      }
+      if (t < 1) {
+        frameRef.current = requestAnimationFrame(tick);
+      } else {
+        busyRef.current = false;
+        settle(to);
+      }
+    };
+    frameRef.current = requestAnimationFrame(tick);
+  }, [getBounds, onValueChange, settle, variant]);
+
+  React.useEffect(() => {
+    latestValueRef.current = value;
+    const schedule = () => {
+      if (busyRef.current) return;
+      const target = getBounds(value ? 1 : 0);
+      const handle = handleRef.current;
+      if (target && handle) {
+        handle.style.top = String(target.top) + "px";
+        handle.style.height = String(target.height) + "px";
+      }
+    };
+    let frame = 0;
+    const queue = () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(schedule);
+      } else schedule();
+    };
+    queue();
+    const root = rootRef.current;
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(queue) : null;
+    if (root) observer?.observe(root);
+    wordRefs.current.forEach(word => { if (word) observer?.observe(word); });
+    if (typeof window !== "undefined") window.addEventListener("resize", queue);
+    const reducedMotion = typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+    reducedMotion?.addEventListener?.("change", cancelAnimation);
+    if (typeof document !== "undefined") document.fonts?.ready?.then(queue);
+    return () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        window.removeEventListener("resize", queue);
+      }
+      reducedMotion?.removeEventListener?.("change", cancelAnimation);
+      observer?.disconnect();
+    };
+  }, [value, words, sizeVariant, getBounds, cancelAnimation]);
+
+  React.useEffect(() => () => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(frameRef.current);
+  }, []);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    onClick?.(event);
+    if (event.defaultPrevented || props.disabled) return;
+    animateToggle(!latestValueRef.current);
+  };
+
+  return (
+    <button
+      ref={rootRef}
+      type="button"
+      role="switch"
+      aria-checked={value}
+      aria-label={ariaLabel ?? words[0] + " / " + words[1]}
+      data-vt-studio-control="true"
+      data-vt-studio-vertical-word-toggle="true"
+      data-vertical-word-toggle-variant={variant}
+      data-size={sizeVariant}
+      data-value={String(value)}
+      className={studioClasses("vt-studio-vertical-word-toggle", "is-" + sizeVariant, "is-" + variant, className)}
+      style={style}
+      onClick={handleClick}
+      {...props}
+    >
+      <span ref={handleRef} className="vt-studio-vertical-word-toggle__handle" aria-hidden="true">
+        <span ref={overlayRef} className="vt-studio-vertical-word-toggle__handle-color" aria-hidden="true" />
+      </span>
+      {words.map((word, index) => (
+        <span
+          key={String(index) + "-" + word}
+          ref={node => { wordRefs.current[index] = node; }}
+          className={"vt-studio-vertical-word-toggle__word" + (value === (index === 1) ? " is-active" : "")}
+          data-word-index={index}
+        >
+          {word}
+        </span>
+      ))}
+    </button>
+  );
+};
+StudioVerticalWordToggle.displayName = "StudioVerticalWordToggle";
 
 
 export const Studioradio: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="radio" />
@@ -506,8 +986,6 @@ export const Studiocheck: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = p
 Studiocheck.displayName = "Studiocheck"
 export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
 Studioxbox.displayName = "Studioxbox"
-export { Studioinput }
-export type { StudioinputProps } from "./Studioinput"
 export const Studioarea = StudioTextArea
 
 /** Canonical public names; lowercase legacy exports remain compatibility aliases. */
@@ -1022,6 +1500,10 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
 )
 StudioUsernameInput.displayName = "StudioUsernameInput"
 
+/** Canonical split-left input alias for icon-led search fields. */
+export type StudioSplitLeftInputProps = StudioUsernameInputProps
+export const StudioSplitLeftInput = StudioUsernameInput
+
 
 export interface StudioLegendMultiDropdownOption {
   value: string
@@ -1037,6 +1519,8 @@ export interface StudioLegendMultiDropdownProps {
   value?: string[]
   defaultValue?: string[]
   onChange?: (values: string[]) => void
+  /** Commit one option and close, or allow independent multiple selection. */
+  selectionMode?: "single" | "multiple"
   sizeVariant?: "compact" | "standard"
   level?: "l0" | "l1" | "l2"
   placeholder?: string
@@ -1053,7 +1537,7 @@ export interface StudioLegendMultiDropdownProps {
  * selection is multi-valued and never depends on a native browser menu.
  */
 export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps> = ({
-  label, accessibleLabel, options, value, defaultValue = [], onChange, sizeVariant = "standard",
+  label, accessibleLabel, options, value, defaultValue = [], onChange, selectionMode = "multiple", sizeVariant = "standard",
   level = "l1", placeholder = "ANY", clearLabel = "CLEAR ALL",
   maxMenuHeight = 280, className, disabled = false, name,
 }) => {
@@ -1090,7 +1574,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
       data-vt-primitive-id="140"
       data-vt-studio-field="legend-multi-dropdown"
       data-vt-studio-control-family="dropdown"
-      data-vt-studio-dropdown-variant="multiselect"
+      data-vt-studio-dropdown-variant={selectionMode === "single" ? "single-select" : "multiselect"}
       data-vt-control-level={level}
       data-size={sizeVariant}
       data-open={open || undefined}
@@ -1115,7 +1599,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
         </button>
       </div>
       {open && !disabled && (
-        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable="true">
+        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable={selectionMode === "multiple"}>
           <div className="vt-studio-legend-options">
             {options.map(option => {
               const isSelected = selected.includes(option.value)
@@ -1128,7 +1612,14 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
                   disabled={option.disabled}
                   data-selected={isSelected || undefined}
                   className="vt-studio-legend-option"
-                  onClick={() => setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])}
+                  onClick={() => {
+                    if (selectionMode === "single") {
+                      setSelected([option.value])
+                      setOpen(false)
+                      return
+                    }
+                    setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])
+                  }}
                 >
                   <span className="vt-studio-legend-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></span>
                   <span className="vt-studio-legend-option-text">{option.label}</span>
@@ -1136,7 +1627,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
               )
             })}
           </div>
-          <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>
+          {selectionMode === "multiple" && <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>}
           {name && selected.map(item => <input key={item} type="hidden" name={name} value={item} />)}
         </div>
       )}
@@ -1383,6 +1874,44 @@ export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "varian
 StudioSplitLeftDropdown.displayName = "StudioSplitLeftDropdown"
 
 // Canonical Studio stepper implementations are owned by this module.
+/** Shared hold-repeat timing.
+ * Starts at 150ms (slower than the prior 128ms), reaches 23ms in 520ms
+ * with one continuous ease-out curve, and smoothsteps to 75ms within the
+ * final three steps after beginning boundary easing 16 steps from the bound. */
+export const getStudioCounterRepeatDelay = (elapsedMs: number, remainingSteps: number) => {
+  const accelerationProgress = Math.min(1, Math.max(0, elapsedMs / 520));
+  const accelerationEase = 1 - Math.pow(1 - accelerationProgress, 2.2);
+  const accelerationDelay = 150 - accelerationEase * 127;
+  const boundaryProgress = Number.isFinite(remainingSteps)
+    ? Math.min(1, Math.max(0, (16 - remainingSteps) / 13))
+    : 0;
+  const boundaryEase = boundaryProgress * boundaryProgress * (3 - 2 * boundaryProgress);
+  const boundaryDelay = 23 + boundaryEase * 52;
+  return Math.round(Math.max(accelerationDelay, boundaryDelay));
+};
+
+/** Shared in-use dwell: active immediately, then remains active until the shared hold expires. */
+function useStudioInteractionFocus(holdMs = STUDIO_FOCUS_INTERACTION_TOKENS.holdMs) {
+  const [active, setActive] = React.useState(false);
+  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clear = React.useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+  }, []);
+  const pulse = React.useCallback(() => {
+    setActive(true);
+    clear();
+    timer.current = setTimeout(() => { setActive(false); timer.current = null; }, holdMs);
+  }, [clear, holdMs]);
+  const start = React.useCallback(() => { setActive(true); clear(); }, [clear]);
+  const end = React.useCallback(() => {
+    clear();
+    timer.current = setTimeout(() => { setActive(false); timer.current = null; }, holdMs);
+  }, [clear, holdMs]);
+  React.useEffect(() => () => clear(), [clear]);
+  return { active, pulse, start, end };
+}
+
 /** Pointer hold-repeat shared by the canonical counter buttons. */
 const useStudioCounterHold = (
   direction: -1 | 1, current: number, min: number, max: number, step: number,
@@ -1391,6 +1920,8 @@ const useStudioCounterHold = (
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentRef = React.useRef(current);
   currentRef.current = current;
+  const latestRef = React.useRef({ min, max, step, adjust });
+  latestRef.current = { min, max, step, adjust };
   const startedAt = React.useRef(0);
   const held = React.useRef(false);
   const suppressClick = React.useRef(false);
@@ -1409,20 +1940,22 @@ const useStudioCounterHold = (
     try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* Embedded webviews may not support pointer capture. */ }
     held.current = false;
     suppressClick.current = false;
-    startedAt.current = Date.now();
     timer.current = setTimeout(() => {
+      startedAt.current = Date.now();
       held.current = true;
       setIsHolding(true);
       const repeat = () => {
         if (!held.current) return;
         const value = currentRef.current;
-        const atBound = direction > 0 ? value >= max : value <= min;
+        const latest = latestRef.current;
+        const atBound = direction > 0 ? value >= latest.max : value <= latest.min;
         if (atBound) { stop(); return; }
-        adjust(direction);
+        latest.adjust(direction);
+        const nextValue = Math.min(latest.max, Math.max(latest.min, value + direction * latest.step));
+        const remaining = direction > 0 ? latest.max - nextValue : nextValue - latest.min;
+        const remainingSteps = Number.isFinite(remaining) ? Math.max(0, remaining / latest.step) : Number.POSITIVE_INFINITY;
         const elapsed = Date.now() - startedAt.current;
-        const remaining = direction > 0 ? max - value : value - min;
-        const nearBound = Number.isFinite(remaining) && remaining <= step * 4;
-        const delay = nearBound ? 190 : Math.max(42, 145 - Math.floor(elapsed / 900) * 18);
+        const delay = getStudioCounterRepeatDelay(elapsed, remainingSteps);
         timer.current = setTimeout(repeat, delay);
       };
       repeat();
@@ -1458,6 +1991,7 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
   className, ...props
 }) => {
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const interactionFocus = useStudioInteractionFocus();
   const validBounds = min <= max;
   const current = Number.isFinite(value) ? value : 0;
   const currentRef = React.useRef(current);
@@ -1474,11 +2008,11 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
     <StudioSplitShell
       layout="double"
       sizeVariant={size}
-      className={studioClasses("vt-studio-counter", `is-${size}`, className)}
+      className={studioClasses("vt-studio-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-counter__rail"
-      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><Minus aria-hidden="true" focusable="false" /></button>}
-      rightRailContent={<button type="button" className={`vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><Plus aria-hidden="true" focusable="false" /></button>}
-      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
+      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><Minus aria-hidden="true" focusable="false" /></button>}
+      rightRailContent={<button type="button" className={`vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><Plus aria-hidden="true" focusable="false" /></button>}
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
     >
       <span className="vt-studio-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
     </StudioSplitShell>
@@ -1493,6 +2027,7 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
   className, ...props
 }) => {
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const interactionFocus = useStudioInteractionFocus();
   const validBounds = min <= max;
   const current = Number.isFinite(value) ? value : 0;
   const currentRef = React.useRef(current);
@@ -1509,13 +2044,13 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
     <StudioSplitShell
       layout="right"
       sizeVariant={size}
-      className={studioClasses("vt-studio-side-counter", `is-${size}`, className)}
+      className={studioClasses("vt-studio-side-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-side-counter__rail"
       rightRailContent={<span className="vt-studio-side-counter__actions">
-        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
-      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-side-counter", "data-vt-library-component": "StudioSideCounter" }}
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-side-counter", "data-vt-library-component": "StudioSideCounter" }}
     >
       <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
     </StudioSplitShell>
@@ -1529,6 +2064,7 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
   className, ...props
 }) => {
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const interactionFocus = useStudioInteractionFocus();
   const validBounds = min <= max;
   const current = Number.isFinite(value) ? value : 0;
   const currentRef = React.useRef(current);
@@ -1545,13 +2081,13 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
     <StudioSplitShell
       layout="left"
       sizeVariant={size}
-      className={studioClasses("vt-studio-side-counter", "vt-studio-left-counter", `is-${size}`, className)}
+      className={studioClasses("vt-studio-side-counter", interactionFocus.active && "is-interaction-focus", "vt-studio-left-counter", `is-${size}`, className)}
       railClassName="vt-studio-left-counter__rail"
       leftRailContent={<span className="vt-studio-side-counter__actions">
-        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
-      shellProps={{ ...props, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
     >
       <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
     </StudioSplitShell>
@@ -1785,28 +2321,47 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
   prompt?: string;
   sizeVariant?: "standard" | "compact";
   disabled?: boolean;
+  multiple?: boolean;
   onFileChange?: (file: File) => void;
+  onFilesChange?: (files: FileList | null) => void;
 }
 
-/** Canonical pair-colored upload canvas with drag/drop and an optional image preview. */
+/** Canonical pair-colored upload canvas with responsive breathing layers and an optional image preview. */
 export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
-  accept,
-  prompt = "Drop or choose file",
+  accept = "image/*,video/*",
+  prompt = "Drag or drop\nImage / video here · or click to upload",
   sizeVariant = "standard",
   disabled = false,
+  multiple = false,
   onFileChange,
+  onFilesChange,
   className,
-  "aria-label": ariaLabel = "Upload: drop or choose a file",
+  "aria-label": ariaLabel = "Upload: drag or drop an image or video here, or click to upload",
   ...labelProps
 }) => {
   const [dragging, setDragging] = React.useState(false);
+  const [clicking, setClicking] = React.useState(false);
   const [selectedName, setSelectedName] = React.useState("");
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   const previewRef = React.useRef<string | null>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const pickerDelayRef = React.useRef<number | null>(null);
 
   React.useEffect(() => () => {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+    if (pickerDelayRef.current !== null) window.clearTimeout(pickerDelayRef.current);
   }, []);
+
+  const beginPicker = React.useCallback(() => {
+    if (disabled) return;
+    if (pickerDelayRef.current !== null) window.clearTimeout(pickerDelayRef.current);
+    setClicking(true);
+    pickerDelayRef.current = window.setTimeout(() => {
+      setClicking(false);
+      pickerDelayRef.current = null;
+      inputRef.current?.click();
+    }, 1000);
+  }, [disabled]);
 
   const selectFile = React.useCallback((file?: File) => {
     if (!file || disabled) return;
@@ -1821,9 +2376,11 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
     if (disabled) return;
     event.preventDefault();
     setDragging(false);
-    const file = event.dataTransfer.files?.[0];
+    const files = event.dataTransfer.files;
+    const file = files?.[0];
     if (!file) return;
-    const input = event.currentTarget.querySelector<HTMLInputElement>("input[type=file]");
+    onFilesChange?.(files);
+    const input = inputRef.current;
     if (input) {
       try { input.files = event.dataTransfer.files; } catch { /* FileList assignment is not supported by every browser. */ }
     }
@@ -1833,25 +2390,43 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   return (
     <label
       {...labelProps}
-      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", previewUrl && "has-img", disabled && "is-disabled", className)}
+      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", clicking && "is-clicking", previewUrl && "has-img", disabled && "is-disabled", className)}
       data-vt-studio-control="true"
       data-vt-studio-control-family="upload"
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
       data-size={sizeVariant}
       aria-disabled={disabled ? "true" : undefined}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      onClick={event => {
+        if (event.target === inputRef.current) return;
+        event.preventDefault();
+        beginPicker();
+      }}
+      onKeyDown={event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          beginPicker();
+        }
+      }}
       onDragEnter={event => { if (!disabled) { event.preventDefault(); setDragging(true); } }}
       onDragOver={event => { if (!disabled) { event.preventDefault(); setDragging(true); } }}
       onDragLeave={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setDragging(false); }}
       onDrop={receiveDrop}
     >
       <input
+        ref={inputRef}
         className="vt-studio-upload-frame__input"
         type="file"
         accept={accept}
+        multiple={multiple}
         disabled={disabled}
         aria-label={ariaLabel}
-        onChange={event => selectFile(event.currentTarget.files?.[0])}
+        onChange={event => {
+          onFilesChange?.(event.currentTarget.files);
+          selectFile(event.currentTarget.files?.[0]);
+        }}
       />
       <span className="vt-studio-upload-frame__inset" aria-hidden="true">
         <span className="vt-studio-upload-frame__layers">
@@ -1866,8 +2441,19 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           <Upload />
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
-        <span className="vt-studio-upload-frame__label" aria-live="polite">{selectedName || prompt}</span>
+        {!previewUrl && (
+          <span className="vt-studio-upload-frame__label" aria-live="polite">{prompt}</span>
+        )}
       </span>
+      <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--left" data-vt-studio-upload-split="left" aria-hidden="true">
+        <Upload />
+      </span>
+      <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--right" data-vt-studio-upload-split="right" aria-hidden="true">
+        <ImageIcon />
+      </span>
+      {selectedName && (
+        <span className="vt-studio-upload-frame__filename" aria-live="polite">{selectedName}</span>
+      )}
     </label>
   );
 };
@@ -1954,6 +2540,7 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
   size = "standard", disabled = false, ariaLabel = "Slider value", leftControls = "reset",
   className, ...props
 }) => {
+  const interactionFocus = useStudioInteractionFocus();
   const validBounds = Number.isFinite(min) && Number.isFinite(max) && min < max;
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const current = Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : min;
@@ -1981,12 +2568,12 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       layout="double"
       sizeVariant={size}
       fieldSlot
-      className={studioClasses("vt-studio-double-split-slider", `is-${size}`, leftControls === "counter" && "is-counter-controls", className)}
+      className={studioClasses("vt-studio-double-split-slider", interactionFocus.active && "is-interaction-focus", `is-${size}`, leftControls === "counter" && "is-counter-controls", className)}
       railClassName="vt-studio-double-split-slider__rail"
       leftRailContent={leftControls === "counter" ? (
         <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
-          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
         </span>
       ) : (
         <button
@@ -1995,12 +2582,11 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
           aria-label={`Reset ${ariaLabel}`}
           title={`Reset ${ariaLabel}`}
           disabled={disabled || !validBounds || current === min}
-          onClick={() => onValueChange(min)}
+          onClick={() => { interactionFocus.pulse(); onValueChange(min); }}
         >↺</button>
       )}
       rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
-      shellProps={{
-        ...props,
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end,
         "data-vt-studio-slider": "double-split",
         "data-vt-studio-slider-left-controls": leftControls,
         "data-vt-library-component": "StudioDoubleSplitSlider",
@@ -2018,7 +2604,7 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
         aria-label={ariaLabel}
         className="vt-studio-double-split-slider__input"
         style={rangeStyle}
-        onChange={(event) => changeValue(event.currentTarget.value)}
+        onPointerDown={interactionFocus.start} onPointerUp={interactionFocus.end} onPointerCancel={interactionFocus.end} onChange={(event) => { interactionFocus.pulse(); changeValue(event.currentTarget.value); }}
       />
     </StudioSplitShell>
   );
