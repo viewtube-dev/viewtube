@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -840,4 +840,22 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after');
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button.is-holding svg');
   });
+}
+describe("Studio counter hold-repeat acceleration", () => {
+  it("smoothly accelerates from 128ms through 46ms to a 23ms maximum-rate interval", () => {
+    expect(getStudioCounterRepeatDelay(0, 30)).toBe(128);
+    expect(getStudioCounterRepeatDelay(520, 30)).toBe(46);
+    expect(getStudioCounterRepeatDelay(1220, 30)).toBe(23);
+    expect(getStudioCounterRepeatDelay(2000, 30)).toBe(23);
+  });
+
+  it("starts a smooth boundary slowdown 16 steps from the bound while preserving full speed farther away", () => {
+    expect(getStudioCounterRepeatDelay(1220, 17)).toBe(23);
+    expect(getStudioCounterRepeatDelay(1220, 16)).toBe(23);
+    expect(getStudioCounterRepeatDelay(1220, 3)).toBe(75);
+    expect(getStudioCounterRepeatDelay(1220, 0)).toBe(75);
+    expect(getStudioCounterRepeatDelay(1220, Number.POSITIVE_INFINITY)).toBe(23);
+  });
+});
+
 });
