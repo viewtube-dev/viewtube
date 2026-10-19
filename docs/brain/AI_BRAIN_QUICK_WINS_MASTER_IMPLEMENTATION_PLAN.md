@@ -350,3 +350,19 @@ These documents provide architecture, current-state, evidence and workflow conte
 Complete only when all 19 behaviors are implemented or explicitly blocked by a verified owner/contract gap; each behavior has focused tests; restore, routing and learning-governance tests pass; new UI is keyboard-accessible and Studio-consistent; claims/actions use canonical data and provenance; and the final PR records commit mapping, test evidence, residual risks and rollback guidance.
 
 A green build alone is not proof of correctness. A UI that looks complete but lacks canonical evidence is not complete. A learning action that bypasses governance is a regression, not an optimization.
+
+
+## Evidence parity hardening — 2026-10-19
+
+**Verified implementation:** `BrainOrchestrator` selects `promptEvidenceRecords` once from the resolved evidence envelope, builds `BrainEvidenceRecordQuality` from that array, and passes both into `buildBrainContextPack`. The quality report includes the ordered record IDs and evidence fingerprint.
+
+**Gap found during review:** `BrainContextBroker` detected a fingerprint mismatch and described it in the prompt, but still rendered the supplied evidence records. That is not a fail-closed gate: a changed value could remain visible after the grade became stale.
+
+**In-flight fix:** PR #723 makes a missing or mismatched record grade block analytics-derived prompt context and adds a regression test that changes a metric after grading. Treat this item as **pending CI verification**, not complete, until the focused Brain contract and relevant CI gates pass.
+
+**Acceptance criteria:**
+- The same selected records are rendered and graded.
+- Missing grade with non-empty prompt evidence blocks analytics context.
+- Changed value, reordered records, or changed record identity after grading blocks analytics context.
+- A valid grade for the exact records preserves normal rendering.
+- Tests prove both the valid and fail-closed paths.
