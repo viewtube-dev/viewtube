@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame, StudioBrainStatusBadge } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame, StudioBrainStatusBadge, StudioTwoLineButton } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-primitive-catalogs.css"
 
