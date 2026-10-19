@@ -4809,3 +4809,31 @@
 .vt-subtoolbox-state.has-studio-text-box > .vt-studio-text-box {
   width: 100%;
 }
+
+
+/* Vault library controls: Sort / State / View stay stacked in the right half. */
+[data-vault-sort-state-view-stack] { width: 100%; min-width: 0; }
+[data-vault-sort-state-view-stack] .vault-sort-state-view-dropdown { width: 100%; min-width: 0; }
+@media (max-width: 639px) {
+  [data-vault-sort-state-view-stack] .vault-sort-state-view-dropdown {
+    --vt-legend-height: 28px;
+    --vt-legend-stroke: 2px;
+    --vt-legend-radius: 4px;
+    --vt-legend-label-height: 14px;
+    --vt-legend-label-font-size: 9px;
+    --vt-studio-dropdown-chevron-size: var(--vt-studio-dropdown-compact-chevron-size, 18px);
+    --vt-studio-dropdown-chevron-stroke: var(--vt-studio-dropdown-compact-chevron-stroke, 1.65);
+    --vt-legend-chevron-size: var(--vt-studio-dropdown-chevron-size);
+    --vt-legend-count-size: 19px;
+  }
+  [data-vault-sort-state-view-stack] .vault-sort-state-view-dropdown .vt-studio-legend-trigger {
+    min-height: 28px;
+    height: 28px;
+    padding-inline: 6px;
+    font-size: 11px;
+  }
+  [data-vault-sort-state-view-stack] .vault-sort-state-view-dropdown .vt-studio-legend-label {
+    left: 8px;
+    padding-inline: 6px;
+  }
+}
