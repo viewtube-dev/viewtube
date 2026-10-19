@@ -4818,3 +4818,39 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
   padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
 }
+
+
+/* Vertical toolbox header toggles: canonical Blackfill compact variant.
+   Keep this scoped to vertical header toggles; ordinary vertical controls are unchanged. */
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-compact-font-size, 24px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-vertical-word-gap: 2.444444px;
+  --vt-studio-vertical-word-padding: 2.444444px;
+  --vt-studio-vertical-word-horizontal-padding: 9.333333px;
+  --vt-studio-vertical-word-handle-inset: 1.833333px;
+  border-color: #000;
+  background: #000;
+}
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement .vt-studio-vertical-word-toggle__word {
+  height: var(--vt-studio-compact-font-size, 24px);
+  flex-basis: var(--vt-studio-compact-font-size, 24px);
+  font-size: var(--vt-studio-compact-font-size, 24px);
+}
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement .vt-studio-vertical-word-toggle__word {
+  color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] {
+  color: #000;
+}
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] {
+  color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="0"] {
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+.vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement .vt-studio-vertical-word-toggle__handle {
+  border-radius: 2px;
+}
