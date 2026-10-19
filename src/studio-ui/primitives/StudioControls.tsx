@@ -56,9 +56,9 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   uploadFrame: {
     owner: "StudioUploadFrame",
     globalRuleException: true,
-    geometry: "16:9 canvas at every breakpoint; 12px outer radius; inset 2px black frame; 5px standard inner inset",
+    geometry: "16:9 canvas at every breakpoint; container-relative quarter strokes and breathing-layer spacing; responsive inset black frame; center image preview scales to 3x and its secondary ring clips slightly at the top/bottom",
     colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
-    behavior: "native file picker, drag/drop, image preview, filename announcement, disabled state, and reduced-motion support",
+    behavior: "native file picker after a 1s click pulse, drag/drop, left upload and right thumbnail split rails, two-line half-scale prompt, oversized circular image preview, bottom filename badge, hover breathing at 2x speed and extra saturation, disabled state, and reduced-motion support",
     shadowPolicy: "none",
     rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
   },
