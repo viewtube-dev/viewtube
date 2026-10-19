@@ -4554,10 +4554,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   align-items: stretch;
   justify-content: flex-start;
   gap: var(--vt-studio-vertical-word-gap);
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  align-self: stretch;
+  width: max-content;
+  max-width: none;
+  min-width: max-content;
+  align-self: flex-start;
   height: auto;
   margin: 0;
   padding: var(--vt-studio-vertical-word-padding) 0;
