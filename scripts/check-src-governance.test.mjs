@@ -1,6 +1,6 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import { findRuntimeSourceViolations } from "./check-src-governance.mjs"
+import { findRuntimeSourceViolations } from "./source-governance/runtime-source-rules.mjs"
 
 test("runtime source governance rejects documentation imports and absolute file links", () => {
  const result = findRuntimeSourceViolations([
