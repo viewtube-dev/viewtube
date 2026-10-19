@@ -416,7 +416,16 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
     >
       {kind === "radio" ? (
         <StudioRadioMotion motion={radioMotion} direction={motionDirection} run={motionRun} checked={isChecked} onEmpty={handleMotionEmpty} />
-      ) : <svg viewBox="0 0 50 50" aria-hidden="true"><path d={mark === "xwide" ? "M 10 10 L 40 40 M 40 10 L 10 40" : "M 7 26 L 19 39 L 43 11"} /></svg>}
+      ) : (
+        <svg viewBox="0 0 50 50" aria-hidden="true">
+          {mark === "xwide" ? (
+            <>
+              <path d="M 10 10 L 40 40" />
+              <path d="M 40 10 L 10 40" />
+            </>
+          ) : <path d="M 7 26 L 19 39 L 43 11" />}
+        </svg>
+      )}
     </button>
   )
 }
