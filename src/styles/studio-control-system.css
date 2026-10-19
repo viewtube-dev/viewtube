@@ -1358,7 +1358,8 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"] [data-vt
   line-height: .86;
   letter-spacing: -.02em;
   text-transform: uppercase;
-  color: #000;
+  color: #000 !important;
+  -webkit-text-fill-color: #000;
 }
 button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-size="standard"] [data-vt-studio-button-line] {
   font-size: 18px;
