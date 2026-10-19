@@ -643,7 +643,7 @@ export const parseEvidenceRequestSpec = (
  else if (rankingCue && /\b(retention|average percentage viewed|percentage viewed)\b/.test(text)) rankBy = "retention"
  else if (rankingCue && /\b(views?|view count|most viewed)\b/.test(text)) rankBy = "views"
 
- const recentCue = /\b(recent|latest|newest|most recent|last uploads?)\b/.test(text)
+ const recentCue = /\b(recent|latest|newest|most recent|last uploads?|last\s+\d+\s+(?:videos?|uploads?))\b/.test(text)
  const explicitMetricRanking = rankBy !== "performance"
  const hasTopCue = /\b(top|best|highest|lowest|rank(?:ed)?|sort(?:ed)?)\b/.test(text)
  const selectionMode: EvidenceRequestSpec["selectionMode"] = recentCue && !explicitMetricRanking
@@ -700,10 +700,12 @@ const evidenceVideoRankValue = (
   return Number.isFinite(timestamp) ? timestamp : -1
  }
  if (rankBy === "performance") return profileVideoScore(video)
+ if (rankBy === "subscribers") {
+  return optionalVideoMetric(video, "subscribersGained") ?? optionalVideoMetric(video, "subscribers") ?? -1
+ }
  const metricKey = rankBy === "watchTime" ? "watchTime"
-  : rankBy === "subscribers" ? "subscribersGained"
-   : rankBy === "retention" ? "averagePercentageViewed"
-    : rankBy
+  : rankBy === "retention" ? "averagePercentageViewed"
+   : rankBy
  return optionalVideoMetric(video, metricKey as keyof NonNullable<VtSyncVideoItem["metrics"]>) ?? -1
 }
 
@@ -767,8 +769,10 @@ export const buildAIBrainEvidencePack = (
  const requestTextLower = cleanProfileText(requestText).toLowerCase()
  const explicitlyRequestsSearch = /\b(search terms?|keywords?|search opportunit(?:y|ies)|queries)\b/.test(requestTextLower)
  const explicitlyRequestsTraffic = /\b(traffic sources?|source of traffic|where (?:views|viewers|traffic) come from|external traffic|browse features|suggested videos)\b/.test(requestTextLower)
- const includeSearch = intent === "seo" || intent === "strategy" || explicitlyRequestsSearch
- const includeTraffic = intent === "strategy" || explicitlyRequestsTraffic
+ const explicitVideoCohortRequest = requestSpec.count !== null || requestSpec.formats.length > 0
+  || Boolean(requestSpec.since || requestSpec.until) || requestSpec.filters.length > 0 || requestSpec.selectionMode !== "both"
+ const includeSearch = intent === "seo" || explicitlyRequestsSearch || (intent === "strategy" && !explicitVideoCohortRequest)
+ const includeTraffic = explicitlyRequestsTraffic || (intent === "strategy" && !explicitVideoCohortRequest)
  const searchTerms = includeSearch ? signalEvidence(snapshot.searchTerms || [], "search") : []
  const trafficSources = includeTraffic ? signalEvidence(snapshot.trafficSources || [], "traffic") : []
  const metricKeys: Array<keyof NonNullable<VtSyncVideoItem["metrics"]>> = [
