@@ -1661,6 +1661,15 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
 }
 
 
+.vt-studio-spectrum-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vt-studio-space-unit, 4px);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
 /* Documented global-rule exception: donor-exact Vault Spectrum Tags.
    Keep this separate from the 44px / 28px control lattice. */
 .vt-studio-spectrum-tag {
