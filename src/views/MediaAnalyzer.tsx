@@ -1,3 +1,4 @@
+import { StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import React, { useState, useRef, useEffect } from "react"
 import { useBrain } from "../context/useBrain"
 import { analyzeMediaContent, transcribeMediaContent } from "../services/gemini"
@@ -17,7 +18,6 @@ import { ToolboxScaffold, SubToolbox } from "../components/Toolbox"
 import { PostActionReflection } from "../components/PostActionReflection"
 import {
  SubToolboxButton,
- SubToolboxFileTarget,
  SubToolboxInput,
  SubToolboxTextArea,
 } from "../components/subtoolbox/SubToolboxPrimitives"
@@ -364,13 +364,13 @@ const MediaAnalyzer: React.FC<MediaAnalyzerProps> = ({
        shellClassName="md:h-full"
        contentClassName="p-5 md:h-full flex flex-col">
        <div className="flex flex-col gap-3">
-       <SubToolboxFileTarget
+       <StudioUploadFrame
         level="l1"
         label={file ? file.name : "UPLOAD VIDEO / AUDIO"}
         icon={<Upload size={28} strokeWidth={3} />}
         accept="video/*,audio/*"
         minHeight={128}
-        onFiles={(files) => setFile(files?.[0] || null)}
+        onFilesChange={(files) => setFile(files?.[0] || null)}
        />
        <SubToolboxButton level="l1" tone="warning"
         onClick={() => fileInputRef.current?.click()}
