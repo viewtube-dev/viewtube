@@ -3870,6 +3870,22 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: 8px;
   background: #fff;
 }
+.vt-studio-upload-frame__inset::before,
+.vt-studio-upload-frame__inset::after {
+  position: absolute;
+  z-index: 2;
+  content: "";
+  pointer-events: none;
+  border-radius: 4px;
+}
+.vt-studio-upload-frame__inset::before {
+  inset: 4px;
+  border: 4px solid var(--vt-studio-upload-primary);
+}
+.vt-studio-upload-frame__inset::after {
+  inset: 8px;
+  border: 2px solid var(--vt-studio-upload-secondary);
+}
 .vt-studio-upload-frame[data-size="compact"] .vt-studio-upload-frame__inset { border-radius: 6px; }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
 .vt-studio-upload-frame__layer {
@@ -3904,14 +3920,32 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   place-items: center;
   width: clamp(64px, 16cqw, 112px);
   aspect-ratio: 1;
-  overflow: hidden;
+  overflow: visible;
   border: 3px solid #000;
   border-radius: 50%;
   color: #000;
   background: conic-gradient(from var(--vt-studio-upload-angle), var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
   animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite reverse;
 }
+.vt-studio-upload-frame__icon::before,
+.vt-studio-upload-frame__icon::after {
+  position: absolute;
+  z-index: 0;
+  content: "";
+  border-radius: 50%;
+  pointer-events: none;
+}
+.vt-studio-upload-frame__icon::before {
+  inset: -7px;
+  border: 4px solid var(--vt-studio-upload-primary);
+}
+.vt-studio-upload-frame__icon::after {
+  inset: -13px;
+  border: 2px solid var(--vt-studio-upload-secondary);
+}
 .vt-studio-upload-frame__icon > svg {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 43%;
   height: 43%;
@@ -3931,29 +3965,21 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background: #fff;
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 13px;
+  font-size: var(--vt-studio-28-font-size, 24px);
   font-weight: 1000;
-  line-height: 1.1;
-  letter-spacing: .1em;
+  line-height: 1;
+  letter-spacing: -.02em;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__layer--core { animation: none; scale: 1; }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__center { display: block; }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: auto;
-  height: 100%;
-  aspect-ratio: 1;
-  translate: -50% 0;
-  transform: none;
-}
+/* Keep the icon shell geometrically identical before and after upload.
+   The preview image is circular itself, so it does not require shell clipping. */
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg { display: none; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > img {
   position: absolute;
+  z-index: 1;
   inset: 3px;
   display: block;
   width: calc(100% - 6px);
@@ -3980,7 +4006,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   .vt-studio-upload-frame { aspect-ratio: 4 / 3; }
   .vt-studio-upload-frame__center { gap: 8px; }
   .vt-studio-upload-frame__icon { width: clamp(58px, 20cqw, 88px); }
-  .vt-studio-upload-frame__label { max-width: 100%; padding: 5px 10px; font-size: 11px; }
+  .vt-studio-upload-frame__label { max-width: 100%; padding: 5px 10px; font-size: var(--vt-studio-28-font-size, 24px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-upload-frame,
