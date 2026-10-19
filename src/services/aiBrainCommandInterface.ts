@@ -1988,14 +1988,32 @@ export const queueAIBrainReviewedAction = async (input: {
  channelId?: string | null
  priority?: BrainCommandAction["priority"]
  confidence?: BrainCommandAction["confidence"]
+ originatingTurnId?: string | null
+ evidenceIds?: string[]
+ contentBuildId?: string | null
+ selectedContentId?: string | null
 }): Promise<AIBrainChatHandoff> => {
- const queued = await queueAssistantCommand(input)
+ const queued = await queueAssistantCommand({
+  request: input.request,
+  response: input.response,
+  channelId: input.channelId,
+  priority: input.priority,
+  confidence: input.confidence,
+ })
  const target = resolveAIBrainToolRoute(queued.targetToolId, queued.action.id)
+ const routeUrl = new URL(target.route, "https://viewtube.local")
+ routeUrl.searchParams.set("reviewOnly", "true")
+ if (input.originatingTurnId) routeUrl.searchParams.set("brainTurnId", input.originatingTurnId)
+ if (input.contentBuildId) routeUrl.searchParams.set("contentBuildId", input.contentBuildId)
+ if (input.selectedContentId) routeUrl.searchParams.set("selectedContentId", input.selectedContentId)
+ for (const evidenceId of input.evidenceIds || []) {
+  routeUrl.searchParams.append("evidenceId", evidenceId)
+ }
  return {
   action: queued.action,
   recordId: queued.recordId,
   workflowId: queued.workflowId,
-  route: target.route,
+  route: `${routeUrl.pathname}${routeUrl.search}${routeUrl.hash}`,
   targetTitle: target.title,
   reviewOnly: isReviewOnlyBrainCommandAction(queued.action),
  }
