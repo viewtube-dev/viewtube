@@ -2015,9 +2015,12 @@ export const queueAIBrainReviewedAction = async (input: {
  ].filter(Boolean)
  const contextBlock = contextLines.join("\n")
  const queued = await queueAssistantCommand({
-  ...input,
   request: `${input.request}\n\n${contextBlock}`,
   response: [input.response, contextBlock].filter(Boolean).join("\n\n"),
+  channelId: input.channelId,
+  priority: input.priority,
+  confidence: input.confidence,
+  targetToolId: input.targetToolId,
  })
  const target = resolveAIBrainToolRoute(queued.targetToolId, queued.action.id)
  const params = new URLSearchParams()
