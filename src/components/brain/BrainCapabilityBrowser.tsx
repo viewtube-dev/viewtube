@@ -129,6 +129,7 @@ export const BrainCapabilityBrowser: React.FC<{
     </div>
    ) : <p className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-2 text-[10px] font-bold text-black/55">Choose a capability to see its prerequisites and launch a request.</p>}
   </section>
+ )
 }
 
 export default BrainCapabilityBrowser
