@@ -80,7 +80,6 @@ const CanonicalControlFamilies: React.FC = () => {
           {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div> })}
         </div>
       </div>
-    </Family>
     <div className="vt-confirmed-toggle-subfamily">
       <strong>WORD TOGGLE · STANDARD + COMPACT</strong>
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
@@ -98,7 +97,7 @@ const CanonicalControlFamilies: React.FC = () => {
       <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
       <div className="vt-confirmed-vertical-word-toggle-family">
         <div className="vt-confirmed-vertical-word-toggle-size-row">
-          <strong>STANDARD · TWO PER ROW</strong>
+          <strong>STANDARD · SINGLE COLUMN</strong>
           <div className="vt-confirmed-vertical-word-toggle-standard">
             {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
               <small>{item.label}</small>
@@ -107,7 +106,7 @@ const CanonicalControlFamilies: React.FC = () => {
           </div>
         </div>
         <div className="vt-confirmed-vertical-word-toggle-size-row">
-          <strong>COMPACT · THREE PER ROW</strong>
+          <strong>COMPACT · SINGLE COLUMN + MICRO MATRIX</strong>
           <div className="vt-confirmed-vertical-word-toggle-compact">
             {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
               <small>{item.label}</small>
@@ -123,6 +122,7 @@ const CanonicalControlFamilies: React.FC = () => {
         </div>
       </div>
     </div>
+    </Family>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
       nonDefaultSettings={[
