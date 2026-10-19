@@ -1,7 +1,6 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
-import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
@@ -683,8 +682,6 @@ export const Studiocheck: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = p
 Studiocheck.displayName = "Studiocheck"
 export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
 Studioxbox.displayName = "Studioxbox"
-export { Studioinput }
-export type { StudioinputProps } from "./Studioinput"
 export const Studioarea = StudioTextArea
 
 /** Canonical public names; lowercase legacy exports remain compatibility aliases. */
