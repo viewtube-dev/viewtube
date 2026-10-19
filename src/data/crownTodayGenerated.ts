@@ -16,7 +16,7 @@ export const CROWN_TODAY_GENERATED = {
     path: null,
     taskIds: [],
     statusCounts: {},
-    note: "Canonical Task Index remains external to the repository runtime. Run the generator with --task-index=/Users/cwb/Downloads/viewtube/ViewTube-Task-Index.html from the authorized local workspace to create a read-only projection.",
+    note: "Canonical Task Index remains external to the repository runtime. Run the generator with an explicit --task-index path in the authorized workspace to create a read-only projection.",
   },
   truthRule: "Generated evidence is a read-only projection. Git history proves committed code state only; Task Index status remains owned by the canonical Task Index.",
 } as const
