@@ -1,10 +1,10 @@
-# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–7
+# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–9
 
 **Date:** 2026-10-19  
 **Repository:** `viewtube-dev/viewtube`  
 **Target base:** `master/consolidated-feature-integration`  
 **Working branch:** `feat/brain-prompts-handoffs-outcomes-phase-6-7`  
-**Status:** Phases 2–7 have incremental implementations across merged PR #733 and the current phase 6–7 branch. Registry/policy inspection and outcome/asset lineage surfaces are added; execution, persistence, coverage and browser certification remain open where explicitly noted. The full feature overhaul remains staged.  
+**Status:** Phases 2–7 have incremental implementations across merged PR #733 and the current phase 6–7 branch. Registry/policy inspection and outcome/asset lineage surfaces are added; execution, persistence, coverage and browser certification remain open where explicitly noted. Phase 8 QA/certification and phase 9 release/observability gates are now being tracked explicitly. The full feature overhaul remains staged.  
 **Primary historical design donor:** [PR #241 Brain brainstorm and frontend design](https://github.com/viewtube-dev/viewtube/blob/bcc561d3c96e435252c1cc8ec544283030117322/docs/migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md)
 
 > This document consolidates the complete Brain UI overhaul proposal and the implementation sequence. The PR #241 design is a historical donor, not a current-state specification. Do not trust its old maturity percentages, route counts, model/provider assumptions, or “currently empty” assertions without rechecking the integration branch. Preserve its still-useful product requirements while following current source, tests, registries, and architecture contracts.
@@ -452,3 +452,38 @@ Predecessor: merged PR [#733](https://github.com/viewtube-dev/viewtube/pull/733)
 ### Verification state
 
 This increment has source and focused test files committed to the working branch. GitHub source operations do not execute Vitest, typecheck, lint or browser tests, so these tests are **not yet verified as passing**. The prior PR #733 CI run had a passing production build and local smoke check but failures in static quality, focused contracts, source governance, Brain quality loop and the full suite; those historical failures remain relevant and must not be described as resolved by this PR. No production deployment or end-to-end certification is claimed.
+
+
+## Implementation update — Brain status primitive and phases 8–9 (2026-10-19)
+
+### Studio Controls: Brain status indicator primitive
+
+- [x] Added `StudioBrainStatusIndicator` to the shared `StudioControls.tsx` primitive source, combining the LED-light (library item 64) and borderless badge (library item 45) visual concepts.
+- [x] Added rectangular dark-fill/white-text and status-tinted/black-text variants with standard/compact/micro tiers, named state colors, configurable pulse, and a live showcase in the Brain context rail.
+- [x] Added the centered lens treatment: 1px black circular outline at 65% of LED diameter with a 60%-opacity white fill.
+- [x] Added staggered saturated LED ripples, glow, reduced-motion handling, and text labels so state is not communicated by color alone.
+- [x] Added a source test and registered the component in the Studio Hub Component Library source-of-truth documentation.
+- [ ] Run focused test/typecheck/build; browser-test the geometry, contrast, clipping, pulse timing and reduced-motion behavior. Source-level addition is not visual certification.
+
+### Phase 8 — QA, certification and release
+
+- [ ] Run the complete CI matrix against the current PR head: focused component tests, TypeScript/static quality, source governance, Brain quality loop, production build, smoke checks and full suite.
+- [ ] Repair failures introduced by this branch; separately label pre-existing baseline failures with reproducible evidence instead of treating them as accepted.
+- [ ] Add/verify responsive browser states for compact/mobile and desktop Brain layouts, keyboard operation, accessible status announcements, contrast, and reduced-motion behavior.
+- [ ] Verify status LED/badge variants in the real Studio Controls library at standard/compact/micro sizes and confirm the catalog shows the actual exported primitive.
+- [ ] Verify evidence ribbon truth states, prompt policy distinctions, and outcomes/asset lineage with representative data and missing-data cases.
+- [ ] Verify that no action/publishing side effect occurs without the existing approval flow and that IDs remain connected end-to-end through ActionPacket/operation/trace/evidence.
+- [ ] Update PR checks and documentation only from observed results; do not mark a gate green from source inspection alone.
+
+### Phase 9 — Release readiness, observability and governance handoff
+
+- [ ] Produce a release checklist for all nine phases, with owner, evidence link, status, and explicit blocked/deferred rationale for each acceptance gate.
+- [ ] Confirm the canonical analytics-canon/VT-SYNC → outcome ledger → evaluation candidate → governed promotion path with actual producer and consumer contracts; do not introduce parallel event stores.
+- [ ] Confirm prompt/policy changes are auditable, channel scoping is correct, browser-local controls are not represented as durable server policy, and consent/privacy exclusions are enforced.
+- [ ] Add operational monitoring or trace views only by extending existing BrainTrace/ToolReceipt and evaluation surfaces; avoid a new observability store.
+- [ ] Validate rollback and feature-disable behavior, then verify deployment source commit and target environment after merge.
+- [ ] Merge only after required CI and human/browser certification gates are green; deployment is a separate verified step.
+
+### Current acceptance posture
+
+The status indicator primitive, showcase, tests and documentation are source changes on the working branch. Phases 8 and 9 are now explicitly defined as release gates, not falsely reported as completed. No current-head CI pass, browser certification, merge, or deployment is claimed here.
