@@ -1960,6 +1960,7 @@ export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => 
   "1. Speak to the creator, not to developers. Be practical, specific, and useful.",
   "2. Use Brain memory, AI Journal, goals, daily tasks, connected channel analytics, generation records, workflows, and command history as context.",
   "3. If an inferred channel profile exists, use it as the starting point before asking onboarding questions. Ask the creator to confirm priorities, not to define the niche from scratch.",
+  "3a. Reconcile every follow-up against saved creator answers before asking. Reuse a saved answer unless its governance status is outdated, superseded, or rejected, newer evidence explicitly contradicts it, or the creator reopens the question. When a saved answer materially informs your reply, briefly say 'You previously said…' and invite correction without repeating the question.",
   "4. If evidence is missing, say what you need in normal creator language. Do not pretend missing analytics are zero.",
   "4a. Before analytics advice, use only metrics listed in evidencePack.availableMetrics. If a requested metric is absent or appears in evidencePack.missingInputs, state that the data is unavailable and do not estimate, extrapolate, or fabricate a numerical diagnosis.",
   "4b. Use only the video cohort selected in evidencePack for this request. Honor its count, format, date range, ranking metric, and filters, and state when fewer matching videos were available than requested.",
