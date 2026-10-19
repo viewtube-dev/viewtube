@@ -36,6 +36,15 @@ test("split dropdown rail uses secondary fill and reserves the trailing rail for
   assert.match(css, /\.vt-studio-dropdown \.vt-studio-dropdown-chevron\[data-rail="end"\] svg \{ width: var\(--vt-studio-dropdown-chevron-size\); height: var\(--vt-studio-dropdown-chevron-size\); \}/)
 })
 
+test("floating labels preserve the component default text size in resting and raised states", () => {
+  assert.match(css, /\.vt-studio-floating-field\s*\{[^}]*--vt-studio-floating-label-size:\s*var\(--vt-studio-44-font-size, 38px\)/s);
+  assert.match(css, /\.vt-studio-floating-field\[data-size="compact"\]\s*\{[^}]*--vt-studio-floating-label-size:\s*var\(--vt-studio-28-font-size, 24px\)/s);
+  assert.match(css, /\.vt-studio-floating-field\[data-size="micro"\]\s*\{[^}]*--vt-studio-floating-label-size:\s*var\(--vt-studio-14-font-size, 10px\)/s);
+  assert.match(css, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size:\s*var\(--vt-studio-textarea-standard-font-size, 18px\)/s);
+  assert.match(css, /\.vt-studio-floating-field\.is-textarea\[data-size="compact"\]\s*\{[^}]*--vt-studio-floating-label-size:\s*var\(--vt-studio-textarea-compact-font-size, 14px\)/s);
+  assert.doesNotMatch(css, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
+});
+
 test("side counter and slider counter dividers are centered against their full two-row rails", () => {
   assert.match(css, /\.vt-studio-side-counter__actions\s*\{[^}]*position:\s*relative/s)
   assert.match(css, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*height:\s*var\(--vt-studio-control-stroke/s)
