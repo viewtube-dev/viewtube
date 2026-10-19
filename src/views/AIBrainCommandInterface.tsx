@@ -841,6 +841,7 @@ const AIBrainCommandInterface: React.FC = () => {
     brainMemory: getBrainMemory(),
     brainOnboardingSnapshot: onboardingSnapshot,
     recentConversationTurns: recentTurns,
+    requestText: userText,
     creatorGrowthContext: turnGrowthContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
