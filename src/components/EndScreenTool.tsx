@@ -1,3 +1,4 @@
+import { StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import React, { useState, useRef } from "react"
 import {
   generateEndScreenImage,
@@ -16,7 +17,6 @@ import {
   SubToolboxButton,
   SubToolboxColorPicker,
   SubToolboxFieldLabel,
-  SubToolboxFileTarget,
   SubToolboxIconButton,
   SubToolboxInput,
   SubToolboxLinkButton,
@@ -318,7 +318,7 @@ export const EndScreenTool: React.FC = () => {
             title="Images"
             icon={<CustomIcon name="image" size={20} />}>
             <div className="space-y-4">
-              <SubToolboxFileTarget
+              <StudioUploadFrame
                 label="Upload Reference Images"
                 icon={<CustomIcon name="image" size={30} />}
                 accept="image/*"
