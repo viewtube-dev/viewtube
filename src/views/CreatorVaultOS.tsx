@@ -19,7 +19,6 @@ import {
  Toolbox,
 } from "../components/Toolbox"
 import {
- StudioSpectrumTag,
  SubToolboxDataTable,
  type SubToolboxDataTableColumn,
  SubToolboxFileTarget,
@@ -2730,15 +2729,12 @@ const CreatorVaultOS: React.FC = () => {
         {importTagsMode === "import" ? (
          <div className="flex flex-col gap-4">
           <div className="text-xs font-black uppercase opacity-60">Import Station</div>
-          <SubToolboxSegmentedToggle
-           level="l1"
-           ariaLabel="Import mode"
-           value={importMode}
-           onValueChange={(value) => setImportMode(value as "direct" | "staged")}
-           options={[
-            { value: "direct", label: "DIRECT" },
-            { value: "staged", label: "STAGED" },
-           ]}
+          <StudioWordToggle
+           size="28"
+           aria-label="Import mode"
+           value={importMode === "staged"}
+           onValueChange={(selected) => setImportMode(selected ? "staged" : "direct")}
+           words={["DIRECT", "STAGED"]}
           />
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)]">
            <SubToolboxFileTarget
