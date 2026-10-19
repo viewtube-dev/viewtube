@@ -55,7 +55,7 @@ const evidenceRecords = [{
  unit: "count",
  aggregation: "sum",
  freshness: "fresh",
- epistemicState: "observed",
+ epistemicState: "OBSERVED",
  provenance: { evidenceIds: ["evidence-1"] },
 }] as any
 
