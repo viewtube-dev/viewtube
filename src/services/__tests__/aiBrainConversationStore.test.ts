@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto"
 import { describe, expect, it } from "vitest"
-import type { CreatorBrainLearningQuestion, CreatorBrainResponse } from "../../types"
+import type { AIBrainQuestionAnswer, CreatorBrainLearningQuestion, CreatorBrainResponse } from "../../types"
 import {
  answerAIBrainQuestionModule,
  reconcileBrainLearningQuestions,
@@ -172,6 +172,62 @@ describe("aiBrainConversationStore", () => {
 
   expect(reconcileBrainLearningQuestions(questions, savedAnswers).map((question) => question.id)).toEqual(["confirm-niche"])
   expect(reconcileBrainLearningQuestions(questions, savedAnswers, ["primary-goal"]).map((question) => question.id)).toContain("primary-goal")
+ })
+
+ it("does not suppress a question when its saved answer is marked outdated", () => {
+  const outdated: AIBrainQuestionAnswer = {
+   id: "answer-outdated",
+   questionId: questionFixture.id,
+   channelId: "channel-question-outdated",
+   question: questionFixture.question,
+   answer: "Views",
+   category: "creator_goal",
+   createdAt: "2026-10-01T00:00:00.000Z",
+   status: "outdated",
+   statusReason: "Creator goal changed after a newer planning session.",
+  }
+
+  expect(reconcileBrainLearningQuestions([questionFixture], [outdated])).toEqual([questionFixture])
+ })
+
+ it("supersedes an older creator-goal answer when a new answer is saved", async () => {
+  const channelId = "channel-question-supersede"
+  const previous: AIBrainQuestionAnswer = {
+   id: "answer-old-goal",
+   questionId: "older-goal-question",
+   channelId,
+   question: "What result matters most?",
+   answer: "Views",
+   category: "creator_goal",
+   createdAt: "2026-09-01T00:00:00.000Z",
+   status: "confirmed",
+  }
+  const oldTurn = await saveAIBrainConversationTurn({
+   channelId,
+   userText: previous.answer,
+   assistantText: "Saved your earlier goal.",
+   questionAnswers: [previous],
+   metadata: { source: "question_module" },
+  })
+
+  const newer = await answerAIBrainQuestionModule({
+   channelId,
+   question: questionFixture,
+   answer: "Subscribers and watch time matter most this month.",
+  })
+  const turns = await listAIBrainConversationTurns({ channelId })
+  const restoredOldTurn = turns.find((turn) => turn.id === oldTurn.id)
+  const savedNewTurn = turns.find((turn) => turn.questionAnswers.some((answer) => answer.id === newer.id))
+
+  expect(restoredOldTurn?.questionAnswers[0]).toMatchObject({
+   status: "superseded",
+   supersededByAnswerId: newer.id,
+  })
+  expect(savedNewTurn?.questionAnswers[0]).toMatchObject({
+   id: newer.id,
+   status: "confirmed",
+  })
+  expect(reconcileBrainLearningQuestions([questionFixture], turns.flatMap((turn) => turn.questionAnswers))).toEqual([])
  })
 
  it("keeps creator-facing copy clear of internal data plumbing language", () => {
