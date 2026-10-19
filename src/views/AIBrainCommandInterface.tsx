@@ -72,6 +72,7 @@ import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrows
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
 import { BrainClaimEvidence } from "../components/brain/BrainClaimEvidence"
+import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRibbon"
 import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
@@ -732,6 +733,7 @@ const CreatorResponseCard: React.FC<{
     ) : null}
     <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
+    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} compact /> : null}
     {openQuestions[0] ? (
      <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
     ) : null}
@@ -749,9 +751,6 @@ const CreatorResponseCard: React.FC<{
        {option.label}
       </button>
      ))}
-     {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
-      <BrainClaimEvidence evidencePack={turnEvidencePack} compact label="Based on" />
-     ) : null}
      <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
