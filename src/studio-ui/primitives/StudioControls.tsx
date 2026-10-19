@@ -1316,7 +1316,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             railClassName="vt-studio-dropdown-split-rail"
             leftRailProps={{ "aria-hidden": true }}
             rightRailClassName="vt-studio-dropdown-chevron is-trailing"
-            rightRailProps={{ "data-vt-studio-dropdown-chevron": true, "aria-hidden": true }}
+            rightRailProps={{ "data-vt-studio-dropdown-chevron": "true", "aria-hidden": true }}
           >
             {connectionMessage ?? selected?.label ?? placeholder}
           </StudioSplitShell>
