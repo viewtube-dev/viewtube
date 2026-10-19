@@ -2238,7 +2238,7 @@ const CreatorVaultOS: React.FC = () => {
           ))}
          </div>
         ) : (
-         <SubToolboxStatePanel level="l1" state="empty" message="Select one compatible asset to reveal ViewTube handoff destinations." />
+         <StudioTextBox size="standard" role="status" aria-live="polite">Select one compatible asset to reveal ViewTube handoff destinations.</StudioTextBox>
         )}
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
          <SubToolboxInnerActionButton label="Export Selected Metadata JSON" iconName="database" tone="cyan" onClick={() => exportVaultMetadata(allAssets.filter((asset) => selectedAssetIds.includes(asset.id)), "json")} />
@@ -3137,7 +3137,7 @@ const CreatorVaultOS: React.FC = () => {
          ) : null}
          </React.Fragment>
         )) : (
-         <SubToolboxStatePanel level="l1" state="empty" message="No Vault background tasks yet." />
+         <StudioTextBox size="standard" role="status" aria-live="polite">No Vault background tasks yet.</StudioTextBox>
         )}
         {completedVaultTasks.length ? (
          <div className="flex flex-wrap items-center gap-2" data-vault-task-history>
@@ -3281,7 +3281,7 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ))}
           </div>
-         ) : <SubToolboxStatePanel level="l1" state="empty" message="No exact duplicate hashes are recorded in the current Vault." />}
+         ) : <StudioTextBox size="standard" role="status" aria-live="polite">No exact duplicate hashes are recorded in the current Vault.</StudioTextBox>}
         </section>
         <section data-vault-similar-pairs>
          <div className="mb-2 flex items-center justify-between gap-2"><div className="text-xs font-black uppercase">Visually Similar Images</div><span className="text-xs font-black">{relationshipReview.similarPairs.length}{relationshipReview.similarPairs.length === 50 ? "+" : ""}</span></div>
@@ -3296,7 +3296,7 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ))}
           </div>
-         ) : <SubToolboxStatePanel level="l1" state="empty" message="No similar-image pairs are currently indexed." />}
+         ) : <StudioTextBox size="standard" role="status" aria-live="polite">No similar-image pairs are currently indexed.</StudioTextBox>}
         </section>
         <section data-vault-unreferenced-assets>
          <div className="mb-2 flex items-center justify-between gap-2"><div className="text-xs font-black uppercase">No Recorded Content Build Usage</div><span className="text-xs font-black">{relationshipReview.usageReview.length}</span></div>
@@ -3310,7 +3310,7 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ))}
           </div>
-         ) : <SubToolboxStatePanel level="l1" state="empty" message="No candidate assets found, or all assets have recorded usage." />}
+         ) : <StudioTextBox size="standard" role="status" aria-live="polite">No candidate assets found, or all assets have recorded usage.</StudioTextBox>}
         </section>
         <div className="text-[10px] font-bold opacity-55">Similarity is a review signal, not proof of duplication. No assets are deleted, merged, or replaced automatically.</div>
        </div>
