@@ -1,49 +1,47 @@
-/* Shared split-field contract: one badge perimeter, full-row default, native editing. */
+/* Split badge owns the perimeter and rails; StudioTextInput owns editing.
+ * Fill the available row, including inside catalog and flex/grid layouts. */
 html body .vt-studio-split-text-input {
-  position: relative;
-  display: block;
+  display: block !important;
   box-sizing: border-box;
-  width: 100%;
+  width: 100% !important;
   min-width: 0;
-  max-width: none;
-  height: var(--vt-studio-control-height);
-  border-radius: var(--vt-studio-control-radius);
-  background: transparent;
-  --vt-split-input-track: calc(var(--vt-studio-control-height) - var(--vt-studio-control-stroke));
+  max-width: none !important;
+  flex: 1 1 auto;
+  justify-self: stretch;
 }
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"] {
   box-sizing: border-box;
-  display: grid !important;
   width: 100% !important;
-  min-width: 0 !important;
+  min-width: 0;
   max-width: none !important;
-  height: var(--vt-studio-control-height);
-  margin: 0;
-  padding: 0;
-  gap: 0;
+  padding: 0 !important;
+  gap: 0 !important;
+  /* Do not composite a half-primary input over a solid-primary badge face. */
   background: transparent !important;
 }
-html body .vt-studio-split-text-input[data-split="left"] > [data-vt-studio-control="true"] { grid-template-columns: var(--vt-split-input-track) minmax(0, 1fr); }
-html body .vt-studio-split-text-input[data-split="right"] > [data-vt-studio-control="true"] { grid-template-columns: minmax(0, 1fr) var(--vt-split-input-track); }
-html body .vt-studio-split-text-input[data-split="double"] > [data-vt-studio-control="true"] { grid-template-columns: var(--vt-split-input-track) minmax(0, 1fr) var(--vt-split-input-track); }
 html body .vt-studio-split-text-input [data-vt-studio-split-label] {
   min-width: 0;
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 !important;
+  margin: 0;
   overflow: hidden;
   background: transparent !important;
 }
 html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
-  width: var(--vt-split-input-track);
-  min-width: var(--vt-split-input-track);
+  width: calc(var(--vt-studio-control-height) - var(--vt-studio-control-stroke));
+  min-width: calc(var(--vt-studio-control-height) - var(--vt-studio-control-stroke));
   height: 100%;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
+  --vt-split-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-split-field-inline-width: var(--vt-studio-control-stroke, 3px);
   display: block;
   box-sizing: border-box;
-  width: 100%;
+  width: 100% !important;
   min-width: 0;
+  max-width: none;
   height: 100%;
   min-height: 0;
   margin: 0;
@@ -52,37 +50,34 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
   border-radius: 0;
   outline: none !important;
   box-shadow: none;
-  background-image: none !important;
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, transparent);
-  color: var(--vt-studio-control-accent, var(--pair-a));
-  -webkit-text-fill-color: var(--vt-studio-control-accent, var(--pair-a));
-  caret-color: var(--vt-studio-control-accent, var(--pair-a));
+  color: var(--vt-split-field-primary);
+  -webkit-text-fill-color: var(--vt-split-field-primary);
+  -webkit-text-stroke-color: var(--vt-split-field-primary);
+  caret-color: var(--vt-split-field-primary);
+  background-color: color-mix(in srgb, var(--vt-split-field-primary) 50%, transparent) !important;
+  /* Opaque primary bands meet the shell border/dividers without an inset gap.
+   * Background paint respects the global no-shadow policy. */
+  background-image:
+    linear-gradient(var(--vt-split-field-primary), var(--vt-split-field-primary)),
+    linear-gradient(var(--vt-split-field-primary), var(--vt-split-field-primary)),
+    linear-gradient(var(--vt-split-field-primary), var(--vt-split-field-primary)),
+    linear-gradient(var(--vt-split-field-primary), var(--vt-split-field-primary)) !important;
+  background-size: 100% var(--vt-split-field-inline-width), 100% var(--vt-split-field-inline-width), var(--vt-split-field-inline-width) 100%, var(--vt-split-field-inline-width) 100%;
+  background-position: top left, bottom left, top left, top right;
+  background-repeat: no-repeat;
+  background-origin: padding-box;
+  background-clip: padding-box;
+  background-attachment: scroll;
   text-align: left;
-}
-/* Noninteractive perimeter paint sits flush inside the badge's black border.
- * This is a real border, not a shadow; it stays primary in every focus state. */
-html body .vt-studio-split-text-input::after {
-  content: "";
-  position: absolute;
-  box-sizing: border-box;
-  inset: var(--vt-studio-control-stroke);
-  border: var(--vt-studio-control-stroke) solid var(--vt-studio-control-accent, var(--pair-a));
-  border-radius: max(0px, calc(var(--vt-studio-control-radius) - var(--vt-studio-control-stroke)));
-  pointer-events: none;
-  z-index: 1;
 }
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
   outline: none !important;
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 15%, transparent);
+  background-color: color-mix(in srgb, var(--vt-split-field-primary) 15%, transparent) !important;
 }
-html body .vt-studio-split-text-input:focus-within {
-  outline: calc(var(--vt-studio-control-stroke) * .65) solid var(--vt-studio-control-secondary, var(--pair-b));
-  outline-offset: 0;
+html body .vt-studio-split-text-input:focus-within > [data-vt-studio-control="true"] {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0 !important;
 }
-html body .vt-studio-split-text-input:focus-within > [data-vt-studio-control="true"] { outline: none; }
-/* Placement-only library rules; examples occupy their complete available row. */
-.vt-confirmed-catalog .vt-confirmed-variants:has(.vt-studio-split-text-input) { display: grid; grid-template-columns: minmax(0, 1fr); }
-.vt-confirmed-catalog .vt-confirmed-variant:has(.vt-studio-split-text-input) { width: 100%; min-width: 0; grid-column: 1 / -1; }
