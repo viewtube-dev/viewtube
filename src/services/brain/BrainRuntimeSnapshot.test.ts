@@ -168,6 +168,9 @@ describe("readBrainRuntimeSnapshot", () => {
       claims: { fabricated: [], unverifiedDerived: [] },
       promptVersions: { constitution: "asset-constitution-v1", title: "title-v1" },
       model: { capability: "text", requested: "gemini-2.5-pro", served: "gemini-2.5-pro", substituted: false, reason: "honoured" },
+      modelRequested: "gemini-requested",
+      modelServed: "gemini-provider-served-version",
+      modelIdentityStatus: "served_known",
       grades: { grounding: 100, styleFidelity: 94 },
       repairAttempts: 0,
       outputRef: "generation-record-1",
@@ -229,7 +232,7 @@ describe("readBrainRuntimeSnapshot", () => {
     evidenceReturned: 1,
     evidenceMissing: 0,
     latencyMs: 2000,
-    modelServed: "gemini-2.5-pro",
+    modelServed: "gemini-provider-served-version",
     gradeAverage: 97,
    },
   })

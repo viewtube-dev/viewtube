@@ -1737,6 +1737,7 @@ export interface StructuredBrainModelOutput {
  }>
  actions: string[]
  question?: string
+ modelIdentity?: { provider: "google-genai"; requestedModel: string; servedModel: string | null }
 }
 
 export const generateStructuredBrainResponse = async (input: {
@@ -1745,8 +1746,9 @@ export const generateStructuredBrainResponse = async (input: {
  systemInstruction: string
 }): Promise<StructuredBrainModelOutput> => {
  const ai = getAiClient()
+ const requestedModel = getActiveModel("text")
  const response = await ai.models.generateContent({
-  model: getActiveModel("text"),
+  model: requestedModel,
   contents: [
    ...input.history.slice(-8),
    { role: "user", parts: [{ text: input.userText }] },
@@ -1832,6 +1834,11 @@ export const generateStructuredBrainResponse = async (input: {
  })
  if (!response.text) throw new Error("The Brain model returned an empty response")
  const parsed = JSON.parse(cleanJsonString(response.text)) as StructuredBrainModelOutput
+ parsed.modelIdentity = {
+  provider: "google-genai",
+  requestedModel,
+  servedModel: typeof response.modelVersion === "string" && response.modelVersion.trim() ? response.modelVersion : null,
+ }
  parsed.modules = (parsed.modules || []).slice(0, 4)
  parsed.actions = (parsed.actions || []).slice(0, 4)
  return parsed

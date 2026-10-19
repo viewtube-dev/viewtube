@@ -152,6 +152,20 @@ describe("beginBrainTrace", () => {
   expect(finished.channelId).toBeNull()
  })
 
+
+ it("records requested-versus-served model identity without claiming an unknown served model", () => {
+  const trace = beginBrainTrace({ kind: "question", channelId: "channel-1" })
+  trace.recordModelIdentity({
+   requested: "gemini-requested",
+   served: null,
+   status: "requested_known_served_not_exposed",
+  })
+  const finished = trace.complete()
+  expect(finished.modelRequested).toBe("gemini-requested")
+  expect(finished.modelServed).toBeNull()
+  expect(finished.modelIdentityStatus).toBe("requested_known_served_not_exposed")
+ })
+
  it("gives every trace a distinct id", () => {
   const ids = new Set(
    Array.from({ length: 25 }, () => beginBrainTrace({ kind: "question" }).id),

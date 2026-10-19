@@ -33,6 +33,7 @@ import {
 } from "../gemini"
 import { defaultBrainModelGateway, type BrainModelGateway } from "./runtime/BrainModelGateway"
 import { buildBrainContextPack } from "./BrainContextBroker"
+import { beginBrainTrace } from "./BrainTrace"
 import {
  inferBrainIntent,
  selectBrainCapabilities,
@@ -343,8 +344,9 @@ export const buildEvidenceProvenanceChips = (evidence: EvidenceIntelligenceEnvel
 export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> => {
  const taskProfile = resolveBrainTaskProfile(input.userText)
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
- const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
- const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
+ let requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
+ let servedModel: string | null = null
+ let modelIdentityStatus: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable" | "model_disabled" = input.allowModel === false ? "model_disabled" : requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const pending = input.retryTurnId
   ? await retryAIBrainTurn(input.retryTurnId)
   : await beginAIBrainTurn({
@@ -354,7 +356,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
-    servedModel: null,
+    servedModel,
     modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     evidenceRequestSpec: input.snapshot.evidencePack.requestSpec,
@@ -519,6 +521,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   algorithmIntelligence,
   creatorContext,
  })
+ const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null })
+ questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
+ questionTrace.recordCapabilities(capabilityIds)
+ questionTrace.recordModelIdentity({
+  requested: requestedModel,
+  served: null,
+  status: modelIdentityStatus,
+ })
+ questionTrace.recordPromptVersion("orchestrator", BRAIN_PROMPT_VERSION)
+ questionTrace.recordPromptVersion("contextResolver", BRAIN_CONTEXT_RESOLVER_VERSION)
+ questionTrace.recordPromptVersion("outputSchema", BRAIN_OUTPUT_SCHEMA_VERSION)
+ let renderedEvidenceRecords = [] as typeof promptEvidenceRecords
  try {
   if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
@@ -570,6 +584,19 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    algorithmIntelligence,
    creatorContext,
   })
+  renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
+   context.systemInstruction.includes(record.id),
+  )
+  questionTrace.recordEvidence({
+   returned: renderedEvidenceRecords.map((record) => record.id),
+   missing: [],
+   records: renderedEvidenceRecords,
+  })
+  questionTrace.recordContext({
+   tokensEstimated: context.budget.estimatedInputTokens,
+   sectionsIncluded: ["system_instruction", ...(renderedEvidenceRecords.length ? ["analytics_evidence_records"] : [])],
+   sectionsDropped: [...context.budget.omittedSections],
+  })
 
   let response = buildFallback(input.userText, input.snapshot, input.growthContext)
   let status: "complete" | "fallback" = "fallback"
@@ -582,6 +609,12 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     userText: input.userText,
     systemInstruction: context.systemInstruction,
    }), BRAIN_MODEL_TIMEOUT_MS)
+   if (output.modelIdentity) {
+    requestedModel = output.modelIdentity.requestedModel
+    servedModel = output.modelIdentity.servedModel
+    modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
+    questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
+   }
    response = fromStructuredOutput(output, input.snapshot)
    response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
    status = "complete"
@@ -612,6 +645,12 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
       "- Differ materially from recent responses in both wording and recommended action.",
      ].join("\n"),
     }), BRAIN_REPAIR_TIMEOUT_MS)
+    if (repairedOutput.modelIdentity) {
+     requestedModel = repairedOutput.modelIdentity.requestedModel
+     servedModel = repairedOutput.modelIdentity.servedModel
+     modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
+     questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
+    }
     const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot)
     const repairedCandidate = {
      ...repairedResponse,
@@ -652,7 +691,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   }
   response = {
    ...response,
-   evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 20),
+   evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 20),
    evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
@@ -678,7 +717,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -689,6 +728,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repairSucceeded: repairOutcome.succeeded,
    },
   })
+  if (repairOutcome.attempted) questionTrace.recordRepairAttempt()
+  questionTrace.recordGrade("response_validation", evaluation.passed ? 100 : 0)
   const turn = await completeAIBrainTurn({
    turnId: pending.id,
    status,
@@ -709,10 +750,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
-    evidenceRecords: promptEvidenceRecords,
+    evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceRecords: renderedEvidenceRecords,
     evidenceRecordQuality,
-    promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
+    promptEvidenceRecordIds: renderedEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -725,6 +766,14 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repaired: repairOutcome.attempted,
    },
   })
+  try {
+   questionTrace.complete({
+    status: status === "complete" ? "complete" : "fallback",
+    outputRef: response.id,
+   })
+  } catch {
+   // Trace persistence must never fail an otherwise completed creator turn.
+  }
   return {
    turn,
    response,
@@ -743,12 +792,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   const fallbackResponse = buildFallback(input.userText, input.snapshot, input.growthContext)
   const response = {
    ...fallbackResponse,
-   evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 20),
+   evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 20),
    evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
    generationPath,
    fallbackReason,
   }
   const evaluation = validateBrainResponse({ response, snapshot: input.snapshot, recentTurns: input.recentTurns, growthContext: input.growthContext, expectedMode: taskProfile.answerMode })
+  try {
+   questionTrace.recordGrade("response_validation", evaluation.passed ? 100 : 0)
+   questionTrace.complete({ status: "fallback", outputRef: response.id, failureReason: error instanceof Error ? error.message : String(error) })
+  } catch {
+   // Trace persistence must never mask the fallback response.
+  }
   const learning = await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
    source: "copilot",
@@ -770,7 +825,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -801,10 +856,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
-    evidenceRecords: promptEvidenceRecords,
+    evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceRecords: renderedEvidenceRecords,
     evidenceRecordQuality,
-    promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
+    promptEvidenceRecordIds: renderedEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,

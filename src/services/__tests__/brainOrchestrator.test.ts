@@ -5,6 +5,7 @@ import { getVtSyncSnapshot } from "../../features/vt-sync-local"
 import { buildAIBrainContextSnapshot } from "../aiBrainCommandInterface"
 import { buildCreatorGrowthContext, resumeAIBrainThread } from "../aiBrainConversationStore"
 import { listAIBrainLearningEntries } from "../aiBrainSelfImprovement"
+import { resetBrainTraceSink, setBrainTraceSink, type BrainTrace } from "../brain/BrainTrace"
 import type { StructuredBrainModelOutput } from "../gemini"
 import {
  BRAIN_MODEL_TIMEOUT_MS,
@@ -87,6 +88,75 @@ describe("BrainOrchestrator", () => {
   expect(restored.turns.at(-1)?.id).toBe(result.turn.id)
  })
 
+
+
+ it("records the exact prompt evidence and explicit model-identity limits in a question trace", async () => {
+  const traces: BrainTrace[] = []
+  setBrainTraceSink({ write: (trace) => traces.push(trace), list: () => traces })
+  try {
+   const snapshot = makeSnapshot()
+   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+   const result = await runBrainTurn({
+    channelId: "trace-channel",
+    userText: "What should I make next?",
+    snapshot,
+    growthContext,
+    systemPrompt: "Use the supplied channel evidence.",
+    allowModel: false,
+   })
+   const trace = traces.at(-1)
+   expect(trace).toMatchObject({
+    kind: "question",
+    channelId: "trace-channel",
+    status: "fallback",
+    outputRef: result.response.id,
+    modelServed: null,
+    modelIdentityStatus: "model_disabled",
+   })
+   expect(trace?.evidence.returned).toEqual(result.response.evidenceIds)
+   expect(trace?.evidence.records).toBeDefined()
+   expect(trace?.promptVersions).toMatchObject({
+    orchestrator: "brain-orchestrator-v2",
+    contextResolver: expect.any(String),
+    outputSchema: "structured-brain-output-v1",
+   })
+  } finally {
+   resetBrainTraceSink()
+  }
+ })
+
+
+ it("records the provider-reported served model when the gateway exposes it", async () => {
+  const snapshot = makeSnapshot()
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const result = await runBrainTurn({
+   channelId: "served-model-channel",
+   userText: "What should my next video be?",
+   snapshot,
+   growthContext,
+   systemPrompt: "Use the supplied channel evidence.",
+   allowModel: true,
+   nicheResolver: vi.fn(async () => nicheProfile),
+   modelGenerator: vi.fn(async () => ({
+    headline: "Build the artillery follow-up",
+    keyInsight: "Alder's Cavalry Explained proves that specific military systems are your strongest viewer promise.",
+    body: "Create an artillery follow-up that keeps the same explanatory structure and makes the contrast visible in the title and thumbnail.",
+    mode: "video_idea_sprint",
+    modules: [],
+    actions: [],
+    modelIdentity: {
+     provider: "google-genai",
+     requestedModel: "gemini-requested",
+     servedModel: "gemini-served-version",
+    },
+   } as StructuredBrainModelOutput)),
+  })
+  expect(result.turn.metadata).toMatchObject({
+   requestedModel: "gemini-requested",
+   servedModel: "gemini-served-version",
+   modelIdentityStatus: "served_known",
+  })
+ })
 
  it("preserves the exact prompt in the captured learning event", async () => {
   const snapshot = makeSnapshot()
