@@ -3376,9 +3376,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   color: #000;
   --vt-studio-number-background: var(--pair-a);
 }
-.vt-studio-counter { --vt-studio-counter-width: 176px; }
-.vt-studio-side-counter { --vt-studio-counter-width: 132px; }
-.vt-studio-left-counter { --vt-studio-counter-width: 132px; }
+.vt-studio-counter { --vt-studio-counter-width: 176px; --vt-studio-number-background: var(--pair-a); }
+.vt-studio-side-counter { --vt-studio-counter-width: 132px; --vt-studio-number-background: var(--pair-a); }
+.vt-studio-left-counter { --vt-studio-counter-width: 132px; --vt-studio-number-background: var(--pair-a); }
 .vt-studio-counter[data-vt-studio-split="double"] {
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
 }
@@ -3545,8 +3545,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter.is-reversed .vt-studio-side-counter__rail { background: var(--pair-a); }
 .vt-studio-counter.is-reversed .vt-studio-counter__button,
 .vt-studio-side-counter.is-reversed .vt-studio-side-counter__actions button { background: var(--pair-a); color: #000; }
-.vt-studio-counter.is-reversed .vt-studio-counter__value,
-.vt-studio-side-counter.is-reversed .vt-studio-side-counter__value { background: var(--pair-b); color: #000; }
+ .vt-studio-counter.is-reversed .vt-studio-counter__value,
+.vt-studio-side-counter.is-reversed .vt-studio-side-counter__value,
+.vt-studio-left-counter.is-reversed .vt-studio-side-counter__value { background: var(--pair-b); color: #000; }
 .vt-studio-counter.is-reversed .vt-studio-counter__rail[data-rail="start"],
 .vt-studio-counter.is-reversed .vt-studio-counter__rail[data-rail="end"],
 .vt-studio-side-counter.is-reversed .vt-studio-side-counter__rail[data-rail="end"] { border-color: #000; }
@@ -3870,6 +3871,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 /* Left-action side counter shares the same action/value anatomy and palette rules. */
 .vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-left-counter.is-reversed { background: var(--pair-b); }
+.vt-studio-left-counter.is-reversed { --vt-studio-number-background: var(--pair-b); }
 .vt-studio-left-counter.is-reversed .vt-studio-side-counter__value { background: var(--pair-b); }
 .vt-studio-left-counter.is-reversed .vt-studio-side-counter__actions,
 .vt-studio-left-counter.is-reversed .vt-studio-side-counter__actions button { background: var(--pair-a); }
