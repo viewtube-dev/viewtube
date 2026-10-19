@@ -22,6 +22,7 @@ export const BrainEvidenceDrawer: React.FC<{
  confidence?: "low" | "medium" | "high" | number | null
  inference?: boolean
  caveats?: string[]
+ evidenceChips?: string[]
  sourceRoute?: string | null
  sourceLabel?: string
 }> = ({
@@ -32,6 +33,7 @@ export const BrainEvidenceDrawer: React.FC<{
  confidence = null,
  inference = true,
  caveats = [],
+ evidenceChips = [],
  sourceRoute = "/analytics",
  sourceLabel = "Open source in Analytics",
 }) => {
@@ -40,7 +42,8 @@ export const BrainEvidenceDrawer: React.FC<{
  const trafficSources = evidencePack.trafficSources.slice(0, 4)
  const missing = evidencePack.missingInputs.slice(0, 4)
  const sourceCount = topVideos.length + searchTerms.length + trafficSources.length
- const hasAnything = sourceCount || missing.length || caveats.length
+ const provenanceCount = evidenceChips.length
+ const hasAnything = sourceCount || missing.length || caveats.length || provenanceCount
  if (!hasAnything) return null
 
  const confidenceText = typeof confidence === "number"
@@ -66,6 +69,7 @@ export const BrainEvidenceDrawer: React.FC<{
      <span className="flex flex-wrap items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.08em]">
       <span>{summaryLabel}</span>
       {sourceCount ? <span className="rounded-full border-[1.5px] border-black bg-[#36E0F6] px-1.5 py-0.5">{sourceCount} sources</span> : null}
+      {provenanceCount ? <span className="rounded-full border-[1.5px] border-black bg-[#FFDA47] px-1.5 py-0.5">{provenanceCount} provenance notes</span> : null}
       {confidenceText ? <span className="rounded-full border-[1.5px] border-black bg-[#C0F240] px-1.5 py-0.5">{confidenceText}</span> : null}
       <span className="rounded-full border-[1.5px] border-black bg-[#FFDA47] px-1.5 py-0.5">{inference ? "inference" : "measured"}</span>
      </span>
@@ -83,6 +87,17 @@ export const BrainEvidenceDrawer: React.FC<{
       ? "Brain combined the evidence below to reach this conclusion. It is an interpretation, not a directly measured fact."
       : "This statement is directly represented by the channel evidence below."}
     </p>
+
+    {evidenceChips.length ? (
+     <section className="rounded-[8px] border-[2px] border-black bg-[#36E0F6]/15 p-2">
+      <h4 className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">Evidence provenance</h4>
+      <ul className="mt-1 grid gap-1">
+       {evidenceChips.slice(0, 8).map((chip, index) => (
+        <li key={`${index}:${chip}`} className="text-[10px] font-bold leading-4 text-black/70">{chip}</li>
+       ))}
+      </ul>
+     </section>
+    ) : null}
 
     {topVideos.length ? (
      <section>
