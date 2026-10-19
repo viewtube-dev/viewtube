@@ -66,6 +66,7 @@ test("field focus outline width follows the selected field border width", () => 
   assert.match(studioCss, /font-size:\s*var\(--vt-studio-standard-font-size, 38px\)/);
   assert.match(studioCss, /font-size:\s*var\(--vt-studio-compact-font-size, 24px\)/);
   assert.match(studioCss, /font-size:\s*var\(--vt-studio-micro-font-size, 10px\)/);
+  assert.match(studioCss, /\.vt-studio-floating-field > :is\(input, textarea\):focus \+ \.vt-studio-floating-field-label,[\s\S]*?font-size:\s*18px/);
 });
 
 test("StudioTextBox uses a half-width black border, matching inline and secondary strokes, and no shadow", () => {
