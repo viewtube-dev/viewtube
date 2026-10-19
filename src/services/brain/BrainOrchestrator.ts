@@ -20,6 +20,7 @@ import {
 } from "../aiBrainCommandInterface"
 import {
  beginAIBrainTurn,
+ retryAIBrainTurn,
  completeAIBrainTurn,
  formatCreatorGrowthModules,
  sanitizeCreatorFacingBrainCopy,
@@ -290,6 +291,8 @@ export const BRAIN_OUTPUT_SCHEMA_VERSION = "structured-brain-output-v1"
 export interface RunBrainTurnInput {
  channelId?: string | null
  userText: string
+ retryTurnId?: string
+ retryGenerationOnly?: boolean
  snapshot: AIBrainContextSnapshot
  systemPrompt: string
  growthContext: CreatorGrowthContext
@@ -340,16 +343,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
  const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
- const pending = await beginAIBrainTurn({
-  channelId: input.channelId,
-  userText: input.userText,
-  metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION,
+ const pending = input.retryTurnId
+  ? await retryAIBrainTurn(input.retryTurnId)
+  : await beginAIBrainTurn({
+   channelId: input.channelId,
+   userText: input.userText,
+   metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     evidenceRequestSpec: input.snapshot.evidencePack.requestSpec,
     evidencePackSnapshot: input.snapshot.evidencePack,
     dataReadinessSnapshot: {
@@ -369,7 +374,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     taskProfileId: taskProfile.id },
- })
+  })
  const capabilities = selectBrainCapabilities({ channelId: input.channelId, userText: input.userText, snapshot: input.snapshot })
  const capabilityIds = capabilities.map((capability) => capability.id)
  const brainIntent = inferBrainIntent(input.userText)
@@ -458,7 +463,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   creatorContext,
  })
  try {
-  if (capabilities.some((capability) => capability.id === "niche-knowledge")) {
+  if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
     channelId: input.channelId,
     niche: input.snapshot.inferredProfile.niche,
@@ -474,7 +479,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     accessedAt: source.accessedAt,
    })))
   }
-  if (input.allowModel && nicheKnowledge?.canonicalNiche && shouldUseCurrentGrounding(input.userText)) {
+  if (!input.retryGenerationOnly && input.allowModel && nicheKnowledge?.canonicalNiche && shouldUseCurrentGrounding(input.userText)) {
    const grounded = readCachedCurrentNicheResearch(nicheKnowledge) || await (input.currentResearcher || groundCurrentNicheResearch)({
      canonicalNiche: nicheKnowledge.canonicalNiche,
      publicQuestion: input.userText,
@@ -595,7 +600,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
   }
-  const learning = await captureAIBrainLearningEvent({
+  const learning = input.retryGenerationOnly ? null : await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
    source: "copilot",
    summary: `Copilot conversation: ${input.userText}`,
@@ -635,7 +640,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    answerModules: response.modules,
    citations,
    evaluation,
-   learningEntryIds: [learning.id],
+   learningEntryIds: learning ? [learning.id] : [],
    metadata: {
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
