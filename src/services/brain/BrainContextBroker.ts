@@ -16,7 +16,7 @@ import { buildAlgorithmIntelligenceContext, type AlgorithmIntelligencePortfolio 
 import { resolveBrainContextSections } from "./BrainContextResolution"
 import type { BrainEvidenceClaim, BrainEvidenceHealth } from "./BrainEvidenceContract"
 import { formatEvidenceRecordForPrompt, type EvidenceRecord } from "./EvidenceRecord"
-import { isBrainEvidenceRecordQualityInSync, type BrainEvidenceRecordQualityReport } from "./BrainEvidenceQuality"
+import { fingerprintBrainEvidenceRecords, isBrainEvidenceRecordQualityInSync, type BrainEvidenceRecordQualityReport } from "./BrainEvidenceQuality"
 
 const clip = (value: string, maximum: number): string => value.slice(0, Math.max(0, maximum))
 
@@ -116,7 +116,7 @@ export const buildBrainContextPack = (input: {
  )
  const evidenceRecordQuality = controls.allowAnalytics && input.evidenceRecordQuality
   ? clip([
-    `parity=${evidenceRecordQualityInSync ? "verified" : "MISMATCH"}; gradedFingerprint=${input.evidenceRecordQuality.evidenceFingerprint}; promptFingerprint=${isBrainEvidenceRecordQualityInSync(input.evidenceRecords || [], input.evidenceRecordQuality) ? input.evidenceRecordQuality.evidenceFingerprint : "different"}`,
+    `parity=${evidenceRecordQualityInSync ? "verified" : "MISMATCH"}; gradedFingerprint=${input.evidenceRecordQuality.evidenceFingerprint}; promptFingerprint=${fingerprintBrainEvidenceRecords(input.evidenceRecords || [])}`,
     `recordGrade=${input.evidenceRecordQuality.confidence}; scope=${input.evidenceRecordQuality.scopeMatch}; records=${input.evidenceRecordQuality.totalRecords}; numeric=${input.evidenceRecordQuality.numericRecords}; observed=${input.evidenceRecordQuality.observedRecords}; stale=${input.evidenceRecordQuality.staleRecords}; missing=${input.evidenceRecordQuality.missingRecords}`,
     `gradedRecordIds=${input.evidenceRecordQuality.evidenceRecordIds.join(",") || "none"}`,
     ...(!evidenceRecordQualityInSync ? ["PARITY FAILURE: the quality report does not describe the exact records currently supplied for prompt rendering. Do not make analytics claims from this grade; treat the grade as invalid."] : []),
