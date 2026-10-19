@@ -1,0 +1,39 @@
+/* Non-editable counterpart to StudioTextArea. Geometry and type consume the
+   same global Studio tokens; the only text-specific override is 0.75 line-height. */
+.vt-studio-text-box[data-vt-studio-text-box="true"] {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: var(--vt-studio-textarea-min-height, 92px);
+  margin: 0;
+  padding: var(--vt-studio-field-padding-block, var(--vt-studio-control-padding-block, 4px))
+    var(--vt-studio-field-padding-inline, var(--vt-studio-control-padding-inline, 4px));
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-control-background, transparent);
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--vt-studio-textarea-standard-font-size, var(--vt-studio-44-font-size, 38px));
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  line-height: 0.75;
+  text-transform: var(--vt-studio-control-text-transform, uppercase);
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+  cursor: text;
+}
+.vt-studio-text-box[data-size="compact"] {
+  border-width: var(--vt-studio-28-stroke, 2px);
+  border-radius: var(--vt-studio-28-radius, 4px);
+  font-size: var(--vt-studio-textarea-compact-font-size, var(--vt-studio-28-font-size, 24px));
+}
+.vt-studio-text-box[data-size="micro"] {
+  border-width: var(--vt-studio-14-stroke, 1px);
+  border-radius: var(--vt-studio-14-radius, 2px);
+  font-size: var(--vt-studio-textarea-micro-font-size, var(--vt-studio-14-font-size, 12px));
+  padding: var(--vt-studio-14-padding-block, 2px) var(--vt-studio-14-padding-inline, 2px);
+  min-height: 0;
+}
