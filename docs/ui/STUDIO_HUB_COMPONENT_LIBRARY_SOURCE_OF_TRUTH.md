@@ -385,3 +385,18 @@ For each family, display the production source paths, standard and compact sizes
 - It inherits the Studio standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 44px / 28px / 14px.
 - The confirmed primitive catalog demonstrates four live variants with independent state: primary/secondary, black fill, primary fill with white handle, and white fill with black handle. Word color updates at animation start; the handle uses vertical expansion/release and color-wipe motion and honors reduced-motion preferences.
 - Gallery geometry is standard 2-up, compact 3-up, and micro 2×2 at the end of compact row two. Source-level tests cover the exported primitive, variant attributes, size tiers, and registered exception. Browser visual certification is still required before claiming pixel-perfect behavior.
+
+
+## Brain status indicator — LED 64 + Badge 45 composition
+
+**Primitive:** `StudioBrainStatusIndicator` in `src/studio-ui/primitives/StudioControls.tsx`  
+**Styles:** `src/styles/studio-control-system.css`  
+**Showcase:** `src/components/brain/BrainStatusIndicatorShowcase.tsx`  
+**Source test:** `src/studio-ui/primitives/StudioBrainStatusIndicator.test.tsx`
+
+- Combines the LED-light visual language (component-library item 64) with the borderless badge language (item 45).
+- Rectangular badge geometry: standard 44px, compact 28px, micro 14px; 6px/4px/2px corner radius by tier; no pill shape.
+- The LED is saturated with colored glow and two staggered expanding ripple rings. A centered 1px black outline lens is 65% of LED diameter, with a 60%-opacity white fill so the LED color shines through.
+- Variants: dark fill with white uppercase text; status-tinted fill with black uppercase text. States: running, success, warning, error, info, paused, idle, queued, processing, complete, blocked, failed.
+- Pulse is configurable and disables animation under `prefers-reduced-motion: reduce`. Status text remains present so color/motion is never the only status signal.
+- Browser visual certification and contrast checks remain required before declaring the specimen visually certified.
