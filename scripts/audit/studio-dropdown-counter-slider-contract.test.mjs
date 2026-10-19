@@ -41,6 +41,8 @@ test("side counter divider is a centered overlay and does not consume either act
 test("counter and slider readouts share default mix and black active numeral tokens", () => {
   assert.match(tokens, /STUDIO_COUNTER_NUMBER_TOKENS/)
   assert.match(css, /--vt-studio-number-default-white-mix:\s*50%/)
+  assert.match(css, /\.vt-studio-counter \{[^}]*--vt-studio-number-background:\s*var\(--pair-a\)/)
+  assert.match(css, /\.vt-studio-left-counter\.is-reversed \{[^}]*--vt-studio-number-background:\s*var\(--pair-b\)/)
   assert.match(css, /\.vt-studio-double-split-slider \.vt-studio-double-split-slider__value\s*\{[^}]*color-mix\(in srgb, #fff var\(--vt-studio-number-default-white-mix, 50%\), var\(--vt-studio-number-background\)\)/s)
   assert.match(css, /\.vt-studio-double-split-slider:has\(input\[type="range"\]:is\(:active, :focus\)\) \.vt-studio-double-split-slider__value\s*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke, #000\)/s)
   assert.match(css, /\.vt-studio-left-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke, #000\)/)
