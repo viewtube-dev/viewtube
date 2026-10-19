@@ -158,11 +158,11 @@ export interface BrainPromptRunReceipt {
  channelId: string
  projectId: string | null
  /** Canonical operation and workflow identities shared with BrainTrace. */
- operationId: string | null
- workflowId: string | null
+ operationId?: string | null
+ workflowId?: string | null
  /** ContentBuild identity and captured revision, when generation is lifecycle-bound. */
- contentBuildId: string | null
- contextRevision: number | null
+ contentBuildId?: string | null
+ contextRevision?: number | null
  promptFamily: BrainPromptFamily
  promptVersion: string
  constitutionVersion: string
@@ -198,10 +198,10 @@ export const validateBrainPromptRunReceipt = (receipt: BrainPromptRunReceipt): s
  if (!receipt.traceId.trim()) issues.push("traceId is required")
  if (!receipt.outputId.trim()) issues.push("outputId is required")
  if (!receipt.channelId.trim()) issues.push("channelId is required")
- if (receipt.operationId !== null && !receipt.operationId.trim()) issues.push("operationId must be null or non-empty")
- if (receipt.workflowId !== null && !receipt.workflowId.trim()) issues.push("workflowId must be null or non-empty")
- if (receipt.contentBuildId !== null && !receipt.contentBuildId.trim()) issues.push("contentBuildId must be null or non-empty")
- if (receipt.contextRevision !== null && (!Number.isInteger(receipt.contextRevision) || receipt.contextRevision < 0)) issues.push("contextRevision must be null or a non-negative integer")
+ if (receipt.operationId != null && !receipt.operationId.trim()) issues.push("operationId must be null or non-empty")
+ if (receipt.workflowId != null && !receipt.workflowId.trim()) issues.push("workflowId must be null or non-empty")
+ if (receipt.contentBuildId != null && !receipt.contentBuildId.trim()) issues.push("contentBuildId must be null or non-empty")
+ if (receipt.contextRevision != null && (!Number.isInteger(receipt.contextRevision) || receipt.contextRevision < 0)) issues.push("contextRevision must be null or a non-negative integer")
  if (!BRAIN_PROMPT_FAMILIES[receipt.promptFamily]) issues.push("promptFamily is not registered")
  if (!receipt.promptVersion.trim()) issues.push("promptVersion is required")
  if (!receipt.constitutionVersion.trim()) issues.push("constitutionVersion is required")
