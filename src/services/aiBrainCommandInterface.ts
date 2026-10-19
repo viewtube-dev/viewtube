@@ -5,6 +5,7 @@ import type {
  AIBrainEvidenceSignal,
  AIBrainEvidenceItem,
  AIBrainEvidenceVideo,
+ EvidenceRequestSpec,
  AIBrainAnswerModule,
  BrainMemorySchema,
  BrainOnboardingBootstrapRun,
@@ -586,6 +587,126 @@ const optionalVideoMetric = (
  return typeof value === "number" && Number.isFinite(value) ? value : null
 }
 
+const dateOnly = (date: Date): string => date.toISOString().slice(0, 10)
+
+const subtractPeriod = (date: Date, amount: number, unit: string): Date => {
+ const result = new Date(date)
+ if (unit.startsWith("day")) result.setUTCDate(result.getUTCDate() - amount)
+ else if (unit.startsWith("week")) result.setUTCDate(result.getUTCDate() - amount * 7)
+ else if (unit.startsWith("month")) result.setUTCMonth(result.getUTCMonth() - amount)
+ else if (unit.startsWith("year")) result.setUTCFullYear(result.getUTCFullYear() - amount)
+ return result
+}
+
+export const parseEvidenceRequestSpec = (
+ requestText: string,
+ referenceDate = new Date(),
+): EvidenceRequestSpec => {
+ const text = cleanProfileText(requestText).toLowerCase()
+ const anchor = Number.isNaN(referenceDate.getTime()) ? new Date() : new Date(referenceDate)
+ const anchorDate = dateOnly(anchor)
+ const countMatch = text.match(/\b(?:top|best|latest|recent|last|show|find|give me|compare|analyze|analyse)\s+(\d{1,2})\b/)
+  || text.match(/\b(\d{1,2})\s+(?:long[- ]form|short[- ]form|shorts?|videos?)\b/)
+ const count = countMatch ? Math.max(1, Math.min(25, Number(countMatch[1]))) : null
+ const formats: EvidenceRequestSpec["formats"] = []
+ if (/\bshorts?\b|\bshort[- ]form\b/.test(text)) formats.push("short")
+ if (/\blong[- ]form\b|\blongform\b/.test(text)) formats.push("long")
+ if (/\blive streams?\b|\blive videos?\b|\blivestreams?\b/.test(text)) formats.push("live")
+
+ let since: string | null = null
+ let until: string | null = null
+ const explicitSince = text.match(/\b(?:since|after|from)\s+(\d{4}-\d{2}-\d{2})\b/)
+ const explicitUntil = text.match(/\b(?:until|before|through)\s+(\d{4}-\d{2}-\d{2})\b/)
+ const calendarYear = text.match(/\b(?:in|during|from)\s+(20\d{2})\b/)
+ const relativeRange = text.match(/\b(?:past|last|previous)\s+(\d{1,2})\s+(days?|weeks?|months?|years?)\b/)
+ const relativeSingle = text.match(/\b(?:past|last|previous)\s+(year|month|week)\b/)
+ if (explicitSince) since = explicitSince[1]
+ if (explicitUntil) until = explicitUntil[1]
+ if (calendarYear && !explicitSince && !explicitUntil) {
+  since = calendarYear[1] + "-01-01"
+  until = calendarYear[1] + "-12-31"
+ } else if (relativeRange) {
+  since = dateOnly(subtractPeriod(anchor, Number(relativeRange[1]), relativeRange[2]))
+  until = anchorDate
+ } else if (relativeSingle && !explicitSince && !explicitUntil) {
+  const unit = relativeSingle[1] === "year" ? "years" : relativeSingle[1] === "month" ? "months" : "weeks"
+  since = dateOnly(subtractPeriod(anchor, 1, unit))
+  until = anchorDate
+ }
+
+ const rankingCue = /\b(top|best|highest|lowest|most|least|rank(?:ed)?|sort(?:ed)?|by)\b/.test(text)
+ let rankBy: EvidenceRequestSpec["rankBy"] = "performance"
+ if (rankingCue && /\b(watch time|watch hours?|hours watched)\b/.test(text)) rankBy = "watchTime"
+ else if (rankingCue && /\b(revenue|earnings|income)\b/.test(text)) rankBy = "revenue"
+ else if (rankingCue && /\b(subscribers?|subs gained)\b/.test(text)) rankBy = "subscribers"
+ else if (rankingCue && /\b(ctr|click[- ]through rate)\b/.test(text)) rankBy = "ctr"
+ else if (rankingCue && /\b(retention|average percentage viewed|percentage viewed)\b/.test(text)) rankBy = "retention"
+ else if (rankingCue && /\b(views?|view count|most viewed)\b/.test(text)) rankBy = "views"
+
+ const recentCue = /\b(recent|latest|newest|most recent|last uploads?)\b/.test(text)
+ const explicitMetricRanking = rankBy !== "performance"
+ const hasTopCue = /\b(top|best|highest|lowest|rank(?:ed)?|sort(?:ed)?)\b/.test(text)
+ const selectionMode: EvidenceRequestSpec["selectionMode"] = recentCue && !explicitMetricRanking
+  ? "recent"
+  : hasTopCue || count !== null
+   ? "top"
+   : "both"
+ if (selectionMode === "recent" && rankBy === "performance") rankBy = "publishedAt"
+
+ const topicMatch = text.match(/\b(?:about|on)\s+(.+?)(?=\s+\b(?:from|in|over|during|past|last|ranked|sorted|by|with|published|after|before)\b|[?.!]|$)/i)
+ const filters = topicMatch ? [topicMatch[1].trim()].filter(Boolean) : []
+
+ return { count, formats, since, until, rankBy, filters, selectionMode }
+}
+
+const normalizedEvidenceVideoFormat = (video: VtSyncVideoItem): "short" | "long" | "live" | null => {
+ const format = cleanProfileText(video.format).toLowerCase()
+ if (/\bshorts?\b|short[- ]form/.test(format)) return "short"
+ if (/\blong[- ]form\b|\blongform\b|^long$/.test(format)) return "long"
+ if (/\blive\b|livestream/.test(format)) return "live"
+ return null
+}
+
+const videoMatchesEvidenceRequest = (video: VtSyncVideoItem, spec: EvidenceRequestSpec): boolean => {
+ if (spec.formats.length) {
+  const format = normalizedEvidenceVideoFormat(video)
+  if (!format || !spec.formats.includes(format)) return false
+ }
+ if (spec.since || spec.until) {
+  const publishedAt = cleanProfileText(video.publishedAt).slice(0, 10)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(publishedAt)) return false
+  if (spec.since && publishedAt < spec.since) return false
+  if (spec.until && publishedAt > spec.until) return false
+ }
+ if (spec.filters.length) {
+  const searchable = [
+   video.title,
+   video.category,
+   video.descriptionSnippet,
+   ...(video.tags || []),
+   ...(video.topics || []),
+  ].map(cleanProfileText).join(" ").toLowerCase()
+  if (!spec.filters.every((term) => searchable.includes(term))) return false
+ }
+ return true
+}
+
+const evidenceVideoRankValue = (
+ video: VtSyncVideoItem,
+ rankBy: EvidenceRequestSpec["rankBy"],
+): number => {
+ if (rankBy === "publishedAt") {
+  const timestamp = Date.parse(video.publishedAt || "")
+  return Number.isFinite(timestamp) ? timestamp : -1
+ }
+ if (rankBy === "performance") return profileVideoScore(video)
+ const metricKey = rankBy === "watchTime" ? "watchTime"
+  : rankBy === "subscribers" ? "subscribersGained"
+   : rankBy === "retention" ? "averagePercentageViewed"
+    : rankBy
+ return optionalVideoMetric(video, metricKey as keyof NonNullable<VtSyncVideoItem["metrics"]>) ?? -1
+}
+
 const evidenceVideo = (video: VtSyncVideoItem): AIBrainEvidenceVideo => ({
  id: video.id,
  evidenceId: `video:${video.id}`,
@@ -632,13 +753,16 @@ export const buildAIBrainEvidencePack = (
  snapshot = applyVtSyncPrivacyFilters(snapshot)
  const intent = evidenceIntentForText(requestText)
  const videos = snapshot.videos || []
- const topVideos = [...videos]
-  .sort((left, right) => profileVideoScore(right) - profileVideoScore(left))
-  .slice(0, 5)
+ const requestSpec = parseEvidenceRequestSpec(requestText, new Date(snapshot.capturedAt || Date.now()))
+ const matchingVideos = videos.filter((video) => videoMatchesEvidenceRequest(video, requestSpec))
+ const selectionCount = requestSpec.count ?? 5
+ const topVideos = requestSpec.selectionMode === "recent" ? [] : [...matchingVideos]
+  .sort((left, right) => evidenceVideoRankValue(right, requestSpec.rankBy) - evidenceVideoRankValue(left, requestSpec.rankBy))
+  .slice(0, selectionCount)
   .map(evidenceVideo)
- const recentVideos = [...videos]
+ const recentVideos = requestSpec.selectionMode === "top" ? [] : [...matchingVideos]
   .sort((left, right) => cleanProfileText(right.publishedAt).localeCompare(cleanProfileText(left.publishedAt)))
-  .slice(0, 5)
+  .slice(0, selectionCount)
   .map(evidenceVideo)
  const includeSearch = intent === "seo" || intent === "strategy"
  const includeTraffic = intent === "analytics" || intent === "audience" || intent === "strategy"
@@ -653,16 +777,22 @@ export const buildAIBrainEvidencePack = (
   "averagePercentageViewed",
  ]
  const availableMetrics = metricKeys.filter((key) =>
-  videos.some((video) => optionalVideoMetric(video, key) !== null),
+  matchingVideos.some((video) => optionalVideoMetric(video, key) !== null),
  )
  const transcriptRouteRequired = intent === "content_analysis"
  const missingInputs = [
   cleanProfileText(snapshot.channelDescription) ? "" : "channel description",
   videos.length ? "" : "synced video inventory",
+  (requestSpec.formats.length || requestSpec.since || requestSpec.until || requestSpec.filters.length) && matchingVideos.length === 0
+   ? "No videos matched the requested format, time range, and filters"
+   : "",
   availableMetrics.length ? "" : "video-level performance metrics",
   intent === "seo" && searchTerms.length === 0 ? "YouTube search terms" : "",
   (intent === "analytics" || intent === "audience") && trafficSources.length === 0 ? "traffic-source evidence" : "",
   transcriptRouteRequired ? "video transcript in chat; use Content Analysis for transcript-backed claims" : "",
+  requestSpec.count !== null && (requestSpec.selectionMode === "recent" ? recentVideos.length : topVideos.length) < requestSpec.count
+   ? "Requested " + requestSpec.count + " matching videos; found " + (requestSpec.selectionMode === "recent" ? recentVideos.length : topVideos.length)
+   : "",
  ].filter(Boolean)
  const evidenceIds = Array.from(new Set([
   cleanProfileText(snapshot.channelDescription) ? "channel:description" : "",
@@ -707,6 +837,7 @@ export const buildAIBrainEvidencePack = (
 
  return {
   promptVersion: BRAIN_CHAT_PROMPT_VERSION,
+  requestSpec,
   intent,
   channelId: snapshot.channelId || null,
   channelName: snapshot.channelName || null,
