@@ -531,6 +531,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  questionTrace.recordPromptVersion("orchestrator", BRAIN_PROMPT_VERSION)
  questionTrace.recordPromptVersion("contextResolver", BRAIN_CONTEXT_RESOLVER_VERSION)
  questionTrace.recordPromptVersion("outputSchema", BRAIN_OUTPUT_SCHEMA_VERSION)
+ let renderedEvidenceRecords = [] as typeof promptEvidenceRecords
  try {
   if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
@@ -582,7 +583,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    algorithmIntelligence,
    creatorContext,
   })
-  const renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
+  renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
    context.systemInstruction.includes(record.id),
   )
   questionTrace.recordEvidence({
@@ -677,7 +678,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   }
   response = {
    ...response,
-   evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 20),
+   evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 20),
    evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
