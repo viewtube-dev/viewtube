@@ -645,7 +645,7 @@ describe("floating label geometry and circular icon scale", () => {
     expect(css).toContain("--vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px)")
     expect(css).toContain("--vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px)")
     expect(css).toContain("font-size: 18px")
-    expect(css).toContain(".vt-studio-floating-field[data-size=\"compact\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-compact-height, 24px);\n  --vt-studio-control-focus-outline-width: 1.3px;")
+    expect(css).toContain(".vt-studio-floating-field[data-size=\"compact\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px);\n  --vt-studio-control-focus-outline-width: 1.3px;")
     expect(css).not.toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
     expect(css).toContain("padding: 2.25px 4.5px;")
   })
