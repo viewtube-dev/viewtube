@@ -3930,7 +3930,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame__icon::before,
 .vt-studio-upload-frame__icon::after {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   content: "";
   border-radius: 50%;
   pointer-events: none;
@@ -3944,6 +3944,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 2px solid var(--vt-studio-upload-secondary);
 }
 .vt-studio-upload-frame__icon > svg {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 43%;
   height: 43%;
@@ -3987,6 +3989,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg { display: none; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > img {
   position: absolute;
+  z-index: 1;
   inset: 3px;
   display: block;
   width: calc(100% - 6px);
