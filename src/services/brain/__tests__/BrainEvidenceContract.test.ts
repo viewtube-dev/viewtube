@@ -16,29 +16,29 @@ const record = (epistemicState: EvidenceRecord["epistemicState"], value: Evidenc
 
 describe("shared evidence epistemic contract", () => {
  it.each([
-  ["known", "known"],
-  ["observed", "observed"],
-  ["calculated", "calculated"],
-  ["user_provided", "user_provided"],
-  ["inferred", "inferred"],
-  ["hypothesis", "hypothesis"],
-  ["estimate", "estimate"],
-  ["stale", "stale"],
-  ["missing", "missing"],
-  ["conflicting", "conflicting"],
+  ["KNOWN", "KNOWN"],
+  ["OBSERVED", "OBSERVED"],
+  ["CALCULATED", "CALCULATED"],
+  ["USER_PROVIDED", "USER_PROVIDED"],
+  ["INFERRED", "INFERRED"],
+  ["HYPOTHESIS", "HYPOTHESIS"],
+  ["ESTIMATE", "ESTIMATE"],
+  ["STALE", "STALE"],
+  ["MISSING", "MISSING"],
+  ["CONFLICTING", "CONFLICTING"],
  ] as const)("preserves %s as the canonical claim state", (input, expected) => {
   const claim = projectEvidenceRecordToBrainClaim(record(input))
   expect(claim.epistemicState).toBe(expected)
  })
 
  it("never exposes a value for missing evidence", () => {
-  expect(projectEvidenceRecordToBrainClaim(record("missing", 0)).value).toBeNull()
+  expect(projectEvidenceRecordToBrainClaim(record("MISSING", 0)).value).toBeNull()
  })
 
  it("lets explicit stale freshness override a current epistemic label", () => {
   expect(projectEvidenceRecordToBrainClaim({
-   ...record("observed"),
-   freshness: "stale",
-  }).epistemicState).toBe("stale")
+   ...record("OBSERVED"),
+   freshness: "STALE",
+  }).epistemicState).toBe("STALE")
  })
 })
