@@ -34,6 +34,7 @@ import type { Project } from "../../types"
 import ProjectCreationDialog from "./ProjectCreationDialog"
 import { syncProjectToContentBuild } from "../../services/asset-engine/ProjectContentBuildBridge"
 import { useProjectsWorkspace } from "./ProjectsWorkspaceContext"
+import { StudioSplitLeftInput } from "../../studio-ui/primitives/StudioControls"
 import {
  SubToolboxButton,
  SubToolboxSelect,
