@@ -764,8 +764,11 @@ export const buildAIBrainEvidencePack = (
   .sort((left, right) => cleanProfileText(right.publishedAt).localeCompare(cleanProfileText(left.publishedAt)))
   .slice(0, selectionCount)
   .map(evidenceVideo)
- const includeSearch = intent === "seo" || intent === "strategy"
- const includeTraffic = intent === "analytics" || intent === "audience" || intent === "strategy"
+ const requestTextLower = cleanProfileText(requestText).toLowerCase()
+ const explicitlyRequestsSearch = /\b(search terms?|keywords?|search opportunit(?:y|ies)|queries)\b/.test(requestTextLower)
+ const explicitlyRequestsTraffic = /\b(traffic sources?|source of traffic|where (?:views|viewers|traffic) come from|external traffic|browse features|suggested videos)\b/.test(requestTextLower)
+ const includeSearch = intent === "seo" || intent === "strategy" || explicitlyRequestsSearch
+ const includeTraffic = intent === "strategy" || explicitlyRequestsTraffic
  const searchTerms = includeSearch ? signalEvidence(snapshot.searchTerms || [], "search") : []
  const trafficSources = includeTraffic ? signalEvidence(snapshot.trafficSources || [], "traffic") : []
  const metricKeys: Array<keyof NonNullable<VtSyncVideoItem["metrics"]>> = [
