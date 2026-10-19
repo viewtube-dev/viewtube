@@ -1957,6 +1957,19 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
   const validBounds = Number.isFinite(min) && Number.isFinite(max) && min < max;
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const current = Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : min;
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const adjustCounter = React.useCallback((direction: -1 | 1) => {
+    const base = currentRef.current;
+    const precision = Math.min(12, Math.max(
+      String(base).split(".")[1]?.length ?? 0,
+      String(safeStep).split(".")[1]?.length ?? 0,
+    ));
+    const next = Number((base + direction * safeStep).toFixed(precision));
+    onValueChange(Math.min(max, Math.max(min, next)));
+  }, [max, min, onValueChange, safeStep]);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current <= min);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current >= max);
   const progress = validBounds ? ((current - min) / (max - min)) * 100 : 0;
   const rangeStyle = { "--vt-studio-slider-progress": `${progress}%` } as React.CSSProperties;
   const changeValue = (raw: string) => {
@@ -1972,8 +1985,8 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       railClassName="vt-studio-double-split-slider__rail"
       leftRailContent={leftControls === "counter" ? (
         <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
-          <button type="button" aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} onClick={() => onValueChange(Math.min(max, current + safeStep))}><ChevronUp aria-hidden="true" focusable="false" /></button>
-          <button type="button" aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onClick={() => onValueChange(Math.max(min, current - safeStep))}><ChevronDown aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
         </span>
       ) : (
         <button
