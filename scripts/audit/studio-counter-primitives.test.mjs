@@ -39,7 +39,7 @@ test("StudioSideCounter is a new button-only split-right primitive with a divide
   assert.match(styles, /\.vt-studio-side-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/)
   assert.match(styles, /\.vt-studio-side-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
   assert.match(styles, /\.vt-studio-side-counter\[data-vt-studio-split="right"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
-  assert.match(styles, /\.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:[^}]+/s)
+  assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
   for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioSideCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
@@ -50,7 +50,8 @@ test("counter affordances have hold-repeat, enlarged icons, activation motion, a
   assert.match(styles, /width:\s*36px;\s*height:\s*36px;\s*stroke-width:\s*3\.75;/);
   assert.match(styles, /vt-studio-counter-pop/);
   assert.match(styles, /vt-studio-counter-hold-pulse/);
-  assert.match(styles, /vt-studio-side-counter__actions button:first-child \{ border-bottom: 1px solid #000; \}/);
+  assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
+  assert.match(styles, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button\.is-holding svg/);
 });
 
 test("counter palette variants are paired by size and centered, with max 100", () => {
@@ -74,7 +75,7 @@ test("counter catalog groups primary and secondary palettes in centered per-size
 });
 
 test("Studio counter hold behavior is wired to pointer events for touch and mouse", () => {
-  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 6);
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 8);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
@@ -84,8 +85,14 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
   assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
 });
 
-test("Studio counter press-and-hold is wired for touch and mouse", () => {
-  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 6);
+test("Studio counter and counter-slider press-and-hold are wired for touch and mouse", () => {
+  assert.equal((component.match(/useStudioCounterHold\(/g) || []).length, 8);
+  const sliderStart = component.indexOf("export const StudioDoubleSplitSlider:");
+  const sliderEnd = component.indexOf("StudioDoubleSplitSlider.displayName", sliderStart);
+  const slider = component.slice(sliderStart, sliderEnd);
+  assert.match(slider, /useStudioCounterHold\(-1,[\s\S]*?adjustCounter/);
+  assert.match(slider, /useStudioCounterHold\(1,[\s\S]*?adjustCounter/);
+  assert.match(slider, /data-press-holding/);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
