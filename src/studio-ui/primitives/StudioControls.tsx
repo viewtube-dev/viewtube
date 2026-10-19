@@ -647,12 +647,11 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
     if (root) observer?.observe(root);
     wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", () => {
-        if (busyRef.current) cancelAnimation(value);
-        schedule();
-      });
-    }
+    const handleResize = () => {
+      if (busyRef.current) cancelAnimation(value);
+      schedule();
+    };
+    if (typeof window !== "undefined") window.addEventListener("resize", handleResize);
     const reducedMotion = typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
     const handleMotionChange = () => { if (busyRef.current) cancelAnimation(value); };
     reducedMotion?.addEventListener?.("change", handleMotionChange);
@@ -660,6 +659,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     return () => {
       if (typeof window !== "undefined") {
         window.cancelAnimationFrame(frame);
+        window.removeEventListener("resize", handleResize);
       }
       reducedMotion?.removeEventListener?.("change", handleMotionChange);
       observer?.disconnect();
