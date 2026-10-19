@@ -127,7 +127,7 @@ export const summarizeBrainEvidenceHealth = (
  const staleIds = claims.filter((claim) => claim.epistemicState === "STALE" || claim.freshness === "stale").map((claim) => claim.id)
  const groups = new Map<string, Set<string>>()
  for (const claim of claims) {
-  if (claim.value === null || claim.epistemicState === "missing") continue
+  if (claim.value === null || claim.epistemicState === "MISSING") continue
   const key = claimKey(claim)
   const values = groups.get(key) || new Set<string>()
   values.add(JSON.stringify(claim.value))
