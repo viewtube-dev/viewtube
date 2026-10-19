@@ -3906,34 +3906,52 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame {
   --vt-studio-upload-speed: 1;
   --vt-studio-upload-angle: 0deg;
-  --vt-studio-upload-step: clamp(4px, 1cqw, 6px);
-  --vt-studio-upload-frame-inset: 5px;
-  --vt-studio-upload-center-inset: calc(var(--vt-studio-upload-frame-inset) + 2px + 9 * var(--vt-studio-upload-step));
+  --vt-studio-upload-stroke: clamp(1px, .42cqw, 3px);
+  --vt-studio-upload-quarter-stroke: calc(var(--vt-studio-upload-stroke) / 4);
+  --vt-studio-upload-step: clamp(2px, .8cqw, 8px);
+  --vt-studio-upload-frame-inset: clamp(3px, .65cqw, 6px);
   --vt-studio-upload-primary: var(--pair-a, #36e0f6);
   --vt-studio-upload-secondary: var(--pair-b, #ff7f6b);
   position: relative;
   display: block;
   width: 100%;
   min-width: 0;
-  aspect-ratio: 16 / 9;
-  overflow: visible;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
   isolation: isolate;
   border: 0;
-  border-radius: 12px;
+  border-radius: clamp(6px, 1.5cqw, 12px);
   background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
   animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
   cursor: pointer;
   container-type: inline-size;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+  transition: filter 140ms ease-out;
 }
 .vt-studio-upload-frame[data-size="compact"] {
-  --vt-studio-upload-step: clamp(3px, 1cqw, 4px);
-  --vt-studio-upload-frame-inset: 4px;
-  --vt-studio-upload-center-inset: calc(var(--vt-studio-upload-frame-inset) + 2px + 9 * var(--vt-studio-upload-step));
-  border-radius: 8px;
+  --vt-studio-upload-step: clamp(1.5px, .55cqw, 5px);
+  --vt-studio-upload-frame-inset: clamp(2px, .5cqw, 4px);
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
+.vt-studio-upload-frame:hover:not(.is-disabled) {
+  --vt-studio-upload-speed: 2;
+  filter: saturate(1.85);
+  animation-name: vt-studio-upload-spin, vt-studio-upload-hover-pulse;
+  animation-duration: calc(4s / var(--vt-studio-upload-speed)), calc(1.4s / var(--vt-studio-upload-speed));
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+.vt-studio-upload-frame.is-clicking {
+  --vt-studio-upload-speed: 4;
+  z-index: 10;
+  filter: saturate(2.35);
+  animation-name: vt-studio-upload-spin, vt-studio-upload-click-pulse;
+  animation-duration: calc(4s / var(--vt-studio-upload-speed)), .11s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
 .vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible) {
   outline: var(--vt-studio-control-stroke, 3px) solid #000;
   outline-offset: 4px;
@@ -3941,7 +3959,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame.is-disabled { cursor: not-allowed; opacity: .55; }
 .vt-studio-upload-frame__input {
   position: absolute;
-  z-index: 6;
+  z-index: 8;
   width: 1px;
   height: 1px;
   padding: 0;
@@ -3953,8 +3971,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   position: absolute;
   inset: var(--vt-studio-upload-frame-inset);
   overflow: hidden;
-  border: 2px solid #000;
-  border-radius: 8px;
+  border: var(--vt-studio-upload-stroke) solid #000;
+  border-radius: clamp(4px, 1cqw, 8px);
   background: #fff;
 }
 .vt-studio-upload-frame__inset::before,
@@ -3963,52 +3981,79 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   z-index: 2;
   content: "";
   pointer-events: none;
-  border-radius: 4px;
+  border-radius: clamp(2px, .6cqw, 5px);
 }
 .vt-studio-upload-frame__inset::before {
-  inset: 4px;
-  border: 4px solid var(--vt-studio-upload-primary);
+  inset: calc(var(--vt-studio-upload-step) * .75);
+  border: calc(var(--vt-studio-upload-stroke) * 1.25) solid var(--vt-studio-upload-primary);
 }
 .vt-studio-upload-frame__inset::after {
-  inset: 8px;
-  border: 2px solid var(--vt-studio-upload-secondary);
+  inset: calc(var(--vt-studio-upload-step) * 1.5);
+  border: calc(var(--vt-studio-upload-stroke) * .75) solid var(--vt-studio-upload-secondary);
 }
-.vt-studio-upload-frame[data-size="compact"] .vt-studio-upload-frame__inset { border-radius: 6px; }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
 .vt-studio-upload-frame__layer {
   position: absolute;
   inset: calc(var(--layer) * var(--vt-studio-upload-step));
-  border-radius: calc(7px - var(--layer) * .4px);
+  border-radius: clamp(4px, 1cqw, 10px);
   background: linear-gradient(135deg, var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary));
   opacity: .07;
   animation: vt-studio-upload-breathe calc(2.8s / var(--vt-studio-upload-speed)) ease-in-out infinite;
-  animation-delay: calc(var(--layer) * .14s);
+  animation-delay: calc(var(--layer) * .14s / var(--vt-studio-upload-speed));
 }
 .vt-studio-upload-frame__layer--core {
   opacity: 1;
   background: linear-gradient(135deg, color-mix(in srgb, var(--vt-studio-upload-primary) 20%, #fff), color-mix(in srgb, var(--vt-studio-upload-secondary) 24%, #fff));
   animation-name: vt-studio-upload-core;
-  animation-delay: 1.26s;
+  animation-delay: calc(1.26s / var(--vt-studio-upload-speed));
 }
 .vt-studio-upload-frame__center {
   position: absolute;
-  inset: var(--vt-studio-upload-center-inset);
+  inset: var(--vt-studio-upload-frame-inset);
   z-index: 5;
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 14px;
+  gap: clamp(6px, 1cqw, 12px);
   min-width: 0;
+  overflow: hidden;
   text-align: center;
+}
+.vt-studio-upload-frame__split {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: clamp(28px, 10cqw, 76px);
+  background: color-mix(in srgb, var(--vt-studio-upload-primary) 16%, white);
+  color: #000;
+}
+.vt-studio-upload-frame__split--left {
+  left: 0;
+  border-right: var(--vt-studio-upload-stroke) solid #000;
+}
+.vt-studio-upload-frame__split--right {
+  right: 0;
+  border-left: var(--vt-studio-upload-stroke) solid #000;
+  background: color-mix(in srgb, var(--vt-studio-upload-secondary) 18%, white);
+}
+.vt-studio-upload-frame__split svg {
+  display: block;
+  width: clamp(14px, 4cqw, 32px);
+  height: clamp(14px, 4cqw, 32px);
+  stroke-width: 2.5;
 }
 .vt-studio-upload-frame__icon {
   position: relative;
+  z-index: 3;
   display: grid;
   place-items: center;
   width: clamp(64px, 16cqw, 112px);
   aspect-ratio: 1;
   overflow: visible;
-  border: 3px solid #000;
+  border: var(--vt-studio-upload-stroke) solid #000;
   border-radius: 50%;
   color: #000;
   background: conic-gradient(from var(--vt-studio-upload-angle), var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
@@ -4023,12 +4068,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   pointer-events: none;
 }
 .vt-studio-upload-frame__icon::before {
-  inset: -7px;
-  border: 4px solid var(--vt-studio-upload-primary);
+  inset: calc(var(--vt-studio-upload-step) * -1.2);
+  border: calc(var(--vt-studio-upload-stroke) * 1.25) solid var(--vt-studio-upload-primary);
 }
 .vt-studio-upload-frame__icon::after {
-  inset: -13px;
-  border: 2px solid var(--vt-studio-upload-secondary);
+  inset: calc(var(--vt-studio-upload-step) * -2);
+  border: calc(var(--vt-studio-upload-stroke) * .75) solid var(--vt-studio-upload-secondary);
 }
 .vt-studio-upload-frame__icon > svg {
   position: relative;
@@ -4037,22 +4082,45 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   width: 43%;
   height: 43%;
   stroke-width: 2.4;
-  animation: vt-studio-upload-nudge 1.6s ease-in-out infinite;
+  animation: vt-studio-upload-nudge calc(1.6s / var(--vt-studio-upload-speed)) ease-in-out infinite;
 }
-.vt-studio-upload-frame:hover .vt-studio-upload-frame__icon,
-.vt-studio-upload-frame.is-drag .vt-studio-upload-frame__icon { transform: scale(1.06); }
-.vt-studio-upload-frame__icon > img { display: none; }
 .vt-studio-upload-frame__label {
+  position: relative;
+  z-index: 4;
   display: block;
-  max-width: 100%;
+  max-width: calc(100% - 2 * clamp(28px, 10cqw, 76px) - 8px);
   overflow: hidden;
-  padding: 6px 14px;
-  border: 2px solid #000;
+  padding: clamp(3px, .6cqw, 6px) clamp(6px, 1.2cqw, 14px);
+  border: var(--vt-studio-upload-stroke) solid #000;
   border-radius: 999px;
   background: #fff;
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: var(--vt-studio-28-font-size, 24px);
+  font-size: clamp(10px, 1.5cqw, 12px);
+  font-weight: 1000;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  white-space: pre-line;
+  text-wrap: balance;
+}
+.vt-studio-upload-frame__filename {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  bottom: calc(var(--vt-studio-upload-quarter-stroke) * -1);
+  translate: -50% 0;
+  display: block;
+  width: max-content;
+  max-width: calc(100% - 2 * clamp(28px, 10cqw, 76px) - 8px);
+  overflow: hidden;
+  padding: clamp(4px, .65cqw, 7px) clamp(8px, 1.4cqw, 16px);
+  border: var(--vt-studio-upload-stroke) solid #000;
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: clamp(10px, 1.5cqw, 12px);
   font-weight: 1000;
   line-height: 1;
   letter-spacing: -.02em;
@@ -4060,39 +4128,63 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   text-transform: uppercase;
   white-space: nowrap;
 }
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__center {
+  display: block;
+}
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__layer--core { animation: none; scale: 1; }
-/* Keep the icon shell geometrically identical before and after upload.
-   The preview image is circular itself, so it does not require shell clipping. */
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 64cqw;
+  max-width: none;
+  animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite reverse;
+}
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg { display: none; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > img {
   position: absolute;
   z-index: 1;
-  inset: 3px;
+  inset: var(--vt-studio-upload-stroke);
   display: block;
-  width: calc(100% - 6px);
-  height: calc(100% - 6px);
+  width: calc(100% - 2 * var(--vt-studio-upload-stroke));
+  height: calc(100% - 2 * var(--vt-studio-upload-stroke));
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
   animation: vt-studio-upload-pop .5s cubic-bezier(.3, 1.5, .5, 1);
 }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__label {
-  position: absolute;
-  top: calc(100% + (var(--vt-studio-upload-center-inset) - 28px) / 2);
-  left: 50%;
-  width: max-content;
-  max-width: min(320px, 80cqw);
-  translate: -50% 0;
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__label { display: none; }
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__filename {
+  bottom: calc(var(--vt-studio-upload-quarter-stroke) * -1);
+}
+.vt-studio-upload-frame:hover:not(.is-disabled) .vt-studio-upload-frame__layer,
+.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__layer {
+  filter: saturate(1.85);
+}
+.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__inset {
+  animation: vt-studio-upload-click-pulse .11s ease-in-out infinite;
+}
+.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__icon {
+  animation: vt-studio-upload-click-pulse .11s ease-in-out infinite, vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite reverse;
 }
 @keyframes vt-studio-upload-spin { to { --vt-studio-upload-angle: 360deg; } }
-@keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; } 45% { opacity: .38; } }
+@keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; scale: 1; } 45% { opacity: .38; scale: 1.012; } }
 @keyframes vt-studio-upload-core { 0%, 100% { scale: 1; } 45% { scale: .975; } }
+@keyframes vt-studio-upload-hover-pulse { 0%, 100% { scale: 1; } 50% { scale: 1.018; } }
+@keyframes vt-studio-upload-click-pulse { 0%, 100% { scale: .96; } 50% { scale: 1.055; } }
 @keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 2px; } 50% { translate: 0 -4px; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
 @media (max-width: 460px) {
-  .vt-studio-upload-frame__center { gap: 8px; }
+  .vt-studio-upload-frame { aspect-ratio: 4 / 3; }
+  .vt-studio-upload-frame__center { gap: 6px; }
   .vt-studio-upload-frame__icon { width: clamp(58px, 20cqw, 88px); }
-  .vt-studio-upload-frame__label { max-width: 100%; padding: 5px 10px; font-size: var(--vt-studio-28-font-size, 24px); }
+  .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon { width: 72cqw; }
+  .vt-studio-upload-frame__split { width: clamp(26px, 10cqw, 42px); }
+  .vt-studio-upload-frame__split svg { width: clamp(14px, 4cqw, 20px); height: clamp(14px, 4cqw, 20px); }
+  .vt-studio-upload-frame__label,
+  .vt-studio-upload-frame__filename { font-size: clamp(10px, 2.5cqw, 12px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-upload-frame,
