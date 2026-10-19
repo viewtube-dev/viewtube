@@ -1,3 +1,4 @@
+import { StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import React, { useCallback, useEffect, useState, useRef } from "react"
 import { useLocation } from "react-router-dom"
 import {
@@ -31,7 +32,7 @@ import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import type { LongformOptimizationHandoffPayload } from "../services/longformOptimization"
 import {
  SubToolboxButton,
- SubToolboxFileTarget,
+ StudioUploadFrame,
  SubToolboxIconButton,
  ToolboxHeaderToggle,
  SubToolboxSelect,
@@ -586,14 +587,14 @@ const ThumbnailStudio: React.FC<ThumbnailStudioProps> = ({
        icon={<CustomIcon name="image" size={20} />}
        isOpenInitial={false}>
        <div className="space-y-4">
-        <SubToolboxFileTarget
+        <StudioUploadFrame
          level="l1"
          label="Upload Images"
          icon={<CustomIcon name="image" size={28} />}
          accept="image/*"
          multiple
          minHeight={112}
-         onFiles={(files) => {
+         onFilesChange={(files) => {
           if (files) {
            const news = Array.from(files).map((f) => ({
             id: crypto.randomUUID(),
