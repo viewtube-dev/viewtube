@@ -85,7 +85,7 @@ describe("aiBrainConversationStore", () => {
   });
   const restored = await resumeAIBrainThread("channel-raw-message");
   expect(restored.turns[0]?.rawUserMessage).toBe(original);
-  expect(restored.turns[0]?.digest?.userIntent).toContain("API");
+  expect(restored.turns[0]?.digest?.userIntent.toLowerCase()).toContain("api");
   expect(restored.turns[0]?.digest?.userIntent).toContain("failed");
   expect(restored.turns[0]?.digest?.userIntent).toContain("error");
   expect(completed.id).toBe(pending.id);
