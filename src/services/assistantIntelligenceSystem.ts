@@ -256,13 +256,16 @@ export const queueAssistantCommand = async (input: {
  channelId?: string | null
  priority?: BrainCommandAction["priority"]
  confidence?: BrainCommandAction["confidence"]
+ targetToolId?: SuperToolId
 }): Promise<{
  action: BrainCommandAction
  recordId: string
  workflowId: string
  targetToolId: SuperToolId
 }> => {
- const targetToolId = inferAssistantTargetTool(input.request)
+ const targetToolId = input.targetToolId && getSuperTool(input.targetToolId)
+  ? input.targetToolId
+  : inferAssistantTargetTool(input.request)
  const tool = getSuperTool(targetToolId)
  const priority = input.priority || "medium"
  const confidence = input.confidence || "medium"

@@ -88,6 +88,44 @@ describe("BrainOrchestrator", () => {
  })
 
 
+ it("retries generation without re-running niche research and links the original turn", async () => {
+  const snapshot = makeSnapshot()
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const nicheResolver = vi.fn(async () => nicheProfile)
+  const currentResearcher = vi.fn(async () => ({ text: "Fresh public research.", citations: [] }))
+  const modelGenerator = vi.fn(async () => ({
+   headline: "Alderian military history follow-up",
+   keyInsight: "Alder's Cavalry Explained is a useful reference for the next military history video.",
+   body: "Draft a focused follow-up using the same clear system-by-system explanation.",
+   mode: "video_idea_sprint" as const,
+   modules: [{ title: "Next video", body: "Compare artillery with the cavalry system.", tone: "green" as const, kind: "recommendation_stack" as const }],
+   actions: ["Outline the follow-up."],
+  } as StructuredBrainModelOutput))
+
+  const result = await runBrainTurn({
+   channelId: "retry-channel",
+   userText: "Research current trends for my next Alderian military history video.",
+   snapshot,
+   growthContext,
+   systemPrompt: "Use the original context and regenerate only the response.",
+   allowModel: true,
+   retryGenerationOnly: true,
+   retryOfTurnId: "interrupted-original-turn",
+   nicheResolver,
+   currentResearcher,
+   modelGenerator,
+  })
+
+  expect(modelGenerator).toHaveBeenCalledTimes(1)
+  expect(nicheResolver).not.toHaveBeenCalled()
+  expect(currentResearcher).not.toHaveBeenCalled()
+  expect(result.turn.metadata).toMatchObject({
+   retryGenerationOnly: true,
+   retryOfTurnId: "interrupted-original-turn",
+   evidencePackSnapshot: snapshot.evidencePack,
+  })
+ })
+
  it("preserves the exact prompt in the captured learning event", async () => {
   const snapshot = makeSnapshot()
   const growthContext = buildCreatorGrowthContext(snapshot, [], [])

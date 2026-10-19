@@ -30,6 +30,8 @@ const toLegacyInput = (input: BrainRuntimeRequest): RunBrainTurnInput => ({
  analyticsWindow: input.analyticsWindow,
  visibleContext: input.visibleContext,
  artifactRefs: input.artifactRefs,
+ retryGenerationOnly: input.retryGenerationOnly,
+ retryOfTurnId: input.retryOfTurnId,
 })
 
 export const buildBrainRuntimeMetadata = (
