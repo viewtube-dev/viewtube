@@ -90,7 +90,7 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
     expect(css).toContain(".vt-studio-radio-motion .vt-studio-radio-core");
     expect(css).toContain(".vt-studio-radio-motion .vt-studio-radio-solid");
     expect(css).toContain("stroke-width: 3");
-    expect(css).toContain("stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
+    expect(css).toContain("fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
   });
 
   it("uses centered SVG attribute animation, clips motion to the control, and honors reduced motion", () => {
