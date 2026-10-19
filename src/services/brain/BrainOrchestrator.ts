@@ -345,7 +345,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  const taskProfile = resolveBrainTaskProfile(input.userText)
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
- const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
+ const modelIdentityStatus = input.allowModel === false ? "model_disabled" : requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const pending = input.retryTurnId
   ? await retryAIBrainTurn(input.retryTurnId)
   : await beginAIBrainTurn({
@@ -526,7 +526,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  questionTrace.recordModelIdentity({
   requested: requestedModel,
   served: null,
-  status: requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable",
+  status: modelIdentityStatus,
  })
  questionTrace.recordPromptVersion("orchestrator", BRAIN_PROMPT_VERSION)
  questionTrace.recordPromptVersion("contextResolver", BRAIN_CONTEXT_RESOLVER_VERSION)
