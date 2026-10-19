@@ -15,7 +15,7 @@ import type { CreatorContextEnvelope } from "./CreatorContextResolver"
 import { buildAlgorithmIntelligenceContext, type AlgorithmIntelligencePortfolio } from "./AlgorithmIntelligenceOrchestrator"
 import { resolveBrainContextSections } from "./BrainContextResolution"
 import type { BrainEvidenceClaim, BrainEvidenceHealth } from "./BrainEvidenceContract"
-import type { EvidenceRecord } from "./EvidenceRecord"
+import { formatEvidenceRecordForPrompt, type EvidenceRecord } from "./EvidenceRecord"
 import type { BrainEvidenceRecordQualityReport } from "./BrainEvidenceQuality"
 
 const clip = (value: string, maximum: number): string => value.slice(0, Math.max(0, maximum))
@@ -84,17 +84,20 @@ export const buildBrainContextPack = (input: {
   : ""
 
  const evidence = controls.allowAnalytics && !analyticsScopeBlocked
+  ? (input.evidenceRecords || []).map(formatEvidenceRecordForPrompt).join("\n")
+  : analyticsScopeBlocked
+   ? "Analytics evidence is blocked because the canonical bundle is unscoped or belongs to a different channel. Do not use channel-specific metrics or performance claims for this turn."
+   : "Analytics evidence access is disabled by the creator in Brain User Controls. Do not infer private channel metrics or quote stored analytics values."
+ const channelProfile = controls.allowAnalytics && !analyticsScopeBlocked
   ? clip([
     `Channel: ${input.snapshot.channel.label}`,
     `Inferred niche: ${input.snapshot.inferredProfile.niche || "unknown"}`,
     `Content pillars: ${input.snapshot.inferredProfile.contentPillars.join(", ") || "unknown"}`,
-    ...(input.evidenceRecords || []).map((record) =>
-     `Evidence id=${record.id}; owner=${record.owner}; metric=${record.metric || "unspecified"}; value=${record.value === null || record.value === undefined ? "unknown" : String(record.value)}${record.unit ? ` ${record.unit}` : ""}; freshness=${record.freshness}; observedAt=${record.observedAt || "unknown"}; source=${record.sourceRef}; snapshot=${record.sourceSnapshotId || "unknown"}; confidence=${record.confidence ?? "unknown"}; state=${record.epistemicState}; refs=${record.provenance.evidenceIds.join(",") || "none"}${record.limitations?.length ? `; limitations=${record.limitations.join("; ")}` : ""}`),
-    ...input.snapshot.evidencePack.missingInputs.map((value) => `Missing: ${value}`),
-   ].join("\n"), 3800)
-  : analyticsScopeBlocked
-   ? "Analytics evidence is blocked because the canonical bundle is unscoped or belongs to a different channel. Do not use channel-specific metrics or performance claims for this turn."
-   : "Analytics evidence access is disabled by the creator in Brain User Controls. Do not infer private channel metrics or quote stored analytics values."
+   ].join("\n"), 1200)
+  : ""
+ const evidenceGaps = controls.allowAnalytics && !analyticsScopeBlocked
+  ? clip(input.snapshot.evidencePack.missingInputs.map((value) => `Missing: ${value}`).join("\n"), 1200)
+  : ""
  if (!controls.allowAnalytics) omittedSections.push("analytics_access_disabled")
  if (analyticsScopeBlocked) omittedSections.push("analytics_scope_blocked")
 
@@ -224,6 +227,8 @@ export const buildBrainContextPack = (input: {
   system,
   controlInstruction,
   "\nCHANNEL EVIDENCE\n" + evidence,
+  channelProfile ? "\nCHANNEL PROFILE CONTEXT\n" + channelProfile : "",
+  evidenceGaps ? "\nEVIDENCE GAPS\n" + evidenceGaps : "",
   evidenceQuality ? "\nEVIDENCE QUALITY\n" + evidenceQuality : "",
   evidenceRecordQuality ? "\nPROMPT EVIDENCE RECORD QUALITY\n" + evidenceRecordQuality : "",
   sharedEvidenceContract ? "\nSHARED EVIDENCE CONTRACT\n" + sharedEvidenceContract : "",
@@ -260,7 +265,7 @@ export const buildBrainContextPack = (input: {
    estimatedInputTokens: resolvedContext.estimatedInputTokens,
    contextBudgetSource: resolvedContext.budgetSource,
    systemCharacters: system.length,
-   evidenceCharacters: evidence.length + evidenceQuality.length + evidenceRecordQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
+   evidenceCharacters: evidence.length + channelProfile.length + evidenceGaps.length + evidenceQuality.length + evidenceRecordQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,
    knowledgeCharacters: knowledge.length + research.length,
    conversationCharacters: clippedConversation.length,
