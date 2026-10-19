@@ -2460,17 +2460,19 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
         {!previewUrl && (
-          <span className="vt-studio-upload-frame__label" aria-live="polite">{prompt}</span>
+          <span className="vt-studio-upload-frame__label" aria-live="polite">
+            <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
+            <span className="vt-studio-upload-frame__badge-text">{prompt}</span>
+            <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
+          </span>
         )}
       </span>
-      <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--left" data-vt-studio-upload-split="left" aria-hidden="true">
-        <Upload />
-      </span>
-      <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--right" data-vt-studio-upload-split="right" aria-hidden="true">
-        <ImageIcon />
-      </span>
       {selectedName && (
-        <span className="vt-studio-upload-frame__filename" aria-live="polite">{selectedName}</span>
+        <span className="vt-studio-upload-frame__filename" aria-live="polite">
+          <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
+          <span className="vt-studio-upload-frame__badge-text">{selectedName}</span>
+          <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
+        </span>
       )}
     </label>
   );
