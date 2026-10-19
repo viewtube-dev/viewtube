@@ -59,7 +59,7 @@
 
 
 /* Radio selection motions: SVG attributes animate around the fixed 22,22 center.
-   The 44px shell and its indicator viewport remain stationary and clipped. */
+   The 44px shell stays stationary; its indicator color follows the checkbox variant contract. */
 .vt-studio-44-choice.is-radio {
   overflow: hidden;
   isolation: isolate;
@@ -70,7 +70,8 @@
   height: 44px;
   flex: 0 0 44px;
   overflow: hidden;
-  color: var(--pair-b, var(--vt-studio-control-secondary, #ff7f6b));
+  color: var(--vt-studio-choice-indicator, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  transition: color 270ms ease-out;
   pointer-events: none;
 }
 .vt-studio-radio-motion circle,
@@ -83,10 +84,6 @@
 .vt-studio-radio-motion .vt-studio-radio-core,
 .vt-studio-radio-motion .vt-studio-radio-solid {
   fill: currentColor;
+  stroke: none;
 }
-/* Opacity is driven by SVG presentation attributes in StudioRadioMotion.
-   CSS opacity declarations here would override setAttribute() and hide every frame. */
-@media (prefers-reduced-motion: reduce) {
-  .vt-studio-44-choice.is-radio .vt-studio-radio-rings,
-  .vt-studio-44-choice.is-radio .vt-studio-radio-spirals { display: none; }
-}
+/* SVG opacity is driven by requestAnimationFrame; CSS opacity would mask those frames. */
