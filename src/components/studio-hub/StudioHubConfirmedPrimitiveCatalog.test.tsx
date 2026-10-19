@@ -332,6 +332,6 @@ describe("confirmed vertical word-toggle primitive", () => {
     expect(controls).toContain('height: "content-driven two-word stack; intentionally not 44px / 28px / 14px"');
     expect(tokens).toContain("verticalWordToggle");
     expect(css).toContain("--vt-studio-vertical-word-font-size");
-    expect(css).toContain('data-size="micro"');
+    expect(css).toContain(".vt-studio-vertical-word-toggle.is-micro");
   });
 });
