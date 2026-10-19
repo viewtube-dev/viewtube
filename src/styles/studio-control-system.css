@@ -4096,3 +4096,125 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Studio control refinement pass: keep side-counter actions truly equal-height. */
+.vt-studio-side-counter__actions {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) !important;
+  align-self: stretch;
+  height: 100%;
+}
+.vt-studio-side-counter__actions > button {
+  position: relative;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+.vt-studio-side-counter__actions > button:first-child::after {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+/* Give slider numbers more of their available split-face width. */
+.vt-studio-double-split-slider [data-vt-studio-split-field] {
+  padding-inline: calc(var(--vt-studio-control-height, 44px) * .09);
+}
+.vt-studio-double-split-slider .vt-studio-double-split-slider__value {
+  padding-inline: 0;
+  min-width: 0;
+  font-size: calc(var(--vt-studio-control-font-size, 38px) * .72);
+}
+.vt-studio-double-split-slider[data-size="compact"] .vt-studio-double-split-slider__value { font-size: 18px; }
+
+/* Optional side-counter controls for the double-split slider's left rail. */
+.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+}
+.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  color: #000;
+}
+.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button:first-child::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: var(--vt-studio-control-stroke, 3px);
+  transform: translateY(-50%);
+  background: #000;
+  pointer-events: none;
+}
+.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter svg {
+  width: min(var(--vt-studio-control-icon-size, 38px), 90%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 90%);
+  stroke-width: 2.5;
+}
+.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter button:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Dropdown chevrons use a stable end rail without a redundant divider in simple mode. */
+.vt-studio-dropdown:not(.is-split-left) .vt-studio-dropdown-chevron.is-trailing {
+  border-left: 0;
+  justify-self: end;
+  justify-content: end;
+  padding-right: 4px;
+}
+.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] {
+  grid-template-columns: var(--vt-studio-dropdown-rail-size) minmax(0, 1fr) var(--vt-studio-dropdown-rail-size);
+}
+.vt-studio-dropdown.is-split-left .vt-studio-dropdown-split-rail[data-rail="start"] {
+  width: var(--vt-studio-dropdown-rail-size);
+  min-width: var(--vt-studio-dropdown-rail-size);
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  margin: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing {
+  border-left: 0;
+  justify-content: end;
+  padding-right: 4px;
+}
+.vt-studio-dropdown-menu {
+  top: 100%;
+  border-top-left-radius: var(--vt-studio-control-radius, 6px);
+  border-top-right-radius: var(--vt-studio-control-radius, 6px);
+  border-top-width: var(--vt-studio-control-stroke, 3px);
+}
+.vt-studio-dropdown-menu .vt-studio-dropdown-option:first-child {
+  border-top-left-radius: calc(var(--vt-studio-control-radius, 6px) * .5);
+  border-top-right-radius: calc(var(--vt-studio-control-radius, 6px) * .5);
+}
+
+/* Selected word-toggle and switch surfaces use 100% primary, never secondary. */
+.vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle,
+.vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle.is-active {
+  background: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+.vt-studio-44-word-toggle.is-color-swap button.is-active {
+  color: #000;
+}
+.vt-studio-44-switch.is-checked,
+.vt-studio-44-switch[aria-checked="true"],
+.vt-studio-switch.is-checked,
+.vt-studio-switch[aria-checked="true"] {
+  background-color: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
