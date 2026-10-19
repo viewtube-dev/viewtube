@@ -63,7 +63,7 @@ The size tier determines height, border stroke, radius, typography, icon size, a
 | Text stroke | 1px | 0.5px | 0.25px |
 | Icon size | 38px | 24px | 10px |
 | Default icon stroke | 1.9px | 2px | 1.5px |
-| Secondary focus-outline width (when applicable) | 1.95px | 1.3px | 0.65px |
+| Secondary focus-outline width (when applicable) | 3px | 2px | 1px |
 | Standard gap token | 4px (external layout only — grids/rows between whole controls; never an internal shell gap) | 4px | 4px |
 | Floating-label height (shared by text inputs and text areas) | 32px (prior 28px + 4px) | 21px (prior 19px + 2px) | Not registered — no micro floating-label fields exist; the micro tier mechanically copies the compact values without halving |
 | Floating-label raised-offset ratio | 1.2 (raised label sits 20% higher above the outer black border) | 1.2 | Not registered — same as compact by copy |
@@ -130,7 +130,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Inline text stroke: primary color, matching the outer border width.
 - Focus fill: primary color at 15% opacity.
 - Focus text: black.
-- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px / 1.3px / 0.65px standard / compact / micro), outline offset 0.
+- Focus outline: secondary color at 100% opacity, width 1:1 of the selected border (3px / 2px / 1px standard / compact / micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
 
 ### Multiline textarea (registered typography exception)
@@ -141,7 +141,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Minimum writing surface: 92px.
 - Resize: vertical.
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
-- Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
+- Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 1:1 of the selected border width, offset 0.
 - Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Floating labels use the shared label metrics registered in §5 (32px / 21px resting height, 80% raised scale, 48% raised offset) — identical to text inputs at the same size tier.
 - No internal gap: textarea shells and any split anatomy inside them are flush; the 4px spacing unit is reserved for external gaps between whole controls.
 
@@ -154,7 +154,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
 | Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/14px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
-| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 1.25 / 1.3, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
+| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 0.75, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Separate 56px action family, 3px stroke, 6px radius, no shadow | Workflow emphasis is not a third size tier of ordinary 44px/28px controls |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
@@ -205,7 +205,7 @@ The split-left button, split-left/right/double badges, and username composite in
 - Inter-component gap remains 4px for all tiers; micro is half the compact geometry.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
-- Text-field focus uses a secondary outline at 65% of border width and zero offset.
+- Text-field focus uses a secondary outline at 1:1 of border width and zero offset.
 - Width defaults to row fill. Content width is opt-in through `data-vt-studio-width="content"` for spectrum tags and closeable badges only.
 - The generated CSS variables are maintained by `scripts/emit-studio-control-vars.mjs`; generated output is committed at `src/styles/studio-control-vars.generated.css`.
 
