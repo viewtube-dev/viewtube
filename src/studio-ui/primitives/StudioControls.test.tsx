@@ -47,7 +47,8 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Upload media"');
     expect(html).toContain('class="vt-studio-upload-frame__layers"');
     expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
-    expect(html).toContain("Drop or choose file");
+    expect(html).toContain("Drag or drop");
+    expect(html).toContain("Image / video here · or click to upload");
     expect(html).not.toContain("FA618A");
     expect(html).not.toContain("4EE4BE");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
@@ -112,6 +113,12 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain("font-weight: 1000");
     expect(css).toContain("letter-spacing: -.02em");
     expect(css).toContain("border-radius: 999px;");
+    expect(css).toContain("aspect-ratio: 16 / 9;");
+    expect(css).toContain("--vt-studio-upload-quarter-stroke: calc(var(--vt-studio-upload-frame-stroke) / 4)");
+    expect(css).toContain("width: 48cqw");
+    expect(css).toContain(".vt-studio-upload-frame:hover");
+    expect(css).toContain("--vt-studio-upload-speed: 2");
+    expect(css).toContain("animation: vt-studio-upload-click-pulse 1s ease-in-out both");
     expect(css).toContain(".vt-studio-upload-frame__icon {");
     expect(css).toContain("overflow: visible");
     expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
