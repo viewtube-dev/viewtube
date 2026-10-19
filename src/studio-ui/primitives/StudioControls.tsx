@@ -2308,7 +2308,9 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
   prompt?: string;
   sizeVariant?: "standard" | "compact";
   disabled?: boolean;
+  multiple?: boolean;
   onFileChange?: (file: File) => void;
+  onFilesChange?: (files: FileList | null) => void;
 }
 
 /** Canonical pair-colored upload canvas with responsive breathing layers and an optional image preview. */
@@ -2317,7 +2319,9 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   prompt = "Drag or drop\nImage / video here · or click to upload",
   sizeVariant = "standard",
   disabled = false,
+  multiple = false,
   onFileChange,
+  onFilesChange,
   className,
   "aria-label": ariaLabel = "Upload: drag or drop an image or video here, or click to upload",
   ...labelProps
@@ -2359,8 +2363,10 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
     if (disabled) return;
     event.preventDefault();
     setDragging(false);
-    const file = event.dataTransfer.files?.[0];
+    const files = event.dataTransfer.files;
+    const file = files?.[0];
     if (!file) return;
+    onFilesChange?.(files);
     const input = inputRef.current;
     if (input) {
       try { input.files = event.dataTransfer.files; } catch { /* FileList assignment is not supported by every browser. */ }
@@ -2401,9 +2407,13 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
         className="vt-studio-upload-frame__input"
         type="file"
         accept={accept}
+        multiple={multiple}
         disabled={disabled}
         aria-label={ariaLabel}
-        onChange={event => selectFile(event.currentTarget.files?.[0])}
+        onChange={event => {
+          onFilesChange?.(event.currentTarget.files);
+          selectFile(event.currentTarget.files?.[0]);
+        }}
       />
       <span className="vt-studio-upload-frame__inset" aria-hidden="true">
         <span className="vt-studio-upload-frame__layers">
