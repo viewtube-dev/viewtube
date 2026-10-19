@@ -4368,3 +4368,42 @@ html body .vt-studio-44-choice.is-color-swap.is-on.is-checkbox svg {
 }
 html body .vt-studio-44-choice.is-white-indicator.is-checkbox svg { stroke: #fff !important; }
 html body .vt-studio-44-choice.is-black-indicator.is-checkbox svg { stroke: #000 !important; }
+
+
+/* Canonical four-skin color contract shared by switches, radios, and checkboxes.
+   The control face remains stationary; only its paired fill/indicator colors transition. */
+button[data-vt-studio-control="true"].vt-studio-44-switch,
+button[data-vt-studio-control="true"].vt-studio-44-choice {
+  --vt-studio-choice-indicator: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice:not(.is-on),
+button[data-vt-studio-control="true"].vt-studio-44-switch:not(.is-on) {
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white) !important;
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-on,
+button[data-vt-studio-control="true"].vt-studio-44-switch.is-on {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-color-swap:not(.is-on),
+button[data-vt-studio-control="true"].vt-studio-44-switch.is-color-swap:not(.is-on) {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-color-swap.is-on,
+button[data-vt-studio-control="true"].vt-studio-44-switch.is-color-swap.is-on {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-color-swap.is-on {
+  --vt-studio-choice-indicator: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-black-indicator,
+button[data-vt-studio-control="true"].vt-studio-44-switch.is-black-indicator {
+  --vt-studio-choice-indicator: #000;
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-white-indicator,
+button[data-vt-studio-control="true"].vt-studio-44-switch.is-white-indicator {
+  --vt-studio-choice-indicator: #fff;
+}
+button[data-vt-studio-control="true"].vt-studio-44-choice.is-checkbox svg {
+  stroke: var(--vt-studio-choice-indicator, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  transition: stroke 270ms ease-out;
+}
