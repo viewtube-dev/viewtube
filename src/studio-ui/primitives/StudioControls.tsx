@@ -764,8 +764,8 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       if (variant === "primary-white-handle") return "#ffffff";
       if (variant === "white-fill") return "#000000";
       return state
-        ? "var(--vt-studio-control-secondary, var(--pair-b, #f276c5))"
-        : "var(--vt-studio-control-accent, var(--pair-a, #20f13e))";
+        ? "var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))"
+        : "var(--vt-studio-control-accent, var(--pair-a, #36e0f6))";
     };
     const fromColor = colorFor(from);
     const toColor = colorFor(to);
