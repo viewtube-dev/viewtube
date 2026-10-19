@@ -132,14 +132,14 @@ export const buildBrainEvidenceRecordQuality = (
   ? "not_requested"
   : mismatched ? "mismatch" : unscoped ? "unscoped" : "exact"
  const observedRecords = records.filter((record) =>
-  record.epistemicState !== "missing"
+  record.epistemicState !== "MISSING"
   && record.availability !== "unavailable"
   && record.value !== null
   && record.value !== undefined,
  ).length
- const staleRecords = records.filter((record) => record.freshness === "stale" || record.epistemicState === "stale").length
+ const staleRecords = records.filter((record) => record.freshness === "stale" || record.epistemicState === "STALE").length
  const missingRecords = records.filter((record) =>
-  record.epistemicState === "missing"
+  record.epistemicState === "MISSING"
   || record.availability === "unavailable"
   || record.value === null
   || record.value === undefined,
