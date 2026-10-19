@@ -3974,18 +3974,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   white-space: nowrap;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__layer--core { animation: none; scale: 1; }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__center { display: grid; }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {
-  position: relative;
-  top: auto;
-  left: auto;
-  width: clamp(64px, 16cqw, 112px);
-  height: auto;
-  aspect-ratio: 1;
-  translate: none;
-  transform: none;
-  overflow: visible;
-}
+/* Keep the icon shell geometrically identical before and after upload.
+   The preview image is circular itself, so it does not require shell clipping. */
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg { display: none; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > img {
   position: absolute;
