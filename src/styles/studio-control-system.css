@@ -4813,3 +4813,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   line-height: .75;
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
 }
+
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
+  padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
+}
