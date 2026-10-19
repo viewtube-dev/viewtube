@@ -513,6 +513,16 @@ export const answerAIBrainQuestionModule = async (input: {
  question: CreatorBrainLearningQuestion
  answer: string
 }): Promise<AIBrainQuestionAnswer> => {
+ const normalizedAnswer = clean(input.answer).toLocaleLowerCase()
+ const priorTurns = await listAIBrainConversationTurnsDB(input.channelId || null)
+ const priorAnswer = priorTurns
+  .flatMap((turn) => turn.questionAnswers || [])
+  .find((answer) =>
+   answer.questionId === input.question.id &&
+   clean(answer.answer).toLocaleLowerCase() === normalizedAnswer,
+  )
+ if (priorAnswer) return priorAnswer
+
  const entry = await captureAIBrainLearningEvent({
   channelId: input.channelId || null,
   source: "copilot",
