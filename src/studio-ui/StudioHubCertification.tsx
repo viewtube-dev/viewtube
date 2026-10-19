@@ -70,27 +70,12 @@ export const StudioHubCertification: React.FC = () => {
           </SubToolboxGrid>
         </SubToolboxSection>
 
-        <SubToolboxSection label="Semantic appearances">
-          <SubToolboxGrid minItemWidth="compact">
-            <StudioButton tone="accent">Primary</StudioButton>
-            <StudioButton tone="neutral">Neutral</StudioButton>
-            <StudioButton tone="warning">Warning</StudioButton>
-            <StudioButton tone="success">Success</StudioButton>
-            <StudioButton tone="danger">Danger</StudioButton>
-          </SubToolboxGrid>
-        </SubToolboxSection>
-
-        <SubToolboxSection label="Square icon skins · V1–V4">
+        <SubToolboxSection label="Square icon variants + effects">
           <SubToolboxGrid minItemWidth="compact">
             <StudioSquareIconButton label="V1 primary fill" icon={<Search />} variant="v1" />
             <StudioSquareIconButton label="V2 secondary fill" icon={<Search />} variant="v2" />
             <StudioSquareIconButton label="V3 selectable pair" icon={<Check />} variant="v3" defaultSelected />
             <StudioSquareIconButton label="V4 black face" icon={<Sparkles />} variant="v4" />
-          </SubToolboxGrid>
-        </SubToolboxSection>
-
-        <SubToolboxSection label="Square icon interaction effects">
-          <SubToolboxGrid minItemWidth="compact">
             <StudioSquareIconButton label="Refresh with pop feedback" icon={<Search />} animate />
             <StudioSquareIconButton label="Three pending notifications" icon={<Settings2 />} effect="notification" badge={3} sizeVariant="compact" />
             <StudioSquareIconButton label="Rotated mode" icon={<Sparkles />} effect="rotated-toggle" defaultSelected />
@@ -105,10 +90,10 @@ export const StudioHubCertification: React.FC = () => {
           <SubToolboxGrid minItemWidth="wide">
             <div className="flex gap-3">
               <StudioIconButton label="Search" icon={<Search size={18} />} />
-              <StudioIconButton label="Confirm" tone="success" icon={<Check size={18} />} />
+              <StudioIconButton label="Confirm" icon={<Check size={18} />} />
             </div>
             <StudioSplitLeftButton data-vt-control-level="l1" sizeVariant="compact" heightVariant="28" icon={<Sparkles size={14} />}>Generate · 28px</StudioSplitLeftButton>
-            <StudioSplitLeftButton data-vt-control-level="l1" tone="success" icon={<Link2 size={22} />}>Connect Channel</StudioSplitLeftButton>
+            <StudioSplitLeftButton data-vt-control-level="l1" icon={<Link2 size={22} />}>Connect Channel</StudioSplitLeftButton>
           </SubToolboxGrid>
         </SubToolboxSection>
       </SubToolboxStack>
