@@ -228,7 +228,7 @@ it("removes the redundant semantic-tone matrices while preserving square icon va
   const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
   expect(html).not.toContain("Button + Split-left · Complete Variant Matrix")
   expect(html).not.toContain("semantic tones")
-  expect(html).toContain("Square Icon Button · 44px + 28px")
+  expect(html.match(/Square Icon Button · 44px \+ 28px/g)).toHaveLength(1)
   expect(html).not.toContain("Square Icon Button · All Presets + Animations")
   expect(html).toContain("Square icon button V1 primary fill")
   expect(html).toContain("HEART + STATE FEEDBACK")
