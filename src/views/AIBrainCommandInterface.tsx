@@ -72,6 +72,7 @@ import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrows
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
 import { BrainClaimEvidence } from "../components/brain/BrainClaimEvidence"
+import { confidenceForEvidence } from "../components/brain/BrainConfidenceChip"
 import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRibbon"
 import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
@@ -414,7 +415,7 @@ const OpeningBriefing: React.FC<{
      </div>
      <p className="mt-2 text-sm font-bold leading-6 text-black/75">{sanitizeCreatorFacingBrainCopy(read)}</p>
      <BrainProfileCoverageChecklist snapshot={snapshot} onPrompt={onPrompt} />
-     <BrainClaimEvidence evidencePack={snapshot.evidencePack} confidence={confidence} className="mt-3" />
+     <BrainClaimEvidence evidencePack={snapshot.evidencePack} confidence={confidenceForEvidence({ hasProfile: snapshot.inferredProfile.status !== "missing", videoCount: snapshot.inferredProfile.videoCount, dataStatus: snapshot.evidencePack.dataStatus })} className="mt-3" />
     </div>
 
    </section>
