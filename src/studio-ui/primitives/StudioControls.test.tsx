@@ -76,6 +76,9 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain('.vt-studio-upload-frame[data-size="compact"]');
     expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon");
     expect(css).toContain(".vt-studio-upload-frame__filename {");
+    expect(css).toContain(".vt-studio-upload-frame__filename::before");
+    expect(css).toContain(".vt-studio-upload-frame__filename::after");
+    expect(css).toContain("width: clamp(12px, 3cqw, 24px);");
     expect(css).toContain("z-index: 7;");
     expect(controls).toContain("inputRef.current?.click()");
     expect(controls).toContain("}, 1000);");
