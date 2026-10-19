@@ -325,3 +325,123 @@ Concretely, the slice would deliver: server-side gateway for one path, `StylePro
 **No implementation has begun and none will until you approve.** Per the brainstorming process, the next step is a written spec for whichever approach you choose, followed by an implementation plan.
 
 To proceed, I need: the approach (B-then-A recommended), an answer on the slice choice, and a decision on the Knowledge Map's ambition. The other open questions can be resolved during the spec.
+
+
+---
+
+# Part 5 — Evidence-first UI integration addendum (2026-10-19)
+
+**Purpose:** Connect the original destination-plus-ambient design to the Brain evidence/provenance work now present in the integration branch. This addendum updates implementation guidance; it does not rewrite the historical 2026-09-12 brainstorm or treat every proposed UI as implemented.
+
+**Current implementation anchors verified on `master/consolidated-feature-integration`:**
+- [PR #667 — preserve rich evidence through provenance](https://github.com/viewtube-dev/viewtube/pull/667) is merged. `EvidenceRecord` carries typed source, metric, value, freshness, epistemic state, confidence, availability and provenance metadata; `BrainTrace` can retain rich evidence records alongside compatibility ID lists. Missing metric records can be represented explicitly, and capture time is no longer fabricated as the metric's observation time.
+- [PR #674 — enforce the model gateway in orchestration](https://github.com/viewtube-dev/viewtube/pull/674) is merged. Both normal and repair generation use the provider-neutral Brain model gateway.
+- [PR #723 — fail closed on evidence grade parity mismatch](https://github.com/viewtube-dev/viewtube/pull/723) is merged. The evidence selected for a turn is graded and rendered under a parity contract; missing or mismatched grades must block analytics-derived prompt context rather than merely add a warning.
+- The implementation plan remains the execution checklist: [AI Brain Quick Wins — Master Implementation, Evidence & UX Plan](../../../brain/AI_BRAIN_QUICK_WINS_MASTER_IMPLEMENTATION_PLAN.md). These merges strengthen the substrate; they do not mean the whole front-end surface or all 60 brainstorm items are complete.
+
+## 5.1 Updated product invariant: one evidence identity from answer to UI
+
+The core front-end contract is now stricter than “show a citation somewhere.” A user-facing claim must be derived from the **same turn-bound evidence records that passed the prompt evidence grade**. The UI must not reconstruct a friendlier or broader evidence list from a separate snapshot, analytics query, cached profile, or display-only summary.
+
+For every evidence-backed claim, preserve and make inspectable:
+- Stable evidence ID, owner/source, source reference and source snapshot.
+- Metric/value/unit, time window and applicable scope (channel/video/project/filter).
+- Observation time and update/capture time as distinct concepts; unknown observation time stays unknown.
+- Freshness, confidence, epistemic state, availability/missingness and known limitations.
+- The turn/trace identity and prompt-context fingerprint needed to reproduce what the model actually saw.
+
+**Fail closed:** if the displayed claim cannot resolve to the graded records for that turn, label it unverified or withhold the evidence-backed claim. Do not show a green confidence indicator over an ungraded value. A warning is not a substitute for blocking unsupported analytics context.
+
+## 5.2 Universal Claim surface — shared component contract
+
+Promote the existing `BrainConfidenceChip` and `BrainEvidenceDrawer` into shared presentation primitives rather than building per-tool evidence widgets. Introduce or formalize a `ClaimBlock` / `EvidenceRibbon` composition with a single data contract:
+
+1. **Claim text/value** — keep source facts distinct from model interpretation.
+2. **Epistemic label** — observed, calculated/derived, creator-provided/confirmed, inferred, hypothesis, estimate, conflicting, missing, or unknown where applicable. Use the canonical evidence vocabulary; do not invent a second UI-only taxonomy.
+3. **Confidence and freshness** — show only when supported by the underlying record and explain what the score means. Never use confidence as decoration or as a substitute for evidence.
+4. **Evidence ribbon** — compact source names/record count plus a keyboard-accessible “Inspect evidence” action.
+5. **Evidence detail** — source, exact value/unit, window, scope, observation/update timestamps, freshness, limitations, missing metrics and a stable destination.
+6. **Provenance action** — “How this was produced” opens the relevant turn trace and identifies the model served, prompt/context version, evidence IDs/omissions and output identity when recorded.
+
+Use this same composition in chat answers, Analytics insights, charts and widgets, generated assets, content briefs, recommendation cards, learning reports and operator evaluations. A surface may choose a compact or expanded layout, but it must not change the meaning of the evidence.
+
+## 5.3 Make uncertainty and missingness visually honest
+
+The UI must distinguish these states instead of collapsing them into empty text, zero, or one generic warning:
+
+| Data state | Required presentation |
+|---|---|
+| Known numeric zero | Render zero as a real measured value |
+| Missing / unavailable | Render “Unavailable” or “Not provided”; never substitute zero |
+| Not requested / not checked | Say it was not checked; do not imply a negative result |
+| Partial coverage | Show the value with a visible partial-coverage qualifier |
+| Stale | Show the age/update time and qualify claims that depend on it |
+| Inferred / hypothesis / estimate | Name the epistemic state and avoid presenting it as observed fact |
+| Conflicting evidence | Surface the disagreement and sources; do not silently choose one |
+| Grade or provenance mismatch | Block analytics-derived claims for that turn and explain the repair path |
+
+Do not imply a precise observation timestamp when the source only records when data was copied. If `observedAt` is unknown, the interface should say so or omit the date while still exposing `updatedAt` separately.
+
+## 5.4 Map the evidence contract to the nine Brain destinations
+
+| Destination | Evidence-first behaviour |
+|---|---|
+| **Conversation** | Inline claim evidence; “show your work” expands the exact turn evidence, limitations and trace summary. |
+| **Channel Mind** | Each profile fact shows source, age, confidence and epistemic state; creator corrections become proposed, attributable updates rather than silent overwrites. |
+| **Style Studio** | Show which creator-confirmed examples and style-profile version informed a draft; distinguish style judgment from measured performance. |
+| **Asset Studio** | Pin the evidence snapshot, brief version, style version, prompt family and output identity to each generated variant. Regeneration/revision creates a new version, not a mutation of the prior receipt. |
+| **Action Board** | Recommendation cards link to the evidence and outcome lineage; acceptance, rejection reason and snooze are structured feedback events. |
+| **Learning Ledger** | Show recommendation → evidence → prediction → measured outcome → candidate → governed promotion. Label provisional learnings separately from confirmed patterns. |
+| **Autonomy & Controls** | Permission, schedule, budget, approval tier and resulting action receipt must be visible together; generation and publication permissions remain distinct. |
+| **Evidence Explorer** | Browse canonical records by owner/source, metric, scope, window, freshness, availability and snapshot; explain each gap and offer a permitted recovery action. |
+| **Activity Feed / operator trace** | Show what happened, what evidence/context was used, what output/action resulted, whether it was reviewed, and how to undo or retry where supported. |
+
+The ambient sidecar and “Why?” affordance must pass a typed `WidgetContext` (widget ID, dataset/evidence IDs, entity, time window, filters and selected datum) into the same evidence-resolution path. It must not use the visible chart label as a substitute for the underlying query context.
+
+## 5.5 Accessibility and responsive behaviour are part of the evidence contract
+
+- **Keyboard-first inspection:** every evidence ribbon, confidence detail, source link, chart point explanation and trace expansion must be reachable and operable without a pointer. Provide visible focus and predictable focus return from drawers/dialogs.
+- **Screen-reader semantics:** expose claim text, epistemic state, freshness and evidence-action purpose as meaningful labels; announce newly loaded evidence and blocked/degraded states without repeatedly reading entire dashboards.
+- **Never rely on colour alone:** pair state colours with text/icons/patterns and explicit labels. Red/green must not be the only way to distinguish conflict, freshness or validation.
+- **Contrast and text sizing:** meet WCAG contrast requirements for text, controls, focus indicators and chart marks in both themes. Keep essential evidence readable at zoom and phone width.
+- **Charts need equivalent text:** provide a concise textual summary and accessible table/list for evidence, missingness and comparisons; tooltips alone are insufficient.
+- **Motion and status:** respect reduced-motion settings. Do not communicate loading, success, or failure only through animation.
+- **Touch and narrow layouts:** source ribbons can wrap or collapse to a clearly labelled count, but must not drop source identity, stale/missing qualifiers or the evidence-inspection action.
+- **Safe recovery:** when evidence is unavailable, explain why and present only actions the user is allowed to take. Do not make a “connect” or “sync” affordance appear successful before the system confirms it.
+
+## 5.6 Shared UI primitives and integration rules
+
+Build on existing primitives where possible; avoid a parallel “Brain-only” component library or a new evidence store.
+
+- `ClaimBlock`: canonical presentation for one fact or interpretation plus epistemic state.
+- `EvidenceRibbon`: compact, responsive summary of the exact record IDs backing the claim.
+- `BrainEvidenceDrawer`: detailed record inspector shared by all surfaces.
+- `BrainConfidenceChip`: optional, sourced confidence display with an explanatory accessible label.
+- `EvidenceGapCard`: actionable missingness/permission/freshness explanation.
+- `TraceTimeline`: user-safe provenance sequence for a turn or generation.
+- `WidgetContext`: typed context handoff for “Why?” and contextual chat.
+- `LearningLineage`: shared presentation of recommendation, prediction, outcome and promotion status.
+
+Each component consumes typed canonical records or IDs that resolve through the turn's evidence envelope. It must not accept arbitrary display-only confidence or a hand-authored evidence summary as proof. Keep data resolution, grade validation, authorization and actions in services; components render the result and expose accessible user actions.
+
+## 5.7 Revised implementation sequence and release gates
+
+1. **Evidence integrity (backend gate):** preserve canonical record IDs and rich provenance; grade and render the same ordered records; reject absent/mismatched grades. This is strengthened by merged PRs #667 and #723.
+2. **Provider-neutral execution:** keep normal and repair calls behind the gateway, as in merged PR #674.
+3. **Shared claim contract:** define the typed UI view model as a projection of canonical evidence, not a second evidence owner. Test ID parity and all epistemic/missingness states.
+4. **One vertical slice:** deliver one Analytics claim from chart/WidgetContext → evidence resolution → graded model context → ClaimBlock → inspectable source/trace. Then carry the same primitives into one generated asset and one recommendation.
+5. **Creator correction and learning:** wire claim corrections, acceptance/rejection reasons, and measured outcomes to structured events with stable lifecycle identity.
+6. **Accessible destination/ambient rollout:** generalize to all nine destinations only after the vertical slice passes parity, accessibility, responsive and regression tests.
+7. **Operator certification:** compare golden cases, exact evidence IDs/omissions, served-model identity, latency/cost and output outcome. Re-baseline deliberately when evidence selection changes; do not tune the baseline merely to make a regression green.
+
+**Release acceptance criteria**
+- Every displayed evidence-backed claim resolves to the exact evidence records graded for its turn.
+- A changed value, reordered/changed record identity, missing grade or unresolved ID cannot silently render as grounded.
+- Zero, missing, not checked, partial, stale, inferred and conflicting are distinguishable in UI and accessible text.
+- Keyboard and screen-reader users can inspect sources and understand blocked/degraded states.
+- Every handoff preserves scope, filters and stable entity/evidence identity.
+- No new front-end surface claims a capability is live until the underlying service, permission and recovery path are verified.
+
+## 5.8 Status discipline
+
+This is integration guidance, not a claim that every proposed destination/component has shipped. Track each surface as **implemented and verified**, **implemented but not verified**, **partial**, or **proposed** against the current code and test evidence. The old Part 4 approval questions and approval gate remain a record of the original brainstorm date; current implementation authority comes from the integration branch, the Quick Wins plan, current architecture contracts and merged PRs—not from the historical status banner.
