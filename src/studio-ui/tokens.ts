@@ -81,7 +81,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     letterSpacing: -0.02,
     lineHeight: 0.86,
     height: "content-driven two-word stack; intentionally not 44px / 28px / 14px",
-    width: "content",
+    width: "row",
     followsTypographySizeFamily: true,
     globalRuleException: true,
   },
