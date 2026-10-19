@@ -300,8 +300,8 @@ const assistantCardFrame = "w-full max-w-none shrink-0 border-y-[2px] border-bla
 const kpiButton =
  "inline-flex items-center gap-2 rounded-[8px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.08em] transition hover:bg-[#3FEE56]"
 
-export const shouldSendBrainComposerKey = ({ key, isComposing }: { key: string; isComposing: boolean }) =>
- key === "Enter" && !isComposing
+export const shouldSendBrainComposerKey = ({ key, isComposing, shiftKey = false }: { key: string; isComposing: boolean; shiftKey?: boolean }) =>
+ key === "Enter" && !isComposing && !shiftKey
 
 const PROMPT_CARD_SUMMARIES: Record<string, string> = {
  "analyze-channel-niche": "Find your niche and fuzzy edges.",
@@ -1772,21 +1772,23 @@ const AIBrainCommandInterface: React.FC = () => {
             <BookOpen size={18} aria-hidden="true" />
            </button>
            <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
-           <span id="brain-composer-help" className="sr-only">Press Enter to send. Search prompts or browse capabilities for guided requests.</span>
+           <span id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
-           <input
-            ref={composerRef}
-            type="text"
+           <textarea
+            ref={composerRef as React.RefObject<HTMLTextAreaElement>}
             id="brain-composer"
+            rows={1}
             value={input}
             onChange={(event) => setInput(event.target.value)}
             onKeyDown={(event) => {
-             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing })) return
+             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
              event.preventDefault()
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="h-[52px] min-w-0 flex-1 rounded-[9px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-[3px] focus-visible:ring-black" aria-label="Ask ViewTube Brain" aria-describedby="brain-composer-help"
+            className="max-h-36 min-h-[52px] min-w-0 flex-1 resize-y rounded-[6px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-2 focus-visible:ring-black"
+            aria-label="Ask ViewTube Brain"
+            aria-describedby="brain-composer-help"
            />
            <button type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
             {busy ? <Zap className="animate-pulse" size={16} /> : <Send size={16} />} Send
