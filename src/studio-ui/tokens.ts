@@ -86,8 +86,8 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     followsTypographySizeFamily: true,
     globalRuleException: true,
   },
-  /** Multiline exception: taller writing surface while preserving the chosen standard/compact geometry. */
-  multiline: { minHeight: 92, standardFontSize: 18, compactFontSize: 14, fontWeight: 1000, standardTextStroke: 0.5, compactTextStroke: 0.35, standardLineHeight: 1.25, compactLineHeight: 1.3, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas alone use 18px standard and 14px compact; they additionally use multiline line-height, padding, and a 92px minimum surface." },
+  /** Multiline surface shares the input typography/focus token ladder; only description line-height is specialized. */
+  multiline: { minHeight: 92, lineHeight: 0.75, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas inherit the same size-tier font size, text stroke, color, fill, caret, and focus outline tokens as text inputs; editable description rows alone use line-height 0.75." },
 } as const
 
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
