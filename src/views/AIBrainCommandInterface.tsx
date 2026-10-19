@@ -1030,6 +1030,10 @@ const AIBrainCommandInterface: React.FC = () => {
  )
 
  useEffect(() => {
+  if (brain.activeProjectId) setProjectContextCleared(false)
+ }, [brain.activeProjectId])
+
+ useEffect(() => {
   const syncSelection = (event?: Event) => {
    const detail = event instanceof CustomEvent ? event.detail as BrainSurfaceSelection | null : null
    setSurfaceSelection(detail || readBrainSurfaceSelection())
@@ -1718,7 +1722,7 @@ const AIBrainCommandInterface: React.FC = () => {
          <BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
           projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
-          contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || null}
+          contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || (typeof surfaceSelection?.context?.contentBuildId === "string" ? surfaceSelection.context.contentBuildId : null)}
           selection={surfaceSelection}
           onClearSelection={handleClearSurfaceSelection}
           onToggleLock={handleToggleSurfaceSelectionLock}
