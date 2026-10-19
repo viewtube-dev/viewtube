@@ -6,7 +6,6 @@ const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "ut
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const certification = readFileSync("src/studio-ui/StudioHubCertification.tsx", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8")
-const catalogStyles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8")
 const confirmedCatalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 
 test("side counter divider is centered on a true half-height boundary", () => {
