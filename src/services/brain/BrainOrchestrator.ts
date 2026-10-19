@@ -27,7 +27,6 @@ import {
 } from "../aiBrainConversationStore"
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
 import {
- generateStructuredBrainResponse,
  getActiveModel,
  groundCurrentNicheResearch,
  type StructuredBrainModelOutput,
@@ -600,7 +599,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    const initialRepairReasons = [...evaluation.repairReasons]
    repairOutcome = { attempted: true, succeeded: false, reasons: initialRepairReasons, evaluationId: evaluation.id }
    try {
-    const repairedOutput = await withTimeout((input.modelGenerator || generateStructuredBrainResponse)({
+    const repairedOutput = await withTimeout((input.modelGenerator || defaultBrainModelGateway.generateStructuredResponse)({
      history: (input.history || []).slice(-8),
      userText: input.userText,
      systemInstruction: [
