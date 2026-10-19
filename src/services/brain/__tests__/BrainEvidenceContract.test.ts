@@ -38,7 +38,7 @@ describe("shared evidence epistemic contract", () => {
  it("lets explicit stale freshness override a current epistemic label", () => {
   expect(projectEvidenceRecordToBrainClaim({
    ...record("OBSERVED"),
-   freshness: "STALE",
+   freshness: "stale",
   }).epistemicState).toBe("STALE")
  })
 })
