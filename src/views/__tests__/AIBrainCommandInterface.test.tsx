@@ -167,10 +167,11 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("You:")
  })
 
- it("sends the composer with Enter while ignoring IME composition", () => {
-  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false })).toBe(true)
-  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: true })).toBe(false)
-  expect(shouldSendBrainComposerKey({ key: "Escape", isComposing: false })).toBe(false)
+ it("sends with Enter, preserves Shift+Enter newlines, and ignores IME composition", () => {
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false, shiftKey: false })).toBe(true)
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false, shiftKey: true })).toBe(false)
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: true, shiftKey: false })).toBe(false)
+  expect(shouldSendBrainComposerKey({ key: "Escape", isComposing: false, shiftKey: false })).toBe(false)
  })
 
  it("keeps prompt and channel-context launchers reachable on smaller screens", () => {
