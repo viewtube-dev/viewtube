@@ -44,7 +44,7 @@ export const reconcileBrainLearningQuestions = (
  const reopened = new Set(reopenedQuestionIds)
  const validAnswers = savedAnswers.filter((answer) =>
   clean(answer.answer) &&
-  !["outdated", "superseded", "rejected"].includes(answer.status || "confirmed") === false &&
+  !["outdated", "superseded", "rejected"].includes(answer.status || "confirmed") &&
   !/\b(outdated|superseded|rejected)\b/i.test(answer.answer),
  )
  return questions.filter((question) => {
