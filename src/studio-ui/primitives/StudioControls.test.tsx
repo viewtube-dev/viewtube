@@ -215,10 +215,13 @@ describe("standalone Studio text fields", () => {
     expect(block).toContain("--field-border-width: var(--vt-studio-control-stroke, 3px);");
     expect(block).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
     expect(block).toContain("border: var(--studio-text-box-stroke-width) solid #000;");
-    expect(block).toContain("box-shadow: inset 0 0 0 var(--studio-text-box-stroke-width) var(--vt-field-primary");
+    expect(block).toContain("position: relative;");
+    expect(block).not.toContain("box-shadow");
     expect(block).toContain("outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
+    expect(css).toContain('.vt-studio-text-box[data-vt-studio-control="true"]::before');
+    expect(css).toContain("border: var(--studio-text-box-stroke-width) solid var(--vt-field-primary");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(block).not.toContain("-webkit-text-stroke");
@@ -226,11 +229,12 @@ describe("standalone Studio text fields", () => {
     expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) #000;");
   });
 
-  it("uses the shared 0.85 line-height token for textarea and text-box sizes", () => {
+  it("uses 0.75 line-height for editable textarea text and read-only StudioTextBox text", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
-    expect(css).toContain("--vt-studio-textarea-line-height: .85;")
-    expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
-    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(5)
+    expect(css).toContain("--vt-studio-textarea-line-height: .75;")
+    expect(css).toContain("line-height: 0.75;")
+    expect(css).toContain("line-height: var(--vt-studio-textarea-line-height, .75);")
+    expect(css).not.toContain("min-height: var(--vt-studio-textarea-min-height, 92px);\n  margin: 0;")
   })
 
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
