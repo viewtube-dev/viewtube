@@ -15,6 +15,8 @@ import type { CreatorContextEnvelope } from "./CreatorContextResolver"
 import { buildAlgorithmIntelligenceContext, type AlgorithmIntelligencePortfolio } from "./AlgorithmIntelligenceOrchestrator"
 import { resolveBrainContextSections } from "./BrainContextResolution"
 import type { BrainEvidenceClaim, BrainEvidenceHealth } from "./BrainEvidenceContract"
+import type { EvidenceRecord } from "./EvidenceRecord"
+import type { BrainEvidenceRecordQualityReport } from "./BrainEvidenceQuality"
 
 const clip = (value: string, maximum: number): string => value.slice(0, Math.max(0, maximum))
 
@@ -32,6 +34,8 @@ export const buildBrainContextPack = (input: {
  currentResearch?: string
  statisticsIntelligence?: StatisticsIntelligenceSnapshot | null
  evidenceQuality?: BrainEvidenceQualityReport | null
+ evidenceRecords?: EvidenceRecord[] | null
+ evidenceRecordQuality?: BrainEvidenceRecordQualityReport | null
  evidenceClaims?: BrainEvidenceClaim[] | null
  sharedEvidenceHealth?: BrainEvidenceHealth | null
  analyticsFindingContext?: BrainAnalyticsFindingContext | null
@@ -84,9 +88,8 @@ export const buildBrainContextPack = (input: {
     `Channel: ${input.snapshot.channel.label}`,
     `Inferred niche: ${input.snapshot.inferredProfile.niche || "unknown"}`,
     `Content pillars: ${input.snapshot.inferredProfile.contentPillars.join(", ") || "unknown"}`,
-    `Known videos: ${input.snapshot.inferredProfile.videoCount}`,
-    ...input.snapshot.inferredProfile.topEvidenceVideos.slice(0, 5).map((video) =>
-     `${video.title}${typeof video.views === "number" ? ` | ${video.views.toLocaleString()} views` : " | views unknown"}`),
+    ...(input.evidenceRecords || []).map((record) =>
+     `Evidence id=${record.id}; owner=${record.owner}; metric=${record.metric || "unspecified"}; value=${record.value === null || record.value === undefined ? "unknown" : String(record.value)}${record.unit ? ` ${record.unit}` : ""}; freshness=${record.freshness}; observedAt=${record.observedAt || "unknown"}; source=${record.sourceRef}; snapshot=${record.sourceSnapshotId || "unknown"}; confidence=${record.confidence ?? "unknown"}; state=${record.epistemicState}; refs=${record.provenance.evidenceIds.join(",") || "none"}${record.limitations?.length ? `; limitations=${record.limitations.join("; ")}` : ""}`),
     ...input.snapshot.evidencePack.missingInputs.map((value) => `Missing: ${value}`),
    ].join("\n"), 3800)
   : analyticsScopeBlocked
@@ -102,6 +105,14 @@ export const buildBrainContextPack = (input: {
     ...input.sharedEvidenceHealth.limitations.map((value) => `Limitation: ${value}`),
     "Shared evidence policy: source ownership and provenance must be preserved; missing is not zero; inferred, estimated and hypothetical claims are not observed facts; channel/project/video scope mismatch blocks use.",
    ].join("\n"), 2400)
+  : ""
+
+ const evidenceRecordQuality = controls.allowAnalytics && input.evidenceRecordQuality
+  ? clip([
+    `recordGrade=${input.evidenceRecordQuality.confidence}; scope=${input.evidenceRecordQuality.scopeMatch}; records=${input.evidenceRecordQuality.totalRecords}; numeric=${input.evidenceRecordQuality.numericRecords}; observed=${input.evidenceRecordQuality.observedRecords}; stale=${input.evidenceRecordQuality.staleRecords}; missing=${input.evidenceRecordQuality.missingRecords}`,
+    ...input.evidenceRecordQuality.limitations.map((value) => `Record limitation: ${value}`),
+    "Record-grade policy: this grade applies only to the EvidenceRecord ids rendered in CHANNEL EVIDENCE; it does not replace dataset readiness.",
+   ].join("\n"), 1200)
   : ""
 
  const evidenceQuality = controls.allowAnalytics && input.evidenceQuality
@@ -214,6 +225,7 @@ export const buildBrainContextPack = (input: {
   controlInstruction,
   "\nCHANNEL EVIDENCE\n" + evidence,
   evidenceQuality ? "\nEVIDENCE QUALITY\n" + evidenceQuality : "",
+  evidenceRecordQuality ? "\nPROMPT EVIDENCE RECORD QUALITY\n" + evidenceRecordQuality : "",
   sharedEvidenceContract ? "\nSHARED EVIDENCE CONTRACT\n" + sharedEvidenceContract : "",
   statistics ? "\nDETERMINISTIC STATISTICS INTELLIGENCE\n" + statistics : "",
   analyticsFindings ? "\nDETERMINISTIC ANALYTICS FINDINGS\n" + analyticsFindings : "",
@@ -248,7 +260,7 @@ export const buildBrainContextPack = (input: {
    estimatedInputTokens: resolvedContext.estimatedInputTokens,
    contextBudgetSource: resolvedContext.budgetSource,
    systemCharacters: system.length,
-   evidenceCharacters: evidence.length + evidenceQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
+   evidenceCharacters: evidence.length + evidenceQuality.length + evidenceRecordQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,
    knowledgeCharacters: knowledge.length + research.length,
    conversationCharacters: clippedConversation.length,
