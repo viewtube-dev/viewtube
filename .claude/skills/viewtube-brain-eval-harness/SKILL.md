@@ -69,13 +69,14 @@ Every evaluable Brain/asset operation should make available:
 - prompt constitution/family/version
 - context-resolver version
 - model requested/served
-- evidence IDs and omissions
+- evidence IDs, omissions and the exact ordered evidence-record fingerprint/IDs rendered in the prompt
+- parity result proving the graded evidence matches the prompt evidence; missing or mismatched grades must block the run
 - repair count
 - style/grounding grades
 - creator decision where available
 - measured outcome where attributable
 
-An eval without model-served and evidence/context provenance is not comparable.
+An eval without model-served and evidence/context provenance is not comparable. A grade is only comparable when its ordered record IDs and fingerprint match the evidence actually rendered; mismatch cases must be included in regression fixtures.
 
 ## Metrics
 

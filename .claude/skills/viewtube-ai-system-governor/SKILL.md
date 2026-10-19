@@ -82,6 +82,8 @@ If yes, redesign first.
 - Retrieve just-in-time.
 - Rank by relevance, authority, freshness, scope and contradiction.
 - Keep evidence provenance and coverage visible.
+- The exact ordered `EvidenceRecord[]` graded by `BrainEvidenceRecordQuality` must be the records rendered by `BrainContextBroker`; missing grades or fingerprint/ID mismatch fail closed before analytics-derived context reaches the model.
+- Preserve epistemic state, owner, scope, observation/update timestamps, freshness, confidence and source refs through resolver → prompt → trace → evaluation. Missing values remain explicit missingness, never zero.
 - Never reconstruct creator-disabled private context.
 - Current measured evidence outranks stale inferred learning.
 
