@@ -309,7 +309,7 @@ export interface RunBrainTurnInput {
  artifactRefs?: string[]
 }
 
-const buildEvidenceProvenanceChips = (evidence: EvidenceIntelligenceEnvelope | null): string[] => {
+export const buildEvidenceProvenanceChips = (evidence: EvidenceIntelligenceEnvelope | null): string[] => {
  if (!evidence) return []
  const quality = evidence.evidenceQuality
  const chips = [
