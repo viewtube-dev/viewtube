@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Navigation Systems — Component Library</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#080808;background:#f4f4f1;--pair-a:#36e0f6;--pair-b:#ff7f6b;--ink:#000;--gap:4px}
+*{box-sizing:border-box}body{margin:0;padding:20px;line-height:1.15}button{font:inherit;color:inherit;cursor:pointer}header{border:3px solid #000;background:#fff;padding:16px;margin-bottom:12px}h1{font-size:clamp(24px,4vw,44px);line-height:.9;letter-spacing:-.05em;text-transform:uppercase;margin:0 0 10px;font-weight:1000}p{margin:0 0 8px}.meta{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}.palette{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}.swatch{display:flex;align-items:center;gap:6px;padding:5px 7px;border:1px solid #000;background:#fff;font-size:10px;font-weight:900}.dot{width:12px;height:12px;border:1px solid #000;display:inline-block}.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:12px 0 18px}.toolbar button{border:2px solid #000;border-radius:4px;background:#fff;padding:7px 10px;font-size:12px;font-weight:1000;text-transform:uppercase}.toolbar button[aria-pressed=true]{background:var(--pair-a)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:12px}.system{background:#fff;border:3px solid #000;min-width:0;padding:10px}.system-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;border-bottom:1px solid #bbb;padding-bottom:8px;margin-bottom:8px}.system h2{font-size:16px;text-transform:uppercase;letter-spacing:-.04em;margin:0;font-weight:1000}.system-head span{font-size:10px;font-weight:900;opacity:.6}.density{margin-top:8px}.density-label{font-size:9px;font-weight:1000;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between}.nav{--h:44px;--stroke:3px;--radius:6px;--fs:38px;--icon:38px;--pad:5px;display:flex;gap:var(--gap);align-items:stretch;min-width:0;overflow-x:auto;padding:0 0 2px;scrollbar-width:thin}.density.compact .nav{--h:28px;--stroke:2px;--radius:4px;--fs:24px;--icon:24px;--pad:3px}.density.micro .nav{--h:14px;--stroke:1px;--radius:2px;--fs:10px;--icon:10px;--pad:1px;gap:2px}.item{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;min-width:max-content;min-height:var(--h);height:var(--h);padding:0 var(--pad);border:var(--stroke) solid #000;border-radius:var(--radius);background:color-mix(in srgb,var(--item-color) 50%,transparent);font-size:var(--fs);font-weight:1000;letter-spacing:-.02em;line-height:.86;text-transform:uppercase;white-space:nowrap;flex:1 0 auto}.item .glyph{font-size:var(--icon);line-height:.8;flex:0 0 auto}.item[aria-current=page]{background:var(--item-color);outline:var(--stroke) solid var(--pair-b);outline-offset:0}.item:focus-visible{outline:calc(var(--stroke)*.65) solid var(--pair-b);outline-offset:0}.item:active{transform:none}.micro .item .glyph{font-size:9px}.swatch-label{font-size:10px;font-weight:1000}.nav>*{transition:none!important;box-shadow:none!important}
+/* 20 intentionally different navigation compositions */
+.s01 .nav{gap:0}.s01 .item{border-radius:0;flex:1 0 auto}.s01 .item+ .item{border-left:0}
+.s02 .nav{flex-direction:column;align-items:stretch;max-width:230px}.s02 .item{justify-content:flex-start}
+.s03 .nav{display:grid;grid-template-columns:repeat(5,minmax(max-content,1fr));gap:4px}.s03 .item{min-width:0;padding-inline:4px}
+.s04 .nav{gap:2px}.s04 .item{border-radius:999px;padding-inline:10px}.s04 .item[aria-current=page]{border-radius:999px}
+.s05 .nav{border:var(--stroke) solid #000;padding:2px;gap:2px;background:var(--pair-b)}.s05 .item{border:0;border-radius:0;background:transparent}.s05 .item[aria-current=page]{background:#fff;outline:0}
+.s06 .nav{flex-wrap:wrap;overflow:visible}.s06 .item{flex:0 1 auto}
+.s07 .nav{display:grid;grid-template-columns:repeat(10,minmax(max-content,1fr));gap:0}.s07 .item{flex-direction:column;gap:1px;border-radius:0;padding:1px}.s07 .item .glyph{font-size:calc(var(--icon)*.55)}
+.s08 .nav{flex-direction:column;max-width:72px;align-items:stretch}.s08 .item{flex-direction:column;padding:0 2px;gap:1px;min-width:0}.s08 .item .label{font-size:calc(var(--fs)*.38);writing-mode:vertical-rl;max-height:calc(var(--h)*.65)}
+.s09 .nav{gap:0}.s09 .item{border:0;border-bottom:var(--stroke) solid #000;border-radius:0;background:transparent;justify-content:flex-start}.s09 .item[aria-current=page]{border-bottom-color:var(--pair-b);background:color-mix(in srgb,var(--item-color) 30%,transparent);outline:0}
+.s10 .nav{flex-wrap:wrap;gap:4px}.s10 .item{flex:0 0 auto;border-style:dashed}
+.s11 .nav{gap:0}.s11 .item{border-radius:0;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%);padding-inline:12px}.s11 .item:first-child{clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%)}
+.s12 .nav{flex-direction:column;max-width:100%;gap:0}.s12 .item{justify-content:space-between;border-radius:0;border-bottom:0}.s12 .item:last-child{border-bottom:var(--stroke) solid #000}.s12 .item:after{content:"↗";font-size:calc(var(--fs)*.6)}
+.s13 .nav{display:grid;grid-template-columns:repeat(5,minmax(max-content,1fr));gap:4px}.s13 .item{border-radius:0;border-width:var(--stroke);box-shadow:inset 0 calc(var(--stroke)*-1) 0 #000}
+.s14 .nav{flex-direction:column;max-width:100%;gap:2px}.s14 .item{border-left-width:calc(var(--stroke)*3);justify-content:flex-start}.s14 .item[aria-current=page]{border-left-color:var(--pair-b);outline:0}
+.s15 .nav{gap:4px}.s15 .item{border-radius:0;flex:0 0 auto}.s15 .item:before{content:"";width:calc(var(--stroke)*2);height:calc(var(--stroke)*2);background:#000;display:inline-block}.s15 .item[aria-current=page]:before{background:var(--pair-b)}
+.s16 .nav{display:grid;grid-template-columns:repeat(5,minmax(max-content,1fr));gap:4px}.s16 .item{flex-direction:row-reverse;justify-content:space-between}.s16 .item .glyph{font-size:calc(var(--icon)*.55)}
+.s17 .nav{flex-direction:column;max-width:100%;gap:4px}.s17 .item{display:grid;grid-template-columns:calc(var(--h)*.7) 1fr;justify-content:stretch;padding:0}.s17 .item .glyph{border-right:var(--stroke) solid #000;height:100%;display:grid;place-items:center;width:calc(var(--h)*.7)}
+.s18 .nav{gap:0;border-bottom:var(--stroke) solid #000}.s18 .item{border-radius:0;border-bottom:0;background:transparent}.s18 .item[aria-current=page]{background:var(--item-color);outline:0}
+.s19 .nav{flex-direction:column;max-width:100%;gap:0}.s19 .item{border-radius:0;border-bottom:0;justify-content:flex-start}.s19 .item:last-child{border-bottom:var(--stroke) solid #000}.s19 .item .glyph{width:calc(var(--icon)*1.2);text-align:center}
+.s20 .nav{display:grid;grid-template-columns:repeat(5,minmax(max-content,1fr));gap:4px}.s20 .item{border-radius:0;border-width:var(--stroke);background:var(--item-color);position:relative}.s20 .item[aria-current=page]{background:var(--pair-a);outline:var(--stroke) solid var(--pair-b)}
+@media(max-width:600px){body{padding:8px}.system{padding:7px}.grid{grid-template-columns:minmax(0,1fr)}.s03 .nav,.s07 .nav,.s13 .nav,.s16 .nav,.s20 .nav{grid-template-columns:repeat(5,minmax(max-content,1fr))}.s08 .nav{max-width:100%;flex-direction:row}.s08 .item .label{writing-mode:horizontal-tb;max-height:none}}
+</style>
+</head>
+<body>
+<header>
+<h1>Studio Navigation Systems</h1>
+<p><strong>20 unique navigation compositions</strong> using the ViewTube section palette and Studio Controls sizing, color-pair, stroke, radius, focus, and flat-surface rules.</p>
+<p class="meta">Standard 44px · Compact 28px · Micro 14px · Inter 1000 · Uppercase · 4px gaps · Black borders · No shadows or movement</p>
+<div class="palette" id="palette"></div>
+</header>
+<div class="toolbar" role="group" aria-label="Library display options">
+<button type="button" id="showAll" aria-pressed="true">Show all sizes</button>
+<button type="button" data-only="standard" aria-pressed="false">Standard only</button>
+<button type="button" data-only="compact" aria-pressed="false">Compact only</button>
+<button type="button" data-only="micro" aria-pressed="false">Micro only</button>
+<button type="button" id="reset">Reset active items</button>
+</div>
+<main class="grid" id="library"></main>
+<script>
+const sections=[
+{name:"Dashboard",color:"#FF5B85",glyph:"▦"},
+{name:"Studio",color:"#FF735C",glyph:"▶"},
+{name:"Projects",color:"#FFA451",glyph:"◫"},
+{name:"AI Brain",color:"#FFD541",glyph:"✳"},
+{name:"Analytics",color:"#BCE742",glyph:"⌁"},
+{name:"Editor",color:"#3DE364",glyph:"✎"},
+{name:"Vault",color:"#33D7FF",glyph:"▣"},
+{name:"Resources",color:"#4D8BFF",glyph:"◇"},
+{name:"Settings",color:"#9D5CFF",glyph:"⚙"},
+{name:"User Guide",color:"#FF6EC7",glyph:"?"},
+];
+const names=[
+"Flush Strip","Vertical Command Rail","Five-Column Matrix","Rounded Segment Bar","Inverse Pair Track",
+"Wrapping Action Chips","Icon-Above Labels","Icon Dock","Underline Navigation","Dashed Utility Row",
+"Chevron Breadcrumbs","Trailing-Action List","Inset Grid Tabs","Accent Spine Menu","Marker Tabs",
+"Right-Icon Matrix","Split Icon Rows","Flat Tab Shelf","Icon Index List","Color-Field Matrix"
+];
+const palettes=document.querySelector("#palette");
+sections.forEach(s=>{const el=document.createElement("span");el.className="swatch";el.innerHTML='<i class="dot" style="background:'+s.color+'"></i>'+s.name+' <code>'+s.color+'</code>';palettes.append(el)});
+const library=document.querySelector("#library");
+names.forEach((name,index)=>{
+ const card=document.createElement("section");card.className="system";
+ const n=String(index+1).padStart(2,"0");card.innerHTML='<div class="system-head"><h2>'+n+' / '+name+'</h2><span>Navigation concept '+n+'</span></div>';
+ ["standard","compact","micro"].forEach(size=>{
+  const density=document.createElement("div");density.className="density "+size;density.dataset.size=size;
+  const px=size==="standard"?44:size==="compact"?28:14;
+  density.innerHTML='<div class="density-label"><span>'+size+'</span><span>'+px+'px height</span></div><nav class="nav s'+n+'" aria-label="'+name+' '+size+'"></nav>';
+  const nav=density.querySelector("nav");
+  sections.forEach((s,i)=>{
+   const button=document.createElement("button");button.type="button";button.className="item";button.style.setProperty("--item-color",s.color);button.setAttribute("aria-label",s.name);button.setAttribute("aria-current",i===0?"page":"false");button.innerHTML='<span class="glyph" aria-hidden="true">'+s.glyph+'</span><span class="label">'+s.name+'</span>';
+   button.addEventListener("click",()=>{nav.querySelectorAll(".item").forEach(b=>b.setAttribute("aria-current","false"));button.setAttribute("aria-current","page")});
+   nav.append(button);
+  });
+  card.append(density);
+ });
+ library.append(card);
+});
+document.querySelectorAll("[data-only]").forEach(button=>button.addEventListener("click",()=>{
+ const size=button.dataset.only;document.querySelectorAll(".density").forEach(d=>d.hidden=d.dataset.size!==size);
+ document.querySelectorAll("[data-only],#showAll").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+}));
+document.querySelector("#showAll").addEventListener("click",()=>{document.querySelectorAll(".density").forEach(d=>d.hidden=false);document.querySelectorAll("[data-only],#showAll").forEach(b=>b.setAttribute("aria-pressed",String(b.id==="showAll")))});
+document.querySelector("#reset").addEventListener("click",()=>document.querySelectorAll(".nav").forEach(nav=>nav.querySelectorAll(".item").forEach((b,i)=>b.setAttribute("aria-current",i===0?"page":"false"))));
+</script>
+</body>
+</html>
