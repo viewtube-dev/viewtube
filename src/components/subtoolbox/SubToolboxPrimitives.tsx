@@ -257,6 +257,8 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
         words={words}
         size={size}
         skin="solid"
+        orientation="horizontal"
+        verticalOnMobilePortrait
         className={classes(
           "vt-toolbox-header-toggle-replacement",
           "vt-toolbox-header-word-toggle",
