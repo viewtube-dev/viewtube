@@ -111,6 +111,18 @@ Record exact values and rationale where useful. Mirror each real exception in th
 - **Focus never moves layout:** outline offset is zero and focus must not change padding or margin.
 - **Catalog equals production:** specimens import the same modules that ship.
 
+## Cross-branch reuse contract
+
+This skill is reusable across feature branches and UI families, but implementation details are branch-local.
+
+1. Start by identifying the target branch, merge base, actual CSS entry points/import graph, token source, TSX primitive, tests, and docs on that branch. Never assume a path, selector, generated variable, or helper from another branch exists here.
+2. Reuse the method and governance rules across branches; port concrete CSS/TSX only after confirming its dependencies and semantics on the target branch.
+3. Treat the target branch's current implementation plus explicit user-confirmed requirements as authoritative. Do not copy stale snapshots, prior PR patches, or generated CSS blindly.
+4. For cross-branch fixes, record which branch is the source of truth and which branches need the change. Prefer a small shared contract or upstream PR over manually duplicating slightly different token values in every branch.
+5. When a shared primitive exists, fix its token/markup/style owner once and add branch-appropriate regression tests. Do not apply a global selector that changes unrelated controls or toolbox-owned styles.
+6. If a branch lacks the canonical primitive or generated-token pipeline, document the missing dependency and adapt deliberately; do not create a parallel token generator or silently invent a second source of truth.
+7. Report the exact branch/ref inspected, files changed, checks actually run, and unverified runtime states. Source assertions are not visual certification.
+
 ## Common tasks
 
 - Collapse Studio control CSS into a stable contract.
