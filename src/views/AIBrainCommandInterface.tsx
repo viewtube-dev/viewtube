@@ -33,6 +33,7 @@ import {
  buildAIBrainContextSnapshot,
  buildAIBrainSystemPrompt,
  buildBrainLearningQuestions,
+ queueAIBrainReviewedAction,
  buildCreatorBrainPromptCards,
  buildCreatorBrainLocalFallback,
  formatCreatorBrainResponse,
@@ -46,6 +47,7 @@ import {
  listAIBrainConversationTurns,
  resumeAIBrainThread,
  saveAIBrainConversationTurn,
+ completeAIBrainTurn,
  sanitizeCreatorFacingBrainCopy,
  aiBrainThreadHasTurnsHint,
 } from "../services/aiBrainConversationStore"
@@ -85,6 +87,7 @@ import type {
  CreatorBrainResponse,
  CreatorInitialInsight,
  CreatorGrowthContext,
+ SuperToolId,
 } from "../types"
 
 export type AIBrainTurnReadiness = {
@@ -444,8 +447,10 @@ const CreatorResponseCard: React.FC<{
  onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
  onRetry: (message: ChatMessage, useFreshContext: boolean) => Promise<void>
+ onCreateHandoff: (message: ChatMessage, targetToolId: SuperToolId, label: string) => Promise<void>
+ hasActiveProject: boolean
  retryContextStale: boolean
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onRetry, retryContextStale }) => {
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onRetry, onCreateHandoff, hasActiveProject, retryContextStale }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
  if (!response) {
@@ -531,14 +536,30 @@ const CreatorResponseCard: React.FC<{
      {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
       <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
      ) : null}
+     {message.response ? (
+      <div className="mt-2 flex flex-wrap gap-1.5" aria-label="Review this answer in another tool">
+       <button type="button" onClick={() => void onCreateHandoff(message, "packaging-lab-pro", "Open in Thumbnail Studio")} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-2.5 py-1 text-[9px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+        Open in Thumbnail Studio
+       </button>
+       <button type="button" onClick={() => void onCreateHandoff(message, "publishing-schedule-architect", "Prepare metadata draft")} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-2.5 py-1 text-[9px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+        Prepare metadata draft
+       </button>
+       {hasActiveProject ? (
+        <button type="button" onClick={() => void onCreateHandoff(message, "project-command-kanban", "Review in Projects")} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-2.5 py-1 text-[9px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+         Review in Projects
+        </button>
+       ) : null}
+      </div>
+     ) : null}
      {message.handoff ? (
       <Link
        to={message.handoff.route}
-       title={`Open ${message.handoff.targetTitle}`}
-       className="ml-auto inline-flex items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
+       title={`Open ${message.handoff.targetTitle} for review only`}
+       aria-label={`Open ${message.handoff.targetTitle} for review only. This does not publish or approve changes.`}
+       className="ml-auto inline-flex min-h-11 items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] focus-visible:ring-2 focus-visible:ring-black"
       >
-       Open
-       <ArrowRight size={13} />
+       Open for review
+       <ArrowRight size={13} aria-hidden="true" />
       </Link>
      ) : null}
    </div>
@@ -871,7 +892,9 @@ const AIBrainCommandInterface: React.FC = () => {
      role: "model" as const,
      text: turn.assistantText || (turn.status === "interrupted" ? "This response was interrupted before it completed." : ""),
      response: turn.response,
-     handoff: null,
+     handoff: turn.metadata?.handoffSnapshot && typeof turn.metadata.handoffSnapshot === "object"
+      ? turn.metadata.handoffSnapshot as AIBrainChatHandoff
+      : null,
      turnStatus: turn.status,
      originalUserText: turn.rawUserMessage ?? turn.userText,
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
@@ -1068,6 +1091,53 @@ const AIBrainCommandInterface: React.FC = () => {
    ])
   } finally {
    setBusy(false)
+  }
+ }
+
+ const handleCreateHandoff = async (message: ChatMessage, targetToolId: SuperToolId, label: string) => {
+  const selectedContent = message.response?.headline || message.originalUserText || message.text
+  const evidenceIds = message.evidencePack?.evidenceIds || []
+  const responseContext = message.response
+   ? JSON.stringify({
+     headline: message.response.headline,
+     keyInsight: message.response.keyInsight,
+     body: message.response.body,
+     mode: message.response.mode,
+     actions: message.response.actions,
+     evidenceIds,
+    })
+   : message.text
+  try {
+   const handoff = await queueAIBrainReviewedAction({
+    request: `${label}. Prepare the selected content for creator review; do not publish or perform external mutations.`,
+    response: responseContext,
+    channelId,
+    targetToolId,
+    evidenceIds,
+    originTurnId: message.id,
+    selectedContent,
+    priority: "medium",
+    confidence: "medium",
+   })
+   if (message.response) {
+    await completeAIBrainTurn({
+     turnId: message.id,
+     status: "complete",
+     assistantText: message.text,
+     response: message.response,
+     answerModules: message.response.modules || [],
+     metadata: { handoffSnapshot: handoff },
+    })
+   }
+   setMessages((current) => current.map((item) => item.id === message.id ? { ...item, handoff } : item))
+   await refreshConversationTurns()
+  } catch (error) {
+   const detail = error instanceof Error ? error.message : String(error)
+   setMessages((current) => [...current, {
+    id: makeMessageId(),
+    role: "model",
+    text: `I couldn't prepare the review handoff. No publishing action was approved. ${detail}`,
+   }])
   }
  }
 
@@ -1368,6 +1438,8 @@ const AIBrainCommandInterface: React.FC = () => {
              onFeedback={handleFeedback}
              onAnswerQuestion={handleAnswerQuestion}
              onRetry={handleRetry}
+             onCreateHandoff={handleCreateHandoff}
+             hasActiveProject={Boolean(brain.projects.some((project) => project.id === brain.activeProjectId || project.status === "active"))}
              retryContextStale={Boolean(message.evidencePack?.capturedAt && snapshot.evidencePack.capturedAt && message.evidencePack.capturedAt !== snapshot.evidencePack.capturedAt)}
             />
            ))}
