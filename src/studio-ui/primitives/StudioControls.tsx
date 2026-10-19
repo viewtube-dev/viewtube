@@ -1628,13 +1628,11 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
 StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
 
 
-export interface StudioSpectrumTagProps {
+export interface StudioSpectrumTagProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children" | "aria-label" | "onClick"> {
   label: string
   selected?: boolean
-  className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
-  disabled?: boolean
 }
 
 /**
@@ -1649,11 +1647,13 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   onClick,
   ariaLabel,
   disabled = false,
+  ...buttonProps
 }) => {
   const normalized = label.trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(normalized)
   return (
     <button
+      {...buttonProps}
       type="button"
       className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
       data-vt-studio-exception="vault-spectrum-tag"
