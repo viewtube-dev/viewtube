@@ -63,7 +63,7 @@ const CanonicalControlFamilies: React.FC = () => {
   const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
-    <Family title="Toggle & Choice Controls" nonDefaultSettings={[
+    <Family title="Switches, Radios & Checkboxes" nonDefaultSettings={[
         "Switches, radios, and checkboxes stay together in the controls family; word toggles are documented in their own separate family.",
         "Each specimen remains independently interactive and uses the canonical primitive with its native accessible label.",
         "Vertical word toggles size to their longest word plus original horizontal padding; the stacked height is content-driven.",
