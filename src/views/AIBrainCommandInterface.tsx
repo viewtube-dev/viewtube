@@ -103,6 +103,7 @@ export type ChatMessage = {
  text: string
  response?: CreatorBrainResponse
  handoff?: AIBrainChatHandoff | null
+ originalUserText?: string
  evidencePack?: AIBrainEvidencePack
  readiness?: AIBrainTurnReadiness
 }
@@ -852,6 +853,7 @@ const AIBrainCommandInterface: React.FC = () => {
      text: turn.assistantText,
      response: turn.response,
      handoff: null,
+     originalUserText: turn.rawUserMessage ?? turn.userText,
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
@@ -1017,7 +1019,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
    ])
    await refreshConversationTurns()
   } catch (error) {
