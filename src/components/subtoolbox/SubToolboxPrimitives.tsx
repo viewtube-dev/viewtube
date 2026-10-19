@@ -1,5 +1,5 @@
 import React from "react"
-import { StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
+import { StudioSpectrumTag, StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { createPortal } from "react-dom"
 import { CircleQuestionMark, Upload } from "lucide-react"
 import "../../styles/toolbox-entry.css"
@@ -1418,47 +1418,14 @@ export const SubToolboxKnob: React.FC<SubToolboxKnobProps> = ({
   )
 }
 
-export type SubToolboxSpectrumTagLevel = ToolboxControlLevel | "l3"
-
-export interface SubToolboxAlphabeticalTagProps extends React.HTMLAttributes<HTMLSpanElement> {
-  level?: SubToolboxSpectrumTagLevel
-  label: string
-  spectrumKey?: string
-}
-export const SubToolboxAlphabeticalTag: React.FC<SubToolboxAlphabeticalTagProps> = ({
-  level = "l0",
-  label,
-  spectrumKey,
-  className,
-  style,
-  ...props
-}) => {
-  const color = getAlphabeticalSpectrumColor(spectrumKey || label)
-  const structuralLevel: ToolboxControlLevel = level === "l3" ? "l2" : level
-  return (
-    <span
-      className={classes("vt-subtoolbox-alpha-tag", level === "l3" && "is-l3", className)}
-      data-vt-control-level={structuralLevel}
-      data-vt-spectrum-level={level}
-      style={{
-        ...(withComponentLevelStyle(structuralLevel, style) ?? {}),
-        ["--vt-alpha-color" as string]: color,
-      } as React.CSSProperties}
-      {...props}
-    >
-      {label}
-    </span>
-  )
-}
-
 export const SubToolboxAlphabeticalSpectrumTags: React.FC<{
   level?: ToolboxControlLevel
   className?: string
   suffix?: string
-}> = ({ level = "l0", className, suffix = "TAG" }) => (
-  <div className={classes("vt-subtoolbox-alpha-tag-row", className)}>
+}> = ({ className, suffix = "TAG" }) => (
+  <div className={classes("vt-studio-spectrum-tag-row", className)} data-vt-studio-width="content">
     {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
-      <SubToolboxAlphabeticalTag key={letter} level={level} label={`${letter} · ${suffix}`} />
+      <StudioSpectrumTag key={letter} label={`${letter} · ${suffix}`} />
     ))}
   </div>
 )
