@@ -390,6 +390,12 @@ export const generateAsset = async <TOutput>(input: {
  trace.recordPromptVersion(strategy.assetType, strategy.promptVersion)
  trace.recordPromptVersion("prompt_family", promptFamilyForAsset(strategy.assetType))
  trace.recordPromptVersion("context_composer", ASSET_CONTEXT_COMPOSITION_VERSION)
+ // Record the context contract before dispatch gating so rejected generations remain
+ // diagnosable in the trace even though no provider call was made.
+ trace.recordContext({
+  sectionsIncluded: availablePromptContext,
+  sectionsDropped: promptFamilyContextIssues,
+ })
  if (style) trace.recordStyle({ styleProfileId: style.id })
 
  const assetId = makeAssetId()
