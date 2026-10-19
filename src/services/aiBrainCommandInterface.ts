@@ -100,6 +100,9 @@ export type AIBrainChatHandoff = {
  route: string
  targetTitle: string
  reviewOnly: boolean
+ evidenceIds?: string[]
+ originTurnId?: string | null
+ selectedContent?: string | null
 }
 
 export type AIBrainContextSnapshot = {
@@ -1999,15 +2002,40 @@ export const queueAIBrainReviewedAction = async (input: {
  channelId?: string | null
  priority?: BrainCommandAction["priority"]
  confidence?: BrainCommandAction["confidence"]
+ targetToolId?: SuperToolId
+ evidenceIds?: string[]
+ originTurnId?: string | null
+ selectedContent?: string | null
 }): Promise<AIBrainChatHandoff> => {
- const queued = await queueAssistantCommand(input)
+ const evidenceIds = Array.from(new Set(input.evidenceIds || [])).slice(0, 50)
+ const contextLines = [
+  "REVIEW ONLY: opening the destination is not approval to publish or mutate an external system.",
+  input.originTurnId ? `Originating chat turn ID: ${input.originTurnId}` : "",
+  input.selectedContent ? `Selected content: ${input.selectedContent}` : "",
+  evidenceIds.length ? `Canonical evidence IDs: ${evidenceIds.join(", ")}` : "",
+ ].filter(Boolean)
+ const contextBlock = contextLines.join("\n")
+ const queued = await queueAssistantCommand({
+  ...input,
+  request: `${input.request}\n\n${contextBlock}`,
+  response: [input.response, contextBlock].filter(Boolean).join("\n\n"),
+ })
  const target = resolveAIBrainToolRoute(queued.targetToolId, queued.action.id)
+ const params = new URLSearchParams()
+ params.set("reviewOnly", "true")
+ if (input.originTurnId) params.set("originTurnId", input.originTurnId)
+ if (input.selectedContent) params.set("selectedContent", input.selectedContent)
+ evidenceIds.forEach((id) => params.append("evidenceId", id))
+ const separator = target.route.includes("?") ? "&" : "?"
  return {
   action: queued.action,
   recordId: queued.recordId,
   workflowId: queued.workflowId,
-  route: target.route,
+  route: `${target.route}${separator}${params.toString()}`,
   targetTitle: target.title,
-  reviewOnly: isReviewOnlyBrainCommandAction(queued.action),
+  reviewOnly: true,
+  evidenceIds,
+  originTurnId: input.originTurnId || null,
+  selectedContent: input.selectedContent || null,
  }
 }
