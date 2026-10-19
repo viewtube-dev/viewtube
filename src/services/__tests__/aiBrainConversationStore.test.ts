@@ -66,11 +66,11 @@ describe("aiBrainConversationStore", () => {
  })
 
  it("preserves the exact creator message separately from presentation copy", async () => {
-  const original = "The API failed with an error — please keep those exact words.";
+  const original = "The API failed with an error — please keep those exact words."
   const pending = await beginAIBrainTurn({
    channelId: "channel-raw-message",
    userText: original,
-  });
+  })
 
   expect(pending.rawUserMessage).toBe(original);
   expect(pending.displayUserMessage).not.toContain("API");
@@ -88,7 +88,7 @@ describe("aiBrainConversationStore", () => {
   expect(restored.turns[0]?.digest?.userIntent.toLowerCase()).toContain("api");
   expect(restored.turns[0]?.digest?.userIntent).toContain("failed");
   expect(restored.turns[0]?.digest?.userIntent).toContain("error");
-  expect(completed.id).toBe(pending.id);
+  expect(completed.id).toBe(pending.id)
  })
 
 
