@@ -334,7 +334,7 @@ export const buildEvidenceProvenanceChips = (evidence: EvidenceIntelligenceEnvel
  return chips.slice(0, 8)
 }
 
-export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> =>
+export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> => {
  const taskProfile = resolveBrainTaskProfile(input.userText)
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
