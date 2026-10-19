@@ -385,3 +385,14 @@ For each family, display the production source paths, standard and compact sizes
 - It inherits the Studio standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 44px / 28px / 14px.
 - The confirmed primitive catalog demonstrates four live variants with independent state: primary/secondary, black fill, primary fill with white handle, and white fill with black handle. Word color updates at animation start; the handle uses vertical expansion/release and color-wipe motion and honors reduced-motion preferences.
 - Gallery geometry is standard 2-up, compact 3-up, and micro 2×2 at the end of compact row two. Source-level tests cover the exported primitive, variant attributes, size tiers, and registered exception. Browser visual certification is still required before claiming pixel-perfect behavior.
+
+
+## Two-line Studio Button — confirmed primitive library entry · 2026-10-19
+
+- `StudioTwoLineButton` is a named variant of the canonical `StudioButton`, implemented in `src/studio-ui/primitives/StudioControls.tsx`, styled in `src/styles/studio-control-system.css`, and exported from `src/studio-ui/index.ts`.
+- The primitive is available in both canonical size tiers: standard 44px with two 18px text rows, and compact 28px with two 12px text rows.
+- **Both rows must render identically in black**: Inter, weight 1000, uppercase, `-.02em` letter spacing, black text fill and text stroke (1px standard / 0.5px compact). No per-row color variation is permitted.
+- Rows are centered horizontally and vertically. Zero row margins/padding and `justify-content: space-evenly` evenly distribute available vertical space above row one, between rows, and below row two.
+- Retains canonical border/radius, fill/color-pair behavior, width and focus/disabled behavior from `StudioButton`; this variant does not create a parallel button system.
+- Catalog specimen labels: **Standard / 44px — 18px + 18px** and **Compact / 28px — 12px + 12px**. Display both specimens in the Confirmed Primitive Toolbox beside the canonical button family.
+- Validation status: source/documentation updated; browser visual certification and build/type/test gates remain pending.
