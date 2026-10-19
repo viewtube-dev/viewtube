@@ -896,7 +896,7 @@
  outline-offset: 2px;
  border-radius: 4px;
 }
-.vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+.vt-sync-meta-tag.vt-studio-spectrum-tag {
  height: 20px;
  min-height: 20px;
  max-width: 100%;
@@ -1070,7 +1070,7 @@
   border-top: 0;
   padding: 7px 0;
  }
- .vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+ .vt-sync-meta-tag.vt-studio-spectrum-tag {
   height: 22px;
   min-height: 22px;
   padding-inline: 7px;
@@ -1174,7 +1174,7 @@
  .vt-sync-group-header {
   padding-inline: 16px;
  }
- .vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+ .vt-sync-meta-tag.vt-studio-spectrum-tag {
   height: 24px;
   min-height: 24px;
   padding-inline: 8px;
@@ -1242,7 +1242,7 @@
   width: 78px;
   font-size: 7.5px !important;
  }
- .vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+ .vt-sync-meta-tag.vt-studio-spectrum-tag {
   height: 18px;
   min-height: 18px;
   padding-inline: 5px;
