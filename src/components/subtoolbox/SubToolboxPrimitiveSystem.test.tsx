@@ -4,7 +4,8 @@ import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "./SubToolboxLayouts"
-import { SubToolboxAlphabeticalSpectrumTags, SubToolboxAspectRatioFrame, SubToolboxAvatar, SubToolboxBreadcrumb, SubToolboxButton, SubToolboxCalendar, SubToolboxCarousel, SubToolboxCommandPalette, SubToolboxControllerSwitch, SubToolboxDataStats, SubToolboxDataTable, SubToolboxDisclosure, SubToolboxFileTarget, SubToolboxHoverCard, SubToolboxInput, SubToolboxKnob, SubToolboxLed, SubToolboxLedDot, SubToolboxLegendTooltip, SubToolboxLoader, SubToolboxMeter, SubToolboxMetric, SubToolboxMetricStrip, SubToolboxNameValueList, SubToolboxOutputCard, SubToolboxPagination, SubToolboxPopover, SubToolboxScrollbar, SubToolboxSplitField, SubToolboxSkeleton, SubToolboxStatePanel, SubToolboxTag, SubToolboxTagEditor, SubToolboxTextArea, SubToolboxTopTitleDropdown, SubToolboxToolbar, SubToolboxTooltip, SubToolboxProgressValue, SubToolboxTree, SubToolboxVaultAsset } from "./SubToolboxPrimitives"
+import { StudioSpectrumTags } from "../../studio-ui/primitives/StudioControls"
+import { SubToolboxAspectRatioFrame, SubToolboxAvatar, SubToolboxBreadcrumb, SubToolboxButton, SubToolboxCalendar, SubToolboxCarousel, SubToolboxCommandPalette, SubToolboxControllerSwitch, SubToolboxDataStats, SubToolboxDataTable, SubToolboxDisclosure, SubToolboxFileTarget, SubToolboxHoverCard, SubToolboxInput, SubToolboxKnob, SubToolboxLed, SubToolboxLedDot, SubToolboxLegendTooltip, SubToolboxLoader, SubToolboxMeter, SubToolboxMetric, SubToolboxMetricStrip, SubToolboxNameValueList, SubToolboxOutputCard, SubToolboxPagination, SubToolboxPopover, SubToolboxScrollbar, SubToolboxSplitField, SubToolboxSkeleton, SubToolboxStatePanel, SubToolboxTag, SubToolboxTagEditor, SubToolboxTextArea, SubToolboxTopTitleDropdown, SubToolboxToolbar, SubToolboxTooltip, SubToolboxProgressValue, SubToolboxTree, SubToolboxVaultAsset } from "./SubToolboxPrimitives"
 import { CONTROL_SHELL, SUBTOOLBOX_CONTROL_SIZES, SUBTOOLBOX_STATES, SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA, VAULT_ASSET_MODULE_DNA, resolveSubtoolboxMinHeight } from "./tokens"
 
 describe("Subtoolbox Primitive System", () => {
@@ -197,7 +198,7 @@ describe("Subtoolbox Primitive System", () => {
           onValueChange={() => undefined}
         />
         <SubToolboxProgressValue level="l1" value={68} label="Sync" />
-        <SubToolboxAlphabeticalSpectrumTags level="l2" />
+        <StudioSpectrumTags />
         <SubToolboxDataTable
           level="l2"
           columns={[{ key: "metric", label: "Metric" }, { key: "value", label: "Value" }]}
