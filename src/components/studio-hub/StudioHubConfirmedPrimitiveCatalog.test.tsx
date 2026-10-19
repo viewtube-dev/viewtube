@@ -235,7 +235,7 @@ it("removes the redundant semantic-tone matrices while preserving square icon va
   expect(html).toContain("BLACK")
   expect(html).toContain("WHITE")
   const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
-  expect(source.match(/title="Square Icon Button · 44px \\+ 28px"/g)).toHaveLength(1)
+  expect(source.match(/title="Square Icon Button · 44px \+ 28px"/g)).toHaveLength(1)
   const choiceFamily = source.slice(source.indexOf('<Family title="44px Radio + Checkbox"'), source.indexOf('<Family title="Word Toggles'))
   expect(choiceFamily).toContain("CHOICE_SKINS.map")
   expect(choiceFamily).not.toContain("CANONICAL_SKINS.map")
