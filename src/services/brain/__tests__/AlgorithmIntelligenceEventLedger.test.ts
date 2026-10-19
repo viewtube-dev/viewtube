@@ -36,6 +36,40 @@ describe("AlgorithmIntelligenceEventLedger timestamp integrity", () => {
     vi.restoreAllMocks()
   })
 
+  it("preserves operation, trace, output, and workflow joins across idempotent updates", () => {
+    recordAlgorithmIntelligenceEvent({
+      id: "event-lineage-preservation",
+      channelId: "channel-1",
+      kind: "RECOMMENDATION_EXECUTED",
+      sourceSystem: "workflow",
+      operationId: "operation:publish:1",
+      traceId: "trace:generation:1",
+      outputRef: "asset:final:1",
+      workflowId: "workflow:package:1",
+      title: "Published package",
+      summary: "Initial event",
+      confidence: "high",
+    })
+
+    recordAlgorithmIntelligenceEvent({
+      id: "event-lineage-preservation",
+      channelId: "channel-1",
+      kind: "RECOMMENDATION_EXECUTED",
+      sourceSystem: "workflow",
+      title: "Published package",
+      summary: "Updated event without repeating optional lineage fields",
+      confidence: "high",
+    })
+
+    expect(listAlgorithmIntelligenceEvents({ channelId: "channel-1" })[0]).toMatchObject({
+      id: "event-lineage-preservation",
+      operationId: "operation:publish:1",
+      traceId: "trace:generation:1",
+      outputRef: "asset:final:1",
+      workflowId: "workflow:package:1",
+    })
+  })
+
   it("preserves an existing event's zero creation timestamp when recording an update", () => {
     localStorage.setItem("vt_algorithm_intelligence_events_v1", JSON.stringify([event()]))
 

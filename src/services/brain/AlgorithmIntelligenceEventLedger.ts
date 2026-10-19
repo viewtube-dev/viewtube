@@ -39,6 +39,10 @@ export interface AlgorithmIntelligenceEvent {
  channelId: string
  projectId?: string | null
  videoId?: string | null
+ /** Join keys back to the originating Brain operation and generated output. */
+ operationId?: string | null
+ traceId?: string | null
+ outputRef?: string | null
  kind: AlgorithmIntelligenceEventKind
  sourceSystem: "anomaly" | "opportunity" | "priming" | "decision" | "communication" | "workflow" | "evaluation" | "learning"
  sourceId?: string | null
@@ -144,6 +148,12 @@ export const recordAlgorithmIntelligenceEvent = (
  const event: AlgorithmIntelligenceEvent = {
   ...input,
   id,
+  // Identity fields are monotonic across idempotent rewrites: a later status update
+  // must not sever the original operation/trace/output join by omitting optional keys.
+  operationId: input.operationId ?? existing?.operationId ?? null,
+  traceId: input.traceId ?? existing?.traceId ?? null,
+  outputRef: input.outputRef ?? existing?.outputRef ?? null,
+  workflowId: input.workflowId ?? existing?.workflowId ?? null,
   parentEventIds: [...new Set([...(existing?.parentEventIds || []), ...(input.parentEventIds || [])])],
   evidenceIds: [...new Set([...(existing?.evidenceIds || []), ...(input.evidenceIds || [])])],
   evaluationTargets: input.evaluationTargets || existing?.evaluationTargets || [],
