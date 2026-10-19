@@ -243,6 +243,11 @@ export const beginBrainTrace = (input: {
   recordModel: (model) => {
    trace.model = model
   },
+  recordModelIdentity: ({ requested, served, status }) => {
+   trace.modelRequested = requested
+   trace.modelServed = served
+   trace.modelIdentityStatus = status
+  },
   recordPromptVersion: (name, version) => {
    trace.promptVersions[name] = version
   },

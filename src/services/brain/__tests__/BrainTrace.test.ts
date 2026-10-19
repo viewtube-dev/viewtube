@@ -160,6 +160,11 @@ describe("beginBrainTrace", () => {
    served: null,
    status: "requested_known_served_not_exposed",
   })
+  expect(trace.snapshot()).toMatchObject({
+   modelRequested: "gemini-requested",
+   modelServed: null,
+   modelIdentityStatus: "requested_known_served_not_exposed",
+  })
   const finished = trace.complete()
   expect(finished.modelRequested).toBe("gemini-requested")
   expect(finished.modelServed).toBeNull()
