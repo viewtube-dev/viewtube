@@ -97,14 +97,30 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
     expect(css).not.toContain("@keyframes vt-studio-radio-build")
     expect(css).not.toContain("@keyframes vt-studio-radio-orbit")
     expect(css).not.toContain("@keyframes vt-studio-radio-spiral")
-    expect(source).toContain('opacity(rings, 1)');
+    expect(source).toContain('opacity(rings, 0)');
     expect(source).toContain('opacity(solid, 1)');
-    expect(source).toContain('r="5.5"');
-    expect(css).toContain('color: var(--pair-b, var(--vt-studio-control-secondary, #ff7f6b))');
-    expect(css).toContain('stroke: #000');
+    expect(source).toContain('r="16.5"');
+    expect(css).toContain('color: var(--vt-studio-radio-indicator, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)))');
+    expect(css).toContain('transition: color 270ms ease-out');
+    expect(css).not.toContain('.vt-studio-radio-solid { opacity: 0; }');
   })
 })
 
+
+
+describe("Studio choice color variants", () => {
+  it("uses the shared four-variant background and indicator color contract for radios and checkboxes", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(css).toContain("background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white)")
+    expect(css).toContain(".vt-studio-44-choice.is-color-swap.is-on")
+    expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
+    expect(css).toContain(".vt-studio-44-choice.is-color-swap.is-on svg")
+    expect(css).toContain("stroke: var(--vt-studio-control-accent, var(--pair-a, #36e0f6))")
+    expect(css).toContain(".vt-studio-44-choice.is-black-indicator svg")
+    expect(css).toContain(".vt-studio-44-choice.is-white-indicator svg")
+    expect(css).toContain("transition: color 270ms ease-out")
+  })
+})
 
 describe("Studio checkbox mark animation timing", () => {
   it("slows checkmark and x strokes by 50 percent and draws x strokes sequentially", () => {
