@@ -163,7 +163,7 @@ describe("readBrainRuntimeSnapshot", () => {
       status: "complete",
       intent: "content_generation",
       capabilitiesInvoked: ["content-generation"],
-      evidence: { requested: ["channel_profile"], returned: ["evidence-1"], missing: [] },
+      evidence: { requested: ["channel_profile"], returned: ["evidence-1"], missing: [], records: [{ id: "analytics:snapshot-1:channel_summary:views", owner: "analytics-canon", sourceRef: "channel_summary", sourceSnapshotId: "snapshot-1", channelId: "channel-1", metric: "views", value: 2800, unit: "count", observedAt: "2026-09-27T16:00:00.000Z", updatedAt: "2026-10-19T00:00:00.000Z", freshness: "stale", epistemicState: "observed", confidence: 0.8, provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics", sourceVersion: "canon-v1" } }] },
       context: { tokensEstimated: 640, sectionsIncluded: ["evidence", "task"], sectionsDropped: [] },
       claims: { fabricated: [], unverifiedDerived: [] },
       promptVersions: { constitution: "asset-constitution-v1", title: "title-v1" },
@@ -553,7 +553,8 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
  expect(snapshot.provenance.latestChain?.promptVersions).toEqual({ title: "title-v1" })
  expect(snapshot.provenance.latestChain?.modelRequested).toBe("gemini-2.5-pro")
  expect(snapshot.provenance.latestChain?.modelServed).toBe("gemini-2.5-pro")
- expect(snapshot.provenance.latestChain?.evidenceIds).toEqual(["evidence-1", "evidence-2"])
+ expect(snapshot.provenance.latestChain?.evidenceIds).toEqual(["evidence-1", "evidence-2", "analytics:snapshot-1:channel_summary:views", "source-evidence-1"])
+ expect(snapshot.provenance.latestChain?.evidenceRecords).toMatchObject([{ id: "analytics:snapshot-1:channel_summary:views", owner: "analytics-canon", value: 2800, freshness: "stale", observedAt: "2026-09-27T16:00:00.000Z", confidence: 0.8, provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics", sourceVersion: "canon-v1" } }])
  expect(snapshot.provenance.latestChain?.selectedAssetIds).toEqual(["asset-script"])
  expect(snapshot.provenance.latestChain?.sourceAssetIds).toEqual(["asset-script"])
  expect(snapshot.provenance.latestChain?.versionIds).toEqual(["version-1", "version-2"])
