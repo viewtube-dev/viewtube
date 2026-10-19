@@ -4218,3 +4218,63 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-switch[aria-checked="true"] {
   background-color: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
+
+
+/* Regression fix: all standard/compact toggle and switch idle surfaces are
+   translucent primary; selected surfaces are solid primary. Indicator skins
+   still own their indicator color, not the track/background color. */
+.vt-studio-44-word-toggle {
+  background: color-mix(in srgb, var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%, transparent);
+}
+.vt-studio-44-word-toggle .vt-studio-44-word-handle,
+.vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle {
+  background: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+.vt-studio-44-switch:not(.is-on):not([aria-checked="true"]),
+.vt-studio-switch:not(.is-checked):not([aria-checked="true"]) {
+  background: color-mix(in srgb, var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%, transparent);
+}
+.vt-studio-44-switch.is-on,
+.vt-studio-44-switch[aria-checked="true"],
+.vt-studio-switch.is-checked,
+.vt-studio-switch[aria-checked="true"] {
+  background: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+.vt-studio-44-switch.is-color-swap.is-on,
+.vt-studio-44-switch.is-color-swap[aria-checked="true"] {
+  background: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+
+/* The split rail is a true square in compact mode; no inset or leading color sliver. */
+.vt-studio-dropdown.is-split-left .vt-studio-dropdown-split-rail[data-rail="start"] {
+  box-sizing: border-box;
+  display: grid;
+  width: var(--vt-studio-dropdown-rail-size);
+  min-width: var(--vt-studio-dropdown-rail-size);
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+  border-radius: 0;
+}
+
+/* Simple dropdown chevrons align to the outer edge without a separator. */
+.vt-studio-dropdown:not(.is-split-left) .vt-studio-dropdown-chevron.is-trailing {
+  border: 0;
+  justify-items: end;
+  justify-content: end;
+  padding-inline: 0 4px;
+}
+
+/* Open dropdown menus inherit the multi-select panel's framed, rounded top. */
+.vt-studio-dropdown-menu {
+  box-sizing: border-box;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0 0;
+}
+.vt-studio-dropdown-menu .vt-studio-dropdown-option:first-child {
+  border-top-left-radius: calc(var(--vt-studio-control-radius, 6px) * .5);
+  border-top-right-radius: calc(var(--vt-studio-control-radius, 6px) * .5);
+}
