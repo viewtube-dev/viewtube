@@ -17,7 +17,7 @@ export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSpl
   ({ split = "left", sizeVariant = "standard", leftIcon, rightIcon, className, style, inputClassName, ...props }, ref) => {
     const input = <StudioTextInput {...props} ref={ref} variant="simple" sizeVariant={sizeVariant} className={inputClassName} />
     return (
-      <span className={["vt-studio-split-text-input", className].filter(Boolean).join(" ")} data-split={split} style={style}>
+      <span className={["vt-studio-split-text-input", className].filter(Boolean).join(" ")} data-vt-studio-control="true" data-size={sizeVariant} data-split={split} style={style}>
         {split === "double"
           ? <StudioDoubleSplitBadge sizeVariant={sizeVariant} leftIcon={leftIcon} rightIcon={rightIcon}>{input}</StudioDoubleSplitBadge>
           : split === "right"
