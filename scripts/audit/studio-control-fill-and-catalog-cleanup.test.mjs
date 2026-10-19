@@ -6,7 +6,7 @@ const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "ut
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const certification = readFileSync("src/studio-ui/StudioHubCertification.tsx", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8")
-const catalogStyles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8")
+const confirmedCatalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 
 test("side counter divider is centered on a true half-height boundary", () => {
   assert.match(styles, /\.vt-studio-side-counter__actions\s*\{[^}]*grid-template-rows:\s*minmax\(0, 1fr\) minmax\(0, 1fr\)/s)
@@ -26,20 +26,36 @@ test("dropdown split rail stays square and simple trailing chevrons have no divi
   assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*border-top-left-radius:/s)
 })
 
-test("button faces default to half-primary fill and selected faces use full primary", () => {
-  assert.match(styles, /background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%, transparent\)/s)
+test("action buttons keep their own idle fill and selected faces use solid primary", () => {
+  const buttonFaceStart = styles.indexOf('button[data-vt-studio-button="true"] > [data-vt-studio-button-face]')
+  const buttonFace = styles.slice(buttonFaceStart, styles.indexOf("/* Compact text buttons", buttonFaceStart))
+  assert.ok(buttonFaceStart >= 0)
+  assert.match(buttonFace, /background:\s*var\(--vt-studio-control-accent/)
+  const actionFaceStart = styles.indexOf('button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face]')
+  const actionFace = styles.slice(actionFaceStart, styles.indexOf(':focus', actionFaceStart))
+  assert.ok(actionFaceStart >= 0)
+  assert.match(actionFace, /background:\s*var\(--vt-studio-control-accent/)
+  assert.doesNotMatch(actionFace, /color-mix\([^}]*50%, transparent/)
+  assert.doesNotMatch(buttonFace, /color-mix\([^}]*50%, transparent/)
   assert.match(styles, /button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^{]*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
-  assert.match(styles, /data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][^{]*\{[^}]*background:\s*color-mix/s)
-  assert.match(catalogStyles, /\.vt-complete-catalog \.vt-catalog-button\s*\{[^}]*background:\s*color-mix/s)
 })
 
-test("switch and word-toggle selected surfaces are primary, with a half-primary resting state", () => {
-  assert.match(styles, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\s*\{[^}]*50%, transparent/s)
-  assert.match(styles, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\.is-active\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
-  assert.match(styles, /\.vt-studio-44-switch:not\(\.is-on\):not\(\.is-checked\):not\(\[aria-checked="true"\]\)\s*\{[^}]*50%, transparent/s)
-  assert.match(styles, /\.vt-studio-44-switch:is\(\.is-on, \.is-checked, \[aria-checked="true"\]\)\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
+test("switches, word toggles, radios, checkmarks and X boxes expose all four shared skins", () => {
+  assert.match(styles, /\.vt-studio-44-switch,\.vt-studio-44-choice\{[^}]*50%, transparent\)/s)
+  assert.match(styles, /\.vt-studio-44-switch\.is-color-swap:not\(\.is-on\)[^{]*\{[^}]*background:var\(--vt-studio-control-accent/s)
+  assert.match(styles, /\.vt-studio-44-switch\.is-color-swap\.is-on[^{]*\{[^}]*background:var\(--vt-studio-control-secondary/s)
+  assert.match(styles, /\.vt-studio-44-choice\.is-white-indicator:is\([^}]*background:var\(--vt-studio-control-accent/s)
+  assert.match(styles, /\.vt-studio-44-choice\.is-black-indicator:is\([^}]*background:var\(--vt-studio-control-accent/s)
+  assert.match(styles, /\.vt-studio-44-choice\.is-white-indicator\.is-checkbox svg\{[^}]*stroke:#fff/s)
+  assert.match(styles, /\.vt-studio-44-choice\.is-black-indicator\.is-checkbox svg\{[^}]*stroke:#000/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle\{[^}]*50%, transparent/s)
+  assert.match(styles, /\.vt-studio-44-word-handle\{[^}]*background:var\(--vt-studio-control-secondary/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle\.is-color-swap:has\(\.vt-studio-44-word-handle\[data-active="true"\]\)\{[^}]*background:var\(--vt-studio-control-secondary/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle\.is-black-indicator \.vt-studio-44-word-handle\{[^}]*background:#000/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle\.is-white-indicator \.vt-studio-44-word-handle\{[^}]*background:#fff/s)
+  assert.match(controls, /export type StudioControlSkin = "solid" \| "color-swap" \| "black-indicator" \| "white-indicator"/)
+  assert.match(confirmedCatalog, /Four state-fill\/indicator variants: V1 half-primary to primary with secondary indicator; V2 primary to secondary with primary\/secondary indicator swap; V3 half-primary to primary with white indicator; V4 half-primary to primary with black indicator/)
 })
-
 test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
   assert.doesNotMatch(certification, /label="Semantic appearances"/)
   assert.equal((certification.match(/label="Square icon variants \+ effects"/g) ?? []).length, 1)
