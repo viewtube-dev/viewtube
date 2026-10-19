@@ -4,7 +4,7 @@ import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -53,6 +53,15 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     radius: 4,
     shadow: "none; primitive/component shadow prohibition",
     rationale: "The plus/check actions use the canonical compact 28px square-button size.",
+  },
+  uploadFrame: {
+    owner: "StudioUploadFrame",
+    globalRuleException: true,
+    geometry: "16:10 desktop canvas / 4:3 narrow-screen canvas; 12px outer radius; inset 2px black frame; 5px standard inner inset",
+    colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
+    behavior: "native file picker, drag/drop, image preview, filename announcement, disabled state, and reduced-motion support",
+    shadowPolicy: "none",
+    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
   },
   textareaTypography: {
     globalRuleException: true,
@@ -1722,6 +1731,101 @@ export const StudioTagEditor: React.FC<StudioTagEditorProps> = ({
   );
 };
 StudioTagEditor.displayName = "StudioTagEditor";
+
+
+
+export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onChange" | "children"> {
+  accept?: string;
+  prompt?: string;
+  sizeVariant?: "standard" | "compact";
+  disabled?: boolean;
+  onFileChange?: (file: File) => void;
+}
+
+/** Canonical pair-colored upload canvas with drag/drop and an optional image preview. */
+export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
+  accept,
+  prompt = "Drop or choose file",
+  sizeVariant = "standard",
+  disabled = false,
+  onFileChange,
+  className,
+  "aria-label": ariaLabel = "Upload: drop or choose a file",
+  ...labelProps
+}) => {
+  const [dragging, setDragging] = React.useState(false);
+  const [selectedName, setSelectedName] = React.useState("");
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
+  const previewRef = React.useRef<string | null>(null);
+
+  React.useEffect(() => () => {
+    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+  }, []);
+
+  const selectFile = React.useCallback((file?: File) => {
+    if (!file || disabled) return;
+    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+    previewRef.current = file.type.startsWith("image/") ? URL.createObjectURL(file) : null;
+    setPreviewUrl(previewRef.current);
+    setSelectedName(file.name.length > 34 ? `${file.name.slice(0, 32)}…` : file.name);
+    onFileChange?.(file);
+  }, [disabled, onFileChange]);
+
+  const receiveDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    if (disabled) return;
+    event.preventDefault();
+    setDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (!file) return;
+    const input = event.currentTarget.querySelector<HTMLInputElement>("input[type=file]");
+    if (input) {
+      try { input.files = event.dataTransfer.files; } catch { /* FileList assignment is not supported by every browser. */ }
+    }
+    selectFile(file);
+  };
+
+  return (
+    <label
+      {...labelProps}
+      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", previewUrl && "has-img", disabled && "is-disabled", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="upload"
+      data-vt-studio-upload-frame="true"
+      data-vt-library-component="StudioUploadFrame"
+      data-size={sizeVariant}
+      aria-disabled={disabled ? "true" : undefined}
+      onDragEnter={event => { if (!disabled) { event.preventDefault(); setDragging(true); } }}
+      onDragOver={event => { if (!disabled) { event.preventDefault(); setDragging(true); } }}
+      onDragLeave={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setDragging(false); }}
+      onDrop={receiveDrop}
+    >
+      <input
+        className="vt-studio-upload-frame__input"
+        type="file"
+        accept={accept}
+        disabled={disabled}
+        aria-label={ariaLabel}
+        onChange={event => selectFile(event.currentTarget.files?.[0])}
+      />
+      <span className="vt-studio-upload-frame__inset" aria-hidden="true">
+        <span className="vt-studio-upload-frame__layers">
+          {Array.from({ length: 9 }, (_, index) => (
+            <i key={index} className="vt-studio-upload-frame__layer" style={{ "--layer": index } as React.CSSProperties} />
+          ))}
+          <i className="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core" style={{ "--layer": 9 } as React.CSSProperties} />
+        </span>
+      </span>
+      <span className="vt-studio-upload-frame__center">
+        <span className="vt-studio-upload-frame__icon" aria-hidden="true">
+          <Upload />
+          {previewUrl && <img src={previewUrl} alt="" />}
+        </span>
+        <span className="vt-studio-upload-frame__label" aria-live="polite">{selectedName || prompt}</span>
+      </span>
+    </label>
+  );
+};
+StudioUploadFrame.displayName = "StudioUploadFrame";
 
 
 /** BEM class names are retained for compatibility; anatomy is shared with buttons and username fields. */

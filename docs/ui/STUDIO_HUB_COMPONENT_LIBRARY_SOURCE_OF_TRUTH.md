@@ -133,6 +133,13 @@ These rules apply to the Component Library presentation layer and do **not** cha
 - The opened panel is portaled above shell overflow/stacking contexts and carries the owning pair-A/pair-B values into the portal.
 - Search is the first row of the opened panel and uses the canonical split-left Search field.
 
+### Studio Upload Frame
+- `StudioUploadFrame` is the default reusable upload surface in the Confirmed Primitive Library.
+- It uses a conic primary/secondary perimeter, layered breathing fill, centered upload affordance, accessible native file input, drag/drop, and circular image preview.
+- The color source is the active Toolbox pair (`--pair-a` and `--pair-b`); the reference's hard-coded pink/mint/yellow colors are not carried into production.
+- Canvas geometry is 16:10 on wider layouts and 4:3 on narrow screens. It is an intentional ratio-based canvas exception rather than a 44px/28px/14px fixed-height control.
+- Production ownership remains in `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`; the catalog renders that same component.
+
 ### Floating-label fields
 - Labeled Input and Labeled Textarea are compound Studio controls built directly on `StudioTextInput` and `StudioTextArea`.
 - The label begins inside the empty field and rises to the top edge on focus or when a value is present.

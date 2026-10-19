@@ -49,6 +49,7 @@ export {
   StudioRadio,
   StudioCheckbox,
   StudioXCheckbox,
+  StudioUploadFrame,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -76,6 +77,7 @@ export type {
   StudioTextInputProps,
   StudioTextAreaProps,
   StudioSimpleDropdownProps,
+  StudioUploadFrameProps,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
