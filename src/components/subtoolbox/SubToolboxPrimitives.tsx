@@ -1,5 +1,5 @@
 import React from "react"
-import { StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
+import { StudioWordToggle, StudioTextBox } from "../../studio-ui/primitives/StudioControls"
 import { createPortal } from "react-dom"
 import { CircleQuestionMark, Upload } from "lucide-react"
 import "../../styles/toolbox-entry.css"
@@ -2152,7 +2152,7 @@ export const SubToolboxFileTarget: React.FC<{
 
 
 const DEFAULT_STATE_COPY: Record<SubToolboxState, string> = { loading: "Loading…", ready: "Ready.", empty: "Nothing to show yet.", "filtered-empty": "No results match the current filters.", disconnected: "Connect your channel to load this.", blocked: "A required connection is unavailable.", stale: "This information may be out of date.", permission: "You do not have access to this.", error: "This section could not be loaded." }
-export const SubToolboxStatePanel: React.FC<{ state: SubToolboxState; message?: React.ReactNode; action?: React.ReactNode; className?: string; level?: ToolboxControlLevel; style?: React.CSSProperties }> = ({ state, message, action, className, level, style }) => { const urgent = state === "error" || state === "blocked"; return <section className={classes("vt-subtoolbox-state", `is-${state}`, level && "has-component-level", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} data-subtoolbox-state={state} role={urgent ? "alert" : "status"} aria-live={urgent ? "assertive" : "polite"}><p>{message ?? DEFAULT_STATE_COPY[state]}</p>{action}</section> }
+export const SubToolboxStatePanel: React.FC<{ state: SubToolboxState; message?: React.ReactNode; action?: React.ReactNode; className?: string; level?: ToolboxControlLevel; style?: React.CSSProperties }> = ({ state, message, action, className, level, style }) => { const urgent = state === "error" || state === "blocked"; const copy = message ?? DEFAULT_STATE_COPY[state]; return <section className={classes("vt-subtoolbox-state", `is-${state}`, level && "has-component-level", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} data-subtoolbox-state={state} role={urgent ? "alert" : "status"} aria-live={urgent ? "assertive" : "polite"}>{typeof copy === "string" ? <StudioTextBox size="standard">{copy}</StudioTextBox> : <div>{copy}</div>}{action}</section> }
 
 
 export interface SubToolboxScrollbarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
