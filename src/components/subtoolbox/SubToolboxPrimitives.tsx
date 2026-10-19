@@ -224,7 +224,7 @@ export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
       size={size}
       className={classes("vt-toolbox-header-toggle-replacement", className)}
       style={style}
-      aria-label={props["aria-label"] ?? props["ariaLabel"] ?? "Choose an option"}
+      aria-label={props["aria-label"] ?? "Choose an option"}
       data-vt-header-toggle={level}
       data-vt-header-toggle-primitive="studio-word-toggle"
     />
