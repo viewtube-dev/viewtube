@@ -3943,12 +3943,14 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame:hover,
 .vt-studio-upload-frame.is-drag {
   --vt-studio-upload-speed: 2;
-  filter: saturate(1.8);
+  filter: none;
 }
 .vt-studio-upload-frame.is-clicking {
-  --vt-studio-upload-speed: 4;
-  animation: vt-studio-upload-click-pulse 1s ease-in-out both, vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
-  filter: saturate(2.4);
+  --vt-studio-upload-speed: 1;
+  /* Click feedback is contained to the decorative layers: the frame, preview,
+     rails, and aspect ratio never scale or change their outer geometry. */
+  animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
+  filter: none;
 }
 .vt-studio-upload-frame:focus-visible {
   outline: var(--vt-studio-upload-frame-stroke) solid #000;
@@ -4156,19 +4158,36 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::before { inset: -3cqw; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::after { inset: -4.5cqw; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__split { opacity: .96; }
-.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__layer { animation-duration: .35s; }
-.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__icon { animation: vt-studio-upload-click-pulse 1s ease-in-out both; }
+.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__layer {
+  animation: vt-studio-upload-click-breathe 1s ease-in-out both;
+  border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
+}
 @keyframes vt-studio-upload-spin { to { --vt-studio-upload-angle: 360deg; } }
 @keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; scale: 1; } 45% { opacity: .38; scale: 1.012; } }
 @keyframes vt-studio-upload-core { 0%, 100% { scale: 1; } 45% { scale: .975; } }
 @keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 2px; } 50% { translate: 0 -4px; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
-@keyframes vt-studio-upload-click-pulse {
-  0%, 100% { scale: 1; }
-  18% { scale: 1.045; }
-  42% { scale: .965; }
-  68% { scale: 1.07; }
-  86% { scale: .985; }
+@keyframes vt-studio-upload-click-breathe {
+  0%, 100% {
+    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step));
+    border-width: calc(var(--vt-studio-upload-frame-stroke) * .25);
+    opacity: .07;
+  }
+  24% {
+    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step) + clamp(1px, .5cqw, 4px));
+    border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
+    opacity: .42;
+  }
+  52% {
+    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step) + clamp(2px, 1cqw, 8px));
+    border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
+    opacity: .5;
+  }
+  78% {
+    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step) + clamp(1px, .5cqw, 4px));
+    border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
+    opacity: .3;
+  }
 }
 @media (max-width: 460px) {
   .vt-studio-upload-frame__center { gap: 4px; }
