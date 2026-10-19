@@ -329,7 +329,7 @@ export const beginAIBrainTurn = async (input: {
   status: "pending",
   rawUserMessage: input.userText,
   displayUserMessage: sanitizeCreatorFacingBrainCopy(input.userText),
-  userText: sanitizeCreatorFacingBrainCopy(input.userText),
+  userText: input.userText,
   assistantText: "",
   answerModules: [],
   questionAnswers: [],
