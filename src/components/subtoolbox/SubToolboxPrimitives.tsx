@@ -1,4 +1,5 @@
 import React from "react"
+import { StudioWordToggle } from "../../studio-ui/primitives/StudioControls"
 import { createPortal } from "react-dom"
 import { CircleQuestionMark, Upload } from "lucide-react"
 import "../../styles/toolbox-entry.css"
@@ -597,15 +598,41 @@ export const SubToolboxSegmentedToggle: React.FC<SubToolboxSegmentedToggleProps>
   className,
   style,
   ...props
-}) => (
-  <div className={classes("vt-subtoolbox-segmented", className)} data-vt-control-level={level} style={withComponentLevelStyle(level, style)} role="group" aria-label={ariaLabel} {...props}>
-    {options.map((option) => (
-      <button type="button" key={option.value} className={value === option.value ? "is-active" : ""} aria-pressed={value === option.value} onClick={() => onValueChange?.(option.value)}>
-        {option.label}
-      </button>
-    ))}
-  </div>
-)
+}) => {
+  const mergedStyle = withComponentLevelStyle(level, style)
+  // Binary word choices are the shared Studio Word Toggle use case. Keep the
+  // legacy segmented layout for 3+ options and non-text labels, which the
+  // canonical word-toggle API intentionally does not represent.
+  const wordOptions = options.length === 2 && options.every(option => typeof option.label === "string")
+    ? options as Array<SubToolboxSegmentedOption & { label: string }>
+    : null
+
+  if (wordOptions) {
+    return (
+      <StudioWordToggle
+        value={value === wordOptions[1].value}
+        onValueChange={(selected) => onValueChange?.(wordOptions[selected ? 1 : 0].value)}
+        words={[wordOptions[0].label, wordOptions[1].label]}
+        size={level === "l0" ? "44" : "28"}
+        className={classes("vt-subtoolbox-word-toggle-adapter", className)}
+        style={mergedStyle}
+        aria-label={ariaLabel}
+        data-vt-control-level={level}
+        {...props}
+      />
+    )
+  }
+
+  return (
+    <div className={classes("vt-subtoolbox-segmented", className)} data-vt-control-level={level} style={mergedStyle} role="group" aria-label={ariaLabel} {...props}>
+      {options.map((option) => (
+        <button type="button" key={option.value} className={value === option.value ? "is-active" : ""} aria-pressed={value === option.value} onClick={() => onValueChange?.(option.value)}>
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 
 export interface SubToolboxTopTitleDropdownOption {
