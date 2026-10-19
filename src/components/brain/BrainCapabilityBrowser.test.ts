@@ -6,6 +6,7 @@ import type { AIBrainContextSnapshot } from "../../../services/aiBrainCommandInt
 
 const snapshot = (videoCount: number) => ({
  inferredProfile: { videoCount },
+ brain: { activeProjects: 1 },
 }) as AIBrainContextSnapshot
 
 describe("Brain capability browser", () => {
@@ -35,6 +36,21 @@ describe("Brain capability browser", () => {
   const result = getBrainCapabilityAvailability(capability, DEFAULT_BRAIN_USER_CONTROLS, snapshot(0))
   expect(result.status).toBe("needs-channel-data")
   expect(result.reason).toContain("Connect or sync")
+ })
+
+ it("blocks project-dependent capabilities when project access is disabled", () => {
+  const capability = BRAIN_CAPABILITY_REGISTRY.find((item) => item.id === "daily-oracle")!
+  const result = getBrainCapabilityAvailability(capability, { ...DEFAULT_BRAIN_USER_CONTROLS, allowProjects: false }, snapshot(12))
+  expect(result.status).toBe("blocked")
+  expect(result.label).toBe("Project access off")
+ })
+
+ it("reports missing project context without pretending the capability is ready", () => {
+  const capability = BRAIN_CAPABILITY_REGISTRY.find((item) => item.id === "daily-oracle")!
+  const noProject = { ...snapshot(12), brain: { activeProjects: 0 } }
+  const result = getBrainCapabilityAvailability(capability, DEFAULT_BRAIN_USER_CONTROLS, noProject)
+  expect(result.status).toBe("needs-project-context")
+  expect(result.reason).toContain("Select or create a project")
  })
 
  it("creates a request prompt that explicitly preserves evidence and execution boundaries", () => {
