@@ -5,6 +5,8 @@ import test from "node:test"
 const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const component = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
 const css = readFileSync("src/styles/studio-control-system.css", "utf8")
+const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
+const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
@@ -43,4 +45,15 @@ test("counter and slider readouts share default mix and black active numeral tok
   assert.match(css, /\.vt-studio-double-split-slider:has\(input\[type="range"\]:is\(:active, :focus\)\) \.vt-studio-double-split-slider__value\s*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke, #000\)/s)
   assert.match(css, /\.vt-studio-left-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke, #000\)/)
   assert.match(css, /\.vt-studio-side-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/s)
+})
+
+test("generated CSS variables stay synchronized with the canonical token module", () => {
+  assert.match(generator, /readFile\\(resolve\\(root, "src\\/studio-ui\\/tokens\\.ts"\\)/)
+  assert.match(generator, /STUDIO_DROPDOWN_TOKENS/)
+  assert.match(generator, /STUDIO_COUNTER_NUMBER_TOKENS/)
+  assert.match(generated, /--vt-studio-dropdown-standard-chevron-size: 28px/)
+  assert.match(generated, /--vt-studio-dropdown-compact-chevron-size: 18px/)
+  assert.match(generated, /--vt-studio-number-default-white-mix: 50%/)
+  assert.match(generated, /--vt-studio-number-active-color: #000/)
+  assert.match(generated, /--vt-studio-number-active-stroke: #000/)
 })
