@@ -42,6 +42,16 @@ describe("CreatorVaultOS mobile card density", () => {
   ]) expect(source).toContain(`aria-label="${label}"`)
  })
 
+ it("stacks Sort, State, and View in the right half with compact mobile sizing", () => {
+  expect(source).toContain("data-vault-sort-state-view-stack")
+  expect(source).toContain('className="vault-sort-state-view-dropdown"')
+  expect(source).toContain('sizeVariant="standard"')
+  const css = fs.readFileSync(path.resolve(process.cwd(), "src/styles/subtoolbox-system.css"), "utf8")
+  expect(css).toContain("[data-vault-sort-state-view-stack]")
+  expect(css).toContain("@media (max-width: 639px)")
+  expect(css).toContain("--vt-legend-height: 28px")
+ })
+
  it("uses a three-cell search row plus a wrapped secondary toolbar for phone widths", () => {
   expect(source).toContain('grid-cols-[auto_minmax(0,1fr)_auto]')
   expect(source).toContain('data-vault-toolbar-secondary')
