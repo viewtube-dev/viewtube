@@ -315,7 +315,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
    raised label is exactly 18px; field geometry and focus width remain tiered. */
 .vt-studio-floating-field {
   /* Standard resting label follows the global 38px text-input default. */
-  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-standard-height, 38px);
+  --vt-studio-control-floating-label-height: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-floating-label-offset-ratio: var(--vt-studio-floating-label-offset-ratio, 1.2);
   --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
   --vt-studio-control-focus-outline-width: 1.95px;
@@ -326,7 +326,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   isolation: isolate;
 }
 .vt-studio-floating-field[data-size="compact"] {
-  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-compact-height, 24px);
+  --vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px);
   --vt-studio-control-focus-outline-width: 1.3px;
 }
 .vt-studio-floating-field[data-size="micro"] {
