@@ -75,6 +75,13 @@ import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import {
+ BRAIN_SURFACE_SELECTION_EVENT,
+ clearBrainSurfaceSelection,
+ readBrainSurfaceSelection,
+ setBrainSurfaceSelectionLocked,
+ type BrainSurfaceSelection,
+} from "../services/brain/BrainSurfaceSelection"
 import type {
  AIBrainAnswerModule,
  AIBrainEvidencePack,
@@ -109,6 +116,7 @@ export type ChatMessage = {
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
  readiness?: AIBrainTurnReadiness
+ contextUsed?: BrainCreatorContextSnapshot
  learningReceipt?: {
   entryId: string
   summary: string
@@ -121,6 +129,122 @@ export type ChatMessage = {
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
 }
+
+export type BrainCreatorContextSnapshot = {
+ version: string | null
+ channelId: string | null
+ project: {
+  projectId: string
+  contentBuildId: string | null
+  title: string | null
+  topic: string | null
+  format: string | null
+  evidenceIds: string[]
+  source: string | null
+ } | null
+ selection: {
+  route: string
+  sourceId: string
+  label: string
+  projectId: string | null
+  videoId: string | null
+  commentId: string | null
+  dateRange: string | null
+  evidenceIds: string[]
+  updatedAt: string
+  locked: boolean
+ } | null
+ profileLoadedAt: string | null
+ styleProfileAvailable: boolean
+ knowledgeItems: Array<{
+  id: string
+  statement: string
+  knowledgeClass: string
+  lifecycleState: string
+  confirmationState: string | null
+  source: string
+  sourceId: string
+  evidenceRefs: string[]
+  status: "confirmed" | "inferred"
+ }>
+ conflictIds: string[]
+ evidenceRefs: string[]
+ projectSource: string | null
+}
+
+const BrainContextUsedDrawer: React.FC<{ contextUsed?: BrainCreatorContextSnapshot }> = ({ contextUsed }) => {
+ if (!contextUsed) return null
+ const selection = contextUsed.selection
+ const project = contextUsed.project
+ const items = [
+  { id: "channel", label: "Channel", value: contextUsed.channelId || "No channel ID", status: "confirmed" },
+  { id: "project", label: "Project", value: project ? `${project.title || project.projectId} · ${project.projectId}` : "No project in this answer's context", status: project?.source === "canonical_project" || project?.source === "canonical_project_content_build" ? "confirmed" : "inferred" },
+  { id: "content-build", label: "ContentBuild", value: project?.contentBuildId || "No linked ContentBuild", status: project?.contentBuildId ? "confirmed" : "temporary" },
+  { id: "selection", label: "Selected video / asset", value: selection ? `${selection.label} · ${selection.sourceId}` : "No selected video or asset was supplied", status: selection ? "temporary" : "inferred" },
+ ]
+ return (
+  <details className="w-full rounded-[7px] border-[2px] border-black bg-white">
+   <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
+    <PanelRight size={12} aria-hidden="true" /> Context used
+    <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
+   </summary>
+   <div className="grid gap-2 border-t-[2px] border-black p-2">
+    <ul className="grid gap-1">
+     {items.map((item) => (
+      <li key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
+       <span className="text-[9px] font-black uppercase">{item.label} · {item.status}</span>
+       <span className="break-words text-[10px] font-bold">{item.value}</span>
+      </li>
+     ))}
+    </ul>
+    {contextUsed.knowledgeItems.length ? (
+     <section>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
+      <ul className="mt-1 grid gap-1">
+       {contextUsed.knowledgeItems.map((item) => (
+        <li key={item.id} className="rounded-[5px] border border-black/20 px-2 py-1">
+         <div className="text-[9px] font-black uppercase">{item.status} · {item.knowledgeClass.replace(/_/g, " ")}</div>
+         <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
+         <code className="block break-all text-[8px] text-black/55">{item.id}</code>
+         {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
+        </li>
+       ))}
+      </ul>
+     </section>
+    ) : null}
+    {contextUsed.conflictIds.length ? <p className="text-[10px] font-bold">Conflicting context records: {contextUsed.conflictIds.join(", ")}</p> : null}
+    {contextUsed.evidenceRefs.length ? <p className="break-words text-[9px] font-bold text-black/60">Context evidence IDs: {contextUsed.evidenceRefs.join(", ")}</p> : null}
+    <p className="text-[9px] font-bold text-black/45">Resolver {contextUsed.version || "unavailable"} · Profile loaded {contextUsed.profileLoadedAt || "time unavailable"} · Style profile {contextUsed.styleProfileAvailable ? "available" : "not included"}</p>
+   </div>
+  </details>
+ )
+}
+
+const BrainContextStrip: React.FC<{
+ channelLabel: string
+ projectLabel: string
+ contentBuildId: string | null
+ selection: BrainSurfaceSelection | null
+ onClearSelection: () => void
+ onToggleLock: () => void
+ onClearProject: () => void
+}> = ({ channelLabel, projectLabel, contentBuildId, selection, onClearSelection, onToggleLock, onClearProject }) => (
+ <section aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1.5 rounded-[7px] border-[2px] border-black bg-white p-2 shadow-[2px_2px_0_0_#000]">
+  <div className="flex flex-wrap items-center gap-1.5">
+   <span className="rounded-[4px] border border-black bg-[#36E0F6] px-1.5 py-1 text-[9px] font-black uppercase">Channel · {channelLabel}</span>
+   <span className="rounded-[4px] border border-black bg-[#3FEE56] px-1.5 py-1 text-[9px] font-black uppercase">Project · {projectLabel}</span>
+   <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-black uppercase">ContentBuild · {contentBuildId || "none"}</span>
+   <span className="min-w-0 rounded-[4px] border border-black bg-[#f8f8f4] px-1.5 py-1 text-[9px] font-black uppercase">Selected · {selection?.label || "none"}</span>
+  </div>
+  <div className="flex flex-wrap gap-1.5">
+   <button type="button" disabled={!selection} aria-pressed={Boolean(selection?.locked)} onClick={onToggleLock} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">
+    {selection?.locked ? "Unlock selection" : "Lock selection"}
+   </button>
+   <button type="button" disabled={!selection} onClick={onClearSelection} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear selection</button>
+   <button type="button" disabled={projectLabel === "none"} onClick={onClearProject} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear project</button>
+  </div>
+ </section>
+)
 
 const shellCard = "rounded-[16px] border-[4px] border-black bg-white shadow-[6px_6px_0_0_#000]"
 const innerCard = "rounded-[10px] border-[2px] border-black bg-white"
@@ -579,6 +703,7 @@ const CreatorResponseCard: React.FC<{
      {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
       <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
      ) : null}
+     <BrainContextUsedDrawer contextUsed={message.contextUsed} />
      {message.handoff ? (
       <Link
        to={message.handoff.route}
@@ -785,6 +910,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
  const [contextRailOpen, setContextRailOpen] = useState(false)
+ const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [journalOpen, setJournalOpen] = useState(false)
  const composerRef = useRef<HTMLInputElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
@@ -853,6 +979,16 @@ const AIBrainCommandInterface: React.FC = () => {
   () => dedupeInsightsAgainstActions(initialInsights, quickActions),
   [initialInsights, quickActions],
  )
+
+ useEffect(() => {
+  const syncSelection = (event?: Event) => {
+   const detail = event instanceof CustomEvent ? event.detail as BrainSurfaceSelection | null : null
+   setSurfaceSelection(detail || readBrainSurfaceSelection())
+  }
+  syncSelection()
+  window.addEventListener(BRAIN_SURFACE_SELECTION_EVENT, syncSelection as EventListener)
+  return () => window.removeEventListener(BRAIN_SURFACE_SELECTION_EVENT, syncSelection as EventListener)
+ }, [])
 
  useEffect(() => {
   setBrainControls(readBrainUserControls(channelId))
@@ -942,6 +1078,9 @@ const AIBrainCommandInterface: React.FC = () => {
      learningReceipt: turn.metadata?.learningReceiptSnapshot && typeof turn.metadata.learningReceiptSnapshot === "object"
       ? turn.metadata.learningReceiptSnapshot as NonNullable<ChatMessage["learningReceipt"]>
       : undefined,
+     contextUsed: turn.metadata?.creatorContextSnapshot && typeof turn.metadata.creatorContextSnapshot === "object"
+      ? turn.metadata.creatorContextSnapshot as BrainCreatorContextSnapshot
+      : undefined,
     },
    ]),
   )
@@ -1019,6 +1158,20 @@ const AIBrainCommandInterface: React.FC = () => {
    console.warn("[AIBrain] Learning capture skipped:", error)
    return null
   }
+ }
+
+ const handleClearSurfaceSelection = () => {
+  clearBrainSurfaceSelection()
+  setSurfaceSelection(null)
+ }
+
+ const handleToggleSurfaceSelectionLock = () => {
+  const updated = setBrainSurfaceSelectionLocked(!surfaceSelection?.locked)
+  setSurfaceSelection(updated)
+ }
+
+ const handleClearActiveProject = () => {
+  updateBrain({ activeProjectId: null })
  }
 
  const handleSend = async (override?: string) => {
@@ -1101,7 +1254,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1201,6 +1354,7 @@ const AIBrainCommandInterface: React.FC = () => {
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
        readiness: readinessForSnapshot(turnSnapshot),
+       contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
        contextMayBeStale: false,
       }
      : item,
@@ -1510,6 +1664,15 @@ const AIBrainCommandInterface: React.FC = () => {
           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
           <div className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain max-xl:overflow-visible xl:overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
+           <BrainContextStrip
+            channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
+            projectLabel={brain.projects.find((project) => project.id === brain.activeProjectId)?.name || "none"}
+            contentBuildId={brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || null}
+            selection={surfaceSelection}
+            onClearSelection={handleClearSurfaceSelection}
+            onToggleLock={handleToggleSurfaceSelectionLock}
+            onClearProject={handleClearActiveProject}
+           />
            {messages.map((message) => message.role === "user" ? (
             <UserMessage key={message.id} text={message.text} />
            ) : (
