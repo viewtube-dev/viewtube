@@ -110,6 +110,8 @@ describe("generateAsset", () => {
   expect(calls).toHaveLength(0)
   expect(result.record.status).toBe("failed")
   expect(result.trace.failureReason).toContain("required context missing: creator_instruction")
+  expect(result.trace.context.sectionsDropped).toContain("required context missing: creator_instruction")
+  expect(result.trace.context.sectionsIncluded).not.toContain("creator_instruction")
  })
 
  it("blocks provider dispatch when request constraints do not match the asset strategy", async () => {
