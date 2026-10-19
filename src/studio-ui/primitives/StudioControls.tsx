@@ -1598,8 +1598,18 @@ const useStudioCounterHold = (
         adjust(direction);
         const elapsed = Date.now() - startedAt.current;
         const remaining = direction > 0 ? max - value : value - min;
-        const nearBound = Number.isFinite(remaining) && remaining <= step * 4;
-        const delay = nearBound ? 190 : Math.max(42, 145 - Math.floor(elapsed / 900) * 18);
+        const remainingSteps = Number.isFinite(remaining) ? Math.max(0, remaining / step) : Number.POSITIVE_INFINITY;
+        // Accelerate early with a smooth ease-out, then ease off progressively
+        // over the final twelve steps instead of abruptly switching intervals.
+        const accelerationProgress = Math.min(1, elapsed / 720);
+        const accelerationEase = 1 - Math.pow(1 - accelerationProgress, 2.4);
+        const fastDelay = 128 - accelerationEase * 82;
+        const boundaryProgress = Number.isFinite(remainingSteps)
+          ? Math.min(1, Math.max(0, (12 - remainingSteps) / 11))
+          : 0;
+        const boundaryEase = boundaryProgress * boundaryProgress * (3 - 2 * boundaryProgress);
+        const boundaryDelay = 46 + boundaryEase * 124;
+        const delay = Math.round(Math.max(fastDelay, boundaryDelay));
         timer.current = setTimeout(repeat, delay);
       };
       repeat();
