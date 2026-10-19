@@ -4005,7 +4005,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   position: absolute;
   inset: calc(var(--layer) * var(--vt-studio-upload-layer-step));
   border: var(--vt-studio-upload-quarter-stroke) solid color-mix(in srgb, var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary));
-  border-radius: clamp(3px, 1cqw, 10px);
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - var(--layer) * var(--vt-studio-upload-layer-step)));
   background: linear-gradient(135deg, var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary));
   opacity: .07;
   animation: vt-studio-upload-breathe calc(2.8s / var(--vt-studio-upload-speed)) ease-in-out infinite;
