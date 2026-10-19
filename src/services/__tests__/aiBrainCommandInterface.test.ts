@@ -156,9 +156,19 @@ describe("aiBrainCommandInterface", () => {
   const handoff = await queueAIBrainReviewedAction({
    request: "analyze my channel stats and route this",
    response: "Open Cinematic Analytics Lab.",
+   originatingTurnId: "turn-origin-1",
+   evidenceIds: ["video:abc", "search:term-1"],
+   contentBuildId: "content-build-9",
+   selectedContentId: "video:abc",
   })
+  const route = new URL(handoff.route, "https://viewtube.test")
 
   expect(handoff.reviewOnly).toBe(true)
+  expect(route.searchParams.get("reviewOnly")).toBe("true")
+  expect(route.searchParams.get("brainTurnId")).toBe("turn-origin-1")
+  expect(route.searchParams.get("contentBuildId")).toBe("content-build-9")
+  expect(route.searchParams.get("selectedContentId")).toBe("video:abc")
+  expect(route.searchParams.getAll("evidenceId")).toEqual(["video:abc", "search:term-1"])
   expect(handoff.action.source).toBe("assistant")
   expect(handoff.action.assistantRequest).toBe("analyze my channel stats and route this")
   expect(handoff.route).toContain("commandActionId=")
