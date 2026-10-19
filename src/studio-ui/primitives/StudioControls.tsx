@@ -2255,7 +2255,7 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
 /** Canonical pair-colored upload canvas with responsive breathing layers and an optional image preview. */
 export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   accept = "image/*,video/*",
-  prompt = "Drag or drop\\nImage / video here · or click to upload",
+  prompt = "Drag or drop\nImage / video here · or click to upload",
   sizeVariant = "standard",
   disabled = false,
   onFileChange,
