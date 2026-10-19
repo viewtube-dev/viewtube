@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioLegendMultiDropdown, StudioTextBox } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioSplitLeftInput, StudioTextBox, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -15,7 +15,6 @@ import {
 import {
  StandardInput,
  SubToolbox,
- SubToolboxDropdownControl,
  SubToolboxInnerActionButton,
  Toolbox,
 } from "../components/Toolbox"
@@ -23,11 +22,9 @@ import {
  SubToolboxAlphabeticalTag,
  SubToolboxDataTable,
  type SubToolboxDataTableColumn,
- SubToolboxFileTarget,
  SubToolboxInput,
  SubToolboxSegmentedToggle,
  SubToolboxSelect,
- SubToolboxSplitField,
  SubToolboxTagEditor,
  SubToolboxTextArea,
 } from "../components/subtoolbox/SubToolboxPrimitives"
@@ -1859,18 +1856,15 @@ const CreatorVaultOS: React.FC = () => {
         >
          Library
         </button>
-        <SubToolboxSplitField
-         level="l1"
-         variant="search"
+        <StudioSplitLeftInput
+         sizeVariant="compact"
          className="vault-library-search-field"
-         icon={<Search />}
-         inputRef={searchInputRef}
-         inputProps={{
-          value: query,
-          onChange: (event) => setQuery(event.target.value),
-          placeholder: "Search assets…",
-          "aria-label": "Search Vault assets",
-         }}
+         icon={<Search aria-hidden="true" />}
+         ref={searchInputRef}
+         value={query}
+         onChange={(event) => setQuery(event.target.value)}
+         placeholder="Search assets…"
+         aria-label="Search Vault assets"
         />
         <button
          type="button"
@@ -1898,48 +1892,48 @@ const CreatorVaultOS: React.FC = () => {
         </button>
         <StudioLegendMultiDropdown
          label="Sort"
+         accessibleLabel="Sort assets"
+         selectionMode="single"
+         sizeVariant="compact"
          value={[sort]}
-         onChange={(values) => {
-          const next = values.find((value) => value !== sort)
-          if (next) setSort(next as VaultWorkspaceSort)
-         }}
+         onChange={(values) => { const next = values[0]; if (next) setSort(next as VaultWorkspaceSort) }}
          options={[
-          { value: "updated-desc", label: "updated-desc" },
-          { value: "updated-asc", label: "updated-asc" },
-          { value: "name-asc", label: "name-asc" },
-          { value: "name-desc", label: "name-desc" },
+          { value: "updated-desc", label: "UPDATED-DESC" },
+          { value: "updated-asc", label: "UPDATED-ASC" },
+          { value: "name-asc", label: "NAME-ASC" },
+          { value: "name-desc", label: "NAME-DESC" },
          ]}
         />
         <StudioLegendMultiDropdown
          label="View"
+         accessibleLabel="Vault view"
+         selectionMode="single"
+         sizeVariant="compact"
          value={[viewMode]}
-         onChange={(values) => {
-          const next = values.find((value) => value !== viewMode)
-          if (next) setViewMode(next as VaultWorkspaceViewMode)
-         }}
+         onChange={(values) => { const next = values[0]; if (next) setViewMode(next as VaultWorkspaceViewMode) }}
          options={[
-          { value: "grid", label: "grid" },
-          { value: "masonry", label: "masonry" },
-          { value: "list", label: "list" },
-          { value: "filmstrip", label: "filmstrip" },
-          { value: "lineage", label: "lineage" },
+          { value: "grid", label: "GRID" },
+          { value: "masonry", label: "MASONRY" },
+          { value: "list", label: "LIST" },
+          { value: "filmstrip", label: "FILMSTRIP" },
+          { value: "lineage", label: "LINEAGE" },
          ]}
         />
         <StudioLegendMultiDropdown
          label="State"
+         accessibleLabel="Vault state"
+         selectionMode="single"
+         sizeVariant="compact"
          value={[special]}
-         onChange={(values) => {
-          const next = values.find((value) => value !== special)
-          if (next) setSpecial(next as typeof special)
-         }}
+         onChange={(values) => { const next = values[0]; if (next) setSpecial(next as typeof special) }}
          options={[
-          { value: "active", label: "active" },
-          { value: "recent", label: "recent" },
-          { value: "generated", label: "generated" },
-          { value: "inbox", label: "inbox" },
-          { value: "favorites", label: "favorites" },
-          { value: "archive", label: "archive" },
-          { value: "trash", label: "trash" },
+          { value: "active", label: "ACTIVE" },
+          { value: "recent", label: "RECENT" },
+          { value: "generated", label: "GENERATED" },
+          { value: "inbox", label: "INBOX" },
+          { value: "favorites", label: "FAVORITES" },
+          { value: "archive", label: "ARCHIVE" },
+          { value: "trash", label: "TRASH" },
          ]}
         />
        </div>
@@ -2754,13 +2748,12 @@ const CreatorVaultOS: React.FC = () => {
            ]}
           />
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)]">
-           <SubToolboxFileTarget
-            level="l1"
+           <StudioUploadFrame
+            sizeVariant="standard"
             multiple
-            minHeight={180}
-            icon={<UploadCloud />}
-            label={importMode === "direct" ? "DROP OR CHOOSE · IMPORT DIRECTLY" : "DROP OR CHOOSE · REVIEW IN STAGING"}
-            onFiles={stageFiles}
+            prompt={importMode === "direct" ? "DROP OR CHOOSE · IMPORT DIRECTLY" : "DROP OR CHOOSE · REVIEW IN STAGING"}
+            aria-label="Import Vault assets"
+            onFilesChange={files => { void stageFiles(files) }}
            />
            <div className="flex min-w-0 flex-col gap-3">
             <StandardInput
