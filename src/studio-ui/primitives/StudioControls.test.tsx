@@ -204,7 +204,7 @@ describe("standalone Studio text fields", () => {
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('First row')
     expect(standard).toContain('Second row')
-    expect(standard).not.toContain('contenteditable="true"')
+    expect(standard).toContain('contenteditable="false"')
     expect(compact).toContain('data-size="compact"')
     expect(micro).toContain('data-size="micro"')
   })
@@ -258,14 +258,15 @@ describe("global defaults govern the effective primitive CSS", () => {
 });
 
 describe("Studio text field library entries", () => {
-  it("renders the standalone Studio text input, textarea, and text box as distinct catalog specimens", () => {
+  it("renders the standalone Studio text input and textarea in the complete catalog and the text box in the confirmed catalog", () => {
     const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />);
+    const confirmedHtml = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
     expect(html).toContain('data-vt-library-component="StudioTextInput"');
     expect(html).toContain('data-vt-library-component="StudioTextArea"');
-    expect(html).toContain('data-vt-library-component="StudioTextBox"');
-    expect(html).toContain('aria-label="Studio text box standard"');
-    expect(html).toContain('aria-label="Studio text box compact"');
-    expect(html).toContain('aria-label="Studio text box micro"');
+    expect(confirmedHtml).toContain('data-vt-library-component="StudioTextBox"');
+    expect(confirmedHtml).toContain('aria-label="Studio text box standard"');
+    expect(confirmedHtml).toContain('aria-label="Studio text box compact"');
+    expect(confirmedHtml).toContain('aria-label="Studio text box micro"');
     expect(html).toContain('aria-label="Canonical Studio text input"');
     expect(html).toContain('aria-label="Canonical Studio text area"');
     expect(html).toContain('data-vt-studio-icon-button="true"');

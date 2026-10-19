@@ -237,6 +237,13 @@ describe("confirmed composite primitive catalog", () => {
     expect(tokens).toContain("fontWeight: 1000")
     expect(catalog).toContain("row-fill by default")
     expect(catalog).toContain("data-width=&quot;content&quot;")
+    expect(catalog).toContain('data-vt-library-component="StudioTextBox"')
+    expect(catalog).toContain('aria-label="Studio text box standard"')
+    expect(catalog).toContain('aria-label="Studio text box compact"')
+    expect(catalog).toContain('aria-label="Studio text box micro"')
+    const catalogSource = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    expect(catalogSource.match(/<Family title="Studio Text Box · Standard \+ Compact \+ Micro"/g)).toHaveLength(1)
+    expect(catalogSource).not.toContain('src/studio-ui/primitives/StudioTextBox.tsx')
   })
 
 })
