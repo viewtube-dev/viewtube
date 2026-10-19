@@ -38,7 +38,6 @@ import { StudioSplitLeftInput } from "../../studio-ui/primitives/StudioControls"
 import {
  SubToolboxButton,
  SubToolboxSelect,
- SubToolboxSplitField,
 } from "../subtoolbox/SubToolboxPrimitives"
 import {
  PROJECT_LANES,
