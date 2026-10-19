@@ -457,45 +457,220 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
 }
 export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const handleRef = React.useRef<HTMLSpanElement>(null);
+  const overlayRef = React.useRef<HTMLSpanElement>(null);
   const wordRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const animationFrameRef = React.useRef(0);
+  const busyRef = React.useRef(false);
+  const animationTargetRef = React.useRef(value);
+  const latestValueRef = React.useRef(value);
+  const stepRef = React.useRef(0);
   const [handle, setHandle] = React.useState({ left: 2.75, width: 16 });
+
+  const getBounds = React.useCallback((index: number) => {
+    const root = rootRef.current;
+    const target = wordRefs.current[index];
+    if (!root || !target) return null;
+    const rootRect = root.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const inset = handleInset ?? (size === "28" ? 2 : 4);
+    const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
+    const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
+    return {
+      left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
+      width: nextWidth,
+    };
+  }, [handleInset, handleWidth, handleWidthScale, size]);
+
+  const setHandleBounds = React.useCallback((bounds: { left: number; width: number }) => {
+    const handleElement = handleRef.current;
+    if (!handleElement) return;
+    handleElement.style.setProperty("--vt-word-toggle-handle-left", `${bounds.left}px`);
+    handleElement.style.setProperty("--vt-word-toggle-handle-width", `${bounds.width}px`);
+    setHandle(current => Math.abs(current.left - bounds.left) < .5 && Math.abs(current.width - bounds.width) < .5
+      ? current
+      : bounds);
+  }, []);
+
+  const settle = React.useCallback((nextValue: boolean) => {
+    const target = getBounds(nextValue ? 1 : 0);
+    if (target) setHandleBounds(target);
+    const overlay = overlayRef.current;
+    if (overlay) {
+      overlay.style.display = "none";
+      overlay.style.clipPath = "";
+    }
+    const handleElement = handleRef.current;
+    if (handleElement) handleElement.style.background = "";
+  }, [getBounds, setHandleBounds]);
+
+  const cancelAnimation = React.useCallback((settledValue = value) => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(animationFrameRef.current);
+    busyRef.current = false;
+    animationTargetRef.current = settledValue;
+    latestValueRef.current = settledValue;
+    settle(settledValue);
+  }, [settle, value]);
+
+  const animateWordToggle = React.useCallback((to: boolean) => {
+    if (busyRef.current || to === latestValueRef.current) return;
+    const root = rootRef.current;
+    const handleElement = handleRef.current;
+    const overlay = overlayRef.current;
+    const source = getBounds(latestValueRef.current ? 1 : 0);
+    const destination = getBounds(to ? 1 : 0);
+    if (!root || !handleElement || !overlay || !source || !destination) {
+      onValueChange?.(to);
+      return;
+    }
+
+    const from = latestValueRef.current;
+    const velvet = Math.floor(stepRef.current / 2) % 2 === 1;
+    const duration = velvet ? 1250 : 1100;
+    const reachEnd = velvet ? 0.58 : 0.70;
+    const releaseStart = velvet ? 0.72 : 0.84;
+    const expandedLeft = Math.min(source.left, destination.left);
+    const expandedRight = Math.max(source.left + source.width, destination.left + destination.width);
+    const expandedWidth = expandedRight - expandedLeft;
+    const skinClass = root.classList;
+    const indicatorColor = (active: boolean) => {
+      if (skinClass.contains("is-black-indicator")) return "#000";
+      if (skinClass.contains("is-white-indicator")) return "#fff";
+      if (skinClass.contains("is-color-swap") && active) {
+        return "var(--vt-studio-control-accent, var(--pair-a, #36e0f6))";
+      }
+      return "var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))";
+    };
+    const fromColor = indicatorColor(from);
+    const toColor = indicatorColor(to);
+    const blendColors = (a: string, b: string, progress: number) => {
+      if (a === b) return a;
+      const toRgb = (color: string) => {
+        const probe = document.createElement("span");
+        probe.style.color = color;
+        root.appendChild(probe);
+        const resolved = getComputedStyle(probe).color;
+        probe.remove();
+        const channels = resolved.match(/[\\d.]+/g);
+        return channels ? channels.slice(0, 3).map(Number) : null;
+      };
+      const first = toRgb(a);
+      const second = toRgb(b);
+      if (!first || !second) return progress < 1 ? a : b;
+      return `rgb(${first.map((channel, index) => Math.round(channel + (second[index] - channel) * progress)).join(" ")})`;
+    };
+
+    stepRef.current += 1;
+    busyRef.current = true;
+    animationTargetRef.current = to;
+    root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
+    overlay.style.display = velvet ? "block" : "none";
+    overlay.style.background = toColor;
+    overlay.style.clipPath = "";
+    handleElement.style.background = velvet ? fromColor : fromColor;
+    onValueChange?.(to);
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) {
+      busyRef.current = false;
+      latestValueRef.current = to;
+      settle(to);
+      return;
+    }
+
+    const started = performance.now();
+    const clamp = (number: number) => Math.max(0, Math.min(1, number));
+    const mix = (a: number, b: number, progress: number) => a + (b - a) * progress;
+    const smooth = (number: number) => {
+      const t = clamp(number);
+      return t * t * (3 - 2 * t);
+    };
+    const easeOut = (number: number) => 1 - Math.pow(1 - clamp(number), 3);
+    const easeInOut = (number: number) => {
+      const t = clamp(number);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+
+    const tick = (now: number) => {
+      const t = clamp((now - started) / duration);
+      const reach = (velvet ? easeOut : smooth)(t / reachEnd);
+      const release = (velvet ? smooth : easeInOut)((t - releaseStart) / (1 - releaseStart));
+      const left = t < releaseStart
+        ? mix(source.left, expandedLeft, reach)
+        : mix(expandedLeft, destination.left, release);
+      const width = t < releaseStart
+        ? mix(source.width, expandedWidth, reach)
+        : mix(expandedWidth, destination.width, release);
+      handleElement.style.setProperty("--vt-word-toggle-handle-left", `${left}px`);
+      handleElement.style.setProperty("--vt-word-toggle-handle-width", `${width}px`);
+
+      if (velvet) {
+        handleElement.style.background = fromColor;
+        const wipe = smooth((t - 0.80) / 0.20);
+        overlay.style.clipPath = to > from
+          ? `inset(0 0 0 ${(1 - wipe) * 100}%)`
+          : `inset(0 ${(1 - wipe) * 100}% 0 0)`;
+      } else if (skinClass.contains("is-color-swap")) {
+        handleElement.style.background = blendColors(fromColor, toColor, smooth((t - 0.92) / 0.08));
+      } else {
+        handleElement.style.background = fromColor;
+      }
+
+      if (t < 1) {
+        animationFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        busyRef.current = false;
+        latestValueRef.current = to;
+        settle(to);
+      }
+    };
+    animationFrameRef.current = requestAnimationFrame(tick);
+  }, [getBounds, onValueChange, settle]);
+
   React.useEffect(() => {
     let frame = 0;
     const measure = () => {
-      const root = rootRef.current;
-      const target = wordRefs.current[value ? 1 : 0];
-      if (!root || !target) return;
-      const rootRect = root.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      // Standard toggles reserve 16px of optical padding inside the active
-      // handle and a fixed 4px gap from either inner container edge. The word
-      // buttons use 20px side padding; the handle is 8px narrower than that
-      // button, leaving 16px between glyph bounds and handle edges.
-      const inset = handleInset ?? (size === "28" ? 2 : 4);
-      const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
-      const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
-      // Absolutely positioned children measure from the container's padding
-      // edge, not its outer border edge. Subtract clientLeft so both sides keep
-      // the same 4px inner margin when the active word flips left/right.
-      const next = {
-        left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
-        width: nextWidth,
-      };
-      setHandle(current => Math.abs(current.left-next.left)<.5 && Math.abs(current.width-next.width)<.5 ? current : next);
+      if (busyRef.current) return;
+      const target = getBounds(value ? 1 : 0);
+      if (target) setHandleBounds(target);
     };
-    const schedule = () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); frame = window.requestAnimationFrame(measure); } else measure(); };
+    const schedule = () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(measure);
+      } else measure();
+    };
+    latestValueRef.current = value;
+    if (!busyRef.current) animationTargetRef.current = value;
     schedule();
     const root = rootRef.current;
     const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(schedule) : null;
     if (root) observer?.observe(root);
     wordRefs.current.forEach(node => { if (node) observer?.observe(node); });
-    if (typeof window !== "undefined") window.addEventListener("resize", schedule);
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", () => {
+        if (busyRef.current) cancelAnimation(value);
+        schedule();
+      });
+    }
+    const reducedMotion = typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+    const handleMotionChange = () => { if (busyRef.current) cancelAnimation(value); };
+    reducedMotion?.addEventListener?.("change", handleMotionChange);
     if (typeof document !== "undefined") document.fonts?.ready?.then(schedule);
-    return () => { if (typeof window !== "undefined") { window.cancelAnimationFrame(frame); window.removeEventListener("resize", schedule); } observer?.disconnect(); };
-  }, [value, words, size, handleWidth, handleInset, handleWidthScale]);
+    return () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+      }
+      reducedMotion?.removeEventListener?.("change", handleMotionChange);
+      observer?.disconnect();
+    };
+  }, [value, words, size, handleWidth, handleInset, handleWidthScale, getBounds, setHandleBounds, cancelAnimation]);
+
   return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
-    <span className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"} />
-    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => onValueChange?.(index === 1)}>{word}</button>)}
+    <span ref={handleRef} className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"}>
+      <span ref={overlayRef} className="vt-studio-44-word-handle-color" aria-hidden="true" />
+    </span>
+    {words.map((word, index) => <button key={index} ref={node => { wordRefs.current[index] = node }} type="button" aria-pressed={value === (index === 1)} className={value === (index === 1) ? "is-active" : ""} onClick={() => animateWordToggle(index === 1)}>{word}</button>)}
   </div>;
 };
 
