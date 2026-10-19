@@ -3984,7 +3984,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   aspect-ratio: 1;
   translate: none;
   transform: none;
-  overflow: hidden;
+  overflow: visible;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg { display: none; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > img {
