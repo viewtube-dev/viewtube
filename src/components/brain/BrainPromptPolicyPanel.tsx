@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react"
 import promptRegistry from "../../../docs/specifications/prompt-registry.json"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import {
- DEFAULT_BRAIN_USER_CONTROLS,
  readBrainUserControls,
  writeBrainUserControls,
  type BrainUserControls,
