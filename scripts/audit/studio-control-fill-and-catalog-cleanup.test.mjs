@@ -51,7 +51,7 @@ test("switches, word toggles, radios, checkmarks and X boxes expose all four sha
   assert.match(styles, /\.vt-studio-44-choice\.is-black-indicator\.is-checkbox svg\{[^}]*stroke:#000/s)
   assert.match(styles, /\.vt-studio-44-word-toggle\{[^}]*50%, transparent/s)
   assert.match(styles, /\.vt-studio-44-word-handle\{[^}]*background:var\(--vt-studio-control-secondary/s)
-  assert.match(styles, /\.vt-studio-44-word-toggle\.is-color-swap:has\([^}]*background:var\(--vt-studio-control-secondary/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle\.is-color-swap:has\(\.vt-studio-44-word-handle\[data-active="true"\]\)\{[^}]*background:var\(--vt-studio-control-secondary/s)
   assert.match(styles, /\.vt-studio-44-word-toggle\.is-black-indicator \.vt-studio-44-word-handle\{[^}]*background:#000/s)
   assert.match(styles, /\.vt-studio-44-word-toggle\.is-white-indicator \.vt-studio-44-word-handle\{[^}]*background:#fff/s)
   assert.match(controls, /export type StudioControlSkin = "solid" \| "color-swap" \| "black-indicator" \| "white-indicator"/)
