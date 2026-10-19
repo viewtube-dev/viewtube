@@ -322,7 +322,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
           <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and 0.86 line-height unless a family exception is documented.</p>
-          <p><b>Field colors:</b> At rest, value, placeholder, and caret use primary (--pair-a); fill uses primary at 50% opacity, the outer border is black, and the inline primary text stroke matches the selected border width. Focus uses primary fill at 15%, black text and inline stroke, plus a secondary-color outline at 65% of the selected border width with 0px offset.</p>
+          <p><b>Field colors:</b> At rest, value, placeholder, and caret use primary (--pair-a); fill uses primary at 50% opacity, the outer border is black, and the inline primary text stroke matches the selected border width. Focus uses primary fill at 15%, black text and inline stroke, plus a secondary-color outline at 1:1 of the selected border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
           <p><b>Certification boundary:</b> This section describes the intended canonical contract. Focus, responsive layout, accessibility, and any explicitly registered inner-icon effect require browser verification before certification; primitive shells remain flat and stationary.</p>
@@ -335,7 +335,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <ul>
         <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
         <li><strong>SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact, weight 1000 and 0.86 line-height while retaining selected-size geometry.</li>
-        <li><strong>MULTILINE TEXTAREA:</strong> 18px standard / 14px compact, multiline line-height and padding, 92px minimum writing surface, and vertical resize.</li>
+        <li><strong>MULTILINE TEXTAREA:</strong> 18px standard / 14px compact, 0.75 editable-text line-height and size-based padding, 92px minimum writing surface, and vertical resize.</li>
         <li><strong>PROMINENT WORKFLOW ACTION:</strong> StudioActionButton is a separate 56px family with 3px stroke, 6px radius, 20px label, and no shell shadow, transition, or hover/press translation.</li>
         <li><strong>GLOBAL SHADOW + MOTION POLICY:</strong> canonical primitive shells and faces are flat and stationary; obsolete shadow/movement declarations must be removed, not masked by override layers. Browser computed-style verification remains a release gate.</li>
         <li><strong>DROPDOWN:</strong> the trigger uses standard/compact sizing; menu rows and options are not button-press surfaces. A floating panel may have its own stationary shadow. Panel typography and stacking use dropdown-specific CSS.</li>
@@ -344,7 +344,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <li><strong>CLOSEABLE BADGE:</strong> follows the standard / compact / micro 44px / 28px / 14px size lattice, 3px / 2px / 1px stroke, 6px / 4px / 2px radius, and 38px / 24px / 10px type. The close action is circular and secondary-filled; no pill-ratio shell exception.</li>
         <li><strong>TAG EDITOR ACTION:</strong> registered compact 28px square plus/check action, 2px stroke and 4px radius with a no shadow under the global flat-control contract.</li>
         <li><strong>SPLIT-LEFT BADGE MICRO DENSITY:</strong> informational badge examples include a 14px / 1px-stroke micro size in addition to standard 44px / 3px and compact 28px / 2px. Micro is a local exception, not a global control size.</li>
-        <li><strong>FIELD CARET + FOCUS:</strong> native insertion caret is retained; <code>caret-shape: block</code> is requested where supported and must not be simulated with a fake overlay. Focus uses the secondary outline at 65% of the selected border width and 0px offset; verify computed styles in a rendered browser.</li>
+        <li><strong>FIELD CARET + FOCUS:</strong> native insertion caret is retained; <code>caret-shape: block</code> is requested where supported and must not be simulated with a fake overlay. Focus uses the secondary outline at 1:1 of the selected border width and 0px offset; verify computed styles in a rendered browser.</li>
         <li><strong>REDUCED MOTION:</strong> primitive shells have no default transitions or movement. Explicitly registered inner-icon effects must honor reduced-motion preferences.</li>
         <li><strong>VERIFICATION BOUNDARY:</strong> source text and source tests do not certify the live deployment. Verify standard/compact dimensions, effective shadows/transforms, selected/disabled/loading states, keyboard focus, dropdown stacking, narrow layouts, and reduced motion in a browser.</li>
       </ul>
@@ -368,7 +368,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
-        "Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface.",
+        "Multiline-only exception: 18px standard / 14px compact typography, 0.75 editable-text line-height, size-based padding, and a 92px minimum writing surface.",
       ]} provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native textarea family with simple and floating-label variants; 92px minimum surface and standard 18px / compact 14px multiline typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
