@@ -1,5 +1,6 @@
 import React from "react"
 import type { BrainConfidenceLevel } from "../../types"
+import { StudioSplitLeftBadge } from "../../studio-ui"
 
 export type BrainConfidenceValue = BrainConfidenceLevel | "missing"
 
@@ -11,9 +12,12 @@ const CONFIDENCE_TONE: Record<BrainConfidenceValue, { background: string; label:
 }
 
 /**
- * One shared confidence chip for every Brain surface: answer modules, the context
- * rail, and the sidebar. Confidence has to read the same everywhere or it stops
- * meaning anything to the creator.
+ * One shared confidence indicator for Brain surfaces.
+ *
+ * The visual shell intentionally uses the production StudioSplitLeftBadge rather
+ * than a local rounded-chip implementation. Confidence meaning and its existing
+ * evidence mapping stay Brain-owned; geometry, typography, split anatomy, and
+ * size tokens stay owned by Studio Controls.
  */
 export const BrainConfidenceChip: React.FC<{
  confidence: BrainConfidenceValue
@@ -21,14 +25,19 @@ export const BrainConfidenceChip: React.FC<{
  className?: string
 }> = ({ confidence, showLabel = true, className = "" }) => {
  const tone = CONFIDENCE_TONE[confidence] || CONFIDENCE_TONE.missing
+ const label = showLabel ? tone.label : confidence
  return (
-  <span
-   className={`inline-flex items-center gap-1.5 rounded-[9px] border-[2px] border-black px-2 py-1 text-[9px] font-black uppercase tracking-[0.08em] text-black ${className}`}
-   style={{ backgroundColor: tone.background }}
+  <StudioSplitLeftBadge
+   sizeVariant="micro"
+   className={className}
+   icon={<span aria-hidden="true" className="block h-1.5 w-1.5 rounded-full border border-black bg-black/70" />}
+   style={{ backgroundColor: tone.background, width: "max-content", maxWidth: "100%" }}
+   aria-label={`${tone.label}; confidence ${confidence}`}
+   title={tone.label}
+   data-vt-brain-confidence={confidence}
   >
-   <span className="h-1.5 w-1.5 rounded-full border border-black bg-black/70" aria-hidden="true" />
-   {showLabel ? tone.label : confidence}
-  </span>
+   {label}
+  </StudioSplitLeftBadge>
  )
 }
 
