@@ -155,6 +155,9 @@ describe("AlgorithmEvaluationEngine lifecycle identity", () => {
   const source = event({
    projectId: "project-1",
    videoId: "video-1",
+   operationId: "operation:publish:1",
+   traceId: "trace-generation-1",
+   outputRef: "asset:final-1",
    actionPacketId: "packet-1",
    metadata: {
     contentBuildId: "content-build-1",
@@ -167,6 +170,9 @@ describe("AlgorithmEvaluationEngine lifecycle identity", () => {
   expect(buildAlgorithmEvaluationLifecycleIdentity(source)).toEqual({
    recommendationId: "recommendation-1",
    projectId: "project-1",
+   operationId: "operation:publish:1",
+   traceId: "trace-generation-1",
+   outputRef: "asset:final-1",
    contentBuildId: "content-build-1",
    videoId: "video-1",
    actionPacketId: "packet-1",
@@ -181,6 +187,9 @@ describe("AlgorithmEvaluationEngine lifecycle identity", () => {
   expect(buildAlgorithmEvaluationLifecycleIdentity(event())).toEqual({
    recommendationId: "recommendation-1",
    projectId: null,
+   operationId: null,
+   traceId: null,
+   outputRef: null,
    contentBuildId: null,
    videoId: null,
    actionPacketId: null,
