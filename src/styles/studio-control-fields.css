@@ -141,12 +141,6 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 }
 
 /* Text fields share the counter/slider 500ms outline fade and 65%-stroke secondary outline. */
-:root,
-[data-vt-studio-control="true"] {
-  --vt-studio-focus-hold-ms: 1500ms;
-  --vt-studio-focus-outline-fade-ms: 500ms;
-}
-
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
