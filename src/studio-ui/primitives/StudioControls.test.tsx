@@ -113,9 +113,14 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain("--vt-studio-upload-speed: 2");
     expect(css).toContain("animation: vt-studio-upload-click-pulse 1s ease-in-out both");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
+    const migrationCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
     expect(legacyCatalog).not.toContain("SubToolboxFileTarget");
+    expect(legacyCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).toContain("<StudioUploadFrame");
+    expect(migrationCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).not.toContain("SubToolboxFileTarget");
   });
 });
 
