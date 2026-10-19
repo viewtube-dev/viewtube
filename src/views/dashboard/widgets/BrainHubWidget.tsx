@@ -166,6 +166,8 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
  const [engines, setEngines] = useState<BrainEngineControls>(() => readBrainEngineControls(channelId))
  const [portfolio, setPortfolio] = useState<AlgorithmIntelligencePortfolio | null>(null)
  const [intelStatus, setIntelStatus] = useState("Not loaded")
+ const [controlStatus, setControlStatus] = useState("Changes save automatically for this channel.")
+ const [engineStatus, setEngineStatus] = useState("Engine settings save automatically for this channel.")
 
  const restoreConversation = useCallback(async () => {
   try {
@@ -236,11 +238,24 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
  const updateUserControl = <K extends keyof BrainUserControls>(key: K, value: BrainUserControls[K]) => {
   const next = writeBrainUserControls({ ...controls, [key]: value }, channelId)
   setControls(next)
+  setControlStatus("Saved for this channel.")
  }
 
  const updateEngineControl = <K extends keyof BrainEngineControls>(key: K, value: BrainEngineControls[K]) => {
   const next = writeBrainEngineControls({ ...engines, [key]: value }, channelId)
   setEngines(next)
+  setEngineStatus("Saved for this channel.")
+ }
+
+ const resetUserControlOverrides = () => {
+  if (!channelId) return
+  setControls(clearBrainUserControlOverride(channelId))
+  setControlStatus("Channel overrides cleared. Inherited settings are now active.")
+ }
+
+ const resetEngineControlOverrides = () => {
+  setEngines(resetBrainEngineControls(channelId))
+  setEngineStatus("Channel engine overrides cleared. Inherited settings are now active.")
  }
 
  const loadIntelligence = async () => {
