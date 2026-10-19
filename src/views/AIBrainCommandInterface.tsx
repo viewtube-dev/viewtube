@@ -1071,6 +1071,86 @@ const AIBrainCommandInterface: React.FC = () => {
   }
  }
 
+ const handleRetry = async (message: ChatMessage, useFreshContext: boolean) => {
+  const userText = message.originalUserText || ""
+  if (!userText.trim() || busy) return
+  setBusy(true)
+  try {
+   const savedSnapshot = useFreshContext ? undefined : message.retryContextSnapshot
+   const retrySnapshot = savedSnapshot || buildAIBrainContextSnapshot({
+    brain,
+    authState,
+    channelConnection,
+    brainMemory: getBrainMemory(),
+    brainOnboardingSnapshot: onboardingSnapshot,
+    recentConversationTurns: recentTurns,
+    requestText: userText,
+   })
+   const retryGrowthContext = (!useFreshContext && message.retryGrowthContext)
+    || buildCreatorGrowthContext(retrySnapshot, recentTurns, learningEntries)
+   const retrySystemPrompt = (!useFreshContext && message.retrySystemPrompt) || buildAIBrainSystemPrompt({
+    brain,
+    authState,
+    channelConnection,
+    brainMemory: getBrainMemory(),
+    brainOnboardingSnapshot: onboardingSnapshot,
+    recentConversationTurns: recentTurns,
+    requestText: userText,
+    creatorGrowthContext: retryGrowthContext,
+   })
+   const retryHistory = (!useFreshContext && message.retryHistory) || buildBrainConversationHistory(recentTurns)
+   const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
+    || brain.projects.find((project) => project.status === "active")
+    || null
+   const result = await runBrainTask({
+    surface: "ai-brain",
+    channelId,
+    projectId: activeProject?.id || null,
+    project: activeProject,
+    projects: brain.projects,
+    visibleContext: activeProject ? {
+     contentBuildId: activeProject.contentBuildId || null,
+     title: activeProject.videoTitle || activeProject.name || null,
+     topic: activeProject.videoTitle || activeProject.name || null,
+     format: null,
+     plannedPublishAt: activeProject.publishDate || null,
+    } : null,
+    userText,
+    snapshot: retrySnapshot,
+    systemPrompt: retrySystemPrompt,
+    growthContext: retryGrowthContext,
+    recentTurns,
+    history: retryHistory,
+    allowModel: canUseGemini,
+    retryGenerationOnly: true,
+    retryOfTurnId: message.id,
+   })
+   setMessages((current) => [...current, {
+    id: result.turn.id,
+    role: "model",
+    text: result.turn.assistantText,
+    response: result.response,
+    handoff: null,
+    evidencePack: retrySnapshot.evidencePack,
+    readiness: readinessForSnapshot(retrySnapshot),
+    retryOfTurnId: message.id,
+   }])
+   await refreshConversationTurns()
+  } catch (error) {
+   const detail = error instanceof Error ? error.message : String(error)
+   setMessages((current) => [...current, {
+    id: makeMessageId(),
+    role: "model",
+    text: `The retry could not complete. Your original turn and evidence were preserved. ${detail}`,
+    evidencePack: message.evidencePack,
+    readiness: message.readiness,
+    retryOfTurnId: message.id,
+   }])
+  } finally {
+   setBusy(false)
+  }
+ }
+
  // Legacy routes fold into the one conversation by seeding an opening question the
  // Brain then routes internally, rather than selecting a mode. `/algorithm-architect`
  // redirects here with `?ask=algorithm-diagnosis`.
