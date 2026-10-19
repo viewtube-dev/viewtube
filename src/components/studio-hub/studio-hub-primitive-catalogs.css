@@ -2949,3 +2949,20 @@
   .vt-confirmed-vertical-word-toggle-specimen { padding: 4px 2px; }
   .vt-confirmed-vertical-word-toggle-specimen > small { font-size: 7px; }
 }
+
+/* Keep the toggle controls together inside one Confirmed Primitive Library family. */
+.vt-confirmed-toggle-subfamily {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-toggle-subfamily > strong {
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 1000;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
