@@ -32,6 +32,7 @@ test("split dropdown rail uses secondary fill and reserves the trailing rail for
   assert.match(css, /\.vt-studio-dropdown-split-rail\s*\{[\s\S]*?background:\s*var\(--vt-studio-control-secondary/)
   assert.match(css, /\.vt-studio-dropdown\.is-split-left button\[data-dropdown-trigger="true"\]\s*\{\s*grid-template-columns:\s*var\(--vt-studio-dropdown-rail-size\) minmax\(0, 1fr\) var\(--vt-studio-dropdown-rail-size\)/)
   assert.match(dropdown, /className="vt-studio-dropdown-chevron is-trailing"/)
+  assert.match(css, /\\.vt-studio-dropdown \\.vt-studio-dropdown-chevron\\[data-rail="end"\\] svg \\{ width: var\\(--vt-studio-dropdown-chevron-size\\); height: var\\(--vt-studio-dropdown-chevron-size\\); \\}/)
 })
 
 test("side counter divider is a centered overlay and does not consume either action row", () => {
