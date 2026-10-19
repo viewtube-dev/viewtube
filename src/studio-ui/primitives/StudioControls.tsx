@@ -2655,3 +2655,51 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
 };
 StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
 
+
+
+export type StudioBrainStatusTone = "green" | "cyan" | "purple" | "yellow" | "red" | "blue";
+export type StudioBrainStatusAppearance = "dark" | "tinted";
+export type StudioBrainStatusSize = "standard" | "compact" | "micro";
+
+export interface StudioBrainStatusBadgeProps {
+  label: string;
+  tone?: StudioBrainStatusTone;
+  appearance?: StudioBrainStatusAppearance;
+  sizeVariant?: StudioBrainStatusSize;
+  active?: boolean;
+  className?: string;
+  "aria-label"?: string;
+}
+
+/**
+ * Compact Brain status primitive: a borderless text badge paired with a smaller
+ * LED core. Active LEDs use the shared slow ripple contract; reduced-motion
+ * preferences suppress the animation without hiding status.
+ */
+export const StudioBrainStatusBadge: React.FC<StudioBrainStatusBadgeProps> = ({
+  label,
+  tone = "green",
+  appearance = "dark",
+  sizeVariant = "compact",
+  active = true,
+  className,
+  "aria-label": ariaLabel,
+}) => (
+  <span
+    className={["vt-studio-brain-status-badge", className].filter(Boolean).join(" ")}
+    data-vt-studio-brain-status="true"
+    data-tone={tone}
+    data-appearance={appearance}
+    data-size={sizeVariant}
+    data-active={active ? "true" : "false"}
+    role="status"
+    aria-label={ariaLabel || label}
+  >
+    <span className="vt-studio-brain-status-badge__led" aria-hidden="true">
+      <span className="vt-studio-brain-status-badge__core" />
+      <span className="vt-studio-brain-status-badge__ripple" />
+    </span>
+    <span className="vt-studio-brain-status-badge__label">{label}</span>
+  </span>
+);
+StudioBrainStatusBadge.displayName = "StudioBrainStatusBadge";
