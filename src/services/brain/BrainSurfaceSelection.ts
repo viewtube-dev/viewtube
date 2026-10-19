@@ -19,7 +19,12 @@ export const publishBrainSurfaceSelection = (
  input: Omit<BrainSurfaceSelection, "updatedAt" | "locked">,
 ): BrainSurfaceSelection => {
  const current = readBrainSurfaceSelection()
- if (current?.locked && current.sourceId !== input.sourceId) return current
+ if (current?.locked && (
+  current.sourceId !== input.sourceId ||
+  current.route !== input.route ||
+  current.videoId !== input.videoId ||
+  current.commentId !== input.commentId
+ )) return current
  const selection: BrainSurfaceSelection = {
   ...input,
   locked: current?.locked || false,
