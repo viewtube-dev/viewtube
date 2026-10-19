@@ -8,7 +8,7 @@ import { BrainTurnEvidenceRibbon } from "./BrainTurnEvidenceRibbon"
 const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack => ({
  promptVersion: "brain-chat-v2",
  requestSpec: { count: null, formats: [], since: null, until: null, rankBy: "performance", filters: [], selectionMode: "top" },
- intent: "channel_strategy",
+ intent: "strategy",
  channelId: null,
  channelName: null,
  channelDescription: null,
