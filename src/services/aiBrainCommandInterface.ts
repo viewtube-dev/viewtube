@@ -771,8 +771,10 @@ export const buildAIBrainEvidencePack = (
  const explicitlyRequestsTraffic = /\b(traffic sources?|source of traffic|where (?:views|viewers|traffic) come from|external traffic|browse features|suggested videos)\b/.test(requestTextLower)
  const explicitVideoCohortRequest = requestSpec.count !== null || requestSpec.formats.length > 0
   || Boolean(requestSpec.since || requestSpec.until) || requestSpec.filters.length > 0 || requestSpec.selectionMode !== "both"
- const includeSearch = intent === "seo" || explicitlyRequestsSearch || (intent === "strategy" && !explicitVideoCohortRequest)
- const includeTraffic = explicitlyRequestsTraffic || (intent === "strategy" && !explicitVideoCohortRequest)
+ const expectsSearchEvidence = intent === "seo" || explicitlyRequestsSearch || (intent === "strategy" && !explicitVideoCohortRequest)
+ const expectsTrafficEvidence = explicitlyRequestsTraffic || (intent === "strategy" && !explicitVideoCohortRequest)
+ const includeSearch = expectsSearchEvidence
+ const includeTraffic = expectsTrafficEvidence
  const searchTerms = includeSearch ? signalEvidence(snapshot.searchTerms || [], "search") : []
  const trafficSources = includeTraffic ? signalEvidence(snapshot.trafficSources || [], "traffic") : []
  const metricKeys: Array<keyof NonNullable<VtSyncVideoItem["metrics"]>> = [
@@ -794,8 +796,9 @@ export const buildAIBrainEvidencePack = (
    ? "No videos matched the requested format, time range, and filters"
    : "",
   availableMetrics.length ? "" : "video-level performance metrics",
-  intent === "seo" && searchTerms.length === 0 ? "YouTube search terms" : "",
-  (intent === "analytics" || intent === "audience") && trafficSources.length === 0 ? "traffic-source evidence" : "",
+  expectsSearchEvidence && searchTerms.length === 0 ? "YouTube search terms" : "",
+  expectsTrafficEvidence && trafficSources.length === 0 ? "traffic-source evidence" : "",
+  /\b(revenue|income|rpm|cpm|earnings)\b/.test(requestTextLower) && !availableMetrics.includes("revenue") ? "revenue data" : "",
   transcriptRouteRequired ? "video transcript in chat; use Content Analysis for transcript-backed claims" : "",
   requestSpec.count !== null && matchingVideos.length < requestSpec.count
    ? "Requested " + requestSpec.count + " matching videos; found " + matchingVideos.length
@@ -1944,6 +1947,8 @@ export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => 
   "2. Use Brain memory, AI Journal, goals, daily tasks, connected channel analytics, generation records, workflows, and command history as context.",
   "3. If an inferred channel profile exists, use it as the starting point before asking onboarding questions. Ask the creator to confirm priorities, not to define the niche from scratch.",
   "4. If evidence is missing, say what you need in normal creator language. Do not pretend missing analytics are zero.",
+  "4a. Before analytics advice, use only metrics listed in evidencePack.availableMetrics. If a requested metric is absent or appears in evidencePack.missingInputs, state that the data is unavailable and do not estimate, extrapolate, or fabricate a numerical diagnosis.",
+  "4b. Use only the video cohort selected in evidencePack for this request. Honor its count, format, date range, ranking metric, and filters, and state when fewer matching videos were available than requested.",
   "5. You may prepare reviewed command handoffs, but you cannot sync, upload, delete, publish, render, or mutate YouTube directly.",
   "6. Do not use raw markdown markers, code fences, backticks, JSON blocks, internal tool ids, or developer-facing labels in the final answer.",
   "7. Vary the answer shape based on intent: strategy brief, analytics diagnosis, SEO plan, idea sprint, creator asset draft, journal reflection, goal coach, publishing checklist, or revenue levers.",
