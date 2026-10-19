@@ -822,6 +822,7 @@ const AIBrainCommandInterface: React.FC = () => {
   // Append to the ongoing thread; the post-send refresh rebuilds it authoritatively.
   setMessages((current) => [...current, userMessage])
   let turnSnapshot: AIBrainContextSnapshot = snapshot
+  let turnGrowthContext = creatorGrowthContext
   try {
    turnSnapshot = buildAIBrainContextSnapshot({
     brain,
@@ -832,6 +833,7 @@ const AIBrainCommandInterface: React.FC = () => {
     recentConversationTurns: recentTurns,
     requestText: userText,
    })
+   turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
    const systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
@@ -839,7 +841,7 @@ const AIBrainCommandInterface: React.FC = () => {
     brainMemory: getBrainMemory(),
     brainOnboardingSnapshot: onboardingSnapshot,
     recentConversationTurns: recentTurns,
-    creatorGrowthContext,
+    creatorGrowthContext: turnGrowthContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
@@ -878,7 +880,7 @@ const AIBrainCommandInterface: React.FC = () => {
     userText,
     snapshot: turnSnapshot,
     systemPrompt,
-    growthContext: creatorGrowthContext,
+    growthContext: turnGrowthContext,
     recentTurns,
     history: historyPayload,
     allowModel: canUseGemini,
@@ -895,7 +897,7 @@ const AIBrainCommandInterface: React.FC = () => {
    const fallbackResponse = formatCreatorBrainResponse(fallbackText, turnSnapshot, { requestText: userText })
    const response = {
     ...fallbackResponse,
-    modules: formatCreatorGrowthModules(fallbackResponse, creatorGrowthContext),
+    modules: formatCreatorGrowthModules(fallbackResponse, turnGrowthContext),
     generationPath: "basic_guidance" as const,
     fallbackReason: "provider_error" as const,
    }
