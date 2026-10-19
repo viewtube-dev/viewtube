@@ -20,6 +20,23 @@ const canonicalTail = (css: string) => {
 };
 
 
+describe("StudioTextBox size-aware stroke defaults", () => {
+  it("halves only the local stroke width and preserves the 50% fill and black text across size variants", () => {
+    const css = readStudioControlCss();
+    const textBox = css.slice(css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]'), css.indexOf('/* Textarea and read-only text display share'));
+    expect(textBox).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5)");
+    expect(textBox).toContain("border: var(--studio-text-box-stroke-width) solid #000");
+    expect(textBox).toContain("inset 0 0 0 var(--studio-text-box-stroke-width)");
+    expect(textBox).toContain("outline: var(--studio-text-box-stroke-width) solid");
+    expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
+    expect(textBox).toContain("color: #000");
+    expect(textBox).toContain("line-height: var(--textarea-description-line-height, 0.75)");
+    expect(textBox).toContain('[data-size="compact"]');
+    expect(textBox).toContain('[data-size="micro"]');
+    expect(textBox).not.toContain("--vt-studio-control-stroke: calc");
+  });
+});
+
 describe("canonical Studio upload frame", () => {
   it("renders the standard upload frame with accessible file input and layered pair-color anatomy", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame aria-label="Upload media" />);
@@ -102,9 +119,12 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame__icon::after");
     expect(css).not.toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
+    const migrationCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
     expect(legacyCatalog).not.toContain("SubToolboxFileTarget");
+    expect(migrationCatalog).toContain("<StudioUploadFrame");
+    expect(migrationCatalog).not.toContain("SubToolboxFileTarget");
   });
 });
 
