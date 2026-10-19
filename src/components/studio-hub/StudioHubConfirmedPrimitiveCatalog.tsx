@@ -23,6 +23,7 @@ import {
   StudioUsernameInput,
   StudioSwitch,
   StudioTextArea,
+  StudioTextBox,
   StudioTextInput,
   StudioWordToggle,
   StudioVerticalWordToggle,
@@ -381,6 +382,15 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · A</span><StudioTextArea variant="fixed-label" label="DESCRIPTION" aria-label="Studio fixed-label textarea compact A" sizeVariant="compact" rows={4} data-vt-library-component="StudioTextArea" /></div>
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextArea className="is-reverse-colors" variant="fixed-label" label="DESCRIPTION" aria-label="Studio fixed-label textarea compact B reverse colors" sizeVariant="compact" rows={4} data-vt-library-component="StudioTextArea" /></div>
       </div>
+    </Family>
+    <Family title="Studio Text Box · Standard + Compact + Micro" nonDefaultSettings={[
+        "Non-editable, selectable display surface; no caret, editing behavior, or keyboard tab stop.",
+        "Inherits the corresponding textarea border, radius, padding, typography, primary fill, and 0.75 line-height.",
+        "Content height grows with text; newlines are preserved and long words wrap.",
+      ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea-matched typography: 18px standard / 14px compact / 10px micro; shared global border widths and radii; line-height 0.75." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · 18PX</span><StudioTextBox aria-label="Studio text box standard" data-vt-library-component="StudioTextBox">A read-only description that can contain as little or as much text as needed.</StudioTextBox></div>
+      <div className="vt-confirmed-variant is-full-row"><span>COMPACT · 14PX</span><StudioTextBox size="compact" aria-label="Studio text box compact" data-vt-library-component="StudioTextBox">Compact display text. A second row remains aligned to the textarea line-height.</StudioTextBox></div>
+      <div className="vt-confirmed-variant is-full-row"><span>MICRO · 10PX</span><StudioTextBox size="micro" aria-label="Studio text box micro" data-vt-library-component="StudioTextBox">Micro display text.</StudioTextBox></div>
     </Family>
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
