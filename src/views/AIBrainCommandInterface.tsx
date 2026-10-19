@@ -32,6 +32,7 @@ import { getLatestBrainOnboardingSnapshot, type BrainOnboardingSnapshot } from "
 import {
  buildAIBrainContextSnapshot,
  buildAIBrainSystemPrompt,
+ queueAIBrainReviewedAction,
  buildBrainLearningQuestions,
  buildCreatorBrainPromptCards,
  buildCreatorBrainLocalFallback,
@@ -431,9 +432,16 @@ const CreatorResponseCard: React.FC<{
  answeredQuestionIds: Set<string>
  onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion }) => {
+ onReviewHandoff: (message: ChatMessage, target: "thumbnail" | "metadata" | "projects") => void
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
+ const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
+ const handoffOptions = [
+  { key: "thumbnail" as const, label: "Open in Thumbnail Studio", matches: /thumbnail|visual|cover image|thumbnail image|visual hook/ },
+  { key: "metadata" as const, label: "Prepare metadata draft", matches: /title|seo|description|tags|keyword|metadata|search opportunity/ },
+  { key: "projects" as const, label: "Review in Projects", matches: /project|publish|package|content build|workflow|content plan/ },
+ ].filter((option) => option.matches.test(handoffContext))
  if (!response) {
   return (
    <article className={`${assistantCardFrame} p-4`}>
@@ -489,6 +497,17 @@ const CreatorResponseCard: React.FC<{
    </div>
    <div className="flex min-h-9 shrink-0 flex-wrap items-center gap-1 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-1">
      <BrainFeedbackControls message={message} onFeedback={onFeedback} />
+     {handoffOptions.map((option) => (
+      <button
+       key={option.key}
+       type="button"
+       onClick={() => onReviewHandoff(message, option.key)}
+       title={`Queue a review-only handoff to ${option.label}`}
+       className="min-h-9 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
+      >
+       {option.label}
+      </button>
+     ))}
      {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
       <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
      ) : null}
@@ -498,7 +517,7 @@ const CreatorResponseCard: React.FC<{
        title={`Open ${message.handoff.targetTitle}`}
        className="ml-auto inline-flex items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
       >
-       Open
+       Review only · Open
        <ArrowRight size={13} />
       </Link>
      ) : null}
@@ -1035,6 +1054,34 @@ const AIBrainCommandInterface: React.FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [location.search])
 
+ const handleReviewHandoff = async (message: ChatMessage, target: "thumbnail" | "metadata" | "projects") => {
+  const targetRequests = {
+   thumbnail: "Open in Thumbnail Studio for review",
+   metadata: "Prepare a metadata draft for review",
+   projects: "Review this content in Projects",
+  }
+  const selectedContentId = message.evidencePack?.evidenceIds.find((id) => id.startsWith("video:"))
+   || brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId
+   || null
+  const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
+   || brain.projects.find((project) => project.status === "active")
+   || null
+  try {
+   const handoff = await queueAIBrainReviewedAction({
+    request: `${targetRequests[target]}: ${message.originalUserText || message.response?.headline || "the current answer"}. Carry the selected content and evidence references forward. Review only; do not publish or perform external mutations.`,
+    response: message.response?.keyInsight || message.text,
+    channelId,
+    originatingTurnId: message.id,
+    evidenceIds: message.evidencePack?.evidenceIds || [],
+    contentBuildId: activeProject?.contentBuildId || null,
+    selectedContentId,
+   })
+   setMessages((current) => current.map((item) => item.id === message.id ? { ...item, handoff } : item))
+  } catch (error) {
+   console.warn("[AIBrain] Review-only handoff could not be queued:", error)
+  }
+ }
+
  const handleFeedback = async (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => {
   const learningEntry = await captureLearning({
    channelId,
@@ -1237,6 +1284,7 @@ const AIBrainCommandInterface: React.FC = () => {
              answeredQuestionIds={answeredQuestionIds}
              onFeedback={handleFeedback}
              onAnswerQuestion={handleAnswerQuestion}
+             onReviewHandoff={handleReviewHandoff}
             />
            ))}
            <div ref={bottomRef} aria-hidden="true" />
