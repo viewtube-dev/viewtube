@@ -3,7 +3,11 @@ import type { CreatorGrowthContext } from "../../../types"
 import { buildDailyOraclePlan, calculateDailyOracleStreak } from "../DailyOracleDecisionEngine"
 
 const growth = (overrides: Partial<CreatorGrowthContext> = {}): CreatorGrowthContext => ({
- profileConfidenceScore: 82,
+ profileCoverageChecklist: [
+  { id: "channel-description", label: "Channel description", status: "available", detail: "Description available." },
+  { id: "videos-analyzed", label: "42 videos analyzed", status: "available", detail: "42 videos present." },
+  { id: "creator-goals", label: "Goals", status: "confirmed", detail: "Goal saved." },
+ ],
  currentGoal: "Reach 10K subscribers with a repeatable history series.",
  inferredNiche: "History",
  contentPillars: ["Napoleonic history"],
@@ -60,7 +64,7 @@ describe("DailyOracleDecisionEngine", () => {
 
  it("returns metric-specific focus tasks and honest disconnected provenance", () => {
   const plan = buildDailyOraclePlan({
-   growth: growth({ profileConfidenceScore: 30, topPerformerPatterns: [] }),
+   growth: growth({ profileCoverageChecklist: [], topPerformerPatterns: [] }),
    focusMetric: "watch-time",
    evidence: {
     recentUploadCount14d: 0,
