@@ -263,6 +263,16 @@ describe("aiBrainCommandInterface", () => {
    "content-pillars",
   ]))
   expect("profileConfidenceScore" in growthContext).toBe(false)
+  expect(growthContext.profileCoverageChecklist.find((item) => item.id === "creator-goals")).toMatchObject({
+   status: "unconfirmed",
+   actionLabel: "Confirm goals",
+   actionAsk: "clarify-channel-goals",
+  })
+  expect(growthContext.profileCoverageChecklist.find((item) => item.id === "style-preference")).toMatchObject({
+   status: "unconfirmed",
+   actionLabel: "Add style examples",
+   actionAsk: "style-examples",
+  })
   expect(capabilityIds).toEqual(expect.arrayContaining([
    "profile_coverage_checklist",
    "creator_confirmation",
