@@ -676,3 +676,24 @@
   .vt-mini-subtoolbox-actions>button{height:calc(var(--vt-mini-height) - 8px)!important;padding-inline:7px!important;font-size:11px!important}
   .vt-thumbnail-mini-empty strong{font-size:11px}
 }
+
+/* Header word toggles (Project/Channel, Thumbnail Studios, Studio Analyze, etc.)
+   White fill inside the colored toolbox header; compact size is selected by
+   ToolboxHeaderToggle for portrait mobile and insufficient header space. */
+[data-vt-toolbox] header .vt-toolbox-header-word-toggle.vt-studio-44-word-toggle,
+[data-vt-toolbox] header .vt-toolbox-header-toggle-replacement.vt-studio-44-word-toggle,
+[data-vt-header-toggle] .vt-studio-44-word-toggle {
+  background: #ffffff !important;
+}
+
+/* Keep both words readable on white; selected-state skin must not recolor text. */
+[data-vt-toolbox] header .vt-toolbox-header-word-toggle.vt-studio-44-word-toggle > button,
+[data-vt-toolbox] header .vt-toolbox-header-toggle-replacement.vt-studio-44-word-toggle > button {
+  color: #000000;
+}
+
+[data-vt-toolbox] header .vt-toolbox-header-word-toggle.vt-studio-44-word-toggle > button.is-active,
+[data-vt-toolbox] header .vt-toolbox-header-toggle-replacement.vt-studio-44-word-toggle > button.is-active {
+  color: #000000;
+}
+

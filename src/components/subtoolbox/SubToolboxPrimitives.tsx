@@ -198,39 +198,76 @@ export interface ToolboxHeaderToggleProps extends Omit<React.HTMLAttributes<HTML
 export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
   value, options, onValueChange, level = "toolbox", className, style, ...props
 }) => {
+  const rootRef = React.useRef<HTMLDivElement>(null)
   const [size, setSize] = React.useState<"44" | "28">("44")
+
   React.useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return
+    if (typeof window === "undefined") return
+
     const portraitMobile = window.matchMedia("(orientation: portrait) and (max-width: 768px)")
-    const updateSize = () => setSize(portraitMobile.matches ? "28" : "44")
+
+    const updateSize = () => {
+      // Compact whenever portrait-mobile OR the header cannot fit title + icon rail + toggle.
+      let cramped = false
+      const host = rootRef.current?.closest("header")
+      if (host) {
+        const identity = host.querySelector(".vt-toolbox-header-identity, [data-vt-header-identity]") as HTMLElement | null
+        const actions = host.querySelector(".vt-toolbox-header-actions") as HTMLElement | null
+        const titleSlot = host.querySelector(".vt-toolbox-header-title-slot") as HTMLElement | null
+        const available = host.clientWidth
+        const used =
+          (identity?.scrollWidth ?? 0) +
+          (actions?.scrollWidth ?? 0) +
+          (titleSlot?.scrollWidth ?? 0)
+        // Leave a small buffer so we compact before overflow clips the title.
+        cramped = used > available - 8
+      }
+      setSize(portraitMobile.matches || cramped ? "28" : "44")
+    }
+
     updateSize()
     portraitMobile.addEventListener?.("change", updateSize)
     window.addEventListener("resize", updateSize)
+
+    const host = rootRef.current?.closest("header")
+    const ro = typeof ResizeObserver !== "undefined" && host
+      ? new ResizeObserver(() => updateSize())
+      : null
+    if (host && ro) ro.observe(host)
+
     return () => {
       portraitMobile.removeEventListener?.("change", updateSize)
       window.removeEventListener("resize", updateSize)
+      ro?.disconnect()
     }
   }, [])
+
   const selectedIndex = Math.max(0, options.findIndex(option => option.value === value))
   const words = [
     String(options[0]?.label ?? ""),
     String(options[1]?.label ?? ""),
   ] as const
+
   return (
-    <Studiotoggle
-      value={selectedIndex > 0}
-      onValueChange={(next) => onValueChange?.(options[next ? 1 : 0]?.value ?? value)}
-      words={words}
-      size={size}
-      className={classes("vt-toolbox-header-toggle-replacement", className)}
-      style={style}
-      aria-label={props["aria-label"] ?? "Choose an option"}
-      data-vt-header-toggle={level}
-      data-vt-header-toggle-primitive="studio-word-toggle"
-    />
+    <div ref={rootRef} className="vt-toolbox-header-toggle-host">
+      <Studiotoggle
+        value={selectedIndex > 0}
+        onValueChange={(next) => onValueChange?.(options[next ? 1 : 0]?.value ?? value)}
+        words={words}
+        size={size}
+        className={classes(
+          "vt-toolbox-header-toggle-replacement",
+          "vt-toolbox-header-word-toggle",
+          className,
+        )}
+        style={style}
+        aria-label={props["aria-label"] ?? "Choose an option"}
+        data-vt-header-toggle={level}
+        data-vt-header-toggle-primitive="studio-word-toggle"
+      />
+    </div>
   )
 }
-
 export interface SubToolboxToggleSwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   level?: ToolboxControlLevel
   pressed: boolean
