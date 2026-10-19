@@ -281,7 +281,7 @@ export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimit
     </header>
     <div className="vt-complete-catalog-grid">
       {STUDIO_HUB_COMPONENT_FAMILIES.map((name, index) => (
-        <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state={name === "Square Icon Button" ? "confirmed-production-primitive" : "hardcoded-reference"}>
+        <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state={name === "Square Icon Button" || name === "Brain Status LED Badges" ? "confirmed-production-primitive" : "hardcoded-reference"}>
           <h3><span>{String(index + 1).padStart(2,"0")}</span>{name}</h3>
           <div className="vt-catalog-levels">
             {["44px Switches", "44px Radio + Checkbox", "Word Toggles"].includes(name) ? <CanonicalControlFamily name={name} paletteIndex={paletteIndex} /> : LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
