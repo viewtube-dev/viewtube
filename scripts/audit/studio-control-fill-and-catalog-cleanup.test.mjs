@@ -6,6 +6,7 @@ const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "ut
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const certification = readFileSync("src/studio-ui/StudioHubCertification.tsx", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8")
+const catalogStyles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8")
 
 test("side counter divider is centered on a true half-height boundary", () => {
   assert.match(styles, /\.vt-studio-side-counter__actions\s*\{[^}]*grid-template-rows:\s*minmax\(0, 1fr\) minmax\(0, 1fr\)/s)
@@ -29,6 +30,14 @@ test("button faces default to half-primary fill and selected faces use full prim
   assert.match(styles, /background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%, transparent\)/s)
   assert.match(styles, /button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^{]*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
   assert.match(styles, /data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][^{]*\{[^}]*background:\s*color-mix/s)
+  assert.match(catalogStyles, /\.vt-complete-catalog \.vt-catalog-button\s*\{[^}]*background:\s*color-mix/s)
+})
+
+test("switch and word-toggle selected surfaces are primary, with a half-primary resting state", () => {
+  assert.match(styles, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\s*\{[^}]*50%, transparent/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\.is-active\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
+  assert.match(styles, /\.vt-studio-44-switch:not\(\.is-on\):not\(\.is-checked\):not\(\[aria-checked="true"\]\)\s*\{[^}]*50%, transparent/s)
+  assert.match(styles, /\.vt-studio-44-switch:is\(\.is-on, \.is-checked, \[aria-checked="true"\]\)\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
 })
 
 test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
