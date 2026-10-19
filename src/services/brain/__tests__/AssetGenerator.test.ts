@@ -185,6 +185,41 @@ describe("generateAsset", () => {
   expect(instruction).not.toContain("FIX THE PREVIOUS DRAFT")
  })
 
+ it("carries canonical lifecycle identities into the prompt receipt", async () => {
+  const build = createContentBuild({
+   id: "cb-prompt-receipt-lineage",
+   channelId: "channel-1",
+   legacyProjectId: "project-1",
+  })
+  const { runner } = makeRunner([goodPlan])
+  const result = await generateAsset({
+   request: {
+    ...request,
+    projectId: "project-1",
+    operationId: "operation:asset-generation:1",
+    workflowId: "workflow:publishing-package:1",
+    contentBuildId: build.id,
+    contextRevision: build.revision,
+   },
+   strategy: communityPostStrategy,
+   evidence,
+   runner,
+   styleProfile: null,
+  })
+
+  expect(result.record.status).toBe("delivered")
+  expect(result.trace.operationId).toBe("operation:asset-generation:1")
+  expect(result.trace.workflowId).toBe("workflow:publishing-package:1")
+  expect(result.record.promptReceipt).toMatchObject({
+   traceId: result.trace.id,
+   outputId: result.record.id,
+   operationId: "operation:asset-generation:1",
+   workflowId: "workflow:publishing-package:1",
+   contentBuildId: build.id,
+   contextRevision: build.revision,
+  })
+ })
+
  it("records both prompt versions so an outcome is attributable to a configuration", async () => {
   const { runner } = makeRunner([goodPlan])
   const result = await generateAsset({
@@ -207,6 +242,10 @@ describe("generateAsset", () => {
    outputSchemaVersion: "community-post-plan-v1",
    traceId: result.trace.id,
    outputId: result.record.id,
+   operationId: null,
+   workflowId: null,
+   contentBuildId: null,
+   contextRevision: null,
   })
  })
 
