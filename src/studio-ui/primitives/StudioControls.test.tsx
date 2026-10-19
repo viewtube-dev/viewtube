@@ -868,7 +868,10 @@ describe("Studio counter hold-repeat acceleration", () => {
   it("starts a smooth boundary slowdown 16 steps from the bound while preserving full speed farther away", () => {
     expect(getStudioCounterRepeatDelay(1220, 17)).toBe(23);
     expect(getStudioCounterRepeatDelay(1220, 16)).toBe(23);
-    expect(getStudioCounterRepeatDelay(1220, 3)).toBe(75);
+    expect(getStudioCounterRepeatDelay(1220, 4)).toBe(28);
+    expect(getStudioCounterRepeatDelay(1220, 3)).toBe(33);
+    expect(getStudioCounterRepeatDelay(1220, 2)).toBe(41);
+    expect(getStudioCounterRepeatDelay(1220, 1)).toBe(54);
     expect(getStudioCounterRepeatDelay(1220, 0)).toBe(75);
     expect(getStudioCounterRepeatDelay(1220, Number.POSITIVE_INFINITY)).toBe(23);
   });
