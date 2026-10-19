@@ -1192,7 +1192,7 @@ export const SubToolboxSpectrumRemovableTag: React.FC<SubToolboxSpectrumRemovabl
   const structuralLevel: ToolboxControlLevel = level === "l3" ? "l2" : level
   return (
     <span
-      className={classes("vt-subtoolbox-alpha-tag", "vt-subtoolbox-spectrum-removable", level === "l3" && "is-l3", className)}
+      className={classes("vt-studio-spectrum-tag", "vt-subtoolbox-spectrum-removable", level === "l3" && "is-l3", className)}
       data-vt-control-level={structuralLevel}
       data-vt-spectrum-level={level}
       style={{
