@@ -553,8 +553,10 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
         <WidgetBadge tone="royal">Approval-aware</WidgetBadge>
        </div>
 
-       <section className="brain-hub-control-section">
-        <h3>Access + memory</h3>
+       <section className="brain-hub-control-section" aria-labelledby="brain-hub-access-controls-title">
+        <h3 id="brain-hub-access-controls-title">Access + memory</h3>
+        <p role="status" aria-live="polite">{controlStatus}</p>
+        {channelId ? <button type="button" onClick={resetUserControlOverrides} className="min-h-11 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-xs font-black uppercase focus-visible:ring-[3px] focus-visible:ring-black">Use inherited defaults</button> : null}
         <ControlRow label="Brain enabled" detail="Allow creator-facing Brain requests.">
          <WidgetToggleSwitch checked={controls.enabled} onChange={(value) => updateUserControl("enabled", value)} label="Brain enabled" height={32} tone="primary" />
         </ControlRow>
