@@ -275,3 +275,28 @@ describe("confirmed double-split slider specimen isolation", () => {
     expect(family).not.toContain("value={microValue} onValueChange={setMicroValue}")
   })
 })
+
+
+describe("confirmed counter specimen isolation", () => {
+  it("gives every counter palette specimen independent state", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const counters = source.slice(source.indexOf("const ConfirmedStudioCounterFamily"), source.indexOf("const ConfirmedStudioDoubleSplitSliderFamily"))
+    const sideCounters = source.slice(source.indexOf("const ConfirmedStudioSideCounterFamily"), source.indexOf("export default StudioHubConfirmedPrimitiveCatalog"))
+
+    for (const state of ["standardPrimary", "standardReversed", "compactPrimary", "compactReversed", "microPrimary", "microReversed"]) {
+      expect(counters).toContain(`const [${state}, set${state[0].toUpperCase() + state.slice(1)}] = React.useState(`)
+      expect(counters).toContain(`value={${state}} onValueChange={set${state[0].toUpperCase() + state.slice(1)}}`)
+    }
+    expect(counters).not.toContain("value={standardValue} onValueChange={setStandardValue}")
+    expect(counters).not.toContain("value={compactValue} onValueChange={setCompactValue}")
+    expect(counters).not.toContain("value={microValue} onValueChange={setMicroValue}")
+
+    for (const state of ["sideStandard", "leftStandard", "sideCompact", "leftCompact", "sideMicro", "leftMicro"]) {
+      expect(sideCounters).toContain(`const [${state}, set${state[0].toUpperCase() + state.slice(1)}] = React.useState(`)
+      expect(sideCounters).toContain(`value={${state}} onValueChange={set${state[0].toUpperCase() + state.slice(1)}}`)
+    }
+    expect(sideCounters).not.toContain("value={standardValue} onValueChange={setStandardValue}")
+    expect(sideCounters).not.toContain("value={compactValue} onValueChange={setCompactValue}")
+    expect(sideCounters).not.toContain("value={microValue} onValueChange={setMicroValue}")
+  })
+})
