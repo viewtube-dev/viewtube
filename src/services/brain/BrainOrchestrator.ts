@@ -354,7 +354,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
     evidenceRequestSpec: input.snapshot.evidencePack.requestSpec,
     evidencePackSnapshot: input.snapshot.evidencePack,
     dataReadinessSnapshot: {
