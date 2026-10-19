@@ -607,7 +607,7 @@ export const parseEvidenceRequestSpec = (
  const anchorDate = dateOnly(anchor)
  const countMatch = text.match(/\b(?:top|best|latest|recent|last|show|find|give me|compare|analyze|analyse)\s+(\d{1,2})\b/)
   || text.match(/\b(\d{1,2})\s+(?:long[- ]form|short[- ]form|shorts?|videos?)\b/)
- const count = countMatch ? Math.max(1, Math.min(25, Number(countMatch[1]))) : null
+ const count = countMatch ? Math.max(1, Number(countMatch[1])) : null
  const formats: EvidenceRequestSpec["formats"] = []
  if (/\bshorts?\b|\bshort[- ]form\b/.test(text)) formats.push("short")
  if (/\blong[- ]form\b|\blongform\b/.test(text)) formats.push("long")
@@ -625,7 +625,7 @@ export const parseEvidenceRequestSpec = (
  if (calendarYear && !explicitSince && !explicitUntil) {
   since = calendarYear[1] + "-01-01"
   until = calendarYear[1] + "-12-31"
- } else if (relativeRange) {
+ } else if (relativeRange && !explicitSince && !explicitUntil) {
   since = dateOnly(subtractPeriod(anchor, Number(relativeRange[1]), relativeRange[2]))
   until = anchorDate
  } else if (relativeSingle && !explicitSince && !explicitUntil) {
@@ -648,7 +648,7 @@ export const parseEvidenceRequestSpec = (
  const hasTopCue = /\b(top|best|highest|lowest|rank(?:ed)?|sort(?:ed)?)\b/.test(text)
  const selectionMode: EvidenceRequestSpec["selectionMode"] = recentCue && !explicitMetricRanking
   ? "recent"
-  : hasTopCue || count !== null
+  : hasTopCue || explicitMetricRanking || count !== null
    ? "top"
    : "both"
  if (selectionMode === "recent" && rankBy === "performance") rankBy = "publishedAt"
@@ -755,7 +755,7 @@ export const buildAIBrainEvidencePack = (
  const videos = snapshot.videos || []
  const requestSpec = parseEvidenceRequestSpec(requestText, new Date(snapshot.capturedAt || Date.now()))
  const matchingVideos = videos.filter((video) => videoMatchesEvidenceRequest(video, requestSpec))
- const selectionCount = requestSpec.count ?? 5
+ const selectionCount = Math.min(requestSpec.count ?? 5, 25)
  const topVideos = requestSpec.selectionMode === "recent" ? [] : [...matchingVideos]
   .sort((left, right) => evidenceVideoRankValue(right, requestSpec.rankBy) - evidenceVideoRankValue(left, requestSpec.rankBy))
   .slice(0, selectionCount)
@@ -790,9 +790,11 @@ export const buildAIBrainEvidencePack = (
   intent === "seo" && searchTerms.length === 0 ? "YouTube search terms" : "",
   (intent === "analytics" || intent === "audience") && trafficSources.length === 0 ? "traffic-source evidence" : "",
   transcriptRouteRequired ? "video transcript in chat; use Content Analysis for transcript-backed claims" : "",
-  requestSpec.count !== null && (requestSpec.selectionMode === "recent" ? recentVideos.length : topVideos.length) < requestSpec.count
-   ? "Requested " + requestSpec.count + " matching videos; found " + (requestSpec.selectionMode === "recent" ? recentVideos.length : topVideos.length)
-   : "",
+  requestSpec.count !== null && matchingVideos.length < requestSpec.count
+   ? "Requested " + requestSpec.count + " matching videos; found " + matchingVideos.length
+   : requestSpec.count !== null && requestSpec.count > selectionCount
+    ? "Requested " + requestSpec.count + " videos; evidence context is limited to " + selectionCount + " videos per cohort"
+    : "",
  ].filter(Boolean)
  const evidenceIds = Array.from(new Set([
   cleanProfileText(snapshot.channelDescription) ? "channel:description" : "",
