@@ -43,10 +43,11 @@ test("mobile portrait header action controls use compact Blackfill dimensions", 
   assert.notEqual(start, -1, "portrait header override exists after legacy resets");
   const portraitRules = toolboxCss.slice(start);
   assert.match(portraitRules, /@media \(max-width: 768px\) and \(orientation: portrait\)/);
-  assert.match(portraitRules, /\.vt-toolbox-header-actions \.vt-toolbox-header-collapse,[\s\S]*?\.vt-toolbox-header-help/);
+  assert.match(portraitRules, /\.vt-toolbox-header-actions \.vt-toolbox-header-collapse,[\s\S]*?\.vt-toolbox-header-help,[\s\S]*?\.vt-toolbox-header-palette-button/);
   assert.match(portraitRules, /width: 28px !important/);
   assert.match(portraitRules, /height: 28px !important/);
   assert.match(portraitRules, /background: #000 !important/);
   assert.match(portraitRules, /border: 2px solid #000 !important/);
+  assert.match(portraitRules, /\.vt-studio-vertical-word-toggle\.vt-toolbox-header-toggle-replacement/);
   assert.match(portraitRules, /--vt-studio-vertical-word-font-size: 12px/);
 });
