@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { CanonicalIntelligenceEvidenceBundle } from "../../analytics-canon"
 import {
  compareEvidenceRecords,
+ EVIDENCE_EPISTEMIC_STATES,
  formatEvidenceRecordForPrompt,
  projectCanonicalEvidenceRecords,
  selectEvidenceRecordsForPrompt,
@@ -54,6 +55,13 @@ const bundle: CanonicalIntelligenceEvidenceBundle = {
 }
 
 describe("EvidenceRecord", () => {
+ it("defines one canonical ten-state epistemic vocabulary", () => {
+  expect(EVIDENCE_EPISTEMIC_STATES).toEqual([
+   "known", "observed", "calculated", "user_provided", "inferred",
+   "hypothesis", "estimate", "stale", "missing", "conflicting",
+  ])
+ })
+
  it("projects canonical analytics metrics without changing their source owner or provenance", () => {
   const records = projectCanonicalEvidenceRecords(bundle)
 
