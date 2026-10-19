@@ -70,7 +70,7 @@
   height: 44px;
   flex: 0 0 44px;
   overflow: hidden;
-  color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: var(--pair-b, var(--vt-studio-control-secondary, #ff7f6b));
   pointer-events: none;
 }
 .vt-studio-radio-motion circle,
@@ -80,10 +80,15 @@
   stroke-width: 3;
   stroke-linecap: round;
 }
-.vt-studio-radio-motion .vt-studio-radio-core,
+.vt-studio-radio-motion .vt-studio-radio-core {
+  fill: currentColor;
+  stroke: #000;
+  stroke-width: 2.5;
+}
 .vt-studio-radio-motion .vt-studio-radio-solid {
   fill: currentColor;
-  stroke: none;
+  stroke: #000;
+  stroke-width: 2.5;
 }
 /* Opacity is driven by SVG presentation attributes in StudioRadioMotion.
    CSS opacity declarations here would override setAttribute() and hide every frame. */
