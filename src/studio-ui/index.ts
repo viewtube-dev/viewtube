@@ -20,6 +20,7 @@ export {
   StudioInput,
   StudioTextInput,
   StudioTextArea,
+  StudioTextBox,
   Studioarea,
   Studiotoggle,
   Studioswitch,
@@ -75,6 +76,8 @@ export type {
   StudioWordToggleProps,
   StudioTextInputProps,
   StudioTextAreaProps,
+  StudioTextBoxProps,
+  StudioTextBoxSize,
   StudioSimpleDropdownProps,
   StudioUploadFrameProps,
 } from "./primitives/StudioControls"
