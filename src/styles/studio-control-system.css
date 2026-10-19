@@ -684,6 +684,9 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 .vt-studio-44-choice.is-radio.is-rect .vt-studio-44-dot{border-radius:1.833px}
 .vt-studio-44-choice.is-on .vt-studio-44-dot{transform:scale(1);opacity:1}
 .vt-studio-44-choice.is-checkbox svg{width:96%;height:96%;stroke:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;}
+.vt-studio-44-choice.is-color-swap.is-checkbox:is(.is-on, .is-checked, [aria-checked="true"]) svg{stroke:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
+.vt-studio-44-choice.is-white-indicator.is-checkbox svg{stroke:#fff}
+.vt-studio-44-choice.is-black-indicator.is-checkbox svg{stroke:#000}
 .vt-studio-44-choice.is-checkbox.is-on svg{stroke-dashoffset:0}
 .vt-studio-44-switch.is-color-swap:not(.is-on):not(.is-checked):not([aria-checked="true"]),.vt-studio-44-choice.is-color-swap:not(.is-on):not(.is-checked):not([aria-checked="true"]){background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}\n.vt-studio-44-switch.is-color-swap.is-on,.vt-studio-44-switch.is-color-swap.is-checked,.vt-studio-44-switch.is-color-swap[aria-checked="true"],.vt-studio-44-choice.is-color-swap.is-on,.vt-studio-44-choice.is-color-swap.is-checked,.vt-studio-44-choice.is-color-swap[aria-checked="true"]{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
 .vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,.vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
