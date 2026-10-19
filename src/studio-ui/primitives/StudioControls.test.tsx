@@ -635,12 +635,18 @@ describe("Studio Play/Pause Split-Left Button", () => {
 })
 
 describe("floating label geometry and circular icon scale", () => {
-  it("floats labels at 80% scale with the border crossing the 48% height line", () => {
+  it("uses global resting text sizes and a shared 18px raised label with the border crossing the 48% height line", () => {
     const css = readStudioControlCss()
     expect(css).toContain("transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)))")
     expect(css).not.toContain("transform 180ms ease-out, font-size 180ms ease-out")
-    expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+    expect(css).toContain("font-size: 18px")
     expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
+    expect(css).toContain("--vt-studio-control-floating-label-height: var(--vt-studio-standard-font-size, 38px)")
+    expect(css).toContain("--vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px)")
+    expect(css).toContain("--vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px)")
+    expect(css).toContain("font-size: 18px")
+    expect(css).toContain(".vt-studio-floating-field[data-size=\"compact\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px);\n  --vt-studio-control-focus-outline-width: 1.3px;")
+    expect(css).not.toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
     expect(css).toContain("padding: 2.25px 4.5px;")
   })
 
@@ -788,7 +794,7 @@ describe("Studio text input and split-left badge typography parity", () => {
     expect(inputCss).toContain("font-size: var(--vt-studio-compact-font-size, 24px);")
     expect(inputCss).toContain("font-size: var(--vt-studio-micro-font-size, 10px);")
     expect(inputCss).toContain('input.vt-studio-text-input[data-size="compact"]')
-    expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
+    expect(css).toContain("font-size: 18px")
     expect(catalogCss).toContain('.vt-complete-catalog .vt-catalog-field:not([data-vt-studio-control="true"])')
     expect(catalogCss).not.toMatch(/\.vt-complete-catalog \.vt-catalog-field\s*\{\s*--field-accent:var\(--pair-a\)/)
     expect(catalogCss).not.toMatch(/\.vt-complete-catalog \.vt-catalog-field:focus\s*\{\s*background:#fff/)

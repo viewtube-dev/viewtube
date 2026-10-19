@@ -310,18 +310,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   [data-vt-studio-control] {  }
 }
 
-/* Shared floating-label fields. The resting label height is the registered
-   shared label metric (not the field's native text size); when raised, it
-   eases to 80% of that metric and sits 48% above the field border (the prior
-   40% offset × the 1.2 floating-label offset ratio). */
+/* Shared floating-label fields. Resting labels use each size tier’s global
+   text-input font size (38px standard, 24px compact, 10px micro). Every
+   raised label is exactly 18px; field geometry and focus width remain tiered. */
 .vt-studio-floating-field {
-  /* Shared floating-label metrics for StudioTextInput and StudioTextArea — no
-     separate input vs textarea values. Sourced from the generated size-tier
-     tokens (tokens.ts SIZE_BASE → emit-studio-control-vars.mjs): standard
-     32px (prior shared 28px + 4px), compact 21px (prior 19px + 2px), offset
-     ratio 1.2 (the raised label sits 20% higher above the outer black border).
-     The label height is its font size (line-height: 1). */
-  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-standard-height, 32px);
+  /* Standard resting label follows the global 38px text-input default. */
+  --vt-studio-control-floating-label-height: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-floating-label-offset-ratio: var(--vt-studio-floating-label-offset-ratio, 1.2);
   --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
   --vt-studio-control-focus-outline-width: 1.95px;
@@ -332,9 +326,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   isolation: isolate;
 }
 .vt-studio-floating-field[data-size="compact"] {
-  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-compact-height, 21px);
-  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
+  --vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px);
   --vt-studio-control-focus-outline-width: 1.3px;
+}
+.vt-studio-floating-field[data-size="micro"] {
+  --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);
+  --vt-studio-control-focus-outline-width: .65px;
 }
 .vt-studio-floating-field > [data-vt-studio-control="true"] {
   display: block;
@@ -376,17 +373,16 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   border-radius: 3px;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
-  font-size: calc(var(--vt-studio-floating-label-size) * .8);
+  font-size: 18px;
   -webkit-text-stroke: .5px currentColor;
   transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)));
   transform-origin: left center;
 }
-/* Raised input labels stay coupled to the input typography scale.
-   Standard: 32px label × 80% = 25.6px. Compact: 21px × 80% = 16.8px.
-   Inputs and textareas share the same label height and raised offset. */
+/* Raised labels intentionally converge to one shared 18px size for every
+   input/textarea and standard/compact/micro variant. */
 .vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
-  font-size: calc(var(--vt-studio-floating-label-size) * .8);
+  font-size: 18px;
 }
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
@@ -4122,11 +4118,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   box-sizing: border-box;
 }
-.vt-studio-side-counter__actions > button:first-child::after {
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
-}
+
 
 /* Give slider numbers more of their available split-face width. */
 .vt-studio-double-split-slider [data-vt-studio-split-field] {
