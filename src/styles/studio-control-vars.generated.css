@@ -16,4 +16,8 @@
   --vt-studio-micro-font-size: 10px;
   --vt-studio-micro-icon-size: 10px;
   --vt-studio-secondary-focus-opacity: 65%;
+  --vt-studio-dropdown-chevron-standard-size: 38px;
+  --vt-studio-dropdown-chevron-compact-size: 24px;
+  --vt-studio-number-resting-white-mix: 50%;
+  --vt-studio-number-active-color: #000;
 }
