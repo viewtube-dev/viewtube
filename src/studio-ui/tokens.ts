@@ -42,7 +42,7 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 } as const
 
 /** Compact geometry source; micro is mechanically derived from this object. */
-const STUDIO_CONTROL_SIZE_BASE_COMPACT = { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, /* Shared floating-label metrics (label height 19px + 2px; raised offset × 1.2). */ floatingLabelHeight: 21, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS } as const
+const STUDIO_CONTROL_SIZE_BASE_COMPACT = { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, /* Floating-label text matches compact input typography (24px); textarea labels override to 14px. */ floatingLabelHeight: 24, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS } as const
 
 function halfCompact<T extends Record<string, number | string>>(compact: T): T {
   const result = { ...compact } as Record<string, number | string>
@@ -60,7 +60,7 @@ function halfCompact<T extends Record<string, number | string>>(compact: T): T {
 
 /** Canonical Studio size values are defined before derived contracts to avoid self-reference during initialization. */
 export const STUDIO_CONTROL_SIZE_BASE = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, /* Shared floating-label metrics (label height 28px + 4px; raised offset × 1.2). */ floatingLabelHeight: 32, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, /* Floating-label text matches standard input typography (38px); textarea labels override to 18px. */ floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: STUDIO_CONTROL_SIZE_BASE_COMPACT,
   /** Micro derives from half the compact geometry, with a legibility floor for text/icon. */
   micro: halfCompact(STUDIO_CONTROL_SIZE_BASE_COMPACT),
