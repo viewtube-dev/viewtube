@@ -1929,6 +1929,17 @@ export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => 
   inferredProfile: snapshot.inferredProfile,
   conversations: snapshot.conversations,
   creatorGrowthContext: input.creatorGrowthContext || null,
+  evidencePack: {
+   requestSpec: snapshot.evidencePack.requestSpec,
+   dataStatus: snapshot.evidencePack.dataStatus,
+   topVideos: snapshot.evidencePack.topVideos,
+   recentVideos: snapshot.evidencePack.recentVideos,
+   searchTerms: snapshot.evidencePack.searchTerms,
+   trafficSources: snapshot.evidencePack.trafficSources,
+   availableMetrics: snapshot.evidencePack.availableMetrics,
+   missingInputs: snapshot.evidencePack.missingInputs,
+   evidenceIds: snapshot.evidencePack.evidenceIds,
+  },
   creatorData: {
    videos: snapshot.vtSync.videos,
    dailyRows: snapshot.vtSync.dailyRows,
