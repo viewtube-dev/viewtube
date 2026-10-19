@@ -65,6 +65,33 @@ describe("aiBrainConversationStore", () => {
   expect(restored.turns[0]?.assistantText).toContain("strongest repeatable topic")
  })
 
+ it("preserves the exact creator message separately from presentation copy", async () => {
+  const original = "The API failed with an error — please keep those exact words."
+  const pending = await beginAIBrainTurn({
+   channelId: "channel-raw-message",
+   userText: original,
+  })
+
+  expect(pending.rawUserMessage).toBe(original);
+  expect(pending.displayUserMessage).not.toContain("API");
+  expect(pending.displayUserMessage).not.toContain("failed");
+  expect(pending.displayUserMessage).not.toContain("error");
+
+  const completed = await completeAIBrainTurn({
+   turnId: pending.id,
+   status: "complete",
+   assistantText: "I preserved your original report.",
+   response: responseFixture,
+  });
+  const restored = await resumeAIBrainThread("channel-raw-message");
+  expect(restored.turns[0]?.rawUserMessage).toBe(original);
+  expect(restored.turns[0]?.digest?.userIntent.toLowerCase()).toContain("api");
+  expect(restored.turns[0]?.digest?.userIntent).toContain("failed");
+  expect(restored.turns[0]?.digest?.userIntent).toContain("error");
+  expect(completed.id).toBe(pending.id)
+ })
+
+
  it("converts an abandoned pending turn into a saved interrupted response", async () => {
   const pending = await beginAIBrainTurn({
    channelId: "channel-interrupted",

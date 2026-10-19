@@ -73,6 +73,28 @@ describe("BrainConversationController", () => {
   expect(state.latestVisibleTurn?.id).toBe("2")
  })
 
+ it("uses the visible-turn source filter for model history and prefers raw user text", () => {
+  const hiddenSources = [
+   turn("8", "feedback", "feedback event", "feedback answer"),
+   turn("7", "journal", "journal event", "journal answer"),
+   turn("6", "quick_action", "quick action event", "quick action answer"),
+   turn("5", "creator_intake", "intake event", "intake answer"),
+   turn("4", "question_module", "question module event", "question module answer"),
+  ];
+  const ordinary = turn("9", undefined, "display-safe text", "ordinary answer");
+  const raw = { ...ordinary, rawUserMessage: "The API failed with an error", displayUserMessage: "The channel data is incomplete" }
+
+  const history = buildBrainConversationHistory([...hiddenSources, raw, turn("3", undefined, "older question", "older answer")])
+
+  expect(history.map((item) => item.parts[0].text)).toEqual([
+   "older question",
+   "older answer",
+   "The API failed with an error",
+   "ordinary answer",
+  ]);
+ })
+
+
  it("builds model history oldest-to-newest from a newest-first controller state", () => {
   const history = buildBrainConversationHistory([
    turn("3", undefined, "q3", "a3"),

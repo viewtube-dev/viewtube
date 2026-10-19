@@ -70,7 +70,7 @@ const summarizeThread = (turns: AIBrainConversationTurn[]): string =>
  turns
   .filter((turn) => turn.status !== "pending")
   .slice(-4)
-  .map((turn) => `${turn.userText}: ${turn.response?.keyInsight || turn.assistantText}`)
+  .map((turn) => `${turn.rawUserMessage ?? turn.userText}: ${turn.response?.keyInsight || turn.assistantText}`)
   .join(" ")
   .slice(0, 1400)
 
@@ -327,6 +327,8 @@ export const beginAIBrainTurn = async (input: {
   createdAt,
   updatedAt: createdAt,
   status: "pending",
+  rawUserMessage: input.userText,
+  displayUserMessage: sanitizeCreatorFacingBrainCopy(input.userText),
   userText: sanitizeCreatorFacingBrainCopy(input.userText),
   assistantText: "",
   answerModules: [],
@@ -369,7 +371,7 @@ export const completeAIBrainTurn = async (input: {
  const updatedAt = nowIso()
  const digest: AIBrainConversationDigest = buildConversationAnalyticDigest({
   channelId: existing.channelId,
-  userText: existing.userText,
+  userText: existing.rawUserMessage ?? existing.userText,
   response: input.response || input.assistantText,
   learningEntryIds: input.learningEntryIds || existing.learningEntryIds,
  })
@@ -421,6 +423,8 @@ export const resumeAIBrainThread = async (
   .filter((turn) => !turn.threadId || turn.threadId === threadId)
   .map((turn) => ({
    ...turn,
+   rawUserMessage: turn.rawUserMessage ?? turn.userText,
+   displayUserMessage: turn.displayUserMessage ?? turn.userText,
    threadId: turn.threadId || threadId,
    updatedAt: turn.updatedAt || turn.createdAt,
    status: turn.status || "complete" as const,
@@ -470,6 +474,8 @@ export const listAIBrainConversationTurns = async (input: {
  const turns = await listAIBrainConversationTurnsDB(input.channelId)
  return turns.map((turn) => ({
   ...turn,
+  rawUserMessage: turn.rawUserMessage ?? turn.userText,
+  displayUserMessage: turn.displayUserMessage ?? turn.userText,
   updatedAt: turn.updatedAt || turn.createdAt,
   status: turn.status || "complete",
   answerModules: turn.answerModules || turn.response?.modules || [],
@@ -497,7 +503,7 @@ export const answerAIBrainQuestionModule = async (input: {
   questionId: input.question.id,
   channelId: input.channelId || null,
   question: input.question.question,
-  answer: sanitizeCreatorFacingBrainCopy(input.answer),
+  answer: input.answer,
   category: input.question.category,
   createdAt: nowIso(),
   learningEntryId: entry.id,

@@ -585,6 +585,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    evidence: response.modules?.map((module) => module.title) || [],
    metadata: {
     evaluationId: evaluation.id,
+    rawUserMessage: input.userText,
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
     generationPath,
@@ -676,6 +677,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    evidence: response.modules?.map((module) => module.title) || [],
    metadata: {
     evaluationId: evaluation.id,
+    rawUserMessage: input.userText,
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
     generationPath,

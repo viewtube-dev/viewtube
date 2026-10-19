@@ -4,6 +4,7 @@ import { fallbackContext } from "../../context/GlobalDataContextTypes"
 import { getVtSyncSnapshot } from "../../features/vt-sync-local"
 import { buildAIBrainContextSnapshot } from "../aiBrainCommandInterface"
 import { buildCreatorGrowthContext, resumeAIBrainThread } from "../aiBrainConversationStore"
+import { listAIBrainLearningEntries } from "../aiBrainSelfImprovement"
 import type { StructuredBrainModelOutput } from "../gemini"
 import {
  BRAIN_MODEL_TIMEOUT_MS,
@@ -85,6 +86,28 @@ describe("BrainOrchestrator", () => {
   })
   expect(restored.turns.at(-1)?.id).toBe(result.turn.id)
  })
+
+
+ it("preserves the exact prompt in the captured learning event", async () => {
+  const snapshot = makeSnapshot()
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const rawUserMessage = "The API failed with an error — keep these exact words."
+  const result = await runBrainTurn({
+   channelId: "raw-learning-channel",
+   userText: rawUserMessage,
+   snapshot,
+   growthContext,
+   systemPrompt: "Use the supplied channel evidence.",
+   allowModel: false,
+  })
+  const entries = await listAIBrainLearningEntries({ channelId: "raw-learning-channel" })
+  const captured = entries.find((entry) => entry.metadata?.rawUserMessage === rawUserMessage)
+
+  expect(result.turn.rawUserMessage).toBe(rawUserMessage)
+  expect(captured).toBeTruthy()
+  expect(captured?.metadata?.rawUserMessage).toBe(rawUserMessage)
+ })
+
 
  it("repairs a repeated generic model answer with an evidence-backed fallback", async () => {
   const snapshot = makeSnapshot()

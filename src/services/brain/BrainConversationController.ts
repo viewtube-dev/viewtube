@@ -30,12 +30,11 @@ export const visibleBrainConversationTurns = (
 export const buildBrainConversationHistory = (
  turnsNewestFirst: AIBrainConversationTurn[],
  limit = 4,
-): BrainConversationState["history"] => turnsNewestFirst
- .filter((turn) => Boolean(turn.response))
- .slice(0, limit)
+): BrainConversationState["history"] => visibleBrainConversationTurns(turnsNewestFirst)
+ .slice(0, Math.max(0, limit))
  .reverse()
  .flatMap((turn) => [
-  { role: "user" as const, parts: [{ text: turn.userText }] },
+  { role: "user" as const, parts: [{ text: turn.rawUserMessage ?? turn.userText }] },
   { role: "model" as const, parts: [{ text: turn.assistantText }] },
  ])
 
