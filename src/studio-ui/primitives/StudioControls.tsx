@@ -492,8 +492,22 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   handleWidthScale?: number;
   /** Horizontal spacing between the two word labels in CSS pixels. */
   wordGap?: number;
+  /** Base orientation; horizontal remains the default. */
+  orientation?: "horizontal" | "vertical";
+  /** Automatically use the existing vertical variant on mobile portrait. */
+  verticalOnMobilePortrait?: boolean;
 }
-export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, className, style, ...props }) => {
+export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueChange, words = ["WRITE", "CREATE"], size = "44", skin = "solid", handleWidth, handleInset, handleWidthScale = 1, wordGap = 0, orientation = "horizontal", verticalOnMobilePortrait = false, className, style, ...props }) => {
+  const [mobilePortrait, setMobilePortrait] = React.useState(false);
+  React.useEffect(() => {
+    if (!verticalOnMobilePortrait || typeof window === "undefined") return;
+    const media = window.matchMedia("(max-width: 768px) and (orientation: portrait)");
+    const sync = () => setMobilePortrait(media.matches);
+    sync();
+    media.addEventListener?.("change", sync);
+    return () => media.removeEventListener?.("change", sync);
+  }, [verticalOnMobilePortrait]);
+  const effectiveOrientation = verticalOnMobilePortrait && mobilePortrait ? "vertical" : orientation;
   const rootRef = React.useRef<HTMLDivElement>(null);
   const handleRef = React.useRef<HTMLSpanElement>(null);
   const overlayRef = React.useRef<HTMLSpanElement>(null);
@@ -705,6 +719,21 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       observer?.disconnect();
     };
   }, [value, words, size, handleWidth, handleInset, handleWidthScale, getBounds, setHandleBounds, cancelAnimation]);
+
+  if (effectiveOrientation === "vertical") {
+    return (
+      <StudioVerticalWordToggle
+        value={value}
+        onValueChange={onValueChange}
+        words={words}
+        sizeVariant={size === "28" ? "compact" : "standard"}
+        variant={skin === "white-indicator" ? "white-fill" : skin === "black-indicator" ? "black-fill" : "primary-secondary"}
+        className={className}
+        style={style}
+        aria-label={typeof props["aria-label"] === "string" ? props["aria-label"] : undefined}
+      />
+    );
+  }
 
   return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
     <span ref={handleRef} className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"}>
