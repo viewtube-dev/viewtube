@@ -83,6 +83,16 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
     expect(html).not.toContain('data-radio-motion="inward"')
   })
 
+  it("keeps radio rings, core, and selected fill visibly outlined against changing control backgrounds", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8");
+    expect(css).toContain(".vt-studio-radio-motion .vt-studio-radio-ring");
+    expect(css).toContain("stroke: #000");
+    expect(css).toContain(".vt-studio-radio-motion .vt-studio-radio-core");
+    expect(css).toContain(".vt-studio-radio-motion .vt-studio-radio-solid");
+    expect(css).toContain("stroke-width: 3");
+    expect(css).toContain("stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
+  });
+
   it("uses centered SVG attribute animation, clips motion to the control, and honors reduced motion", () => {
     const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
@@ -105,9 +115,9 @@ describe("Studio checkbox mark animation timing", () => {
   it("slows checkmark and x strokes by 50 percent and draws x strokes sequentially", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-    expect(css).toContain("stroke-dashoffset 330ms")
+    expect(css).toContain("stroke-dashoffset 495ms")
     expect(css).toContain(".vt-studio-44-choice.is-checkbox.is-xwide svg path:nth-child(2)")
-    expect(css).toContain("transition-delay: 330ms")
+    expect(css).toContain("transition-delay: 495ms")
     expect(controls).toContain('d="M 10 10 L 40 40"')
     expect(controls).toContain('d="M 40 10 L 10 40"')
   })
