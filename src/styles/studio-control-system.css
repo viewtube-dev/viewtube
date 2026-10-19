@@ -1063,17 +1063,16 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   min-height: var(--vt-studio-textarea-min-height, 92px);
   resize: vertical;
   padding: 10px 12px;
-  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  /* Share the same size-tier typography tokens as native text inputs. */
+  font-size: var(--vt-studio-control-font-size);
   font-weight: var(--vt-studio-control-font-weight, 1000);
-  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, .5px) var(--vt-field-primary);
-  line-height: var(--vt-studio-textarea-standard-line-height, 1.25);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
+  /* Only textarea-specific typography override: compact description row spacing. */
+  line-height: .75;
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   padding: 8px 10px;
-  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
-  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) var(--vt-field-primary);
-  line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder {
   color: var(--vt-field-primary);
@@ -1088,12 +1087,12 @@ input[data-vt-studio-control="true"][data-size="compact"]:not([type="checkbox"])
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder {
   color: var(--vt-field-primary);
   -webkit-text-fill-color: var(--vt-field-primary);
-  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, .5px) var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
   font: inherit;
   opacity: 1;
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]::placeholder {
-  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible) {
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
@@ -1110,12 +1109,12 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, .5px) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;
   outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]:is(:focus, :focus-visible) {
-  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):is(:disabled, [readonly]) {
   cursor: not-allowed;
