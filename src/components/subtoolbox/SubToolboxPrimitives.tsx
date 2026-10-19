@@ -1418,18 +1418,6 @@ export const SubToolboxKnob: React.FC<SubToolboxKnobProps> = ({
   )
 }
 
-export const SubToolboxAlphabeticalSpectrumTags: React.FC<{
-  level?: ToolboxControlLevel
-  className?: string
-  suffix?: string
-}> = ({ className, suffix = "TAG" }) => (
-  <div className={classes("vt-studio-spectrum-tag-row", className)} data-vt-studio-width="content">
-    {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
-      <StudioSpectrumTag key={letter} label={`${letter} · ${suffix}`} />
-    ))}
-  </div>
-)
-
 export interface SubToolboxDataTableColumn<T extends Record<string, React.ReactNode>> {
   key: keyof T
   label: React.ReactNode
