@@ -4842,7 +4842,8 @@
    Keep this after legacy shell resets so transparent/44px header chrome cannot win. */
 @media (max-width: 768px) and (orientation: portrait) {
   .vt-toolbox-header-actions .vt-toolbox-header-collapse,
-  .vt-toolbox-header-actions .vt-toolbox-header-help {
+  .vt-toolbox-header-actions .vt-toolbox-header-help,
+  .vt-toolbox-header-actions .vt-toolbox-header-palette-button {
     box-sizing: border-box !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -4862,13 +4863,14 @@
   }
 
   .vt-toolbox-header-actions .vt-toolbox-header-collapse svg,
-  .vt-toolbox-header-actions .vt-toolbox-header-help svg {
+  .vt-toolbox-header-actions .vt-toolbox-header-help svg,
+  .vt-toolbox-header-actions .vt-toolbox-header-palette-button svg {
     width: 24px !important;
     height: 24px !important;
     color: #fff !important;
   }
 
-  .vt-toolbox-header-toggle-replacement .vt-studio-vertical-word-toggle {
+  .vt-studio-vertical-word-toggle.vt-toolbox-header-toggle-replacement {
     --vt-studio-vertical-word-font-size: 12px;
     --vt-studio-vertical-word-gap: 1px;
     --vt-studio-vertical-word-padding: 1px;
