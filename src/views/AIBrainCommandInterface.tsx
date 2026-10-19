@@ -107,6 +107,8 @@ export type ChatMessage = {
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
  readiness?: AIBrainTurnReadiness
+ turnStatus?: AIBrainConversationTurn["status"]
+ contextMayBeStale?: boolean
 }
 
 const shellCard = "rounded-[16px] border-[4px] border-black bg-white shadow-[6px_6px_0_0_#000]"
@@ -435,7 +437,8 @@ const CreatorResponseCard: React.FC<{
  onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
  onReviewHandoff: (message: ChatMessage, target: "thumbnail" | "metadata" | "projects") => void
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff }) => {
+ onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
  const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
@@ -445,10 +448,28 @@ const CreatorResponseCard: React.FC<{
   { key: "projects" as const, label: "Review in Projects", matches: /project|publish|package|content build|workflow|content plan/ },
  ].filter((option) => option.matches.test(handoffContext))
  if (!response) {
+  const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
    <article className={`${assistantCardFrame} p-4`}>
     <div className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
-    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{sanitizeCreatorFacingBrainCopy(message.text)}</p>
+    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
+    {canRetry ? (
+     <div className="mt-3 grid gap-2">
+      {message.contextMayBeStale ? (
+       <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
+      ) : null}
+      <div className="flex flex-wrap gap-2">
+       <button type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+        {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
+       </button>
+       {message.contextMayBeStale ? (
+        <button type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+         Refresh evidence & retry
+        </button>
+       ) : null}
+      </div>
+     </div>
+    ) : null}
    </article>
   )
  }
@@ -838,7 +859,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }, [channelId])
 
  const visibleTurns = useMemo(
-  () => recentTurns.filter((turn) => turn.response && !["feedback", "journal", "quick_action", "creator_intake", "question_module"].includes(String(turn.metadata?.source || ""))),
+  () => recentTurns.filter((turn) => (turn.response || turn.status === "interrupted") && !["feedback", "journal", "quick_action", "creator_intake", "question_module"].includes(String(turn.metadata?.source || ""))),
   [recentTurns],
  )
 
@@ -858,6 +879,14 @@ const AIBrainCommandInterface: React.FC = () => {
      response: turn.response,
      handoff: null,
      originalUserText: turn.rawUserMessage ?? turn.userText,
+     turnStatus: turn.status,
+     contextMayBeStale: Boolean(
+      turn.metadata?.dataReadinessSnapshot &&
+      typeof turn.metadata.dataReadinessSnapshot === "object" &&
+      (turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness).capturedAt &&
+      snapshot.vtSync.capturedAt &&
+      (turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness).capturedAt !== snapshot.vtSync.capturedAt
+     ),
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
@@ -1045,6 +1074,97 @@ const AIBrainCommandInterface: React.FC = () => {
    setBusy(false)
   }
  }
+
+ const handleRetryInterruptedTurn = (message: ChatMessage, useFreshEvidence: boolean) => {
+  const userText = message.originalUserText || ""
+  if (!userText.trim() || busy || message.turnStatus !== "interrupted") return
+
+  setBusy(true)
+  setMessages((current) => current.map((item) => item.id === message.id
+   ? { ...item, text: "Retrying the original request…", turnStatus: "pending", response: undefined }
+   : item,
+  ))
+
+  void (async () => {
+   try {
+    const freshSnapshot = buildAIBrainContextSnapshot({
+     brain,
+     authState,
+     channelConnection,
+     brainMemory: getBrainMemory(),
+     brainOnboardingSnapshot: onboardingSnapshot,
+     recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
+     requestText: userText,
+    })
+    const turnSnapshot = !useFreshEvidence && message.evidencePack
+     ? { ...freshSnapshot, evidencePack: message.evidencePack }
+     : freshSnapshot
+    const turnGrowthContext = buildCreatorGrowthContext(
+     turnSnapshot,
+     recentTurns.filter((turn) => turn.id !== message.id),
+     learningEntries,
+    )
+    const systemPrompt = buildAIBrainSystemPrompt({
+     brain,
+     authState,
+     channelConnection,
+     brainMemory: getBrainMemory(),
+     brainOnboardingSnapshot: onboardingSnapshot,
+     recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
+     requestText: userText,
+     evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
+     creatorGrowthContext: turnGrowthContext,
+    })
+    const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
+    const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
+     || brain.projects.find((project) => project.status === "active")
+     || null
+
+    const result = await runBrainTask({
+     surface: "ai-brain",
+     channelId,
+     retryTurnId: message.id,
+     projectId: activeProject?.id || null,
+     project: activeProject,
+     projects: brain.projects,
+     visibleContext: activeProject ? {
+      contentBuildId: activeProject.contentBuildId || null,
+      title: activeProject.videoTitle || activeProject.name || null,
+      topic: activeProject.videoTitle || activeProject.name || null,
+      format: null,
+      plannedPublishAt: activeProject.publishDate || null,
+     } : null,
+     userText,
+     snapshot: turnSnapshot,
+     systemPrompt,
+     growthContext: turnGrowthContext,
+     recentTurns: recentTurns.filter((turn) => turn.id !== message.id),
+     history: historyPayload,
+     allowModel: canUseGemini,
+    })
+    setMessages((current) => current.map((item) => item.id === result.turn.id
+     ? {
+       ...item,
+       text: result.turn.assistantText,
+       response: result.response,
+       turnStatus: result.turn.status,
+       originalUserText: result.turn.rawUserMessage ?? userText,
+       evidencePack: turnSnapshot.evidencePack,
+       readiness: readinessForSnapshot(turnSnapshot),
+       contextMayBeStale: false,
+      }
+     : item,
+    ))
+    await refreshConversationTurns()
+   } catch (error) {
+    console.warn("[AIBrain] Interrupted response retry failed:", error)
+    await refreshConversationTurns()
+   } finally {
+    setBusy(false)
+   }
+  })()
+ }
+
 
  // Legacy routes fold into the one conversation by seeding an opening question the
  // Brain then routes internally, rather than selecting a mode. `/algorithm-architect`
@@ -1291,6 +1411,7 @@ const AIBrainCommandInterface: React.FC = () => {
              onFeedback={handleFeedback}
              onAnswerQuestion={handleAnswerQuestion}
              onReviewHandoff={handleReviewHandoff}
+             onRetry={handleRetryInterruptedTurn}
             />
            ))}
            <div ref={bottomRef} aria-hidden="true" />
