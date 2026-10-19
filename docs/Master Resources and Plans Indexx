@@ -1,0 +1,284 @@
+Worked for 18s
+
+3. Analytics, AI, and cross-tool connections
+
+These documents are especially important for tasks 12–16 and 19: making post-publication performance useful for future decisions.
+
+11. Post-9:45 PM Planning Integration Master
+
+Useful for finding specific implementation gaps across Projects, ContentBuild, analytics checkpoint writers, exact-used-variant attribution, and outcome evaluation. Read alongside the lifecycle master plan to find existing work that should be extended rather than duplicated.
+
+12. System Convergence and Consolidation
+
+Useful for identifying existing infrastructure that must converge: shared identity, services, operations, and cross-system ownership. Important before creating parallel implementations.
+
+13. Studio Hub AI / Brain / Prompts documentation
+
+This folder is a useful starting point for the existing generation and Brain integration plans. Search it for prompt templates, context assembly, tool instructions, and generation ownership. Audit the actual source calls before assuming a documented prompt matches the running implementation.
+
+14. Studio Hub tool definitions and lifecycle
+
+Useful for understanding tool ownership, the implementation lifecycle, handoffs, validation, and learning. It helps prevent Metadata Master, Video Publisher, Video Manager, and Content Analysis from taking over one another’s responsibilities.
+
+4. UI primitives, component library, and verification
+
+These documents are the most useful resources for tasks 17, 20–23, and 25.
+
+15. Toolbox UI Master Resource
+
+The main architectural reference for the Toolbox/SubToolbox system, reusable components, sizing, composition, and the rules for extending existing primitives instead of hardcoding lookalikes.
+
+16. Studio Hub Component Library Source of Truth
+
+Use this to identify canonical component examples and required visual demonstrations. It is particularly relevant to shared variants, the reference library, and preventing divergent component implementations.
+
+17. Full Studio Hub UI Primitive Audit
+
+Use for identifying hardcoded controls, missing primitive variants, component-library gaps, and tool-by-tool reuse problems.
+
+18. October 11 Studio Hub Component Library UI Audit
+
+The most targeted resource for the newer primitive work. It documents new patterns, the 12/20 source-based audit assessment, and outstanding mobile, keyboard, screen-reader, performance, and build verification.
+
+19. Consolidated Master Validation Checklist
+
+This is the operational checklist for the branch. It covers dependency installation, type-checking, focused tests, full tests, production build, persistence round-trips, channel-connected controls, mobile layouts, and the release gate.
+
+5. Recovery and resource discovery
+
+These are useful when work or decisions are spread across older branches, historical plans, or previous implementation sessions.
+
+20. Recovery Agent Playbook — tells future agents how to recover context and continue from canonical documentation.
+
+21. Recovery History — records historical findings, conflicts, unresolved inventories, and recommended follow-up.
+
+22. Toolbox System README — explains the UI-system documentation structure and where complete libraries, specialized components, guides, and infographics live.
+
+23. Toolbox System Manifest — useful for distinguishing canonical, historical, imported, and unverified reference artifacts.
+
+
+My recommended implementation packet
+
+If the goal is to finish the 25 tasks efficiently, I would give the implementing agent this core reading list in order:
+
+Read these first
+
+12 of 12 documents selected
+
+Deselect all
+
+Integrated Content Lifecycle, Analytics & Studio Hub Master Plan
+
+Projects / ContentBuild Workflow Master Resource
+
+Asset Engine Master Resource
+
+Integrated Metadata System — Master Plan
+
+Integrated Metadata System Execution Plan
+
+Publisher Metadata Project/Package Persistence Plan
+
+Publisher + Manager Channel-Connected Controls Plan
+
+Metadata Master Implementation Plan
+
+Toolbox UI Master Resource
+
+Studio Hub Component Library Source of Truth
+
+October 11 Studio Hub Component Library UI Audit
+
+Consolidated Master Validation Checklist
+
+Copy reading list
+
+One important caveat: I verified the document paths through GitHub search and the consolidated branch’s documentation, but I have not established that every linked plan is fully implemented or current in every detail. The validation checklist itself requires reviewing the exact branch head and current code.
+
+The key rule for implementation is to use the master plans to understand the intended design, the focused plans to determine the exact feature contracts, the actual source code to establish current behavior, and the validation checklist to prove completion.
+
+Worked for 31s
+
+The 25 most important missing or incomplete items
+
+A. Publisher, Manager, and metadata package lifecycle
+
+01
+
+Finish wiring Saved Metadata Sets into Video Publisher
+
+Integration gap
+
+The branch contains publisherMetadataPackageOptions.ts, its persistence service, tests, and PublisherMetadataPackageOptions.tsx. The consolidation plan explicitly says to finish connecting the saved-set experience to the current Publisher UI, rather than treating the presence of these files as a completed workflow.
+
+02
+
+Complete end-to-end project/package round-trip persistence
+
+Not verified
+
+Editing, generating, saving, leaving Publisher, reopening a project, and restoring the same selected metadata must work as one continuous workflow. The existing ContentBuild, Project, Video Package, and Asset Engine authorities must remain canonical.
+
+03
+
+Complete the Save / Save as Option / Choose / Restore workflow
+
+Saved versions and alternative metadata sets must remain distinct. Saving an alternative must not silently replace the current selection; choosing an alternative must update the existing canonical package, and restoring must recover a prior saved state.
+
+04
+
+Persist generation, refinement, and asset lineage
+
+Every generated or refined result needs its operation/generation reference, parent relationship, selected asset identity, and package/option provenance. The plan specifies these contracts, but the complete round-trip and lineage guarantees remain validation work.
+
+05
+
+Implement exact approved-publication attribution
+
+Connect the selected package to an immutable or otherwise traceable approved publish snapshot and publish transaction. It must be possible to establish which title, thumbnail, description, tags, and other selected assets were actually published—not merely which options were saved.
+
+B. Channel-connected publishing controls
+
+06
+
+Complete real channel-connected playlist selection
+
+Replace free-form playlist entry with an authenticated, searchable multi-select populated from the creator’s YouTube channel. Support pagination, stable playlist IDs, loading, retry, empty results, and expired authentication. Verify that Publisher and Manager both use the correct channel data.
+
+07
+
+Implement the four-state Visibility control correctly
+
+The required choices are Public, Private, Unlisted, and Scheduled. Scheduled must be implemented as a ViewTube scheduling state with a valid future date/time, not incorrectly sent to YouTube as a privacy status.
+
+08
+
+Finish the reusable Location autocomplete
+
+The branch plan calls for spelling-tolerant place suggestions, keyboard navigation, retry/error states, and properly resolved place data. The documented baseline still uses a plain text input. The autocomplete provider and its secure integration need to be completed.
+
+09
+
+Preserve an explicit unknown Audience state
+
+The required model is true | false | unset, with the visible question “IS IT MADE FOR KIDS?” An unset value must not silently become No. Validate that the correct YouTube fields are used before publishing or updating.
+
+10
+
+Separate internal AI-use tracking from YouTube disclosure
+
+Preserve existing aiUse metadata while distinguishing general AI assistance from YouTube’s altered/synthetic-content disclosure requirements. Normalize legacy saved data instead of dropping it or silently changing defaults.
+
+11
+
+Complete the canonical 13-section metadata workflow
+
+Finish validating the exact shared order: Video Upload, Title, Thumbnail, Visibility, Audience, Timestamps, Description, Location, Playlists, Community, AI Use, Tags, Category. Publisher and Manager must share the canonical section composition without duplicate controls or conflicting values.
+
+C. Post-publication analytics and AI learning
+
+12
+
+Connect published-package identity to analytics checkpoints
+
+Establish a reliable link from the exact published package and selected variants to Analytics Canon / VT-SYNC checkpoints. The lifecycle plan defines this connection, but the full end-to-end flow remains an explicit testing requirement.
+
+13
+
+Record decision and change lineage separately
+
+Record both what changed and why the creator chose the change. Include the old/new value or asset, decision reason, evidence, actor, timestamp, operation identity, source tool, and eventual publication/outcome relationship. The plan describes this model; full producer coverage still needs implementation and verification.
+
+14
+
+Build the post-publishing outcome and evaluation loop
+
+Connect publication → analytics checkpoint → outcome → evaluation. Compare measured performance with a defined baseline and account for timing and confounding factors. Avoid treating a correlation between a metadata change and a performance change as proven causation.
+
+15
+
+Implement governed AI Brain learning from measured outcomes
+
+Turn validated outcomes into learning candidates, preserve evidence and confidence, and require the existing governance/promotion process before durable Brain knowledge changes. The lifecycle plan identifies this as a core connection, not a separate AI memory store.
+
+16
+
+Finish the Manager’s analytics-linked change history
+
+For published-video metadata updates, record before/after values, change dates, reasons, and the relevant performance window. Expose enough history to compare outcomes after a title, thumbnail, or other metadata change.
+
+D. Metadata Master and Studio Hub intelligence
+
+17
+
+Complete the full Metadata Master workspace layout
+
+The branch retains the Metadata Master implementation, but the planned frontend architecture is explicitly marked as not yet implemented or visually certified. Finish the coherent Toolbox/SubToolbox workflow, publication-package canvas, evaluation/compare workspace, inspector, and handoff controls while preserving existing functionality.
+
+18
+
+Implement complete metadata-set scoring and comparison
+
+Beyond generating alternatives, provide meaningful cross-package comparison, conflict and redundancy detection, title/thumbnail relationship evaluation, readiness scoring, and transparent warnings. Preserve creator-locked fields and distinguish suggestions from applied changes.
+
+19
+
+Connect generation strategies to goals and measured performance
+
+Complete the goal-based metadata sets and make them informed by available channel/project context, prior package history, and analytics evidence. Preserve the existing generation stack rather than creating a competing prompt/provider system. This is a broader intelligence requirement, not proof that no strategy options exist today.
+
+20
+
+Complete Video Publisher’s Write / Create workflow
+
+The branch includes the Write/Create plan and a workspace contract test, but the plan describes the full interface as a target: Write for field-level metadata work; Create/Generate for idea, script, and rough-video workflows; candidate sets; per-field actions; explicit Apply; and separate package-save and Publish actions. Verify the complete UI and behavior rather than counting the plan as implementation.
+
+E. Shared component system, quality, and operational readiness
+
+21
+
+Finish the requested 44px component-size standard and multi-select button groups
+
+Selectively port the authorized component-size and multiple-selection behavior into the canonical primitives and tokens. The branch manifest specifically lists these as remaining work from the older visual-test ideas. Do not overwrite the current canonical CSS with the older branch snapshot.
+
+22
+
+Finish the complete primitive-family and migration-catalog coverage
+
+The branch adds several useful patterns, including a multi-section script bar, nested square choice, tag-adjacent split action row, ranked metadata tag, and education timestamp notes. Remaining work includes selectively integrating and testing other required primitive families and the documented variants, rather than copying old CSS or leaving tools with hard-coded controls.
+
+23
+
+Complete responsive, keyboard, and screen-reader certification
+
+The October 11 UI audit reports mobile layouts, custom dropdown interactions, focus order, Escape behavior, screen-reader announcements, and narrow-screen compound action rows as unverified. It also flags potential performance costs from mounting the entire UI Reference Library. These require live checks and measured fixes.
+
+24
+
+Reconcile the remaining recovery, resource-library, and experimental-workspace work
+
+The consolidated branch manifest says older recovery branches should contribute unique missing history only, historical resource-plan material needs reconciliation, and the Liquid Glass workspace must remain isolated until its build and integration boundary are verified. These are unresolved reconciliation tasks—not authorization to merge those branches wholesale.
+
+25
+
+Establish a green, reproducible integration and release baseline
+
+The consolidated branch document reports that prior related CI passed a production build and selected focused checks but failed TypeScript checking and the full test suite. The current branch validation checklist remains unchecked. Run the checks against the exact current branch SHA, classify inherited versus introduced failures, test the complete lifecycle, and record the evidence before claiming readiness.
+
+What I would tackle first
+
+These gaps are connected, so I would not implement them as 25 unrelated projects.
+
+Priority	Workstream	First deliverable
+
+1	Integration stability	Fresh typecheck, full-test, and build baseline for the exact branch head
+2	Publisher persistence	Fully wired saved metadata sets and a passing project/package round-trip
+3	Channel-connected controls	Correct playlists, visibility, location, and audience/disclosure behavior
+4	Lifecycle intelligence	Trace one package through publication, analytics, evaluation, and governed learning
+5	Studio Hub UI	Finish Metadata Master and Publisher workflows using canonical primitives
+6	Verification	Desktop/mobile, accessibility, regression, and end-to-end checks
+
+
+The largest functional gap is the complete lifecycle connection: not simply generating metadata or saving alternatives, but tracing the selected package through actual publication, measuring what happened afterward, and using reliable evidence to inform future decisions.
+
+The largest immediate implementation risk is the unfinished integration and validation work. I would establish a fresh baseline on master/consolidated-feature-integration first, then close the persistence and publishing gaps without touching main or merging the excluded canonical UI branch.

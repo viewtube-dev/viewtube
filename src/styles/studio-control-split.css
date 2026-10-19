@@ -1,0 +1,311 @@
+/* One split-shell contract for split-left/right/double faces and rails. */
+[data-vt-studio-control="true"][data-vt-studio-split] {
+  display: grid;
+  align-items: stretch;
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  /* Outer perimeter always belongs to the shell and is never pair-colored. */
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+[data-vt-studio-control="true"][data-vt-studio-split="left"] {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+[data-vt-studio-control="true"][data-vt-studio-split="right"] {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+[data-vt-studio-control="true"][data-vt-studio-split="double"] {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  min-width: var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  /* Rail fill is secondary; icon and glyphs are always black. */
+  color: #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  line-height: 1;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail][data-rail="start"] {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail][data-rail="end"] {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail] > svg {
+  display: block;
+  flex: 0 0 auto;
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  margin: auto;
+  color: #000;
+  stroke: #000;
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-rail] > svg * {
+  stroke: #000;
+}
+[data-vt-studio-control="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] {
+  color: #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+}
+[data-vt-studio-control="true"] [data-vt-studio-split-label],
+[data-vt-studio-control="true"] [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-vt-studio-control="true"][data-vt-studio-split] [data-vt-studio-split-label] {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #000;
+  text-align: center;
+  line-height: var(--vt-studio-control-line-height, .86);
+}
+
+/* A face-only split shell is nested inside StudioButton but follows the same grid. */
+[data-vt-studio-control="true"] [data-vt-studio-split-face] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  border-radius: 0;
+}
+
+
+/* Canonical split correction: one face perimeter, rail owns only its divider. */
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
+  display: grid;
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
+  align-items: stretch;
+  padding: 0;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+  box-shadow: none;
+  background: transparent;
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split],
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-face] {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"])[data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"])[aria-pressed="true"] [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] svg,
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] svg * {
+  color: #000;
+  stroke: #000;
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-label] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  line-height: var(--vt-studio-control-line-height, 0.86);
+  color: #000;
+}
+
+/* Username composite: shell owns perimeter; inner input and rail do not duplicate it. */
+.vt-studio-username-input,
+.vt-studio-split-shell.vt-studio-username-input {
+  box-sizing: border-box;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+}
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
+.vt-studio-username-input [data-vt-studio-split-field] > [data-vt-studio-control="true"],
+.vt-studio-username-input [data-vt-studio-split-label] > [data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  min-height: 100%;
+  height: 100%;
+}
+.vt-studio-username-input > [data-vt-studio-split-rail],
+.vt-studio-username-input [data-vt-studio-split-rail] {
+  border: 0;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-username-input [data-vt-studio-split-rail] svg,
+.vt-studio-username-input [data-vt-studio-split-rail] svg * {
+  color: #000;
+  stroke: #000;
+}
+
+/* All double-split rails retain the secondary role, including both sides. */
+.vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-rail],
+.vt-studio-double-split-badge__rail {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail,
+[data-vt-studio-split-rail] {
+  border-radius: 0;
+}
+.vt-studio-split-left-badge__rail > svg,
+.vt-studio-split-right-badge__rail > svg,
+.vt-studio-double-split-badge__rail > svg,
+[data-vt-studio-split-rail] > svg,
+[data-vt-studio-split-rail] > svg * {
+  color: #000;
+  stroke: #000;
+}
+
+
+/* Play/pause split buttons share the same single-perimeter anatomy. */
+button[data-vt-studio-play-pause="true"] > [data-vt-studio-button-face] {
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+  box-shadow: none;
+}
+button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
+  border: 0;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: 0;
+}
+
+/* Split badges use one black perimeter; interior rail fills are never pills. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge,
+.vt-studio-split-shell {
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge__rail,
+[data-vt-studio-split-rail] {
+  border-radius: 0;
+  color: #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+
+
+/* Split steppers own one stationary shell; suppress legacy pseudo-faces that could stack borders. */
+.vt-studio-split-stepper::before { content: none; display: none; }
+
+
+/* Inline and vertical steppers share the canonical shell and field contracts. */
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
+  width: 100%;
+}
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper[data-vt-studio-width="content"] {
+  width: fit-content;
+}
+
+.vt-studio-inline-stepper__rail {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  z-index: 0;
+}
+
+.vt-studio-inline-stepper__value,
+.vt-studio-split-stepper-value {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;
+  font-weight: var(--vt-studio-control-font-weight, 1000) !important;
+  font-size: var(--vt-studio-control-font-size, 38px) !important;
+  line-height: var(--vt-studio-control-line-height, .86) !important;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em) !important;
+  text-transform: var(--vt-studio-control-text-transform, uppercase) !important;
+  padding: 0 14px !important;
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
+  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary) !important;
+}
+
+.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value,
+.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-value {
+  font-size: var(--vt-studio-28-font-size, 24px) !important;
+  padding: 0 8px !important;
+  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) #000 !important;
+}
+
+.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
+  font-size: var(--vt-studio-14-font-size, 10px) !important;
+  padding: 0 2px !important;
+  -webkit-text-stroke: var(--vt-studio-14-text-stroke, .25px) #000 !important;
+}
+
+.vt-studio-inline-stepper:focus-within .vt-studio-inline-stepper__value,
+.vt-studio-split-stepper:focus-within .vt-studio-split-stepper-value {
+  background: transparent !important;
+}
+
+.vt-studio-inline-stepper__rail svg,
+.vt-studio-split-stepper-actions svg {
+  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
+}
+
+.vt-studio-split-stepper-actions button {
+  position: relative;
+}
+
+.vt-studio-split-stepper-actions button:focus-visible {
+  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
+  outline-offset: -2px;
+  z-index: 1;
+}

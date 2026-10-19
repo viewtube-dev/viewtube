@@ -1,0 +1,1068 @@
+Worked for 3m 58s
+
+Started. I’ve begun implementing the creator production tools on your canonical integration branch—not the Vault maintenance work.
+
+Pull request opened
+
+PR #102 — Creator Workbench: Image & Video Editing Controls
+
+Base: master/consolidated-feature-integration
+
+Feature branch: feat/creator-workbench-image-video-controls
+
+Status: Open, not merged
+
+Changes: 4 commits, 3 files changed
+
+
+1. First editing controls implemented
+
+I updated the existing editor’s selected-clip Crop inspector with:
+
+Center 10% — applies a symmetrical crop on all four edges.
+
+Center 20% — applies a tighter symmetrical crop.
+
+Reset Crop — resets cropping without changing position, scale, rotation, or opacity.
+
+Individual edge controls — retained for precise adjustments.
+
+
+These controls use the existing editor state and crop system. They do not create a separate editing system or overwrite the original media asset.
+
+2. Added the production workbench implementation guide
+
+The new Creator Production Workbench Implementation Plan records the actual source audit and implementation sequence.
+
+It covers:
+
+Workstream	Next objective
+
+Image editing	Ratio-aware cropping, resizing, image processing, and thumbnail/poster controls
+Video editing	Preview, trimming, reframing, frame extraction, conversion, and processing jobs
+Script editor	Improve Script Architect integration while preserving drafts, locked text, and existing authoring behavior
+Audio and captions	Connect editing controls to the existing timeline and shared state
+AI production tools	Introduce reviewable edit proposals and connect generation through the existing architecture
+
+
+I also updated the canonical Editor System resource with the new workstream and an implementation log entry.
+
+3. What I found in the existing code
+
+The repository already contains working foundations we should extend rather than duplicate:
+
+Shared crop and transform handling in src/shared/vtE1VisualFrame.js.
+
+Existing editor state and timeline controls.
+
+A Script Architect with draft autosave, chapter and fragment editing, locked-text verification, and script assembly.
+
+Remotion media-rendering infrastructure.
+
+
+One important issue to investigate next is Script Architect’s direct import of the Gemini generation service. The editor architecture specifies BrainRuntime as the shared reasoning and orchestration entry point. I documented this for a contract-led audit before changing its behavior.
+
+4. Verification status
+
+The branch is four commits ahead of the integration branch and has no reported commits behind it.
+
+However, the GitHub status check currently reports failures for all three Vercel deployment contexts because of a build-rate-limit target. I have not verified a local build, run the editor tests, or visually inspected the new controls on desktop and mobile. The PR remains open, and I am not claiming the change is deployed.
+
+Next phase
+
+I’ll continue with the image and video editing workbench, tracing the real media-processing and asset-derivation contracts before connecting additional controls. Then I’ll move into Script Architect integration and audio/caption editing, preserving the existing project model and shared UI system.Worked for 1m 22s
+
+Understood. I misunderstood what you meant by the Workbench. You mean the actual creator production tools—the image and video editing controls, script editor, and related media-production systems—not asset maintenance.
+
+I checked the repository and found existing architecture references for the Vault Asset Workbench and the desktop/mobile Editor. The next phase should connect and complete these production capabilities, using the existing systems rather than building competing editors.
+
+Corrected plan: Creator Workbench Production Tools
+
+Phase 1 — Image Editing Workbench
+
+Build out the tools for editing and transforming images directly within the Workbench.
+
+Crop & Reframe: free crop, aspect-ratio presets, and positioning.
+
+Resize & Resolution: width, height, output resolution, and aspect ratio.
+
+Transform: rotate, flip, scale, and focal-point positioning.
+
+Image Adjustments: supported color, brightness, contrast, and related adjustments.
+
+Format & Compression: conversion, output format, and quality controls.
+
+Before / After: compare the original against the proposed result.
+
+Variants: preserve the original and create separately identifiable edited versions.
+
+Thumbnail Tools: prepare image derivatives for thumbnails, posts, and other publishing assets.
+
+
+Operations should support preview and cancellation before committing changes.
+
+Phase 2 — Video Editing & Control Workbench
+
+Build the actual video manipulation tools and connect them to the canonical Editor.
+
+Video Preview: playback, scrubbing, and frame inspection.
+
+Trim & Cut: start/end points, precise time entry, and clip splitting where supported.
+
+Crop & Reframe: aspect-ratio presets, positioning, and resolution conversion.
+
+Frame Extraction: extract still images and select poster frames.
+
+Audio Controls: inspect, extract, and adjust audio where supported.
+
+Conversion & Compression: output format, resolution, and quality.
+
+Video Derivatives: create alternate versions while preserving source identity.
+
+Comparison: inspect source and edited output.
+
+Processing Controls: progress, cancellation, errors, and retry where supported.
+
+
+Important distinction: Vault should own convenient asset-level operations, while the full Editor owns timeline composition, tracks, transitions, keyframes, and complete video editing. The two should share asset identity and handoffs rather than duplicate editing state.
+
+Phase 3 — Script Editor Workbench
+
+Build the script-writing and editing tools into the existing Script Architect workflow.
+
+Script Editor: editable script content with appropriate formatting.
+
+Structure: hooks, sections, scenes, dialogue, and narration.
+
+Templates & Snippets: reusable script structures and content blocks.
+
+AI Refinement: revise selected passages without silently replacing the entire script.
+
+Version History: preserve earlier versions and compare revisions.
+
+Project Connections: link scripts to the correct project and ContentBuild.
+
+Media Connections: associate scenes with storyboards, footage, images, voice, and other production assets.
+
+Export & Handoff: prepare scripts for storyboarding, production, and the Editor.
+
+
+The Vault's document editor should handle lightweight asset-linked text editing; it should not become a competing Script Architect.
+
+Phase 4 — Audio, Captions & Transcript Tools
+
+Audio playback, waveform, and trimming.
+
+Transcript inspection and editing.
+
+Caption and subtitle editing.
+
+Timestamped caption corrections.
+
+Supported audio extraction and conversion.
+
+Script-to-transcript and transcript-to-script workflows.
+
+Connections to the video timeline and project media.
+
+
+Phase 5 — Unified Editing Controls
+
+Create a consistent interaction model across these tools:
+
+Select an asset or project.
+
+Choose the relevant editing capability.
+
+Adjust settings and preview the result.
+
+Accept, revise, or cancel.
+
+Save a new version or derivative.
+
+Preserve source identity and lineage.
+
+Send the result to the next production tool.
+
+
+Controls should appear contextually based on the selected media, available capabilities, and current workflow. Desktop and mobile should share the same underlying editing capabilities and project state.
+
+Phase 6 — AI-Assisted Production
+
+Connect the Brain to the existing production systems for tasks such as:
+
+Suggesting image crops and thumbnail framing.
+
+Proposing video trims and pacing improvements.
+
+Generating and revising scripts.
+
+Creating captions and transcripts.
+
+Proposing timeline edits.
+
+Generating image and video assets.
+
+Explaining controls and guiding users through editing workflows.
+
+
+AI-proposed edits should be reviewable, and accepted editor changes should use the existing undo/redo mechanism.
+
+
+---
+
+Implementation order
+
+I recommend building in this order:
+
+Priority	System	Primary outcome
+
+1	Image Editing	Usable image transformations and previews
+2	Video Controls	Usable video inspection, trimming, and conversion
+3	Script Editor	Complete script-editing workflow
+4	Audio & Captions	Connected audio, transcript, and subtitle tools
+5	Unified Controls	Shared interactions and consistent operation handling
+6	AI Production Assistant	Context-aware assistance across all production tools
+
+
+These are capability targets, not claims that every listed feature already exists or is missing. The implementation must first identify what is actually working in the canonical branch.
+
+The next step is to audit the existing production tools and start completing the first real feature slice, preserving the canonical Editor, Script Architect, Asset Engine, Vault, and Brain architecture.
+
+I’ll use master/consolidated-feature-integration as the integration target and avoid overwriting the existing Settings plan.Worked for 37s
+
+Agreed. The Vault Inspector should be a proper SubToolbox module, following the same architecture as the other Workbench tools—not a standalone panel whose visibility is controlled separately from the Workbench.
+
+I reviewed the current master/consolidated-feature-integration branch and the Vault Workbench architecture document. The existing code already registers inspector as a workspace module, alongside Asset Library, Task Center, Import & Tags, and Text Editor. The architectural improvement is to make sure Inspector is implemented and presented consistently as a first-class SubToolbox module.
+
+There is also an opportunity to expand the Workbench without cluttering it with dozens of unrelated panels.
+
+1. Inspector: What It Should Become
+
+Inspector SubToolbox
+
+Purpose: Understand the selected asset, its properties, its history, and how it connects to the rest of ViewTube.
+
+Rather than creating a separate module for every kind of inspection, I recommend one Inspector SubToolbox with these sections:
+
+Section	Responsibilities
+
+Overview	Asset name, type, thumbnail or preview, status, project, and key metadata.
+Metadata	Edit the title, description, tags, custom fields, and supported descriptive metadata.
+Technical Details	Dimensions, resolution, aspect ratio, duration, codec, file size, and available technical properties.
+Provenance	Show where the asset originated, which tool created it, and relevant generation or editing records.
+Lineage & Versions	Show parent assets, derivatives, version history, and relationships between assets.
+Rights & Usage	Display licensing, usage restrictions, attribution, and known usage references.
+Health & Validation	Identify missing metadata, invalid properties, unsupported formats, and other actionable problems.
+
+
+The Inspector should adapt to the selected asset.
+
+For example, selecting an image should expose image dimensions and image-specific details. Selecting a video should expose video properties. Selecting a document should expose document-specific information.
+
+Sections should only display properties that are relevant and supported by the available data.
+
+How it should behave
+
+Use the existing Toolbox/SubToolbox architecture.
+
+Use the canonical UI components and styling system rather than hard-coded copies.
+
+Integrate with the existing asset selection and workspace state.
+
+Preserve the selected asset when switching Inspector sections.
+
+Keep edits connected to the canonical asset record.
+
+Show the source of information and distinguish verified metadata from unavailable information.
+
+Provide contextual actions to open the appropriate specialist tool.
+
+Work consistently across desktop and mobile layouts.
+
+
+Important: The Inspector should inspect assets and perform appropriate lightweight metadata operations. It should not become a second video editor, Script Architect, or generation engine.
+
+
+---
+
+2. Other Workbench Tools Worth Adding
+
+The goal should be to give the Vault Workbench a small number of powerful, reusable SubToolbox modules—not to turn every capability into a separate application.
+
+These are my recommended additions and improvements.
+
+Priority 1 — Selection Actions
+
+Purpose: Give creators immediate access to actions for the assets they have selected.
+
+This would be a contextual action module or action bar that appears when an asset or group of assets is selected.
+
+Potential actions:
+
+Edit metadata.
+
+Add or remove tags.
+
+Add to a collection.
+
+Assign to a project.
+
+Compare versions.
+
+Inspect provenance.
+
+Send to a specialist tool.
+
+Export a manifest.
+
+Archive or change lifecycle state.
+
+Run supported batch operations.
+
+
+Why it matters
+
+The existing Asset Operations module includes Search, Batch, Groups, and Tools. The Vault architecture already identifies a contextual Selection Action Bar as the longer-term direction for reducing the size of that module.
+
+I would prioritize this improvement rather than build another general-purpose actions toolbox alongside it.
+
+
+---
+
+Priority 2 — Compare & Versions
+
+Purpose: Help creators understand what changed between assets and choose the correct version.
+
+The Vault already has Compare and Before/After functionality, along with version and lineage services. The opportunity is to organize those capabilities into a consistent experience.
+
+Recommended features:
+
+Side-by-side image comparison.
+
+Before/after previews.
+
+Video poster and frame comparison.
+
+Metadata differences.
+
+Version history.
+
+Parent and derivative relationships.
+
+Creator-edited versus generated versions.
+
+Identify the current approved or selected version.
+
+Promote a candidate to the selected version where supported.
+
+
+For example, a creator could compare three thumbnail candidates, inspect their metadata and provenance, and select the correct candidate without losing track of the original.
+
+Implementation principle: Extend the existing comparison and version systems before creating duplicate services or data models.
+
+
+---
+
+Priority 3 — Processing & Derivatives
+
+Purpose: Perform supported asset transformations without turning Vault into a full editing application.
+
+This SubToolbox could expose operations appropriate to the selected asset type.
+
+Asset type	Potential operations
+
+Images	Crop, resize, rotate, convert formats, adjust compression.
+Videos	Extract frames, select a poster frame, trim, convert formats, generate proxies.
+Audio	Trim, convert formats, extract audio from video, generate waveforms.
+Documents	Extract text, inspect supported formats, create supported derivatives.
+
+
+A standard operation flow should be:
+
+Select asset → Configure operation → Preview → Confirm → Process → Review result.
+
+The result should be registered as a canonical derivative or version, with its source relationship and operation history preserved.
+
+Operations that require unavailable providers, processing infrastructure, or unsupported formats should be clearly identified rather than presented as functional when they are not.
+
+Boundary: This is for asset-level processing. Full timeline editing remains with the dedicated Editor.
+
+
+---
+
+Priority 4 — Collections & Relationships
+
+Purpose: Organize assets around projects, topics, campaigns, and production needs.
+
+Potential features:
+
+Create and edit collections.
+
+Add or remove selected assets.
+
+Build smart collections from supported filters.
+
+Display collection membership.
+
+Find related assets.
+
+Identify assets shared between projects.
+
+Show where an asset is referenced.
+
+Find unused or potentially orphaned assets.
+
+
+For example, a creator working on a history video might maintain collections for maps, archival photographs, narration, music, and thumbnail candidates.
+
+The Workbench should organize references to canonical assets rather than create duplicate copies of the underlying assets.
+
+This should extend the existing manual and smart collection systems.
+
+
+---
+
+Priority 5 — Captions & Transcript
+
+Purpose: Make text associated with media easy to inspect, edit, and reuse.
+
+The current Vault implementation already contains caption-related functionality and transcript-to-script conversion.
+
+A dedicated SubToolbox could bring those capabilities together.
+
+Recommended features:
+
+Preview an associated transcript.
+
+Inspect and edit caption lines.
+
+Work with timestamps.
+
+Export supported SRT and VTT formats.
+
+Convert a transcript into a Script asset.
+
+Associate transcripts and captions with their source media.
+
+Track derived versions and their provenance.
+
+Route script-related work to the canonical script tool.
+
+
+This would be a focused asset-linked text workspace, not another full script editor.
+
+
+---
+
+Priority 6 — Project Readiness & Dependencies
+
+Purpose: Tell creators whether the assets needed for a project or publishing package are available and ready.
+
+This is particularly valuable because Vault assets connect to Projects, ContentBuild, the Asset Engine, and downstream publishing workflows.
+
+The module could display:
+
+Required assets.
+
+Available and missing assets.
+
+Approved versus draft assets.
+
+Missing thumbnails, scripts, captions, or other required materials.
+
+Dependencies between assets.
+
+Unresolved asset requirements.
+
+Project assignment.
+
+Actions to open the appropriate creation tool.
+
+
+For example:
+
+Requirement	State	Next action
+
+Final script	Ready	Open script
+Thumbnail	Missing	Open Thumbnail Studio
+Captions	Draft	Review captions
+Supporting image	Ready	Inspect asset
+Publishing metadata	Incomplete	Open Publisher
+
+
+This should build on the existing Vault readiness and dependency capabilities rather than invent a competing readiness system.
+
+
+---
+
+Priority 7 — Send To & Workflow Handoff
+
+Purpose: Move assets into the correct specialist tool without losing project context or asset identity.
+
+The Vault already has tool-launching and handoff-related services. This module would make those workflows easier to discover and manage.
+
+Potential destinations include:
+
+Thumbnail Studio.
+
+Video Editor.
+
+Script Architect.
+
+Video Manager.
+
+Video Publisher.
+
+Projects and ContentBuild.
+
+Other registered specialist tools that support the relevant asset type.
+
+
+A handoff should preserve the appropriate information:
+
+Canonical asset IDs.
+
+Source project and ContentBuild context.
+
+Selected versions.
+
+Relevant metadata.
+
+Provenance references.
+
+Requested operation.
+
+Return destination.
+
+
+The receiving tool should use the established handoff contract rather than receive a disconnected copy of the asset.
+
+The result should return to Vault as an updated asset, derivative, version, or other supported output.
+
+
+---
+
+3. A More Complete Vault Workbench Module Map
+
+Here is the structure I would work toward.
+
+Module	Primary responsibility	Recommendation
+
+Navigator	Navigate workspace and project context	Retain; simplify its presentation.
+Explorer	Filter and navigate asset groupings	Retain; keep it focused on discovery.
+Asset Library	Browse, preview, and select assets	Retain as the primary asset workspace.
+Inspector	Inspect and manage asset details	Refine into the full SubToolbox described above.
+Import & Tags	Ingest assets and manage tags	Retain as its existing independent SubToolbox.
+Text Editor	Edit canonical text and Markdown assets	Retain as a separate specialist module.
+Task Center	Monitor background processing and tasks	Retain; connect it to processing operations.
+Selection Actions	Perform contextual operations on selected assets	Prioritize as the next structural improvement.
+Compare & Versions	Compare candidates and understand version history	Unify existing capabilities into a consistent workflow.
+Processing & Derivatives	Configure and execute supported media operations	Add as a focused operational module.
+Collections & Relationships	Organize assets and inspect their connections	Expand existing collection functionality.
+Captions & Transcript	Inspect and edit asset-linked text	Consolidate existing functionality.
+Project Readiness	Identify missing assets and dependencies	Extend the existing readiness system.
+Send To & Handoff	Route assets and context to other tools	Expand existing handoff functionality.
+
+
+This is a target architecture, not a claim that every module is already implemented. Several capabilities already exist in some form, while others need a source audit before their implementation status can be determined.
+
+Workspace Notes and the existing workspace controls should also be preserved where they remain useful.
+
+
+---
+
+4. How the Modules Should Work Together
+
+The modules should not operate as isolated mini-applications.
+
+Consider a creator selecting a video asset.
+
+1. Asset Library displays the video and its basic information.
+
+
+2. Inspector reveals its metadata, technical details, provenance, and available versions.
+
+
+3. Compare & Versions helps the creator select the correct candidate.
+
+
+4. Processing & Derivatives offers supported transformations.
+
+
+5. Task Center tracks any asynchronous processing.
+
+
+6. Project Readiness identifies whether the resulting asset satisfies project requirements.
+
+
+7. Send To & Handoff routes the asset to the appropriate specialist tool.
+
+
+8. The result returns to the appropriate canonical asset or project workflow.
+
+
+
+Throughout this process, the asset should retain its identity and history.
+
+The creator should not have to manually recreate context every time they move between modules.
+
+Shared rules for every SubToolbox
+
+Every module should follow the same standards:
+
+One clear purpose: Its title should communicate what it does.
+
+Shared primitives: Use the canonical UI components and tokens.
+
+Consistent behavior: Module headers, controls, spacing, and expansion behavior should follow the existing system.
+
+Context awareness: Know the selected asset, selection count, project, and available operations.
+
+Appropriate actions: Do not display irrelevant operations for an asset type.
+
+Persistent state: Preserve useful selections and settings according to the workspace persistence rules.
+
+Honest status: Distinguish completed work, pending operations, unavailable functionality, and errors.
+
+Canonical data: Use the existing asset, project, ContentBuild, and handoff systems.
+
+Responsive layout: Modules must remain usable on mobile.
+
+No duplicate engines: Route work to existing specialist systems.
+
+
+
+---
+
+5. The Order I Recommend
+
+I would not implement all seven additions at once. The Vault architecture explicitly calls for consolidating its information architecture before expanding the number of visible features.
+
+My proposed sequence is:
+
+Phase 1 — Correct the existing architecture
+
+1. Make Inspector a consistently rendered SubToolbox module.
+
+
+2. Verify its module registration, default state, selection behavior, and responsive layout.
+
+
+3. Consolidate its metadata, provenance, lineage, rights, and health information.
+
+
+4. Remove any duplicate or conflicting Inspector presentation.
+
+
+5. Add regression tests for module visibility and selection behavior.
+
+
+
+Phase 2 — Improve everyday asset operations
+
+6. Improve the contextual Selection Action Bar.
+
+
+7. Unify Compare & Versions.
+
+
+8. Improve Collections & Relationships.
+
+
+
+Phase 3 — Connect asset work to production
+
+9. Expand Processing & Derivatives.
+
+
+10. Consolidate Captions & Transcript.
+
+
+11. Improve Project Readiness & Dependencies.
+
+
+12. Expand Send To & Workflow Handoff.
+
+
+
+Phase 4 — Certify the experience
+
+13. Verify that each module uses the intended canonical components.
+
+
+14. Test empty, loading, error, unsupported-type, and permission states.
+
+
+15. Test single-asset and multi-asset selection.
+
+
+16. Verify desktop and mobile layouts.
+
+
+17. Confirm that operations preserve asset identity, versions, provenance, and project context.
+
+
+
+My recommendation
+
+Start with Inspector, but treat it as an architectural correction—not another attempt to make a hidden panel visible.
+
+The current code already recognizes inspector as a workspace module. The next change should examine how that module is rendered, whether it uses the proper SubToolbox shell, how its visibility and expansion state are controlled, and how it behaves at different breakpoints.
+
+Then prioritize the Selection Action Bar, followed by Compare & Versions. Those changes will improve the usability of existing functionality before the Workbench gains more controls.
+
+All implementation work should target master/consolidated-feature-integration through a feature branch and pull request, with the existing canonical components reused rather than duplicated.Worked for 2m 23s
+
+ViewTube Vault — Continuation Plan
+
+I've created the next-stage Vault Asset Workbench plan in the GitHub repository and opened a draft pull request targeting main, your master integration branch.
+
+The plan continues the existing Vault system rather than creating another application or competing architecture.
+
+GitHub links
+
+View the draft pull request #70
+
+Read the updated Vault implementation plan
+
+Read the canonical Vault Asset Workbench master
+
+Review the existing Vault task list
+
+
+Status: The planning document is committed to a feature branch and verified on GitHub. PR #70 is open as a draft and has not been merged. No application code was changed.
+
+
+---
+
+1. The architectural direction
+
+The plan preserves the central design decision in the existing Vault master:
+
+One adaptive Vault Asset Workbench, many capabilities, a small number of reusable interfaces.
+
+Instead of turning every asset tool into a separate application, Vault should adapt to the selected asset, selection count, operation, permissions, and workflow.
+
+The Workbench will provide seven conceptual modes:
+
+Mode	Purpose
+
+Browse / View	Find, select, preview, and navigate assets.
+Inspect	Examine metadata, technical properties, rights, history, and lineage.
+Edit	Modify supported metadata and media properties.
+Compare	Compare assets, versions, and operation results.
+Process	Run supported transformations, conversions, and derivative jobs.
+Organize	Manage tags, collections, groups, and relationships.
+Workflow	Send assets to Projects, ContentBuild, and compatible ViewTube tools.
+
+
+These are modes within the existing Vault experience, not seven separate applications.
+
+Systems that must remain connected
+
+The implementation plan preserves the following ownership boundaries:
+
+Vault: Asset access, organization, inspection, metadata, and reuse.
+
+Asset Engine: Canonical asset relationships, versions, derivatives, and lineage according to its existing contracts.
+
+Projects: Project organization and creator intent.
+
+ContentBuild: Content-production identity and lifecycle.
+
+BrainRuntime: AI reasoning, research, and suggestions.
+
+ActionPacket/Handoff: Movement between compatible tools and workflows.
+
+Publisher: Downstream publishing responsibilities.
+
+
+The goal is to connect these systems without creating duplicate asset stores, project models, or operation histories.
+
+
+---
+
+2. The implementation order
+
+The plan establishes six implementation phases.
+
+Phase 0 — Audit the actual implementation
+
+Before adding more tools, establish precisely what exists on the current main branch.
+
+This includes examining:
+
+The /vault route and CreatorVaultOS.
+
+Asset adapters, services, schemas, and persistence.
+
+Search, selection, collections, and Inspector.
+
+Import and processing jobs.
+
+Asset versions, derivatives, and lineage.
+
+Projects/ContentBuild integration.
+
+Existing tests and the current build baseline.
+
+
+The source inspection confirmed that these files exist:
+
+src/views/CreatorVaultOS.tsx
+
+src/services/vaultWorkspaceState.ts
+
+
+However, the previously reported src/features/vault-workbench/* adaptive Workbench files were not found at the expected paths on main.
+
+That is an important finding: we must locate the actual implementation or build on the verified canonical source before assuming that a separate adaptive Workbench already exists.
+
+No capability will be considered implemented merely because it appears in an architecture document.
+
+Phase 1 — Finish the compact Vault interface
+
+This is the first implementation priority because it is already defined in the existing Vault task list.
+
+The work includes:
+
+1. Make the Asset Library the primary content surface.
+
+
+2. Move Workspace/Layout configuration out of the normal page flow.
+
+
+3. Consolidate search, filtering, sorting, and view controls.
+
+
+4. Remove duplicated responsibilities between Navigator, Explorer, and the Library.
+
+
+5. Replace the persistent Asset Operations module with contextual selection actions.
+
+
+6. Keep Import & Tags together in one SubToolbox.
+
+
+7. Keep Text Editor separate.
+
+
+8. Make Inspector contextual on mobile and a right-side panel on suitable desktop layouts.
+
+
+9. Reduce unnecessary card chrome and prioritize media previews.
+
+
+10. Keep Task Center compact when no jobs require attention.
+
+
+
+Acceptance criteria: The Library should be immediately accessible, controls must not be clipped on mobile, and selection, filters, and workspace preferences must behave consistently.
+
+Desktop, mobile portrait, and mobile landscape must be visually reviewed after the changes.
+
+Phase 2 — Complete intake and processing
+
+The next phase finishes existing gaps in the intake pipeline.
+
+This includes:
+
+Vision and suggested-tag processing when backed by a real service.
+
+Local-file transcription when a supported speech-to-text backend is available.
+
+Proxy derivative generation.
+
+Reliable job status, retry, cancellation, and error handling.
+
+Duplicate prevention.
+
+Direct import and staged import behavior.
+
+Per-item acceptance and rejection.
+
+
+Processing must not be simulated and presented as real.
+
+Successful derivatives must retain their source relationships, and retries must not create duplicate outputs.
+
+Phase 3 — Build the shared operation and capability system
+
+Once the existing implementation has been mapped, the plan consolidates how Vault tools work.
+
+Each capability will have a defined purpose, inputs, prerequisites, permissions, parameters, outputs, dependencies, and verification requirements.
+
+Operations should follow a common lifecycle:
+
+Select → Validate → Preview/Confirm → Execute → Results → Lineage/History → Optional Handoff
+
+The system should also support:
+
+Contextual tool availability.
+
+Clear disabled-action explanations.
+
+Non-destructive operations by default.
+
+Protected/GOLDEN asset safeguards.
+
+Operation history and provenance.
+
+Appropriate retry, cancellation, and error handling.
+
+
+The important constraint is to extend existing services and action contracts rather than create another Workbench subsystem.
+
+Phase 4 — Complete Projects and ContentBuild integration
+
+This phase continues the existing Projects-related work.
+
+Planned areas include:
+
+Creating or attaching Projects/ContentBuilds from selected assets.
+
+A linked Vault asset picker.
+
+Mapping existing creator workflow stages to the canonical ContentBuild lifecycle.
+
+Project priority and due dates where supported.
+
+Storyboard shot records and title drafts.
+
+Checklists and derived progress.
+
+BrainRuntime project-research handoffs.
+
+Published-performance information where reliable attribution exists.
+
+
+The plan explicitly avoids creating a second project board, duplicate lifecycle, or competing project data store.
+
+Phase 5 — Add safe media operations and tool integrations
+
+After auditing the current editor/media implementation, the plan addresses missing transformation capabilities.
+
+Potential work includes:
+
+Creating derivatives.
+
+Safe overwrite protection.
+
+Batch transformations.
+
+Verified crop, trim, color, and LUT functionality.
+
+Packaging and End Screen integration.
+
+Hook-related tools.
+
+Video Manager and Analytics integrations where appropriate.
+
+
+Each integration must be audited first to determine whether the functionality already exists and which subsystem should own it.
+
+Phase 6 — Certify the complete system
+
+The final phase verifies that the Workbench operates as an integrated system rather than a collection of disconnected controls.
+
+Verification covers:
+
+Focused tests and integration tests.
+
+Typechecking, linting, and production builds.
+
+Browser and responsive UI checks.
+
+Permissions and data integrity.
+
+Asset identity and lineage.
+
+Projects/ContentBuild handoffs.
+
+Accessibility and error states.
+
+Exact-commit deployment verification when available.
+
+
+A successful build alone will not count as proof that a user-facing capability works.
+
+
+---
+
+3. An important UI architecture requirement
+
+The continuation plan incorporates your canonical Studio Controls requirement.
+
+The production control system must use:
+
+TSX: src/studio-ui/primitives/StudioControls.tsx
+CSS: src/styles/studio-control-system.css
+
+New production primitives and their styles must not be added to the legacy locations:
+
+src/components/subtoolbox/SubToolboxPrimitives.tsx
+
+src/styles/subtoolbox-system.css
+
+
+The existing Toolbox/SubToolbox shells remain part of the architecture, but control primitives must follow the canonical Studio Controls system.
+
+Before implementing the Vault UI changes, the team must audit existing primitive usage and migrate confirmed missing primitives or variants through their canonical owners.
+
+This prevents the Vault from developing another independent collection of buttons, inputs, controls, and styles.
+
+
+---
+
+4. How the work will be managed
+
+The continuation plan extends the existing files and architecture rather than creating another master document.
+
+It is associated with:
+
+Capability: CAP-ASSET-LINEAGE
+
+Plan family: PLAN-FAMILY-ASSET-VAULT
+
+Canonical Asset Engine authority: docs/architecture/VIEWTUBE_ASSET_ENGINE_MASTER_RESOURCE.md
+
+Vault Workbench authority: docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md
+
+
+Proposed implementation work must still be reconciled with Task Authority before permanent task IDs or canonical task-state changes are made.
+
+The intended development sequence is:
+
+Audit → Plan → Implement → Test → Verify → Document → Review → Merge → Verify again.
+
+The feature branch and pull request preserve that workflow without modifying main directly.
+
+
+---
+
+5. What happens next?
+
+The immediate next step is Phase 0: audit the current Vault implementation, followed by the existing compact-UX work in Phase 1.
+
+That order matters. The repository already has a substantial Vault task list, so the next development effort should establish what remains incomplete and then finish the highest-priority existing work—not introduce another broad collection of tools before the current interface is consolidated.
+
+Current handoff status
+
+Item	Status
+
+Review canonical Vault master	Complete
+Inspect existing Vault plan and task list	Complete
+Inspect key current-main source files	Initial inspection complete
+Write continuation plan	Complete
+Commit plan to feature branch	Complete
+Verify updated plan on GitHub	Complete
+Open PR targeting main	Complete — draft PR #70
+Merge PR into main	Not yet done
+Implement runtime changes	Not started
+Run application tests/build for this plan	Not applicable; no runtime code changed
+
+
+The plan is ready for review. Once the documentation PR is accepted, the next coding effort should start with the current-main audit and then proceed directly to the compact, Library-first Vault UX.
+
+The goal is to make the existing Vault a reliable, unified asset workbench—not to build a second one alongside it.

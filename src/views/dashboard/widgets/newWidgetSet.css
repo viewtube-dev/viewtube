@@ -1,0 +1,93 @@
+.vt-new-widget{
+  height:100%;
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-weight:800;
+  color:var(--widget-border,var(--vt-ink,#24343a));
+}
+.vt-new-widget__eyebrow{
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.08em;
+  opacity:.58;
+}
+.vt-new-widget__action{
+  min-height:32px;
+  border:2px solid var(--widget-border,var(--vt-ink,#24343a));
+  border-radius:8px;
+  background:var(--widget-color,var(--vt-widget-header-color,#fff));
+  color:var(--widget-border,var(--vt-ink,#24343a));
+  font:950 10px/1 inherit;
+  letter-spacing:.04em;
+  box-shadow:3px 3px 0 color-mix(in srgb,var(--widget-color,var(--vt-widget-header-color,#fff)) 50%,transparent);
+  cursor:pointer;
+}
+.vt-new-widget__action:hover{transform:translate(1.5px,1.5px)}
+.vt-new-widget__action:active{transform:translate(3px,3px);box-shadow:none}
+
+.vt-progress-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  flex:1;
+}
+.vt-progress-card{
+  min-width:0;
+  border:2px solid var(--widget-border,var(--vt-ink,#24343a));
+  border-radius:8px;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:7px;
+  background:white;
+}
+.vt-progress-card__top,
+.vt-progress-card__foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  font-size:8px;
+}
+.vt-progress-card__top strong{
+  font-size:16px;
+  font-weight:1000;
+}
+.vt-progress-card__foot{
+  opacity:.62;
+  font-weight:900;
+}
+.vt-progress-track{
+  height:14px;
+  border:2px solid var(--widget-border,var(--vt-ink,#24343a));
+  border-radius:6px;
+  overflow:hidden;
+}
+.vt-progress-track span{
+  display:block;
+  height:100%;
+  background:var(--widget-color,var(--vt-widget-header-color,#fff));
+  border-right:2px solid var(--widget-border,var(--vt-ink,#24343a));
+}
+
+@container (max-width:520px){
+  .vt-progress-grid{grid-template-columns:1fr}
+  .vt-progress-card{padding:6px}
+  .vt-progress-card__top strong{font-size:13px}
+}
+@container (max-width:380px){
+  .vt-progress-card__foot{font-size:7px}
+}
+@media (pointer:coarse){
+  .vt-new-widget__action{min-height:44px}
+  .vt-new-widget__action:hover{transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .vt-new-widget__action{transition:none}
+  .vt-new-widget__action:hover,
+  .vt-new-widget__action:active{transform:none}
+}

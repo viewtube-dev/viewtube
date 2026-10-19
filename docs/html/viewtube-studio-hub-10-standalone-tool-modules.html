@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIEWTUBE — Studio Hub / 10 Standalone Tool Modules</title>
+<style>
+:root{--pink:#fa61ba;--coral:#ff7f6b;--orange:#ffa85c;--yellow:#ffda47;--lime:#c0f240;--green:#3fee56;--teal:#4ee4be;--cyan:#36e0f6;--blue:#528ffa;--purple:#a467f4;--paper:#efefec;--ink:#000;--white:#fff}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;padding:86px 22px 60px;background:var(--paper);color:#000;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.topbar{position:fixed;inset:0 0 auto 0;z-index:1000;min-height:68px;display:grid;grid-template-columns:auto minmax(160px,1fr) auto;gap:12px;align-items:center;padding:10px 18px;background:#fff;border-bottom:3px solid #000;box-shadow:0 8px 0 rgba(54,224,246,.5)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:1000;text-transform:uppercase}.brand-mark{width:42px;height:42px;display:grid;place-items:center;border:3px solid #000;border-radius:8px;background:var(--pink);box-shadow:4px 4px 0 rgba(250,97,186,.45)}
+.search{height:42px;width:100%;border:3px solid #000;border-radius:8px;padding:0 12px;background:#fff;font-size:11px;font-weight:900;text-transform:uppercase;outline:0}.search:focus{box-shadow:inset 0 0 0 3px var(--cyan)}
+.top-actions{display:flex;gap:8px}.btn-top{height:42px;padding:0 12px;border:3px solid #000;border-radius:8px;background:var(--cyan);font-size:9px;font-weight:1000;text-transform:uppercase;box-shadow:3px 3px 0 rgba(54,224,246,.45)}
+.hero{max-width:1500px;margin:0 auto 20px;padding:20px;border:3px solid #000;border-radius:14px;background:#fff;box-shadow:8px 8px 0 rgba(250,97,186,.4)}
+.hero-kicker{display:inline-block;padding:5px 8px;border:2px solid #000;border-radius:6px;background:var(--yellow);font-size:9px;font-weight:1000;text-transform:uppercase}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr);gap:18px;align-items:end}
+h1{margin:12px 0 7px;font-size:clamp(34px,6vw,68px);line-height:.86;letter-spacing:-.055em;text-transform:uppercase}.hero p{max-width:850px;margin:0;font-size:13px;line-height:1.45;font-weight:750}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{padding:12px;border:2px solid #000;border-radius:8px;background:var(--cyan);box-shadow:4px 4px 0 rgba(54,224,246,.45)}.stat strong{display:block;font-size:22px;line-height:1;font-weight:1000}.stat span{font-size:8px;font-weight:1000;text-transform:uppercase}
+.toolbar{max-width:1500px;margin:0 auto 24px;padding:8px;display:flex;gap:7px;overflow:auto;position:sticky;top:78px;z-index:900;border:3px solid #000;border-radius:10px;background:#fff;box-shadow:5px 5px 0 rgba(63,238,86,.4)}
+.toolbar a{flex:0 0 auto;padding:7px 10px;border:2px solid #000;border-radius:6px;background:#fff;color:#000;text-decoration:none;font-size:8px;font-weight:1000;text-transform:uppercase}.toolbar a:hover,.toolbar a:focus{background:var(--green)}
+.tool-grid{max-width:1500px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px;align-items:start}
+.tool-module{min-width:0;border:3px solid #000;border-radius:12px;background:#fff;overflow:hidden;box-shadow:7px 7px 0 color-mix(in srgb,var(--accent) 48%,transparent);scroll-margin-top:150px}
+.module-header{display:grid;grid-template-columns:52px minmax(0,1fr) 34px;min-height:82px;background:var(--accent);border-bottom:3px solid #000}.module-icon{display:grid;place-items:center;border-right:3px solid #000;background:color-mix(in srgb,var(--accent) 52%,white);font-size:12px;font-weight:1000}
+.module-heading{padding:10px 11px 9px;min-width:0}.eyebrow{font-size:7px;font-weight:1000;letter-spacing:.08em}.module-heading h2{margin:4px 0;font-size:13px;line-height:1;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.module-heading p{margin:0;font-size:8px;line-height:1.25;font-weight:850;text-transform:uppercase}
+.check{align-self:start;justify-self:end;margin:10px 8px 0 0;width:24px;height:24px;border:2px solid #000;border-radius:5px;background:#fff;font-weight:1000}.check.on{background:var(--green)}
+.module-meta{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-bottom:2px solid #000;background:#fff}.module-id,.status{padding:3px 5px;border:1.5px solid #000;border-radius:4px;font-size:7px;font-weight:1000}.status{background:var(--green)}
+.subtool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:8px;background:#c7c7c2}.subtool{min-width:0;border:2px solid #000;border-radius:7px;background:#fff;overflow:hidden}
+.subtool-head{height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 7px;background:var(--accent);border-bottom:2px solid #000;font-size:8px;font-weight:1000;text-transform:uppercase}.subtool-head i{width:7px;height:7px;border:1.5px solid #000;border-radius:2px;background:#fff}
+.control{padding:7px;display:grid;gap:4px}.control label,.control-top span{font-size:7px;font-weight:1000;text-transform:uppercase}.control-caption{font-size:7px;font-weight:700;opacity:.65;text-transform:uppercase}.select,.range{width:100%}.select{height:25px;padding:0 5px;border:2px solid #000;border-radius:5px;background:#fff;font-size:7px;font-weight:900;text-transform:uppercase}.range{accent-color:#000;height:18px}.control-top{display:flex;justify-content:space-between;align-items:center}.control-top b{font-size:8px}
+.module-tags{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:7px 8px;border-top:2px solid #000;background:#fff}.tags-label{font-size:7px;font-weight:1000;margin-right:2px}.tag{height:17px;padding:0 5px;border:1.5px solid #000;border-radius:4px;background:color-mix(in srgb,var(--tag) 30%,white);font-size:7px;font-weight:1000}.tag.active{background:var(--tag)}
+.module-note{position:relative;border-top:2px solid #000;background:#fff}.module-note textarea{display:block;width:100%;height:58px;padding:7px 7px 24px;border:0;outline:0;resize:none;background:#fff;font-size:8px;line-height:1.2;font-weight:800;text-transform:uppercase}.module-note textarea:focus{box-shadow:inset 0 0 0 2px var(--accent)}.save{position:absolute;right:5px;bottom:5px;height:18px;padding:0 7px;border:2px solid #000;border-radius:4px;background:var(--accent);font-size:7px;font-weight:1000;text-transform:uppercase;display:none}.module-note.dirty .save{display:block}
+.module-footer{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:5px;padding:7px;border-top:2px solid #000;background:#fff}.btn{height:28px;padding:0 6px;border:2px solid #000;border-radius:5px;background:#fff;font-size:7px;font-weight:1000;text-transform:uppercase}.btn:hover{transform:translate(-1px,-1px)}.btn.accent{background:var(--accent);box-shadow:3px 3px 0 color-mix(in srgb,var(--accent) 45%,transparent)}
+.toast{position:fixed;right:18px;bottom:18px;z-index:2000;max-width:330px;padding:10px 12px;border:3px solid #000;border-radius:8px;background:var(--green);box-shadow:5px 5px 0 rgba(63,238,86,.45);font-size:9px;font-weight:1000;text-transform:uppercase;display:none}.toast.show{display:block}
+.detail{position:fixed;inset:0;z-index:1800;display:none;background:rgba(0,0,0,.6);padding:22px}.detail.show{display:grid;place-items:center}.detail-panel{width:min(980px,100%);max-height:90vh;overflow:auto;border:3px solid #000;border-radius:12px;background:#fff;box-shadow:10px 10px 0 var(--accent)}.detail-head{display:grid;grid-template-columns:52px 1fr auto;background:var(--accent);border-bottom:3px solid #000}.detail-head .module-icon{min-height:70px}.detail-title{padding:12px}.detail-title h2{margin:0 0 5px;font-size:20px;text-transform:uppercase}.detail-title p{margin:0;font-size:9px;font-weight:800;text-transform:uppercase}.close{margin:10px;width:34px;height:34px;border:3px solid #000;border-radius:7px;background:#fff;font-weight:1000}.detail-body{padding:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.detail-card{border:3px solid #000;border-radius:8px;overflow:hidden}.detail-card h3{margin:0;padding:8px;background:#c7c7c2;border-bottom:2px solid #000;font-size:9px;text-transform:uppercase}.detail-card .body{padding:10px}
+@media(max-width:720px){body{padding:82px 12px 40px}.topbar{grid-template-columns:auto 1fr}.top-actions{display:none}.hero-grid{grid-template-columns:1fr}.tool-grid{grid-template-columns:1fr}.detail-body{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">VT</div><div>VIEWTUBE<br>STUDIO HUB</div></div>
+  <input id="search" class="search" placeholder="SEARCH 10 STUDIO TOOLS...">
+  <div class="top-actions"><button class="btn-top" id="sync">SYNC</button><button class="btn-top" id="new">NEW PROJECT</button></div>
+</header>
+<section class="hero">
+  <span class="hero-kicker">STUDIO HUB / TOOLBOX SYSTEM</span>
+  <div class="hero-grid"><div><h1>10 Standalone<br>Tool Modules</h1><p>Each Studio Hub tool is its own toolbox module with a dedicated setup, controls, subtoolboxes, handoffs, notes, and a path into Projects, Asset Engine, Analytics, and the AI Brain.</p></div>
+  <div class="stats"><div class="stat"><strong>10</strong><span>Independent tools</span></div><div class="stat" style="background:var(--green)"><strong>4×</strong><span>Subtoolboxes / tool</span></div></div></div>
+</section>
+<nav class="toolbar">
+  <a href="#tool-01">01 Opportunity</a><a href="#tool-02">02 Genome</a><a href="#tool-03">03 Signals</a><a href="#tool-04">04 Story</a><a href="#tool-05">05 Autopilot</a><a href="#tool-06">06 Relationships</a><a href="#tool-07">07 Revenue</a><a href="#tool-08">08 Experiments</a><a href="#tool-09">09 Command</a><a href="#tool-10">10 Flywheel</a>
+</nav>
+<main class="tool-grid">
+<article class="tool-module" id="tool-01" style="--accent:#36E0F6">
+  <header class="module-header">
+    <div class="module-icon">01</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Content Opportunity Engine</h2><p>FIND THE HIGHEST-VALUE THING TO MAKE NEXT</p></div>
+    <button class="check" aria-label="Enable Content Opportunity Engine">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-01</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>SCAN</span><i></i></div><div class="control"><label>SCAN</label><span class="control-caption">Source signals</span><select class="select"><option>ALL SIGNALS</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>SCORE</span><i></i></div><div class="control"><div class="control-top"><span>SCORE</span><b data-range-value>78</b></div><input class="range" type="range" min="0" max="100" value="78" data-range></div></section><section class="subtool"><div class="subtool-head"><span>EVIDENCE</span><i></i></div><div class="control"><label>EVIDENCE</label><span class="control-caption">Evidence strength</span><select class="select"><option>HIGH</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>HANDOFF</span><i></i></div><div class="control"><label>HANDOFF</label><span class="control-caption">Destination</span><select class="select"><option>PROJECT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#36E0F6">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-02" style="--accent:#A467F4">
+  <header class="module-header">
+    <div class="module-icon">02</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Video Genome</h2><p>DISCOVER THE CREATOR'S REPEATABLE SUCCESS PATTERNS</p></div>
+    <button class="check" aria-label="Enable Video Genome">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-02</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>GENOME MAP</span><i></i></div><div class="control"><label>GENOME MAP</label><span class="control-caption">Pattern family</span><select class="select"><option>HOOK + PAYOFF</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>PATTERNS</span><i></i></div><div class="control"><label>PATTERNS</label><span class="control-caption">Retention pattern</span><select class="select"><option>FAST OPEN</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>COMPARE</span><i></i></div><div class="control"><label>COMPARE</label><span class="control-caption">Compare videos</span><select class="select"><option>TOP 10</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>KNOWLEDGE</span><i></i></div><div class="control"><label>KNOWLEDGE</label><span class="control-caption">Knowledge status</span><select class="select"><option>CANDIDATE</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#A467F4">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-03" style="--accent:#4EE4BE">
+  <header class="module-header">
+    <div class="module-icon">03</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Audience Signal Miner</h2><p>TURN AUDIENCE BEHAVIOR INTO STRUCTURED OPPORTUNITIES</p></div>
+    <button class="check" aria-label="Enable Audience Signal Miner">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-03</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>SIGNALS</span><i></i></div><div class="control"><label>SIGNALS</label><span class="control-caption">Signal source</span><select class="select"><option>COMMENTS</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>CLUSTERS</span><i></i></div><div class="control"><div class="control-top"><span>CLUSTERS</span><b data-range-value>84</b></div><input class="range" type="range" min="0" max="100" value="84" data-range></div></section><section class="subtool"><div class="subtool-head"><span>ACTIONS</span><i></i></div><div class="control"><label>ACTIONS</label><span class="control-caption">Action type</span><select class="select"><option>OPPORTUNITY</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>HANDOFF</span><i></i></div><div class="control"><label>HANDOFF</label><span class="control-caption">Route to</span><select class="select"><option>AI BRAIN</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#4EE4BE">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-04" style="--accent:#FFDA47">
+  <header class="module-header">
+    <div class="module-icon">04</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Story & Retention Architect</h2><p>BUILD THE STRONGEST VIEWER JOURNEY BEFORE PRODUCTION</p></div>
+    <button class="check" aria-label="Enable Story & Retention Architect">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-04</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>BLUEPRINT</span><i></i></div><div class="control"><label>BLUEPRINT</label><span class="control-caption">Blueprint stage</span><select class="select"><option>OPENING</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>RETENTION</span><i></i></div><div class="control"><div class="control-top"><span>RETENTION</span><b data-range-value>62</b></div><input class="range" type="range" min="0" max="100" value="62" data-range></div></section><section class="subtool"><div class="subtool-head"><span>ASSETS</span><i></i></div><div class="control"><label>ASSETS</label><span class="control-caption">Asset requirement</span><select class="select"><option>A-ROLL + B-ROLL</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>PROJECT</span><i></i></div><div class="control"><label>PROJECT</label><span class="control-caption">Project handoff</span><select class="select"><option>ACTIVE PROJECT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#FFDA47">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-05" style="--accent:#FA61BA">
+  <header class="module-header">
+    <div class="module-icon">05</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Content Autopilot</h2><p>EXTRACT MAXIMUM STRATEGIC VALUE FROM EVERY FINISHED PIECE</p></div>
+    <button class="check" aria-label="Enable Content Autopilot">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-05</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>SOURCE</span><i></i></div><div class="control"><label>SOURCE</label><span class="control-caption">Source content</span><select class="select"><option>LATEST VIDEO</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>DERIVATIVES</span><i></i></div><div class="control"><label>DERIVATIVES</label><span class="control-caption">Derivative type</span><select class="select"><option>SHORT + POST</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>ASSETS</span><i></i></div><div class="control"><label>ASSETS</label><span class="control-caption">Asset queue</span><select class="select"><option>READY</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>LEARN</span><i></i></div><div class="control"><label>LEARN</label><span class="control-caption">Learning capture</span><select class="select"><option>AUTO</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#FA61BA">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-06" style="--accent:#FF7F6B">
+  <header class="module-header">
+    <div class="module-icon">06</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Creator Relationship Engine</h2><p>IDENTIFY RELATIONSHIPS THAT DESERVE HUMAN ATTENTION</p></div>
+    <button class="check" aria-label="Enable Creator Relationship Engine">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-06</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>PRIORITY</span><i></i></div><div class="control"><label>PRIORITY</label><span class="control-caption">Relationship priority</span><select class="select"><option>SUPERFAN</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>HISTORY</span><i></i></div><div class="control"><label>HISTORY</label><span class="control-caption">History window</span><select class="select"><option>90 DAYS</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>ACTIONS</span><i></i></div><div class="control"><label>ACTIONS</label><span class="control-caption">Next action</span><select class="select"><option>REPLY</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>PROJECTS</span><i></i></div><div class="control"><label>PROJECTS</label><span class="control-caption">Project route</span><select class="select"><option>COLLABORATION</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#FF7F6B">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-07" style="--accent:#FFA85C">
+  <header class="module-header">
+    <div class="module-icon">07</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Revenue Opportunity Map</h2><p>FIND THE MOST DEFENSIBLE WAY TO INCREASE REVENUE</p></div>
+    <button class="check" aria-label="Enable Revenue Opportunity Map">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-07</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>MAP</span><i></i></div><div class="control"><label>MAP</label><span class="control-caption">Revenue lane</span><select class="select"><option>PRODUCT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>EVIDENCE</span><i></i></div><div class="control"><div class="control-top"><span>EVIDENCE</span><b data-range-value>71</b></div><input class="range" type="range" min="0" max="100" value="71" data-range></div></section><section class="subtool"><div class="subtool-head"><span>MODEL</span><i></i></div><div class="control"><label>MODEL</label><span class="control-caption">Value model</span><select class="select"><option>AUDIENCE FIT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>PROJECT</span><i></i></div><div class="control"><label>PROJECT</label><span class="control-caption">Launch route</span><select class="select"><option>REVENUE PROJECT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#FFA85C">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-08" style="--accent:#3FEE56">
+  <header class="module-header">
+    <div class="module-icon">08</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Experiment Lab</h2><p>TURN CREATOR DECISIONS INTO MEASURABLE LEARNING</p></div>
+    <button class="check" aria-label="Enable Experiment Lab">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-08</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>NEW TEST</span><i></i></div><div class="control"><label>NEW TEST</label><span class="control-caption">Variable</span><select class="select"><option>THUMBNAIL</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>ACTIVE</span><i></i></div><div class="control"><label>ACTIVE</label><span class="control-caption">Test window</span><select class="select"><option>14 DAYS</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>RESULTS</span><i></i></div><div class="control"><label>RESULTS</label><span class="control-caption">Target metric</span><select class="select"><option>CTR</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>KNOWLEDGE</span><i></i></div><div class="control"><label>KNOWLEDGE</label><span class="control-caption">Knowledge state</span><select class="select"><option>UNVALIDATED</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#3FEE56">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-09" style="--accent:#528FFA">
+  <header class="module-header">
+    <div class="module-icon">09</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Creator Command Brain</h2><p>DECIDE WHAT THE CREATOR SHOULD DO NEXT</p></div>
+    <button class="check" aria-label="Enable Creator Command Brain">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-09</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>NOW</span><i></i></div><div class="control"><label>NOW</label><span class="control-caption">Primary action</span><select class="select"><option>FIX RETENTION</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>QUEUE</span><i></i></div><div class="control"><div class="control-top"><span>QUEUE</span><b data-range-value>91</b></div><input class="range" type="range" min="0" max="100" value="91" data-range></div></section><section class="subtool"><div class="subtool-head"><span>EVIDENCE</span><i></i></div><div class="control"><label>EVIDENCE</label><span class="control-caption">Evidence count</span><select class="select"><option>12 SOURCES</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>ROUTING</span><i></i></div><div class="control"><label>ROUTING</label><span class="control-caption">Destination</span><select class="select"><option>STORY ARCHITECT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#528FFA">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article>
+
+<article class="tool-module" id="tool-10" style="--accent:#C0F240">
+  <header class="module-header">
+    <div class="module-icon">10</div>
+    <div class="module-heading"><div class="eyebrow">STUDIO HUB TOOLBOX</div><h2>Channel Flywheel</h2><p>FIND THE WEAKEST LINK IN THE COMPLETE GROWTH SYSTEM</p></div>
+    <button class="check" aria-label="Enable Channel Flywheel">✓</button>
+  </header>
+  <div class="module-meta"><span class="module-id">VT-STUDIO-10</span><span class="status">READY</span></div>
+  <div class="subtool-grid"><section class="subtool"><div class="subtool-head"><span>HEALTH</span><i></i></div><div class="control"><div class="control-top"><span>HEALTH</span><b data-range-value>76</b></div><input class="range" type="range" min="0" max="100" value="76" data-range></div></section><section class="subtool"><div class="subtool-head"><span>BOTTLENECK</span><i></i></div><div class="control"><label>BOTTLENECK</label><span class="control-caption">Weakest link</span><select class="select"><option>RETURN</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>SYSTEM</span><i></i></div><div class="control"><label>SYSTEM</label><span class="control-caption">System layer</span><select class="select"><option>AUDIENCE</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section><section class="subtool"><div class="subtool-head"><span>ACTION</span><i></i></div><div class="control"><label>ACTION</label><span class="control-caption">Intervention</span><select class="select"><option>CREATE PROJECT</option><option>REVIEW</option><option>PAUSED</option><option>READY</option></select></div></section></div>
+  <div class="module-tags"><span class="tags-label">HANDOFFS</span><button class="tag" style="--tag:#C0F240">BRAIN</button> <button class="tag" style="--tag:#36E0F6">PROJECT</button> <button class="tag" style="--tag:#3FEE56">ASSET</button> <button class="tag" style="--tag:#FFA85C">ANALYTICS</button></div>
+  <div class="module-note"><textarea placeholder="ADD TOOL-SPECIFIC NOTES, CONSTRAINTS OR BRAIN CONTEXT..."></textarea><button class="save">SAVE</button></div>
+  <footer class="module-footer"><button class="btn accent">OPEN TOOL</button><button class="btn">SETUP</button><button class="btn">HANDOFF →</button></footer>
+</article></main>
+<div id="toast" class="toast"></div>
+<div id="detail" class="detail" aria-hidden="true"><div class="detail-panel" id="detailPanel" style="--accent:#36E0F6"><div class="detail-head"><div class="module-icon" id="detailNum">01</div><div class="detail-title"><h2 id="detailName">Tool</h2><p id="detailPurpose">Purpose</p></div><button class="close" id="closeDetail">×</button></div>
+<div class="detail-body">
+<section class="detail-card"><h3>TOOL SETUP</h3><div class="body"><div class="control"><label>Operating mode</label><select class="select"><option>ACTIVE</option><option>PAUSED</option><option>CALIBRATE</option></select></div><div class="control"><label>Brain intake</label><select class="select"><option>OBSERVATIONS + EVIDENCE</option><option>OBSERVATIONS ONLY</option></select></div></div></section>
+<section class="detail-card"><h3>WORKFLOW HANDOFF</h3><div class="body"><div class="control"><label>Primary destination</label><select class="select"><option>AI BRAIN</option><option>PROJECTS</option><option>ASSET ENGINE</option><option>ANALYTICS</option></select></div><div class="control"><label>Require confirmation</label><button class="btn accent">REQUIRED</button></div></div></section>
+<section class="detail-card" style="grid-column:1/-1"><h3>MODULE CONTRACT</h3><div class="body"><p style="font-size:9px;font-weight:800;line-height:1.45;margin:0">INPUT → TOOL-SPECIFIC PROCESSING → OUTPUT → TYPED HANDOFF → BRAIN PROVENANCE. This standalone workspace is where the tool owns its primary function; shared systems receive structured outputs rather than duplicating the tool's logic.</p></div></section>
+</div></div></div>
+<script>
+const toast=document.getElementById('toast');
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>toast.classList.remove('show'),1800)}
+document.querySelectorAll('[data-range]').forEach(r=>r.addEventListener('input',e=>e.target.closest('.control').querySelector('[data-range-value]').textContent=e.target.value));
+document.querySelectorAll('.check').forEach(b=>b.addEventListener('click',()=>{b.classList.toggle('on');showToast(b.classList.contains('on')?'TOOL ENABLED':'TOOL DISABLED')}));
+document.querySelectorAll('.tag').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('active')));
+document.querySelectorAll('.module-note textarea').forEach(t=>t.addEventListener('input',()=>t.closest('.module-note').classList.add('dirty')));
+document.querySelectorAll('.save').forEach(b=>b.addEventListener('click',()=>{b.closest('.module-note').classList.remove('dirty');showToast('TOOL NOTES SAVED')}));
+document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click',()=>{if(b.textContent.includes('OPEN TOOL')) openDetail(b.closest('.tool-module')); else if(b.textContent.includes('HANDOFF')) showToast('HANDOFF PACKAGE QUEUED'); else if(b.textContent.includes('SETUP')) openDetail(b.closest('.tool-module'));}));
+function openDetail(card){const style=getComputedStyle(card);document.getElementById('detailPanel').style.setProperty('--accent',style.getPropertyValue('--accent'));document.getElementById('detailNum').textContent=card.querySelector('.module-icon').textContent.trim();document.getElementById('detailName').textContent=card.querySelector('h2').textContent.trim();document.getElementById('detailPurpose').textContent=card.querySelector('.module-heading p').textContent.trim();document.getElementById('detail').classList.add('show');document.getElementById('detail').setAttribute('aria-hidden','false')}
+document.getElementById('closeDetail').onclick=()=>{document.getElementById('detail').classList.remove('show');document.getElementById('detail').setAttribute('aria-hidden','true')};
+document.getElementById('detail').addEventListener('click',e=>{if(e.target.id==='detail')document.getElementById('closeDetail').click()});
+document.getElementById('sync').onclick=()=>showToast('STUDIO HUB SYNC COMPLETE');
+document.getElementById('new').onclick=()=>showToast('NEW PROJECT INTAKE READY');
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();document.querySelectorAll('.tool-module').forEach(card=>card.style.display=(!q||card.textContent.toLowerCase().includes(q))?'':'none')});
+</script>
+</body>
+</html>
