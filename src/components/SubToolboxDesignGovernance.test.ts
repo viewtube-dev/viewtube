@@ -827,14 +827,21 @@ describe("canonical split badge geometry and color ownership", () => {
 })
 
 
-describe("Toolbox header word-toggle density and track color", () => {
-  it("keeps the header toggle white and switches to compact Studio size on portrait mobile", () => {
+describe("Toolbox header word-toggle density, white track, and color fade", () => {
+  it("pins only header toggles to white and fades header colors without changing in-content skins", () => {
     const primitives = source("src/components/subtoolbox/SubToolboxPrimitives.tsx")
-    const studioCss = source("src/styles/studio-control-system.css")
+    const toolboxCss = source("src/styles/toolbox-system.css")
 
     expect(primitives).toContain('(orientation: portrait) and (max-width: 768px)')
-    expect(primitives).toContain('setSize(portraitMobile.matches ? "28" : "44")')
+    expect(primitives).toContain('setSize(portraitMobile.matches || cramped ? "28" : "44")')
     expect(primitives).toContain('size={size}')
-    expect(studioCss).toMatch(/\.vt-studio-44-word-toggle\.vt-toolbox-header-toggle-replacement\s*\{[^}]*background:\s*#fff\s*!important/s)
+    expect(primitives).toContain('skin="solid"')
+    expect(primitives).toContain('style={{ ...style, background: "#ffffff" }}')
+    expect(toolboxCss).toMatch(/\[data-vt-toolbox\] header \.vt-studio-44-word-toggle[^]*?background: #ffffff !important/s)
+    expect(toolboxCss).toContain('transition: background-color 180ms ease-out;')
+    expect(toolboxCss).toContain('color 180ms ease-out')
+    expect(toolboxCss).toContain('-webkit-text-stroke-color 180ms ease-out')
+    expect(toolboxCss).toContain('transition: background-color 180ms ease-out;')
+    expect(toolboxCss).toContain('@media (prefers-reduced-motion: reduce)')
   })
 })
