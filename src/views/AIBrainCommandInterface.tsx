@@ -192,8 +192,9 @@ export type BrainCreatorContextSnapshot = {
 
 const BrainContextUsedDrawer: React.FC<{
  contextUsed?: BrainCreatorContextSnapshot
+ turnId?: string
  onCorrectItem?: (id: string, statement: string) => void
-}> = ({ contextUsed, onCorrectItem }) => {
+}> = ({ contextUsed, turnId, onCorrectItem }) => {
  if (!contextUsed) return null
  const selection = contextUsed.selection
  const project = contextUsed.project
@@ -204,7 +205,7 @@ const BrainContextUsedDrawer: React.FC<{
   { id: "selection", label: "Selected video / asset", value: selection ? `${selection.label} · ${selection.sourceId}` : "No selected video or asset was supplied", status: selection ? "temporary" : "inferred" },
  ]
  return (
-  <details className="w-full rounded-[7px] border-[2px] border-black bg-white">
+  <details data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
    <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
     <PanelRight size={12} aria-hidden="true" /> Context used
     <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
@@ -751,7 +752,7 @@ const CreatorResponseCard: React.FC<{
        {option.label}
       </button>
      ))}
-     <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
+     <BrainContextUsedDrawer contextUsed={message.contextUsed} turnId={message.id} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
        to={message.handoff.route}
