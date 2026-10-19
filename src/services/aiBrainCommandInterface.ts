@@ -216,6 +216,7 @@ export type AIBrainContextInput = {
  recentConversationTurns?: AIBrainConversationTurn[]
  creatorGrowthContext?: CreatorGrowthContext | null
  requestText?: string
+ evidencePackOverride?: AIBrainEvidencePack
  now?: Date
 }
 
@@ -1920,7 +1921,10 @@ export const buildCreatorBrainLocalFallback = (
 }
 
 export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => {
- const snapshot = buildAIBrainContextSnapshot(input)
+ const baseSnapshot = buildAIBrainContextSnapshot(input)
+ const snapshot = input.evidencePackOverride
+  ? { ...baseSnapshot, evidencePack: input.evidencePackOverride }
+  : baseSnapshot
  const assistantSnapshot = buildAssistantIntelligenceSnapshot(input)
  const creatorPromptContext = {
   channel: snapshot.channel,
