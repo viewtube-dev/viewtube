@@ -64,10 +64,10 @@ const CanonicalControlFamilies: React.FC = () => {
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
     <Family title="Toggle & Choice Controls" nonDefaultSettings={[
-        "Switches, radios, checkboxes, horizontal word toggles, and vertical word toggles are grouped in one family module.",
+        "Switches, radios, and checkboxes stay together in the controls family; word toggles are documented in their own separate family.",
         "Each specimen remains independently interactive and uses the canonical primitive with its native accessible label.",
         "Vertical word toggles size to their longest word plus original horizontal padding; the stacked height is content-driven.",
-      ]} provenance={<Provenance primitive="StudioSwitch / StudioRadio / StudioCheckbox / StudioXCheckbox / StudioWordToggle / StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px global size tiers, with content-driven vertical-toggle width and height." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      ]} provenance={<Provenance primitive="StudioSwitch / StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px global size tiers for switches, radios, and checkboxes." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-choice-module">
         <div className="vt-confirmed-choice-names" aria-label="Component names">
           <span>ROUND SWITCH</span><span>RECTANGULAR SWITCH</span><span>RADIO BUTTON</span><span>CHECKMARK CHECKBOX</span><span>X CHECKBOX</span>
