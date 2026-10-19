@@ -6,7 +6,7 @@ import { StudioCounter } from "./StudioControls"
 
 let container: HTMLDivElement
 let root: Root
-const onValueChange = vi.fn()
+const onValueChange = vi.fn<(next: number) => void>()
 
 const CounterHarness: React.FC<{ initialValue?: number; min?: number; max?: number; step?: number }> = ({
   initialValue = 0, min = 0, max = 5, step = 1,
