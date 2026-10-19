@@ -121,7 +121,7 @@ export interface BrainEvidenceRecordQualityReport {
  * Produces a deterministic diagnostic fingerprint of the exact ordered records.
  * This is for prompt/grader parity detection, not cryptographic integrity.
  */
-const fingerprintEvidenceRecords = (records: EvidenceRecord[]): string => {
+export const fingerprintBrainEvidenceRecords = (records: EvidenceRecord[]): string => {
  const serialized = JSON.stringify(records)
  let first = 0x811c9dc5
  let second = 0x9e3779b9
@@ -132,6 +132,16 @@ const fingerprintEvidenceRecords = (records: EvidenceRecord[]): string => {
  }
  return `evidence-v1:${first.toString(16).padStart(8, "0")}${second.toString(16).padStart(8, "0")}`
 }
+
+/** True only when both the ordered record identities and record content match the grade. */
+export const isBrainEvidenceRecordQualityInSync = (
+ records: EvidenceRecord[],
+ report: Pick<BrainEvidenceRecordQualityReport, "evidenceFingerprint" | "evidenceRecordIds">,
+): boolean => (
+ report.evidenceFingerprint === fingerprintBrainEvidenceRecords(records)
+ && report.evidenceRecordIds.length === records.length
+ && report.evidenceRecordIds.every((id, index) => id === records[index]?.id)
+)
 
 /**
  * Grades the exact EvidenceRecord projection selected for prompt rendering.
@@ -180,7 +190,7 @@ export const buildBrainEvidenceRecordQuality = (
   version: "vt-brain-evidence-record-quality-v1",
   generatedAt: new Date().toISOString(),
   expectedChannelId,
-  evidenceFingerprint: fingerprintEvidenceRecords(records),
+  evidenceFingerprint: fingerprintBrainEvidenceRecords(records),
   evidenceRecordIds: records.map((record) => record.id),
   totalRecords: records.length,
   numericRecords,
