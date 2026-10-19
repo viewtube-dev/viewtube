@@ -44,6 +44,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Intrinsic-width exception | Text-content primitives may opt into content width; they must not force every ordinary control to intrinsic width |
 | Split sections | Icon/action rail is fixed by the selected size tier; label region flexes into remaining width; label is centered within its region |
 | Split dividers | Exactly one shared divider for a single split; exactly two shared dividers for a double split; no duplicated adjacent borders |
+| Internal gap (split shells) | `0` — rails and faces are flush with no white seam; the 4px spacing unit applies only to external gaps between whole controls in grids/rows |
 | Shadows and movement | No shadow, transition, hover/click translation, or geometry movement on canonical Studio primitive shells. Any legacy motion/effect must be explicitly named and approved; no shadow-based geometry compensation |
 | Focus | No layout shift. Text input/textarea focus outline offset is 0; focus color/width are specified in the field contract |
 | Width vs ratio | Row fill is the default layout rule; fixed aspect ratios constrain the control face/rail, not the surrounding row's ability to fill its module |
@@ -63,7 +64,9 @@ The size tier determines height, border stroke, radius, typography, icon size, a
 | Icon size | 38px | 24px | 10px |
 | Default icon stroke | 1.9px | 2px | 1.5px |
 | Secondary focus-outline width (when applicable) | 1.95px | 1.3px | 0.65px |
-| Standard gap token | 4px | 4px | 4px |
+| Standard gap token | 4px (external layout only — grids/rows between whole controls; never an internal shell gap) | 4px | 4px |
+| Floating-label height (shared by text inputs and text areas) | 32px (prior 28px + 4px) | 21px (prior 19px + 2px) | Not registered — no micro floating-label fields exist; the micro tier mechanically copies the compact values without halving |
+| Floating-label raised-offset ratio | 1.2 (raised label sits 20% higher above the outer black border) | 1.2 | Not registered — same as compact by copy |
 | Text transform | Uppercase | Uppercase | Uppercase |
 | Letter spacing | -0.02em | -0.02em | -0.01em |
 | Line height | 0.86 | 0.86 | 1.0 |
@@ -117,6 +120,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 ### Single-line input (default)
 
 - Typography ownership: the native input value/placeholder remains 38px standard / 24px compact. Floating-label presentation scales only the raised label to its registered 80% size; it must never shrink the native input text.
+- Floating-label shared metrics (identical for `StudioTextInput` and `StudioTextArea` at the same size tier): resting label height 32px standard / 21px compact (line-height 1, so the label box height equals its font size); raised label at 80% = 25.6px / 16.8px; the raised label sits 48% above the outer black border (prior 40% × the 1.2 offset ratio). Text inputs and text areas must read the same `floatingLabelHeight` / `floatingLabelOffsetRatio` tokens — no separate hard-coded values per field type.
 - Alignment: left; vertically centered.
 - Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, 0.86 line-height.
 - Geometry: 44px / 28px high, 3px / 2px border, 6px / 4px radius.
@@ -138,7 +142,8 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Resize: vertical.
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
 - Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
-- Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems.
+- Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Floating labels use the shared label metrics registered in §5 (32px / 21px resting height, 80% raised scale, 48% raised offset) — identical to text inputs at the same size tier.
+- No internal gap: textarea shells and any split anatomy inside them are flush; the 4px spacing unit is reserved for external gaps between whole controls.
 
 ## 6. Registered primitive-specific exceptions
 
@@ -162,11 +167,12 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 2. No thin inherited badge font; use Inter weight 1000 for global badges and their labels. The Vault Spectrum Tag is the explicitly registered weight-900 exception.
 3. No hard-coded 48px control size. The canonical ordinary lattice is 44px / 28px, plus the explicitly defined 14px micro tier.
 4. No asymmetric split rails, off-center icons, label misalignment, or duplicated split borders.
-5. No fixed-width ordinary buttons/fields where row-fill is required; intrinsic width is reserved for content primitives.
-6. No global rule should override a named exception, and no exception should leak to sibling primitives.
-7. Catalog entries must render the production component, list its source path and non-default settings, and clearly label static preview states.
-8. Source assertions alone are not visual certification. Required release verification: run focused tests, typecheck, production build, and browser inspection of all size tiers, split variants, text alignment, badge weight, switch/choice ratios, and field focus states.
-9. Update this reference, the machine-readable tokens/exception registry, CSS, and Confirmed Primitive Library together whenever a contract changes.
+5. No internal gap on any control shell: split rails and faces are flush (no white seam), and the 4px spacing unit is for external grids/rows between whole controls only.
+6. No fixed-width ordinary buttons/fields where row-fill is required; intrinsic width is reserved for content primitives.
+7. No global rule should override a named exception, and no exception should leak to sibling primitives.
+8. Catalog entries must render the production component, list its source path and non-default settings, and clearly label static preview states.
+9. Source assertions alone are not visual certification. Required release verification: run focused tests, typecheck, production build, and browser inspection of all size tiers, split variants, text alignment, badge weight, switch/choice ratios, and field focus states.
+10. Update this reference, the machine-readable tokens/exception registry, CSS, and Confirmed Primitive Library together whenever a contract changes.
 
 ## 8. Canonical source ownership
 

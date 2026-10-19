@@ -635,9 +635,9 @@ describe("Studio Play/Pause Split-Left Button", () => {
 })
 
 describe("floating label geometry and circular icon scale", () => {
-  it("floats labels at 80% scale with the border crossing the 40% height line", () => {
+  it("floats labels at 80% scale with the border crossing the 48% height line", () => {
     const css = readStudioControlCss()
-    expect(css).toContain("transform: translateY(-40%)")
+    expect(css).toContain("transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)))")
     expect(css).not.toContain("transform 180ms ease-out, font-size 180ms ease-out")
     expect(css).toContain("font-size: calc(var(--vt-studio-floating-label-size) * .8)")
     expect(css).toContain("font-size: var(--vt-studio-floating-label-size)")
