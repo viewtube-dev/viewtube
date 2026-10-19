@@ -1,3 +1,4 @@
+import { StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import React, { useEffect, useState } from "react"
 import { BarChart3, Check, Copy, FileText, RefreshCcw, Send, ShieldCheck, Sparkles, Type, Upload, Zap } from "lucide-react"
 import JSZip from "jszip"
@@ -49,7 +50,6 @@ import { SubToolbox, SubToolboxGridActionButton, ToolboxScaffold } from "../comp
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
 import {
   SubToolboxButton,
-  SubToolboxFileTarget,
   SubToolboxInput,
   SubToolboxLinkButton,
   SubToolboxOutputCard,
@@ -969,7 +969,7 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           {insightsImported ? <SubToolboxStatePanel state="ready" message="Incoming Brain/tool context loaded. Review before generating or publishing." /> : null}
           <SubToolboxGrid minItemWidth="wide">
             <SubToolbox title="Video Upload" icon={<Upload size={20} strokeWidth={3} />} collapsible isOpenInitial>
-              <SubToolboxFileTarget label={videoFile ? <>{videoFile.name}<br />Final video selected</> : <>Drop files or click to upload<br />Upload video</>} icon={<Upload size={28} strokeWidth={3} />} accept="video/*" onFiles={files => handleVideoFileChange(files?.[0] || null)} />
+              <StudioUploadFrame label={videoFile ? <>{videoFile.name}<br />Final video selected</> : <>Drop files or click to upload<br />Upload video</>} icon={<Upload size={28} strokeWidth={3} />} accept="video/*" onFiles={files => handleVideoFileChange(files?.[0] || null)} />
             </SubToolbox>
             <SubToolbox title="Video Script" icon={<FileText size={20} strokeWidth={3} />} collapsible isOpenInitial>
               <SubToolboxTextArea aria-label="Video script" value={script} onChange={(event) => setScript(event.target.value)} placeholder="Paste your script here..." height="standard" className="text-base" />
