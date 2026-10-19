@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildBrainProfileCoverageItems } from "./BrainProfileCoverageChecklist"
+import { buildBrainProfileCoverageItems } from "../../services/brain/profileCoverage"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 
 type SnapshotOverrides = {
