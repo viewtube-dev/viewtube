@@ -1,12 +1,11 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
-import { StudioSideCounter } from "../../studio-ui/primitives/StudioControls"
+import { StudioSideCounter, StudioSpectrumTags } from "../../studio-ui/primitives/StudioControls"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
   SubToolboxAspectRatioFrame,
-  SubToolboxAlphabeticalSpectrumTags,
   SubToolboxAvatar,
   SubToolboxBreadcrumb,
   SubToolboxCarousel,
@@ -666,7 +665,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <SubToolboxKnob level={level} value={knobValue} onValueChange={setKnobValue} label="VALUE" />
   }
   if (name === "Alphabetical Spectrum Tags") {
-    return <SubToolboxAlphabeticalSpectrumTags level={level} />
+    return <StudioSpectrumTags />
   }
   if (name === "Field Label") {
     return <SubToolboxFieldLabel level={level}>VIDEO TITLE</SubToolboxFieldLabel>
