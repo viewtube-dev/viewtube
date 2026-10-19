@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioLegendMultiDropdown, StudioSplitLeftInput, StudioTextArea, StudioTextBox, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioSpectrumTag, StudioSplitLeftInput, StudioTextArea, StudioTextBox, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -20,7 +20,7 @@ import {
  Toolbox,
 } from "../components/Toolbox"
 import {
- SubToolboxAlphabeticalTag,
+ StudioSpectrumTag,
  SubToolboxDataTable,
  type SubToolboxDataTableColumn,
  SubToolboxInput,
@@ -1973,27 +1973,27 @@ const CreatorVaultOS: React.FC = () => {
        <section aria-label="Vault active filters" className="flex flex-wrap gap-1">
         {selectedTag ? (
          <button type="button" onClick={() => setSelectedTag(null)} aria-label={`Clear tag filter ${selectedTag}`}>
-          <SubToolboxAlphabeticalTag level="l2" label={`TAG · ${selectedTag} ×`} spectrumKey={selectedTag} />
+          <StudioSpectrumTag label={`TAG · ${selectedTag} ×`} spectrumKey={selectedTag} />
          </button>
         ) : null}
         {source !== "all" ? (
          <button type="button" onClick={() => setSource("all")} aria-label={`Clear source filter ${source}`}>
-          <SubToolboxAlphabeticalTag level="l2" label={`SOURCE · ${source} ×`} spectrumKey={source} />
+          <StudioSpectrumTag label={`SOURCE · ${source} ×`} spectrumKey={source} />
          </button>
         ) : null}
         {filterLifecycle !== "all" ? (
          <button type="button" onClick={() => setFilterLifecycle("all")} aria-label={`Clear lifecycle filter ${filterLifecycle}`}>
-          <SubToolboxAlphabeticalTag level="l2" label={`STATE · ${filterLifecycle} ×`} spectrumKey={filterLifecycle} />
+          <StudioSpectrumTag label={`STATE · ${filterLifecycle} ×`} spectrumKey={filterLifecycle} />
          </button>
         ) : null}
         {filterOrientation !== "all" ? (
          <button type="button" onClick={() => setFilterOrientation("all")} aria-label={`Clear orientation filter ${filterOrientation}`}>
-          <SubToolboxAlphabeticalTag level="l2" label={`ORIENTATION · ${filterOrientation} ×`} spectrumKey={filterOrientation} />
+          <StudioSpectrumTag label={`ORIENTATION · ${filterOrientation} ×`} spectrumKey={filterOrientation} />
          </button>
         ) : null}
         {filterMimeType.trim() ? (
          <button type="button" onClick={() => setFilterMimeType("")} aria-label={`Clear MIME filter ${filterMimeType}`}>
-          <SubToolboxAlphabeticalTag level="l2" label={`MIME · ${filterMimeType} ×`} spectrumKey={filterMimeType} />
+          <StudioSpectrumTag label={`MIME · ${filterMimeType} ×`} spectrumKey={filterMimeType} />
          </button>
         ) : null}
         {advancedFilterCount ? (
@@ -2011,8 +2011,7 @@ const CreatorVaultOS: React.FC = () => {
            setFilterMaxBytesMb("")
           }}
          >
-          <SubToolboxAlphabeticalTag
-           level="l2"
+          <StudioSpectrumTag
            label={`ADVANCED · ${advancedFilterCount} ×`}
            spectrumKey="advanced"
           />
@@ -2125,8 +2124,7 @@ const CreatorVaultOS: React.FC = () => {
             onClick={() => setSelectedTag((current) => current === tag ? null : tag)}
             className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
            >
-            <SubToolboxAlphabeticalTag
-             level="l2"
+            <StudioSpectrumTag
              label={tag}
              spectrumKey={tag}
              className={selectedTag === tag ? "is-selected" : ""}
@@ -2589,7 +2587,7 @@ const CreatorVaultOS: React.FC = () => {
               </div>
               <div className="mt-2 flex flex-wrap gap-1">
                {(asset.tags || []).map((tag) => (
-                <SubToolboxAlphabeticalTag key={tag} level="l2" label={tag} spectrumKey={tag} />
+                <StudioSpectrumTag key={tag} label={tag} spectrumKey={tag} />
                ))}
               </div>
              </div>
@@ -2736,8 +2734,7 @@ const CreatorVaultOS: React.FC = () => {
              onClick={() => setSelectedTag((current) => current === tag ? null : tag)}
              className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             >
-             <SubToolboxAlphabeticalTag
-              level="l2"
+             <StudioSpectrumTag
               label={tag}
               spectrumKey={tag}
               className={selectedTag === tag ? "is-selected" : ""}
@@ -2788,8 +2785,7 @@ const CreatorVaultOS: React.FC = () => {
                 onClick={() => toggleImportTag(tag)}
                 className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                >
-                <SubToolboxAlphabeticalTag
-                 level="l2"
+                <StudioSpectrumTag
                  label={importTags.includes(tag) ? `× ${tag}` : `+ ${tag}`}
                  spectrumKey={tag}
                 />
@@ -2842,7 +2838,7 @@ const CreatorVaultOS: React.FC = () => {
                   aria-label={`Remove pending tag ${tag}`}
                   onClick={() => togglePendingTag(item.id, tag)}
                  >
-                  <SubToolboxAlphabeticalTag level="l2" label={`× ${tag}`} spectrumKey={tag} />
+                  <StudioSpectrumTag label={`× ${tag}`} spectrumKey={tag} />
                  </button>
                 ))}
                </div>
@@ -3515,7 +3511,7 @@ const CreatorVaultOS: React.FC = () => {
           <div className="mb-2 text-xs font-black uppercase opacity-60">Spectrum Tags</div>
           <div className="flex flex-wrap gap-1">
            {(selectedAsset.tags || []).map((tag) => (
-            <SubToolboxAlphabeticalTag key={tag} level="l2" label={tag} spectrumKey={tag} />
+            <StudioSpectrumTag key={tag} label={tag} spectrumKey={tag} />
            ))}
           </div>
          </div>
