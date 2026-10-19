@@ -156,7 +156,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Outer shell geometry stays stationary and flat; approved inner indicators, labels, and icons may animate through studio-control-motion.css and must honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 65% of the selected border width; focus is communicated by outline, not box-shadow.",
+  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 100% of the selected border width; focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
@@ -181,9 +181,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro",
+      focusOutlineWidth: "100% of border width: 3px standard / 2px compact / 1px micro",
       focusOutlineOffset: "0px for both sizes",
-      outlineStrokeWidth: "65% of the selected border width; secondary color remains at 100% opacity",
+      outlineStrokeWidth: "100% of the selected border width; secondary color remains at 100% opacity",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
   },
