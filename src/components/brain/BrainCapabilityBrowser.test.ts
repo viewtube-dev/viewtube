@@ -47,7 +47,8 @@ describe("Brain capability browser", () => {
 
  it("reports missing project context without pretending the capability is ready", () => {
   const capability = BRAIN_CAPABILITY_REGISTRY.find((item) => item.id === "daily-oracle")!
-  const noProject = { ...snapshot(12), brain: { activeProjects: 0 } }
+  const withProjectContext = snapshot(12)
+  const noProject = { ...withProjectContext, brain: { ...withProjectContext.brain, activeProjects: 0 } }
   const result = getBrainCapabilityAvailability(capability, DEFAULT_BRAIN_USER_CONTROLS, noProject)
   expect(result.status).toBe("needs-project-context")
   expect(result.reason).toContain("Select or create a project")
