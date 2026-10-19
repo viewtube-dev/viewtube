@@ -10,6 +10,7 @@ import type {
  CreatorBrainResponse,
  CreatorGrowthContext,
  CreatorGrowthCapabilityStatus,
+ CreatorProfileCoverageItem,
 } from "../types"
 import {
  getAIBrainConversationTurnDB,
@@ -114,11 +115,48 @@ export const buildCreatorGrowthContext = (
   .filter((entry) => ["creator_goal", "content_style", "channel_fact", "preference"].includes(entry.category))
   .map((entry) => sanitizeCreatorFacingBrainCopy(entry.summary))
   .slice(0, 8)
- const profileScore =
-  snapshot.inferredProfile.status === "ready" ? 88
-  : profileReady ? Math.min(78, 38 + snapshot.inferredProfile.topicClusters.length * 5 + Math.min(20, snapshot.inferredProfile.videoCount / 50))
-  : 24
  const currentGoal = snapshot.brain.futureStateMap || firstOr(learnedFacts, "Pick one measurable channel goal for this month.")
+ const savedAnswers = recentTurns.flatMap((turn) => turn.questionAnswers || [])
+ const goalConfirmed = savedAnswers.some((answer) => answer.category === "creator_goal")
+  || learningEntries.some((entry) => entry.category === "creator_goal")
+ const styleConfirmed = savedAnswers.some((answer) => answer.category === "content_style")
+  || learningEntries.some((entry) => entry.category === "content_style")
+ const hasChannelDescription = Boolean(clean(snapshot.evidencePack.channelDescription))
+ const videoCount = snapshot.inferredProfile.videoCount || snapshot.vtSync.videos
+ const profileCoverageChecklist: CreatorProfileCoverageItem[] = [
+  {
+   id: "channel-description",
+   label: "Channel description",
+   status: hasChannelDescription ? "available" : "missing",
+   detail: hasChannelDescription ? "A channel description is available as source context." : "No channel description is available for this answer.",
+  },
+  {
+   id: "videos-analyzed",
+   label: `${videoCount} videos analyzed`,
+   status: videoCount > 0 ? "available" : "missing",
+   detail: videoCount > 0 ? `${videoCount} videos are present in the current profile evidence.` : "No video inventory is available yet.",
+  },
+  {
+   id: "creator-goals",
+   label: "Goals",
+   status: goalConfirmed ? "confirmed" : currentGoal && !/pick one measurable channel goal/i.test(currentGoal) ? "available" : "unconfirmed",
+   detail: goalConfirmed ? "Goal information was explicitly answered or saved." : "A creator-confirmed goal would sharpen planning recommendations.",
+   ...(!goalConfirmed ? { actionLabel: "Confirm goals", actionAsk: "clarify-channel-goals" } : {}),
+  },
+  {
+   id: "style-preference",
+   label: "Style preference",
+   status: styleConfirmed ? "confirmed" : "unconfirmed",
+   detail: styleConfirmed ? "A style preference was explicitly answered or saved." : "Style examples have not been confirmed in saved answers.",
+   ...(!styleConfirmed ? { actionLabel: "Add style examples", actionAsk: "style-examples" } : {}),
+  },
+  {
+   id: "content-pillars",
+   label: "Content pillars",
+   status: pillars.length > 0 ? "available" : "missing",
+   detail: pillars.length > 0 ? `${pillars.length} inferred content pillars are available.` : "Content pillars need more title, topic, or creator evidence.",
+  },
+ ]
  const topPatterns = snapshot.inferredProfile.successDrivers.length
   ? snapshot.inferredProfile.successDrivers.map(sanitizeCreatorFacingBrainCopy)
   : topVideos.map((video) => `${video.title}${typeof video.views === "number" ? ` has ${video.views.toLocaleString()} views` : ""}`)
@@ -135,7 +173,7 @@ export const buildCreatorGrowthContext = (
  ]
 
  return {
-  profileConfidenceScore: Math.round(profileScore),
+  profileCoverageChecklist,
   currentGoal,
   inferredNiche: snapshot.inferredProfile.niche || "Channel niche still needs stronger creator confirmation.",
   contentPillars: pillars,
@@ -165,8 +203,8 @@ export const buildCreatorGrowthContext = (
   recentConversationFacts: recentFacts,
   capabilities: [
    {
-    id: "profile_confidence",
-    label: "Channel Profile Read",
+    id: "profile_coverage_checklist",
+    label: "Profile Coverage Checklist",
     status: statusFor(profileReady, snapshot.inferredProfile.videoCount > 0),
     summary: profileReady ? "The Brain has enough channel evidence to start with inferred lanes before asking confirmation questions." : "The Brain can still help, but creator confirmation will make recommendations sharper.",
    },

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
 import {
   Brain,
   CalendarDays,
@@ -498,7 +499,7 @@ export const DailyOracleWidget = ({
             <>
               <WidgetSection edge="full" className="daily-oracle-v2__source-strip">
                 <WidgetBadge height={18} icon={<Brain size={11} />}>
-                  {Math.round(growth.profileConfidenceScore)}% CHANNEL READ
+                  {growth.profileCoverageChecklist.filter((item) => item.status === "confirmed").length}/{growth.profileCoverageChecklist.length} PROFILE ITEMS CONFIRMED
                 </WidgetBadge>
                 <span>{plan.sourceLabel}</span>
                 <span>{plan.evidenceCoverage}% EVIDENCE READY</span>
@@ -663,9 +664,25 @@ export const DailyOracleWidget = ({
               </WidgetSection>
 
               <WidgetSection className="daily-oracle-v2__context-grid">
-                <div className="is-purple">
-                  <span>CHANNEL READ</span>
-                  <strong>{Math.round(growth.profileConfidenceScore)}%</strong>
+                <div className="is-purple daily-oracle-v2__profile-coverage">
+                  <span>PROFILE COVERAGE CHECKLIST</span>
+                  <ul className="daily-oracle-v2__profile-coverage-list">
+                    {growth.profileCoverageChecklist.map((item) => (
+                      <li key={item.id}>
+                        <span className={item.status === "confirmed" || item.status === "available" ? "is-covered" : "is-incomplete"} aria-hidden="true">
+                          {item.status === "confirmed" || item.status === "available" ? "✓" : "○"}
+                        </span>
+                        <span title={item.detail}>{item.label}</span>
+                        {item.actionLabel && item.actionAsk ? (
+                          <Link to={`/ai-brain?ask=${encodeURIComponent(item.actionAsk)}`} aria-label={item.actionLabel} className="daily-oracle-v2__profile-action">
+                            {item.actionLabel}
+                          </Link>
+                        ) : (
+                          <small>{item.status === "confirmed" ? "CONFIRMED" : item.status === "available" ? "AVAILABLE" : item.status.toUpperCase()}</small>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
                 <div className="is-cyan">
                   <span>EVIDENCE READY</span>

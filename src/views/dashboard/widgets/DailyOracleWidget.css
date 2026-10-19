@@ -1030,3 +1030,67 @@
   .daily-oracle-v2__content{overflow:visible}
   .daily-oracle-v2__source-strip > .vt-spectrum-badge{margin-left:0}
 }
+
+
+/* Concrete profile coverage replaces the synthetic channel-confidence score. */
+.daily-oracle-v2__profile-coverage {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  min-width: 0;
+  padding: 8px;
+}
+.daily-oracle-v2__profile-coverage > span {
+  font-size: clamp(8px, 1.15cqi, 10px);
+  font-weight: 1000;
+  line-height: 1.2;
+}
+.daily-oracle-v2__profile-coverage-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.daily-oracle-v2__profile-coverage-list > li {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: clamp(8px, 1.05cqi, 10px);
+  font-weight: 900;
+  line-height: 1.25;
+}
+.daily-oracle-v2__profile-coverage-list > li > span:nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.daily-oracle-v2__profile-coverage-list .is-covered {
+  font-weight: 1000;
+}
+.daily-oracle-v2__profile-coverage-list .is-incomplete {
+  opacity: .6;
+}
+.daily-oracle-v2__profile-coverage-list small {
+  font-size: 7px;
+  font-weight: 1000;
+  text-align: right;
+}
+.daily-oracle-v2__profile-action {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 7px;
+  font-weight: 1000;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.daily-oracle-v2__profile-action:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}

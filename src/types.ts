@@ -1670,8 +1670,19 @@ export interface BrainOrchestratorResult {
 
 export type CreatorGrowthCapabilityStatus = "ready" | "partial" | "missing"
 
+export type CreatorProfileCoverageStatus = "confirmed" | "available" | "unconfirmed" | "missing"
+
+export interface CreatorProfileCoverageItem {
+ id: string
+ label: string
+ status: CreatorProfileCoverageStatus
+ detail: string
+ actionLabel?: string
+ actionAsk?: string
+}
+
 export interface CreatorGrowthContext {
- profileConfidenceScore: number
+ profileCoverageChecklist: CreatorProfileCoverageItem[]
  currentGoal: string
  inferredNiche: string
  contentPillars: string[]

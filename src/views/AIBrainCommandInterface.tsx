@@ -185,6 +185,10 @@ const makeMessageId = () =>
 const ASK_SEED_PROMPTS: Record<string, string> = {
  "algorithm-diagnosis":
   "Give me an algorithm diagnosis: walk through why my views are moving the way they are across impressions, click-through, and watch time, and tell me the one thing to test next.",
+ "clarify-channel-goals":
+  "Help me confirm my channel goals, audience, and direction. Ask only what is still unknown.",
+ "style-examples":
+  "Help me define my content style using examples from my existing videos. Ask for concrete examples only where the evidence is missing.",
 }
 
 /**
