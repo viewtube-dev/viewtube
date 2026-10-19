@@ -4224,9 +4224,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 html body button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
   background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
 }
-html body button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
-}
+/* Action buttons keep their component-defined idle fill. */
 html body button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][aria-pressed="true"] > [data-vt-studio-action-face] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
