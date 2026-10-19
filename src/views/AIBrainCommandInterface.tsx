@@ -479,7 +479,7 @@ const CreatorResponseCard: React.FC<{
    </div>
    <div className="flex flex-col gap-2.5 p-3">
     {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
-     <BrainDataReadiness readiness={message.readiness} evidencePack={message.evidencePack} />
+     <BrainDataReadiness readiness={message.readiness} />
     ) : null}
     <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
@@ -521,7 +521,7 @@ const readinessForSnapshot = (snapshot: AIBrainContextSnapshot): AIBrainTurnRead
  warnings: snapshot.vtSync.warnings,
 })
 
-const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness; evidencePack: AIBrainEvidencePack }> = ({ readiness, evidencePack }) => {
+const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ readiness }) => {
  const staleCount = readiness.diagnostics.coverage.staleDatasets
  const missingCount = readiness.diagnostics.coverage.missingDatasets
  const revenueUnavailable = !readiness.availableMetrics.includes("revenue")
