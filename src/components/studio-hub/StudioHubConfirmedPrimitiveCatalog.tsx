@@ -459,6 +459,23 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
 
     </Family>
     <Family
+      title="Split-left Button · Standard + Compact"
+      nonDefaultSettings={[
+        "Canonical split-left button with an independent leading icon rail and stationary outer shell.",
+        "The two compact examples share one row and retain their individual accessible names.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared button palettes · square leading icon rail." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · edit action</span>
+        <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Standard split-left edit action" data-vt-library-component="StudioSplitLeftButton">EDIT</StudioSplitLeftButton>
+      </div>
+      <div className="vt-confirmed-paired-compact-row">
+        <div className="vt-confirmed-variant"><span>28px compact · edit action</span><StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="compact" aria-label="Compact split-left edit action" data-vt-library-component="StudioSplitLeftButton">EDIT</StudioSplitLeftButton></div>
+        <div className="vt-confirmed-variant"><span>28px compact · create action</span><StudioSplitLeftButton icon={<Sparkles aria-hidden="true" />} sizeVariant="compact" aria-label="Compact split-left create action" data-vt-library-component="StudioSplitLeftButton">CREATE</StudioSplitLeftButton></div>
+      </div>
+    </Family>
+    <Family
       title="Play/Pause Split-left Button · 44px + 28px"
       nonDefaultSettings={[
         "Reserves label width so Play/Pause does not resize the control.",
