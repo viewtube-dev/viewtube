@@ -3,9 +3,6 @@ import { Info, ArrowUpRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import type { AIBrainEvidencePack } from "../../types"
 
-const numberText = (value: number | null | undefined): string =>
- typeof value === "number" && Number.isFinite(value) ? value.toLocaleString() : ""
-
 /**
  * Creator-facing "Why this recommendation?" surface.
  *
@@ -37,13 +34,30 @@ export const BrainEvidenceDrawer: React.FC<{
  sourceRoute = "/analytics",
  sourceLabel = "Open source in Analytics",
 }) => {
- const topVideos = evidencePack.topVideos.slice(0, 4)
- const searchTerms = evidencePack.searchTerms.slice(0, 4)
- const trafficSources = evidencePack.trafficSources.slice(0, 4)
  const missing = evidencePack.missingInputs.slice(0, 4)
- const sourceCount = topVideos.length + searchTerms.length + trafficSources.length
+ const evidenceItems = evidencePack.items
+ const visibleEvidenceItems = evidenceItems.slice(0, 5)
+ const sourceCount = evidenceItems.length
  const provenanceCount = evidenceChips.length
  const hasAnything = sourceCount || missing.length || caveats.length || provenanceCount
+
+ const evidenceHref = (item: AIBrainEvidencePack["items"][number]): string => {
+  const params = new URLSearchParams()
+  params.set("brainEvidenceId", item.id)
+  params.set("brainEvidenceSource", item.source)
+  params.set("brainEvidenceLabel", item.label)
+  params.set("rankBy", evidencePack.requestSpec.rankBy)
+  params.set("selectionMode", evidencePack.requestSpec.selectionMode)
+  if (evidencePack.requestSpec.count !== null) params.set("count", String(evidencePack.requestSpec.count))
+  if (evidencePack.requestSpec.since) params.set("since", evidencePack.requestSpec.since)
+  if (evidencePack.requestSpec.until) params.set("until", evidencePack.requestSpec.until)
+  evidencePack.requestSpec.formats.forEach((format) => params.append("format", format))
+  evidencePack.requestSpec.filters.forEach((filter) => params.append("filter", filter))
+  if (item.id.startsWith("video:")) params.set("videoId", item.id.slice("video:".length))
+  if (item.source.toLowerCase().includes("search")) params.set("searchTerm", item.label)
+  if (item.source.toLowerCase().includes("traffic")) params.set("trafficSource", item.label)
+  return `/analytics?${params.toString()}`
+ }
  if (!hasAnything) return null
 
  const confidenceText = typeof confidence === "number"
@@ -58,11 +72,13 @@ export const BrainEvidenceDrawer: React.FC<{
   >
    {compact ? (
     <summary
-     className="grid h-7 w-7 cursor-pointer list-none place-items-center rounded-[6px] border-[2px] border-black bg-white transition hover:bg-[#FFDA47]"
+     className="inline-flex min-h-7 cursor-pointer list-none items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase tracking-[0.06em] hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
      title={summaryLabel}
-     aria-label={summaryLabel}
+     aria-label={`${summaryLabel}; ${sourceCount} evidence references`}
     >
-     <Info size={13} />
+     <Info size={13} aria-hidden="true" />
+     <span>{summaryLabel}</span>
+     {sourceCount ? <span className="rounded-full border border-black bg-[#36E0F6] px-1">{sourceCount}</span> : null}
     </summary>
    ) : (
     <summary className="cursor-pointer list-none border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47]">
@@ -99,41 +115,43 @@ export const BrainEvidenceDrawer: React.FC<{
      </section>
     ) : null}
 
-    {topVideos.length ? (
+    {visibleEvidenceItems.length ? (
      <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.16em] text-black/45">Primary video evidence</h4>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.16em] text-black/45">Evidence supplied for this answer</h4>
       <ul className="mt-1 grid gap-1">
-       {topVideos.map((video) => (
-        <li key={video.evidenceId} className="rounded-[7px] border-[1.5px] border-black/15 bg-[#f8f8f4] px-2 py-1 text-xs font-bold leading-5 text-black/75">
-         {video.title}
-         {numberText(video.metrics.views) ? (
-          <span className="text-black/45"> · {numberText(video.metrics.views)} views</span>
-         ) : null}
+       {visibleEvidenceItems.map((item) => (
+        <li key={item.id} className="overflow-hidden rounded-[7px] border-[1.5px] border-black/20 bg-[#f8f8f4]">
+         <Link to={evidenceHref(item)} className="flex min-h-11 items-center justify-between gap-2 px-2 py-1.5 text-xs font-bold leading-4 text-black/80 hover:bg-[#36E0F6]/25 focus-visible:ring-2 focus-visible:ring-black">
+          <span className="min-w-0">
+           <span className="block break-words">{item.label}</span>
+           <span className="block text-[9px] font-bold text-black/50">{item.source}{item.detail ? ` · ${item.detail}` : ""}</span>
+          </span>
+          <ArrowUpRight size={13} className="shrink-0" aria-hidden="true" />
+         </Link>
         </li>
        ))}
       </ul>
-     </section>
-    ) : null}
-
-    {searchTerms.length ? (
-     <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.16em] text-black/45">Search evidence</h4>
-      <ul className="mt-1 flex flex-wrap gap-1.5">
-       {searchTerms.map((term) => (
-        <li key={term.evidenceId} className="rounded-[8px] border-[2px] border-black bg-[#36E0F6] px-2 py-0.5 text-[10px] font-black uppercase">{term.value}</li>
-       ))}
-      </ul>
-     </section>
-    ) : null}
-
-    {trafficSources.length ? (
-     <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.16em] text-black/45">Traffic-source evidence</h4>
-      <ul className="mt-1 flex flex-wrap gap-1.5">
-       {trafficSources.map((source) => (
-        <li key={source.evidenceId} className="rounded-[8px] border-[2px] border-black bg-[#C0F240] px-2 py-0.5 text-[10px] font-black uppercase">{source.value}</li>
-       ))}
-      </ul>
+      {evidenceItems.length > visibleEvidenceItems.length ? (
+       <details className="mt-2">
+        <summary className="min-h-11 cursor-pointer content-center text-[10px] font-black uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+         Show all {evidenceItems.length} references
+        </summary>
+        <ul className="mt-1 grid gap-1">
+         {evidenceItems.slice(5).map((item) => (
+          <li key={item.id} className="overflow-hidden rounded-[7px] border-[1.5px] border-black/20 bg-[#f8f8f4]">
+           <Link to={evidenceHref(item)} className="flex min-h-11 items-center justify-between gap-2 px-2 py-1.5 text-xs font-bold leading-4 text-black/80 hover:bg-[#36E0F6]/25 focus-visible:ring-2 focus-visible:ring-black">
+            <span className="min-w-0">
+             <span className="block break-words">{item.label}</span>
+             <span className="block text-[9px] font-bold text-black/50">{item.source}{item.detail ? ` · ${item.detail}` : ""}</span>
+             <code className="block break-all text-[8px] font-normal text-black/45">{item.id}</code>
+            </span>
+            <ArrowUpRight size={13} className="shrink-0" aria-hidden="true" />
+           </Link>
+          </li>
+         ))}
+        </ul>
+       </details>
+      ) : null}
      </section>
     ) : null}
 

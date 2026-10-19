@@ -73,6 +73,7 @@ import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
 import type {
  AIBrainAnswerModule,
+ AIBrainEvidencePack,
  AIBrainConversationTurn,
  AIBrainFeedbackSignal,
  AIBrainLearningEntry,
@@ -91,6 +92,7 @@ export type ChatMessage = {
  text: string
  response?: CreatorBrainResponse
  handoff?: AIBrainChatHandoff | null
+ evidencePack?: AIBrainEvidencePack
 }
 
 const shellCard = "rounded-[16px] border-[4px] border-black bg-white shadow-[6px_6px_0_0_#000]"
@@ -415,12 +417,12 @@ export const BrainFeedbackControls: React.FC<{
 
 const CreatorResponseCard: React.FC<{
  message: ChatMessage
- evidencePack: AIBrainContextSnapshot["evidencePack"]
  answeredQuestionIds: Set<string>
  onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
-}> = ({ message, evidencePack, answeredQuestionIds, onFeedback, onAnswerQuestion }) => {
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion }) => {
  const response = message.response
+ const turnEvidencePack = message.evidencePack
  if (!response) {
   return (
    <article className={`${assistantCardFrame} p-4`}>
@@ -473,7 +475,9 @@ const CreatorResponseCard: React.FC<{
    </div>
    <div className="flex min-h-9 shrink-0 flex-wrap items-center gap-1 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-1">
      <BrainFeedbackControls message={message} onFeedback={onFeedback} />
-     <BrainEvidenceDrawer evidencePack={evidencePack} compact />
+     {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
+      <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
+     ) : null}
      {message.handoff ? (
       <Link
        to={message.handoff.route}
@@ -729,7 +733,16 @@ const AIBrainCommandInterface: React.FC = () => {
   setMessages(
    chronological.flatMap((turn) => [
     { id: `${turn.id}-user`, role: "user" as const, text: turn.userText },
-    { id: turn.id, role: "model" as const, text: turn.assistantText, response: turn.response, handoff: null },
+    {
+     id: turn.id,
+     role: "model" as const,
+     text: turn.assistantText,
+     response: turn.response,
+     handoff: null,
+     evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
+      ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
+      : undefined,
+    },
    ]),
   )
  }, [busy, visibleTurns])
@@ -888,7 +901,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, evidencePack: turnSnapshot.evidencePack },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -904,7 +917,7 @@ const AIBrainCommandInterface: React.FC = () => {
    }
    setMessages((current) => [
     ...current,
-    { id: makeMessageId(), role: "model", text: fallbackText, response },
+    { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack },
    ])
   } finally {
    setBusy(false)
@@ -1124,7 +1137,6 @@ const AIBrainCommandInterface: React.FC = () => {
             <CreatorResponseCard
              key={message.id}
              message={message}
-             evidencePack={snapshot.evidencePack}
              answeredQuestionIds={answeredQuestionIds}
              onFeedback={handleFeedback}
              onAnswerQuestion={handleAnswerQuestion}
