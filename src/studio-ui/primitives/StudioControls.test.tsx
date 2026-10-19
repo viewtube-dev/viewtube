@@ -54,6 +54,9 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame__inset::before");
     expect(css).toContain(".vt-studio-upload-frame__inset::after");
     expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
+    expect(css).toContain("font-weight: 1000");
+    expect(css).toContain("letter-spacing: -.02em");
+    expect(css).toContain("border-radius: 999px;");
     const uploadedIconRules = css.slice(css.indexOf(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {"), css.indexOf(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg"));
     expect(uploadedIconRules).not.toContain("left: 50%");
     expect(uploadedIconRules).not.toContain("translate: -50%");
