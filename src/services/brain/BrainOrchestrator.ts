@@ -20,6 +20,7 @@ import {
 } from "../aiBrainCommandInterface"
 import {
  beginAIBrainTurn,
+ retryAIBrainTurn,
  completeAIBrainTurn,
  formatCreatorGrowthModules,
  sanitizeCreatorFacingBrainCopy,
@@ -290,6 +291,7 @@ export const BRAIN_OUTPUT_SCHEMA_VERSION = "structured-brain-output-v1"
 export interface RunBrainTurnInput {
  channelId?: string | null
  userText: string
+ retryTurnId?: string
  snapshot: AIBrainContextSnapshot
  systemPrompt: string
  growthContext: CreatorGrowthContext
@@ -340,10 +342,12 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
  const modelIdentityStatus = requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
- const pending = await beginAIBrainTurn({
-  channelId: input.channelId,
-  userText: input.userText,
-  metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION,
+ const pending = input.retryTurnId
+  ? await retryAIBrainTurn(input.retryTurnId)
+  : await beginAIBrainTurn({
+   channelId: input.channelId,
+   userText: input.userText,
+   metadata: { source: "brain_orchestrator", promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
@@ -369,7 +373,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     taskProfileId: taskProfile.id },
- })
+  })
  const capabilities = selectBrainCapabilities({ channelId: input.channelId, userText: input.userText, snapshot: input.snapshot })
  const capabilityIds = capabilities.map((capability) => capability.id)
  const brainIntent = inferBrainIntent(input.userText)
