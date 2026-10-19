@@ -129,8 +129,8 @@ export const buildBrainEvidenceRecordQuality = (
  const expectedChannelId = String(options.expectedChannelId || "").trim() || null
  const hasRecords = records.length > 0
  const mismatched = Boolean(expectedChannelId && records.some((record) => record.channelId && record.channelId !== expectedChannelId))
- const unscoped = Boolean(expectedChannelId && records.some((record) => !record.channelId))
- const scopeMatch: BrainEvidenceScopeMatch = !expectedChannelId || !hasRecords
+ const unscoped = Boolean(!expectedChannelId || records.some((record) => !record.channelId))
+ const scopeMatch: BrainEvidenceScopeMatch = !hasRecords
   ? "not_requested"
   : mismatched ? "mismatch" : unscoped ? "unscoped" : "exact"
  const observedRecords = records.filter((record) =>
