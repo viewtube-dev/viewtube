@@ -30,7 +30,7 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Upload media"');
     expect(html).toContain('class="vt-studio-upload-frame__layers"');
     expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
-    expect(html).toContain("DROP OR CHOOSE FILE");
+    expect(html).toContain("Drop or choose file");
     expect(html).not.toContain("FA618A");
     expect(html).not.toContain("4EE4BE");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
@@ -53,7 +53,7 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain("border: 2px solid var(--vt-studio-upload-secondary)");
     expect(css).toContain(".vt-studio-upload-frame__inset::before");
     expect(css).toContain(".vt-studio-upload-frame__inset::after");
-    expect(css).toContain("font-size: var(--vt-studio-compact-font-size, 24px)");
+    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
     const uploadedIconRules = css.slice(css.indexOf(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {"), css.indexOf(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg"));
     expect(uploadedIconRules).not.toContain("left: 50%");
     expect(uploadedIconRules).not.toContain("translate: -50%");
