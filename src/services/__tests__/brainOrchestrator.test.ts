@@ -89,6 +89,42 @@ describe("BrainOrchestrator", () => {
  })
 
 
+
+ it("records the exact prompt evidence and explicit model-identity limits in a question trace", async () => {
+  const traces: BrainTrace[] = []
+  setBrainTraceSink({ write: (trace) => traces.push(trace), list: () => traces })
+  try {
+   const snapshot = makeSnapshot()
+   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+   const result = await runBrainTurn({
+    channelId: "trace-channel",
+    userText: "What should I make next?",
+    snapshot,
+    growthContext,
+    systemPrompt: "Use the supplied channel evidence.",
+    allowModel: false,
+   })
+   const trace = traces.at(-1)
+   expect(trace).toMatchObject({
+    kind: "question",
+    channelId: "trace-channel",
+    status: "fallback",
+    outputRef: result.response.id,
+    modelServed: null,
+    modelIdentityStatus: "generator_identity_unavailable",
+   })
+   expect(trace?.evidence.returned).toEqual(result.response.evidenceIds)
+   expect(trace?.evidence.records).toBeDefined()
+   expect(trace?.promptVersions).toMatchObject({
+    orchestrator: "brain-orchestrator-v2",
+    contextResolver: expect.any(String),
+    outputSchema: "structured-brain-output-v1",
+   })
+  } finally {
+   resetBrainTraceSink()
+  }
+ })
+
  it("preserves the exact prompt in the captured learning event", async () => {
   const snapshot = makeSnapshot()
   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
