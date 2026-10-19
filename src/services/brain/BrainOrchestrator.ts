@@ -349,7 +349,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
     evidenceRequestSpec: input.snapshot.evidencePack.requestSpec,
     evidencePackSnapshot: input.snapshot.evidencePack,
     channelId: input.channelId || null,
@@ -577,10 +577,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   }
   response = {
    ...response,
-   evidenceIds: Array.from(new Set([
-    ...(response.evidenceIds || []),
-    ...(evidenceIntelligence?.evidenceRecords || []).map((record) => record.id),
-   ])).slice(0, 20),
+   evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 20),
    evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
@@ -606,7 +603,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -637,7 +634,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
     evidenceRecords: promptEvidenceRecords,
     evidenceRecordQuality,
     promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
@@ -671,10 +668,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   const fallbackResponse = buildFallback(input.userText, input.snapshot, input.growthContext)
   const response = {
    ...fallbackResponse,
-   evidenceIds: Array.from(new Set([
-    ...(fallbackResponse.evidenceIds || []),
-    ...(evidenceIntelligence?.evidenceRecords || []).map((record) => record.id),
-   ])).slice(0, 20),
+   evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 20),
    evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
    generationPath,
    fallbackReason,
@@ -701,7 +695,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -732,7 +726,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceIds: promptEvidenceRecords.map((record) => record.id).slice(0, 50),
     evidenceRecords: promptEvidenceRecords,
     evidenceRecordQuality,
     promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
