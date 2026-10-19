@@ -4,7 +4,7 @@
 **Repository:** `viewtube-dev/viewtube`  
 **Target base:** `master/consolidated-feature-integration`  
 **Working branch:** `feat/brain-toolbox-chat-phases-1-2`  
-**Status:** Phases 1–2 implementation in progress; source audit recorded; full feature overhaul remains staged.  
+**Status:** Phase 1 source audit recorded; Phase 2 first control migration and regression tests committed to this branch; CI and browser visual certification pending. The full feature overhaul remains staged.  
 **Primary historical design donor:** [PR #241 Brain brainstorm and frontend design](https://github.com/viewtube-dev/viewtube/blob/bcc561d3c96e435252c1cc8ec544283030117322/docs/migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md)
 
 > This document consolidates the complete Brain UI overhaul proposal and the implementation sequence. The PR #241 design is a historical donor, not a current-state specification. Do not trust its old maturity percentages, route counts, model/provider assumptions, or “currently empty” assertions without rechecking the integration branch. Preserve its still-useful product requirements while following current source, tests, registries, and architecture contracts.
@@ -355,4 +355,4 @@ Prompt families to expose in UI: Constitution, Analytics, Audience, Strategy, Pa
 - Docs, component catalog and certification ledger agree with the shipped source.
 - The target branch/commit and deployment source are verified before release is reported.
 
-**Current completion statement:** Phase 1 source inventory is recorded above. Phase 2 is being implemented as a small source-backed Studio Controls migration beginning with the existing Brain confidence chip. Phases 3–8 are planned, not complete. Browser visual certification, end-to-end reachability, and deployment verification are still open.
+**Current completion statement:** Phase 1 source inventory is recorded above. Phase 2 now includes a first source-backed migration: `BrainConfidenceChip` uses the production `StudioSplitLeftBadge` at the registered micro tier, preserving Brain-owned confidence mapping and adding a focused component regression test. This is the first vertical slice, not a claim that every Brain control has migrated. The focused test has been added but has not yet been executed in this connector-only workflow. Phases 3–8 are planned, not complete. Browser visual certification, end-to-end reachability, and deployment verification are still open.
