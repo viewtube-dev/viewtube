@@ -48,6 +48,7 @@ export const BrainContextRail: React.FC<{
  onAskInsight: (insight: CreatorInitialInsight) => void
  onAcceptQuickAction: (action: BrainQuickAction) => void
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
+ onEditPrompt?: (prompt: string) => void
  compactGrid?: boolean
 }> = ({
  channelId = null,
@@ -60,6 +61,7 @@ export const BrainContextRail: React.FC<{
  onAskInsight,
  onAcceptQuickAction,
  onAnswerQuestion,
+ onEditPrompt,
  compactGrid = false,
 }) => {
  const goal = sanitizeCreatorFacingBrainCopy(growthContext.currentGoal)
@@ -70,6 +72,15 @@ export const BrainContextRail: React.FC<{
  const goalQuestion = availableQuestions.find((question) => question.category === "creator_goal")
  const topQuestion = availableQuestions.find((question) => question.category !== "creator_goal")
  const laneOptions = snapshot.inferredProfile.topicClusters.slice(0, 4)
+ const goalIsSaved = Boolean(goal && !/not set|tell me what matters/i.test(goal))
+ const channelFocusIsSaved = Boolean(snapshot.brain.coreConcept.trim() || snapshot.brain.targetNiche.trim() || snapshot.inferredProfile.niche)
+ const styleNotesAreSaved = Boolean(snapshot.brain.contentDNA.trim())
+ const profileChecks = [
+  { label: "Channel focus", complete: channelFocusIsSaved, detail: snapshot.inferredProfile.niche || snapshot.brain.targetNiche || snapshot.brain.coreConcept },
+  { label: "Videos analyzed", complete: snapshot.inferredProfile.videoCount > 0, detail: snapshot.inferredProfile.videoCount.toLocaleString() + " videos" },
+  { label: "Goals", complete: goalIsSaved, detail: goalIsSaved ? goal : "Not confirmed" },
+  { label: "Style preferences", complete: styleNotesAreSaved, detail: styleNotesAreSaved ? "Saved style notes available" : "Examples not saved" },
+ ]
 
  return (
   <aside
@@ -77,6 +88,38 @@ export const BrainContextRail: React.FC<{
    aria-label="What the Brain currently knows"
   >
    <div className="col-span-full"><BrainScopeSummary channelId={channelId} /></div>
+   <Panel title="Profile coverage" tone="#36E0F6">
+    <ul className="grid gap-1.5">
+     {profileChecks.map((item) => (
+      <li key={item.label} className="flex min-w-0 items-start gap-2 text-[10px] leading-4">
+       <span aria-label={item.complete ? "Complete" : "Needs attention"} className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-[3px] border border-black font-black ${item.complete ? "bg-[#3FEE56]" : "bg-[#FFDA47]"}`}>
+        {item.complete ? "✓" : "!"}
+       </span>
+       <span className="min-w-0 flex-1">
+        <span className="block font-black uppercase">{item.label}</span>
+        <span className="block break-words text-black/60">{item.detail || "Not confirmed yet"}</span>
+       </span>
+       {!item.complete && onEditPrompt ? (
+        <button
+         type="button"
+         onClick={() => onEditPrompt(item.label === "Goals"
+          ? "Help me confirm and save my main YouTube goal. Ask one question at a time."
+          : item.label === "Style preferences"
+           ? "Help me document my content style preferences. Ask for examples and do not assume preferences I have not confirmed."
+           : item.label === "Channel focus"
+            ? "Help me confirm my channel focus and niche using my existing evidence, then ask me to confirm or correct it."
+            : "Help me review which videos have been analyzed and what evidence is still missing.")
+         }
+         className="min-h-9 shrink-0 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase underline underline-offset-2 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
+        >
+         {item.label === "Goals" ? "Confirm" : item.label === "Style preferences" ? "Add examples" : item.label === "Channel focus" ? "Review" : "Inspect"}
+        </button>
+       ) : null}
+      </li>
+     ))}
+    </ul>
+   </Panel>
+
    <Panel title="Your channel" tone="#3FEE56">
     {clusters.length ? (
      <ul className="flex flex-wrap gap-1">

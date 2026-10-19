@@ -1316,6 +1316,7 @@ const AIBrainCommandInterface: React.FC = () => {
           onAskInsight={handleAskInsight}
           onAcceptQuickAction={handleAcceptQuickAction}
           onAnswerQuestion={handleAnswerQuestion}
+          onEditPrompt={(prompt) => { setInput(prompt); composerRef.current?.focus() }}
           compactGrid
          />
         </div>
@@ -1367,7 +1368,7 @@ const AIBrainCommandInterface: React.FC = () => {
          <button ref={contextCloseRef} type="button" className={kpiButton} onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</button>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
-         <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} />
+         <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
         </div>
        </div>
       ) : null}
