@@ -324,7 +324,7 @@ describe("confirmed vertical word-toggle primitive", () => {
     expect(css).toContain("width: max-content;");
     expect(css).toContain("min-width: max-content;");
     expect(css).toContain("prefers-reduced-motion: reduce");
-    expect(source).toContain('title="Toggle & Choice Controls"');
+    expect(source).toContain('title="Switches, Radios & Checkboxes"');
     expect(source).toContain('title="Word Toggles · Standard + Compact + Vertical"');
     expect(source).toContain('primitive="StudioWordToggle / StudioVerticalWordToggle"');
     expect(source).not.toContain("Switches, radios, checkboxes, horizontal word toggles, and vertical word toggles are grouped in one family module.");
