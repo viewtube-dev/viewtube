@@ -17,6 +17,14 @@ test("runtime source governance rejects raw machine paths without a file URL sch
  assert.deepEqual(result.absoluteFileLinks, ["src/example.ts"])
 })
 
+
+test("runtime source governance does not mistake escaped newline labels for Windows paths", () => {
+ const result = findRuntimeSourceViolations([
+  { path: "src/example.ts", text: 'const prompt = "STAGE_A_INPUT_JSON:\\n${payload}"; const status = "status:\\nready"' },
+ ])
+ assert.deepEqual(result.absoluteFileLinks, [])
+})
+
 test("runtime source governance permits repository-relative docs links and ordinary source", () => {
  const result = findRuntimeSourceViolations([
   { path: "src/example.ts", text: 'const href = "https://github.com/viewtube-dev/viewtube/blob/master/docs/brain/guide.md"' },
