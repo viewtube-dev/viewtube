@@ -4234,32 +4234,21 @@ html body button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-
 html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
-html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
-}
 html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]):is([data-selected="true"], [aria-pressed="true"]) > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
 }
 
-/* Word-toggle off = 50% primary; selected handle = 100% primary. */
-html body .vt-studio-44-word-toggle .vt-studio-44-word-handle {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
-}
+/* Selected word-toggle handles use solid primary; idle appearance remains component-defined. */
 html body .vt-studio-44-word-toggle .vt-studio-44-word-handle.is-active {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
 }
-html body .vt-studio-44-switch:not(.is-on):not(.is-checked):not([aria-checked="true"]) {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
-}
+/* Switch idle appearance remains component-defined; selected switches use solid primary. */
 html body .vt-studio-44-switch:is(.is-on, .is-checked, [aria-checked="true"]) {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
 }
 
 
-/* Button fill contract: 50% primary at rest, solid primary when selected. */
-html body button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
-}
+/* Button faces retain their component-specific default fill; only selected states are explicitly solid primary. */
 html body button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face],
 html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
