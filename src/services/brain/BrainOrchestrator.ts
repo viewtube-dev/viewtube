@@ -457,6 +457,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    } : null,
    profileLoadedAt: creatorContext?.provenance.profileLoadedAt || null,
    styleProfileAvailable: Boolean(creatorContext?.styleProfile),
+   styleProfile: creatorContext?.styleProfile ? {
+    id: creatorContext.styleProfile.id,
+    scope: creatorContext.styleProfile.scope,
+    assetType: creatorContext.styleProfile.assetType || null,
+    source: creatorContext.styleProfile.source,
+    descriptor: creatorContext.styleProfile.descriptor,
+    exemplars: creatorContext.styleProfile.exemplars.slice(0, 5).map((exemplar) => ({
+     id: exemplar.id,
+     sourceRef: exemplar.sourceRef || null,
+     text: exemplar.text,
+    })),
+   } : null,
    knowledgeItems: (creatorContext?.channelKnowledge?.records || []).slice(0, 10).map((record) => ({
     id: record.id,
     statement: record.statement,
