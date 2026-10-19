@@ -1500,6 +1500,10 @@ export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUser
 )
 StudioUsernameInput.displayName = "StudioUsernameInput"
 
+/** Semantic alias for the canonical split-left input used by search and filter bars. */
+export const StudioSplitLeftInput = StudioUsernameInput
+export type StudioSplitLeftInputProps = StudioUsernameInputProps
+
 
 export interface StudioLegendMultiDropdownOption {
   value: string
@@ -1630,6 +1634,7 @@ export interface StudioSpectrumTagProps {
   className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
+  disabled?: boolean
 }
 
 /**
@@ -1643,6 +1648,7 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   className,
   onClick,
   ariaLabel,
+  disabled = false,
 }) => {
   const normalized = label.trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(normalized)
@@ -1654,6 +1660,7 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
       data-tag={normalized}
       aria-label={ariaLabel ?? normalized}
       aria-pressed={selected}
+      disabled={disabled}
       style={{ ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
       onClick={onClick}
     >
@@ -2305,9 +2312,16 @@ StudioTagEditor.displayName = "StudioTagEditor";
 
 export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onChange" | "children"> {
   accept?: string;
-  prompt?: string;
+  /** Backward-compatible upload copy; label takes precedence when supplied. */
+  prompt?: React.ReactNode;
+  label?: React.ReactNode;
+  icon?: React.ReactNode;
   sizeVariant?: "standard" | "compact";
+  level?: "l0" | "l1" | "l2";
+  minHeight?: number;
+  multiple?: boolean;
   disabled?: boolean;
+  onFiles?: (files: FileList | null) => void;
   onFileChange?: (file: File) => void;
 }
 
@@ -2359,8 +2373,10 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
     if (disabled) return;
     event.preventDefault();
     setDragging(false);
-    const file = event.dataTransfer.files?.[0];
+    const files = event.dataTransfer.files;
+    const file = files?.[0];
     if (!file) return;
+    onFiles?.(files);
     const input = inputRef.current;
     if (input) {
       try { input.files = event.dataTransfer.files; } catch { /* FileList assignment is not supported by every browser. */ }
@@ -2377,6 +2393,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
       data-size={sizeVariant}
+      style={{ ...style, ...(minHeight ? { minHeight } : {}) }}
       aria-disabled={disabled ? "true" : undefined}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -2401,9 +2418,13 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
         className="vt-studio-upload-frame__input"
         type="file"
         accept={accept}
+        multiple={multiple}
         disabled={disabled}
         aria-label={ariaLabel}
-        onChange={event => selectFile(event.currentTarget.files?.[0])}
+        onChange={event => {
+          onFiles?.(event.currentTarget.files);
+          selectFile(event.currentTarget.files?.[0]);
+        }}
       />
       <span className="vt-studio-upload-frame__inset" aria-hidden="true">
         <span className="vt-studio-upload-frame__layers">
@@ -2415,11 +2436,11 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       </span>
       <span className="vt-studio-upload-frame__center">
         <span className="vt-studio-upload-frame__icon" aria-hidden="true">
-          <Upload />
+          {icon ?? <Upload />}
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
         {!previewUrl && (
-          <span className="vt-studio-upload-frame__label" aria-live="polite">{prompt}</span>
+          <span className="vt-studio-upload-frame__label" aria-live="polite">{label ?? prompt}</span>
         )}
       </span>
       <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--left" data-vt-studio-upload-split="left" aria-hidden="true">
