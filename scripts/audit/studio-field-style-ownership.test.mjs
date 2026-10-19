@@ -79,7 +79,7 @@ test("StudioTextBox uses a half-width black border, matching inline and secondar
   assert.match(studioCss, /\\.vt-studio-text-box\\[data-vt-studio-control="true"\\]::before[\\s\\S]*?border:\\s*var\\(--studio-text-box-stroke-width\\) solid var\\(--vt-field-primary/);
   assert.doesNotMatch(textBoxBlock, /box-shadow/);
   assert.match(textBoxBlock, /font-size:\\s*var\\(--vt-studio-standard-font-size, 38px\\)/);
-  assert.match(textBoxBlock, /line-height:\\s*var\\(--vt-studio-textarea-line-height, \\.75\\)/);
+  assert.match(textBoxBlock, /line-height:\\s*\\.75/);
 });
 
 test("Vault uses Studio Controls for spectrum tags, import toggles, search, upload, and display text", async () => {
