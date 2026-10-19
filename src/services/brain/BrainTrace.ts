@@ -80,7 +80,7 @@ export interface BrainTrace {
  /** Explicitly separates the requested model from the provider-served model. */
  modelRequested?: string | null
  modelServed?: string | null
- modelIdentityStatus?: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable"
+ modelIdentityStatus?: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable" | "model_disabled"
 
  /** Named grader results, 0-100. */
  grades: Record<string, number>
