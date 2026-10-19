@@ -1,0 +1,1261 @@
+/* Space Mono and Bebas Neue are loaded via the consolidated <link> in
+   index.html so this route stops render-blocking on a serial CSS-inside-CSS
+   fetch chain (Vite would previously hoist this @import to the top of the
+   route bundle and hold first paint on it). */
+
+:root {
+ --vt-retro-mono: "Space Mono", "SF Mono", ui-monospace, monospace;
+ --vt-retro-display: "Bebas Neue", "Arial Narrow", sans-serif;
+}
+
+/* Dark chassis background for the sync controller/progress panel content areas. */
+.vt-retro-dark-content { background: #141414 !important; }
+
+/* Panel title in the retro display font. */
+.vt-retro-shell header h1 { font-family: var(--vt-retro-display); letter-spacing: .03em; }
+
+/* Half-height colored accordion header with the retro display font, no badge. */
+.vt-retro-acc-header { min-height: 0; }
+.vt-retro-acc-label { font-family: var(--vt-retro-display); font-weight: 1000; letter-spacing: -.05em; text-transform: uppercase; }
+
+/* Chassis shell: hosts corner rivets on the outer bordered/shadowed frame. */
+.vt-retro-shell { position: relative; }
+
+.vt-retro-rivet {
+ position: absolute;
+ z-index: 5;
+ width: 10px;
+ height: 10px;
+ border-radius: 50%;
+ background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9), rgba(255,255,255,.15) 40%, rgba(0,0,0,.55) 72%, rgba(0,0,0,.78));
+ box-shadow: 0 1px 1px rgba(255,255,255,.35) inset, 0 1px 2px rgba(0,0,0,.5);
+ pointer-events: none;
+}
+.vt-retro-rivet--tl { top: 10px; left: 10px; }
+.vt-retro-rivet--tr { top: 10px; right: 10px; }
+.vt-retro-rivet--bl { bottom: 10px; left: 10px; }
+.vt-retro-rivet--br { bottom: 10px; right: 10px; }
+
+/* Brushed-metal panel texture: a faint diagonal grain over a warm-gray base. */
+.vt-retro-brushed {
+ background-image: repeating-linear-gradient(115deg, rgba(255,255,255,.5) 0 1px, transparent 1px 3px);
+ background-color: #e4e4e0;
+}
+
+/* LED status row: dark housing with round lights, 2x the reference component's 12px dots. */
+.vt-retro-led-row {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ padding: 7px 12px;
+ border: 2px solid #000;
+ border-radius: 8px;
+ background: #0b0b0c;
+ box-shadow: 2px 2px 0 rgba(0,0,0,.4);
+}
+.vt-retro-led {
+ position: relative;
+ width: 24px;
+ height: 24px;
+ flex: 0 0 auto;
+ border-radius: 50%;
+ border: 2px solid rgba(255,255,255,.28);
+ background: rgba(255,255,255,.08);
+ transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.vt-retro-led.is-lit {
+ background: currentColor;
+ border-color: currentColor;
+ box-shadow: 0 0 8px currentColor, 0 0 18px currentColor;
+}
+.vt-retro-led.is-pulse.is-lit { animation: vt-retro-led-pulse 1.3s ease-in-out infinite; }
+@keyframes vt-retro-led-pulse {
+ 0%, 100% { box-shadow: 0 0 6px currentColor, 0 0 12px currentColor; }
+ 50% { box-shadow: 0 0 10px currentColor, 0 0 24px currentColor; }
+}
+.vt-retro-led-caption {
+ font-family: var(--vt-retro-mono);
+ font-size: 8px;
+ font-weight: 700;
+ letter-spacing: .08em;
+ text-transform: uppercase;
+ color: rgba(255,255,255,.55);
+}
+
+/* LCD digital readout: replaces flat oval badges with a glowing mono display. */
+.vt-retro-lcd {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ padding: 4px 9px;
+ border: 2px solid #000;
+ border-radius: 4px;
+ background: #0b0b0c;
+ color: var(--tone, #3FEE56);
+ font-family: var(--vt-retro-mono);
+ font-size: 10px;
+ font-weight: 700;
+ letter-spacing: .05em;
+ line-height: 1;
+ text-shadow: 0 0 6px currentColor;
+ box-shadow: 2px 2px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04);
+ white-space: nowrap;
+}
+
+/* Chunky bezeled switch: replaces flat rounded-full pill buttons. */
+.vt-retro-switch {
+ position: relative;
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ padding: 9px 16px;
+ border: 2px solid #000;
+ border-radius: 7px;
+ background: linear-gradient(180deg, #ffffff 0%, #d6d6d2 100%);
+ box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -2px 0 rgba(0,0,0,.12), 2px 2px 0 #000;
+ font-family: var(--vt-retro-mono);
+ font-size: 11px;
+ font-weight: 700;
+ letter-spacing: .04em;
+ text-transform: uppercase;
+ color: #000;
+ cursor: pointer;
+ transition: transform .08s ease, box-shadow .08s ease;
+}
+.vt-retro-switch:hover { transform: translate(-1px, -1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -2px 0 rgba(0,0,0,.12), 3px 3px 0 #000; }
+.vt-retro-switch:active,
+.vt-retro-switch[data-active="true"]:active { transform: translate(1px, 1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.15), 1px 1px 0 #000; }
+.vt-retro-switch:disabled { cursor: not-allowed; opacity: .5; }
+.vt-retro-switch[data-active="true"] {
+ background: linear-gradient(180deg, var(--tone-light, #fff59a) 0%, var(--tone, #FFDA47) 100%);
+}
+.vt-retro-switch .vt-retro-switch-led {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ background: rgba(0,0,0,.2);
+ border: 1px solid rgba(0,0,0,.4);
+}
+.vt-retro-switch[data-active="true"] .vt-retro-switch-led {
+ background: #3FEE56;
+ border-color: #000;
+ box-shadow: 0 0 6px #3FEE56;
+}
+
+/* Segmented VU-meter bar: replaces the thin gradient-fill progress bar. */
+.vt-retro-vu {
+ position: relative;
+ height: 15px;
+ overflow: hidden;
+ border: 2px solid #000;
+ border-radius: 3px;
+ background: repeating-linear-gradient(90deg, #1c1c1c 0 6px, #0b0b0c 6px 8px);
+}
+.vt-retro-vu > i {
+ position: absolute;
+ inset: 0;
+ display: block;
+ width: var(--fill, 0%);
+ background-image: repeating-linear-gradient(90deg, var(--tone, #3FEE56) 0 6px, rgba(0,0,0,.4) 6px 8px);
+ box-shadow: 0 0 8px var(--tone, #3FEE56) inset;
+ transition: width .3s ease;
+}
+
+/* ── ELECTRONIC SLIDE SWITCH FROM ANALOG COMPONENT ARCHIVE ──────────────── */
+.vt-retro-pcb-group {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #0f0f11;
+    border-radius: 8px;
+    border: 3px solid #000;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.8), 3px 3px 0 #000;
+    transition: background 0.3s;
+    user-select: none;
+    min-width: 105px;
+}
+
+.vt-retro-pcb-group .led-rim {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #555 0%, #2a2a2a 40%, #151515 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.vt-retro-pcb-group .led-bulb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+}
+
+.vt-retro-pcb-group .led-bulb::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 4px;
+    height: 3px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: rotate(-30deg);
+}
+
+.vt-retro-pcb-group.is-active .led-rim {
+    background: linear-gradient(135deg, #666 0%, #2a2a2a 30%, rgba(var(--active-col-rgb), 0.45) 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.4), 0 0 10px rgba(var(--active-col-rgb), 0.2);
+}
+
+.vt-retro-pcb-group.is-active .led-bulb {
+    background: var(--active-col);
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 12px var(--active-col), 0 0 20px rgba(var(--active-col-rgb), 0.4);
+}
+
+.vt-retro-pcb-group .switch-hitbox {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.vt-retro-pcb-group .switch-hitbox:focus-visible {
+    outline: 2px solid var(--active-col, #3FEE56);
+    border-radius: 4px;
+}
+
+.vt-retro-pcb-group .sw-slide-housing {
+    width: 52px;
+    height: 26px;
+    background: linear-gradient(to bottom, #d1d5db, #9ca3af);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px #fff, 0 0 0 2px #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+}
+
+.vt-retro-pcb-group .sw-slide-track {
+    width: 100%;
+    height: 12px;
+    background: #111;
+    border-radius: 2px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+    position: relative;
+}
+
+.vt-retro-pcb-group .sw-slide-nub {
+    width: 14px;
+    height: 18px;
+    background: #374151;
+    border: 1px solid #111;
+    border-radius: 2px;
+    position: absolute;
+    top: -3px;
+    left: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1.5px 1px rgba(255,255,255,0.2);
+    transition: left 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vt-retro-pcb-group .sw-slide-nub::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 3px;
+    bottom: 3px;
+    width: 2px;
+    background: #111;
+    transform: translateX(-50%);
+}
+
+.vt-retro-pcb-group.is-active .sw-slide-nub {
+    left: calc(100% - 16px);
+    background: #374151;
+}
+
+.vt-retro-pcb-group .comp-label {
+    font-family: var(--vt-retro-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+.vt-retro-pcb-group.is-active .comp-label {
+    color: var(--active-col);
+    text-shadow: 0 0 4px rgba(255,255,255,0.1);
+}
+
+.vt-retro-pcb-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Sync status states and animations for PCB slide switch LEDs */
+@keyframes pcb-led-pulse-green {
+    0% {
+        background: #4FFF5B;
+        box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 6px #4FFF5B, 0 0 10px rgba(79,255,91, 0.4);
+    }
+    50% {
+        background: #115c16;
+        box-shadow: inset -2px -2px 4px rgba(0,0,0,0.6), inset 2px 2px 4px rgba(255,255,255,0.1), 0 0 2px rgba(79,255,91, 0.1);
+    }
+    100% {
+        background: #4FFF5B;
+        box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 6px #4FFF5B, 0 0 10px rgba(79,255,91, 0.4);
+    }
+}
+
+/* Syncing state: LED pulses green */
+.vt-retro-pcb-group.is-syncing .led-rim {
+    background: linear-gradient(135deg, #666 0%, #2a2a2a 30%, rgba(79,255,91, 0.45) 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.4), 0 0 10px rgba(79,255,91, 0.2);
+}
+.vt-retro-pcb-group.is-syncing .led-bulb {
+    animation: pcb-led-pulse-green 1s infinite ease-in-out;
+}
+.vt-retro-pcb-group.is-syncing .comp-label {
+    color: #4FFF5B;
+    text-shadow: 0 0 4px rgba(79,255,91, 0.3);
+}
+
+/* Waiting state: LED turns yellow */
+.vt-retro-pcb-group.is-waiting .led-rim {
+    background: linear-gradient(135deg, #666 0%, #2a2a2a 30%, rgba(255,255,97, 0.45) 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.4), 0 0 10px rgba(255,255,97, 0.2);
+}
+.vt-retro-pcb-group.is-waiting .led-bulb {
+    background: #FFFF61;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 12px #FFFF61, 0 0 20px rgba(255,255,97, 0.4);
+}
+.vt-retro-pcb-group.is-waiting .comp-label {
+    color: #FFFF61;
+    text-shadow: 0 0 4px rgba(255,255,97, 0.3);
+}
+
+/* Completed state: LED turns blue */
+.vt-retro-pcb-group.is-completed .led-rim {
+    background: linear-gradient(135deg, #666 0%, #2a2a2a 30%, rgba(59,107,255, 0.45) 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.4), 0 0 10px rgba(59,107,255, 0.2);
+}
+.vt-retro-pcb-group.is-completed .led-bulb {
+    background: #3B6BFF;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 12px #3B6BFF, 0 0 20px rgba(59,107,255, 0.4);
+}
+.vt-retro-pcb-group.is-completed .comp-label {
+    color: #3B6BFF;
+    text-shadow: 0 0 4px rgba(59,107,255, 0.3);
+}
+
+/* Partial state: amber LED, switch stays at rest so status is not confused with action state. */
+.vt-retro-pcb-group.is-partial .led-rim {
+    background: linear-gradient(135deg, #666 0%, #2a2a2a 30%, rgba(255,218,71, 0.45) 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.4), 0 0 10px rgba(255,218,71,0.2);
+}
+.vt-retro-pcb-group.is-partial .led-bulb {
+    background: #FFDA47;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 12px #FFDA47, 0 0 20px rgba(255,218,71,0.4);
+}
+.vt-retro-pcb-group.is-partial .comp-label {
+    color: #FFDA47;
+    text-shadow: 0 0 4px rgba(255,218,71,0.3);
+}
+
+/* Failed state: red/pink LED, switch stays at rest and remains retryable. */
+.vt-retro-pcb-group.is-failed .led-rim {
+    background: linear-gradient(135deg, #666 0%, #2a2a2a 30%, rgba(250,97,138, 0.45) 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.4), 0 0 10px rgba(250,97,138,0.2);
+}
+.vt-retro-pcb-group.is-failed .led-bulb {
+    background: #FA618A;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), inset 2px 2px 4px rgba(255,255,255,0.6), 0 0 12px #FA618A, 0 0 20px rgba(250,97,138,0.4);
+}
+.vt-retro-pcb-group.is-failed .comp-label {
+    color: #FA618A;
+    text-shadow: 0 0 4px rgba(250,97,138,0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+ .vt-retro-led.is-pulse.is-lit { animation: none; }
+ .vt-retro-switch,
+ .vt-retro-vu > i { transition: none; }
+ .vt-retro-pcb-group.is-syncing .led-bulb { animation: none; background: #4FFF5B; }
+}
+
+/* Compact analog toggle used for batch presets and time windows. */
+.vt-retro-analog-toggle {
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+ padding: 0;
+ border: 0;
+ background: transparent;
+ color: var(--vt-analog-label, #f7f7f7);
+ font: inherit;
+ cursor: pointer;
+ -webkit-tap-highlight-color: transparent;
+}
+.vt-retro-analog-toggle:disabled { cursor: not-allowed; opacity: .45; }
+.vt-retro-analog-toggle:focus-visible {
+ outline: 2px solid #fff;
+ outline-offset: 3px;
+ border-radius: 4px;
+}
+.vt-retro-analog-toggle__plate {
+ box-sizing: border-box;
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+ height: 25px;
+ padding: 0 5px;
+ border: 2px solid #000;
+ border-radius: 5px;
+ background: linear-gradient(180deg, #f3f4f6 0%, #c7cbd0 46%, #9298a0 100%);
+ box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px rgba(0,0,0,.25), 1px 1px 0 #000;
+}
+.vt-retro-analog-toggle__led {
+ box-sizing: border-box;
+ display: grid;
+ place-items: center;
+ width: 14px;
+ height: 14px;
+ border-radius: 50%;
+ background: linear-gradient(135deg, #656b72, #202328 68%);
+ box-shadow: inset 0 1px 1px rgba(255,255,255,.35), 0 1px 2px rgba(0,0,0,.65);
+}
+.vt-retro-analog-toggle__led > i {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ background: #17191c;
+ box-shadow: inset 1px 1px 2px rgba(0,0,0,.85);
+}
+.vt-retro-analog-toggle__track {
+ position: relative;
+ display: block;
+ width: 34px;
+ height: 8px;
+ border-radius: 2px;
+ background: #0f1114;
+ box-shadow: inset 0 2px 4px rgba(0,0,0,.9), 0 1px 0 rgba(255,255,255,.25);
+}
+.vt-retro-analog-toggle__track > i {
+ position: absolute;
+ top: -5px;
+ left: 1px;
+ width: 12px;
+ height: 18px;
+ border: 1px solid #0a0b0d;
+ border-radius: 2px;
+ background: linear-gradient(90deg, #20242a, #4c5664 45%, #242930);
+ box-shadow: 0 2px 3px rgba(0,0,0,.65), inset 1px 1px 1px rgba(255,255,255,.28);
+ transition: left .14s cubic-bezier(.4,0,.2,1);
+}
+.vt-retro-analog-toggle__track > i::after {
+ content: "";
+ position: absolute;
+ top: 3px;
+ bottom: 3px;
+ left: 50%;
+ width: 2px;
+ transform: translateX(-50%);
+ background: rgba(0,0,0,.72);
+}
+.vt-retro-analog-toggle.is-on .vt-retro-analog-toggle__track > i { left: 20px; }
+.vt-retro-analog-toggle.is-on .vt-retro-analog-toggle__led > i {
+ background: #4FFF5B;
+ box-shadow: inset -1px -1px 2px rgba(0,0,0,.2), inset 1px 1px 2px rgba(255,255,255,.65), 0 0 6px #4FFF5B, 0 0 10px rgba(79,255,91,.5);
+}
+.vt-retro-analog-toggle.is-cyan.is-on .vt-retro-analog-toggle__led > i {
+ background: #36E0F6;
+ box-shadow: inset -1px -1px 2px rgba(0,0,0,.2), inset 1px 1px 2px rgba(255,255,255,.65), 0 0 6px #36E0F6, 0 0 10px rgba(54,224,246,.5);
+}
+.vt-retro-analog-toggle.is-yellow.is-on .vt-retro-analog-toggle__led > i {
+ background: #FFDA47;
+ box-shadow: inset -1px -1px 2px rgba(0,0,0,.2), inset 1px 1px 2px rgba(255,255,255,.65), 0 0 6px #FFDA47, 0 0 10px rgba(255,218,71,.5);
+}
+.vt-retro-analog-toggle.is-red.is-on .vt-retro-analog-toggle__led > i {
+ background: #ff3e48;
+ box-shadow: inset -1px -1px 2px rgba(0,0,0,.2), inset 1px 1px 2px rgba(255,255,255,.65), 0 0 6px #ff3e48, 0 0 10px rgba(255,62,72,.5);
+}
+.vt-retro-analog-toggle__label {
+ font-family: var(--vt-retro-mono);
+ font-size: 8px;
+ font-weight: 900;
+ letter-spacing: .04em;
+ line-height: 1;
+ text-transform: uppercase;
+ white-space: nowrap;
+}
+
+/* Dual analog controller plate.
+   Physical composition: [ status LED | horizontal sync switch | red vertical batch switch | batch LED ]. */
+.vt-retro-pcb-group.is-category-action {
+ min-width: 96px !important;
+ padding: 0 !important;
+ gap: 0 !important;
+ border: 0 !important;
+ background: transparent !important;
+ box-shadow: none !important;
+}
+.vt-retro-pcb-group.is-category-action.has-batch-selection { min-width: 142px !important; }
+.vt-retro-pcb-group.is-category-action .vt-retro-pcb-controls {
+ padding: 0;
+ gap: 0 !important;
+}
+.vt-retro-dual-plate {
+ box-sizing: border-box;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 6px;
+ width: 84px;
+ height: 30px;
+ padding: 0 5px;
+ border: 2px solid #000;
+ border-radius: 5px;
+ background: linear-gradient(180deg, #f4f5f6 0%, #c9cdd2 44%, #969ca4 100%);
+ box-shadow: inset 0 1px 1px #fff, inset 0 -2px 2px rgba(0,0,0,.25), 1px 1px 0 #000;
+}
+.vt-retro-pcb-group.has-batch-selection .vt-retro-dual-plate {
+ width: 134px;
+}
+.vt-retro-pcb-group.is-category-action .led-rim {
+ box-sizing: border-box;
+ flex: 0 0 17px;
+ width: 17px !important;
+ height: 17px !important;
+ aspect-ratio: 1 / 1;
+ border-radius: 50%;
+}
+.vt-retro-pcb-group.is-category-action .led-bulb {
+ width: 9px !important;
+ height: 9px !important;
+ aspect-ratio: 1 / 1;
+ border-radius: 50%;
+}
+.vt-retro-sync-hitbox {
+ flex: 0 0 46px;
+ width: 46px !important;
+ height: 24px;
+}
+.vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-track {
+ position: relative;
+ width: 46px;
+ height: 8px !important;
+ border-radius: 1px;
+ background: #101216;
+ box-shadow: inset 0 2px 4px rgba(0,0,0,.9), 0 1px 0 rgba(255,255,255,.2);
+}
+.vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-nub {
+ width: 15px !important;
+ height: 18px !important;
+ top: -5px !important;
+ left: 1px;
+ background: linear-gradient(90deg, #252a31, #4d5868 45%, #272c34);
+}
+.vt-retro-pcb-group.is-category-action.is-active .vt-retro-sync-hitbox .sw-slide-nub {
+ left: calc(100% - 16px) !important;
+}
+
+/* Red physical vertical switch that replaces the row checkbox. */
+.vt-retro-batch-hitbox {
+ box-sizing: border-box;
+ display: grid;
+ place-items: center;
+ flex: 0 0 22px;
+ width: 22px;
+ height: 26px;
+ padding: 0;
+ border: 0;
+ background: transparent;
+ cursor: pointer;
+ -webkit-tap-highlight-color: transparent;
+}
+.vt-retro-batch-hitbox:focus-visible {
+ outline: 2px solid #ff3e48;
+ outline-offset: 2px;
+ border-radius: 3px;
+}
+.vt-retro-batch-hitbox:disabled { cursor: not-allowed; opacity: .45; }
+.vt-retro-batch-track {
+ position: relative;
+ display: block;
+ width: 13px;
+ height: 23px;
+ border: 1px solid #08090a;
+ border-radius: 2px;
+ background: linear-gradient(90deg, #0a0b0d 0%, #202329 48%, #090a0b 100%);
+ box-shadow: inset 0 2px 4px rgba(0,0,0,.95), 0 1px 1px rgba(255,255,255,.38);
+}
+.vt-retro-batch-nub {
+ position: absolute;
+ left: -3px;
+ bottom: 1px;
+ width: 17px;
+ height: 10px;
+ border: 1px solid #500008;
+ border-radius: 2px;
+ background:
+  linear-gradient(180deg, rgba(255,255,255,.45), transparent 35%),
+  linear-gradient(90deg, #8f0714, #ff3044 45%, #a10716);
+ box-shadow: 0 2px 3px rgba(0,0,0,.75), inset 1px 1px 1px rgba(255,255,255,.42), inset -1px -1px 2px rgba(80,0,8,.55);
+ transition: bottom .14s cubic-bezier(.4,0,.2,1);
+}
+.vt-retro-batch-nub::after {
+ content: "";
+ position: absolute;
+ top: 2px;
+ left: 2px;
+ right: 2px;
+ height: 1px;
+ background: rgba(255,255,255,.4);
+}
+.vt-retro-pcb-group.is-batch-selected .vt-retro-batch-nub { bottom: 11px; }
+
+.vt-retro-selection-led {
+ background: linear-gradient(135deg, #5e6268 0%, #22262b 50%, #111315 100%) !important;
+ box-shadow: 0 2px 4px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.3) !important;
+}
+.vt-retro-selection-led .led-bulb {
+ animation: none !important;
+ background: #1a1a1a !important;
+ box-shadow: inset 1px 1px 3px rgba(0,0,0,.8) !important;
+}
+.vt-retro-pcb-group.is-batch-selected .vt-retro-selection-led {
+ background: linear-gradient(135deg, #6b6d72 0%, #2a2a2a 40%, rgba(255,62,72,.48) 100%) !important;
+ box-shadow: 0 2px 5px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.38), 0 0 9px rgba(255,62,72,.35) !important;
+}
+.vt-retro-pcb-group.is-batch-selected .vt-retro-selection-led .led-bulb {
+ background: #ff3e48 !important;
+ box-shadow: inset -1px -1px 2px rgba(0,0,0,.2), inset 1px 1px 2px rgba(255,255,255,.65), 0 0 8px #ff3e48, 0 0 14px rgba(255,62,72,.52) !important;
+}
+
+/* Status LED is independent from the red batch-selection LED. */
+.vt-retro-pcb-group.is-syncing .vt-retro-status-led .led-bulb {
+ animation: pcb-led-pulse-green 1s infinite ease-in-out;
+}
+.vt-retro-pcb-group.is-waiting .vt-retro-status-led .led-bulb {
+ background: #FFFF61;
+ box-shadow: inset -2px -2px 4px rgba(0,0,0,.2), inset 2px 2px 4px rgba(255,255,255,.6), 0 0 12px #FFFF61, 0 0 20px rgba(255,255,97,.4);
+}
+.vt-retro-pcb-group.is-completed .vt-retro-status-led .led-bulb {
+ background: #3B6BFF;
+ box-shadow: inset -2px -2px 4px rgba(0,0,0,.2), inset 2px 2px 4px rgba(255,255,255,.6), 0 0 12px #3B6BFF, 0 0 20px rgba(59,107,255,.4);
+}
+.vt-retro-pcb-group.is-partial .vt-retro-status-led .led-bulb {
+ background: #FFDA47;
+ box-shadow: inset -2px -2px 4px rgba(0,0,0,.2), inset 2px 2px 4px rgba(255,255,255,.6), 0 0 12px #FFDA47, 0 0 20px rgba(255,218,71,.4);
+}
+.vt-retro-pcb-group.is-failed .vt-retro-status-led .led-bulb {
+ background: #FA618A;
+ box-shadow: inset -2px -2px 4px rgba(0,0,0,.2), inset 2px 2px 4px rgba(255,255,255,.6), 0 0 12px #FA618A, 0 0 20px rgba(250,97,138,.4);
+}
+
+.vt-retro-pcb-group.is-category-action .comp-label {
+ box-sizing: border-box;
+ width: 84px;
+ margin: 3px 0 0;
+ padding: 3px;
+ border: 1px solid #000;
+ border-radius: 0;
+ box-shadow: 1px 1px 0 #000;
+ font-size: 8px !important;
+ line-height: 1 !important;
+ background: rgba(255,255,255,.75);
+}
+.vt-retro-pcb-group.is-category-action.has-batch-selection .comp-label { width: 134px; }
+
+@media (prefers-reduced-motion: reduce) {
+ .vt-retro-analog-toggle__track > i,
+ .vt-retro-batch-nub { transition: none; }
+ .vt-retro-pcb-group.is-syncing .vt-retro-status-led .led-bulb { animation: none; background: #4FFF5B; }
+}
+
+
+
+/* Dataset row selector: restore the original compact hardware scale.
+   The LED and vertical red switch sit side-by-side on one silver plate. */
+.vt-retro-batch-selector {
+ box-sizing: border-box;
+ display: inline-grid;
+ place-items: center;
+ width: 62px;
+ height: 46px;
+ padding: 0;
+ border: 0;
+ background: transparent;
+ color: #111;
+ cursor: pointer;
+ -webkit-tap-highlight-color: transparent;
+}
+.vt-retro-batch-selector:disabled { cursor: not-allowed; opacity: .42; }
+.vt-retro-batch-selector:focus-visible {
+ outline: 3px solid #ff3e48;
+ outline-offset: 2px;
+ border-radius: 6px;
+}
+.vt-retro-batch-selector__plate {
+ box-sizing: border-box;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 7px;
+ width: 58px;
+ height: 42px;
+ padding: 0 6px;
+ border: 2px solid #000;
+ border-radius: 5px;
+ background: linear-gradient(180deg, #f4f5f6 0%, #c9cdd2 44%, #969ca4 100%);
+ box-shadow: inset 0 1px 1px #fff, inset 0 -2px 2px rgba(0,0,0,.25), 1px 1px 0 #000;
+}
+.vt-retro-batch-selector__led {
+ box-sizing: border-box;
+ display: grid;
+ place-items: center;
+ flex: 0 0 17px;
+ width: 17px;
+ height: 17px;
+ border-radius: 50%;
+ background: linear-gradient(135deg, #656b72, #202328 68%);
+ box-shadow: inset 0 1px 1px rgba(255,255,255,.35), 0 1px 2px rgba(0,0,0,.65);
+}
+.vt-retro-batch-selector__led > i {
+ width: 9px;
+ height: 9px;
+ border-radius: 50%;
+ background: #17191c;
+ box-shadow: inset 1px 1px 2px rgba(0,0,0,.85);
+}
+.vt-retro-batch-selector__track {
+ position: relative;
+ display: block;
+ flex: 0 0 14px;
+ width: 14px;
+ height: 25px;
+ border: 1px solid #08090a;
+ border-radius: 2px;
+ background: linear-gradient(90deg, #0a0b0d 0%, #202329 48%, #090a0b 100%);
+ box-shadow: inset 0 2px 4px rgba(0,0,0,.95), 0 1px 1px rgba(255,255,255,.38);
+}
+.vt-retro-batch-selector__nub {
+ position: absolute;
+ left: -3px;
+ bottom: 1px;
+ width: 18px;
+ height: 10px;
+ border: 1px solid #500008;
+ border-radius: 2px;
+ background:
+  linear-gradient(180deg, rgba(255,255,255,.45), transparent 35%),
+  linear-gradient(90deg, #8f0714, #ff3044 45%, #a10716);
+ box-shadow: 0 2px 3px rgba(0,0,0,.75), inset 1px 1px 1px rgba(255,255,255,.42), inset -1px -1px 2px rgba(80,0,8,.55);
+ transition: bottom .14s cubic-bezier(.4,0,.2,1);
+}
+.vt-retro-batch-selector__nub::after {
+ content: "";
+ position: absolute;
+ top: 2px;
+ left: 2px;
+ right: 2px;
+ height: 1px;
+ background: rgba(255,255,255,.4);
+}
+.vt-retro-batch-selector.is-selected .vt-retro-batch-selector__nub { bottom: 13px; }
+.vt-retro-batch-selector.is-selected .vt-retro-batch-selector__led {
+ background: linear-gradient(135deg, #6b6d72 0%, #2a2a2a 40%, rgba(255,62,72,.48) 100%);
+ box-shadow: 0 2px 5px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.38), 0 0 9px rgba(255,62,72,.35);
+}
+.vt-retro-batch-selector.is-selected .vt-retro-batch-selector__led > i {
+ background: #ff3e48;
+ box-shadow: inset -1px -1px 2px rgba(0,0,0,.2), inset 1px 1px 2px rgba(255,255,255,.65), 0 0 8px #ff3e48, 0 0 14px rgba(255,62,72,.52);
+}
+
+/* Clickable standard badges retain the shared badge primitive as the visible control. */
+.vt-sync-standard-badge-action {
+ display: inline-flex;
+ align-items: center;
+ flex: 0 0 auto;
+ margin: 0;
+ padding: 0;
+ border: 0;
+ background: transparent;
+ color: inherit;
+ font: inherit;
+ cursor: pointer;
+}
+.vt-sync-standard-badge-action:focus-visible {
+ outline: 2px solid #528FFA;
+ outline-offset: 2px;
+ border-radius: 5px;
+}
+.vt-sync-standard-badge {
+ flex: 0 0 auto;
+ white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+ .vt-retro-batch-selector__nub { transition: none; }
+}
+
+
+
+/* VT-SYNC compact responsive row primitives. */
+.vt-sync-row-shell {
+ box-sizing: border-box;
+ display: grid;
+ grid-template-columns: 32px minmax(0, 1fr) 84px;
+ grid-template-areas:
+  "check copy sync"
+  "meta meta meta";
+ align-items: stretch;
+ column-gap: 6px;
+ margin: 5px 8px;
+ overflow: hidden;
+ border-radius: 6px;
+}
+.vt-sync-row-check {
+ grid-area: check;
+ align-self: stretch;
+ padding: 4px 0;
+}
+.vt-sync-row-copy {
+ grid-area: copy;
+ align-self: stretch;
+ padding: 8px 2px;
+}
+.vt-sync-row-sync {
+ grid-area: sync;
+ align-self: stretch;
+ padding: 4px 0;
+}
+.vt-sync-meta-rail {
+ grid-area: meta;
+ display: flex;
+ min-width: 0;
+ align-items: center;
+ gap: 6px;
+ overflow-x: auto;
+ border-top: 1px solid color-mix(in srgb, #000 18%, transparent);
+ padding: 6px 2px 7px;
+ scrollbar-width: thin;
+ overscroll-behavior-inline: contain;
+}
+
+.vt-sync-batch-checkbox.vt-subtoolbox-check-control {
+ width: 24px !important;
+ height: 24px !important;
+ min-width: 24px;
+ min-height: 24px;
+ border-radius: 0;
+ flex: 0 0 24px;
+}
+.vt-sync-batch-checkbox.vt-subtoolbox-check-control > span {
+ width: 64%;
+ height: 64%;
+}
+
+.vt-sync-meta-tag,
+.vt-sync-meta-tag-action {
+ box-sizing: border-box;
+ flex: 0 0 auto;
+ min-width: 0;
+}
+.vt-sync-meta-tag-action {
+ display: inline-flex;
+ margin: 0;
+ padding: 0;
+ border: 0;
+ background: transparent;
+ color: inherit;
+ cursor: pointer;
+}
+.vt-sync-meta-tag-action:focus-visible {
+ outline: 2px solid #528FFA;
+ outline-offset: 2px;
+ border-radius: 4px;
+}
+.vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+ height: 20px;
+ min-height: 20px;
+ max-width: 100%;
+ justify-content: flex-start;
+ overflow: hidden;
+ padding: 0 6px;
+ border-radius: 4px;
+ font-size: 8px;
+ font-weight: 1000;
+ letter-spacing: 0;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+}
+.vt-sync-dataset-title {
+ max-width: 100%;
+ overflow: hidden;
+ text-overflow: clip;
+}
+.vt-sync-dataset-subtitle {
+ font-size: 10.5px;
+ line-height: 1.16;
+}
+.vt-sync-category-title {
+ font-size: 19px !important;
+ line-height: 1;
+}
+.vt-sync-category-summary {
+ font-size: 9.5px !important;
+}
+.vt-sync-group-header {
+ box-sizing: border-box;
+ padding-inline: 8px;
+}
+
+/* Status palette: execution badge and LED share the exact state color. */
+.vt-retro-pcb-group.is-category-action {
+ --vt-sync-led-color: #8f96a0;
+ --vt-sync-led-rgb: 143,150,160;
+}
+.vt-retro-pcb-group.is-waiting {
+ --vt-sync-led-color: #FFFF61;
+ --vt-sync-led-rgb: 255,255,97;
+}
+.vt-retro-pcb-group[data-sync-label="UP NEXT"] {
+ --vt-sync-led-color: #36E0F6;
+ --vt-sync-led-rgb: 54,224,246;
+}
+.vt-retro-pcb-group.is-syncing {
+ --vt-sync-led-color: #4FFF5B;
+ --vt-sync-led-rgb: 79,255,91;
+}
+.vt-retro-pcb-group.is-completed {
+ --vt-sync-led-color: #3B6BFF;
+ --vt-sync-led-rgb: 59,107,255;
+}
+.vt-retro-pcb-group.is-partial {
+ --vt-sync-led-color: #FFDA47;
+ --vt-sync-led-rgb: 255,218,71;
+}
+.vt-retro-pcb-group.is-failed {
+ --vt-sync-led-color: #FA618A;
+ --vt-sync-led-rgb: 250,97,138;
+}
+
+.vt-retro-pcb-group.is-category-action .comp-label {
+ width: 84px;
+ min-height: 17px;
+ margin: 3px 0 0;
+ padding: 3px 4px;
+ border: 1.5px solid var(--vt-sync-led-color);
+ border-radius: 4px;
+ background: color-mix(in srgb, var(--vt-sync-led-color) 14%, white);
+ box-shadow: none;
+ color: var(--vt-sync-led-color) !important;
+ font-size: 8px !important;
+ font-weight: 1000;
+ line-height: 1 !important;
+ letter-spacing: .06em;
+ text-shadow: none !important;
+}
+
+@keyframes vt-sync-led-breathe {
+ 0%,100% {
+  filter: brightness(1);
+  box-shadow:
+   inset -2px -2px 4px rgba(0,0,0,.2),
+   inset 2px 2px 4px rgba(255,255,255,.6),
+   0 0 8px var(--vt-sync-led-color),
+   0 0 14px rgba(var(--vt-sync-led-rgb),.36);
+ }
+ 50% {
+  filter: brightness(.68);
+  box-shadow:
+   inset -2px -2px 4px rgba(0,0,0,.35),
+   inset 2px 2px 4px rgba(255,255,255,.28),
+   0 0 3px rgba(var(--vt-sync-led-rgb),.35);
+ }
+}
+@keyframes vt-sync-led-ripple {
+ 0% { transform: scale(.65); opacity: .6; }
+ 70% { opacity: .18; }
+ 100% { transform: scale(2.45); opacity: 0; }
+}
+
+.vt-retro-pcb-group:is(.is-waiting,.is-syncing,.is-completed,.is-partial,.is-failed) .vt-retro-status-led {
+ overflow: visible;
+}
+.vt-retro-pcb-group:is(.is-waiting,.is-syncing,.is-completed,.is-partial,.is-failed) .vt-retro-status-led .led-bulb {
+ background: var(--vt-sync-led-color) !important;
+ animation: vt-sync-led-breathe 1.45s infinite ease-in-out !important;
+}
+.vt-retro-pcb-group:is(.is-waiting,.is-syncing,.is-completed,.is-partial,.is-failed) .vt-retro-status-led::after {
+ content: "";
+ position: absolute;
+ inset: 2px;
+ z-index: 0;
+ border: 1.5px solid var(--vt-sync-led-color);
+ border-radius: 50%;
+ pointer-events: none;
+ animation: vt-sync-led-ripple 1.65s infinite ease-out;
+}
+.vt-retro-pcb-group[data-sync-label="UP NEXT"] .vt-retro-status-led .led-bulb,
+.vt-retro-pcb-group[data-sync-label="UP NEXT"] .vt-retro-status-led::after {
+ animation-duration: 1.05s !important;
+}
+.vt-retro-pcb-group.is-syncing .vt-retro-status-led .led-bulb,
+.vt-retro-pcb-group.is-syncing .vt-retro-status-led::after {
+ animation-duration: .9s !important;
+}
+.vt-retro-pcb-group.is-completed .vt-retro-status-led .led-bulb,
+.vt-retro-pcb-group.is-completed .vt-retro-status-led::after {
+ animation-duration: 2.25s !important;
+}
+.vt-retro-pcb-group.is-failed .vt-retro-status-led .led-bulb,
+.vt-retro-pcb-group.is-failed .vt-retro-status-led::after {
+ animation-duration: 1.15s !important;
+}
+
+/* Mobile landscape and wider: one horizontal instrument row.
+   Metadata fills in vertical pairs (two badges per column) immediately
+   to the left of the larger sync compound component. */
+@media (min-width: 600px) {
+ .vt-sync-row-shell {
+  grid-template-columns: 40px minmax(180px, 1fr) minmax(160px, 30vw) 112px;
+  grid-template-areas: "check copy meta sync";
+  align-items: center;
+  column-gap: 10px;
+  min-height: 88px;
+  margin: 7px 12px;
+  padding: 0 2px;
+ }
+ .vt-sync-row-check,
+ .vt-sync-row-copy,
+ .vt-sync-row-sync {
+  align-self: stretch;
+ }
+ .vt-sync-row-copy {
+  padding: 10px 2px;
+ }
+ .vt-sync-meta-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, minmax(20px, auto));
+  grid-auto-columns: max-content;
+  align-content: center;
+  align-items: center;
+  justify-content: start;
+  gap: 5px 7px;
+  max-width: 100%;
+  overflow-x: auto;
+  border-top: 0;
+  padding: 7px 0;
+ }
+ .vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+  height: 22px;
+  min-height: 22px;
+  padding-inline: 7px;
+  font-size: 8.5px;
+ }
+ .vt-sync-batch-checkbox.vt-subtoolbox-check-control {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px;
+  min-height: 28px;
+  flex-basis: 28px;
+ }
+ .vt-sync-dataset-title {
+  font-size: clamp(16px, 1.55vw, 20px) !important;
+  letter-spacing: -.042em !important;
+ }
+ .vt-sync-dataset-subtitle {
+  font-size: 12px;
+  line-height: 1.14;
+ }
+ .vt-sync-category-title {
+  font-size: 22px !important;
+ }
+ .vt-sync-category-summary {
+  font-size: 10.5px !important;
+ }
+ .vt-sync-group-header {
+  padding-inline: 12px;
+ }
+
+ .vt-retro-pcb-group.is-category-action {
+  min-width: 108px !important;
+ }
+ .vt-retro-dual-plate {
+  width: 102px;
+  height: 36px;
+  padding-inline: 7px;
+  gap: 8px;
+ }
+ .vt-retro-pcb-group.is-category-action .led-rim {
+  width: 20px !important;
+  height: 20px !important;
+  flex-basis: 20px;
+ }
+ .vt-retro-pcb-group.is-category-action .led-bulb {
+  width: 11px !important;
+  height: 11px !important;
+ }
+ .vt-retro-sync-hitbox {
+  width: 58px !important;
+  flex-basis: 58px;
+  height: 28px;
+ }
+ .vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-track {
+  width: 58px;
+  height: 9px !important;
+ }
+ .vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-nub {
+  width: 17px !important;
+  height: 21px !important;
+  top: -6px !important;
+ }
+ .vt-retro-pcb-group.is-category-action.is-active .vt-retro-sync-hitbox .sw-slide-nub {
+  left: calc(100% - 18px) !important;
+ }
+ .vt-retro-pcb-group.is-category-action .comp-label {
+  width: 102px;
+  min-height: 20px;
+  padding: 4px 5px;
+  font-size: 9px !important;
+ }
+}
+
+/* Desktop: preserve generous equal margins and increase the physical controller
+   without allowing it to touch the toolbox edge. */
+@media (min-width: 1100px) {
+ .vt-sync-row-shell {
+  grid-template-columns: 44px minmax(320px, 1fr) minmax(300px, 430px) 126px;
+  column-gap: 12px;
+  margin: 9px 16px;
+  min-height: 96px;
+ }
+ .vt-sync-batch-checkbox.vt-subtoolbox-check-control {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  min-height: 32px;
+ }
+ .vt-sync-dataset-title {
+  font-size: clamp(19px, 1.45vw, 23px) !important;
+ }
+ .vt-sync-dataset-subtitle {
+  font-size: 12.5px;
+ }
+ .vt-sync-category-title {
+  font-size: 24px !important;
+ }
+ .vt-sync-category-summary {
+  font-size: 11px !important;
+ }
+ .vt-sync-group-header {
+  padding-inline: 16px;
+ }
+ .vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+  height: 24px;
+  min-height: 24px;
+  padding-inline: 8px;
+  font-size: 9px;
+ }
+ .vt-retro-pcb-group.is-category-action {
+  min-width: 120px !important;
+ }
+ .vt-retro-dual-plate {
+  width: 114px;
+  height: 40px;
+  padding-inline: 8px;
+  gap: 9px;
+ }
+ .vt-retro-pcb-group.is-category-action .led-rim {
+  width: 22px !important;
+  height: 22px !important;
+  flex-basis: 22px;
+ }
+ .vt-retro-pcb-group.is-category-action .led-bulb {
+  width: 12px !important;
+  height: 12px !important;
+ }
+ .vt-retro-sync-hitbox {
+  width: 64px !important;
+  flex-basis: 64px;
+  height: 30px;
+ }
+ .vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-track {
+  width: 64px;
+  height: 10px !important;
+ }
+ .vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-nub {
+  width: 18px !important;
+  height: 22px !important;
+  top: -6px !important;
+ }
+ .vt-retro-pcb-group.is-category-action.is-active .vt-retro-sync-hitbox .sw-slide-nub {
+  left: calc(100% - 19px) !important;
+ }
+ .vt-retro-pcb-group.is-category-action .comp-label {
+  width: 114px;
+  min-height: 22px;
+  font-size: 9.5px !important;
+ }
+}
+
+@media (max-width: 430px) {
+ .vt-retro-pcb-group.is-category-action {
+  min-width: 82px !important;
+ }
+ .vt-retro-dual-plate {
+  width: 78px;
+  padding-inline: 4px;
+  gap: 5px;
+ }
+ .vt-retro-sync-hitbox {
+  width: 42px !important;
+  flex-basis: 42px;
+ }
+ .vt-retro-pcb-group.is-category-action .vt-retro-sync-hitbox .sw-slide-track {
+  width: 42px;
+ }
+ .vt-retro-pcb-group.is-category-action .comp-label {
+  width: 78px;
+  font-size: 7.5px !important;
+ }
+ .vt-sync-meta-tag.vt-subtoolbox-alpha-tag {
+  height: 18px;
+  min-height: 18px;
+  padding-inline: 5px;
+  font-size: 7.5px;
+ }
+}
+
+@media (prefers-reduced-motion: reduce) {
+ .vt-retro-pcb-group:is(.is-waiting,.is-syncing,.is-completed,.is-partial,.is-failed) .vt-retro-status-led .led-bulb {
+  animation: none !important;
+ }
+ .vt-retro-pcb-group:is(.is-waiting,.is-syncing,.is-completed,.is-partial,.is-failed) .vt-retro-status-led::after {
+  display: none;
+ }
+}
+

@@ -1,0 +1,67 @@
+{
+  "threadId": "widget-geometry-primitives-2026-09-26",
+  "verb": "FIX",
+  "tier": "T2",
+  "stage": "EXECUTE",
+  "owner": "dashboard-widget-system",
+  "status": "partial",
+  "intent": "Repair mobile widget shell width/clipping and promote the shared header, split-control, video-selector, comment, compound and upload-frame corrections into canonical widget primitives.",
+  "taskIds": [
+    "widget-shell-geometry",
+    "widget-header-toggle",
+    "widget-split-controls",
+    "widget-video-select",
+    "widget-comment-donors",
+    "widget-compound-primitives",
+    "widget-upload-frames",
+    "widget-settings-certification",
+    "widget-preview-state",
+    "widget-preview-cohort"
+  ],
+  "writerLock": {
+    "held": true,
+    "branch": "feat/widget-preview-settings-certification-2026-09-26",
+    "paths": [
+      "src/views/dashboard/WidgetPrimitives.tsx",
+      "src/views/dashboard/widgetCompoundPrimitives.css",
+      "src/views/dashboard/widgetPreviewFixtures.ts",
+      "src/views/dashboard/widgets/SettingsWidget.tsx",
+      "src/views/dashboard/widgets/SettingsWidget.css",
+      "src/views/dashboard/widgets/OpportunityRadarWidget.tsx",
+      "src/views/dashboard/widgets/CommentReplyWidget.tsx",
+      "src/views/dashboard/widgets/VideoUploaderWidget.tsx",
+      "src/views/dashboard/widgets/UIReferenceLibraryWidget.tsx",
+      "src/views/dashboard/__tests__/",
+      "scripts/",
+      "docs/architecture/VIEWTUBE_WIDGET_DASHBOARD_MASTER_RESOURCE.md"
+    ]
+  },
+  "reconRef": "VIEWTUBE_WIDGET_DASHBOARD_MASTER_RESOURCE.md + 2026-09-26 user field QA screenshots",
+  "approval": "Explicit creator approval: Begin",
+  "openQuestions": [],
+  "nextAction": "Certify Settings, add canonical WidgetPreviewState + governed fixtures, migrate representative analytics/AI/community/creation surfaces, capture desktop/phone evidence, then stop before consolidation work.",
+  "entries": [
+    {
+      "ts": "2026-09-26",
+      "stage": "RECON",
+      "note": "Current mobile contract uses asymmetric 12px/40px dashboard reclaim; screenshots show the compensation now overshoots right edge. Shared header toggle uses equal-width segments; split/video primitives retain hard-coded geometry."
+    },
+    {
+      "ts": "2026-09-26T01:52-04:00",
+      "stage": "FIX",
+      "note": "tested/changed shared widget geometry and primitive owners → current main absorbed the mobile width, intrinsic header toggle, split-control, donor primitive, compound, and video-select corrections; final branch now only fixes upload-frame styling and UI Reference Library caption scale/color → likely remaining risk is visual regression, so PR #456 CI + desktop/phone capture is next"
+    },
+    {
+      "ts": "2026-09-26T01:52-04:00",
+      "stage": "VERIFY",
+      "note": "PR #456 release gates on prior head: source-governance, focused-contracts, local-smoke and production-build passed; full-suite and static-quality failed only on unrelated current-main Vault/Editor/navigation/VT-SYNC/type debt. Widget master resource updated with Wave 0 receipt and revised next sequence. Visual proof remains pending."
+    },
+    {
+      "ts": "2026-09-26T04:36-04:00",
+      "stage": "EXECUTE",
+      "note": "Creator requested completion through the pre-consolidation boundary. New branch owns Settings certification, canonical preview-state system, representative preview migrations, visual evidence, tests and master-resource handoff."
+    }
+  ],
+  "lastApp": "ChatGPT",
+  "lastTs": "2026-09-26T04:36-04:00"
+}

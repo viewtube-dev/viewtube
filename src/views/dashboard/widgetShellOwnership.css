@@ -1,0 +1,136 @@
+/* Canonical shell ownership — Phase 1.
+   This layer owns shell geometry and overflow without increasing selector
+   specificity. Legacy toolbox rules remain available while migration proceeds. */
+@layer widgets {
+  .dashboard-barrier {
+    --vt-shell-overflow-x: hidden;
+    --vt-widget-collapse-duration: 600ms;
+    --vt-widget-collapse-easing: ease-out;
+  }
+
+  .vt-widget-outer-effect {
+    width:100%;
+    height:100%;
+    min-width:0;
+    min-height:0;
+    position:relative;
+    overflow:visible;
+  }
+
+  .vt-widget {
+    width:100%;
+    height:100%;
+    min-width:0;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow:visible;
+    background:var(--bg-widget);
+    container-name:vt-widget;
+    container-type:inline-size;
+  }
+
+  .vt-widget-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex:0 0 var(--header-height);
+    min-width:0;
+    min-height:var(--header-height);
+  }
+
+  .vt-widget-collapse-region {
+    display:grid;
+    flex:1 1 auto;
+    min-width:0;
+    min-height:0;
+    grid-template-rows:1fr;
+    transition:grid-template-rows var(--vt-widget-collapse-duration) var(--vt-widget-collapse-easing);
+  }
+
+  .vt-widget-collapse-region.is-closed {
+    grid-template-rows:0fr;
+    flex-basis:0;
+  }
+
+  .widget-mobile-controls-trigger,
+  .widget-mobile-control-row {
+    display:none;
+  }
+
+  .vt-widget-collapse-inner {
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    min-height:0;
+    overflow:visible;
+  }
+
+  .vt-widget-collapse-region.is-closed .vt-widget-collapse-inner {
+    overflow:hidden;
+  }
+
+  .vt-widget-content {
+    display:flex;
+    flex:1 1 auto;
+    flex-direction:column;
+    min-width:0;
+    min-height:0;
+    overflow:visible;
+  }
+
+  .vt-widget-body {
+    --vt-widget-body-inset:var(--widget-content-inset);
+    --vt-widget-edge-safe:4px;
+    --vt-widget-zone-full-start:full-start;
+    --vt-widget-zone-full-end:full-end;
+    --vt-widget-zone-shadow-start:shadow-start;
+    --vt-widget-zone-shadow-end:shadow-end;
+    --vt-widget-zone-inset-start:inset-start;
+    --vt-widget-zone-inset-end:inset-end;
+    display:grid;
+    flex:1 1 auto;
+    grid-template-columns:
+      [full-start] var(--vt-widget-edge-safe)
+      [shadow-start] max(0px, calc(var(--vt-widget-body-inset) - var(--vt-widget-edge-safe)))
+      [inset-start] minmax(0, 1fr)
+      [inset-end] max(0px, calc(var(--vt-widget-body-inset) - var(--vt-widget-edge-safe)))
+      [shadow-end] var(--vt-widget-edge-safe)
+      [full-end];
+    grid-auto-rows:max-content;
+    align-content:start;
+    padding:0;
+    min-width:0;
+    min-height:0;
+    overflow:visible;
+  }
+
+  .vt-widget-body > * {
+    grid-column:inset-start / inset-end;
+    min-width:0;
+  }
+
+  .vt-widget-paint-clip {
+    overflow:visible;
+  }
+
+  .vt-widget-body--flush { --vt-widget-body-inset:0px; }
+
+  /* Named geometry zones are grid tracks, not width compensation.
+     FULL reaches the paint edge, SHADOW-SAFE preserves effect clearance,
+     INSET is the default control/content column, and OVERLAY is the semantic
+     hook for floating UI (true escaping overlays should portal to the top layer). */
+  .vt-widget-zone-inset { grid-column:inset-start / inset-end; }
+  .vt-full-bleed,
+  .vt-widget-zone-full,
+  .vt-full-bleed-bottom,
+  .vt-full-bleed-top { grid-column:full-start / full-end; width:auto; max-width:none; margin-inline:0; }
+  .vt-widget-zone-shadow-safe,
+  .vt-widget-shadow-safe { grid-column:shadow-start / shadow-end; width:auto; margin-inline:0; box-sizing:border-box; overflow:visible; }
+  .vt-widget-zone-overlay { grid-column:full-start / full-end; position:relative; z-index:40; overflow:visible; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vt-widget-collapse-region { transition:none; }
+  }
+}

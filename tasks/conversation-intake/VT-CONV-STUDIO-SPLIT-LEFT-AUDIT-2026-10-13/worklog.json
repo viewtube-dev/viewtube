@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "viewtube.conversation-worklog.v1",
+  "conversationId": "VT-CONV-STUDIO-SPLIT-LEFT-AUDIT-2026-10-13",
+  "producedAt": "2026-10-13",
+  "sourceHost": "ChatGPT",
+  "reconciliationStatus": "UNREVIEWED",
+  "items": [
+    {
+      "id": "VT-WORK-STUDIO-SPLIT-001",
+      "title": "Audit StudioButton vs StudioSplitLeftButton typography and size",
+      "kind": "AUDIT",
+      "state": "DISCOVERED",
+      "details": "StudioSplitLeftButton wraps StudioButton but has had independent split-label typography rules and competing responsive declarations.",
+      "domains": [
+        "Studio Hub UI",
+        "Design system"
+      ],
+      "artifacts": [
+        "src/studio-ui/primitives/StudioControls.tsx",
+        "src/styles/studio-control-system.css",
+        "PR #40",
+        "PR #41"
+      ],
+      "verification": "Source and PR summaries inspected; build and visual checks not verified.",
+      "blockers": [
+        "Refresh PR diffs/checks and resolve competing CSS ownership."
+      ],
+      "suggestedDestination": "Existing split-left consolidation work; reconcile PRs #40/#41/#44/#46",
+      "reviewStatus": "UNREVIEWED"
+    },
+    {
+      "id": "VT-WORK-STUDIO-SPLIT-002",
+      "title": "Unify Generate/Analyze, Load/Refresh, and Post Workspace split-left controls",
+      "kind": "MIGRATION",
+      "state": "STARTED",
+      "details": "Three groups have used separate sources/styles; migrate all to the canonical Studio split-left component.",
+      "domains": [
+        "Metadata toolbox",
+        "Project Manifestation",
+        "Video Manager",
+        "Community Post"
+      ],
+      "artifacts": [
+        "PR #41",
+        "PR #44"
+      ],
+      "verification": "PR descriptions found; complete source/build verification pending.",
+      "blockers": [
+        "Overlapping PRs and branch/base ancestry need reconciliation."
+      ],
+      "suggestedDestination": "Existing split-left consolidation PR/task family",
+      "reviewStatus": "UNREVIEWED"
+    },
+    {
+      "id": "VT-WORK-STUDIO-SPLIT-003",
+      "title": "Remove double shadow in primitives 06 and 07",
+      "kind": "BUG",
+      "state": "DISCOVERED",
+      "details": "Legacy split primitive CSS uses filter: drop-shadow with hover/active filter overrides; another shared box-shadow can stack it.",
+      "domains": [
+        "SubToolbox primitives",
+        "CSS system"
+      ],
+      "artifacts": [
+        "src/components/subtoolbox/SubToolboxSplitPrimitives.tsx",
+        "src/styles/subtoolbox-split-primitives.css",
+        "PR #41",
+        "PR #44"
+      ],
+      "verification": "Legacy CSS inspected; final effective cascade and both primitive IDs still need verification.",
+      "blockers": [
+        "Need exact deployed SHA and effective stylesheet/primitive ownership."
+      ],
+      "suggestedDestination": "Existing split-left shadow consolidation PR",
+      "reviewStatus": "UNREVIEWED"
+    },
+    {
+      "id": "VT-WORK-STUDIO-SPLIT-004",
+      "title": "Migrate named split-left actions to canonical Studio source",
+      "kind": "MIGRATION",
+      "state": "STARTED",
+      "details": "Assemble Script, Open Comment, Save Draft, Connect Channel and Preview Plan must use the Studio split-left primitive.",
+      "domains": [
+        "Script Architect",
+        "Comment Responder",
+        "Community Post",
+        "Studio recipes"
+      ],
+      "artifacts": [
+        "PR #44"
+      ],
+      "verification": "PR summary lists these migrations; verify actual call sites and final merged source.",
+      "blockers": [
+        "Refresh PR #44 diff and checks."
+      ],
+      "suggestedDestination": "PR #44 or its reconciled successor",
+      "reviewStatus": "UNREVIEWED"
+    },
+    {
+      "id": "VT-WORK-STUDIO-SPLIT-005",
+      "title": "Fix Render production build missing exports",
+      "kind": "BUG",
+      "state": "BLOCKED",
+      "details": "Vite reports SplitLeftButton missing from SubToolboxSplitPrimitives.tsx at StudioHubCertification.tsx:7 and SubToolboxSplitButton missing at SubToolboxCompoundPrimitives.tsx:4.",
+      "domains": [
+        "Build",
+        "Studio UI component exports"
+      ],
+      "artifacts": [
+        "Render log at 2026-10-13T11:46:06Z",
+        "src/studio-ui/StudioHubCertification.tsx",
+        "src/components/subtoolbox/SubToolboxCompoundPrimitives.tsx",
+        "src/components/subtoolbox/SubToolboxSplitPrimitives.tsx"
+      ],
+      "verification": "Error reproduced in supplied deployment log; not reproduced locally.",
+      "blockers": [
+        "Exact deployed commit/source snapshot unknown."
+      ],
+      "suggestedDestination": "Fix in the correct active branch before UI verification",
+      "reviewStatus": "UNREVIEWED"
+    },
+    {
+      "id": "VT-WORK-STUDIO-SPLIT-006",
+      "title": "Create durable handoff for the split-left audit",
+      "kind": "DOCUMENTATION",
+      "state": "COMPLETED_IN_CONVERSATION",
+      "details": "Created handoff.md, worklog.json and review.md in the canonical conversation-intake directory.",
+      "domains": [
+        "Conversation handoff",
+        "Studio UI"
+      ],
+      "artifacts": [
+        "tasks/conversation-intake/VT-CONV-STUDIO-SPLIT-LEFT-AUDIT-2026-10-13/"
+      ],
+      "verification": "Files committed to the handoff branch; PR creation and merge not yet performed.",
+      "blockers": [],
+      "suggestedDestination": "Conversation intake staging; later reconcile with canonical plan/task authorities",
+      "reviewStatus": "UNREVIEWED"
+    }
+  ]
+}

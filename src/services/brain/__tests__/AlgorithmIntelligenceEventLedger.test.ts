@@ -1,0 +1,97 @@
+// @vitest-environment jsdom
+import { beforeEach, describe, expect, it, vi } from "vitest"
+
+vi.mock("../BrainIntelligencePersistence", () => ({
+  persistBrainIntelligence: vi.fn().mockResolvedValue(undefined),
+}))
+
+import {
+  recordAlgorithmIntelligenceEvent,
+  upsertAlgorithmIntelligenceEvents,
+  listAlgorithmIntelligenceEvents,
+  type AlgorithmIntelligenceEvent,
+} from "../AlgorithmIntelligenceEventLedger"
+
+const event = (overrides: Partial<AlgorithmIntelligenceEvent> = {}): AlgorithmIntelligenceEvent => ({
+  id: "event-zero-time",
+  channelId: "channel-1",
+  kind: "RECOMMENDATION_CREATED",
+  sourceSystem: "workflow",
+  sourceId: "source-1",
+  parentEventIds: [],
+  evidenceIds: [],
+  confidence: "high",
+  title: "Timestamp test",
+  summary: "Preserve valid epoch timestamps",
+  evaluationTargets: [],
+  checkpointAt: 0,
+  metadata: {},
+  createdAt: 0,
+  ...overrides,
+})
+
+describe("AlgorithmIntelligenceEventLedger timestamp integrity", () => {
+  beforeEach(() => {
+    localStorage.clear()
+    vi.restoreAllMocks()
+  })
+
+  it("preserves operation, trace, output, and workflow joins across idempotent updates", () => {
+    recordAlgorithmIntelligenceEvent({
+      id: "event-lineage-preservation",
+      channelId: "channel-1",
+      kind: "RECOMMENDATION_EXECUTED",
+      sourceSystem: "workflow",
+      operationId: "operation:publish:1",
+      traceId: "trace:generation:1",
+      outputRef: "asset:final:1",
+      workflowId: "workflow:package:1",
+      title: "Published package",
+      summary: "Initial event",
+      confidence: "high",
+    })
+
+    recordAlgorithmIntelligenceEvent({
+      id: "event-lineage-preservation",
+      channelId: "channel-1",
+      kind: "RECOMMENDATION_EXECUTED",
+      sourceSystem: "workflow",
+      title: "Published package",
+      summary: "Updated event without repeating optional lineage fields",
+      confidence: "high",
+    })
+
+    expect(listAlgorithmIntelligenceEvents({ channelId: "channel-1" })[0]).toMatchObject({
+      id: "event-lineage-preservation",
+      operationId: "operation:publish:1",
+      traceId: "trace:generation:1",
+      outputRef: "asset:final:1",
+      workflowId: "workflow:package:1",
+    })
+  })
+
+  it("preserves an existing event's zero creation timestamp when recording an update", () => {
+    localStorage.setItem("vt_algorithm_intelligence_events_v1", JSON.stringify([event()]))
+
+    recordAlgorithmIntelligenceEvent({
+      id: "event-zero-time",
+      channelId: "channel-1",
+      kind: "RECOMMENDATION_CREATED",
+      sourceSystem: "workflow",
+      sourceId: "source-1",
+      title: "Timestamp test updated",
+      summary: "Preserve original creation time",
+      confidence: "high",
+    })
+
+    expect(listAlgorithmIntelligenceEvents({ channelId: "channel-1" })[0].createdAt).toBe(0)
+  })
+
+  it("preserves zero when merging durable event history", () => {
+    localStorage.setItem("vt_algorithm_intelligence_events_v1", JSON.stringify([event({ createdAt: 100 })]))
+
+    upsertAlgorithmIntelligenceEvents([event({ createdAt: 0 })])
+
+    expect(listAlgorithmIntelligenceEvents({ channelId: "channel-1" })[0].createdAt).toBe(0)
+  })
+})

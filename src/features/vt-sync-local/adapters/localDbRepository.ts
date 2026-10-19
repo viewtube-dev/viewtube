@@ -1,0 +1,355 @@
+import {
+ VT_SYNC_LOCAL_DB_NAME,
+ VT_SYNC_LOCAL_DB_VERSION,
+ VT_SYNC_LOCAL_STORE_NAMES,
+ type VtSyncChannelIndexRecord,
+ type VtSyncDatasetRawReportRecord,
+ type VtSyncDatasetTableRowsRecord,
+ type VtSyncInventoryCursorRecord,
+ type VtSyncLocalDbStoreName,
+ type VtSyncSyncRunRecord,
+ type VtSyncVideoInventoryRecord,
+ type VtSyncAnalyticsWindow,
+} from "./contracts"
+
+const hasIndexedDb = (): boolean =>
+ typeof indexedDB !== "undefined" && typeof indexedDB.open === "function"
+
+/**
+ * Rewrite pre-v2 dataset records under window-qualified ids, tagging them
+ * "lifetime". Runs inside the versionchange transaction, so it either fully
+ * applies or the upgrade fails and the old database is left untouched.
+ */
+const backfillDatasetWindowsToLifetime = (tx: IDBTransaction): void => {
+ const stores = [
+  VT_SYNC_LOCAL_STORE_NAMES.datasetRawReports,
+  VT_SYNC_LOCAL_STORE_NAMES.datasetTableRows,
+ ] as const
+ stores.forEach((storeName) => {
+  if (!tx.objectStoreNames.contains(storeName)) return
+  const store = tx.objectStore(storeName)
+  const cursorRequest = store.openCursor()
+  cursorRequest.onsuccess = () => {
+   const cursor = cursorRequest.result
+   if (!cursor) return
+   const record = cursor.value as Record<string, unknown>
+   if (record && record.window === undefined) {
+    const migrated = { ...record, window: "lifetime" as const }
+    const kind = storeName === VT_SYNC_LOCAL_STORE_NAMES.datasetRawReports ? "raw" : "table"
+    const nextId = String(record.id || "").startsWith("latest_api::")
+     ? latestDatasetRecordId(
+        record.channelId as string | undefined,
+        String(record.datasetId || ""),
+        kind,
+        "lifetime",
+       )
+     : String(record.id)
+    if (nextId === record.id) {
+     cursor.update(migrated)
+    } else {
+     // Put under the new key first, then drop the old one, so an interrupted
+     // upgrade can never leave the record missing from both keys.
+     store.put({ ...migrated, id: nextId })
+     cursor.delete()
+    }
+   }
+   cursor.continue()
+  }
+ })
+}
+
+export const buildVtSyncInventoryId = (channelId: string, videoId: string): string =>
+ `${channelId}::${videoId}`
+
+export const openVtSyncLocalDb = async (): Promise<IDBDatabase> =>
+ new Promise((resolve, reject) => {
+  if (!hasIndexedDb()) {
+   reject(new Error("IndexedDB is not available for VT Sync local storage."))
+   return
+  }
+  const request = indexedDB.open(VT_SYNC_LOCAL_DB_NAME, VT_SYNC_LOCAL_DB_VERSION)
+  request.onupgradeneeded = (event) => {
+   const db = request.result
+   Object.values(VT_SYNC_LOCAL_STORE_NAMES).forEach((storeName) => {
+    if (!db.objectStoreNames.contains(storeName)) db.createObjectStore(storeName, { keyPath: "id" })
+   })
+   const oldVersion = (event as IDBVersionChangeEvent).oldVersion
+   // v1 -> v2: window becomes part of dataset record identity. Existing
+   // records predate any window loop, so every one of them is lifetime data.
+   // Re-key them rather than dropping them: a user who has synced should not
+   // have to re-sync to keep what they already have.
+   if (oldVersion >= 1 && oldVersion < 2 && request.transaction) {
+    backfillDatasetWindowsToLifetime(request.transaction)
+   }
+  }
+  request.onsuccess = () => resolve(request.result)
+  request.onerror = () => reject(request.error || new Error("Failed to open VT Sync local database."))
+ })
+
+const withStore = async <T>(
+ storeName: VtSyncLocalDbStoreName,
+ mode: IDBTransactionMode,
+ action: (store: IDBObjectStore) => IDBRequest<T> | void,
+): Promise<T | undefined> => {
+ const db = await openVtSyncLocalDb()
+ return new Promise<T | undefined>((resolve, reject) => {
+ const tx = db.transaction(storeName, mode)
+ const store = tx.objectStore(storeName)
+ const request = action(store)
+ let requestResult: T | undefined
+ if (request) {
+   request.onsuccess = () => {
+    requestResult = request.result
+   }
+   request.onerror = () => reject(request.error)
+  }
+  tx.oncomplete = () => {
+   db.close()
+   resolve(requestResult)
+  }
+  tx.onerror = () => {
+   db.close()
+   reject(tx.error)
+  }
+  tx.onabort = () => {
+   db.close()
+   reject(tx.error)
+  }
+ })
+}
+
+const putRecord = async <T extends Record<string, unknown>>(
+ storeName: VtSyncLocalDbStoreName,
+ record: T,
+): Promise<void> => {
+ await withStore(storeName, "readwrite", (store) => {
+  store.put(record)
+ })
+}
+
+const putMany = async <T extends Record<string, unknown>>(
+ storeName: VtSyncLocalDbStoreName,
+ records: T[],
+): Promise<void> => {
+ if (!records.length) return
+ const db = await openVtSyncLocalDb()
+ await new Promise<void>((resolve, reject) => {
+  const tx = db.transaction(storeName, "readwrite")
+  const store = tx.objectStore(storeName)
+  records.forEach((record) => store.put(record))
+  tx.oncomplete = () => {
+   db.close()
+   resolve()
+  }
+  tx.onerror = () => {
+   db.close()
+   reject(tx.error)
+  }
+  tx.onabort = () => {
+   db.close()
+   reject(tx.error)
+  }
+ })
+}
+
+const getAll = async <T>(storeName: VtSyncLocalDbStoreName): Promise<T[]> => {
+ const result = await withStore<T[]>(storeName, "readonly", (store) => store.getAll())
+ return result || []
+}
+
+const deleteMany = async (storeName: VtSyncLocalDbStoreName, ids: string[]): Promise<void> => {
+ if (!ids.length) return
+ const db = await openVtSyncLocalDb()
+ await new Promise<void>((resolve, reject) => {
+  const tx = db.transaction(storeName, "readwrite")
+  const store = tx.objectStore(storeName)
+  ids.forEach((id) => store.delete(id))
+  tx.oncomplete = () => {
+   db.close()
+   resolve()
+  }
+  tx.onerror = () => {
+   db.close()
+   reject(tx.error)
+  }
+  tx.onabort = () => {
+   db.close()
+   reject(tx.error)
+  }
+ })
+}
+
+/**
+ * Identity for the newest API-owned record of a dataset. The window is part of
+ * the key: without it, syncing 28d would overwrite the lifetime record.
+ */
+const latestDatasetRecordId = (
+ channelId: string | undefined,
+ datasetId: string,
+ kind: "raw" | "table",
+ window: VtSyncAnalyticsWindow = "lifetime",
+) =>
+ `latest_api::${encodeURIComponent(channelId || "unscoped")}::${encodeURIComponent(datasetId)}::${encodeURIComponent(window)}::${kind}`
+
+const getById = async <T>(storeName: VtSyncLocalDbStoreName, id: string): Promise<T | null> => {
+ const result = await withStore<T>(storeName, "readonly", (store) => store.get(id))
+ return result || null
+}
+
+export const clearVtSyncLocalDb = async (): Promise<void> => {
+ if (!hasIndexedDb()) return
+ try {
+  const db = await openVtSyncLocalDb()
+  await new Promise<void>((resolve, reject) => {
+   const storeNames = Object.values(VT_SYNC_LOCAL_STORE_NAMES)
+   const tx = db.transaction(storeNames, "readwrite")
+   storeNames.forEach((storeName) => tx.objectStore(storeName).clear())
+   tx.oncomplete = () => {
+    db.close()
+    resolve()
+   }
+   tx.onerror = () => {
+    db.close()
+    reject(tx.error)
+   }
+   tx.onabort = () => {
+    db.close()
+    reject(tx.error)
+   }
+  })
+ } catch {
+  // Reset remains best-effort on browsers that block or disable IndexedDB.
+ }
+}
+
+export const clearVtSyncVideoCatalogForChannel = async (channelId: string): Promise<void> => {
+ const records = await listVtSyncVideoInventory(channelId)
+ await Promise.all([
+  deleteMany(VT_SYNC_LOCAL_STORE_NAMES.videoInventory, records.map((record) => record.id)),
+  withStore(VT_SYNC_LOCAL_STORE_NAMES.channelIndex, "readwrite", (store) => store.delete(channelId)),
+  withStore(VT_SYNC_LOCAL_STORE_NAMES.syncCursors, "readwrite", (store) => store.delete(channelId)),
+ ])
+}
+
+export const putVtSyncChannelIndex = async (record: VtSyncChannelIndexRecord): Promise<void> =>
+ putRecord(VT_SYNC_LOCAL_STORE_NAMES.channelIndex, record)
+
+export const getVtSyncChannelIndex = async (channelId: string): Promise<VtSyncChannelIndexRecord | null> =>
+ getById<VtSyncChannelIndexRecord>(VT_SYNC_LOCAL_STORE_NAMES.channelIndex, channelId)
+
+export const putVtSyncInventoryCursor = async (record: VtSyncInventoryCursorRecord): Promise<void> =>
+ putRecord(VT_SYNC_LOCAL_STORE_NAMES.syncCursors, record)
+
+export const getVtSyncInventoryCursor = async (channelId: string): Promise<VtSyncInventoryCursorRecord | null> =>
+ getById<VtSyncInventoryCursorRecord>(VT_SYNC_LOCAL_STORE_NAMES.syncCursors, channelId)
+
+export const putVtSyncSyncRun = async (record: VtSyncSyncRunRecord): Promise<void> =>
+ putRecord(VT_SYNC_LOCAL_STORE_NAMES.syncRuns, record)
+
+export const listVtSyncSyncRuns = async (): Promise<VtSyncSyncRunRecord[]> =>
+ getAll<VtSyncSyncRunRecord>(VT_SYNC_LOCAL_STORE_NAMES.syncRuns)
+
+export const replaceLatestVtSyncSyncRun = async (record: VtSyncSyncRunRecord): Promise<void> => {
+ await putVtSyncSyncRun(record)
+ const runs = await listVtSyncSyncRuns()
+ await deleteMany(
+  VT_SYNC_LOCAL_STORE_NAMES.syncRuns,
+  runs.filter((candidate) => candidate.channelId === record.channelId && candidate.id !== record.id).map((candidate) => candidate.id),
+ )
+}
+
+export const getVtSyncSyncRun = async (runId: string): Promise<VtSyncSyncRunRecord | null> =>
+ getById<VtSyncSyncRunRecord>(VT_SYNC_LOCAL_STORE_NAMES.syncRuns, runId)
+
+export const putVtSyncVideoInventoryRecords = async (
+ records: VtSyncVideoInventoryRecord[],
+): Promise<void> => putMany(VT_SYNC_LOCAL_STORE_NAMES.videoInventory, records)
+
+export const listVtSyncVideoInventory = async (channelId: string): Promise<VtSyncVideoInventoryRecord[]> => {
+ const records = await getAll<VtSyncVideoInventoryRecord>(VT_SYNC_LOCAL_STORE_NAMES.videoInventory)
+ return records
+  .filter((record) => record.channelId === channelId)
+  .sort((left, right) => {
+   const leftPage = left.pageNumber ?? Number.MAX_SAFE_INTEGER
+   const rightPage = right.pageNumber ?? Number.MAX_SAFE_INTEGER
+   if (leftPage !== rightPage) return leftPage - rightPage
+   const leftIndex = left.pageIndex ?? Number.MAX_SAFE_INTEGER
+   const rightIndex = right.pageIndex ?? Number.MAX_SAFE_INTEGER
+   if (leftIndex !== rightIndex) return leftIndex - rightIndex
+   return left.videoId.localeCompare(right.videoId)
+  })
+}
+
+export const getVtSyncKnownVideoIds = async (channelId: string): Promise<Set<string>> => {
+ const records = await listVtSyncVideoInventory(channelId)
+ return new Set(records.map((record) => record.videoId).filter(Boolean))
+}
+
+export const putVtSyncDatasetRawReport = async (record: VtSyncDatasetRawReportRecord): Promise<void> =>
+ putRecord(VT_SYNC_LOCAL_STORE_NAMES.datasetRawReports, record)
+
+export const listVtSyncDatasetRawReports = async (): Promise<VtSyncDatasetRawReportRecord[]> =>
+ getAll<VtSyncDatasetRawReportRecord>(VT_SYNC_LOCAL_STORE_NAMES.datasetRawReports)
+
+export const deleteVtSyncDatasetRawReport = async (id: string): Promise<void> => {
+ await withStore(VT_SYNC_LOCAL_STORE_NAMES.datasetRawReports, "readwrite", (store) => store.delete(id))
+}
+
+/**
+ * Store the newest authoritative API report under a stable key, then remove
+ * superseded diagnostics. The successful put happens before cleanup so a
+ * failed write never destroys the last usable report.
+ */
+export const replaceLatestVtSyncDatasetRawReport = async (
+ record: Omit<VtSyncDatasetRawReportRecord, "id">,
+): Promise<void> => {
+ const window = record.window || "lifetime"
+ const id = latestDatasetRecordId(record.channelId, record.datasetId, "raw", window)
+ await putVtSyncDatasetRawReport({ ...record, window, id })
+ const records = await listVtSyncDatasetRawReports()
+ await deleteMany(
+  VT_SYNC_LOCAL_STORE_NAMES.datasetRawReports,
+  records
+   .filter((candidate) => candidate.id !== id
+    && candidate.source !== "local_import"
+    && candidate.datasetId === record.datasetId
+    // Supersede only the SAME window. Without this a 28d sync would delete the
+    // lifetime report for the same dataset.
+    && (candidate.window || "lifetime") === window
+    && (
+    candidate.channelId === record.channelId || candidate.channelId === undefined
+   ))
+   .map((candidate) => candidate.id),
+ )
+}
+
+export const putVtSyncDatasetTableRows = async (record: VtSyncDatasetTableRowsRecord): Promise<void> =>
+ putRecord(VT_SYNC_LOCAL_STORE_NAMES.datasetTableRows, record)
+
+export const listVtSyncDatasetTableRows = async (): Promise<VtSyncDatasetTableRowsRecord[]> =>
+ getAll<VtSyncDatasetTableRowsRecord>(VT_SYNC_LOCAL_STORE_NAMES.datasetTableRows)
+
+export const deleteVtSyncDatasetTableRows = async (id: string): Promise<void> => {
+ await withStore(VT_SYNC_LOCAL_STORE_NAMES.datasetTableRows, "readwrite", (store) => store.delete(id))
+}
+
+/** Replace only API-owned rows for this channel/dataset; manual CSV records survive. */
+export const replaceLatestVtSyncDatasetTableRows = async (
+ record: Omit<VtSyncDatasetTableRowsRecord, "id" | "provenance">,
+): Promise<void> => {
+ const window = record.window || "lifetime"
+ const id = latestDatasetRecordId(record.channelId, record.datasetId, "table", window)
+ await putVtSyncDatasetTableRows({ ...record, window, id, provenance: "api" })
+ const records = await listVtSyncDatasetTableRows()
+ await deleteMany(
+  VT_SYNC_LOCAL_STORE_NAMES.datasetTableRows,
+  records
+   .filter((candidate) => candidate.id !== id
+    && candidate.provenance === "api"
+    && candidate.datasetId === record.datasetId
+    // Same-window only — see replaceLatestVtSyncDatasetRawReport.
+    && (candidate.window || "lifetime") === window
+    && (candidate.channelId === record.channelId || candidate.channelId === undefined))
+   .map((candidate) => candidate.id),
+ )
+}

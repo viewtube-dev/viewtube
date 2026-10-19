@@ -1,0 +1,114 @@
+/* Upload canvas geometry; preserve native upload behavior and 16:9 authority. */
+.vt-studio-upload-frame {
+  --vt-upload-circle-size: clamp(96px, 24cqw, 168px);
+  --vt-upload-circle-border: 3px;
+  --vt-upload-primary-stroke: 4px;
+  --vt-upload-secondary-stroke: 2px;
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__inset::before {
+  box-sizing: border-box;
+  inset: 0;
+  border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary);
+  border-radius: inherit;
+  border-radius: max(0px, calc(8px - 2px));
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__inset::after {
+  box-sizing: border-box;
+  inset: var(--vt-upload-primary-stroke);
+  border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
+  border-radius: max(0px, calc(8px - 2px - var(--vt-upload-primary-stroke)));
+}
+.vt-studio-upload-frame[data-size="compact"] .vt-studio-upload-frame__inset::before {
+  border-radius: 4px;
+}
+.vt-studio-upload-frame[data-size="compact"] .vt-studio-upload-frame__inset::after {
+  border-radius: 0;
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__icon {
+  box-sizing: border-box;
+  width: var(--vt-upload-circle-size);
+  height: var(--vt-upload-circle-size);
+  min-width: var(--vt-upload-circle-size);
+  aspect-ratio: 1;
+  border-width: var(--vt-upload-circle-border);
+  overflow: visible;
+}
+/* Absolute offsets originate at the icon padding edge: include its black
+ * border before adding the contiguous primary and secondary ring widths. */
+.vt-studio-upload-frame .vt-studio-upload-frame__icon::before {
+  box-sizing: border-box;
+  inset: calc(0px - var(--vt-upload-circle-border) - var(--vt-upload-primary-stroke));
+  border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary);
+  border-radius: 50%;
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__icon::after {
+  box-sizing: border-box;
+  inset: calc(0px - var(--vt-upload-circle-border) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke));
+  border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
+  border-radius: 50%;
+}
+/* Compact double-split badge appearance. Decorative rails do not duplicate
+ * the live prompt/filename or alter the native file input's accessible name. */
+.vt-studio-upload-frame .vt-studio-upload-frame__label {
+  --vt-upload-badge-height: var(--vt-studio-compact-height, 28px);
+  --vt-upload-badge-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-upload-badge-rail: calc(var(--vt-upload-badge-height) - var(--vt-upload-badge-stroke));
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 100%;
+  height: var(--vt-upload-badge-height);
+  min-height: var(--vt-upload-badge-height);
+  padding: 0 calc(var(--vt-upload-badge-rail) + 8px);
+  border: var(--vt-upload-badge-stroke) solid #000;
+  border-radius: var(--vt-studio-compact-radius, 4px);
+  background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, white);
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  font-weight: 1000;
+  font-synthesis: none;
+  line-height: calc(var(--vt-upload-badge-height) - var(--vt-upload-badge-stroke) * 2);
+  letter-spacing: -.02em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: none;
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__label::before,
+.vt-studio-upload-frame .vt-studio-upload-frame__label::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  bottom: 0;
+  width: var(--vt-upload-badge-rail);
+  background: var(--vt-studio-upload-secondary);
+  pointer-events: none;
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__label::before {
+  left: 0;
+  border-right: var(--vt-upload-badge-stroke) solid #000;
+}
+.vt-studio-upload-frame .vt-studio-upload-frame__label::after {
+  right: 0;
+  border-left: var(--vt-upload-badge-stroke) solid #000;
+}
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__label {
+  position: relative;
+  top: auto;
+  left: auto;
+  translate: none;
+  max-width: 100%;
+}
+@media (max-width: 460px) {
+  .vt-studio-upload-frame {
+    --vt-upload-circle-size: clamp(87px, 30cqw, 132px);
+  }
+  .vt-studio-upload-frame .vt-studio-upload-frame__center {
+    gap: 12px;
+  }
+}

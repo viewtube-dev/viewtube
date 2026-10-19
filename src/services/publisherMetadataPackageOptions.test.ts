@@ -1,0 +1,232 @@
+import { beforeEach, describe, expect, it } from "vitest"
+import { createContentBuild, getContentBuild, resetContentBuildRepositoryForTests } from "./asset-engine/ContentBuildRepository"
+import { ensureVideoPackageForProject } from "./video-package/ProjectVideoPackageBridge"
+import { findVideoPackageByProject, resetVideoPackageRepositoryForTests } from "./video-package/VideoPackageRepository"
+import { savePublisherMetadataToProject } from "./publisherMetadataProjectPersistence"
+import { createVersionedAsset } from "./assetEngine"
+import { listPublisherMetadataPackageOptions, selectPublisherMetadataPackageOption } from "./publisherMetadataPackageOptions"
+
+const project = {
+  id: "project-publisher-options",
+  contentBuildId: "cb-publisher-options",
+  name: "Publisher Options Test",
+  status: "active",
+  videoTitle: "Original",
+  description: "",
+  tags: "",
+  plan: {},
+} as any
+
+describe("Publisher metadata package options", () => {
+  beforeEach(() => {
+    localStorage.clear()
+    resetVideoPackageRepositoryForTests()
+    resetContentBuildRepositoryForTests()
+    createContentBuild({ id: project.contentBuildId, legacyProjectId: project.id, legacyProjectName: project.name })
+  })
+
+  it("preserves an explicitly unset Audience value in a saved metadata option", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const saved = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Audience state test",
+      description: "Audience must remain unset",
+      tags: "audience",
+      audience: null,
+    }, { mode: "option" })
+
+    const option = listPublisherMetadataPackageOptions(project.contentBuildId)
+      .find(item => item.assetId === saved.packageOptionAssetId)
+    expect(option?.payload.audience).toBeNull()
+  })
+
+  it("lists saved current and alternative metadata sets from the canonical variant group", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const current = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Current", description: "Current description", tags: "current",
+    }, { mode: "current" })
+    savePublisherMetadataToProject(project, "channel-options", {
+      title: "Alternative", description: "Alternative description", tags: "alternative",
+    }, { mode: "option" })
+
+    const options = listPublisherMetadataPackageOptions(project.contentBuildId)
+    expect(options).toHaveLength(2)
+    expect(options.find(option => option.assetId === current.packageOptionAssetId)?.selected).toBe(true)
+    expect(options.some(option => option.payload.title === "Alternative")).toBe(true)
+  })
+
+  it("restores intentionally blank fields without retaining the previous option's asset selections", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const current = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Current title",
+      description: "Current description",
+      tags: "current",
+    }, { mode: "current" })
+    const currentBuild = getContentBuild(project.contentBuildId)!
+    const currentTitleAssetId = currentBuild.selections.title
+
+    const blank = savePublisherMetadataToProject(project, "channel-options", {
+      title: "",
+      description: "",
+      tags: "",
+    }, { mode: "option" })
+    const blankOption = listPublisherMetadataPackageOptions(project.contentBuildId)
+      .find(option => option.assetId === blank.packageOptionAssetId)!
+    expect(blankOption.payload.title).toBe("")
+    expect(blankOption.payload.description).toBe("")
+    expect(blankOption.payload.tags).toBe("")
+    expect(blankOption.payload.titleAssetId).toBeTruthy()
+    expect(blankOption.payload.titleAssetId).not.toBe(currentTitleAssetId)
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, blank.packageOptionAssetId)
+    const restoredBuild = getContentBuild(project.contentBuildId)!
+    expect(restoredBuild.selections["metadata-package"]).toBe(blank.packageOptionAssetId)
+    expect(restoredBuild.selections.title).toBe(blankOption.payload.titleAssetId)
+    expect(restoredBuild.selections.description).toBe(blankOption.payload.descriptionAssetId)
+    expect(restoredBuild.selections.tags).toBe(blankOption.payload.tagsAssetId)
+    expect(blank.packageOptionAssetId).not.toBe(current.packageOptionAssetId)
+  })
+
+  it("restores a canonical thumbnail asset and preview when a saved option is selected", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const thumbnail = createVersionedAsset({
+      sourceToolId: "video-publisher",
+      sourceKind: "studio-tool",
+      payloadKind: "thumbnail",
+      name: "Saved thumbnail",
+      summary: "Publisher thumbnail round-trip",
+      kind: "image",
+      url: "data:image/png;base64,dGVzdA==",
+      mimeType: "image/png",
+      slot: "thumbnail",
+      context: {
+        contentBuildId: project.contentBuildId,
+        projectId: project.id,
+        projectName: project.name,
+        stage: "metadata",
+      },
+    }).asset
+    const saved = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Thumbnail option",
+      description: "A thumbnail must survive selection",
+      tags: "thumbnail",
+      thumbnailAssetId: thumbnail.id,
+    }, {
+      mode: "option",
+      thumbnailAsset: {
+        id: thumbnail.id,
+        name: thumbnail.name,
+        url: thumbnail.url,
+        previewUrl: thumbnail.previewUrl,
+        mimeType: thumbnail.mimeType,
+      },
+    })
+
+    const option = listPublisherMetadataPackageOptions(project.contentBuildId)
+      .find(item => item.assetId === saved.packageOptionAssetId)!
+    expect(option.payload.thumbnailAssetId).toBe(thumbnail.id)
+    expect(option.payload.thumbnailPreviewUrl).toBe("data:image/png;base64,dGVzdA==")
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, saved.packageOptionAssetId)
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)!
+    expect(videoPackage.packaging.selectedThumbnailId).toBe(`publisher:thumbnail:${thumbnail.id}`)
+    expect(videoPackage.packaging.thumbnailVariants.some(item => item.vaultAssetId === thumbnail.id)).toBe(true)
+  })
+
+  it("restores the saved final-video reference into the existing Video Package", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const finalVideo = createVersionedAsset({
+      sourceToolId: "video-publisher",
+      sourceKind: "studio-tool",
+      payloadKind: "video",
+      name: "Final render",
+      summary: "Publisher final render round-trip",
+      kind: "video",
+      url: "https://example.test/final.mp4",
+      mimeType: "video/mp4",
+      slot: "final-render",
+      context: {
+        contentBuildId: project.contentBuildId,
+        projectId: project.id,
+        projectName: project.name,
+        stage: "production",
+      },
+    }).asset
+    const saved = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Final video option",
+      description: "The render reference must survive option selection",
+      tags: "render",
+      finalVideoAssetId: finalVideo.id,
+    }, {
+      mode: "option",
+      finalVideoAsset: {
+        id: finalVideo.id,
+        name: finalVideo.name,
+        url: finalVideo.url,
+        previewUrl: finalVideo.previewUrl,
+        mimeType: finalVideo.mimeType,
+      },
+    })
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, saved.packageOptionAssetId)
+    const build = getContentBuild(project.contentBuildId)!
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)!
+    expect(build.selections["final-render"]).toBe(finalVideo.id)
+    expect(videoPackage.production.renderIds).toContain(finalVideo.id)
+  })
+
+  it("saves and switches metadata options while disconnected from YouTube", () => {
+    const localPackage = ensureVideoPackageForProject(project, {
+      channelId: null,
+      sourceToolId: "video-publisher",
+    })
+    const first = savePublisherMetadataToProject(project, null, {
+      title: "Local draft A",
+      description: "First offline metadata set",
+      tags: "local, first",
+    }, { mode: "current" })
+    const alternative = savePublisherMetadataToProject(project, null, {
+      title: "Local draft B",
+      description: "Second offline metadata set",
+      tags: "local, second",
+    }, { mode: "option" })
+
+    selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
+    const videoPackage = findVideoPackageByProject(project.id, project.contentBuildId)
+    const build = getContentBuild(project.contentBuildId)!
+
+    expect(localPackage?.channelId).toBe(`local-draft:${project.id}`)
+    expect(first.videoPackageId).toBe(localPackage?.id)
+    expect(alternative.videoPackageId).toBe(localPackage?.id)
+    expect(videoPackage?.channelId).toBe(`local-draft:${project.id}`)
+    expect(build.selections["metadata-package"]).toBe(alternative.packageOptionAssetId)
+    expect(listPublisherMetadataPackageOptions(project.contentBuildId)).toHaveLength(2)
+  })
+
+  it("selects an alternative without creating a new Project or ContentBuild", () => {
+    ensureVideoPackageForProject(project, { channelId: "channel-options", sourceToolId: "video-publisher" })
+    const current = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Current", description: "Current description", tags: "current",
+    }, { mode: "current" })
+    const alternative = savePublisherMetadataToProject(project, "channel-options", {
+      title: "Alternative", description: "Alternative description", tags: "alternative",
+    }, { mode: "option" })
+
+    expect(getContentBuild(project.contentBuildId)?.selections["metadata-package"]).toBe(current.packageOptionAssetId)
+    selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
+    const build = getContentBuild(project.contentBuildId)!
+    expect(build.selections["metadata-package"]).toBe(alternative.packageOptionAssetId)
+    expect(build.variantGroups.find(group => group.slot === "metadata-package")?.members).toHaveLength(2)
+    const selectedOption = listPublisherMetadataPackageOptions(project.contentBuildId).find(option => option.assetId === alternative.packageOptionAssetId)!
+    expect(build.selections.title).toBe(selectedOption.payload.titleAssetId)
+    expect(build.selections.description).toBe(selectedOption.payload.descriptionAssetId)
+    expect(build.selections.tags).toBe(selectedOption.payload.tagsAssetId)
+    const packageBeforeRepeat = findVideoPackageByProject(project.id, project.contentBuildId)!
+    const provenanceCountBeforeRepeat = packageBeforeRepeat.provenance.length
+    selectPublisherMetadataPackageOption(project.contentBuildId, alternative.packageOptionAssetId)
+    const afterRepeat = getContentBuild(project.contentBuildId)!
+    const packageAfterRepeat = findVideoPackageByProject(project.id, project.contentBuildId)!
+    expect(afterRepeat.variantGroups.find(group => group.slot === "metadata-package")?.members).toHaveLength(2)
+    expect(afterRepeat.id).toBe(build.id)
+    expect(packageAfterRepeat.provenance).toHaveLength(provenanceCountBeforeRepeat)
+  })
+})

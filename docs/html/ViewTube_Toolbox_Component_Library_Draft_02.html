@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VIEWTUBE — Toolbox Component Library • Draft 02</title>
+<style>
+:root{
+  --ink:#050505;
+  --paper:#fff;
+  --paper2:#f5f6f7;
+  --cyan:#2ddff0;
+  --cyan2:#baf7fb;
+  --pink:#ff4b87;
+  --pink2:#ffc2d5;
+  --magenta:#e94cff;
+  --orange:#ff9a62;
+  --yellow:#ffe34b;
+  --lime:#baf53a;
+  --green:#31e85b;
+  --purple:#a86dff;
+  --blue:#62a7ff;
+  --navy:#14304f;
+  --shadow:8px 8px 0 var(--ink);
+  --shadow-sm:4px 4px 0 var(--ink);
+  --radius:18px;
+  --stroke:5px;
+  --font:Arial,Helvetica,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{background:#151515;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-weight:800}
+button,input,select,textarea{font:inherit}
+button{color:inherit}
+a{color:inherit;text-decoration:none}
+.shell{max-width:1480px;margin:auto;padding:18px}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;border:var(--stroke) solid var(--ink);padding:12px 16px;background:var(--cyan);box-shadow:var(--shadow);margin-bottom:18px;position:sticky;top:10px;z-index:20}
+.brand{font-size:18px}
+.topbar .meta{font-size:11px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.ui-select,.ui-btn{border:3px solid var(--ink);background:var(--paper);padding:8px 11px;border-radius:10px;font-size:12px;cursor:pointer}
+.ui-btn.active{background:var(--ink);color:var(--paper)}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:18px}
+.sidebar{position:sticky;top:82px;align-self:start;border:var(--stroke) solid var(--ink);background:var(--paper);box-shadow:var(--shadow-sm);padding:12px}
+.sidebar h2{font-size:16px;margin:0 0 10px}
+.sidebar a{display:block;border:3px solid var(--ink);padding:8px 10px;margin:7px 0;border-radius:9px;font-size:11px;background:var(--paper2)}
+.sidebar a:hover{background:var(--yellow)}
+.section{border:var(--stroke) solid var(--ink);background:var(--paper);margin-bottom:22px;box-shadow:var(--shadow)}
+.section-head{display:grid;grid-template-columns:72px 1fr auto;border-bottom:var(--stroke) solid var(--ink);min-height:78px}
+.section-icon{display:grid;place-items:center;font-size:34px;border-right:var(--stroke) solid var(--ink)}
+.section-title{display:flex;align-items:center;padding:12px 16px;font-size:clamp(24px,3.4vw,44px);line-height:.9}
+.section-note{display:flex;align-items:center;padding:10px 14px;font-size:10px;text-transform:uppercase;letter-spacing:.09em}
+.section-body{padding:18px}
+.subhead{font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:4px 0 10px}
+.note{border:3px solid var(--ink);padding:11px;background:var(--paper2);font-size:12px;line-height:1.35;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:var(--stroke) solid var(--ink);background:var(--paper);padding:14px;min-width:0}
+.card.cyan{background:var(--cyan2)} .card.pink{background:var(--pink2)}
+.card.yellow{background:var(--yellow)} .card.lime{background:var(--lime)}
+.card.magenta{background:#efc0ff} .card.orange{background:#ffd0bb}
+.card h3{margin:0 0 9px;font-size:17px}
+.card p{margin:0;font-size:12px;line-height:1.35;font-weight:700}
+.token{font-family:var(--mono);font-size:10px;font-weight:700}
+.token-row{display:flex;flex-wrap:wrap;gap:6px}
+.token-chip{border:2px solid var(--ink);background:#fff;padding:5px 7px;border-radius:8px;font:10px var(--mono)}
+.toolbox{border:var(--stroke) solid var(--ink);background:var(--paper);margin:10px 0;overflow:hidden}
+.toolbox[data-level="l0"]{--h:56px;--rail:52px;--title:24px;--pad:10px}
+.toolbox[data-level="l1"]{--h:66px;--rail:64px;--title:28px;--pad:12px}
+.toolbox[data-level="l2"]{--h:78px;--rail:76px;--title:34px;--pad:14px}
+.tb-head{display:grid;grid-template-columns:var(--rail) 1fr 70px;min-height:var(--h);border-bottom:var(--stroke) solid var(--ink)}
+.tb-head .rail{display:grid;place-items:center;border-right:var(--stroke) solid var(--ink);background:var(--cyan);font-size:27px}
+.tb-head .title{display:flex;align-items:center;padding:var(--pad);font-size:var(--title);line-height:.88}
+.tb-head .collapse{display:grid;place-items:center;background:#fff;font-size:28px;border:0;cursor:pointer}
+.tb-head .collapse .chev{width:16px;height:16px;border-right:5px solid var(--ink);border-bottom:5px solid var(--ink);transform:rotate(45deg);transition:transform .22s ease}
+.toolbox[data-state="open"] .chev,.subtoolbox[data-state="open"] .chev{transform:rotate(225deg)}
+.toolbox[data-state="closed"] .tb-head{border-bottom:0}
+.toolbox[data-state="closed"] .tb-body{display:none}
+.tb-body{padding:14px;background:#fff}
+.subtoolbox{border:var(--stroke) solid var(--ink);background:#fff;margin-top:12px;overflow:hidden}
+.st-head{display:grid;grid-template-columns:52px 1fr 58px;min-height:56px;border-bottom:var(--stroke) solid var(--ink)}
+.st-head .rail{display:grid;place-items:center;border-right:var(--stroke) solid var(--ink);background:var(--orange);font-size:24px}
+.st-head .title{display:flex;align-items:center;padding:9px 11px;font-size:19px;line-height:.9}
+.st-head .collapse{display:grid;place-items:center;border:0;background:#fff;cursor:pointer}
+.subtoolbox[data-state="closed"] .st-head{border-bottom:0}
+.subtoolbox[data-state="closed"] .st-body{display:none}
+.st-body{padding:12px;background:#fff}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.btn{border:3px solid var(--ink);background:#fff;border-radius:10px;padding:10px 13px;box-shadow:var(--shadow-sm);font-size:12px;cursor:pointer}
+.btn.primary{background:var(--blue)} .btn.success{background:var(--lime)} .btn.warning{background:var(--yellow)}
+.btn.danger{background:var(--pink)} .btn.magenta{background:var(--magenta)}
+.btn.icon{width:44px;height:42px;padding:0;display:grid;place-items:center;font-size:20px}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.split{display:grid;grid-template-columns:58px 1fr 58px;border:var(--stroke) solid var(--ink);border-radius:14px;overflow:hidden;background:#fff}
+.split .rail{display:grid;place-items:center;background:var(--magenta);border-right:var(--stroke) solid var(--ink);font-size:26px}
+.split input{border:0;min-width:0;padding:12px 13px;font-size:18px;outline:none;background:#fff}
+.split .tail{border:0;border-left:var(--stroke) solid var(--ink);background:var(--magenta);font-size:24px;cursor:pointer}
+.field{display:grid;gap:6px}
+.field label{font-size:11px;text-transform:uppercase}
+.field input,.field select,.field textarea{width:100%;border:var(--stroke) solid var(--ink);border-radius:14px;padding:11px 12px;background:#fff;font-size:16px;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{outline:4px solid var(--yellow);outline-offset:1px}
+.input-action{display:grid;grid-template-columns:1fr 65px;border:var(--stroke) solid var(--ink);border-radius:14px;overflow:hidden}
+.input-action input{border:0;background:var(--cyan2);padding:12px;font-size:17px;min-width:0}
+.input-action button{border:0;border-left:var(--stroke) solid var(--ink);background:var(--pink);font-size:28px;cursor:pointer}
+.check{display:inline-grid;grid-template-columns:28px 1fr;align-items:center;gap:7px;font-size:12px}
+.check input{appearance:none;width:28px;height:28px;border:3px solid var(--ink);background:#fff;position:relative}
+.check input:checked{background:var(--lime)}
+.check input:checked::after{content:"";position:absolute;left:7px;top:2px;width:8px;height:14px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{border:3px solid var(--ink);border-radius:999px;padding:6px 10px;background:var(--yellow);font-size:10px}.tag.pink{background:var(--pink2)} .tag.cyan{background:var(--cyan2)}
+.states{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.state{border:3px solid var(--ink);padding:12px 8px;text-align:center;font-size:10px;background:#fff}
+.state.hover{background:var(--yellow)} .state.focus{outline:4px solid var(--cyan);outline-offset:1px}
+.state.active{background:var(--cyan)} .state.selected{background:var(--lime)} .state.disabled{opacity:.35}
+.state.open{background:var(--magenta)} .state.closed{background:var(--paper2)}
+.palette{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.swatch{border:3px solid var(--ink);min-height:74px;padding:11px;display:flex;align-items:flex-end;font-size:11px}
+.swatch.cyan{background:var(--cyan)} .swatch.pink{background:var(--pink)} .swatch.magenta{background:var(--magenta)} .swatch.orange{background:var(--orange)}
+.swatch.yellow{background:var(--yellow)} .swatch.lime{background:var(--lime)} .swatch.green{background:var(--green)} .swatch.purple{background:var(--purple)}
+.level-demo{border:3px solid var(--ink);background:#fff;display:grid;grid-template-columns:50px 1fr 48px;align-items:center;overflow:hidden}
+.level-demo .mini-rail{height:100%;background:var(--cyan);border-right:3px solid var(--ink);display:grid;place-items:center;font-size:20px}
+.level-demo .mini-title{padding:8px;font-size:var(--fs)}
+.level-demo .mini-action{height:100%;display:grid;place-items:center;border-left:3px solid var(--ink);font-size:18px}
+.level-demo.l0{--fs:18px;min-height:52px}.level-demo.l1{--fs:24px;min-height:64px}.level-demo.l2{--fs:30px;min-height:76px}
+.loading{display:grid;gap:8px}.skeleton{height:16px;border:3px solid var(--ink);background:linear-gradient(90deg,#ddd,#fff,#ddd);background-size:180% 100%;animation:shimmer 1.5s linear infinite}
+.skeleton.big{height:70px}.loader{width:42px;height:42px;border:6px solid var(--ink);border-right-color:transparent;border-radius:50%;animation:spin .9s linear infinite}
+@keyframes shimmer{to{background-position:-180% 0}} @keyframes spin{to{transform:rotate(360deg)}}
+.media{aspect-ratio:16/9;border:var(--stroke) solid var(--ink);background:var(--navy);display:grid;place-items:center;color:#fff;position:relative}
+.media .play{width:64px;height:64px;border:5px solid #fff;border-radius:50%;display:grid;place-items:center;font-size:28px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;border:var(--stroke) solid var(--ink);padding:8px;background:#fff}
+.cal{border:2px solid var(--ink);padding:7px;text-align:center;font-size:10px;background:#fff}.cal.active{background:var(--pink)} .cal.today{background:var(--yellow)}
+.code{white-space:pre-wrap;font:10px/1.5 var(--mono);font-weight:600;background:#111;color:#fff;border:3px solid var(--ink);padding:12px}
+.footer{font-size:11px;line-height:1.45;padding:15px 0 45px;font-weight:700}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.sidebar{position:static}.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.shell{padding:10px}.topbar{position:static;box-shadow:var(--shadow-sm)}.section-head{grid-template-columns:52px 1fr}.section-note{display:none}.grid,.grid3{grid-template-columns:1fr}.states{grid-template-columns:repeat(3,1fr)}.palette{grid-template-columns:1fr 1fr}.tb-head{grid-template-columns:48px 1fr 55px}.st-head{grid-template-columns:44px 1fr 50px}.split{grid-template-columns:48px 1fr 48px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div>
+      <div class="brand">VIEWTUBE — TOOLBOX COMPONENT LIBRARY</div>
+      <div class="meta">STANDALONE • DRAFT 02 • PRODUCTION-STYLE VISUAL REFERENCE</div>
+    </div>
+    <div class="controls">
+      <button class="ui-btn active" data-filter="canonical">Canonical</button>
+      <button class="ui-btn" data-filter="alternate">Alternate</button>
+      <select class="ui-select" id="levelPicker" aria-label="Level">
+        <option value="l1">L1 reference</option><option value="l0">L0</option><option value="l2">L2</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <h2>LIBRARY</h2>
+      <a href="#foundations">Foundations</a>
+      <a href="#shells">Toolbox / SubToolbox</a>
+      <a href="#headers">Headers + split-left</a>
+      <a href="#actions">Buttons / actions</a>
+      <a href="#inputs">Inputs</a>
+      <a href="#selection">Selection</a>
+      <a href="#navigation">Navigation</a>
+      <a href="#cards">Cards / modules</a>
+      <a href="#data">Data displays</a>
+      <a href="#media">Media</a>
+      <a href="#overlays">Overlays</a>
+      <a href="#advanced">Advanced controls</a>
+      <a href="#vault">Vault / asset modules</a>
+      <a href="#loading">Loading</a>
+      <a href="#states">States</a>
+      <a href="#responsive">Responsive</a>
+      <a href="#provenance">Provenance</a>
+    </nav>
+
+    <main>
+      <section class="section" id="foundations">
+        <div class="section-head"><div class="section-icon" style="background:var(--cyan)">✦</div><div class="section-title">FOUNDATIONS</div><div class="section-note">tokens • geometry • typography</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card cyan"><h3>Visual grammar</h3><p>White/light content fields, heavy black structural strokes, bold typography, strong colored rails, and unmistakable semantic color blocks.</p></div>
+            <div class="card"><h3>Canonical ownership</h3><p>Toolbox/SubToolbox production code and CSS remain authoritative. This HTML library is a visual specification and test surface.</p></div>
+          </div>
+          <div class="subhead">Palette</div>
+          <div class="palette">
+            <div class="swatch cyan">CYAN</div><div class="swatch pink">PINK</div><div class="swatch magenta">MAGENTA</div><div class="swatch orange">ORANGE</div>
+            <div class="swatch yellow">YELLOW</div><div class="swatch lime">LIME</div><div class="swatch green">GREEN</div><div class="swatch purple">PURPLE</div>
+          </div>
+          <div class="subhead">Token families</div>
+          <div class="token-row">
+            <span class="token-chip">stroke: 5px</span><span class="token-chip">radius: 18px family</span><span class="token-chip">shadow: 8px black</span>
+            <span class="token-chip">unit: 4px</span><span class="token-chip">bold display type</span><span class="token-chip">palette rail</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="shells">
+        <div class="section-head"><div class="section-icon" style="background:var(--pink)">▣</div><div class="section-title">TOOLBOX / SUBTOOLBOX</div><div class="section-note">same anatomy • size hierarchy</div></div>
+        <div class="section-body">
+          <div class="toolbox" data-level="l1" data-state="open">
+            <div class="tb-head"><div class="rail">☰</div><div class="title">VIDEO MANAGER</div><button class="collapse" aria-label="Toggle Toolbox"><span class="chev"></span></button></div>
+            <div class="tb-body">
+              <div class="row"><button class="btn primary">Create</button><button class="btn">Manage</button><button class="btn success">Analyze</button></div>
+              <div class="subtoolbox" data-state="open">
+                <div class="st-head"><div class="rail">◈</div><div class="title">Video Details</div><button class="collapse" aria-label="Toggle SubToolbox"><span class="chev"></span></button></div>
+                <div class="st-body">
+                  <div class="row"><span class="tag cyan">TITLE</span><span class="tag pink">DESCRIPTION</span><span class="tag">THUMBNAIL</span></div>
+                </div>
+              </div>
+              <div class="subtoolbox" data-state="closed">
+                <div class="st-head"><div class="rail" style="background:var(--lime)">◫</div><div class="title">Collapsed SubToolbox</div><button class="collapse" aria-label="Toggle SubToolbox"><span class="chev"></span></button></div>
+                <div class="st-body"><p>Hidden content</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="note">State contract represented here: open/closed shell state, rotating chevron, palette rail, nested SubToolbox, and collapsed seam suppression. The production implementation should preserve the corresponding DOM/state contracts.</div>
+        </div>
+      </section>
+
+      <section class="section" id="headers">
+        <div class="section-head"><div class="section-icon" style="background:var(--orange)">◩</div><div class="section-title">HEADERS + SPLIT-LEFT</div><div class="section-note">rail • title • actions</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card orange">
+              <h3>Split-left search</h3>
+              <div class="split"><div class="rail">⌕</div><input value="Search videos"><button class="tail">×</button></div>
+            </div>
+            <div class="card magenta">
+              <h3>Header action split</h3>
+              <div class="split"><div class="rail">＋</div><input value="New project"><button class="tail">⌄</button></div>
+            </div>
+          </div>
+          <div class="note" style="margin-top:12px">The left section is a structural palette-bearing region. It should never collapse into an accidental white icon block.</div>
+        </div>
+      </section>
+
+      <section class="section" id="actions">
+        <div class="section-head"><div class="section-icon" style="background:var(--yellow)">✚</div><div class="section-title">BUTTONS / ACTIONS</div><div class="section-note">primitive families</div></div>
+        <div class="section-body">
+          <div class="controls"><button class="btn">Secondary</button><button class="btn primary">Primary</button><button class="btn success">Success</button><button class="btn warning">Warning</button><button class="btn danger">Danger</button><button class="btn magenta">Generate</button><button class="btn icon">＋</button><button class="btn icon">⚙</button><button class="btn icon">⌕</button><button class="btn" disabled>Disabled</button></div>
+          <div class="grid" style="margin-top:12px">
+            <div class="card cyan"><h3>SubToolboxGridActionButton</h3><p>Grid-based action with optional split-left icon section.</p></div>
+            <div class="card lime"><h3>SubToolboxInnerActionButton</h3><p>Inner-body action that preserves the enclosing SubToolbox shell.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="inputs">
+        <div class="section-head"><div class="section-icon" style="background:var(--cyan)">⌨</div><div class="section-title">INPUTS</div><div class="section-note">standard fields • actions</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card"><div class="field"><label>StandardInput</label><input value="Napoleon Bonaparte"></div></div>
+            <div class="card"><div class="field"><label>StandardTextArea</label><textarea rows="4">Write a tool description here.</textarea></div></div>
+            <div class="card yellow"><h3>Number Field</h3><div class="field"><label>Count</label><input type="number" value="25"></div></div>
+            <div class="card pink"><h3>Input Action</h3><div class="input-action"><input value="NEW ITEM"><button>＋</button></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="selection">
+        <div class="section-head"><div class="section-icon" style="background:var(--lime)">✓</div><div class="section-title">SELECTION CONTROLS</div><div class="section-note">checkbox • dropdown • tags</div></div>
+        <div class="section-body">
+          <div class="grid3">
+            <div class="card"><h3>Checkbox</h3><label class="check"><input type="checkbox" checked>Use selected channel</label></div>
+            <div class="card"><h3>Dropdown</h3><select class="ui-select" style="width:100%"><option>Channel</option><option>Project</option><option>Video</option></select></div>
+            <div class="card"><h3>Removable Tags</h3><div class="tags"><span class="tag">YouTube</span><span class="tag pink">Shorts ×</span><span class="tag cyan">SEO ×</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="navigation">
+        <div class="section-head"><div class="section-icon" style="background:var(--purple)">↔</div><div class="section-title">NAVIGATION</div><div class="section-note">tabs • pagination • rails</div></div>
+        <div class="section-body">
+          <div class="row"><button class="btn primary">Overview</button><button class="btn">Videos</button><button class="btn">Analytics</button><button class="btn">Settings</button></div>
+          <div class="row" style="margin-top:12px"><button class="btn icon">←</button><span class="tag yellow">1</span><span class="tag cyan">2</span><span class="tag">3</span><button class="btn icon">→</button></div>
+        </div>
+      </section>
+
+      <section class="section" id="cards">
+        <div class="section-head"><div class="section-icon" style="background:var(--pink)">▤</div><div class="section-title">CARDS / MODULES</div><div class="section-note">tool compositions</div></div>
+        <div class="section-body">
+          <div class="grid3">
+            <article class="card cyan"><h3>Video Manager</h3><p>Tool shell containing controls, content modules, metadata, and actions.</p></article>
+            <article class="card yellow"><h3>Thumbnail Generator</h3><p>Image-oriented module with generation, preview, status, and save actions.</p></article>
+            <article class="card lime"><h3>Channel Profile</h3><p>Profile/knowledge module composed from canonical Toolbox primitives.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="data">
+        <div class="section-head"><div class="section-icon" style="background:var(--blue)">▦</div><div class="section-title">DATA DISPLAYS</div><div class="section-note">metrics • lists • calendar</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card"><h3>KPI block</h3><div style="font-size:38px">12.8K</div><div class="token">VIEWS / 28 DAYS</div></div>
+            <div class="card orange"><h3>Calendar</h3><div class="calendar">
+              <div class="cal">M</div><div class="cal">T</div><div class="cal">W</div><div class="cal">T</div><div class="cal">F</div><div class="cal">S</div><div class="cal">S</div>
+              <div class="cal">1</div><div class="cal">2</div><div class="cal today">3</div><div class="cal">4</div><div class="cal">5</div><div class="cal">6</div><div class="cal">7</div>
+            </div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="media">
+        <div class="section-head"><div class="section-icon" style="background:var(--magenta)">▶</div><div class="section-title">MEDIA TOOLS</div><div class="section-note">video • image • audio</div></div>
+        <div class="section-body">
+          <div class="grid3">
+            <div class="card"><h3>Video player</h3><div class="media"><div class="play">▶</div></div></div>
+            <div class="card"><h3>Image preview</h3><div class="media" style="background:var(--orange);color:var(--ink)">IMAGE</div></div>
+            <div class="card"><h3>Audio player</h3><div class="row"><button class="btn icon">▶</button><button class="btn icon">Ⅱ</button><button class="btn icon">↺</button></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="overlays">
+        <div class="section-head"><div class="section-icon" style="background:var(--orange)">⌘</div><div class="section-title">OVERLAYS</div><div class="section-note">menus • dialogs • popovers</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card"><h3>Context menu</h3><div style="border:3px solid var(--ink);padding:8px;background:#fff;max-width:260px"><div class="btn" style="box-shadow:none;border-width:2px;margin:2px;width:100%;text-align:left">Rename</div><div class="btn" style="box-shadow:none;border-width:2px;margin:2px;width:100%;text-align:left">Duplicate</div><div class="btn danger" style="box-shadow:none;border-width:2px;margin:2px;width:100%;text-align:left">Delete</div></div></div>
+            <div class="card pink"><h3>Help popover</h3><div class="note">1–2 sentences explaining the tool's main function, feature, output, and how to start.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="advanced">
+        <div class="section-head"><div class="section-icon" style="background:var(--yellow)">◉</div><div class="section-title">ADVANCED CONTROLS</div><div class="section-note">knob • toggle • compound</div></div>
+        <div class="section-body">
+          <div class="grid3">
+            <div class="card"><h3>Knob / Dial</h3><div style="width:100px;height:100px;border:7px solid var(--ink);border-radius:50%;margin:auto;background:var(--cyan);display:grid;place-items:center;font-size:14px">72</div></div>
+            <div class="card"><h3>Segment toggle</h3><div class="row"><button class="btn primary">Longs</button><button class="btn">Shorts</button><button class="btn">All</button></div></div>
+            <div class="card"><h3>Compound action</h3><div class="split"><div class="rail">⚙</div><input value="Create + Analyze"><button class="tail">⌄</button></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="vault">
+        <div class="section-head"><div class="section-icon" style="background:var(--green)">▣</div><div class="section-title">VAULT / ASSET MODULES</div><div class="section-note">asset • metadata • rights</div></div>
+        <div class="section-body">
+          <div class="grid3">
+            <article class="card cyan"><h3>Asset Inspector</h3><p>Preview, metadata, technical media information, lineage/provenance, and rights information.</p></article>
+            <article class="card orange"><h3>Image Tools</h3><p>Crop, resize, aspect-ratio derivatives, and preview actions.</p></article>
+            <article class="card lime"><h3>Video Tools</h3><p>Player, frame/preview controls, technical info, and derivative management.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="loading">
+        <div class="section-head"><div class="section-icon" style="background:var(--purple)">◌</div><div class="section-title">LOADING SYSTEM</div><div class="section-note">skeleton • loader • stable layout</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card"><h3>Skeletons</h3><div class="loading"><div class="skeleton big"></div><div class="skeleton"></div><div class="skeleton" style="width:70%"></div></div></div>
+            <div class="card"><h3>Loader</h3><div class="row"><div class="loader"></div><span>Generating thumbnail…</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="states">
+        <div class="section-head"><div class="section-icon" style="background:var(--pink)">●</div><div class="section-title">STATE MATRIX</div><div class="section-note">visual certification</div></div>
+        <div class="section-body">
+          <div class="states">
+            <div class="state">Default</div><div class="state hover">Hover</div><div class="state focus">Focus</div>
+            <div class="state active">Active</div><div class="state selected">Selected</div><div class="state disabled">Disabled</div>
+            <div class="state open">Open</div><div class="state closed">Closed</div><div class="state">Loading</div>
+            <div class="state">Error</div><div class="state">Warning</div><div class="state">Success</div>
+          </div>
+          <div class="note" style="margin-top:12px">Certification includes expanded/collapsed Toolbox and SubToolbox, split-left actions, palette variants, collapse rotation, icon rails, both component-library tracks, and desktop/mobile behavior.</div>
+        </div>
+      </section>
+
+      <section class="section" id="responsive">
+        <div class="section-head"><div class="section-icon" style="background:var(--cyan)">▤</div><div class="section-title">RESPONSIVE</div><div class="section-note">desktop → mobile</div></div>
+        <div class="section-body">
+          <div class="grid">
+            <div class="card"><h3>Desktop</h3><p>Full rail + title + actions, wider modules, multi-column component catalog.</p></div>
+            <div class="card"><h3>Mobile</h3><p>Condensed rails and headings, stacked modules, preserved component anatomy, no accidental overflow.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="provenance">
+        <div class="section-head"><div class="section-icon" style="background:var(--yellow)">⌁</div><div class="section-title">PROVENANCE / AUTHORITY</div><div class="section-note">do not confuse reference with source</div></div>
+        <div class="section-body">
+          <div class="code">PRIMARY DONOR:
+themotionvisual/viewtubebuild
+  src/components/Toolbox.tsx
+  src/styles/toolbox-entry.css
+  src/styles/toolbox-system.css
+  src/styles/subtoolbox-system.css
+  src/components/subtoolbox/tokens.ts
+  src/components/subtoolbox/SubToolboxPrimitives.tsx
+  src/components/subtoolbox/SubToolboxSplitPrimitives.tsx
+  src/styles/subtoolbox-split-primitives.css
+  src/styles/toolboxPalette.ts
+  src/components/ToolboxUISystem.tsx
+  src/components/ToolboxUIReferenceLibrary.tsx
+
+STANDALONE DONOR LIBRARIES:
+  src/assets/reference/viewtube-full-component-library.html
+  src/assets/reference/viewtube-mini-toolbox-bundle.html
+
+RELATED APPLICATION:
+  src/views/ThumbnailStudio.tsx
+
+RULE:
+Production coded implementation + validated donor source + supplied screenshots
+are the authority. This standalone HTML is a compiled visual reference and
+working laboratory, not a replacement for the production components.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="footer">
+    Draft 02 deliberately uses the actual ViewTube Toolbox visual vocabulary rather than the earlier generic dark documentation treatment. The next revision should replace any remaining approximations with exact donor CSS, token values, component anatomy, icons, and standalone-library content from <code>themotionvisual/viewtubebuild</code>.
+  </footer>
+</div>
+<script>
+function toggleShell(shell){
+  shell.dataset.state = shell.dataset.state === 'open' ? 'closed' : 'open';
+}
+document.querySelectorAll('.toolbox .collapse, .subtoolbox .collapse').forEach(btn=>{
+  btn.addEventListener('click',()=>toggleShell(btn.closest('[data-state]')));
+});
+document.querySelectorAll('[data-filter]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+const picker=document.getElementById('levelPicker');
+picker.addEventListener('change',()=>{
+  document.querySelectorAll('.toolbox[data-level]').forEach(el=>el.dataset.level=picker.value);
+});
+</script>
+</body>
+</html>

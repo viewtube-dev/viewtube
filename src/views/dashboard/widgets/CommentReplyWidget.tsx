@@ -1,0 +1,523 @@
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
+import { WidgetShell } from "../WidgetShell"
+import { WidgetFooter, WidgetHeaderStepper, WidgetHeaderToggle, WidgetPreviewState, WidgetScrollArea, WidgetSpeechBubble, WidgetSplitButton, WidgetSplitCounterBadge, WidgetTooltip, WidgetVideoMiniCard } from "../WidgetPrimitives"
+import {
+  MessageSquare,
+  Sparkles,
+  Send,
+  Loader2,
+  ThumbsUp,
+  MessagesSquare,
+  ExternalLink,
+  Link2,
+} from "lucide-react"
+import {
+  findLargestFittingFontSize,
+  fitThumbnailTitle,
+  THUMBNAIL_TITLE_MIN_SIZE,
+  formatCommentTimestamp,
+  THUMBNAIL_TITLE_LETTER_SPACING_EM,
+  type ThumbnailTitleLayout,
+} from "./commentResponderUtils"
+import { useCommentResponderController, useCreatorEngagementContext } from "../../../features/creator-engagement"
+import { InstrumentExplanation, InstrumentStages, WidgetInstrument } from "../instruments/WidgetInstrument"
+import { COMMENT_RESPONDER_PREVIEW } from "../widgetPreviewFixtures"
+import "./CommentReplyWidget.css"
+
+const htmlDecode = (input: string) => {
+  const doc = new DOMParser().parseFromString(input, "text/html")
+  return doc.documentElement.textContent || input
+}
+
+const CommentAvatar = ({ src, label, initial }: { src?: string; label: string; initial: string }) => {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const showImage = Boolean(src && failedSrc !== src)
+
+  return (
+    <div className="comment-responder-avatar" aria-label={`${label} profile picture`}>
+      {showImage && (
+        <img
+          src={src}
+          alt=""
+          referrerPolicy="no-referrer"
+          onError={() => setFailedSrc(src || null)}
+        />
+      )}
+      {!showImage && <span aria-hidden="true">{initial || "?"}</span>}
+    </div>
+  )
+}
+
+const CommentVideoThumbnail = ({ title, videoId, thumbnailUrl }: { title: string; videoId: string; thumbnailUrl: string }) => {
+  const cardRef = useRef<HTMLDivElement | null>(null)
+  const topTitleRef = useRef<HTMLDivElement | null>(null)
+  const bottomTitleRef = useRef<HTMLDivElement | null>(null)
+  const [layout, setLayout] = useState<ThumbnailTitleLayout>(() => fitThumbnailTitle(title, 188))
+
+  useLayoutEffect(() => {
+    const card = cardRef.current
+    if (!card) return
+    const update = () => {
+      const titleBand = topTitleRef.current
+      if (!titleBand) return
+      const styles = window.getComputedStyle(titleBand)
+      const canvas = document.createElement("canvas")
+      const context = canvas.getContext("2d")
+      const width = Math.max(80, titleBand.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight))
+      const measure = (value: string, fontSize: number) => {
+        if (!context) return value.length * fontSize * 0.58
+        context.font = `900 ${fontSize}px ${styles.fontFamily}`
+        const spacing = Math.max(0, value.length - 1) * fontSize * THUMBNAIL_TITLE_LETTER_SPACING_EM
+        return context.measureText(value).width + spacing
+      }
+      setLayout(fitThumbnailTitle(title, width, measure))
+    }
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(card)
+    return () => observer.disconnect()
+  }, [title])
+
+  useLayoutEffect(() => {
+    const titleBands = [topTitleRef.current, bottomTitleRef.current].filter((band): band is HTMLDivElement => Boolean(band))
+    if (!titleBands.length) return
+
+    const fittedSize = findLargestFittingFontSize((fontSize) => {
+      titleBands.forEach((band) => { band.style.fontSize = `${fontSize}px` })
+      return titleBands.every((band) => band.scrollWidth <= band.clientWidth + 0.5)
+    }, { min: THUMBNAIL_TITLE_MIN_SIZE, max: layout.fontSize })
+
+    if (fittedSize !== layout.fontSize) {
+      setLayout((current) => ({ ...current, fontSize: fittedSize }))
+    }
+  }, [layout.fontSize, layout.lines])
+
+  const handleThumbnailError = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget
+    if (image.src.includes("maxresdefault.jpg")) image.src = `https://img.youtube.com/vi/${videoId}/sddefault.jpg`
+    else if (image.src.includes("sddefault.jpg")) image.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+    else if (image.src.includes("hqdefault.jpg")) image.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+    else image.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 180'%3E%3Crect width='320' height='180' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23111' font-family='Arial' font-size='16'%3EThumbnail unavailable%3C/text%3E%3C/svg%3E"
+  }
+
+  return (
+    <WidgetVideoMiniCard
+      ref={cardRef}
+      className="comment-video-card"
+      title={<span ref={topTitleRef} style={{ display: "block", width: "100%", fontSize: `${layout.fontSize}px` }}>{layout.lines[0]}</span>}
+      thumbnail={videoId ? thumbnailUrl : undefined}
+      alt={`Video thumbnail for ${title}`}
+      onImageError={handleThumbnailError}
+      placeholder={<Loader2 size={16} className="animate-spin" />}
+      footer={<span ref={bottomTitleRef} style={{ display: "block", width: "100%", fontSize: `${layout.fontSize}px` }}>{layout.lines[1]}</span>}
+    />
+  )
+}
+
+const AutoFitCommentBubble = ({ text }: { text: string }) => {
+  const bubbleRef = useRef<HTMLDivElement | null>(null)
+  const textRef = useRef<HTMLSpanElement | null>(null)
+
+  useLayoutEffect(() => {
+    const bubble = bubbleRef.current
+    const textNode = textRef.current
+    const copy = bubble?.closest<HTMLElement>(".comment-responder-current-copy")
+    const row = bubble?.closest<HTMLElement>(".comment-responder-current-comment")
+    const card = row?.querySelector<HTMLElement>(".comment-video-card")
+    const meta = copy?.querySelector<HTMLElement>(".comment-responder-comment-meta")
+    if (!bubble || !textNode || !copy || !card || !meta) return
+
+    let frame = 0
+    const update = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const copyStyles = window.getComputedStyle(copy)
+        const gap = parseFloat(copyStyles.rowGap || copyStyles.gap) || 0
+        const cardHeight = card.getBoundingClientRect().height
+        const bubbleHeight = Math.max(42, cardHeight - meta.getBoundingClientRect().height - gap)
+        const bubbleStyles = window.getComputedStyle(bubble)
+        const verticalInsets = parseFloat(bubbleStyles.paddingTop) + parseFloat(bubbleStyles.paddingBottom)
+
+        // Keep readable copy at the system size. Short comments collapse to
+        // their content; only long comments use the available bubble height
+        // and the internal scroll rail.
+        copy.style.height = `${cardHeight}px`
+        bubble.style.height = "auto"
+        const naturalHeight = textNode.scrollHeight + verticalInsets
+        bubble.style.height = `${Math.min(bubbleHeight, Math.max(42, naturalHeight))}px`
+      })
+    }
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(card)
+    window.addEventListener("resize", update)
+    return () => {
+      cancelAnimationFrame(frame)
+      observer.disconnect()
+      window.removeEventListener("resize", update)
+    }
+  }, [text])
+
+  return (
+    <WidgetSpeechBubble ref={bubbleRef} className="comment-responder-bubble" scrollable>
+      <span ref={textRef} className="comment-responder-bubble-copy">{text}</span>
+    </WidgetSpeechBubble>
+  )
+}
+
+export const CommentReplyWidget = ({
+  widget,
+  instance,
+  editMode,
+  onToggleCollapse,
+  onCycleSize,
+  onDecSize,
+  onCycleHeight,
+  onDecHeight,
+  onRemove,
+  data,
+}: any) => {
+  const engagement = useCreatorEngagementContext()
+  const sharedController = useCommentResponderController(engagement)
+  const canPostReply = sharedController.canPostReply
+  const common = {
+    widget,
+    instance,
+    editMode,
+    canEdit: true,
+    onToggleCollapse,
+    onCycleSize,
+    onDecSize,
+    onCycleHeight,
+    onDecHeight,
+    onRemove,
+  }
+
+  const [tab, setTab] = useState<"unreplied" | "history">("unreplied")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [allThreads, setAllThreads] = useState<any[]>([])
+  const [replyText, setReplyText] = useState<Record<string, string>>({})
+  const [isGenerating, setIsGenerating] = useState<Record<string, boolean>>({})
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [fetchedVideoData, setFetchedVideoData] = useState<Record<string, any>>({})
+  const [inboundImageUrl, setInboundImageUrl] = useState<string | null>(null)
+  const replyTextareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const channelId = engagement.channelId
+  const canonicalVideos = engagement.videoAssets
+
+  useEffect(() => {
+    setAllThreads(sharedController.threads)
+    setLoading(sharedController.loading)
+    setError(sharedController.error)
+    setFetchedVideoData(sharedController.fetchedVideoData)
+    setInboundImageUrl(sharedController.inboundImageUrl)
+    const activeId = sharedController.currentThread?.id
+    if (activeId) {
+      setReplyText((current) => ({ ...current, [activeId]: sharedController.replyText }))
+      setIsGenerating((current) => ({ ...current, [activeId]: sharedController.generating }))
+    }
+  }, [sharedController.error, sharedController.fetchedVideoData, sharedController.generating, sharedController.inboundImageUrl, sharedController.loading, sharedController.replyText, sharedController.threads, sharedController.currentThread?.id])
+
+  useEffect(() => {
+    const applyImage = (payload: any) => {
+      if (!payload?.imageUrl) return
+      setInboundImageUrl(payload.imageUrl)
+    }
+    const onBridge = (event: Event) => {
+      const detail = (event as CustomEvent<any>).detail
+      if (!detail || detail.targetWidget !== "comment-replier") return
+      applyImage(detail)
+    }
+    window.addEventListener("vt_dashboard_generated_image", onBridge as EventListener)
+    try {
+      const cached = localStorage.getItem("vt_bridge_image_comment-replier")
+      if (cached) applyImage(JSON.parse(cached))
+    } catch {}
+    return () => window.removeEventListener("vt_dashboard_generated_image", onBridge as EventListener)
+  }, [])
+
+  const unreplied = allThreads.filter((thread: any) => {
+    if (thread.repliesComplete === false) return false
+    const replies = thread.replies?.comments || []
+    return !replies.some(
+      (reply: any) => reply.snippet.authorChannelId?.value === channelId,
+    )
+  })
+
+  const replied = allThreads.filter((thread: any) => {
+    if (thread.repliesComplete === false) return false
+    const replies = thread.replies?.comments || []
+    return replies.some(
+      (reply: any) => reply.snippet.authorChannelId?.value === channelId,
+    )
+  })
+
+  useEffect(() => {
+    setCurrentIndex(0)
+  }, [tab])
+
+  const handleMagicDraft = async (commentId: string) => {
+    await sharedController.draftReply()
+  }
+
+  const handleSuggestVideo = async (commentId: string) => {
+    await sharedController.suggestVideo()
+  }
+
+  const handleSend = async (commentId: string) => {
+    await sharedController.postReply()
+  }
+
+  const displayComments = tab === "unreplied" ? unreplied : replied
+  const safeIndex = Math.min(currentIndex, Math.max(0, displayComments.length - 1))
+  const currentThread = displayComments[safeIndex] || null
+  const activeReplyText = currentThread ? replyText[currentThread.id] || "" : ""
+
+  const autosizeReplyInput = (input: HTMLTextAreaElement | null) => {
+    if (!input) return
+    input.style.height = ""
+  }
+
+  useEffect(() => {
+    autosizeReplyInput(replyTextareaRef.current)
+  }, [currentThread?.id, activeReplyText])
+
+  const headerContent = (
+    <div className="comment-responder-header-controls">
+      <WidgetHeaderToggle
+        label="Comment responder view"
+        value={tab}
+        onChange={(next) => { setTab(next); sharedController.setTab(next) }}
+        items={[{ id: "unreplied", label: "New" }, { id: "history", label: "Old" }]}
+      />
+      {displayComments.length > 0 && (
+        <WidgetHeaderStepper
+          label="Comment pagination"
+          value={`${safeIndex + 1} / ${displayComments.length}`}
+          canPrevious={safeIndex > 0}
+          canNext={safeIndex < displayComments.length - 1}
+          onPrevious={() => { const next = Math.max(0, safeIndex - 1); setCurrentIndex(next); sharedController.setCurrentIndex(next) }}
+          onNext={() => { const next = Math.min(displayComments.length - 1, safeIndex + 1); setCurrentIndex(next); sharedController.setCurrentIndex(next) }}
+        />
+      )}
+    </div>
+  )
+
+  const composer = currentThread ? (
+    <WidgetFooter divider={tab === "history"} className="comment-responder-footer">
+      <textarea
+        ref={replyTextareaRef}
+        className="vt-textarea"
+        value={activeReplyText}
+        onChange={(event) => { setReplyText((previous) => ({ ...previous, [currentThread.id]: event.target.value })); sharedController.setReplyText(event.target.value) }}
+        onInput={(event) => autosizeReplyInput(event.currentTarget)}
+        placeholder={tab === "history" ? "ADD FOLLOW-UP REPLY..." : "REPLY..."}
+      />
+      <div className="comment-responder-footer-actions">
+        <WidgetSplitButton
+          onClick={() => handleMagicDraft(currentThread.id)}
+          disabled={loading || isGenerating[currentThread.id]}
+          icon={isGenerating[currentThread.id] ? <Loader2 className="animate-spin" /> : <Sparkles />}
+          tone="soft"
+          width="full">
+          {isGenerating[currentThread.id] ? "WORKING..." : activeReplyText.trim() ? "REFINE" : "DRAFT"}
+        </WidgetSplitButton>
+        <WidgetSplitButton
+          onClick={() => handleSuggestVideo(currentThread.id)}
+          disabled={loading || isGenerating[currentThread.id]}
+          icon={<Link2 />}
+          tone="neutral"
+          width="full"
+          multiline>
+          Suggest video
+        </WidgetSplitButton>
+        <WidgetSplitButton
+          onClick={() => handleSend(currentThread.id)}
+          disabled={loading || (canPostReply && !activeReplyText.trim())}
+          icon={<Send />}
+          tone="primary"
+          width="full">
+          {canPostReply ? "POST" : "RECONNECT CHANNEL"}
+        </WidgetSplitButton>
+      </div>
+    </WidgetFooter>
+  ) : null
+
+  return (
+    <WidgetShell {...common} contentLayout="flush" headerContent={headerContent} icon={<MessageSquare size={22} />} helpContent={
+      <WidgetInstrument archetype="conversation" label="CONVERSATION PATH" summary="COMMENT TO MEANINGFUL REPLY" compact>
+        <InstrumentStages stages={[
+          { id: "listen", label: "Listen", detail: "Read the comment" },
+          { id: "draft", label: "Compose", detail: "Draft or refine" },
+          { id: "connect", label: "Connect", detail: "Add a video" },
+          { id: "reply", label: "Respond", detail: "Review and post" },
+        ]} />
+        <InstrumentExplanation purpose="Explain how comments become intentional engagement." process="Read the selected comment, compose or refine a reply, optionally connect a relevant video, then post." result="A useful conversation branch that can strengthen the viewer relationship and session depth." />
+      </WidgetInstrument>
+    }>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: 0, minHeight: 0 }}>
+        {inboundImageUrl && (
+          <div style={{ border: "2px solid var(--vt-ink, var(--widget-border))", borderRadius: "8px", padding: "6px 8px", margin: "10px 10px 0", background: "#fff", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+            <span style={{ fontSize: "9px", fontWeight: 900, textTransform: "uppercase", opacity: 0.7 }}>Image received from generator</span>
+            <button className="vt-button" style={{ height: "24px", fontSize: "8px", padding: "0 8px" }} onClick={() => navigator.clipboard?.writeText(inboundImageUrl)}>COPY URL</button>
+          </div>
+        )}
+
+        {error && (
+          <div role="alert" style={{ border: "2px solid #000", margin: "10px 10px 0", padding: "7px 9px", background: "#FFB158", color: "var(--vt-ink, var(--widget-border))", fontSize: "10px", fontWeight: 900, lineHeight: 1.3 }}>
+            {error}
+          </div>
+        )}
+
+        <WidgetScrollArea ariaLabel="Comment responder conversation" edge="inset" className="comment-responder-scroll-area" enabled={tab === "history"}>
+          {loading && allThreads.length === 0 ? (
+            <div className="comment-responder-sync-state" aria-live="polite">
+              <div className="comment-responder-sync-thread">
+                <div className="comment-responder-sync-thumbnail" />
+                <div className="comment-responder-sync-copy">
+                  <div className="comment-responder-sync-meta"><span className="comment-responder-sync-avatar" /><span /><span /></div>
+                  <div className="comment-responder-sync-bubble" />
+                </div>
+              </div>
+              <div className="comment-responder-sync-footer"><Loader2 size={15} className="animate-spin" /> Syncing your first three comments…</div>
+            </div>
+          ) : !currentThread ? (
+            <WidgetPreviewState
+              compact
+              ariaLabel="Comment Responder preview"
+              previewReason="Example comment anatomy stays visible until real comment access returns a conversation."
+              recoveryAction={canPostReply ? "REFRESH COMMENTS" : "RECONNECT CHANNEL"}
+              onRecover={() => void sharedController.refresh()}
+            >
+              <div className="comment-responder-preview">
+                <WidgetVideoMiniCard
+                  title={COMMENT_RESPONDER_PREVIEW.videoTitle}
+                  placeholder={<MessageSquare size={24} />}
+                  footer="SAMPLE VIDEO"
+                />
+                <div className="comment-responder-preview-copy">
+                  <strong>{COMMENT_RESPONDER_PREVIEW.author}</strong>
+                  <WidgetSpeechBubble>
+                    {COMMENT_RESPONDER_PREVIEW.comment}
+                  </WidgetSpeechBubble>
+                  <div className="comment-responder-preview-badges">
+                    <WidgetSplitCounterBadge icon={<ThumbsUp />} value={COMMENT_RESPONDER_PREVIEW.likes} label="Sample likes" height={24} tone="primary" />
+                    <WidgetSplitCounterBadge icon={<MessagesSquare />} value={COMMENT_RESPONDER_PREVIEW.replies} label="Sample replies" height={24} tone="secondary" />
+                  </div>
+                </div>
+              </div>
+            </WidgetPreviewState>
+          ) : (() => {
+            const thread = currentThread
+            const c = thread.snippet.topLevelComment.snippet
+            const authorHandle = htmlDecode(c.authorDisplayName.replace(/^@+/, "@"))
+            const avatarInitial = authorHandle.replace(/^@+/, "").charAt(0).toUpperCase() || "?"
+            const handleFontSize = Math.max(5, Math.min(15, Math.floor(270 / Math.max(authorHandle.length, 1))))
+            const commentText = htmlDecode(c.textDisplay)
+            const timestamp = formatCommentTimestamp(c.publishedAt || c.updatedAt)
+            const likeCountNumber = Number(c.likeCount || 0)
+            const likeCount = likeCountNumber.toLocaleString()
+            const videoId = thread.snippet.videoId
+            const videoCandidate = canonicalVideos.find((v: any) => v.videoId === videoId)
+            const fetched = fetchedVideoData[videoId]
+            const video = (fetched && fetched.title && fetched.title !== "Unknown Video") ? fetched : videoCandidate
+            const thumbnailUrl = video?.thumbnails?.maxres?.url || video?.snippet?.thumbnails?.maxres?.url || video?.thumbnailUrl || video?.thumbnail || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+            const existingChannelReplies = thread.replies?.comments || []
+            const replyCountNumber = Number(thread.snippet.totalReplyCount ?? existingChannelReplies.length ?? 0)
+            const replyCount = replyCountNumber.toLocaleString()
+
+            return (
+              <div className={`comment-responder-thread-panel is-${tab} ${tab === "history" && existingChannelReplies.length === 1 ? "is-single-reply" : ""}`.trim()}>
+
+                <div className="comment-responder-current-comment">
+
+                  <CommentVideoThumbnail
+                    title={video?.title && video.title !== "Unknown Video" ? htmlDecode(video.title) : `[${videoId}]`}
+                    videoId={videoId}
+                    thumbnailUrl={thumbnailUrl}
+                  />
+
+                  {/* Right Column Wrapper: Takes the remaining space */}
+                  <div className="comment-responder-current-copy">
+                    
+                    {/* Author Info & Comment text */}
+                    <div className="comment-responder-comment-meta">
+                      
+                      <CommentAvatar src={c.authorProfileImageUrl} label={authorHandle} initial={avatarInitial} />
+
+                      {/* Info Column */}
+                      <div className="comment-responder-meta-copy">
+                        
+                        {/* Author Name and Date */}
+                        <div style={{ minWidth: 0 }}>
+                          <span className="comment-responder-handle" title={authorHandle} style={{ fontSize: `${handleFontSize}px` }}>
+                            {authorHandle}
+                          </span>
+                          <div className="comment-responder-date-row">
+                            <span style={{ color: "#3157ff", fontSize: "10px", fontWeight: 800, letterSpacing: "0.02em", lineHeight: 1.2 }}>
+                              {timestamp.dateLabel}<span style={{ fontSize: "7px", verticalAlign: "text-bottom", marginLeft: "1px" }}>{timestamp.meridiem}</span>
+                            </span>
+                            <span style={{ color: "var(--vt-ink, var(--widget-border))", fontSize: "8px", fontWeight: 700, letterSpacing: "0.04em", lineHeight: 1 }}>
+                              {timestamp.relative}
+                            </span>
+                          </div>
+                          <div className="comment-responder-reaction-row">
+                            <WidgetSplitCounterBadge
+                              className="comment-responder-reaction-badge comment-responder-like-action"
+                              icon={<ThumbsUp />}
+                              value={likeCount}
+                              label={`${likeCount} likes`}
+                              height={24}
+                            />
+                            <WidgetSplitCounterBadge
+                              className="comment-responder-reaction-badge comment-responder-reply-action"
+                              icon={<MessagesSquare />}
+                              value={replyCount}
+                              label={`${replyCount} replies`}
+                              height={24}
+                            />
+                            <WidgetTooltip className="comment-responder-open-tooltip" content="Go to this comment on YouTube">
+                              <a className="widget-split-button is-compact is-auto comment-responder-reaction-badge comment-responder-open-action" aria-label="Go to comment on YouTube" href={`https://www.youtube.com/watch?v=${videoId}&lc=${thread.snippet.topLevelComment.id}`} target="_blank" rel="noreferrer">
+                                <span className="widget-split-button-icon"><ExternalLink size={14} /></span>
+                                <span className="widget-split-button-label">Go to comment</span>
+                              </a>
+                            </WidgetTooltip>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <AutoFitCommentBubble text={commentText} />
+
+                  </div>
+                </div>
+                {existingChannelReplies.length > 0 && (
+                  <div className="comment-responder-replies">
+                    {existingChannelReplies.map((reply: any, idx: number) => {
+                      const replyInitial = htmlDecode(reply.snippet?.authorDisplayName || "You").replace(/^@+/, "").charAt(0).toUpperCase()
+                      const isChannelReply = reply.snippet?.authorChannelId?.value === channelId
+                      const replyAuthor = htmlDecode(reply.snippet?.authorDisplayName || "Reply author")
+                      const replyAvatar = <CommentAvatar src={reply.snippet?.authorProfileImageUrl} label={replyAuthor} initial={replyInitial} />
+                      return (
+                        <div key={reply.id || idx} className="comment-responder-reply-row">
+                          {!isChannelReply && replyAvatar}
+                          <div className={isChannelReply ? "previous-reply-bubble" : "viewer-reply-bubble"} style={{ flex: 1, minWidth: 0, padding: "7px 9px", fontSize: "11px", fontWeight: 900, lineHeight: 1.25, textTransform: "uppercase", display: "flex", flexWrap: "wrap", gap: "6px 8px", alignItems: "flex-start" }}>
+                            <span style={{ flex: "1 1 120px", minWidth: 0, overflowWrap: "anywhere" }}>{htmlDecode(reply.snippet.textDisplay || "")}</span>
+                          </div>
+                          {isChannelReply && replyAvatar}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )
+          })()}
+        </WidgetScrollArea>
+        {composer}
+      </div>
+    </WidgetShell>
+  )
+}

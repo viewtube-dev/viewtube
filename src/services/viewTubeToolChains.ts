@@ -1,0 +1,249 @@
+import { createGenerationRecord, updateGenerationRecord } from "./generationStore"
+import { operationRecordFromActionPacket } from "./operations/OperationRecord"
+import { ingestGenerationArtifacts } from "./vaultAdapter"
+import { enqueueBrainHandoffs } from "./brainHandoffInbox"
+import type { OpportunityTacticsPacket } from "./brain/OpportunityIntelligence"
+import {
+ appendContentBuildEvent,
+ attachAssetToContentBuild,
+ ensureContentBuild,
+ listContentBuildEvents,
+} from "./asset-engine/ContentBuildRepository"
+
+export type ViewTubeToolKind = "studio-tool" | "widget" | "analytics" | "project" | "vault" | "editor" | "brain" | "super-tool" | "system"
+export type ViewTubePayloadKind = "video" | "thumbnail" | "image" | "script" | "storyboard" | "metadata" | "comment" | "community-post" | "poll" | "analysis" | "tactic" | "hook" | "project" | "calendar-item" | "timeline" | "asset" | "evidence" | "json"
+export type ViewTubeHandoffIntent = "inspect" | "prepare" | "propose" | "execute"
+export type ViewTubeApprovalState = "not-required" | "pending" | "approved" | "rejected"
+export type ViewTubeMutationClass = "read-only" | "prepare" | "proposal" | "user-approved-write" | "external-write"
+export interface ViewTubeToolCapability { id:string; label:string; kind:ViewTubeToolKind; route:string; accepts:ViewTubePayloadKind[]; produces:ViewTubePayloadKind[]; status:"ready"|"partial"|"planned"; description:string; requiredContext?:string[]; mutationClass?:ViewTubeMutationClass; resumeRoute?:string }
+export interface ViewTubeActionPacket<T=unknown> { id:string; version:1; sourceToolId:string; sourceKind:ViewTubeToolKind; payloadKind:ViewTubePayloadKind; title:string; summary:string; payload:T; creatorId?:string|null; contentBuildId?:string|null; projectId?:string|null; channelId?:string|null; videoId?:string|null; assetIds?:string[]; evidence:string[]; provenance:string[]; suggestedTargets:string[]; createdAt:number; workflowId?:string; operationId?:string; idempotencyKey?:string|null; parentPacketId?:string|null; recommendationId?:string|null; experimentId?:string|null; contextManifestId?:string|null; promptRecipeId?:string|null; promptRecipeVersion?:string|null; intent?:ViewTubeHandoffIntent; approvalState?:ViewTubeApprovalState; approvedBy?:string|null; approvedAt?:string|null; approvedSnapshotId?:string|null; approvedSnapshotHash?:string|null; expectedSnapshotHash?:string|null; identityMode?:"canonical"|"legacy-derived" }
+export interface ViewTubeToolChainStep { toolId:string; purpose:string; optional?:boolean }
+export interface ViewTubeSuggestedToolChain { id:string; title:string; description:string; startsWith:string[]; steps:ViewTubeToolChainStep[]; outcome:string }
+
+const PACKET_KEY = "viewtube:action-packets:v1"
+const readPackets = (): ViewTubeActionPacket[] => { if(typeof window==="undefined") return []; try{return JSON.parse(window.localStorage.getItem(PACKET_KEY)||"[]") as ViewTubeActionPacket[]}catch{return []} }
+const cachePacket = (packet:ViewTubeActionPacket) => { if(typeof window!=="undefined") window.localStorage.setItem(PACKET_KEY, JSON.stringify([packet,...readPackets().filter(p=>p.id!==packet.id)].slice(0,250))) }
+export const loadViewTubeActionPacket = (id:string) => { const packet=readPackets().find(item=>item.id===id); if(!packet) return null; return { ...packet, workflowId:packet.workflowId||`legacy:${packet.id}`, operationId:packet.operationId||`legacy:${packet.id}`, intent:packet.intent||"prepare", approvalState:packet.approvalState||"not-required", identityMode:packet.identityMode||"legacy-derived" } }
+export const removeViewTubeActionPacket = (id:string) => { if(typeof window!=="undefined") window.localStorage.setItem(PACKET_KEY, JSON.stringify(readPackets().filter(packet=>packet.id!==id))) }
+
+export const VIEWTUBE_TOOL_CAPABILITIES: ViewTubeToolCapability[] = [
+ {id:"video-manager",label:"Video Manager",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","asset"],produces:["video","metadata"],status:"ready",description:"Select and manage canonical creator videos and their assets.",mutationClass:"external-write",requiredContext:["video"],resumeRoute:"/studio"},
+ {id:"video-publisher",label:"Video Publisher",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","script","asset"],produces:["metadata","asset"],status:"ready",description:"Assemble publish-ready metadata and creator deliverables.",mutationClass:"external-write",resumeRoute:"/publisher"},
+ {id:"metadata-master",label:"Metadata Master",kind:"studio-tool",route:"/studio#metadata-master",accepts:["video","script","metadata","analysis","evidence","asset","thumbnail"],produces:["metadata","thumbnail","analysis","evidence","asset","json"],status:"ready",description:"Optimize, compare and assemble the publication package before publication or a proposed live-video update."},
+ {id:"content-analysis",label:"Content Analysis",kind:"studio-tool",route:"/studio",accepts:["video","script","metadata","evidence"],produces:["analysis","tactic","hook"],status:"ready",description:"Analyze creator content and turn evidence into actionable findings."},
+ {id:"thumbnail-studio",label:"Thumbnail Studio",kind:"studio-tool",route:"/studio",accepts:["video","image","metadata","analysis","hook"],produces:["thumbnail","image","asset"],status:"ready",description:"Create and analyze thumbnail packaging."},
+ {id:"community-posts",label:"Community Posts",kind:"studio-tool",route:"/studio#community-posts",accepts:["image","video","metadata","analysis","poll"],produces:["community-post","poll","asset"],status:"ready",description:"Create community updates and image/poll concepts from creator assets."},
+ {id:"comment-responder",label:"Comment Responder",kind:"studio-tool",route:"/studio#comment-responder",accepts:["comment","video","metadata","analysis"],produces:["comment","analysis","video"],status:"ready",description:"Draft replies and recommend relevant creator videos."},
+ {id:"end-screen-architect",label:"End-Screen Architect",kind:"studio-tool",route:"/studio",accepts:["video","analysis","metadata"],produces:["metadata","script","video"],status:"ready",description:"Design next-video end-screen flows and outro copy."},
+ {id:"pre-launch-priming",label:"Pre-Launch Priming",kind:"studio-tool",route:"/studio",accepts:["video","thumbnail","metadata","analysis"],produces:["tactic","metadata","project"],status:"ready",description:"Turn a prepared upload into a pre-launch execution plan."},
+ {id:"hook-generator",label:"Hook Generator",kind:"studio-tool",route:"/studio",accepts:["script","video","analysis","tactic","metadata"],produces:["hook","script"],status:"ready",description:"Generate opening hooks from context, evidence and strategy."},
+ {id:"opportunity-radar",label:"Opportunity Radar",kind:"studio-tool",route:"/studio",accepts:["video","analysis","evidence"],produces:["evidence"],status:"partial",description:"Discover and rank candidates from governed evidence; the dashboard widget remains independently registered."},
+ {id:"tactics-engine",label:"Tactics Engine",kind:"studio-tool",route:"/studio",accepts:["analysis","evidence","video","metadata"],produces:["tactic","project"],status:"ready",description:"Convert channel evidence and strategy into concrete creator actions."},
+ {id:"project-calendar",label:"Projects + Calendar",kind:"project",route:"/projects",accepts:["script","storyboard","project","calendar-item","tactic","asset"],produces:["project","calendar-item"],status:"ready",description:"Schedule and organize production work."},
+ {id:"storyboard-studio",label:"Storyboard Studio",kind:"project",route:"/storyboard-studio",accepts:["script","project","image","asset"],produces:["storyboard","image","asset"],status:"ready",description:"Turn scripts and project context into visual scene plans."},
+ {id:"vault",label:"Creator Vault",kind:"vault",route:"/vault",accepts:["thumbnail","image","script","storyboard","metadata","asset","json"],produces:["asset"],status:"ready",description:"Persist reusable creator assets with provenance."},
+ {id:"video-editor",label:"VT_E1 Video Editor",kind:"editor",route:"/editor",accepts:["video","script","storyboard","image","thumbnail","asset","timeline"],produces:["timeline","video","asset"],status:"partial",description:"Assemble creator assets and plans on the canonical editing timeline."},
+ {id:"ai-brain",label:"ViewTube Brain",kind:"brain",route:"/ai-brain",accepts:["analysis","evidence","video","script","metadata","comment","project","asset","json"],produces:["analysis","tactic","hook","project","json"],status:"ready",description:"Reason across channel context and recommend or orchestrate next actions."},
+]
+export const VIEWTUBE_SUGGESTED_TOOL_CHAINS: ViewTubeSuggestedToolChain[] = [
+ {id:"metadata-to-publish",title:"Metadata Master → Publish",description:"Move an approved publication package into the publishing workflow without re-entering optimized metadata.",startsWith:["metadata-master"],steps:[{toolId:"metadata-master",purpose:"Optimize, compare and approve the publication package"},{toolId:"thumbnail-studio",purpose:"Create or finalize the selected thumbnail direction",optional:true},{toolId:"video-publisher",purpose:"Validate, schedule and publish the approved package"}],outcome:"An approved metadata package reaches publication without duplicating optimization ownership."},
+ {id:"thumbnail-to-publish",title:"Thumbnail → Publish",description:"Move approved packaging into the upload workflow without re-entering it.",startsWith:["thumbnail-studio"],steps:[{toolId:"thumbnail-studio",purpose:"Create or approve the thumbnail"},{toolId:"video-publisher",purpose:"Attach the thumbnail to the publish-ready package"},{toolId:"video-manager",purpose:"Associate the approved asset with the canonical video",optional:true}],outcome:"A publish-ready video package with its approved thumbnail attached."},
+ {id:"generated-image-to-community-poll",title:"Generated Image → Community Poll",description:"Reuse an image created anywhere in ViewTube as the visual basis of a community poll.",startsWith:["thumbnail-studio","vault","ai-brain"],steps:[{toolId:"vault",purpose:"Preserve the generated image and provenance",optional:true},{toolId:"community-posts",purpose:"Use the image in a community post or image poll"}],outcome:"A community post draft that reuses an existing creator asset."},
+ {id:"script-to-production",title:"Script → Production",description:"Turn a generated script into a scheduled, visualized and editable production.",startsWith:["ai-brain","hook-generator"],steps:[{toolId:"project-calendar",purpose:"Attach the script to a project and production date"},{toolId:"storyboard-studio",purpose:"Break the script into scenes and visual requirements"},{toolId:"video-editor",purpose:"Create or populate the editing timeline"},{toolId:"vault",purpose:"Preserve script, storyboard and generated assets",optional:true}],outcome:"A script becomes an organized production with a storyboard and editor handoff."},
+ {id:"analysis-to-packaging",title:"Analysis → Metadata Master → Packaging",description:"Turn evidence about a video or channel into a coordinated publication package.",startsWith:["content-analysis","ai-brain"],steps:[{toolId:"content-analysis",purpose:"Identify evidence-backed strengths, weaknesses and opportunities"},{toolId:"metadata-master",purpose:"Turn evidence into a coherent, comparable publication package"},{toolId:"thumbnail-studio",purpose:"Create the selected visual packaging direction"},{toolId:"pre-launch-priming",purpose:"Prepare the chosen package for launch"}],outcome:"One evidence trail connects content understanding, metadata packaging, thumbnail creation and launch."},
+ {id:"comment-to-content",title:"Audience Request → Content",description:"Convert useful audience demand into a planned creator project.",startsWith:["comment-responder"],steps:[{toolId:"comment-responder",purpose:"Identify a useful request or recurring audience question"},{toolId:"ai-brain",purpose:"Assess channel fit and supporting evidence"},{toolId:"project-calendar",purpose:"Create and schedule the content project"},{toolId:"storyboard-studio",purpose:"Develop the production plan",optional:true}],outcome:"A viewer request becomes a traceable content project."},
+ {id:"video-to-next-video",title:"Video → Next Video Funnel",description:"Use the creator catalog and analysis to create a deliberate viewer path.",startsWith:["video-manager","content-analysis"],steps:[{toolId:"video-manager",purpose:"Choose the source video"},{toolId:"content-analysis",purpose:"Determine viewer intent and strongest related content"},{toolId:"end-screen-architect",purpose:"Design the next-video handoff and outro"},{toolId:"video-manager",purpose:"Associate the resulting end-screen plan with the video"}],outcome:"A source video gets an evidence-backed next-video path."},
+ {id:"opportunity-radar-to-tactics",title:"Opportunity Radar → Tactics Engine",description:"Turn a creator-accepted, evidence-backed opportunity into a reviewable tactic proposal without merging either tool identity.",startsWith:["opportunity-radar"],steps:[{toolId:"opportunity-radar",purpose:"Review evidence, limitations and accept or reject the candidate"},{toolId:"tactics-engine",purpose:"Prepare a tactic proposal linked to the accepted opportunity"},{toolId:"project-calendar",purpose:"Create execution work only after creator approval",optional:true}],outcome:"A traceable opportunity-to-tactic proposal with canonical evidence and approval boundaries."},
+ {id:"tactic-to-experiment",title:"Tactic → Creative Experiment",description:"Turn strategic advice into something the creator can actually test.",startsWith:["tactics-engine","ai-brain"],steps:[{toolId:"tactics-engine",purpose:"Select a concrete tactic"},{toolId:"hook-generator",purpose:"Create a hook variant for the tactic",optional:true},{toolId:"thumbnail-studio",purpose:"Create a packaging variant for the tactic",optional:true},{toolId:"project-calendar",purpose:"Track the experiment and its deadline"}],outcome:"A recommendation becomes a measurable creator experiment."},
+ {id:"asset-to-editor",title:"Vault Asset → Editor",description:"Send reusable creator assets directly into production.",startsWith:["vault"],steps:[{toolId:"vault",purpose:"Select the source asset"},{toolId:"video-editor",purpose:"Insert or stage the asset in the active edit"}],outcome:"A Vault asset arrives in the editor with provenance intact."},
+]
+export const getViewTubeToolCapability=(id:string)=>VIEWTUBE_TOOL_CAPABILITIES.find(tool=>tool.id===id)||null
+export const getCompatibleHandoffTargets=(packet:Pick<ViewTubeActionPacket,"sourceToolId"|"payloadKind">)=>VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==packet.sourceToolId&&tool.accepts.includes(packet.payloadKind))
+export const getSuggestedChainsForTool=(toolId:string)=>VIEWTUBE_SUGGESTED_TOOL_CHAINS.filter(chain=>chain.startsWith.includes(toolId)||chain.steps.some(step=>step.toolId===toolId))
+export const createViewTubeActionPacket=<T,>(input:Omit<ViewTubeActionPacket<T>,"id"|"version"|"createdAt"|"suggestedTargets"|"identityMode">&{suggestedTargets?:string[]}):ViewTubeActionPacket<T>=>{const compatible=VIEWTUBE_TOOL_CAPABILITIES.filter(tool=>tool.id!==input.sourceToolId&&tool.accepts.includes(input.payloadKind)).map(tool=>tool.id);return{...input,id:crypto.randomUUID(),version:1,workflowId:input.workflowId||crypto.randomUUID(),operationId:input.operationId||crypto.randomUUID(),intent:input.intent||"prepare",approvalState:input.approvalState||"not-required",identityMode:"canonical",suggestedTargets:input.suggestedTargets||compatible,createdAt:Date.now()}}
+/** Convert an accepted Radar packet to the canonical, review-required action-packet envelope. */
+export const createOpportunityTacticsActionPacket = (
+ opportunity: OpportunityTacticsPacket,
+): ViewTubeActionPacket<OpportunityTacticsPacket> => {
+ if (opportunity.schemaVersion !== "vt-opportunity-tactics-handoff-v1"
+  || opportunity.validationState !== "accepted"
+  || !opportunity.opportunityId?.trim()
+  || !opportunity.channelId?.trim()
+  || !Array.isArray(opportunity.evidenceIds)
+  || !opportunity.evidenceIds.some((id) => typeof id === "string" && id.trim())) {
+  throw new Error("Only accepted opportunities with canonical evidence can be handed to Tactics Engine.")
+ }
+ const stableIdentity = `opportunity-tactics:${opportunity.channelId}:${opportunity.opportunityId}:${opportunity.provenance.sourceSnapshotId || "unknown-snapshot"}`
+ return createViewTubeActionPacket<OpportunityTacticsPacket>({
+  sourceToolId: "opportunity-radar",
+  sourceKind: "studio-tool",
+  payloadKind: "evidence",
+  title: `Tactics proposal: ${opportunity.entity || opportunity.opportunityId}`,
+  summary: "Accepted opportunity packet ready for Tactics Engine review; no tactic or project has been executed.",
+  payload: opportunity,
+  channelId: opportunity.channelId,
+  videoId: opportunity.videoId,
+  evidence: [...opportunity.evidenceIds],
+  provenance: [
+   `sourceOwner:${opportunity.provenance.sourceOwner || "unknown"}`,
+   `snapshot:${opportunity.provenance.sourceSnapshotId || "unknown"}`,
+   `window:${opportunity.provenance.window || "unknown"}`,
+   `datasetStatus:${opportunity.provenance.datasetStatus || "unknown"}`,
+  ],
+  suggestedTargets: ["tactics-engine"],
+  workflowId: stableIdentity,
+  operationId: stableIdentity,
+  idempotencyKey: stableIdentity,
+  intent: "propose",
+  approvalState: "pending",
+ })
+}
+
+export const persistViewTubeActionPacket = <T,>(packet: ViewTubeActionPacket<T>) => {
+ packet = { ...packet, workflowId:packet.workflowId||`legacy:${packet.id}`, operationId:packet.operationId||`legacy:${packet.id}`, intent:packet.intent||"prepare", approvalState:packet.approvalState||"not-required", identityMode:packet.identityMode||"legacy-derived" }
+ cachePacket(packet as ViewTubeActionPacket)
+ const inboxItems = enqueueBrainHandoffs(packet as ViewTubeActionPacket)
+ const record = createGenerationRecord({
+  operationId: packet.operationId || packet.id,
+  workflowId: packet.workflowId || `legacy:${packet.id}`,
+  toolId: packet.sourceToolId as never,
+  provider: "mock",
+  model: "viewtube-action-packet-v1",
+  prompt: JSON.stringify({
+   sourceToolId: packet.sourceToolId,
+   payloadKind: packet.payloadKind,
+   contentBuildId: packet.contentBuildId || null,
+   workflowId: packet.workflowId || null,
+   operationId: packet.operationId || null,
+   promptRecipeId: packet.promptRecipeId || null,
+   promptRecipeVersion: packet.promptRecipeVersion || null,
+   contextManifestId: packet.contextManifestId || null,
+  }),
+  status: "running",
+  artifacts: [],
+  metadata: {
+   actionPacketId: packet.id,
+   workflowId: packet.workflowId || null,
+   operationId: packet.operationId || null,
+   parentPacketId: packet.parentPacketId || null,
+   idempotencyKey: packet.idempotencyKey || null,
+   contentBuildId: packet.contentBuildId || null,
+   projectId: packet.projectId || null,
+   creatorId: packet.creatorId || null,
+   channelId: packet.channelId || null,
+   videoId: packet.videoId || null,
+   assetIds: packet.assetIds || [],
+   recommendationId: packet.recommendationId || null,
+   experimentId: packet.experimentId || null,
+   contextManifestId: packet.contextManifestId || null,
+   promptRecipeId: packet.promptRecipeId || null,
+   promptRecipeVersion: packet.promptRecipeVersion || null,
+   intent: packet.intent || "prepare",
+   approvalState: packet.approvalState || "not-required",
+   approvedBy: packet.approvedBy || null,
+   approvedAt: packet.approvedAt || null,
+   approvedSnapshotId: packet.approvedSnapshotId || null,
+   approvedSnapshotHash: packet.approvedSnapshotHash || null,
+   identityMode: packet.identityMode || "legacy-derived",
+   operationRecord: operationRecordFromActionPacket(packet),
+   universalToolHandoff: true,
+   handoffInboxIds: inboxItems.map(item => item.id),
+  },
+ })
+ const artifact = {
+  id: crypto.randomUUID(),
+  kind: "json" as const,
+  label: `${packet.title} handoff`,
+  sourceRecordId: record.id,
+  metadata: packet as unknown as Record<string, unknown>,
+ }
+ updateGenerationRecord(record.id, {
+  status: "complete",
+  outputText: packet.summary,
+  outputJson: packet as unknown as Record<string, unknown>,
+  artifacts: [artifact],
+  usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+  estimatedCostCents: 0,
+ })
+ const [vaultAsset] = ingestGenerationArtifacts([artifact], {
+  toolId: packet.sourceToolId as never,
+  projectId: packet.projectId || null,
+  generationId: record.id,
+  tags: [
+   packet.sourceToolId,
+   packet.payloadKind,
+   "viewtube-action-packet",
+   ...(packet.contentBuildId ? ["content-build"] : []),
+  ],
+ })
+
+ if (packet.contentBuildId && vaultAsset) {
+  ensureContentBuild({
+   id: packet.contentBuildId,
+   channelId: packet.channelId || null,
+   legacyProjectId: packet.projectId || null,
+   videoId: packet.videoId || null,
+   toolId: packet.sourceToolId,
+  })
+  attachAssetToContentBuild(packet.contentBuildId, vaultAsset.id, {
+   toolId: packet.sourceToolId,
+   evidenceIds: packet.evidence,
+   generationRecordId: record.id,
+   metadata: {
+    actionPacketId: packet.id,
+    payloadKind: packet.payloadKind,
+    suggestedTargets: packet.suggestedTargets,
+   },
+  })
+
+  const alreadyRecorded = listContentBuildEvents(packet.contentBuildId).some(
+   event => event.eventType === "handoff.created" && event.actionPacketId === packet.id,
+  )
+  if (!alreadyRecorded) {
+   appendContentBuildEvent({
+    contentBuildId: packet.contentBuildId,
+    eventType: "handoff.created",
+    entityType: "action-packet",
+    entityId: packet.id,
+    actorType: "tool",
+    toolId: packet.sourceToolId,
+    inputAssetIds: [],
+    outputAssetIds: [vaultAsset.id],
+    evidenceIds: packet.evidence,
+    generationRecordId: record.id,
+    actionPacketId: packet.id,
+    metadata: {
+     payloadKind: packet.payloadKind,
+     suggestedTargets: packet.suggestedTargets,
+     workflowId: packet.workflowId || null,
+     operationId: packet.operationId || null,
+     parentPacketId: packet.parentPacketId || null,
+     idempotencyKey: packet.idempotencyKey || null,
+     creatorId: packet.creatorId || null,
+     recommendationId: packet.recommendationId || null,
+     experimentId: packet.experimentId || null,
+     contextManifestId: packet.contextManifestId || null,
+     promptRecipeId: packet.promptRecipeId || null,
+     promptRecipeVersion: packet.promptRecipeVersion || null,
+     intent: packet.intent || "prepare",
+     approvalState: packet.approvalState || "not-required",
+     approvedBy: packet.approvedBy || null,
+     approvedAt: packet.approvedAt || null,
+     approvedSnapshotId: packet.approvedSnapshotId || null,
+     approvedSnapshotHash: packet.approvedSnapshotHash || null,
+     identityMode: packet.identityMode || "legacy-derived",
+     operationRecord: operationRecordFromActionPacket(packet),
+    },
+   })
+  }
+ }
+
+ return {
+  packet,
+  inboxItems,
+  recordId: record.id,
+  artifactId: artifact.id,
+  vaultAssetId: vaultAsset?.id || null,
+ }
+}
+
