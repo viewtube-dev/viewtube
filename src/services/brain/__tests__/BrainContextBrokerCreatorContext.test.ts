@@ -144,7 +144,7 @@ describe("BrainContextBroker creator-context convergence", () => {
   })
 
   const prompt = result.systemInstruction
-  const evidenceSection = prompt.split("CHANNEL EVIDENCE\\n")[1]?.split("\\nEVIDENCE QUALITY")[0] || ""
+  const evidenceSection = prompt.split("CHANNEL EVIDENCE\n")[1]?.split("\nCHANNEL PROFILE CONTEXT")[0] || ""
   expect(evidenceSection).toContain(record.id)
   expect(evidenceSection).toContain("value=2800")
   expect(evidenceSection).not.toContain("Inferred niche")
