@@ -121,7 +121,7 @@ export interface BrainEvidenceRecordQualityReport {
  * Produces a deterministic diagnostic fingerprint of the exact ordered records.
  * This is for prompt/grader parity detection, not cryptographic integrity.
  */
-const fingerprintEvidenceRecords = (records: EvidenceRecord[]): string => {
+export const fingerprintBrainEvidenceRecords = (records: EvidenceRecord[]): string => {
  const serialized = JSON.stringify(records)
  let first = 0x811c9dc5
  let second = 0x9e3779b9
@@ -138,7 +138,7 @@ export const isBrainEvidenceRecordQualityInSync = (
  records: EvidenceRecord[],
  report: Pick<BrainEvidenceRecordQualityReport, "evidenceFingerprint" | "evidenceRecordIds">,
 ): boolean => (
- report.evidenceFingerprint === fingerprintEvidenceRecords(records)
+ report.evidenceFingerprint === fingerprintBrainEvidenceRecords(records)
  && report.evidenceRecordIds.length === records.length
  && report.evidenceRecordIds.every((id, index) => id === records[index]?.id)
 )
