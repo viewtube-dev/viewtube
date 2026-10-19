@@ -6,7 +6,7 @@ const source = fs.readFileSync(path.resolve(process.cwd(), "src/views/CreatorVau
 const controls = fs.readFileSync(path.resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
 
 describe("Creator Vault canonical Studio Controls migration", () => {
-  it("uses canonical split-left search and upload primitives without legacy replacements", () => {
+  it("uses the canonical split-left input and upload frame for Vault search and file intake", () => {
     expect(source).toContain("StudioSplitLeftInput")
     expect(source).toContain("StudioUploadFrame")
     expect(source).toContain("onFilesChange")
@@ -14,7 +14,7 @@ describe("Creator Vault canonical Studio Controls migration", () => {
     expect(source).not.toContain("SubToolboxFileTarget")
   })
 
-  it("uses true single-selection semantics for Sort, View, and State", () => {
+  it("uses single-select semantics for Sort, View, and State", () => {
     expect(source.match(/selectionMode="single"/g)).toHaveLength(3)
     expect(source).toContain('accessibleLabel="Sort assets"')
     expect(source).toContain('accessibleLabel="Vault view"')
