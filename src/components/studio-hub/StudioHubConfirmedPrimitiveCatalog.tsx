@@ -383,28 +383,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextArea className="is-reverse-colors" variant="fixed-label" label="DESCRIPTION" aria-label="Studio fixed-label textarea compact B reverse colors" sizeVariant="compact" rows={4} data-vt-library-component="StudioTextArea" /></div>
       </div>
     </Family>
-    <Family
-      title="StudioTextBox · Standard + Compact + Micro"
-      nonDefaultSettings={[
-        "Non-editable, selectable text display; content grows naturally and preserves line breaks.",
-        "Shares global border, radius, padding, and size tokens with StudioTextArea; line-height 0.75 applies to displayed text only.",
-        "No caret, editing, floating label, or keyboard tab stop.",
-      ]}
-      provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioTextBox.tsx" css="src/styles/studio-text-box.css" tokens="Textarea-aligned standard / compact / micro size tiers · global border and radius · line-height 0.75" imports={["src/studio-ui/primitives/StudioTextBox.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row">
-        <span>Standard · non-editable text display</span>
-        <StudioTextBox sizeVariant="standard" data-vt-library-component="StudioTextBox">A standard text box can contain a short note or multiple lines of description text.</StudioTextBox>
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>Compact · non-editable text display</span>
-        <StudioTextBox sizeVariant="compact" data-vt-library-component="StudioTextBox">Compact display text wraps and grows with its content.</StudioTextBox>
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>Micro · non-editable text display</span>
-        <StudioTextBox sizeVariant="micro" data-vt-library-component="StudioTextBox">Micro text display.</StudioTextBox>
-      </div>
-    </Family>
+
     <Family title="Studio Text Box · Standard + Compact + Micro" nonDefaultSettings={[
         "Non-editable, selectable display surface; no caret, editing behavior, or keyboard tab stop.",
         "Inherits the corresponding textarea border, radius, padding, typography, primary fill, and 0.75 line-height.",
