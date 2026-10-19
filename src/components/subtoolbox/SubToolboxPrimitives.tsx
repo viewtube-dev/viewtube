@@ -5,7 +5,7 @@ import "../../styles/toolbox-entry.css"
 import { getComponentLevelCssVars } from "./tokens"
 import type { SubToolboxControlSize, SubToolboxState, ToolboxControlLevel } from "./tokens"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { StudioInput as CanonicalStudioInput, StudioTextArea as CanonicalStudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioInput as CanonicalStudioInput, StudioTextArea as CanonicalStudioTextArea, Studiotoggle } from "../../studio-ui/primitives/StudioControls"
 
 type PrimitiveTone = "accent" | "neutral" | "ink" | "danger" | "warning" | "success"
 type SplitActionVariant = "head" | "tail"
@@ -198,83 +198,36 @@ export interface ToolboxHeaderToggleProps extends Omit<React.HTMLAttributes<HTML
 export const ToolboxHeaderToggle: React.FC<ToolboxHeaderToggleProps> = ({
   value, options, onValueChange, level = "toolbox", className, style, ...props
 }) => {
-  const rootRef = React.useRef<HTMLDivElement>(null)
-  const optionRefs = React.useRef<Record<string, HTMLButtonElement | null>>({})
-  const [handle, setHandle] = React.useState({ left: 3, width: 24 })
+  const [size, setSize] = React.useState<"44" | "28">("44")
   React.useEffect(() => {
-    let disposed = false
-    let frame = 0
-    const measure = () => {
-      const root = rootRef.current
-      const target = optionRefs.current[value]
-      if (!root || !target) return
-      const rootRect = root.getBoundingClientRect()
-      const targetRect = target.getBoundingClientRect()
-      const inset = level === "subtoolbox" ? 2 : 2.75
-      const next = {
-        left: targetRect.left - rootRect.left + inset,
-        width: Math.max(targetRect.width - inset * 2, 16),
-      }
-      setHandle(current =>
-        Math.abs(current.left - next.left) < 0.5 && Math.abs(current.width - next.width) < 0.5
-          ? current
-          : next,
-      )
-    }
-    // Wait until React has committed the option labels and the browser has
-    // completed a layout pass; otherwise the active handle can be measured
-    // against stale or zero-width text on first render.
-    const scheduleMeasure = () => {
-      if (disposed) return
-      if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
-        window.cancelAnimationFrame(frame)
-        frame = window.requestAnimationFrame(measure)
-      } else {
-        measure()
-      }
-    }
-    scheduleMeasure()
-    const root = rootRef.current
-    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(scheduleMeasure) : null
-    if (root && observer) observer.observe(root)
-    Object.values(optionRefs.current).forEach(node => { if (node) observer?.observe(node) })
-    if (typeof window !== "undefined") window.addEventListener("resize", scheduleMeasure)
-    const fonts = typeof document !== "undefined" ? document.fonts : undefined
-    fonts?.ready?.then(scheduleMeasure)
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return
+    const portraitMobile = window.matchMedia("(orientation: portrait) and (max-width: 768px)")
+    const updateSize = () => setSize(portraitMobile.matches ? "28" : "44")
+    updateSize()
+    portraitMobile.addEventListener?.("change", updateSize)
+    window.addEventListener("resize", updateSize)
     return () => {
-      disposed = true
-      if (typeof window !== "undefined") {
-        window.cancelAnimationFrame(frame)
-        window.removeEventListener("resize", scheduleMeasure)
-      }
-      observer?.disconnect()
+      portraitMobile.removeEventListener?.("change", updateSize)
+      window.removeEventListener("resize", updateSize)
     }
-  }, [value, options, level])
+  }, [])
+  const selectedIndex = Math.max(0, options.findIndex(option => option.value === value))
+  const words = [
+    String(options[0]?.label ?? ""),
+    String(options[1]?.label ?? ""),
+  ] as const
   return (
-    <div
-      ref={rootRef}
-      className={classes("vt-toolbox-header-toggle", "is-word-toggle", options.findIndex((option) => option.value === value) > 0 && "has-noninitial-selection", level === "subtoolbox" && "is-subtoolbox", className)}
-      data-vt-header-toggle={level}
-      data-vt-header-toggle-primitive="word-toggle"
+    <Studiotoggle
+      value={selectedIndex > 0}
+      onValueChange={(next) => onValueChange?.(options[next ? 1 : 0]?.value ?? value)}
+      words={words}
+      size={size}
+      className={classes("vt-toolbox-header-toggle-replacement", className)}
       style={style}
-      role="group"
-      {...props}
-    >
-      <span className="vt-word-toggle-handle" aria-hidden="true" style={{ left: handle.left, width: handle.width }} />
-      {options.map((option) => (
-        <button
-          key={option.value}
-          ref={(node) => { optionRefs.current[option.value] = node }}
-          type="button"
-          className={classes(option.value === value && "is-active")}
-          aria-pressed={option.value === value}
-          aria-label={option.ariaLabel}
-          onClick={() => onValueChange?.(option.value)}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
+      aria-label={props["aria-label"] ?? "Choose an option"}
+      data-vt-header-toggle={level}
+      data-vt-header-toggle-primitive="studio-word-toggle"
+    />
   )
 }
 
