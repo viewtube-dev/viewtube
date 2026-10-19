@@ -1615,6 +1615,25 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   )
 }
 
+export interface StudioSpectrumTagsProps {
+  suffix?: string
+  className?: string
+  ariaLabel?: string
+}
+
+/** Alphabetical palette reference rendered from the canonical Studio Spectrum Tag. */
+export const StudioSpectrumTags: React.FC<StudioSpectrumTagsProps> = ({
+  suffix = "TAG",
+  className,
+  ariaLabel = "Alphabetical spectrum tags",
+}) => (
+  <div className={["vt-studio-spectrum-tag-row", className].filter(Boolean).join(" ")} role="group" aria-label={ariaLabel}>
+    {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
+      <StudioSpectrumTag key={letter} label={`${letter} · ${suffix}`} />
+    ))}
+  </div>
+)
+
 // Canonical dropdown family: single-select variants share the same trigger/menu implementation.
 export interface StudioDropdownOption {
   value: string
