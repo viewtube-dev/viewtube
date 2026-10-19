@@ -558,25 +558,25 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
         <p role="status" aria-live="polite">{controlStatus}</p>
         {channelId ? <button type="button" onClick={resetUserControlOverrides} className="min-h-11 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-xs font-black uppercase focus-visible:ring-[3px] focus-visible:ring-black">Use inherited defaults</button> : null}
         <ControlRow label="Brain enabled" detail="Allow creator-facing Brain requests.">
-         <WidgetToggleSwitch checked={controls.enabled} onChange={(value) => updateUserControl("enabled", value)} label="Brain enabled" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.enabled} onChange={(value) => updateUserControl("enabled", value)} label="Brain enabled" height={44} tone="primary" />
         </ControlRow>
         <ControlRow label="Personalization" detail="Use creator memory and recent conversation context.">
-         <WidgetToggleSwitch checked={controls.personalization} onChange={(value) => updateUserControl("personalization", value)} label="Brain personalization" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.personalization} onChange={(value) => updateUserControl("personalization", value)} label="Brain personalization" height={44} tone="primary" />
         </ControlRow>
         <ControlRow label="Analytics evidence" detail="Allow canonical channel analytics evidence.">
-         <WidgetToggleSwitch checked={controls.allowAnalytics} onChange={(value) => updateUserControl("allowAnalytics", value)} label="Analytics evidence" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.allowAnalytics} onChange={(value) => updateUserControl("allowAnalytics", value)} label="Analytics evidence" height={44} tone="primary" />
         </ControlRow>
         <ControlRow label="Projects" detail="Allow project state and planning context.">
-         <WidgetToggleSwitch checked={controls.allowProjects} onChange={(value) => updateUserControl("allowProjects", value)} label="Projects access" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.allowProjects} onChange={(value) => updateUserControl("allowProjects", value)} label="Projects access" height={44} tone="primary" />
         </ControlRow>
         <ControlRow label="Vault" detail="Allow asset and package context.">
-         <WidgetToggleSwitch checked={controls.allowVault} onChange={(value) => updateUserControl("allowVault", value)} label="Vault access" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.allowVault} onChange={(value) => updateUserControl("allowVault", value)} label="Vault access" height={44} tone="primary" />
         </ControlRow>
         <ControlRow label="Publisher" detail="Allow publishing handoffs; writes remain approval-aware.">
-         <WidgetToggleSwitch checked={controls.allowPublisher} onChange={(value) => updateUserControl("allowPublisher", value)} label="Publisher access" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.allowPublisher} onChange={(value) => updateUserControl("allowPublisher", value)} label="Publisher access" height={44} tone="primary" />
         </ControlRow>
         <ControlRow label="Require approval" detail="Keep external writes and publish actions gated.">
-         <WidgetToggleSwitch checked={controls.externalActionsRequireApproval} onChange={(value) => updateUserControl("externalActionsRequireApproval", value)} label="Require approval for external actions" height={32} tone="primary" />
+         <WidgetToggleSwitch checked={controls.externalActionsRequireApproval} onChange={(value) => updateUserControl("externalActionsRequireApproval", value)} label="Require approval for external actions" height={44} tone="primary" />
         </ControlRow>
        </section>
 
@@ -585,19 +585,19 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
         <p role="status" aria-live="polite">{engineStatus}</p>
         <button type="button" onClick={resetEngineControlOverrides} className="min-h-11 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-xs font-black uppercase focus-visible:ring-[3px] focus-visible:ring-black">Use inherited engine defaults</button>
         <ControlRow label="Channel Intelligence" detail="Use durable channel-specific patterns.">
-         <WidgetToggleSwitch checked={engines.channelIntelligence} onChange={(value) => updateEngineControl("channelIntelligence", value)} label="Channel Intelligence" height={32} tone="secondary" />
+         <WidgetToggleSwitch checked={engines.channelIntelligence} onChange={(value) => updateEngineControl("channelIntelligence", value)} label="Channel Intelligence" height={44} tone="secondary" />
         </ControlRow>
         <ControlRow label="Anomaly Intelligence" detail="Observe unusual changes without collapsing into priming.">
-         <WidgetToggleSwitch checked={engines.anomalyIntelligence} onChange={(value) => updateEngineControl("anomalyIntelligence", value)} label="Anomaly Intelligence" height={32} tone="secondary" />
+         <WidgetToggleSwitch checked={engines.anomalyIntelligence} onChange={(value) => updateEngineControl("anomalyIntelligence", value)} label="Anomaly Intelligence" height={44} tone="secondary" />
         </ControlRow>
         <ControlRow label="Opportunity Intelligence" detail="Find strategically useful openings.">
-         <WidgetToggleSwitch checked={engines.opportunityIntelligence} onChange={(value) => updateEngineControl("opportunityIntelligence", value)} label="Opportunity Intelligence" height={32} tone="secondary" />
+         <WidgetToggleSwitch checked={engines.opportunityIntelligence} onChange={(value) => updateEngineControl("opportunityIntelligence", value)} label="Opportunity Intelligence" height={44} tone="secondary" />
         </ControlRow>
         <ControlRow label="Algorithm Priming" detail="Plan proactive pre-launch through sustain actions.">
-         <WidgetToggleSwitch checked={engines.algorithmPriming} onChange={(value) => updateEngineControl("algorithmPriming", value)} label="Algorithm Priming" height={32} tone="secondary" />
+         <WidgetToggleSwitch checked={engines.algorithmPriming} onChange={(value) => updateEngineControl("algorithmPriming", value)} label="Algorithm Priming" height={44} tone="secondary" />
         </ControlRow>
         <ControlRow label="Video Packages" detail="Allow package and Vault-assisted creator outputs.">
-         <WidgetToggleSwitch checked={engines.videoPackages} onChange={(value) => updateEngineControl("videoPackages", value)} label="Video Packages" height={32} tone="secondary" />
+         <WidgetToggleSwitch checked={engines.videoPackages} onChange={(value) => updateEngineControl("videoPackages", value)} label="Video Packages" height={44} tone="secondary" />
         </ControlRow>
        </section>
 
