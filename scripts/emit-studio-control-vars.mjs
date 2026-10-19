@@ -36,9 +36,9 @@ const focusHoldMs = Number(focusContract.match(/holdMs:\s*(\d+)/)?.[1]);
 const focusFadeMs = Number(focusContract.match(/outlineFadeMs:\s*(\d+)/)?.[1]);
 const focusOutlineWidthRatio = Number(focusContract.match(/outlineWidthRatio:\s*([\d.]+)/)?.[1]);
 const focusOutlineOffsetPx = Number(focusContract.match(/outlineOffsetPx:\s*([\d.]+)/)?.[1]);
-const numberMix = Number(numberContract.match(/defaultWhiteMixPercent:\s*(\d+)/)?.[1]);
-const activeTextColor = numberContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
-const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1];
+const numberMix = Number(focusContract.match(/restTextMixPercent:\s*(\d+)/)?.[1]);
+const activeTextColor = focusContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
+const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1] ?? activeTextColor;
 if (!Number.isFinite(focusHoldMs) || !Number.isFinite(focusFadeMs) || !Number.isFinite(focusOutlineWidthRatio) || !Number.isFinite(focusOutlineOffsetPx) || !Number.isFinite(numberMix) || !activeTextColor || !activeStrokeColor) {
   throw new Error("Incomplete Studio focus interaction / counter number-state tokens");
 }
