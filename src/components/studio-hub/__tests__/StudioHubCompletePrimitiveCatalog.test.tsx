@@ -10,7 +10,7 @@ describe("Studio Hub complete primitive catalog", () => {
 
   it("contains the post-V21 additions instead of leaving them in side sections", () => {
     expect(STUDIO_HUB_COMPONENT_FAMILIES).toEqual(expect.arrayContaining([
-      "Horizontal Scrollbar", "Vertical Scrollbar", "Data Stats Module",
+      "Horizontal Scrollbar", "Vertical Scrollbar", "Data Stats Module", "Two-line Studio Button",
       "Disabled Button", "Disabled Split Button", "Upload Frame", "Pagination",
       "Vault Landscape Asset", "Vault Portrait Asset", "Vault Audio Asset",
       "Vault Document Asset", "Knob Dial", "Controller Switch", "LED Light",
