@@ -180,4 +180,36 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).not.toContain("Analytics evidence access is disabled")
  })
 
+
+ it("fails closed when evidence records have no grade", () => {
+  const records = [{
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon",
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   channelId: "channel-1",
+   metric: "views",
+   value: 2800,
+   unit: "count",
+   freshness: "fresh",
+   observedAt: null,
+   updatedAt: "2026-10-19T00:00:00.000Z",
+   epistemicState: "OBSERVED",
+   availability: "available",
+   confidence: 1,
+   provenance: { evidenceIds: ["evidence:channel-summary"] },
+  }] as any
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "How many views?",
+   evidenceRecords: records,
+  })
+
+  expect(result.systemInstruction).toContain("or no grade was supplied")
+  expect(result.systemInstruction).not.toContain("value=2800")
+ })
+
 })
