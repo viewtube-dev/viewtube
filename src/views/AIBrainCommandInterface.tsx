@@ -417,13 +417,12 @@ export const BrainFeedbackControls: React.FC<{
 
 const CreatorResponseCard: React.FC<{
  message: ChatMessage
- evidencePack: AIBrainContextSnapshot["evidencePack"]
  answeredQuestionIds: Set<string>
  onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
-}> = ({ message, evidencePack, answeredQuestionIds, onFeedback, onAnswerQuestion }) => {
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion }) => {
  const response = message.response
- const turnEvidencePack = message.evidencePack || evidencePack
+ const turnEvidencePack = message.evidencePack
  if (!response) {
   return (
    <article className={`${assistantCardFrame} p-4`}>
@@ -476,7 +475,9 @@ const CreatorResponseCard: React.FC<{
    </div>
    <div className="flex min-h-9 shrink-0 flex-wrap items-center gap-1 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-1">
      <BrainFeedbackControls message={message} onFeedback={onFeedback} />
-     <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
+     {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
+      <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
+     ) : null}
      {message.handoff ? (
       <Link
        to={message.handoff.route}
@@ -1136,7 +1137,6 @@ const AIBrainCommandInterface: React.FC = () => {
             <CreatorResponseCard
              key={message.id}
              message={message}
-             evidencePack={snapshot.evidencePack}
              answeredQuestionIds={answeredQuestionIds}
              onFeedback={handleFeedback}
              onAnswerQuestion={handleAnswerQuestion}
