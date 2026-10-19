@@ -101,7 +101,7 @@ describe("BrainOrchestrator", () => {
    allowModel: false,
   })
   const entries = await listAIBrainLearningEntries({ channelId: "raw-learning-channel" })
-  const captured = entries.find((entry) => entry.summary === `Copilot conversation: ${rawUserMessage}`)
+  const captured = entries.find((entry) => entry.metadata?.rawUserMessage === rawUserMessage)
 
   expect(result.turn.rawUserMessage).toBe(rawUserMessage)
   expect(captured).toBeTruthy()
