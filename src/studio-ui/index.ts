@@ -1,6 +1,5 @@
 import "../styles/toolbox-entry.css"
 import "../styles/studio-control-entry.css"
-import "../styles/studio-split-regression-fixes.css"
 
 export { STUDIO_TOKENS } from "./tokens"
 export type { StudioControlSize, StudioHierarchyLevel } from "./tokens"
