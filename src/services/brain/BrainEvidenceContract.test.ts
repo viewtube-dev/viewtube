@@ -18,7 +18,7 @@ const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
  unit: "count",
  window: { kind: "28d", start: "2026-09-01", end: "2026-09-28" },
  freshness: "fresh",
- epistemicState: "observed",
+ epistemicState: "OBSERVED",
  confidence: 1,
  provenance: { evidenceIds: ["source-row-1"], sourceRoute: "/analytics", sourceVersion: "v1" },
  ...overrides,
@@ -55,7 +55,7 @@ describe("Brain evidence contract", () => {
   const claim = projectEvidenceRecordToBrainClaim(record({
    id: "missing-views",
    value: 0,
-   epistemicState: "missing",
+   epistemicState: "MISSING",
    confidence: 0,
    freshness: "unknown",
   }))
@@ -90,7 +90,7 @@ describe("Brain evidence contract", () => {
    id: "stale-views",
    value: 42,
    freshness: "stale",
-   epistemicState: "stale",
+   epistemicState: "STALE",
   }))
   const current = projectEvidenceRecordToBrainClaim(record({ id: "current-views", value: 90 }))
   const health = summarizeBrainEvidenceHealth([stale, current], { channelId: "channel-1" })

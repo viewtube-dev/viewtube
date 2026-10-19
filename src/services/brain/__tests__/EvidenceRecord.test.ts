@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import type { CanonicalIntelligenceEvidenceBundle } from "../../analytics-canon"
 import {
  compareEvidenceRecords,
+ EVIDENCE_EPISTEMIC_STATES,
  formatEvidenceRecordForPrompt,
  projectCanonicalEvidenceRecords,
  selectEvidenceRecordsForPrompt,
@@ -54,6 +55,13 @@ const bundle: CanonicalIntelligenceEvidenceBundle = {
 }
 
 describe("EvidenceRecord", () => {
+ it("defines one canonical ten-state epistemic vocabulary", () => {
+  expect(EVIDENCE_EPISTEMIC_STATES).toEqual([
+   "KNOWN", "OBSERVED", "CALCULATED", "USER_PROVIDED", "INFERRED",
+   "HYPOTHESIS", "ESTIMATE", "STALE", "MISSING", "CONFLICTING",
+  ])
+ })
+
  it("projects canonical analytics metrics without changing their source owner or provenance", () => {
   const records = projectCanonicalEvidenceRecords(bundle)
 
@@ -67,7 +75,7 @@ describe("EvidenceRecord", () => {
    value: 2800,
    aggregation: "sum",
    freshness: "fresh",
-   epistemicState: "observed",
+   epistemicState: "OBSERVED",
   })
   expect(records[0].provenance.evidenceIds).toEqual(["evidence:channel-summary"])
   expect(records[0].window?.kind).toBe("28d")
@@ -91,20 +99,20 @@ describe("EvidenceRecord", () => {
   expect(records).toHaveLength(3)
   expect(records.find((record) => record.metric === "views")).toMatchObject({
    value: 2800,
-   epistemicState: "observed",
+   epistemicState: "OBSERVED",
    observedAt: null,
   })
   expect(records.find((record) => record.metric === "impressions")).toMatchObject({
    id: "analytics:snapshot-1:channel_summary:impressions:missing",
    value: null,
-   epistemicState: "missing",
+   epistemicState: "MISSING",
    availability: "unavailable",
    missingness: ["impressions"],
    observedAt: null,
   })
   expect(records.find((record) => record.metric === "clickThroughRate")).toMatchObject({
    value: null,
-   epistemicState: "missing",
+   epistemicState: "MISSING",
    availability: "unavailable",
   })
  })
@@ -119,7 +127,7 @@ describe("EvidenceRecord", () => {
    metric: "views",
    value: index + 1,
    freshness: "fresh",
-   epistemicState: "observed",
+   epistemicState: "OBSERVED",
    provenance: { evidenceIds: [`source-${index}`] },
   }))
   const selected = selectEvidenceRecordsForPrompt(records, { maximumRecords: 5, maximumCharacters: 800 })
@@ -149,7 +157,7 @@ describe("EvidenceRecord", () => {
    observedAt: null,
    updatedAt: null,
    freshness: "fresh",
-   epistemicState: "observed",
+   epistemicState: "OBSERVED",
    provenance: { evidenceIds: ["e1"] },
   }
   const right: EvidenceRecord = {
@@ -186,7 +194,7 @@ describe("EvidenceRecord", () => {
    observedAt: null,
    updatedAt: null,
    freshness: "fresh",
-   epistemicState: "observed",
+   epistemicState: "OBSERVED",
    provenance: { evidenceIds: ["e1"] },
   }
   const right: EvidenceRecord = {
@@ -220,7 +228,7 @@ describe("EvidenceRecord", () => {
    observedAt: null,
    updatedAt: null,
    freshness: "fresh",
-   epistemicState: "observed",
+   epistemicState: "OBSERVED",
    provenance: { evidenceIds: ["e1"] },
   }
 

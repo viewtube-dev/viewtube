@@ -112,7 +112,7 @@ describe("beginBrainTrace", () => {
    observedAt: "2026-09-27T16:00:00.000Z",
    updatedAt: "2026-10-19T00:00:00.000Z",
    freshness: "stale" as const,
-   epistemicState: "observed" as const,
+   epistemicState: "OBSERVED" as const,
    confidence: 0.8,
    provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics", sourceVersion: "canon-v1" },
   }

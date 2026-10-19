@@ -4,12 +4,10 @@ import {
  type CanonicalIntelligenceDatasetStatus,
  type CanonicalIntelligenceEvidenceBundle,
 } from "../analytics-canon"
-import type { EvidenceRecord } from "./EvidenceRecord"
+import type { EvidenceEpistemicState, EvidenceRecord } from "./EvidenceRecord"
 
-export type BrainEvidenceEpistemicState =
- | "OBSERVED"
- | "STALE"
- | "MISSING"
+/** Dataset readiness is a subset of the canonical evidence epistemic states. */
+export type BrainEvidenceEpistemicState = Extract<EvidenceEpistemicState, "OBSERVED" | "STALE" | "MISSING">
 
 export type BrainEvidenceConfidence = "high" | "medium" | "low" | "insufficient"
 export type BrainEvidenceScopeMatch = "exact" | "mismatch" | "unscoped" | "not_requested"
@@ -134,14 +132,14 @@ export const buildBrainEvidenceRecordQuality = (
   ? "not_requested"
   : mismatched ? "mismatch" : unscoped ? "unscoped" : "exact"
  const observedRecords = records.filter((record) =>
-  record.epistemicState !== "missing"
+  record.epistemicState !== "MISSING"
   && record.availability !== "unavailable"
   && record.value !== null
   && record.value !== undefined,
  ).length
- const staleRecords = records.filter((record) => record.freshness === "stale" || record.epistemicState === "stale").length
+ const staleRecords = records.filter((record) => record.freshness === "stale" || record.epistemicState === "STALE").length
  const missingRecords = records.filter((record) =>
-  record.epistemicState === "missing"
+  record.epistemicState === "MISSING"
   || record.availability === "unavailable"
   || record.value === null
   || record.value === undefined,

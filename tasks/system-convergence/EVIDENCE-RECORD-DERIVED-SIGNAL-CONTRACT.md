@@ -42,11 +42,16 @@ type EvidenceOwner =
   | "creator-confirmed"
 
 type EvidenceEpistemicState =
-  | "observed"
-  | "derived"
-  | "creator_confirmed"
-  | "stale"
-  | "missing"
+  | "KNOWN"
+  | "OBSERVED"
+  | "CALCULATED"
+  | "USER_PROVIDED"
+  | "INFERRED"
+  | "HYPOTHESIS"
+  | "ESTIMATE"
+  | "STALE"
+  | "MISSING"
+  | "CONFLICTING"
 
 interface EvidenceRecord {
   id: string

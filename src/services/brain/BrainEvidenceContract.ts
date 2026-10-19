@@ -1,16 +1,7 @@
-import type { EvidenceRecord } from "./EvidenceRecord"
+import type { EvidenceRecord, EvidenceEpistemicState } from "./EvidenceRecord"
 
-export type BrainEpistemicState =
- | "KNOWN"
- | "OBSERVED"
- | "CALCULATED"
- | "USER_PROVIDED"
- | "INFERRED"
- | "HYPOTHESIS"
- | "ESTIMATE"
- | "STALE"
- | "MISSING"
- | "CONFLICTING"
+/** Backward-compatible type name for the canonical shared epistemic vocabulary. */
+export type BrainEpistemicState = EvidenceEpistemicState
 
 export type BrainEvidenceScopeState = "exact" | "mismatch" | "unscoped" | "not_requested"
 
@@ -62,11 +53,9 @@ export const normalizeBrainConfidence = (
 }
 
 const epistemicStateFor = (record: EvidenceRecord): BrainEpistemicState => {
- if (record.epistemicState === "missing") return "MISSING"
- if (record.epistemicState === "stale" || record.freshness === "stale") return "STALE"
- if (record.epistemicState === "creator_confirmed") return "USER_PROVIDED"
- if (record.epistemicState === "derived") return "CALCULATED"
- return "OBSERVED"
+ if (record.epistemicState === "MISSING") return "MISSING"
+ if (record.epistemicState === "STALE" || record.freshness === "stale") return "STALE"
+ return record.epistemicState
 }
 
 /** Additive, read-only projection. It does not become an evidence store or mutate source records. */
