@@ -4,6 +4,7 @@ import {
  type CanonicalIntelligenceDatasetStatus,
  type CanonicalIntelligenceEvidenceBundle,
 } from "../analytics-canon"
+import type { EvidenceRecord } from "./EvidenceRecord"
 
 export type BrainEvidenceEpistemicState =
  | "OBSERVED"
@@ -101,6 +102,80 @@ const confidenceFor = (input: {
  * missingness while deriving bounded confidence/coverage metadata for reasoning
  * and prompt assembly.
  */
+export interface BrainEvidenceRecordQualityReport {
+ version: "vt-brain-evidence-record-quality-v1"
+ generatedAt: string
+ expectedChannelId: string | null
+ evidenceRecordIds: string[]
+ totalRecords: number
+ numericRecords: number
+ observedRecords: number
+ staleRecords: number
+ missingRecords: number
+ scopeMatch: BrainEvidenceScopeMatch
+ confidence: BrainEvidenceConfidence
+ limitations: string[]
+}
+
+/**
+ * Grades the exact EvidenceRecord projection selected for prompt rendering.
+ * Dataset-level readiness remains in buildBrainEvidenceQuality(bundle); this
+ * record-level grade is deliberately scoped to the records the model can read.
+ */
+export const buildBrainEvidenceRecordQuality = (
+ records: EvidenceRecord[],
+ options: { expectedChannelId?: string | null } = {},
+): BrainEvidenceRecordQualityReport => {
+ const expectedChannelId = String(options.expectedChannelId || "").trim() || null
+ const hasRecords = records.length > 0
+ const mismatched = Boolean(expectedChannelId && records.some((record) => record.channelId && record.channelId !== expectedChannelId))
+ const unscoped = Boolean(!expectedChannelId || records.some((record) => !record.channelId))
+ const scopeMatch: BrainEvidenceScopeMatch = !hasRecords
+  ? "not_requested"
+  : mismatched ? "mismatch" : unscoped ? "unscoped" : "exact"
+ const observedRecords = records.filter((record) =>
+  record.epistemicState !== "missing"
+  && record.availability !== "unavailable"
+  && record.value !== null
+  && record.value !== undefined,
+ ).length
+ const staleRecords = records.filter((record) => record.freshness === "stale" || record.epistemicState === "stale").length
+ const missingRecords = records.filter((record) =>
+  record.epistemicState === "missing"
+  || record.availability === "unavailable"
+  || record.value === null
+  || record.value === undefined,
+ ).length
+ const numericRecords = records.filter((record) => typeof record.value === "number" && Number.isFinite(record.value)).length
+ const limitations: string[] = []
+ if (scopeMatch === "mismatch") limitations.push("Prompt evidence contains records from a different channel; channel-specific claims are blocked.")
+ if (scopeMatch === "unscoped") limitations.push("Some prompt evidence records lack a verified channel scope.")
+ if (!hasRecords) limitations.push("No EvidenceRecord items were selected for the prompt.")
+ if (staleRecords) limitations.push("Some prompt evidence records are stale and must be treated as historical.")
+ if (missingRecords) limitations.push("Some prompt evidence records are missing or unavailable; missing is not zero.")
+ const confidence: BrainEvidenceConfidence = scopeMatch === "mismatch" || scopeMatch === "unscoped" || !hasRecords || observedRecords === 0
+  ? "insufficient"
+  : staleRecords || missingRecords || observedRecords < records.length
+   ? "low"
+   : records.some((record) => record.confidence !== undefined && record.confidence !== null && record.confidence < 0.6)
+    ? "medium"
+    : "high"
+ return {
+  version: "vt-brain-evidence-record-quality-v1",
+  generatedAt: new Date().toISOString(),
+  expectedChannelId,
+  evidenceRecordIds: records.map((record) => record.id),
+  totalRecords: records.length,
+  numericRecords,
+  observedRecords,
+  staleRecords,
+  missingRecords,
+  scopeMatch,
+  confidence,
+  limitations,
+ }
+}
+
 export const buildBrainEvidenceQuality = (
  bundle: CanonicalIntelligenceEvidenceBundle,
  options: { expectedChannelId?: string | null } = {},

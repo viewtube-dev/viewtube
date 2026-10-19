@@ -88,21 +88,25 @@ Single seam in the orchestrator owns the hand-off. No other module independently
 
 ### Step 0 — Inventory & confirmation (read-only)
 
-- Confirm every caller of `buildBrainContextPack` / the prompt builder (orchestrator is the expected primary; verify no others).
-- Confirm the exact shape of `EvidenceRecord` and what the quality module currently receives.
-- Confirm what `BrainRuntimeSnapshot` currently stores for evidence and which consumers read the flat id list.
-- Note any test helpers that construct `topEvidenceVideos` or parallel evidence arrays.
+**Inventory findings (verified on the target branch):**
 
-**Exit criterion:** Written call graph and type map checked into the PR description.
+- Production prompt path: `BrainOrchestrator.runBrainTurn` → `resolveEvidenceIntelligence` → `buildBrainContextPack` → model generation. The broker is called twice when niche research is resolved and the context is rebuilt.
+- `EvidenceIntelligenceResolver` projects the canonical analytics bundle to `EvidenceRecord[]`, but `BrainEvidenceQuality.buildBrainEvidenceQuality` currently grades the `CanonicalIntelligenceEvidenceBundle`. `BrainStatisticsBridge` also calls the dataset-level grader outside the orchestrator.
+- `BrainContextBroker` previously rendered the channel evidence section from `snapshot.inferredProfile.topEvidenceVideos`, while the resolver's record projection was used separately for response provenance.
+- `EvidenceRecord` includes id, owner, source reference/snapshot, channel/project/video scope, metric/value/unit/aggregation, window, observed/updated timestamps, freshness, epistemic state, confidence/coverage, availability, missingness, limitations, and provenance.
+- `BrainRuntimeSnapshot` is the ContentBuild/generation provenance summary. Its `evidenceIds` are attached to generation-operation chains; it is not the chat-turn runtime record and must not be repurposed for unrelated chat turns.
+- `AIBrainConversationTurn.metadata` is persisted by `completeAIBrainTurn` and is the existing per-turn provenance seam. It will retain the exact prompt evidence records and a derived id list without a schema migration.
+- Other direct broker callers found in tests use constructed snapshots; they must remain compatible when `evidenceRecords` is omitted.
+
+**Exit criterion:** This call graph and type map are recorded here and summarized in the PR description.
 
 ### Step 1 — Single seam in the orchestrator
 
-- In the orchestrator turn path, obtain the `EvidenceRecord[]` once from the resolver/projection.
-- Pass that same array (by reference or explicit copy) to:
-  - the context/prompt builder,
-  - the quality grader,
-  - the snapshot writer.
-- Remove or dead-code any parallel construction of prompt evidence from `inferredProfile.topEvidenceVideos` for Brain turns that go through this path.
+- In the orchestrator turn path, obtain the resolver's `EvidenceRecord[]` once and select the bounded prompt subset once.
+- Pass that same subset to the context/prompt builder and `buildBrainEvidenceRecordQuality`.
+- Persist that same subset in the completed `AIBrainConversationTurn.metadata`, along with `promptEvidenceRecordIds` and the existing id-only projection.
+- Keep the existing canonical-bundle quality report for dataset readiness/missingness; it is a separate readiness summary, not a substitute for the record-level grade.
+- Remove the parallel prompt evidence construction from `inferredProfile.topEvidenceVideos` on this orchestrated path.
 
 **Exit criterion:** One variable in the orchestrator is the sole source for all three consumers on a Brain turn.
 
@@ -117,21 +121,20 @@ Single seam in the orchestrator owns the hand-off. No other module independently
 
 ### Step 3 — Quality grader receives the identical array
 
-- Ensure `BrainEvidenceQuality.buildBrainEvidenceQuality` is called with the exact array (or the post-truncation array) that was rendered.
-- Do not re-query, re-project, or re-filter inside the quality module for the turn under evaluation.
-- If the quality module currently builds its own list, replace that construction with the injected array.
+- Add/use `BrainEvidenceQuality.buildBrainEvidenceRecordQuality` with the exact bounded `EvidenceRecord[]` passed to the prompt builder.
+- Do not re-query, re-project, or re-filter the record array inside the record-level grader.
+- Preserve `buildBrainEvidenceQuality(bundle)` for dataset-level readiness, since unavailable datasets with no metric rows cannot be represented by ordinary observed-value records alone. Do not conflate these two responsibilities.
 
 **Exit criterion:** For a given turn, `promptEvidence === gradedEvidence` (same object identity or deep equality of the records used).
 
 ### Step 4 — Runtime snapshot carries rich evidence
 
-- Extend the snapshot evidence field to hold either:
-  - the full `EvidenceRecord[]`, or
-  - a stable projection that retains at minimum: id, owner, freshness/observation time, confidence (if present), source reference, and the metric/value pair.
-- Keep a derived `evidenceIds: string[]` (or equivalent) for any existing consumers that only need ids, so this step stays backward-compatible.
-- Do **not** import the evidence type into unrelated modules; keep the type boundary where it already lives and have the snapshot module accept a DTO or the existing type if it is already a shared contract.
+- Persist the bounded prompt evidence records in the existing completed `AIBrainConversationTurn.metadata` under `evidenceRecords`, together with `promptEvidenceRecordIds` and `evidenceRecordQuality`.
+- Keep the existing `evidenceIds: string[]` projection for id-only consumers, including the canonical records' ids.
+- Do **not** add chat-turn evidence to `BrainRuntimeSnapshot`: source inspection confirms that type represents ContentBuild/generation provenance and has no chat-turn identity. Its generation-chain evidence ids remain untouched.
+- Avoid importing the `EvidenceRecord` type into unrelated modules; the persisted metadata is a backward-compatible DTO boundary and requires no database/schema migration.
 
-**Exit criterion:** A completed turn’s snapshot can answer “what evidence was graded and shown to the model” without consulting a second store.
+**Exit criterion:** A completed conversation turn answers “what evidence records were graded and passed to the prompt builder?” from its own persisted metadata, without consulting a second store.
 
 ### Step 5 — Tests & golden baseline
 
@@ -139,7 +142,7 @@ Single seam in the orchestrator owns the hand-off. No other module independently
   1. Builds a turn with a known `EvidenceRecord[]`.
   2. Asserts the prompt builder received and rendered from that array.
   3. Asserts the quality grader received the same array.
-  4. Asserts the snapshot recorded the same array (or faithful projection).
+  4. Asserts the completed conversation turn metadata recorded the same array (or faithful projection) and derived ids.
 - Run the existing golden suite (≥24 scenarios).
 - Deliberately re-baseline only the scenarios whose evidence source legitimately changed. Do not weaken assertions that catch unsupported numbers, cross-channel leakage, or vocabulary bleed.
 - Confirm the evaluation harness can now obtain evidence ids + omissions from the snapshot for a turn.
@@ -197,7 +200,7 @@ These are real defects from the same audit but are **not** part of the unificati
 
 ## 9. Relationship to existing plans
 
-- **AI_BRAIN_MASTER_RESOURCE.md** — Claim-level evidence, “Based on” sections, and readiness display assume this unification. Add a gate note under the quick-wins section.
+- **AI_BRAIN_MASTER_RESOURCE.md** — Claim-level evidence, “Based on” sections, and readiness display are gated on the prompt/grade/turn-metadata equivalence.
 - **Quick-wins 3, 4, 12, 14** (Based on, readiness, evidence button, statistics routing) — May land in parallel only if they consume the unified array; otherwise sequence them after Step 5.
 - **Skills** — Fold any required guidance into the existing authority-mapping and evaluation-provenance skills. Do not add a 37th skill.
 
