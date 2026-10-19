@@ -74,7 +74,7 @@ describe("buildBrainEvidenceQuality", () => {
   const result = buildBrainEvidenceQuality(evidenceBundle())
 
   expect(result.datasets.find((dataset) => dataset.datasetId === "revenue")).toMatchObject({
-   epistemicState: "missing",
+   epistemicState: "MISSING",
    evidenceRefs: [],
    missingMetrics: ["estimatedRevenue"],
   })
@@ -85,13 +85,13 @@ describe("buildBrainEvidenceQuality", () => {
    coverage: { total: 2, available: 1, partial: 0, stale: 1, failed: 0, unavailable: 0, represented: 2 },
    datasets: evidenceBundle().datasets.map((dataset) =>
     dataset.id === "revenue"
-     ? { ...dataset, status: "stale", rowCount: 1, evidenceRefs: ["snapshot-1:revenue:1"] }
+     ? { ...dataset, status: "STALE", rowCount: 1, evidenceRefs: ["snapshot-1:revenue:1"] }
      : dataset),
   })
 
   const result = buildBrainEvidenceQuality(input)
 
-  expect(result.datasets.find((dataset) => dataset.datasetId === "revenue")?.epistemicState).toBe("stale")
+  expect(result.datasets.find((dataset) => dataset.datasetId === "revenue")?.epistemicState).toBe("STALE")
   expect(result.confidence).not.toBe("high")
  })
 
