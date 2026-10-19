@@ -10,6 +10,13 @@ test("runtime source governance rejects documentation imports and absolute file 
  assert.deepEqual(result.absoluteFileLinks, ["src/example.ts"])
 })
 
+test("runtime source governance rejects raw machine paths without a file URL scheme", () => {
+ const result = findRuntimeSourceViolations([
+  { path: "src/example.ts", text: 'const source = "/Users/dev/Downloads/input.json"' },
+ ])
+ assert.deepEqual(result.absoluteFileLinks, ["src/example.ts"])
+})
+
 test("runtime source governance permits repository-relative docs links and ordinary source", () => {
  const result = findRuntimeSourceViolations([
   { path: "src/example.ts", text: 'const href = "https://github.com/viewtube-dev/viewtube/blob/master/docs/brain/guide.md"' },
