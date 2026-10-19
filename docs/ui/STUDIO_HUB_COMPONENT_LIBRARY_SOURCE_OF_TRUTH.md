@@ -396,3 +396,18 @@ For each family, display the production source paths, standard and compact sizes
 - Retains canonical border/radius, fill/color-pair behavior, width and focus/disabled behavior from `StudioButton`; this variant does not create a parallel button system.
 - The Confirmed Primitive Toolbox displays production-backed specimens labeled **Standard / 44px — 18px + 18px** and **Compact / 28px — 12px + 12px**.
 - Validation status: source and catalog registration updated; browser visual certification and build/type/test gates remain pending.
+
+
+## Brain status indicator — LED 64 + Badge 45 composition
+
+**Primitive:** `StudioBrainStatusIndicator` in `src/studio-ui/primitives/StudioControls.tsx`  
+**Styles:** `src/styles/studio-control-system.css`  
+**Showcase:** `src/components/brain/BrainStatusIndicatorShowcase.tsx`  
+**Source test:** `src/studio-ui/primitives/StudioBrainStatusIndicator.test.tsx`
+
+- Combines LED-light (library item 64) with borderless badge (item 45).
+- Rectangular 44/28/14px tiers with 6/4/2px corner radii, not pill shapes.
+- Saturated LED glow and staggered ripple rings; centered 1px black lens outline at 65% LED diameter with 60%-opacity white fill.
+- Dark fill/white text and tinted fill/black text variants; running, success, warning, error, info, paused, idle, queued, processing, complete, blocked and failed states.
+- Configurable pulse respects `prefers-reduced-motion`; text remains visible so color is not the only status signal.
+- Browser visual certification and contrast checks remain outstanding.

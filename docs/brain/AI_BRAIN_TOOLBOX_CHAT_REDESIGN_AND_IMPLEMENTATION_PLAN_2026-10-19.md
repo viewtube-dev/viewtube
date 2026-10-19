@@ -1,4 +1,4 @@
-# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–7
+# AI Brain Toolbox + Chat Overhaul — Plan, Audit, and Phases 1–9
 
 **Date:** 2026-10-19  
 **Repository:** `viewtube-dev/viewtube`  
@@ -452,3 +452,23 @@ Predecessor: merged PR [#733](https://github.com/viewtube-dev/viewtube/pull/733)
 ### Verification state
 
 This increment has source and focused test files committed to the working branch. GitHub source operations do not execute Vitest, typecheck, lint or browser tests, so these tests are **not yet verified as passing**. The prior PR #733 CI run had a passing production build and local smoke check but failures in static quality, focused contracts, source governance, Brain quality loop and the full suite; those historical failures remain relevant and must not be described as resolved by this PR. No production deployment or end-to-end certification is claimed.
+
+
+## Phase 8 — QA, certification and release
+
+- [ ] Run current-head focused tests, typecheck/static quality, source governance, Brain quality loop, production build, smoke checks and full suite.
+- [ ] Repair branch-introduced failures and distinguish reproducible baseline failures from regressions.
+- [ ] Browser-certify mobile/desktop layout, keyboard and screen-reader behavior, contrast, reduced motion, evidence truth states, policy settings and outcome lineage.
+- [ ] Verify action and publication approval boundaries and end-to-end ActionPacket/operation/trace/evidence identity.
+- [ ] Confirm the actual Studio Controls library displays the new primitive at standard, compact and micro sizes.
+
+## Phase 9 — Release readiness, observability and governance handoff
+
+- [ ] Produce a nine-phase release checklist with evidence links and explicit blocked/deferred rationale.
+- [ ] Verify analytics-canon/VT-SYNC → outcome ledger → evaluation candidate → governed promotion using existing stores and contracts; no parallel event store.
+- [ ] Audit consent/privacy exclusions, channel-scoped policy behavior and the distinction between browser-local controls and durable server policy.
+- [ ] Extend existing BrainTrace/ToolReceipt and evaluation surfaces for operational visibility rather than adding a second observability store.
+- [ ] Validate rollback/feature-disable behavior; after merge, verify deployed source commit and environment.
+- [ ] Merge only after required CI and browser certification gates are green.
+
+Status indicator source and focused test are added on this branch. Phases 8 and 9 are acceptance gates, not claimed complete; no current-head CI pass or browser certification is asserted.

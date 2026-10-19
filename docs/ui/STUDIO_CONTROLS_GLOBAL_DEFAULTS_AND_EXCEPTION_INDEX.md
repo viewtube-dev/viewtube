@@ -237,3 +237,8 @@ Visual verification is still required in the running app for standard/compact/mi
 - Density variants: standard (24px badge surface, 10px LED), compact (20px surface, 8px LED), and micro (14px surface, 6px LED). These are status badges, not ordinary 44px/28px input/button geometry.
 - Active LED ripple follows the library's eight-second cycle: saturated ring starts at the LED core, expands to five times its size over three seconds and fades. Reduced-motion disables the ripple. Inactive state dims the core and removes the ripple.
 - Status labels are descriptive, not actions. Consumers must pass the real status and must not show “ready”, “synced” or “complete” unless the owning workflow reports that state.
+
+
+## Brain status indicator variant family
+
+`StudioBrainStatusIndicator` uses rectangular 44/28/14px tiers with 6/4/2px corner radii. Its LED has a 1px black lens outline at 65% diameter with 60%-opacity white overlay, saturated state glow/ripples, and reduced-motion fallback. Dark variant uses white text; tinted variant uses black text. See the Studio Controls primitive and component-library source of truth.
