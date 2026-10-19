@@ -441,7 +441,7 @@ const CreatorResponseCard: React.FC<{
  if (!response) {
   const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
-   <article className={${assistantCardFrame} p-4}>
+   <article className={`${assistantCardFrame} p-4`}>
     <div className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
     <p className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
     {canRetry ? (
