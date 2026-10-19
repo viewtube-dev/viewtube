@@ -1485,6 +1485,10 @@ export interface AIBrainQuestionAnswer {
  category: AIBrainLearningCategory
  createdAt: string
  learningEntryId?: string
+ /** Explicit governance state; absent legacy values remain valid unless superseded by newer evidence. */
+ status?: "confirmed" | "outdated" | "superseded" | "rejected"
+ supersededByAnswerId?: string
+ statusReason?: string
 }
 
 export interface AIBrainConversationTurn {
