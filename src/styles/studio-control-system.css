@@ -4541,21 +4541,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 }
 
 /* Shared interaction-focus contract: token-generated timing and one outline rule. */
-:root,
-[data-vt-studio-control="true"] {
-  --vt-studio-focus-hold-ms: 1500ms;
-  --vt-studio-focus-outline-fade-ms: 500ms;
-  --vt-studio-number-rest-mix: 50%;
-  --vt-studio-number-rest-color: color-mix(
-    in srgb,
-    var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix, 50%),
-    white
-  );
-  --vt-studio-number-active-color: #000000;
-  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * 0.65);
-  --vt-studio-focus-outline-offset: 0px;
-}
+/* Focus variables are emitted from STUDIO_FOCUS_INTERACTION_TOKENS by the token generator. */
 
 .vt-studio-counter,
 .vt-studio-side-counter,
