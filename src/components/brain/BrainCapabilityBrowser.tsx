@@ -30,6 +30,12 @@ export const getBrainCapabilityAvailability = (
  if (PERSONALIZED_CAPABILITIES.has(capability.id) && !controls.personalization) {
   return { status: "blocked", label: "Personalization off", reason: "Enable personalization in Brain controls to use this capability." }
  }
+ if (PROJECT_CAPABILITIES.has(capability.id) && !controls.allowProjects) {
+  return { status: "blocked", label: "Project access off", reason: "Enable project access in Brain controls to use this capability." }
+ }
+ if (PROJECT_CAPABILITIES.has(capability.id) && snapshot.brain.activeProjects === 0) {
+  return { status: "needs-project-context", label: "Needs project context", reason: "Select or create a project so Brain can use the project-specific context this capability expects." }
+ }
  if (capability.requiresChannelData && snapshot.inferredProfile.videoCount === 0) {
   return { status: "needs-channel-data", label: "Needs channel data", reason: "Connect or sync a channel so Brain can check the evidence needed for this task." }
  }
