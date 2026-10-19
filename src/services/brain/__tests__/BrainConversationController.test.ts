@@ -82,9 +82,9 @@ describe("BrainConversationController", () => {
    turn("4", "question_module", "question module event", "question module answer"),
   ];
   const ordinary = turn("9", undefined, "display-safe text", "ordinary answer");
-  const raw = { ...ordinary, rawUserMessage: "The API failed with an error", displayUserMessage: "The channel data is incomplete" };
+  const raw = { ...ordinary, rawUserMessage: "The API failed with an error", displayUserMessage: "The channel data is incomplete" }
 
-  const history = buildBrainConversationHistory([...hiddenSources, raw, turn("3", undefined, "older question", "older answer")]);
+  const history = buildBrainConversationHistory([...hiddenSources, raw, turn("3", undefined, "older question", "older answer")];
 
   expect(history.map((item) => item.parts[0].text)).toEqual([
    "older question",
