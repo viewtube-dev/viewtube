@@ -41,6 +41,7 @@ import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
 import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence, type EvidenceIntelligenceEnvelope } from "./EvidenceIntelligenceResolver"
+import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
@@ -382,6 +383,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   : null
  // Quality accompanies every analytics-backed task, including algorithm/anomaly requests.
  const evidenceQuality = evidenceIntelligence?.evidenceQuality || null
+ // Single evidence array for prompt, grade, and turn snapshot — do not re-derive.
+ const promptEvidenceRecords = (evidenceIntelligence?.evidenceRecords || []).slice(0, 12)
+ const evidenceRecordQuality = buildBrainEvidenceRecordQuality(promptEvidenceRecords, { expectedChannelId: input.channelId })
  const statisticsIntelligence = wantsStatisticsIntelligence
   ? evidenceIntelligence?.statisticsIntelligence || null
   : null
@@ -431,6 +435,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   userText: input.userText,
   statisticsIntelligence,
   evidenceQuality,
+  evidenceRecords: promptEvidenceRecords,
+  evidenceRecordQuality,
   evidenceClaims: evidenceIntelligence?.evidenceClaims,
   sharedEvidenceHealth: evidenceIntelligence?.sharedEvidenceHealth,
   analyticsFindingContext: evidenceIntelligence?.analyticsFindingContext,
@@ -480,7 +486,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    userText: input.userText,
    statisticsIntelligence,
    evidenceQuality,
-   evidenceClaims: evidenceIntelligence?.evidenceClaims,
+  evidenceRecords: promptEvidenceRecords,
+  evidenceRecordQuality,
+  evidenceClaims: evidenceIntelligence?.evidenceClaims,
    sharedEvidenceHealth: evidenceIntelligence?.sharedEvidenceHealth,
    analyticsFindingContext: evidenceIntelligence?.analyticsFindingContext,
    audienceIntelligence,
@@ -598,7 +606,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceRecords: promptEvidenceRecords,
+    evidenceRecordQuality,
+    promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -629,7 +640,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceRecords: promptEvidenceRecords,
+    evidenceRecordQuality,
+    promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -690,7 +704,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceRecords: promptEvidenceRecords,
+    evidenceRecordQuality,
+    promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -721,7 +738,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    evidenceIds: Array.from(new Set([...input.snapshot.evidencePack.evidenceIds, ...promptEvidenceRecords.map((record) => record.id)])).slice(0, 50),
+    evidenceRecords: promptEvidenceRecords,
+    evidenceRecordQuality,
+    promptEvidenceRecordIds: promptEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
