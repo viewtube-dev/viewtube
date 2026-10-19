@@ -14,6 +14,10 @@ export interface AlgorithmLearningCandidate {
  confidence: BrainConfidenceLevel
  sourceEventIds: string[]
  evidenceIds: string[]
+ /** Optional end-to-end joins to generation traces and generated outputs. */
+ operationIds?: string[]
+ traceIds?: string[]
+ outputRefs?: string[]
  sampleSize: number
  positiveRate: number
  status: "candidate" | "insufficient_evidence"
@@ -74,6 +78,9 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
    confidence: confidenceFor(decisive, positiveRate),
    sourceEventIds: decisiveRows.map(({ event }) => event.id),
    evidenceIds: [...new Set(decisiveRows.flatMap(({ event }) => event.evidenceIds))],
+   operationIds: [...new Set(decisiveRows.map(({ event }) => event.operationId).filter((value): value is string => Boolean(value)))],
+   traceIds: [...new Set(decisiveRows.map(({ event }) => event.traceId).filter((value): value is string => Boolean(value)))],
+   outputRefs: [...new Set(decisiveRows.map(({ event }) => event.outputRef).filter((value): value is string => Boolean(value)))],
    sampleSize,
    positiveRate,
    status,
