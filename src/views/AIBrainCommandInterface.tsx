@@ -41,6 +41,7 @@ import {
 } from "../services/aiBrainCommandInterface"
 import {
  answerAIBrainQuestionModule,
+ reconcileBrainLearningQuestions,
  buildCreatorGrowthContext,
  formatCreatorGrowthModules,
  listAIBrainConversationTurns,
@@ -740,8 +741,11 @@ const AIBrainCommandInterface: React.FC = () => {
   [questionAnswers],
  )
  const learningQuestions = useMemo(
-  () => buildBrainLearningQuestions(snapshot).filter((question) => !answeredQuestionIds.has(question.id)),
-  [snapshot, answeredQuestionIds],
+  () => reconcileBrainLearningQuestions(
+   buildBrainLearningQuestions(snapshot),
+   questionAnswers,
+  ).filter((question) => !answeredQuestionIds.has(question.id)),
+  [snapshot, answeredQuestionIds, questionAnswers],
  )
  const latestResponseQuestions = useMemo(
   () => [...messages]
