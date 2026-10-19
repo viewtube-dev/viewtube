@@ -8,6 +8,7 @@ const css = readFileSync("src/styles/studio-control-system.css", "utf8")
 const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 const fieldCss = readFileSync("src/styles/studio-text-input.css", "utf8")
+const fieldInteractionCss = readFileSync("src/styles/studio-control-fields.css", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
@@ -102,3 +103,17 @@ test("Studio text fields use a rounded inset primary stroke instead of square gr
   assert.match(fieldCss, /box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/)
   assert.doesNotMatch(fieldCss, /background-image:\s*[\s\S]*?linear-gradient\(var\(--vt-field-inline-primary/)
 })
+
+test("shared interaction-focus tokens drive dwell, fade, rest color, and outline geometry", () => {
+  assert.match(tokens, /STUDIO_FOCUS_INTERACTION_TOKENS[\s\S]*?holdMs:\s*1500[\s\S]*?outlineFadeMs:\s*500[\s\S]*?restTextMixPercent:\s*50[\s\S]*?outlineWidthRatio:\s*0\.65[\s\S]*?outlineOffsetPx:\s*0/);
+  assert.match(generator, /STUDIO_FOCUS_INTERACTION_TOKENS/);
+  assert.match(generated, /--vt-studio-focus-hold-ms:\s*1500ms/);
+  assert.match(generated, /--vt-studio-focus-outline-fade-ms:\s*500ms/);
+  assert.match(generated, /--vt-studio-number-rest-mix:\s*50%/);
+  assert.match(generated, /--vt-studio-focus-outline-width-ratio:\s*0\.65/);
+  assert.match(generated, /--vt-studio-focus-outline-width:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* var\(--vt-studio-focus-outline-width-ratio, 0\.65\)\)/);
+  assert.match(css, /data-vt-interaction-focus="true"[\s\S]*?outline:[^;]*var\(--vt-studio-focus-outline-color/);
+  assert.match(css, /is-interaction-focus[\s\S]*?color:\s*var\(--vt-studio-number-active-color/);
+  assert.match(fieldInteractionCss, /transition:[\s\S]*?outline-color var\(--vt-studio-focus-outline-fade-ms, 500ms\) ease-out/);
+  assert.match(component, /onPointerDown=\{interactionFocus\.start\}[\s\S]*?onPointerUp=\{interactionFocus\.end\}/);
+});

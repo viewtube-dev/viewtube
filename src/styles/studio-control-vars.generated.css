@@ -16,6 +16,15 @@
   --vt-studio-micro-font-size: 10px;
   --vt-studio-micro-icon-size: 10px;
   --vt-studio-secondary-focus-opacity: 65%;
+  --vt-studio-focus-hold-ms: 1500ms;
+  --vt-studio-focus-outline-fade-ms: 500ms;
+  --vt-studio-number-rest-mix: 50%;
+  --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix, 50%), white);
+  --vt-studio-number-active-color: #000000;
+  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-focus-outline-width-ratio: 0.65;
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));
+  --vt-studio-focus-outline-offset: 0px;
   --vt-studio-dropdown-standard-rail-size: 44px;
   --vt-studio-dropdown-compact-rail-size: 28px;
   --vt-studio-dropdown-standard-chevron-size: 28px;
