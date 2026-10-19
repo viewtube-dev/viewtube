@@ -2219,7 +2219,7 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
         >↺</button>
       )}
       rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
-      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end,
         "data-vt-studio-slider": "double-split",
         "data-vt-studio-slider-left-controls": leftControls,
         "data-vt-library-component": "StudioDoubleSplitSlider",
