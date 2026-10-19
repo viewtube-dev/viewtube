@@ -1,3 +1,4 @@
+import { StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
   Activity,
@@ -48,7 +49,6 @@ import {
   SubToolboxBadge,
   SubToolboxCheckbox,
   SubToolboxFieldLabel,
-  SubToolboxFileTarget,
   SubToolboxMetric,
   SubToolboxSelectableListRow,
   SubToolboxSurface,
@@ -758,7 +758,7 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
       case "stickers-overlays":
         return <SubToolboxStack>
           <StudioDirectorOverlayStack itemCount={activePayload.items.length} />
-          <SubToolboxFileTarget icon={<ImagePlus size={30} />} label="Add Overlay Asset" accept="image/*,.svg" onFiles={() => setNotice("File intake UI is ready; Vault/object-storage binding follows the asset phase.")} />
+          <StudioUploadFrame icon={<ImagePlus size={30} />} label="Add Overlay Asset" accept="image/*,.svg" onFiles={() => setNotice("File intake UI is ready; Vault/object-storage binding follows the asset phase.")} />
           <SubToolboxSurface tone="subtle"><MutedNote>{activePayload.items.length} overlay layer{activePayload.items.length === 1 ? "" : "s"} in this scope.</MutedNote></SubToolboxSurface>
         </SubToolboxStack>
 
@@ -787,7 +787,7 @@ const VideoDirector: React.FC<VideoDirectorProps> = ({
       case "references-seeds":
         return <SubToolboxStack>
           <StudioDirectorReferenceBoard referenceCount={activePayload.references.length} seed={activePayload.seed} lockSeed={activePayload.lockSeed} variationNoise={activePayload.variationNoise} />
-          <SubToolboxFileTarget icon={<Upload size={30} />} label="Add Visual / Audio Reference" accept="image/*,video/*,audio/*" onFiles={() => setNotice("Reference file intake selected; direct object-storage upload is a later backend slice.")} />
+          <StudioUploadFrame icon={<Upload size={30} />} label="Add Visual / Audio Reference" accept="image/*,video/*,audio/*" onFiles={() => setNotice("Reference file intake selected; direct object-storage upload is a later backend slice.")} />
           <SubToolboxGrid>
             <NumberField label="Seed" value={activePayload.seed ?? 0} min={0} max={2147483647} onChange={(value) => setCategoryField(activeCategoryId, "seed", Math.round(value))} />
             <NumberField label="Variation Noise" value={Math.round(activePayload.variationNoise * 100)} min={0} max={100} unit="%" onChange={(value) => setCategoryField(activeCategoryId, "variationNoise", value / 100)} />
