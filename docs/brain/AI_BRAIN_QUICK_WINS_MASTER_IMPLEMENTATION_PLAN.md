@@ -350,3 +350,8 @@ These documents provide architecture, current-state, evidence and workflow conte
 Complete only when all 19 behaviors are implemented or explicitly blocked by a verified owner/contract gap; each behavior has focused tests; restore, routing and learning-governance tests pass; new UI is keyboard-accessible and Studio-consistent; claims/actions use canonical data and provenance; and the final PR records commit mapping, test evidence, residual risks and rollback guidance.
 
 A green build alone is not proof of correctness. A UI that looks complete but lacks canonical evidence is not complete. A learning action that bypasses governance is a regression, not an optimization.
+
+
+## Skill ownership reconciliation — 2026-10-19
+
+Do not create a separate active Brain-improvement skill for evidence and evaluation responsibilities. The existing `.claude/skills/viewtube-ai-system-governor/SKILL.md` owns architecture, canonical-owner routing and evidence/context invariants; `.claude/skills/viewtube-brain-eval-harness/SKILL.md` owns evidence-grade parity, model/evidence provenance comparability, regression fixtures and quality release gates. The unregistered `skills/viewtube-ai-brain-improvement/SKILL.md` duplicates these procedures and is proposed for removal rather than becoming another skill in the locked catalog.
