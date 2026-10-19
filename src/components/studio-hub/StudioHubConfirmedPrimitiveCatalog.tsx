@@ -75,8 +75,15 @@ const CanonicalControlFamilies: React.FC = () => {
     <Family title="Word Toggle · Standard + Compact" nonDefaultSettings={[
         "Word toggles are kept separate from switch, radio, and checkbox shapes while sharing the same V1–V4 palette contract.",
       ]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · V1–V4 shared palette variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-control-family">
-        {[{size:"44" as const,label:"WORD TOGGLE · STANDARD"},{size:"28" as const,label:"WORD TOGGLE · COMPACT"}].map((item,row) => <div className="vt-confirmed-control-row" key={"word-"+item.size}><strong>{item.label}</strong><div className="vt-confirmed-control-variants" data-control-size={item.size}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioWordToggle size={item.size} skin={skin.skin} value={words[index]} words={item.size === "44" && col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div></div>)}
+      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · STANDARD</strong>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = col; return <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[index]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
+        </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · COMPACT</strong>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
+        </div>
       </div>
     </Family>
     <Family
