@@ -7,7 +7,7 @@ import {
 import type { EvidenceEpistemicState, EvidenceRecord } from "./EvidenceRecord"
 
 /** Dataset readiness is a subset of the canonical evidence epistemic states. */
-export type BrainEvidenceEpistemicState = Extract<EvidenceEpistemicState, "observed" | "stale" | "missing">
+export type BrainEvidenceEpistemicState = Extract<EvidenceEpistemicState, "OBSERVED" | "STALE" | "MISSING">
 
 export type BrainEvidenceConfidence = "high" | "medium" | "low" | "insufficient"
 export type BrainEvidenceScopeMatch = "exact" | "mismatch" | "unscoped" | "not_requested"
@@ -55,9 +55,9 @@ export interface BrainEvidenceQualityReport {
 const epistemicStateFor = (
  status: CanonicalIntelligenceDatasetStatus,
 ): BrainEvidenceEpistemicState => {
- if (status === "stale") return "stale"
- if (status === "failed" || status === "unavailable") return "missing"
- return "observed"
+ if (status === "stale") return "STALE"
+ if (status === "failed" || status === "unavailable") return "MISSING"
+ return "OBSERVED"
 }
 
 const usabilityWeight = (status: CanonicalIntelligenceDatasetStatus): number => {
