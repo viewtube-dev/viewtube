@@ -23,6 +23,7 @@ describe("StudioTextBox default stroke contract", () => {
     expect(standard).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(standard).toContain("color: #000;");
     expect(standard).toContain("-webkit-text-fill-color: #000;");
+    expect(standard).toContain("line-height: var(--textarea-description-line-height, 0.75);");
     expect(css).toContain('.vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"]');
     expect(css).toContain('.vt-studio-text-box[data-vt-studio-control="true"][data-size="micro"]');
     expect(css).toContain("var(--vt-studio-textarea-compact-font-size, 14px)");
