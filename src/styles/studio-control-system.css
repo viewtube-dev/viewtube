@@ -4938,3 +4938,88 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   text-overflow: clip;
   max-height: 1.8em;
 }
+
+
+/* Brain status badges: LED + borderless label, composed from the shared Studio primitive system. */
+.vt-studio-brain-status-badge {
+  --vt-brain-led-color: #42f55b;
+  --vt-brain-led-tint: #d9ffdf;
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  min-width: 0;
+  border: 0 !important;
+  border-radius: 999px;
+  padding: 4px 10px 4px 7px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: none !important;
+  vertical-align: middle;
+}
+.vt-studio-brain-status-badge[data-tone="green"] { --vt-brain-led-color: #20f13e; --vt-brain-led-tint: #d8ffdf; }
+.vt-studio-brain-status-badge[data-tone="cyan"] { --vt-brain-led-color: #00d9ff; --vt-brain-led-tint: #d7faff; }
+.vt-studio-brain-status-badge[data-tone="purple"] { --vt-brain-led-color: #b64dff; --vt-brain-led-tint: #f0dcff; }
+.vt-studio-brain-status-badge[data-tone="yellow"] { --vt-brain-led-color: #ffd400; --vt-brain-led-tint: #fff5bd; }
+.vt-studio-brain-status-badge[data-tone="red"] { --vt-brain-led-color: #ff3158; --vt-brain-led-tint: #ffdbe2; }
+.vt-studio-brain-status-badge[data-tone="blue"] { --vt-brain-led-color: #3485ff; --vt-brain-led-tint: #dceaff; }
+.vt-studio-brain-status-badge[data-appearance="dark"] { background: #000; color: #fff; }
+.vt-studio-brain-status-badge[data-appearance="tinted"] { background: var(--vt-brain-led-tint); color: #000; }
+.vt-studio-brain-status-badge[data-size="standard"] { min-height: 24px; gap: 8px; padding: 5px 11px 5px 8px; font-size: 12px; }
+.vt-studio-brain-status-badge[data-size="compact"] { min-height: 20px; gap: 6px; padding: 4px 8px 4px 6px; font-size: 10px; }
+.vt-studio-brain-status-badge[data-size="micro"] { min-height: 14px; gap: 4px; padding: 2px 5px 2px 4px; font-size: 8px; letter-spacing: -.01em; }
+.vt-studio-brain-status-badge__led {
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 10px;
+  height: 10px;
+  overflow: visible;
+  isolation: isolate;
+}
+.vt-studio-brain-status-badge[data-size="standard"] .vt-studio-brain-status-badge__led { width: 10px; height: 10px; }
+.vt-studio-brain-status-badge[data-size="compact"] .vt-studio-brain-status-badge__led { width: 8px; height: 8px; }
+.vt-studio-brain-status-badge[data-size="micro"] .vt-studio-brain-status-badge__led { width: 6px; height: 6px; }
+.vt-studio-brain-status-badge__core,
+.vt-studio-brain-status-badge__ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.vt-studio-brain-status-badge__core {
+  z-index: 2;
+  background: var(--vt-brain-led-color);
+  box-shadow: 0 0 4px var(--vt-brain-led-color), 0 0 9px color-mix(in srgb, var(--vt-brain-led-color) 78%, transparent);
+}
+.vt-studio-brain-status-badge__ripple {
+  z-index: 1;
+  border: 2px solid var(--vt-brain-led-color);
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--vt-brain-led-color) 30%, transparent);
+  opacity: 0;
+}
+.vt-studio-brain-status-badge[data-active="true"] .vt-studio-brain-status-badge__ripple {
+  animation: vt-studio-brain-led-ripple 8s ease-out infinite;
+}
+.vt-studio-brain-status-badge[data-active="false"] .vt-studio-brain-status-badge__core {
+  background: color-mix(in srgb, var(--vt-brain-led-color) 45%, #777);
+  box-shadow: none;
+}
+.vt-studio-brain-status-badge[data-active="false"] .vt-studio-brain-status-badge__ripple { display: none; }
+.vt-studio-brain-status-badge__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+@keyframes vt-studio-brain-led-ripple {
+  0% { transform: scale(1); opacity: .78; }
+  37.5% { transform: scale(5); opacity: 0; }
+  100% { transform: scale(5); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-brain-status-badge[data-active="true"] .vt-studio-brain-status-badge__ripple { animation: none; opacity: 0; }
+}
