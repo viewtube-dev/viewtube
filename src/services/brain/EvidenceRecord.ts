@@ -26,16 +26,16 @@ export type EvidenceOwner =
  | "creator-confirmed"
 
 export const EVIDENCE_EPISTEMIC_STATES = [
- "known",
- "observed",
- "calculated",
- "user_provided",
- "inferred",
- "hypothesis",
- "estimate",
- "stale",
- "missing",
- "conflicting",
+ "KNOWN",
+ "OBSERVED",
+ "CALCULATED",
+ "USER_PROVIDED",
+ "INFERRED",
+ "HYPOTHESIS",
+ "ESTIMATE",
+ "STALE",
+ "MISSING",
+ "CONFLICTING",
 ] as const
 
 export type EvidenceEpistemicState = typeof EVIDENCE_EPISTEMIC_STATES[number]
@@ -219,9 +219,9 @@ const freshnessFor = (
 const epistemicStateFor = (
  status: CanonicalIntelligenceDatasetStatus,
 ): EvidenceEpistemicState => {
- if (status === "stale") return "stale"
- if (status === "failed" || status === "unavailable") return "missing"
- return "observed"
+ if (status === "stale") return "STALE"
+ if (status === "failed" || status === "unavailable") return "MISSING"
+ return "OBSERVED"
 }
 
 const availabilityFor = (
@@ -305,7 +305,7 @@ export const projectCanonicalEvidenceRecords = (
     observedAt: null,
     updatedAt: dataset.updatedAt || null,
     freshness: freshnessFor(dataset.status),
-    epistemicState: "missing",
+    epistemicState: "MISSING",
     confidence: 0,
     coverage: null,
     availability: "unavailable",
@@ -356,7 +356,7 @@ const canonicalWindow = (record: EvidenceRecord): MetricComparisonContext["windo
 
 const comparisonAvailability = (record: EvidenceRecord): MetricAvailabilityForComparison => {
  if (record.availability) return record.availability
- return record.epistemicState === "missing" ? "unavailable" : "available"
+ return record.epistemicState === "MISSING" ? "unavailable" : "available"
 }
 
 const asMetricContext = (record: EvidenceRecord): MetricComparisonContext | null => {
