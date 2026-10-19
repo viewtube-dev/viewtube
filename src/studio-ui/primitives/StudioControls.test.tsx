@@ -830,6 +830,10 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(slider).toContain('useStudioCounterHold(1, current, min, max, safeStep, adjustCounter');
     expect(slider).toContain('data-press-holding={increment.isHolding ? "true" : undefined}');
     expect(slider).toContain('data-press-holding={decrement.isHolding ? "true" : undefined}');
+    const html = renderToStaticMarkup(<StudioDoubleSplitSlider value={5} onValueChange={() => {}} leftControls="counter" ariaLabel="Level" />);
+    expect(html).toContain('data-vt-studio-slider-left-controls="counter"');
+    expect(html).toContain('aria-label="Increase Level"');
+    expect(html).toContain('aria-label="Decrease Level"');
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after');
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button.is-holding svg');
   });
