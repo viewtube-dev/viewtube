@@ -1566,9 +1566,11 @@ export const getStudioCounterRepeatDelay = (elapsedMs: number, remainingSteps: n
   const accelerationEase = 1 - Math.pow(1 - accelerationProgress, 2.2);
   const accelerationDelay = 150 - accelerationEase * 127;
   const boundaryProgress = Number.isFinite(remainingSteps)
-    ? Math.min(1, Math.max(0, (16 - remainingSteps) / 13))
+    ? Math.min(1, Math.max(0, (16 - remainingSteps) / 16))
     : 0;
-  const boundaryEase = boundaryProgress * boundaryProgress * (3 - 2 * boundaryProgress);
+  // A high-power ease keeps the repeat responsive at 4–6 steps and reserves
+  // most of the slowdown for the final few steps.
+  const boundaryEase = Math.pow(boundaryProgress, 8);
   const boundaryDelay = 23 + boundaryEase * 52;
   return Math.round(Math.max(accelerationDelay, boundaryDelay));
 };
