@@ -47,6 +47,7 @@ import { selectEvidenceRecordsForPrompt } from "./EvidenceRecord"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
+import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
 import {
  cacheCurrentNicheResearch,
  readCachedCurrentNicheResearch,
@@ -411,6 +412,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  const audienceIntelligence = wantsStatisticsIntelligence
   ? evidenceIntelligence?.audienceIntelligence || null
   : null
+ const surfaceSelection = readBrainSurfaceSelection()
  const creatorContext = await resolveCreatorContext({
   channelId: input.channelId,
   query: input.userText,
@@ -418,7 +420,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   project: input.project,
   projects: input.projects,
   visibleContext: input.visibleContext,
-  artifactRefs: input.artifactRefs,
+  selection: surfaceSelection,
+  artifactRefs: [...(input.artifactRefs || []), ...(surfaceSelection?.evidenceIds || [])],
  }).catch(() => null)
  const creatorContextMetadata = () => ({
   creatorContextVersion: creatorContext?.version || null,
@@ -428,6 +431,47 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   creatorStyleProfileAvailable: Boolean(creatorContext?.styleProfile),
   channelKnowledgeRecordIds: (creatorContext?.channelKnowledge?.records || []).map((record) => record.id).slice(0, 50),
   channelKnowledgeConflictIds: (creatorContext?.channelKnowledge?.contradictions || []).map((record) => record.id).slice(0, 50),
+  creatorContextSnapshot: {
+   version: creatorContext?.version || null,
+   channelId: creatorContext?.channelId || null,
+   project: creatorContext?.project ? {
+    projectId: creatorContext.project.projectId,
+    contentBuildId: creatorContext.project.contentBuildId || null,
+    title: creatorContext.project.title || null,
+    topic: creatorContext.project.topic || null,
+    format: creatorContext.project.format || null,
+    evidenceIds: creatorContext.project.evidenceIds || [],
+    source: creatorContext?.provenance.projectSource || null,
+   } : null,
+   selection: creatorContext?.selection ? {
+    route: creatorContext.selection.route,
+    sourceId: creatorContext.selection.sourceId,
+    label: creatorContext.selection.label,
+    projectId: creatorContext.selection.projectId || null,
+    videoId: creatorContext.selection.videoId || null,
+    commentId: creatorContext.selection.commentId || null,
+    dateRange: creatorContext.selection.dateRange || null,
+    evidenceIds: creatorContext.selection.evidenceIds || [],
+    updatedAt: creatorContext.selection.updatedAt,
+    locked: creatorContext.selection.locked === true,
+   } : null,
+   profileLoadedAt: creatorContext?.provenance.profileLoadedAt || null,
+   styleProfileAvailable: Boolean(creatorContext?.styleProfile),
+   knowledgeItems: (creatorContext?.channelKnowledge?.records || []).slice(0, 10).map((record) => ({
+    id: record.id,
+    statement: record.statement,
+    knowledgeClass: record.knowledgeClass,
+    lifecycleState: record.lifecycleState,
+    confirmationState: record.confirmationState,
+    source: record.source,
+    sourceId: record.sourceId,
+    evidenceRefs: record.evidenceRefs,
+    status: record.confirmationState === "confirmed" ? "confirmed" : "inferred",
+   })),
+   conflictIds: (creatorContext?.channelKnowledge?.contradictions || []).map((record) => record.id).slice(0, 10),
+   evidenceRefs: creatorContext?.evidenceRefs || [],
+   projectSource: creatorContext?.provenance.projectSource || null,
+  },
  })
  const opportunityEvidence = evidenceIntelligence?.opportunityEvidence || []
  const algorithmAccess = wantsAlgorithmIntelligence && input.channelId
