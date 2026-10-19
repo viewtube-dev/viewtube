@@ -390,8 +390,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
 
     <Family title="Square Icon Button · 44px + 28px" nonDefaultSettings={[
         "V1–V4 skins change fill and icon color only.",
-        "Inner-icon feedback effects are opt-in; success styling must follow a real successful operation.",
-      ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; seven opt-in inner-icon effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
+        "All icon presets and interaction effects live in this single family; success styling must follow a real successful operation.",
+      ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; all icon presets and opt-in interaction effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row">
         <span>44px standard · variants 1–4</span>
         <div className="vt-confirmed-square-variant-grid">
