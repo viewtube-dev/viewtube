@@ -19,7 +19,6 @@ Improve the existing ViewTube AI Brain by extending canonical owners and existin
 - Preserve creator raw message exactly. Presentation sanitization must never mutate learning, evidence matching or follow-up inputs.
 - Never invent analytics, readiness, confidence, model identity, receipts, saved outputs or operation success.
 - Evidence shown must come from the exact evidence pack supplied to the relevant turn and retain canonical IDs.
-- Prompt evidence and its grade must use the same ordered `EvidenceRecord[]`; if the grade is missing or its IDs/fingerprint differ from the records being rendered, fail closed and omit analytics-derived claims.
 - Reuse synced inventories and turn-bound cohorts; preserve filters for later evidence navigation.
 - Readiness and numerical answers must be constrained by real missing-input diagnostics and existing capability evidence requirements.
 - Reuse CreatorContextResolver/envelope, BrainCapabilityRegistry, BrainRuntimeSnapshot/traces, ToolReceipts, ContentBuild and learning governance.
