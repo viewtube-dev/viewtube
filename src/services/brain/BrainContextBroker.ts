@@ -54,10 +54,23 @@ export const buildBrainContextPack = (input: {
   : readBrainUserControls(input.channelId)
  const maximumCharacters = input.maximumCharacters || 24_000
  const omittedSections: string[] = []
+ const evidenceRecordQualityInSync = Boolean(
+  input.evidenceRecordQuality
+  && isBrainEvidenceRecordQualityInSync(input.evidenceRecords || [], input.evidenceRecordQuality),
+ )
+ const hasPromptEvidenceRecords = Boolean(input.evidenceRecords?.length)
+ const evidenceRecordParityBlocked = Boolean(
+  controls.allowAnalytics
+  && hasPromptEvidenceRecords
+  && !evidenceRecordQualityInSync,
+ )
  const analyticsScopeBlocked = Boolean(
   controls.allowAnalytics
-  && input.evidenceQuality
-  && (!requestedChannelId || input.evidenceQuality.scopeMatch === "mismatch" || input.evidenceQuality.scopeMatch === "unscoped" || input.evidenceQuality.scopeMatch === "not_requested"),
+  && (
+   evidenceRecordParityBlocked
+   || (input.evidenceQuality
+    && (!requestedChannelId || input.evidenceQuality.scopeMatch === "mismatch" || input.evidenceQuality.scopeMatch === "unscoped" || input.evidenceQuality.scopeMatch === "not_requested"))
+  ),
  )
  const system = clip(input.systemPrompt, 11_000)
  if (system.length < input.systemPrompt.length) omittedSections.push("system_overflow")
@@ -86,7 +99,9 @@ export const buildBrainContextPack = (input: {
  const evidence = controls.allowAnalytics && !analyticsScopeBlocked
   ? (input.evidenceRecords || []).map(formatEvidenceRecordForPrompt).join("\n")
   : analyticsScopeBlocked
-   ? "Analytics evidence is blocked because the canonical bundle is unscoped or belongs to a different channel. Do not use channel-specific metrics or performance claims for this turn."
+   ? evidenceRecordParityBlocked
+    ? "Analytics evidence is blocked because the evidence records do not match their quality grade or no grade was supplied. Do not use channel-specific metrics or performance claims for this turn."
+    : "Analytics evidence is blocked because the canonical bundle is unscoped or belongs to a different channel. Do not use channel-specific metrics or performance claims for this turn."
    : "Analytics evidence access is disabled by the creator in Brain User Controls. Do not infer private channel metrics or quote stored analytics values."
  const channelProfile = controls.allowAnalytics && !analyticsScopeBlocked
   ? clip([
@@ -110,10 +125,6 @@ export const buildBrainContextPack = (input: {
    ].join("\n"), 2400)
   : ""
 
- const evidenceRecordQualityInSync = Boolean(
-  input.evidenceRecordQuality
-  && isBrainEvidenceRecordQualityInSync(input.evidenceRecords || [], input.evidenceRecordQuality),
- )
  const evidenceRecordQuality = controls.allowAnalytics && input.evidenceRecordQuality
   ? clip([
     `parity=${evidenceRecordQualityInSync ? "verified" : "MISMATCH"}; gradedFingerprint=${input.evidenceRecordQuality.evidenceFingerprint}; promptFingerprint=${fingerprintBrainEvidenceRecords(input.evidenceRecords || [])}`,
