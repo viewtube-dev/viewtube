@@ -13,6 +13,24 @@ const readStudioControlCss = () => [
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('title="StudioTextBox · Standard + Compact + Micro"')
+    expect(html).toContain('data-vt-studio-text-box="true"')
+    expect(html).toContain('data-size="standard"')
+    expect(html).toContain('data-size="compact"')
+    expect(html).toContain('data-size="micro"')
+    expect(html).toContain('aria-readonly="true"')
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextBox.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-text-box.css"), "utf8")
+    expect(source).toContain('import "../../styles/studio-text-box.css"')
+    expect(css).toContain("line-height: 0.75;")
+    expect(css).toContain("var(--vt-studio-control-stroke")
+    expect(css).toContain("var(--vt-studio-control-radius")
+    expect(css).toContain('data-size="compact"')
+    expect(css).toContain('data-size="micro"')
+  })
+
   it("registers the production Play/Pause split-left control at standard and compact sizes", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('Play/Pause Split-left Button · 44px + 28px')
