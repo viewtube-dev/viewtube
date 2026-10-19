@@ -234,8 +234,13 @@ const confidenceFor = (status: CanonicalIntelligenceDatasetStatus): number => {
 export const projectCanonicalEvidenceRecords = (
  bundle: CanonicalIntelligenceEvidenceBundle,
 ): EvidenceRecord[] =>
- bundle.datasets.flatMap((dataset) =>
-  Object.keys(dataset.metrics).flatMap((metric) => {
+ bundle.datasets.flatMap((dataset) => {
+  const provenance = {
+   evidenceIds: [...new Set(dataset.evidenceRefs)],
+   sourceRoute: "/analytics",
+   sourceVersion: bundle.version,
+  }
+  const observedRecords = Object.keys(dataset.metrics).flatMap((metric) => {
    const projected = metricValue(metric, dataset)
    if (!projected) return []
    return [{
@@ -253,8 +258,10 @@ export const projectCanonicalEvidenceRecords = (
     format: null,
     geography: null,
     window: { kind: bundle.selectedWindow },
-    observedAt: bundle.capturedAt,
-    updatedAt: dataset.updatedAt || bundle.generatedAt,
+    // Capture time describes when this projection was copied, not when the
+    // source metric was observed. Do not fabricate observation timestamps.
+    observedAt: null,
+    updatedAt: dataset.updatedAt || null,
     freshness: freshnessFor(dataset.status),
     epistemicState: epistemicStateFor(dataset.status),
     confidence: confidenceFor(dataset.status),
@@ -266,14 +273,40 @@ export const projectCanonicalEvidenceRecords = (
      : dataset.status === "partial"
       ? ["Canonical dataset has partial coverage."]
       : [],
-    provenance: {
-     evidenceIds: [...new Set(dataset.evidenceRefs)],
-     sourceRoute: "/analytics",
-     sourceVersion: bundle.version,
-    },
+    provenance,
    }]
-  }),
- )
+  })
+  const representedMetrics = new Set(observedRecords.map((record) => record.metric))
+  const missingRecords = dataset.missingMetrics
+   .filter((metric) => !representedMetrics.has(metric))
+   .map((metric): EvidenceRecord => ({
+    id: `analytics:${bundle.snapshotId}:${dataset.id}:${metric}:missing`,
+    owner: "analytics-canon",
+    sourceRef: dataset.id,
+    sourceSnapshotId: bundle.snapshotId,
+    channelId: bundle.channelId,
+    datasetId: dataset.id,
+    metric,
+    value: null,
+    unit: metricUnit(metric),
+    aggregation: metricAggregation(metric, metricUnit(metric)),
+    population: null,
+    format: null,
+    geography: null,
+    window: { kind: bundle.selectedWindow },
+    observedAt: null,
+    updatedAt: dataset.updatedAt || null,
+    freshness: freshnessFor(dataset.status),
+    epistemicState: "missing",
+    confidence: 0,
+    coverage: null,
+    availability: "unavailable",
+    missingness: [metric],
+    limitations: [`Canonical metric "${metric}" is missing; absence is not zero.`],
+    provenance,
+   }))
+  return [...observedRecords, ...missingRecords]
+ })
 
 const normalizeFormat = (value?: string | null): MetricFormatScope => {
  const format = String(value || "").trim().toLowerCase()
