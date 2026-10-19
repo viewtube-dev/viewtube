@@ -5,12 +5,12 @@ import type {
  SuperToolRuntimePlanRecord,
 } from "../types"
 
-export const SUPER_TOOL_PLAN_BASE = "/Users/cwb/Downloads/viewtube/viewtubeX/docs/VT Brain"
+export const SUPER_TOOL_PLAN_BASE = "https://github.com/viewtube-dev/viewtube/blob/master/docs/VT%20Brain"
 export const SUPER_TOOL_PHASE_3_REPORT_PATH =
  "super-tool-agent-plans/phase-3/VIEWTUBEX_SUPER_TOOL_AGENT_OPTIMIZATION_REPORTS.md"
 
 export const buildSuperToolDocHref = (path: string, anchor?: string): string => {
- const href = encodeURI(`file://${SUPER_TOOL_PLAN_BASE}/${path}`)
+ const href = `${SUPER_TOOL_PLAN_BASE}/${path.split("/").map(encodeURIComponent).join("/")}`
  return anchor ? `${href}#${anchor}` : href
 }
 
