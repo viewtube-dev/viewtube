@@ -3,7 +3,7 @@
 **Status:** Generated production-registry reference  
 **Audited main:** `988098840050f4b658a266e1a7d6fe1c4d939c81`  
 **Source:** `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx` → `STUDIO_HUB_COMPONENT_FAMILIES`  
-**Count:** 62 registered component families
+**Count:** 76 registered component families
 
 Do not hand-add a family here without adding it to the production registry. The Component Library also contains migration/certification examples outside this base family array; keep those separately identified rather than silently inflating this registry count.
 
@@ -127,3 +127,5 @@ These patterns are registered in `STUDIO_HUB_MIGRATED_FAMILIES` and rendered on 
 - Tone / Tension / Cinematic Dropdown — arrow-triggered, colored dropdown pattern using the existing Toolbox dropdown primitive.
 - Ranked Metadata Tag — SEO rank/color tag from Video Manager metadata.
 - Education Timestamp Notes — validated timestamp/question field used by the Education category flow.
+
+- Brain Status LED Badges — borderless Brain status badge variants with a smaller saturated LED, slow ripple, dark/white-text and tinted/black-text treatments.
