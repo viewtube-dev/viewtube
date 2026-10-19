@@ -1,3 +1,4 @@
+import { StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import React, { useState } from "react"
 import {
  Sparkles,
@@ -26,7 +27,6 @@ import { PostActionReflection } from "../components/PostActionReflection"
 import { SubToolboxActions, SubToolboxGrid, SubToolboxStack } from "../components/subtoolbox/SubToolboxLayouts"
 import {
  SubToolboxButton,
- SubToolboxFileTarget,
  SubToolboxInput,
  SubToolboxOutputCard,
  SubToolboxTextArea,
@@ -258,7 +258,7 @@ const SeoGenerator: React.FC<{
     <SubToolboxStack density="comfortable">
      <SubToolboxGrid minItemWidth="wide">
       <SubToolbox title="Video Upload" icon={<Upload size={20} strokeWidth={3} />} collapsible isOpenInitial>
-       <SubToolboxFileTarget
+       <StudioUploadFrame
         label={<>Upload video<br />Supports video/audio (max 15mb)</>}
         icon={<Upload size={28} strokeWidth={3} />}
         accept="video/*,audio/*"
