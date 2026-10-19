@@ -5,7 +5,6 @@ import test from "node:test"
 const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const component = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
 const css = readFileSync("src/styles/studio-control-system.css", "utf8")
-const fixes = readFileSync("src/styles/studio-split-regression-fixes.css", "utf8")
 const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
@@ -89,10 +88,10 @@ test("dropdown rails and menus share canonical geometry", () => {
 });
 
 test("split-left button label cell paints its full width instead of exposing a background gap", () => {
-  assert.match(fixes, /button\[data-vt-studio-button="true"\]:is\(\[data-split-left="true"\], \[data-vt-studio-split="left"\]\) > \[data-vt-studio-button-face\] \[data-vt-studio-split-label\]\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent[^;]*50%, #fff\)/s)
+  assert.match(css, /button\[data-vt-studio-button="true"\]:is\(\[data-split-left="true"\], \[data-vt-studio-split="left"\]\) > \[data-vt-studio-button-face\] \[data-vt-studio-split-label\]\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent[^;]*50%, #fff\)/s)
 })
 
 test("compact dropdown trigger synchronizes split grid tracks and visible rail dimensions to 28px", () => {
-  assert.match(fixes, /\.vt-studio-dropdown\[data-size="compact"\] button\[data-dropdown-trigger="true"\]\s*\{[^}]*--vt-studio-dropdown-rail-size:\s*var\(--vt-studio-compact-height, 28px\)[^}]*--vt-studio-control-height:\s*var\(--vt-studio-compact-height, 28px\)/s)
-  assert.match(fixes, /\.vt-studio-dropdown\[data-size="compact"\] button\[data-dropdown-trigger="true"\] \.vt-studio-dropdown-split-rail,[\s\S]*?\.vt-studio-dropdown-chevron\s*\{[^}]*width:\s*var\(--vt-studio-compact-height, 28px\)[^}]*min-width:\s*var\(--vt-studio-compact-height, 28px\)/s)
+  assert.match(css, /\.vt-studio-dropdown\[data-size="compact"\] button\[data-dropdown-trigger="true"\]\s*\{[^}]*--vt-studio-dropdown-rail-size:\s*var\(--vt-studio-compact-height, 28px\)[^}]*--vt-studio-control-height:\s*var\(--vt-studio-compact-height, 28px\)/s)
+  assert.match(css, /\.vt-studio-dropdown\[data-size="compact"\] button\[data-dropdown-trigger="true"\] \.vt-studio-dropdown-split-rail,[\s\S]*?\.vt-studio-dropdown-chevron\s*\{[^}]*width:\s*var\(--vt-studio-compact-height, 28px\)[^}]*min-width:\s*var\(--vt-studio-compact-height, 28px\)/s)
 })
