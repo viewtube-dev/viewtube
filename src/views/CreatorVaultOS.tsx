@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioTextBox } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioTextBox } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -1897,23 +1897,51 @@ const CreatorVaultOS: React.FC = () => {
         >
          Filters
         </button>
-        <SubToolboxDropdownControl
+        <StudioLegendMultiDropdown
          label="Sort"
-         value={sort}
-         onChange={(value) => setSort(value as VaultWorkspaceSort)}
-         options={["updated-desc", "updated-asc", "name-asc", "name-desc"]}
+         value={[sort]}
+         onChange={(values) => {
+          const next = values.find((value) => value !== sort)
+          if (next) setSort(next as VaultWorkspaceSort)
+         }}
+         options={[
+          { value: "updated-desc", label: "updated-desc" },
+          { value: "updated-asc", label: "updated-asc" },
+          { value: "name-asc", label: "name-asc" },
+          { value: "name-desc", label: "name-desc" },
+         ]}
         />
-        <SubToolboxDropdownControl
+        <StudioLegendMultiDropdown
          label="View"
-         value={viewMode}
-         onChange={(value) => setViewMode(value as VaultWorkspaceViewMode)}
-         options={["grid", "masonry", "list", "filmstrip", "lineage"]}
+         value={[viewMode]}
+         onChange={(values) => {
+          const next = values.find((value) => value !== viewMode)
+          if (next) setViewMode(next as VaultWorkspaceViewMode)
+         }}
+         options={[
+          { value: "grid", label: "grid" },
+          { value: "masonry", label: "masonry" },
+          { value: "list", label: "list" },
+          { value: "filmstrip", label: "filmstrip" },
+          { value: "lineage", label: "lineage" },
+         ]}
         />
-        <SubToolboxDropdownControl
+        <StudioLegendMultiDropdown
          label="State"
-         value={special}
-         onChange={(value) => setSpecial(value as typeof special)}
-         options={["active", "recent", "generated", "inbox", "favorites", "archive", "trash"]}
+         value={[special]}
+         onChange={(values) => {
+          const next = values.find((value) => value !== special)
+          if (next) setSpecial(next as typeof special)
+         }}
+         options={[
+          { value: "active", label: "active" },
+          { value: "recent", label: "recent" },
+          { value: "generated", label: "generated" },
+          { value: "inbox", label: "inbox" },
+          { value: "favorites", label: "favorites" },
+          { value: "archive", label: "archive" },
+          { value: "trash", label: "trash" },
+         ]}
         />
        </div>
        <div className="vault-media-type-filter-row">
