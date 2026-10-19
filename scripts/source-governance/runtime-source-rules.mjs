@@ -5,7 +5,7 @@ export const findRuntimeSourceViolations = (entries) => {
   if (/(?:from\s*|import\s*\()\s*["'][^"']*(?:^|[./\\])docs\//m.test(entry.text)) {
    documentationImports.push(entry.path)
   }
-  if (/(?:file:\/\/)?(?:\/Users\/|\/home\/|\/Volumes\/|[A-Za-z]:[\\/](?!\/))/.test(entry.text)) {
+  if (/(?:^|[\s"'\x60=({])(?:file:\/\/)?(?:\/Users\/|\/home\/|\/Volumes\/)|(?:^|[\s"'\x60=({])[A-Za-z]:[\\/](?!\/)[^\s"'\x60),;]+/m.test(entry.text)) {
    absoluteFileLinks.push(entry.path)
   }
  }
