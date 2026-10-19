@@ -216,6 +216,7 @@ describe("standalone Studio text fields", () => {
     expect(block).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
     expect(block).toContain("border: var(--studio-text-box-stroke-width) solid #000;");
     expect(block).toContain("position: relative;");
+    expect(block).toContain("min-height: 0;");
     expect(block).not.toContain("box-shadow");
     expect(block).toContain("outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary");
     expect(block).toContain("outline-offset: 0;");
@@ -949,3 +950,26 @@ describe("Studio counter hold-repeat acceleration", () => {
   });
 });
 
+
+
+describe("Vault Studio Controls migration completion contracts", () => {
+  it("uses one-to-one focus outline widths from the shared size-tier token", () => {
+    const tokens = readFileSync(resolve(process.cwd(), "src/studio-ui/tokens.ts"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(tokens).toContain("outlineWidthRatio: 1")
+    expect(css).toContain("var(--vt-studio-focus-outline-width-ratio, 1)")
+    expect(css).not.toMatch(/--vt-studio-control-focus-outline-width:\\s*(?:1\\.95px|1\\.3px|\\.65px)/)
+  })
+
+  it("uses Studio Spectrum Tags and portrait-aware Studio Word Toggles in Vault", () => {
+    const vault = readFileSync(resolve(process.cwd(), "src/views/CreatorVaultOS.tsx"), "utf8")
+    const headerPrimitives = readFileSync(resolve(process.cwd(), "src/components/subtoolbox/SubToolboxPrimitives.tsx"), "utf8")
+    expect(vault).toContain("<StudioSpectrumTag")
+    expect(vault).not.toContain("SubToolboxAlphabeticalTag")
+    expect(vault).toContain("<StudioWordToggle")
+    expect(vault).toContain('words={["TAGS", "IMPORT"]}')
+    expect(vault).toContain('words={["DIRECT", "STAGED"]}')
+    expect(vault).toContain("verticalOnMobilePortrait")
+    expect(headerPrimitives).toContain("verticalOnMobilePortrait")
+  })
+})
