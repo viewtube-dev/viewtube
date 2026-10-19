@@ -13,7 +13,7 @@
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: .86;
-  --vt-studio-textarea-line-height: .85;
+  --vt-studio-textarea-line-height: .75;
   
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
@@ -1028,7 +1028,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   --vt-field-stroke: var(--vt-studio-control-stroke);
-  --vt-field-outline-stroke: var(--vt-studio-control-secondary-outline-width);
+  --vt-field-outline-stroke: var(--vt-field-stroke);
   --vt-field-focus-outline-width: var(--vt-studio-control-focus-outline-width);
   box-sizing: border-box;
   width: 100%;
@@ -1069,7 +1069,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   font-weight: var(--vt-studio-control-font-weight, 1000);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
   /* Only textarea-specific typography override: compact description row spacing. */
-  line-height: var(--vt-studio-textarea-line-height, .85);
+  line-height: var(--vt-studio-textarea-line-height, .75);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
@@ -4767,6 +4767,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   --studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);
 
   box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
   display: block;
   width: 100%;
   min-width: 0;
@@ -4777,13 +4779,12 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   border: var(--studio-text-box-stroke-width) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  box-shadow: inset 0 0 0 var(--studio-text-box-stroke-width) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
   outline-offset: 0;
   color: #000;
   -webkit-text-fill-color: #000;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
-  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  font-size: var(--vt-studio-standard-font-size, 38px);
   font-weight: var(--vt-studio-control-font-weight, 1000);
   line-height: var(--vt-studio-textarea-line-height, .85);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
@@ -4793,15 +4794,24 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   user-select: text;
   cursor: text;
 }
+.vt-studio-text-box[data-vt-studio-control="true"]::before {
+  content: "";
+  position: absolute;
+  inset: var(--studio-text-box-stroke-width);
+  box-sizing: border-box;
+  border: var(--studio-text-box-stroke-width) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  pointer-events: none;
+  z-index: 0;
+}
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
   padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
-  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  font-size: var(--vt-studio-compact-font-size, 24px);
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="micro"] {
   padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
-  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  font-size: var(--vt-studio-micro-font-size, 10px);
 }
-/* Textarea and read-only text display share the canonical 0.85 line-height token. */
+/* Textareas and read-only text display share the 0.75 description line-height token and input size tiers. */
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
