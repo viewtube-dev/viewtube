@@ -1882,7 +1882,8 @@ const CreatorVaultOS: React.FC = () => {
          ×
         </button>
        </div>
-       <div data-vault-toolbar-secondary className="flex flex-wrap items-center gap-2">
+       <div data-vault-toolbar-secondary className="grid grid-cols-2 items-start gap-2">
+        <div className="min-w-0">
         <button
          type="button"
          aria-label="Open Vault filters"
@@ -1895,7 +1896,11 @@ const CreatorVaultOS: React.FC = () => {
         >
          Filters
         </button>
+        </div>
+        <div data-vault-sort-state-view-stack className="grid min-w-0 grid-cols-1 gap-2">
         <StudioLegendMultiDropdown
+         className="vault-sort-state-view-dropdown"
+         sizeVariant="standard"
          label="Sort"
          value={[sort]}
          onChange={(values) => {
@@ -1910,6 +1915,8 @@ const CreatorVaultOS: React.FC = () => {
          ]}
         />
         <StudioLegendMultiDropdown
+         className="vault-sort-state-view-dropdown"
+         sizeVariant="standard"
          label="View"
          value={[viewMode]}
          onChange={(values) => {
@@ -1925,6 +1932,8 @@ const CreatorVaultOS: React.FC = () => {
          ]}
         />
         <StudioLegendMultiDropdown
+         className="vault-sort-state-view-dropdown"
+         sizeVariant="standard"
          label="State"
          value={[special]}
          onChange={(values) => {
@@ -1941,6 +1950,7 @@ const CreatorVaultOS: React.FC = () => {
           { value: "trash", label: "trash" },
          ]}
         />
+        </div>
        </div>
        <div className="vault-media-type-filter-row">
         <SubToolboxSegmentedToggle
