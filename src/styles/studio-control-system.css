@@ -3941,6 +3941,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame.is-drag {
   --vt-studio-upload-speed: 2;
   filter: saturate(1.8);
+  animation: vt-studio-upload-hover-pulse calc(2.8s / var(--vt-studio-upload-speed)) ease-in-out infinite,
+    vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
 }
 .vt-studio-upload-frame.is-clicking {
   --vt-studio-upload-speed: 4;
@@ -4156,16 +4158,21 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__layer { animation-duration: .35s; }
 .vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__icon { animation: vt-studio-upload-click-pulse 1s ease-in-out both; }
 @keyframes vt-studio-upload-spin { to { --vt-studio-upload-angle: 360deg; } }
+@keyframes vt-studio-upload-hover-pulse {
+  0%, 100% { scale: 1; }
+  45% { scale: 1.025; }
+}
 @keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; scale: 1; } 45% { opacity: .38; scale: 1.012; } }
 @keyframes vt-studio-upload-core { 0%, 100% { scale: 1; } 45% { scale: .975; } }
 @keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 2px; } 50% { translate: 0 -4px; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
 @keyframes vt-studio-upload-click-pulse {
   0%, 100% { scale: 1; }
-  18% { scale: 1.045; }
-  42% { scale: .965; }
-  68% { scale: 1.07; }
-  86% { scale: .985; }
+  14% { scale: 1.12; }
+  32% { scale: .91; }
+  54% { scale: 1.18; }
+  76% { scale: .94; }
+  90% { scale: 1.06; }
 }
 @media (max-width: 460px) {
   .vt-studio-upload-frame__center { gap: 4px; }
