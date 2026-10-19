@@ -450,7 +450,7 @@ const CreatorResponseCard: React.FC<{
  if (!response && message.learningReceipt) {
   const receipt = message.learningReceipt
   return (
-   <article className={${assistantCardFrame} overflow-hidden}>
+   <article className={`${assistantCardFrame} overflow-hidden`}>
     <div className="border-b-[2px] border-black bg-[#FFDA47] px-3 py-2">
      <h3 className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h3>
     </div>
