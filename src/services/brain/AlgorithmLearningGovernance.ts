@@ -18,6 +18,9 @@ export interface AlgorithmLearningReview {
  eventId: string
 }
 
+const scalarIdentity = (values?: string[]): string | null =>
+ values?.length === 1 ? values[0] : null
+
 const candidateFromEvent = (event: AlgorithmIntelligenceEvent): AlgorithmLearningCandidate | null => {
  const value = event.metadata?.candidate
  return value && typeof value === "object" ? value as AlgorithmLearningCandidate : null
@@ -79,6 +82,11 @@ export const reviewAlgorithmLearningCandidate = (input: {
   kind: "LEARNING_CANDIDATE_REVIEWED",
   sourceSystem: "learning",
   sourceId: input.candidateId,
+  operationId: scalarIdentity(row.candidate.operationIds),
+  workflowId: scalarIdentity(row.candidate.workflowIds),
+  traceId: scalarIdentity(row.candidate.traceIds),
+  outputRef: scalarIdentity(row.candidate.outputRefs),
+  actionPacketId: scalarIdentity(row.candidate.actionPacketIds),
   parentEventIds: [row.sourceEvent.id],
   evidenceIds: row.candidate.evidenceIds,
   confidence: row.candidate.confidence,

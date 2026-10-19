@@ -9,6 +9,11 @@ const mocks = vi.hoisted(() => {
   confidence: "high" as const,
   sourceEventIds: ["outcome-1", "outcome-2", "outcome-3"],
   evidenceIds: ["evidence-1", "evidence-2"],
+  operationIds: ["operation-1"],
+  workflowIds: ["workflow-1"],
+  traceIds: ["trace-1"],
+  outputRefs: ["asset-1"],
+  actionPacketIds: ["packet-1"],
   sampleSize: 3,
   positiveRate: 1,
   status: "candidate" as const,
@@ -147,6 +152,11 @@ describe("AlgorithmLearningProfilePromotion", () => {
   expect(mocks.recordAlgorithmIntelligenceEvent).toHaveBeenCalledWith(expect.objectContaining({
    kind: "LEARNING_PROMOTED",
    sourceId: mocks.candidate.id,
+   operationId: "operation-1",
+   workflowId: "workflow-1",
+   traceId: "trace-1",
+   outputRef: "asset-1",
+   actionPacketId: "packet-1",
    parentEventIds: expect.arrayContaining(["candidate-event-1", "review-event-1"]),
   }))
  })

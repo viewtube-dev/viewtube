@@ -52,6 +52,8 @@ export const promoteApprovedAlgorithmLearningToProfile = async (
  }
 
  const { candidate, sourceEvent, review } = row
+ const scalarIdentity = (values?: string[]): string | null =>
+  values?.length === 1 ? values[0] : null
  const priorPromotion = listAlgorithmIntelligenceEvents({
   channelId: input.channelId,
   kind: "LEARNING_PROMOTED",
@@ -81,6 +83,11 @@ export const promoteApprovedAlgorithmLearningToProfile = async (
   kind: "LEARNING_PROMOTED",
   sourceSystem: "learning",
   sourceId: candidate.id,
+  operationId: scalarIdentity(candidate.operationIds),
+  workflowId: scalarIdentity(candidate.workflowIds),
+  traceId: scalarIdentity(candidate.traceIds),
+  outputRef: scalarIdentity(candidate.outputRefs),
+  actionPacketId: scalarIdentity(candidate.actionPacketIds),
   parentEventIds: [sourceEvent.id, review?.eventId].filter(Boolean) as string[],
   evidenceIds: candidate.evidenceIds,
   confidence: candidate.confidence,
