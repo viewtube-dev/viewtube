@@ -1895,6 +1895,7 @@ const CreatorVaultOS: React.FC = () => {
          className="vault-sort-state-view-dropdown"
          sizeVariant="standard"
          label="Sort"
+         selectionMode="single"
          value={[sort]}
          onChange={(values) => {
           const next = values.find((value) => value !== sort)
@@ -1911,6 +1912,7 @@ const CreatorVaultOS: React.FC = () => {
          className="vault-sort-state-view-dropdown"
          sizeVariant="standard"
          label="View"
+         selectionMode="single"
          value={[viewMode]}
          onChange={(values) => {
           const next = values.find((value) => value !== viewMode)
@@ -1928,6 +1930,7 @@ const CreatorVaultOS: React.FC = () => {
          className="vault-sort-state-view-dropdown"
          sizeVariant="standard"
          label="State"
+         selectionMode="single"
          value={[special]}
          onChange={(values) => {
           const next = values.find((value) => value !== special)
