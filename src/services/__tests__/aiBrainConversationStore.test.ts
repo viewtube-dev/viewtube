@@ -142,6 +142,23 @@ describe("aiBrainConversationStore", () => {
   expect(turns[0]?.metadata?.source).toBe("question_module")
  })
 
+ it("does not create a duplicate learning receipt when the same saved answer is submitted twice", async () => {
+  const first = await answerAIBrainQuestionModule({
+   channelId: "channel-idempotent-answer",
+   question: questionFixture,
+   answer: "Subscribers matter most this month.",
+  })
+  const second = await answerAIBrainQuestionModule({
+   channelId: "channel-idempotent-answer",
+   question: questionFixture,
+   answer: "Subscribers matter most this month.",
+  })
+  const turns = await listAIBrainConversationTurns({ channelId: "channel-idempotent-answer" })
+
+  expect(second.id).toBe(first.id)
+  expect(turns.filter((turn) => turn.metadata?.source === "question_module")).toHaveLength(1)
+ })
+
  it("does not re-propose a valid saved goal or style answer unless the creator reopens it", () => {
   const questions: CreatorBrainLearningQuestion[] = [
    questionFixture,
