@@ -80,9 +80,23 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
   assert.match(component, /onPointerCancel: stop/);
   assert.match(component, /const base = currentRef\.current/);
   assert.match(component, /max = 100/);
+  assert.match(component, /accelerationEase/);
+  assert.match(component, /accelerationProgress = Math\.min\(1, elapsed \/ 720\)/);
+  assert.match(component, /boundaryEase/);
+  assert.match(component, /remainingSteps/);
   assert.match(styles, /touch-action:\s*none/);
   assert.match(styles, /color-mix\(in srgb, white 50%, var\(--pair-a\)\)/);
   assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
+});
+
+test("slider counter click handlers preserve the shared hold hook's click behavior and interaction focus", () => {
+  const sliderStart = component.indexOf("export const StudioDoubleSplitSlider:");
+  const sliderEnd = component.indexOf("StudioDoubleSplitSlider.displayName", sliderStart);
+  const slider = component.slice(sliderStart, sliderEnd);
+  assert.match(slider, /increment\.events\.onClick\(event\); interactionFocus\.pulse\(\)/);
+  assert.match(slider, /decrement\.events\.onClick\(event\); interactionFocus\.pulse\(\)/);
+  assert.doesNotMatch(slider, /\.\.\.increment\.events\} onClick=\{interactionFocus\.pulse\}/);
+  assert.doesNotMatch(slider, /\.\.\.decrement\.events\} onClick=\{interactionFocus\.pulse\}/);
 });
 
 test("Studio counter and counter-slider press-and-hold are wired for touch and mouse", () => {
