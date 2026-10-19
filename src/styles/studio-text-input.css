@@ -56,7 +56,7 @@ input.vt-studio-text-input:focus,
 input.vt-studio-text-input:focus-visible {
   color: #000;
   -webkit-text-fill-color: #000;
-  caret-color: #000;
+  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   -webkit-text-stroke-color: #000;
 }
 

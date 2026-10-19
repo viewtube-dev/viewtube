@@ -65,8 +65,12 @@ test("plain Studio input retains the explicit standard, compact, and micro size 
 
 test("primary inline glyph stroke is declared separately from the outer field border", () => {
   assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary\)/);
-  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-textarea-standard-text-stroke, 0\.5px\)\s*var\(--vt-field-primary/);
-  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-textarea-compact-text-stroke, 0\.35px\)\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /textarea\[data-vt-studio-control="true"\][\s\S]*?line-height:\s*0\.75/);
+  assert.doesNotMatch(fieldCss, /textarea[^{}]*\{[^}]*font-size:/s);
+  assert.doesNotMatch(fieldCss, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
+  assert.match(fieldCss, /background-color:\s*color-mix\(in srgb, var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\) 15%, transparent\)/);
+  assert.match(fieldCss, /caret-color:\s*var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\)/);
+  assert.match(inputCss, /caret-color:\s*var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\)/);
   assert.match(fieldCss, /:is\(:focus, :focus-visible\)[\s\S]*?-webkit-text-stroke-color:\s*#000/);
   assert.match(inputPrimitive, /data-vt-studio-control="true"/);
   assert.match(textareaPrimitive, /"data-vt-studio-control": "true"/);
@@ -76,4 +80,20 @@ test("the new regression test is wired into the normal Studio controls test comm
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
   assert.equal(packageJson.scripts["test:studio-input-token-ownership"], "node --test scripts/audit/studio-input-token-ownership.test.mjs");
   assert.ok(packageJson.scripts["test:studio-controls"].includes("npm run test:studio-input-token-ownership"));
+});
+
+
+test("textareas use shared input typography and global focus tokens, with only a 0.75 row line-height exception", () => {
+  const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
+  const inputStyles = readFileSync("src/styles/studio-text-input.css", "utf8");
+  assert.match(fields, /html body textarea\[data-vt-studio-control="true"\][\s\S]*?line-height:\s*0\.75/);
+  assert.doesNotMatch(fields, /textarea[^{}]*\{[^}]*font-size:/s);
+  assert.doesNotMatch(fields, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
+  assert.match(fields, /background-color:\s*color-mix\(in srgb, var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\) 15%, transparent\)/);
+  assert.match(fields, /color:\s*#000;[\s\S]*?caret-color:\s*var\(--vt-field-primary/);
+  assert.match(fields, /outline:[\s\S]*?var\(--vt-field-secondary, var\(--pair-b, #ff7f6b\)\)/);
+  assert.match(inputStyles, /input\.vt-studio-text-input\[data-size="standard"\][\s\S]*?font-size: var\(--vt-studio-standard-font-size, 38px\)/);
+  assert.match(inputStyles, /input\.vt-studio-text-input\[data-size="compact"\][\s\S]*?font-size: var\(--vt-studio-compact-font-size, 24px\)/);
+  assert.match(inputStyles, /input\.vt-studio-text-input:focus[\s\S]*?caret-color: var\(--vt-studio-control-accent/);
+  assert.match(readFileSync("src/styles/studio-control-system.css", "utf8"), /font-size: 18px;/);
 });
