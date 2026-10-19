@@ -838,6 +838,10 @@ interface StudioSplitShellProps {
   labelClassName?: string
   railClassName?: string
   railProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  leftRailClassName?: string
+  rightRailClassName?: string
+  leftRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  rightRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
   leftRailContent?: React.ReactNode
   rightRailContent?: React.ReactNode
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
@@ -845,15 +849,16 @@ interface StudioSplitShellProps {
 const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps,
+  leftRailClassName, rightRailClassName, leftRailProps, rightRailProps,
   leftRailContent, rightRailContent, shellProps,
 }) => {
   const content = (
     <>
-      {layout !== "right" && <span {...railProps} aria-hidden={leftRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="start" className={railClassName}>{leftRailContent ?? iconLeft}</span>}
+      {layout !== "right" && <span {...railProps} {...leftRailProps} aria-hidden={leftRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="start" className={[railClassName, leftRailClassName].filter(Boolean).join(" ")}>{leftRailContent ?? iconLeft}</span>}
       {fieldSlot
         ? <span data-vt-studio-split-field>{children}</span>
         : <span data-vt-studio-split-label className={labelClassName}>{children}</span>}
-      {layout !== "left" && <span {...railProps} aria-hidden={rightRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="end" className={railClassName}>{rightRailContent ?? iconRight}</span>}
+      {layout !== "left" && <span {...railProps} {...rightRailProps} aria-hidden={rightRailContent !== undefined ? undefined : "true"} data-vt-studio-split-rail data-rail="end" className={[railClassName, rightRailClassName].filter(Boolean).join(" ")}>{rightRailContent ?? iconRight}</span>}
     </>
   )
   if (faceOnly) return <span data-vt-studio-split-face="true" data-vt-studio-split={layout} data-size={sizeVariant} className="vt-studio-split-face">{content}</span>
@@ -1297,21 +1302,35 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         onKeyDown={onKeyDown}
       >
         {variant === "split-left" ? (
-          <span className="vt-studio-dropdown-split-rail" data-vt-studio-split-rail data-rail="start" aria-hidden="true">
-            {splitIcon}
-          </span>
-        ) : null}
-        <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
-        <span
-          className="vt-studio-dropdown-chevron is-trailing"
-          data-vt-studio-dropdown-chevron
-          aria-hidden="true"
-        >
-          <ChevronDown
-            size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
-            strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
-          />
-        </span>
+          <StudioSplitShell
+            layout="double"
+            sizeVariant={sizeVariant}
+            iconLeft={splitIcon}
+            iconRight={
+              <ChevronDown
+                size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+              />
+            }
+            faceOnly
+            railClassName="vt-studio-dropdown-split-rail"
+            leftRailProps={{ "aria-hidden": true }}
+            rightRailClassName="vt-studio-dropdown-chevron is-trailing"
+            rightRailProps={{ "data-vt-studio-dropdown-chevron": true, "aria-hidden": true }}
+          >
+            {connectionMessage ?? selected?.label ?? placeholder}
+          </StudioSplitShell>
+        ) : (
+          <>
+            <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
+            <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true">
+              <ChevronDown
+                size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+              />
+            </span>
+          </>
+        )}
       </button>
       {open && !disabled ? (
         <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
