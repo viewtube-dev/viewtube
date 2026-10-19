@@ -1941,6 +1941,8 @@ export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<
   size?: StudioControlSize;
   disabled?: boolean;
   ariaLabel?: string;
+  /** Use the Studio side-counter up/down controls instead of the reset action. */
+  leftControls?: "reset" | "counter";
 }
 
 /**
@@ -1949,7 +1951,7 @@ export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<
  */
 export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
-  size = "standard", disabled = false, ariaLabel = "Slider value",
+  size = "standard", disabled = false, ariaLabel = "Slider value", leftControls = "reset",
   className, ...props
 }) => {
   const validBounds = Number.isFinite(min) && Number.isFinite(max) && min < max;
@@ -1966,9 +1968,14 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       layout="double"
       sizeVariant={size}
       fieldSlot
-      className={studioClasses("vt-studio-double-split-slider", `is-${size}`, className)}
+      className={studioClasses("vt-studio-double-split-slider", `is-${size}`, leftControls === "counter" && "is-counter-controls", className)}
       railClassName="vt-studio-double-split-slider__rail"
-      leftRailContent={
+      leftRailContent={leftControls === "counter" ? (
+        <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
+          <button type="button" aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} onClick={() => onValueChange(Math.min(max, current + safeStep))}><ChevronUp aria-hidden="true" focusable="false" /></button>
+          <button type="button" aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onClick={() => onValueChange(Math.max(min, current - safeStep))}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        </span>
+      ) : (
         <button
           type="button"
           className="vt-studio-double-split-slider__reset"
@@ -1977,11 +1984,12 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
           disabled={disabled || !validBounds || current === min}
           onClick={() => onValueChange(min)}
         >↺</button>
-      }
+      )}
       rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
       shellProps={{
         ...props,
         "data-vt-studio-slider": "double-split",
+        "data-vt-studio-slider-left-controls": leftControls,
         "data-vt-library-component": "StudioDoubleSplitSlider",
         "data-size": size,
         "aria-disabled": disabled || !validBounds ? "true" : undefined,
