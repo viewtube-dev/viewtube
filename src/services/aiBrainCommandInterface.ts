@@ -1636,9 +1636,10 @@ export const buildBrainLearningQuestions = (
  }
  const answeredIds = new Set(snapshot.conversations.answeredQuestionIds)
  const answeredCategories = new Set(snapshot.conversations.answeredQuestionCategories)
+ const reconciledCategories = new Set<string>(["creator_goal", "content_style"])
  return questions
   .filter((question) => !answeredIds.has(question.id))
-  .filter((question) => !["creator_goal", "content_style"].includes(question.category) || !answeredCategories.has(question.category))
+  .filter((question) => !reconciledCategories.has(question.category) || !answeredCategories.has(question.category))
   .slice(0, 2)
 }
 
