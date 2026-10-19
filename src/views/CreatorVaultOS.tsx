@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioLegendMultiDropdown, StudioTextBox } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioTextArea, StudioTextBox } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -29,7 +29,6 @@ import {
  SubToolboxSelect,
  SubToolboxSplitField,
  SubToolboxTagEditor,
- SubToolboxTextArea,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 import {
  createImportedVaultAsset,
@@ -2910,7 +2909,7 @@ const CreatorVaultOS: React.FC = () => {
            <option value="plain">PLAIN TEXT</option>
            <option value="markdown">MARKDOWN</option>
           </SubToolboxSelect>
-          <SubToolboxTextArea
+          <StudioTextArea
            value={textEditorContent}
            onChange={(event) => setTextEditorContent(event.target.value)}
            placeholder="Write notes, copy, research, script fragments, prompts, or documentation…"
@@ -2954,7 +2953,7 @@ const CreatorVaultOS: React.FC = () => {
          placeholder="Note title"
          aria-label="Vault note title"
         />
-        <SubToolboxTextArea
+        <StudioTextArea
          value={scratchpadContent}
          onChange={(event) => setScratchpadContent(event.target.value)}
          placeholder="Write a Vault workspace note…"
@@ -3394,9 +3393,9 @@ const CreatorVaultOS: React.FC = () => {
          ) : null}
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Notes</div>
-          <SubToolboxTextArea
+          <StudioTextArea
            key={selectedAsset.id}
-           height="compact"
+           sizeVariant="compact"
            defaultValue={String(selectedAsset.metadata?.notes || "")}
            placeholder="Asset notes…"
            aria-label="Asset notes"
@@ -3479,8 +3478,8 @@ const CreatorVaultOS: React.FC = () => {
            <StudioTextBox size="standard" role="status" aria-live="polite">{"No current organization or review issues."}</StudioTextBox>
           )}
           <div className="mt-2 flex flex-col gap-2">
-           <SubToolboxTextArea
-            height="compact"
+           <StudioTextArea
+            sizeVariant="compact"
             value={attentionNoteDraft}
             placeholder="Review note…"
             aria-label="Vault review note"
@@ -3869,8 +3868,8 @@ const CreatorVaultOS: React.FC = () => {
             aria-label="Asset rights expiry"
             onBlur={(event) => updateAssetRights(selectedAsset, { rightsExpiry: event.target.value })}
            />
-           <SubToolboxTextArea
-            height="compact"
+           <StudioTextArea
+            sizeVariant="compact"
             defaultValue={rightsRestrictions}
             placeholder="Usage restrictions, territory, platform, attribution notes…"
             aria-label="Asset rights restrictions"
