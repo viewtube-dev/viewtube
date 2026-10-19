@@ -154,14 +154,23 @@ describe("aiBrainCommandInterface", () => {
 
  it("queues reviewed assistant handoffs without direct mutation flags", async () => {
   const handoff = await queueAIBrainReviewedAction({
-   request: "analyze my channel stats and route this",
-   response: "Open Cinematic Analytics Lab.",
+   request: "Prepare this video for review in Thumbnail Studio",
+   response: "Draft thumbnail concept for Alder's Cavalry Explained.",
+   targetToolId: "packaging-lab-pro",
+   evidenceIds: ["video:alder-cavalry", "search:military-history"],
+   originTurnId: "turn/retry-42",
+   selectedContent: "Alder's Cavalry Explained",
   })
 
   expect(handoff.reviewOnly).toBe(true)
   expect(handoff.action.source).toBe("assistant")
-  expect(handoff.action.assistantRequest).toBe("analyze my channel stats and route this")
+  expect(handoff.action.targetToolId).toBe("packaging-lab-pro")
+  expect(handoff.action.assistantRequest).toContain("Canonical evidence IDs: video:alder-cavalry, search:military-history")
   expect(handoff.route).toContain("commandActionId=")
+  expect(handoff.route).toContain("reviewOnly=true")
+  expect(handoff.route).toContain("originTurnId=turn%2Fretry-42")
+  expect(handoff.route).toContain("evidenceId=video%3Aalder-cavalry")
+  expect(handoff.route).toContain("selectedContent=Alder%27s+Cavalry+Explained")
   expect((handoff.action as any).autoExecute).toBeUndefined()
   expect((handoff.action as any).directMutation).toBeUndefined()
  })
