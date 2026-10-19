@@ -11,6 +11,7 @@ import { sanitizeCreatorFacingBrainCopy } from "../../services/aiBrainConversati
 import { BrainQuestionPrompt } from "./BrainQuestionPrompt"
 import { BrainQuickActionCard } from "./BrainAnswerModules"
 import { BrainEvaluationInboxPanel } from "./BrainEvaluationInboxPanel"
+import { BrainScopeSummary } from "./BrainScopeSummary"
 
 const Panel: React.FC<{ title: string; tone: string; children: React.ReactNode }> = ({
  title,
@@ -75,6 +76,7 @@ export const BrainContextRail: React.FC<{
    className={`grid content-start gap-2 ${compactGrid ? "grid-cols-2" : "grid-cols-1"}`}
    aria-label="What the Brain currently knows"
   >
+   <div className="col-span-full"><BrainScopeSummary channelId={channelId} /></div>
    <Panel title="Your channel" tone="#3FEE56">
     {clusters.length ? (
      <ul className="flex flex-wrap gap-1">
