@@ -1767,7 +1767,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   --vt-field-stroke: var(--vt-studio-control-stroke);
-  --vt-field-outline-stroke: var(--vt-studio-control-secondary-outline-width);
+  --vt-field-outline-stroke: var(--vt-field-stroke);
   --vt-field-focus-outline-width: var(--vt-studio-control-focus-outline-width);
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity), transparent);
 }
