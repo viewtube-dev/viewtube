@@ -5,6 +5,7 @@ import {
  projectCanonicalEvidenceRecords,
  type EvidenceRecord,
 } from "../EvidenceRecord"
+import { buildBrainEvidenceRecordQuality } from "../BrainEvidenceQuality"
 
 const bundle: CanonicalIntelligenceEvidenceBundle = {
  version: "vt-intelligence-evidence-v1",
@@ -220,4 +221,15 @@ describe("EvidenceRecord", () => {
   expect(result.level).toBe("directional")
   expect(result.reasons.join(" ")).toContain("stale")
  })
+ it("fingerprints the exact ordered evidence records used by prompt and grading", () => {
+  const records = projectCanonicalEvidenceRecords(bundle)
+  const quality = buildBrainEvidenceRecordQuality(records, { expectedChannelId: "channel-1" })
+  const reordered = buildBrainEvidenceRecordQuality([...records].reverse(), { expectedChannelId: "channel-1" })
+  const changedValue = buildBrainEvidenceRecordQuality(records.map((record) => ({ ...record, value: 2801 })), { expectedChannelId: "channel-1" })
+
+  expect(quality.evidenceFingerprint).toBeTruthy()
+  expect(reordered.evidenceFingerprint).toBe(quality.evidenceFingerprint)
+  expect(changedValue.evidenceFingerprint).not.toBe(quality.evidenceFingerprint)
+ })
+
 })
