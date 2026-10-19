@@ -697,3 +697,59 @@
   color: #000000;
 }
 
+
+
+/* Header word toggles keep a solid white track regardless of the selected skin.
+   The Studio pair colors remain on the moving handle; this override is header-only. */
+[data-vt-toolbox] header .vt-studio-44-word-toggle,
+[data-vt-toolbox] header .vt-toolbox-header-toggle-replacement,
+[data-vt-header-toggle] .vt-studio-44-word-toggle,
+.vt-toolbox-header-word-toggle.vt-studio-44-word-toggle,
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-color-swap,
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-solid,
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-white-indicator,
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-black-indicator,
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]),
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="false"]),
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-solid:has(.vt-studio-44-word-handle[data-active="true"]),
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-white-indicator:has(.vt-studio-44-word-handle[data-active="true"]),
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-black-indicator:has(.vt-studio-44-word-handle[data-active="true"]) {
+  background: #ffffff !important;
+}
+
+/* Short ease for header label/indicator colors. Handle geometry remains owned by
+   Studiotoggle's existing animation, avoiding competing CSS and JS motion. */
+[data-vt-toolbox] header .vt-studio-44-word-toggle,
+[data-vt-header-toggle] .vt-studio-44-word-toggle,
+.vt-toolbox-header-word-toggle.vt-studio-44-word-toggle {
+  transition: background-color 180ms ease-out;
+}
+
+[data-vt-toolbox] header .vt-studio-44-word-toggle > button,
+[data-vt-header-toggle] .vt-studio-44-word-toggle > button,
+.vt-toolbox-header-word-toggle.vt-studio-44-word-toggle > button {
+  transition:
+    color 180ms ease-out,
+    -webkit-text-stroke-color 180ms ease-out,
+    background-color 180ms ease-out;
+}
+
+[data-vt-toolbox] header .vt-studio-44-word-handle,
+[data-vt-header-toggle] .vt-studio-44-word-handle,
+.vt-toolbox-header-word-toggle.vt-studio-44-word-toggle .vt-studio-44-word-handle {
+  transition: background-color 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-vt-toolbox] header .vt-studio-44-word-toggle,
+  [data-vt-toolbox] header .vt-studio-44-word-toggle > button,
+  [data-vt-toolbox] header .vt-studio-44-word-handle,
+  [data-vt-header-toggle] .vt-studio-44-word-toggle,
+  [data-vt-header-toggle] .vt-studio-44-word-toggle > button,
+  [data-vt-header-toggle] .vt-studio-44-word-handle,
+  .vt-toolbox-header-word-toggle.vt-studio-44-word-toggle,
+  .vt-toolbox-header-word-toggle.vt-studio-44-word-toggle > button,
+  .vt-toolbox-header-word-toggle.vt-studio-44-word-toggle .vt-studio-44-word-handle {
+    transition: none !important;
+  }
+}
