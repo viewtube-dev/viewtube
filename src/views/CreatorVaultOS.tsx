@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioLegendMultiDropdown, StudioTextBox } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioSplitLeftInput, StudioTextBox, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -23,11 +23,9 @@ import {
  SubToolboxAlphabeticalTag,
  SubToolboxDataTable,
  type SubToolboxDataTableColumn,
- SubToolboxFileTarget,
  SubToolboxInput,
  SubToolboxSegmentedToggle,
  SubToolboxSelect,
- SubToolboxSplitField,
  SubToolboxTagEditor,
  SubToolboxTextArea,
 } from "../components/subtoolbox/SubToolboxPrimitives"
@@ -1859,18 +1857,13 @@ const CreatorVaultOS: React.FC = () => {
         >
          Library
         </button>
-        <SubToolboxSplitField
-         level="l1"
-         variant="search"
-         className="vault-library-search-field"
-         icon={<Search />}
-         inputRef={searchInputRef}
-         inputProps={{
-          value: query,
-          onChange: (event) => setQuery(event.target.value),
-          placeholder: "Search assets…",
-          "aria-label": "Search Vault assets",
-         }}
+        <StudioSplitLeftInput
+         icon={<Search aria-hidden="true" />}
+         ref={searchInputRef}
+         value={query}
+         onChange={(event) => setQuery(event.target.value)}
+         placeholder="Search assets…"
+         aria-label="Search Vault assets"
         />
         <button
          type="button"
@@ -1898,6 +1891,8 @@ const CreatorVaultOS: React.FC = () => {
         </button>
         <StudioLegendMultiDropdown
          label="Sort"
+         selectionMode="single"
+         sizeVariant="compact"
          value={[sort]}
          onChange={(values) => {
           const next = values.find((value) => value !== sort)
@@ -1912,6 +1907,8 @@ const CreatorVaultOS: React.FC = () => {
         />
         <StudioLegendMultiDropdown
          label="View"
+         selectionMode="single"
+         sizeVariant="compact"
          value={[viewMode]}
          onChange={(values) => {
           const next = values.find((value) => value !== viewMode)
@@ -1927,6 +1924,8 @@ const CreatorVaultOS: React.FC = () => {
         />
         <StudioLegendMultiDropdown
          label="State"
+         selectionMode="single"
+         sizeVariant="compact"
          value={[special]}
          onChange={(values) => {
           const next = values.find((value) => value !== special)
@@ -2754,13 +2753,13 @@ const CreatorVaultOS: React.FC = () => {
            ]}
           />
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)]">
-           <SubToolboxFileTarget
-            level="l1"
+           <StudioUploadFrame
+            sizeVariant="standard"
             multiple
-            minHeight={180}
-            icon={<UploadCloud />}
-            label={importMode === "direct" ? "DROP OR CHOOSE · IMPORT DIRECTLY" : "DROP OR CHOOSE · REVIEW IN STAGING"}
-            onFiles={stageFiles}
+            accept="*/*"
+            aria-label="Vault asset import"
+            prompt={importMode === "direct" ? "Drop or choose · import directly" : "Drop or choose · review in staging"}
+            onFilesChange={(files) => { void stageFiles(files) }}
            />
            <div className="flex min-w-0 flex-col gap-3">
             <StandardInput
