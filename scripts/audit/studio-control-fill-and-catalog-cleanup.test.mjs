@@ -56,6 +56,18 @@ test("switches, word toggles, radios, checkmarks and X boxes expose all four sha
   assert.match(controls, /export type StudioControlSkin = "solid" \| "color-swap" \| "black-indicator" \| "white-indicator"/)
   assert.match(confirmedCatalog, /Four state-fill\/indicator variants: V1 half-primary to primary with secondary indicator; V2 primary to secondary with primary\/secondary indicator swap; V3 half-primary to primary with white indicator; V4 half-primary to primary with black indicator/)
 })
+test("word toggles use Late Silk and Velvet Release motion with reduced-motion and resize settling", () => {
+  assert.match(controls, /const animateWordToggle = React\.useCallback/)
+  assert.match(controls, /Late Silk/)
+  assert.match(controls, /Velvet Release/)
+  assert.match(controls, /prefers-reduced-motion: reduce/)
+  assert.match(controls, /cancelAnimationFrame/)
+  assert.match(controls, /data-motion/)
+  assert.match(styles, /\.vt-studio-44-word-handle\{[^}]*left:var\(--vt-word-toggle-handle-left/)
+  assert.match(styles, /\.vt-studio-44-word-handle\{[^}]*width:var\(--vt-word-toggle-handle-width/)
+  assert.match(styles, /\.vt-studio-44-word-handle-color\{[^}]*clip-path/)
+})
+
 test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
   assert.doesNotMatch(certification, /label="Semantic appearances"/)
   assert.equal((certification.match(/label="Square icon variants \+ effects"/g) ?? []).length, 1)
