@@ -2825,3 +2825,27 @@
   float: right;
 }
 .vt-confirmed-square-effect-details[open] > summary::after { content: " −"; }
+
+/* Word-toggle specimen rows use the same shared four-variant grid. */
+.vt-confirmed-word-toggle-standard {
+  grid-template-columns: minmax(0, 1fr);
+}
+.vt-confirmed-word-toggle-standard > div {
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-word-toggle-standard > div > * {
+  width: 100%;
+  max-width: 100%;
+}
+.vt-confirmed-word-toggle-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.vt-confirmed-word-toggle-compact > div {
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-word-toggle-compact > div > * {
+  width: 100%;
+  max-width: 100%;
+}
