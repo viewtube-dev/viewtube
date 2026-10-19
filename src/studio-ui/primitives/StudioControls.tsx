@@ -567,7 +567,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     overlay.style.display = velvet ? "block" : "none";
     overlay.style.background = toColor;
     overlay.style.clipPath = "";
-    handleElement.style.background = velvet ? fromColor : fromColor;
+    handleElement.style.background = fromColor;
     onValueChange?.(to);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
