@@ -249,6 +249,6 @@ describe("EvidenceRecord", () => {
   const result = compareEvidenceRecords(left, right)
   expect(result.comparable).toBe(true)
   expect(result.level).toBe("directional")
-  expect(result.reasons.join(" ")).toContain("stale"
+  expect(result.reasons.join(" ")).toContain("stale")
  })
 })
