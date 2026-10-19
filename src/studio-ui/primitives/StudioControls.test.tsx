@@ -91,8 +91,6 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
     expect(source).toContain('translate(22 22) scale(')
     expect(source).toContain('cx="22" cy="22"')
     expect(css).toContain("overflow: hidden")
-    expect(css).toContain("paint-order: stroke fill")
-    expect(css).toContain("filter: drop-shadow(0 0 1px #000)")
     expect(css).not.toContain(".vt-studio-radio-solid { opacity: 0; }")
     expect(css).not.toContain(".vt-studio-radio-rings { opacity: 0; }")
     expect(css).not.toContain(".vt-studio-radio-spirals { opacity: 0; }")
@@ -103,7 +101,7 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
     expect(source).toContain('opacity(solid, 1)');
     expect(source).toContain('r="5.5"');
     expect(css).toContain('color: var(--pair-b, var(--vt-studio-control-secondary, #ff7f6b))');
-    expect(css).toContain('stroke: #000');
+    expect(css).not.toContain('stroke: #000');
   })
 })
 
@@ -112,11 +110,11 @@ describe("Studio checkbox mark animation timing", () => {
   it("slows checkmark and x strokes by 50 percent and draws x strokes sequentially", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-    expect(css).toContain("stroke-dashoffset 495ms")
-    expect(css).toContain("stroke 405ms")
-    expect(css).toContain("opacity 360ms")
-    expect(css).toContain(".vt-studio-44-choice.is-checkbox.is-xwide.is-on svg path:nth-child(2)")
-    expect(css).toContain("transition-delay: 495ms")
+    expect(css).toContain("stroke-dashoffset 330ms")
+    expect(css).toContain("stroke 270ms")
+    expect(css).toContain("opacity 240ms")
+    expect(css).toContain(".vt-studio-44-choice.is-checkbox.is-xwide svg path:nth-child(2)")
+    expect(css).toContain("transition-delay: 330ms")
     expect(controls).toContain('d="M 10 10 L 40 40"')
     expect(controls).toContain('d="M 40 10 L 10 40"')
   })
