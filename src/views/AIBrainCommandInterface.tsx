@@ -188,7 +188,10 @@ export type BrainCreatorContextSnapshot = {
  projectSource: string | null
 }
 
-const BrainContextUsedDrawer: React.FC<{ contextUsed?: BrainCreatorContextSnapshot }> = ({ contextUsed }) => {
+const BrainContextUsedDrawer: React.FC<{
+ contextUsed?: BrainCreatorContextSnapshot
+ onCorrectItem?: (id: string, statement: string) => void
+}> = ({ contextUsed, onCorrectItem }) => {
  if (!contextUsed) return null
  const selection = contextUsed.selection
  const project = contextUsed.project
@@ -250,6 +253,7 @@ const BrainContextUsedDrawer: React.FC<{ contextUsed?: BrainCreatorContextSnapsh
          <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
          <code className="block break-all text-[8px] text-black/55">{item.id}</code>
          {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
+         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item.id, item.statement)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Correct context</button> : null}
         </li>
        ))}
       </ul>
@@ -647,7 +651,8 @@ const CreatorResponseCard: React.FC<{
  onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
  onCorrectReceipt: (message: ChatMessage) => void
  onRejectReceipt: (message: ChatMessage) => void
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt }) => {
+ onCorrectContextItem: (id: string, statement: string) => void
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt, onCorrectContextItem }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
  const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
@@ -746,7 +751,7 @@ const CreatorResponseCard: React.FC<{
      {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
       <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
      ) : null}
-     <BrainContextUsedDrawer contextUsed={message.contextUsed} />
+     <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
        to={message.handoff.route}
@@ -1202,6 +1207,11 @@ const AIBrainCommandInterface: React.FC = () => {
    console.warn("[AIBrain] Learning capture skipped:", error)
    return null
   }
+ }
+
+ const handleCorrectContextItem = (id: string, statement: string) => {
+  setInput(`Correct this AI Brain context item ${id}. Current statement: "${statement}". Ask me to confirm the correction, then route the updated preference/fact through the existing learning governance path. Do not silently replace the existing record.`)
+  composerRef.current?.focus()
  }
 
  const handleClearSurfaceSelection = () => {
@@ -1704,22 +1714,22 @@ const AIBrainCommandInterface: React.FC = () => {
       </div>
       <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[minmax(0,1.45fr)_minmax(520px,1fr)]">
        <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-        <div className="grid min-h-0 flex-1 bg-white max-xl:min-h-[420px]">
+        <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white max-xl:min-h-[420px]">
+         <BrainContextStrip
+          channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
+          projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
+          contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || null}
+          selection={surfaceSelection}
+          onClearSelection={handleClearSurfaceSelection}
+          onToggleLock={handleToggleSurfaceSelectionLock}
+          onClearProject={handleClearActiveProject}
+         />
          {!hydrated && messages.length === 0 ? (
           <div className="min-h-0 flex-1" aria-hidden="true" />
          ) : messages.length === 0 ? (
           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
           <div className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain max-xl:overflow-visible xl:overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
-           <BrainContextStrip
-            channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
-            projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
-            contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || null}
-            selection={surfaceSelection}
-            onClearSelection={handleClearSurfaceSelection}
-            onToggleLock={handleToggleSurfaceSelectionLock}
-            onClearProject={handleClearActiveProject}
-           />
            {messages.map((message) => message.role === "user" ? (
             <UserMessage key={message.id} text={message.text} />
            ) : (
@@ -1733,6 +1743,7 @@ const AIBrainCommandInterface: React.FC = () => {
              onRetry={handleRetryInterruptedTurn}
              onCorrectReceipt={handleCorrectReceipt}
              onRejectReceipt={handleRejectReceipt}
+             onCorrectContextItem={handleCorrectContextItem}
             />
            ))}
            <div ref={bottomRef} aria-hidden="true" />
