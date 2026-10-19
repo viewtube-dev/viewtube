@@ -4108,13 +4108,14 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   bottom: clamp(4px, 1.25cqw, 12px);
   left: 50%;
   display: block;
+  box-sizing: border-box;
   width: max-content;
   max-width: 72%;
   overflow: hidden;
-  padding: clamp(4px, .7cqw, 8px) clamp(8px, 1.4cqw, 16px);
+  padding: clamp(4px, .7cqw, 8px) clamp(18px, 3.8cqw, 36px);
   border: var(--vt-studio-upload-frame-stroke) solid #000;
   border-radius: clamp(3px, .6cqw, 8px);
-  background: linear-gradient(100deg, var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary));
+  background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary));
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: clamp(10px, 2cqw, 17px);
@@ -4125,6 +4126,26 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   text-transform: uppercase;
   white-space: nowrap;
   translate: -50% 0;
+}
+.vt-studio-upload-frame__filename::before,
+.vt-studio-upload-frame__filename::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(12px, 3cqw, 24px);
+  content: "";
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.vt-studio-upload-frame__filename::before {
+  left: 0;
+  background: var(--vt-studio-upload-primary);
+  border-right: var(--vt-studio-upload-frame-stroke) solid #000;
+}
+.vt-studio-upload-frame__filename::after {
+  right: 0;
+  background: var(--vt-studio-upload-secondary);
+  border-left: var(--vt-studio-upload-frame-stroke) solid #000;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__center {
   inset: 0;
