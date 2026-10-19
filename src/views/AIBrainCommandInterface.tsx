@@ -86,6 +86,16 @@ import type {
  CreatorInitialInsight,
 } from "../types"
 
+export type AIBrainTurnReadiness = {
+ dataStatus: AIBrainEvidencePack["dataStatus"]
+ capturedAt: string | null
+ availableMetrics: string[]
+ missingInputs: string[]
+ sourceStatuses: AIBrainContextSnapshot["sourceStatuses"]
+ diagnostics: Pick<AIBrainContextSnapshot["vtSync"]["diagnostics"], "status" | "coverage" | "warnings">
+ warnings: string[]
+}
+
 export type ChatMessage = {
  id: string
  role: "user" | "model"
@@ -93,6 +103,7 @@ export type ChatMessage = {
  response?: CreatorBrainResponse
  handoff?: AIBrainChatHandoff | null
  evidencePack?: AIBrainEvidencePack
+ readiness?: AIBrainTurnReadiness
 }
 
 const shellCard = "rounded-[16px] border-[4px] border-black bg-white shadow-[6px_6px_0_0_#000]"
@@ -467,6 +478,9 @@ const CreatorResponseCard: React.FC<{
     </h3>
    </div>
    <div className="flex flex-col gap-2.5 p-3">
+    {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
+     <BrainDataReadiness readiness={message.readiness} evidencePack={message.evidencePack} />
+    ) : null}
     <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
     {openQuestions[0] ? (
@@ -490,6 +504,86 @@ const CreatorResponseCard: React.FC<{
      ) : null}
    </div>
   </article>
+ )
+}
+
+const readinessForSnapshot = (snapshot: AIBrainContextSnapshot): AIBrainTurnReadiness => ({
+ dataStatus: snapshot.evidencePack.dataStatus,
+ capturedAt: snapshot.vtSync.capturedAt || snapshot.evidencePack.capturedAt,
+ availableMetrics: snapshot.evidencePack.availableMetrics,
+ missingInputs: snapshot.evidencePack.missingInputs,
+ sourceStatuses: snapshot.sourceStatuses,
+ diagnostics: {
+  status: snapshot.vtSync.diagnostics.status,
+  coverage: snapshot.vtSync.diagnostics.coverage,
+  warnings: snapshot.vtSync.diagnostics.warnings,
+ },
+ warnings: snapshot.vtSync.warnings,
+})
+
+const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness; evidencePack: AIBrainEvidencePack }> = ({ readiness, evidencePack }) => {
+ const staleCount = readiness.diagnostics.coverage.staleDatasets
+ const missingCount = readiness.diagnostics.coverage.missingDatasets
+ const revenueUnavailable = !readiness.availableMetrics.includes("revenue")
+ const statusLabel = readiness.dataStatus === "ready"
+  ? "Channel data synced"
+  : readiness.dataStatus === "partial"
+   ? "Partial channel data"
+   : "Channel data unavailable"
+ const summary = [
+  statusLabel,
+  revenueUnavailable ? "Revenue unavailable" : "",
+  staleCount > 0 ? `${staleCount} stale datasets` : "",
+  missingCount > 0 ? `${missingCount} missing datasets` : "",
+ ].filter(Boolean).join(" · ")
+ const incompleteSources = readiness.sourceStatuses.filter((source) => source.status !== "ready")
+
+ return (
+  <details className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
+   <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+    <span className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${readiness.dataStatus === "ready" ? "bg-[#3FEE56]" : readiness.dataStatus === "partial" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
+    <span>{summary}</span>
+   </summary>
+   <div className="grid gap-2 border-t-[2px] border-black p-2.5">
+    <div>
+     <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Metrics available for this answer</h4>
+     <p className="mt-1 text-xs font-bold leading-5">{readiness.availableMetrics.length ? readiness.availableMetrics.join(", ") : "No video performance metrics are available for this request."}</p>
+    </div>
+    {readiness.missingInputs.length ? (
+     <div>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
+      <ul className="mt-1 grid gap-1">
+       {readiness.missingInputs.map((item) => <li key={item} className="text-xs font-bold leading-5">{item}</li>)}
+      </ul>
+     </div>
+    ) : null}
+    {incompleteSources.length ? (
+     <div>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
+      <ul className="mt-1 grid gap-1">
+       {incompleteSources.map((source) => (
+        <li key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
+         <span className="font-black">{source.label}</span>
+         <span className="block text-[10px] leading-4 text-black/65">{source.status}: {source.detail}</span>
+        </li>
+       ))}
+      </ul>
+     </div>
+    ) : null}
+    {readiness.diagnostics.warnings.length || readiness.warnings.length ? (
+     <div>
+      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
+      <ul className="mt-1 grid gap-1">
+       {[...new Set([...readiness.diagnostics.warnings, ...readiness.warnings])].slice(0, 5).map((warning) => (
+        <li key={warning} className="text-xs font-bold leading-5">{warning}</li>
+       ))}
+      </ul>
+     </div>
+    ) : null}
+    {readiness.capturedAt ? <p className="text-[9px] font-bold text-black/45">Evidence snapshot: {readiness.capturedAt}</p> : null}
+    <p className="text-[9px] font-bold leading-4 text-black/55">This status is based on the synced data and diagnostic records attached to this turn. Missing metrics are not estimated.</p>
+   </div>
+  </details>
  )
 }
 
@@ -742,6 +836,9 @@ const AIBrainCommandInterface: React.FC = () => {
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
+     readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
+      ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
+      : undefined,
     },
    ]),
   )
@@ -901,7 +998,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, evidencePack: turnSnapshot.evidencePack },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -917,7 +1014,7 @@ const AIBrainCommandInterface: React.FC = () => {
    }
    setMessages((current) => [
     ...current,
-    { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack },
+    { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
    ])
   } finally {
    setBusy(false)
