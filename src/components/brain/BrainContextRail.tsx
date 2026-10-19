@@ -14,6 +14,7 @@ import { BrainEvaluationInboxPanel } from "./BrainEvaluationInboxPanel"
 import { BrainScopeSummary } from "./BrainScopeSummary"
 import { BrainPromptPolicyPanel } from "./BrainPromptPolicyPanel"
 import { BrainOutcomeLearningCard } from "./BrainOutcomeLearningCard"
+import { BrainStatusIndicatorShowcase } from "./BrainStatusIndicatorShowcase"
 
 const Panel: React.FC<{ title: string; tone: string; children: React.ReactNode }> = ({
  title,
@@ -152,6 +153,7 @@ export const BrainContextRail: React.FC<{
     compact={compactGrid}
    />
    <div className="col-span-full"><BrainOutcomeLearningCard channelId={channelId} maximumItems={compactGrid ? 2 : 4} /></div>
+   <div className="col-span-full"><Panel title="Status indicator primitives" tone="#BCE742"><BrainStatusIndicatorShowcase /></Panel></div>
 
    {quickActions.length ? (
     <Panel title="Do this next" tone="#C0F240">
