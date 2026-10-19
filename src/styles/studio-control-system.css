@@ -4535,3 +4535,153 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   color: var(--vt-studio-number-active-color);
 }
 
+
+
+/* Canonical vertical word toggle: global Studio typography/strokes with content-driven stacked height. */
+.vt-studio-vertical-word-toggle {
+  --vt-studio-vertical-word-font-size: 38px;
+  --vt-studio-vertical-word-stroke: 3px;
+  --vt-studio-vertical-word-radius: 6px;
+  --vt-studio-vertical-word-gap: 3.666667px;
+  --vt-studio-vertical-word-padding: 3.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 14.666667px;
+  --vt-studio-vertical-word-handle-inset: 2.75px;
+  position: relative;
+  display: inline-flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--vt-studio-vertical-word-gap);
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: var(--vt-studio-vertical-word-padding) 0;
+  border: var(--vt-studio-vertical-word-stroke) solid #000;
+  border-radius: var(--vt-studio-vertical-word-radius);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #20f13e)) 50%, transparent);
+  color: #000;
+  overflow: hidden;
+  isolation: isolate;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 1000;
+  font-variation-settings: "wght" 1000;
+  font-synthesis: none;
+  letter-spacing: -.02em;
+  line-height: .86;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.vt-studio-vertical-word-toggle.is-compact {
+  --vt-studio-vertical-word-font-size: 24px;
+  --vt-studio-vertical-word-stroke: 2px;
+  --vt-studio-vertical-word-radius: 4px;
+  --vt-studio-vertical-word-gap: 2.444444px;
+  --vt-studio-vertical-word-padding: 2.444444px;
+  --vt-studio-vertical-word-horizontal-padding: 9.333333px;
+  --vt-studio-vertical-word-handle-inset: 1.833333px;
+  border-width: 2px;
+}
+.vt-studio-vertical-word-toggle.is-micro {
+  --vt-studio-vertical-word-font-size: 10px;
+  --vt-studio-vertical-word-stroke: 1px;
+  --vt-studio-vertical-word-radius: 2px;
+  --vt-studio-vertical-word-gap: 1.222222px;
+  --vt-studio-vertical-word-padding: 1.222222px;
+  --vt-studio-vertical-word-horizontal-padding: 4px;
+  --vt-studio-vertical-word-handle-inset: .916667px;
+  border-width: 1px;
+}
+.vt-studio-vertical-word-toggle:focus-visible {
+  outline: calc(var(--vt-studio-vertical-word-stroke) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
+  outline-offset: 3px;
+}
+.vt-studio-vertical-word-toggle:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.vt-studio-vertical-word-toggle__word {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 0 0 var(--vt-studio-vertical-word-font-size);
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: var(--vt-studio-vertical-word-font-size);
+  padding: 0 var(--vt-studio-vertical-word-horizontal-padding);
+  color: #000;
+  font-family: inherit;
+  font-size: var(--vt-studio-vertical-word-font-size);
+  font-weight: 1000;
+  font-variation-settings: "wght" 1000;
+  font-synthesis: none;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-text-stroke: var(--vt-studio-vertical-word-stroke) currentColor;
+  transition: color 120ms ease-out;
+}
+.vt-studio-vertical-word-toggle__handle {
+  position: absolute;
+  z-index: 0;
+  top: var(--vt-studio-vertical-word-handle-top, 3px);
+  left: var(--vt-studio-vertical-word-handle-inset);
+  right: var(--vt-studio-vertical-word-handle-inset);
+  height: var(--vt-studio-vertical-word-handle-height, var(--vt-studio-vertical-word-font-size));
+  border-radius: calc(var(--vt-studio-vertical-word-radius) * .5);
+  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
+  overflow: hidden;
+  pointer-events: none;
+}
+.vt-studio-vertical-word-toggle__handle-color {
+  position: absolute;
+  inset: 0;
+  display: none;
+  border-radius: inherit;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
+  pointer-events: none;
+}
+.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="false"] .vt-studio-vertical-word-toggle__handle,
+.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__handle {
+  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
+}
+.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="true"] .vt-studio-vertical-word-toggle__handle,
+.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__handle {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
+}
+.vt-studio-vertical-word-toggle.is-primary-secondary .vt-studio-vertical-word-toggle__word { color: #000; }
+.vt-studio-vertical-word-toggle.is-black-fill {
+  border-color: #000;
+  background: #000;
+}
+.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__word { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
+.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
+.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: #000; }
+.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
+.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="0"] { color: var(--vt-studio-control-accent, var(--pair-a, #20f13e)); }
+.vt-studio-vertical-word-toggle.is-primary-white-handle {
+  border-color: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
+  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
+}
+.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__word { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
+.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__handle { background: #fff; }
+.vt-studio-vertical-word-toggle.is-white-fill {
+  border-color: #fff;
+  background: #fff;
+}
+.vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__word { color: #000; }
+.vt-studio-vertical-word-toggle.is-white-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
+.vt-studio-vertical-word-toggle.is-white-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: #fff; }
+.vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__handle { background: #000; }
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-vertical-word-toggle__word { transition: none !important; }
+}
