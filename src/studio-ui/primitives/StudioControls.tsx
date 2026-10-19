@@ -1565,45 +1565,41 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
 StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
 
 
-export interface StudioSpectrumTagProps {
+export interface StudioSpectrumTagProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type" | "onClick"> {
   label: string
   selected?: boolean
-  className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
 }
 
-/**
- * Vault's donor-backed 15px monochromatic tag. This is a deliberate global
- * sizing exception; the alphabetic ViewTube spectrum and chip geometry are
- * shared by Vault and the confirmed Studio Controls library.
- */
+/** Canonical Studio Controls spectrum tag; forwards native button interactions. */
 export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   label,
   selected = false,
   className,
   onClick,
   ariaLabel,
+  style,
+  ...props
 }) => {
   const normalized = label.trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(normalized)
   return (
     <button
+      {...props}
       type="button"
       className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
       data-vt-studio-exception="vault-spectrum-tag"
       data-tag={normalized}
       aria-label={ariaLabel ?? normalized}
       aria-pressed={selected}
-      style={{ ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
+      style={{ ...style, ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
       onClick={onClick}
     >
       {normalized}
     </button>
   )
 }
-StudioSpectrumTag.displayName = "StudioSpectrumTag"
-
 
 // Canonical dropdown family: single-select variants share the same trigger/menu implementation.
 export interface StudioDropdownOption {
