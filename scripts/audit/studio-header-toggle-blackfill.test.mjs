@@ -12,7 +12,7 @@ const controls = readFileSync(
 );
 
 const start = source.indexOf("export const ToolboxHeaderToggle:");
-const end = source.indexOf("\\nexport interface SubToolboxToggleSwitchProps", start);
+const end = source.indexOf("\nexport interface SubToolboxToggleSwitchProps", start);
 assert.notEqual(start, -1, "ToolboxHeaderToggle implementation exists");
 assert.notEqual(end, -1, "ToolboxHeaderToggle implementation has a stable end boundary");
 const implementation = source.slice(start, end);
