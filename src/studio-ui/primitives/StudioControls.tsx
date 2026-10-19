@@ -1572,7 +1572,7 @@ export interface StudioSpectrumTagProps extends Omit<React.ButtonHTMLAttributes<
   ariaLabel?: string
 }
 
-/** Canonical Studio Controls spectrum tag; forwards native button interactions. */
+/** Canonical Studio Controls spectrum tag; native button props are supported. */
 export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   label,
   selected = false,
@@ -1584,16 +1584,28 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
 }) => {
   const normalized = label.trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(normalized)
+  const tagClassName = ["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")
+  const tagStyle = { ...style, ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties
+
+  // Passive tags render as spans so action wrappers do not nest buttons.
+  if (!onClick && !props.onDragOver && !props.onDrop) {
+    return (
+      <span className={tagClassName} data-vt-studio-exception="vault-spectrum-tag" data-tag={normalized} style={tagStyle}>
+        {normalized}
+      </span>
+    )
+  }
+
   return (
     <button
       {...props}
       type="button"
-      className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
+      className={tagClassName}
       data-vt-studio-exception="vault-spectrum-tag"
       data-tag={normalized}
       aria-label={ariaLabel ?? normalized}
       aria-pressed={selected}
-      style={{ ...style, ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
+      style={tagStyle}
       onClick={onClick}
     >
       {normalized}
