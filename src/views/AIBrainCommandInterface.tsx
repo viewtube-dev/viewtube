@@ -71,7 +71,8 @@ import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
-import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
+import { BrainClaimEvidence } from "../components/brain/BrainClaimEvidence"
+import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
@@ -411,7 +412,7 @@ const OpeningBriefing: React.FC<{
      </div>
      <p className="mt-2 text-sm font-bold leading-6 text-black/75">{sanitizeCreatorFacingBrainCopy(read)}</p>
      <BrainProfileCoverageChecklist snapshot={snapshot} onPrompt={onPrompt} />
-     <BrainEvidenceDrawer evidencePack={snapshot.evidencePack} className="mt-3" />
+     <BrainClaimEvidence evidencePack={snapshot.evidencePack} confidence={confidence} className="mt-3" />
     </div>
 
    </section>
@@ -749,7 +750,7 @@ const CreatorResponseCard: React.FC<{
       </button>
      ))}
      {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
-      <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
+      <BrainClaimEvidence evidencePack={turnEvidencePack} compact label="Based on" />
      ) : null}
      <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
@@ -1716,8 +1717,9 @@ const AIBrainCommandInterface: React.FC = () => {
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
-      <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[minmax(0,1.45fr)_minmax(520px,1fr)]">
-       <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
+      <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
+       <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
+      <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
         <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white max-xl:min-h-[420px]">
          <BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
