@@ -23,6 +23,8 @@
 
 *Use this prompt (or the skill that embeds it) whenever implementing the immediate, existing-system improvements.*
 
+**Evidence-unification gate (P0):** Claim-level evidence, trustworthy “Based on” links, and evidence-quality assertions depend on the same bounded `EvidenceRecord[]` being rendered into the model prompt, graded by the record-level evidence-quality function, and persisted with the completed chat turn. Dataset-level readiness remains a separate canonical-bundle summary so unavailable datasets do not disappear. The implementation plan and acceptance criteria live in `docs/brain/EVIDENCE_UNIFICATION_PLAN.md`; do not ship quick-wins 3, 4, 12, or 14 in a way that reintroduces a parallel prompt evidence source.
+
 ```
 You are a senior engineer working on the ViewTube AI Brain on the master/consolidated-feature-integration branch. Implement every quick win listed below in a single coordinated pass. Reuse existing systems only—no new databases, no new Brain runtime, no parallel memory stores, no new analytics engines.
 
