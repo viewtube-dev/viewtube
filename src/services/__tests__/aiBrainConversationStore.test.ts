@@ -72,7 +72,8 @@ describe("aiBrainConversationStore", () => {
    userText: original,
   })
 
-  expect(pending.rawUserMessage).toBe(original);
+  expect(pending.rawUserMessage).toBe(original)
+  expect(pending.userText).toBe(original)
   expect(pending.displayUserMessage).not.toContain("API");
   expect(pending.displayUserMessage).not.toContain("failed");
   expect(pending.displayUserMessage).not.toContain("error");
@@ -84,7 +85,8 @@ describe("aiBrainConversationStore", () => {
    response: responseFixture,
   });
   const restored = await resumeAIBrainThread("channel-raw-message");
-  expect(restored.turns[0]?.rawUserMessage).toBe(original);
+  expect(restored.turns[0]?.rawUserMessage).toBe(original)
+  expect(restored.turns[0]?.userText).toBe(original)
   expect(restored.turns[0]?.digest?.userIntent.toLowerCase()).toContain("api");
   expect(restored.turns[0]?.digest?.userIntent).toContain("failed");
   expect(restored.turns[0]?.digest?.userIntent).toContain("error");
