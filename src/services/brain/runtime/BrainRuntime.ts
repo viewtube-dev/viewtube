@@ -12,6 +12,7 @@ export const BRAIN_RUNTIME_VERSION = "brain-runtime-v1"
 const toLegacyInput = (input: BrainRuntimeRequest): RunBrainTurnInput => ({
  channelId: input.channelId,
  userText: input.userText,
+ retryTurnId: input.retryTurnId,
  snapshot: input.snapshot,
  systemPrompt: input.systemPrompt,
  growthContext: input.growthContext,
