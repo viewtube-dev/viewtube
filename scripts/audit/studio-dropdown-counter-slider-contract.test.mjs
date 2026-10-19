@@ -114,15 +114,15 @@ test("shared interaction focus is token-generated and applies to text-field blur
   assert.match(fieldCss, /outline-width var\(--vt-studio-focus-outline-fade-ms/);
 });
 
-test("every counter and slider step button starts focus before its hold handlers can override it", () => {
-  const controls = component.split("\n");
-  const stepButtons = controls.filter(line => /<(?:button)[^>]*\{(?:increment|decrement)\.events\}/.test(line));
+test("counter and slider shell capture shares focus without replacing hold-repeat handlers", () => {
+  assert.match(component, /onPointerDownCapture: interactionFocus\\.start/);
+  assert.match(component, /onPointerUpCapture: interactionFocus\\.end/);
+  assert.match(component, /onPointerCancelCapture: interactionFocus\\.end/);
+  const controls = component.split("\\n");
+  const stepButtons = controls.filter(line => /<(?:button)[^>]*\\{(?:increment|decrement)\\.events\\}/.test(line));
   assert.ok(stepButtons.length >= 6, "expected counter and slider step buttons to be covered");
   for (const line of stepButtons) {
-    assert.match(line, /\.events}[^>]*onPointerDown=\{interactionFocus\.start\}/);
-    assert.match(line, /onPointerUp=\{interactionFocus\.end\}/);
-    assert.match(line, /onPointerCancel=\{interactionFocus\.end\}/);
+    assert.doesNotMatch(line, /onPointerDown=\\{interactionFocus\\.start\\}/);
+    assert.match(line, /onClick=\\{interactionFocus\\.pulse\\}/);
   }
 });
-
-  assert.match(fieldCss, /outline: calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* var\\(--vt-studio-focus-outline-width-ratio, 0\\.65\\)\\) solid var\\(--vt-field-secondary/);
