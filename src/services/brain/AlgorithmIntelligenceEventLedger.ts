@@ -39,6 +39,10 @@ export interface AlgorithmIntelligenceEvent {
  channelId: string
  projectId?: string | null
  videoId?: string | null
+ /** Join keys back to the originating Brain operation and generated output. */
+ operationId?: string | null
+ traceId?: string | null
+ outputRef?: string | null
  kind: AlgorithmIntelligenceEventKind
  sourceSystem: "anomaly" | "opportunity" | "priming" | "decision" | "communication" | "workflow" | "evaluation" | "learning"
  sourceId?: string | null
