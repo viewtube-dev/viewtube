@@ -1568,6 +1568,7 @@ StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
 export interface StudioSpectrumTagProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type" | "onClick"> {
   label: string
   selected?: boolean
+  spectrumKey?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
 }
@@ -1576,6 +1577,7 @@ export interface StudioSpectrumTagProps extends Omit<React.ButtonHTMLAttributes<
 export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   label,
   selected = false,
+  spectrumKey,
   className,
   onClick,
   ariaLabel,
@@ -1583,7 +1585,7 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   ...props
 }) => {
   const normalized = label.trim().toUpperCase()
-  const color = getAlphabeticalSpectrumColor(normalized)
+  const color = getAlphabeticalSpectrumColor(spectrumKey || normalized)
   const tagClassName = ["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")
   const tagStyle = { ...style, ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties
 
