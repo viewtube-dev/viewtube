@@ -35,10 +35,13 @@ test("split dropdown rail uses secondary fill and reserves the trailing rail for
   assert.match(css, /\.vt-studio-dropdown \.vt-studio-dropdown-chevron\[data-rail="end"\] svg \{ width: var\(--vt-studio-dropdown-chevron-size\); height: var\(--vt-studio-dropdown-chevron-size\); \}/)
 })
 
-test("side counter divider is a centered overlay and does not consume either action row", () => {
-  assert.match(css, /\.vt-studio-side-counter__actions button:first-child::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*height:\s*var\(--vt-studio-control-stroke/s)
-  assert.doesNotMatch(css, /\.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-studio-control-stroke/)
-  assert.doesNotMatch(css, /\.vt-studio-left-counter\.is-reversed \.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:/)
+test("side counter and slider counter dividers are centered against their full two-row rails", () => {
+  assert.match(css, /\.vt-studio-side-counter__actions\s*\{[^}]*position:\s*relative/s)
+  assert.match(css, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*height:\s*var\(--vt-studio-control-stroke/s)
+  assert.doesNotMatch(css, /\.vt-studio-side-counter__actions button:first-child::after/)
+  assert.match(css, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter\s*\{[^}]*position:\s*relative/s)
+  assert.match(css, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s)
+  assert.doesNotMatch(css, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button:first-child::after/)
 })
 
 test("counter and slider readouts share default mix and black active numeral tokens", () => {
