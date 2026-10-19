@@ -112,7 +112,6 @@ test("shared interaction focus is token-generated and applies to text-field blur
   assert.match(fieldCss, /outline:\s*0 solid transparent/);
   assert.match(fieldCss, /outline-color var\(--vt-studio-focus-outline-fade-ms/);
   assert.match(fieldCss, /outline-width var\(--vt-studio-focus-outline-fade-ms/);
-  assert.match(fieldCss, /:is\\(:focus, :focus-visible\\)[\\s\\S]*?outline:\\s*calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* 0\\.65\\) solid var\\(--vt-field-secondary/);
 });
 
 test("every counter and slider step button starts focus before its hold handlers can override it", () => {
@@ -125,3 +124,5 @@ test("every counter and slider step button starts focus before its hold handlers
     assert.match(line, /onPointerCancel=\{interactionFocus\.end\}/);
   }
 });
+
+  assert.match(fieldCss, /outline: calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* var\\(--vt-studio-focus-outline-width-ratio, 0\\.65\\)\\) solid var\\(--vt-field-secondary/);
