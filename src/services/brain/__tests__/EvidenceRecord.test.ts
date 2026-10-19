@@ -69,6 +69,42 @@ describe("EvidenceRecord", () => {
   })
   expect(records[0].provenance.evidenceIds).toEqual(["evidence:channel-summary"])
   expect(records[0].window?.kind).toBe("28d")
+  expect(records[0].observedAt).toBeNull()
+  expect(records[0].updatedAt).toBe("2026-09-27T15:00:00.000Z")
+ })
+
+ it("preserves missing metrics as explicit missing records and never normalizes them to zero", () => {
+  const records = projectCanonicalEvidenceRecords({
+   ...bundle,
+   datasets: [{
+    ...bundle.datasets[0],
+    status: "partial",
+    missingMetrics: ["impressions", "clickThroughRate"],
+    metrics: {
+     views: bundle.datasets[0].metrics.views,
+    },
+   }],
+  })
+
+  expect(records).toHaveLength(3)
+  expect(records.find((record) => record.metric === "views")).toMatchObject({
+   value: 2800,
+   epistemicState: "observed",
+   observedAt: null,
+  })
+  expect(records.find((record) => record.metric === "impressions")).toMatchObject({
+   id: "analytics:snapshot-1:channel_summary:impressions:missing",
+   value: null,
+   epistemicState: "missing",
+   availability: "unavailable",
+   missingness: ["impressions"],
+   observedAt: null,
+  })
+  expect(records.find((record) => record.metric === "clickThroughRate")).toMatchObject({
+   value: null,
+   epistemicState: "missing",
+   availability: "unavailable",
+  })
  })
 
  it("allows exact comparisons only when metric, unit, scope and window semantics match", () => {
