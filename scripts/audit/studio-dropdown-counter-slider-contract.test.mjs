@@ -102,3 +102,26 @@ test("Studio text fields use a rounded inset primary stroke instead of square gr
   assert.match(fieldCss, /box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/)
   assert.doesNotMatch(fieldCss, /background-image:\s*[\s\S]*?linear-gradient\(var\(--vt-field-inline-primary/)
 })
+
+
+test("shared interaction focus is token-generated and applies to text-field blur transitions", () => {
+  assert.match(tokens, /STUDIO_FOCUS_INTERACTION_TOKENS/);
+  assert.match(generator, /STUDIO_FOCUS_INTERACTION_TOKENS/);
+  assert.match(generated, /--vt-studio-focus-hold-ms: 1500ms/);
+  assert.match(generated, /--vt-studio-focus-outline-fade-ms: 500ms/);
+  assert.match(fieldCss, /outline:\\s*0 solid transparent/);
+  assert.match(fieldCss, /outline-color var\\(--vt-studio-focus-outline-fade-ms/);
+  assert.match(fieldCss, /outline-width var\\(--vt-studio-focus-outline-fade-ms/);
+  assert.match(fieldCss, /:is\\(:focus, :focus-visible\\)[\\s\\S]*?outline:\\s*calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* 0\\.65\\) solid var\\(--vt-field-secondary/);
+});
+
+test("every counter and slider step button starts focus before its hold handlers can override it", () => {
+  const controls = component.split("\\n");
+  const stepButtons = controls.filter(line => /<(?:button)[^>]*\\{(?:increment|decrement)\\.events\\}/.test(line));
+  assert.ok(stepButtons.length >= 6, "expected counter and slider step buttons to be covered");
+  for (const line of stepButtons) {
+    assert.match(line, /\\.events}[^>]*onPointerDown=\\{interactionFocus\\.start\\}/);
+    assert.match(line, /onPointerUp=\\{interactionFocus\\.end\\}/);
+    assert.match(line, /onPointerCancel=\\{interactionFocus\\.end\\}/);
+  }
+});
