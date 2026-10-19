@@ -44,7 +44,11 @@ export const reconcileBrainLearningQuestions = (
  reopenedQuestionIds: string[] = [],
 ): CreatorBrainLearningQuestion[] => {
  const reopened = new Set(reopenedQuestionIds)
- const validAnswers = savedAnswers.filter((answer) => clean(answer.answer) && !/\b(outdated|superseded|rejected)\b/i.test(answer.answer))
+ const validAnswers = savedAnswers.filter((answer) =>
+  clean(answer.answer) &&
+  !["outdated", "superseded", "rejected"].includes(answer.status || "confirmed") &&
+  !/\b(outdated|superseded|rejected)\b/i.test(answer.answer),
+ )
  return questions.filter((question) => {
   if (reopened.has(question.id)) return true
   const exactAnswer = validAnswers.some((answer) =>
@@ -548,12 +552,13 @@ export const answerAIBrainQuestionModule = async (input: {
 }): Promise<AIBrainQuestionAnswer> => {
  const normalizedAnswer = clean(input.answer).toLocaleLowerCase()
  const priorTurns = await listAIBrainConversationTurnsDB(input.channelId || null)
- const priorAnswer = priorTurns
-  .flatMap((turn) => turn.questionAnswers || [])
-  .find((answer) =>
-   answer.questionId === input.question.id &&
-   clean(answer.answer).toLocaleLowerCase() === normalizedAnswer,
-  )
+ const priorAnswers = priorTurns.flatMap((turn) => turn.questionAnswers || [])
+ const priorAnswer = priorAnswers.find((answer) =>
+  answer.questionId === input.question.id &&
+  clean(answer.answer).toLocaleLowerCase() === normalizedAnswer &&
+  !["outdated", "superseded", "rejected"].includes(answer.status || "confirmed") &&
+  !/\b(outdated|superseded|rejected)\b/i.test(answer.answer),
+ )
  if (priorAnswer) return priorAnswer
 
  const entry = await captureAIBrainLearningEvent({
@@ -574,6 +579,28 @@ export const answerAIBrainQuestionModule = async (input: {
   category: input.question.category,
   createdAt: nowIso(),
   learningEntryId: entry.id,
+  status: "confirmed",
+ }
+ const broadPreferenceCategory = ["creator_goal", "content_style", "audience_insight"].includes(input.question.category)
+ for (const turn of priorTurns) {
+  let changed = false
+  const questionAnswers = (turn.questionAnswers || []).map((savedAnswer) => {
+   const sameScope = savedAnswer.questionId === input.question.id ||
+    (broadPreferenceCategory && savedAnswer.category === input.question.category)
+   const savedAnswerIsCurrent = !["outdated", "superseded", "rejected"].includes(savedAnswer.status || "confirmed") &&
+    !/\b(outdated|superseded|rejected)\b/i.test(savedAnswer.answer)
+   if (!sameScope || !savedAnswerIsCurrent || clean(savedAnswer.answer).toLocaleLowerCase() === normalizedAnswer) return savedAnswer
+   changed = true
+   return {
+    ...savedAnswer,
+    status: "superseded" as const,
+    supersededByAnswerId: answer.id,
+    statusReason: "Replaced by a newer creator answer in the same question scope.",
+   }
+  })
+  if (changed) {
+   await saveAIBrainConversationTurnDB({ ...turn, updatedAt: nowIso(), questionAnswers })
+  }
  }
  await saveAIBrainConversationTurn({
   channelId: input.channelId || null,
