@@ -4,6 +4,7 @@ import type { CreatorBrainLearningQuestion, CreatorBrainResponse } from "../../t
 import {
  answerAIBrainQuestionModule,
  reconcileBrainLearningQuestions,
+ retryAIBrainTurn,
  beginAIBrainTurn,
  completeAIBrainTurn,
  listAIBrainConversationTurns,
@@ -172,6 +173,28 @@ describe("aiBrainConversationStore", () => {
 
   expect(reconcileBrainLearningQuestions(questions, savedAnswers).map((question) => question.id)).toEqual(["confirm-niche"])
   expect(reconcileBrainLearningQuestions(questions, savedAnswers, ["primary-goal"]).map((question) => question.id)).toContain("primary-goal")
+ })
+
+ it("retries an interrupted turn using the same canonical turn ID and saved evidence metadata", async () => {
+  const pending = await beginAIBrainTurn({
+   channelId: "channel-retry",
+   userText: "Which videos grew fastest?",
+   metadata: { evidencePackSnapshot: { evidenceIds: ["video:abc"] }, dataReadinessSnapshot: { dataStatus: "partial" } },
+  })
+  await completeAIBrainTurn({
+   turnId: pending.id,
+   status: "interrupted",
+   assistantText: "That response was interrupted.",
+  })
+
+  const retry = await retryAIBrainTurn(pending.id)
+  const turns = await listAIBrainConversationTurns({ channelId: "channel-retry" })
+
+  expect(retry.id).toBe(pending.id)
+  expect(retry.status).toBe("pending")
+  expect(retry.rawUserMessage).toBe("Which videos grew fastest?")
+  expect(retry.metadata?.evidencePackSnapshot).toEqual({ evidenceIds: ["video:abc"] })
+  expect(turns).toHaveLength(1)
  })
 
  it("keeps creator-facing copy clear of internal data plumbing language", () => {
