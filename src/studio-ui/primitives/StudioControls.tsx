@@ -242,6 +242,7 @@ export const StudioTextBox = React.forwardRef<HTMLDivElement, StudioTextBoxProps
     <div
       {...props}
       ref={ref}
+      contentEditable={false}
       className={studioClasses("vt-studio-text-box", className)}
       data-vt-studio-control="true"
       data-vt-studio-field-kind="textarea-display"
