@@ -27,11 +27,11 @@ import {
 } from "../aiBrainConversationStore"
 import { captureAIBrainLearningEvent } from "../aiBrainSelfImprovement"
 import {
- generateStructuredBrainResponse,
  getActiveModel,
  groundCurrentNicheResearch,
  type StructuredBrainModelOutput,
 } from "../gemini"
+import { defaultBrainModelGateway, type BrainModelGateway } from "./runtime/BrainModelGateway"
 import { buildBrainContextPack } from "./BrainContextBroker"
 import {
  inferBrainIntent,
@@ -301,7 +301,7 @@ export interface RunBrainTurnInput {
  recentTurns?: AIBrainConversationTurn[]
  history?: any[]
  allowModel?: boolean
- modelGenerator?: typeof generateStructuredBrainResponse
+ modelGenerator?: BrainModelGateway["generateStructuredResponse"]
  nicheResolver?: typeof resolveNicheKnowledge
  currentResearcher?: typeof groundCurrentNicheResearch
  projectId?: string | null
@@ -577,7 +577,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   let fallbackReason: BrainFallbackReason | undefined = input.allowModel ? undefined : "model_disabled"
   let repairOutcome: BrainRepairOutcome = { attempted: false, succeeded: false, reasons: [] }
   if (input.allowModel) {
-   const output = await withTimeout((input.modelGenerator || generateStructuredBrainResponse)({
+   const output = await withTimeout((input.modelGenerator || defaultBrainModelGateway.generateStructuredResponse)({
     history: (input.history || []).slice(-8),
     userText: input.userText,
     systemInstruction: context.systemInstruction,
@@ -599,7 +599,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    const initialRepairReasons = [...evaluation.repairReasons]
    repairOutcome = { attempted: true, succeeded: false, reasons: initialRepairReasons, evaluationId: evaluation.id }
    try {
-    const repairedOutput = await withTimeout((input.modelGenerator || generateStructuredBrainResponse)({
+    const repairedOutput = await withTimeout((input.modelGenerator || defaultBrainModelGateway.generateStructuredResponse)({
      history: (input.history || []).slice(-8),
      userText: input.userText,
      systemInstruction: [
