@@ -954,6 +954,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
  const [contextRailOpen, setContextRailOpen] = useState(false)
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
+ const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
  const composerRef = useRef<HTMLInputElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
@@ -1214,6 +1215,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  const handleClearActiveProject = () => {
+  setProjectContextCleared(true)
   updateBrain({ activeProjectId: null })
  }
 
@@ -1254,9 +1256,11 @@ const AIBrainCommandInterface: React.FC = () => {
     creatorGrowthContext: turnGrowthContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
-   const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
-    || brain.projects.find((project) => project.status === "active")
-    || null
+   const activeProject = projectContextCleared
+    ? null
+    : brain.projects.find((project) => project.id === brain.activeProjectId)
+     || brain.projects.find((project) => project.status === "active")
+     || null
    if (channelId) {
     const communicationControls = readBrainUserControls(channelId)
     if (communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions && communicationControls.captureCreatorCommunications) {
@@ -1709,8 +1713,8 @@ const AIBrainCommandInterface: React.FC = () => {
           <div className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain max-xl:overflow-visible xl:overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
            <BrainContextStrip
             channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
-            projectLabel={brain.projects.find((project) => project.id === brain.activeProjectId)?.name || "none"}
-            contentBuildId={brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || null}
+            projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
+            contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || null}
             selection={surfaceSelection}
             onClearSelection={handleClearSurfaceSelection}
             onToggleLock={handleToggleSurfaceSelectionLock}
