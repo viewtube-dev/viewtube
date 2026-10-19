@@ -139,6 +139,11 @@ describe("aiBrainConversationStore", () => {
   expect(answer.learningEntryId).toBeTruthy()
   expect(turns[0]?.questionAnswers[0]?.answer).toContain("Subscribers")
   expect(turns[0]?.metadata?.source).toBe("question_module")
+  expect(turns[0]?.metadata?.learningReceiptSnapshot).toMatchObject({
+   entryId: answer.learningEntryId,
+   status: "reflected",
+   scope: "learning_ledger_not_durable",
+  })
  })
 
  it("keeps creator-facing copy clear of internal data plumbing language", () => {
