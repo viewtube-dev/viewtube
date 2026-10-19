@@ -67,7 +67,7 @@ import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
-import { BrainConfidenceChip, confidenceForEvidence } from "../components/brain/BrainConfidenceChip"
+import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
 import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
@@ -195,12 +195,10 @@ const ASK_SEED_PROMPTS: Record<string, string> = {
  * is composed from whatever real evidence exists, and names what is missing when
  * there is nothing to stand on.
  */
-const OpeningBriefing: React.FC<{ snapshot: AIBrainContextSnapshot }> = ({ snapshot }) => {
- const confidence = confidenceForEvidence({
-  hasProfile: snapshot.inferredProfile.status !== "missing",
-  videoCount: snapshot.inferredProfile.videoCount || snapshot.vtSync.videos,
-  dataStatus: snapshot.evidencePack.dataStatus,
- })
+const OpeningBriefing: React.FC<{
+ snapshot: AIBrainContextSnapshot
+ onPrompt: (prompt: string) => void
+}> = ({ snapshot, onPrompt }) => {
  const topVideo = snapshot.inferredProfile.topEvidenceVideos[0]
  const clusters = snapshot.inferredProfile.topicClusters.slice(0, 3).filter(Boolean)
  const hasEvidence = Boolean(topVideo || clusters.length || snapshot.vtSync.videos)
@@ -226,9 +224,9 @@ const OpeningBriefing: React.FC<{ snapshot: AIBrainContextSnapshot }> = ({ snaps
       <h2 className="text-xl font-[1000] uppercase leading-tight sm:text-2xl">
        {hasEvidence ? "Here's what I'm seeing" : "Let's get me enough to be useful"}
       </h2>
-      <BrainConfidenceChip confidence={confidence} />
      </div>
      <p className="mt-2 text-sm font-bold leading-6 text-black/75">{sanitizeCreatorFacingBrainCopy(read)}</p>
+     <BrainProfileCoverageChecklist snapshot={snapshot} onPrompt={onPrompt} />
      <BrainEvidenceDrawer evidencePack={snapshot.evidencePack} className="mt-3" />
     </div>
 
@@ -1278,7 +1276,7 @@ const AIBrainCommandInterface: React.FC = () => {
          {!hydrated && messages.length === 0 ? (
           <div className="min-h-0 flex-1" aria-hidden="true" />
          ) : messages.length === 0 ? (
-          <OpeningBriefing snapshot={snapshot} />
+          <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
           <div className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain max-xl:overflow-visible xl:overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
            {messages.map((message) => message.role === "user" ? (
