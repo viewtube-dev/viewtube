@@ -102,3 +102,27 @@ test("Studio text fields use a rounded inset primary stroke instead of square gr
   assert.match(fieldCss, /box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/)
   assert.doesNotMatch(fieldCss, /background-image:\s*[\s\S]*?linear-gradient\(var\(--vt-field-inline-primary/)
 })
+
+
+test("shared interaction focus is token-generated and applies to text-field blur transitions", () => {
+  assert.match(tokens, /STUDIO_FOCUS_INTERACTION_TOKENS/);
+  assert.match(generator, /STUDIO_FOCUS_INTERACTION_TOKENS/);
+  assert.match(generated, /--vt-studio-focus-hold-ms: 1500ms/);
+  assert.match(generated, /--vt-studio-focus-outline-fade-ms: 500ms/);
+  assert.match(fieldCss, /outline:\s*0 solid transparent/);
+  assert.match(fieldCss, /outline-color var\(--vt-studio-focus-outline-fade-ms/);
+  assert.match(fieldCss, /outline-width var\(--vt-studio-focus-outline-fade-ms/);
+});
+
+test("counter and slider shell capture shares focus without replacing hold-repeat handlers", () => {
+  assert.ok(component.includes("onPointerDownCapture: interactionFocus.start"));
+  assert.ok(component.includes("onPointerUpCapture: interactionFocus.end"));
+  assert.ok(component.includes("onPointerCancelCapture: interactionFocus.end"));
+  assert.ok(fieldCss.includes("var(--vt-studio-focus-outline-width-ratio"));
+  const stepButtons = component.split("\n").filter(line => line.includes("increment.events") || line.includes("decrement.events"));
+  assert.ok(stepButtons.length >= 6, "expected counter and slider step buttons to be covered");
+  for (const line of stepButtons) {
+    assert.ok(!line.includes("onPointerDown={interactionFocus.start}"), "hold handlers must not be overridden");
+    assert.ok(line.includes("onClick={interactionFocus.pulse}"), "keyboard/click activation must pulse focus");
+  }
+});
