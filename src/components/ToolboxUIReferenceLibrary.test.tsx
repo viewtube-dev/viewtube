@@ -83,7 +83,7 @@ describe("Toolbox UI Reference Library", () => {
     expect(source).toContain("<SubToolboxProgressBar")
     expect(source).toContain("<SubToolboxKpiCard")
     expect(source).toContain("<SubToolboxKnob")
-    expect(source).toContain("<SubToolboxAlphabeticalSpectrumTags")
+    expect(source).toContain("<StudioSpectrumTags")
     expect(source).toContain("<SubToolboxDataTable")
     expect(source).toContain("<SubToolboxColorPicker")
     expect(source).toContain("<SubToolboxMediaCard")
