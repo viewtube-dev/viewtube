@@ -4159,6 +4159,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: 0;
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   color: #000;
+  cursor: pointer;
+  touch-action: none;
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after {
   content: "";
@@ -4173,9 +4175,19 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   pointer-events: none;
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter svg {
-  width: min(var(--vt-studio-control-icon-size, 38px), 90%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 90%);
-  stroke-width: 2.5;
+  width: min(42px, 90%);
+  height: min(42px, 90%);
+  stroke-width: 3.75;
+}
+.vt-studio-double-split-slider.is-counter-controls[data-size="compact"] .vt-studio-double-split-slider__counter svg {
+  width: min(30px, 90%);
+  height: min(30px, 90%);
+  stroke-width: 3;
+}
+.vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-double-split-slider__counter svg {
+  width: min(15px, 90%);
+  height: min(15px, 90%);
+  stroke-width: 2.25;
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter button:disabled { opacity: .4; cursor: not-allowed; }
 
