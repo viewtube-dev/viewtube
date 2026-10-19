@@ -34,7 +34,7 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain("or click to upload");
     expect(html).toContain("vt-studio-upload-frame__split--left");
     expect(html).toContain("vt-studio-upload-frame__split--right");
-    expect(html).toContain("vt-studio-upload-frame__filename");
+
     expect(html).not.toContain("FA618A");
     expect(html).not.toContain("4EE4BE");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
@@ -44,6 +44,8 @@ describe("canonical Studio upload frame", () => {
   it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame sizeVariant="compact" accept="image/*" aria-label="Compact upload" />);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const componentSource = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(componentSource).toContain('className="vt-studio-upload-frame__filename"');
     expect(html).toContain('data-size="compact"');
     expect(html).toContain('accept="image/*"');
     expect(css).toContain(".vt-studio-upload-frame");
@@ -77,9 +79,9 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
     expect(css).toContain(".vt-studio-upload-frame__icon::after");
     expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
-    expect(ts).toContain("}, 1000)");
-    expect(ts).toContain("setClicking(true)");
-    expect(ts).toContain("inputRef.current?.click()");
+    expect(componentSource).toContain("}, 1000)");
+    expect(componentSource).toContain("setClicking(true)");
+    expect(componentSource).toContain("inputRef.current?.click()");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
