@@ -77,6 +77,11 @@ const scoreCandidate = (candidate: Omit<DailyOracleCandidate, "score">): DailyOr
  score: (candidate.impact * 4) + (candidate.urgency * 3) + (candidate.confidence * 2) - candidate.effort,
 })
 
+const profileEvidenceLevel = (growth: CreatorGrowthContext): DailyOracleLevel => {
+ const coveredItems = growth.profileCoverageChecklist.filter((item) => item.status === "confirmed" || item.status === "available").length
+ return Math.max(1, Math.min(3, Math.ceil(coveredItems / 2))) as DailyOracleLevel
+}
+
 const short = (value: string, max = 220) => {
  const clean = String(value || "").replace(/\s+/g, " ").trim()
  return clean.length > max ? `${clean.slice(0, max - 1).trim()}…` : clean
@@ -170,7 +175,7 @@ export const buildDailyOraclePlan = ({
    taskText: `Build the next content decision around this proven pattern: ${short(topPattern, 160)}`,
    impact: 3,
    urgency: 2,
-   confidence: growth.profileConfidenceScore >= 70 ? 3 : 2,
+   confidence: growth.profileCoverageChecklist.some((item) => item.id === "videos-analyzed" && item.status === "available") ? 3 : 2,
    effort: 2,
   }))
  }
@@ -198,7 +203,7 @@ export const buildDailyOraclePlan = ({
    taskText: short(brainAction, 180),
    impact: 2,
    urgency: 2,
-   confidence: Math.max(1, Math.min(3, Math.ceil(growth.profileConfidenceScore / 34))) as DailyOracleLevel,
+   confidence: profileEvidenceLevel(growth),
    effort: 1,
   }))
  }
