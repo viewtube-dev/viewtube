@@ -26,7 +26,7 @@ export const BrainWorkspaceNavigation: React.FC<{ className?: string }> = ({ cla
 
   return (
     <nav aria-label="Brain workspace navigation" className={`grid content-start gap-1 ${className}`}>
-      <div className="mb-1 hidden items-center gap-2 border-b-2 border-black px-1 pb-2 xl:flex">
+      <div className="mb-1 hidden items-center gap-2 border-b-2 border-black px-1 pb-2 2xl:flex">
         <SlidersHorizontal size={16} aria-hidden="true" />
         <span className="text-[10px] font-[1000] uppercase tracking-[0.08em]">Workspace</span>
       </div>
@@ -43,7 +43,7 @@ export const BrainWorkspaceNavigation: React.FC<{ className?: string }> = ({ cla
             className={`group flex min-h-11 min-w-0 items-center gap-2 border-2 border-black px-2 py-2 text-left text-[10px] font-[1000] uppercase leading-4 outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${active ? "bg-[#FFDA47]" : "bg-white hover:bg-[#36E0F6]"}`}
           >
             <span className="grid h-7 w-7 shrink-0 place-items-center" aria-hidden="true">{item.icon}</span>
-            <span className="hidden min-w-0 break-words xl:block">{item.label}</span>
+            <span className="hidden min-w-0 break-words 2xl:block">{item.label}</span>
           </Link>
         )
       })}
