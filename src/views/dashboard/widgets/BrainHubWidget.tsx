@@ -46,6 +46,7 @@ import {
 import { runBrainTask } from "../../../services/brain/runtime/BrainRuntime"
 import { recordCreatorCommunicationEvidence } from "../../../services/brain/BrainCommunicationIngestion"
 import {
+ clearBrainUserControlOverride,
  readBrainUserControls,
  setActiveBrainControlChannel,
  writeBrainUserControls,
@@ -53,6 +54,7 @@ import {
 } from "../../../services/brain/BrainUserControls"
 import {
  readBrainEngineControls,
+ resetBrainEngineControls,
  writeBrainEngineControls,
  type BrainEngineControls,
 } from "../../../services/brain/BrainEngineControls"
