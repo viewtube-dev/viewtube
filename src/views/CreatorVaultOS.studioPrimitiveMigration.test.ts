@@ -12,6 +12,9 @@ describe("Vault and Studio Hub shared Studio Controls migration", () => {
     expect(vault).toContain('placeholder="Search assets…"');
     expect(vault).toContain("ref={searchInputRef}");
     expect(vault).not.toContain("SubToolboxSplitField");
+    const styles = read("src/styles/subtoolbox-system.css");
+    expect(styles).toContain('[data-vault-search-row] [data-vt-studio-username-input="true"]');
+    expect(styles).not.toContain(".vault-library-search-field");
   });
 
   it("uses the canonical upload frame for Vault multi-file staging", () => {

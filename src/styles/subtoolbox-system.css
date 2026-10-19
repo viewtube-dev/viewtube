@@ -4612,12 +4612,11 @@
 }
 [data-vault-search-row] [data-vault-library-trigger] { grid-area: library; }
 [data-vault-search-row] [data-vault-search-clear] { grid-area: clear; }
-[data-vault-search-row] .vault-library-search-field {
+[data-vault-search-row] [data-vt-studio-username-input="true"] {
   grid-area: search;
   width: 100%;
   min-width: 0;
 }
-[data-vault-search-row] .vault-library-search-field > input { width: 100%; min-width: 0; }
 .vault-media-type-filter-row {
   display: flex;
   width: 100%;
