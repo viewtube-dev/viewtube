@@ -14,7 +14,7 @@ export const STUDIO_DROPDOWN_TOKENS = {
 export const STUDIO_COUNTER_NUMBER_TOKENS = {
   defaultWhiteMixPercent: 50,
   defaultStrokeColor: "same as default fill",
-  activeTextColor: "#000000",
+  activeTextColor: "#000",
   activeStrokeColor: "#000000",
 } as const
 
