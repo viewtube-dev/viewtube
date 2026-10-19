@@ -2680,16 +2680,13 @@ const CreatorVaultOS: React.FC = () => {
        persistenceId="vault-import-tags"
       >
        <div className="flex flex-col gap-3">
-        <SubToolboxSegmentedToggle
-         level="l1"
-         ariaLabel="Import and Tags tool"
-         value={importTagsMode}
-         onValueChange={(value) => setImportTagsMode(value as VaultImportTagsMode)}
-         options={[
-          { value: "tags", label: "TAGS" },
-          { value: "import", label: "IMPORT" },
-         ]}
-        />
+        <StudioWordToggle
+          size="28"
+          aria-label="Import and Tags tool"
+          value={importTagsMode === "import"}
+          onValueChange={(selected) => setImportTagsMode(selected ? "import" : "tags")}
+          words={["TAGS", "IMPORT"]}
+         />
         {importTagsMode === "tags" ? (
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Spectrum Tags</div>
