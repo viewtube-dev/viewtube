@@ -203,8 +203,8 @@ export const buildCreatorGrowthContext = (
   recentConversationFacts: recentFacts,
   capabilities: [
    {
-    id: "profile_confidence",
-    label: "Channel Profile Read",
+    id: "profile_coverage_checklist",
+    label: "Profile Coverage Checklist",
     status: statusFor(profileReady, snapshot.inferredProfile.videoCount > 0),
     summary: profileReady ? "The Brain has enough channel evidence to start with inferred lanes before asking confirmation questions." : "The Brain can still help, but creator confirmation will make recommendations sharper.",
    },
