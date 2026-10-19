@@ -1,10 +1,9 @@
 import React from "react"
-import { StudioTextInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import {StudioTextInput, StudioTextArea, StudioUploadFrame} from "../../studio-ui/primitives/StudioControls"
 import { Upload, Image as ImageIcon, Sparkles, WandSparkles, Search, MapPin, ListVideo, Users, Clock3, Globe2, MessageSquare, Bot, Tags, FolderOpen, Plus } from "lucide-react"
 import { SubToolbox, ThumbnailMiniSubToolbox } from "../Toolbox"
 import {
   SubToolboxButton,
-  SubToolboxFileTarget,
   SubToolboxInput,
   SubToolboxSelect,
   SubToolboxStatusBadge,
@@ -193,14 +192,14 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
         {showVideoUpload ? (
           <SubToolboxSection label="VIDEO UPLOAD">
             {onVideoFileChange ? (
-              <SubToolboxFileTarget
+              <StudioUploadFrame
                 label={videoFile ? <>{videoFile.name}<br />VIDEO SELECTED</> : videoUploadLabel || <>DROP FILE OR CLICK<br />UPLOAD VIDEO</>}
                 icon={<Upload size={28} strokeWidth={3} />}
                 accept="video/*"
                 file={videoFile}
                 tooltip="Click or drop a video to upload or change it."
                 previewAlt="Selected video preview"
-                onFiles={files => onVideoFileChange(files?.[0] || null)}
+                onFilesChange={files => onVideoFileChange(files?.[0] || null)}
               />
             ) : <SubToolboxStatusBadge level="l1">{videoUploadLabel || "VIDEO SELECTED"}</SubToolboxStatusBadge>}
           </SubToolboxSection>
@@ -213,7 +212,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
 
         <SubToolboxSection>
           {onThumbnailFileChange ? (
-            <SubToolboxFileTarget
+            <StudioUploadFrame
               label={thumbnailFile ? thumbnailFile.name : thumbnailLabel || "Click or drop an image"}
               icon={<ImageIcon size={28} />}
               accept="image/jpeg,image/png,image/webp"
@@ -221,7 +220,7 @@ export const CanonicalMetadataSections: React.FC<CanonicalMetadataSectionsProps>
               preview={thumbnailPreview}
               tooltip="Click or drop an image to upload or change the thumbnail."
               previewAlt="Selected thumbnail"
-              onFiles={files => onThumbnailFileChange(files?.[0] || null)}
+              onFilesChange={files => onThumbnailFileChange(files?.[0] || null)}
               className="vt-thumbnail-upload-target"
             />
           ) : thumbnailPreview ? (
