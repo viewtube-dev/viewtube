@@ -116,7 +116,7 @@ describe("Studio checkbox mark animation timing", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     expect(css).toContain("stroke-dashoffset 495ms")
-    expect(css).toContain(".vt-studio-44-choice.is-checkbox.is-xwide svg path:nth-child(2)")
+    expect(css).toContain(".vt-studio-44-choice.is-checkbox.is-xwide.is-on svg path:nth-child(2)")
     expect(css).toContain("transition-delay: 495ms")
     expect(controls).toContain('d="M 10 10 L 40 40"')
     expect(controls).toContain('d="M 40 10 L 10 40"')
