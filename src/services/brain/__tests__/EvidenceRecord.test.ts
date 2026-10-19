@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest"
 import type { CanonicalIntelligenceEvidenceBundle } from "../../analytics-canon"
 import {
  compareEvidenceRecords,
+ formatEvidenceRecordForPrompt,
  projectCanonicalEvidenceRecords,
+ selectEvidenceRecordsForPrompt,
  type EvidenceRecord,
 } from "../EvidenceRecord"
 
@@ -69,6 +71,27 @@ describe("EvidenceRecord", () => {
   })
   expect(records[0].provenance.evidenceIds).toEqual(["evidence:channel-summary"])
   expect(records[0].window?.kind).toBe("28d")
+ })
+
+ it("selects exactly the records that fit the bounded prompt evidence budget", () => {
+  const records: EvidenceRecord[] = Array.from({ length: 7 }, (_, index) => ({
+   id: `evidence-${index}`,
+   owner: "analytics-canon",
+   sourceRef: `dataset-${index}`,
+   sourceSnapshotId: "snapshot-1",
+   channelId: "channel-1",
+   metric: "views",
+   value: index + 1,
+   freshness: "fresh",
+   epistemicState: "observed",
+   provenance: { evidenceIds: [`source-${index}`] },
+  }))
+  const selected = selectEvidenceRecordsForPrompt(records, { maximumRecords: 5, maximumCharacters: 800 })
+
+  expect(selected.length).toBeGreaterThan(0)
+  expect(selected.length).toBeLessThanOrEqual(5)
+  expect(selected.map(formatEvidenceRecordForPrompt).join("\n").length).toBeLessThanOrEqual(800)
+  expect(selected.every((record) => records.includes(record))).toBe(true)
  })
 
  it("allows exact comparisons only when metric, unit, scope and window semantics match", () => {

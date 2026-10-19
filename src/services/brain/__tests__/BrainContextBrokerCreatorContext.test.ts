@@ -100,4 +100,60 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).toContain("measured and documentary")
   expect(result.systemInstruction).toContain("avoid=insane")
  })
+
+ it("keeps ungraded profile facts and missing-input notes outside the graded evidence section", () => {
+  const record = {
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon",
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   channelId: "channel-1",
+   metric: "views",
+   value: 2800,
+   unit: "count",
+   freshness: "fresh",
+   observedAt: "2026-09-27T16:00:00.000Z",
+   epistemicState: "observed",
+   confidence: 1,
+   provenance: { evidenceIds: ["evidence:channel-summary"] },
+  } as any
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot: {
+    ...snapshot,
+    evidencePack: { missingInputs: ["revenue unavailable"], evidenceIds: [] },
+   },
+   recentTurns: [],
+   userText: "How many views?",
+   evidenceRecords: [record],
+   evidenceRecordQuality: {
+    version: "vt-brain-evidence-record-quality-v1",
+    generatedAt: "2026-10-19T00:00:00.000Z",
+    expectedChannelId: "channel-1",
+    evidenceRecordIds: [record.id],
+    totalRecords: 1,
+    numericRecords: 1,
+    observedRecords: 1,
+    staleRecords: 0,
+    missingRecords: 0,
+    scopeMatch: "exact",
+    confidence: "high",
+    limitations: [],
+   },
+  })
+
+  const prompt = result.systemInstruction
+  const evidenceSection = prompt.split("CHANNEL EVIDENCE\n")[1]?.split("\nCHANNEL PROFILE CONTEXT")[0] || ""
+  expect(evidenceSection).toContain(record.id)
+  expect(evidenceSection).toContain("value=2800")
+  expect(evidenceSection).not.toContain("Inferred niche")
+  expect(evidenceSection).not.toContain("Content pillars")
+  expect(evidenceSection).not.toContain("Missing: revenue unavailable")
+  expect(prompt).toContain("CHANNEL PROFILE CONTEXT")
+  expect(prompt).toContain("Inferred niche: Napoleonic history")
+  expect(prompt).toContain("EVIDENCE GAPS")
+  expect(prompt).toContain("revenue unavailable")
+ })
+
 })

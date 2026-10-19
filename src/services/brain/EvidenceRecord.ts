@@ -81,6 +81,34 @@ export interface EvidenceRecord {
  }
 }
 
+
+/** Render the exact canonical evidence fields available to the model. */
+export const formatEvidenceRecordForPrompt = (record: EvidenceRecord): string =>
+ `Evidence id=${record.id}; owner=${record.owner}; metric=${record.metric || "unspecified"}; value=${record.value === null || record.value === undefined ? "unknown" : String(record.value)}${record.unit ? ` ${record.unit}` : ""}; freshness=${record.freshness}; observedAt=${record.observedAt || "unknown"}; source=${record.sourceRef}; snapshot=${record.sourceSnapshotId || "unknown"}; confidence=${record.confidence ?? "unknown"}; state=${record.epistemicState}; availability=${record.availability || "unknown"}; window=${record.window?.kind || "unknown"}; missingness=${record.missingness?.join(",") || "none"}; refs=${record.provenance.evidenceIds.join(",") || "none"}${record.limitations?.length ? `; limitations=${record.limitations.join("; ")}` : ""}`
+
+/**
+ * Bound the single evidence array before both prompt rendering and quality grading.
+ * The broker must render this array without a second, independent clipping step.
+ */
+export const selectEvidenceRecordsForPrompt = (
+ records: EvidenceRecord[],
+ options: { maximumRecords?: number; maximumCharacters?: number } = {},
+): EvidenceRecord[] => {
+ const maximumRecords = options.maximumRecords ?? 5
+ const maximumCharacters = options.maximumCharacters ?? 3800
+ const selected: EvidenceRecord[] = []
+ let characters = 0
+ for (const record of records) {
+  if (selected.length >= maximumRecords) break
+  const rendered = formatEvidenceRecordForPrompt(record)
+  const nextCharacters = characters + (selected.length ? 1 : 0) + rendered.length
+  if (nextCharacters > maximumCharacters) break
+  selected.push(record)
+  characters = nextCharacters
+ }
+ return selected
+}
+
 export type DerivedSignalKind =
  | "trend"
  | "comparison"
