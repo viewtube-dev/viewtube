@@ -33,6 +33,7 @@ import {
 } from "../gemini"
 import { defaultBrainModelGateway, type BrainModelGateway } from "./runtime/BrainModelGateway"
 import { buildBrainContextPack } from "./BrainContextBroker"
+import { beginBrainTrace } from "./BrainTrace"
 import {
  inferBrainIntent,
  selectBrainCapabilities,
@@ -519,6 +520,17 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   algorithmIntelligence,
   creatorContext,
  })
+ const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null })
+ questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
+ questionTrace.recordCapabilities(capabilityIds)
+ questionTrace.recordModelIdentity({
+  requested: requestedModel,
+  served: null,
+  status: requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable",
+ })
+ questionTrace.recordPromptVersion("orchestrator", BRAIN_PROMPT_VERSION)
+ questionTrace.recordPromptVersion("contextResolver", BRAIN_CONTEXT_RESOLVER_VERSION)
+ questionTrace.recordPromptVersion("outputSchema", BRAIN_OUTPUT_SCHEMA_VERSION)
  try {
   if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
@@ -569,6 +581,19 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    audienceIntelligence,
    algorithmIntelligence,
    creatorContext,
+  })
+  const renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
+   context.systemInstruction.includes(record.id),
+  )
+  questionTrace.recordEvidence({
+   returned: renderedEvidenceRecords.map((record) => record.id),
+   missing: [],
+   records: renderedEvidenceRecords,
+  })
+  questionTrace.recordContext({
+   tokensEstimated: context.budget.estimatedInputTokens,
+   sectionsIncluded: ["system_instruction", ...(renderedEvidenceRecords.length ? ["analytics_evidence_records"] : [])],
+   sectionsDropped: [...context.budget.omittedSections],
   })
 
   let response = buildFallback(input.userText, input.snapshot, input.growthContext)
@@ -689,6 +714,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repairSucceeded: repairOutcome.succeeded,
    },
   })
+  if (repairOutcome.attempted) questionTrace.recordRepairAttempt()
+  questionTrace.recordGrade("response_validation", evaluation.passed ? 100 : 0)
   const turn = await completeAIBrainTurn({
    turnId: pending.id,
    status,
@@ -725,6 +752,14 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repaired: repairOutcome.attempted,
    },
   })
+  try {
+   questionTrace.complete({
+    status: status === "complete" ? "complete" : "fallback",
+    outputRef: response.id,
+   })
+  } catch {
+   // Trace persistence must never fail an otherwise completed creator turn.
+  }
   return {
    turn,
    response,
@@ -749,6 +784,12 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    fallbackReason,
   }
   const evaluation = validateBrainResponse({ response, snapshot: input.snapshot, recentTurns: input.recentTurns, growthContext: input.growthContext, expectedMode: taskProfile.answerMode })
+  try {
+   questionTrace.recordGrade("response_validation", evaluation.passed ? 100 : 0)
+   questionTrace.complete({ status: "fallback", outputRef: response.id, failureReason: error instanceof Error ? error.message : String(error) })
+  } catch {
+   // Trace persistence must never mask the fallback response.
+  }
   const learning = await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
    source: "copilot",
