@@ -62,3 +62,10 @@ test("generated CSS variables stay synchronized with the canonical token module"
   assert.match(generated, /--vt-studio-number-active-color: #000/)
   assert.match(generated, /--vt-studio-number-active-stroke: #000/)
 })
+
+
+test("Studio buttons use half-primary idle fill and solid-primary selected fill", () => {
+  assert.match(css, /html body button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\]\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent[^;]*50%/s);
+  assert.match(css, /html body button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^}]*background:\s*var\(--vt-studio-control-accent/s);
+  assert.match(css, /html body button\[data-vt-studio-button="true"\]\[aria-pressed="true"\] > \[data-vt-studio-button-face\][^}]*background:\s*var\(--vt-studio-control-accent/s);
+});
