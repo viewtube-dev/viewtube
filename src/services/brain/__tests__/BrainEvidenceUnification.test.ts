@@ -1,8 +1,10 @@
+import "fake-indexeddb/auto"
 import { describe, expect, it } from "vitest"
 import type { EvidenceRecord } from "../EvidenceRecord"
 import { buildBrainContextPack } from "../BrainContextBroker"
 import { buildBrainEvidenceRecordQuality } from "../BrainEvidenceQuality"
 import { DEFAULT_BRAIN_USER_CONTROLS } from "../BrainUserControls"
+import { beginAIBrainTurn, completeAIBrainTurn } from "../../aiBrainConversationStore"
 
 const record: EvidenceRecord = {
  id: "analytics:snapshot-1:videos:views",
@@ -80,4 +82,34 @@ describe("Brain evidence unification", () => {
   expect(result.systemInstruction).not.toContain("LEGACY UNGRADED VIDEO")
   expect(result.systemInstruction).not.toContain("Known videos: 99")
  })
+ it("persists the graded prompt records and id projection on the completed turn", async () => {
+  const evidenceRecords = [record]
+  const evidenceRecordQuality = buildBrainEvidenceRecordQuality(evidenceRecords, {
+   expectedChannelId: "channel-1",
+  })
+  const pending = await beginAIBrainTurn({
+   channelId: "channel-1",
+   userText: "How many views?",
+  })
+  const completed = await completeAIBrainTurn({
+   turnId: pending.id,
+   status: "complete",
+   assistantText: "The recorded metric is 1,234 views.",
+   metadata: {
+    evidenceRecords,
+    evidenceRecordQuality,
+    promptEvidenceRecordIds: evidenceRecords.map((item) => item.id),
+    evidenceIds: evidenceRecords.map((item) => item.id),
+   },
+  })
+
+  expect(completed.metadata?.evidenceRecords).toEqual(evidenceRecords)
+  expect(completed.metadata?.evidenceRecordQuality).toMatchObject({
+   evidenceRecordIds: evidenceRecords.map((item) => item.id),
+   confidence: "high",
+  })
+  expect(completed.metadata?.promptEvidenceRecordIds).toEqual(evidenceRecords.map((item) => item.id))
+  expect(completed.metadata?.evidenceIds).toEqual(evidenceRecords.map((item) => item.id))
+ })
+
 })
