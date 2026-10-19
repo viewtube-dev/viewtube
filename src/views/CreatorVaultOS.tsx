@@ -1893,54 +1893,60 @@ const CreatorVaultOS: React.FC = () => {
         <div data-vault-sort-state-view-stack className="grid min-w-0 grid-cols-1 gap-2">
         <StudioLegendMultiDropdown
          className="vault-sort-state-view-dropdown"
-         sizeVariant="standard"
+         sizeVariant="compact"
          label="Sort"
+         accessibleLabel="Sort assets"
+         selectionMode="single"
          value={[sort]}
          onChange={(values) => {
-          const next = values.find((value) => value !== sort)
+          const next = values[0]
           if (next) setSort(next as VaultWorkspaceSort)
          }}
          options={[
-          { value: "updated-desc", label: "updated-desc" },
-          { value: "updated-asc", label: "updated-asc" },
-          { value: "name-asc", label: "name-asc" },
-          { value: "name-desc", label: "name-desc" },
+          { value: "updated-desc", label: "UPDATED-DESC" },
+          { value: "updated-asc", label: "UPDATED-ASC" },
+          { value: "name-asc", label: "NAME-ASC" },
+          { value: "name-desc", label: "NAME-DESC" },
          ]}
         />
         <StudioLegendMultiDropdown
          className="vault-sort-state-view-dropdown"
-         sizeVariant="standard"
+         sizeVariant="compact"
          label="View"
+         accessibleLabel="Vault view"
+         selectionMode="single"
          value={[viewMode]}
          onChange={(values) => {
-          const next = values.find((value) => value !== viewMode)
+          const next = values[0]
           if (next) setViewMode(next as VaultWorkspaceViewMode)
          }}
          options={[
-          { value: "grid", label: "grid" },
-          { value: "masonry", label: "masonry" },
-          { value: "list", label: "list" },
-          { value: "filmstrip", label: "filmstrip" },
-          { value: "lineage", label: "lineage" },
+          { value: "grid", label: "GRID" },
+          { value: "masonry", label: "MASONRY" },
+          { value: "list", label: "LIST" },
+          { value: "filmstrip", label: "FILMSTRIP" },
+          { value: "lineage", label: "LINEAGE" },
          ]}
         />
         <StudioLegendMultiDropdown
          className="vault-sort-state-view-dropdown"
-         sizeVariant="standard"
+         sizeVariant="compact"
          label="State"
+         accessibleLabel="Vault state"
+         selectionMode="single"
          value={[special]}
          onChange={(values) => {
-          const next = values.find((value) => value !== special)
+          const next = values[0]
           if (next) setSpecial(next as typeof special)
          }}
          options={[
-          { value: "active", label: "active" },
-          { value: "recent", label: "recent" },
-          { value: "generated", label: "generated" },
-          { value: "inbox", label: "inbox" },
-          { value: "favorites", label: "favorites" },
-          { value: "archive", label: "archive" },
-          { value: "trash", label: "trash" },
+          { value: "active", label: "ACTIVE" },
+          { value: "recent", label: "RECENT" },
+          { value: "generated", label: "GENERATED" },
+          { value: "inbox", label: "INBOX" },
+          { value: "favorites", label: "FAVORITES" },
+          { value: "archive", label: "ARCHIVE" },
+          { value: "trash", label: "TRASH" },
          ]}
         />
         </div>
