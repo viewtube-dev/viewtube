@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { buildBrainContextPack } from "../BrainContextBroker"
 import { DEFAULT_BRAIN_USER_CONTROLS } from "../BrainUserControls"
+import { buildBrainEvidenceRecordQuality } from "../BrainEvidenceQuality"
 
 const snapshot = {
  brain: {
@@ -154,6 +155,42 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(prompt).toContain("Inferred niche: Napoleonic history")
   expect(prompt).toContain("EVIDENCE GAPS")
   expect(prompt).toContain("revenue unavailable")
+ })
+
+
+ it("fails closed when prompt evidence differs from the evidence record grade", () => {
+  const records = [{
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon",
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   channelId: "channel-1",
+   metric: "views",
+   value: 2800,
+   unit: "count",
+   freshness: "fresh",
+   observedAt: null,
+   updatedAt: "2026-10-19T00:00:00.000Z",
+   epistemicState: "OBSERVED",
+   availability: "available",
+   confidence: 1,
+   provenance: { evidenceIds: ["evidence:channel-summary"] },
+  }] as any
+  const grade = buildBrainEvidenceRecordQuality(records, { expectedChannelId: "channel-1" })
+  const changedRecords = records.map((record: any) => ({ ...record, value: 9999 }))
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "How many views?",
+   evidenceRecords: changedRecords,
+   evidenceRecordQuality: grade,
+  })
+
+  expect(result.systemInstruction).toContain("evidence records do not match their quality grade")
+  expect(result.systemInstruction).not.toContain("value=9999")
+  expect(result.systemInstruction).not.toContain("Analytics evidence access is disabled")
  })
 
 })
