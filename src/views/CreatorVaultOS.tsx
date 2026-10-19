@@ -15,7 +15,6 @@ import {
 import {
  StandardInput,
  SubToolbox,
- SubToolboxDropdownControl,
  SubToolboxInnerActionButton,
  Toolbox,
 } from "../components/Toolbox"
@@ -1900,33 +1899,36 @@ const CreatorVaultOS: React.FC = () => {
         <StudioLegendMultiDropdown
          label="Sort"
          accessibleLabel="Sort assets"
+         selectionMode="single"
          sizeVariant="compact"
          options={["updated-desc", "updated-asc", "name-asc", "name-desc"].map((option) => ({ value: option, label: option.toUpperCase() }))}
          value={[sort]}
          onChange={(values) => {
-          const next = values[values.length - 1]
+          const next = values[0]
           if (next) setSort(next as VaultWorkspaceSort)
          }}
         />
         <StudioLegendMultiDropdown
          label="View"
          accessibleLabel="Vault view"
+         selectionMode="single"
          sizeVariant="compact"
          options={["grid", "masonry", "list", "filmstrip", "lineage"].map((option) => ({ value: option, label: option.toUpperCase() }))}
          value={[viewMode]}
          onChange={(values) => {
-          const next = values[values.length - 1]
+          const next = values[0]
           if (next) setViewMode(next as VaultWorkspaceViewMode)
          }}
         />
         <StudioLegendMultiDropdown
          label="State"
          accessibleLabel="Vault state"
+         selectionMode="single"
          sizeVariant="compact"
          options={["active", "recent", "generated", "inbox", "favorites", "archive", "trash"].map((option) => ({ value: option, label: option.toUpperCase() }))}
          value={[special]}
          onChange={(values) => {
-          const next = values[values.length - 1]
+          const next = values[0]
           if (next) setSpecial(next as typeof special)
          }}
         />
