@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-primitive-catalogs.css"
 
@@ -20,7 +20,7 @@ export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
   "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Studio Text Input", "Studio Text Area", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "Studio Text Input · Floating Label Variant", "Studio Text Area · Floating Label Variant", "Split Search",
-  "Number Field", "Input Action", "Stepper", "Slider", "Range Slider", "Toggle",
+  "Number Field", "Input Action", "Stepper", "Slider", "Slider Counter", "Range Slider", "Toggle",
   "Settings Switch", "Checkbox", "Radio", "Segmented Choice", "Button Group", "Tag",
   "Removable Tag", "Selectable Tag", "Tag Editor", "Badge", "Status Badge", "Progress Bar",
   "Progress Value", "KPI", "Stat Card", "Metric Strip", "Tooltip", "Popover", "Disclosure",
@@ -140,7 +140,8 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   if (name === "Split Search") return <div className={`vt-catalog-split-field is-search has-action is-${level}`} style={style}><span><Search /></span><SubToolboxInput20 controlSize="compact" aria-label="Search" placeholder="SEARCH" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} /><button type="button" className="field-action" aria-label="Clear search" onClick={() => setSearchQuery("")}><X /></button></div>
   if (name === "Input Action") return <div className={`vt-catalog-split-field is-action has-action is-${level}`} style={style}><SubToolboxInput20 controlSize="compact" aria-label="Add item" placeholder="ADD ITEM" value={actionDraft} onChange={e => setActionDraft(e.target.value)} /><button type="button" className="field-action" aria-label="Add item" onClick={() => setActionDraft("")}><Plus /></button></div>
   if (name === "Stepper") return <div className={`vt-catalog-stepper is-${level}`} style={style}><button type="button" aria-label="Decrease" onClick={() => setValue(v => v - 1)}><Minus /></button><strong>{value}</strong><button type="button" aria-label="Increase" onClick={() => setValue(v => v + 1)}><Plus /></button></div>
-  if (name === "Slider") return <div className={`vt-catalog-slider is-${level}`} style={style}><button type="button" className="rail" aria-label="Reset slider" onClick={() => setSliderValue(62)}><span className="slider-glyph" aria-hidden="true">S</span></button><div className="slider-center"><input aria-label="Slider value" type="range" min="0" max="100" value={sliderValue} style={{"--pct":`${sliderValue}%`} as React.CSSProperties} onChange={e => setSliderValue(Number(e.target.value))}/></div><output>{sliderValue}</output></div>
+  if (name === "Slider") return <div className={`vt-catalog-slider-canonical is-${level}`} style={style}><StudioDoubleSplitSlider size={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} value={sliderValue} onValueChange={setSliderValue} ariaLabel="Slider value" /></div>
+  if (name === "Slider Counter") return <div className={`vt-catalog-slider-canonical is-${level}`} style={style}><StudioDoubleSplitSlider size={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} value={sliderValue} onValueChange={setSliderValue} ariaLabel="Slider value" leftControls="counter" /></div>
   if (name === "Range Slider") return <div className={`vt-catalog-range is-${level}`} style={style}><button type="button" className="rail" aria-label="Reset range" onClick={() => { setRangeLow(22); setRangeHigh(76) }}><SlidersHorizontal/></button><div className="range-center"><div className="range-track"><span className="range-fill" style={{left:`${rangeLow}%`,right:`${100-rangeHigh}%`}}/></div><input aria-label="Range minimum" type="range" min="0" max="100" value={rangeLow} onChange={e => setRangeLow(Math.min(Number(e.target.value), rangeHigh - 1))}/><input aria-label="Range maximum" type="range" min="0" max="100" value={rangeHigh} onChange={e => setRangeHigh(Math.max(Number(e.target.value), rangeLow + 1))}/></div><output>{rangeLow}–{rangeHigh}</output></div>
   if (name === "Toggle") return <button type="button" className={`vt-catalog-toggle is-${level} ${toggleOn ? "is-on" : ""}`} style={style} aria-pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn(v => !v)}><span /></button>
   if (name === "Settings Switch") return <button type="button" className={`vt-catalog-switch is-${level} ${switchOn ? "is-on" : ""}`} style={style} aria-pressed={switchOn} onClick={() => setSwitchOn(v => !v)}><span /></button>
