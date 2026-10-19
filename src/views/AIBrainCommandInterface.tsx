@@ -84,6 +84,7 @@ import type {
  CreatorBrainPromptCard,
  CreatorBrainResponse,
  CreatorInitialInsight,
+ CreatorGrowthContext,
 } from "../types"
 
 export type AIBrainTurnReadiness = {
@@ -104,6 +105,13 @@ export type ChatMessage = {
  handoff?: AIBrainChatHandoff | null
  evidencePack?: AIBrainEvidencePack
  readiness?: AIBrainTurnReadiness
+ turnStatus?: AIBrainConversationTurn["status"]
+ originalUserText?: string
+ retryContextSnapshot?: AIBrainContextSnapshot
+ retrySystemPrompt?: string
+ retryGrowthContext?: CreatorGrowthContext
+ retryHistory?: any[]
+ retryOfTurnId?: string | null
 }
 
 const shellCard = "rounded-[16px] border-[4px] border-black bg-white shadow-[6px_6px_0_0_#000]"
@@ -435,14 +443,41 @@ const CreatorResponseCard: React.FC<{
  answeredQuestionIds: Set<string>
  onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
  onAnswerQuestion: (question: CreatorBrainLearningQuestion, answer: string) => void
-}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion }) => {
+ onRetry: (message: ChatMessage, useFreshContext: boolean) => Promise<void>
+ retryContextStale: boolean
+}> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onRetry, retryContextStale }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
  if (!response) {
   return (
    <article className={`${assistantCardFrame} p-4`}>
     <div className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
-    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{sanitizeCreatorFacingBrainCopy(message.text)}</p>
+    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{sanitizeCreatorFacingBrainCopy(message.text || (message.turnStatus === "interrupted" ? "This response was interrupted before it completed." : ""))}</p>
+    {message.turnStatus === "interrupted" ? (
+     <div className="mt-3 grid gap-2">
+      {retryContextStale ? (
+       <p className="text-xs font-bold leading-5" role="status">Channel evidence has changed since this response started. Choose whether to retry with the original context or refreshed data.</p>
+      ) : !message.retryContextSnapshot ? (
+       <p className="text-xs font-bold leading-5" role="status">The original context is not available for this older turn. A retry will use the current channel data.</p>
+      ) : null}
+      <div className="flex flex-wrap gap-2">
+       {message.retryContextSnapshot && retryContextStale ? (
+        <button type="button" onClick={() => void onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+         Retry original context
+        </button>
+       ) : message.retryContextSnapshot ? (
+        <button type="button" onClick={() => void onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+         Retry this response
+        </button>
+       ) : null}
+       {retryContextStale || !message.retryContextSnapshot ? (
+        <button type="button" onClick={() => void onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+         Retry with fresh data
+        </button>
+       ) : null}
+      </div>
+     </div>
+    ) : null}
    </article>
   )
  }
@@ -818,7 +853,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }, [channelId])
 
  const visibleTurns = useMemo(
-  () => recentTurns.filter((turn) => turn.response && !["feedback", "journal", "quick_action", "creator_intake", "question_module"].includes(String(turn.metadata?.source || ""))),
+  () => recentTurns.filter((turn) => (turn.response || turn.status === "interrupted") && !["feedback", "journal", "quick_action", "creator_intake", "question_module"].includes(String(turn.metadata?.source || ""))),
   [recentTurns],
  )
 
@@ -830,19 +865,30 @@ const AIBrainCommandInterface: React.FC = () => {
   const chronological = [...visibleTurns].reverse()
   setMessages(
    chronological.flatMap((turn) => [
-    { id: `${turn.id}-user`, role: "user" as const, text: turn.userText },
+    { id: `${turn.id}-user`, role: "user" as const, text: turn.rawUserMessage ?? turn.userText },
     {
      id: turn.id,
      role: "model" as const,
-     text: turn.assistantText,
+     text: turn.assistantText || (turn.status === "interrupted" ? "This response was interrupted before it completed." : ""),
      response: turn.response,
      handoff: null,
+     turnStatus: turn.status,
+     originalUserText: turn.rawUserMessage ?? turn.userText,
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
       : undefined,
+     retryContextSnapshot: turn.metadata?.retryContextSnapshot && typeof turn.metadata.retryContextSnapshot === "object"
+      ? turn.metadata.retryContextSnapshot as AIBrainContextSnapshot
+      : undefined,
+     retrySystemPrompt: typeof turn.metadata?.retrySystemPrompt === "string" ? turn.metadata.retrySystemPrompt : undefined,
+     retryGrowthContext: turn.metadata?.retryGrowthContext && typeof turn.metadata.retryGrowthContext === "object"
+      ? turn.metadata.retryGrowthContext as CreatorGrowthContext
+      : undefined,
+     retryHistory: Array.isArray(turn.metadata?.retryHistory) ? turn.metadata.retryHistory as any[] : undefined,
+     retryOfTurnId: typeof turn.metadata?.retryOfTurnId === "string" ? turn.metadata.retryOfTurnId : null,
     },
    ]),
   )
@@ -1241,6 +1287,8 @@ const AIBrainCommandInterface: React.FC = () => {
              answeredQuestionIds={answeredQuestionIds}
              onFeedback={handleFeedback}
              onAnswerQuestion={handleAnswerQuestion}
+             onRetry={handleRetry}
+             retryContextStale={Boolean(message.evidencePack?.capturedAt && snapshot.evidencePack.capturedAt && message.evidencePack.capturedAt !== snapshot.evidencePack.capturedAt)}
             />
            ))}
            <div ref={bottomRef} aria-hidden="true" />
