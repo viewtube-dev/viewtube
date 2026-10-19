@@ -358,7 +358,7 @@ A green build alone is not proof of correctness. A UI that looks complete but la
 
 **Gap found during review:** `BrainContextBroker` detected a fingerprint mismatch and described it in the prompt, but still rendered the supplied evidence records. That is not a fail-closed gate: a changed value could remain visible after the grade became stale.
 
-**In-flight fix:** PR #723 makes a missing or mismatched record grade block analytics-derived prompt context and adds a regression test that changes a metric after grading. Treat this item as **pending CI verification**, not complete, until the focused Brain contract and relevant CI gates pass.
+**Verified implementation:** [PR #723](https://github.com/viewtube-dev/viewtube/pull/723) is merged. A missing or mismatched record grade blocks analytics-derived prompt context, with regression coverage for a metric changing after grading. Keep the acceptance criteria below as continuing regression requirements; a merged PR does not by itself certify every broader evidence/UI surface.
 
 **Acceptance criteria:**
 - The same selected records are rendered and graded.
@@ -366,3 +366,8 @@ A green build alone is not proof of correctness. A UI that looks complete but la
 - Changed value, reordered records, or changed record identity after grading blocks analytics context.
 - A valid grade for the exact records preserves normal rendering.
 - Tests prove both the valid and fail-closed paths.
+
+
+## Front-end integration reference — 2026-10-19
+
+The shared evidence-to-UI contract and accessibility guidance now live in [Part 5 of the PR241 Brain brainstorm/front-end design reference](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#part-5--evidence-first-ui-integration-addendum-2026-10-19). Treat that addendum as the companion UI integration design—not as proof that the proposed components have shipped. The core release gate remains exact parity between the turn's graded evidence records and evidence shown in the UI.
