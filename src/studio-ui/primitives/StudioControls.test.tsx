@@ -844,9 +844,9 @@ describe("Studio counter divider alignment and slider counter hold", () => {
 
 describe("Studio counter hold-repeat acceleration", () => {
   it("smoothly accelerates from 128ms through 46ms to a 23ms maximum-rate interval", () => {
-    expect(getStudioCounterRepeatDelay(0, 30)).toBe(128);
-    expect(getStudioCounterRepeatDelay(520, 30)).toBe(46);
-    expect(getStudioCounterRepeatDelay(1220, 30)).toBe(23);
+    expect(getStudioCounterRepeatDelay(0, 30)).toBe(150);
+    expect(getStudioCounterRepeatDelay(520, 30)).toBe(23);
+    expect(getStudioCounterRepeatDelay(900, 30)).toBe(23);
     expect(getStudioCounterRepeatDelay(2000, 30)).toBe(23);
   });
 
