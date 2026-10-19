@@ -22,7 +22,7 @@ describe("Brain launchpad prompt discovery", () => {
  })
 
  it("keeps Enter-to-send from firing during IME composition", () => {
-  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: true })).toBe(true)
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: true })).toBe(false)
   expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false })).toBe(true)
   expect(shouldSendBrainComposerKey({ key: "Escape", isComposing: false })).toBe(false)
  })
