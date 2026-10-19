@@ -198,25 +198,29 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
 
 
 const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
-  const [standardValue, setStandardValue] = React.useState(62)
-  const [compactValue, setCompactValue] = React.useState(38)
-  const [microValue, setMicroValue] = React.useState(7)
+  const [standardA, setStandardA] = React.useState(62)
+  const [standardB, setStandardB] = React.useState(62)
+  const [standardC, setStandardC] = React.useState(62)
+  const [compactA, setCompactA] = React.useState(38)
+  const [compactB, setCompactB] = React.useState(38)
+  const [microA, setMicroA] = React.useState(7)
+  const [microB, setMicroB] = React.useState(7)
   return (
     <Family
       title="StudioDoubleSplitSlider · Standard + Compact + Micro"
       nonDefaultSettings={[
         "L1 range-slider track and live numeric readout on the canonical double-split shell.",
         "Rectangular v2 handle with a black structural stroke; no shell shadow or movement.",
-        "Standard, compact, and micro specimens use 0–100 values and paired palette variants.",
+        "Each slider specimen has independent state, including reversed palette and counter-controlled variants.",
       ]}
       provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
         <div className="vt-confirmed-counter-size-rows">
-          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>COUNTER-CONTROLLED · UP / DOWN</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardA} onValueChange={setStandardA} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardB} onValueChange={setStandardB} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactA} onValueChange={setCompactA} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactB} onValueChange={setCompactB} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>COUNTER-CONTROLLED · UP / DOWN</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardC} onValueChange={setStandardC} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microA} onValueChange={setMicroA} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microB} onValueChange={setMicroB} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
         </div>
       </div>
     </Family>
