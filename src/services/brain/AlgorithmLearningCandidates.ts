@@ -14,10 +14,12 @@ export interface AlgorithmLearningCandidate {
  confidence: BrainConfidenceLevel
  sourceEventIds: string[]
  evidenceIds: string[]
- /** Optional end-to-end joins to generation traces and generated outputs. */
+ /** End-to-end joins to the operations, workflows, traces, outputs, and packets measured. */
  operationIds?: string[]
+ workflowIds?: string[]
  traceIds?: string[]
  outputRefs?: string[]
+ actionPacketIds?: string[]
  sampleSize: number
  positiveRate: number
  status: "candidate" | "insufficient_evidence"
@@ -81,6 +83,8 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
    operationIds: [...new Set(decisiveRows.map(({ event }) => event.operationId).filter((value): value is string => Boolean(value)))],
    traceIds: [...new Set(decisiveRows.map(({ event }) => event.traceId).filter((value): value is string => Boolean(value)))],
    outputRefs: [...new Set(decisiveRows.map(({ event }) => event.outputRef).filter((value): value is string => Boolean(value)))],
+   workflowIds: [...new Set(decisiveRows.map(({ event }) => event.workflowId).filter((value): value is string => Boolean(value)))],
+   actionPacketIds: [...new Set(decisiveRows.map(({ event }) => event.actionPacketId).filter((value): value is string => Boolean(value)))],
    sampleSize,
    positiveRate,
    status,
@@ -100,6 +104,13 @@ export const recordAlgorithmLearningCandidates = (channelId: string) => {
   kind: "LEARNING_CANDIDATE_CREATED",
   sourceSystem: "learning",
   sourceId: candidate.id,
+  // Preserve a scalar join only when every measured sample agrees. Mixed identities
+  // stay available in metadata without falsely attributing the aggregate to one run.
+  operationId: candidate.operationIds?.length === 1 ? candidate.operationIds[0] : null,
+  workflowId: candidate.workflowIds?.length === 1 ? candidate.workflowIds[0] : null,
+  traceId: candidate.traceIds?.length === 1 ? candidate.traceIds[0] : null,
+  outputRef: candidate.outputRefs?.length === 1 ? candidate.outputRefs[0] : null,
+  actionPacketId: candidate.actionPacketIds?.length === 1 ? candidate.actionPacketIds[0] : null,
   parentEventIds: candidate.sourceEventIds,
   evidenceIds: candidate.evidenceIds,
   confidence: candidate.confidence,
