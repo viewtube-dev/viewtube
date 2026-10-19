@@ -1064,7 +1064,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   resize: vertical;
   padding: 10px 12px;
   /* Share the same size-tier typography tokens as native text inputs. */
-  font-size: var(--vt-studio-control-font-size);
+  font-size: var(--vt-studio-standard-font-size, 38px);
   font-weight: var(--vt-studio-control-font-weight, 1000);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
   /* Only textarea-specific typography override: compact description row spacing. */
@@ -1073,6 +1073,12 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   padding: 8px 10px;
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) var(--vt-field-primary);
+}
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
+  font-size: var(--vt-studio-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) var(--vt-field-primary);
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder {
   color: var(--vt-field-primary);
