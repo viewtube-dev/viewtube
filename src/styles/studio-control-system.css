@@ -748,7 +748,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
 button[data-vt-studio-control="true"].vt-studio-44-switch:focus-visible,
 button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 3px;
+  outline-offset: 0.3cqw;
 }
 /* Word toggles keep their intentional 3px/2px frame, but size to their own
    labels and stay inside the module instead of inheriting action-button layout. */
@@ -4183,7 +4183,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 @keyframes vt-studio-upload-spin { to { --vt-studio-upload-angle: 360deg; } }
 @keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; scale: 1; } 45% { opacity: .38; scale: 1.012; } }
 @keyframes vt-studio-upload-core { 0%, 100% { scale: 1; } 45% { scale: .975; } }
-@keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 2px; } 50% { translate: 0 -4px; } }
+@keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 0.2cqw; } 50% { translate: 0 -0.4cqw; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
 @keyframes vt-studio-upload-click-breathe {
   0%, 100% {
