@@ -218,3 +218,20 @@ Resolve these with source inspection before writing production code.
 ---
 
 *End of plan. Keep the change narrow. One array. Prompt, grade, and record it. Re-baseline deliberately. Revert if needed.*
+
+
+## 9. Follow-on phase: canonical epistemic vocabulary
+
+**Status:** Implemented in the follow-on evidence-contract phase.
+
+The original narrow unification intentionally deferred this work. The evidence contract and schema now converge on one ten-state vocabulary:
+
+`KNOWN`, `OBSERVED`, `CALCULATED`, `USER_PROVIDED`, `INFERRED`, `HYPOTHESIS`, `ESTIMATE`, `STALE`, `MISSING`, and `CONFLICTING`.
+
+- `EvidenceRecord.ts` owns the canonical TypeScript constant and union.
+- `BrainEvidenceContract.ts` aliases that union instead of translating to a second uppercase vocabulary.
+- `BrainEvidenceQuality.ts` uses a typed subset for dataset readiness rather than declaring an independent state vocabulary.
+- The JSON Schema's existing uppercase enum remains the wire-contract authority; no schema migration is required.
+- Dataset operational status (available/partial/stale/failed/unavailable) remains distinct from epistemic state. A dataset can be operationally unavailable while its evidence state is `MISSING`.
+
+Regression tests cover all ten states, preservation through claim projection, missing values never becoming zero, and stale freshness taking precedence over a current epistemic label.
