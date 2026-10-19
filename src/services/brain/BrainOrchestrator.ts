@@ -40,7 +40,7 @@ import {
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
 import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
-import { resolveEvidenceIntelligence } from "./EvidenceIntelligenceResolver"
+import { resolveEvidenceIntelligence, type EvidenceIntelligenceEnvelope } from "./EvidenceIntelligenceResolver"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
@@ -309,7 +309,32 @@ export interface RunBrainTurnInput {
  artifactRefs?: string[]
 }
 
-export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> => {
+const buildEvidenceProvenanceChips = (evidence: EvidenceIntelligenceEnvelope | null): string[] => {
+ if (!evidence) return []
+ const quality = evidence.evidenceQuality
+ const chips = [
+  `Analytics scope: ${quality.scopeMatch}; window: ${quality.selectedWindow}; confidence: ${quality.confidence}`,
+  `Evidence coverage: ${Math.round(quality.coverageRatio * 100)}%; snapshot: ${quality.sourceSnapshotId.slice(0, 8)}`,
+ ]
+ for (const claim of evidence.evidenceClaims.slice(0, 3)) {
+  const value = claim.value === null ? "unknown" : String(claim.value)
+  const unit = claim.unit ? ` ${claim.unit}` : ""
+  const timeframe = claim.timeframe?.start || claim.timeframe?.end
+   ? ` · ${claim.timeframe.start || "start unknown"}–${claim.timeframe.end || "end unknown"}`
+   : claim.timeframe?.kind ? ` · ${claim.timeframe.kind}` : ""
+  chips.push(`${claim.claim}: ${value}${unit} · ${claim.epistemicState.toLowerCase()} · ${claim.freshness} · source ${claim.sourceOwner}${timeframe}`)
+ }
+ const staleCount = quality.freshness.staleDatasetIds.length
+ const missingCount = quality.missingness.unavailableDatasetIds.length
+  + quality.missingness.failedDatasetIds.length
+  + quality.missingness.omittedDatasetIds.length
+ if (staleCount) chips.push(`Stale datasets: ${staleCount}; treat as historical`)
+ if (missingCount) chips.push(`Unavailable/omitted datasets: ${missingCount}; missing is not zero`)
+ for (const limitation of quality.limitations.slice(0, 2)) chips.push(`Limitation: ${limitation}`)
+ return chips.slice(0, 8)
+}
+
+export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrchestratorResult> =>
  const taskProfile = resolveBrainTaskProfile(input.userText)
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  const requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
@@ -540,7 +565,16 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     fallbackReason = "repair_failed"
    }
   }
-  response = { ...response, generationPath, ...(fallbackReason ? { fallbackReason } : {}) }
+  response = {
+   ...response,
+   evidenceIds: Array.from(new Set([
+    ...(response.evidenceIds || []),
+    ...(evidenceIntelligence?.evidenceRecords || []).map((record) => record.id),
+   ])).slice(0, 20),
+   evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
+   generationPath,
+   ...(fallbackReason ? { fallbackReason } : {}),
+  }
   const learning = await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
    source: "copilot",
@@ -620,7 +654,17 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   const generationPath: BrainGenerationPath = "basic_guidance"
   const fallbackReason: BrainFallbackReason = input.allowModel ? "provider_error" : "model_disabled"
   const repairOutcome: BrainRepairOutcome = { attempted: false, succeeded: false, reasons: [] }
-  const response = { ...buildFallback(input.userText, input.snapshot, input.growthContext), generationPath, fallbackReason }
+  const fallbackResponse = buildFallback(input.userText, input.snapshot, input.growthContext)
+  const response = {
+   ...fallbackResponse,
+   evidenceIds: Array.from(new Set([
+    ...(fallbackResponse.evidenceIds || []),
+    ...(evidenceIntelligence?.evidenceRecords || []).map((record) => record.id),
+   ])).slice(0, 20),
+   evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
+   generationPath,
+   fallbackReason,
+  }
   const evaluation = validateBrainResponse({ response, snapshot: input.snapshot, recentTurns: input.recentTurns, growthContext: input.growthContext, expectedMode: taskProfile.answerMode })
   const learning = await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
