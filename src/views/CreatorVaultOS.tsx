@@ -28,7 +28,6 @@ import {
  SubToolboxSegmentedToggle,
  SubToolboxSelect,
  SubToolboxSplitField,
- SubToolboxStatePanel,
  SubToolboxTagEditor,
  SubToolboxTextArea,
 } from "../components/subtoolbox/SubToolboxPrimitives"
@@ -2238,7 +2237,7 @@ const CreatorVaultOS: React.FC = () => {
           ))}
          </div>
         ) : (
-         <SubToolboxStatePanel level="l1" state="empty" message="Select one compatible asset to reveal ViewTube handoff destinations." />
+         <StudioTextBox size="standard" role="status" aria-live="polite">{"Select one compatible asset to reveal ViewTube handoff destinations."}</StudioTextBox>
         )}
         <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
          <SubToolboxInnerActionButton label="Export Selected Metadata JSON" iconName="database" tone="cyan" onClick={() => exportVaultMetadata(allAssets.filter((asset) => selectedAssetIds.includes(asset.id)), "json")} />
@@ -2345,18 +2344,10 @@ const CreatorVaultOS: React.FC = () => {
              ))}
             </div>
            ) : (
-            <SubToolboxStatePanel
-             level="l1"
-             state="empty"
-             message="No canonical parent lineage is recorded for this asset."
-            />
+            <StudioTextBox size="standard" role="status" aria-live="polite">{"No canonical parent lineage is recorded for this asset."}</StudioTextBox>
            )
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="empty"
-            message="Select an asset to view its canonical lineage."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"Select an asset to view its canonical lineage."}</StudioTextBox>
           )}
          </div>
         ) : visibleAssets.length ? (
@@ -2477,13 +2468,9 @@ const CreatorVaultOS: React.FC = () => {
          </div>
          )
         ) : (
-         <SubToolboxStatePanel
-          level="l1"
-          state={allAssets.length ? "filtered-empty" : "empty"}
-          message={allAssets.length
+         <StudioTextBox size="standard" role="status" aria-live="polite">{allAssets.length
            ? "No Vault assets match the current search and filters."
-           : "No Vault assets yet. Use Import Station to stage your first batch."}
-         />
+           : "No Vault assets yet. Use Import Station to stage your first batch."}</StudioTextBox>
         )}
        </div>
       </SubToolbox>
@@ -2658,7 +2645,7 @@ const CreatorVaultOS: React.FC = () => {
           </div>
          </section>
         ) : (
-         <SubToolboxStatePanel level="l1" state="empty" message="Select exactly two assets to compare their previews and metadata differences." />
+         <StudioTextBox size="standard" role="status" aria-live="polite">{"Select exactly two assets to compare their previews and metadata differences."}</StudioTextBox>
         )}
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Versions</div>
@@ -2688,11 +2675,7 @@ const CreatorVaultOS: React.FC = () => {
             ) : null}
            </>
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="empty"
-            message="No canonical version stack is recorded for this asset."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"No canonical version stack is recorded for this asset."}</StudioTextBox>
           )}
          </div>
 
@@ -2868,11 +2851,7 @@ const CreatorVaultOS: React.FC = () => {
               </div>
               {item.metadata.duplicateAssetId ? (
                <>
-                <SubToolboxStatePanel
-                 level="l1"
-                 state="stale"
-                 message={`Exact duplicate of ${String(item.metadata.duplicateAssetName || "an existing Vault asset")}. Review before ingesting.`}
-                />
+                <StudioTextBox size="standard" role="status" aria-live="polite">{`Exact duplicate of ${String(item.metadata.duplicateAssetName || "an existing Vault asset")}. Review before ingesting.`}</StudioTextBox>
                 <SubToolboxInnerActionButton
                  label="Use Existing Duplicate"
                  iconName="link"
@@ -2897,7 +2876,7 @@ const CreatorVaultOS: React.FC = () => {
              </div>
             </div>
            )) : (
-            <SubToolboxStatePanel level="l1" state="ready" message="Import Station is ready for a batch." />
+            <StudioTextBox size="standard" role="status" aria-live="polite">{"Import Station is ready for a batch."}</StudioTextBox>
            )}
           </div>
          </div>
@@ -3137,7 +3116,7 @@ const CreatorVaultOS: React.FC = () => {
          ) : null}
          </React.Fragment>
         )) : (
-         <SubToolboxStatePanel level="l1" state="empty" message="No Vault background tasks yet." />
+         <StudioTextBox size="standard" role="status" aria-live="polite">{"No Vault background tasks yet."}</StudioTextBox>
         )}
         {completedVaultTasks.length ? (
          <div className="flex flex-wrap items-center gap-2" data-vault-task-history>
@@ -3239,7 +3218,7 @@ const CreatorVaultOS: React.FC = () => {
            ))}
           </div>
          ) : (
-          <SubToolboxStatePanel level="l1" state="empty" message="No projects are available for packaging readiness review." />
+          <StudioTextBox size="standard" role="status" aria-live="polite">{"No projects are available for packaging readiness review."}</StudioTextBox>
          )}
         </div>
         <div className="text-[10px] font-bold opacity-55">
@@ -3281,7 +3260,7 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ))}
           </div>
-         ) : <SubToolboxStatePanel level="l1" state="empty" message="No exact duplicate hashes are recorded in the current Vault." />}
+         ) : <StudioTextBox size="standard" role="status" aria-live="polite">{"No exact duplicate hashes are recorded in the current Vault."}</StudioTextBox>}
         </section>
         <section data-vault-similar-pairs>
          <div className="mb-2 flex items-center justify-between gap-2"><div className="text-xs font-black uppercase">Visually Similar Images</div><span className="text-xs font-black">{relationshipReview.similarPairs.length}{relationshipReview.similarPairs.length === 50 ? "+" : ""}</span></div>
@@ -3296,7 +3275,7 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ))}
           </div>
-         ) : <SubToolboxStatePanel level="l1" state="empty" message="No similar-image pairs are currently indexed." />}
+         ) : <StudioTextBox size="standard" role="status" aria-live="polite">{"No similar-image pairs are currently indexed."}</StudioTextBox>}
         </section>
         <section data-vault-unreferenced-assets>
          <div className="mb-2 flex items-center justify-between gap-2"><div className="text-xs font-black uppercase">No Recorded Content Build Usage</div><span className="text-xs font-black">{relationshipReview.usageReview.length}</span></div>
@@ -3310,7 +3289,7 @@ const CreatorVaultOS: React.FC = () => {
             </div>
            ))}
           </div>
-         ) : <SubToolboxStatePanel level="l1" state="empty" message="No candidate assets found, or all assets have recorded usage." />}
+         ) : <StudioTextBox size="standard" role="status" aria-live="polite">{"No candidate assets found, or all assets have recorded usage."}</StudioTextBox>}
         </section>
         <div className="text-[10px] font-bold opacity-55">Similarity is a review signal, not proof of duplication. No assets are deleted, merged, or replaced automatically.</div>
        </div>
@@ -3335,11 +3314,7 @@ const CreatorVaultOS: React.FC = () => {
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Quick Look</div>
           {!quickLookOpen ? (
-           <SubToolboxStatePanel
-            level="l1"
-            state="ready"
-            message="Quick Look is closed. Press Space to reopen it."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"Quick Look is closed. Press Space to reopen it."}</StudioTextBox>
           ) : selectedAsset.kind === "image" && (selectedAsset.previewUrl || selectedAsset.url) ? (
            <SubToolboxMediaInspector
             level="l1"
@@ -3370,11 +3345,7 @@ const CreatorVaultOS: React.FC = () => {
             onSpeedChange={setQuickLookSpeed}
            />
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="empty"
-            message="This Vault record does not have a compatible preview source yet."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"This Vault record does not have a compatible preview source yet."}</StudioTextBox>
           )}
          </div>
          {selectedMediaCapabilities.length ? (
@@ -3469,11 +3440,7 @@ const CreatorVaultOS: React.FC = () => {
              />
             </div>
            )) : (
-            <SubToolboxStatePanel
-             level="l1"
-             state="empty"
-             message="This asset is not in a manual collection yet."
-            />
+            <StudioTextBox size="standard" role="status" aria-live="polite">{"This asset is not in a manual collection yet."}</StudioTextBox>
            )}
            {manualCollections.length ? (
             <>
@@ -3509,11 +3476,7 @@ const CreatorVaultOS: React.FC = () => {
             ))}
            </div>
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="ready"
-            message="No current organization or review issues."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"No current organization or review issues."}</StudioTextBox>
           )}
           <div className="mt-2 flex flex-col gap-2">
            <SubToolboxTextArea
@@ -3564,11 +3527,7 @@ const CreatorVaultOS: React.FC = () => {
              />
             </div>
            ) : (
-            <SubToolboxStatePanel
-             level="l1"
-             state="blocked"
-             message="No YouTube video ID is available for this asset. Local-file speech transcription requires a real speech-to-text backend and is not simulated."
-            />
+            <StudioTextBox size="standard" role="status" aria-live="polite">{"No YouTube video ID is available for this asset. Local-file speech transcription requires a real speech-to-text backend and is not simulated."}</StudioTextBox>
            )}
           </div>
          ) : null}
@@ -3664,18 +3623,10 @@ const CreatorVaultOS: React.FC = () => {
               ))}
              </div>
             ) : (
-             <SubToolboxStatePanel
-              level="l1"
-              state="empty"
-              message="No visually similar imported images are currently indexed."
-             />
+             <StudioTextBox size="standard" role="status" aria-live="polite">{"No visually similar imported images are currently indexed."}</StudioTextBox>
             )
            ) : (
-            <SubToolboxStatePanel
-             level="l1"
-             state="stale"
-             message="This image predates local perceptual indexing. Re-import or replace its preview source to generate a similarity fingerprint."
-            />
+            <StudioTextBox size="standard" role="status" aria-live="polite">{"This image predates local perceptual indexing. Re-import or replace its preview source to generate a similarity fingerprint."}</StudioTextBox>
            )}
           </div>
          ) : null}
@@ -3694,11 +3645,7 @@ const CreatorVaultOS: React.FC = () => {
             ))}
            </div>
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="empty"
-            message="No parent lineage is recorded for this asset."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"No parent lineage is recorded for this asset."}</StudioTextBox>
           )}
          </div>
          <div>
@@ -3811,16 +3758,8 @@ const CreatorVaultOS: React.FC = () => {
            <div className="mb-2 text-xs font-black uppercase opacity-60">Project Readiness</div>
            <div className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
-             <SubToolboxStatePanel
-              level="l1"
-              state={selectedReadiness.packageReady ? "ready" : "stale"}
-              message={selectedReadiness.packageReady ? "PACKAGE READY" : `${selectedReadiness.missingPackaging.length} PACKAGING DEPENDENCIES MISSING`}
-             />
-             <SubToolboxStatePanel
-              level="l1"
-              state={selectedReadiness.publishReady ? "ready" : "stale"}
-              message={selectedReadiness.publishReady ? "PUBLISH READY" : "FINAL RENDER NOT READY"}
-             />
+             <StudioTextBox size="standard" role="status" aria-live="polite">{selectedReadiness.packageReady ? "PACKAGE READY" : `${selectedReadiness.missingPackaging.length} PACKAGING DEPENDENCIES MISSING`}</StudioTextBox>
+             <StudioTextBox size="standard" role="status" aria-live="polite">{selectedReadiness.publishReady ? "PUBLISH READY" : "FINAL RENDER NOT READY"}</StudioTextBox>
             </div>
             <div className="grid grid-cols-2 gap-2">
              {selectedReadiness.slots.map((slot) => (
@@ -3857,11 +3796,7 @@ const CreatorVaultOS: React.FC = () => {
             ))}
            </div>
           ) : (
-           <SubToolboxStatePanel
-            level="l1"
-            state="empty"
-            message="This asset is not attached to a ContentBuild yet."
-           />
+           <StudioTextBox size="standard" role="status" aria-live="polite">{"This asset is not attached to a ContentBuild yet."}</StudioTextBox>
           )}
          </div>
          {Array.isArray(selectedAsset.metadata?.imagePalette)
@@ -3990,11 +3925,7 @@ const CreatorVaultOS: React.FC = () => {
          </div>
         </div>
        ) : (
-        <SubToolboxStatePanel
-         level="l1"
-         state="empty"
-         message="Select an asset to inspect its metadata and provenance."
-        />
+        <StudioTextBox size="standard" role="status" aria-live="polite">{"Select an asset to inspect its metadata and provenance."}</StudioTextBox>
        )}
       </SubToolbox>
        </div>
