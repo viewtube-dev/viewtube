@@ -306,6 +306,8 @@ export const DailyOracleWidget = ({
     () => buildCreatorGrowthContext(snapshot, [], []),
     [snapshot],
   )
+  const confirmedProfileChecks = growth.profileCoverage.filter((item) => item.complete).length
+  const totalProfileChecks = growth.profileCoverage.length
 
   const evidence = useMemo(() => {
     const rows: any[] = Array.isArray(data?.canonicalRows) ? data.canonicalRows : []
@@ -498,7 +500,7 @@ export const DailyOracleWidget = ({
             <>
               <WidgetSection edge="full" className="daily-oracle-v2__source-strip">
                 <WidgetBadge height={18} icon={<Brain size={11} />}>
-                  {Math.round(growth.profileConfidenceScore)}% CHANNEL READ
+                  {confirmedProfileChecks}/{totalProfileChecks} PROFILE CHECKS
                 </WidgetBadge>
                 <span>{plan.sourceLabel}</span>
                 <span>{plan.evidenceCoverage}% EVIDENCE READY</span>
@@ -664,8 +666,8 @@ export const DailyOracleWidget = ({
 
               <WidgetSection className="daily-oracle-v2__context-grid">
                 <div className="is-purple">
-                  <span>CHANNEL READ</span>
-                  <strong>{Math.round(growth.profileConfidenceScore)}%</strong>
+                  <span>PROFILE CHECKLIST</span>
+                  <strong>{confirmedProfileChecks}/{totalProfileChecks}</strong>
                 </div>
                 <div className="is-cyan">
                   <span>EVIDENCE READY</span>
