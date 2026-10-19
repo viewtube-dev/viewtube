@@ -1,3 +1,4 @@
+import { findRuntimeSourceViolations } from "./source-governance/runtime-source-rules.mjs"
 import fs from "node:fs"
 import path from "node:path"
 
@@ -28,10 +29,15 @@ const violations = {
  quarantineImports: [],
  duplicateServiceTests: [],
  directLegacyRoutes: [],
+ documentationImports: [],
+ absoluteFileLinks: [],
 }
 
 for (const file of sourceFiles) {
  const text = fs.readFileSync(file, "utf8")
+ const runtimePathIssues = findRuntimeSourceViolations([{ path: path.relative(ROOT, file), text }])
+ violations.documentationImports.push(...runtimePathIssues.documentationImports)
+ violations.absoluteFileLinks.push(...runtimePathIssues.absoluteFileLinks)
  if (/useState\s*\(\s*\(\)\s*=>[\s\S]{0,300}navigate\(/m.test(text)) {
   violations.renderTimeNavigate.push(path.relative(ROOT, file))
  }
@@ -101,9 +107,17 @@ if (hasViolations) {
   console.error("\nLegacy routes mounted directly (must redirect):")
   for (const v of violations.directLegacyRoutes) console.error(`- ${v}`)
  }
+ if (violations.documentationImports.length) {
+  console.error("\nRuntime source must not import documentation files:")
+  for (const v of violations.documentationImports) console.error(`- ${v}`)
+ }
+ if (violations.absoluteFileLinks.length) {
+  console.error("\nRuntime source must not emit developer-machine file:// links:")
+  for (const v of violations.absoluteFileLinks) console.error(`- ${v}`)
+ }
  process.exit(1)
 }
 
 console.log(
- "src governance check passed: no render-time navigate patterns, no duplicate service tests, no quarantine imports, and no direct legacy route mounts.",
+ "src governance check passed: no render-time navigate patterns, no duplicate service tests, no quarantine imports, no direct legacy route mounts, no runtime documentation imports, and no developer-machine file links.",
 )
