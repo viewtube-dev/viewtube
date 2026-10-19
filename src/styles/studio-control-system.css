@@ -4219,15 +4219,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background-color: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
 
-/* Studio palette fill contract: resting controls use a 50% primary wash;
-   selected controls use the full primary color. Split-left rails stay secondary. */
-html body button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
-}
-/* Action buttons keep their component-defined idle fill. */
-html body button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][aria-pressed="true"] > [data-vt-studio-action-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
+/* Button and split-left idle faces keep their component-defined fill.
+   Selected button faces use solid primary. */
 html body button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face],
 html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
@@ -4235,6 +4228,8 @@ html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-s
 html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]):is([data-selected="true"], [aria-pressed="true"]) > [data-vt-studio-button-face] > [data-vt-studio-split-label] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
 }
+
+/* Action buttons keep their component-defined idle and selected fills. */
 
 /* Selected word-toggle handles use solid primary; idle appearance remains component-defined. */
 html body .vt-studio-44-word-toggle .vt-studio-44-word-handle.is-active {
