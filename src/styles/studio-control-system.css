@@ -4785,7 +4785,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
   font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--textarea-description-line-height, 0.75);
+  line-height: 0.75;
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: uppercase;
   white-space: pre-wrap;
@@ -4798,7 +4798,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   position: absolute;
   inset: var(--studio-text-box-stroke-width);
   border: var(--studio-text-box-stroke-width) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  border-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--studio-text-box-stroke-width) * 2));
+  border-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--studio-text-box-stroke-width) - var(--studio-text-box-stroke-width)));
   pointer-events: none;
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
