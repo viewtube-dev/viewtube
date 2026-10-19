@@ -255,8 +255,16 @@ describe("aiBrainCommandInterface", () => {
   const modules = formatCreatorGrowthModules(response, growthContext)
   const capabilityIds = growthContext.capabilities.map((capability) => capability.id)
 
+  expect(growthContext.profileCoverageChecklist.map((item) => item.id)).toEqual(expect.arrayContaining([
+   "channel-description",
+   "videos-analyzed",
+   "creator-goals",
+   "style-preference",
+   "content-pillars",
+  ]))
+  expect("profileConfidenceScore" in growthContext).toBe(false)
   expect(capabilityIds).toEqual(expect.arrayContaining([
-   "profile_confidence",
+   "profile_coverage_checklist",
    "creator_confirmation",
    "top_performer_patterns",
    "audience_promise",
