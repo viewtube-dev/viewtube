@@ -74,8 +74,8 @@ describe("canonical Studio upload frame", () => {
   it("supports explicit single-select semantics in the shared legend dropdown", () => {
     const html = renderToStaticMarkup(<StudioLegendMultiDropdown label="Sort" accessibleLabel="Sort assets" selectionMode="single" value={["name-asc"]} options={[{ value: "name-asc", label: "NAME ASC" }, { value: "name-desc", label: "NAME DESC" }]} />);
     expect(html).toContain('data-vt-studio-dropdown-variant="single-select"');
-    expect(html).toContain('aria-multiselectable="false"');
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controls).toContain('aria-multiselectable={selectionMode === "multiple"}');
     expect(controls).toContain("setSelected([option.value])");
     expect(controls).toContain("setOpen(false)");
   });
