@@ -53,6 +53,9 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain("border: 2px solid var(--vt-studio-upload-secondary)");
     expect(css).toContain(".vt-studio-upload-frame__inset::before");
     expect(css).toContain(".vt-studio-upload-frame__inset::after");
+    const uploadFrameBlock = css.slice(css.indexOf(".vt-studio-upload-frame {"), css.indexOf(".vt-studio-upload-frame[data-size=\"compact\"]"));
+    expect(uploadFrameBlock).toContain("aspect-ratio: 16 / 9;");
+    expect(css).not.toMatch(/\.vt-studio-upload-frame\s*\{\s*aspect-ratio:\s*(?!16 \/ 9)/);
     expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
     expect(css).toContain("font-weight: 1000");
     expect(css).toContain("letter-spacing: -.02em");

@@ -3915,7 +3915,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   display: block;
   width: 100%;
   min-width: 0;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   overflow: visible;
   isolation: isolate;
   border: 0;
@@ -4090,7 +4090,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 @keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 2px; } 50% { translate: 0 -4px; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
 @media (max-width: 460px) {
-  .vt-studio-upload-frame { aspect-ratio: 4 / 3; }
   .vt-studio-upload-frame__center { gap: 8px; }
   .vt-studio-upload-frame__icon { width: clamp(58px, 20cqw, 88px); }
   .vt-studio-upload-frame__label { max-width: 100%; padding: 5px 10px; font-size: var(--vt-studio-28-font-size, 24px); }

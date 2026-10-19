@@ -220,7 +220,7 @@
 .vt-complete-catalog .vt-catalog-pagination button+button{border-left:0}
 
 /* Upload certification now consumes the production Video Publisher Tight Reveal primitive. */
-.vt-complete-catalog .vt-catalog-upload-authority{width:100%;aspect-ratio:16/10;min-height:0}
+.vt-complete-catalog .vt-catalog-upload-authority{width:100%;aspect-ratio:16/9;min-height:0}
 .vt-complete-catalog .vt-catalog-upload-authority .vt-studio-upload-frame{width:100%;height:100%}
 
 /* V26/V28/V31 canonical variant expansion — variants stay inside shared families. */
