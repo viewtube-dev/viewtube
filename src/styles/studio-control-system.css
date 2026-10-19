@@ -4246,3 +4246,31 @@ html body button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-
 html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
 }
+
+
+/* Dropdown parity: square split rail, trailing chevron without a divider,
+   and the same framed menu treatment as multi-select dropdowns. */
+.vt-studio-dropdown.is-split-left .vt-studio-dropdown-split-rail[data-rail="start"] {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+  border-radius: 0;
+}
+.vt-studio-dropdown:not(.is-split-left) .vt-studio-dropdown-chevron.is-trailing {
+  border: 0;
+  justify-self: end;
+  justify-content: end;
+  padding-inline: 0 4px;
+}
+.vt-studio-dropdown-menu {
+  box-sizing: border-box;
+  border-style: solid;
+  border-color: #000;
+  border-width: var(--vt-studio-control-stroke, 3px);
+  border-top-left-radius: var(--vt-studio-control-radius, 6px);
+  border-top-right-radius: var(--vt-studio-control-radius, 6px);
+}
