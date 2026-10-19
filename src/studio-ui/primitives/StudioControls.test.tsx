@@ -258,10 +258,14 @@ describe("global defaults govern the effective primitive CSS", () => {
 });
 
 describe("Studio text field library entries", () => {
-  it("renders the standalone Studio text input and textarea as distinct catalog specimens", () => {
+  it("renders the standalone Studio text input, textarea, and text box as distinct catalog specimens", () => {
     const html = renderToStaticMarkup(<StudioHubCompletePrimitiveCatalog />);
     expect(html).toContain('data-vt-library-component="StudioTextInput"');
     expect(html).toContain('data-vt-library-component="StudioTextArea"');
+    expect(html).toContain('data-vt-library-component="StudioTextBox"');
+    expect(html).toContain('aria-label="Studio text box standard"');
+    expect(html).toContain('aria-label="Studio text box compact"');
+    expect(html).toContain('aria-label="Studio text box micro"');
     expect(html).toContain('aria-label="Canonical Studio text input"');
     expect(html).toContain('aria-label="Canonical Studio text area"');
     expect(html).toContain('data-vt-studio-icon-button="true"');
