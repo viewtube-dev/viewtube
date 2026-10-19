@@ -1136,6 +1136,8 @@ const AIBrainCommandInterface: React.FC = () => {
             <BookOpen size={18} aria-hidden="true" />
            </button>
            <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
+           <span id="brain-composer-help" className="sr-only">Press Enter to send. Search prompts or browse capabilities for guided requests.</span>
+           <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
            <input
             ref={composerRef}
             type="text"
