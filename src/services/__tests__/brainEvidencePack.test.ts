@@ -16,6 +16,7 @@ describe("buildAIBrainEvidencePack", () => {
     metrics: { views: 1200 },
    }],
    searchTerms: [{ term: "practical craft", views: 120 }],
+   trafficSources: [{ source: "External", views: 90 }],
    syncManifest: { stop_reason: "completed" },
   })
 
@@ -26,6 +27,8 @@ describe("buildAIBrainEvidencePack", () => {
    "search:practical-craft",
   ]))
   expect(pack.items.every((item) => item.label && item.source)).toBe(true)
+  expect(pack.requestSpec.selectionMode).toBe("both")
+  expect(pack.trafficSources).toEqual([])
  })
  it("parses requested count, format, date range, and ranking metric", () => {
   const spec = parseEvidenceRequestSpec(
