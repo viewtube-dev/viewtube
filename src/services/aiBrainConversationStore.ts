@@ -36,6 +36,30 @@ const makeId = (prefix: string): string => {
 
 const clean = (value: unknown): string => String(value || "").replace(/\s+/g, " ").trim()
 
+export const reconcileBrainLearningQuestions = (
+ questions: CreatorBrainLearningQuestion[],
+ savedAnswers: AIBrainQuestionAnswer[],
+ reopenedQuestionIds: string[] = [],
+): CreatorBrainLearningQuestion[] => {
+ const reopened = new Set(reopenedQuestionIds)
+ const validAnswers = savedAnswers.filter((answer) => clean(answer.answer) && !/\b(outdated|superseded|rejected)\b/i.test(answer.answer))
+ return questions.filter((question) => {
+  if (reopened.has(question.id)) return true
+  const exactAnswer = validAnswers.some((answer) =>
+   answer.questionId === question.id ||
+   (clean(answer.question).toLowerCase() === clean(question.question).toLowerCase() && answer.category === question.category),
+  )
+  if (exactAnswer) return false
+
+  // Preference questions remain answered across regenerated prompt IDs. Facts stay
+  // question-specific because one saved channel fact must not suppress other facts.
+  if (["creator_goal", "content_style", "audience_insight"].includes(question.category)) {
+   return !validAnswers.some((answer) => answer.category === question.category)
+  }
+  return true
+ })
+}
+
 const THREAD_HINT_KEY = (channelId?: string | null): string =>
  `vt_ai_brain_thread_seen_${channelId || "default"}`
 
