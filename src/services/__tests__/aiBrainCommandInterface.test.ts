@@ -262,7 +262,7 @@ describe("aiBrainCommandInterface", () => {
   })
   const response = formatCreatorBrainResponse("Improve my title and thumbnail for more views.", snapshot)
   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
-  const modules = formatCreatorGrowthModules(response, growthContext)
+  const modules = formatCreatorGrowthModules(response, growthContext, "Improve my title and thumbnail for more views.")
   const capabilityIds = growthContext.capabilities.map((capability) => capability.id)
 
   expect(growthContext).not.toHaveProperty("profileConfidenceScore")
@@ -281,6 +281,66 @@ describe("aiBrainCommandInterface", () => {
   ]))
   expect(modules.map((module) => module.title)).toEqual(expect.arrayContaining(["What To Do Next", "Title/Thumbnail Test"]))
   expect(modules.map((module) => module.title).join(" ")).not.toMatch(/Profile Confidence|SEO Queue|What The Brain Learned|Best Next Action|Growth Read|Content Opportunity/i)
+ })
+
+ it("keeps direct factual answers free of generic growth-plan modules", () => {
+  const snapshot = buildAIBrainContextSnapshot({
+   brain: fallbackContext.brain,
+   authState: fallbackContext.authState,
+   channelConnection: fallbackContext.channelConnection,
+   brainMemory: fallbackContext.getBrainMemory(),
+   now: new Date("2026-07-14T00:02:00.000Z"),
+  })
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const base = formatCreatorBrainResponse("Your channel niche appears to be history.", snapshot, { requestText: "What is my channel niche?" })
+  const response = {
+   ...base,
+   mode: "strategy_brief" as const,
+   modules: [{ id: "direct-answer", title: "Direct Answer", body: "Your channel niche appears to be history.", tone: "blue" as const, source: "growth" as const }],
+  }
+
+  const modules = formatCreatorGrowthModules(response, growthContext, "What is my channel niche?")
+  expect(modules.map((module) => module.title)).toEqual(["Direct Answer"])
+ })
+
+ it("keeps analytics diagnoses evidence-focused without adding a 30-day plan", () => {
+  const snapshot = buildAIBrainContextSnapshot({
+   brain: fallbackContext.brain,
+   authState: fallbackContext.authState,
+   channelConnection: fallbackContext.channelConnection,
+   brainMemory: fallbackContext.getBrainMemory(),
+   now: new Date("2026-07-14T00:02:00.000Z"),
+  })
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const base = formatCreatorBrainResponse("The available evidence shows a click-through-rate decline.", snapshot, { requestText: "Diagnose why views dropped last week." })
+  const response = {
+   ...base,
+   mode: "analytics_diagnosis" as const,
+   modules: [{ id: "evidence", title: "Evidence", body: "The click-through-rate metric declined.", tone: "blue" as const, source: "analytics" as const }],
+  }
+
+  const modules = formatCreatorGrowthModules(response, growthContext, "Diagnose why views dropped last week.")
+  expect(modules.map((module) => module.title)).toEqual(["Evidence"])
+ })
+
+ it("returns creator assets without appending generic growth sections", () => {
+  const snapshot = buildAIBrainContextSnapshot({
+   brain: fallbackContext.brain,
+   authState: fallbackContext.authState,
+   channelConnection: fallbackContext.channelConnection,
+   brainMemory: fallbackContext.getBrainMemory(),
+   now: new Date("2026-07-14T00:02:00.000Z"),
+  })
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const base = formatCreatorBrainResponse("Title option: The Forgotten Battle That Changed Everything.", snapshot, { requestText: "Write a title for my next upload." })
+  const response = {
+   ...base,
+   mode: "creator_asset_draft" as const,
+   modules: [{ id: "title-draft", title: "Title Draft", body: "The Forgotten Battle That Changed Everything.", tone: "yellow" as const, source: "growth" as const }],
+  }
+
+  const modules = formatCreatorGrowthModules(response, growthContext, "Write a title for my next upload.")
+  expect(modules.map((module) => module.title)).toEqual(["Title Draft"])
  })
 
  it("caps Brain learning questions at two creator-facing questions", () => {
