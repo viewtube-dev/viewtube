@@ -71,7 +71,10 @@ import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
-import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
+import { BrainClaimEvidence } from "../components/brain/BrainClaimEvidence"
+import { confidenceForEvidence } from "../components/brain/BrainConfidenceChip"
+import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRibbon"
+import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
@@ -190,8 +193,9 @@ export type BrainCreatorContextSnapshot = {
 
 const BrainContextUsedDrawer: React.FC<{
  contextUsed?: BrainCreatorContextSnapshot
+ turnId?: string
  onCorrectItem?: (id: string, statement: string) => void
-}> = ({ contextUsed, onCorrectItem }) => {
+}> = ({ contextUsed, turnId, onCorrectItem }) => {
  if (!contextUsed) return null
  const selection = contextUsed.selection
  const project = contextUsed.project
@@ -202,7 +206,7 @@ const BrainContextUsedDrawer: React.FC<{
   { id: "selection", label: "Selected video / asset", value: selection ? `${selection.label} · ${selection.sourceId}` : "No selected video or asset was supplied", status: selection ? "temporary" : "inferred" },
  ]
  return (
-  <details className="w-full rounded-[7px] border-[2px] border-black bg-white">
+  <details data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
    <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
     <PanelRight size={12} aria-hidden="true" /> Context used
     <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
@@ -299,8 +303,8 @@ const assistantCardFrame = "w-full max-w-none shrink-0 border-y-[2px] border-bla
 const kpiButton =
  "inline-flex items-center gap-2 rounded-[8px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.08em] transition hover:bg-[#3FEE56]"
 
-export const shouldSendBrainComposerKey = ({ key, isComposing }: { key: string; isComposing: boolean }) =>
- key === "Enter" && !isComposing
+export const shouldSendBrainComposerKey = ({ key, isComposing, shiftKey = false }: { key: string; isComposing: boolean; shiftKey?: boolean }) =>
+ key === "Enter" && !isComposing && !shiftKey
 
 const PROMPT_CARD_SUMMARIES: Record<string, string> = {
  "analyze-channel-niche": "Find your niche and fuzzy edges.",
@@ -411,7 +415,7 @@ const OpeningBriefing: React.FC<{
      </div>
      <p className="mt-2 text-sm font-bold leading-6 text-black/75">{sanitizeCreatorFacingBrainCopy(read)}</p>
      <BrainProfileCoverageChecklist snapshot={snapshot} onPrompt={onPrompt} />
-     <BrainEvidenceDrawer evidencePack={snapshot.evidencePack} className="mt-3" />
+     <BrainClaimEvidence evidencePack={snapshot.evidencePack} confidence={confidenceForEvidence({ hasProfile: snapshot.inferredProfile.status !== "missing", videoCount: snapshot.inferredProfile.videoCount, dataStatus: snapshot.evidencePack.dataStatus })} className="mt-3" />
     </div>
 
    </section>
@@ -731,6 +735,7 @@ const CreatorResponseCard: React.FC<{
     ) : null}
     <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
+    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} compact /> : null}
     {openQuestions[0] ? (
      <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
     ) : null}
@@ -748,10 +753,7 @@ const CreatorResponseCard: React.FC<{
        {option.label}
       </button>
      ))}
-     {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
-      <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
-     ) : null}
-     <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
+     <BrainContextUsedDrawer contextUsed={message.contextUsed} turnId={message.id} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
        to={message.handoff.route}
@@ -961,7 +963,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
- const composerRef = useRef<HTMLInputElement | null>(null)
+ const composerRef = useRef<HTMLTextAreaElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
@@ -1242,6 +1244,7 @@ const AIBrainCommandInterface: React.FC = () => {
    return
   }
   setInput("")
+  if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
   // Append to the ongoing thread; the post-send refresh rebuilds it authoritatively.
@@ -1716,8 +1719,9 @@ const AIBrainCommandInterface: React.FC = () => {
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
-      <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[minmax(0,1.45fr)_minmax(520px,1fr)]">
-       <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
+      <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
+       <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
+      <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
         <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white max-xl:min-h-[420px]">
          <BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
@@ -1770,21 +1774,27 @@ const AIBrainCommandInterface: React.FC = () => {
             <BookOpen size={18} aria-hidden="true" />
            </button>
            <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
-           <span id="brain-composer-help" className="sr-only">Press Enter to send. Search prompts or browse capabilities for guided requests.</span>
+           <span id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
-           <input
+           <textarea
             ref={composerRef}
-            type="text"
             id="brain-composer"
+            rows={1}
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(event) => {
+             event.currentTarget.style.height = "auto"
+             event.currentTarget.style.height = `${Math.min(event.currentTarget.scrollHeight, 144)}px`
+             setInput(event.target.value)
+            }}
             onKeyDown={(event) => {
-             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing })) return
+             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
              event.preventDefault()
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="h-[52px] min-w-0 flex-1 rounded-[9px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-[3px] focus-visible:ring-black" aria-label="Ask ViewTube Brain" aria-describedby="brain-composer-help"
+            className="max-h-36 min-h-[52px] min-w-0 flex-1 resize-y rounded-[6px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-2 focus-visible:ring-black"
+            aria-label="Ask ViewTube Brain"
+            aria-describedby="brain-composer-help"
            />
            <button type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
             {busy ? <Zap className="animate-pulse" size={16} /> : <Send size={16} />} Send

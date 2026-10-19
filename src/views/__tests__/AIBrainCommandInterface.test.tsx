@@ -167,10 +167,19 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("You:")
  })
 
- it("sends the composer with Enter while ignoring IME composition", () => {
-  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false })).toBe(true)
-  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: true })).toBe(false)
-  expect(shouldSendBrainComposerKey({ key: "Escape", isComposing: false })).toBe(false)
+ it("sends with Enter, preserves Shift+Enter newlines, and ignores IME composition", () => {
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false, shiftKey: false })).toBe(true)
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: false, shiftKey: true })).toBe(false)
+  expect(shouldSendBrainComposerKey({ key: "Enter", isComposing: true, shiftKey: false })).toBe(false)
+  expect(shouldSendBrainComposerKey({ key: "Escape", isComposing: false, shiftKey: false })).toBe(false)
+ })
+
+ it("renders a multiline composer with a documented Shift+Enter newline", () => {
+  const html = renderHub()
+  expect(html).toContain('<textarea')
+  expect(html).toContain('id="brain-composer"')
+  expect(html).toContain("Shift+Enter for a new line")
+  expect(html).toContain("max-h-36")
  })
 
  it("keeps prompt and channel-context launchers reachable on smaller screens", () => {
@@ -196,7 +205,7 @@ describe("AIBrainCommandInterface", () => {
 
   expect(html).not.toContain("grid min-h-0 flex-1 gap-2 bg-white p-2")
   expect(html).toContain("grid min-h-0 flex-1 bg-white")
-  expect(html).toContain("xl:grid-cols-[minmax(0,1.45fr)_minmax(520px,1fr)]")
+  expect(html).toContain("xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)]")
   expect(html).toContain("xl:pt-3")
   expect(html).toContain("brain-chat-scrollbar")
   expect(html).toContain('aria-label="Open AI Journal"')

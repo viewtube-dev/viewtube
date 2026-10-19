@@ -2,6 +2,7 @@ import React from "react"
 import { Info, ArrowUpRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import type { AIBrainEvidencePack } from "../../types"
+import { StudioSplitLeftBadge } from "../../studio-ui"
 
 /**
  * Creator-facing "Why this recommendation?" surface.
@@ -11,6 +12,16 @@ import type { AIBrainEvidencePack } from "../../types"
  * Optional confidence/inference metadata lets every Brain surface use the
  * same trust UI without changing the canonical evidence-pack schema.
  */
+const EvidenceBadge: React.FC<{ label: string; tone: string }> = ({ label, tone }) => (
+ <StudioSplitLeftBadge
+  sizeVariant="micro"
+  icon={<span aria-hidden="true" className="block h-1.5 w-1.5 rounded-full border border-black bg-black/70" />}
+  style={{ backgroundColor: tone, width: "max-content", maxWidth: "100%" }}
+ >
+  {label}
+ </StudioSplitLeftBadge>
+)
+
 export const BrainEvidenceDrawer: React.FC<{
  evidencePack: AIBrainEvidencePack
  summaryLabel?: string
@@ -78,23 +89,23 @@ export const BrainEvidenceDrawer: React.FC<{
     >
      <Info size={13} aria-hidden="true" />
      <span>{summaryLabel}</span>
-     {sourceCount ? <span className="rounded-full border border-black bg-[#36E0F6] px-1">{sourceCount}</span> : null}
+     {sourceCount ? <EvidenceBadge label={String(sourceCount)} tone="#36E0F6" /> : null}
     </summary>
    ) : (
     <summary className="cursor-pointer list-none border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47]">
      <span className="flex flex-wrap items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.08em]">
       <span>{summaryLabel}</span>
-      {sourceCount ? <span className="rounded-full border-[1.5px] border-black bg-[#36E0F6] px-1.5 py-0.5">{sourceCount} sources</span> : null}
-      {provenanceCount ? <span className="rounded-full border-[1.5px] border-black bg-[#FFDA47] px-1.5 py-0.5">{provenanceCount} provenance notes</span> : null}
-      {confidenceText ? <span className="rounded-full border-[1.5px] border-black bg-[#C0F240] px-1.5 py-0.5">{confidenceText}</span> : null}
-      <span className="rounded-full border-[1.5px] border-black bg-[#FFDA47] px-1.5 py-0.5">{inference ? "inference" : "measured"}</span>
+      {sourceCount ? <EvidenceBadge label={`${sourceCount} sources`} tone="#36E0F6" /> : null}
+      {provenanceCount ? <EvidenceBadge label={`${provenanceCount} provenance notes`} tone="#FFDA47" /> : null}
+      {confidenceText ? <EvidenceBadge label={confidenceText} tone="#C0F240" /> : null}
+      <EvidenceBadge label={inference ? "inference" : "measured"} tone="#FFDA47" />
      </span>
     </summary>
    )}
    <div
     className={`grid gap-3 ${
      compact
-      ? "absolute right-0 z-20 mt-1 w-[300px] max-w-[calc(100vw-24px)] rounded-[10px] border-[2px] border-black bg-white p-3 shadow-[4px_4px_0_0_#000]"
+      ? "absolute right-0 z-20 mt-1 w-[300px] max-w-[calc(100vw-24px)] rounded-[6px] border-[2px] border-black bg-white p-3"
       : "p-3"
     }`}
    >
@@ -176,7 +187,7 @@ export const BrainEvidenceDrawer: React.FC<{
     {sourceRoute && sourceCount ? (
      <Link
       to={sourceRoute}
-      className="inline-flex w-fit items-center gap-1 rounded-[7px] border-[2px] border-black bg-white px-2 py-1 text-[8px] font-[1000] uppercase shadow-[2px_2px_0_0_#000] transition hover:bg-[#36E0F6]"
+      className="inline-flex w-fit items-center gap-1 border-[2px] border-black bg-white px-2 py-1 text-[8px] font-[1000] uppercase outline-none focus-visible:ring-2 focus-visible:ring-black hover:bg-[#36E0F6]"
      >
       {sourceLabel}<ArrowUpRight size={11} />
      </Link>
