@@ -26,8 +26,9 @@ test("dropdown split rail stays square and simple trailing chevrons have no divi
 })
 
 test("button faces default to half-primary fill and selected faces use full primary", () => {
-  assert.match(styles, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^{]*\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent[^)]*\)\s*50%,\s*transparent\)/s)
+  assert.match(styles, /background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%, transparent\)/s)
   assert.match(styles, /button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^{]*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
+  assert.match(styles, /data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][^{]*\{[^}]*background:\s*color-mix/s)
 })
 
 test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
