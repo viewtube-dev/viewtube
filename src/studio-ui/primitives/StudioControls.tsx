@@ -1639,6 +1639,8 @@ StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
 
 export interface StudioSpectrumTagProps {
   label: string
+  /** Preserve spectrum identity when the visible label includes an action prefix/suffix. */
+  spectrumKey?: string
   selected?: boolean
   className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
@@ -1646,28 +1648,44 @@ export interface StudioSpectrumTagProps {
 }
 
 /**
- * Vault's donor-backed 15px monochromatic tag. This is a deliberate global
- * sizing exception; the alphabetic ViewTube spectrum and chip geometry are
- * shared by Vault and the confirmed Studio Controls library.
+ * Vault's donor-backed 15px monochromatic tag. Static tags render as spans so
+ * they can safely sit inside accessible parent buttons; interactive tags keep
+ * native button semantics. The alphabetic spectrum and chip geometry are shared.
  */
 export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   label,
+  spectrumKey,
   selected = false,
   className,
   onClick,
   ariaLabel,
 }) => {
   const normalized = label.trim().toUpperCase()
-  const color = getAlphabeticalSpectrumColor(normalized)
+  const identity = (spectrumKey ?? label).trim().toUpperCase()
+  const color = getAlphabeticalSpectrumColor(identity)
+  const classes = ["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")
+  const style = { ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties
+  if (!onClick) {
+    return (
+      <span
+        className={classes}
+        data-vt-studio-exception="vault-spectrum-tag"
+        data-tag={identity}
+        style={style}
+      >
+        {normalized}
+      </span>
+    )
+  }
   return (
     <button
       type="button"
-      className={["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")}
+      className={classes}
       data-vt-studio-exception="vault-spectrum-tag"
-      data-tag={normalized}
+      data-tag={identity}
       aria-label={ariaLabel ?? normalized}
       aria-pressed={selected}
-      style={{ ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties}
+      style={style}
       onClick={onClick}
     >
       {normalized}
