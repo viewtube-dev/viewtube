@@ -325,8 +325,9 @@ describe("confirmed vertical word-toggle primitive", () => {
     expect(css).toContain("min-width: max-content;");
     expect(css).toContain("prefers-reduced-motion: reduce");
     expect(source).toContain('title="Toggle & Choice Controls"');
-    expect(source).not.toContain('title="Word Toggle · Standard + Compact"');
-    expect(source).not.toContain('title="Vertical Word Toggle · Standard + Compact + Micro"');
+    expect(source).toContain('title="Word Toggles · Standard + Compact + Vertical"');
+    expect(source).toContain('primitive="StudioWordToggle / StudioVerticalWordToggle"');
+    expect(source).not.toContain("Switches, radios, checkboxes, horizontal word toggles, and vertical word toggles are grouped in one family module.");
     expect(readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")).toContain("flex-direction: column;\n  align-items: flex-start;");
   });
 
