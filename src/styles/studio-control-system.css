@@ -4524,10 +4524,15 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 }
 
 
-/* Toolbox header word toggles use a neutral white track in every selection state.
-   The moving indicator keeps its Studio pair color; only the track is neutralized. */
+/* Toolbox header word toggles use the Blackfill compact variant.
+   Keep the moving indicator on the active Studio pair while the track stays black. */
 .vt-studio-44-word-toggle.vt-toolbox-header-toggle-replacement {
-  background: #fff !important;
+  --vt-word-height: 28px;
+  --vt-word-font-size: 24px;
+  --vt-word-radius: 4px;
+  height: 28px !important;
+  border-width: 2px !important;
+  background: #000 !important;
 }
 
 
