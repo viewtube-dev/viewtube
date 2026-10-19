@@ -3581,8 +3581,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 
 /* Press/hold changes icon color only; button geometry and borders stay fixed. */
-.vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"]) svg,
-.vt-studio-side-counter__actions button:is(:active, .is-holding, [data-press-holding="true"]) svg {
+.vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) svg,
+.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) svg {
   color: #000;
   stroke: #000;
 }
@@ -3659,10 +3659,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   color: color-mix(in srgb, #fff var(--vt-studio-number-default-white-mix, 50%), var(--vt-studio-number-background, var(--pair-a)));
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
-  transition:
-    color 140ms ease,
-    -webkit-text-fill-color 140ms ease,
-    -webkit-text-stroke-color 140ms ease;
   /* Keep value-area backgrounds stable while pressing, especially on right counters. */
 }
 
@@ -3677,7 +3673,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 
 /* Standard/left counter: click and hold use the same black numeral treatment. */
 .vt-studio-counter:has(
-  .vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"])
+  .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-counter__value {
   background: color-mix(in srgb, var(--pair-a) 50%, transparent);
   color: var(--vt-studio-number-active-color, #000);
@@ -3686,7 +3682,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 
 .vt-studio-counter.is-reversed:has(
-  .vt-studio-counter__button:is(:active, .is-holding, [data-press-holding="true"])
+  .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-counter__value {
   background: color-mix(in srgb, var(--pair-b) 50%, transparent);
   color: var(--vt-studio-number-active-color, #000);
@@ -3696,10 +3692,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 
 /* Right counter: numeral turns black, but the value-area background never changes. */
 .vt-studio-side-counter:has(
-  .vt-studio-side-counter__actions button:is(:active, .is-holding, [data-press-holding="true"])
+  .vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-side-counter__value,
 .vt-studio-side-counter.is-reversed:has(
-  .vt-studio-side-counter__actions button:is(:active, .is-holding, [data-press-holding="true"])
+  .vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-side-counter__value {
   color: var(--vt-studio-number-active-color, #000);
   -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
