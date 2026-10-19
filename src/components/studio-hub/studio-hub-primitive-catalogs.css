@@ -2962,3 +2962,23 @@
   letter-spacing: -.02em;
   text-transform: uppercase;
 }
+
+
+/* Brain status LED badge specimens use the production StudioBrainStatusBadge primitive. */
+.vt-catalog-brain-status-badges {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  align-content: start;
+  gap: 8px;
+}
+.vt-catalog-brain-status-badges__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-catalog-brain-status-badges.is-l1,
+.vt-catalog-brain-status-badges.is-l2 { gap: 6px; }
+.vt-catalog-brain-status-badges.is-l2 .vt-catalog-brain-status-badges__group { gap: 4px; }
