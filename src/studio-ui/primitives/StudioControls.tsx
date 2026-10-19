@@ -1696,7 +1696,7 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
       sizeVariant={size}
       className={studioClasses("vt-studio-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-counter__rail"
-      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onPointerDown={interactionFocus.start} onPointerUp={interactionFocus.end} onPointerCancel={interactionFocus.end} {...decrement.events}><Minus aria-hidden="true" focusable="false" /></button>}
+      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><Minus aria-hidden="true" focusable="false" /></button>}
       rightRailContent={<button type="button" className={`vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><Plus aria-hidden="true" focusable="false" /></button>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
     >
@@ -1734,7 +1734,7 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
       railClassName="vt-studio-side-counter__rail"
       rightRailContent={<span className="vt-studio-side-counter__actions">
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onPointerDown={interactionFocus.start} onPointerUp={interactionFocus.end} onPointerCancel={interactionFocus.end} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-side-counter", "data-vt-library-component": "StudioSideCounter" }}
     >
@@ -1771,7 +1771,7 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
       railClassName="vt-studio-left-counter__rail"
       leftRailContent={<span className="vt-studio-side-counter__actions">
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onPointerDown={interactionFocus.start} onPointerUp={interactionFocus.end} onPointerCancel={interactionFocus.end} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
     >
@@ -2209,7 +2209,7 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       leftRailContent={leftControls === "counter" ? (
         <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
           <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} onPointerDown={interactionFocus.start} onPointerUp={interactionFocus.end} onPointerCancel={interactionFocus.end} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
         </span>
       ) : (
         <button
