@@ -321,7 +321,13 @@ describe("confirmed vertical word-toggle primitive", () => {
     expect(controls).toContain("export const StudioVerticalWordToggle");
     expect(controls).toContain('verticalWordToggle:');
     expect(css).toContain(".vt-studio-vertical-word-toggle");
+    expect(css).toContain("width: max-content;");
+    expect(css).toContain("min-width: max-content;");
     expect(css).toContain("prefers-reduced-motion: reduce");
+    expect(source).toContain('title="Toggle & Choice Controls"');
+    expect(source).not.toContain('title="Word Toggle · Standard + Compact"');
+    expect(source).not.toContain('title="Vertical Word Toggle · Standard + Compact + Micro"');
+    expect(readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")).toContain("flex-direction: column;\n  align-items: flex-start;");
   });
 
   it("documents the vertical word-toggle height as a named exception while retaining global typography tokens", () => {
