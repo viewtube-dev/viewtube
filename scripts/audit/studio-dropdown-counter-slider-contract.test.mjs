@@ -8,6 +8,7 @@ const css = readFileSync("src/styles/studio-control-system.css", "utf8")
 const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 const fieldCss = readFileSync("src/styles/studio-text-input.css", "utf8")
+const fieldInteractionCss = readFileSync("src/styles/studio-control-fields.css", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
@@ -112,6 +113,6 @@ test("shared interaction-focus tokens drive dwell, fade, rest color, and outline
   assert.match(generated, /--vt-studio-focus-outline-width:\\s*calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* 0\\.65\\)/);
   assert.match(css, /data-vt-interaction-focus="true"[\\s\\S]*?outline:[^;]*var\\(--vt-studio-focus-outline-color/);
   assert.match(css, /is-interaction-focus[\\s\\S]*?color:\\s*var\\(--vt-studio-number-active-color/);
-  assert.match(fieldCss, /transition:[\\s\\S]*?outline-color var\\(--vt-studio-focus-outline-fade-ms, 500ms\\) ease-out/);
+  assert.match(fieldInteractionCss, /transition:[\\s\\S]*?outline-color var\\(--vt-studio-focus-outline-fade-ms, 500ms\\) ease-out/);
   assert.match(component, /onPointerDown=\\{interactionFocus\\.start\\}[\\s\\S]*?onPointerUp=\\{interactionFocus\\.end\\}/);
 });
