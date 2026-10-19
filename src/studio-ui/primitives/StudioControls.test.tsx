@@ -958,7 +958,9 @@ describe("Vault Studio Controls migration completion contracts", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
     expect(tokens).toContain("outlineWidthRatio: 1")
     expect(css).toContain("var(--vt-studio-focus-outline-width-ratio, 1)")
-    expect(css).not.toMatch(/--vt-studio-control-focus-outline-width:\\s*(?:1\\.95px|1\\.3px|\\.65px)/)
+    expect(css).not.toContain("--vt-studio-control-focus-outline-width: 1.95px")
+    expect(css).not.toContain("--vt-studio-control-focus-outline-width: 1.3px")
+    expect(css).not.toContain("--vt-studio-control-focus-outline-width: .65px")
   })
 
   it("uses Studio Spectrum Tags and portrait-aware Studio Word Toggles in Vault", () => {
