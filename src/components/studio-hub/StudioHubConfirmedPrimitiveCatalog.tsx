@@ -24,7 +24,6 @@ import {
   StudioSwitch,
   StudioTextArea,
   StudioTextInput,
-  Studioinput,
   StudioWordToggle,
   StudioSpectrumTag,
   StudioCloseableBadge,
@@ -56,11 +55,15 @@ const CanonicalControlFamilies: React.FC = () => {
   const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
-    <Family title="44px Switches" nonDefaultSettings={[
-        "Four state-fill/indicator variants: V1 half-primary to primary with secondary indicator; V2 primary to secondary with primary/secondary indicator swap; V3 half-primary to primary with white indicator; V4 half-primary to primary with black indicator.",
-        "Round and rectangular variants change track/handle geometry.",
-      ]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="75.68×44px track; shared four-skin variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-control-family">{(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-control-row" key={shape}><strong>{shape === "round" ? "ROUND" : "RECTANGULAR"}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div></div>)}</div>
+    <Family title="Choice Controls · Shared Four-Variant System" nonDefaultSettings={[
+        "Switches, radios, checkmark checkboxes, X checkboxes, and word toggles share the same V1–V4 variant labels and color contract.",
+        "Switch shape, radio/checkbox mark, and word-toggle size remain named per-row geometry variants; all five public control types are shown together.",
+      ]} provenance={<Provenance primitive="StudioSwitch / StudioRadio / StudioCheckbox / StudioXCheckbox / StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Shared V1 primary/secondary · V2 color swap · V3 white indicator · V4 black indicator." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-control-family">
+        {(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-control-row" key={"switch-"+shape}><strong>{shape === "round" ? "ROUND SWITCH" : "RECTANGULAR SWITCH"}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " switch " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div></div>)}
+        {([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}
+        {[{size:"44" as const,label:"WORD TOGGLE · STANDARD"},{size:"28" as const,label:"WORD TOGGLE · COMPACT"}].map((item,row) => <div className="vt-confirmed-control-row" key={"word-"+item.size}><strong>{item.label}</strong><div className="vt-confirmed-control-variants" data-control-size={item.size}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioWordToggle size={item.size} skin={skin.skin} value={words[index]} words={item.size === "44" && col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div></div>)}
+      </div>
     </Family>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
@@ -113,22 +116,6 @@ const CanonicalControlFamilies: React.FC = () => {
         <StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="compact">COMPACT RIGHT</StudioSplitRightBadge>
         <StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="micro">MICRO DOUBLE</StudioDoubleSplitBadge>
       </div>
-    </Family>
-    <Family title="44px Radio + Checkbox" nonDefaultSettings={[
-        "Radio, checkmark checkbox, and wide-X checkbox remain distinct public selection-mark variants.",
-        "All four canonical state-fill/indicator variants are available for radios, checkmark boxes, and X boxes.",
-      ]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-control-family">{([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}</div>
-    </Family>
-    <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={[
-        "All four canonical state-fill/indicator variants are available at standard and compact sizes.",
-      ]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => {
-        return <div className="vt-confirmed-control-row" key={item.size}>
-          <strong>{item.label}</strong>
-          <div className="vt-confirmed-control-variants" data-control-size={item.size}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioWordToggle size={item.size} skin={skin.skin} value={words[index]} words={item.size === "44" && col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
-        </div>
-      })}</div>
     </Family>
   </>
 }
@@ -300,14 +287,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>Fixed label box · 44px standard · A</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input standard A" sizeVariant="standard" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · A</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact A" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextInput className="is-reverse-colors" variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact B reverse colors" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
-    </Family>
-    <Family title="Studioinput · Independent Input Primitive" nonDefaultSettings={[
-        "Separate native-input primitive with its own TSX module, CSS class, field-kind marker, and typography rules.",
-        "Does not alias StudioTextInput and can evolve independently without changing the plain text-input foundation.",
-      ]} provenance={<Provenance primitive="Studioinput" tsx="src/studio-ui/primitives/Studioinput.tsx" css="src/styles/studio-input.css" tokens="Independent plain input: standard 44px / 38px, compact 28px / 24px, micro 14px / 10px." imports={["src/studio-ui/primitives/Studioinput.tsx", "src/styles/studio-input.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · Studioinput</span><Studioinput sizeVariant="standard" aria-label="Studioinput standard" placeholder="STUDIOINPUT" data-vt-library-component="Studioinput" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>28px compact · Studioinput</span><Studioinput sizeVariant="compact" aria-label="Studioinput compact" placeholder="STUDIOINPUT" data-vt-library-component="Studioinput" /></div>
-      <div className="vt-confirmed-variant"><span>14px micro · Studioinput</span><Studioinput sizeVariant="micro" aria-label="Studioinput micro" placeholder="STUDIOINPUT" data-vt-library-component="Studioinput" /></div>
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface.",

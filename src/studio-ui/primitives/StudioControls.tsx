@@ -1,7 +1,6 @@
 import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
-import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
@@ -683,8 +682,6 @@ export const Studiocheck: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = p
 Studiocheck.displayName = "Studiocheck"
 export const Studioxbox: React.FC<Omit<StudioChoiceProps, "kind" | "mark">> = props => <StudioChoice {...props} kind="checkbox" mark="xwide" />
 Studioxbox.displayName = "Studioxbox"
-export { Studioinput }
-export type { StudioinputProps } from "./Studioinput"
 export const Studioarea = StudioTextArea
 
 /** Canonical public names; lowercase legacy exports remain compatibility aliases. */
@@ -1560,6 +1557,24 @@ export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "varian
 StudioSplitLeftDropdown.displayName = "StudioSplitLeftDropdown"
 
 // Canonical Studio stepper implementations are owned by this module.
+/** Smoothly accelerates from a deliberate 128ms repeat to 46ms, then 23ms;
+ * easing starts 16 steps from a bound and only noticeably slows in the final few steps. */
+export const getStudioCounterRepeatDelay = (elapsedMs: number, remainingSteps: number) => {
+  const firstRamp = Math.min(1, Math.max(0, elapsedMs / 520));
+  const firstEase = 1 - Math.pow(1 - firstRamp, 2.2);
+  const mediumDelay = 128 - firstEase * 82;
+  const secondRamp = Math.min(1, Math.max(0, (elapsedMs - 520) / 700));
+  const secondEase = 1 - Math.pow(1 - secondRamp, 2);
+  const acceleratedDelay = 46 - secondEase * 23;
+  const fastDelay = elapsedMs < 520 ? mediumDelay : acceleratedDelay;
+  const boundaryProgress = Number.isFinite(remainingSteps)
+    ? Math.min(1, Math.max(0, (16 - remainingSteps) / 13))
+    : 0;
+  const boundaryEase = boundaryProgress * boundaryProgress * (3 - 2 * boundaryProgress);
+  const boundaryDelay = 23 + boundaryEase * 52;
+  return Math.round(Math.max(fastDelay, boundaryDelay));
+};
+
 /** Pointer hold-repeat shared by the canonical counter buttons. */
 const useStudioCounterHold = (
   direction: -1 | 1, current: number, min: number, max: number, step: number,
@@ -1599,17 +1614,7 @@ const useStudioCounterHold = (
         const elapsed = Date.now() - startedAt.current;
         const remaining = direction > 0 ? max - value : value - min;
         const remainingSteps = Number.isFinite(remaining) ? Math.max(0, remaining / step) : Number.POSITIVE_INFINITY;
-        // Accelerate early with a smooth ease-out, then ease off progressively
-        // over the final twelve steps instead of abruptly switching intervals.
-        const accelerationProgress = Math.min(1, elapsed / 720);
-        const accelerationEase = 1 - Math.pow(1 - accelerationProgress, 2.4);
-        const fastDelay = 128 - accelerationEase * 82;
-        const boundaryProgress = Number.isFinite(remainingSteps)
-          ? Math.min(1, Math.max(0, (12 - remainingSteps) / 11))
-          : 0;
-        const boundaryEase = boundaryProgress * boundaryProgress * (3 - 2 * boundaryProgress);
-        const boundaryDelay = 46 + boundaryEase * 124;
-        const delay = Math.round(Math.max(fastDelay, boundaryDelay));
+        const delay = getStudioCounterRepeatDelay(elapsed, remainingSteps);
         timer.current = setTimeout(repeat, delay);
       };
       repeat();
