@@ -1515,6 +1515,8 @@ export interface StudioLegendMultiDropdownProps {
   value?: string[]
   defaultValue?: string[]
   onChange?: (values: string[]) => void
+  /** Choose one value and close the menu, or allow independent multi-selection. */
+  selectionMode?: "single" | "multiple"
   sizeVariant?: "compact" | "standard"
   level?: "l0" | "l1" | "l2"
   placeholder?: string
@@ -1531,7 +1533,7 @@ export interface StudioLegendMultiDropdownProps {
  * selection is multi-valued and never depends on a native browser menu.
  */
 export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps> = ({
-  label, accessibleLabel, options, value, defaultValue = [], onChange, sizeVariant = "standard",
+  label, accessibleLabel, options, value, defaultValue = [], onChange, selectionMode = "multiple", sizeVariant = "standard",
   level = "l1", placeholder = "ANY", clearLabel = "CLEAR ALL",
   maxMenuHeight = 280, className, disabled = false, name,
 }) => {
@@ -1568,7 +1570,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
       data-vt-primitive-id="140"
       data-vt-studio-field="legend-multi-dropdown"
       data-vt-studio-control-family="dropdown"
-      data-vt-studio-dropdown-variant="multiselect"
+      data-vt-studio-dropdown-variant={selectionMode === "single" ? "single-select" : "multiselect"}
       data-vt-control-level={level}
       data-size={sizeVariant}
       data-open={open || undefined}
@@ -1593,7 +1595,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
         </button>
       </div>
       {open && !disabled && (
-        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable="true">
+        <div className="vt-studio-legend-menu" style={{ maxHeight: maxMenuHeight }} id={listId} role="listbox" aria-label={menuAccessibleLabel} aria-multiselectable={selectionMode === "multiple"}>
           <div className="vt-studio-legend-options">
             {options.map(option => {
               const isSelected = selected.includes(option.value)
@@ -1606,7 +1608,14 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
                   disabled={option.disabled}
                   data-selected={isSelected || undefined}
                   className="vt-studio-legend-option"
-                  onClick={() => setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])}
+                  onClick={() => {
+                    if (selectionMode === "single") {
+                      setSelected([option.value])
+                      setOpen(false)
+                      return
+                    }
+                    setSelected(isSelected ? selected.filter(item => item !== option.value) : [...selected, option.value])
+                  }}
                 >
                   <span className="vt-studio-legend-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></span>
                   <span className="vt-studio-legend-option-text">{option.label}</span>
@@ -1614,7 +1623,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
               )
             })}
           </div>
-          <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>
+          {selectionMode === "multiple" && <button type="button" className="vt-studio-legend-clear" onClick={() => setSelected([])} disabled={selected.length === 0}>{clearLabel}</button>}
           {name && selected.map(item => <input key={item} type="hidden" name={name} value={item} />)}
         </div>
       )}
