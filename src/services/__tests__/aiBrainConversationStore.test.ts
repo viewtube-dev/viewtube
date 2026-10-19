@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import type { CreatorBrainLearningQuestion, CreatorBrainResponse } from "../../types"
 import {
  answerAIBrainQuestionModule,
+ reconcileBrainLearningQuestions,
  beginAIBrainTurn,
  completeAIBrainTurn,
  listAIBrainConversationTurns,
@@ -139,6 +140,21 @@ describe("aiBrainConversationStore", () => {
   expect(answer.learningEntryId).toBeTruthy()
   expect(turns[0]?.questionAnswers[0]?.answer).toContain("Subscribers")
   expect(turns[0]?.metadata?.source).toBe("question_module")
+ })
+
+ it("does not re-propose a valid saved goal or style answer unless the creator reopens it", () => {
+  const questions: CreatorBrainLearningQuestion[] = [
+   questionFixture,
+   { ...questionFixture, id: "content-style", question: "What should your videos feel like?", category: "content_style" },
+   { ...questionFixture, id: "confirm-niche", question: "What niche name would you use?", category: "channel_fact" },
+  ]
+  const savedAnswers = [
+   { id: "answer-goal", questionId: "older-goal-id", channelId: "channel-question", question: "What result matters most?", answer: "Subscribers", category: "creator_goal" as const, createdAt: "2026-10-01T00:00:00.000Z" },
+   { id: "answer-style", questionId: "content-style", channelId: "channel-question", question: "What should your videos feel like?", answer: "Practical", category: "content_style" as const, createdAt: "2026-10-02T00:00:00.000Z" },
+  ]
+
+  expect(reconcileBrainLearningQuestions(questions, savedAnswers).map((question) => question.id)).toEqual(["confirm-niche"])
+  expect(reconcileBrainLearningQuestions(questions, savedAnswers, ["primary-goal"]).map((question) => question.id)).toContain("primary-goal")
  })
 
  it("keeps creator-facing copy clear of internal data plumbing language", () => {
