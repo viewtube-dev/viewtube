@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -35,6 +35,41 @@ describe("canonical Studio upload frame", () => {
     expect(html).not.toContain("4EE4BE");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.colorPair).toContain("--pair-a");
+  });
+
+  it("supports multiple file selection through the canonical upload frame", () => {
+    const html = renderToStaticMarkup(<StudioUploadFrame multiple accept="image/*,video/*" aria-label="Vault asset import" />);
+    expect(html).toContain('multiple=""');
+    expect(html).toContain('accept="image/*,video/*"');
+    expect(html).toContain('aria-label="Vault asset import"');
+  });
+
+  it("renders the canonical split-left input with search icon rail and native input attributes", () => {
+    const html = renderToStaticMarkup(
+      <StudioSplitLeftInput icon={<span aria-hidden="true">⌕</span>} value="thumbnail" placeholder="Search assets…" aria-label="Search Vault assets" />,
+    );
+    expect(html).toContain('data-vt-studio-username-input="true"');
+    expect(html).toContain('aria-label="Search Vault assets"');
+    expect(html).toContain('placeholder="Search assets…"');
+    expect(html).toContain('value="thumbnail"');
+  });
+
+  it("supports explicit single-select semantics in the shared legend dropdown", () => {
+    const html = renderToStaticMarkup(
+      <StudioLegendMultiDropdown
+        label="Sort"
+        accessibleLabel="Sort assets"
+        selectionMode="single"
+        value={["name-asc"]}
+        options={[{ value: "name-asc", label: "NAME ASC" }, { value: "name-desc", label: "NAME DESC" }]}
+      />,
+    );
+    expect(html).toContain('data-vt-studio-dropdown-variant="single-select"');
+    expect(html).toContain('aria-multiselectable="false"');
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controls).toContain('if (selectionMode === "single")');
+    expect(controls).toContain("setSelected([option.value])");
+    expect(controls).toContain("setOpen(false)");
   });
 
   it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
