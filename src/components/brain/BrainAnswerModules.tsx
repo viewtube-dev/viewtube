@@ -55,34 +55,72 @@ const formatMetricValue = (
  return value.toLocaleString()
 }
 
-/** A minimal area sparkline for a module's trend points (trend_chart / retention_curve). */
+/** Missing values split a trend into separate runs; a real zero remains a measured point. */
+export const buildBrainSparklineSegments = <T extends { label: string; value: number | null }>(points: T[]): T[][] => {
+ const segments: T[][] = []
+ let current: T[] = []
+ for (const point of points) {
+  if (typeof point.value === "number" && Number.isFinite(point.value)) {
+   current.push(point)
+  } else if (current.length) {
+   segments.push(current)
+   current = []
+  }
+ }
+ if (current.length) segments.push(current)
+ return segments
+}
+
+/** A compact trend visual that never plots missing values as zero. */
 const BrainSparkline: React.FC<{ points: Array<{ label: string; value: number | null }>; accent: string }> = ({
  points,
  accent,
 }) => {
- const values = points.map((point) => (typeof point.value === "number" && Number.isFinite(point.value) ? point.value : 0))
- if (values.length < 2) return null
+ const measured = points.filter((point) => typeof point.value === "number" && Number.isFinite(point.value))
+ const segments = buildBrainSparklineSegments(points)
+ if (!measured.length) {
+  return <p className="border-[2px] border-black bg-white px-2 py-2 text-xs font-bold" role="status">Trend unavailable: no measured points.</p>
+ }
+ const values = measured.map((point) => point.value as number)
  const max = Math.max(...values)
  const min = Math.min(...values)
  const range = max - min || 1
  const width = 240
  const height = 44
  const pad = 3
- const step = (width - pad * 2) / (values.length - 1)
- const coords = values.map((value, index): [number, number] => [
-  pad + index * step,
-  height - pad - ((value - min) / range) * (height - pad * 2),
- ])
- const line = coords.map(([x, y], index) => `${index === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ")
- const last = coords[coords.length - 1]
- const area = `${line} L${last[0].toFixed(1)},${height - pad} L${coords[0][0].toFixed(1)},${height - pad} Z`
+ const step = (width - pad * 2) / Math.max(points.length - 1, 1)
+ const pointAt = (point: { label: string; value: number | null }): [number, number] => {
+  const index = points.indexOf(point)
+  return [
+   pad + index * step,
+   height - pad - (((point.value as number) - min) / range) * (height - pad * 2),
+  ]
+ }
  return (
-  <figure className="rounded-[7px] border-[2px] border-black bg-white p-1.5">
-   <svg viewBox={`0 0 ${width} ${height}`} className="h-11 w-full" preserveAspectRatio="none" role="img" aria-label="Trend">
-    <path d={area} fill={accent} opacity="0.35" />
-    <path d={line} fill="none" stroke="#000" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-    <circle cx={last[0]} cy={last[1]} r="3" fill={accent} stroke="#000" strokeWidth="1.5" />
+  <figure className="border-[2px] border-black bg-white p-1.5">
+   <svg viewBox={`0 0 ${width} ${height}`} className="h-11 w-full" preserveAspectRatio="none" role="img" aria-label="Trend; gaps indicate missing measurements">
+    {segments.map((segment, index) => {
+     const coords = segment.map(pointAt)
+     const line = coords.map(([x, y], pointIndex) => `${pointIndex === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ")
+     const first = coords[0]
+     const last = coords[coords.length - 1]
+     const area = segment.length > 1
+      ? `${line} L${last[0].toFixed(1)},${height - pad} L${first[0].toFixed(1)},${height - pad} Z`
+      : null
+     return (
+      <g key={`${segment[0].label}-${index}`}>
+       {area ? <path d={area} fill={accent} opacity="0.25" /> : null}
+       {segment.length > 1 ? <path d={line} fill="none" stroke="#000" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" /> : null}
+       {coords.map(([x, y], pointIndex) => (
+        <circle key={segment[pointIndex].label} cx={x} cy={y} r="2.5" fill={accent} stroke="#000" strokeWidth="1.5" />
+       ))}
+      </g>
+     )
+    })}
    </svg>
+   {segments.length > 1 || measured.length !== points.length ? (
+    <figcaption className="px-1 pt-1 text-[9px] font-bold text-black/60">Gaps indicate missing measurements; they are not zero.</figcaption>
+   ) : null}
   </figure>
  )
 }
