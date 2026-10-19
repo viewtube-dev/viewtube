@@ -128,7 +128,7 @@ describe("BrainContextBroker creator-context convergence", () => {
    recentTurns: [],
    userText: "How many views?",
    evidenceRecords: [record],
-   evidenceRecordQuality: buildBrainEvidenceRecordQuality([record], { expectedChannelId: "channel-1" }),,
+   evidenceRecordQuality: buildBrainEvidenceRecordQuality([record], { expectedChannelId: "channel-1" }),
   })
 
   const prompt = result.systemInstruction
