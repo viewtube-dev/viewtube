@@ -110,7 +110,7 @@ describe("Brain generation quality loop", () => {
         records: [{ id: "knowledge-record-1" }],
         contradictions: [{ id: "knowledge-conflict-1" }],
       } as never,
-      styleProfile: {} as never,
+      styleProfile: { descriptor: { voice: "measured and documentary" } } as never,
       project: null,
       surface: null,
       selection: null,
