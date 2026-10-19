@@ -1859,7 +1859,6 @@ const CreatorVaultOS: React.FC = () => {
         </button>
         <StudioSplitLeftInput
          sizeVariant="compact"
-         className="vault-library-search-field"
          icon={<Search aria-hidden="true" />}
          ref={searchInputRef}
          value={query}
@@ -2752,6 +2751,7 @@ const CreatorVaultOS: React.FC = () => {
            <StudioUploadFrame
             sizeVariant="standard"
             multiple
+            accept=""
             prompt={importMode === "direct" ? "DROP OR CHOOSE · IMPORT DIRECTLY" : "DROP OR CHOOSE · REVIEW IN STAGING"}
             aria-label="Import Vault assets"
             onFilesChange={files => { void stageFiles(files) }}
