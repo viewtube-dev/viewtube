@@ -59,6 +59,15 @@ export const SidebarChatbot: React.FC = () => {
   recentConversationTurns: controls.personalization ? turns : [],
  }), [brain, authState, channelConnection, turns, controls.personalization, getBrainMemory])
  const growthContext = useMemo(() => buildCreatorGrowthContext(snapshot, turns, []), [snapshot, turns])
+ const contextProjectId = controls.allowProjects
+  ? selection?.projectId ?? surface.projectId ?? brain.activeProjectId ?? null
+  : null
+ const contextProject = contextProjectId
+  ? brain.projects.find((project) => project.id === contextProjectId) || null
+  : null
+ const contextVideoId = selection?.videoId ?? surface.videoId ?? null
+ const contextDateRange = controls.allowAnalytics ? selection?.dateRange ?? surface.dateRange ?? null : null
+ const contextAssetLabel = selection?.label || null
 
  const restore = async () => {
   try {
@@ -204,6 +213,21 @@ export const SidebarChatbot: React.FC = () => {
     <Link to="/ai-brain" className="inline-flex items-center gap-1 text-[9px] font-black uppercase">Open Hub <ArrowRight size={11} /></Link>
    </header>
 
+   <div className="shrink-0 border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2" aria-label="Current Brain context">
+    <p className="mb-1 text-[8px] font-[1000] uppercase tracking-[0.1em] text-black/55">Context for this answer</p>
+    <div className="flex flex-wrap gap-1">
+     <span className="max-w-full truncate rounded-[5px] border border-black bg-white px-1.5 py-0.5 text-[8px] font-black uppercase">Channel: {channelId ? snapshot.channel.label || "Connected channel" : "Not connected"}</span>
+     <span className="max-w-full truncate rounded-[5px] border border-black bg-white px-1.5 py-0.5 text-[8px] font-black uppercase">Profile: {controls.personalization ? "On" : "Off"}</span>
+     {contextProjectId ? <span className="max-w-full truncate rounded-[5px] border border-black bg-[#C0F240] px-1.5 py-0.5 text-[8px] font-black uppercase">Project: {contextProject?.name || contextProjectId.slice(0, 12)}</span> : null}
+     {contextProject?.contentBuildId ? <span className="max-w-full truncate rounded-[5px] border border-black bg-white px-1.5 py-0.5 text-[8px] font-black uppercase">ContentBuild: {contextProject.contentBuildId.slice(0, 10)}</span> : null}
+     {contextVideoId ? <span className="max-w-full truncate rounded-[5px] border border-black bg-white px-1.5 py-0.5 text-[8px] font-black uppercase">Video: {contextVideoId.slice(0, 12)}</span> : null}
+     {contextDateRange ? <span className="max-w-full truncate rounded-[5px] border border-black bg-white px-1.5 py-0.5 text-[8px] font-black uppercase">Window: {contextDateRange}</span> : null}
+     {contextAssetLabel ? <span className="max-w-full truncate rounded-[5px] border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-black uppercase">Selected: {contextAssetLabel}</span> : null}
+     <span className="max-w-full truncate rounded-[5px] border border-black bg-white px-1.5 py-0.5 text-[8px] font-black uppercase">Surface: {surface.route}</span>
+    </div>
+    {surface.sourceOfTruth.length ? <p className="mt-1 truncate text-[8px] font-bold text-black/45">Source: {surface.sourceOfTruth.slice(0, 2).join(" · ")}</p> : null}
+   </div>
+
    {selection ? (
     <div className="shrink-0 border-b-[2px] border-black bg-[#36E0F6]/25 px-3 py-1.5">
      <p className="truncate text-[8px] font-[1000] uppercase text-black/55">Current selection</p>
@@ -215,11 +239,19 @@ export const SidebarChatbot: React.FC = () => {
     {activeTurn?.response ? (
      <>
       <p className="text-xs font-black leading-5">{sanitizeCreatorFacingBrainCopy(activeTurn.response.keyInsight)}</p>
+      {(activeTurn.response.evidenceChips || []).length ? (
+       <div className="flex flex-wrap gap-1" aria-label="Evidence provenance summary">
+        {(activeTurn.response.evidenceChips || []).slice(0, 3).map((chip, index) => (
+         <span key={`${index}:${chip}`} className="max-w-full rounded-[5px] border border-black bg-[#36E0F6]/25 px-1.5 py-1 text-[8px] font-bold leading-3">{chip}</span>
+        ))}
+       </div>
+      ) : null}
       <BrainAnswerModuleGrid modules={(activeTurn.response.modules || []).slice(0, 1)} compact />
       {controls.showEvidence ? (
        <BrainEvidenceDrawer
         evidencePack={snapshot.evidencePack}
         confidence={activeTurn.response.confidence}
+        evidenceChips={activeTurn.response.evidenceChips || []}
         inference
         summaryLabel="Why this answer?"
         caveats={activeTurn.response.evidenceIds?.length
