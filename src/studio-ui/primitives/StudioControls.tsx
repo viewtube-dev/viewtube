@@ -1357,7 +1357,7 @@ export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ opti
 )
 StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
-/** Single-select dropdown with a fixed square chevron rail on the left. */
+/** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
   <StudioDropdown {...props} variant="split-left" />
 )
