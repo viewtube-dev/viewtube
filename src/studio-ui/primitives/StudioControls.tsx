@@ -2334,7 +2334,7 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
 /** Canonical pair-colored upload canvas with responsive breathing layers and an optional image preview. */
 export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   accept = "image/*,video/*",
-  prompt = "Drag or drop\\nImage / video here · or click to upload",
+  prompt = "Drag or drop\nImage / video here · or click to upload",
   label,
   icon,
   sizeVariant = "standard",
@@ -2348,7 +2348,8 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   style,
   "aria-label": ariaLabel = "Upload: drag or drop an image or video here, or click to upload",
   ...labelProps
-}) => {{
+}) => {
+  void _level;
   const [dragging, setDragging] = React.useState(false);
   const [clicking, setClicking] = React.useState(false);
   const [selectedName, setSelectedName] = React.useState("");
