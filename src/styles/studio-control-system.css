@@ -4455,3 +4455,88 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-44-word-toggle.vt-toolbox-header-toggle-replacement {
   background: #fff !important;
 }
+
+
+/* Shared interaction-focus tokens: values mirror STUDIO_FOCUS_INTERACTION_TOKENS. */
+:root,
+[data-vt-studio-control="true"] {
+  --vt-studio-focus-hold-ms: 1500ms;
+  --vt-studio-focus-outline-fade-ms: 500ms;
+  --vt-studio-number-rest-mix: 50%;
+  --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix), white);
+  --vt-studio-number-active-color: #000000;
+  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * 0.65);
+  --vt-studio-focus-outline-offset: 0px;
+}
+
+/* Counter and slider values share the same neutral-rest / black-in-use transition. */
+.vt-studio-counter__value,
+.vt-studio-side-counter__value,
+.vt-studio-double-split-slider__value {
+  color: var(--vt-studio-number-rest-color);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke-color: var(--vt-studio-number-rest-color);
+  transition:
+    color var(--vt-studio-focus-outline-fade-ms) ease-out,
+    -webkit-text-fill-color var(--vt-studio-focus-outline-fade-ms) ease-out,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms) ease-out;
+}
+
+.vt-studio-counter,
+.vt-studio-side-counter,
+.vt-studio-left-counter,
+.vt-studio-double-split-slider,
+[data-vt-studio-control-family="counter"],
+[data-vt-studio-slider] {
+  outline: 0 solid transparent;
+  outline-offset: var(--vt-studio-focus-outline-offset);
+  transition:
+    outline-color var(--vt-studio-focus-outline-fade-ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms) ease-out;
+}
+
+.vt-studio-counter.is-interaction-focus,
+.vt-studio-side-counter.is-interaction-focus,
+.vt-studio-left-counter.is-interaction-focus,
+.vt-studio-double-split-slider.is-interaction-focus,
+[data-vt-studio-control-family="counter"][data-vt-interaction-focus="true"],
+[data-vt-studio-slider][data-vt-interaction-focus="true"] {
+  outline: var(--vt-studio-focus-outline-width) solid var(--vt-studio-focus-outline-color);
+  outline-offset: var(--vt-studio-focus-outline-offset);
+}
+
+.vt-studio-counter.is-interaction-focus .vt-studio-counter__value,
+.vt-studio-side-counter.is-interaction-focus .vt-studio-side-counter__value,
+.vt-studio-left-counter.is-interaction-focus .vt-studio-side-counter__value,
+.vt-studio-double-split-slider.is-interaction-focus .vt-studio-double-split-slider__value,
+[data-vt-interaction-focus="true"] [data-vt-studio-counter-value] {
+  color: var(--vt-studio-number-active-color);
+  -webkit-text-fill-color: var(--vt-studio-number-active-color);
+  -webkit-text-stroke-color: var(--vt-studio-number-active-color);
+}
+
+/* Fields retain their existing focus fill and black text; only the outline timing/role is unified. */
+.vt-studio-text-input,
+.vt-studio-text-area,
+[data-vt-studio-control="true"]:is(input, textarea) {
+  outline: 0 solid transparent;
+  outline-offset: var(--vt-studio-focus-outline-offset);
+  transition:
+    outline-color var(--vt-studio-focus-outline-fade-ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms) ease-out,
+    color var(--vt-studio-focus-outline-fade-ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms) ease-out;
+}
+
+.vt-studio-text-input:focus,
+.vt-studio-text-input:focus-visible,
+.vt-studio-text-area:focus,
+.vt-studio-text-area:focus-visible,
+[data-vt-studio-control="true"]:is(input, textarea):focus,
+[data-vt-studio-control="true"]:is(input, textarea):focus-visible {
+  outline: var(--vt-studio-focus-outline-width) solid var(--vt-studio-focus-outline-color);
+  outline-offset: var(--vt-studio-focus-outline-offset);
+  color: var(--vt-studio-number-active-color);
+}
+
