@@ -71,3 +71,15 @@ test("half-primary idle fill is reserved for radio and checkbox controls", () =>
   assert.match(css, /html body button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^}]*background:\s*var\(--vt-studio-control-accent/s);
   assert.match(css, /html body button\[data-vt-studio-button="true"\]\[aria-pressed="true"\] > \[data-vt-studio-button-face\][^}]*background:\s*var\(--vt-studio-control-accent/s);
 });
+
+
+test("double-split slider keeps the reduced readout inset", () => {
+  assert.match(css, /\.vt-studio-double-split-slider \[data-vt-studio-split-field\]\s*\{[^}]*padding-inline:\s*calc\(var\(--vt-studio-control-height, 44px\) \* \.09\)/s);
+  assert.match(css, /\.vt-studio-double-split-slider \.vt-studio-double-split-slider__value\s*\{[^}]*padding-inline:\s*0[^}]*min-width:\s*0/s);
+});
+
+test("dropdown rails and menus share canonical geometry", () => {
+  assert.match(css, /\.vt-studio-dropdown\.is-split-left \.vt-studio-dropdown-split-rail\[data-rail="start"\]\s*\{[^}]*height:\s*100%[^}]*aspect-ratio:\s*1\s*\/\s*1[^}]*border-radius:\s*0/s);
+  assert.match(css, /\.vt-studio-dropdown:not\(\.is-split-left\) \.vt-studio-dropdown-chevron\.is-trailing\s*\{[^}]*border:\s*0/s);
+  assert.match(css, /\.vt-studio-dropdown-menu\s*\{[^}]*border-style:\s*solid[^}]*border-top-left-radius:/s);
+});
