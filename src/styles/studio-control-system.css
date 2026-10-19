@@ -13,7 +13,7 @@
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: .86;
-  --vt-studio-textarea-line-height: .85;
+  --vt-studio-textarea-line-height: .75;
   
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
@@ -1069,7 +1069,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   font-weight: var(--vt-studio-control-font-weight, 1000);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
   /* Only textarea-specific typography override: compact description row spacing. */
-  line-height: var(--vt-studio-textarea-line-height, .85);
+  line-height: var(--vt-studio-textarea-line-height, .75);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
@@ -4536,7 +4536,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 [data-vt-studio-control="true"] {
   --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix), white);
   --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 1));
 }
 
 /* Counter and slider values share the same neutral-rest / black-in-use transition. */
@@ -4771,13 +4771,13 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   width: 100%;
   min-width: 0;
   height: auto;
-  min-height: var(--vt-studio-textarea-min-height, 92px);
+  min-height: 0;
   margin: 0;
   padding: var(--vt-studio-textarea-standard-padding-block, 10px) var(--vt-studio-textarea-standard-padding-inline, 12px);
   border: var(--studio-text-box-stroke-width) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  box-shadow: inset 0 0 0 var(--studio-text-box-stroke-width) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  position: relative;
   outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
   outline-offset: 0;
   color: #000;
@@ -4793,6 +4793,14 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   user-select: text;
   cursor: text;
 }
+.vt-studio-text-box[data-vt-studio-control="true"]::before {
+  content: "";
+  position: absolute;
+  inset: var(--studio-text-box-stroke-width);
+  border: var(--studio-text-box-stroke-width) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  border-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--studio-text-box-stroke-width) * 2));
+  pointer-events: none;
+}
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
   padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
@@ -4801,7 +4809,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
 }
-/* Textarea and read-only text display share the canonical 0.85 line-height token. */
+/* Editable textarea text alone uses the requested compact 0.75 line-height. */
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
