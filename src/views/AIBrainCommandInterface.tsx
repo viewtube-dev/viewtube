@@ -809,8 +809,8 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  const handleSend = async (override?: string) => {
-  const userText = (override || input).trim()
-  if (!userText || busy) return
+  const userText = override ?? input
+  if (!userText.trim() || busy) return
   if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
    setIntakeContext(loadAiBrainContext())
    setIntakeOpen(true)
