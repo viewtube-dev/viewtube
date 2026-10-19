@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioTextBox } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioTextBox } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -1897,23 +1897,38 @@ const CreatorVaultOS: React.FC = () => {
         >
          Filters
         </button>
-        <SubToolboxDropdownControl
+        <StudioLegendMultiDropdown
          label="Sort"
-         value={sort}
-         onChange={(value) => setSort(value as VaultWorkspaceSort)}
-         options={["updated-desc", "updated-asc", "name-asc", "name-desc"]}
+         accessibleLabel="Sort assets"
+         sizeVariant="compact"
+         options={["updated-desc", "updated-asc", "name-asc", "name-desc"].map((option) => ({ value: option, label: option.toUpperCase() }))}
+         value={[sort]}
+         onChange={(values) => {
+          const next = values[values.length - 1]
+          if (next) setSort(next as VaultWorkspaceSort)
+         }}
         />
-        <SubToolboxDropdownControl
+        <StudioLegendMultiDropdown
          label="View"
-         value={viewMode}
-         onChange={(value) => setViewMode(value as VaultWorkspaceViewMode)}
-         options={["grid", "masonry", "list", "filmstrip", "lineage"]}
+         accessibleLabel="Vault view"
+         sizeVariant="compact"
+         options={["grid", "masonry", "list", "filmstrip", "lineage"].map((option) => ({ value: option, label: option.toUpperCase() }))}
+         value={[viewMode]}
+         onChange={(values) => {
+          const next = values[values.length - 1]
+          if (next) setViewMode(next as VaultWorkspaceViewMode)
+         }}
         />
-        <SubToolboxDropdownControl
+        <StudioLegendMultiDropdown
          label="State"
-         value={special}
-         onChange={(value) => setSpecial(value as typeof special)}
-         options={["active", "recent", "generated", "inbox", "favorites", "archive", "trash"]}
+         accessibleLabel="Vault state"
+         sizeVariant="compact"
+         options={["active", "recent", "generated", "inbox", "favorites", "archive", "trash"].map((option) => ({ value: option, label: option.toUpperCase() }))}
+         value={[special]}
+         onChange={(values) => {
+          const next = values[values.length - 1]
+          if (next) setSpecial(next as typeof special)
+         }}
         />
        </div>
        <div className="vault-media-type-filter-row">
