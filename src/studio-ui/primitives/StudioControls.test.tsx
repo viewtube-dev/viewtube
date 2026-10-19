@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -20,6 +20,24 @@ const canonicalTail = (css: string) => {
 };
 
 
+describe("StudioTextBox size-aware stroke defaults", () => {
+  it("halves only the local stroke width while preserving the 50% fill and black text", () => {
+    const css = readStudioControlCss();
+    const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
+    const end = css.indexOf("/* Textarea and read-only text display share", start);
+    const textBox = css.slice(start, end);
+    expect(textBox).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5)");
+    expect(textBox).toContain("border: var(--studio-text-box-stroke-width) solid #000");
+    expect(textBox).toContain("inset 0 0 0 var(--studio-text-box-stroke-width)");
+    expect(textBox).toContain("outline: var(--studio-text-box-stroke-width) solid");
+    expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
+    expect(textBox).toContain("color: #000");
+    expect(textBox).toContain("line-height: var(--textarea-description-line-height, 0.75)");
+    expect(textBox).toContain('[data-size="compact"]');
+    expect(textBox).toContain('[data-size="micro"]');
+  });
+});
+
 describe("canonical Studio upload frame", () => {
   it("renders the standard upload frame with accessible file input and layered pair-color anatomy", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame aria-label="Upload media" />);
@@ -30,11 +48,36 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Upload media"');
     expect(html).toContain('class="vt-studio-upload-frame__layers"');
     expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
-    expect(html).toContain("Drop or choose file");
+    expect(html).toContain("Drag or drop");
+    expect(html).toContain("Image / video here · or click to upload");
     expect(html).not.toContain("FA618A");
     expect(html).not.toContain("4EE4BE");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.colorPair).toContain("--pair-a");
+  });
+
+  it("supports multiple file selection through the canonical upload frame", () => {
+    const html = renderToStaticMarkup(<StudioUploadFrame multiple accept="image/*,video/*" aria-label="Vault asset import" />);
+    expect(html).toContain('multiple=""');
+    expect(html).toContain('accept="image/*,video/*"');
+    expect(html).toContain('aria-label="Vault asset import"');
+  });
+
+  it("renders the canonical split-left input with search icon rail and native input attributes", () => {
+    const html = renderToStaticMarkup(<StudioSplitLeftInput icon={<span aria-hidden="true">⌕</span>} value="thumbnail" placeholder="Search assets…" aria-label="Search Vault assets" />);
+    expect(html).toContain('data-vt-studio-username-input="true"');
+    expect(html).toContain('aria-label="Search Vault assets"');
+    expect(html).toContain('placeholder="Search assets…"');
+    expect(html).toContain('value="thumbnail"');
+  });
+
+  it("supports explicit single-select semantics in the shared legend dropdown", () => {
+    const html = renderToStaticMarkup(<StudioLegendMultiDropdown label="Sort" accessibleLabel="Sort assets" selectionMode="single" value={["name-asc"]} options={[{ value: "name-asc", label: "NAME ASC" }, { value: "name-desc", label: "NAME DESC" }]} />);
+    expect(html).toContain('data-vt-studio-dropdown-variant="single-select"');
+    expect(html).toContain('aria-multiselectable="false"');
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controls).toContain("setSelected([option.value])");
+    expect(controls).toContain("setOpen(false)");
   });
 
   it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
@@ -49,27 +92,35 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame.is-drag");
     expect(css).toContain(".vt-studio-upload-frame.has-img");
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
-    expect(css).toContain("border: 4px solid var(--vt-studio-upload-primary)");
-    expect(css).toContain("border: 2px solid var(--vt-studio-upload-secondary)");
+    expect(css).toContain("border: calc(var(--vt-studio-upload-frame-stroke) * 1.25) solid var(--vt-studio-upload-primary)");
+    expect(css).toContain("border: calc(var(--vt-studio-upload-frame-stroke) * .75) solid var(--vt-studio-upload-secondary)");
     expect(css).toContain(".vt-studio-upload-frame__inset::before");
     expect(css).toContain(".vt-studio-upload-frame__inset::after");
     const uploadFrameBlock = css.slice(css.indexOf(".vt-studio-upload-frame {"), css.indexOf(".vt-studio-upload-frame[data-size=\"compact\"]"));
     expect(uploadFrameBlock).toContain("aspect-ratio: 16 / 9;");
     expect(css).not.toMatch(/\.vt-studio-upload-frame\s*\{\s*aspect-ratio:\s*(?!16 \/ 9)/);
-    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
+    expect(css).toContain("font-size: clamp(10px, 1.6cqw, 12px)");
     expect(css).toContain("font-weight: 1000");
     expect(css).toContain("letter-spacing: -.02em");
-    expect(css).toContain("border-radius: 999px;");
+    expect(css).toContain("border-radius: clamp(3px, .6cqw, 8px);");
     expect(css).toContain(".vt-studio-upload-frame__icon {");
     expect(css).toContain("overflow: visible");
-    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
     expect(css).toContain(".vt-studio-upload-frame__icon::after");
-    expect(css).not.toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
+    expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
+    expect(css).toContain("width: 48cqw");
+    expect(css).toContain("--vt-studio-upload-quarter-stroke: calc(var(--vt-studio-upload-frame-stroke) / 4)");
+    expect(css).toContain("--vt-studio-upload-speed: 2");
+    expect(css).toContain("animation: vt-studio-upload-click-pulse 1s ease-in-out both");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
+    const migrationCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
     expect(legacyCatalog).not.toContain("SubToolboxFileTarget");
+    expect(legacyCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).toContain("<StudioUploadFrame");
+    expect(migrationCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).not.toContain("SubToolboxFileTarget");
   });
 });
 
