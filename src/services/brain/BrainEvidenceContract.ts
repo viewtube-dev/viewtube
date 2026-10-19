@@ -1,16 +1,7 @@
-import type { EvidenceRecord } from "./EvidenceRecord"
+import type { EvidenceRecord, EvidenceEpistemicState } from "./EvidenceRecord"
 
-export type BrainEpistemicState =
- | "KNOWN"
- | "OBSERVED"
- | "CALCULATED"
- | "USER_PROVIDED"
- | "INFERRED"
- | "HYPOTHESIS"
- | "ESTIMATE"
- | "STALE"
- | "MISSING"
- | "CONFLICTING"
+/** Backward-compatible type name for the canonical shared epistemic vocabulary. */
+export type BrainEpistemicState = EvidenceEpistemicState
 
 export type BrainEvidenceScopeState = "exact" | "mismatch" | "unscoped" | "not_requested"
 
@@ -62,11 +53,9 @@ export const normalizeBrainConfidence = (
 }
 
 const epistemicStateFor = (record: EvidenceRecord): BrainEpistemicState => {
- if (record.epistemicState === "missing") return "MISSING"
- if (record.epistemicState === "stale" || record.freshness === "stale") return "STALE"
- if (record.epistemicState === "creator_confirmed") return "USER_PROVIDED"
- if (record.epistemicState === "derived") return "CALCULATED"
- return "OBSERVED"
+ if (record.epistemicState === "missing") return "missing"
+ if (record.epistemicState === "stale" || record.freshness === "stale") return "stale"
+ return record.epistemicState
 }
 
 /** Additive, read-only projection. It does not become an evidence store or mutate source records. */
@@ -86,7 +75,7 @@ export const projectEvidenceRecordToBrainClaim = (record: EvidenceRecord): Brain
   claim: record.metric || record.entityType || record.entityId || record.sourceRef,
   metric: record.metric || null,
   // Missing is represented as null; it is never coerced to zero.
-  value: epistemicState === "MISSING" ? null : record.value ?? null,
+  value: epistemicState === "missing" ? null : record.value ?? null,
   unit: record.unit || null,
   timeframe: record.window ? {
    kind: record.window.kind,
@@ -134,8 +123,8 @@ export const summarizeBrainEvidenceHealth = (
  const requested = [expectedScope.channelId, expectedScope.projectId, expectedScope.videoId].some((value) => value !== undefined)
  const scoped = claims.map((claim) => ({ claim, scope: assessBrainEvidenceScope(claim, expectedScope) }))
  const scopeMismatchIds = scoped.filter((entry) => entry.scope === "mismatch" || entry.scope === "unscoped").map((entry) => entry.claim.id)
- const missingIds = claims.filter((claim) => claim.epistemicState === "MISSING" || claim.value === null).map((claim) => claim.id)
- const staleIds = claims.filter((claim) => claim.epistemicState === "STALE" || claim.freshness === "stale").map((claim) => claim.id)
+ const missingIds = claims.filter((claim) => claim.epistemicState === "missing" || claim.value === null).map((claim) => claim.id)
+ const staleIds = claims.filter((claim) => claim.epistemicState === "stale" || claim.freshness === "stale").map((claim) => claim.id)
  const groups = new Map<string, Set<string>>()
  for (const claim of claims) {
   if (claim.value === null || claim.epistemicState === "MISSING") continue
@@ -149,9 +138,9 @@ export const summarizeBrainEvidenceHealth = (
  const usableClaims = scoped.filter(({ claim, scope }) =>
   (!requested || scope === "exact" || scope === "not_requested")
   && !conflictingKeys.has(claimKey(claim))
-  && claim.epistemicState !== "MISSING"
-  && claim.epistemicState !== "CONFLICTING"
-  && claim.epistemicState !== "STALE"
+  && claim.epistemicState !== "missing"
+  && claim.epistemicState !== "conflicting"
+  && claim.epistemicState !== "stale"
   && claim.value !== null,
  ).length
  const coverageRatio = claims.length ? usableClaims / claims.length : 0
