@@ -13,8 +13,8 @@ describe("BrainPromptPolicyPanel", () => {
  it("shows registry inventory without claiming it is the active prompt for a turn", () => {
   const html = renderToStaticMarkup(<BrainPromptPolicyPanel snapshot={snapshot} channelId="channel-test" onEditPrompt={() => undefined} />)
   expect(html).toContain("Prompt Studio &amp; Access")
-  expect(html).toContain("Prompt registry inventory")
-  expect(html).toContain("does not claim a prompt is active for a particular turn")
+  expect(html).toContain("Canonical prompt authority")
+  expect(html).toContain("does not import documentation into runtime code")
   expect(html).toContain("Inspect active prompt for next task")
  })
  it("separates permission gates from current data readiness", () => {
