@@ -239,7 +239,7 @@ describe("subtoolbox design governance", () => {
   expect(systemCss).toContain("Mobile editable-control contract — 2026-09-25")
   expect(systemCss).toContain("font-size:16px!important")
   expect(systemCss).toContain(':not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input)')
-  expect(systemCss).toContain(".vt-subtoolbox-labeled-control:not([data-vt-studio-control=\\"true\\"])")
+  expect(systemCss).toContain('.vt-subtoolbox-labeled-control:not([data-vt-studio-control="true"])')
   expect(systemCss).toContain("scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px)")
 
   expect(keyboardHook).toContain('window.visualViewport?.addEventListener("resize", onVisualViewportChange)')
