@@ -9,7 +9,7 @@ const dropdown = component.slice(component.indexOf("export const StudioDropdown"
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
   assert.match(tokens, /STUDIO_DROPDOWN_TOKENS/)
-  assert.match(css, /--vt-studio-dropdown-chevron-size:\s*var\(--vt-studio-dropdown-chevron-size/)
+  assert.match(css, /--vt-studio-dropdown-standard-chevron-size/)
   assert.match(css, /\.vt-studio-legend-trigger[\s\S]*?--vt-studio-dropdown-chevron-size/)
 })
 
@@ -35,8 +35,8 @@ test("side counter divider is a centered overlay and does not consume either act
 
 test("counter and slider readouts share default mix and black active numeral tokens", () => {
   assert.match(tokens, /STUDIO_COUNTER_NUMBER_TOKENS/)
-  assert.match(css, /--vt-studio-number-default-mix:\s*50%/)
-  assert.match(css, /\.vt-studio-double-split-slider__value[\s\S]*?color-mix\(in srgb, #fff 50%, var\(--vt-studio-number-background/)
+  assert.match(css, /--vt-studio-number-default-white-mix:\s*50%/)
+  assert.match(css, /\.vt-studio-double-split-slider__value[\s\S]*?color-mix\\(in srgb, #fff var\\(--vt-studio-number-default-white-mix, 50%\\), var\\(--vt-studio-number-background/)
   assert.match(css, /\.vt-studio-double-split-slider:has\([\s\S]*?\.vt-studio-double-split-slider__value[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke[^;]*#000/s)
   assert.match(css, /\.vt-studio-side-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke[^;]*#000/s)
 })
