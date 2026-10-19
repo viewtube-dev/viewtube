@@ -3,9 +3,6 @@ import { Info, ArrowUpRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import type { AIBrainEvidencePack } from "../../types"
 
-const numberText = (value: number | null | undefined): string =>
- typeof value === "number" && Number.isFinite(value) ? value.toLocaleString() : ""
-
 /**
  * Creator-facing "Why this recommendation?" surface.
  *
@@ -37,9 +34,6 @@ export const BrainEvidenceDrawer: React.FC<{
  sourceRoute = "/analytics",
  sourceLabel = "Open source in Analytics",
 }) => {
- const topVideos = evidencePack.topVideos
- const searchTerms = evidencePack.searchTerms
- const trafficSources = evidencePack.trafficSources
  const missing = evidencePack.missingInputs.slice(0, 4)
  const evidenceItems = evidencePack.items
  const visibleEvidenceItems = evidenceItems.slice(0, 5)
@@ -78,7 +72,7 @@ export const BrainEvidenceDrawer: React.FC<{
   >
    {compact ? (
     <summary
-     className="inline-flex min-h-7 cursor-pointer list-none items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase tracking-[0.06em] hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+     className="inline-flex min-h-7 cursor-pointer list-none items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase tracking-[0.06em] hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
      title={summaryLabel}
      aria-label={`${summaryLabel}; ${sourceCount} evidence references`}
     >
@@ -127,7 +121,7 @@ export const BrainEvidenceDrawer: React.FC<{
       <ul className="mt-1 grid gap-1">
        {visibleEvidenceItems.map((item) => (
         <li key={item.id} className="overflow-hidden rounded-[7px] border-[1.5px] border-black/20 bg-[#f8f8f4]">
-         <Link to={evidenceHref(item)} className="flex min-h-11 items-center justify-between gap-2 px-2 py-1.5 text-xs font-bold leading-4 text-black/80 hover:bg-[#36E0F6]/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-black">
+         <Link to={evidenceHref(item)} className="flex min-h-11 items-center justify-between gap-2 px-2 py-1.5 text-xs font-bold leading-4 text-black/80 hover:bg-[#36E0F6]/25 focus-visible:ring-2 focus-visible:ring-black">
           <span className="min-w-0">
            <span className="block break-words">{item.label}</span>
            <span className="block text-[9px] font-bold text-black/50">{item.source}{item.detail ? ` · ${item.detail}` : ""}</span>
@@ -145,7 +139,7 @@ export const BrainEvidenceDrawer: React.FC<{
         <ul className="mt-1 grid gap-1">
          {evidenceItems.slice(5).map((item) => (
           <li key={item.id} className="overflow-hidden rounded-[7px] border-[1.5px] border-black/20 bg-[#f8f8f4]">
-           <Link to={evidenceHref(item)} className="flex min-h-11 items-center justify-between gap-2 px-2 py-1.5 text-xs font-bold leading-4 text-black/80 hover:bg-[#36E0F6]/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-black">
+           <Link to={evidenceHref(item)} className="flex min-h-11 items-center justify-between gap-2 px-2 py-1.5 text-xs font-bold leading-4 text-black/80 hover:bg-[#36E0F6]/25 focus-visible:ring-2 focus-visible:ring-black">
             <span className="min-w-0">
              <span className="block break-words">{item.label}</span>
              <span className="block text-[9px] font-bold text-black/50">{item.source}{item.detail ? ` · ${item.detail}` : ""}</span>
