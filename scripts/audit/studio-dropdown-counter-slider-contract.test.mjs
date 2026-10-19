@@ -10,33 +10,37 @@ const dropdown = component.slice(component.indexOf("export const StudioDropdown"
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
   assert.match(tokens, /STUDIO_DROPDOWN_TOKENS/)
   assert.match(css, /--vt-studio-dropdown-standard-chevron-size/)
-  assert.match(css, /\.vt-studio-legend-trigger[\s\S]*?--vt-studio-dropdown-chevron-size/)
+  assert.match(css, /--vt-studio-dropdown-compact-chevron-size/)
+  assert.match(css, /--vt-legend-chevron-size:\s*var\(--vt-studio-dropdown-chevron-size\)/)
+  assert.match(css, /\.vt-studio-legend-chevron\s*\{\s*stroke-width:\s*var\(--vt-studio-dropdown-chevron-stroke/)
 })
 
 test("simple dropdown has no split rail; split-left dropdown uses split-shell anatomy and trailing chevron", () => {
   assert.match(dropdown, /variant === "simple"/)
-  assert.match(dropdown, /data-vt-studio-split="left"/)
+  assert.match(dropdown, /data-vt-studio-split=\{variant === "split-left" \? "left" : undefined\}/)
   assert.match(dropdown, /data-vt-studio-split-rail/)
   assert.match(dropdown, /data-vt-studio-dropdown-chevron/)
   assert.match(dropdown, /splitIcon/)
   assert.doesNotMatch(dropdown, /variant === "split-left" \? <span className="vt-studio-dropdown-chevron is-leading"/)
 })
 
-test("split dropdown rail uses secondary fill and leaves chevron on the trailing side", () => {
-  assert.match(css, /\.vt-studio-dropdown\.is-split-left[\s\S]*?data-vt-studio-split-rail[\s\S]*?var\(--vt-studio-control-secondary/)
-  assert.match(css, /\.vt-studio-dropdown-chevron[\s\S]*?--vt-studio-dropdown-chevron-size/)
-  assert.match(css, /\.vt-studio-dropdown\.is-split-left button\[data-dropdown-trigger="true"\][\s\S]*?minmax\(0, 1fr\)\s+minmax\(0, 1fr\)/)
+test("split dropdown rail uses secondary fill and reserves the trailing rail for the chevron", () => {
+  assert.match(css, /\.vt-studio-dropdown-split-rail\s*\{[\s\S]*?background:\s*var\(--vt-studio-control-secondary/)
+  assert.match(css, /\.vt-studio-dropdown\.is-split-left button\[data-dropdown-trigger="true"\]\s*\{\s*grid-template-columns:\s*var\(--vt-studio-dropdown-rail-size\) minmax\(0, 1fr\) var\(--vt-studio-dropdown-rail-size\)/)
+  assert.match(dropdown, /className="vt-studio-dropdown-chevron is-trailing"/)
 })
 
 test("side counter divider is a centered overlay and does not consume either action row", () => {
   assert.match(css, /\.vt-studio-side-counter__actions button:first-child::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*height:\s*var\(--vt-studio-control-stroke/s)
   assert.doesNotMatch(css, /\.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:\s*var\(--vt-studio-control-stroke/)
+  assert.doesNotMatch(css, /\.vt-studio-left-counter\.is-reversed \.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:/)
 })
 
 test("counter and slider readouts share default mix and black active numeral tokens", () => {
   assert.match(tokens, /STUDIO_COUNTER_NUMBER_TOKENS/)
   assert.match(css, /--vt-studio-number-default-white-mix:\s*50%/)
-  assert.match(css, /\.vt-studio-double-split-slider__value[\s\S]*?color-mix\\(in srgb, #fff var\\(--vt-studio-number-default-white-mix, 50%\\), var\\(--vt-studio-number-background/)
-  assert.match(css, /\.vt-studio-double-split-slider:has\([\s\S]*?\.vt-studio-double-split-slider__value[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke[^;]*#000/s)
-  assert.match(css, /\.vt-studio-side-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke[^;]*#000/s)
+  assert.match(css, /\.vt-studio-double-split-slider \.vt-studio-double-split-slider__value\s*\{[^}]*color-mix\(in srgb, #fff var\(--vt-studio-number-default-white-mix, 50%\), var\(--vt-studio-number-background\)\)/s)
+  assert.match(css, /\.vt-studio-double-split-slider:has\(input\[type="range"\]:is\(:active, :focus\)\) \.vt-studio-double-split-slider__value\s*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke, #000\)/s)
+  assert.match(css, /\.vt-studio-left-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke, #000\)/)
+  assert.match(css, /\.vt-studio-side-counter:has\([\s\S]*?\.vt-studio-side-counter__value[\s\S]*?-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/s)
 })
