@@ -5,7 +5,7 @@ textarea[data-vt-studio-control="true"],
 [data-vt-studio-control="true"] textarea {
   box-sizing: border-box;
   border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-accent, var(--pair-a));
-  outline: none;
+  outline: 0 solid transparent;
   box-shadow: none;
 }
 input[data-vt-studio-control="true"]:focus-visible,
@@ -36,7 +36,7 @@ textarea[data-vt-studio-control="true"]:focus-visible,
   font-weight: var(--vt-studio-control-font-weight, 1000);
   text-transform: var(--vt-studio-control-text-transform, uppercase);
   letter-spacing: var(--vt-studio-control-letter-spacing, -0.02em);
-  outline: none;
+  outline: 0 solid transparent;
   box-shadow: none;
 }
 
@@ -63,7 +63,7 @@ textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: #000;
   -webkit-text-fill-color: #000;
-  outline: calc(var(--vt-studio-control-stroke, 3px) * 0.65) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
   box-shadow: none;
 }
@@ -140,4 +140,16 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   -webkit-text-stroke-color: #000;
 }
 
-\n/* Unified text-field focus transition: retain the secondary 65%-stroke outline while blur fades it away. */\n[data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),\ninput[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),\n[data-vt-studio-control="true"] textarea:is(:focus, :focus-visible),\ntextarea[data-vt-studio-control="true"]:is(:focus, :focus-visible) {\n  outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65));\n  outline-style: solid;\n  outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));\n  outline-offset: var(--vt-studio-focus-outline-offset, 0px);\n}\n
+
+/* Unified text-field focus transition: retain the secondary outline while blur fades it away. */
+[data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+[data-vt-studio-control="true"] textarea,
+textarea[data-vt-studio-control="true"] {
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
+  transition:
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
+}
