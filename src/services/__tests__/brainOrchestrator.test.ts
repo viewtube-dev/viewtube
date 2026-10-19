@@ -125,6 +125,39 @@ describe("BrainOrchestrator", () => {
   }
  })
 
+
+ it("records the provider-reported served model when the gateway exposes it", async () => {
+  const snapshot = makeSnapshot()
+  const growthContext = buildCreatorGrowthContext(snapshot, [], [])
+  const result = await runBrainTurn({
+   channelId: "served-model-channel",
+   userText: "What should my next video be?",
+   snapshot,
+   growthContext,
+   systemPrompt: "Use the supplied channel evidence.",
+   allowModel: true,
+   nicheResolver: vi.fn(async () => nicheProfile),
+   modelGenerator: vi.fn(async () => ({
+    headline: "Build the artillery follow-up",
+    keyInsight: "Alder's Cavalry Explained proves that specific military systems are your strongest viewer promise.",
+    body: "Create an artillery follow-up that keeps the same explanatory structure and makes the contrast visible in the title and thumbnail.",
+    mode: "video_idea_sprint",
+    modules: [],
+    actions: [],
+    modelIdentity: {
+     provider: "google-genai",
+     requestedModel: "gemini-requested",
+     servedModel: "gemini-served-version",
+    },
+   } as StructuredBrainModelOutput)),
+  })
+  expect(result.turn.metadata).toMatchObject({
+   requestedModel: "gemini-requested",
+   servedModel: "gemini-served-version",
+   modelIdentityStatus: "served_known",
+  })
+ })
+
  it("preserves the exact prompt in the captured learning event", async () => {
   const snapshot = makeSnapshot()
   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
