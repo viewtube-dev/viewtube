@@ -62,3 +62,17 @@ test("generated CSS variables stay synchronized with the canonical token module"
   assert.match(generated, /--vt-studio-number-active-color: #000/)
   assert.match(generated, /--vt-studio-number-active-stroke: #000/)
 })
+
+
+test("word toggles and switches use a 50% primary idle surface and full primary selected surface", () => {
+  assert.match(css, /\.vt-studio-44-word-toggle:not\(\.is-on\)[^{]*\{[^}]*background:[^;]*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
+  assert.match(css, /\.vt-studio-44-word-toggle\.is-on[^}]*background:[^;]*var\(--vt-studio-control-primary/s);
+  assert.match(css, /\.vt-studio-44-switch:not\(\.is-on\)[^{]*\{[^}]*background:[^;]*color-mix\(in srgb, var\(--vt-studio-control-primary[^;]*50%/s);
+  assert.match(css, /\.vt-studio-44-switch\.(?:is-on|is-checked)[^{]*\{[^}]*background(?:-color)?:\s*var\(--vt-studio-control-primary/s);
+  assert.doesNotMatch(css, /\.vt-studio-44-switch\.is-color-swap\.is-on\s*,\s*\.vt-studio-44-choice\.is-color-swap\.is-on\s*\{\s*background:\s*var\(--vt-studio-control-secondary/s);
+});
+
+test("slider readout uses reduced horizontal inset so its number can grow", () => {
+  assert.match(css, /\.vt-studio-double-split-slider \[data-vt-studio-split-field\]\s*\{[^}]*padding-inline:\s*calc\(var\(--vt-studio-control-height, 44px\) \* \.09\)/s);
+  assert.match(css, /\.vt-studio-double-split-slider \.vt-studio-double-split-slider__value\s*\{[^}]*padding-inline:\s*0[^}]*min-width:\s*0/s);
+});
