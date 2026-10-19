@@ -64,6 +64,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
+import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainConfidenceChip, confidenceForEvidence } from "../components/brain/BrainConfidenceChip"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
 import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
@@ -125,6 +126,20 @@ const PROMPT_CARD_SUMMARIES: Record<string, string> = {
 
 export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
  PROMPT_CARD_SUMMARIES[card.id] || card.prompt
+
+export const filterCreatorBrainPromptCards = (
+ cards: CreatorBrainPromptCard[],
+ query: string,
+ category = "all",
+): CreatorBrainPromptCard[] => {
+ const normalized = query.trim().toLowerCase()
+ return cards.filter((card) => {
+  if (category !== "all" && card.category !== category) return false
+  if (!normalized) return true
+  return [card.label, card.prompt, promptCardSummary(card), card.category, card.id]
+   .some((value) => value.toLowerCase().includes(normalized))
+ })
+}
 
 const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; color: string; description: string }> = {
  model: { label: "Full Brain", color: "#00FF00", description: "This response was prepared with the full Brain." },
@@ -216,7 +231,10 @@ export const BrainPromptLibrary: React.FC<{
  onEdit?: (prompt: string) => void
 }> = ({ cards, busy = false, headingId = "brain-prompt-library-title", onPrompt, onEdit }) => {
  const [selectedId, setSelectedId] = useState<string | null>(null)
- const selected = cards.find((card) => card.id === selectedId) || null
+ const [query, setQuery] = useState("")
+ const [category, setCategory] = useState("all")
+ const filteredCards = useMemo(() => filterCreatorBrainPromptCards(cards, query, category), [cards, query, category])
+ const selected = filteredCards.find((card) => card.id === selectedId) || null
 
  return (
   <section
@@ -229,12 +247,26 @@ export const BrainPromptLibrary: React.FC<{
      Prompt Library
     </h2>
     <p className="mt-0.5 text-[10px] font-bold leading-4 text-black/65">
-     Tap a prompt to preview it, then send it into the chat.
+     Search by task or topic, preview the prompt, then send it or edit it first.
     </p>
    </div>
 
+   <div className="grid gap-2 border-b-[2px] border-black bg-[#fff7fc] p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
+    <label className="flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
+     <span className="sr-only">Search prompts</span>
+     <input type="search" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold outline-none" />
+    </label>
+    <label className="flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
+     <span className="sr-only">Filter prompts by category</span>
+     <select aria-label="Filter prompts by category" value={category} onChange={(event) => { setCategory(event.target.value); setSelectedId(null) }} className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold outline-none">
+      <option value="all">All categories</option>
+      {Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => <option key={item} value={item}>{item.replace(/_/g, " ")}</option>)}
+     </select>
+    </label>
+   </div>
+   <p className="px-3 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
    <ul className="grid grid-cols-1 gap-1.5 p-2 sm:grid-cols-2 xl:grid-cols-3">
-    {cards.map((card) => {
+    {filteredCards.map((card) => {
      const isSelected = card.id === selectedId
      return (
       <li key={card.id}>
@@ -244,9 +276,7 @@ export const BrainPromptLibrary: React.FC<{
         aria-pressed={isSelected}
         title={card.prompt}
         onClick={() => setSelectedId(isSelected ? null : card.id)}
-        className={`group flex h-full min-h-[54px] w-full flex-col items-stretch overflow-hidden rounded-[8px] border-[2px] border-black bg-white text-left outline-none transition focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50 ${
-         isSelected ? "-translate-x-[1px] -translate-y-[1px] shadow-[3px_3px_0_0_#000]" : "hover:-translate-y-0.5"
-        }`}
+        className={`group flex h-full min-h-11 w-full flex-col items-stretch overflow-hidden rounded-[8px] border-[2px] border-black bg-white text-left outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50 ${isSelected ? "bg-[#FFDA47]" : "hover:bg-[#36E0F6]/20"}`}
        >
         <span
          className="flex shrink-0 items-center justify-between gap-1 border-b-[2px] border-black px-2 py-1 text-[10px] font-[1000] uppercase leading-none"
@@ -265,6 +295,7 @@ export const BrainPromptLibrary: React.FC<{
      )
     })}
    </ul>
+   {!filteredCards.length ? <p className="px-3 pb-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
 
    <div className="border-t-[2px] border-black bg-[#f8f8f4] p-2">
     {selected ? (
@@ -280,7 +311,7 @@ export const BrainPromptLibrary: React.FC<{
         type="button"
         aria-label="Close preview"
         onClick={() => setSelectedId(null)}
-        className="grid h-5 w-5 shrink-0 place-items-center rounded-[5px] border-[2px] border-black bg-white/80 hover:bg-white"
+        className="grid min-h-11 min-w-11 shrink-0 place-items-center rounded-[5px] border-[2px] border-black bg-white/80 outline-none focus-visible:ring-[3px] focus-visible:ring-black hover:bg-white"
        >
         <X size={11} />
        </button>
@@ -295,7 +326,7 @@ export const BrainPromptLibrary: React.FC<{
           onPrompt(selected.prompt)
           setSelectedId(null)
          }}
-         className="inline-flex items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.06em] transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-50"
+         className="inline-flex min-h-11 items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase tracking-[0.06em] outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50"
         >
          <Send size={12} /> Send to chat
         </button>
@@ -306,7 +337,7 @@ export const BrainPromptLibrary: React.FC<{
            onEdit(selected.prompt)
            setSelectedId(null)
           }}
-          className="inline-flex items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.06em] transition hover:bg-[#FFDA47]"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.06em] outline-none focus-visible:ring-[3px] focus-visible:ring-black hover:bg-[#FFDA47]"
          >
           Edit first <ArrowRight size={11} />
          </button>
@@ -565,6 +596,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [intakeOpen, setIntakeOpen] = useState(false)
  const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
  const [promptRailOpen, setPromptRailOpen] = useState(false)
+ const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
  const [contextRailOpen, setContextRailOpen] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
  const composerRef = useRef<HTMLInputElement | null>(null)
@@ -577,6 +609,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
  const channelId = authState.channelHandle || authState.channelId || null
+ const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
   () => readBrainRuntimeSnapshot({
    channelId,
@@ -630,6 +663,16 @@ const AIBrainCommandInterface: React.FC = () => {
   () => dedupeInsightsAgainstActions(initialInsights, quickActions),
   [initialInsights, quickActions],
  )
+
+ useEffect(() => {
+  setBrainControls(readBrainUserControls(channelId))
+  const onControlsChanged = (event: Event) => {
+   const detail = (event as CustomEvent<ReturnType<typeof readBrainUserControls>>).detail
+   setBrainControls(detail || readBrainUserControls(channelId))
+  }
+  window.addEventListener("vt_brain_user_controls_changed", onControlsChanged as EventListener)
+  return () => window.removeEventListener("vt_brain_user_controls_changed", onControlsChanged as EventListener)
+ }, [channelId])
 
  useEffect(() => {
   const query = new URLSearchParams(location.search)
@@ -1084,7 +1127,7 @@ const AIBrainCommandInterface: React.FC = () => {
            <button ref={promptLauncherRef} type="button" onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="inline-flex min-h-9 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#FF7AC8] px-2 py-1 text-[9px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
             <LayoutGrid size={13} aria-hidden="true" /> Prompt Library
            </button>
-           <button ref={contextLauncherRef} type="button" onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="inline-flex min-h-9 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-2 py-1 text-[9px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
+           <button ref={contextLauncherRef} type="button" onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="inline-flex min-h-11 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
             <PanelRight size={13} aria-hidden="true" /> Channel Context
            </button>
           </div>
@@ -1105,9 +1148,9 @@ const AIBrainCommandInterface: React.FC = () => {
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="h-[52px] min-w-0 flex-1 rounded-[9px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-[3px] focus-visible:ring-black"
+            className="h-[52px] min-w-0 flex-1 rounded-[9px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-[3px] focus-visible:ring-black" aria-label="Ask ViewTube Brain" aria-describedby="brain-composer-help"
            />
-           <button type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} className="inline-flex w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
+           <button type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
             {busy ? <Zap className="animate-pulse" size={16} /> : <Send size={16} />} Send
            </button>
           </div>
@@ -1116,16 +1159,25 @@ const AIBrainCommandInterface: React.FC = () => {
        </div>
 
        <div className="hidden min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 overflow-hidden xl:grid">
-        <div className="min-h-0" aria-label="Prompt library">
-         <BrainPromptLibrary
-          cards={promptCards}
-          busy={busy}
-          onPrompt={(prompt) => void handleSend(prompt)}
-          onEdit={(prompt) => {
-           setInput(prompt)
-           composerRef.current?.focus()
-          }}
-         />
+        <div className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden" aria-label="Brain launchpad">
+         <div className="grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1">
+          <button type="button" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "prompts" ? "bg-[#FF7AC8]" : "bg-white"}`}>Prompt Library</button>
+          <button type="button" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "capabilities" ? "bg-[#36E0F6]" : "bg-white"}`}>Capabilities</button>
+         </div>
+         <div className="min-h-0 overflow-y-auto pt-2">
+          {launcherMode === "prompts" ? <BrainPromptLibrary
+           cards={promptCards}
+           busy={busy}
+           onPrompt={(prompt) => void handleSend(prompt)}
+           onEdit={(prompt) => { setInput(prompt); composerRef.current?.focus() }}
+          /> : <BrainCapabilityBrowser
+           snapshot={snapshot}
+           controls={brainControls}
+           busy={busy}
+           onPrompt={(prompt) => void handleSend(prompt)}
+           onEdit={(prompt) => { setInput(prompt); composerRef.current?.focus() }}
+          />}
+         </div>
         </div>
         <div className="min-h-0 overflow-hidden" aria-label="Channel context">
          <BrainContextRail
@@ -1152,27 +1204,33 @@ const AIBrainCommandInterface: React.FC = () => {
         aria-labelledby="brain-prompt-library-dialog-title"
         className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden"
        >
-        <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
-         <h2 id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Prompt Library</h2>
-         <button ref={promptCloseRef} type="button" className={kpiButton} onClick={() => setPromptRailOpen(false)}>
-          <X size={14} aria-hidden="true" /> Close
-         </button>
+        <div className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
+         <div className="flex items-center justify-between gap-2">
+          <h2 id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
+          <button ref={promptCloseRef} type="button" className={kpiButton} onClick={() => setPromptRailOpen(false)}>
+           <X size={14} aria-hidden="true" /> Close
+          </button>
+         </div>
+         <div className="grid grid-cols-2 gap-1">
+          <button type="button" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "prompts" ? "bg-[#FF7AC8]" : "bg-white"}`}>Prompt Library</button>
+          <button type="button" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "capabilities" ? "bg-[#36E0F6]" : "bg-white"}`}>Capabilities</button>
+         </div>
         </div>
-        <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Prompt library" tabIndex={0}>
-         <BrainPromptLibrary
+        <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Brain launchpad content" tabIndex={0}>
+         {launcherMode === "prompts" ? <BrainPromptLibrary
           cards={promptCards}
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
-          onPrompt={(prompt) => {
-           setPromptRailOpen(false)
-           void handleSend(prompt)
-          }}
-          onEdit={(prompt) => {
-           setPromptRailOpen(false)
-           setInput(prompt)
-           composerRef.current?.focus()
-          }}
-         />
+          onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); composerRef.current?.focus() }}
+         /> : <BrainCapabilityBrowser
+          snapshot={snapshot}
+          controls={brainControls}
+          busy={busy}
+          headingId="brain-capability-browser-drawer-title"
+          onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); composerRef.current?.focus() }}
+         />}
         </div>
        </div>
       ) : null}
