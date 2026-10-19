@@ -23,6 +23,7 @@ import {
  captureAIBrainLearningEvent,
 } from "./aiBrainSelfImprovement"
 import type { AIBrainContextSnapshot } from "./aiBrainCommandInterface"
+import { buildBrainProfileCoverageItems } from "./brain/profileCoverage"
 
 const nowIso = () => new Date().toISOString()
 
@@ -138,10 +139,6 @@ export const buildCreatorGrowthContext = (
   .filter((entry) => ["creator_goal", "content_style", "channel_fact", "preference"].includes(entry.category))
   .map((entry) => sanitizeCreatorFacingBrainCopy(entry.summary))
   .slice(0, 8)
- const profileScore =
-  snapshot.inferredProfile.status === "ready" ? 88
-  : profileReady ? Math.min(78, 38 + snapshot.inferredProfile.topicClusters.length * 5 + Math.min(20, snapshot.inferredProfile.videoCount / 50))
-  : 24
  const currentGoal = snapshot.brain.futureStateMap || firstOr(learnedFacts, "Pick one measurable channel goal for this month.")
  const topPatterns = snapshot.inferredProfile.successDrivers.length
   ? snapshot.inferredProfile.successDrivers.map(sanitizeCreatorFacingBrainCopy)
@@ -157,9 +154,12 @@ export const buildCreatorGrowthContext = (
   profileReady ? "Turn the strongest profile lane into one repeatable upload idea." : "Answer one profile question so the Brain can rank opportunities.",
   "Improve one title, hook, thumbnail promise, or end screen today.",
  ]
+ const profileCoverage = buildBrainProfileCoverageItems(snapshot).map(({ id, label, complete }) => ({ id, label, complete }))
+ const confirmedProfileChecks = profileCoverage.filter((item) => item.complete).length
+ const incompleteProfileChecks = profileCoverage.filter((item) => !item.complete).map((item) => item.label)
 
  return {
-  profileConfidenceScore: Math.round(profileScore),
+  profileCoverage,
   currentGoal,
   inferredNiche: snapshot.inferredProfile.niche || "Channel niche still needs stronger creator confirmation.",
   contentPillars: pillars,
@@ -189,10 +189,10 @@ export const buildCreatorGrowthContext = (
   recentConversationFacts: recentFacts,
   capabilities: [
    {
-    id: "profile_confidence",
-    label: "Channel Profile Read",
-    status: statusFor(profileReady, snapshot.inferredProfile.videoCount > 0),
-    summary: profileReady ? "The Brain has enough channel evidence to start with inferred lanes before asking confirmation questions." : "The Brain can still help, but creator confirmation will make recommendations sharper.",
+    id: "profile_coverage",
+    label: "Profile Coverage Checklist",
+    status: statusFor(profileCoverage.length > 0 && confirmedProfileChecks === profileCoverage.length, confirmedProfileChecks > 0),
+    summary: `${confirmedProfileChecks} of ${profileCoverage.length} profile checks confirmed${incompleteProfileChecks.length ? `; still to confirm: ${incompleteProfileChecks.join(", ")}` : ""}.`,
    },
    {
     id: "creator_confirmation",
