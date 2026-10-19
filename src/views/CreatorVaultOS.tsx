@@ -103,6 +103,7 @@ import {
 } from "../services/vaultManualCollections"
 import { resolveVaultKeyboardCommand, resolveVaultTagHotkey } from "../services/vaultKeyboard"
 import { SubToolboxMediaInspector, SubToolboxMediaPlayer } from "../components/subtoolbox/SubToolboxMediaPrimitives"
+import { StudioSpectrumTag, StudioWordToggle } from "../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../components/subtoolbox/VaultAssetModule"
 import { useBrain } from "../context/useBrain"
 import { initializeProjectContentIdentity } from "../services/projects/ProjectContentIdentityService"
