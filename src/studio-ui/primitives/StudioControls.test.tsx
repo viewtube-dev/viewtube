@@ -840,7 +840,8 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after');
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button.is-holding svg');
   });
-}
+});
+
 describe("Studio counter hold-repeat acceleration", () => {
   it("smoothly accelerates from 128ms through 46ms to a 23ms maximum-rate interval", () => {
     expect(getStudioCounterRepeatDelay(0, 30)).toBe(128);
@@ -858,4 +859,3 @@ describe("Studio counter hold-repeat acceleration", () => {
   });
 });
 
-});
