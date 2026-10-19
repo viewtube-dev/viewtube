@@ -25,6 +25,15 @@ test("runtime source governance does not mistake escaped newline labels for Wind
  assert.deepEqual(result.absoluteFileLinks, [])
 })
 
+
+test("runtime source governance permits developer-path fixtures in test files", () => {
+ const result = findRuntimeSourceViolations([
+  { path: "src/services/example.test.ts", text: 'const fixture = "/Users/dev/fixture.json"' },
+  { path: "src/services/__tests__/example.test.ts", text: 'const fixture = "C:\\Users\\dev\\fixture.json"' },
+ ])
+ assert.deepEqual(result.absoluteFileLinks, [])
+})
+
 test("runtime source governance permits repository-relative docs links and ordinary source", () => {
  const result = findRuntimeSourceViolations([
   { path: "src/example.ts", text: 'const href = "https://github.com/viewtube-dev/viewtube/blob/master/docs/brain/guide.md"' },
