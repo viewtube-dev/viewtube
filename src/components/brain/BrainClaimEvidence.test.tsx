@@ -7,8 +7,18 @@ import { BrainClaimEvidence } from "./BrainClaimEvidence"
 
 const evidencePack = {
   topVideos: [],
+  recentVideos: [],
   searchTerms: [],
   trafficSources: [],
+  items: [],
+  requestSpec: { count: null, formats: [], since: null, until: null, rankBy: "performance", filters: [], selectionMode: "top" },
+  availableMetrics: [],
+  transcriptRouteRequired: false,
+  promptVersion: "brain-chat-v2",
+  intent: "channel_strategy",
+  channelId: null,
+  channelName: null,
+  channelDescription: null,
   missingInputs: ["Recent retention data"],
   dataStatus: "partial",
   capturedAt: null,
