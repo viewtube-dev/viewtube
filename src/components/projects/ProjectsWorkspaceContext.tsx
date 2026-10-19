@@ -15,12 +15,11 @@ type ProjectsWorkspaceContextValue = {
 
 const ProjectsWorkspaceContext = createContext<ProjectsWorkspaceContextValue | null>(null)
 
-export const ProjectsWorkspaceProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
- const { brain, setActiveProject } = useBrain()
- const [builderScope, setBuilderScope] = useState<ProjectBuilderScope>(
-  Array.isArray(brain.projects) && brain.projects.length ? "project" : "channel",
- )
- const [boardView, setBoardView] = useState<ProjectBoardView>("board")
+export const ProjectsWorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { setActiveProject } = useBrain()
+  // Always default to the Project page (not Channel).
+  const [builderScope, setBuilderScope] = useState<ProjectBuilderScope>("project")
+  const [boardView, setBoardView] = useState<ProjectBoardView>("board")
 
  const value = useMemo<ProjectsWorkspaceContextValue>(() => ({
   builderScope,
