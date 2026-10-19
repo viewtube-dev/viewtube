@@ -115,14 +115,14 @@ test("shared interaction focus is token-generated and applies to text-field blur
 });
 
 test("counter and slider shell capture shares focus without replacing hold-repeat handlers", () => {
-  assert.match(component, /onPointerDownCapture: interactionFocus\\.start/);
-  assert.match(component, /onPointerUpCapture: interactionFocus\\.end/);
-  assert.match(component, /onPointerCancelCapture: interactionFocus\\.end/);
-  const controls = component.split("\\n");
-  const stepButtons = controls.filter(line => /<(?:button)[^>]*\\{(?:increment|decrement)\\.events\\}/.test(line));
+  assert.ok(component.includes("onPointerDownCapture: interactionFocus.start"));
+  assert.ok(component.includes("onPointerUpCapture: interactionFocus.end"));
+  assert.ok(component.includes("onPointerCancelCapture: interactionFocus.end"));
+  assert.ok(fieldCss.includes("var(--vt-studio-focus-outline-width-ratio"));
+  const stepButtons = component.split("\n").filter(line => line.includes("increment.events") || line.includes("decrement.events"));
   assert.ok(stepButtons.length >= 6, "expected counter and slider step buttons to be covered");
   for (const line of stepButtons) {
-    assert.doesNotMatch(line, /onPointerDown=\\{interactionFocus\\.start\\}/);
-    assert.match(line, /onClick=\\{interactionFocus\\.pulse\\}/);
+    assert.ok(!line.includes("onPointerDown={interactionFocus.start}"), "hold handlers must not be overridden");
+    assert.ok(line.includes("onClick={interactionFocus.pulse}"), "keyboard/click activation must pulse focus");
   }
 });
