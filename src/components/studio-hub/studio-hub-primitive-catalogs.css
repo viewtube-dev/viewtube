@@ -2809,3 +2809,19 @@
   .vt-confirmed-choice-examples { gap: 6px; }
   .vt-confirmed-choice-example-row { gap: 2px; }
 }
+
+.vt-confirmed-square-effect-details > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 1000;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.vt-confirmed-square-effect-details > summary::-webkit-details-marker { display: none; }
+.vt-confirmed-square-effect-details > summary::after {
+  content: " +";
+  float: right;
+}
+.vt-confirmed-square-effect-details[open] > summary::after { content: " −"; }
