@@ -198,6 +198,8 @@ export type AIBrainContextSnapshot = {
  conversations: {
   recentFacts: string[]
   answeredQuestions: string[]
+  answeredQuestionIds: string[]
+  answeredQuestionCategories: AIBrainConversationTurn["questionAnswers"][number]["category"][]
  }
 }
 
@@ -1083,10 +1085,14 @@ export const buildAIBrainContextSnapshot = ({
   .flatMap((turn) => turn.digest?.keyFacts || [])
   .map(sanitizeCreatorBrainMarkdown)
   .slice(0, 8)
- const answeredQuestions = recentConversationTurns
+ const currentQuestionAnswers = recentConversationTurns
   .flatMap((turn) => turn.questionAnswers || [])
+  .filter((answer) => !["outdated", "contradicted", "reopened"].includes(answer.status || "valid"))
+ const answeredQuestions = currentQuestionAnswers
   .map((answer) => `${answer.question} Answer: ${answer.answer}`)
   .slice(0, 8)
+ const answeredQuestionIds = Array.from(new Set(currentQuestionAnswers.map((answer) => answer.questionId)))
+ const answeredQuestionCategories = Array.from(new Set(currentQuestionAnswers.map((answer) => answer.category)))
 
  return {
   generatedAt: now.toISOString(),
@@ -1182,6 +1188,8 @@ export const buildAIBrainContextSnapshot = ({
   conversations: {
    recentFacts,
    answeredQuestions,
+   answeredQuestionIds,
+   answeredQuestionCategories,
   },
  }
 }
@@ -1626,7 +1634,12 @@ export const buildBrainLearningQuestions = (
    confidence: "low",
   })
  }
- return questions.slice(0, 2)
+ const answeredIds = new Set(snapshot.conversations.answeredQuestionIds)
+ const answeredCategories = new Set(snapshot.conversations.answeredQuestionCategories)
+ return questions
+  .filter((question) => !answeredIds.has(question.id))
+  .filter((question) => !["creator_goal", "content_style"].includes(question.category) || !answeredCategories.has(question.category))
+  .slice(0, 2)
 }
 
 /**
