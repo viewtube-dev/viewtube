@@ -265,8 +265,10 @@ describe("aiBrainCommandInterface", () => {
   const modules = formatCreatorGrowthModules(response, growthContext)
   const capabilityIds = growthContext.capabilities.map((capability) => capability.id)
 
+  expect(growthContext).not.toHaveProperty("profileConfidenceScore")
+  expect(growthContext.profileCoverage.length).toBeGreaterThan(0)
   expect(capabilityIds).toEqual(expect.arrayContaining([
-   "profile_confidence",
+   "profile_coverage",
    "creator_confirmation",
    "top_performer_patterns",
    "audience_promise",
