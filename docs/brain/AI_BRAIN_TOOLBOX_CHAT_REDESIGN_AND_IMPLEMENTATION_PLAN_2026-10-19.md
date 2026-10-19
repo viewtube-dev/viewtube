@@ -355,7 +355,7 @@ Prompt families to expose in UI: Constitution, Analytics, Audience, Strategy, Pa
 - Docs, component catalog and certification ledger agree with the shipped source.
 - The target branch/commit and deployment source are verified before release is reported.
 
-**Current completion statement:** Phase 1 source inventory is recorded above. Phase 2 now includes a first source-backed migration: `BrainConfidenceChip` uses the production `StudioSplitLeftBadge` at the registered micro tier, preserving Brain-owned confidence mapping and adding a focused component regression test. This is the first vertical slice, not a claim that every Brain control has migrated. The focused test has been added but has not yet been executed in this connector-only workflow. Phases 3–8 are planned, not complete. Browser visual certification, end-to-end reachability, and deployment verification are still open.
+**Initial completion statement (superseded by the implementation update below):** The original Phase 1/Phase 2 source-audit PR contained only the first confidence-chip migration. The later Phase 2/Phase 3 implementation update below records the additional shared evidence composition and responsive navigation work. Neither update claims tests or browser certification passed without receipts.
 
 ## Implementation update — Phase 2 and Phase 3 (2026-10-19)
 
