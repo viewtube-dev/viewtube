@@ -677,27 +677,6 @@
   text-transform:uppercase;letter-spacing:.04em
 }
 
-.vt-subtoolbox-alpha-tag-row{display:flex;flex-wrap:wrap;gap:6px}
-.vt-subtoolbox-alpha-tag{
-  --tag-h:calc(var(--vt-component-height)*.58);
-  display:inline-flex;align-items:center;justify-content:center;height:var(--tag-h);min-height:var(--tag-h);
-  padding:0 calc(var(--tag-h)*.34);
-  border:var(--vt-component-stroke) solid var(--vt-alpha-color);border-radius:999px;
-  background:color-mix(in srgb,var(--vt-alpha-color) 35%,white);
-  color:var(--vt-alpha-color);
-  font:1000 calc(var(--vt-component-font-size)*.72)/1 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));
-  letter-spacing:-.035em;text-transform:uppercase;white-space:nowrap
-}
-.vt-subtoolbox-alpha-tag.is-l3{
-  --tag-h:18px;
-  gap:3px;
-  min-height:18px;
-  padding:0 5px;
-  border-width:1.5px;
-  font-size:9px;
-  line-height:1;
-  letter-spacing:-.02em;
-}
 .vt-subtoolbox-spectrum-removable{padding-right:2px!important}
 .vt-subtoolbox-spectrum-removable>button{
   width:14px;height:14px;min-width:14px;padding:0;margin-left:2px;
