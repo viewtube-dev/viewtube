@@ -106,6 +106,8 @@ describe("BrainOrchestrator", () => {
   expect(result.turn.rawUserMessage).toBe(rawUserMessage)
   expect(captured).toBeTruthy()
   expect(captured?.metadata?.rawUserMessage).toBe(rawUserMessage)
+  expect(result.turn.metadata?.evidenceRequestSpec).toEqual(snapshot.evidencePack.requestSpec)
+  expect(result.turn.metadata?.evidencePackSnapshot).toEqual(snapshot.evidencePack)
  })
 
 
