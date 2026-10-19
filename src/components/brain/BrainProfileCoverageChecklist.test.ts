@@ -54,7 +54,7 @@ describe("buildBrainProfileCoverageItems", () => {
    brain: { goals: 1 },
    conversations: { answeredQuestions: ["What is your editing style? Answer: Fast-paced, close-up demonstrations."] },
    tools: [{
-    toolId: "analytics",
+    toolId: "cinematic-analytics-lab",
     title: "Analytics",
     route: "/analytics",
     surface: "analytics",
