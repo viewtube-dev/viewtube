@@ -69,8 +69,8 @@ const palettes=document.querySelector("#palette");
 sections.forEach(s=>{const el=document.createElement("span");el.className="swatch";el.innerHTML='<i class="dot" style="background:'+s.color+'"></i>'+s.name+' <code>'+s.color+'</code>';palettes.append(el)});
 const library=document.querySelector("#library");
 names.forEach((name,index)=>{
- const card=document.createElement("section");card.className="system";
- const n=String(index+1).padStart(2,"0");card.innerHTML='<div class="system-head"><h2>'+n+' / '+name+'</h2><span>Navigation concept '+n+'</span></div>';
+ const card=document.createElement("section");
+ const n=String(index+1).padStart(2,"0");card.className="system s"+n;card.innerHTML='<div class="system-head"><h2>'+n+' / '+name+'</h2><span>Navigation concept '+n+'</span></div>';
  ["standard","compact","micro"].forEach(size=>{
   const density=document.createElement("div");density.className="density "+size;density.dataset.size=size;
   const px=size==="standard"?44:size==="compact"?28:14;
