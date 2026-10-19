@@ -32,7 +32,6 @@ import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import type { LongformOptimizationHandoffPayload } from "../services/longformOptimization"
 import {
  SubToolboxButton,
- StudioUploadFrame,
  SubToolboxIconButton,
  ToolboxHeaderToggle,
  SubToolboxSelect,
