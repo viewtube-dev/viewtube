@@ -24,7 +24,7 @@ test("simple dropdown has no split rail; split-left dropdown uses split-shell an
   assert.match(component, /interface StudioSplitShellProps[\s\S]*?rightRailClassName/)
   assert.match(dropdown, /data-vt-studio-dropdown-chevron/)
   assert.match(dropdown, /splitIcon/)
-  assert.match(dropdown, /rightRailProps=\{\{ "data-vt-studio-dropdown-chevron": true/)
+  assert.match(dropdown, /rightRailProps=\{\{ "data-vt-studio-dropdown-chevron": "true"/)
   assert.doesNotMatch(dropdown, /variant === "split-left" \? <span className="vt-studio-dropdown-chevron is-leading"/)
 })
 
