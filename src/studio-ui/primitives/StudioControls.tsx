@@ -221,8 +221,37 @@ StudioNumberInput.displayName = "StudioNumberInput"
 
 export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
+
 export { StudioTextArea }
 export type { StudioTextAreaProps } from "./StudioTextArea"
+
+/** Read-only display surface that inherits the canonical textarea size tokens. */
+export type StudioTextBoxSize = StudioControlSize
+export type StudioTextBoxProps = Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "contentEditable" | "dangerouslySetInnerHTML" | "children"
+> & {
+  /** Plain display text; embedded line breaks are preserved. */
+  children?: string
+  /** Corresponding textarea typography and surface size. */
+  size?: StudioTextBoxSize
+}
+
+export const StudioTextBox = React.forwardRef<HTMLDivElement, StudioTextBoxProps>(
+  ({ children, size = "standard", className, ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      className={studioClasses("vt-studio-text-box", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-field-kind="textarea-display"
+      data-size={size}
+    >
+      {children}
+    </div>
+  ),
+)
+StudioTextBox.displayName = "StudioTextBox"
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
