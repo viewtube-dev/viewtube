@@ -1,5 +1,6 @@
 import React from "react";
 import { Film, HardDrive } from "lucide-react";
+import { StudioTextBox } from "../../studio-ui/primitives/StudioControls";
 import { SubToolboxInnerActionButton } from "../../components/Toolbox";
 import { SubToolboxInput, SubToolboxSelect, SubToolboxStatePanel } from "../../components/subtoolbox/SubToolboxPrimitives";
 import { createImportedVaultAsset } from "../../services/vaultAdapter";
@@ -239,7 +240,7 @@ export const VaultVideoWorkbench: React.FC<VaultVideoWorkbenchProps> = ({ asset,
   };
 
   if (asset.kind !== "video") {
-    return <SubToolboxStatePanel level="l1" state="empty" message="Select one video asset to use the Video Workbench." />;
+    return <StudioTextBox size="standard" role="status" aria-live="polite">Select one video asset to use the Video Workbench.</StudioTextBox>;
   }
 
   return (
