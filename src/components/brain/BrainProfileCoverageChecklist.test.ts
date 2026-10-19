@@ -2,7 +2,16 @@ import { describe, expect, it } from "vitest"
 import { buildBrainProfileCoverageItems } from "./BrainProfileCoverageChecklist"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 
-const makeSnapshot = (overrides: Partial<AIBrainContextSnapshot> = {}) => ({
+type SnapshotOverrides = {
+ evidencePack?: { channelDescription: string | null }
+ inferredProfile?: { videoCount: number }
+ vtSync?: { videos: number }
+ brain?: { goals: number }
+ conversations?: { answeredQuestions: string[] }
+ tools?: AIBrainContextSnapshot["tools"]
+}
+
+const makeSnapshot = (overrides: SnapshotOverrides = {}) => ({
  evidencePack: { channelDescription: null },
  inferredProfile: { videoCount: 0 },
  vtSync: { videos: 0 },
