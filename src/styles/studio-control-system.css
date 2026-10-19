@@ -4088,7 +4088,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   position: relative;
   z-index: 4;
   display: block;
-  max-width: calc(100% - 2 * clamp(28px, 10cqw, 76px) - 8px);
+  max-width: calc(100% - clamp(28px, 10cqw, 76px) - clamp(28px, 10cqw, 76px) - 8px);
   overflow: hidden;
   padding: clamp(3px, .6cqw, 6px) clamp(6px, 1.2cqw, 14px);
   border: var(--vt-studio-upload-stroke) solid #000;
@@ -4112,7 +4112,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   translate: -50% 0;
   display: block;
   width: max-content;
-  max-width: calc(100% - 2 * clamp(28px, 10cqw, 76px) - 8px);
+  max-width: calc(100% - clamp(28px, 10cqw, 76px) - clamp(28px, 10cqw, 76px) - 8px);
   overflow: hidden;
   padding: clamp(4px, .65cqw, 7px) clamp(8px, 1.4cqw, 16px);
   border: var(--vt-studio-upload-stroke) solid #000;
@@ -4148,8 +4148,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   z-index: 1;
   inset: var(--vt-studio-upload-stroke);
   display: block;
-  width: calc(100% - 2 * var(--vt-studio-upload-stroke));
-  height: calc(100% - 2 * var(--vt-studio-upload-stroke));
+  width: calc(100% - var(--vt-studio-upload-stroke) - var(--vt-studio-upload-stroke));
+  height: calc(100% - var(--vt-studio-upload-stroke) - var(--vt-studio-upload-stroke));
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
