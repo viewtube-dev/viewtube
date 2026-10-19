@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame, StudioBrainStatusBadge } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-primitive-catalogs.css"
 
@@ -27,7 +27,7 @@ export const STUDIO_HUB_COMPONENT_FAMILIES = [
   "Divider", "Horizontal Scrollbar", "Vertical Scrollbar", "Data Stats Module", "Disabled Button",
   "Disabled Split Button", "Upload Frame", "Pagination", "Vault Landscape Asset",
   "Vault Portrait Asset", "Vault Audio Asset", "Vault Document Asset", "Knob Dial",
-  "Controller Switch", "LED Light", "Alphabetical Spectrum Tags", "Icon Rail Control",
+  "Controller Switch", "LED Light", "Brain Status LED Badges", "Alphabetical Spectrum Tags", "Icon Rail Control",
   "44px Switches", "44px Radio + Checkbox", "Word Toggles",
   "Two Color Data Stats", "Monochrome Data Stats", "Tiny Data Stats", "Tooltip Dark",
   "Tooltip Color", "Dashboard Pill Tags",
@@ -203,6 +203,18 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
   }
   if (name === "Controller Switch") return <button className={`vt-catalog-controller-switch is-${level}`} style={style}><span/><b>ON</b></button>
   if (name === "LED Light") return <div className={`vt-catalog-led is-${level} is-active`} style={style}><i/><b>ACTIVE</b></div>
+  if (name === "Brain Status LED Badges") return <div className={`vt-catalog-brain-status-badges is-${level}`} style={style} data-vt-library-component="StudioBrainStatusBadge">
+    <div className="vt-catalog-brain-status-badges__group" aria-label="Dark badge with saturated LED">
+      <StudioBrainStatusBadge label="READY" tone="green" appearance="dark" sizeVariant={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} />
+      <StudioBrainStatusBadge label="THINKING" tone="cyan" appearance="dark" sizeVariant={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} />
+      <StudioBrainStatusBadge label="LEARNING" tone="purple" appearance="dark" sizeVariant={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} />
+    </div>
+    <div className="vt-catalog-brain-status-badges__group" aria-label="Tinted badge matching LED tone">
+      <StudioBrainStatusBadge label="REVIEW" tone="yellow" appearance="tinted" sizeVariant={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} />
+      <StudioBrainStatusBadge label="BLOCKED" tone="red" appearance="tinted" sizeVariant={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} />
+      <StudioBrainStatusBadge label="SYNCED" tone="blue" appearance="tinted" sizeVariant={level === "l0" ? "standard" : level === "l1" ? "compact" : "micro"} />
+    </div>
+  </div>
   if (name === "Alphabetical Spectrum Tags") return <div className="vt-catalog-spectrum-row">{Array.from({length:26},(_,i)=>String.fromCharCode(65+i)).map((letter) => <span key={letter} className={`vt-alpha-tag is-${level}`} style={{"--alpha":getAlphabeticalSpectrumColor(letter)} as React.CSSProperties}>{letter} · TAG</span>)}</div>
   if (name === "Icon Rail Control") return <div className={`vt-catalog-icon-rail is-${level}`} style={style}><span><SlidersHorizontal/></span><b>Control</b></div>
   if (name === "Two Color Data Stats") return <div className={`vt-variant-stat vt-stat-two is-${level}`} style={style}><span>VIEWS</span><strong>128K</strong><small>+12.4%</small></div>
