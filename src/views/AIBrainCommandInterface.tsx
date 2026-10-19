@@ -961,7 +961,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
- const composerRef = useRef<HTMLInputElement | null>(null)
+ const composerRef = useRef<HTMLTextAreaElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
@@ -1774,7 +1774,7 @@ const AIBrainCommandInterface: React.FC = () => {
            <span id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
            <textarea
-            ref={composerRef as React.RefObject<HTMLTextAreaElement>}
+            ref={composerRef}
             id="brain-composer"
             rows={1}
             value={input}
