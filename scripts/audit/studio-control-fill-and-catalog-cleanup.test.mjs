@@ -1,0 +1,48 @@
+import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import test from "node:test"
+
+const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
+const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
+const certification = readFileSync("src/studio-ui/StudioHubCertification.tsx", "utf8")
+const catalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8")
+const catalogStyles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8")
+
+test("side counter divider is centered on a true half-height boundary", () => {
+  assert.match(styles, /\.vt-studio-side-counter__actions\s*\{[^}]*grid-template-rows:\s*minmax\(0, 1fr\) minmax\(0, 1fr\)/s)
+  assert.match(styles, /\.vt-studio-side-counter__actions > button:first-child::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s)
+})
+
+test("double split slider readout has reduced horizontal padding and supports counter controls", () => {
+  assert.match(styles, /\.vt-studio-double-split-slider \[data-vt-studio-split-field\]\s*\{[^}]*padding-inline:\s*calc\(var\(--vt-studio-control-height, 44px\) \* \.09\)/s)
+  assert.match(controls, /leftControls\?:\s*"reset" \| "counter"/)
+  assert.match(controls, /data-vt-studio-slider-left-controls/)
+  assert.match(catalog, /name === "Slider Counter"[\s\S]*?leftControls="counter"/)
+})
+
+test("dropdown split rail stays square and simple trailing chevrons have no divider", () => {
+  assert.match(styles, /\.vt-studio-dropdown\.is-split-left \.vt-studio-dropdown-split-rail\[data-rail="start"\]\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/s)
+  assert.match(styles, /\.vt-studio-dropdown:not\(\.is-split-left\) \.vt-studio-dropdown-chevron\.is-trailing\s*\{[^}]*border-left:\s*0/s)
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*border-top-left-radius:/s)
+})
+
+test("button faces default to half-primary fill and selected faces use full primary", () => {
+  assert.match(styles, /background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%, transparent\)/s)
+  assert.match(styles, /button\[data-vt-studio-button="true"\]\[data-selected="true"\] > \[data-vt-studio-button-face\][^{]*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
+  assert.match(styles, /data-vt-studio-action-button="true"\] > \[data-vt-studio-action-face\][^{]*\{[^}]*background:\s*color-mix/s)
+  assert.match(catalogStyles, /\.vt-complete-catalog \.vt-catalog-button\s*\{[^}]*background:\s*color-mix/s)
+})
+
+test("switch and word-toggle selected surfaces are primary, with a half-primary resting state", () => {
+  assert.match(styles, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\s*\{[^}]*50%, transparent/s)
+  assert.match(styles, /\.vt-studio-44-word-toggle \.vt-studio-44-word-handle\.is-active\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
+  assert.match(styles, /\.vt-studio-44-switch:not\(\.is-on\):not\(\.is-checked\):not\(\[aria-checked="true"\]\)\s*\{[^}]*50%, transparent/s)
+  assert.match(styles, /\.vt-studio-44-switch:is\(\.is-on, \.is-checked, \[aria-checked="true"\]\)\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s)
+})
+
+test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
+  assert.doesNotMatch(certification, /label="Semantic appearances"/)
+  assert.equal((certification.match(/label="Square icon variants \+ effects"/g) ?? []).length, 1)
+  assert.doesNotMatch(certification, /<StudioButton tone="(?:neutral|warning|success|danger)">/)
+  assert.doesNotMatch(certification, /<StudioSplitLeftButton[^>]*tone=/)
+})
