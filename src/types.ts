@@ -1329,8 +1329,20 @@ export interface AIBrainEvidenceItem {
  detail?: string
 }
 
+export interface EvidenceRequestSpec {
+ /** Explicit creator-requested cohort size; null means use the intent default. */
+ count: number | null
+ formats: Array<"short" | "long" | "live">
+ since: string | null
+ until: string | null
+ rankBy: "performance" | "views" | "watchTime" | "subscribers" | "revenue" | "ctr" | "retention" | "publishedAt"
+ filters: string[]
+ selectionMode: "top" | "recent" | "both"
+}
+
 export interface AIBrainEvidencePack {
  promptVersion: "brain-chat-v2"
+ requestSpec: EvidenceRequestSpec
  intent: AIBrainEvidenceIntent
  channelId: string | null
  channelName: string | null
