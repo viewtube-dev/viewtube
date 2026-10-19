@@ -356,3 +356,33 @@ Prompt families to expose in UI: Constitution, Analytics, Audience, Strategy, Pa
 - The target branch/commit and deployment source are verified before release is reported.
 
 **Current completion statement:** Phase 1 source inventory is recorded above. Phase 2 now includes a first source-backed migration: `BrainConfidenceChip` uses the production `StudioSplitLeftBadge` at the registered micro tier, preserving Brain-owned confidence mapping and adding a focused component regression test. This is the first vertical slice, not a claim that every Brain control has migrated. The focused test has been added but has not yet been executed in this connector-only workflow. Phases 3–8 are planned, not complete. Browser visual certification, end-to-end reachability, and deployment verification are still open.
+
+## Implementation update — Phase 2 and Phase 3 (2026-10-19)
+
+Working branch: `feat/brain-toolbox-phase-2-3`  
+Target base: `master/consolidated-feature-integration`
+
+### Phase 2 — Shared design system
+
+- [x] `BrainConfidenceChip` uses the production `StudioSplitLeftBadge` at the registered micro tier; confidence semantics remain Brain-owned.
+- [x] Added `BrainClaimEvidence` as a reusable composition for evidence packs and optional, explicitly supplied confidence.
+- [x] Replaced the chat opening briefing's separate confidence/evidence controls with the shared composition.
+- [x] Replaced the assistant response's compact evidence drawer invocation with the shared composition.
+- [x] Migrated evidence count/provenance/confidence/inference labels to the Studio split-left badge primitive.
+- [x] Removed fake shadows from the migrated evidence drawer and source action; preserved source links and the existing evidence-pack schema.
+- [x] Added focused tests for claim/evidence behavior and workspace navigation route exposure.
+- [ ] Execute the focused Vitest tests, Studio Controls contracts, typecheck, full suite, and browser visual certification. These have not been run from the GitHub connector workflow and must not be treated as passing.
+
+### Phase 3 — Shell and toolbox navigation
+
+- [x] Added `BrainWorkspaceNavigation` to the existing Brain page identity; it links to the existing Brain chat, Brain command center, Analytics, Projects, and Studio routes.
+- [x] Mounted the navigation as a compact icon rail at the wide-desktop breakpoint and a labeled rail at extra-wide desktop widths.
+- [x] Kept the existing conversation, runtime panel, prompt/capability launchpad, context rail, and mobile sheets in place; this is an incremental shell integration, not a second router or parallel workspace.
+- [x] Preserved the existing page state and thread hydration path; navigation links use route changes only.
+- [ ] Browser-verify intermediate/desktop widths, mobile portrait/landscape, keyboard focus, zoom, and no horizontal overflow.
+- [ ] Verify each destination route in the running app and confirm browser history/resume behavior.
+
+### Current evidence and limitations
+
+Source edits and test files are committed to the working branch. GitHub source operations do not execute Vitest, typecheck, lint, or browser tests, so no green-test or visual-certification claim is made here. Phase 3 is a first shell/navigation increment: the existing center conversation and right-side launchpad/context layout is retained rather than fully restructured into independent scroll containers. Follow-up work must finish route reachability, test/CI receipts, and responsive browser certification before this phase is considered fully certified.
+
