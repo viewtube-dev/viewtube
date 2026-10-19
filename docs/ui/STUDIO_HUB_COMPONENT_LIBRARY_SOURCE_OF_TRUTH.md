@@ -135,9 +135,12 @@ These rules apply to the Component Library presentation layer and do **not** cha
 
 ### Studio Upload Frame
 - `StudioUploadFrame` is the default reusable upload surface in the Confirmed Primitive Library.
-- It uses a conic primary/secondary perimeter, layered breathing fill, centered upload affordance, accessible native file input, drag/drop, and circular image preview.
-- The color source is the active Toolbox pair (`--pair-a` and `--pair-b`); the reference's hard-coded pink/mint/yellow colors are not carried into production.
-- Canvas geometry is 16:10 on wider layouts and 4:3 on narrow screens. It is an intentional ratio-based canvas exception rather than a 44px/28px/14px fixed-height control.
+- It maintains a 16:9 canvas at every viewport size, with container-relative breathing layers, quarter-stroke borders, and scalable inset spacing.
+- The active Toolbox pair (`--pair-a` and `--pair-b`) drives the conic perimeter, inner strokes, split rails, circle rings, and filename badge.
+- The left split rail carries the upload icon; the right split rail carries the thumbnail/image icon. The default prompt uses two lines at roughly half the prior text scale.
+- Hover doubles the breathing/rotation speed and increases saturation. Clicking triggers a one-second high-energy pulse before the native file picker opens. Drag/drop remains immediate.
+- After an image is selected, the circular preview grows to three times its previous nominal diameter (48cqw), its primary/secondary rings slightly clip against the top and bottom edges, and a filename badge overlays the bottom edge.
+- Reduced-motion preferences disable the visual animation. The component retains native file selection, keyboard activation, drag/drop, and filename announcement.
 - Production ownership remains in `src/studio-ui/primitives/StudioControls.tsx` and `src/styles/studio-control-system.css`; the catalog renders that same component.
 
 ### Floating-label fields

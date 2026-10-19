@@ -341,4 +341,32 @@ describe("confirmed vertical word-toggle primitive", () => {
     expect(css).toContain("--vt-studio-vertical-word-font-size");
     expect(css).toContain(".vt-studio-vertical-word-toggle.is-micro");
   });
+
+
+describe("responsive Studio upload frame", () => {
+  it("keeps the ratio-based composition, split icon rails, and two-line upload prompt", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const css = readStudioControlCss();
+    expect(controls).toContain('data-vt-studio-upload-split="left"');
+    expect(controls).toContain('data-vt-studio-upload-split="right"');
+    expect(controls).toContain('<Upload />');
+    expect(controls).toContain('<ImageIcon />');
+    expect(controls).toContain("Image / video here · or click to upload");
+    expect(css).toContain("aspect-ratio: 16 / 9;");
+    expect(css).toContain("--vt-studio-upload-frame-stroke:");
+    expect(css).toContain("--vt-studio-upload-layer-step:");
+    expect(css).toContain("48cqw");
+    expect(css).toContain(".vt-studio-upload-frame:hover");
+    expect(css).toContain("vt-studio-upload-click");
+    expect(css).toContain("prefers-reduced-motion: reduce");
+  });
+
+  it("delays the native file picker for the one-second click animation", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controls).toContain("pickerDelayRef");
+    expect(controls).toContain("window.setTimeout");
+    expect(controls).toContain("1000");
+    expect(controls).toContain("inputRef.current?.click()");
+  });
+});
 });
