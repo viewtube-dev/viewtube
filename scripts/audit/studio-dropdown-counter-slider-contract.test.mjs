@@ -110,7 +110,8 @@ test("shared interaction-focus tokens drive dwell, fade, rest color, and outline
   assert.match(generated, /--vt-studio-focus-hold-ms:\s*1500ms/);
   assert.match(generated, /--vt-studio-focus-outline-fade-ms:\s*500ms/);
   assert.match(generated, /--vt-studio-number-rest-mix:\s*50%/);
-  assert.match(generated, /--vt-studio-focus-outline-width:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* 0\.65\)/);
+  assert.match(generated, /--vt-studio-focus-outline-width-ratio:\s*0\.65/);
+  assert.match(generated, /--vt-studio-focus-outline-width:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* var\(--vt-studio-focus-outline-width-ratio, 0\.65\)\)/);
   assert.match(css, /data-vt-interaction-focus="true"[\s\S]*?outline:[^;]*var\(--vt-studio-focus-outline-color/);
   assert.match(css, /is-interaction-focus[\s\S]*?color:\s*var\(--vt-studio-number-active-color/);
   assert.match(fieldInteractionCss, /transition:[\s\S]*?outline-color var\(--vt-studio-focus-outline-fade-ms, 500ms\) ease-out/);
