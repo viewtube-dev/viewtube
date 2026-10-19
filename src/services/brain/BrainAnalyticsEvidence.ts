@@ -1,4 +1,5 @@
 import type { AIBrainContextSnapshot } from "../aiBrainCommandInterface"
+import type { AIBrainEvidencePack } from "../../types"
 import { readBrainUserControls } from "./BrainUserControls"
 import type {
  BrainEvidenceExplanation,
@@ -12,13 +13,15 @@ import { explainBrainEvidence } from "./phaseOneIntegration"
  * contract. No second analytics store is introduced here.
  */
 export const buildAnalyticsEvidenceExplanation = (input: {
- snapshot: AIBrainContextSnapshot
+ snapshot?: AIBrainContextSnapshot
+ evidencePack?: AIBrainEvidencePack
+ channelId?: string | null
  claim: string
  confidence?: number
  inference?: boolean
  caveats?: string[]
 }): BrainEvidenceExplanation => {
- const controls = readBrainUserControls()
+ const controls = readBrainUserControls(input.channelId)
  if (!controls.allowAnalytics) {
   return explainBrainEvidence(input.claim, [], {
    confidence: 0,
@@ -28,7 +31,15 @@ export const buildAnalyticsEvidenceExplanation = (input: {
   })
  }
 
- const pack = input.snapshot.evidencePack
+ const pack = input.evidencePack || input.snapshot?.evidencePack
+ if (!pack) {
+  return explainBrainEvidence(input.claim, [], {
+   confidence: input.confidence ?? 0,
+   inference: true,
+   missingEvidence: ["No saved, turn-bound analytics evidence pack is available for this claim."],
+   caveats: ["The UI must not substitute newer channel data for the evidence used by this answer."],
+  })
+ }
  const evidence: BrainEvidenceItem[] = [
   ...pack.topVideos.slice(0, 5).map((video) => ({
    id: video.evidenceId,
@@ -59,7 +70,7 @@ export const buildAnalyticsEvidenceExplanation = (input: {
  ]
 
  return explainBrainEvidence(input.claim, evidence, {
-  confidence: input.confidence ?? (input.snapshot.inferredProfile.status === "ready" ? 0.85 : 0.6),
+  confidence: input.confidence ?? (input.snapshot?.inferredProfile.status === "ready" ? 0.85 : 0.6),
   inference: input.inference ?? true,
   missingEvidence: pack.missingInputs.slice(0, 6),
   caveats: input.caveats ?? [],
