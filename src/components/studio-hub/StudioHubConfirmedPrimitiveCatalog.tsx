@@ -47,17 +47,17 @@ const formatDefaultValue = (value: unknown): string => {
   return String(value)
 }
 
-const CANONICAL_SKINS = [{ skin: "solid" as const, label: "SOLID" }, { skin: "color-swap" as const, label: "COLOR SWAP" }, { skin: "black-indicator" as const, label: "BLACK" }, { skin: "white-indicator" as const, label: "WHITE" }]
-const CHOICE_SKINS = CANONICAL_SKINS.filter(({ skin }) => skin === "black-indicator" || skin === "white-indicator")
-const WORD_TOGGLE_SKINS = CANONICAL_SKINS.slice(0, 3)
+const CANONICAL_SKINS = [{ skin: "solid" as const, label: "V1 · PRIMARY / SECONDARY" }, { skin: "color-swap" as const, label: "V2 · PRIMARY ↔ SECONDARY" }, { skin: "white-indicator" as const, label: "V3 · WHITE INDICATOR" }, { skin: "black-indicator" as const, label: "V4 · BLACK INDICATOR" }]
+const CHOICE_SKINS = CANONICAL_SKINS
+const WORD_TOGGLE_SKINS = CANONICAL_SKINS
 const CanonicalControlFamilies: React.FC = () => {
   const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
   const [choices, setChoices] = React.useState<boolean[]>(Array(12).fill(false))
-  const [words, setWords] = React.useState<boolean[]>(Array(6).fill(false))
+  const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
     <Family title="44px Switches" nonDefaultSettings={[
-        "Alternate selected-indicator skins: COLOR SWAP, BLACK, and WHITE.",
+        "Four state-fill/indicator variants: V1 half-primary to primary with secondary indicator; V2 primary to secondary with primary/secondary indicator swap; V3 half-primary to primary with white indicator; V4 half-primary to primary with black indicator.",
         "Round and rectangular variants change track/handle geometry.",
       ]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="75.68×44px track; shared four-skin variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-control-row" key={shape}><strong>{shape === "round" ? "ROUND" : "RECTANGULAR"}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div></div>)}</div>
@@ -116,17 +116,17 @@ const CanonicalControlFamilies: React.FC = () => {
     </Family>
     <Family title="44px Radio + Checkbox" nonDefaultSettings={[
         "Radio, checkmark checkbox, and wide-X checkbox remain distinct public selection-mark variants.",
-        "Alternate selected-indicator skins: BLACK and WHITE.",
+        "All four canonical state-fill/indicator variants are available for radios, checkmark boxes, and X boxes.",
       ]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}</div>
     </Family>
     <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={[
-        "Alternate active-handle skins: COLOR SWAP and BLACK.",
+        "All four canonical state-fill/indicator variants are available at standard and compact sizes.",
       ]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Text-measured active handle; standard and compact variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">{([{size:"44" as const,label:"44PX STANDARD"},{size:"28" as const,label:"28PX COMPACT"}]).map((item,row) => {
         return <div className="vt-confirmed-control-row" key={item.size}>
           <strong>{item.label}</strong>
-          <div className="vt-confirmed-control-variants" data-control-size={item.size}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = row * 3 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioWordToggle size={item.size} skin={skin.skin} value={words[index]} words={item.size === "44" && col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
+          <div className="vt-confirmed-control-variants" data-control-size={item.size}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioWordToggle size={item.size} skin={skin.skin} value={words[index]} words={item.size === "44" && col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} /></div> })}</div>
         </div>
       })}</div>
     </Family>
