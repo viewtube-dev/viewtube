@@ -140,3 +140,33 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   -webkit-text-stroke-color: #000;
 }
 
+/* Text fields share the counter/slider 500ms outline fade and 65%-stroke secondary outline. */
+:root,
+[data-vt-studio-control="true"] {
+  --vt-studio-focus-hold-ms: 1500ms;
+  --vt-studio-focus-outline-fade-ms: 500ms;
+}
+
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body [data-vt-studio-control="true"] textarea {
+  outline: 0 solid transparent;
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
+  transition:
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    -webkit-text-fill-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
+}
+
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * 0.65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
+  color: var(--vt-studio-number-active-color, #000000);
+  -webkit-text-fill-color: var(--vt-studio-number-active-color, #000000);
+}
