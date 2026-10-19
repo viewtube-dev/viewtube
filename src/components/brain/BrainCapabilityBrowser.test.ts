@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
-import { DEFAULT_BRAIN_USER_CONTROLS } from "../../../services/brain/BrainUserControls"
-import { BRAIN_CAPABILITY_REGISTRY } from "../../../services/brain/BrainCapabilityRegistry"
+import { DEFAULT_BRAIN_USER_CONTROLS } from "../../services/brain/BrainUserControls"
+import { BRAIN_CAPABILITY_REGISTRY } from "../../services/brain/BrainCapabilityRegistry"
 import { filterBrainCapabilities, getBrainCapabilityAvailability, capabilityPromptFor } from "./BrainCapabilityBrowser"
-import type { AIBrainContextSnapshot } from "../../../services/aiBrainCommandInterface"
+import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 
 const snapshot = (videoCount: number) => ({
  inferredProfile: { videoCount },
