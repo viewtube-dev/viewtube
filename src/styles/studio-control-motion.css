@@ -21,7 +21,7 @@
     stroke 405ms ease-out,
     opacity 360ms ease-out;
 }
-.vt-studio-44-choice.is-checkbox.is-xwide svg path:nth-child(2) {
+.vt-studio-44-choice.is-checkbox.is-xwide.is-on svg path:nth-child(2) {
   transition-delay: 495ms, 0ms, 0ms;
 }
 
