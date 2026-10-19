@@ -228,7 +228,7 @@ describe("EvidenceRecord", () => {
   const changedValue = buildBrainEvidenceRecordQuality(records.map((record) => ({ ...record, value: 2801 })), { expectedChannelId: "channel-1" })
 
   expect(quality.evidenceFingerprint).toBeTruthy()
-  expect(reordered.evidenceFingerprint).toBe(quality.evidenceFingerprint)
+  expect(reordered.evidenceFingerprint).not.toBe(quality.evidenceFingerprint)
   expect(changedValue.evidenceFingerprint).not.toBe(quality.evidenceFingerprint)
  })
 
