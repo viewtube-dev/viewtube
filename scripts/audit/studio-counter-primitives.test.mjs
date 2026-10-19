@@ -90,8 +90,8 @@ test("Studio counter and counter-slider press-and-hold are wired for touch and m
   const sliderStart = component.indexOf("export const StudioDoubleSplitSlider:");
   const sliderEnd = component.indexOf("StudioDoubleSplitSlider.displayName", sliderStart);
   const slider = component.slice(sliderStart, sliderEnd);
-  assert.match(slider, /useStudioCounterHold\\(-1,[\\s\\S]*?adjustCounter/);
-  assert.match(slider, /useStudioCounterHold\\(1,[\\s\\S]*?adjustCounter/);
+  assert.match(slider, /useStudioCounterHold\(-1,[\s\S]*?adjustCounter/);
+  assert.match(slider, /useStudioCounterHold\(1,[\s\S]*?adjustCounter/);
   assert.match(slider, /data-press-holding/);
   assert.match(component, /setPointerCapture\(event\.pointerId\)/);
   assert.match(component, /onPointerCancel: stop/);
