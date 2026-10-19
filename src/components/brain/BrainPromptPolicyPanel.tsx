@@ -8,7 +8,21 @@ import {
 } from "../../services/brain/BrainUserControls"
 
 type RegistryEntry = { family?: string; status?: string; id?: string }
-const entries = (promptRegistry as unknown as { legacyPromptConstants?: RegistryEntry[] }).legacyPromptConstants || []
+type PromptRegistryShape = {
+ legacyPromptConstants?: RegistryEntry[]
+ legacyGeminiExports?: RegistryEntry[]
+ oracleTemplates?: RegistryEntry[]
+ brainTaskProfiles?: RegistryEntry[]
+ governedAssetStrategies?: RegistryEntry[]
+}
+const registry = promptRegistry as unknown as PromptRegistryShape
+const entries: RegistryEntry[] = [
+ ...(registry.legacyPromptConstants || []),
+ ...(registry.legacyGeminiExports || []),
+ ...(registry.oracleTemplates || []),
+ ...(registry.brainTaskProfiles || []),
+ ...(registry.governedAssetStrategies || []),
+]
 const familyName = (value: string) => value.replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase())
 
 const POLICY_ROWS: Array<{ key: keyof BrainUserControls; label: string; detail: string }> = [
@@ -70,12 +84,12 @@ export const BrainPromptPolicyPanel: React.FC<{
    <div className="grid gap-2 p-2">
     <div>
      <h4 className="mb-1 text-[9px] font-[1000] uppercase">Prompt registry inventory</h4>
-     <p className="mb-1 text-[9px] font-bold text-black/60">Registry version: {String((promptRegistry as { version?: string }).version || "not declared")} · {entries.length} legacy prompt records. This inventory does not claim a prompt is active for a particular turn.</p>
+     <p className="mb-1 text-[9px] font-bold text-black/60">Registry version: {String((promptRegistry as { version?: string }).version || "not declared")} · {entries.length} indexed prompt/task/strategy records. This inventory does not claim a prompt is active for a particular turn.</p>
      <ul className="grid gap-1">
       {families.map(([family, summary]) => (
        <li key={family} className="flex items-center justify-between gap-2 border-b border-black/10 py-1 text-[9px]">
         <span className="font-bold">{familyName(family)}</span>
-        <span className="font-black tabular-nums">{summary.count} records</span>
+        <span className="font-black tabular-nums">{summary.count} records · {[...summary.statuses].map(familyName).join(", ") || "status not declared"}</span>
        </li>
       ))}
      </ul>
