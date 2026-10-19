@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
@@ -194,6 +194,19 @@ describe("standalone Studio text fields", () => {
     expect(standard).not.toContain("subtoolbox")
     expect(compact).toContain('data-vt-studio-field-kind="textarea"')
     expect(compact).toContain('data-size="compact"')
+  })
+
+  it("renders StudioTextBox as non-editable standard, compact, and micro display surfaces", () => {
+    const standard = renderToStaticMarkup(<StudioTextBox aria-label="Standard summary">First row{"\n"}Second row</StudioTextBox>)
+    const compact = renderToStaticMarkup(<StudioTextBox size="compact" aria-label="Compact summary">Compact content</StudioTextBox>)
+    const micro = renderToStaticMarkup(<StudioTextBox size="micro" aria-label="Micro summary">Micro content</StudioTextBox>)
+    expect(standard).toContain('data-vt-studio-field-kind="textarea-display"')
+    expect(standard).toContain('data-size="standard"')
+    expect(standard).toContain('First row')
+    expect(standard).toContain('Second row')
+    expect(standard).not.toContain('contenteditable="true"')
+    expect(compact).toContain('data-size="compact"')
+    expect(micro).toContain('data-size="micro"')
   })
 
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
