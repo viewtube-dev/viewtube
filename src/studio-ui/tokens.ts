@@ -17,7 +17,7 @@ export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   restTextMixPercent: 50,
   activeTextColor: "#000000",
   outlineColorRole: "secondary",
-  outlineWidthRatio: 0.65,
+  outlineWidthRatio: 1,
   outlineOffsetPx: 0,
 } as const;
 
