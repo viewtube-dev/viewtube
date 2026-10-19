@@ -607,7 +607,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
       if (velvet) {
         handleElement.style.background = fromColor;
         const wipe = smooth((t - 0.80) / 0.20);
-        overlay.style.clipPath = to > from
+        overlay.style.clipPath = to && !from
           ? `inset(0 0 0 ${(1 - wipe) * 100}%)`
           : `inset(0 ${(1 - wipe) * 100}% 0 0)`;
       } else if (skinClass.contains("is-color-swap")) {
