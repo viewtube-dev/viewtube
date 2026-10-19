@@ -1861,7 +1861,6 @@ const CreatorVaultOS: React.FC = () => {
         <StudioSplitLeftInput
          icon={<Search aria-hidden="true" />}
          ref={searchInputRef}
-         className="vault-library-search-field"
          value={query}
          onChange={(event) => setQuery(event.target.value)}
          placeholder="Search assets…"
