@@ -156,16 +156,16 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Outer shell geometry stays stationary and flat; approved inner indicators, labels, and icons may animate through studio-control-motion.css and must honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 65% of the selected border width; focus is communicated by outline, not box-shadow.",
+  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 1:1 of the selected border width; focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
       compactInputFontSize: "24px",
       standardTextAreaFontSize: "18px",
       compactTextAreaFontSize: "14px",
-      rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
+      rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height 0.75 and size-based padding; height remains content-driven.",
     },
-    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the global .86 line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
+    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the global .86 line-height. Textareas alone use 18px standard / 14px compact with multiline line-height 0.75 and size-based padding; height remains content-driven. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
@@ -181,9 +181,9 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro",
+      focusOutlineWidth: "1:1 of border width: 3px standard / 2px compact / 1px micro",
       focusOutlineOffset: "0px for both sizes",
-      outlineStrokeWidth: "65% of the selected border width; secondary color remains at 100% opacity",
+      outlineStrokeWidth: "1:1 of the selected border width; secondary color remains at 100% opacity",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
   },
@@ -1639,6 +1639,8 @@ StudioLegendMultiDropdown.displayName = "StudioLegendMultiDropdown"
 
 export interface StudioSpectrumTagProps {
   label: string
+  /** Optional semantic key keeps tag color stable when the visible label includes context. */
+  spectrumKey?: string
   selected?: boolean
   className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
@@ -1652,13 +1654,14 @@ export interface StudioSpectrumTagProps {
  */
 export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   label,
+  spectrumKey,
   selected = false,
   className,
   onClick,
   ariaLabel,
 }) => {
   const normalized = label.trim().toUpperCase()
-  const color = getAlphabeticalSpectrumColor(normalized)
+  const color = getAlphabeticalSpectrumColor(spectrumKey ?? normalized)
   return (
     <button
       type="button"
