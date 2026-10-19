@@ -20,9 +20,9 @@ test("dropdown chevron geometry has one token-owned source shared by single and 
 test("simple dropdown has no split rail; split-left dropdown uses split-shell anatomy and trailing chevron", () => {
   assert.match(dropdown, /variant === "simple"/)
   assert.match(dropdown, /data-vt-studio-split=\{variant === "split-left" \? "left" : undefined\}/)
-  assert.match(dropdown, /data-vt-studio-split-rail/)
+  assert.match(dropdown, /StudioSplitShell[\\s\\S]*?layout="double"[\\s\\S]*?faceOnly/)\n  assert.match(component, /interface StudioSplitShellProps[\\s\\S]*?rightRailClassName/)
   assert.match(dropdown, /data-vt-studio-dropdown-chevron/)
-  assert.match(dropdown, /splitIcon/)
+  assert.match(dropdown, /splitIcon/)\n  assert.match(dropdown, /rightRailProps=\\{\\{ "data-vt-studio-dropdown-chevron": true/)
   assert.doesNotMatch(dropdown, /variant === "split-left" \? <span className="vt-studio-dropdown-chevron is-leading"/)
 })
 
