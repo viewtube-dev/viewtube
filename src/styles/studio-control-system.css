@@ -4466,7 +4466,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix), white);
   --vt-studio-number-active-color: #000000;
   --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * 0.65);
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));
   --vt-studio-focus-outline-offset: 0px;
 }
 
@@ -4490,7 +4490,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 [data-vt-studio-control-family="counter"],
 [data-vt-studio-slider] {
   outline: 0 solid transparent;
-  outline-offset: var(--vt-studio-focus-outline-offset);
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
   transition:
     outline-color var(--vt-studio-focus-outline-fade-ms) ease-out,
     outline-width var(--vt-studio-focus-outline-fade-ms) ease-out;
@@ -4503,7 +4503,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 [data-vt-studio-control-family="counter"][data-vt-interaction-focus="true"],
 [data-vt-studio-slider][data-vt-interaction-focus="true"] {
   outline: var(--vt-studio-focus-outline-width) solid var(--vt-studio-focus-outline-color);
-  outline-offset: var(--vt-studio-focus-outline-offset);
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
 }
 
 .vt-studio-counter.is-interaction-focus .vt-studio-counter__value,
