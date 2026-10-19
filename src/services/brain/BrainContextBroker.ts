@@ -16,7 +16,7 @@ import { buildAlgorithmIntelligenceContext, type AlgorithmIntelligencePortfolio 
 import { resolveBrainContextSections } from "./BrainContextResolution"
 import type { BrainEvidenceClaim, BrainEvidenceHealth } from "./BrainEvidenceContract"
 import { formatEvidenceRecordForPrompt, type EvidenceRecord } from "./EvidenceRecord"
-import type { BrainEvidenceRecordQualityReport } from "./BrainEvidenceQuality"
+import { isBrainEvidenceRecordQualityInSync, type BrainEvidenceRecordQualityReport } from "./BrainEvidenceQuality"
 
 const clip = (value: string, maximum: number): string => value.slice(0, Math.max(0, maximum))
 
@@ -110,9 +110,16 @@ export const buildBrainContextPack = (input: {
    ].join("\n"), 2400)
   : ""
 
+ const evidenceRecordQualityInSync = Boolean(
+  input.evidenceRecordQuality
+  && isBrainEvidenceRecordQualityInSync(input.evidenceRecords || [], input.evidenceRecordQuality),
+ )
  const evidenceRecordQuality = controls.allowAnalytics && input.evidenceRecordQuality
   ? clip([
+    `parity=${evidenceRecordQualityInSync ? "verified" : "MISMATCH"}; gradedFingerprint=${input.evidenceRecordQuality.evidenceFingerprint}; promptFingerprint=${isBrainEvidenceRecordQualityInSync(input.evidenceRecords || [], input.evidenceRecordQuality) ? input.evidenceRecordQuality.evidenceFingerprint : "different"}`,
     `recordGrade=${input.evidenceRecordQuality.confidence}; scope=${input.evidenceRecordQuality.scopeMatch}; records=${input.evidenceRecordQuality.totalRecords}; numeric=${input.evidenceRecordQuality.numericRecords}; observed=${input.evidenceRecordQuality.observedRecords}; stale=${input.evidenceRecordQuality.staleRecords}; missing=${input.evidenceRecordQuality.missingRecords}`,
+    `gradedRecordIds=${input.evidenceRecordQuality.evidenceRecordIds.join(",") || "none"}`,
+    ...(!evidenceRecordQualityInSync ? ["PARITY FAILURE: the quality report does not describe the exact records currently supplied for prompt rendering. Do not make analytics claims from this grade; treat the grade as invalid."] : []),
     ...input.evidenceRecordQuality.limitations.map((value) => `Record limitation: ${value}`),
     "Record-grade policy: this grade applies only to the EvidenceRecord ids rendered in CHANNEL EVIDENCE; it does not replace dataset readiness.",
    ].join("\n"), 1200)
