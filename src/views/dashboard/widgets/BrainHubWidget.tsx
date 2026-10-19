@@ -580,8 +580,10 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
         </ControlRow>
        </section>
 
-       <section className="brain-hub-control-section">
-        <h3>Intelligence engines</h3>
+       <section className="brain-hub-control-section" aria-labelledby="brain-hub-engine-controls-title">
+        <h3 id="brain-hub-engine-controls-title">Intelligence engines</h3>
+        <p role="status" aria-live="polite">{engineStatus}</p>
+        <button type="button" onClick={resetEngineControlOverrides} className="min-h-11 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-xs font-black uppercase focus-visible:ring-[3px] focus-visible:ring-black">Use inherited engine defaults</button>
         <ControlRow label="Channel Intelligence" detail="Use durable channel-specific patterns.">
          <WidgetToggleSwitch checked={engines.channelIntelligence} onChange={(value) => updateEngineControl("channelIntelligence", value)} label="Channel Intelligence" height={32} tone="secondary" />
         </ControlRow>
