@@ -1,7 +1,8 @@
 import React, { useMemo, useRef, useState } from "react"
 import { CheckSquare, ChevronDown, ChevronRight, Copy, RefreshCw, ShieldCheck, Square } from "lucide-react"
 import { ToolboxScaffold } from "../../../components/Toolbox"
-import { SubToolboxAlphabeticalTag, SubToolboxCheckControl } from "../../../components/subtoolbox/SubToolboxPrimitives"
+import { SubToolboxCheckControl } from "../../../components/subtoolbox/SubToolboxPrimitives"
+import { StudioSpectrumTag } from "../../../studio-ui/primitives/StudioControls"
 import { getPaletteColor } from "../../../styles/toolboxPalette"
 import { RetroAnalogToggle, RetroRivets, RetroSyncExecutionSwitch, type RetroSyncExecutionStatus } from "./VtSyncRetroChrome"
 import type {
@@ -53,28 +54,16 @@ type SyncSpectrumTagProps = {
  title?: string
 }
 
-const SyncSpectrumTag: React.FC<SyncSpectrumTagProps> = ({ text, spectrumKey, onClick, title }) => {
- const content = (
-  <SubToolboxAlphabeticalTag
-   level="l2"
-   className="vt-sync-meta-tag"
-   label={text}
-   spectrumKey={spectrumKey}
-   title={title}
-  />
- )
- if (!onClick) return content
- return (
-  <button
-   type="button"
-   className="vt-sync-meta-tag-action"
-   onClick={onClick}
-   title={title}
-  >
-   {content}
-  </button>
- )
-}
+const SyncSpectrumTag: React.FC<SyncSpectrumTagProps> = ({ text, spectrumKey, onClick, title }) => (
+ <StudioSpectrumTag
+  label={text}
+  spectrumKey={spectrumKey}
+  className={onClick ? "vt-sync-meta-tag-action" : "vt-sync-meta-tag"}
+  onClick={onClick ? () => onClick() : undefined}
+  title={title}
+  ariaLabel={title ?? text}
+ />
+)
 
 const buildUnitGroups = (hasContentOwner: boolean) => VT_SYNC_GROUP_ORDER
  .map((group) => ({
