@@ -82,7 +82,7 @@ select[data-vt-studio-control] {
   padding-right: 36px;
 }
 
-button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) {
+button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-vertical-word-toggle):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) {
   display: inline-flex;
   min-width: 0;
   min-height: var(--vt-studio-control-height);
@@ -106,7 +106,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   
 }
 
-button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) { font-size: 24px; padding: 0 8px; }
+button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-vertical-word-toggle):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) { font-size: 24px; padding: 0 8px; }
 [data-vt-studio-button-icon] { display: grid; place-items: center; }
 
 [data-vt-studio-control][data-tone="neutral"] { --vt-studio-control-accent: #fff; }
@@ -4563,7 +4563,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   padding: var(--vt-studio-vertical-word-padding) 0;
   border: var(--vt-studio-vertical-word-stroke) solid #000;
   border-radius: var(--vt-studio-vertical-word-radius);
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #20f13e)) 50%, transparent);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
   color: #000;
   overflow: hidden;
   isolation: isolate;
@@ -4595,7 +4595,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   --vt-studio-vertical-word-handle-inset: .916667px;
 }
 .vt-studio-vertical-word-toggle:focus-visible {
-  outline: calc(var(--vt-studio-vertical-word-stroke) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
+  outline: var(--vt-studio-control-focus-outline-width, 1.95px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 3px;
 }
 .vt-studio-vertical-word-toggle:disabled {
@@ -4643,7 +4643,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   inset: 0;
   display: none;
   border-radius: inherit;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   pointer-events: none;
 }
 .vt-studio-vertical-word-toggle.is-primary-secondary[data-value="false"] .vt-studio-vertical-word-toggle__handle,
