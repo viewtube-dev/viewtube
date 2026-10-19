@@ -48,6 +48,16 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain("prefers-reduced-motion: reduce");
     expect(css).toContain(".vt-studio-upload-frame.is-drag");
     expect(css).toContain(".vt-studio-upload-frame.has-img");
+    expect(css).toContain(".vt-studio-upload-frame__icon::before");
+    expect(css).toContain("border: 4px solid var(--vt-studio-upload-primary)");
+    expect(css).toContain("border: 2px solid var(--vt-studio-upload-secondary)");
+    expect(css).toContain(".vt-studio-upload-frame__inset::before");
+    expect(css).toContain(".vt-studio-upload-frame__inset::after");
+    expect(css).toContain("font-size: var(--vt-studio-compact-font-size, 24px)");
+    const uploadedIconRules = css.slice(css.indexOf(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {"), css.indexOf(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg"));
+    expect(uploadedIconRules).not.toContain("left: 50%");
+    expect(uploadedIconRules).not.toContain("translate: -50%");
+    expect(uploadedIconRules).not.toContain("position: absolute");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
