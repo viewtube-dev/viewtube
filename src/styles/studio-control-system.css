@@ -310,20 +310,11 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   [data-vt-studio-control] {  }
 }
 
-/* Shared floating-label fields. The resting label height is the registered
-   shared label metric (not the field's native text size); when raised, it
-   eases to 80% of that metric and sits 48% above the field border (the prior
-   40% offset × the 1.2 floating-label offset ratio). */
+/* Floating labels inherit the exact default text size of their field.
+   Raised labels keep that size too; only their position changes. */
 .vt-studio-floating-field {
-  /* Shared floating-label metrics for StudioTextInput and StudioTextArea — no
-     separate input vs textarea values. Sourced from the generated size-tier
-     tokens (tokens.ts SIZE_BASE → emit-studio-control-vars.mjs): standard
-     32px (prior shared 28px + 4px), compact 21px (prior 19px + 2px), offset
-     ratio 1.2 (the raised label sits 20% higher above the outer black border).
-     The label height is its font size (line-height: 1). */
-  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-standard-height, 32px);
   --vt-studio-control-floating-label-offset-ratio: var(--vt-studio-floating-label-offset-ratio, 1.2);
-  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
+  --vt-studio-floating-label-size: var(--vt-studio-44-font-size, 38px);
   --vt-studio-control-focus-outline-width: 1.95px;
   position: relative;
   display: block;
@@ -332,9 +323,17 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   isolation: isolate;
 }
 .vt-studio-floating-field[data-size="compact"] {
-  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-compact-height, 21px);
-  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
+  --vt-studio-floating-label-size: var(--vt-studio-28-font-size, 24px);
   --vt-studio-control-focus-outline-width: 1.3px;
+}
+.vt-studio-floating-field[data-size="micro"] {
+  --vt-studio-floating-label-size: var(--vt-studio-14-font-size, 10px);
+}
+.vt-studio-floating-field.is-textarea {
+  --vt-studio-floating-label-size: var(--vt-studio-textarea-standard-font-size, 18px);
+}
+.vt-studio-floating-field.is-textarea[data-size="compact"] {
+  --vt-studio-floating-label-size: var(--vt-studio-textarea-compact-font-size, 14px);
 }
 .vt-studio-floating-field > [data-vt-studio-control="true"] {
   display: block;
@@ -376,18 +375,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   border-radius: 3px;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
-  font-size: calc(var(--vt-studio-floating-label-size) * .8);
   -webkit-text-stroke: .5px currentColor;
   transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)));
   transform-origin: left center;
 }
-/* Raised input labels stay coupled to the input typography scale.
-   Standard: 32px label × 80% = 25.6px. Compact: 21px × 80% = 16.8px.
-   Inputs and textareas share the same label height and raised offset. */
-.vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
-  font-size: calc(var(--vt-studio-floating-label-size) * .8);
-}
+/* The label font size intentionally stays equal to the field's default text
+   in both resting and raised states, including textarea typography exceptions. */
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   top: 0;
