@@ -2730,3 +2730,9 @@
 @media (min-width: 720px) {
   .vt-confirmed-slider-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Studio button specimens follow the same quiet fill contract as the canonical primitive. */
+.vt-complete-catalog .vt-catalog-button {
+  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent);
+  box-shadow: none;
+}
