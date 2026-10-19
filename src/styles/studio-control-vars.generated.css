@@ -15,7 +15,7 @@
   --vt-studio-micro-radius: 2px;
   --vt-studio-micro-font-size: 10px;
   --vt-studio-micro-icon-size: 10px;
-  --vt-studio-secondary-focus-opacity: 65%;
+  --vt-studio-secondary-focus-opacity: 65%;\n  --vt-studio-focus-hold-ms: 1500ms;\n  --vt-studio-focus-outline-fade-ms: 500ms;\n  --vt-studio-focus-outline-width-ratio: 0.65;\n  --vt-studio-focus-outline-offset: 0px;
   --vt-studio-dropdown-standard-rail-size: 44px;
   --vt-studio-dropdown-compact-rail-size: 28px;
   --vt-studio-dropdown-standard-chevron-size: 28px;
