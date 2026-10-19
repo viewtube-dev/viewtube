@@ -783,9 +783,9 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
     handle.style.background = fromColor;
     overlay.style.background = toColor;
-    overlay.style.display = velvet ? "block" : "none";
-    overlay.style.opacity = "1";
-    overlay.style.clipPath = "inset(100% 0 0 0)";
+    overlay.style.display = "block";
+    overlay.style.opacity = velvet ? "1" : "0";
+    overlay.style.clipPath = velvet ? "inset(100% 0 0 0)" : "none";
     onValueChange?.(to);
 
     const reducedMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -872,9 +872,12 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       }
       reducedMotion?.removeEventListener?.("change", cancelAnimation);
       observer?.disconnect();
-      if (typeof window !== "undefined") window.cancelAnimationFrame(frameRef.current);
     };
   }, [value, words, sizeVariant, getBounds, cancelAnimation]);
+
+  React.useEffect(() => () => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(frameRef.current);
+  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
