@@ -279,14 +279,14 @@ export const BrainPromptLibrary: React.FC<{
         className={`group flex h-full min-h-11 w-full flex-col items-stretch overflow-hidden rounded-[8px] border-[2px] border-black bg-white text-left outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50 ${isSelected ? "bg-[#FFDA47]" : "hover:bg-[#36E0F6]/20"}`}
        >
         <span
-         className="flex shrink-0 items-center justify-between gap-1 border-b-[2px] border-black px-2 py-1 text-[10px] font-[1000] uppercase leading-none"
+         className="flex shrink-0 items-center justify-between gap-1 border-b-[2px] border-black px-2 py-2 text-xs font-[1000] uppercase leading-4"
          style={{ backgroundColor: card.color }}
         >
          <span className="truncate">{card.label}</span>
          {isSelected ? <Check size={12} className="shrink-0" aria-hidden="true" /> : null}
         </span>
         <span className="flex min-h-0 flex-1 items-center px-2 py-1.5">
-         <span className="line-clamp-2 block overflow-hidden text-[10px] font-bold leading-[13px] text-black/70">
+         <span className="line-clamp-2 block overflow-hidden text-xs font-bold leading-4 text-black/70">
           {promptCardSummary(card)}
          </span>
         </span>
@@ -304,7 +304,7 @@ export const BrainPromptLibrary: React.FC<{
        className="flex items-center justify-between gap-2 border-b-[2px] border-black px-2.5 py-1"
        style={{ backgroundColor: selected.color }}
       >
-       <span className="truncate text-[9px] font-[1000] uppercase tracking-[0.12em]">
+       <span className="truncate text-xs font-[1000] uppercase tracking-[0.08em]">
         Preview · {selected.label}
        </span>
        <button
@@ -317,7 +317,7 @@ export const BrainPromptLibrary: React.FC<{
        </button>
       </div>
       <div className="grid gap-2 p-2.5">
-       <p className="text-xs font-bold leading-5 text-black/80">{selected.prompt}</p>
+       <p className="text-sm font-bold leading-5 text-black/80">{selected.prompt}</p>
        <div className="flex flex-wrap gap-1.5">
         <button
          type="button"
@@ -396,7 +396,7 @@ export const BrainFeedbackControls: React.FC<{
       aria-pressed={isSelected}
       disabled={status === "saving"}
       onClick={() => void submitFeedback(rating)}
-      className="grid h-8 w-8 cursor-pointer place-items-center rounded-[6px] border-[2px] border-black bg-white transition hover:-translate-y-0.5 focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-60"
+      className="grid h-11 w-11 cursor-pointer place-items-center rounded-[6px] border-[2px] border-black bg-white focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-60"
       style={{ backgroundColor: isSelected ? color : "#ffffff" }}
       onMouseEnter={(event) => (event.currentTarget.style.backgroundColor = color)}
       onMouseLeave={(event) => (event.currentTarget.style.backgroundColor = isSelected ? color : "#ffffff")}
