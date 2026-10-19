@@ -1724,8 +1724,8 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min, interactionFocus);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max, interactionFocus);
   return (
     <StudioSplitShell
       layout="right"
@@ -1761,8 +1761,8 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min, interactionFocus);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max, interactionFocus);
   return (
     <StudioSplitShell
       layout="left"
