@@ -1601,8 +1601,8 @@ const useStudioCounterHold = (
     try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* Embedded webviews may not support pointer capture. */ }
     held.current = false;
     suppressClick.current = false;
-    startedAt.current = Date.now();
     timer.current = setTimeout(() => {
+      startedAt.current = Date.now();
       held.current = true;
       setIsHolding(true);
       const repeat = () => {
