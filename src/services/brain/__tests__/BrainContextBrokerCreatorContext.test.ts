@@ -128,20 +128,7 @@ describe("BrainContextBroker creator-context convergence", () => {
    recentTurns: [],
    userText: "How many views?",
    evidenceRecords: [record],
-   evidenceRecordQuality: {
-    version: "vt-brain-evidence-record-quality-v1",
-    generatedAt: "2026-10-19T00:00:00.000Z",
-    expectedChannelId: "channel-1",
-    evidenceRecordIds: [record.id],
-    totalRecords: 1,
-    numericRecords: 1,
-    observedRecords: 1,
-    staleRecords: 0,
-    missingRecords: 0,
-    scopeMatch: "exact",
-    confidence: "high",
-    limitations: [],
-   },
+   evidenceRecordQuality: buildBrainEvidenceRecordQuality([record], { expectedChannelId: "channel-1" }),,
   })
 
   const prompt = result.systemInstruction
