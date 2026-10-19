@@ -28,7 +28,7 @@ describe("buildAIBrainEvidencePack", () => {
   ]))
   expect(pack.items.every((item) => item.label && item.source)).toBe(true)
   expect(pack.requestSpec.selectionMode).toBe("both")
-  expect(pack.trafficSources).toEqual([])
+  expect(pack.trafficSources).toHaveLength(1)
  })
  it("parses requested count, format, date range, and ranking metric", () => {
   const spec = parseEvidenceRequestSpec(
@@ -59,6 +59,8 @@ describe("buildAIBrainEvidencePack", () => {
     { id: "long-high", title: "Long high views", format: "long", publishedAt: "2026-02-01", metrics: { views: 500 } },
     { id: "long-old", title: "Old long video", format: "long", publishedAt: "2024-02-01", metrics: { views: 1000 } },
    ],
+   searchTerms: [{ term: "long-form", views: 30 }],
+   trafficSources: [{ source: "External", views: 40 }],
    syncManifest: { stop_reason: "completed" },
   })
 
@@ -71,6 +73,8 @@ describe("buildAIBrainEvidencePack", () => {
   expect(pack.recentVideos).toEqual([])
   expect(pack.evidenceIds).toEqual(expect.arrayContaining(["video:long-high", "video:long-low"]))
   expect(pack.missingInputs).toContain("Requested 10 matching videos; found 2")
+  expect(pack.searchTerms).toEqual([])
+  expect(pack.trafficSources).toEqual([])
  })
 
  it("filters a requested topic and ranks by watch time", () => {
