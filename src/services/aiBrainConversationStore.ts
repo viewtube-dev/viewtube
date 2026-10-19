@@ -13,6 +13,7 @@ import type {
 } from "../types"
 import {
  getAIBrainConversationTurnDB,
+ getAIBrainConversationThreadDB,
  listAIBrainConversationThreadsDB,
  listAIBrainConversationTurnsDB,
  saveAIBrainConversationThreadDB,
@@ -376,6 +377,38 @@ export const beginAIBrainTurn = async (input: {
  markAIBrainThreadSeen(channelId)
  return turn
 }
+
+export const retryAIBrainTurn = async (turnId: string): Promise<AIBrainConversationTurn> => {
+ const existing = await getAIBrainConversationTurnDB(turnId)
+ if (!existing) throw new Error(`AI Brain turn not found: ${turnId}`)
+ if (existing.status !== "interrupted") {
+  throw new Error(`Only interrupted AI Brain turns can be retried: ${turnId}`)
+ }
+
+ const updatedAt = nowIso()
+ const retryCount = Number(existing.metadata?.retryCount || 0) + 1
+ const turn: AIBrainConversationTurn = {
+  ...existing,
+  updatedAt,
+  status: "pending",
+  assistantText: "",
+  response: undefined,
+  answerModules: [],
+  citations: undefined,
+  evaluation: undefined,
+  metadata: { ...(existing.metadata || {}), retryCount, lastRetryAt: updatedAt },
+ }
+ await saveAIBrainConversationTurnDB(turn)
+
+ const thread = await getAIBrainConversationThreadDB(existing.threadId)
+ if (thread) {
+  thread.updatedAt = updatedAt
+  thread.selectedTurnId = existing.id
+  await saveAIBrainConversationThreadDB(thread)
+ }
+ return turn
+}
+
 
 export const completeAIBrainTurn = async (input: {
  turnId: string
