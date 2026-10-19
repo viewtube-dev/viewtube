@@ -129,3 +129,9 @@ These patterns are registered in `STUDIO_HUB_MIGRATED_FAMILIES` and rendered on 
 - Education Timestamp Notes — validated timestamp/question field used by the Education category flow.
 
 - Brain Status LED Badges — borderless Brain status badge variants with a smaller saturated LED, slow ripple, dark/white-text and tinted/black-text treatments.
+
+
+## Registry refresh — 2026-10-19
+
+- Added **Two-line Studio Button** to `STUDIO_HUB_COMPONENT_FAMILIES` in `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx`.
+- The entry renders the production `StudioTwoLineButton` primitive for both standard and compact variants. It is not a hardcoded visual substitute.
