@@ -322,16 +322,13 @@ const ProjectKanbanWorkspace: React.FC<{ embedded?: boolean }> = ({ embedded = f
    )}
 
    <div className="grid gap-2 border-b-[3px] border-black bg-white p-2 md:grid-cols-[minmax(180px,1fr)_140px_150px_auto]">
-    <SubToolboxSplitField
-     level="l1"
-     variant="search"
-     icon={<Search size={14}/>}
-     inputProps={{
-      value:workspace.query,
-      onChange:(event)=>setWorkspace((state)=>({...state,query:event.currentTarget.value})),
-      placeholder:"Search projects",
-      "aria-label":"Search projects",
-     }}
+    <StudioSplitLeftInput
+     sizeVariant="compact"
+     icon={<Search size={14} aria-hidden="true" />}
+     value={workspace.query}
+     onChange={(event)=>setWorkspace((state)=>({...state,query:event.currentTarget.value}))}
+     placeholder="Search projects"
+     aria-label="Search projects"
     />
     <SubToolboxSelect value={workspace.priorityFilter} onChange={(event) => setWorkspace((state) => ({ ...state, priorityFilter: event.target.value as ProjectWorkspaceState["priorityFilter"] }))} aria-label="Priority filter">
      <option value="all">All priorities</option>
