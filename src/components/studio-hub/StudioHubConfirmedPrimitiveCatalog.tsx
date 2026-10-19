@@ -765,7 +765,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "Conic border, breathing layers, and image preview derive their colors from the active primary/secondary pair.",
         "Native file picker, drag/drop, disabled state, image preview, and reduced-motion behavior are supported.",
       ]}
-      provenance={<Provenance primitive="StudioUploadFrame" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Full-row canvas · pair A/B gradients · 16:9 ratio" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioUploadFrame" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Full-row canvas · pair A/B gradients · responsive 16:10 / mobile 4:3 ratio" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame">
         <span>Standard · default upload frame</span>
