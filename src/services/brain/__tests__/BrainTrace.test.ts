@@ -98,6 +98,38 @@ describe("beginBrainTrace", () => {
   expect(finished.outputRef).toBe("asset_9f2")
  })
 
+
+ it("retains typed evidence records alongside legacy evidence refs", () => {
+  const record = {
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon" as const,
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   channelId: "channel-1",
+   metric: "views",
+   value: 2800,
+   unit: "count" as const,
+   observedAt: "2026-09-27T16:00:00.000Z",
+   updatedAt: "2026-10-19T00:00:00.000Z",
+   freshness: "stale" as const,
+   epistemicState: "observed" as const,
+   confidence: 0.8,
+   provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics", sourceVersion: "canon-v1" },
+  }
+  const trace = beginBrainTrace({ kind: "question", channelId: "channel-1" })
+  trace.recordEvidence({
+   requested: ["channel_summary"],
+   returned: [record.id],
+   missing: [],
+   records: [record],
+  })
+
+  const finished = trace.complete()
+
+  expect(finished.evidence.records).toEqual([record])
+  expect(finished.evidence.returned).toContain(record.id)
+ })
+
  it("preserves shared operation and workflow identity when supplied by the caller", () => {
   const trace = beginBrainTrace({
    kind: "asset",

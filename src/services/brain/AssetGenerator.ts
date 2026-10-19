@@ -27,6 +27,7 @@
 
 import type { Schema } from "@google/genai"
 import { beginBrainTrace, type BrainTrace } from "./BrainTrace"
+import type { EvidenceRecord } from "./EvidenceRecord"
 import { auditNumericClaims } from "./numericClaims"
 import type { ModelResolution } from "./modelRouting"
 import { getContentBuild } from "../asset-engine/ContentBuildRepository"
@@ -84,6 +85,8 @@ export interface RubricFinding {
 }
 
 export interface AssetEvidence {
+ /** Canonical typed evidence records, preserved through prompt and trace provenance. */
+ records?: EvidenceRecord[]
  /** Evidence class names that were requested. */
  requested: string[]
  /** Stable refs for what resolved, recorded on the trace. */
@@ -385,6 +388,7 @@ export const generateAsset = async <TOutput>(input: {
   requested: strategy.evidenceClasses,
   returned: evidence.refs,
   missing: evidence.missing,
+  records: evidence.records,
  })
  trace.recordPromptVersion("constitution", ASSET_CONSTITUTION_VERSION)
  trace.recordPromptVersion(strategy.assetType, strategy.promptVersion)

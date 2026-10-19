@@ -29,6 +29,7 @@ import {
  summarizeBrainOutcomes,
  type BrainOutcomeRecord,
 } from "./BrainOutcomeLedger"
+import type { EvidenceRecord } from "./EvidenceRecord"
 import {
  summarizeMetadataIntelligence,
  type MetadataIntelligenceSummary,
@@ -115,6 +116,7 @@ export interface BrainRuntimeProvenanceChain {
  modelRequested: string | null
  modelServed: string | null
  evidenceIds: string[]
+ evidenceRecords?: EvidenceRecord[]
  selectedAssetIds: string[]
  sourceAssetIds: string[]
  outputAssetIds: string[]
@@ -460,11 +462,19 @@ const buildProvenanceChain = (input: {
   new Set(directAlgorithmEvents.map(event => event.id)),
  )
 
+ const evidenceRecords = (trace?.evidence?.records || []).map(record => ({
+  ...record,
+  ...(record.missingness ? { missingness: [...record.missingness] } : {}),
+  ...(record.limitations ? { limitations: [...record.limitations] } : {}),
+  ...(record.window ? { window: { ...record.window } } : {}),
+  provenance: { ...record.provenance, evidenceIds: [...record.provenance.evidenceIds] },
+ }))
  const evidenceIds = uniqueStrings([
   ...(input.request.evidenceIds || []),
   ...(input.manifest?.evidenceIds || []),
   ...(receipt?.evidenceIds || []),
   ...(trace?.evidence?.returned || []),
+  ...evidenceRecords.flatMap(record => [record.id, ...record.provenance.evidenceIds]),
   ...relatedEvents.flatMap(event => event.evidenceIds || []),
   ...matchedOutcomes.flatMap(outcome => outcome.evidence || []),
   ...algorithmEvents.flatMap(event => event.evidenceIds || []),
@@ -497,6 +507,7 @@ const buildProvenanceChain = (input: {
   modelRequested: trace?.model?.requested || null,
   modelServed: trace?.model?.served || null,
   evidenceIds,
+  evidenceRecords,
   selectedAssetIds: uniqueStrings(input.manifest?.selectedAssetIds || []),
   sourceAssetIds: uniqueStrings(input.request.sourceAssetIds || []),
   outputAssetIds: uniqueStrings(receipt?.outputAssetIds || []),
