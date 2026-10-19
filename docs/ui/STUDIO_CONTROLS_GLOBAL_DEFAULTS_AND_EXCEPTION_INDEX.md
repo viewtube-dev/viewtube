@@ -227,3 +227,8 @@ Visual verification is still required in the running app for standard/compact/mi
 - Four variants: primary/secondary pair; black fill with the inactive word colored to match the handle color at the start of the last transition and the active word black on the colored handle; primary fill/border with secondary text and a white handle; white fill/border with a black handle and inverse text.
 - Word colors change quickly at the beginning of the handle animation; the handle expands vertically, releases to the other word, and uses a vertical color wipe on alternating transitions. Reduced-motion settles immediately.
 - Catalog layout: standard two per row; compact three per row; a 2×2 micro matrix occupies the remaining two cells at the end of compact row two. Every specimen has independent state.
+
+
+## Brain status indicator exception / variant family
+
+`StudioBrainStatusIndicator` is a named primitive family built from the LED-light + borderless badge composition. Its rectangular 44/28/14px tiers intentionally use 6/4/2px corner radii, not pill radii. The LED uses a 1px black lens outline at 65% diameter with a 60%-opacity white overlay, saturated state-specific glow/ripples, and reduced-motion fallback. Dark variant uses white text; tinted variant uses black text. See `src/studio-ui/primitives/StudioControls.tsx`, `src/styles/studio-control-system.css`, and `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`.
