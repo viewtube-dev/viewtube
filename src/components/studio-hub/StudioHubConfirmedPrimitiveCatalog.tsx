@@ -29,6 +29,7 @@ import {
   StudioVerticalWordToggle,
   StudioSpectrumTag,
   StudioCloseableBadge,
+  StudioBrainStatusBadge,
   StudioTagEditor,
   StudioSimpleDropdown,
   StudioSplitLeftDropdown,
@@ -820,6 +821,40 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
+    <Family
+      title="Brain Status LED Badges"
+      nonDefaultSettings={[
+        "Borderless status badge with a smaller saturated LED to the left of the label.",
+        "Dark variant: black fill and white text; tinted variant: light fill matching the LED hue and black text.",
+        "Six LED tones with a slow expanding/fading circular ripple; reduced-motion disables the ripple.",
+        "Status text must reflect the owning workflow state; these specimens are visual examples, not live telemetry.",
+      ]}
+      provenance={<Provenance primitive="StudioBrainStatusBadge" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="24px / 20px / 14px badge tiers · 10px / 8px / 6px LED core · black/tinted fill variants · 8s ripple cycle" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge">
+        <span>STANDARD · DARK FILL / WHITE TEXT</span>
+        <div className="vt-catalog-brain-status-badges__group">
+          <StudioBrainStatusBadge label="READY" tone="green" appearance="dark" sizeVariant="standard" />
+          <StudioBrainStatusBadge label="THINKING" tone="cyan" appearance="dark" sizeVariant="standard" />
+          <StudioBrainStatusBadge label="LEARNING" tone="purple" appearance="dark" sizeVariant="standard" />
+        </div>
+        <span>STANDARD · MATCHING LIGHT FILL / BLACK TEXT</span>
+        <div className="vt-catalog-brain-status-badges__group">
+          <StudioBrainStatusBadge label="REVIEW" tone="yellow" appearance="tinted" sizeVariant="standard" />
+          <StudioBrainStatusBadge label="BLOCKED" tone="red" appearance="tinted" sizeVariant="standard" />
+          <StudioBrainStatusBadge label="SYNCED" tone="blue" appearance="tinted" sizeVariant="standard" />
+        </div>
+        <span>COMPACT + MICRO</span>
+        <div className="vt-catalog-brain-status-badges__group">
+          <StudioBrainStatusBadge label="ACTIVE" tone="green" appearance="dark" sizeVariant="compact" />
+          <StudioBrainStatusBadge label="QUEUED" tone="cyan" appearance="dark" sizeVariant="compact" />
+          <StudioBrainStatusBadge label="PAUSED" tone="yellow" appearance="tinted" sizeVariant="compact" />
+          <StudioBrainStatusBadge label="IDLE" tone="purple" appearance="tinted" sizeVariant="micro" />
+          <StudioBrainStatusBadge label="ERROR" tone="red" appearance="dark" sizeVariant="micro" />
+          <StudioBrainStatusBadge label="SYNC" tone="blue" appearance="tinted" sizeVariant="micro" />
+        </div>
+      </div>
+    </Family>
   </div>
 )
 

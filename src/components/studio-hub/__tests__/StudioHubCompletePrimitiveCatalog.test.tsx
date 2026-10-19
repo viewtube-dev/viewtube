@@ -5,6 +5,7 @@ describe("Studio Hub complete primitive catalog", () => {
   it("promotes all canonical and newly added reusable families into one registry", () => {
     expect(STUDIO_HUB_COMPONENT_FAMILIES.length).toBeGreaterThanOrEqual(56)
     expect(new Set(STUDIO_HUB_COMPONENT_FAMILIES).size).toBe(STUDIO_HUB_COMPONENT_FAMILIES.length)
+    expect(STUDIO_HUB_COMPONENT_FAMILIES).toContain("Brain Status LED Badges")
   })
 
   it("contains the post-V21 additions instead of leaving them in side sections", () => {
