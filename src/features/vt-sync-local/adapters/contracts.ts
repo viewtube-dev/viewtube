@@ -28,7 +28,7 @@ export const ANALYTICS_LOCAL_SNAPSHOT_KEY = VT_SYNC_LOCAL_SNAPSHOT_KEY
 export const ANALYTICS_LOCAL_DB_NAME = VT_SYNC_LOCAL_DB_NAME
 export const ANALYTICS_LOCAL_DB_VERSION = VT_SYNC_LOCAL_DB_VERSION
 export const ANALYTICS_LOCAL_STORE_NAMES = VT_SYNC_LOCAL_STORE_NAMES
-export const VT_SYNC_UPSTREAM_REPO_PATH = "/Users/cwb/Downloads/viewtube/VT-SYNC" as const
+export const VT_SYNC_UPSTREAM_REPO_PATH: string | null = null
 
 export type VtSyncCategoryGroup =
  | "channel"

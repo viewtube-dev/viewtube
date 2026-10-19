@@ -5,9 +5,6 @@ import { ORACLE_TOOL_CONTRACTS } from "./tools";
 import type { OracleSkillSpecV1, OracleSystemBundleV1 } from "./types";
 
 const SOURCE_KNOWLEDGE_DOMAINS = [
-  "/Users/cwb/Downloads/viewtube/remotionbasix.txt",
-  "/Users/cwb/Downloads/viewtube/docs/Video Editor/Reac:SVG:Remotion:AI Assets Video Generator Stuff copy.txt",
-  "/Users/cwb/Downloads/viewtube/docs/Video Editor/remotion_full_docs copy 2.txt",
   "https://www.remotion.dev/docs",
 ];
 

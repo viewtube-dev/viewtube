@@ -34,6 +34,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run check:src-governance
       - run: npm run test:confirmed-library-layout
       - run: node --test scripts/audit/studio-control-motion.test.mjs
       - run: node --test scripts/audit/release-gates-dependencies.test.mjs
@@ -41,7 +42,6 @@ jobs:
       - run: npm run check:routes
       - run: npm run check:css
       - run: npm run check:quarantine
-      - run: npm run check:src-governance
       - run: npm run check:privacy-src
       - run: npm run test:ai-systems-governance
       - run: npm run test:ai-systems-herald
