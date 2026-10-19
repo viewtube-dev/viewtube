@@ -1,10 +1,10 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { Studioinput } from "./Studioinput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, ThumbsUp, Upload } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -1201,6 +1201,7 @@ export interface StudioDropdownProps {
   ariaLabel?: string
   sizeVariant?: "standard" | "compact"
   variant?: "default" | "simple" | "split-left"
+  splitIcon?: React.ReactNode
 }
 
 export const StudioDropdown: React.FC<StudioDropdownProps> = ({
@@ -1216,6 +1217,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   ariaLabel,
   sizeVariant = "standard",
   variant = "default",
+  splitIcon = <Settings2 aria-hidden="true" focusable="false" />,
 }) => {
   const [open, setOpen] = React.useState(false)
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
@@ -1285,6 +1287,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         data-vt-studio-control="true"
         data-size={sizeVariant}
         data-dropdown-trigger="true"
+        data-vt-studio-split={variant === "split-left" ? "left" : undefined}
         aria-label={ariaLabel}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -1293,9 +1296,22 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
         onClick={() => setOpen((current) => !current)}
         onKeyDown={onKeyDown}
       >
-        {variant === "split-left" ? <span className="vt-studio-dropdown-chevron is-leading" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
+        {variant === "split-left" ? (
+          <span className="vt-studio-dropdown-split-rail" data-vt-studio-split-rail data-rail="start" aria-hidden="true">
+            {splitIcon}
+          </span>
+        ) : null}
         <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
-        {variant !== "split-left" ? <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true"><ChevronDown size={sizeVariant === "compact" ? 24 : 38} strokeWidth={sizeVariant === "compact" ? 2 : 1.9} /></span> : null}
+        <span
+          className="vt-studio-dropdown-chevron is-trailing"
+          data-vt-studio-dropdown-chevron
+          aria-hidden="true"
+        >
+          <ChevronDown
+            size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+            strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+          />
+        </span>
       </button>
       {open && !disabled ? (
         <div id={id ? `${id}-listbox` : undefined} role="listbox" className="vt-studio-dropdown-menu" data-size={sizeVariant} aria-label={ariaLabel}>
