@@ -73,6 +73,7 @@ import {
   SubToolboxSettingsSwitch,
   SubToolboxScriptBar,
   SubToolboxSlider,
+  SubToolboxSplitField,
   SubToolboxControllerSwitch,
   SubToolboxStatePanel,
   SubToolboxStatCard,
