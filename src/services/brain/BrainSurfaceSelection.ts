@@ -22,8 +22,8 @@ export const publishBrainSurfaceSelection = (
  if (current?.locked && (
   current.sourceId !== input.sourceId ||
   current.route !== input.route ||
-  current.videoId !== input.videoId ||
-  current.commentId !== input.commentId
+  (current.videoId || null) !== (input.videoId || null) ||
+  (current.commentId || null) !== (input.commentId || null)
  )) return current
  const selection: BrainSurfaceSelection = {
   ...input,
