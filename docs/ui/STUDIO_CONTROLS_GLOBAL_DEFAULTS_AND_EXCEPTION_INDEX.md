@@ -227,3 +227,13 @@ Visual verification is still required in the running app for standard/compact/mi
 - Four variants: primary/secondary pair; black fill with the inactive word colored to match the handle color at the start of the last transition and the active word black on the colored handle; primary fill/border with secondary text and a white handle; white fill/border with a black handle and inverse text.
 - Word colors change quickly at the beginning of the handle animation; the handle expands vertically, releases to the other word, and uses a vertical color wipe on alternating transitions. Reduced-motion settles immediately.
 - Catalog layout: standard two per row; compact three per row; a 2×2 micro matrix occupies the remaining two cells at the end of compact row two. Every specimen has independent state.
+
+
+## Brain LED status badge — registered component variant
+
+- Canonical primitive: `StudioBrainStatusBadge` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; Component Library specimens: `Brain Status LED Badges` in `StudioHubCompletePrimitiveCatalog.tsx`.
+- Anatomy: borderless pill badge with white uppercase text on black, or black uppercase text on a lighter tint matching the saturated LED color. A smaller LED sits to the left of the label; the LED core does not change the badge's layout size.
+- Tones: green, cyan, purple, yellow, red, and blue. Variants include dark-fill/saturated-LED and light-tinted-fill/black-text.
+- Density variants: standard (24px badge surface, 10px LED), compact (20px surface, 8px LED), and micro (14px surface, 6px LED). These are status badges, not ordinary 44px/28px input/button geometry.
+- Active LED ripple follows the library's eight-second cycle: saturated ring starts at the LED core, expands to five times its size over three seconds and fades. Reduced-motion disables the ripple. Inactive state dims the core and removes the ripple.
+- Status labels are descriptive, not actions. Consumers must pass the real status and must not show “ready”, “synced” or “complete” unless the owning workflow reports that state.
