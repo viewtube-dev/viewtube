@@ -133,6 +133,16 @@ const fingerprintEvidenceRecords = (records: EvidenceRecord[]): string => {
  return `evidence-v1:${first.toString(16).padStart(8, "0")}${second.toString(16).padStart(8, "0")}`
 }
 
+/** True only when both the ordered record identities and record content match the grade. */
+export const isBrainEvidenceRecordQualityInSync = (
+ records: EvidenceRecord[],
+ report: Pick<BrainEvidenceRecordQualityReport, "evidenceFingerprint" | "evidenceRecordIds">,
+): boolean => (
+ report.evidenceFingerprint === fingerprintEvidenceRecords(records)
+ && report.evidenceRecordIds.length === records.length
+ && report.evidenceRecordIds.every((id, index) => id === records[index]?.id)
+)
+
 /**
  * Grades the exact EvidenceRecord projection selected for prompt rendering.
  * Dataset-level readiness remains in buildBrainEvidenceQuality(bundle); this
