@@ -11,6 +11,7 @@ import './styles/studio-control-motion.css'
 import './styles/studio-text-input.css'
 import './styles/studio-dropdown-geometry.css'
 import './styles/studio-upload-geometry.css'
+import './components/studio-hub/studio-hub-confirmed-full-width.css'
 // Install developer-console error/rejection capture before anything else runs.
 // Verbose request and long-task diagnostics stay disabled for normal users.
 import { installOnScreenDiagnostics } from './app/onScreenDiagnostics'
