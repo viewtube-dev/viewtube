@@ -350,13 +350,13 @@ describe("responsive Studio upload frame", () => {
     expect(controls).toContain('data-vt-studio-upload-split="left"');
     expect(controls).toContain('data-vt-studio-upload-split="right"');
     expect(controls).toContain('<Upload />');
-    expect(controls).toContain('<Image />');
-    expect(controls).toContain('Drag or drop<br />Image / video here');
+    expect(controls).toContain('<ImageIcon />');
+    expect(controls).toContain("Image / video here · or click to upload");
     expect(css).toContain("aspect-ratio: 16 / 9;");
     expect(css).toContain("--vt-studio-upload-frame-stroke:");
     expect(css).toContain("--vt-studio-upload-layer-step:");
     expect(css).toContain("48cqw");
-    expect(css).toContain("vt-studio-upload-hover");
+    expect(css).toContain(".vt-studio-upload-frame:hover");
     expect(css).toContain("vt-studio-upload-click");
     expect(css).toContain("prefers-reduced-motion: reduce");
   });
