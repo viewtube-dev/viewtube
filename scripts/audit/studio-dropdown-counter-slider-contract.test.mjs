@@ -99,6 +99,6 @@ test("compact dropdown trigger synchronizes split grid tracks and visible rail d
 
 
 test("Studio text fields use a rounded inset primary stroke instead of square gradient strips", () => {
-  assert.match(fieldCss, /box-shadow:\\s*inset 0 0 0 var\\(--vt-field-inline-width\\) var\\(--vt-field-inline-primary\\)/)
-  assert.doesNotMatch(fieldCss, /background-image:\\s*[\\s\\S]*?linear-gradient\\(var\\(--vt-field-inline-primary/)
+  assert.match(fieldCss, /box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/)
+  assert.doesNotMatch(fieldCss, /background-image:\s*[\s\S]*?linear-gradient\(var\(--vt-field-inline-primary/)
 })
