@@ -427,8 +427,8 @@ Predecessor: merged PR [#733](https://github.com/viewtube-dev/viewtube/pull/733)
 
 ### Phase 6 — Prompts, settings, permissions and handoffs (increment delivered; acceptance remains open)
 
-- [x] Added `BrainPromptPolicyPanel` to the existing Brain context rail; it inventories prompt families/statuses from `docs/specifications/prompt-registry.json` and labels this as registry inventory, not proof of the active prompt for a particular turn.
-- [x] Added a guided action that asks the existing Brain runtime to inspect the current resolver's active family/version, inherited defaults, creator overrides, context recipe and schema only where the runtime exposes them. This does not introduce a second prompt resolver.
+- [x] Added `BrainPromptPolicyPanel` to the existing Brain context rail; it names the canonical prompt authority without importing documentation into runtime code or treating static registry metadata as proof of a turn's active prompt.
+- [x] Added a guided action that asks the existing Brain runtime to inspect the current resolver's active family/version, inherited defaults, creator overrides, context recipe and schema only where the runtime exposes them. This is a request path, not proof that the runtime currently exposes turn-specific prompt provenance.
 - [x] Exposed existing `BrainUserControls` policy fields through persisted controls, including master enablement, personalization, interaction learning, analytics/projects/comments/Vault/Publisher access, external-action approval, creator-communication capture and de-identified research contribution.
 - [x] Explicitly separate browser-local saved permission gates from current snapshot readiness for analyzed channel videos and active projects. The UI does not claim a permission means data was loaded or a capability ran.
 - [x] Keep publishing approval-gated and show creator-communication capture and research contribution as separate opt-in controls.
