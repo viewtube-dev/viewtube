@@ -39,7 +39,7 @@ test("StudioSideCounter is a new button-only split-right primitive with a divide
   assert.match(styles, /\.vt-studio-side-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/)
   assert.match(styles, /\.vt-studio-side-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
   assert.match(styles, /\.vt-studio-side-counter\[data-vt-studio-split="right"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
-  assert.match(styles, /\.vt-studio-side-counter__actions button:first-child\s*\{[^}]*border-bottom:[^}]+/s)
+  assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
   for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioSideCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
