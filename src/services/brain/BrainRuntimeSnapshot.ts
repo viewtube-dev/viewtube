@@ -29,6 +29,7 @@ import {
  summarizeBrainOutcomes,
  type BrainOutcomeRecord,
 } from "./BrainOutcomeLedger"
+import type { EvidenceRecord } from "./EvidenceRecord"
 import {
  summarizeMetadataIntelligence,
  type MetadataIntelligenceSummary,
@@ -115,7 +116,7 @@ export interface BrainRuntimeProvenanceChain {
  modelRequested: string | null
  modelServed: string | null
  evidenceIds: string[]
- evidenceRecords: EvidenceRecord[]
+ evidenceRecords?: EvidenceRecord[]
  selectedAssetIds: string[]
  sourceAssetIds: string[]
  outputAssetIds: string[]
