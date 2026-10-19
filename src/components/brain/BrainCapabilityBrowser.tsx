@@ -101,8 +101,8 @@ export const BrainCapabilityBrowser: React.FC<{
        >
         <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-[5px] border border-black bg-white" aria-hidden="true"><Sparkles size={14} /></span>
         <span className="min-w-0 flex-1">
-         <span className="block text-[10px] font-[1000] uppercase leading-4">{capability.label}</span>
-         <span className="mt-0.5 block text-[10px] font-bold leading-4 text-black/65">{capability.description}</span>
+         <span className="block text-xs font-[1000] uppercase leading-4">{capability.label}</span>
+         <span className="mt-0.5 block text-xs font-bold leading-4 text-black/65">{capability.description}</span>
          <span className={`mt-1 inline-flex rounded-[4px] border border-black px-1.5 py-0.5 text-[9px] font-black uppercase ${availability.status === "ready" ? "bg-[#C0F240]" : availability.status === "blocked" ? "bg-[#FA618A]" : "bg-[#FFDA47]"}`}>{availability.label}</span>
         </span>
         <ArrowRight size={14} className="mt-1 shrink-0" aria-hidden="true" />
