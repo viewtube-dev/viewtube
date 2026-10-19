@@ -260,7 +260,24 @@ export const buildCreatorGrowthContext = (
 export const formatCreatorGrowthModules = (
  response: CreatorBrainResponse,
  growthContext: CreatorGrowthContext,
+ requestText = "",
 ): AIBrainAnswerModule[] => {
+ const request = clean(requestText).toLowerCase()
+ const asksForPlan = /\b(plan|strategy|roadmap|priorit(?:y|ies)|next steps|recommend|what should i|how can i improve|help me grow|30[- ]day|weekly|daily|action plan|steps to)\b/.test(request)
+ const asksForDiagnosis = /\b(diagnos|why (?:are|did|do|is|has|have)|what caused|what changed|root cause|drop|spike|decline|performance|revenue|rpm|ctr|retention|traffic source|analytics)\b/.test(request)
+ const isAssetRequest = response.mode === "creator_asset_draft"
+ const isDiagnosis = response.mode === "analytics_diagnosis" || response.mode === "revenue_levers" || asksForDiagnosis
+ const isStrategyIntent = asksForPlan || [
+  "strategy_brief",
+  "goal_coach",
+  "publishing_checklist",
+  "video_idea_sprint",
+  "seo_keyword_plan",
+  "journal_reflection",
+ ].includes(response.mode)
+ const isDirectFactualQuestion = /^(what|who|when|where|which|how many|how much|is|are|does|do|can|did)\b/.test(request) &&
+  !asksForPlan && !asksForDiagnosis && !isAssetRequest
+
  const modules: AIBrainAnswerModule[] = response.modules?.length ? response.modules : (response.sections || []).map((section) => ({
   id: section.id,
   title: section.title,
@@ -275,10 +292,20 @@ export const formatCreatorGrowthModules = (
    body: sanitizeCreatorFacingBrainCopy(item.body),
   }))
   .filter((item) => !/profile confidence|growth read|content opportunity|what the brain learned|best next action|seo queue/i.test(item.title))
+  .filter((item) => {
+   const title = item.title.toLowerCase()
+   if (/30-day goal path/.test(title)) return isStrategyIntent
+   if (/why this is happening/.test(title)) return isDiagnosis || isStrategyIntent
+   return true
+  })
 
- if (response.mode === "creator_asset_draft" && cleaned.length) return cleaned.slice(0, 4)
-
+ // Asset requests should return the asset itself. Factual answers should stay direct.
+ // Diagnosis keeps only supplied evidence/caveat modules; it must not inherit a plan.
+ if (isAssetRequest) return cleaned.slice(0, 4)
+ if (isDiagnosis) return cleaned.slice(0, 4)
+ if (isDirectFactualQuestion) return cleaned.slice(0, 2)
  if (cleaned.length >= 2) return cleaned.slice(0, 4)
+ if (!isStrategyIntent) return cleaned.slice(0, 4)
 
  const topPattern = firstOr(growthContext.topPerformerPatterns, firstOr(growthContext.contentPillars, growthContext.inferredNiche))
  const goal = sanitizeCreatorFacingBrainCopy(growthContext.currentGoal)
