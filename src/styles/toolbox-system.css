@@ -711,7 +711,9 @@
 [data-vt-toolbox] header .vt-studio-44-word-toggle.is-black-indicator,
 [data-vt-toolbox] header .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]),
 [data-vt-toolbox] header .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="false"]),
-[data-vt-toolbox] header .vt-studio-44-word-toggle.is-solid:has(.vt-studio-44-word-handle[data-active="true"]) {
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-solid:has(.vt-studio-44-word-handle[data-active="true"]),
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-white-indicator:has(.vt-studio-44-word-handle[data-active="true"]),
+[data-vt-toolbox] header .vt-studio-44-word-toggle.is-black-indicator:has(.vt-studio-44-word-handle[data-active="true"]) {
   background: #ffffff !important;
 }
 
