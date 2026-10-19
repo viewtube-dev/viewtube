@@ -384,7 +384,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // Quality accompanies every analytics-backed task, including algorithm/anomaly requests.
  const evidenceQuality = evidenceIntelligence?.evidenceQuality || null
  // Single evidence array for prompt, grade, and turn snapshot — do not re-derive.
- const promptEvidenceRecords = (evidenceIntelligence?.evidenceRecords || []).slice(0, 12)
+ const promptEvidenceRecords = (evidenceIntelligence?.evidenceRecords || []).slice(0, 5)
  const evidenceRecordQuality = buildBrainEvidenceRecordQuality(promptEvidenceRecords, { expectedChannelId: input.channelId })
  const statisticsIntelligence = wantsStatisticsIntelligence
   ? evidenceIntelligence?.statisticsIntelligence || null
