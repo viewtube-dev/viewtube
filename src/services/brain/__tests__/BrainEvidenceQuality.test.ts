@@ -85,7 +85,7 @@ describe("buildBrainEvidenceQuality", () => {
    coverage: { total: 2, available: 1, partial: 0, stale: 1, failed: 0, unavailable: 0, represented: 2 },
    datasets: evidenceBundle().datasets.map((dataset) =>
     dataset.id === "revenue"
-     ? { ...dataset, status: "STALE", rowCount: 1, evidenceRefs: ["snapshot-1:revenue:1"] }
+     ? { ...dataset, status: "stale", rowCount: 1, evidenceRefs: ["snapshot-1:revenue:1"] }
      : dataset),
   })
 
