@@ -24,6 +24,7 @@ describe("canonical Studio upload frame", () => {
   it("renders the responsive 16:9 composition with accessible two-line prompt and split icon rails", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame aria-label="Upload media" />);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
     expect(html).toContain('data-vt-studio-upload-frame="true"');
     expect(html).toContain('data-vt-library-component="StudioUploadFrame"');
     expect(html).toContain('data-size="standard"');
@@ -33,7 +34,7 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain("Image / video here · or click to upload");
     expect(html).toContain('data-vt-studio-upload-split="left"');
     expect(html).toContain('data-vt-studio-upload-split="right"');
-    expect(html).toContain("vt-studio-upload-frame__filename");
+    expect(controls).toContain("vt-studio-upload-frame__filename");
     expect(css).toContain("aspect-ratio: 16 / 9;");
     expect(css).toContain("--vt-studio-upload-quarter-stroke: calc(var(--vt-studio-upload-frame-stroke) / 4);");
     expect(css).toContain("border: var(--vt-studio-upload-quarter-stroke) solid");
@@ -56,7 +57,8 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('accept="image/*"');
     expect(css).toContain('.vt-studio-upload-frame[data-size="compact"]');
     expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon");
-    expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__filename");
+    expect(css).toContain(".vt-studio-upload-frame__filename {");
+    expect(css).toContain("z-index: 7;");
     expect(controls).toContain("inputRef.current?.click()");
     expect(controls).toContain("}, 1000);");
     expect(controls).toContain('clicking && "is-clicking"');
