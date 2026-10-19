@@ -8,7 +8,7 @@ import {
  selectEvidenceRecordsForPrompt,
  type EvidenceRecord,
 } from "../EvidenceRecord"
-import { buildBrainEvidenceRecordQuality } from "../BrainEvidenceQuality"
+import { buildBrainEvidenceRecordQuality, isBrainEvidenceRecordQualityInSync } from "../BrainEvidenceQuality"
 
 const bundle: CanonicalIntelligenceEvidenceBundle = {
  version: "vt-intelligence-evidence-v1",
@@ -263,6 +263,19 @@ describe("EvidenceRecord", () => {
   expect(quality.evidenceRecordIds).toEqual(records.map((record) => record.id))
   expect(reordered.evidenceFingerprint).not.toBe(quality.evidenceFingerprint)
   expect(changedValue.evidenceFingerprint).not.toBe(quality.evidenceFingerprint)
+ })
+
+ it("detects when the graded evidence report no longer matches the records sent to the prompt", () => {
+  const records = projectCanonicalEvidenceRecords(bundle)
+  const quality = buildBrainEvidenceRecordQuality(records, { expectedChannelId: "channel-1" })
+  const changedRecords = records.map((record) => ({ ...record, value: 9999 }))
+
+  expect(isBrainEvidenceRecordQualityInSync(records, quality)).toBe(true)
+  expect(isBrainEvidenceRecordQualityInSync(changedRecords, quality)).toBe(false)
+  expect(isBrainEvidenceRecordQualityInSync(records, {
+   ...quality,
+   evidenceRecordIds: ["different-record"],
+  })).toBe(false)
  })
 
 })
