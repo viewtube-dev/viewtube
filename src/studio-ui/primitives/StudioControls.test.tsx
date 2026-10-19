@@ -111,14 +111,14 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
 describe("Studio choice color variants", () => {
   it("uses the shared four-variant background and indicator color contract for radios and checkboxes", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const motion = readFileSync(resolve(process.cwd(), "src/styles/studio-control-motion.css"), "utf8")
     expect(css).toContain("background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white)")
-    expect(css).toContain(".vt-studio-44-choice.is-color-swap.is-on")
+    expect(css).toContain("button[data-vt-studio-control=\"true\"].vt-studio-44-choice.is-color-swap.is-on")
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))")
-    expect(css).toContain(".vt-studio-44-choice.is-color-swap.is-on svg")
-    expect(css).toContain("stroke: var(--vt-studio-control-accent, var(--pair-a, #36e0f6))")
-    expect(css).toContain(".vt-studio-44-choice.is-black-indicator svg")
-    expect(css).toContain(".vt-studio-44-choice.is-white-indicator svg")
-    expect(css).toContain("transition: color 270ms ease-out")
+    expect(css).toContain("--vt-studio-choice-indicator: var(--vt-studio-control-accent, var(--pair-a, #36e0f6))")
+    expect(css).toContain("button[data-vt-studio-control=\"true\"].vt-studio-44-choice.is-black-indicator")
+    expect(css).toContain("button[data-vt-studio-control=\"true\"].vt-studio-44-choice.is-white-indicator")
+    expect(motion).toContain("transition: color 270ms ease-out")
   })
 })
 
