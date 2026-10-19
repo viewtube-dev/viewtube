@@ -145,7 +145,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
 | Floating-label variants | Labels add presentation only; native field geometry, type scale, alignment, focus, and textarea behavior remain owned by the field primitive | Prevents a second field family and duplicate borders/focus rings |
-| Studio upload frame | Ratio-based media canvas: 16:10 desktop / 4:3 narrow screens, 12px outer radius, 2px inset black frame; conic perimeter and breathing layers use the active primary/secondary pair; no shadow | Upload surface is a canvas, not a fixed-height ordinary control |
+| Studio upload frame | Ratio-based media canvas: 16:10 desktop / 4:3 narrow screens, 12px outer radius, 2px inset black frame with 4px primary + 2px secondary inner strokes; center circle keeps 4px primary + 2px secondary outer rings before and after upload; pill typography uses compact 24px / Inter 1000 / -.02em; no shadow | Upload surface is a canvas, not a fixed-height ordinary control |
 
 ## 7. Global prohibitions and governance
 
