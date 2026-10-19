@@ -349,6 +349,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     servedModel: null,
     modelIdentityStatus,
     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 50),
+    evidenceRequestSpec: input.snapshot.evidencePack.requestSpec,
+    evidencePackSnapshot: input.snapshot.evidencePack,
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
