@@ -7,6 +7,7 @@ import { StudioHubCompletePrimitiveCatalog } from "./studio-hub/StudioHubComplet
 import { StudioHubPrimitiveMigrationCatalog } from "./studio-hub/StudioHubPrimitiveMigrationCatalog"
 import { StudioHubProductionButtonCatalog } from "./studio-hub/StudioHubProductionButtonCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "./studio-hub/StudioHubConfirmedPrimitiveCatalog"
+import { StudioHubConfirmedSplitTextInputCatalog } from "./studio-hub/StudioHubConfirmedSplitTextInputCatalog"
 
 const PALETTE_NAMES = [
   "Rose", "Coral", "Orange", "Yellow", "Lime", "Green",
@@ -107,7 +108,7 @@ const ComponentLibraryTrack: React.FC<ComponentLibraryTrackProps> = ({
         <div className="contents" style={activePairStyle}>
           {isHardcoded
             ? <StudioHubCompletePrimitiveCatalog paletteIndex={paletteIndex} />
-            : isConfirmed ? <StudioHubConfirmedPrimitiveCatalog />
+            : isConfirmed ? <><StudioHubConfirmedPrimitiveCatalog /><StudioHubConfirmedSplitTextInputCatalog /></>
             : <><StudioHubPrimitiveMigrationCatalog paletteIndex={paletteIndex} /><StudioHubProductionButtonCatalog paletteIndex={paletteIndex} /></>}
         </div>
       </ToolboxScaffold>
