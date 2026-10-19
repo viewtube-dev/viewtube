@@ -204,7 +204,7 @@ describe("standalone Studio text fields", () => {
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('First row')
     expect(standard).toContain('Second row')
-    expect(standard).not.toContain('contenteditable="true"')
+    expect(standard).toContain('contenteditable="false"')
     expect(compact).toContain('data-size="compact"')
     expect(micro).toContain('data-size="micro"')
   })
