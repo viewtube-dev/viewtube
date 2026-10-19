@@ -43,6 +43,7 @@ import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence, type EvidenceIntelligenceEnvelope } from "./EvidenceIntelligenceResolver"
 import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
+import { selectEvidenceRecordsForPrompt } from "./EvidenceRecord"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
@@ -402,7 +403,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // Quality accompanies every analytics-backed task, including algorithm/anomaly requests.
  const evidenceQuality = evidenceIntelligence?.evidenceQuality || null
  // Single evidence array for prompt, grade, and turn snapshot — do not re-derive.
- const promptEvidenceRecords = (evidenceIntelligence?.evidenceRecords || []).slice(0, 5)
+ const promptEvidenceRecords = selectEvidenceRecordsForPrompt(evidenceIntelligence?.evidenceRecords || [])
  const evidenceRecordQuality = buildBrainEvidenceRecordQuality(promptEvidenceRecords, { expectedChannelId: input.channelId })
  const statisticsIntelligence = wantsStatisticsIntelligence
   ? evidenceIntelligence?.statisticsIntelligence || null
