@@ -48,7 +48,7 @@ test("counter and slider readouts share default mix and black active numeral tok
 })
 
 test("generated CSS variables stay synchronized with the canonical token module", () => {
-  assert.match(generator, /readFile\\(resolve\\(root, "src\\/studio-ui\\/tokens\\.ts"\\)/)
+  assert.ok(generator.includes('readFile(resolve(root, "src/studio-ui/tokens.ts")'))
   assert.match(generator, /STUDIO_DROPDOWN_TOKENS/)
   assert.match(generator, /STUDIO_COUNTER_NUMBER_TOKENS/)
   assert.match(generated, /--vt-studio-dropdown-standard-chevron-size: 28px/)
