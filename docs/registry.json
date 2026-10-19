@@ -416,6 +416,27 @@
         "docs/domains/BRAIN.md",
         "docs/architecture/VIEWTUBE_PROJECTS_CONTENTBUILD_WORKFLOW_MASTER_RESOURCE.md"
       ]
+    },
+    {
+      "id": "DOC-PLAN-BRAIN-TOOLBOX-CHAT-REDESIGN",
+      "path": "docs/brain/AI_BRAIN_TOOLBOX_CHAT_REDESIGN_AND_IMPLEMENTATION_PLAN_2026-10-19.md",
+      "class": "ACTIVE_PLAN",
+      "status": "ACTIVE",
+      "concern": "brain-toolbox-chat-ux-and-studio-controls-integration",
+      "owner": "Brain UI + Studio Controls",
+      "productionDate": "2026-10-19",
+      "lastEdited": "2026-10-19",
+      "lastAuditedMainSha": null,
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/domains/BRAIN.md",
+        "docs/specifications/PROMPTS.md",
+        "docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md",
+        "docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md",
+        "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md",
+        "docs/migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md",
+        "docs/brain/PR241_DONOR_HARVEST_AUDIT_2026-09-24.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
