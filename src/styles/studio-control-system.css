@@ -4911,7 +4911,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 /* Upload-frame prompt badge only: compact two-line label.
    Do not apply upload-specific typography to shared double-split controls. */
 .vt-studio-upload-frame__label .vt-studio-upload-frame__badge-text {
-  font-size: .5em;
+  font-size: calc(var(--vt-studio-control-font-size, var(--vt-studio-44-font-size, 38px)) * .5);
   line-height: .9;
   white-space: normal;
   overflow-wrap: anywhere;
