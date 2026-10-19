@@ -46,6 +46,11 @@ describe("Studio radio build, orbit, and spiral motion contract", () => {
     expect(css).not.toContain("@keyframes vt-studio-radio-build")
     expect(css).not.toContain("@keyframes vt-studio-radio-orbit")
     expect(css).not.toContain("@keyframes vt-studio-radio-spiral")
+    expect(source).toContain('opacity(rings, 1)');
+    expect(source).toContain('opacity(solid, 1)');
+    expect(source).toContain('r="5.5"');
+    expect(css).toContain('color: var(--pair-b, var(--vt-studio-control-secondary, #ff7f6b))');
+    expect(css).toContain('stroke: #000');
   })
 })
 
