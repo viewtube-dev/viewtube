@@ -138,3 +138,25 @@ export function studioSizeTierToCssVars(size: keyof typeof STUDIO_CONTROL_SIZE_B
     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
   };
 }
+
+
+/** Shared interaction-focus dwell and visual contract for counters, sliders, and text fields. */
+export const STUDIO_FOCUS_INTERACTION_TOKENS = {
+  holdMs: 1500,
+  outlineFadeMs: 500,
+  restTextMixPercent: 50,
+  activeTextColor: "#000000",
+  outlineColorRole: "secondary",
+  outlineWidthRatio: 0.65,
+  outlineOffsetPx: 0,
+} as const;
+
+/** Shared counter/slider number-state contract; kept aligned with focus tokens. */
+export const STUDIO_COUNTER_NUMBER_TOKENS = {
+  defaultWhiteMixPercent: STUDIO_FOCUS_INTERACTION_TOKENS.restTextMixPercent,
+  defaultStrokeColor: "same as default fill",
+  activeTextColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
+  activeStrokeColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
+  holdMs: STUDIO_FOCUS_INTERACTION_TOKENS.holdMs,
+  outlineFadeMs: STUDIO_FOCUS_INTERACTION_TOKENS.outlineFadeMs,
+} as const;
