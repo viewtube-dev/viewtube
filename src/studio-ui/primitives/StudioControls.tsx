@@ -2631,3 +2631,56 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
 };
 StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
 
+
+
+export type StudioBrainStatusTone = "running" | "success" | "warning" | "error" | "info" | "paused" | "idle" | "queued" | "processing" | "complete" | "blocked" | "failed";
+export type StudioBrainStatusVariant = "dark" | "tinted";
+export type StudioBrainStatusSize = "standard" | "compact" | "micro";
+
+const STUDIO_BRAIN_STATUS_COLORS: Record<StudioBrainStatusTone, { led: string; tint: string; text: string }> = {
+  running: { led: "#20ff62", tint: "#d8ffe2", text: "#000" },
+  success: { led: "#168cff", tint: "#dcecff", text: "#000" },
+  warning: { led: "#ffad18", tint: "#fff0cf", text: "#000" },
+  error: { led: "#ff244f", tint: "#ffdce3", text: "#000" },
+  info: { led: "#b94dff", tint: "#f0ddff", text: "#000" },
+  paused: { led: "#00d9ee", tint: "#d6fbff", text: "#000" },
+  idle: { led: "#9ca9b8", tint: "#edf0f4", text: "#000" },
+  queued: { led: "#3478ff", tint: "#dce7ff", text: "#000" },
+  processing: { led: "#00d9ee", tint: "#d6fbff", text: "#000" },
+  complete: { led: "#20ff62", tint: "#d8ffe2", text: "#000" },
+  blocked: { led: "#ffad18", tint: "#fff0cf", text: "#000" },
+  failed: { led: "#ff244f", tint: "#ffdce3", text: "#000" },
+};
+
+/** LED + borderless badge composition for Brain/system status. Status remains readable without animation. */
+export const StudioBrainStatusIndicator: React.FC<{
+  status: StudioBrainStatusTone;
+  label: string;
+  variant?: StudioBrainStatusVariant;
+  size?: StudioBrainStatusSize;
+  pulse?: boolean;
+  className?: string;
+  title?: string;
+}> = ({ status, label, variant = "dark", size = "compact", pulse = true, className = "", title }) => {
+  const colors = STUDIO_BRAIN_STATUS_COLORS[status];
+  return (
+    <span
+      className={`vt-studio-brain-status vt-studio-brain-status--${variant} ${className}`.trim()}
+      data-vt-studio-control="brain-status"
+      data-vt-library-component="StudioBrainStatusIndicator"
+      data-status={status}
+      data-variant={variant}
+      data-size={size}
+      data-pulse={pulse ? "true" : "false"}
+      title={title || label}
+      role="status"
+    >
+      <span className="vt-studio-brain-status__led-wrap" aria-hidden="true" style={{ "--vt-brain-led": colors.led } as React.CSSProperties}>
+        <span className="vt-studio-brain-status__led" />
+        <span className="vt-studio-brain-status__lens" />
+      </span>
+      <span className="vt-studio-brain-status__label">{label}</span>
+    </span>
+  );
+};
+StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
