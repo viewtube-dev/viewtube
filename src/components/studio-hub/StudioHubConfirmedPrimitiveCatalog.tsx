@@ -4,7 +4,6 @@ import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
-  StudioIconButton,
   StudioActionButton,
   StudioRadio,
   StudioCheckbox,
@@ -49,6 +48,7 @@ const formatDefaultValue = (value: unknown): string => {
 }
 
 const CANONICAL_SKINS = [{ skin: "solid" as const, label: "SOLID" }, { skin: "color-swap" as const, label: "COLOR SWAP" }, { skin: "black-indicator" as const, label: "BLACK" }, { skin: "white-indicator" as const, label: "WHITE" }]
+const CHOICE_SKINS = CANONICAL_SKINS.filter(({ skin }) => skin === "black-indicator" || skin === "white-indicator")
 const WORD_TOGGLE_SKINS = CANONICAL_SKINS.slice(0, 3)
 const CanonicalControlFamilies: React.FC = () => {
   const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
@@ -57,7 +57,7 @@ const CanonicalControlFamilies: React.FC = () => {
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
     <Family title="44px Switches" nonDefaultSettings={[
-        "Alternate selected-indicator skins: COLOR SWAP, BLACK, and WHITE.",
+        "Alternate selected-indicator skins: BLACK and WHITE.",
         "Round and rectangular variants change track/handle geometry.",
       ]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="75.68×44px track; shared four-skin variants." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family">{(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-control-row" key={shape}><strong>{shape === "round" ? "ROUND" : "RECTANGULAR"}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div></div>)}</div>
@@ -118,7 +118,7 @@ const CanonicalControlFamilies: React.FC = () => {
         "Radio, checkmark checkbox, and wide-X checkbox remain distinct public selection-mark variants.",
         "Alternate selected-indicator skins: COLOR SWAP, BLACK, and WHITE.",
       ]} provenance={<Provenance primitive="StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px controls; checkmark and wide-X checkbox marks." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-control-family">{([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CANONICAL_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}</div>
+      <div className="vt-confirmed-control-family">{([{Component:StudioRadio,label:"CIRCULAR RADIO",shape:"round" as const},{Component:StudioCheckbox,label:"CHECKMARK CHECKBOX",shape:"rect" as const},{Component:StudioXCheckbox,label:"WIDE-X CHECKBOX",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-control-row" key={item.label}><strong>{item.label}</strong><div className="vt-confirmed-control-variants">{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><small>{skin.label}</small><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div></div> })}</div>
     </Family>
     <Family title="Word Toggles · 44px + 28px" nonDefaultSettings={[
         "Alternate active-handle skins: COLOR SWAP and BLACK.",
@@ -328,20 +328,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected sizeVariant="standard">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioButton selected sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioButton selected disabled sizeVariant="compact">button</StudioButton></div>
     </Family>
-    <Family title="Icon Button · 44px + 28px" nonDefaultSettings={[
-        "Icon-only wrapper over StudioButton; the label provides the accessible name and the icon is decorative.",
-        "Current and moderate icon presets are opt-in.",
-      ]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px; shared StudioButton interaction contract." imports={["src/studio-ui/index.ts"]} />}><div className="vt-confirmed-variant is-full-row"><span>44px standard · semantic tones</span><div className="vt-confirmed-square-variant-grid">{(["accent","neutral","danger","warning","success"] as const).map(tone => <StudioIconButton key={tone} icon={<Settings2 aria-hidden="true" />} label={tone + " action"} tone={tone} sizeVariant="standard" data-vt-library-component="StudioIconButton" />)}</div></div><div className="vt-confirmed-variant is-full-row"><span>28px compact · semantic tones</span><div className="vt-confirmed-square-variant-grid">{(["accent","neutral","danger","warning","success"] as const).map(tone => <StudioIconButton key={tone} icon={<Settings2 aria-hidden="true" />} label={tone + " compact action"} tone={tone} sizeVariant="compact" data-vt-library-component="StudioIconButton" />)}</div></div><div className="vt-confirmed-variant"><span>Selected</span><StudioIconButton icon={<Check aria-hidden="true" />} label="Selected icon action" selected sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div><div className="vt-confirmed-variant"><span>Disabled</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled icon action" disabled sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div><div className="vt-confirmed-variant"><span>Loading</span><StudioIconButton icon={<Sparkles aria-hidden="true" />} label="Loading icon action" loading sizeVariant="standard" data-vt-library-component="StudioIconButton" /></div></Family>
-    <Family title="Prominent Action · 56px" nonDefaultSettings={[
-        "Dedicated 56px action family with 20px label typography; it is not a third ordinary-button size.",
-      ]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>56px prominent workflow action</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
-    </Family>
+    
 
     <Family title="Square Icon Button · 44px + 28px" nonDefaultSettings={[
         "V1–V4 skins change fill and icon color only.",
-        "Inner-icon feedback effects are opt-in; success styling must follow a real successful operation.",
-      ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; seven opt-in inner-icon effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
+        "All icon presets and interaction effects are included; success styling must follow a real successful operation.",
+      ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; all icon presets and opt-in interaction effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row">
         <span>44px standard · variants 1–4</span>
         <div className="vt-confirmed-square-variant-grid">
@@ -381,58 +373,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
-    <Family title="Split-left" nonDefaultSettings={[
-        "Selected state swaps face and icon-rail colors.",
-        "Fixed icon rail and centered label are component-specific anatomy.",
-      ]} provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px icons explicitly enlarged; selected state swaps module-pair fills." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioSplitLeftButton icon={<Sparkles />} sizeVariant="standard" data-vt-library-component="StudioSplitLeftButton">split-left</StudioSplitLeftButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioSplitLeftButton icon={<Sparkles />} sizeVariant="compact">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioSplitLeftButton icon={<Sparkles />} tone="neutral" sizeVariant="compact">split-left</StudioSplitLeftButton></div>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected sizeVariant="standard">split-left</StudioSplitLeftButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected sizeVariant="compact">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioSplitLeftButton icon={<Settings2 />} selected disabled sizeVariant="compact">split-left</StudioSplitLeftButton></div>
-    </Family>
-    <Family
-      title="Button + Split-left · Complete Variant Matrix"
-      
-      provenance={<Provenance primitive="StudioButton / StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · 28px compact · five semantic tones · selected / disabled / loading · shared tactile press motion" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row">
-        <span>STANDARD · SEMANTIC TONES</span>
-        <div className="vt-confirmed-square-variant-grid">
-          {(["accent", "neutral", "danger", "warning", "success"] as const).map(tone => <StudioButton key={tone} sizeVariant="standard" tone={tone}>{tone}</StudioButton>)}
-        </div>
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>COMPACT · SEMANTIC TONES</span>
-        <div className="vt-confirmed-square-variant-grid">
-          {(["accent", "neutral", "danger", "warning", "success"] as const).map(tone => <StudioButton key={tone} sizeVariant="compact" tone={tone}>{tone}</StudioButton>)}
-        </div>
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>SPLIT-LEFT · FIVE TONES</span>
-        <div className="vt-confirmed-square-variant-grid">
-          {(["accent", "neutral", "danger", "warning", "success"] as const).map(tone => <StudioSplitLeftButton key={tone} icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" tone={tone}>{tone}</StudioSplitLeftButton>)}
-        </div>
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>STATE VARIANTS · SELECTED / DISABLED / LOADING</span>
-        <div className="vt-confirmed-square-variant-grid">
-          <StudioButton sizeVariant="standard" selected>selected</StudioButton>
-          <StudioButton sizeVariant="standard" disabled>disabled</StudioButton>
-          <StudioButton sizeVariant="standard" loading>loading</StudioButton>
-          <StudioSplitLeftButton icon={<Check aria-hidden="true" />} sizeVariant="standard" selected>selected</StudioSplitLeftButton>
-          <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" disabled>disabled</StudioSplitLeftButton>
-          <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" loading>loading</StudioSplitLeftButton>
-        </div>
-      </div>
-    </Family>
-    <Family
-      title="Square Icon Button · All Presets + Animations"
-      nonDefaultSettings={[
-        "Icon presets and inner-icon effects are opt-in variants.",
-        "Success is demonstration-only unless the product operation actually succeeded.",
-      ]}
-      provenance={<Provenance primitive="StudioSquareIconButton · complete preset/effect matrix" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="V1–V4 · 44×44px / 28×28px · 7 presets · all 17 effect modes · shared labels and motion" imports={["src/studio-ui/index.ts", "src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
       <div className="vt-confirmed-variant is-full-row">
         <span>CANONICAL ICON PRESETS · INTERACTIVE</span>
         <div className="vt-confirmed-square-variant-grid">
@@ -489,7 +429,18 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           <StudioSquareIconButton iconPreset="download-check" label="Compact download success" effect="download-success" variant="v3" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
         </div>
       </div>
+
+    <Family title="Split-left" nonDefaultSettings={[
+        "Selected state swaps face and icon-rail colors.",
+        "Fixed icon rail and centered label are component-specific anatomy.",
+      ]} provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px icons explicitly enlarged; selected state swaps module-pair fills." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioSplitLeftButton icon={<Sparkles />} sizeVariant="standard" data-vt-library-component="StudioSplitLeftButton">split-left</StudioSplitLeftButton></div>
+      <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioSplitLeftButton icon={<Sparkles />} sizeVariant="compact">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioSplitLeftButton icon={<Sparkles />} tone="neutral" sizeVariant="compact">split-left</StudioSplitLeftButton></div>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected sizeVariant="standard">split-left</StudioSplitLeftButton></div>
+      <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioSplitLeftButton icon={<Settings2 />} selected sizeVariant="compact">split-left</StudioSplitLeftButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioSplitLeftButton icon={<Settings2 />} selected disabled sizeVariant="compact">split-left</StudioSplitLeftButton></div>
     </Family>
+
+
     <Family
       title="Play/Pause Split-left Button · 44px + 28px"
       nonDefaultSettings={[
