@@ -1482,6 +1482,10 @@ export interface AIBrainConversationTurn {
  createdAt: string
  updatedAt?: string
  status?: AIBrainConversationTurnStatus
+ /** Immutable creator-authored text used for reasoning, evidence matching and learning. */
+ rawUserMessage?: string
+ /** Optional creator-facing display copy; presentation-only and never a reasoning input. */
+ displayUserMessage?: string
  userText: string
  assistantText: string
  response?: CreatorBrainResponse
