@@ -4274,3 +4274,80 @@ html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-s
   border-top-left-radius: var(--vt-studio-control-radius, 6px);
   border-top-right-radius: var(--vt-studio-control-radius, 6px);
 }
+
+/* Four canonical state-fill / indicator-shape variants shared by switches,
+   word toggles, radios, checkmark boxes, and X boxes.
+   V1: 50% primary -> primary; secondary indicator.
+   V2: primary -> secondary; secondary -> primary indicator.
+   V3: 50% primary -> primary; white indicator.
+   V4: 50% primary -> primary; black indicator. */
+html body .vt-studio-44-switch,
+html body .vt-studio-44-choice {
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+}
+html body .vt-studio-44-switch.is-solid.is-on,
+html body .vt-studio-44-choice.is-solid.is-on,
+html body .vt-studio-44-switch.is-black-indicator.is-on,
+html body .vt-studio-44-choice.is-black-indicator.is-on,
+html body .vt-studio-44-switch.is-white-indicator.is-on,
+html body .vt-studio-44-choice.is-white-indicator.is-on {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-switch.is-color-swap,
+html body .vt-studio-44-choice.is-color-swap {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-switch.is-color-swap.is-on,
+html body .vt-studio-44-choice.is-color-swap.is-on {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-44-switch.is-solid .vt-studio-44-handle,
+html body .vt-studio-44-choice.is-solid .vt-studio-44-dot,
+html body .vt-studio-44-switch.is-color-swap .vt-studio-44-handle,
+html body .vt-studio-44-choice.is-color-swap .vt-studio-44-dot {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,
+html body .vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,
+html body .vt-studio-44-choice.is-white-indicator .vt-studio-44-dot {
+  background: #fff !important;
+}
+html body .vt-studio-44-switch.is-black-indicator .vt-studio-44-handle,
+html body .vt-studio-44-choice.is-black-indicator .vt-studio-44-dot {
+  background: #000 !important;
+}
+
+/* Word toggles use the same four fills. data-active is on the moving handle,
+   while aria-pressed identifies the active word. */
+html body .vt-studio-44-word-toggle {
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+}
+html body .vt-studio-44-word-toggle.is-solid,
+html body .vt-studio-44-word-toggle.is-black-indicator,
+html body .vt-studio-44-word-toggle.is-white-indicator {
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+}
+html body .vt-studio-44-word-toggle.is-solid:has(.vt-studio-44-word-handle[data-active="true"]),
+html body .vt-studio-44-word-toggle.is-black-indicator:has(.vt-studio-44-word-handle[data-active="true"]),
+html body .vt-studio-44-word-toggle.is-white-indicator:has(.vt-studio-44-word-handle[data-active="true"]) {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-word-toggle.is-color-swap {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]) {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-44-word-toggle.is-solid .vt-studio-44-word-handle,
+html body .vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]) .vt-studio-44-word-handle {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+html body .vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle { background: #fff !important; }
+html body .vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle { background: #000 !important; }
+
