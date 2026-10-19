@@ -111,7 +111,7 @@ describe("BrainOrchestrator", () => {
     status: "fallback",
     outputRef: result.response.id,
     modelServed: null,
-    modelIdentityStatus: "generator_identity_unavailable",
+    modelIdentityStatus: "model_disabled",
    })
    expect(trace?.evidence.returned).toEqual(result.response.evidenceIds)
    expect(trace?.evidence.records).toBeDefined()
