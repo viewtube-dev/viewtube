@@ -1,12 +1,13 @@
 /* Floating labels are shared by density, independently of entered-text type.
- * Standard midpoint: (38 + 18) / 2 = 28px; raised at 80% = 22.4px.
- * Compact midpoint: (24 + 14) / 2 = 19px; raised at 80% = 15.2px. */
+ * One shared label height per tier for inputs and textareas:
+ * Standard: prior shared 28px + 4px = 32px; raised at 80% = 25.6px.
+ * Compact: prior shared 19px + 2px = 21px; raised at 80% = 16.8px.
+ * The raised label sits 48% above the outer black border (40% × 1.2 ratio). */
 html body .vt-studio-floating-field {
-  --vt-studio-floating-label-size: 28px;
-  --vt-studio-floating-label-size-compact: 19px;
+  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height, 32px);
 }
 html body .vt-studio-floating-field[data-size="compact"] {
-  --vt-studio-floating-label-size: var(--vt-studio-floating-label-size-compact);
+  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height, 21px);
 }
 html body .vt-studio-floating-field > .vt-studio-floating-field-label {
   font-size: var(--vt-studio-floating-label-size);

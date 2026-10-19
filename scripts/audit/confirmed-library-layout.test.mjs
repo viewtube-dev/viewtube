@@ -64,14 +64,16 @@ test("global defaults distinguish the secondary focus outline from field text st
   assert.doesNotMatch(controls, /computed CSS outline itself measured 1px/);
 });
 
-test("floating labels use balanced box spacing, 40% border alignment, and 80% floated typography", () => {
+test("floating labels use balanced box spacing, 48% border alignment, and 80% floated typography", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-44-font-size,\s*38px\)/);
-  assert.match(fieldCss, /--vt-studio-floating-label-size-compact:\s*var\(--vt-studio-28-font-size,\s*24px\)/);
+  assert.match(fieldCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-standard-height,\s*32px\)/);
+  assert.match(fieldCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-compact-height,\s*21px\)/);
+  assert.match(fieldCss, /--vt-studio-control-floating-label-offset-ratio:\s*var\(--vt-studio-floating-label-offset-ratio,\s*1\.2\)/);
+  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-control-floating-label-height\)/);
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
-  assert.match(fieldCss, /translateY\(-40%\)/);
+  assert.match(fieldCss, /translateY\(calc\(-40% \* var\(--vt-studio-control-floating-label-offset-ratio, 1\.2\)\)\)/);
   assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
-  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-floating-label-size-compact\)/);
+  assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size/s);
   assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field-label\s*\{[^}]*transition:/s);
   assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);

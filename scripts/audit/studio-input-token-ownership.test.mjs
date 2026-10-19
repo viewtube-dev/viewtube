@@ -43,6 +43,20 @@ test("plain Studio input geometry consumes the generated size tokens", () => {
   assert.match(inputCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\)/);
 });
 
+test("floating-label metrics are generated from the size-ladder tokens and consumed by the shared field rules", () => {
+  for (const token of [
+    "--vt-studio-floating-label-standard-height: 32px",
+    "--vt-studio-floating-label-compact-height: 21px",
+    "--vt-studio-floating-label-offset-ratio: 1.2",
+  ]) assert.ok(generatedVars.includes(token), `missing generated floating-label token: ${token}`);
+  const systemCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-standard-height,\s*32px\)/);
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-compact-height,\s*21px\)/);
+  assert.match(systemCss, /--vt-studio-control-floating-label-offset-ratio:\s*var\(--vt-studio-floating-label-offset-ratio,\s*1\.2\)/);
+  // Inputs and textareas share the metric: no textarea-specific label-size override remains.
+  assert.doesNotMatch(systemCss, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size/s);
+});
+
 test("plain Studio input retains the explicit standard, compact, and micro size hooks", () => {
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="standard"\]/);
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="compact"\]/);

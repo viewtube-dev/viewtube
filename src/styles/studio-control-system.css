@@ -310,11 +310,20 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   [data-vt-studio-control] {  }
 }
 
-/* Shared floating-label fields. The resting label matches the field's normal
-   text size; when raised, it eases to 80% and sits 40% above the field border. */
+/* Shared floating-label fields. The resting label height is the registered
+   shared label metric (not the field's native text size); when raised, it
+   eases to 80% of that metric and sits 48% above the field border (the prior
+   40% offset × the 1.2 floating-label offset ratio). */
 .vt-studio-floating-field {
-  --vt-studio-floating-label-size: var(--vt-studio-44-font-size, 38px);
-  --vt-studio-floating-label-size-compact: var(--vt-studio-28-font-size, 24px);
+  /* Shared floating-label metrics for StudioTextInput and StudioTextArea — no
+     separate input vs textarea values. Sourced from the generated size-tier
+     tokens (tokens.ts SIZE_BASE → emit-studio-control-vars.mjs): standard
+     32px (prior shared 28px + 4px), compact 21px (prior 19px + 2px), offset
+     ratio 1.2 (the raised label sits 20% higher above the outer black border).
+     The label height is its font size (line-height: 1). */
+  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-standard-height, 32px);
+  --vt-studio-control-floating-label-offset-ratio: var(--vt-studio-floating-label-offset-ratio, 1.2);
+  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
   --vt-studio-control-focus-outline-width: 1.95px;
   position: relative;
   display: block;
@@ -323,14 +332,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   isolation: isolate;
 }
 .vt-studio-floating-field[data-size="compact"] {
-  --vt-studio-floating-label-size: var(--vt-studio-floating-label-size-compact);
+  --vt-studio-control-floating-label-height: var(--vt-studio-floating-label-compact-height, 21px);
+  --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
   --vt-studio-control-focus-outline-width: 1.3px;
-}
-.vt-studio-floating-field.is-textarea {
-  --vt-studio-floating-label-size: var(--vt-studio-textarea-standard-font-size, 18px);
-}
-.vt-studio-floating-field.is-textarea[data-size="compact"] {
-  --vt-studio-floating-label-size: var(--vt-studio-textarea-compact-font-size, 14px);
 }
 .vt-studio-floating-field > [data-vt-studio-control="true"] {
   display: block;
@@ -374,12 +378,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   color: #000;
   font-size: calc(var(--vt-studio-floating-label-size) * .8);
   -webkit-text-stroke: .5px currentColor;
-  transform: translateY(-40%);
+  transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)));
   transform-origin: left center;
 }
 /* Raised input labels stay coupled to the input typography scale.
-   Standard: 38px input × 80% = 30.4px label. Compact: 24px × 80% = 19.2px.
-   Textarea label sizing is isolated to .is-textarea above and never leaks into inputs. */
+   Standard: 32px label × 80% = 25.6px. Compact: 21px × 80% = 16.8px.
+   Inputs and textareas share the same label height and raised offset. */
 .vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   font-size: calc(var(--vt-studio-floating-label-size) * .8);
@@ -387,7 +391,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   top: 0;
-  transform: translateY(-40%);
+  transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)));
   transform-origin: left center;
 }
 .vt-studio-floating-field > :is(input, textarea):focus-visible + .vt-studio-floating-field-label {
@@ -1367,7 +1371,7 @@ button[data-vt-studio-icon-button="true"][data-icon-variant="v4"] [data-vt-studi
 
 /* Sole split-left geometry contract: rail equals control height and divider uses the shared stroke token. */
 button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%; padding:0; border:0; outline:0; background:transparent; overflow:visible; }
-button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] { display:grid; box-sizing:border-box; grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr); align-items:stretch; justify-content:stretch; padding:0; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); overflow:hidden; text-align:left; }
+button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] { display:grid; box-sizing:border-box; grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr); align-items:stretch; justify-content:stretch; gap:0; padding:0; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); overflow:hidden; text-align:left; }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] { box-sizing:border-box; display:grid; place-items:center; align-self:stretch; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); height:100%; border-right:var(--vt-studio-control-stroke) solid #000; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] > svg { display:block; width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); min-width:var(--vt-studio-control-icon-size,28px); min-height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] { height:100%; padding-inline:10px; color:#000; }

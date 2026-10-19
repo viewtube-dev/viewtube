@@ -4,7 +4,9 @@
   box-shadow: none;
   transition-property: color, background-color, border-color, outline-color;
   transition-duration: 0ms;
-  gap: var(--vt-studio-control-gap, 4px);
+  /* No internal gap: split shells are flush (rails and faces touch) and the
+     4px spacing unit is reserved for external gaps between whole controls. */
+  gap: 0;
 }
 [data-vt-studio-control="true"]:hover,
 [data-vt-studio-control="true"]:active {
