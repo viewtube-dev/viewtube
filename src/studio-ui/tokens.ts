@@ -15,7 +15,7 @@ export const STUDIO_COUNTER_NUMBER_TOKENS = {
   defaultWhiteMixPercent: 50,
   defaultStrokeColor: "same as default fill",
   activeTextColor: "#000",
-  activeStrokeColor: "#000000",
+  activeStrokeColor: "#000",
 } as const
 
 /** Studio control geometry is independent from Toolbox/SubToolbox structural levels. */
