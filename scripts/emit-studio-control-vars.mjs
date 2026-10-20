@@ -37,7 +37,7 @@ const multilineTokens = {
   standardTextStroke: readSizeValue(multilineContract, "standardTextStroke"),
   compactTextStroke: readSizeValue(multilineContract, "compactTextStroke"),
   microTextStroke: readSizeValue(multilineContract, "microTextStroke"),
-  fontWeight: readSizeValue(multilineContract, "fontWeight"),
+  fontWeight: sizeTiers.standard.fontWeight,
   minHeight: readSizeValue(multilineContract, "minHeight"),
   lineHeight: readSizeValue(multilineContract, "lineHeight"),
 };
