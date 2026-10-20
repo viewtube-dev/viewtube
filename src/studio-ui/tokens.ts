@@ -74,7 +74,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     globalRuleException: true,
   },
   /** Multiline surface shares the input typography/focus token ladder; only description line-height is specialized. */
-  multiline: { supremeFontSize: 18 * 60 / 44, standardFontSize: 18, compactFontSize: 14, microFontSize: 10, minHeight: 92, lineHeight: 0.75, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas inherit the same size-tier font size, text stroke, color, fill, caret, and focus outline tokens as text inputs; editable description rows alone use line-height 0.75." },
+  multiline: { supremeFontSize: 18 * 60 / 44, standardFontSize: 18, compactFontSize: 14, microFontSize: 10, fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight, minHeight: 92, lineHeight: 0.75, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas inherit the same size-tier font size, text stroke, color, fill, caret, and focus outline tokens as text inputs; editable description rows alone use line-height 0.75." },
 } as const
 
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
