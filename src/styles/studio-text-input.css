@@ -24,6 +24,13 @@ input.vt-studio-text-input {
   appearance: none;
 }
 
+input.vt-studio-text-input[data-size="supreme"] {
+  height: var(--vt-studio-supreme-height, 60px);
+  border-width: var(--vt-studio-supreme-stroke, 4.09px);
+  border-radius: var(--vt-studio-supreme-radius, 8.18px);
+  font-size: var(--vt-studio-supreme-font-size, 51.82px);
+}
+
 input.vt-studio-text-input,
 input.vt-studio-text-input[data-size="standard"] {
   height: var(--vt-studio-standard-height, 44px);
