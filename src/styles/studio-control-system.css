@@ -2644,7 +2644,7 @@ not button faces.
 
 /* Global Studio spacing and micro-size contract.
    Spacing is a 4px unit on all four sides; layouts may use explicit multiples.
-   Micro controls are 14px high with proportional 1px stroke / 2px radius / 10px icon and type. */
+   Micro controls are explicitly 12px high with 1px stroke / 2px radius / 10px icon and type. */
 [data-vt-studio-control] {
   --vt-studio-space-unit: 4px;
   --vt-studio-space-top: var(--vt-studio-space-unit);
@@ -2657,7 +2657,7 @@ not button faces.
   --vt-studio-control-stroke: 1px;
   --vt-studio-control-radius: 2px;
   --vt-studio-control-font-size: 10px;
-  --vt-studio-control-font-weight: 900;
+  --vt-studio-control-font-weight: 1000;
   --vt-studio-control-letter-spacing: -.01em;
   --vt-studio-control-line-height: 1;
   --vt-studio-control-icon-size: 10px;
