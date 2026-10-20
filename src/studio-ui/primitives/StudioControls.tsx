@@ -215,7 +215,7 @@ export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
 
 export { StudioTextArea }
-export type { StudioTextAreaProps } from "./StudioTextArea"
+export type { StudioTextAreaProps, StudioTextAreaSize } from "./StudioTextArea"
 
 /** Read-only display surface that inherits the canonical textarea size tokens. */
 export type StudioTextBoxSize = StudioControlSize
