@@ -1,7 +1,7 @@
 # Studio Controls — Definitive Global Defaults, Size Contract & Primitive Exceptions
 
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
-**Reviewed:** 2026-10-17  
+**Reviewed:** 2026-10-20  
 **Repository:** `viewtube-dev/viewtube`  
 **Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-Micro is already represented by the existing token ladder and is reserved for the informational split-left badge. It must not be introduced as a general interactive-button size. Do not add a second token generator or duplicate generated stylesheet when the current source already owns the contract.
+The canonical ladder is Supreme (60px), Standard (44px), Compact (28px), and Micro (12px). Supreme is available to supported single-height controls, including buttons, split controls, fields, dropdowns, and action buttons. Micro is family-aware: expose it only on production families whose 12px geometry is supported (including informational split badges and the existing micro-capable fields); do not assume every interactive family can fit it. The canonical TypeScript tokens and `scripts/emit-studio-control-vars.mjs` remain the only sizing authority.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -51,25 +51,25 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The size tier determines height, border stroke, radius, typography, icon size, and icon stroke. Do not independently override one of these properties without a registered exception.
+The size tier determines height, border stroke, radius, typography, icon size, and icon stroke across Supreme (60px), Standard (44px), Compact (28px), and Micro (12px), subject to registered family-specific exceptions. Do not independently override one of these properties without a registered exception.
 
-| Property | Standard | Compact | Micro |
-|---|---:|---:|---:|
-| Control height | 44px | 28px | 14px |
-| Border/stroke width | 3px | 2px | 1px |
-| Corner radius | 6px | 4px | 2px |
-| Text size | 38px | 24px | 10px |
-| Text weight | 1000 | 1000 | 1000 |
-| Text stroke | 1px | 0.5px | 0.25px |
-| Icon size | 38px | 24px | 10px |
-| Default icon stroke | 1.9px | 2px | 1.5px |
-| Secondary focus-outline width (when applicable) | 1.95px | 1.3px | 0.65px |
-| Standard gap token | 4px (external layout only — grids/rows between whole controls; never an internal shell gap) | 4px | 4px |
-| Floating-label height (shared by text inputs and text areas) | 32px (prior 28px + 4px) | 21px (prior 19px + 2px) | Not registered — no micro floating-label fields exist; the micro tier mechanically copies the compact values without halving |
-| Floating-label raised-offset ratio | 1.2 (raised label sits 20% higher above the outer black border) | 1.2 | Not registered — same as compact by copy |
-| Text transform | Uppercase | Uppercase | Uppercase |
-| Letter spacing | -0.02em | -0.02em | -0.01em |
-| Line height | 0.86 | 0.86 | 1.0 |
+| Property | Supreme | Standard | Compact | Micro |
+|---|---:|---:|---:|---:|
+| Control height | 60px | 44px | 28px | 12px |
+| Border/stroke width | 4.09px | 3px | 2px | 1px |
+| Corner radius | 8.18px | 6px | 4px | 2px |
+| Text size | 51.82px | 38px | 24px | 10px |
+| Text weight | 1000 | 1000 | 1000 | 1000 |
+| Text stroke | 1.36px | 1px | 0.5px | 0.25px |
+| Icon size | 51.82px | 38px | 24px | 10px |
+| Default icon stroke | 2.59px | 1.9px | 2px | 1.5px |
+| Secondary focus-outline width (when applicable) | 2.66px | 1.95px | 1.3px | 0.65px |
+| Standard gap token | 4px external only | 4px | 4px | 4px |
+| Floating-label height | 51.82px where supported | 38px | 24px | 10px where supported |
+| Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 |
+| Text transform | Uppercase | Uppercase | Uppercase | Uppercase |
+| Letter spacing | -0.02em | -0.02em | -0.02em | -0.01em |
+| Line height | 0.86 | 0.86 | 0.86 | 1.0 |
 
 **Color/ratio invariant:** A size change scales geometry and typography; it must not silently change primary/secondary color ownership, text weight, label centering, split-rail color, or row-fill behavior.
 
@@ -152,10 +152,10 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Exception | Exact exception | Why it exists |
 |---|---|---|
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
-| Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/14px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
+| Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/12px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
 | Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 1.25 / 1.3, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
-| Prominent action button | Separate 56px action family, 3px stroke, 6px radius, no shadow | Workflow emphasis is not a third size tier of ordinary 44px/28px controls |
+| Prominent action button | Supreme 60px by default; standard/compact variants use shared tier tokens; flat shell, no shadow | Workflow emphasis is a component role, not a separate 56px geometry tier |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
 | Floating-label variants | Labels add presentation only; native field geometry, type scale, alignment, focus, and textarea behavior remain owned by the field primitive | Prevents a second field family and duplicate borders/focus rings |
@@ -165,7 +165,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 
 1. No undocumented pill-ratio badge styling.
 2. No thin inherited badge font; use Inter weight 1000 for global badges and their labels. The Vault Spectrum Tag is the explicitly registered weight-900 exception.
-3. No hard-coded 48px control size. The canonical ordinary lattice is 44px / 28px, plus the explicitly defined 14px micro tier.
+3. No hard-coded intermediate control sizes. The canonical lattice is Supreme 60px / Standard 44px / Compact 28px / Micro 12px; documented content-driven and family-specific exceptions remain explicit.
 4. No asymmetric split rails, off-center icons, label misalignment, or duplicated split borders.
 5. No internal gap on any control shell: split rails and faces are flush (no white seam), and the 4px spacing unit is for external grids/rows between whole controls only.
 6. No fixed-width ordinary buttons/fields where row-fill is required; intrinsic width is reserved for content primitives.
@@ -201,8 +201,8 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Standard / compact / micro face geometry: 44px / 28px / 14px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
-- Inter-component gap remains 4px for all tiers; micro is half the compact geometry.
+- Supreme / standard / compact / micro face geometry: 60px / 44px / 28px / 12px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
+- Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
 - Text-field focus uses a secondary outline at 65% of border width and zero offset.
@@ -217,13 +217,13 @@ The split-left button, split-left/right/double badges, and username composite in
 - `src/styles/studio-control-fields.css`: inline field stroke and focus contract.
 - `src/studio-ui/primitives/studio-control-contract.test.ts`: focused invariants for size tiers, double rails, focus treatment and exception registration.
 
-Visual verification is still required in the running app for standard/compact/micro split badges, username input, and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
+Visual verification is still required in the running app for supreme/standard/compact/micro split badges, username input, and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
 
 
 ## Vertical Studio word toggle — registered height exception
 
 - Canonical primitive: `StudioVerticalWordToggle` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; live specimens: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`.
-- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and micro remains 10px / 1px / 2px. The resulting overall height is not forced to 44px / 28px / 14px.
+- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and micro remains 10px / 1px / 2px. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
 - Four variants: primary/secondary pair; black fill with the inactive word colored to match the handle color at the start of the last transition and the active word black on the colored handle; primary fill/border with secondary text and a white handle; white fill/border with a black handle and inverse text.
 - Word colors change quickly at the beginning of the handle animation; the handle expands vertically, releases to the other word, and uses a vertical color wipe on alternating transitions. Reduced-motion settles immediately.
 - Catalog layout: standard two per row; compact three per row; a 2×2 micro matrix occupies the remaining two cells at the end of compact row two. Every specimen has independent state.
@@ -234,7 +234,7 @@ Visual verification is still required in the running app for standard/compact/mi
 - Canonical primitive: `StudioBrainStatusBadge` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; Component Library specimens: `Brain Status LED Badges` in `StudioHubCompletePrimitiveCatalog.tsx`.
 - Anatomy: borderless pill badge with white uppercase text on black, or black uppercase text on a lighter tint matching the saturated LED color. A smaller LED sits to the left of the label; the LED core does not change the badge's layout size.
 - Tones: green, cyan, purple, yellow, red, and blue. Variants include dark-fill/saturated-LED and light-tinted-fill/black-text.
-- Density variants: standard (24px badge surface, 10px LED), compact (20px surface, 8px LED), and micro (14px surface, 6px LED). These are status badges, not ordinary 44px/28px input/button geometry.
+- Density variants: standard (24px badge surface, 10px LED), compact (20px surface, 8px LED), and micro (12px surface, 5px LED). These are status badges, not ordinary 44px/28px input/button geometry.
 - Active LED ripple follows the library's eight-second cycle: saturated ring starts at the LED core, expands to five times its size over three seconds and fades. Reduced-motion disables the ripple. Inactive state dims the core and removes the ripple.
 - Status labels are descriptive, not actions. Consumers must pass the real status and must not show “ready”, “synced” or “complete” unless the owning workflow reports that state.
 

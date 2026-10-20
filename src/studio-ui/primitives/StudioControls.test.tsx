@@ -3,9 +3,10 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
+import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -501,7 +502,7 @@ describe("Studio text-field module ownership and typography", () => {
     expect(inputCss).toContain("font-size: 10px;")
     expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-standard-height, 44px)")
     expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-compact-height, 28px)")
-    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 14px)")
+    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 12px)")
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
     expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
@@ -974,7 +975,7 @@ describe("StudioVerticalWordToggle", () => {
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={true} sizeVariant="compact" />)).toContain('data-size="compact"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={false} sizeVariant="micro" />)).toContain('data-size="micro"');
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.globalRuleException).toBe(true);
-    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 14px");
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 12px");
   });
 });
 
@@ -996,3 +997,45 @@ describe("Studio counter hold-repeat acceleration", () => {
   });
 });
 
+
+
+describe("Supreme and Micro production size contract", () => {
+  it("defines the four canonical tiers with exact 60/44/28/12px heights", () => {
+    const expected: Record<StudioControlSize, number> = {
+      supreme: 60,
+      standard: 44,
+      compact: 28,
+      micro: 12,
+    }
+    for (const [size, height] of Object.entries(expected) as [StudioControlSize, number][]) {
+      expect(STUDIO_CONTROL_SIZE_BASE[size].height).toBe(height)
+      expect(studioSizeTierToCssVars(size)["--vt-studio-control-height"]).toBe(`${height}px`)
+    }
+  })
+
+  it("renders Supreme buttons and Micro split badges using production size APIs", () => {
+    const supreme = renderToStaticMarkup(<StudioButton sizeVariant="supreme">SUPREME</StudioButton>)
+    const action = renderToStaticMarkup(<StudioActionButton>CONTINUE</StudioActionButton>)
+    const textBox = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme display">SUPREME</StudioTextBox>)
+    const dropdown = renderToStaticMarkup(<StudioDropdown sizeVariant="supreme" options={[{ value: "a", label: "Alpha" }]} />)
+    const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro" icon={<span>+</span>}>MICRO</StudioSplitLeftBadge>)
+    expect(supreme).toContain('data-size="supreme"')
+    expect(supreme).toContain('data-height-variant="60"')
+    expect(action).toContain('data-size="supreme"')
+    expect(textBox).toContain('data-size="supreme"')
+    expect(dropdown).toContain('data-size="supreme"')
+    expect(micro).toContain('data-size="micro"')
+  })
+
+  it("keeps generated CSS and global styles aligned to the canonical 60px and 12px tiers", () => {
+    const generated = readFileSync(resolve(process.cwd(), "src/styles/studio-control-vars.generated.css"), "utf8")
+    const system = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(generated).toContain("--vt-studio-supreme-height: 60px;")
+    expect(generated).toContain("--vt-studio-micro-height: 12px;")
+    expect(system).toContain('--vt-studio-control-height: var(--vt-studio-supreme-height, 60px)')
+    expect(system).toContain('--vt-studio-control-height: var(--vt-studio-micro-height, 12px)')
+    expect(system).toContain('button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face]')
+    expect(system).toContain('.vt-studio-double-split-badge[data-size="supreme"]')
+    expect(system).not.toContain("--vt-studio-14-height")
+  })
+})

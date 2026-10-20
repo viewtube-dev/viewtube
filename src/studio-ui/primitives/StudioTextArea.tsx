@@ -7,8 +7,10 @@ const withStudioAttrs = (size: StudioControlSize) => ({
   "data-size": size,
 })
 
+export type StudioTextAreaSize = Exclude<StudioControlSize, "micro">
+
 type StudioTextAreaBaseProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioTextAreaSize
 }
 
 type StudioTextAreaSimpleProps = StudioTextAreaBaseProps & {
@@ -24,7 +26,7 @@ type StudioTextAreaFloatingLabelProps = Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
   "className" | "style"
 > & {
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioTextAreaSize
   /** Render the canonical writing surface with the shared floating-label treatment. */
   variant: "floating-label"
   label: string
@@ -43,7 +45,7 @@ type StudioTextAreaFixedLabelProps = Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
   "className" | "style"
 > & {
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioTextAreaSize
   /** Permanent top-left label box matching StudioLegendMultiDropdown. */
   variant: "fixed-label"
   label: string
@@ -61,7 +63,7 @@ export type StudioTextAreaProps = StudioTextAreaSimpleProps | StudioTextAreaFloa
 /**
  * Canonical multiline Studio writing-surface family.
  * Simple and floating-label presentations are variants of this one primitive.
- * Textarea typography alone is 18px standard / 14px compact; the 92px minimum
+ * Textarea sizes exclude the 12px Micro tier because this family has a 92px minimum. Typography alone is 18px standard / 14px compact; the 92px minimum
  * writing surface, multiline padding, and vertical resize remain shared by variants.
  */
 export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAreaProps>(
