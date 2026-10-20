@@ -2983,3 +2983,57 @@
 .vt-catalog-brain-status-badges.is-l2 { gap: 6px; }
 .vt-catalog-brain-status-badges.is-l2 .vt-catalog-brain-status-badges__group { gap: 4px; }
 
+
+
+/* Confirmed Primitive Library 4px grid contract */
+.vt-confirmed-catalog {
+  --vt-confirmed-grid-unit: 4px;
+  display: grid;
+  gap: calc(var(--vt-confirmed-grid-unit) * 3);
+  min-width: 0;
+}
+.vt-confirmed-family {
+  gap: calc(var(--vt-confirmed-grid-unit) * 2);
+  min-width: 0;
+}
+.vt-confirmed-variants {
+  gap: calc(var(--vt-confirmed-grid-unit) * 2);
+  min-width: 0;
+}
+.vt-confirmed-variant {
+  gap: var(--vt-confirmed-grid-unit);
+  min-width: 0;
+}
+.vt-confirmed-composite-grid,
+.vt-confirmed-username-grid,
+.vt-confirmed-stepper-row-grid {
+  gap: calc(var(--vt-confirmed-grid-unit) * 2);
+  min-width: 0;
+}
+.vt-confirmed-square-variant-grid,
+.vt-confirmed-square-effect-grid {
+  gap: calc(var(--vt-confirmed-grid-unit) * 2);
+  min-width: 0;
+}
+.vt-confirmed-spectrum-tag-grid {
+  gap: var(--vt-confirmed-grid-unit);
+  min-width: 0;
+}
+.vt-confirmed-vertical-word-toggle-family,
+.vt-confirmed-vertical-word-toggle-standard,
+.vt-confirmed-vertical-word-toggle-compact,
+.vt-confirmed-vertical-word-toggle-micro {
+  gap: calc(var(--vt-confirmed-grid-unit) * 2);
+}
+@media (max-width: 560px) {
+  .vt-confirmed-catalog { gap: calc(var(--vt-confirmed-grid-unit) * 2); }
+  .vt-confirmed-family { gap: calc(var(--vt-confirmed-grid-unit) * 2); }
+  .vt-confirmed-variants { gap: calc(var(--vt-confirmed-grid-unit) * 2); min-width: 0; }
+  .vt-confirmed-variant { gap: var(--vt-confirmed-grid-unit); min-width: 0; }
+  .vt-confirmed-composite-grid,
+  .vt-confirmed-username-grid,
+  .vt-confirmed-stepper-row-grid,
+  .vt-confirmed-square-variant-grid,
+  .vt-confirmed-square-effect-grid { gap: calc(var(--vt-confirmed-grid-unit) * 2); }
+  .vt-confirmed-spectrum-tag-grid { gap: var(--vt-confirmed-grid-unit); }
+}
