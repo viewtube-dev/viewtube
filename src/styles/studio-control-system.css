@@ -630,7 +630,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
-  --vt-studio-14-height: var(--vt-studio-micro-height, 12px); --vt-studio-14-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-14-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-14-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-14-font-weight: 1000; --vt-studio-14-icon-size: 10px; --vt-studio-14-icon-stroke: 1.5;
+  --vt-studio-micro-height: var(--vt-studio-micro-height, 12px); --vt-studio-micro-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-micro-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-micro-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-micro-font-weight: 1000; --vt-studio-micro-icon-size: 10px; --vt-studio-micro-icon-stroke: 1.5;
    
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
@@ -5013,7 +5013,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 .vt-studio-brain-status-badge[data-appearance="tinted"] { background: var(--vt-brain-led-tint); color: #000; }
 .vt-studio-brain-status-badge[data-size="standard"] { min-height: 24px; gap: 8px; padding: 5px 11px 5px 8px; font-size: 12px; }
 .vt-studio-brain-status-badge[data-size="compact"] { min-height: 20px; gap: 6px; padding: 4px 8px 4px 6px; font-size: 10px; }
-.vt-studio-brain-status-badge[data-size="micro"] { min-height: 14px; gap: 4px; padding: 2px 5px 2px 4px; font-size: 8px; letter-spacing: -.01em; }
+.vt-studio-brain-status-badge[data-size="micro"] { min-height: 12px; gap: 4px; padding: 2px 5px 2px 4px; font-size: 8px; letter-spacing: -.01em; }
 .vt-studio-brain-status-badge__led {
   position: relative;
   display: inline-grid;
@@ -5092,7 +5092,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 .vt-studio-brain-status[data-size="standard"] { --vt-brain-status-height: 44px; --vt-brain-led-size: 18px; --vt-brain-status-gap: 9px; padding-inline: 12px; font-size: 16px; }
 .vt-studio-brain-status[data-size="compact"] { --vt-brain-status-height: 28px; --vt-brain-led-size: 12px; --vt-brain-status-gap: 7px; padding-inline: 9px; font-size: 11px; }
-.vt-studio-brain-status[data-size="micro"] { --vt-brain-status-height: 14px; --vt-brain-led-size: 7px; --vt-brain-status-gap: 4px; padding-inline: 4px; font-size: 7px; border-radius: 2px; }
+.vt-studio-brain-status[data-size="micro"] { --vt-brain-status-height: 12px; --vt-brain-led-size: 7px; --vt-brain-status-gap: 4px; padding-inline: 4px; font-size: 7px; border-radius: 2px; }
 .vt-studio-brain-status--tinted { color: #000; background: var(--vt-brain-status-tint, #edf0f4); }
 .vt-studio-brain-status[data-status="running"], .vt-studio-brain-status[data-status="complete"] { --vt-brain-status-led: #20ff62; --vt-brain-status-tint: #d8ffe2; }
 .vt-studio-brain-status[data-status="success"], .vt-studio-brain-status[data-status="queued"] { --vt-brain-status-led: #168cff; --vt-brain-status-tint: #dcecff; }
