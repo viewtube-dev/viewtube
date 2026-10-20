@@ -10,12 +10,16 @@ describe("Studio Hub complete primitive catalog", () => {
 
   it("contains the post-V21 additions instead of leaving them in side sections", () => {
     expect(STUDIO_HUB_COMPONENT_FAMILIES).toEqual(expect.arrayContaining([
-      "Horizontal Scrollbar", "Vertical Scrollbar", "Data Stats Module", "Two-line Studio Button",
+      "Horizontal Scrollbar", "Vertical Scrollbar", "Data Stats Module",
       "Disabled Button", "Disabled Split Button", "Upload Frame", "Pagination",
       "Vault Landscape Asset", "Vault Portrait Asset", "Vault Audio Asset",
       "Vault Document Asset", "Knob Dial", "Controller Switch", "LED Light",
       "Alphabetical Spectrum Tags", "Icon Rail Control",
     ]))
+  })
+
+  it("keeps the two-line button variant out of the legacy comparison registry", () => {
+    expect(STUDIO_HUB_COMPONENT_FAMILIES).not.toContain("Two-line Studio Button")
   })
 
   it("removes the rejected two-color upload family while keeping the corrected knob and spectrum families", () => {
