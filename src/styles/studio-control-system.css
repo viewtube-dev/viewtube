@@ -5144,6 +5144,9 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   line-height: var(--vt-studio-control-line-height, .86);
   padding: 0 14px !important;
 }
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
+  max-width: 100%;
+}
 .vt-studio-inline-stepper {
   grid-template-columns: var(--vt-stepper-height) minmax(0, 2fr) var(--vt-stepper-height);
   width: 100%;
