@@ -65,7 +65,12 @@ export const StudioSplitRailAccordion = React.forwardRef<HTMLDivElement, StudioS
         data-size={sizeVariant}
         data-active-index={visibleIndex}
         className={["vt-studio-split-rail-accordion", className].filter(Boolean).join(" ")}
-        onMouseLeave={() => setPreviewIndex(null)}
+        onMouseLeave={event => {
+          if (!event.currentTarget.contains(document.activeElement)) setPreviewIndex(null)
+        }}
+        onBlurCapture={event => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPreviewIndex(null)
+        }}
       >
         {items.map((item, index) => {
           const itemIndex = index as 0 | 1 | 2
@@ -86,11 +91,6 @@ export const StudioSplitRailAccordion = React.forwardRef<HTMLDivElement, StudioS
                 disabled={item.disabled}
                 onMouseEnter={() => setPreviewIndex(itemIndex)}
                 onFocus={() => setPreviewIndex(itemIndex)}
-                onBlur={event => {
-                  if (!event.currentTarget.parentElement?.contains(event.relatedTarget as Node | null)) {
-                    setPreviewIndex(null)
-                  }
-                }}
                 onClick={() => activate(itemIndex)}
               >
                 <span aria-hidden="true" data-vt-studio-split-rail-icon-face>{item.icon}</span>
