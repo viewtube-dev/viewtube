@@ -3439,7 +3439,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 
 
 /* New independent StudioCounter / StudioSideCounter primitives.
-   Geometry comes from the global 44/28/14 size lattice; no legacy stepper rules. */
+   Geometry comes from the global 60/44/28/12 size lattice; no legacy stepper rules. */
 .vt-studio-counter,
 .vt-studio-side-counter,
 .vt-studio-left-counter {
@@ -3471,6 +3471,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-left-counter[data-vt-studio-split="left"] {
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 }
+.vt-studio-counter[data-size="supreme"] { --vt-studio-counter-width: 240px; }
+.vt-studio-side-counter[data-size="supreme"] { --vt-studio-counter-width: 180px; }
+.vt-studio-left-counter[data-size="supreme"] { --vt-studio-counter-width: 180px; }
 .vt-studio-counter[data-size="compact"],
 .vt-studio-side-counter[data-size="compact"],
 .vt-studio-left-counter[data-size="compact"] {
