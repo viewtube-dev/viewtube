@@ -3277,3 +3277,82 @@
   }
 }
 
+/* Final spacing normalization: legacy catalog subfamilies must also obey the 4px lattice. */
+[class*="vt-confirmed-"]:not(.vt-confirmed-catalog) {
+  gap: var(--vt-confirmed-space-1) !important;
+  padding: var(--vt-confirmed-space-1) !important;
+}
+.vt-confirmed-catalog { gap: var(--vt-confirmed-space-3) !important; padding: 0 !important; }
+.vt-confirmed-family,
+.vt-confirmed-defaults-combined,
+.vt-confirmed-global-grid > div,
+.vt-confirmed-square-effect-pair,
+.vt-confirmed-nondefault-settings,
+.vt-confirmed-defaults-explainer {
+  gap: var(--vt-confirmed-space-2) !important;
+  padding: var(--vt-confirmed-space-2) !important;
+}
+.vt-confirmed-family { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-variants,
+.vt-confirmed-variant { padding: 0 !important; }
+.vt-confirmed-variants { gap: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-variant { gap: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-global-grid,
+.vt-confirmed-control-variants,
+.vt-confirmed-square-effect-sizes,
+.vt-confirmed-square-effects-wrap,
+.vt-confirmed-square-effect-grid,
+.vt-confirmed-square-variant-grid,
+.vt-confirmed-stepper-row,
+.vt-confirmed-stepper-row-grid,
+.vt-confirmed-spectrum-tag-variant,
+.vt-confirmed-spectrum-tag-selected,
+.vt-confirmed-vertical-word-toggle-family,
+.vt-confirmed-toggle-subfamily,
+.vt-confirmed-split-left-badge-family,
+.vt-confirmed-badge-layout,
+.vt-confirmed-choice-examples,
+.vt-confirmed-choice-module {
+  gap: var(--vt-confirmed-space-2) !important;
+}
+.vt-confirmed-control-family { gap: var(--vt-confirmed-space-3) !important; }
+.vt-confirmed-choice-names,
+.vt-confirmed-choice-variant-headings,
+.vt-confirmed-choice-example-row,
+.vt-confirmed-square-variant-row,
+.vt-confirmed-stepper-specimen,
+.vt-confirmed-composite-specimen,
+.vt-confirmed-spectrum-tag-grid,
+.vt-confirmed-badge-micro-stack,
+.vt-confirmed-slider-pair,
+.vt-confirmed-paired-compact-row,
+.vt-confirmed-vertical-word-toggle-size-row,
+.vt-confirmed-vertical-word-toggle-specimen,
+.vt-confirmed-vertical-word-toggle-micro {
+  gap: var(--vt-confirmed-space-1) !important;
+}
+.vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants {
+  gap: var(--vt-confirmed-space-2) !important;
+}
+.vt-confirmed-source-details,
+.vt-confirmed-source-details[open],
+.vt-confirmed-defaults-details,
+.vt-confirmed-defaults-details[open],
+.vt-confirmed-defaults-details .vt-confirmed-global-grid {
+  gap: var(--vt-confirmed-space-1) !important;
+}
+.vt-confirmed-size-grid { gap: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-size-card { gap: var(--vt-confirmed-space-1) !important; padding: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-square-effect-pair { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-global-grid > div { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-nondefault-settings,
+.vt-confirmed-defaults-explainer { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-source-details .vt-confirmed-nondefault-settings { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-vertical-word-toggle-specimen { padding: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-vertical-word-toggle-micro .vt-confirmed-vertical-word-toggle-specimen { padding: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-spectrum-tag-grid { padding: 0 !important; }
+.vt-confirmed-stepper-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vt-confirmed-square-variant-grid { grid-template-columns: repeat(4, minmax(0, max-content)); overflow-x: auto; }
+.vt-confirmed-control-family .vt-confirmed-word-toggle-standard { grid-template-columns: minmax(0, 1fr); }
+.vt-confirmed-control-family .vt-confirmed-word-toggle-compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
