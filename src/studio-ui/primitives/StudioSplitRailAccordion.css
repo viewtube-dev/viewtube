@@ -30,6 +30,9 @@
   min-height: inherit;
   align-items: stretch;
 }
+.vt-studio-split-rail-accordion__item[data-active="true"] {
+  flex: 1 1 0;
+}
 .vt-studio-split-rail-accordion__item + .vt-studio-split-rail-accordion__item {
   border-left: var(--vt-studio-control-stroke, 3px) solid #000;
 }
