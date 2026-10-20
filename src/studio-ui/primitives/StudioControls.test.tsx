@@ -1034,5 +1034,8 @@ describe("Supreme and Micro production size contract", () => {
     expect(generated).toContain("--vt-studio-micro-height: 12px;")
     expect(system).toContain('--vt-studio-control-height: var(--vt-studio-supreme-height, 60px)')
     expect(system).toContain('--vt-studio-control-height: var(--vt-studio-micro-height, 12px)')
+    expect(system).toContain('button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face]')
+    expect(system).toContain('.vt-studio-double-split-badge[data-size="supreme"]')
+    expect(system).not.toContain("--vt-studio-14-height")
   })
 })
