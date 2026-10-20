@@ -491,7 +491,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "Supreme 60px is the default; standard 44px and compact 28px are explicit size variants.",
         "Workflow role does not create a separate fixed-height tier; all geometry comes from the canonical Studio size tokens.",
       ]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme 60px default · Standard 44px · Compact 28px; workflow role shares canonical size tokens." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>60px Supreme · default</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
+      <div className="vt-confirmed-variant is-full-row"><span>60px Supreme · default</span><StudioActionButton sizeVariant="supreme" data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
       <div className="vt-confirmed-variant"><span>44px standard</span><StudioActionButton sizeVariant="standard" data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
       <div className="vt-confirmed-variant"><span>28px compact</span><StudioActionButton sizeVariant="compact" data-vt-library-component="StudioActionButton">CREATE</StudioActionButton></div>
     </Family>
