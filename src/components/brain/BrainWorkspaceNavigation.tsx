@@ -28,7 +28,7 @@ export const BrainWorkspaceNavigation: React.FC<{ className?: string }> = ({ cla
     <nav data-vt-brain-component="BrainWorkspaceNavigation" aria-label="Brain workspace navigation" className={`grid content-start gap-1 ${className}`}>
       <div className="mb-1 hidden items-center gap-2 border-b-2 border-black px-1 pb-2 2xl:flex">
         <SlidersHorizontal size={16} aria-hidden="true" />
-        <span className="text-[10px] font-[1000] uppercase tracking-[0.08em]">Workspace</span>
+        <span data-vt-brain-part="workspace-heading" className="text-[10px] font-[1000] uppercase tracking-[0.08em]">Workspace</span>
       </div>
       {WORKSPACE_LINKS.map((item) => {
         const active = location.pathname === item.to ||
