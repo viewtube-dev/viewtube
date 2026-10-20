@@ -27,7 +27,7 @@ const sizeTiers = {
   micro: readTier(microSizeLine),
 };
 
-const multilineContract = sizeBaseBlock.match(/multiline:\s*\\{([^}]*)\\}/)?.[1] ?? "";
+const multilineContract = sizeBaseBlock.match(/multiline:\s*\{([^}]*)\}/)?.[1] ?? "";
 const multilineTokens = {
   supremeFontSize: readSizeValue(multilineContract, "standardFontSize") * 60 / 44,
   standardFontSize: readSizeValue(multilineContract, "standardFontSize"),
