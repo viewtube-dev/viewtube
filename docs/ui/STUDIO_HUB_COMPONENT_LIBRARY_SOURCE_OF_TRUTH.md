@@ -387,15 +387,14 @@ For each family, display the production source paths, standard and compact sizes
 - Gallery geometry is standard 2-up, compact 3-up, and micro 2×2 at the end of compact row two. Source-level tests cover the exported primitive, variant attributes, size tiers, and registered exception. Browser visual certification is still required before claiming pixel-perfect behavior.
 
 
-## Two-line Studio Button — confirmed primitive library entry · 2026-10-19
+## Studio Button — two-line text layout variant · 2026-10-19
 
-- `StudioTwoLineButton` is a named variant of the canonical `StudioButton`, implemented in `src/studio-ui/primitives/StudioControls.tsx`, styled in `src/styles/studio-control-system.css`, and exported from `src/studio-ui/index.ts`.
-- The primitive is available in both canonical size tiers: standard 44px with two 18px text rows, and compact 28px with two 12px text rows.
-- **Both rows render identically in black**: Inter, weight 1000, uppercase, `-.02em` letter spacing, black text fill and text stroke (1px standard / 0.5px compact). No per-row color variation is permitted.
-- Rows are centered horizontally and vertically. Zero row margins/padding and `justify-content: space-evenly` evenly distribute available vertical space above row one, between rows, and below row two.
-- Retains canonical border/radius, fill/color-pair behavior, width and focus/disabled behavior from `StudioButton`; this variant does not create a parallel button system.
-- The Confirmed Primitive Toolbox displays production-backed specimens labeled **Standard / 44px — 18px + 18px** and **Compact / 28px — 12px + 12px**.
-- Validation status: source and catalog registration updated; browser visual certification and build/type/test gates remain pending.
+- The two-line layout is a **variant inside the canonical Studio Button family**, implemented by `StudioButton` in `src/studio-ui/primitives/StudioControls.tsx` via `textLayout="two-line"`, `firstLine`, and `secondLine`.
+- The Confirmed Primitive Library renders the variant directly in the **Button** module; it is not a separate primitive-library family or an entry in the legacy comparison catalog.
+- Standard: 44px surface with two centered 18px rows. Compact: 28px surface with two centered 12px rows.
+- Both rows use identical black Inter 1000 uppercase typography, `-.02em` letter spacing, and text stroke (1px standard / 0.5px compact); row spacing is evenly distributed.
+- Border, radius, fill, focus and disabled behavior remain owned by `StudioButton`. `StudioTwoLineButton` remains only as a backwards-compatible wrapper around that variant.
+- Build, typecheck, tests and browser visual certification must pass before declaring the visual implementation verified.
 
 
 ## Brain status indicator — LED 64 + Badge 45 composition

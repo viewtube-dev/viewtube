@@ -401,6 +401,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton sizeVariant="compact" tone="neutral">button</StudioButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected sizeVariant="standard">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioButton selected sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioButton selected disabled sizeVariant="compact">button</StudioButton></div>
+      <div className="vt-confirmed-variant is-full-row"><span>44px standard · two-line · 18px rows</span><StudioButton sizeVariant="standard" textLayout="two-line" firstLine="GENERATE" secondLine="METADATA" aria-label="Generate metadata" data-vt-library-variant="two-line" /></div>
+      <div className="vt-confirmed-variant"><span>28px compact · two-line · 12px rows</span><StudioButton sizeVariant="compact" textLayout="two-line" firstLine="AI" secondLine="REFINE" aria-label="AI refine" data-vt-library-variant="two-line" /></div>
     </Family>
     <Family title="Prominent Action · 56px" nonDefaultSettings={[
         "Dedicated 56px action family with 20px label typography; it is not a third ordinary-button size.",

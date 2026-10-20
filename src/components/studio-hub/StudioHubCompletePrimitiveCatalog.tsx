@@ -7,7 +7,7 @@ import {
 import {
   SubToolboxInput, SubToolboxInput20, SubToolboxTextArea, SubToolboxTextArea21, SubToolboxStatusBadge,
 } from "../subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame, StudioBrainStatusBadge, StudioTwoLineButton } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitLeftInput, StudioSplitLeftBadge, StudioSquareIconButton, StudioDoubleSplitSlider, StudioTextInput, StudioInput, StudioTextArea, Studioswitch as StudioSwitch, StudioChoice, Studiotoggle as StudioWordToggle, StudioUploadFrame, StudioBrainStatusBadge } from "../../studio-ui/primitives/StudioControls"
 import { getAlphabeticalSpectrumColor, VT_SPECTRUM_PALETTE_06 } from "../../styles/toolboxPalette"
 import "./studio-hub-primitive-catalogs.css"
 
@@ -17,7 +17,7 @@ const LEVELS: Level[] = ["l0", "l1", "l2"]
 
 /** Legacy comparison catalog; split-left demonstrations now use the canonical production primitive. */
 export const STUDIO_HUB_COMPONENT_FAMILIES = [
-  "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button", "Two-line Studio Button",
+  "Primary Button", "Secondary Button", "Neutral Button", "Destructive Button",
   "Square Icon Button", "Split Left Button", "Head Tail Action", "Split Menu",
   "Dropdown", "28px Dropdown Pair", "Select Menu", "Context Menu", "Studio Text Input", "Studio Text Area", "Text Input", "20 Simple Text Input", "Textarea", "21 Simple Textarea", "20 Plain Input", "21 Plain Text Area", "Studio Text Input · Floating Label Variant", "Studio Text Area · Floating Label Variant", "Split Search",
   "Number Field", "Input Action", "Stepper", "Slider", "Slider Counter", "Range Slider", "Toggle",
@@ -226,18 +226,7 @@ export const HardcodedGenericControl: React.FC<{ name: string; level: Level; ind
 }
 
 
-const CanonicalTwoLineButtonFamily: React.FC = () => (
-  <div className="vt-catalog-two-line-button-family" data-vt-confirmed-component="StudioTwoLineButton">
-    <div className="vt-catalog-two-line-button-specimen">
-      <small>STANDARD · 44PX · 18PX TEXT</small>
-      <StudioTwoLineButton firstLine="GENERATE" secondLine="METADATA" aria-label="Standard two-line button example" />
-    </div>
-    <div className="vt-catalog-two-line-button-specimen">
-      <small>COMPACT · 28PX · 12PX TEXT</small>
-      <StudioTwoLineButton sizeVariant="compact" firstLine="AI" secondLine="REFINE" aria-label="Compact two-line button example" />
-    </div>
-  </div>
-);
+/* Two-line text layout is demonstrated inside the confirmed Studio Button family. */
 
 const CONTROL_SKINS = [
   { skin: "solid", label: "1 · SOLID" },
@@ -297,7 +286,7 @@ export const StudioHubCompletePrimitiveCatalog: React.FC<StudioHubCompletePrimit
         <article className="vt-catalog-family" key={name} data-vt-family={name} data-vt-certification-state={name === "Square Icon Button" || name === "Brain Status LED Badges" ? "confirmed-production-primitive" : "hardcoded-reference"}>
           <h3><span>{String(index + 1).padStart(2,"0")}</span>{name}</h3>
           <div className="vt-catalog-levels">
-            {["44px Switches", "44px Radio + Checkbox", "Word Toggles"].includes(name) ? <CanonicalControlFamily name={name} paletteIndex={paletteIndex} /> : name === "Two-line Studio Button" ? <CanonicalTwoLineButtonFamily /> : LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
+            {["44px Switches", "44px Radio + Checkbox", "Word Toggles"].includes(name) ? <CanonicalControlFamily name={name} paletteIndex={paletteIndex} /> : LEVELS.map(level => <DemoShell level={level} key={level}><HardcodedGenericControl name={name} level={level} index={index} paletteIndex={paletteIndex}/></DemoShell>)}
           </div>
         </article>
       ))}
