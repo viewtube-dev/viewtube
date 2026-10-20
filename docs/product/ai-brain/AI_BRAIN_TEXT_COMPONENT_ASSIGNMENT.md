@@ -74,6 +74,10 @@ Topic/title clarification and content-style preference are separate semantic pro
 | Visible text | Owning composition | Text role |
 |---|---|---|
 | Prompt Library and its search/help copy | `BrainPromptLibrary` | Prompt discovery and selection |
+| Brain Launchpad / drawer heading | `BrainLauncherDrawer` → launcher heading | Mobile prompt/capability drawer title |
+| Prompt Library / Capabilities mode choices | `BrainLauncherModeSwitch` → standard `StudioSplitLeftButton` controls | Switch the mobile or desktop launchpad mode |
+| Your Channel Context | `BrainContextDrawer` → context drawer heading | Mobile context panel title |
+| Prompt Library title and explanatory copy | `BrainPromptLibrary` → title/description parts | Explains how to search, preview, send, or edit prompts |
 | Prompt Library / Capabilities | `BrainLauncherModeSwitch` → standard `StudioSplitLeftButton` controls | Switch launchpad mode |
 | Channel Context | Channel-context launcher / `BrainContextRail` | Open creator context panel |
 | Press Enter to send; use Shift+Enter for a new line… | `BrainComposer` → accessible help text | Keyboard instructions |
