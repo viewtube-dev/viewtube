@@ -41,6 +41,9 @@
   --vt-studio-control-secondary-outline-width: 2.66px;
 }
 
+[data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-supreme-rail-size, 60px); min-width: var(--vt-studio-dropdown-supreme-rail-size, 60px); }
+[data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-supreme-chevron-size, 38px); height: var(--vt-studio-dropdown-supreme-chevron-size, 38px); }
+
 [data-vt-studio-control][data-size="compact"] {
   --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px);
   --vt-studio-control-height: var(--vt-studio-28-height, 28px);
