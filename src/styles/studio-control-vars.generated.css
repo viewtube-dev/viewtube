@@ -40,6 +40,18 @@
   --vt-studio-micro-icon-stroke: 1.5;
   --vt-studio-micro-focus-outline-width: 0.65px;
   --vt-studio-micro-secondary-outline-width: 0.65px;
+  /* Textarea-specific typography exception, generated from STUDIO_CONTROL_SIZE_BASE.multiline. */
+  --vt-studio-textarea-supreme-font-size: 24.55px;
+  --vt-studio-textarea-standard-font-size: 18px;
+  --vt-studio-textarea-compact-font-size: 14px;
+  --vt-studio-textarea-micro-font-size: 10px;
+  --vt-studio-textarea-supreme-text-stroke: 0.68px;
+  --vt-studio-textarea-standard-text-stroke: 0.5px;
+  --vt-studio-textarea-compact-text-stroke: 0.35px;
+  --vt-studio-textarea-micro-text-stroke: 0.25px;
+  --vt-studio-textarea-font-weight: 1000;
+  --vt-studio-textarea-min-height: 92px;
+  --vt-studio-textarea-line-height: 0.75;
   /* Compatibility aliases: old numbered names resolve to the canonical tier tokens. */
   --vt-studio-60-height: var(--vt-studio-supreme-height);
   --vt-studio-60-stroke: var(--vt-studio-supreme-stroke);
