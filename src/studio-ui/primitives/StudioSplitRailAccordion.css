@@ -1,0 +1,105 @@
+/* Three-way expandable split control. It reuses Studio size/pair tokens and
+   keeps one shared perimeter stroke with square, non-rounded internal rails. */
+.vt-studio-split-rail-accordion {
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--vt-studio-control-height, 44px);
+  overflow: hidden;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-control-accent, var(--pair-a));
+  color: #000;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-weight: 1000;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-split-rail-accordion[data-size="compact"] {
+  min-height: var(--vt-studio-28-height, 28px);
+}
+.vt-studio-split-rail-accordion__item {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: inherit;
+  align-items: stretch;
+}
+.vt-studio-split-rail-accordion__item[data-active="true"] {
+  flex: 1 1 0;
+}
+.vt-studio-split-rail-accordion__item + .vt-studio-split-rail-accordion__item {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon] {
+  box-sizing: border-box;
+  display: grid;
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+  color: #000;
+  cursor: pointer;
+  -webkit-text-stroke: 0;
+}
+.vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon] {
+  flex-basis: var(--vt-studio-28-height, 28px);
+  width: var(--vt-studio-28-height, 28px);
+  min-width: var(--vt-studio-28-height, 28px);
+  min-height: var(--vt-studio-28-height, 28px);
+}
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon-face],
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon-face] > svg {
+  display: block;
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+}
+.vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon-face],
+.vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon-face] > svg {
+  width: min(var(--vt-studio-28-icon-size, 24px), 100%);
+  height: min(var(--vt-studio-28-icon-size, 24px), 100%);
+}
+.vt-studio-split-rail-accordion__content {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: inherit;
+  padding: 0 4px;
+  overflow: hidden;
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  background: var(--vt-studio-control-accent, var(--pair-a));
+  font-size: var(--vt-studio-control-font-size, 38px);
+  text-align: center;
+}
+.vt-studio-split-rail-accordion[data-size="compact"] .vt-studio-split-rail-accordion__content {
+  font-size: var(--vt-studio-28-font-size, 24px);
+}
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]:focus-visible {
+  outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b));
+  outline-offset: calc(-1 * var(--vt-studio-control-focus-outline-width, 3px));
+  z-index: 1;
+}
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-split-rail-accordion,
+  .vt-studio-split-rail-accordion * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
