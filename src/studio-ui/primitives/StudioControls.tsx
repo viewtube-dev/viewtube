@@ -60,12 +60,12 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
     behavior: "native file picker after a 1s click pulse, drag/drop, left upload and right thumbnail split rails, two-line half-scale prompt, oversized circular image preview, bottom filename badge, hover breathing at 2x speed and extra saturation, disabled state, and reduced-motion support",
     shadowPolicy: "none",
-    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
+    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/12px control.",
   },
   verticalWordToggle: {
     owner: "StudioVerticalWordToggle",
     globalRuleException: true,
-    height: "content-driven two-word stack; intentionally not 44px / 28px / 14px",
+    height: "content-driven two-word stack; intentionally not 44px / 28px / 12px",
     typography: "inherits standard/compact/micro Studio text-size, weight, family, case, and letter-spacing tokens",
     stroke: "standard 3px / compact 2px / micro 1px",
     radius: "standard 6px / compact 4px / micro 2px",
@@ -1088,8 +1088,8 @@ StudioTwoLineButton.displayName = "StudioTwoLineButton"
 
 
 /**
- * Separate 56px action family for prominent workflow actions.
- * It is intentionally not a StudioButton size variant: StudioButton remains 44px/28px only.
+ * Prominent workflow action button using the shared Supreme size tier by default.
+ * It shares the canonical sizeVariant API and defaults to Supreme.
  */
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   sizeVariant?: StudioControlSize
@@ -2533,14 +2533,14 @@ StudioUploadFrame.displayName = "StudioUploadFrame";
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 interface StudioSplitBadgeBaseProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   layout: "left" | "right" | "double";
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
   layout, iconLeft, iconRight, children, sizeVariant = "standard", className, ...props
@@ -2571,7 +2571,7 @@ StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
 export interface StudioSplitRightBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioSplitRightBadge: React.FC<StudioSplitRightBadgeProps> = ({ icon, ...props }) =>
   <StudioSplitBadgeBase {...props} layout="right" iconRight={icon} />;
@@ -2581,7 +2581,7 @@ export interface StudioDoubleSplitBadgeProps extends Omit<React.HTMLAttributes<H
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ leftIcon, rightIcon, ...props }) =>
   <StudioSplitBadgeBase {...props} layout="double" iconLeft={leftIcon} iconRight={rightIcon} />;
