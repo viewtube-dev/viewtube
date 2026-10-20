@@ -53,23 +53,23 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 The size tier determines height, border stroke, radius, typography, icon size, and icon stroke. Do not independently override one of these properties without a registered exception.
 
-| Property | Standard | Compact | Micro |
-|---|---:|---:|---:|
-| Control height | 44px | 28px | 14px |
-| Border/stroke width | 3px | 2px | 1px |
-| Corner radius | 6px | 4px | 2px |
-| Text size | 38px | 24px | 10px |
-| Text weight | 1000 | 1000 | 1000 |
-| Text stroke | 1px | 0.5px | 0.25px |
-| Icon size | 38px | 24px | 10px |
-| Default icon stroke | 1.9px | 2px | 1.5px |
-| Secondary focus-outline width (when applicable) | 1.95px | 1.3px | 0.65px |
-| Standard gap token | 4px (external layout only — grids/rows between whole controls; never an internal shell gap) | 4px | 4px |
-| Floating-label height (shared by text inputs and text areas) | 32px (prior 28px + 4px) | 21px (prior 19px + 2px) | Not registered — no micro floating-label fields exist; the micro tier mechanically copies the compact values without halving |
-| Floating-label raised-offset ratio | 1.2 (raised label sits 20% higher above the outer black border) | 1.2 | Not registered — same as compact by copy |
-| Text transform | Uppercase | Uppercase | Uppercase |
-| Letter spacing | -0.02em | -0.02em | -0.01em |
-| Line height | 0.86 | 0.86 | 1.0 |
+| Property | Supreme | Standard | Compact | Micro |
+|---|---:|---:|---:|---:|
+| Control height | 60px | 44px | 28px | 12px |
+| Border/stroke width | 4.09px | 3px | 2px | 1px |
+| Corner radius | 8.18px | 6px | 4px | 2px |
+| Text size | 51.82px | 38px | 24px | 10px |
+| Text weight | 1000 | 1000 | 1000 | 1000 |
+| Text stroke | 1.36px | 1px | 0.5px | 0.25px |
+| Icon size | 51.82px | 38px | 24px | 10px |
+| Default icon stroke | 2.59px | 1.9px | 2px | 1.5px |
+| Secondary focus-outline width (when applicable) | 2.66px | 1.95px | 1.3px | 0.65px |
+| Standard gap token | 4px external only | 4px | 4px | 4px |
+| Floating-label height | 51.82px where supported | 38px | 24px | 10px where supported |
+| Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 |
+| Text transform | Uppercase | Uppercase | Uppercase | Uppercase |
+| Letter spacing | -0.02em | -0.02em | -0.02em | -0.01em |
+| Line height | 0.86 | 0.86 | 0.86 | 1.0 |
 
 **Color/ratio invariant:** A size change scales geometry and typography; it must not silently change primary/secondary color ownership, text weight, label centering, split-rail color, or row-fill behavior.
 
