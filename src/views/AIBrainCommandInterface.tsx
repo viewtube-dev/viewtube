@@ -1761,19 +1761,17 @@ const AIBrainCommandInterface: React.FC = () => {
          )}
         </div>
 
-        <footer className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2">
+        <footer data-vt-brain-component="BrainComposer" className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2">
          <div className="mx-auto w-full max-w-[880px]">
           <div className="mb-1.5 grid grid-cols-2 gap-1 xl:hidden">
            <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
            <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="standard" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
           </div>
-          <div className="flex gap-2">
-           <button type="button" onClick={() => setJournalOpen(true)} aria-label="Open AI Journal" title="Open AI Journal" className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-[9px] border-[2px] border-black bg-[#36E0F6] outline-none transition hover:bg-[#FFDA47] focus-visible:ring-[3px] focus-visible:ring-black">
-            <BookOpen size={18} aria-hidden="true" />
-           </button>
-           <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
-           <span id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
-           <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
+          <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
+           <StudioSquareIconButton sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
+           <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
+           <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
+           <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
            <StudioTextArea
             ref={composerRef}
             id="brain-composer"
@@ -1795,7 +1793,7 @@ const AIBrainCommandInterface: React.FC = () => {
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
            />
-           <button type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
+           <button data-vt-brain-component="BrainComposerSendAction" type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
             {busy ? <Zap className="animate-pulse" size={16} /> : <Send size={16} />} Send
            </button>
           </div>
