@@ -876,12 +876,12 @@ const CreatorIntakeWizard: React.FC<{
  const question = AI_BRAIN_INTAKE_QUESTIONS[questionIndex]
  const lastQuestion = questionIndex === AI_BRAIN_INTAKE_QUESTIONS.length - 1
  return (
-  <section className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
-   <div className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
+  <section data-vt-brain-component="BrainProfileSetup" className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
+   <div data-vt-brain-part="profile-setup-heading" className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
     <div className="flex items-center justify-between gap-3">
      <div>
-      <div className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
-      <h2 className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
+      <div data-vt-brain-part="profile-setup-eyebrow" className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
+      <h2 data-vt-brain-part="profile-setup-title" className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
      </div>
      <span className="rounded-[8px] border-[2px] border-black bg-white px-3 py-1 text-xs font-black">
       {questionIndex + 1} / {AI_BRAIN_INTAKE_QUESTIONS.length}
@@ -891,8 +891,8 @@ const CreatorIntakeWizard: React.FC<{
    <div className="grid min-h-0 flex-1 place-items-center p-4 sm:p-6">
     <label key={question.id} className={`${innerCard} block w-full max-w-4xl overflow-hidden`}>
      <span className="block border-b-[2px] border-black px-4 py-3" style={{ backgroundColor: TOOLBOX_PALETTE[(questionIndex + 2) % TOOLBOX_PALETTE.length] }}>
-      <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
-      <span className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
+      <span data-vt-brain-part="profile-question-label" className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
+      <span data-vt-brain-part="profile-question-prompt" className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
      </span>
      <textarea
       value={String(context[question.id] || "")}
