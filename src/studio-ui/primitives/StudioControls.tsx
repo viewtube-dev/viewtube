@@ -1003,7 +1003,7 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
-  /** Explicit geometry variant for the confirmed 44px and 28px button family. */
+  /** Explicit geometry variant for Supreme 60px, Standard 44px, and Compact 28px button geometry. */
   heightVariant?: "60" | "44" | "28"
   /** Layout variant owned by StudioButton; geometry and behavior remain canonical. */
   textLayout?: "single-line" | "two-line"
