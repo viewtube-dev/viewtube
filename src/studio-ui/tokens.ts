@@ -41,7 +41,7 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
   clickOffsetPx: 0,
 } as const
 
-/** Compact geometry source; micro is mechanically derived from this object. */
+/** Compact geometry is explicit; micro is an independently defined 12px tier. */
 const STUDIO_CONTROL_SIZE_BASE_COMPACT = { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2.0, /* Resting labels inherit the matching global text-input size. */ floatingLabelHeight: 24, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS } as const
 
 function halfCompact<T extends Record<string, number | string>>(compact: T): T {
@@ -63,8 +63,10 @@ function halfCompact<T extends Record<string, number | string>>(compact: T): T {
 export const STUDIO_CONTROL_SIZE_BASE = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, /* Resting labels use the standard global text-input size. */ floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: STUDIO_CONTROL_SIZE_BASE_COMPACT,
-  /** Micro derives from half the compact geometry, with a legibility floor for text/icon. */
-  micro: halfCompact(STUDIO_CONTROL_SIZE_BASE_COMPACT),
+  /** Supreme scales the standard dimensional contract by 60 / 44; ratios and behavior stay constant. */
+  supreme: { height: 60, stroke: 4.09, radius: 8.18, fontSize: 51.82, fontWeight: 1000, textStroke: 1.36, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 2.66, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 2.66, iconSize: 51.82, iconStroke: 2.59, floatingLabelHeight: 51.82, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  /** Micro keeps its deliberate compact-family typography and border treatment at an explicit 12px height. */
+  micro: { height: 12, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textStroke: 0.25, width: "row", textTransform: "uppercase", letterSpacing: -0.01, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.65, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.65, iconSize: 10, iconStroke: 1.5, floatingLabelHeight: 10, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
 } as const
 
 /** One canonical size ladder for Studio controls; documented exceptions live below. */
@@ -97,10 +99,10 @@ export const STUDIO_TOKENS = {
   // Deprecated compatibility alias only; compact is retired as a V35 level.
   compactSubtoolbox: { headerHeight: TOOLBOX_LEVEL_DNA.l1.height, stroke: TOOLBOX_LEVEL_DNA.l1.stroke, radius: TOOLBOX_LEVEL_DNA.l1.radius, shadowOffset: TOOLBOX_LEVEL_DNA.l1.shadowOffset, titleSize: TOOLBOX_LEVEL_DNA.l1.titleSize },
   component: {
-    height: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.height, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.height },
-    stroke: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke },
-    radius: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius },
-    shadowOffset: { standard: 0, compact: 0, micro: 0 },
+    height: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.height, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.height, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.height, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.height },
+    stroke: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.stroke, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke },
+    radius: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.radius, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius },
+    shadowOffset: { supreme: 0, standard: 0, compact: 0, micro: 0 },
   },
   typography: {
     label: 24,
@@ -114,22 +116,22 @@ export const STUDIO_TOKENS = {
   },
   /** Four-pixel unit is for external gaps between sibling rows, columns, and components only; never an implicit inset. */
   spacing: { unit: 4, dense: SUBTOOLBOX_TOKENS.spacing.dense, standard: SUBTOOLBOX_TOKENS.spacing.standard, section: SUBTOOLBOX_TOKENS.spacing.section, large: SUBTOOLBOX_TOKENS.spacing.large },
-  radius: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.radius, subtoolbox: TOOLBOX_LEVEL_DNA.l0.radius, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.radius, component: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius }, tag: 4 },
-  stroke: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.stroke, subtoolbox: TOOLBOX_LEVEL_DNA.l0.stroke, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.stroke, component: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke }, tag: 2 },
-  shadow: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.shadowOffset, subtoolbox: TOOLBOX_LEVEL_DNA.l0.shadowOffset, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.shadowOffset, component: { standard: 0, compact: 0, micro: 0 } },
+  radius: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.radius, subtoolbox: TOOLBOX_LEVEL_DNA.l0.radius, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.radius, component: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.radius, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius }, tag: 4 },
+  stroke: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.stroke, subtoolbox: TOOLBOX_LEVEL_DNA.l0.stroke, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.stroke, component: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.stroke, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke }, tag: 2 },
+  shadow: { toolbox: TOOLBOX_LEVEL_DNA.toolbox.shadowOffset, subtoolbox: TOOLBOX_LEVEL_DNA.l0.shadowOffset, compactSubtoolbox: TOOLBOX_LEVEL_DNA.l1.shadowOffset, component: { supreme: 0, standard: 0, compact: 0, micro: 0 } },
   motion: { controlMs: SUBTOOLBOX_TOKENS.motion.controlMs, collapseMs: SUBTOOLBOX_TOKENS.motion.collapseMs, easing: SUBTOOLBOX_TOKENS.motion.easing },
   breakpoints: { phoneMax: 767, compactShellMax: 900 },
 } as const
 
 /** Shared Studio icon-size comparison presets for the Lucide 24×24 icon family. */
 export const STUDIO_ICON_SIZE_COMPARISON = {
-  current: { standard: { size: 28, stroke: 2.5 }, compact: { size: 18, stroke: 1.65 } },
-  moderate: { standard: { size: 34, stroke: 2.0588 }, compact: { size: 22, stroke: 1.35 } },
-  large: { standard: { size: 38, stroke: 1.9 }, compact: { size: 24, stroke: 2.0 } },
+  current: { supreme: { size: 38, stroke: 2.5 }, standard: { size: 28, stroke: 2.5 }, compact: { size: 18, stroke: 1.65 } },
+  moderate: { supreme: { size: 46, stroke: 2.81 }, standard: { size: 34, stroke: 2.0588 }, compact: { size: 22, stroke: 1.35 } },
+  large: { supreme: { size: 52, stroke: 2.59 }, standard: { size: 38, stroke: 1.9 }, compact: { size: 24, stroke: 2.0 } },
 } as const
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
-export type StudioControlSize = "standard" | "compact" | "micro"
+export type StudioControlSize = "supreme" | "standard" | "compact" | "micro"
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
 
 
