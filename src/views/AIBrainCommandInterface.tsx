@@ -1886,7 +1886,7 @@ const AIBrainCommandInterface: React.FC = () => {
        <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
          <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
-         <button ref={contextCloseRef} type="button" className={kpiButton} onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</button>
+         <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
          <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
@@ -1901,8 +1901,8 @@ const AIBrainCommandInterface: React.FC = () => {
          <div className="grid gap-3 p-4">
           <StudioTextArea data-vt-brain-part="journal-entry-input" value={journalInput} onChange={(event) => setJournalInput(event.target.value)} sizeVariant="standard" rows={4} placeholder="A goal, content style note, audience insight, constraint, or decision you want the Brain to remember." className="min-h-[92px] resize-none" />
           <div data-vt-brain-part="journal-dialog-actions" className="flex justify-end gap-1">
-           <button type="button" className={kpiButton} onClick={() => setJournalOpen(false)}>Cancel</button>
-           <button type="button" className={`${kpiButton} bg-[#3FEE56]`} disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</button>
+           <StudioButton data-vt-brain-part="journal-cancel" sizeVariant="compact" tone="neutral" type="button" onClick={() => setJournalOpen(false)}>Cancel</StudioButton>
+           <StudioButton data-vt-brain-part="journal-save" sizeVariant="compact" tone="success" type="button" disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</StudioButton>
           </div>
          </div>
         </section>
