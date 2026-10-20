@@ -1013,6 +1013,12 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   selected?: boolean
   /** Explicit geometry variant for the confirmed 44px and 28px button family. */
   heightVariant?: "44" | "28"
+  /** Layout variant owned by StudioButton; geometry and behavior remain canonical. */
+  textLayout?: "single-line" | "two-line"
+  /** First row for the two-line text layout variant. */
+  firstLine?: React.ReactNode
+  /** Second row for the two-line text layout variant. */
+  secondLine?: React.ReactNode
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
@@ -1023,6 +1029,9 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
       loading = false,
       selected = false,
       heightVariant,
+      textLayout = "single-line",
+      firstLine,
+      secondLine,
       disabled,
       children,
       type = "button",
@@ -1044,13 +1053,21 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
         data-vt-studio-button="true"
+        data-vt-studio-button-lines={textLayout === "two-line" ? "two" : undefined}
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
         aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
         aria-busy={loading || undefined}
         disabled={disabled || loading}
       >
-        <span data-vt-studio-button-face>{children}</span>
+        <span data-vt-studio-button-face>
+          {textLayout === "two-line" ? (
+            <>
+              <span data-vt-studio-button-line="first">{firstLine}</span>
+              <span data-vt-studio-button-line="second">{secondLine}</span>
+            </>
+          ) : children}
+        </span>
       </button>
     )
   },
@@ -1058,10 +1075,9 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
 StudioButton.displayName = "StudioButton"
 
 /** Two-line text variant of the canonical 44px / 28px Studio button. */
-export interface StudioTwoLineButtonProps extends Omit<StudioButtonProps, "children"> {
-  /** First centered text row. Both rows inherit the shared Studio uppercase typography. */
+/** Backwards-compatible named wrapper; the actual layout variant belongs to StudioButton. */
+export interface StudioTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "textLayout" | "firstLine" | "secondLine"> {
   firstLine: React.ReactNode
-  /** Second centered text row. */
   secondLine: React.ReactNode
 }
 
@@ -1071,11 +1087,10 @@ export const StudioTwoLineButton = React.forwardRef<HTMLButtonElement, StudioTwo
       {...props}
       ref={ref}
       sizeVariant={sizeVariant}
-      data-vt-studio-button-lines="two"
-    >
-      <span data-vt-studio-button-line="first">{firstLine}</span>
-      <span data-vt-studio-button-line="second">{secondLine}</span>
-    </StudioButton>
+      textLayout="two-line"
+      firstLine={firstLine}
+      secondLine={secondLine}
+    />
   ),
 )
 StudioTwoLineButton.displayName = "StudioTwoLineButton"
