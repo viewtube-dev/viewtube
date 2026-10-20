@@ -1843,7 +1843,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   }
 
   return (
-    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
+    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant} data-open={open ? "true" : "false"}>
       <button
         id={id}
         type="button"
