@@ -75,7 +75,7 @@
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
 }
 [data-vt-studio-control][data-size="micro"] {
-  --vt-studio-control-focus-outline-width: 1px;
+  --vt-studio-control-focus-outline-width: .65px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: .65px;
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
@@ -358,7 +358,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-size="micro"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);
-  --vt-studio-control-focus-outline-width: 1px;
+  --vt-studio-control-focus-outline-width: .65px;
 }
 .vt-studio-floating-field > [data-vt-studio-control="true"] {
   display: block;

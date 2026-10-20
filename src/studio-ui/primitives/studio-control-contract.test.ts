@@ -1,10 +1,29 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { STUDIO_CONTROL_SIZE_BASE, studioSizeTierToCssVars } from "../tokens";
 
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8");
 
 describe("Studio control global contract", () => {
+  it("projects every canonical tier metric through the production CSS-variable API", () => {
+    expect(STUDIO_CONTROL_SIZE_BASE.supreme.height).toBe(60);
+    expect(STUDIO_CONTROL_SIZE_BASE.standard.height).toBe(44);
+    expect(STUDIO_CONTROL_SIZE_BASE.compact.height).toBe(28);
+    expect(STUDIO_CONTROL_SIZE_BASE.micro.height).toBe(12);
+
+    const supreme = studioSizeTierToCssVars("supreme");
+    const micro = studioSizeTierToCssVars("micro");
+    expect(supreme["--vt-studio-control-height"]).toBe("60px");
+    expect(supreme["--vt-studio-control-font-weight"]).toBe(1000);
+    expect(supreme["--vt-studio-control-text-stroke"]).toBe("1.36px");
+    expect(supreme["--vt-studio-control-focus-outline-width"]).toBe("2.66px");
+    expect(micro["--vt-studio-control-height"]).toBe("12px");
+    expect(micro["--vt-studio-control-font-size"]).toBe("10px");
+    expect(micro["--vt-studio-control-text-stroke"]).toBe("0.25px");
+    expect(micro["--vt-studio-control-focus-outline-width"]).toBe("0.65px");
+  });
+
   it("defines canonical Supreme/standard/compact/Micro geometry without an internal gap token", () => {
     const css = read("src/styles/studio-control-vars.generated.css");
     for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 0.75"]) expect(css).toContain(token);
@@ -51,6 +70,8 @@ describe("Studio control global contract", () => {
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.95px");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
     expect(system).toContain("--vt-studio-control-focus-outline-width: .65px");
+    expect(system).not.toContain("--vt-studio-control-focus-outline-width: 1px");
+    expect(system).toContain(".vt-studio-floating-field[data-size=\"micro\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);\n  --vt-studio-control-focus-outline-width: .65px;\n}");
     expect(system).toContain("outline-offset: 0;");
     const finalGenericFocusRule = system.slice(system.lastIndexOf("/* Explicit non-button exceptions:"));
     expect(finalGenericFocusRule).not.toContain("outline-offset: 1px");

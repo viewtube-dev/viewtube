@@ -132,6 +132,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Focus text: black.
 - Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px / 1.3px / 0.65px standard / compact / micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
+- The Micro (12px) focus outline is **0.65px** (65% of its 1px border), not 1px. Both standard controls and floating-field wrappers must consume the same tier token; no Micro-only 1px override is permitted.
 
 ### Multiline textarea (registered typography exception)
 
@@ -213,7 +214,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Contract files
 
-- `src/studio-ui/tokens.ts`: size ladder, width exceptions, color roles and CSS-var projection.
+- `src/studio-ui/tokens.ts`: size ladder, width exceptions, color roles and complete CSS-var projection (`studioSizeTierToCssVars` includes typography, icon stroke, focus, fill, and floating-label metrics).
 - `src/styles/studio-control-core.css`: flat geometry, size tiers and width policy.
 - `src/styles/studio-control-split.css`: shared split grid, rail and label contract.
 - `src/styles/studio-control-fields.css`: inline field stroke and focus contract.
