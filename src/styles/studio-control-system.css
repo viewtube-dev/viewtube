@@ -2675,7 +2675,7 @@ not button faces.
   --vt-studio-control-line-height: 1;
   --vt-studio-control-icon-size: 10px;
   --vt-studio-control-icon-stroke: 1.5;
-  min-height: 14px;
+  min-height: var(--vt-studio-micro-height, 12px);
 }
 
 /* No hard-coded elevation or motion on Studio primitives/components. Geometry and
@@ -3482,9 +3482,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
   --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
 }
-.vt-studio-counter[data-size="micro"] { --vt-studio-counter-width: 56px; }
-.vt-studio-side-counter[data-size="micro"] { --vt-studio-counter-width: 42px; }
-.vt-studio-left-counter[data-size="micro"] { --vt-studio-counter-width: 42px; }
+.vt-studio-counter[data-size="micro"] { --vt-studio-counter-width: 48px; }
+.vt-studio-side-counter[data-size="micro"] { --vt-studio-counter-width: 36px; }
+.vt-studio-left-counter[data-size="micro"] { --vt-studio-counter-width: 36px; }
 .vt-studio-counter [data-vt-studio-split-rail],
 .vt-studio-side-counter [data-vt-studio-split-rail],
 .vt-studio-left-counter [data-vt-studio-split-rail] {
@@ -3925,7 +3925,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
   --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
   --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
-  --vt-studio-control-font-size: 12px;
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
 }
 .vt-studio-double-split-slider[data-size="micro"] .vt-studio-double-split-slider__reset {
   font-size: 10px;
