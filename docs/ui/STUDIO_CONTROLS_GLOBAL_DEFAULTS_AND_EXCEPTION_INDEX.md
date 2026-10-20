@@ -249,3 +249,18 @@ Visual verification is still required in the running app for supreme/standard/co
 Catalog layout follows a 4px base unit. The catalog shell uses 12px desktop spacing (8px on narrow screens); family cards and variant grids use 8px; individual specimen caption/control stacks use 4px. Related composite and tag grids use 4px or 8px gaps. Every grid child that can host a long label or a full-row primitive must be allowed to shrink with min-width: 0. Responsive rules may change columns but must not alter the production primitive's height, stroke, radius, typography, color pair, or behavior.
 
 Catalog CSS is layout-only. The real specimen source is src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx, and layout rules are in src/components/studio-hub/studio-hub-primitive-catalogs.css. Tests in scripts/audit/confirmed-library-layout.test.mjs guard the grid rhythm and source ownership. The separate complete catalog is a legacy comparison surface and must not be treated as the source of truth for production geometry.
+
+## Confirmed Primitive Library — grid layout contract
+
+The Confirmed Primitive Library is a layout and provenance surface around production primitives. It must not restyle production control geometry. Its layout uses one explicit **4px spacing unit** in `src/components/studio-hub/studio-hub-primitive-catalogs.css`:
+
+- Catalog-to-family spacing: 12px (3 units).
+- Family padding and family-to-specimen spacing: 8px (2 units).
+- Specimen-to-label/control spacing and tight control matrices: 4px (1 unit).
+- Nested matrices may use 8px or 12px when needed, but every catalog gap and padding value must remain a multiple of 4px; do not reintroduce 5px, 6px, 7px, 10px, or 12px as ad hoc values.
+- The default specimen grid uses two minmax-safe columns; explicitly full-row specimens span both columns. Choice/radio/checkbox skins retain four columns, standard word toggles remain one per row, and compact word toggles remain two per row.
+- Narrow layouts retain min-width: 0, border-box sizing, and wrapping for long labels. Responsive rules change placement, not production primitive size, stroke, typography, fill, or split anatomy.
+- Do not certify layout by source inspection alone. Verify the rendered catalog at desktop and narrow mobile widths, including open dropdowns, textareas, split controls, compact specimens, and status badges.
+
+The final authoritative CSS block is labelled `Confirmed Primitive Library — authoritative 4px grid system`. Older catalog CSS may remain for component-specific anatomy, but the final grid contract is the source of truth for spacing and responsive grid placement.
+
