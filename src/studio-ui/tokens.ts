@@ -73,7 +73,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     followsTypographySizeFamily: true,
     globalRuleException: true,
   },
-  /** Multiline surface shares the input typography/focus token ladder; only description line-height is specialized. */
+  /** Multiline surface has a dedicated 18px/14px typography exception with size-scaled Supreme and supported Micro metrics. */
   multiline: { supremeFontSize: 18 * 60 / 44, standardFontSize: 18, compactFontSize: 14, microFontSize: 10, supremeTextStroke: 0.5 * 60 / 44, standardTextStroke: 0.5, compactTextStroke: 0.35, microTextStroke: 0.25, fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight, minHeight: 92, lineHeight: 0.75, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas use their registered 18px/14px standard/compact typography exception, scale standard metrics for Supreme, retain supported Micro sizing, and use a 0.75 description line-height." },
 } as const
 
