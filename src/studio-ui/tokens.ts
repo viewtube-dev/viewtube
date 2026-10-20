@@ -58,7 +58,7 @@ export const STUDIO_CONTROL_SIZE_BASE = {
 export const STUDIO_CONTROL_SIZE_CONTRACT = {
   ...STUDIO_CONTROL_SIZE_BASE,
   /** Single-line text inputs inherit the canonical global standard/compact control typography. */
-  textInput: { standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize, compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize, fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight, lineHeight: 0.86, width: "row", textTransform: "uppercase", letterSpacing: -0.02, textAlign: "left", defaultFillOpacity: 50, defaultTextColor: "primary", inlineStrokeColor: "primary", inlineStrokeWidth: "same as border width", focusTextColor: "#000000", focusFillOpacity: 15, focusOutlineColor: "secondary at 100% opacity", focusOutlineWidth: "65% of border width", followsSizeFamily: true },
+  textInput: { supremeFontSize: STUDIO_CONTROL_SIZE_BASE.supreme.fontSize, standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize, compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize, fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight, lineHeight: 0.86, width: "row", textTransform: "uppercase", letterSpacing: -0.02, textAlign: "left", defaultFillOpacity: 50, defaultTextColor: "primary", inlineStrokeColor: "primary", inlineStrokeWidth: "same as border width", focusTextColor: "#000000", focusFillOpacity: 15, focusOutlineColor: "secondary at 100% opacity", focusOutlineWidth: "65% of border width", followsSizeFamily: true },
   /** Vertical two-word stack keeps the global type/stroke/radius tiers; only height is content-driven. */
   verticalWordToggle: {
     standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
@@ -74,7 +74,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     globalRuleException: true,
   },
   /** Multiline surface shares the input typography/focus token ladder; only description line-height is specialized. */
-  multiline: { minHeight: 92, lineHeight: 0.75, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas inherit the same size-tier font size, text stroke, color, fill, caret, and focus outline tokens as text inputs; editable description rows alone use line-height 0.75." },
+  multiline: { supremeFontSize: 18 * 60 / 44, standardFontSize: 18, compactFontSize: 14, microFontSize: 10, minHeight: 92, lineHeight: 0.75, textAlign: "left", resize: "vertical", preservesSizeFamily: true, rationale: "Textareas inherit the same size-tier font size, text stroke, color, fill, caret, and focus outline tokens as text inputs; editable description rows alone use line-height 0.75." },
 } as const
 
 /** Studio Hub shell tokens; only shell-level values inherit the SubToolbox hierarchy. */
