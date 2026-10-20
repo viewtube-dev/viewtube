@@ -117,6 +117,8 @@ export const STUDIO_ICON_SIZE_COMPARISON = {
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
 export type StudioControlSize = "supreme" | "standard" | "compact" | "micro"
+/** Interactive button/dropdown families deliberately exclude the dense Micro tier. */
+export type StudioControlInteractiveSize = Exclude<StudioControlSize, "micro">
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
 
 
