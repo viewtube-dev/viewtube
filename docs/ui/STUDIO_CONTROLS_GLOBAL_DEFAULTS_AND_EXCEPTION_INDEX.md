@@ -152,7 +152,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Exception | Exact exception | Why it exists |
 |---|---|---|
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
-| Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/14px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
+| Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/12px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
 | Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 1.25 / 1.3, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Separate 56px action family, 3px stroke, 6px radius, no shadow | Workflow emphasis is not a third size tier of ordinary 44px/28px controls |
@@ -201,7 +201,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Standard / compact / micro face geometry: 44px / 28px / 14px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
+- Supreme / standard / compact / micro face geometry: 60px / 44px / 28px / 12px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
 - Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
@@ -234,7 +234,7 @@ Visual verification is still required in the running app for supreme/standard/co
 - Canonical primitive: `StudioBrainStatusBadge` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; Component Library specimens: `Brain Status LED Badges` in `StudioHubCompletePrimitiveCatalog.tsx`.
 - Anatomy: borderless pill badge with white uppercase text on black, or black uppercase text on a lighter tint matching the saturated LED color. A smaller LED sits to the left of the label; the LED core does not change the badge's layout size.
 - Tones: green, cyan, purple, yellow, red, and blue. Variants include dark-fill/saturated-LED and light-tinted-fill/black-text.
-- Density variants: standard (24px badge surface, 10px LED), compact (20px surface, 8px LED), and micro (14px surface, 6px LED). These are status badges, not ordinary 44px/28px input/button geometry.
+- Density variants: standard (24px badge surface, 10px LED), compact (20px surface, 8px LED), and micro (12px surface, 5px LED). These are status badges, not ordinary 44px/28px input/button geometry.
 - Active LED ripple follows the library's eight-second cycle: saturated ring starts at the LED core, expands to five times its size over three seconds and fades. Reduced-motion disables the ripple. Inactive state dims the core and removes the ripple.
 - Status labels are descriptive, not actions. Consumers must pass the real status and must not show “ready”, “synced” or “complete” unless the owning workflow reports that state.
 
