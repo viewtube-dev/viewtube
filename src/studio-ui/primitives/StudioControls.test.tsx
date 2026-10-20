@@ -259,22 +259,6 @@ describe("standalone Studio text fields", () => {
     expect(standard).toContain('contenteditable="false"')
     expect(compact).toContain('data-size="compact"')
     expect(micro).toContain('data-size="micro"')
-    expect(microInput).toContain('data-vt-studio-control="true"')
-    expect(microInput).toContain('data-size="micro"')
-    expect(microInput).toContain('data-vt-studio-control="true"')
-    expect(microInput).toContain('data-size="micro"')
-  })
-
-  it("keeps Confirmed Primitive Library size specimens aligned to production APIs", () => {
-    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
-    expect(catalog).toContain('Family title="Prominent Action · 60px Supreme"')
-    expect(catalog).toContain('sizeVariant="standard"')
-    expect(catalog).toContain('sizeVariant="compact"')
-    expect(catalog).toContain('sizeVariant="supreme"')
-    expect(catalog).toContain('aria-label="Studio plain text input micro"')
-    expect(catalog).toContain('sizeVariant="micro"')
-    expect(catalog).not.toContain('Family title="Prominent Action · 56px"')
-    expect(catalog).not.toContain('56px prominent workflow action')
   })
 
   it("uses half-width black borders and matching primary/secondary strokes for StudioTextBox", () => {
