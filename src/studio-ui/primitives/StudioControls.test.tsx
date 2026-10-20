@@ -1019,12 +1019,27 @@ describe("Supreme and Micro production size contract", () => {
     const textBox = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme display">SUPREME</StudioTextBox>)
     const dropdown = renderToStaticMarkup(<StudioDropdown sizeVariant="supreme" options={[{ value: "a", label: "Alpha" }]} />)
     const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro" icon={<span>+</span>}>MICRO</StudioSplitLeftBadge>)
+    const microInput = renderToStaticMarkup(<StudioTextInput sizeVariant="micro" aria-label="Micro title" placeholder="TITLE" />)
     expect(supreme).toContain('data-size="supreme"')
     expect(supreme).toContain('data-height-variant="60"')
     expect(action).toContain('data-size="supreme"')
     expect(textBox).toContain('data-size="supreme"')
     expect(dropdown).toContain('data-size="supreme"')
     expect(micro).toContain('data-size="micro"')
+    expect(microInput).toContain('data-vt-studio-control="true"')
+    expect(microInput).toContain('data-size="micro"')
+  })
+
+  it("keeps Confirmed Primitive Library size specimens aligned to production APIs", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    expect(catalog).toContain('Family title="Prominent Action · 60px Supreme"')
+    expect(catalog).toContain('sizeVariant="standard"')
+    expect(catalog).toContain('sizeVariant="compact"')
+    expect(catalog).toContain('sizeVariant="supreme"')
+    expect(catalog).toContain('aria-label="Studio plain text input micro"')
+    expect(catalog).toContain('sizeVariant="micro"')
+    expect(catalog).not.toContain('Family title="Prominent Action · 56px"')
+    expect(catalog).not.toContain('56px prominent workflow action')
   })
 
   it("keeps generated CSS and global styles aligned to the canonical 60px and 12px tiers", () => {
