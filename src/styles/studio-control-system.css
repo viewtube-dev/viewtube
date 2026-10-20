@@ -1316,27 +1316,30 @@ button[data-vt-studio-button="true"][data-icon-size-variant="moderate"][data-siz
 button[data-vt-studio-button="true"][data-icon-size-variant="moderate"][data-size="compact"] { --vt-studio-control-icon-size:22px; --vt-studio-control-icon-stroke:1.35; }
 button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="standard"] { --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
 button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
-/* StudioActionButton is the public Supreme-size action variant. */
+/* StudioActionButton defaults to Supreme and follows the shared interactive size tiers. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px);
   appearance: none; box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
-  min-height: 60px; height: 60px; padding: 0; border: 0; border-radius: var(--vt-studio-supreme-radius, 8.18px); background: transparent;
+  min-height: var(--vt-studio-control-height, 60px); height: var(--vt-studio-control-height, 60px); padding: 0; border: 0; border-radius: var(--vt-studio-control-radius, 8.18px); background: transparent;
    overflow: visible; color: #000;
   
 }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px); --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, 2.66px); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="standard"] { --vt-studio-control-height: var(--vt-studio-standard-height, 44px); --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px); --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px); --vt-studio-control-secondary-outline-width: var(--vt-studio-compact-secondary-outline-width, 1.3px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--vt-studio-space-unit, 4px);
-  width: 100%; min-width: 0; min-height: 60px; height: 60px; padding: 4px 8px;
-  border: var(--vt-studio-supreme-stroke, 4.09px) solid #000; border-radius: var(--vt-studio-supreme-radius, 8.18px);
+  width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 60px); height: var(--vt-studio-control-height, 60px); padding: 4px 8px;
+  border: var(--vt-studio-control-stroke, 4.09px) solid #000; border-radius: var(--vt-studio-control-radius, 8.18px);
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: var(--vt-studio-supreme-font-size, 51.82px); font-weight: 1000; line-height: .86; letter-spacing: -.02em;
+  font-size: var(--vt-studio-control-font-size, 51.82px); font-weight: 1000; line-height: .86; letter-spacing: -.02em;
   text-transform: uppercase; -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
   
 }
 
 
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-supreme-secondary-outline-width, 2.66px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-control-secondary-outline-width, 2.66px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
