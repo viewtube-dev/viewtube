@@ -3071,3 +3071,186 @@
   .vt-confirmed-vertical-word-toggle-specimen,
   .vt-catalog-brain-status-badges__group { gap: var(--vt-confirmed-grid-unit); }
 }
+
+/* Confirmed Primitive Library — authoritative 4px grid system
+ * Layout-only rules: never alter the production primitives' geometry or tokens.
+ * All external catalog spacing is a multiple of the shared 4px unit.
+ */
+.vt-confirmed-catalog {
+  --vt-confirmed-grid-unit: 4px;
+  --vt-confirmed-space-1: calc(var(--vt-confirmed-grid-unit) * 1);
+  --vt-confirmed-space-2: calc(var(--vt-confirmed-grid-unit) * 2);
+  --vt-confirmed-space-3: calc(var(--vt-confirmed-grid-unit) * 3);
+  --vt-confirmed-space-4: calc(var(--vt-confirmed-grid-unit) * 4);
+  display: grid;
+  gap: var(--vt-confirmed-space-3);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-family {
+  display: grid;
+  gap: var(--vt-confirmed-space-2);
+  min-width: 0;
+  padding: var(--vt-confirmed-space-2);
+}
+.vt-confirmed-family > h3 {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-variants {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--vt-confirmed-space-2);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-variant {
+  display: grid;
+  align-content: start;
+  gap: var(--vt-confirmed-space-1);
+  min-width: 0;
+  max-width: 100%;
+}
+.vt-confirmed-variant > span:not([data-vt-studio-control="true"]) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.vt-confirmed-variant.is-full-row,
+.vt-confirmed-variant:has(textarea),
+.vt-confirmed-variant:has([data-vt-studio-field-kind="textarea"]) {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+.vt-confirmed-composite-grid,
+.vt-confirmed-username-grid,
+.vt-confirmed-stepper-row-grid,
+.vt-confirmed-square-variant-grid,
+.vt-confirmed-square-effect-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vt-confirmed-space-2);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-spectrum-tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vt-confirmed-space-1);
+  min-width: 0;
+}
+.vt-confirmed-control-family {
+  display: grid;
+  gap: var(--vt-confirmed-space-3);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-control-row,
+.vt-confirmed-choice-module,
+.vt-confirmed-choice-examples,
+.vt-confirmed-toggle-subfamily,
+.vt-confirmed-stepper-row {
+  gap: var(--vt-confirmed-space-2);
+  min-width: 0;
+}
+.vt-confirmed-choice-names,
+.vt-confirmed-choice-variant-headings,
+.vt-confirmed-choice-example-row,
+.vt-confirmed-square-effect-pair,
+.vt-confirmed-square-effect-sizes,
+.vt-confirmed-vertical-word-toggle-specimen {
+  gap: var(--vt-confirmed-space-1);
+  min-width: 0;
+}
+.vt-confirmed-choice-example-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.vt-confirmed-control-family .vt-confirmed-word-toggle-standard {
+  grid-template-columns: minmax(0, 1fr);
+}
+.vt-confirmed-control-family .vt-confirmed-word-toggle-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.vt-confirmed-paired-compact-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vt-confirmed-space-1);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-paired-compact-row > .vt-confirmed-variant,
+.vt-confirmed-composite-grid > *,
+.vt-confirmed-username-grid > *,
+.vt-confirmed-stepper-row-grid > *,
+.vt-confirmed-square-variant-grid > *,
+.vt-confirmed-square-effect-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.vt-confirmed-source-details {
+  min-width: 0;
+  padding-top: var(--vt-confirmed-space-1);
+}
+.vt-confirmed-source-details[open] {
+  display: grid;
+  gap: var(--vt-confirmed-space-2);
+}
+.vt-confirmed-provenance {
+  gap: var(--vt-confirmed-space-1);
+}
+.vt-confirmed-catalog :is(input, textarea, select, button, [data-vt-studio-control]) {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.vt-confirmed-catalog :is(input, textarea, select, [data-vt-studio-field-kind="textarea"]) {
+  min-width: 0;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-catalog {
+    gap: var(--vt-confirmed-space-2);
+  }
+  .vt-confirmed-family {
+    gap: var(--vt-confirmed-space-2);
+    padding: var(--vt-confirmed-space-2);
+  }
+  .vt-confirmed-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vt-confirmed-space-2);
+  }
+  .vt-confirmed-variant {
+    gap: var(--vt-confirmed-space-1);
+  }
+  .vt-confirmed-composite-grid,
+  .vt-confirmed-username-grid,
+  .vt-confirmed-stepper-row-grid,
+  .vt-confirmed-square-variant-grid,
+  .vt-confirmed-square-effect-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vt-confirmed-space-2);
+  }
+  .vt-confirmed-control-family,
+  .vt-confirmed-control-row,
+  .vt-confirmed-choice-module,
+  .vt-confirmed-choice-examples,
+  .vt-confirmed-toggle-subfamily,
+  .vt-confirmed-stepper-row,
+  .vt-confirmed-stepper-row-grid {
+    gap: var(--vt-confirmed-space-2);
+  }
+  .vt-confirmed-choice-names,
+  .vt-confirmed-choice-variant-headings,
+  .vt-confirmed-choice-example-row,
+  .vt-confirmed-square-effect-pair,
+  .vt-confirmed-square-effect-sizes,
+  .vt-confirmed-vertical-word-toggle-specimen,
+  .vt-confirmed-spectrum-tag-grid,
+  .vt-catalog-brain-status-badges__group {
+    gap: var(--vt-confirmed-space-1);
+  }
+}
+
