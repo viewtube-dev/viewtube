@@ -358,6 +358,7 @@ export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath }> = ({ 
  const badge = GENERATION_BADGES[path]
  return (
   <span
+   data-vt-brain-component="BrainGenerationBadge"
    role="status"
    tabIndex={0}
    aria-label={`${badge.label} response status`}
@@ -668,12 +669,12 @@ const CreatorResponseCard: React.FC<{
   { key: "projects" as const, label: "Review in Projects", matches: /project|publish|package|content build|workflow|content plan/ },
  ].filter((option) => option.matches.test(handoffContext))
  if (!response && message.learningReceipt) {
-  return <article className={assistantCardFrame}><BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /></article>
+  return <article data-vt-brain-component="BrainLearningReceiptCard" className={assistantCardFrame}><BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /></article>
  }
  if (!response) {
   const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
-   <article className={`${assistantCardFrame} p-4`}>
+   <article data-vt-brain-component="BrainInterruptedResponseCard" className={`${assistantCardFrame} p-4`}>
     <div className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
     <p className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
     {canRetry ? (
@@ -721,7 +722,7 @@ const CreatorResponseCard: React.FC<{
  )
 
  return (
-  <article className={`${assistantCardFrame} flex flex-col overflow-hidden`}>
+  <article data-vt-brain-component="BrainResponseCard" className={`${assistantCardFrame} flex flex-col overflow-hidden`}>
    <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
     <div className="flex flex-wrap items-start justify-between gap-1.5">
      <div className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
@@ -845,8 +846,8 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
       </ul>
      </div>
     ) : null}
-    {readiness.capturedAt ? <p className="text-[9px] font-bold text-black/45">Evidence snapshot: {readiness.capturedAt}</p> : null}
-    <p className="text-[9px] font-bold leading-4 text-black/55">This status is based on the synced data and diagnostic records attached to this turn. Missing metrics are not estimated.</p>
+    {readiness.capturedAt ? <p data-vt-brain-part="evidence-snapshot-timestamp" className="text-[9px] font-bold text-black/45">Evidence snapshot: {readiness.capturedAt}</p> : null}
+    <p data-vt-brain-part="evidence-provenance-note" className="text-[9px] font-bold leading-4 text-black/55">This status is based on the synced data and diagnostic records attached to this turn. Missing metrics are not estimated.</p>
    </div>
   </details>
  )
