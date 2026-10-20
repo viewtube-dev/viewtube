@@ -817,13 +817,14 @@ export const AdaptiveNavigationShell: React.FC<AdaptiveNavigationShellProps> = (
   ) : null
 
   const logo = (
-    <button type="button" className="vt-adaptive-nav__logo" onClick={() => navigate("/")} aria-label="Go to Dashboard">
+    <button type="button" data-vt-app-part="brand" className="vt-adaptive-nav__logo" onClick={() => navigate("/")} aria-label="Go to Dashboard">
       <span>View</span><span>Tube</span>
     </button>
   )
 
   return (
     <div
+      data-vt-app-component="AdaptiveNavigationShell"
       className="vt-adaptive-shell"
       data-layout={shellLayout}
       data-editor-chromeless={hideMobileEditorChrome ? "true" : "false"}
@@ -867,6 +868,7 @@ export const AdaptiveNavigationShell: React.FC<AdaptiveNavigationShellProps> = (
                   {workspaceUx.globalQuickSwitcher ? (
                     <button
                       type="button"
+                      data-vt-app-part="global-search-shortcut"
                       className="vt-adaptive-nav__quick-switcher-drawer"
                       onClick={openQuickSwitcher}
                     >
