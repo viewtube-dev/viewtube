@@ -444,6 +444,7 @@ export const BrainPromptLibrary: React.FC<{
 
  return (
   <section
+   data-vt-brain-component="BrainPromptLibrary"
    aria-label="Prompt library"
    aria-labelledby={headingId}
    aria-busy={busy || undefined}
