@@ -255,7 +255,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 .vt-studio-dropdown[data-size="compact"] {
   --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-  --vt-studio-control-font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
   --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
   --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
   --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
@@ -1106,11 +1106,11 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   padding: 8px 10px;
-  font-size: var(--vt-studio-compact-font-size, 24px);
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
   -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
-  font-size: var(--vt-studio-micro-font-size, 10px);
+  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
   -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) var(--vt-field-primary);
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder {
