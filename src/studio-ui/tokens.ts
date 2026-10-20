@@ -68,7 +68,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     textTransform: "uppercase",
     letterSpacing: -0.02,
     lineHeight: 0.86,
-    height: "content-driven two-word stack; intentionally not 44px / 28px / 14px",
+    height: "content-driven two-word stack; intentionally not 60px / 44px / 28px / 12px",
     width: "row",
     followsTypographySizeFamily: true,
     globalRuleException: true,
@@ -92,7 +92,7 @@ export const STUDIO_TOKENS = {
   typography: {
     label: 24,
     fixedLabel: { standardFontSize: 14, compactFontSize: 9, fontWeight: 1000, textStroke: 0 },
-    floatingLabel: { standardRestingFontSize: 38, compactRestingFontSize: 24, microRestingFontSize: 10, standardRaisedFontSize: 18, compactRaisedFontSize: 18, microRaisedFontSize: 18, fontWeight: 1000, textStroke: 0.5, offsetRatio: 1.2 },
+    floatingLabel: { supremeRestingFontSize: 51.82, standardRestingFontSize: 38, compactRestingFontSize: 24, microRestingFontSize: 10, supremeRaisedFontSize: 24, standardRaisedFontSize: 18, compactRaisedFontSize: 18, microRaisedFontSize: 18, fontWeight: 1000, textStroke: 0.5, offsetRatio: 1.2 },
     control: STUDIO_CONTROL_SIZE_CONTRACT.standard.fontSize,
     compactControl: STUDIO_CONTROL_SIZE_CONTRACT.compact.fontSize,
     subtoolboxTitle: TOOLBOX_LEVEL_DNA.l0.titleSize,
