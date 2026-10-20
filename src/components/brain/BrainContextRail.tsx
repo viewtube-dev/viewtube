@@ -87,6 +87,7 @@ export const BrainContextRail: React.FC<{
 
  return (
   <aside
+   data-vt-brain-component="BrainContextRail"
    className={`grid content-start gap-2 ${compactGrid ? "grid-cols-2" : "grid-cols-1"}`}
    aria-label="What the Brain currently knows"
   >
