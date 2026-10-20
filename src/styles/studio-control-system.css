@@ -1099,6 +1099,11 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   line-height: var(--vt-studio-textarea-line-height, .75);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
+textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="supreme"] {
+  line-height: var(--vt-studio-textarea-line-height, .75);
+  font-size: calc(var(--vt-studio-textarea-standard-font-size, 18px) * 1.363636);
+  padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
+}
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   padding: 8px 10px;
   font-size: var(--vt-studio-compact-font-size, 24px);
@@ -4892,6 +4897,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   overflow-wrap: anywhere;
   user-select: text;
   cursor: text;
+}
+.vt-studio-text-box[data-vt-studio-control="true"][data-size="supreme"] {
+  padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
+  font-size: calc(var(--vt-studio-textarea-standard-font-size, 18px) * 1.363636);
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
   padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
