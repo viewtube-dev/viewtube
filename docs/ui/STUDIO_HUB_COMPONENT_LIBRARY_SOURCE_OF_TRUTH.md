@@ -6,6 +6,10 @@
 **Studio Controls authoring guide:** [`STUDIO_CONTROLS_AUTHORING_GUIDE.md`](./STUDIO_CONTROLS_AUTHORING_GUIDE.md).  
 **Related authority:** `../architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md` owns the production Toolbox/Subtoolbox system globally. Production tokens/code/tests win over catalog-only CSS.
 
+## Studio Controls size-tier authority — 2026-10-20
+
+The production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Micro 12px**. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Micro has an explicit 12px height and is not derived from half Compact. Micro remains family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
+
 `ToolboxUIReferenceLibrary.tsx` is the Studio Hub entry point and shell. It must not maintain an independent subset of component examples.
 
 `StudioHubCompletePrimitiveCatalog.tsx` owns the canonical family registry and rendered examples. Add reusable component families there so they automatically appear in the Studio Hub toolbox.
@@ -382,7 +386,7 @@ For each family, display the production source paths, standard and compact sizes
 ## Vertical Studio word toggle — canonical primitive update · 2026-10-19
 
 - `StudioVerticalWordToggle` is a separate canonical primitive beside the existing horizontal `StudioWordToggle`; it is exported from `src/studio-ui/primitives/StudioControls.tsx` and styled only in `src/styles/studio-control-system.css`.
-- It inherits the Studio standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 44px / 28px / 14px.
+- It inherits the Studio supreme/standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 44px / 28px / 14px.
 - The confirmed primitive catalog demonstrates four live variants with independent state: primary/secondary, black fill, primary fill with white handle, and white fill with black handle. Word color updates at animation start; the handle uses vertical expansion/release and color-wipe motion and honors reduced-motion preferences.
 - Gallery geometry is standard 2-up, compact 3-up, and micro 2×2 at the end of compact row two. Source-level tests cover the exported primitive, variant attributes, size tiers, and registered exception. Browser visual certification is still required before claiming pixel-perfect behavior.
 
