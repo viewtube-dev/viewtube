@@ -143,7 +143,7 @@ export const BrainContextRail: React.FC<{
      </p>
     )}
     <p className="border-t-[2px] border-black/10 pt-2 text-[11px] font-bold leading-4 text-black/70">
-     <span className="font-black uppercase tracking-[0.08em] text-black/45">Goal · </span>
+     <span data-vt-brain-part="creator-goal-label" className="font-black uppercase tracking-[0.08em] text-black/45">Goal · </span>
      {goal || "Not set. Tell me what matters most this month."}
     </p>
    </Panel>
