@@ -1074,7 +1074,6 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
 )
 StudioButton.displayName = "StudioButton"
 
-/** Two-line text variant of the canonical 44px / 28px Studio button. */
 /** Backwards-compatible named wrapper; the actual layout variant belongs to StudioButton. */
 export interface StudioTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "textLayout" | "firstLine" | "secondLine"> {
   firstLine: React.ReactNode
