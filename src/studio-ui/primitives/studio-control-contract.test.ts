@@ -5,9 +5,9 @@ import { resolve } from "node:path";
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8");
 
 describe("Studio control global contract", () => {
-  it("defines canonical standard/compact/micro geometry without an internal gap token", () => {
+  it("defines canonical Supreme/standard/compact/Micro geometry without an internal gap token", () => {
     const css = read("src/styles/studio-control-vars.generated.css");
-    for (const token of ["--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px"]) expect(css).toContain(token);
+    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px"]) expect(css).toContain(token);
     expect(css).not.toContain("--vt-studio-control-gap");
   });
   it("keeps split rails secondary and shells flat", () => {
