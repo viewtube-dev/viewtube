@@ -40,7 +40,7 @@
   --vt-studio-micro-icon-stroke: 1.5;
   --vt-studio-micro-focus-outline-width: 0.65px;
   --vt-studio-micro-secondary-outline-width: 0.65px;
-  /* Compatibility aliases: numbered names resolve to canonical tiers. */
+  /* Compatibility aliases: old numbered names resolve to the canonical tier tokens. */
   --vt-studio-60-height: var(--vt-studio-supreme-height);
   --vt-studio-60-stroke: var(--vt-studio-supreme-stroke);
   --vt-studio-60-radius: var(--vt-studio-supreme-radius);
@@ -72,8 +72,8 @@
   --vt-studio-dropdown-compact-chevron-stroke: 1.65;
   --vt-studio-number-default-white-mix: 50%;
   --vt-studio-number-rest-mix: 50%;
-  --vt-studio-number-active-color: #000;
-  --vt-studio-number-active-stroke: #000;
+  --vt-studio-number-active-color: #000000;
+  --vt-studio-number-active-stroke: #000000;
   --vt-studio-floating-label-standard-height: 38px;
   --vt-studio-floating-label-compact-height: 24px;
   --vt-studio-floating-label-offset-ratio: 1.2;
