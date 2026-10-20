@@ -362,7 +362,7 @@ The Confirmed Primitive Library must render production imports, not locally redr
 
 ### Button families
 - StudioButton: 44px standard and 28px compact; accent, neutral, danger, warning, and success tones; selected, disabled, and loading states; inherited keyboard focus, tactile press, and reduced-motion behavior.
-- StudioActionButton: separate fixed 56px prominent workflow-action family, not a third ordinary button size.
+- StudioActionButton: prominent workflow-action role, Supreme 60px by default, with standard/compact variants using shared tier tokens; no separate 56px size family.
 - StudioIconButton: icon-only wrapper over StudioButton; inherits button sizing, tone, selected, disabled, loading, and focus contracts.
 
 ### Split-left families
