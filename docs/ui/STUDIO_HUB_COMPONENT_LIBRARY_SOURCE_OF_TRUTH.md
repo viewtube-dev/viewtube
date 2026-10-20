@@ -386,7 +386,7 @@ For each family, display the production source paths, standard and compact sizes
 ## Vertical Studio word toggle — canonical primitive update · 2026-10-19
 
 - `StudioVerticalWordToggle` is a separate canonical primitive beside the existing horizontal `StudioWordToggle`; it is exported from `src/studio-ui/primitives/StudioControls.tsx` and styled only in `src/styles/studio-control-system.css`.
-- It inherits the Studio supreme/standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 44px / 28px / 14px.
+- It inherits the Studio supreme/standard/compact/micro typography, weight, letter spacing, border stroke, and radius tokens. Only total height is exempt: two vertically stacked word faces make height content-driven rather than fixed to 60px / 44px / 28px / 12px.
 - The confirmed primitive catalog demonstrates four live variants with independent state: primary/secondary, black fill, primary fill with white handle, and white fill with black handle. Word color updates at animation start; the handle uses vertical expansion/release and color-wipe motion and honors reduced-motion preferences.
 - Gallery geometry is standard 2-up, compact 3-up, and micro 2×2 at the end of compact row two. Source-level tests cover the exported primitive, variant attributes, size tiers, and registered exception. Browser visual certification is still required before claiming pixel-perfect behavior.
 
@@ -409,7 +409,7 @@ For each family, display the production source paths, standard and compact sizes
 **Source test:** `src/studio-ui/primitives/StudioBrainStatusIndicator.test.tsx`
 
 - Combines LED-light (library item 64) with borderless badge (item 45).
-- Rectangular 44/28/14px tiers with 6/4/2px corner radii, not pill shapes.
+- Rectangular 44/28/12px tiers with 6/4/2px corner radii, not pill shapes.
 - Saturated LED glow and staggered ripple rings; centered 1px black lens outline at 65% LED diameter with 60%-opacity white fill.
 - Dark fill/white text and tinted fill/black text variants; running, success, warning, error, info, paused, idle, queued, processing, complete, blocked and failed states.
 - Configurable pulse respects `prefers-reduced-motion`; text remains visible so color is not the only status signal.
