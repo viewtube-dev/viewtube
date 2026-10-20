@@ -3278,7 +3278,7 @@
 }
 
 /* Final spacing normalization: legacy catalog subfamilies must also obey the 4px lattice. */
-[class*="vt-confirmed-"]:not(.vt-confirmed-catalog) {
+:where([class*="vt-confirmed-"]:not(.vt-confirmed-catalog)) {
   gap: var(--vt-confirmed-space-1) !important;
   padding: var(--vt-confirmed-space-1) !important;
 }
