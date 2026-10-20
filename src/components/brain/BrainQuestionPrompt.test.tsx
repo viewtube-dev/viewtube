@@ -36,7 +36,7 @@ describe("BrainQuestionPrompt text ownership", () => {
    id: "question-direction-1",
    question: "What topic or working video title should these drafts be about?",
    reason: "A subject is required before drafts can be prepared.",
-   category: "confirm_direction",
+   category: "preference",
    confidence: "high",
   }
   const html = renderToStaticMarkup(
