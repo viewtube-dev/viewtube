@@ -429,8 +429,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
 
     <Family title="Prominent Action · 56px" nonDefaultSettings={[
-        "Dedicated 56px action family with 20px label typography; it is not a third ordinary-button size.",
-      ]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        "Supreme 60px default with standard/compact variants; it is not a separate ordinary-button size.",
+      ]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme 60px default with standard/compact variants; workflow role shares canonical size tokens." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>56px prominent workflow action</span><StudioActionButton data-vt-library-component="StudioActionButton">CREATE PACKAGE</StudioActionButton></div>
     </Family>
 
