@@ -29,8 +29,8 @@ const sizeTiers = {
 
 function readPair(contract, property) {
   const block = contract.match(new RegExp(`${property}:\\s*\\{([^}]*)\\}`))?.[1] ?? "";
-  const standard = block.match(/standard:\\s*([\\d.]+)/)?.[1];
-  const compact = block.match(/compact:\\s*([\\d.]+)/)?.[1];
+  const standard = block.match(/standard:\s*([\d.]+)/)?.[1];
+  const compact = block.match(/compact:\s*([\d.]+)/)?.[1];
   if (!standard || !compact) throw new Error(`Missing Studio token pair: ${property}`);
   return { standard: Number(standard), compact: Number(compact) };
 }
