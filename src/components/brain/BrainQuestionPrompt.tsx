@@ -59,7 +59,7 @@ export const BrainQuestionPrompt: React.FC<{
         key={option}
         type="button"
         sizeVariant="compact"
-        variant="v1"
+        tone="neutral"
         onClick={() => onAnswer(question, option)}
         className="min-w-0"
        >
