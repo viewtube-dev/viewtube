@@ -385,3 +385,26 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 test("component descriptions above specimens stay on one compact line", () => {
   assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
 });
+
+
+test("confirmed primitive library layout uses a shared 4px grid rhythm", () => {
+  const marker = "/* Confirmed Primitive Library 4px grid contract */";
+  const gridContract = styles.slice(styles.lastIndexOf(marker));
+  assert.ok(gridContract.length > marker.length, "the final grid contract override exists");
+  assert.match(gridContract, /--vt-confirmed-grid-unit:\s*4px/);
+  assert.match(gridContract, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(gridContract, /\.vt-confirmed-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(gridContract, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(gridContract, /\.vt-confirmed-control-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(gridContract, /\.vt-confirmed-choice-example-row[^{}]*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(gridContract, /\.vt-confirmed-stepper-row-grid[^{}]*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+});
+
+test("confirmed primitive library grids collapse responsively without fractional or negative spacing", () => {
+  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
+  const marker = "/* Confirmed Primitive Library 4px grid contract */";
+  const gridContract = styles.slice(styles.lastIndexOf(marker));
+  assert.match(gridContract, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*min-width:\s*0/);
+  assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
+});

@@ -414,3 +414,15 @@ For each family, display the production source paths, standard and compact sizes
 - Dark fill/white text and tinted fill/black text variants; running, success, warning, error, info, paused, idle, queued, processing, complete, blocked and failed states.
 - Configurable pulse respects `prefers-reduced-motion`; text remains visible so color is not the only status signal.
 - Browser visual certification and contrast checks remain outstanding.
+
+
+## Confirmed Primitive Library grid system — 2026-10-20
+
+The Confirmed Primitive Library uses a shared **4px spacing unit** for catalog layout. The unit governs external gaps between the catalog shell, family cards, variant grids, and specimen cells; multiples of the unit (4px, 8px, 12px, 16px) may be used to establish hierarchy. Responsive rules may change column count but must retain min-width: 0 on grid children so long labels and full-row controls cannot force horizontal overflow.
+
+- src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx is the source-confirmed specimen registry and imports production primitives.
+- src/components/studio-hub/studio-hub-primitive-catalogs.css owns catalog placement, grid columns, cell spacing, specimen captions, and source disclosure presentation only.
+- src/studio-ui/primitives/StudioControls.tsx, the canonical token generator, generated token CSS, and production control styles remain the sole owners of control geometry and appearance.
+- Do not use catalog-only mock controls as proof of production support. Each size tier shown must be supported by the actual primitive API and verified render behavior.
+- Standard and compact comparison specimens may remain paired on narrow screens where the comparison itself is meaningful; grid containment is required even when columns are retained.
+- scripts/audit/confirmed-library-layout.test.mjs protects the shared spacing unit, responsive containment, production-source provenance, and the separation between catalog layout and control-face styling.

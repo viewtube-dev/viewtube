@@ -127,7 +127,7 @@ describe("canonical Studio upload frame", () => {
 
 describe("Studio radio build, orbit, and spiral motion contract", () => {
   it("renders the animated indicator inside the stationary 44px radio shell", () => {
-    const html = renderToStaticMarkup(<StudioChoice kind="radio" aria-label="Animated radio" />)
+    const html = renderToStaticMarkup(<StudioChoice kind="radio" checked={false} aria-label="Animated radio" />)
     expect(html).toContain('data-radio-motion="build"')
     expect(html).toContain('data-radio-direction="on"')
     expect(html).toContain('class="vt-studio-radio-motion"')

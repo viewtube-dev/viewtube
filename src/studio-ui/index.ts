@@ -53,6 +53,9 @@ export {
   StudioCheckbox,
   StudioXCheckbox,
   StudioUploadFrame,
+  StudioInlineStepper,
+  StudioSplitStepper,
+  normalizeStudioInlineStepperValue,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -86,6 +89,9 @@ export type {
   StudioTextBoxSize,
   StudioSimpleDropdownProps,
   StudioUploadFrameProps,
+  StudioInlineStepperProps,
+  StudioSplitStepperProps,
+  StudioSplitStepperSize,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"

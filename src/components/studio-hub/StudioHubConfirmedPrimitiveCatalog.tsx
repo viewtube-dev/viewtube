@@ -10,6 +10,8 @@ import {
   StudioXCheckbox,
   StudioLegendMultiDropdown,
   StudioCounter,
+  StudioInlineStepper,
+  StudioSplitStepper,
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioLeftCounter,
@@ -216,6 +218,62 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
     )}
   </section>
 )
+
+const ConfirmedStudioInlineStepperFamily: React.FC = () => {
+  const [standardValue, setStandardValue] = React.useState(22)
+  const [compactValue, setCompactValue] = React.useState(3)
+  return (
+    <Family
+      title="Inline Stepper · 44px + 28px"
+      nonDefaultSettings={[
+        "One flat three-section shell: decrement, editable numeric value, increment.",
+        "Standard and compact sizes are supported; the stepper does not claim Micro support.",
+      ]}
+      provenance={<Provenance primitive="StudioInlineStepper" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared Studio token and palette ownership" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-stepper-row" data-vt-library-component="StudioInlineStepper">
+        <div className="vt-confirmed-stepper-row-grid">
+          <div className="vt-confirmed-variant">
+            <span>44px standard · interactive</span>
+            <StudioInlineStepper value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard inline stepper" />
+          </div>
+          <div className="vt-confirmed-variant">
+            <span>28px compact · interactive</span>
+            <StudioInlineStepper value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact inline stepper" />
+          </div>
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+const ConfirmedStudioSplitStepperFamily: React.FC = () => {
+  const [standardValue, setStandardValue] = React.useState(4)
+  const [compactValue, setCompactValue] = React.useState(3)
+  return (
+    <Family
+      title="Split Stepper · Username Foundation"
+      nonDefaultSettings={[
+        "Editable value pane uses the shared username-input foundation and a secondary vertical action rail.",
+        "Standard and compact variants are supported; Micro is intentionally not exposed.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitStepper" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="2:1 editable value pane · square secondary action rail · no shadows" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-stepper-row" data-vt-library-component="StudioSplitStepper">
+        <div className="vt-confirmed-stepper-row-grid">
+          <div className="vt-confirmed-variant">
+            <span>44px standard · interactive</span>
+            <StudioSplitStepper value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard split stepper" />
+          </div>
+          <div className="vt-confirmed-variant">
+            <span>28px compact · interactive</span>
+            <StudioSplitStepper value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact split stepper" />
+          </div>
+        </div>
+      </div>
+    </Family>
+  )
+}
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
   const [standardPrimary, setStandardPrimary] = React.useState(22)
@@ -844,6 +902,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioSimpleDropdown aria-label="Fixed trailing chevron example" sizeVariant="compact" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }, { value: "focused", label: "Focused" }]} />
       </div>
     </Family>
+    <ConfirmedStudioInlineStepperFamily />
+    <ConfirmedStudioSplitStepperFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
