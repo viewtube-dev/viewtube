@@ -2828,10 +2828,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
       data-vt-studio-split="double"
       data-size={size}
     >
-      <div className="vt-studio-inline-stepper__actions">
-        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
-        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
-      </div>
+      <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
       <input
         className="vt-studio-inline-stepper__value"
         type="number"
@@ -2846,6 +2843,7 @@ export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
           if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
         }}
       />
+      <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
     </div>
   );
 };
