@@ -5092,7 +5092,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 .vt-studio-brain-status[data-size="standard"] { --vt-brain-status-height: 44px; --vt-brain-led-size: 18px; --vt-brain-status-gap: 9px; padding-inline: 12px; font-size: 16px; }
 .vt-studio-brain-status[data-size="compact"] { --vt-brain-status-height: 28px; --vt-brain-led-size: 12px; --vt-brain-status-gap: 7px; padding-inline: 9px; font-size: 11px; }
-.vt-studio-brain-status[data-size="micro"] { --vt-brain-status-height: 12px; --vt-brain-led-size: 7px; --vt-brain-status-gap: 4px; padding-inline: 4px; font-size: 7px; border-radius: 2px; }
+.vt-studio-brain-status[data-size="micro"] { --vt-brain-status-height: 12px; --vt-brain-led-size: 5px; --vt-brain-status-gap: 4px; padding-inline: 4px; font-size: 7px; border-radius: 2px; }
 .vt-studio-brain-status--tinted { color: #000; background: var(--vt-brain-status-tint, #edf0f4); }
 .vt-studio-brain-status[data-status="running"], .vt-studio-brain-status[data-status="complete"] { --vt-brain-status-led: #20ff62; --vt-brain-status-tint: #d8ffe2; }
 .vt-studio-brain-status[data-status="success"], .vt-studio-brain-status[data-status="queued"] { --vt-brain-status-led: #168cff; --vt-brain-status-tint: #dcecff; }
