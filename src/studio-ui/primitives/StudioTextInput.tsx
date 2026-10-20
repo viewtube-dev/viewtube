@@ -12,7 +12,7 @@ type StudioTextInputBaseProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "size"
 > & {
-  /** standard = 44/38 · compact = 28/24 · micro = 14/10 */
+  /** standard = 44/38 · compact = 28/24 · micro = 12/10 */
   sizeVariant?: StudioControlSize
 }
 
