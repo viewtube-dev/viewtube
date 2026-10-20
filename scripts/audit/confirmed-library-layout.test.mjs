@@ -388,11 +388,14 @@ test("component descriptions above specimens stay on one compact line", () => {
 
 
 test("confirmed primitive library layout uses a shared 4px grid rhythm", () => {
-  assert.match(styles, /--vt-confirmed-grid-unit:\s*4px/);
-  assert.match(styles, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
-  assert.match(styles, /\.vt-confirmed-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
-  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
-  assert.match(styles, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  const marker = "/* Confirmed Primitive Library 4px grid contract */";
+  const gridContract = styles.slice(styles.lastIndexOf(marker));
+  assert.ok(gridContract.length > marker.length, "the final grid contract override exists");
+  assert.match(gridContract, /--vt-confirmed-grid-unit:\s*4px/);
+  assert.match(gridContract, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(gridContract, /\.vt-confirmed-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(gridContract, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
 });
 
 test("confirmed primitive library grids collapse responsively without fractional or negative spacing", () => {
