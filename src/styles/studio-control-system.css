@@ -382,7 +382,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   text-transform: uppercase;
   white-space: nowrap;
   text-overflow: ellipsis;
-  -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1.36px) currentColor;
   pointer-events: none;
   transform: translateY(-50%);
   transform-origin: left center;
