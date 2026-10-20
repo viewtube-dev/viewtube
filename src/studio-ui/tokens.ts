@@ -152,6 +152,18 @@ export function studioSizeTierToCssVars(size: keyof typeof STUDIO_CONTROL_SIZE_B
     "--vt-studio-control-stroke": `${tier.stroke}px`,
     "--vt-studio-control-radius": `${tier.radius}px`,
     "--vt-studio-control-font-size": `${tier.fontSize}px`,
+    "--vt-studio-control-font-weight": tier.fontWeight,
+    "--vt-studio-control-text-stroke": `${tier.textStroke}px`,
     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
+    "--vt-studio-control-icon-stroke": tier.iconStroke,
+    "--vt-studio-control-focus-outline-width": `${tier.focusOutlineWidth}px`,
+    "--vt-studio-control-secondary-outline-width": `${tier.secondaryFocusOutlineWidth}px`,
+    "--vt-studio-control-focus-outline-offset": `${tier.focusOutlineOffset}px`,
+    "--vt-studio-control-default-fill-opacity": `${tier.defaultFillOpacity}%`,
+    "--vt-studio-control-focus-fill-opacity": `${tier.focusFillOpacity}%`,
+    "--vt-studio-control-floating-label-height": `${tier.floatingLabelHeight}px`,
+    "--vt-studio-control-floating-label-offset-ratio": tier.floatingLabelOffsetRatio,
+    "--vt-studio-control-letter-spacing": `${tier.letterSpacing}em`,
+    "--vt-studio-control-line-height": tier.lineHeight,
   };
 }
