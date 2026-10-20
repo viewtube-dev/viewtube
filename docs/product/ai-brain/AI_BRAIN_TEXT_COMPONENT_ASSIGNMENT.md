@@ -85,6 +85,8 @@ Topic/title clarification and content-style preference are separate semantic pro
 
 Source-level markers make assignments inspectable in the rendered DOM:
 
+- `data-vt-app-component`: global application shell owner.
+- `data-vt-app-part`: global brand/search part.
 - `data-vt-brain-component`: named composition owner.
 - `data-vt-brain-part`: named text/interaction part within a composition.
 - `data-vt-brain-context`: active context badge.
