@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { ArrowRight } from "lucide-react"
-import { StudioSplitRightButton, StudioTextInput } from "../../studio-ui"
+import { StudioButton, StudioSplitRightButton, StudioTextInput } from "../../studio-ui"
 import type { CreatorBrainLearningQuestion } from "../../types"
 import { sanitizeCreatorFacingBrainCopy } from "../../services/aiBrainConversationStore"
 
@@ -43,31 +43,33 @@ export const BrainQuestionPrompt: React.FC<{
   : sanitizeCreatorFacingBrainCopy(question.question)
 
  return (
-  <section className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white">
-   <div className={`border-b-[2px] border-black bg-[#FFDA47] px-3 ${compact ? "py-1" : "py-2"}`}>
+  <section data-vt-brain-component="BrainQuestionPrompt" data-vt-brain-question-category={question.category} className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white">
+   <div data-vt-brain-part="question-heading" className={`border-b-[2px] border-black bg-[#FFDA47] px-3 ${compact ? "py-1" : "py-2"}`}>
     <h4 className="text-[11px] font-[1000] uppercase leading-4 tracking-[0.04em]">{labelForQuestion(question)}</h4>
    </div>
    <div className={`grid ${compact ? "gap-1.5 p-2" : "gap-2.5 p-3"}`}>
-    <p className={`font-black leading-5 ${compact ? "text-xs" : "text-sm"}`}>
+    <p data-vt-brain-part="question-copy" className={`font-black leading-5 ${compact ? "text-xs" : "text-sm"}`}>
      {displayQuestion}
     </p>
 
     {options.length ? (
-     <div className="flex flex-wrap gap-1.5">
+     <div data-vt-brain-part="question-answer-options" className="flex flex-wrap gap-1">
       {options.map((option) => (
-       <button
+       <StudioButton
         key={option}
         type="button"
+        sizeVariant="compact"
+        variant="v1"
         onClick={() => onAnswer(question, option)}
-        className={`rounded-[8px] border-[2px] border-black bg-white text-[10px] font-black uppercase tracking-[0.06em] hover:bg-[#3FEE56] ${compact ? "px-2 py-0.5" : "px-2.5 py-1"}`}
+        className="min-w-0"
        >
         {option}
-       </button>
+       </StudioButton>
       ))}
      </div>
     ) : null}
 
-    <div className="flex min-w-0 gap-1">
+    <div data-vt-brain-part="free-text-answer" className="flex min-w-0 gap-1">
      <StudioTextInput
       type="text"
       sizeVariant={compact ? "compact" : "standard"}
