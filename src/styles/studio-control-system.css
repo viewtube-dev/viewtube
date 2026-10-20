@@ -81,7 +81,7 @@
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
   --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
   --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
-  --vt-studio-control-font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
   --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000);
   --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, .25px);
   --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
@@ -634,7 +634,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
    
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
-  --vt-studio-textarea-standard-font-size: 18px; --vt-studio-textarea-compact-font-size: 14px;
   --vt-studio-control-letter-spacing: -.02em; --vt-studio-control-line-height: .86;
   --vt-studio-control-height: var(--vt-studio-44-height);
   --vt-studio-control-stroke: var(--vt-studio-44-stroke);
