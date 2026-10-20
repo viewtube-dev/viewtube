@@ -1016,11 +1016,13 @@ describe("Supreme and Micro production size contract", () => {
   it("renders Supreme buttons and Micro split badges using production size APIs", () => {
     const supreme = renderToStaticMarkup(<StudioButton sizeVariant="supreme">SUPREME</StudioButton>)
     const action = renderToStaticMarkup(<StudioActionButton>CONTINUE</StudioActionButton>)
+    const textBox = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme display">SUPREME</StudioTextBox>)
     const dropdown = renderToStaticMarkup(<StudioDropdown sizeVariant="supreme" options={[{ value: "a", label: "Alpha" }]} />)
     const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro" icon={<span>+</span>}>MICRO</StudioSplitLeftBadge>)
     expect(supreme).toContain('data-size="supreme"')
     expect(supreme).toContain('data-height-variant="60"')
     expect(action).toContain('data-size="supreme"')
+    expect(textBox).toContain('data-size="supreme"')
     expect(dropdown).toContain('data-size="supreme"')
     expect(micro).toContain('data-size="micro"')
   })
