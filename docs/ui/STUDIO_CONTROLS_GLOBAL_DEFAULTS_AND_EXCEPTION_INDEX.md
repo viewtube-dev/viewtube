@@ -242,3 +242,10 @@ Visual verification is still required in the running app for supreme/standard/co
 ## Brain status indicator variant family
 
 `StudioBrainStatusIndicator` uses rectangular 44/28/12px tiers with 6/4/2px corner radii. Its LED has a 1px black lens outline at 65% diameter with 60%-opacity white overlay, saturated state glow/ripples, and reduced-motion fallback. Dark variant uses white text; tinted variant uses black text. See the Studio Controls primitive and component-library source of truth.
+
+
+## Confirmed Primitive Library grid contract — 2026-10-20
+
+Catalog layout follows a 4px base unit. The catalog shell uses 12px desktop spacing (8px on narrow screens); family cards and variant grids use 8px; individual specimen caption/control stacks use 4px. Related composite and tag grids use 4px or 8px gaps. Every grid child that can host a long label or a full-row primitive must be allowed to shrink with min-width: 0. Responsive rules may change columns but must not alter the production primitive's height, stroke, radius, typography, color pair, or behavior.
+
+Catalog CSS is layout-only. The real specimen source is src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx, and layout rules are in src/components/studio-hub/studio-hub-primitive-catalogs.css. Tests in scripts/audit/confirmed-library-layout.test.mjs guard the grid rhythm and source ownership. The separate complete catalog is a legacy comparison surface and must not be treated as the source of truth for production geometry.
