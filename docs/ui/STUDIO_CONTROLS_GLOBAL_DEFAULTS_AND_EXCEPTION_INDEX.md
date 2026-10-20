@@ -201,7 +201,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Supreme / standard / compact / micro face geometry: 60px / 44px / 28px / 12px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
+- Supreme / standard / compact / micro face geometry: 60px / 44px / 28px / 12px; border: 4.09px / 3px / 2px / 1px; radius: 8.18px / 6px / 4px / 2px; typography and icon: 51.82px / 38px / 24px / 10px.
 - Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
@@ -241,4 +241,4 @@ Visual verification is still required in the running app for supreme/standard/co
 
 ## Brain status indicator variant family
 
-`StudioBrainStatusIndicator` uses rectangular 44/28/14px tiers with 6/4/2px corner radii. Its LED has a 1px black lens outline at 65% diameter with 60%-opacity white overlay, saturated state glow/ripples, and reduced-motion fallback. Dark variant uses white text; tinted variant uses black text. See the Studio Controls primitive and component-library source of truth.
+`StudioBrainStatusIndicator` uses rectangular 44/28/12px tiers with 6/4/2px corner radii. Its LED has a 1px black lens outline at 65% diameter with 60%-opacity white overlay, saturated state glow/ripples, and reduced-motion fallback. Dark variant uses white text; tinted variant uses black text. See the Studio Controls primitive and component-library source of truth.
