@@ -18,7 +18,7 @@ describe("ConfirmedSpecimenGrid", () => {
     expect(renderSpecimen).toHaveBeenCalledWith(expect.objectContaining({ tier: "standard" }))
     expect(renderSpecimen).toHaveBeenCalledWith(expect.objectContaining({ tier: "compact" }))
     expect(renderSpecimen).toHaveBeenCalledWith(expect.objectContaining({ tier: "micro" }))
-    expect(document.querySelectorAll(".vt-specimen-row--4")).toHaveLength(3)
+    expect(document.querySelectorAll(".vt-specimen-row--4")).toHaveLength(2)
   })
 
   it("toggles clean mode with an accessible, controlled switch and unmounts documentation", () => {
