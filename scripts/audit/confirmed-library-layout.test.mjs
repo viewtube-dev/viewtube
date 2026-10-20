@@ -385,3 +385,18 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 test("component descriptions above specimens stay on one compact line", () => {
   assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
 });
+
+
+test("confirmed primitive library layout uses a shared 4px grid rhythm", () => {
+  assert.match(styles, /--vt-confirmed-grid-unit:\s*4px/);
+  assert.match(styles, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(styles, /\.vt-confirmed-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(styles, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+});
+
+test("confirmed primitive library grids collapse responsively without fractional or negative spacing", () => {
+  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
+  assert.match(styles, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/s);
+  assert.match(styles, /\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
+});
