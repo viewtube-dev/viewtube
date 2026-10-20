@@ -2788,3 +2788,7 @@ export const StudioBrainStatusIndicator: React.FC<{
   );
 };
 StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
+
+
+export { StudioSplitRailAccordion } from "./StudioSplitRailAccordion"
+export type { StudioSplitRailAccordionItem, StudioSplitRailAccordionProps } from "./StudioSplitRailAccordion"
