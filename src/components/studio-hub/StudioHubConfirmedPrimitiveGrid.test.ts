@@ -24,7 +24,7 @@ describe("Confirmed Primitive Library grid contract", () => {
   it("keeps responsive grid cells shrinkable and leaves control geometry to production primitives", () => {
     expect(grid).toMatch(/@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*min-width:\s*0/);
     expect(grid).toMatch(/\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
-    expect(styles).not.toMatch(/\.vt-confirmed-(?:catalog|family|variants|variant)[^{]*\{[^}]*\b(?:height|border-radius|box-shadow|font-size|font-weight):/s);
+    expect(grid).not.toMatch(/\.vt-confirmed-(?:catalog|family|variants|variant)[^{]*\{[^}]*\b(?:height|border-radius|box-shadow|font-size|font-weight):/s);
   });
 
   it("registers the real inline and split stepper exports rather than mock controls", () => {
