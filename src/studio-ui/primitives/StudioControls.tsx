@@ -1088,11 +1088,10 @@ StudioTwoLineButton.displayName = "StudioTwoLineButton"
 
 
 /**
- * Prominent workflow action button using the shared Supreme size tier by default.
- * It shares the canonical sizeVariant API and defaults to Supreme.
+ * Prominent workflow action button defaults to Supreme and supports the standard interactive size tiers.
  */
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  sizeVariant?: "supreme"
+  sizeVariant?: StudioControlInteractiveSize
   tone?: StudioControlTone
   loading?: boolean
 }
@@ -1570,7 +1569,7 @@ export interface StudioLegendMultiDropdownProps {
   onChange?: (values: string[]) => void
   /** Commit one option and close, or allow independent multiple selection. */
   selectionMode?: "single" | "multiple"
-  sizeVariant?: "compact" | "standard"
+  sizeVariant?: StudioControlInteractiveSize
   level?: "l0" | "l1" | "l2"
   placeholder?: string
   clearLabel?: string
