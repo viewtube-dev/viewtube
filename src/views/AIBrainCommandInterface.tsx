@@ -894,12 +894,15 @@ const CreatorIntakeWizard: React.FC<{
       <span data-vt-brain-part="profile-question-label" className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
       <span data-vt-brain-part="profile-question-prompt" className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
      </span>
-     <textarea
+     <StudioTextArea
+      data-vt-brain-part="profile-question-answer"
+      sizeVariant="standard"
+      rows={5}
       value={String(context[question.id] || "")}
       onChange={(event) => update(question.id, event.target.value)}
-      data-vt-brain-part="profile-question-answer"
-       placeholder={question.placeholder}
-      className="h-[clamp(150px,28vh,250px)] w-full resize-none border-0 bg-white p-4 text-base font-bold leading-7 outline-none focus:bg-[#FFDA47]/20"
+      placeholder={question.placeholder}
+      style={{ height: "clamp(150px, 28vh, 250px)" }}
+      className="w-full resize-none"
      />
     </label>
    </div>
