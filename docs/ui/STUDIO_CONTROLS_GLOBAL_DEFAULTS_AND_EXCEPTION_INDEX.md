@@ -136,11 +136,13 @@ These are content-driven components, not fixed-width row controls. Their intrins
 ### Multiline textarea (registered typography exception)
 
 - Alignment: left; text starts at the top of the writing area with normal multiline padding.
-- Standard type: 18px, weight 1000, 0.5px text stroke, line-height 1.25.
-- Compact type: 14px, weight 1000, 0.35px text stroke, line-height 1.3.
+- Standard type: 18px, weight 1000, 0.5px text stroke, line-height 0.75.
+- Compact type: 14px, weight 1000, 0.35px text stroke, line-height 0.75.
 - Minimum writing surface: 92px.
 - Resize: vertical.
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
+The multiline exception is sourced from `STUDIO_CONTROL_SIZE_BASE.multiline` in `src/studio-ui/tokens.ts` and emitted by `scripts/emit-studio-control-vars.mjs` into `src/styles/studio-control-vars.generated.css`. Do not use the single-line input font-size or text-stroke tokens for textarea glyphs.
+
 - Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
 - Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Floating labels use the shared label metrics registered in §5 (32px / 21px resting height, 80% raised scale, 48% raised offset) — identical to text inputs at the same size tier.
 - No internal gap: textarea shells and any split anatomy inside them are flush; the 4px spacing unit is reserved for external gaps between whole controls.
@@ -154,7 +156,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
 | Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/12px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
-| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 1.25 / 1.3, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
+| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 0.75, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Supreme 60px by default; standard/compact variants use shared tier tokens; flat shell, no shadow | Workflow emphasis is a component role, not a separate 56px geometry tier |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
