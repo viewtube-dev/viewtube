@@ -626,7 +626,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
-  --vt-studio-60-height: var(--vt-studio-supreme-height, 60px); --vt-studio-60-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-60-radius: var(--vt-studio-supreme-radius, 8.18px); --vt-studio-60-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-60-font-weight: 1000;\n  --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
+  --vt-studio-60-height: var(--vt-studio-supreme-height, 60px); --vt-studio-60-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-60-radius: var(--vt-studio-supreme-radius, 8.18px); --vt-studio-60-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-60-font-weight: 1000;
+  --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
   --vt-studio-14-height: var(--vt-studio-micro-height, 12px); --vt-studio-14-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-14-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-14-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-14-font-weight: 1000; --vt-studio-14-icon-size: 10px; --vt-studio-14-icon-stroke: 1.5;
