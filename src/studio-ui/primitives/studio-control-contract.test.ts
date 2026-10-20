@@ -46,7 +46,7 @@ describe("Studio control global contract", () => {
     const system = read("src/styles/studio-control-system.css");
     const tokens = read("src/studio-ui/tokens.ts");
 
-    expect(fields).toContain("* .65");
+    expect(fields).toContain("var(--vt-studio-focus-outline-width-ratio, 0.65)");
     expect(fields).toContain("outline-offset: 0");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.95px");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
@@ -73,8 +73,8 @@ describe("Studio control global contract", () => {
     expect(css).toContain("--vt-studio-control-text-stroke, 1px");
     expect(css).toContain("--vt-studio-textarea-standard-font-size, 18px");
     expect(css).toContain("--vt-studio-textarea-compact-font-size, 14px");
-    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, .5px");
-    expect(css).toContain("--vt-studio-textarea-compact-text-stroke, .35px");
+    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
+    expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
     expect(css).toContain('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible)');
     expect(css).not.toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary)");
     const start = css.indexOf("/* Canonical Studio Controls field contract.");
@@ -118,7 +118,7 @@ describe("Studio control global contract", () => {
     expect(css).not.toContain("Final global field contract:");
     expect(css).not.toContain("!important");
     expect(css).toContain("--vt-studio-control-text-stroke, 1px");
-    expect(css).toContain("--vt-studio-control-text-stroke, 0.5px");
+    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
     expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
     expect(css).toContain("outline-offset: 0");
