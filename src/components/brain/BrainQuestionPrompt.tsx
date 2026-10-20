@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { ArrowRight } from "lucide-react"
-import { StudioButton, StudioTextInput } from "../../studio-ui"
+import { StudioSplitRightButton, StudioTextInput } from "../../studio-ui"
 import type { CreatorBrainLearningQuestion } from "../../types"
 import { sanitizeCreatorFacingBrainCopy } from "../../services/aiBrainConversationStore"
 
@@ -83,11 +83,10 @@ export const BrainQuestionPrompt: React.FC<{
       aria-label={sanitizeCreatorFacingBrainCopy(question.question)}
       className="min-w-0 flex-1"
      />
-     <StudioButton
+     <StudioSplitRightButton
       type="button"
       sizeVariant={compact ? "compact" : "standard"}
-      data-vt-studio-split="right"
-      data-vt-studio-split-right="true"
+      icon={<ArrowRight aria-hidden="true" />}
       disabled={!freeText.trim()}
       onClick={() => {
        if (!freeText.trim()) return
@@ -97,8 +96,8 @@ export const BrainQuestionPrompt: React.FC<{
       className="shrink-0"
       style={{ backgroundColor: "#3FEE56" }}
      >
-      Save <ArrowRight aria-hidden="true" />
-     </StudioButton>
+      Save
+     </StudioSplitRightButton>
     </div>
    </div>
   </section>
