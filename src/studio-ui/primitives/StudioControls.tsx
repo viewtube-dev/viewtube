@@ -1,5 +1,5 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioControlInteractiveSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
@@ -999,7 +999,7 @@ export const StudioSelect = React.forwardRef<
 StudioSelect.displayName = "StudioSelect"
 
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioControlInteractiveSize
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
@@ -1092,7 +1092,7 @@ StudioTwoLineButton.displayName = "StudioTwoLineButton"
  * It shares the canonical sizeVariant API and defaults to Supreme.
  */
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  sizeVariant?: StudioControlSize
+  sizeVariant?: "supreme"
   tone?: StudioControlTone
   loading?: boolean
 }
@@ -1762,7 +1762,7 @@ export interface StudioDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioControlInteractiveSize
   variant?: "default" | "simple" | "split-left"
   splitIcon?: React.ReactNode
 }
@@ -1925,7 +1925,7 @@ export interface StudioSimpleDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioControlInteractiveSize
 }
 
 /** Simple single-select child variant of the canonical StudioDropdown family. */
