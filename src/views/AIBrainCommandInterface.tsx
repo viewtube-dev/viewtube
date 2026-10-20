@@ -642,8 +642,8 @@ const BrainLearningReceiptCard: React.FC<{
    </dl>
    {!dismissed ? (
     <div className="flex flex-wrap gap-2">
-     <button type="button" onClick={() => onCorrect(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">Correct</button>
-     <button type="button" onClick={() => onReject(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FF7497] px-3 py-2 text-[10px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Reject</button>
+     <StudioButton data-vt-brain-part="learning-receipt-correct" type="button" sizeVariant="compact" tone="neutral" onClick={() => onCorrect(message)}>Correct</StudioButton>
+     <StudioButton data-vt-brain-part="learning-receipt-reject" type="button" sizeVariant="compact" tone="danger" onClick={() => onReject(message)}>Reject</StudioButton>
     </div>
    ) : <p role="status" className="text-xs font-bold">This learning entry was rejected and will not be promoted.</p>}
   </section>
@@ -677,18 +677,18 @@ const CreatorResponseCard: React.FC<{
   return (
    <article data-vt-brain-component="BrainInterruptedResponseCard" className={`${assistantCardFrame} p-4`}>
     <div data-vt-brain-part="interrupted-response-attribution" className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
-    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
+    <p data-vt-brain-part="interrupted-response-copy" className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
     {canRetry ? (
      <div className="mt-3 grid gap-2">
       {message.contextMayBeStale ? (
        <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
       ) : null}
       <div className="flex flex-wrap gap-2">
-       <button type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+       <button data-vt-brain-part="retry-response-action" type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
         {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
        </button>
        {message.contextMayBeStale ? (
-        <button type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+        <button data-vt-brain-part="retry-refresh-evidence-action" type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
          Refresh evidence & retry
         </button>
        ) : null}
