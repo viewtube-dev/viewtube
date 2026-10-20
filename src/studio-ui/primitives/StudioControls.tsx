@@ -1762,7 +1762,7 @@ export interface StudioDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: "standard" | "compact"
+  sizeVariant?: StudioControlSize
   variant?: "default" | "simple" | "split-left"
   splitIcon?: React.ReactNode
 }
@@ -1925,7 +1925,7 @@ export interface StudioSimpleDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: "standard" | "compact"
+  sizeVariant?: StudioControlSize
 }
 
 /** Simple single-select child variant of the canonical StudioDropdown family. */
