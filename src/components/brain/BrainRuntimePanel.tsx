@@ -56,6 +56,7 @@ const RuntimeCell: React.FC<{
  accent: string
 }> = ({ label, value, detail, icon, accent }) => (
  <article
+  data-vt-brain-component="BrainRuntimeCell"
   className="min-w-0 overflow-hidden rounded-[9px] border-[2px] bg-white"
   style={{ borderColor: INK }}
  >
@@ -82,6 +83,7 @@ const RuntimePill: React.FC<{
  value: React.ReactNode
 }> = ({ label, value }) => (
  <span
+  data-vt-brain-component="BrainRuntimeMetricPill"
   className="inline-flex min-h-6 items-center gap-1 rounded-[6px] border px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.06em]"
   style={{ borderColor: `${INK}55`, color: INK, backgroundColor: "#ffffffb8" }}
  >
@@ -98,6 +100,7 @@ const RuntimeCompactCell: React.FC<{
  accent: string
 }> = ({ label, value, detail, icon, accent }) => (
  <article
+  data-vt-brain-component="BrainRuntimeCell"
   data-vt-runtime-cell="compact"
   title={detail}
   className="flex min-w-0 items-center gap-1.5 rounded-[7px] border-[2px] bg-white px-1.5 py-1"
@@ -126,6 +129,7 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
  if (embedded) {
   return (
    <section
+    data-vt-brain-component="BrainRuntimePanel"
     aria-label="Brain runtime status"
     data-vt-brain-runtime-shell="merged"
     className="border-b-[2px] border-black bg-[#EEF2F7] px-2 py-2"
@@ -194,6 +198,7 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
 
  return (
   <section
+   data-vt-brain-component="BrainRuntimePanel"
    aria-label="Live Brain runtime"
    data-vt-brain-runtime-shell="card"
    className="overflow-hidden rounded-[11px] border-[2px] bg-[#F8FAFC] shadow-[3px_3px_0_0_rgba(38,50,74,0.16)]"

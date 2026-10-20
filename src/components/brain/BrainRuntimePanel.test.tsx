@@ -153,6 +153,9 @@ describe("BrainRuntimePanel", () => {
   )
 
   expect(html).toContain("LIVE BRAIN RUNTIME")
+  expect(html).toContain('data-vt-brain-component="BrainRuntimePanel"')
+  expect(html).toContain('data-vt-brain-component="BrainRuntimeCell"')
+  expect(html).toContain('data-vt-brain-component="BrainRuntimeMetricPill"')
   expect(html).toContain("Project")
   expect(html).toContain("ContentBuild")
   expect(html).toContain("Context")
@@ -185,6 +188,8 @@ describe("BrainRuntimePanel", () => {
   )
 
   expect(html).toContain('data-vt-brain-runtime-shell="merged"')
+  expect(html).toContain('data-vt-brain-component="BrainRuntimePanel"')
+  expect(html).toContain('data-vt-brain-component="BrainRuntimeMetricPill"')
   expect(html).not.toContain("LIVE BRAIN RUNTIME")
   expect(html).toContain('data-vt-runtime-cell="compact"')
   expect(html).toContain("md:flex")
