@@ -2535,7 +2535,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-success-label] {
 }
 button[data-vt-studio-icon-button="true"][data-size="compact"].is-effect-tooltip [data-vt-square-tooltip],
 button[data-vt-studio-icon-button="true"][data-size="compact"] [data-vt-square-success-label] {
-  min-height: var(--vt-studio-micro-height, 12px); padding: 0 7px; border-width: 2px; border-radius: 4px; font-size: 9px;
+  min-height: 14px; padding: 0 7px; border-width: 2px; border-radius: 4px; font-size: 9px;
 }
 /* Opaque black heart fill for 3s, then a slow 1.2s return to outline. */
 button[data-vt-studio-icon-button="true"][data-icon-preset="heart"].is-effect-heart-pop[data-pop="true"] svg path,
@@ -3049,7 +3049,7 @@ no shell shadows{
 .vt-studio-double-split-badge[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-28-height, 28px); --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-28-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px); --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px); }
 .vt-studio-split-left-badge[data-size="micro"],
 .vt-studio-split-right-badge[data-size="micro"],
-.vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-14-height, 14px); --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-14-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-14-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-14-text-stroke, .25px); }
+.vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, .25px); }
 .vt-studio-split-left-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="compact"] > [data-vt-studio-split-label] { padding-inline: 8px; }
 .vt-studio-split-left-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="micro"] > [data-vt-studio-split-label] { padding-inline: 2px; }
 .vt-studio-split-left-badge,
@@ -3909,7 +3909,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   font-size: 15px;
 }
 .vt-studio-double-split-slider[data-size="micro"] {
-  --vt-studio-control-height: var(--vt-studio-micro-height, 14px);
+  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
   --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
   --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
   --vt-studio-control-font-size: 12px;
