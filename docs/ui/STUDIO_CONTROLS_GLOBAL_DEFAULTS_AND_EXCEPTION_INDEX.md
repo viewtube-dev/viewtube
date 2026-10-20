@@ -1,7 +1,7 @@
 # Studio Controls — Definitive Global Defaults, Size Contract & Primitive Exceptions
 
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
-**Reviewed:** 2026-10-17  
+**Reviewed:** 2026-10-20  
 **Repository:** `viewtube-dev/viewtube`  
 **Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-Micro is already represented by the existing token ladder and is reserved for the informational split-left badge. It must not be introduced as a general interactive-button size. Do not add a second token generator or duplicate generated stylesheet when the current source already owns the contract.
+The canonical ladder is Supreme (60px), Standard (44px), Compact (28px), and Micro (12px). Supreme is available to supported single-height controls, including buttons, split controls, fields, dropdowns, and action buttons. Micro is family-aware: expose it only on production families whose 12px geometry is supported (including informational split badges and the existing micro-capable fields); do not assume every interactive family can fit it. The canonical TypeScript tokens and `scripts/emit-studio-control-vars.mjs` remain the only sizing authority.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -165,7 +165,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 
 1. No undocumented pill-ratio badge styling.
 2. No thin inherited badge font; use Inter weight 1000 for global badges and their labels. The Vault Spectrum Tag is the explicitly registered weight-900 exception.
-3. No hard-coded 48px control size. The canonical ordinary lattice is 44px / 28px, plus the explicitly defined 14px micro tier.
+3. No hard-coded intermediate control sizes. The canonical lattice is Supreme 60px / Standard 44px / Compact 28px / Micro 12px; documented content-driven and family-specific exceptions remain explicit.
 4. No asymmetric split rails, off-center icons, label misalignment, or duplicated split borders.
 5. No internal gap on any control shell: split rails and faces are flush (no white seam), and the 4px spacing unit is for external grids/rows between whole controls only.
 6. No fixed-width ordinary buttons/fields where row-fill is required; intrinsic width is reserved for content primitives.
@@ -202,7 +202,7 @@ The split-left button, split-left/right/double badges, and username composite in
 ### Stabilized defaults
 
 - Standard / compact / micro face geometry: 44px / 28px / 14px; border: 3px / 2px / 1px; radius: 6px / 4px / 2px; typography and icon: 38px / 24px / 10px.
-- Inter-component gap remains 4px for all tiers; micro is half the compact geometry.
+- Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
 - Text-field focus uses a secondary outline at 65% of border width and zero offset.
@@ -217,7 +217,7 @@ The split-left button, split-left/right/double badges, and username composite in
 - `src/styles/studio-control-fields.css`: inline field stroke and focus contract.
 - `src/studio-ui/primitives/studio-control-contract.test.ts`: focused invariants for size tiers, double rails, focus treatment and exception registration.
 
-Visual verification is still required in the running app for standard/compact/micro split badges, username input, and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
+Visual verification is still required in the running app for supreme/standard/compact/micro split badges, username input, and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
 
 
 ## Vertical Studio word toggle — registered height exception
