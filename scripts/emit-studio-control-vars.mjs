@@ -6,7 +6,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const tokenSource = await readFile(resolve(root, "src/studio-ui/tokens.ts"), "utf8");
 const dropdownContract = tokenSource.match(/export const STUDIO_DROPDOWN_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const numberContract = tokenSource.match(/export const STUDIO_COUNTER_NUMBER_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
-const focusContract = tokenSource.match(/export const STUDIO_FOCUS_INTERACTION_TOKENS = \\{([\\s\\S]*?)\\} as const/)?.[1] ?? "";
+const focusContract = tokenSource.match(/export const STUDIO_FOCUS_INTERACTION_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const sizeBaseBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_BASE = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
 const compactSizeLine = tokenSource.match(/const STUDIO_CONTROL_SIZE_BASE_COMPACT = \{([^\n]*)\} as const/)?.[1] ?? "";
 const supremeSizeLine = sizeBaseBlock.match(/supreme: \{([^\n]*)\}/)?.[1] ?? "";
@@ -28,9 +28,11 @@ const sizeTiers = {
 };
 
 function readPair(contract, property) {
-  const match = contract.match(new RegExp(`${property}:\\s*\\{\\s*standard:\\s*([\\d.]+),\\s*compact:\\s*([\\d.]+)`));
-  if (!match) throw new Error(`Missing Studio token pair: ${property}`);
-  return { standard: Number(match[1]), compact: Number(match[2]) };
+  const block = contract.match(new RegExp(`${property}:\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+  const standard = block.match(/standard:\\s*([\\d.]+)/)?.[1];
+  const compact = block.match(/compact:\\s*([\\d.]+)/)?.[1];
+  if (!standard || !compact) throw new Error(`Missing Studio token pair: ${property}`);
+  return { standard: Number(standard), compact: Number(compact) };
 }
 
 const dropdownRail = readPair(dropdownContract, "railSize");
@@ -52,10 +54,10 @@ const floatingLabelOffsetRatio = readFloatingLabelMetric(sizeBaseBlock, "floatin
 const numberMix = Number(numberContract.match(/defaultWhiteMixPercent:\s*(\d+)/)?.[1]);
 const activeTextColor = numberContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
 const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1];
-const focusHoldMs = Number(focusContract.match(/holdMs:\\s*(\\d+)/)?.[1]);
-const focusOutlineFadeMs = Number(focusContract.match(/outlineFadeMs:\\s*(\\d+)/)?.[1]);
-const focusWidthRatio = Number(focusContract.match(/outlineWidthRatio:\\s*([\\d.]+)/)?.[1]);
-const focusOffsetPx = Number(focusContract.match(/outlineOffsetPx:\\s*(\\d+)/)?.[1]);
+const focusHoldMs = Number(focusContract.match(/holdMs:\s*(\d+)/)?.[1]);
+const focusOutlineFadeMs = Number(focusContract.match(/outlineFadeMs:\s*(\d+)/)?.[1]);
+const focusWidthRatio = Number(focusContract.match(/outlineWidthRatio:\s*([\d.]+)/)?.[1]);
+const focusOffsetPx = Number(focusContract.match(/outlineOffsetPx:\s*(\d+)/)?.[1]);
 if (!Number.isFinite(numberMix) || !activeTextColor || !activeStrokeColor || !Number.isFinite(focusHoldMs) || !Number.isFinite(focusOutlineFadeMs) || !Number.isFinite(focusWidthRatio) || !Number.isFinite(focusOffsetPx)) {
   throw new Error("Incomplete Studio counter number-state tokens");
 }
