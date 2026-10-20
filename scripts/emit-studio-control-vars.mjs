@@ -8,6 +8,7 @@ const dropdownContract = tokenSource.match(/export const STUDIO_DROPDOWN_TOKENS 
 const numberContract = tokenSource.match(/export const STUDIO_COUNTER_NUMBER_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const focusContract = tokenSource.match(/export const STUDIO_FOCUS_INTERACTION_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const sizeBaseBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_BASE = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
+const sizeContractBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_CONTRACT = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
 const compactSizeLine = tokenSource.match(/const STUDIO_CONTROL_SIZE_BASE_COMPACT = \{([^\n]*)\} as const/)?.[1] ?? "";
 const supremeSizeLine = sizeBaseBlock.match(/supreme: \{([^\n]*)\}/)?.[1] ?? "";
 const standardSizeLine = sizeBaseBlock.match(/standard: \{([^\n]*)\}/)?.[1] ?? "";
@@ -27,7 +28,7 @@ const sizeTiers = {
   micro: readTier(microSizeLine),
 };
 
-const multilineContract = sizeBaseBlock.match(/multiline:\s*\{([^}]*)\}/)?.[1] ?? "";
+const multilineContract = sizeContractBlock.match(/multiline:\s*\{([^}]*)\}/)?.[1] ?? "";
 const multilineTokens = {
   supremeFontSize: readSizeValue(multilineContract, "standardFontSize") * 60 / 44,
   standardFontSize: readSizeValue(multilineContract, "standardFontSize"),
