@@ -1042,6 +1042,8 @@ describe("Supreme and Micro production size contract", () => {
     expect(textBox).toContain('data-size="supreme"')
     expect(dropdown).toContain('data-size="supreme"')
     expect(micro).toContain('data-size="micro"')
+    expect(microInput).toContain('data-vt-studio-control="true"')
+    expect(microInput).toContain('data-size="micro"')
   })
 
   it("keeps Confirmed Primitive Library size specimens aligned to production APIs", () => {
