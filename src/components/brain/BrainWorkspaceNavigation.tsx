@@ -25,7 +25,7 @@ export const BrainWorkspaceNavigation: React.FC<{ className?: string }> = ({ cla
   const location = useLocation()
 
   return (
-    <nav aria-label="Brain workspace navigation" className={`grid content-start gap-1 ${className}`}>
+    <nav data-vt-brain-component="BrainWorkspaceNavigation" aria-label="Brain workspace navigation" className={`grid content-start gap-1 ${className}`}>
       <div className="mb-1 hidden items-center gap-2 border-b-2 border-black px-1 pb-2 2xl:flex">
         <SlidersHorizontal size={16} aria-hidden="true" />
         <span className="text-[10px] font-[1000] uppercase tracking-[0.08em]">Workspace</span>
@@ -35,6 +35,7 @@ export const BrainWorkspaceNavigation: React.FC<{ className?: string }> = ({ cla
           (item.to === "/tools/brain-command-center" && location.pathname.startsWith("/tools/brain-command-center"))
         return (
           <Link
+            data-vt-brain-part="workspace-route-link"
             key={item.to}
             to={item.to}
             aria-label={item.label}
