@@ -3,9 +3,10 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioButton, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
+import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -996,3 +997,36 @@ describe("Studio counter hold-repeat acceleration", () => {
   });
 });
 
+
+
+describe("Supreme and Micro production size contract", () => {
+  it("defines the four canonical tiers with exact 60/44/28/12px heights", () => {
+    const expected: Record<StudioControlSize, number> = {
+      supreme: 60,
+      standard: 44,
+      compact: 28,
+      micro: 12,
+    }
+    for (const [size, height] of Object.entries(expected) as [StudioControlSize, number][]) {
+      expect(STUDIO_CONTROL_SIZE_BASE[size].height).toBe(height)
+      expect(studioSizeTierToCssVars(size)["--vt-studio-control-height"]).toBe(`${height}px`)
+    }
+  })
+
+  it("renders Supreme buttons and Micro split badges using production size APIs", () => {
+    const supreme = renderToStaticMarkup(<StudioButton sizeVariant="supreme">SUPREME</StudioButton>)
+    const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro" icon={<span>+</span>}>MICRO</StudioSplitLeftBadge>)
+    expect(supreme).toContain('data-size="supreme"')
+    expect(supreme).toContain('data-height-variant="60"')
+    expect(micro).toContain('data-size="micro"')
+  })
+
+  it("keeps generated CSS and global styles aligned to the canonical 60px and 12px tiers", () => {
+    const generated = readFileSync(resolve(process.cwd(), "src/styles/studio-control-vars.generated.css"), "utf8")
+    const system = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(generated).toContain("--vt-studio-supreme-height: 60px;")
+    expect(generated).toContain("--vt-studio-micro-height: 12px;")
+    expect(system).toContain('--vt-studio-control-height: var(--vt-studio-supreme-height, 60px)')
+    expect(system).toContain('--vt-studio-control-height: var(--vt-studio-micro-height, 12px)')
+  })
+})
