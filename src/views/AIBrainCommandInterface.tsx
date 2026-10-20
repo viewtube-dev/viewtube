@@ -451,10 +451,10 @@ export const BrainPromptLibrary: React.FC<{
    className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white"
   >
    <div data-vt-brain-part="prompt-library-heading" className="border-b-[2px] border-black bg-[#FF7AC8] px-3 py-2">
-    <h2 id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">
+    <h2 data-vt-brain-part="prompt-library-title" id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">
      Prompt Library
     </h2>
-    <p className="mt-0.5 text-[10px] font-bold leading-4 text-black/65">
+    <p data-vt-brain-part="prompt-library-description" className="mt-0.5 text-[10px] font-bold leading-4 text-black/65">
      Search by task or topic, preview the prompt, then send it or edit it first.
     </p>
    </div>
@@ -1845,6 +1845,7 @@ const AIBrainCommandInterface: React.FC = () => {
 
       {promptRailOpen ? (
        <div
+        data-vt-brain-component="BrainLauncherDrawer"
         role="dialog"
         aria-modal="true"
         aria-labelledby="brain-prompt-library-dialog-title"
@@ -1852,14 +1853,14 @@ const AIBrainCommandInterface: React.FC = () => {
        >
         <div className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
-          <h2 id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
+          <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
           <button ref={promptCloseRef} type="button" className={kpiButton} onClick={() => setPromptRailOpen(false)}>
            <X size={14} aria-hidden="true" /> Close
           </button>
          </div>
-         <div className="grid grid-cols-2 gap-1">
-          <button type="button" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "prompts" ? "bg-[#FF7AC8]" : "bg-white"}`}>Prompt Library</button>
-          <button type="button" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "capabilities" ? "bg-[#36E0F6]" : "bg-white"}`}>Capabilities</button>
+         <div data-vt-brain-component="BrainLauncherModeSwitch" className="grid grid-cols-2 gap-1">
+          <StudioSplitLeftButton sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }}>Prompt Library</StudioSplitLeftButton>
+          <StudioSplitLeftButton sizeVariant="standard" icon={<Zap aria-hidden="true" />} aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }}>Capabilities</StudioSplitLeftButton>
          </div>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Brain launchpad content" tabIndex={0}>
@@ -1882,9 +1883,9 @@ const AIBrainCommandInterface: React.FC = () => {
       ) : null}
 
       {contextRailOpen ? (
-       <div role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
+       <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
-         <h2 id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
+         <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
          <button ref={contextCloseRef} type="button" className={kpiButton} onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</button>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
