@@ -396,6 +396,9 @@ test("confirmed primitive library layout uses a shared 4px grid rhythm", () => {
   assert.match(gridContract, /\.vt-confirmed-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
   assert.match(gridContract, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
   assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(gridContract, /\.vt-confirmed-control-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(gridContract, /\.vt-confirmed-choice-example-row\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(gridContract, /\.vt-confirmed-stepper-row-grid\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
 });
 
 test("confirmed primitive library grids collapse responsively without fractional or negative spacing", () => {
