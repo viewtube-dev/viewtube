@@ -999,7 +999,7 @@ export const StudioSelect = React.forwardRef<
 StudioSelect.displayName = "StudioSelect"
 
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  sizeVariant?: "supreme"
+  sizeVariant?: StudioControlInteractiveSize
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
@@ -1088,7 +1088,7 @@ StudioTwoLineButton.displayName = "StudioTwoLineButton"
 
 
 /**
- * Prominent workflow action button is a Supreme-only 60px action surface.
+ * Prominent workflow action button defaults to Supreme and supports Standard and Compact variants.
  */
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   sizeVariant?: StudioControlInteractiveSize
