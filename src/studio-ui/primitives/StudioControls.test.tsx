@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioButton, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -502,7 +502,7 @@ describe("Studio text-field module ownership and typography", () => {
     expect(inputCss).toContain("font-size: 10px;")
     expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-standard-height, 44px)")
     expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-compact-height, 28px)")
-    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 14px)")
+    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 12px)")
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
     expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
@@ -975,7 +975,7 @@ describe("StudioVerticalWordToggle", () => {
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={true} sizeVariant="compact" />)).toContain('data-size="compact"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={false} sizeVariant="micro" />)).toContain('data-size="micro"');
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.globalRuleException).toBe(true);
-    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 14px");
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 12px");
   });
 });
 
