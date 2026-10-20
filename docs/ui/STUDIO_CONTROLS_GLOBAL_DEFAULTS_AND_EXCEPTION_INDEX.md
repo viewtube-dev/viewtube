@@ -246,6 +246,13 @@ Visual verification is still required in the running app for supreme/standard/co
 
 ## Confirmed Primitive Library grid contract — 2026-10-20
 
-Catalog layout follows a 4px base unit. The catalog shell uses 12px desktop spacing (8px on narrow screens); family cards and variant grids use 8px; individual specimen caption/control stacks use 4px. Related composite and tag grids use 4px or 8px gaps. Every grid child that can host a long label or a full-row primitive must be allowed to shrink with min-width: 0. Responsive rules may change columns but must not alter the production primitive's height, stroke, radius, typography, color pair, or behavior.
+Catalog layout uses one explicit 4px spacing unit in `src/components/studio-hub/studio-hub-primitive-catalogs.css`:
 
-Catalog CSS is layout-only. The real specimen source is src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx, and layout rules are in src/components/studio-hub/studio-hub-primitive-catalogs.css. Tests in scripts/audit/confirmed-library-layout.test.mjs guard the grid rhythm and source ownership. The separate complete catalog is a legacy comparison surface and must not be treated as the source of truth for production geometry.
+- Catalog-to-family spacing: 12px (3 units).
+- Family padding and family-to-specimen spacing: 8px (2 units).
+- Specimen-to-label/control spacing and tight control matrices: 4px (1 unit).
+- Nested matrices may use 8px or 12px when needed; every catalog gap and padding must remain a multiple of 4px. Do not add ad hoc 5px, 6px, 7px, or 10px spacing.
+- The default specimen grid uses two minmax-safe columns; full-row specimens span both columns. Choice/radio/checkbox skins retain four columns, standard word toggles remain one per row, compact word toggles remain two per row, and square-icon variant rows retain four items.
+- Narrow layouts retain `min-width: 0`, border-box sizing, and one-line ellipsis for compact specimen captions. Responsive rules change placement, not production primitive size, stroke, typography, fill, split anatomy, or behavior.
+- Catalog CSS is layout-only. The real specimen source is `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`; production geometry remains owned by Studio Controls. The separate complete catalog is a legacy comparison surface, not the source of truth for production geometry.
+- Source tests are necessary but not sufficient for certification. Verify desktop and narrow mobile rendering, including open dropdowns, textareas, split controls, compact specimens, and status badges.

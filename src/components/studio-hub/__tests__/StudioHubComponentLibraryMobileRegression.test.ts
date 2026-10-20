@@ -248,4 +248,26 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(metadataCss).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))")
   })
 
+
+  it("enforces one authoritative 4px spacing grid across the Confirmed Primitive Library", () => {
+    const css = read("src/components/studio-hub/studio-hub-primitive-catalogs.css")
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    const gridContract = css.slice(css.lastIndexOf("/* Confirmed Primitive Library — authoritative 4px grid system"))
+    expect(gridContract).toContain("--vt-confirmed-grid-unit: 4px")
+    expect(gridContract).toContain("--vt-confirmed-space-1: calc(var(--vt-confirmed-grid-unit) * 1)")
+    expect(gridContract).toContain("--vt-confirmed-space-2: calc(var(--vt-confirmed-grid-unit) * 2)")
+    expect(gridContract).toContain("--vt-confirmed-space-3: calc(var(--vt-confirmed-grid-unit) * 3)")
+    expect(gridContract).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))")
+    expect(gridContract).toContain("grid-template-columns: minmax(0, 1fr)")
+    expect(gridContract).toContain("@media (max-width: 560px)")
+    expect(gridContract).toContain("min-width: 0")
+    expect(gridContract).toContain("overflow-wrap: anywhere")
+    expect(catalog).toContain('className="vt-confirmed-catalog"')
+    expect(catalog).toContain('className="vt-confirmed-variants"')
+    expect(gridContract).not.toContain("gap: 5px")
+    expect(gridContract).not.toContain("gap: 6px")
+    expect(gridContract).not.toContain("gap: 7px")
+    expect(gridContract).not.toContain("gap: 10px")
+  })
+
 })
