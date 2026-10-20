@@ -897,7 +897,8 @@ const CreatorIntakeWizard: React.FC<{
      <textarea
       value={String(context[question.id] || "")}
       onChange={(event) => update(question.id, event.target.value)}
-      placeholder={question.placeholder}
+      data-vt-brain-part="profile-question-answer"
+       placeholder={question.placeholder}
       className="h-[clamp(150px,28vh,250px)] w-full resize-none border-0 bg-white p-4 text-base font-bold leading-7 outline-none focus:bg-[#FFDA47]/20"
      />
     </label>
