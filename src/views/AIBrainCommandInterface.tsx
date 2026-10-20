@@ -818,18 +818,18 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
     </div>
     {readiness.missingInputs.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
+      <h4 data-vt-brain-part="missing-inputs-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
       <ul className="mt-1 grid gap-1">
-       {readiness.missingInputs.map((item) => <li key={item} className="text-xs font-bold leading-5">{item}</li>)}
+       {readiness.missingInputs.map((item) => <li data-vt-brain-part="missing-input-item" key={item} className="text-xs font-bold leading-5">{item}</li>)}
       </ul>
      </div>
     ) : null}
     {incompleteSources.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
+      <h4 data-vt-brain-part="dataset-status-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
       <ul className="mt-1 grid gap-1">
        {incompleteSources.map((source) => (
-        <li key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
+        <li data-vt-brain-part="dataset-status-item" key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
          <span className="font-black">{source.label}</span>
          <span className="block text-[10px] leading-4 text-black/65">{source.status}: {source.detail}</span>
         </li>
@@ -839,10 +839,10 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
     ) : null}
     {readiness.diagnostics.warnings.length || readiness.warnings.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
+      <h4 data-vt-brain-part="sync-notes-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
       <ul className="mt-1 grid gap-1">
        {[...new Set([...readiness.diagnostics.warnings, ...readiness.warnings])].slice(0, 5).map((warning) => (
-        <li key={warning} className="text-xs font-bold leading-5">{warning}</li>
+        <li data-vt-brain-part="sync-note-item" key={warning} className="text-xs font-bold leading-5">{warning}</li>
        ))}
       </ul>
      </div>
