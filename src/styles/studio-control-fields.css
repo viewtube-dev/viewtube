@@ -126,3 +126,52 @@ textarea[data-vt-studio-control="true"] {
     color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
     background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
+
+
+/* Canonical multiline typography exception: textareas are 18px / 14px, not input-sized.
+ * All values are emitted from STUDIO_CONTROL_SIZE_BASE.multiline in tokens.ts. */
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"] {
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  font-weight: var(--vt-studio-textarea-font-weight, 1000);
+  line-height: var(--vt-studio-textarea-line-height, 0.75);
+  min-height: var(--vt-studio-textarea-min-height, 92px);
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="supreme"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="supreme"] {
+  font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
+  -webkit-text-stroke: var(--vt-studio-textarea-supreme-text-stroke, 0.68px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="compact"] {
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="micro"] {
+  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder,
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]::placeholder {
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]::placeholder,
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="compact"]::placeholder {
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
+  -webkit-text-stroke-color: #000;
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="compact"]:is(:focus, :focus-visible) {
+  -webkit-text-stroke-width: var(--vt-studio-textarea-compact-text-stroke, 0.35px);
+}
+
+/* Studio field shells are stationary; no focus-fade or geometry-transition layer. */
+html body :is(input, textarea, select)[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] :is(input, textarea, select) {
+  transition: none;
+}

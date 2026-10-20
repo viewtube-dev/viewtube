@@ -7,7 +7,7 @@ const read = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8"
 describe("Studio control global contract", () => {
   it("defines canonical Supreme/standard/compact/Micro geometry without an internal gap token", () => {
     const css = read("src/styles/studio-control-vars.generated.css");
-    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px"]) expect(css).toContain(token);
+    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 0.75"]) expect(css).toContain(token);
     expect(css).toContain("--vt-studio-supreme-height: 60px");
     expect(css).not.toContain("--vt-studio-14-height");
     expect(css).not.toContain("--vt-studio-control-gap");
@@ -46,7 +46,7 @@ describe("Studio control global contract", () => {
     const system = read("src/styles/studio-control-system.css");
     const tokens = read("src/studio-ui/tokens.ts");
 
-    expect(fields).toContain("* .65");
+    expect(fields).toContain("var(--vt-studio-focus-outline-width-ratio, 0.65)");
     expect(fields).toContain("outline-offset: 0");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.95px");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
@@ -73,8 +73,8 @@ describe("Studio control global contract", () => {
     expect(css).toContain("--vt-studio-control-text-stroke, 1px");
     expect(css).toContain("--vt-studio-textarea-standard-font-size, 18px");
     expect(css).toContain("--vt-studio-textarea-compact-font-size, 14px");
-    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, .5px");
-    expect(css).toContain("--vt-studio-textarea-compact-text-stroke, .35px");
+    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
+    expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
     expect(css).toContain('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible)');
     expect(css).not.toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary)");
     const start = css.indexOf("/* Canonical Studio Controls field contract.");
@@ -118,7 +118,7 @@ describe("Studio control global contract", () => {
     expect(css).not.toContain("Final global field contract:");
     expect(css).not.toContain("!important");
     expect(css).toContain("--vt-studio-control-text-stroke, 1px");
-    expect(css).toContain("--vt-studio-control-text-stroke, 0.5px");
+    expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
     expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
     expect(css).toContain("outline-offset: 0");
@@ -150,4 +150,18 @@ describe("Studio control global contract", () => {
     expect(fieldCss).toContain("-webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
     expect(fieldCss).toContain("-webkit-text-stroke-color: #000;");
   });
+  it("keeps the Confirmed Primitive Library grid on the 4px spacing unit", () => {
+    const css = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
+    const start = css.lastIndexOf("/* Canonical 4px catalog grid:");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const contract = css.slice(start);
+    expect(contract).toContain(".vt-confirmed-catalog { gap: var(--vt-confirmed-space-1) !important; padding: 0 !important; }");
+    expect(contract).toContain(".vt-confirmed-variants { gap: var(--vt-confirmed-space-1) !important; }");
+    expect(contract).toContain(".vt-confirmed-family { padding: var(--vt-confirmed-space-1) !important; }");
+    expect(contract).not.toContain("--vt-confirmed-space-2");
+    expect(contract).not.toContain("--vt-confirmed-space-3");
+    expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))");
+    expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr))");
+  });
+
 });
