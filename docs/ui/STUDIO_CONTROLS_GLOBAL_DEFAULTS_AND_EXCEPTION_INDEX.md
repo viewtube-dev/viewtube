@@ -51,7 +51,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The size tier determines height, border stroke, radius, typography, icon size, and icon stroke. Do not independently override one of these properties without a registered exception.
+The size tier determines height, border stroke, radius, typography, icon size, and icon stroke across Supreme (60px), Standard (44px), Compact (28px), and Micro (12px), subject to registered family-specific exceptions. Do not independently override one of these properties without a registered exception.
 
 | Property | Supreme | Standard | Compact | Micro |
 |---|---:|---:|---:|---:|
