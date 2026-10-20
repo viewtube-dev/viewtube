@@ -3,6 +3,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
  ArrowRight,
  BookOpen,
+ Lock,
+ Unlock,
+ Trash2,
+ XCircle,
  Brain,
  Check,
  ChevronLeft,
@@ -17,6 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
+import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -287,12 +292,10 @@ const BrainContextStrip: React.FC<{
    <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-black uppercase">ContentBuild · {contentBuildId || "none"}</span>
    <span className="min-w-0 rounded-[4px] border border-black bg-[#f8f8f4] px-1.5 py-1 text-[9px] font-black uppercase">Selected · {selection?.label || "none"}</span>
   </div>
-  <div className="flex flex-wrap gap-1.5">
-   <button type="button" disabled={!selection} aria-pressed={Boolean(selection?.locked)} onClick={onToggleLock} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">
-    {selection?.locked ? "Unlock selection" : "Lock selection"}
-   </button>
-   <button type="button" disabled={!selection} onClick={onClearSelection} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear selection</button>
-   <button type="button" disabled={projectLabel === "none"} onClick={onClearProject} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear project</button>
+  <div className="grid grid-cols-3 gap-1">
+   <StudioSplitLeftButton sizeVariant="standard" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} onClick={onToggleLock} className="min-w-0" style={{ backgroundColor: "#ffffff" }}>{selection?.locked ? "Unlock selection" : "Lock selection"}</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="standard" icon={<XCircle aria-hidden="true" />} disabled={!selection} onClick={onClearSelection} className="min-w-0" style={{ backgroundColor: "#ffffff" }}>Clear selection</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="standard" icon={<Trash2 aria-hidden="true" />} disabled={projectLabel === "none"} onClick={onClearProject} className="min-w-0" style={{ backgroundColor: "#ffffff" }}>Clear project</StudioSplitLeftButton>
   </div>
  </section>
 )
@@ -591,21 +594,20 @@ export const BrainFeedbackControls: React.FC<{
    {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
     const isSelected = selected === rating
     return (
-     <button
+     <StudioSquareIconButton
       key={rating}
-      type="button"
+      sizeVariant="compact"
+      iconSizeVariant="large"
+      variant={isSelected ? "v2" : "v1"}
+      icon={<Icon aria-hidden="true" />}
+      label={label}
       title={label}
-      aria-label={label}
       aria-pressed={isSelected}
       disabled={status === "saving"}
       onClick={() => void submitFeedback(rating)}
-      className="grid h-11 w-11 cursor-pointer place-items-center rounded-[6px] border-[2px] border-black bg-white focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-60"
       style={{ backgroundColor: isSelected ? color : "#ffffff" }}
-      onMouseEnter={(event) => (event.currentTarget.style.backgroundColor = color)}
-      onMouseLeave={(event) => (event.currentTarget.style.backgroundColor = isSelected ? color : "#ffffff")}
-     >
-      <Icon size={14} aria-hidden="true" />
-     </button>
+      className="cursor-pointer disabled:cursor-wait disabled:opacity-60"
+     />
     )
    })}
    <span className="ml-1 text-[10px] font-black uppercase tracking-[0.06em]" aria-live="polite" role="status">
@@ -1761,13 +1763,9 @@ const AIBrainCommandInterface: React.FC = () => {
 
         <footer className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2">
          <div className="mx-auto w-full max-w-[880px]">
-          <div className="mb-1.5 flex flex-wrap gap-1 xl:hidden">
-           <button ref={promptLauncherRef} type="button" onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="inline-flex min-h-9 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#FF7AC8] px-2 py-1 text-[9px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
-            <LayoutGrid size={13} aria-hidden="true" /> Prompt Library
-           </button>
-           <button ref={contextLauncherRef} type="button" onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="inline-flex min-h-11 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
-            <PanelRight size={13} aria-hidden="true" /> Channel Context
-           </button>
+          <div className="mb-1.5 grid grid-cols-2 gap-1 xl:hidden">
+           <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
+           <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="standard" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
           </div>
           <div className="flex gap-2">
            <button type="button" onClick={() => setJournalOpen(true)} aria-label="Open AI Journal" title="Open AI Journal" className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-[9px] border-[2px] border-black bg-[#36E0F6] outline-none transition hover:bg-[#FFDA47] focus-visible:ring-[3px] focus-visible:ring-black">
@@ -1776,9 +1774,10 @@ const AIBrainCommandInterface: React.FC = () => {
            <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
-           <textarea
+           <StudioTextArea
             ref={composerRef}
             id="brain-composer"
+            sizeVariant="standard"
             rows={1}
             value={input}
             onChange={(event) => {
@@ -1792,7 +1791,7 @@ const AIBrainCommandInterface: React.FC = () => {
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="max-h-36 min-h-[52px] min-w-0 flex-1 resize-y rounded-[6px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-2 focus-visible:ring-black"
+            className="max-h-36 min-h-[92px] min-w-0 flex-1 resize-y"
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
            />

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { ArrowRight } from "lucide-react"
+import { StudioSplitRightButton, StudioTextInput } from "../../studio-ui"
 import type { CreatorBrainLearningQuestion } from "../../types"
 import { sanitizeCreatorFacingBrainCopy } from "../../services/aiBrainConversationStore"
 
@@ -66,9 +67,10 @@ export const BrainQuestionPrompt: React.FC<{
      </div>
     ) : null}
 
-    <div className="flex gap-2">
-     <input
+    <div className="flex min-w-0 gap-1">
+     <StudioTextInput
       type="text"
+      sizeVariant={compact ? "compact" : "standard"}
       value={freeText}
       onChange={(event) => setFreeText(event.target.value)}
       onKeyDown={(event) => {
@@ -79,21 +81,23 @@ export const BrainQuestionPrompt: React.FC<{
       }}
       placeholder={options.length ? "Or say it your way..." : "Type your answer..."}
       aria-label={sanitizeCreatorFacingBrainCopy(question.question)}
-      className={`min-w-0 flex-1 rounded-[8px] border-[2px] border-black bg-white px-2.5 text-xs font-bold outline-none focus:bg-[#FFDA47]/25 ${compact ? "py-1" : "py-1.5"}`}
+      className="min-w-0 flex-1"
      />
-     <button
+     <StudioSplitRightButton
       type="button"
+      sizeVariant={compact ? "compact" : "standard"}
+      icon={<ArrowRight aria-hidden="true" />}
       disabled={!freeText.trim()}
       onClick={() => {
        if (!freeText.trim()) return
        onAnswer(question, freeText.trim())
        setFreeText("")
       }}
-      className={`inline-flex shrink-0 items-center gap-1 rounded-[8px] border-[2px] border-black bg-[#3FEE56] px-2.5 text-[10px] font-black uppercase disabled:opacity-40 ${compact ? "py-1" : "py-1.5"}`}
+      className="shrink-0"
+      style={{ backgroundColor: "#3FEE56" }}
      >
       Save
-      <ArrowRight size={12} />
-     </button>
+     </StudioSplitRightButton>
     </div>
    </div>
   </section>

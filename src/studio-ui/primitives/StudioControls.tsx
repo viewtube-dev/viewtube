@@ -1384,6 +1384,21 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
 )
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
 
+/** Canonical right-rail action button; shares the same Studio split shell and tokens. */
+export interface StudioSplitRightButtonProps extends StudioButtonProps {
+  /** Icon rendered in the square right rail. */
+  icon: React.ReactNode
+  iconSizeVariant?: StudioIconSizeVariant
+}
+export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
+      <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
+    </StudioButton>
+  ),
+)
+StudioSplitRightButton.displayName = "StudioSplitRightButton"
+
 
 /** Circular shape variant of the canonical square icon button. All icon sizing,
  * palette, selection, effects, focus and disabled behavior remain shared. */
