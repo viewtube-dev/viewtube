@@ -51,9 +51,9 @@ function readFloatingLabelMetric(source, property, { required = true } = {}) {
 const floatingLabelStandardHeight = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelHeight");
 const floatingLabelCompactHeight = readFloatingLabelMetric(compactSizeLine, "floatingLabelHeight");
 const floatingLabelOffsetRatio = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelOffsetRatio");
-const numberMix = Number(numberContract.match(/defaultWhiteMixPercent:\s*(\d+)/)?.[1]);
-const activeTextColor = numberContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
-const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1];
+const numberMix = Number(focusContract.match(/restTextMixPercent:\s*(\d+)/)?.[1]);
+const activeTextColor = focusContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
+const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1] ?? activeTextColor;
 const focusHoldMs = Number(focusContract.match(/holdMs:\s*(\d+)/)?.[1]);
 const focusOutlineFadeMs = Number(focusContract.match(/outlineFadeMs:\s*(\d+)/)?.[1]);
 const focusWidthRatio = Number(focusContract.match(/outlineWidthRatio:\s*([\d.]+)/)?.[1]);
