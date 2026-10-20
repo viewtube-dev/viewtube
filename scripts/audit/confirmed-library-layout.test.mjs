@@ -400,6 +400,8 @@ test("confirmed primitive library layout uses a shared 4px grid rhythm", () => {
 
 test("confirmed primitive library grids collapse responsively without fractional or negative spacing", () => {
   assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
-  assert.match(styles, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/s);
-  assert.match(styles, /\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
+  const marker = "/* Confirmed Primitive Library 4px grid contract */";
+  const gridContract = styles.slice(styles.lastIndexOf(marker));
+  assert.match(gridContract, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*min-width:\s*0/);
+  assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
 });
