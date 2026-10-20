@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -1015,9 +1015,13 @@ describe("Supreme and Micro production size contract", () => {
 
   it("renders Supreme buttons and Micro split badges using production size APIs", () => {
     const supreme = renderToStaticMarkup(<StudioButton sizeVariant="supreme">SUPREME</StudioButton>)
+    const action = renderToStaticMarkup(<StudioActionButton>CONTINUE</StudioActionButton>)
+    const dropdown = renderToStaticMarkup(<StudioDropdown sizeVariant="supreme" options={[{ value: "a", label: "Alpha" }]} />)
     const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro" icon={<span>+</span>}>MICRO</StudioSplitLeftBadge>)
     expect(supreme).toContain('data-size="supreme"')
     expect(supreme).toContain('data-height-variant="60"')
+    expect(action).toContain('data-size="supreme"')
+    expect(dropdown).toContain('data-size="supreme"')
     expect(micro).toContain('data-size="micro"')
   })
 
