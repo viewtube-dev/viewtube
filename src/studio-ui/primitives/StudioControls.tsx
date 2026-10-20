@@ -224,7 +224,7 @@ export type StudioTextBoxProps = Omit<
   "contentEditable" | "dangerouslySetInnerHTML" | "children"
 > & {
   /** Plain display text; embedded line breaks are preserved. */
-  children?: string
+  children?: React.ReactNode
   /** Corresponding textarea typography and surface size. */
   size?: StudioTextBoxSize
 }
