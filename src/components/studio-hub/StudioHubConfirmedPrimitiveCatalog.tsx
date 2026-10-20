@@ -11,6 +11,7 @@ import {
   StudioLegendMultiDropdown,
   StudioCounter,
   StudioInlineStepper,
+  StudioSplitStepper,
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioLeftCounter,
@@ -239,6 +240,34 @@ const ConfirmedStudioInlineStepperFamily: React.FC = () => {
           <div className="vt-confirmed-variant">
             <span>28px compact · interactive</span>
             <StudioInlineStepper value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact inline stepper" />
+          </div>
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+const ConfirmedStudioSplitStepperFamily: React.FC = () => {
+  const [standardValue, setStandardValue] = React.useState(4)
+  const [compactValue, setCompactValue] = React.useState(3)
+  return (
+    <Family
+      title="Split Stepper · Username Foundation"
+      nonDefaultSettings={[
+        "Editable value pane uses the shared username-input foundation and a secondary vertical action rail.",
+        "Standard and compact variants are supported; Micro is intentionally not exposed.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitStepper" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="2:1 editable value pane · square secondary action rail · no shadows" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-stepper-row" data-vt-library-component="StudioSplitStepper">
+        <div className="vt-confirmed-stepper-row-grid">
+          <div className="vt-confirmed-variant">
+            <span>44px standard · interactive</span>
+            <StudioSplitStepper value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard split stepper" />
+          </div>
+          <div className="vt-confirmed-variant">
+            <span>28px compact · interactive</span>
+            <StudioSplitStepper value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact split stepper" />
           </div>
         </div>
       </div>
@@ -874,6 +903,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <ConfirmedStudioInlineStepperFamily />
+    <ConfirmedStudioSplitStepperFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
