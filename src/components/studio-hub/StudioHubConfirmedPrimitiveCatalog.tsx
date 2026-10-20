@@ -14,6 +14,7 @@ import {
   StudioSideCounter,
   StudioLeftCounter,
   StudioSplitLeftButton,
+  StudioSplitRailAccordion,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
   StudioDoubleSplitBadge,
@@ -404,6 +405,29 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · two-line · 18px rows</span><StudioButton sizeVariant="standard" textLayout="two-line" firstLine="GENERATE" secondLine="METADATA" aria-label="Generate metadata" data-vt-library-variant="two-line" /></div>
       <div className="vt-confirmed-variant"><span>28px compact · two-line · 12px rows</span><StudioButton sizeVariant="compact" textLayout="two-line" firstLine="AI" secondLine="REFINE" aria-label="AI refine" data-vt-library-variant="two-line" /></div>
     </Family>
+    <Family title="Split Rail Accordion · 44px + 28px" nonDefaultSettings={[
+      "Three square icon rails remain visible; one adjacent content panel expands at a time.",
+      "Rightmost content is visible by default. Hover/focus previews the left or middle panel; clicking selects it.",
+      "Shares Studio split geometry and tokens; no separate shadow or motion system.",
+    ]} provenance={<Provenance primitive="StudioSplitRailAccordion" tsx="src/studio-ui/primitives/StudioSplitRailAccordion.tsx" css="src/studio-ui/primitives/StudioSplitRailAccordion.css" tokens="Three 1:1 icon rails; active panel expands inline; standard 44px / compact 28px." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · right panel opens by default</span>
+        <StudioSplitRailAccordion items={[
+          { accessibleLabel: "Left option", icon: <Check aria-hidden="true" />, content: "LEFT PANEL" },
+          { accessibleLabel: "Middle option", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE PANEL" },
+          { accessibleLabel: "Right option", icon: <Sparkles aria-hidden="true" />, content: "RIGHT PANEL" },
+        ]} />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px compact · middle panel initially selected</span>
+        <StudioSplitRailAccordion sizeVariant="compact" defaultActiveIndex={1} items={[
+          { accessibleLabel: "Left option compact", icon: <Check aria-hidden="true" />, content: "LEFT" },
+          { accessibleLabel: "Middle option compact", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE" },
+          { accessibleLabel: "Right option compact", icon: <Sparkles aria-hidden="true" />, content: "RIGHT" },
+        ]} />
+      </div>
+    </Family>
+
     <Family title="Prominent Action · 56px" nonDefaultSettings={[
         "Dedicated 56px action family with 20px label typography; it is not a third ordinary-button size.",
       ]} provenance={<Provenance primitive="StudioActionButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Separate fixed 56px action family; never used as a standard/compact size alias." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
