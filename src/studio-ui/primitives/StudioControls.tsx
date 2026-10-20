@@ -2681,15 +2681,15 @@ StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
 
 
 
-export type StudioBrainStatusTone = "green" | "cyan" | "purple" | "yellow" | "red" | "blue";
+export type StudioBrainStatusBadgeTone = "green" | "cyan" | "purple" | "yellow" | "red" | "blue";
 export type StudioBrainStatusAppearance = "dark" | "tinted";
-export type StudioBrainStatusSize = "standard" | "compact" | "micro";
+export type StudioBrainStatusBadgeSize = "standard" | "compact" | "micro";
 
 export interface StudioBrainStatusBadgeProps {
   label: string;
-  tone?: StudioBrainStatusTone;
+  tone?: StudioBrainStatusBadgeTone;
   appearance?: StudioBrainStatusAppearance;
-  sizeVariant?: StudioBrainStatusSize;
+  sizeVariant?: StudioBrainStatusBadgeSize;
   active?: boolean;
   className?: string;
   "aria-label"?: string;
