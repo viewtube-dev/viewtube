@@ -246,13 +246,11 @@ Visual verification is still required in the running app for supreme/standard/co
 
 ## Confirmed Primitive Library grid contract — 2026-10-20
 
-Catalog layout uses one explicit 4px spacing unit in `src/components/studio-hub/studio-hub-primitive-catalogs.css`:
+The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-level and nested grid/row spacing. The final normalization layer in `src/components/studio-hub/studio-hub-primitive-catalogs.css` sets catalog gaps, family spacing, specimen spacing, and control-matrix spacing to `--vt-confirmed-space-1` (4px). It is layout-only and must not alter production primitive geometry.
 
-- Catalog-to-family spacing: 12px (3 units).
-- Family padding and family-to-specimen spacing: 8px (2 units).
-- Specimen-to-label/control spacing and tight control matrices: 4px (1 unit).
-- Nested matrices may use 8px or 12px when needed; every catalog gap and padding must remain a multiple of 4px. Do not add ad hoc 5px, 6px, 7px, or 10px spacing.
-- The default specimen grid uses two minmax-safe columns; full-row specimens span both columns. Choice/radio/checkbox skins retain four columns, standard word toggles remain one per row, compact word toggles remain two per row, and square-icon variant rows retain four items.
-- Narrow layouts retain `min-width: 0`, border-box sizing, and one-line ellipsis for compact specimen captions. Responsive rules change placement, not production primitive size, stroke, typography, fill, split anatomy, or behavior.
-- Catalog CSS is layout-only. The real specimen source is `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`; production geometry remains owned by Studio Controls. The separate complete catalog is a legacy comparison surface, not the source of truth for production geometry.
-- Source tests are necessary but not sufficient for certification. Verify desktop and narrow mobile rendering, including open dropdowns, textareas, split controls, compact specimens, and status badges.
+- Use CSS Grid with `minmax(0, 1fr)` columns for equal-width specimens; use `min-width: 0` and `box-sizing: border-box` to prevent overflow.
+- Full-row specimens span all grid columns. Textareas and wide field examples occupy the full row.
+- Choice/radio/checkbox skins retain four columns where the content fits; standard word toggles remain one per row and compact word toggles remain two per row. Square icon variants may use a four-item row with horizontal overflow when necessary.
+- Responsive rules change placement only. They must not change production size tier, stroke, typography, fill, split anatomy, or behavior.
+- The confirmed catalog imports production primitives from `src/studio-ui/primitives/StudioControls.tsx`. The complete catalog is a legacy comparison surface and must not be treated as the geometry source of truth.
+- The grid contract is regression-tested in `src/studio-ui/primitives/studio-control-contract.test.ts`. Source tests do not replace browser verification at desktop and narrow mobile widths, including open dropdowns, textareas, split controls, compact specimens, and status badges.
