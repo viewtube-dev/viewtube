@@ -78,14 +78,6 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     compactFontSize: 14,
     rationale: "Multiline reading/writing surface uses a dedicated type scale while retaining canonical field geometry.",
   },
-  prominentAction: {
-    globalRuleException: true,
-    height: 56,
-    stroke: 3,
-    radius: 6,
-    shadow: 0,
-    rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
-  },
 } as const
 
 
@@ -104,7 +96,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
   badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
-  globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
+  globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
 
@@ -1012,7 +1004,7 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   loading?: boolean
   selected?: boolean
   /** Explicit geometry variant for the confirmed 44px and 28px button family. */
-  heightVariant?: "44" | "28"
+  heightVariant?: "60" | "44" | "28"
   /** Layout variant owned by StudioButton; geometry and behavior remain canonical. */
   textLayout?: "single-line" | "two-line"
   /** First row for the two-line text layout variant. */
@@ -1042,9 +1034,9 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     // Height is the authoritative geometry when supplied. This prevents a 28px
     // control from accidentally inheriting standard border/radius/shadow tokens.
     const resolvedSize = heightVariant
-      ? heightVariant === "28" ? "compact" : "standard"
+      ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
       : sizeVariant ?? "standard"
-    const resolvedHeight = heightVariant ?? (resolvedSize === "compact" ? "28" : "44")
+    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : "44")
 
     return (
       <button
@@ -1100,17 +1092,18 @@ StudioTwoLineButton.displayName = "StudioTwoLineButton"
  * It is intentionally not a StudioButton size variant: StudioButton remains 44px/28px only.
  */
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  sizeVariant?: StudioControlSize
   tone?: StudioControlTone
   loading?: boolean
 }
 
 export const StudioActionButton = React.forwardRef<HTMLButtonElement, StudioActionButtonProps>(
-  ({ tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
+  ({ sizeVariant = "supreme", tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
     <button
       ref={ref}
       type={type}
       {...props}
-      data-vt-studio-control="true"
+      {...withStudioAttrs(sizeVariant, tone)}
       data-vt-studio-action-button="true"
       data-tone={tone}
       aria-busy={loading || undefined}
@@ -2176,7 +2169,7 @@ export interface StudioCloseableBadgeProps {
   onClose?: () => void;
   className?: string;
   entering?: boolean;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   label,
@@ -2393,7 +2386,7 @@ StudioTagEditor.displayName = "StudioTagEditor";
 export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onChange" | "children"> {
   accept?: string;
   prompt?: string;
-  sizeVariant?: "standard" | "compact";
+  sizeVariant?: StudioControlSize;
   disabled?: boolean;
   multiple?: boolean;
   onFileChange?: (file: File) => void;
