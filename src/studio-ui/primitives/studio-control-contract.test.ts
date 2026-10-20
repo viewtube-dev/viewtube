@@ -150,4 +150,18 @@ describe("Studio control global contract", () => {
     expect(fieldCss).toContain("-webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
     expect(fieldCss).toContain("-webkit-text-stroke-color: #000;");
   });
+  it("keeps the Confirmed Primitive Library grid on the 4px spacing unit", () => {
+    const css = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
+    const start = css.lastIndexOf("/* Canonical 4px catalog grid:");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const contract = css.slice(start);
+    expect(contract).toContain(".vt-confirmed-catalog { gap: var(--vt-confirmed-space-1) !important; padding: 0 !important; }");
+    expect(contract).toContain(".vt-confirmed-variants { gap: var(--vt-confirmed-space-1) !important; }");
+    expect(contract).toContain(".vt-confirmed-family { padding: var(--vt-confirmed-space-1) !important; }");
+    expect(contract).not.toContain("--vt-confirmed-space-2");
+    expect(contract).not.toContain("--vt-confirmed-space-3");
+    expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))");
+    expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr))");
+  });
+
 });
