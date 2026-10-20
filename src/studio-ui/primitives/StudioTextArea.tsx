@@ -45,7 +45,7 @@ type StudioTextAreaFixedLabelProps = Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
   "className" | "style"
 > & {
-  sizeVariant?: StudioControlSize
+  sizeVariant?: StudioTextAreaSize
   /** Permanent top-left label box matching StudioLegendMultiDropdown. */
   variant: "fixed-label"
   label: string
