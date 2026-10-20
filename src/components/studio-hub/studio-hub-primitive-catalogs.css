@@ -3277,25 +3277,25 @@
   }
 }
 
-/* Final spacing normalization: legacy catalog subfamilies must also obey the 4px lattice. */
+/* Canonical 4px catalog grid: layout-only; never changes production primitive geometry. */
 :where([class*="vt-confirmed-"]:not(.vt-confirmed-catalog)) {
   gap: var(--vt-confirmed-space-1) !important;
   padding: var(--vt-confirmed-space-1) !important;
 }
-.vt-confirmed-catalog { gap: var(--vt-confirmed-space-3) !important; padding: 0 !important; }
+.vt-confirmed-catalog { gap: var(--vt-confirmed-space-1) !important; padding: 0 !important; }
 .vt-confirmed-family,
 .vt-confirmed-defaults-combined,
 .vt-confirmed-global-grid > div,
 .vt-confirmed-square-effect-pair,
 .vt-confirmed-nondefault-settings,
 .vt-confirmed-defaults-explainer {
-  gap: var(--vt-confirmed-space-2) !important;
-  padding: var(--vt-confirmed-space-2) !important;
+  gap: var(--vt-confirmed-space-1) !important;
+  padding: var(--vt-confirmed-space-1) !important;
 }
-.vt-confirmed-family { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-family { padding: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-variants,
 .vt-confirmed-variant { padding: 0 !important; }
-.vt-confirmed-variants { gap: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-variants { gap: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-variant { gap: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-global-grid,
 .vt-confirmed-control-variants,
@@ -3313,9 +3313,9 @@
 .vt-confirmed-badge-layout,
 .vt-confirmed-choice-examples,
 .vt-confirmed-choice-module {
-  gap: var(--vt-confirmed-space-2) !important;
+  gap: var(--vt-confirmed-space-1) !important;
 }
-.vt-confirmed-control-family { gap: var(--vt-confirmed-space-3) !important; }
+.vt-confirmed-control-family { gap: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-choice-names,
 .vt-confirmed-choice-variant-headings,
 .vt-confirmed-choice-example-row,
@@ -3332,7 +3332,7 @@
   gap: var(--vt-confirmed-space-1) !important;
 }
 .vt-confirmed-family:has(.vt-studio-legend-multi) > .vt-confirmed-variants {
-  gap: var(--vt-confirmed-space-2) !important;
+  gap: var(--vt-confirmed-space-1) !important;
 }
 .vt-confirmed-source-details,
 .vt-confirmed-source-details[open],
@@ -3343,11 +3343,11 @@
 }
 .vt-confirmed-size-grid { gap: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-size-card { gap: var(--vt-confirmed-space-1) !important; padding: var(--vt-confirmed-space-1) !important; }
-.vt-confirmed-square-effect-pair { padding: var(--vt-confirmed-space-2) !important; }
-.vt-confirmed-global-grid > div { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-square-effect-pair { padding: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-global-grid > div { padding: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-nondefault-settings,
-.vt-confirmed-defaults-explainer { padding: var(--vt-confirmed-space-2) !important; }
-.vt-confirmed-source-details .vt-confirmed-nondefault-settings { padding: var(--vt-confirmed-space-2) !important; }
+.vt-confirmed-defaults-explainer { padding: var(--vt-confirmed-space-1) !important; }
+.vt-confirmed-source-details .vt-confirmed-nondefault-settings { padding: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-vertical-word-toggle-specimen { padding: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-vertical-word-toggle-micro .vt-confirmed-vertical-word-toggle-specimen { padding: var(--vt-confirmed-space-1) !important; }
 .vt-confirmed-spectrum-tag-grid { padding: 0 !important; }
