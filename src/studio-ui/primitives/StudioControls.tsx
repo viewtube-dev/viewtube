@@ -2784,3 +2784,120 @@ StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
 
 export { StudioSplitRailAccordion } from "./StudioSplitRailAccordion"
 export type { StudioSplitRailAccordionItem, StudioSplitRailAccordionProps } from "./StudioSplitRailAccordion"
+
+
+/** Shared numeric normalization for canonical inline and split steppers. */
+export function normalizeStudioInlineStepperValue(
+  value: number,
+  direction: -1 | 1,
+  step = 1,
+  min = Number.NEGATIVE_INFINITY,
+  max = Number.POSITIVE_INFINITY,
+): number {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const current = Number.isFinite(value) ? value : Number.isFinite(min) ? min : 0;
+  const next = Math.min(max, Math.max(min, current + direction * safeStep));
+  const precision = Math.min(12, Math.max(0, (String(safeStep).split(".")[1] ?? "").length));
+  return Number(next.toFixed(precision));
+}
+
+export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: "standard" | "compact";
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+
+/** Flat double-split numeric stepper: decrement, editable value, increment. */
+export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
+  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
+  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
+}) => {
+  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
+  return (
+    <div
+      {...props}
+      className={studioClasses("vt-studio-inline-stepper", size === "compact" ? "is-compact" : "is-standard", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="inline-stepper"
+      data-vt-studio-split="double"
+      data-size={size}
+    >
+      <div className="vt-studio-inline-stepper__actions">
+        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
+        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
+      </div>
+      <input
+        className="vt-studio-inline-stepper__value"
+        type="number"
+        aria-label={ariaLabel}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onChange={event => {
+          const parsed = Number(event.currentTarget.value);
+          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
+        }}
+      />
+    </div>
+  );
+};
+
+export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: "standard" | "compact";
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+export type StudioSplitStepperSize = NonNullable<StudioSplitStepperProps["size"]>;
+
+/** Username-input-derived compact numeric field with a secondary action rail. */
+export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
+  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
+  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
+}) => {
+  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
+  return (
+    <div
+      {...props}
+      className={studioClasses("vt-studio-split-stepper", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="split-stepper"
+      data-vt-studio-username-foundation="true"
+      data-size={size}
+    >
+      <input
+        className="vt-studio-split-stepper-value"
+        type="number"
+        aria-label={ariaLabel}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onChange={event => {
+          const parsed = Number(event.currentTarget.value);
+          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
+        }}
+      />
+      <div className="vt-studio-split-stepper-rail">
+        <div className="vt-studio-split-stepper-actions">
+          <button type="button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
+          <button type="button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
+        </div>
+      </div>
+    </div>
+  );
+};
