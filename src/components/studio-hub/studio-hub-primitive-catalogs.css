@@ -3095,9 +3095,12 @@
 }
 .vt-confirmed-family > h3 {
   min-width: 0;
-  max-width: 100%;
+  max-width: 40ch;
   margin: 0;
+  overflow: hidden;
   overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .vt-confirmed-variants {
   display: grid;
@@ -3107,6 +3110,12 @@
   min-width: 0;
   width: 100%;
 }
+.vt-confirmed-button-family > .vt-confirmed-variants {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
+  grid-column: 1 / -1 !important;
+}
 .vt-confirmed-variant {
   display: grid;
   align-content: start;
@@ -3115,10 +3124,13 @@
   max-width: 100%;
 }
 .vt-confirmed-variant > span:not([data-vt-studio-control="true"]) {
+  display: block;
   min-width: 0;
-  max-width: 100%;
+  max-width: 40ch;
+  overflow: hidden;
   overflow-wrap: anywhere;
-  white-space: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .vt-confirmed-variant.is-full-row,
 .vt-confirmed-variant:has(textarea),
@@ -3129,13 +3141,20 @@
 .vt-confirmed-composite-grid,
 .vt-confirmed-username-grid,
 .vt-confirmed-stepper-row-grid,
-.vt-confirmed-square-variant-grid,
 .vt-confirmed-square-effect-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--vt-confirmed-space-2);
   min-width: 0;
   width: 100%;
+}
+.vt-confirmed-square-variant-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, max-content));
+  gap: var(--vt-confirmed-space-2);
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
 }
 .vt-confirmed-spectrum-tag-grid {
   display: flex;
@@ -3228,10 +3247,14 @@
   .vt-confirmed-composite-grid,
   .vt-confirmed-username-grid,
   .vt-confirmed-stepper-row-grid,
-  .vt-confirmed-square-variant-grid,
   .vt-confirmed-square-effect-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--vt-confirmed-space-2);
+  }
+  .vt-confirmed-square-variant-grid {
+    grid-template-columns: repeat(4, minmax(0, max-content));
+    gap: var(--vt-confirmed-space-2);
+    overflow-x: auto;
   }
   .vt-confirmed-control-family,
   .vt-confirmed-control-row,
