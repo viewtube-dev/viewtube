@@ -1,4 +1,5 @@
 import React from "react"
+import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { StudioSplitRailAccordion } from "./StudioSplitRailAccordion"
@@ -37,13 +38,23 @@ describe("StudioSplitRailAccordion", () => {
     expect(contentRule).not.toContain("opacity:");
     expect(contentRule).not.toContain("transition: opacity");
     expect(css).toContain("[data-vt-studio-split-rail-label] {");
-    expect(css).toContain("left: 4px;");
-    expect(css).toContain("position: absolute;");
-    expect(css).toContain("width: var(--vt-studio-control-stroke, 3px);");
+    expect(css).toContain("inset: 0 auto 0 4px;");
+    expect(css).toContain("align-items: center;");
+    expect(css).toContain("transform: none;");
+    expect(css).toContain("opacity: 1;");
+    expect(css).toContain("-webkit-text-fill-color: #000;");
+    expect(css).toContain("height: 100%;");
+    expect(css).toContain("aspect-ratio: 1 / 1;");
+    expect(css).not.toContain("min-height: var(--vt-studio-control-height, 44px);");
+    expect(css).toContain("width: var(--vt-studio-split-rail-stroke);");
     expect(css).toContain("transform: translateX(-50%);");
     expect(css).toContain("transform: translateX(50%);");
-    expect(css).not.toContain(".vt-studio-split-rail-accordion__item + .vt-studio-split-rail-accordion__item");
     expect(css).toContain(".vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before");
+    expect(css).toContain(".vt-studio-split-rail-accordion__item:last-child [data-vt-studio-split-rail-icon]::after");
+    expect(css).toContain("flex: 1 1 0;");
+    expect(css).toContain("max-width: 100%;");
+    expect(css).not.toContain("top: 50%;");
+    expect(css).not.toContain("translateY(-50%)");
   });
 
   it("exposes selection and expansion state for accessible keyboard interaction", () => {
