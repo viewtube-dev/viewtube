@@ -2395,7 +2395,6 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
 export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   accept = "image/*,video/*",
   prompt = "Drag or drop\nImage / video here · or click to upload",
-  sizeVariant = "standard",
   disabled = false,
   multiple = false,
   onFileChange,
@@ -2694,7 +2693,6 @@ export const StudioBrainStatusBadge: React.FC<StudioBrainStatusBadgeProps> = ({
   label,
   tone = "green",
   appearance = "dark",
-  sizeVariant = "standard",
   active = true,
   className,
   "aria-label": ariaLabel,
@@ -2747,7 +2745,7 @@ export const StudioBrainStatusIndicator: React.FC<{
   pulse?: boolean;
   className?: string;
   title?: string;
-}> = ({ status, label, variant = "dark", size = "standard", pulse = true, className = "", title }) => {
+}> = ({ status, label, variant = "dark", pulse = true, className = "", title }) => {
   const colors = STUDIO_BRAIN_STATUS_COLORS[status];
   return (
     <span
