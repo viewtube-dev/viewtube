@@ -57,7 +57,7 @@ describe("StudioSplitRailAccordion", () => {
     expect(css).toContain('.vt-studio-split-rail-accordion__item[data-active="true"]:not(:last-child)');
     expect(css).toContain("box-shadow: inset calc(-1 * var(--sra-stroke)) 0 0 #000;");
     expect(css).toContain("[data-vt-studio-split-rail-label] {");
-    expect(css).toContain("left: 0;");
+    expect(css).toContain("inset: 0;");
     expect(css).toContain("align-items: center;");
     expect(css).toContain("line-height: 1;");
     expect(css).toContain("opacity: 1;");
