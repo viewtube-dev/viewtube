@@ -1128,10 +1128,10 @@ describe("Studio split-rail accordion motion", () => {
   it("uses item-owned flex-grow and content-only clipping with inset dividers", () => {
     const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
     const itemStart = css.indexOf(".vt-studio-split-rail-accordion__item {");
-    const itemEnd = css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\\"true\\"]", itemStart);
+    const itemEnd = css.indexOf('[data-active="true"]', itemStart);
     const itemRule = css.slice(itemStart, itemEnd);
     const contentStart = css.indexOf(".vt-studio-split-rail-accordion__content {");
-    const contentEnd = css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\\"true\\"]", contentStart);
+    const contentEnd = css.indexOf('[data-active="true"]', contentStart);
     const contentRule = css.slice(contentStart, contentEnd);
     expect(css).toContain("--vt-studio-split-rail-slide-duration: 280ms;");
     expect(itemRule).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
