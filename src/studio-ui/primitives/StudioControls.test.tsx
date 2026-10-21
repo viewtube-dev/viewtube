@@ -30,8 +30,8 @@ describe("Studio split rail accordion motion", () => {
     const contentRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__content {"), css.indexOf(".vt-studio-split-rail-accordion__content[data-active=\"true\"]"));
     expect(itemRule).toContain("flex: 0 0 var(--vt-studio-control-height, 44px)");
     expect(activeItemRule).toContain("flex: 1 1 var(--vt-studio-control-height, 44px)");
-    expect(itemRule).toContain("flex-grow 320ms cubic-bezier(.22, 1, .36, 1)");
-    expect(contentRule).toContain("flex-grow 320ms cubic-bezier(.22, 1, .36, 1)");
+    expect(itemRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
+    expect(contentRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 });
