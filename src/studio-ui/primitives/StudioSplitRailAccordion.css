@@ -4,8 +4,9 @@
 .vt-studio-split-rail-accordion {
   --vt-studio-split-rail-size: var(--vt-studio-control-height, 44px);
   --vt-studio-split-rail-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-studio-split-rail-slide-duration: 320ms;
-  --vt-studio-split-rail-slide-easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --vt-studio-split-rail-slide-duration: 280ms;
+  --vt-studio-split-rail-slide-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --vt-studio-split-rail-face: calc(var(--vt-studio-split-rail-size) - (2 * var(--vt-studio-split-rail-stroke)));
 
   box-sizing: border-box;
   display: flex;
@@ -22,7 +23,7 @@
   color: #000;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-weight: 1000;
-  line-height: 0.86;
+  line-height: 1;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
@@ -56,11 +57,11 @@
   position: relative;
   display: grid;
   place-items: center;
-  flex: 0 0 auto;
+  flex: 0 0 var(--vt-studio-split-rail-face);
+  width: var(--vt-studio-split-rail-face);
+  min-width: var(--vt-studio-split-rail-face);
+  max-width: var(--vt-studio-split-rail-face);
   height: 100%;
-  width: auto;
-  aspect-ratio: 1 / 1;
-  align-self: stretch;
   padding: 0;
   margin: 0;
   border: 0;
@@ -106,14 +107,14 @@
   position: relative;
   z-index: 3;
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 70%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 70%);
+  width: min(var(--vt-studio-control-icon-size, 38px), 86%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 86%);
 }
 
 .vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon-face],
 .vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon-face] > svg {
-  width: min(var(--vt-studio-28-icon-size, 24px), 70%);
-  height: min(var(--vt-studio-28-icon-size, 24px), 70%);
+  width: min(var(--vt-studio-28-icon-size, 24px), 86%);
+  height: min(var(--vt-studio-28-icon-size, 24px), 86%);
 }
 
 /* Panes open and close together; only the clipping mask reveals the fixed label. */
@@ -122,6 +123,7 @@
   position: relative;
   display: block;
   flex: 0 1 0;
+  flex-basis: 0;
   width: 0;
   max-width: 0;
   height: 100%;
@@ -129,7 +131,7 @@
   padding: 0;
   overflow: hidden;
   border: 0;
-  background: var(--vt-studio-control-accent, var(--pair-a));
+  background: transparent;
   font-size: var(--vt-studio-control-font-size, 38px);
   text-align: left;
   white-space: nowrap;
@@ -143,9 +145,23 @@
 
 .vt-studio-split-rail-accordion__content[data-active="true"] {
   flex: 1 1 0;
-  width: auto;
+  flex-basis: 0;
+  width: 0;
   max-width: 100%;
   clip-path: inset(0 0 0 0);
+  clip-path: inset(0 0 0 0);
+}
+
+.vt-studio-split-rail-accordion__content[data-active="true"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--vt-studio-split-rail-stroke);
+  background: #000;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .vt-studio-split-rail-accordion[data-size="compact"] .vt-studio-split-rail-accordion__content {
@@ -155,7 +171,7 @@
 /* Fixed, opaque label: centered against the entire content box. */
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-label] {
   position: absolute;
-  inset: 0 auto 0 4px;
+  inset: 0 auto 0 6px;
   display: flex;
   align-items: center;
   width: max-content;
@@ -168,6 +184,7 @@
   opacity: 1;
   -webkit-text-fill-color: #000;
   background: transparent;
+  line-height: 1;
   pointer-events: auto;
   white-space: nowrap;
   z-index: 1;
