@@ -26,6 +26,26 @@ describe("StudioSplitRailAccordion", () => {
     expect(html).toContain("LEFT PANEL")
   })
 
+
+  it("keeps label position fixed while revealing it by clipping, with persistent square-rail borders", () => {
+    const css = readFileSync(new URL("./StudioSplitRailAccordion.css", import.meta.url), "utf8");
+    const contentStart = css.indexOf(".vt-studio-split-rail-accordion__content {");
+    const contentEnd = css.indexOf(".vt-studio-split-rail-accordion[data-size=\"compact\"] .vt-studio-split-rail-accordion__content {", contentStart);
+    const contentRule = css.slice(contentStart, contentEnd);
+    expect(contentRule).toContain("justify-content: flex-start");
+    expect(contentRule).toContain("clip-path: inset(0 100% 0 0)");
+    expect(contentRule).not.toContain("opacity:");
+    expect(contentRule).not.toContain("transition: opacity");
+    expect(css).toContain("[data-vt-studio-split-rail-label] {");
+    expect(css).toContain("left: 4px;");
+    expect(css).toContain("position: absolute;");
+    expect(css).toContain("width: var(--vt-studio-control-stroke, 3px);");
+    expect(css).toContain("transform: translateX(-50%);");
+    expect(css).toContain("transform: translateX(50%);");
+    expect(css).not.toContain(".vt-studio-split-rail-accordion__item + .vt-studio-split-rail-accordion__item");
+    expect(css).toContain(".vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before");
+  });
+
   it("exposes selection and expansion state for accessible keyboard interaction", () => {
     const html = renderToStaticMarkup(<StudioSplitRailAccordion items={items} />)
     expect(html).toContain('aria-label="Middle"')
