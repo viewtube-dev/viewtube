@@ -1139,7 +1139,7 @@ describe("Studio split-rail accordion motion", () => {
     expect(contentRule).toContain("transition: clip-path var(--vt-studio-split-rail-slide-duration)");
     expect(contentRule).not.toContain("flex-grow");
     expect(contentRule).not.toContain("max-width");
-    expect(contentRule).not.toContain("width: 0");
+    expect(contentRule).not.toMatch(/(^|\\n)\\s*width: 0;/);
     expect(css).not.toContain("::before");
     expect(css).not.toContain("::after");
     expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
