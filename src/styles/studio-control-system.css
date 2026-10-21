@@ -4238,7 +4238,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__center {
   inset: 0;
-  display: block;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.1cqw;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {
   position: absolute;
@@ -4262,8 +4265,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   object-position: center;
   animation: vt-studio-upload-pop .5s cubic-bezier(.3, 1.5, .5, 1);
 }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::before { inset: calc(var(--vt-studio-upload-frame-stroke) * -1); }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::after { inset: calc(var(--vt-studio-upload-frame-stroke) * -1.75); }
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::before { inset: calc(0px - var(--vt-upload-circle-border)); }
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::after { inset: calc(0px - var(--vt-upload-circle-border) - var(--vt-upload-primary-stroke)); }
 .vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__layer {
   animation: vt-studio-upload-click-breathe 1s ease-in-out both;
   border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
