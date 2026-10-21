@@ -28,8 +28,8 @@ describe("Studio split rail accordion motion", () => {
     const itemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item {"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
     const activeItemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\"true\"]"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
     const contentRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__content {"), css.indexOf(".vt-studio-split-rail-accordion__content[data-active=\"true\"]"));
-    expect(itemRule).toContain("flex: 0 0 var(--vt-studio-control-height, 44px)");
-    expect(activeItemRule).toContain("flex: 1 1 var(--vt-studio-control-height, 44px)");
+    expect(itemRule).toContain("flex: 0 0 var(--vt-studio-split-rail-size)");
+    expect(activeItemRule).toContain("flex: 1 1 var(--vt-studio-split-rail-size)");
     expect(itemRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
     expect(contentRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
