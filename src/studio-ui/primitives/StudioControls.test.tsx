@@ -66,7 +66,10 @@ describe("Studio badge single-size contract", () => {
     expect(indicator).toContain('data-size="standard"');
     expect(css).toContain("font: 1000 18px/20px Inter");
     expect(css).toContain("border-radius: 4px;");
-    expect(css).toContain("rgba(255,255,255,.95)");
+    expect(css).toContain("transform: translateY(.5px);");
+    expect(css).toContain("background: radial-gradient(circle at 50% 45%, #fff 0%, #fff 28%, var(--vt-brain-led-color) 62%, color-mix(in srgb, var(--vt-brain-led-color) 70%, #000) 100%)");
+    expect(css).toContain("box-shadow: 0 0 4px 1px var(--vt-brain-led-color), 0 0 10px 3px color-mix(in srgb, var(--vt-brain-led-color) 55%, transparent);");
+    expect(css).toContain("background: #fff;");
     expect(css).toContain("vt-studio-brain-led-ripple 8s ease-out infinite");
     expect(css).toContain("prefers-reduced-motion: reduce");
   });
