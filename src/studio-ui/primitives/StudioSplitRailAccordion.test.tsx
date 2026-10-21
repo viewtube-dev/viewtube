@@ -45,10 +45,16 @@ describe("StudioSplitRailAccordion", () => {
     expect(css).toContain("-webkit-text-fill-color: #000;");
     expect(css).toContain("height: 100%;");
     expect(css).toContain("aspect-ratio: 1 / 1;");
+    expect(css).toContain("align-self: stretch;");
+    expect(css).toContain("flex: 0 0 auto;");
+    expect(css).toContain("width: auto;");
     expect(css).not.toContain("min-height: var(--vt-studio-control-height, 44px);");
     expect(css).toContain("width: var(--vt-studio-split-rail-stroke);");
     expect(css).toContain("transform: translateX(-50%);");
     expect(css).toContain("transform: translateX(50%);");
+    expect(css).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
+    expect(css).toContain("flex-basis var(--vt-studio-split-rail-slide-duration)");
+    expect(css).toContain("clip-path var(--vt-studio-split-rail-slide-duration)");
     expect(css).toContain(".vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before");
     expect(css).toContain(".vt-studio-split-rail-accordion__item:last-child [data-vt-studio-split-rail-icon]::after");
     expect(css).toContain("flex: 1 1 0;");
