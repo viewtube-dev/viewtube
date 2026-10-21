@@ -33,7 +33,7 @@ describe("StudioSplitRailAccordion", () => {
     const contentStart = css.indexOf(".vt-studio-split-rail-accordion__content {");
     const contentEnd = css.indexOf(".vt-studio-split-rail-accordion[data-size=\"compact\"] .vt-studio-split-rail-accordion__content {", contentStart);
     const contentRule = css.slice(contentStart, contentEnd);
-    expect(contentRule).toContain("justify-content: flex-start");
+    expect(contentRule).toContain("display: block;");
     expect(contentRule).toContain("clip-path: inset(0 100% 0 0)");
     expect(contentRule).not.toContain("opacity:");
     expect(contentRule).not.toContain("transition: opacity");
