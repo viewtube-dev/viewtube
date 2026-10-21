@@ -1054,3 +1054,23 @@ describe("Supreme and Micro production size contract", () => {
     expect(system).not.toContain("--vt-studio-14-height")
   })
 })
+
+
+describe("Studio counter single-click regression", () => {
+  it("preserves each counter button's increment/decrement click handler while pulsing focus", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    for (const [startMarker, endMarker] of [
+      ["export const StudioCounter:", "StudioCounter.displayName"],
+      ["export const StudioSideCounter:", "StudioSideCounter.displayName"],
+      ["export const StudioLeftCounter:", "StudioLeftCounter.displayName"],
+    ]) {
+      const start = source.indexOf(startMarker);
+      const end = source.indexOf(endMarker, start);
+      expect(start, startMarker).toBeGreaterThanOrEqual(0);
+      expect(end, endMarker).toBeGreaterThan(start);
+      const component = source.slice(start, end);
+      expect(component).toContain("onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}");
+      expect(component).toContain("onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}");
+    }
+  });
+});
