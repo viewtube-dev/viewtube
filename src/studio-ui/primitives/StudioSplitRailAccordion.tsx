@@ -103,7 +103,7 @@ export const StudioSplitRailAccordion = React.forwardRef<HTMLDivElement, StudioS
                 className="vt-studio-split-rail-accordion__content"
                 aria-label={item.accessibleLabel + " content"}
               >
-                {item.content}
+                <span data-vt-studio-split-rail-label="true">{item.content}</span>
               </div>
             </div>
           )
