@@ -22,6 +22,21 @@ const canonicalTail = (css: string) => {
 };
 
 
+describe("Studio split rail accordion motion", () => {
+  it("opens the incoming pane while closing the previous pane on the same rail-size basis", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
+    const itemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item {"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
+    const activeItemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\"true\"]"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
+    const contentRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__content {"), css.indexOf(".vt-studio-split-rail-accordion__content[data-active=\"true\"]"));
+    expect(itemRule).toContain("flex: 0 0 var(--vt-studio-control-height, 44px)");
+    expect(activeItemRule).toContain("flex: 1 1 var(--vt-studio-control-height, 44px)");
+    expect(itemRule).toContain("flex-grow 320ms cubic-bezier(.22, 1, .36, 1)");
+    expect(contentRule).toContain("flex-grow 320ms cubic-bezier(.22, 1, .36, 1)");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
+  });
+});
+
+
 describe("StudioTextBox size-aware stroke defaults", () => {
   it("halves only the local stroke width while preserving the 50% fill and black text", () => {
     const css = readStudioControlCss();
