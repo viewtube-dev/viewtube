@@ -22,6 +22,21 @@ const canonicalTail = (css: string) => {
 };
 
 
+describe("Studio split rail accordion motion", () => {
+  it("opens the incoming pane while closing the previous pane on the same rail-size basis", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
+    const itemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item {"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
+    const activeItemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\"true\"]"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
+    const contentRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__content {"), css.indexOf(".vt-studio-split-rail-accordion__content[data-active=\"true\"]"));
+    expect(itemRule).toContain("flex: 0 0 var(--vt-studio-split-rail-size)");
+    expect(activeItemRule).toContain("flex: 1 1 var(--vt-studio-split-rail-size)");
+    expect(itemRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
+    expect(contentRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
+  });
+});
+
+
 describe("StudioTextBox size-aware stroke defaults", () => {
   it("halves only the local stroke width while preserving the 50% fill and black text", () => {
     const css = readStudioControlCss();
@@ -1092,8 +1107,12 @@ describe("Studio split-rail accordion motion", () => {
     expect(html).toContain("MIDDLE CONTENT");
     expect(html).toContain("RIGHT CONTENT");
     const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
-    expect(css).toContain("transition: flex-grow");
-    expect(css).toContain("transition: max-width");
+    expect(css).toContain("--vt-studio-split-rail-slide-duration: 320ms;");
+    expect(css).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
+    expect(css).toContain("max-width var(--vt-studio-split-rail-slide-duration)");
+    expect(css).toContain("clip-path: inset(0 100% 0 0)");
+    expect(css).toContain("clip-path: inset(0 0 0 0)");
+    expect(css).toContain("clip-path var(--vt-studio-split-rail-slide-duration)");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 });
