@@ -1966,11 +1966,13 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   gap: 6px;
   width: max-content;
   height: 20px;
+  min-height: 20px;
+  max-height: 20px;
   padding: 0 2px 0 8px;
   border-radius: 999px;
   background: var(--vt-badge-primary);
   color: var(--vt-badge-text);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1988,7 +1990,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-closeable-badge__label {
   display: inline-block;
   color: var(--vt-badge-text);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
 }
@@ -3986,7 +3988,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame {
   --vt-studio-upload-speed: 1;
   --vt-studio-upload-angle: 0deg;
-  --vt-studio-upload-frame-stroke: 0.3cqw;
+  --vt-studio-upload-frame-stroke: 4px;
+  --vt-upload-circle-border: 4px;
+  --vt-upload-primary-stroke: 5px;
+  --vt-upload-secondary-stroke: 3px;
   --vt-studio-upload-frame-radius: 1.5cqw;
   --vt-studio-upload-inset-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - var(--vt-studio-upload-frame-inset)));
   --vt-studio-upload-badge-radius: 0.6cqw;
@@ -4059,13 +4064,13 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: inherit;
 }
 .vt-studio-upload-frame__inset::before {
-  inset: 1cqw;
-  border: calc(var(--vt-studio-upload-frame-stroke) * 1.25) solid var(--vt-studio-upload-primary);
+  inset: 0;
+  border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary);
   border-radius: max(0px, calc(var(--vt-studio-upload-inset-radius) - 1cqw));
 }
 .vt-studio-upload-frame__inset::after {
-  inset: calc(1cqw + var(--vt-studio-upload-frame-stroke) * 1.25);
-  border: calc(var(--vt-studio-upload-frame-stroke) * .75) solid var(--vt-studio-upload-secondary);
+  inset: var(--vt-upload-primary-stroke);
+  border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
   border-radius: max(0px, calc(var(--vt-studio-upload-inset-radius) - 1cqw - var(--vt-studio-upload-frame-stroke) * 1.25));
 }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
@@ -4104,7 +4109,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   width: 16cqw;
   aspect-ratio: 1;
   overflow: visible;
-  border: var(--vt-studio-upload-frame-stroke) solid #000;
+  border: var(--vt-upload-circle-border) solid #000;
   border-radius: 50%;
   color: #000;
   background: conic-gradient(from var(--vt-studio-upload-angle), var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
@@ -4119,12 +4124,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   pointer-events: none;
 }
 .vt-studio-upload-frame__icon::before {
-  inset: calc(var(--vt-studio-upload-frame-stroke) * -1);
-  border: calc(var(--vt-studio-upload-frame-stroke) * 1.25) solid var(--vt-studio-upload-primary);
+  inset: calc(0px - var(--vt-upload-circle-border));
+  border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary);
 }
 .vt-studio-upload-frame__icon::after {
-  inset: calc(var(--vt-studio-upload-frame-stroke) * -1.75);
-  border: calc(var(--vt-studio-upload-frame-stroke) * .75) solid var(--vt-studio-upload-secondary);
+  inset: calc(0px - var(--vt-upload-circle-border) - var(--vt-upload-primary-stroke));
+  border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
 }
 .vt-studio-upload-frame__icon > svg {
   position: relative;
@@ -4147,13 +4152,16 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   padding: 0;
   border: var(--vt-studio-upload-frame-stroke) solid #000;
   box-sizing: border-box;
-  border-radius: var(--vt-studio-upload-badge-radius);
+  border-radius: 4px;
   background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, white);
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 3.2cqw;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
+  font-size: 12px;
   font-weight: 1000;
-  line-height: 1.08;
+  line-height: 1.1;
   letter-spacing: -.02em;
   text-transform: uppercase;
   white-space: pre-line;
@@ -4165,14 +4173,16 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 0.65cqw 1.1cqw;
+  padding: 0 6px;
   text-align: center;
   overflow-wrap: anywhere;
 }
 .vt-studio-upload-frame__badge-rail {
   box-sizing: border-box;
   display: grid;
-  flex: 0 0 5cqw;
+  flex: 0 0 24px;
+  width: 24px;
+  min-width: 24px;
   place-items: center;
   align-self: stretch;
   color: #000;
@@ -4187,8 +4197,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame__badge-rail > svg {
   display: block;
-  width: 48%;
-  height: 48%;
+  width: 55%;
+  height: 55%;
   stroke: #000;
   stroke-width: 2.5;
 }
@@ -4986,10 +4996,11 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 
 
-/* Brain status badges: LED + borderless label, composed from the shared Studio primitive system. */
+/* Brain status badges: one 20px rectangular contract with realistic LED optics. */
 .vt-studio-brain-status-badge {
   --vt-brain-led-color: #42f55b;
   --vt-brain-led-tint: #d9ffdf;
+  box-sizing: border-box;
   display: inline-flex;
   width: max-content;
   max-width: 100%;
@@ -4997,13 +5008,16 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   justify-content: flex-start;
   gap: 7px;
   min-width: 0;
+  height: 20px;
+  min-height: 20px;
+  max-height: 20px;
   border: 0 !important;
-  border-radius: 999px;
-  padding: 4px 10px 4px 7px;
+  border-radius: 4px;
+  padding: 0 10px 0 7px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 1000;
-  line-height: 1;
+  line-height: 20px;
   letter-spacing: -.02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -5018,9 +5032,19 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 .vt-studio-brain-status-badge[data-tone="blue"] { --vt-brain-led-color: #3485ff; --vt-brain-led-tint: #dceaff; }
 .vt-studio-brain-status-badge[data-appearance="dark"] { background: #000; color: #fff; }
 .vt-studio-brain-status-badge[data-appearance="tinted"] { background: var(--vt-brain-led-tint); color: #000; }
-.vt-studio-brain-status-badge[data-size="standard"] { min-height: 24px; gap: 8px; padding: 5px 11px 5px 8px; font-size: 12px; }
-.vt-studio-brain-status-badge[data-size="compact"] { min-height: 20px; gap: 6px; padding: 4px 8px 4px 6px; font-size: 10px; }
-.vt-studio-brain-status-badge[data-size="micro"] { min-height: 12px; gap: 4px; padding: 2px 5px 2px 4px; font-size: 8px; letter-spacing: -.01em; }
+.vt-studio-brain-status-badge[data-size],
+.vt-studio-brain-status-badge[data-size="standard"],
+.vt-studio-brain-status-badge[data-size="compact"],
+.vt-studio-brain-status-badge[data-size="micro"] {
+  height: 20px;
+  min-height: 20px;
+  max-height: 20px;
+  gap: 7px;
+  padding: 0 10px 0 7px;
+  font-size: 18px;
+  line-height: 20px;
+  border-radius: 4px;
+}
 .vt-studio-brain-status-badge__led {
   position: relative;
   display: inline-grid;
@@ -5031,9 +5055,9 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   overflow: visible;
   isolation: isolate;
 }
-.vt-studio-brain-status-badge[data-size="standard"] .vt-studio-brain-status-badge__led { width: 10px; height: 10px; }
-.vt-studio-brain-status-badge[data-size="compact"] .vt-studio-brain-status-badge__led { width: 8px; height: 8px; }
-.vt-studio-brain-status-badge[data-size="micro"] .vt-studio-brain-status-badge__led { width: 6px; height: 6px; }
+.vt-studio-brain-status-badge[data-size="standard"] .vt-studio-brain-status-badge__led,
+.vt-studio-brain-status-badge[data-size="compact"] .vt-studio-brain-status-badge__led,
+.vt-studio-brain-status-badge[data-size="micro"] .vt-studio-brain-status-badge__led { width: 10px; height: 10px; }
 .vt-studio-brain-status-badge__core,
 .vt-studio-brain-status-badge__ripple {
   position: absolute;
@@ -5043,39 +5067,45 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 .vt-studio-brain-status-badge__core {
   z-index: 2;
-  background: var(--vt-brain-led-color);
-  box-shadow: 0 0 4px var(--vt-brain-led-color), 0 0 9px color-mix(in srgb, var(--vt-brain-led-color) 78%, transparent);
+  background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 28%, var(--vt-brain-led-color) 62%, color-mix(in srgb, var(--vt-brain-led-color) 70%, #000) 100%);
+  box-shadow: 0 0 3px 1px color-mix(in srgb, var(--vt-brain-led-color) 70%, transparent), 0 0 6px 2px color-mix(in srgb, var(--vt-brain-led-color) 35%, transparent);
 }
 .vt-studio-brain-status-badge__ripple {
   z-index: 1;
-  border: 2px solid var(--vt-brain-led-color);
-  box-shadow: inset 0 0 10px color-mix(in srgb, var(--vt-brain-led-color) 30%, transparent);
+  border: 1.5px solid var(--vt-brain-led-color);
+  background: transparent;
   opacity: 0;
+  transform: scale(.55);
 }
 .vt-studio-brain-status-badge[data-active="true"] .vt-studio-brain-status-badge__ripple {
   animation: vt-studio-brain-led-ripple 8s ease-out infinite;
 }
 .vt-studio-brain-status-badge[data-active="false"] .vt-studio-brain-status-badge__core {
-  background: color-mix(in srgb, var(--vt-brain-led-color) 45%, #777);
+  filter: grayscale(.35) brightness(.75);
   box-shadow: none;
 }
 .vt-studio-brain-status-badge[data-active="false"] .vt-studio-brain-status-badge__ripple { display: none; }
-.vt-studio-brain-status-badge__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.vt-studio-brain-status-badge__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 18px;
+  line-height: 20px;
+}
 @keyframes vt-studio-brain-led-ripple {
-  0% { transform: scale(1); opacity: .78; }
-  37.5% { transform: scale(5); opacity: 0; }
-  100% { transform: scale(5); opacity: 0; }
+  0% { transform: scale(.55); opacity: .8; }
+  100% { transform: scale(2.15); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-brain-status-badge[data-active="true"] .vt-studio-brain-status-badge__ripple { animation: none; opacity: 0; }
 }
 
 
-/* Brain status indicator primitive: LED 64 + borderless badge 45 composition.
+/* /* Brain status indicator primitive: LED 64 + borderless badge 45 composition.
    Rectangular geometry; centered 1px black lens ring is 65% of LED diameter with a translucent white lens. */
 .vt-studio-brain-status {
-  --vt-brain-status-height: 28px;
-  --vt-brain-led-size: 12px;
+  --vt-brain-status-height: 20px;
+  --vt-brain-led-size: 10px;
   --vt-brain-status-gap: 7px;
   position: relative;
   display: inline-flex;
@@ -5083,23 +5113,23 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   justify-content: flex-start;
   gap: var(--vt-brain-status-gap);
   min-width: 0;
-  min-height: var(--vt-brain-status-height);
+  height: 20px;
+  min-height: 20px;
+  max-height: 20px;
   padding: 0 10px;
   border: 1px solid transparent;
   border-radius: 4px;
   color: #fff;
   background: #080b10;
   font-family: Inter, sans-serif;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 1000;
   letter-spacing: -.02em;
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
 }
-.vt-studio-brain-status[data-size="standard"] { --vt-brain-status-height: 44px; --vt-brain-led-size: 18px; --vt-brain-status-gap: 9px; padding-inline: 12px; font-size: 16px; }
-.vt-studio-brain-status[data-size="compact"] { --vt-brain-status-height: 28px; --vt-brain-led-size: 12px; --vt-brain-status-gap: 7px; padding-inline: 9px; font-size: 11px; }
-.vt-studio-brain-status[data-size="micro"] { --vt-brain-status-height: 12px; --vt-brain-led-size: 5px; --vt-brain-status-gap: 4px; padding-inline: 4px; font-size: 7px; border-radius: 2px; }
+.vt-studio-brain-status[data-size], .vt-studio-brain-status[data-size="standard"], .vt-studio-brain-status[data-size="compact"], .vt-studio-brain-status[data-size="micro"] { --vt-brain-status-height: 20px; --vt-brain-led-size: 10px; --vt-brain-status-gap: 7px; height: 20px; min-height: 20px; max-height: 20px; padding-inline: 10px; font-size: 18px; border-radius: 4px; }
 .vt-studio-brain-status--tinted { color: #000; background: var(--vt-brain-status-tint, #edf0f4); }
 .vt-studio-brain-status[data-status="running"], .vt-studio-brain-status[data-status="complete"] { --vt-brain-status-led: #20ff62; --vt-brain-status-tint: #d8ffe2; }
 .vt-studio-brain-status[data-status="success"], .vt-studio-brain-status[data-status="queued"] { --vt-brain-status-led: #168cff; --vt-brain-status-tint: #dcecff; }
@@ -5108,7 +5138,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 .vt-studio-brain-status[data-status="info"] { --vt-brain-status-led: #b94dff; --vt-brain-status-tint: #f0ddff; }
 .vt-studio-brain-status[data-status="paused"], .vt-studio-brain-status[data-status="processing"] { --vt-brain-status-led: #00d9ee; --vt-brain-status-tint: #d6fbff; }
 .vt-studio-brain-status[data-status="idle"] { --vt-brain-status-led: #9ca9b8; --vt-brain-status-tint: #edf0f4; }
-.vt-studio-brain-status__led-wrap { position: relative; display: inline-grid; flex: 0 0 var(--vt-brain-led-size); place-items: center; width: var(--vt-brain-led-size); height: var(--vt-brain-led-size); border-radius: 50%; background: var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)); box-shadow: 0 0 4px 2px color-mix(in srgb, var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)) 65%, transparent), 0 0 10px 3px color-mix(in srgb, var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)) 35%, transparent); filter: blur(.0px); isolation: isolate; }
+.vt-studio-brain-status__led-wrap { position: relative; display: inline-grid; flex: 0 0 var(--vt-brain-led-size); place-items: center; width: var(--vt-brain-led-size); height: var(--vt-brain-led-size); border-radius: 50%; background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 28%, var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)) 62%, color-mix(in srgb, var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)) 70%, #000) 100%); box-shadow: 0 0 4px 2px color-mix(in srgb, var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)) 65%, transparent), 0 0 10px 3px color-mix(in srgb, var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)) 35%, transparent); filter: blur(.0px); isolation: isolate; }
 .vt-studio-brain-status__led-wrap::before, .vt-studio-brain-status__led-wrap::after { content: ""; position: absolute; inset: -35%; border: 1px solid var(--vt-brain-status-led, var(--vt-brain-led, #20ff62)); border-radius: 50%; opacity: 0; pointer-events: none; }
 .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::before { animation: vt-studio-brain-led-ripple 2s ease-out infinite; }
 .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::after { animation: vt-studio-brain-led-ripple 2s ease-out 1s infinite; }
