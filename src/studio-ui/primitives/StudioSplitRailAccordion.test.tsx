@@ -28,45 +28,43 @@ describe("StudioSplitRailAccordion", () => {
   })
 
 
-  it("keeps label position fixed while revealing it by clipping, with persistent square-rail borders", () => {
+  it("uses inset rail dividers and item-owned motion with a pure content clip window", () => {
     const css = readFileSync(new URL("./StudioSplitRailAccordion.css", import.meta.url), "utf8");
     const contentStart = css.indexOf(".vt-studio-split-rail-accordion__content {");
-    const contentEnd = css.indexOf(".vt-studio-split-rail-accordion[data-size=\"compact\"] .vt-studio-split-rail-accordion__content {", contentStart);
+    const contentEnd = css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\\"true\\"]", contentStart);
     const contentRule = css.slice(contentStart, contentEnd);
-    expect(contentRule).toContain("display: block;");
-    expect(contentRule).toContain("clip-path: inset(0 100% 0 0)");
-    expect(contentRule).not.toContain("opacity:");
-    expect(contentRule).not.toContain("transition: opacity");
-    expect(css).toContain("[data-vt-studio-split-rail-label] {");
-    expect(css).toContain("inset: 0 auto 0 4px;");
-    expect(css).toContain("align-items: center;");
-    expect(css).toContain("transform: none;");
-    expect(css).toContain("opacity: 1;");
-    expect(css).toContain("-webkit-text-fill-color: #000;");
-    expect(css).toContain("height: 100%;");
+    const itemStart = css.indexOf(".vt-studio-split-rail-accordion__item {");
+    const itemEnd = css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\\"true\\"]", itemStart);
+    const itemRule = css.slice(itemStart, itemEnd);
+    expect(css).toContain("--vt-studio-split-rail-face: calc(var(--vt-studio-split-rail-size) - 2 * var(--vt-studio-split-rail-stroke));");
     expect(css).toContain("flex: 0 0 var(--vt-studio-split-rail-face);");
     expect(css).toContain("width: var(--vt-studio-split-rail-face);");
-    expect(css).toContain("min-width: var(--vt-studio-split-rail-face);");
-    expect(css).toContain("max-width: var(--vt-studio-split-rail-face);");
+    expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
+    expect(css).not.toContain("::before");
+    expect(css).not.toContain("::after");
+    expect(css).not.toContain("transform: translateX(-50%)");
+    expect(css).not.toContain("transform: translateX(50%)");
     expect(css).not.toContain("width: auto;");
     expect(css).not.toContain("aspect-ratio: 1 / 1;");
-    expect(css).toContain("--vt-studio-split-rail-face: calc(var(--vt-studio-split-rail-size) - (2 * var(--vt-studio-split-rail-stroke)));");
-    expect(css).toContain("width: min(var(--vt-studio-control-icon-size, 38px), 86%);");
-    expect(css).toContain("background: transparent;");
-    expect(css).toContain(".vt-studio-split-rail-accordion__content[data-active=\"true\"]::after");
-    expect(css).not.toContain("min-height: var(--vt-studio-control-height, 44px);");
-    expect(css).toContain("width: var(--vt-studio-split-rail-stroke);");
-    expect(css).toContain("transform: translateX(-50%);");
-    expect(css).toContain("transform: translateX(50%);");
-    expect(css).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
-    expect(css).toContain("flex-basis var(--vt-studio-split-rail-slide-duration)");
-    expect(css).toContain("clip-path var(--vt-studio-split-rail-slide-duration)");
-    expect(css).toContain(".vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before");
-    expect(css).toContain(".vt-studio-split-rail-accordion__item:last-child [data-vt-studio-split-rail-icon]::after");
-    expect(css).toContain("flex: 1 1 0;");
-    expect(css).toContain("max-width: 100%;");
-    expect(css).not.toContain("top: 50%;");
-    expect(css).not.toContain("translateY(-50%)");
+    expect(itemRule).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
+    expect(contentRule).toContain("flex: 1 1 0;");
+    expect(contentRule).toContain("clip-path: inset(0 100% 0 0)");
+    expect(contentRule).toContain("transition: clip-path var(--vt-studio-split-rail-slide-duration)");
+    expect(contentRule).not.toContain("flex-grow");
+    expect(contentRule).not.toContain("max-width");
+    expect(contentRule).not.toContain("width: 0");
+    expect(contentRule).toContain("background: transparent;");
+    expect(css).toContain('.vt-studio-split-rail-accordion__item[data-active="true"]:not(:last-child)');
+    expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
+    expect(css).toContain("[data-vt-studio-split-rail-label] {");
+    expect(css).toContain("left: 0;");
+    expect(css).toContain("align-items: center;");
+    expect(css).toContain("line-height: 1;");
+    expect(css).toContain("opacity: 1;");
+    expect(css).toContain("width: 86%;");
+    expect(css).toContain("height: 86%;");
+    expect(css).toContain("place-items: center;");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 
   it("exposes selection and expansion state for accessible keyboard interaction", () => {
