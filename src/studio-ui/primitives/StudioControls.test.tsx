@@ -1139,7 +1139,7 @@ describe("Studio split-rail accordion motion", () => {
     expect(html).toContain("MIDDLE CONTENT");
     expect(html).toContain("RIGHT CONTENT");
     const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
-    expect(css).toContain("--vt-studio-split-rail-slide-duration: 320ms;");
+    expect(css).toContain("--vt-studio-split-rail-slide-duration: 280ms;");
     expect(css).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
     expect(css).toContain("max-width var(--vt-studio-split-rail-slide-duration)");
     expect(css).toContain("clip-path: inset(0 100% 0 0)");
