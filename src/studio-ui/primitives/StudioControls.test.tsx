@@ -7,6 +7,7 @@ import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeft
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
+import { StudioSplitRailAccordion } from "./StudioSplitRailAccordion"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -1072,5 +1073,27 @@ describe("Studio counter single-click regression", () => {
       expect(component).toContain("onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}");
       expect(component).toContain("onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}");
     }
+  });
+});
+
+
+describe("Studio split-rail accordion motion", () => {
+  it("keeps all content panes mounted so the outgoing pane can close as the incoming pane opens", () => {
+    const html = renderToStaticMarkup(
+      <StudioSplitRailAccordion
+        items={[
+          { icon: <span>A</span>, accessibleLabel: "Left pane", content: <span>LEFT CONTENT</span> },
+          { icon: <span>B</span>, accessibleLabel: "Middle pane", content: <span>MIDDLE CONTENT</span> },
+          { icon: <span>C</span>, accessibleLabel: "Right pane", content: <span>RIGHT CONTENT</span> },
+        ]}
+      />,
+    );
+    expect(html).toContain("LEFT CONTENT");
+    expect(html).toContain("MIDDLE CONTENT");
+    expect(html).toContain("RIGHT CONTENT");
+    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
+    expect(css).toContain("transition: flex-grow");
+    expect(css).toContain("transition: max-width");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 });
