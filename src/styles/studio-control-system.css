@@ -5104,7 +5104,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 
 
-/* /* Brain status indicator primitive: LED 64 + borderless badge 45 composition.
+/* Brain status indicator primitive: LED 64 + borderless badge 45 composition.
    Rectangular geometry; centered 1px black lens ring is 65% of LED diameter with a translucent white lens. */
 .vt-studio-brain-status {
   --vt-brain-status-height: 20px;
