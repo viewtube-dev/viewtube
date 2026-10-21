@@ -152,7 +152,7 @@
   clip-path: inset(0 0 0 0);
 }
 
-.vt-studio-split-rail-accordion__content[data-active="true"]::after {
+.vt-studio-split-rail-accordion__item:not(:last-child) .vt-studio-split-rail-accordion__content[data-active="true"]::after {
   content: "";
   position: absolute;
   top: 0;
