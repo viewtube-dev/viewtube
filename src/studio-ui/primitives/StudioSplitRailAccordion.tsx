@@ -46,13 +46,30 @@ export const StudioSplitRailAccordion = React.forwardRef<HTMLDivElement, StudioS
     const [uncontrolledIndex, setUncontrolledIndex] = React.useState<0 | 1 | 2>(defaultActiveIndex)
     const selectedIndex = activeIndex ?? uncontrolledIndex
     const [previewIndex, setPreviewIndex] = React.useState<0 | 1 | 2 | null>(null)
+    const [motionLocked, setMotionLocked] = React.useState(false)
+    const lockTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+    React.useEffect(() => () => {
+      if (lockTimer.current) clearTimeout(lockTimer.current)
+    }, [])
     const visibleIndex = previewIndex ?? selectedIndex
 
+    const preview = (index: 0 | 1 | 2) => {
+      if (!motionLocked && !items[index].disabled) setPreviewIndex(index)
+    }
+
     const activate = (index: 0 | 1 | 2) => {
-      if (items[index].disabled) return
+      if (items[index].disabled || motionLocked) return
+      setMotionLocked(true)
+      setPreviewIndex(index)
       if (activeIndex === undefined) setUncontrolledIndex(index)
       onActiveIndexChange?.(index)
       items[index].onSelect?.()
+      if (lockTimer.current) clearTimeout(lockTimer.current)
+      lockTimer.current = setTimeout(() => {
+        setMotionLocked(false)
+        setPreviewIndex(null)
+        lockTimer.current = null
+      }, 280)
     }
 
     return (
@@ -89,8 +106,8 @@ export const StudioSplitRailAccordion = React.forwardRef<HTMLDivElement, StudioS
                 aria-pressed={selectedIndex === itemIndex}
                 aria-expanded={active}
                 disabled={item.disabled}
-                onMouseEnter={() => setPreviewIndex(itemIndex)}
-                onFocus={() => setPreviewIndex(itemIndex)}
+                onMouseEnter={() => preview(itemIndex)}
+                onFocus={() => preview(itemIndex)}
                 onClick={() => activate(itemIndex)}
               >
                 <span aria-hidden="true" data-vt-studio-split-rail-icon-face>{item.icon}</span>
