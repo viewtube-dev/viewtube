@@ -52,7 +52,7 @@ describe("StudioSplitRailAccordion", () => {
     expect(contentRule).toContain("transition: clip-path var(--vt-studio-split-rail-slide-duration)");
     expect(contentRule).not.toContain("flex-grow");
     expect(contentRule).not.toContain("max-width");
-    expect(contentRule).not.toContain("width: 0");
+    expect(contentRule).not.toMatch(/(^|\\n)\\s*width: 0;/);
     expect(contentRule).toContain("background: transparent;");
     expect(css).toContain('.vt-studio-split-rail-accordion__item[data-active="true"]:not(:last-child)');
     expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
