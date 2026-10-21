@@ -67,10 +67,12 @@ describe("Studio badge single-size contract", () => {
     expect(css).toContain("font: 1000 18px/20px Inter");
     expect(css).toContain("border-radius: 4px;");
     expect(css).toContain("transform: translateY(.5px);");
-    expect(css).toContain("background: radial-gradient(circle at 50% 45%, #fff 0%, #fff 28%, var(--vt-brain-led-color) 62%, color-mix(in srgb, var(--vt-brain-led-color) 70%, #000) 100%)");
+    expect(css).toContain("background-color: var(--vt-brain-led-color);");
+    expect(css).toContain("radial-gradient(circle at 38% 32%, #fff 0 22%, var(--vt-brain-led-color) 23% 76%, color-mix(in srgb, var(--vt-brain-led-color) 78%, #000) 100%)");
+    expect(css).toContain("opacity: 1;");
     expect(css).toContain("border: 2px solid var(--vt-brain-led-color);");
-    expect(css).toContain("inset 0 0 10px color-mix(in srgb, var(--vt-brain-led-color) 30%, transparent)");
     expect(css).toContain("vt-studio-brain-led-ripple 8s cubic-bezier(.16,1,.3,1) infinite");
+    expect(css).toContain("transform: scale(1);");
     expect(css).toContain("37.5% { transform: scale(5); opacity: 0; }");
     expect(css).toContain("background: #fff;");
     expect(css).toContain("prefers-reduced-motion: reduce");
