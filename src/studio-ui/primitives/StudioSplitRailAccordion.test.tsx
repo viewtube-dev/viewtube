@@ -36,26 +36,26 @@ describe("StudioSplitRailAccordion", () => {
     const itemStart = css.indexOf(".vt-studio-split-rail-accordion__item {");
     const itemEnd = css.indexOf('[data-active="true"]', itemStart);
     const itemRule = css.slice(itemStart, itemEnd);
-    expect(css).toContain("--vt-studio-split-rail-face: calc(var(--vt-studio-split-rail-size) - 2 * var(--vt-studio-split-rail-stroke));");
-    expect(css).toContain("flex: 0 0 var(--vt-studio-split-rail-face);");
-    expect(css).toContain("width: var(--vt-studio-split-rail-face);");
-    expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
+    expect(css).toContain("--sra-face: calc(var(--sra-size) - 2 * var(--sra-stroke));");
+    expect(css).toContain("flex: 0 0 var(--sra-face);");
+    expect(css).toContain("width: var(--sra-face);");
+    expect(css).toContain("box-shadow: inset calc(-1 * var(--sra-stroke)) 0 0 #000;");
     expect(css).not.toContain("::before");
     expect(css).not.toContain("::after");
     expect(css).not.toContain("transform: translateX(-50%)");
     expect(css).not.toContain("transform: translateX(50%)");
     expect(css).not.toContain("width: auto;");
     expect(css).not.toContain("aspect-ratio: 1 / 1;");
-    expect(itemRule).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
+    expect(itemRule).toContain("transition: flex-grow var(--sra-duration)");
     expect(contentRule).toContain("flex: 1 1 0;");
     expect(contentRule).toContain("clip-path: inset(0 100% 0 0)");
-    expect(contentRule).toContain("transition: clip-path var(--vt-studio-split-rail-slide-duration)");
+    expect(contentRule).toContain("transition: clip-path var(--sra-duration)");
     expect(contentRule).not.toContain("flex-grow");
     expect(contentRule).not.toContain("max-width");
     expect(contentRule).not.toMatch(/^\s*width: 0;/m);
     expect(contentRule).toContain("background: transparent;");
     expect(css).toContain('.vt-studio-split-rail-accordion__item[data-active="true"]:not(:last-child)');
-    expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
+    expect(css).toContain("box-shadow: inset calc(-1 * var(--sra-stroke)) 0 0 #000;");
     expect(css).toContain("[data-vt-studio-split-rail-label] {");
     expect(css).toContain("left: 0;");
     expect(css).toContain("align-items: center;");
@@ -67,7 +67,7 @@ describe("StudioSplitRailAccordion", () => {
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 
-  it("exposes selection and expansion state for accessible keyboard interaction", () => {
+  it("locks hover preview for the full activation tween", () => {\n    const source = readFileSync(new URL("./StudioSplitRailAccordion.tsx", import.meta.url), "utf8");\n    expect(source).toContain("const [motionLocked, setMotionLocked] = React.useState(false)");\n    expect(source).toContain("if (!motionLocked && !items[index].disabled) setPreviewIndex(index)");\n    expect(source).toContain("}, 280)");\n  });\n\n  it("exposes selection and expansion state for accessible keyboard interaction", () => {
     const html = renderToStaticMarkup(<StudioSplitRailAccordion items={items} />)
     expect(html).toContain('aria-label="Middle"')
     expect(html).toContain('aria-expanded="false"')
