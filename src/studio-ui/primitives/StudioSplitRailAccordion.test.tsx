@@ -31,10 +31,10 @@ describe("StudioSplitRailAccordion", () => {
   it("uses inset rail dividers and item-owned motion with a pure content clip window", () => {
     const css = readFileSync(new URL("./StudioSplitRailAccordion.css", import.meta.url), "utf8");
     const contentStart = css.indexOf(".vt-studio-split-rail-accordion__content {");
-    const contentEnd = css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\\"true\\"]", contentStart);
+    const contentEnd = css.indexOf('[data-active="true"]', contentStart);
     const contentRule = css.slice(contentStart, contentEnd);
     const itemStart = css.indexOf(".vt-studio-split-rail-accordion__item {");
-    const itemEnd = css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\\"true\\"]", itemStart);
+    const itemEnd = css.indexOf('[data-active="true"]', itemStart);
     const itemRule = css.slice(itemStart, itemEnd);
     expect(css).toContain("--vt-studio-split-rail-face: calc(var(--vt-studio-split-rail-size) - 2 * var(--vt-studio-split-rail-stroke));");
     expect(css).toContain("flex: 0 0 var(--vt-studio-split-rail-face);");
