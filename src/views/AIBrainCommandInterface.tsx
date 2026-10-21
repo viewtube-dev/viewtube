@@ -219,7 +219,7 @@ const BrainContextUsedDrawer: React.FC<{
    <div className="grid gap-2 border-t-[2px] border-black p-2">
     <ul className="grid gap-1">
      {items.map((item) => (
-      <li key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
+      <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
        <span className="text-[9px] font-black uppercase">{item.label} · {item.status}</span>
        <span className="break-words text-[10px] font-bold">{item.value}</span>
       </li>
@@ -227,7 +227,7 @@ const BrainContextUsedDrawer: React.FC<{
     </ul>
     {contextUsed.styleProfile ? (
      <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Style profile used</h4>
+      <h4 data-vt-brain-part="context-style-profile-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Style profile used</h4>
       <div className="mt-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] p-2">
        <p className="text-[9px] font-black uppercase">{contextUsed.styleProfile.scope} · {contextUsed.styleProfile.source} · {contextUsed.styleProfile.id}</p>
        {([
@@ -254,10 +254,10 @@ const BrainContextUsedDrawer: React.FC<{
     ) : null}
     {contextUsed.knowledgeItems.length ? (
      <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
+      <h4 data-vt-brain-part="context-knowledge-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
       <ul className="mt-1 grid gap-1">
        {contextUsed.knowledgeItems.map((item) => (
-        <li key={item.id} className="rounded-[5px] border border-black/20 px-2 py-1">
+        <li data-vt-brain-part="context-knowledge-item" key={item.id} className="rounded-[5px] border border-black/20 px-2 py-1">
          <div className="text-[9px] font-black uppercase">{item.status} · {item.knowledgeClass.replace(/_/g, " ")}</div>
          <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
          <code className="block break-all text-[8px] text-black/55">{item.id}</code>
@@ -270,7 +270,7 @@ const BrainContextUsedDrawer: React.FC<{
     ) : null}
     {contextUsed.conflictIds.length ? <p className="text-[10px] font-bold">Conflicting context records: {contextUsed.conflictIds.join(", ")}</p> : null}
     {contextUsed.evidenceRefs.length ? <p className="break-words text-[9px] font-bold text-black/60">Context evidence IDs: {contextUsed.evidenceRefs.join(", ")}</p> : null}
-    <p className="text-[9px] font-bold text-black/45">Resolver {contextUsed.version || "unavailable"} · Profile loaded {contextUsed.profileLoadedAt || "time unavailable"} · Style profile {contextUsed.styleProfileAvailable ? "available" : "not included"}</p>
+    <p data-vt-brain-part="context-provenance-summary" className="text-[9px] font-bold text-black/45">Resolver {contextUsed.version || "unavailable"} · Profile loaded {contextUsed.profileLoadedAt || "time unavailable"} · Style profile {contextUsed.styleProfileAvailable ? "available" : "not included"}</p>
    </div>
   </details>
  )
@@ -628,14 +628,14 @@ const BrainLearningReceiptCard: React.FC<{
  if (!receipt) return null
  const dismissed = receipt.status === "dismissed"
  return (
-  <section aria-label="Learning receipt" className="grid gap-2 border-t-[2px] border-black bg-[#FFF8D6] p-3">
+  <section data-vt-brain-part="learning-receipt-content" aria-label="Learning receipt" className="grid gap-2 border-t-[2px] border-black bg-[#FFF8D6] p-3">
    <div className="flex flex-wrap items-center justify-between gap-2">
-    <h4 className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
+    <h4 data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
     <span role="status" className="rounded-[5px] border-[1.5px] border-black bg-white px-2 py-0.5 text-[9px] font-black uppercase">{receipt.status}</span>
    </div>
-   <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
+   <p data-vt-brain-part="learning-receipt-summary" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
    {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
-   <dl className="grid gap-1 text-[10px] leading-4">
+   <dl data-vt-brain-part="learning-receipt-metadata" className="grid gap-1 text-[10px] leading-4">
     <div><dt className="inline font-black uppercase">Scope · </dt><dd className="inline">{receipt.scope === "durable_knowledge" ? "Confirmed durable knowledge" : "Learning ledger; not promoted to durable knowledge"}</dd></div>
     <div><dt className="inline font-black uppercase">Category · </dt><dd className="inline">{receipt.category.replace(/_/g, " ")}</dd></div>
     <div><dt className="inline font-black uppercase">Receipt ID · </dt><dd className="break-all font-mono">{receipt.entryId}</dd></div>
@@ -676,19 +676,19 @@ const CreatorResponseCard: React.FC<{
   const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
    <article data-vt-brain-component="BrainInterruptedResponseCard" className={`${assistantCardFrame} p-4`}>
-    <div className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
-    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
+    <div data-vt-brain-part="interrupted-response-attribution" className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
+    <p data-vt-brain-part="interrupted-response-copy" className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
     {canRetry ? (
      <div className="mt-3 grid gap-2">
       {message.contextMayBeStale ? (
        <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
       ) : null}
       <div className="flex flex-wrap gap-2">
-       <button type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+       <button data-vt-brain-part="retry-response-action" type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
         {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
        </button>
        {message.contextMayBeStale ? (
-        <button type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+        <button data-vt-brain-part="retry-refresh-evidence-action" type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
          Refresh evidence & retry
         </button>
        ) : null}
@@ -726,10 +726,10 @@ const CreatorResponseCard: React.FC<{
   <article data-vt-brain-component="BrainResponseCard" className={`${assistantCardFrame} flex flex-col overflow-hidden`}>
    <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
     <div className="flex flex-wrap items-start justify-between gap-1.5">
-     <div className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+     <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
      {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
     </div>
-    <h3 className="text-lg font-[1000] uppercase leading-none sm:text-xl">
+    <h3 data-vt-brain-part="response-headline" className="text-lg font-[1000] uppercase leading-none sm:text-xl">
      {sanitizeCreatorFacingBrainCopy(response.headline)}
     </h3>
    </div>
@@ -737,7 +737,7 @@ const CreatorResponseCard: React.FC<{
     {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
      <BrainDataReadiness readiness={message.readiness} />
     ) : null}
-    <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
+    <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
     {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} compact /> : null}
     {openQuestions[0] ? (
@@ -808,8 +808,8 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
    <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${readiness.dataStatus === "ready" ? "bg-[#3FEE56]" : readiness.dataStatus === "partial" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
-    <span>{summary}</span>
+    <span data-vt-brain-part="evidence-readiness-status" className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${readiness.dataStatus === "ready" ? "bg-[#3FEE56]" : readiness.dataStatus === "partial" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
+    <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>
    <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-[2px] border-black p-2.5">
     <div data-vt-brain-part="available-metrics">
@@ -818,18 +818,18 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
     </div>
     {readiness.missingInputs.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
+      <h4 data-vt-brain-part="missing-inputs-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
       <ul className="mt-1 grid gap-1">
-       {readiness.missingInputs.map((item) => <li key={item} className="text-xs font-bold leading-5">{item}</li>)}
+       {readiness.missingInputs.map((item) => <li data-vt-brain-part="missing-input-item" key={item} className="text-xs font-bold leading-5">{item}</li>)}
       </ul>
      </div>
     ) : null}
     {incompleteSources.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
+      <h4 data-vt-brain-part="dataset-status-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
       <ul className="mt-1 grid gap-1">
        {incompleteSources.map((source) => (
-        <li key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
+        <li data-vt-brain-part="dataset-status-item" key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
          <span className="font-black">{source.label}</span>
          <span className="block text-[10px] leading-4 text-black/65">{source.status}: {source.detail}</span>
         </li>
@@ -839,10 +839,10 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
     ) : null}
     {readiness.diagnostics.warnings.length || readiness.warnings.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
+      <h4 data-vt-brain-part="sync-notes-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
       <ul className="mt-1 grid gap-1">
        {[...new Set([...readiness.diagnostics.warnings, ...readiness.warnings])].slice(0, 5).map((warning) => (
-        <li key={warning} className="text-xs font-bold leading-5">{warning}</li>
+        <li data-vt-brain-part="sync-note-item" key={warning} className="text-xs font-bold leading-5">{warning}</li>
        ))}
       </ul>
      </div>
@@ -876,12 +876,12 @@ const CreatorIntakeWizard: React.FC<{
  const question = AI_BRAIN_INTAKE_QUESTIONS[questionIndex]
  const lastQuestion = questionIndex === AI_BRAIN_INTAKE_QUESTIONS.length - 1
  return (
-  <section className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
-   <div className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
+  <section data-vt-brain-component="BrainProfileSetup" className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
+   <div data-vt-brain-part="profile-setup-heading" className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
     <div className="flex items-center justify-between gap-3">
      <div>
-      <div className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
-      <h2 className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
+      <div data-vt-brain-part="profile-setup-eyebrow" className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
+      <h2 data-vt-brain-part="profile-setup-title" className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
      </div>
      <span className="rounded-[8px] border-[2px] border-black bg-white px-3 py-1 text-xs font-black">
       {questionIndex + 1} / {AI_BRAIN_INTAKE_QUESTIONS.length}
@@ -891,14 +891,18 @@ const CreatorIntakeWizard: React.FC<{
    <div className="grid min-h-0 flex-1 place-items-center p-4 sm:p-6">
     <label key={question.id} className={`${innerCard} block w-full max-w-4xl overflow-hidden`}>
      <span className="block border-b-[2px] border-black px-4 py-3" style={{ backgroundColor: TOOLBOX_PALETTE[(questionIndex + 2) % TOOLBOX_PALETTE.length] }}>
-      <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
-      <span className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
+      <span data-vt-brain-part="profile-question-label" className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
+      <span data-vt-brain-part="profile-question-prompt" className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
      </span>
-     <textarea
+     <StudioTextArea
+      data-vt-brain-part="profile-question-answer"
+      sizeVariant="standard"
+      rows={5}
       value={String(context[question.id] || "")}
       onChange={(event) => update(question.id, event.target.value)}
       placeholder={question.placeholder}
-      className="h-[clamp(150px,28vh,250px)] w-full resize-none border-0 bg-white p-4 text-base font-bold leading-7 outline-none focus:bg-[#FFDA47]/20"
+      style={{ height: "clamp(150px, 28vh, 250px)" }}
+      className="w-full resize-none"
      />
     </label>
    </div>
@@ -1851,7 +1855,7 @@ const AIBrainCommandInterface: React.FC = () => {
         aria-labelledby="brain-prompt-library-dialog-title"
         className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden"
        >
-        <div className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
+        <div data-vt-brain-part="mobile-launcher-heading" className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
           <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
           <button ref={promptCloseRef} type="button" className={kpiButton} onClick={() => setPromptRailOpen(false)}>
@@ -1886,7 +1890,7 @@ const AIBrainCommandInterface: React.FC = () => {
        <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
          <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
-         <button ref={contextCloseRef} type="button" className={kpiButton} onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</button>
+         <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
          <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
@@ -1897,12 +1901,12 @@ const AIBrainCommandInterface: React.FC = () => {
       {journalOpen ? (
        <div className="absolute inset-0 z-50 grid place-items-center bg-black/40 p-4">
         <section className={`${shellCard} w-full max-w-2xl overflow-hidden`}>
-         <div className="border-b-[2px] border-black bg-[#36E0F6] px-4 py-3"><h2 className="text-xl font-[1000] uppercase">Save To AI Journal</h2></div>
+         <div data-vt-brain-part="journal-dialog-heading" className="border-b-[2px] border-black bg-[#36E0F6] px-4 py-3"><h2 className="text-xl font-[1000] uppercase">Save To AI Journal</h2></div>
          <div className="grid gap-3 p-4">
-          <textarea value={journalInput} onChange={(event) => setJournalInput(event.target.value)} placeholder="A goal, content style note, audience insight, constraint, or decision you want the Brain to remember." className="h-[180px] resize-none rounded-[8px] border-[2px] border-black p-3 text-sm font-bold leading-6 outline-none" />
-          <div className="flex justify-end gap-2">
-           <button type="button" className={kpiButton} onClick={() => setJournalOpen(false)}>Cancel</button>
-           <button type="button" className={`${kpiButton} bg-[#3FEE56]`} disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</button>
+          <StudioTextArea data-vt-brain-part="journal-entry-input" value={journalInput} onChange={(event) => setJournalInput(event.target.value)} sizeVariant="standard" rows={4} placeholder="A goal, content style note, audience insight, constraint, or decision you want the Brain to remember." className="min-h-[92px] resize-none" />
+          <div data-vt-brain-part="journal-dialog-actions" className="flex justify-end gap-1">
+           <StudioButton data-vt-brain-part="journal-cancel" sizeVariant="compact" tone="neutral" type="button" onClick={() => setJournalOpen(false)}>Cancel</StudioButton>
+           <StudioButton data-vt-brain-part="journal-save" sizeVariant="compact" tone="success" type="button" disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</StudioButton>
           </div>
          </div>
         </section>
