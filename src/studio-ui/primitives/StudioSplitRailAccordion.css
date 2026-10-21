@@ -1,160 +1,190 @@
-/* Three-way expandable split control. It reuses Studio size/pair tokens and
-   keeps one shared perimeter stroke with square, non-rounded internal rails. */
+/* Split rail accordion — simultaneous open/close, fixed opaque text,
+   square icon rails, shared internal borders that split when panes open. */
+
 .vt-studio-split-rail-accordion {
   --vt-studio-split-rail-size: var(--vt-studio-control-height, 44px);
+  --vt-studio-split-rail-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-studio-split-rail-slide-duration: 320ms;
-  --vt-studio-split-rail-slide-easing: cubic-bezier(.22, 1, .36, 1);
+  --vt-studio-split-rail-slide-easing: cubic-bezier(0.22, 1, 0.36, 1);
+
   box-sizing: border-box;
   display: flex;
   align-items: stretch;
   width: 100%;
   min-width: 0;
   height: var(--vt-studio-split-rail-size);
-  min-height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-split-rail-size);
+  max-height: var(--vt-studio-split-rail-size);
   overflow: hidden;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border: var(--vt-studio-split-rail-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-accent, var(--pair-a));
   color: #000;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-weight: 1000;
-  line-height: .86;
-  letter-spacing: -.02em;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
+
 .vt-studio-split-rail-accordion[data-size="compact"] {
   --vt-studio-split-rail-size: var(--vt-studio-28-height, 28px);
-  min-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-split-rail-stroke: var(--vt-studio-28-stroke, 2px);
 }
+
+/* Items: inactive = icon only; active = icon + content */
 .vt-studio-split-rail-accordion__item {
   box-sizing: border-box;
   display: flex;
-  flex: 0 0 var(--vt-studio-split-rail-size);
+  flex: 0 0 auto;
   min-width: 0;
-  min-height: inherit;
+  height: 100%;
   align-items: stretch;
-  transition: flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing);
+  transition: flex-grow var(--vt-studio-split-rail-slide-duration)
+    var(--vt-studio-split-rail-slide-easing);
 }
+
 .vt-studio-split-rail-accordion__item[data-active="true"] {
-  flex: 1 1 var(--vt-studio-split-rail-size);
+  flex: 1 1 0;
+  min-width: 0;
 }
+
+/* Square rails fill the shell's inner height, not its outer border-box height. */
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon] {
   box-sizing: border-box;
   position: relative;
   display: grid;
-  flex: 0 0 var(--vt-studio-control-height, 44px);
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
   place-items: center;
+  flex: 0 0 auto;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1 / 1;
+  align-self: stretch;
   padding: 0;
+  margin: 0;
   border: 0;
   border-radius: 0;
   background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
   cursor: pointer;
   -webkit-text-stroke: 0;
+  z-index: 1;
 }
+
+/* Half-outside strokes share an edge while closed and separate as panes open. */
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]::before,
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: var(--vt-studio-control-stroke, 3px);
+  width: var(--vt-studio-split-rail-stroke);
   background: #000;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
+
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]::before {
   left: 0;
   transform: translateX(-50%);
 }
+
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]::after {
   right: 0;
   transform: translateX(50%);
 }
-.vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before {
+
+/* The shell owns the outside perimeter. */
+.vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before,
+.vt-studio-split-rail-accordion__item:last-child [data-vt-studio-split-rail-icon]::after {
   display: none;
 }
-.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon-face] {
-  position: relative;
-  z-index: 2;
-}
-.vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon] {
-  flex-basis: var(--vt-studio-28-height, 28px);
-  width: var(--vt-studio-28-height, 28px);
-  min-width: var(--vt-studio-28-height, 28px);
-  min-height: var(--vt-studio-28-height, 28px);
-}
+
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon-face],
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon-face] > svg {
+  position: relative;
+  z-index: 3;
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-studio-control-icon-size, 38px), 70%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 70%);
 }
+
 .vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon-face],
 .vt-studio-split-rail-accordion[data-size="compact"] [data-vt-studio-split-rail-icon-face] > svg {
-  width: min(var(--vt-studio-28-icon-size, 24px), 100%);
-  height: min(var(--vt-studio-28-icon-size, 24px), 100%);
+  width: min(var(--vt-studio-28-icon-size, 24px), 70%);
+  height: min(var(--vt-studio-28-icon-size, 24px), 70%);
 }
+
+/* Panes open and close together; only the clipping mask reveals the fixed label. */
 .vt-studio-split-rail-accordion__content {
   box-sizing: border-box;
-  display: flex;
+  position: relative;
+  display: block;
   flex: 0 1 0;
   width: 0;
   max-width: 0;
-  position: relative;
-  align-items: center;
-  justify-content: flex-start;
+  height: 100%;
   min-width: 0;
-  min-height: inherit;
   padding: 0;
   overflow: hidden;
   border: 0;
   background: var(--vt-studio-control-accent, var(--pair-a));
   font-size: var(--vt-studio-control-font-size, 38px);
   text-align: left;
-  clip-path: inset(0 100% 0 0);
   white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
   transition:
     flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing),
     flex-basis var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing),
     max-width var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing),
     clip-path var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing);
 }
+
 .vt-studio-split-rail-accordion__content[data-active="true"] {
   flex: 1 1 0;
   width: auto;
-  max-width: 100vw;
-  padding: 0;
+  max-width: 100%;
   clip-path: inset(0 0 0 0);
 }
-.vt-studio-split-rail-accordion [data-vt-studio-split-rail-label] {
-  position: absolute;
-  top: 50%;
-  left: 4px;
-  display: block;
-  width: max-content;
-  min-width: max-content;
-  max-width: none;
-  transform: translateY(-50%);
-  white-space: nowrap;
-  pointer-events: auto;
-}
+
 .vt-studio-split-rail-accordion[data-size="compact"] .vt-studio-split-rail-accordion__content {
   font-size: var(--vt-studio-28-font-size, 24px);
 }
-.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]:focus-visible {
-  outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b));
-  outline-offset: calc(-1 * var(--vt-studio-control-focus-outline-width, 3px));
+
+/* Fixed, opaque label: centered against the entire content box. */
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-label] {
+  position: absolute;
+  inset: 0 auto 0 4px;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  transform: none;
+  color: #000;
+  opacity: 1;
+  -webkit-text-fill-color: #000;
+  background: transparent;
+  pointer-events: auto;
+  white-space: nowrap;
   z-index: 1;
 }
+
+.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]:focus-visible {
+  outline: var(--vt-studio-control-focus-outline-width, 3px) solid
+    var(--vt-studio-control-secondary, var(--pair-b));
+  outline-offset: calc(-1 * var(--vt-studio-control-focus-outline-width, 3px));
+  z-index: 2;
+}
+
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]:disabled {
   cursor: not-allowed;
-  opacity: .45;
+  opacity: 0.45;
 }
+
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-split-rail-accordion,
   .vt-studio-split-rail-accordion * {
