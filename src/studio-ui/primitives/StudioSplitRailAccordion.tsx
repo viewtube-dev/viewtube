@@ -95,15 +95,16 @@ export const StudioSplitRailAccordion = React.forwardRef<HTMLDivElement, StudioS
               >
                 <span aria-hidden="true" data-vt-studio-split-rail-icon-face>{item.icon}</span>
               </button>
-              {active ? (
-                <div
-                  data-vt-studio-split-rail-content="true"
-                  className="vt-studio-split-rail-accordion__content"
-                  aria-label={item.accessibleLabel + " content"}
-                >
-                  {item.content}
-                </div>
-              ) : null}
+              <div
+                data-vt-studio-split-rail-content="true"
+                data-active={active ? "true" : "false"}
+                aria-hidden={!active}
+                inert={!active}
+                className="vt-studio-split-rail-accordion__content"
+                aria-label={item.accessibleLabel + " content"}
+              >
+                {item.content}
+              </div>
             </div>
           )
         })}
