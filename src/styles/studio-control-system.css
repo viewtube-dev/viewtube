@@ -5285,3 +5285,81 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 .vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-value { font-size: var(--vt-studio-28-font-size, 24px) !important; }
 .vt-studio-inline-stepper button:disabled,
 .vt-studio-split-stepper button:disabled { cursor: not-allowed; opacity: .45; }
+
+
+/* Shared single-line text-face centering: avoid the low baseline caused by
+   the legacy .86 line-height when heavy text stroke is applied. */
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
+.vt-studio-username-input > [data-vt-studio-split-field] > input[data-vt-studio-control="true"],
+.vt-studio-username-input > [data-vt-studio-split-label] > input[data-vt-studio-control="true"] {
+  line-height: 1 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  align-self: stretch;
+}
+.vt-studio-simple-dropdown select {
+  line-height: 1;
+  padding-top: 0;
+  padding-bottom: 0;
+  text-align: center;
+  text-align-last: center;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] {
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+.vt-studio-dropdown button[data-vt-studio-split="left"] [data-vt-studio-split-label],
+.vt-studio-dropdown [data-vt-studio-split-label] {
+  line-height: 1;
+}
+.vt-studio-username-input > [data-vt-studio-split-rail] {
+  align-self: stretch;
+  place-items: center;
+}
+.vt-studio-username-input[data-size="compact"] > [data-vt-studio-split-rail] {
+  width: var(--vt-studio-28-height, 28px);
+  min-width: var(--vt-studio-28-height, 28px);
+  height: 100%;
+  padding: 0;
+}
+
+/* Center the opaque LED core and its ripple on the same geometric origin. */
+.vt-studio-brain-status-badge__core,
+.vt-studio-brain-status-badge__ripple {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+}
+.vt-studio-brain-status-badge__core {
+  background-color: var(--vt-brain-led-color);
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    #fff 0%,
+    #fff 22%,
+    var(--vt-brain-led-color) 55%,
+    color-mix(in srgb, var(--vt-brain-led-color) 75%, #000) 100%
+  );
+  opacity: 1;
+}
+.vt-studio-brain-status-badge__ripple {
+  border-width: 1.5px;
+  transform: translate(-50%, -50%) scale(.55);
+}
+.vt-studio-brain-status-badge[data-active="true"] .vt-studio-brain-status-badge__ripple {
+  animation: vt-studio-brain-led-ripple 8s ease-out infinite;
+}
+@keyframes vt-studio-brain-led-ripple {
+  0% { transform: translate(-50%, -50%) scale(.55); opacity: .8; }
+  100% { transform: translate(-50%, -50%) scale(2.15); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-brain-status-badge[data-active="true"] .vt-studio-brain-status-badge__ripple {
+    animation: none;
+    opacity: 0;
+  }
+}
