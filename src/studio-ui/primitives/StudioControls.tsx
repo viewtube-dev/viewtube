@@ -2175,7 +2175,6 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   onClose,
   className,
   entering = true,
-  sizeVariant = "standard",
 }) => {
   const [swapping, setSwapping] = React.useState(false);
   const [fading, setFading] = React.useState(false);
@@ -2205,7 +2204,7 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   return (
     <span
       className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
-      data-size={sizeVariant}
+      data-size="standard"
       data-vt-studio-badge="true"
       data-vt-studio-width="content"
       data-entering={isEntering ? "true" : undefined}
@@ -2461,7 +2460,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       data-vt-studio-control-family="upload"
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
-      data-size={sizeVariant}
+      data-size="standard"
       aria-disabled={disabled ? "true" : undefined}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -2507,21 +2506,12 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           <Upload />
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
-        {!previewUrl && (
-          <span className="vt-studio-upload-frame__label" aria-live="polite">
-            <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
-            <span className="vt-studio-upload-frame__badge-text">{prompt}</span>
-            <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
-          </span>
-        )}
-      </span>
-      {selectedName && (
-        <span className="vt-studio-upload-frame__filename" aria-live="polite">
+        <span className="vt-studio-upload-frame__label" data-vt-studio-split="double" aria-live="polite">
           <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
-          <span className="vt-studio-upload-frame__badge-text">{selectedName}</span>
+          <span className="vt-studio-upload-frame__badge-text">{selectedName || prompt}</span>
           <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
         </span>
-      )}
+      </span>
     </label>
   );
 };
@@ -2704,7 +2694,7 @@ export const StudioBrainStatusBadge: React.FC<StudioBrainStatusBadgeProps> = ({
   label,
   tone = "green",
   appearance = "dark",
-  sizeVariant = "compact",
+  sizeVariant = "standard",
   active = true,
   className,
   "aria-label": ariaLabel,
@@ -2714,7 +2704,7 @@ export const StudioBrainStatusBadge: React.FC<StudioBrainStatusBadgeProps> = ({
     data-vt-studio-brain-status="true"
     data-tone={tone}
     data-appearance={appearance}
-    data-size={sizeVariant}
+    data-size="standard"
     data-active={active ? "true" : "false"}
     role="status"
     aria-label={ariaLabel || label}
@@ -2757,7 +2747,7 @@ export const StudioBrainStatusIndicator: React.FC<{
   pulse?: boolean;
   className?: string;
   title?: string;
-}> = ({ status, label, variant = "dark", size = "compact", pulse = true, className = "", title }) => {
+}> = ({ status, label, variant = "dark", size = "standard", pulse = true, className = "", title }) => {
   const colors = STUDIO_BRAIN_STATUS_COLORS[status];
   return (
     <span
@@ -2766,7 +2756,7 @@ export const StudioBrainStatusIndicator: React.FC<{
       data-vt-library-component="StudioBrainStatusIndicator"
       data-status={status}
       data-variant={variant}
-      data-size={size}
+      data-size="standard"
       data-pulse={pulse ? "true" : "false"}
       title={title || label}
       role="status"
