@@ -73,8 +73,6 @@
 .vt-studio-split-rail-accordion__content {
   box-sizing: border-box;
   display: flex;
-  box-sizing: border-box;
-  display: flex;
   flex: 0 1 0;
   width: 0;
   max-width: 0;
