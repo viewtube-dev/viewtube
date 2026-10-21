@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -55,6 +55,23 @@ describe("StudioTextBox size-aware stroke defaults", () => {
   });
 });
 
+describe("Studio badge single-size contract", () => {
+  it("renders closeable and Brain status badges at the single standard size", () => {
+    const closeable = renderToStaticMarkup(<StudioCloseableBadge label="Featured" sizeVariant="micro" />);
+    const brain = renderToStaticMarkup(<StudioBrainStatusBadge label="Learning" sizeVariant="micro" />);
+    const indicator = renderToStaticMarkup(<StudioBrainStatusIndicator status="running" label="Ready" size="micro" />);
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(closeable).toContain('data-size="standard"');
+    expect(brain).toContain('data-size="standard"');
+    expect(indicator).toContain('data-size="standard"');
+    expect(css).toContain("font: 1000 18px/20px Inter");
+    expect(css).toContain("border-radius: 4px;");
+    expect(css).toContain("rgba(255,255,255,.95)");
+    expect(css).toContain("vt-studio-brain-led-ripple 8s ease-out infinite");
+    expect(css).toContain("prefers-reduced-motion: reduce");
+  });
+});
+
 describe("canonical Studio upload frame", () => {
   it("renders the standard upload frame with accessible file input and layered pair-color anatomy", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame aria-label="Upload media" />);
@@ -100,8 +117,11 @@ describe("canonical Studio upload frame", () => {
   it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame sizeVariant="compact" accept="image/*" aria-label="Compact upload" />);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
-    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-size="standard"');
     expect(html).toContain('accept="image/*"');
+    expect(html).toContain('data-vt-studio-split="double"');
+    expect(html).toContain('class="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left"');
+    expect(html).toContain('class="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right"');
     expect(css).toContain(".vt-studio-upload-frame");
     expect(css).toContain("var(--pair-a");
     expect(css).toContain("var(--pair-b");
@@ -109,17 +129,21 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame.is-drag");
     expect(css).toContain(".vt-studio-upload-frame.has-img");
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
-    expect(css).toContain("border: calc(var(--vt-studio-upload-frame-stroke) * 1.25) solid var(--vt-studio-upload-primary)");
-    expect(css).toContain("border: calc(var(--vt-studio-upload-frame-stroke) * .75) solid var(--vt-studio-upload-secondary)");
+    expect(css).toContain("--vt-upload-circle-border: 4px");
+    expect(css).toContain("--vt-upload-primary-stroke: 5px");
+    expect(css).toContain("--vt-upload-secondary-stroke: 3px");
+    expect(css).toContain("border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary)");
+    expect(css).toContain("border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary)");
     expect(css).toContain(".vt-studio-upload-frame__inset::before");
     expect(css).toContain(".vt-studio-upload-frame__inset::after");
     const uploadFrameBlock = css.slice(css.indexOf(".vt-studio-upload-frame {"), css.indexOf(".vt-studio-upload-frame[data-size=\"compact\"]"));
     expect(uploadFrameBlock).toContain("aspect-ratio: 16 / 9;");
     expect(css).not.toMatch(/\.vt-studio-upload-frame\s*\{\s*aspect-ratio:\s*(?!16 \/ 9)/);
-    expect(css).toContain("font-size: clamp(10px, 1.6cqw, 12px)");
+    expect(css).toContain("font-size: 12px");
+    expect(css).toContain("height: 28px");
     expect(css).toContain("font-weight: 1000");
     expect(css).toContain("letter-spacing: -.02em");
-    expect(css).toContain("border-radius: clamp(3px, .6cqw, 8px);");
+    expect(css).toContain("border-radius: 4px;");
     expect(css).toContain(".vt-studio-upload-frame__icon {");
     expect(css).toContain("overflow: visible");
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
