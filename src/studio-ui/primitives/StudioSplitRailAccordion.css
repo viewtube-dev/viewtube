@@ -75,7 +75,7 @@
   right: 0;
   transform: translateX(50%);
 }
-.vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon]:first-child::before {
+.vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before {
   display: none;
 }
 .vt-studio-split-rail-accordion [data-vt-studio-split-rail-icon-face] {
