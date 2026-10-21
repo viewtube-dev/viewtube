@@ -43,6 +43,7 @@ describe("StudioSplitRailAccordion", () => {
     expect(css).toContain("transform: translateX(-50%);");
     expect(css).toContain("transform: translateX(50%);");
     expect(css).not.toContain(".vt-studio-split-rail-accordion__item + .vt-studio-split-rail-accordion__item");
+    expect(css).toContain(".vt-studio-split-rail-accordion__item:first-child [data-vt-studio-split-rail-icon]::before");
   });
 
   it("exposes selection and expansion state for accessible keyboard interaction", () => {
