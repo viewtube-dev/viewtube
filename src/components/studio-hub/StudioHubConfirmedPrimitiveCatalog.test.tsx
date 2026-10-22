@@ -404,7 +404,7 @@ describe("responsive Studio upload frame", () => {
     expect(controls).toContain("1000");
     expect(controls).toContain("inputRef.current?.click()");
   });
-});
+
 
   it("registers the Arrow, Side, Double Side, and Bar Toggle production specimens", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
@@ -424,5 +424,4 @@ describe("responsive Studio upload frame", () => {
     expect(css).toContain(".vt-studio-value-toggle__bar")
     expect(css).toContain("flex: 0 0 18px")
   })
-
 });
