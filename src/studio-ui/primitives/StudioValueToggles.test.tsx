@@ -25,18 +25,27 @@ afterEach(() => {
 });
 
 describe("Studio value toggle primitives", () => {
-  it("changes Arrow Toggle options and respects option boundaries", () => {
+  it("cycles Arrow Toggle options endlessly in both directions without disabling boundary arrows", () => {
     const onValueChange = vi.fn();
-    const { container } = mount(<StudioArrowToggle options={["A", "B"]} value="A" onValueChange={onValueChange} />);
+    const { container } = mount(<StudioArrowToggle options={["A", "B", "C"]} value="A" onValueChange={onValueChange} />);
+    expect((container.querySelector('button[aria-label="Previous option"]') as HTMLButtonElement).disabled).toBe(false);
+    click(container.querySelector('button[aria-label="Previous option"]'));
+    expect(onValueChange).toHaveBeenLastCalledWith("C");
     click(container.querySelector('button[aria-label="Next option"]'));
-    expect(onValueChange).toHaveBeenCalledWith("B");
-    expect((container.querySelector('button[aria-label="Previous option"]') as HTMLButtonElement).disabled).toBe(true);
+    expect(onValueChange).toHaveBeenLastCalledWith("B");
+    expect((container.querySelector('button[aria-label="Next option"]') as HTMLButtonElement).disabled).toBe(false);
   });
 
-  it("renders Side Toggle text face with a left arrow stack", () => {
-    const { container } = mount(<StudioSideToggle options={["LOW", "HIGH"]} value="LOW" onValueChange={() => {}} arrowSide="left" />);
+  it("renders Side Toggle text face with a left arrow stack and keeps both directions enabled at boundaries", () => {
+    const onValueChange = vi.fn();
+    const { container } = mount(<StudioSideToggle options={["LOW", "MID", "HIGH"]} value="LOW" onValueChange={onValueChange} arrowSide="left" />);
     expect(container.querySelector(".vt-studio-value-toggle__face")?.textContent).toContain("LOW");
-    expect(container.querySelectorAll(".vt-studio-value-toggle__arrow-stack button")).toHaveLength(2);
+    const arrows = container.querySelectorAll(".vt-studio-value-toggle__arrow-stack button");
+    expect(arrows).toHaveLength(2);
+    expect((arrows[0] as HTMLButtonElement).disabled).toBe(false);
+    expect((arrows[1] as HTMLButtonElement).disabled).toBe(false);
+    click(arrows[0]);
+    expect(onValueChange).toHaveBeenLastCalledWith("HIGH");
   });
 
   it("renders independently configured Double Side Toggle values without the V2 divider", () => {
