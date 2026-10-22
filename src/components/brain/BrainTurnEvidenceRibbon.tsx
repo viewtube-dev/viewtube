@@ -1,5 +1,7 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import type { AIBrainEvidencePack } from "../../types"
+import type { EvidenceRecord } from "../../services/brain/EvidenceRecord"
 import { StudioSplitLeftBadge } from "../../studio-ui"
 import { BrainClaimEvidence } from "./BrainClaimEvidence"
 
@@ -7,6 +9,7 @@ export type BrainTurnEvidenceRibbonProps = {
  turnId: string
  evidencePack: AIBrainEvidencePack
  citedEvidenceIds?: string[]
+ evidenceRecords?: EvidenceRecord[]
  compact?: boolean
  className?: string
 }
@@ -26,6 +29,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  turnId,
  evidencePack,
  citedEvidenceIds = [],
+ evidenceRecords,
  compact = false,
  className = "",
 }) => {
@@ -74,6 +78,50 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     </div>
    ) : null}
    <BrainClaimEvidence evidencePack={evidencePack} compact label="Inspect evidence" />
+   <details data-vt-brain-part="prompt-evidence-records" className="min-w-0 border-t border-black/20 pt-1.5">
+    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-[10px] font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+     <span>Prompt evidence records</span>
+     <span className="shrink-0">{evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
+    </summary>
+    {evidenceRecords === undefined ? (
+     <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">
+      Record-level provenance is unavailable for this saved turn. The legacy evidence summary above is not proof of the exact typed records supplied to the model.
+     </p>
+    ) : evidenceRecords.length === 0 ? (
+     <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">No typed prompt evidence records were recorded for this turn.</p>
+    ) : (
+     <ul className="grid min-w-0 gap-1.5 py-1">
+      {evidenceRecords.map((record) => {
+       const sourceRoute = record.provenance.sourceRoute
+       const safeSourceRoute = typeof sourceRoute === "string" && sourceRoute.startsWith("/") && !sourceRoute.startsWith("//") ? sourceRoute : null
+       const displayValue = record.value === null || record.value === undefined
+        ? "Unknown / missing — no zero value is inferred"
+        : (typeof record.value === "number" ? new Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(record.value) : String(record.value)) + (record.unit ? " " + record.unit : "")
+       return (
+        <li key={record.id} data-vt-evidence-record-id={record.id} className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-[#f8f8f4] p-2">
+         <div className="flex min-w-0 flex-wrap items-start justify-between gap-1.5">
+          <strong className="min-w-0 break-words text-[10px] font-[1000]">{record.metric || "Evidence record"}: {displayValue}</strong>
+          <span className="shrink-0 border border-black px-1 py-0.5 text-[8px] font-black uppercase">{record.freshness}</span>
+         </div>
+         <p className="break-all text-[9px] font-bold leading-4 text-black/65">{record.id}</p>
+         <dl className="grid min-w-0 grid-cols-2 gap-x-2 gap-y-1 text-[9px] leading-4 sm:grid-cols-3">
+          <div><dt className="font-black uppercase text-black/50">State</dt><dd className="break-words font-bold">{record.epistemicState}</dd></div>
+          <div><dt className="font-black uppercase text-black/50">Owner</dt><dd className="break-words font-bold">{record.owner}</dd></div>
+          <div><dt className="font-black uppercase text-black/50">Source</dt><dd className="break-words font-bold">{record.sourceRef}</dd></div>
+          <div><dt className="font-black uppercase text-black/50">Observed</dt><dd className="break-words font-bold">{record.observedAt || "Unknown"}</dd></div>
+          <div><dt className="font-black uppercase text-black/50">Updated</dt><dd className="break-words font-bold">{record.updatedAt || "Unknown"}</dd></div>
+          <div><dt className="font-black uppercase text-black/50">Window</dt><dd className="break-words font-bold">{record.window?.kind || "Unknown"}</dd></div>
+         </dl>
+         {record.missingness?.length ? <p className="break-words text-[9px] font-bold leading-4">Missing: {record.missingness.join(", ")}</p> : null}
+         {record.limitations?.length ? <ul className="grid gap-0.5">{record.limitations.map((limitation) => <li key={limitation} className="break-words text-[9px] font-bold leading-4">Limitation: {limitation}</li>)}</ul> : null}
+         {record.provenance.evidenceIds.length ? <p className="break-words text-[9px] font-bold leading-4">Source evidence IDs: {record.provenance.evidenceIds.join(", ")}</p> : null}
+         {safeSourceRoute ? <Link to={safeSourceRoute} className="inline-flex min-h-9 w-fit items-center gap-1 border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">Open source surface</Link> : <p className="text-[9px] font-bold text-black/60">Source link unavailable for this record.</p>}
+        </li>
+       )
+      })}
+     </ul>
+    )}
+   </details>
   </section>
  )
 }
