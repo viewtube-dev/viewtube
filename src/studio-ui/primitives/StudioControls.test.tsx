@@ -1122,6 +1122,11 @@ describe("global StudioButton variants and containment contract", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
     const css = readStudioControlCss();
     expect(controls).toContain("variant?: StudioButtonVariant");
+    expect(controls).toContain('const isToggleVariant = variant === "v3" || variant === "v5" || variant === "v6"');
+    expect(controls).toContain("setLocalOn(next)");
+    expect(controls).toContain("onVariantChange?.(next)");
+    expect(controls).toContain("activeChildren");
+    expect(controls).toContain("activeIcon");
     expect(css).toContain("[data-vt-studio-button-face]");
     expect(css).toContain("[data-vt-studio-split-label]");
     expect(css).toContain("text-overflow: ellipsis");
