@@ -1,6 +1,6 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
-import "./StudioPanelAccordion.css"
+import "../../styles/studio-panel-accordion.css"
 
 export interface StudioPanelAccordionItem {
   /** Icon drawn inside the square rail face. */
