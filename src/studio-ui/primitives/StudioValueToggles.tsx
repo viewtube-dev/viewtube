@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
+import { StudioSplitShell } from "./StudioControls";
+import type { StudioControlSize } from "../tokens";
 
 export type StudioToggleAppearance = {
   textColor?: string;
@@ -14,7 +16,7 @@ type CommonProps = {
   onValueChange: (value: string) => void;
   appearance?: StudioToggleAppearance;
   disabled?: boolean;
-  size?: "supreme" | "standard" | "compact" | "micro";
+  size?: StudioControlSize;
   ariaLabel?: string;
   className?: string;
 };
@@ -25,13 +27,15 @@ export type StudioArrowToggleProps = CommonProps & {
 
 export type StudioSideToggleProps = CommonProps & {
   arrowSide?: "left" | "right";
+  /** Reserved label width for Double Side Toggle content-width variants. */
+  reserveLabel?: string;
 };
 
 export type StudioDoubleSideToggleProps = {
   left: CommonProps;
   right: CommonProps;
   variant?: "default" | "v2" | "v3" | "v4";
-  size?: CommonProps["size"];
+  size?: StudioControlSize;
   className?: string;
 };
 
@@ -43,6 +47,7 @@ const appearanceStyle = (appearance?: StudioToggleAppearance): React.CSSProperti
 } as React.CSSProperties);
 
 function changeOption(props: CommonProps, direction: -1 | 1) {
+  if (!props.options.length || props.disabled) return;
   const current = props.options.indexOf(props.value);
   const next = Math.max(0, Math.min(props.options.length - 1, (current < 0 ? 0 : current) + direction));
   if (props.options[next] !== undefined && props.options[next] !== props.value) props.onValueChange(props.options[next]);
@@ -60,47 +65,58 @@ function ArrowButton({ direction, disabled, onClick, label }: {
   </button>;
 }
 
+function arrowRail(props: CommonProps, direction: -1 | 1, iconDirection: "left" | "right") {
+  const index = props.options.indexOf(props.value);
+  return <ArrowButton direction={iconDirection} label={direction < 0 ? "Previous option" : "Next option"}
+    disabled={props.disabled || !props.options.length || (direction < 0 ? index <= 0 : index >= props.options.length - 1)}
+    onClick={() => changeOption(props, direction)} />;
+}
+
 export function StudioArrowToggle(props: StudioArrowToggleProps) {
-  const { options, value, disabled, iconSide = "double", size = "standard", appearance, ariaLabel = "Choose value", className } = props;
+  const { options, value, iconSide = "double", size = "standard", appearance, ariaLabel = "Choose value", className } = props;
   const index = options.indexOf(value);
   const current = options[index < 0 ? 0 : index] ?? value;
   const left = iconSide === "left" || iconSide === "double";
   const right = iconSide === "right" || iconSide === "double";
-  return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--arrow", className].filter(Boolean).join(" ")}
-    data-vt-studio-control="true" data-vt-studio-value-toggle="arrow" data-size={size} style={appearanceStyle(appearance)}>
-    {left && <ArrowButton direction="left" label="Previous option" disabled={disabled || index <= 0} onClick={() => changeOption(props, -1)} />}
+  const layout = iconSide === "double" ? "double" : iconSide;
+  return <StudioSplitShell layout={layout} sizeVariant={size}
+    className={["vt-studio-value-toggle", "vt-studio-value-toggle--arrow", className].filter(Boolean).join(" ")}
+    shellProps={{ "data-vt-studio-value-toggle": "arrow", style: appearanceStyle(appearance) }}
+    leftRailContent={left ? arrowRail(props, -1, "left") : undefined}
+    rightRailContent={right ? arrowRail(props, 1, "right") : undefined}>
     <span className="vt-studio-value-toggle__face" aria-live="polite" aria-label={ariaLabel} title={current}>{current}</span>
-    {right && <ArrowButton direction="right" label="Next option" disabled={disabled || index >= options.length - 1} onClick={() => changeOption(props, 1)} />}
-  </div>;
+  </StudioSplitShell>;
 }
 
 export function StudioSideToggle(props: StudioSideToggleProps) {
-  const { options, value, disabled, arrowSide = "right", size = "standard", appearance, ariaLabel = "Choose value", className } = props;
+  const { options, value, arrowSide = "right", size = "standard", ariaLabel = "Choose value", className, reserveLabel } = props;
   const index = options.indexOf(value);
   const current = options[index < 0 ? 0 : index] ?? value;
   const arrows = <div className="vt-studio-value-toggle__arrow-stack">
-    <ArrowButton direction="up" label="Previous option" disabled={disabled || index <= 0} onClick={() => changeOption(props, -1)} />
-    <ArrowButton direction="down" label="Next option" disabled={disabled || index >= options.length - 1} onClick={() => changeOption(props, 1)} />
+    <ArrowButton direction="up" label="Previous option" disabled={props.disabled || !options.length || index <= 0} onClick={() => changeOption(props, -1)} />
+    <ArrowButton direction="down" label="Next option" disabled={props.disabled || !options.length || index >= options.length - 1} onClick={() => changeOption(props, 1)} />
   </div>;
-  return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--side", className].filter(Boolean).join(" ")}
-    data-vt-studio-control="true" data-vt-studio-value-toggle="side" data-size={size} style={appearanceStyle(appearance)}>
-    {arrowSide === "left" && arrows}
-    <span className="vt-studio-value-toggle__face" aria-live="polite" aria-label={ariaLabel} title={current}>{current}</span>
-    {arrowSide === "right" && arrows}
-  </div>;
+  return <StudioSplitShell layout={arrowSide} sizeVariant={size}
+    className={["vt-studio-value-toggle", "vt-studio-value-toggle--side", className].filter(Boolean).join(" ")}
+    shellProps={{ "data-vt-studio-value-toggle": "side", style: appearanceStyle(props.appearance) }}
+    leftRailContent={arrowSide === "left" ? arrows : undefined}
+    rightRailContent={arrowSide === "right" ? arrows : undefined}>
+    <span className="vt-studio-value-toggle__face" data-content-width={reserveLabel ? "true" : undefined} aria-live="polite" aria-label={ariaLabel} title={current}><span>{current}</span>{reserveLabel && <span className="vt-studio-value-toggle__measure" aria-hidden="true">{reserveLabel}</span>}</span>
+  </StudioSplitShell>;
 }
 
 export function StudioDoubleSideToggle({ left, right, variant = "default", size = "standard", className }: StudioDoubleSideToggleProps) {
   const noDivider = variant === "v2" || variant === "v4";
   const contentWidth = variant === "v3" || variant === "v4";
+  const longestWord = (options: readonly string[]) => options.flatMap(option => option.split(/\s+/)).reduce((longest, word) => word.length > longest.length ? word : longest, "");
   return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--double", className].filter(Boolean).join(" ")}
     data-vt-studio-control="true" data-vt-studio-value-toggle="double" data-variant={variant} data-size={size}>
-    <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth || undefined}>
-      <StudioSideToggle {...left} size={size} arrowSide="left" className="vt-studio-value-toggle--nested" />
+    <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
+      <StudioSideToggle {...left} size={size} arrowSide="left" reserveLabel={contentWidth ? longestWord(left.options) : undefined} className="vt-studio-value-toggle--nested" />
     </div>
     {!noDivider && <span className="vt-studio-value-toggle__divider" aria-hidden="true" />}
-    <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth || undefined}>
-      <StudioSideToggle {...right} size={size} arrowSide="right" className="vt-studio-value-toggle--nested" />
+    <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
+      <StudioSideToggle {...right} size={size} arrowSide="right" reserveLabel={contentWidth ? longestWord(right.options) : undefined} className="vt-studio-value-toggle--nested" />
     </div>
   </div>;
 }
@@ -109,7 +125,7 @@ export type StudioBarToggleProps = {
   value: number;
   onValueChange: (value: number) => void;
   disabled?: boolean;
-  size?: CommonProps["size"];
+  size?: StudioControlSize;
   appearance?: StudioToggleAppearance;
   ariaLabel?: string;
   holdDelayMs?: number;
@@ -131,15 +147,13 @@ export function StudioBarToggle({
     repeatTimer.current = null;
   }, []);
   useEffect(() => stopRepeat, [stopRepeat]);
-
   const step = useCallback((direction: -1 | 1) => {
     if (disabled) return;
     const current = Math.max(0, Math.min(100, valueRef.current));
     const next = Math.max(0, Math.min(100, Math.round(current / 10) * 10 + direction * 10));
     valueRef.current = next;
     onValueChange(next);
-  }, [disabled, onValueChange, value]);
-
+  }, [disabled, onValueChange]);
   const startRepeat = (direction: -1 | 1) => {
     stopRepeat();
     step(direction);
@@ -150,22 +164,25 @@ export function StudioBarToggle({
       repeatTimer.current = setTimeout(repeat, repeatIntervalMs);
     }, holdDelayMs);
   };
-
   const bars = Math.max(0, Math.min(10, Math.round(value / 10)));
-  return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--bar", className].filter(Boolean).join(" ")}
-    data-vt-studio-control="true" data-vt-studio-value-toggle="bar" data-size={size} style={appearanceStyle(appearance)}>
-    <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Decrease level" disabled={disabled || value <= 0}
-      onPointerDown={() => startRepeat(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(-1); } }}>
-      <ChevronLeft aria-hidden="true" />
-    </button>
+  const decrease = <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Decrease level" disabled={disabled || value <= 0}
+    onPointerDown={() => startRepeat(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
+    onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(-1); } }}>
+    <ChevronLeft aria-hidden="true" />
+  </button>;
+  const increase = <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Increase level" disabled={disabled || value >= 100}
+    onPointerDown={() => startRepeat(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
+    onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(1); } }}>
+    <ChevronRight aria-hidden="true" />
+  </button>;
+  return <StudioSplitShell layout="double" sizeVariant={size}
+    className={["vt-studio-value-toggle", "vt-studio-value-toggle--bar", className].filter(Boolean).join(" ")}
+    shellProps={{ "data-vt-studio-value-toggle": "bar", style: appearanceStyle(appearance) }}
+    leftRailContent={decrease} rightRailContent={increase}>
     <div className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={bars * 10}>
       {Array.from({ length: 10 }, (_, index) => <span key={index} className="vt-studio-value-toggle__bar" data-active={index < bars ? "true" : "false"} />)}
     </div>
-    <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Increase level" disabled={disabled || value >= 100}
-      onPointerDown={() => startRepeat(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(1); } }}>
-      <ChevronRight aria-hidden="true" />
-    </button>
-  </div>;
+  </StudioSplitShell>;
 }
 
 export const STUDIO_VALUE_TOGGLE_VARIANTS = ["default", "v2", "v3", "v4"] as const;

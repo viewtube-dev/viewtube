@@ -1394,7 +1394,7 @@ type StudioSplitLayout = "left" | "right" | "double"
 type StudioDataAttributeProps = {
   [key: `data-${string}`]: string | undefined
 }
-interface StudioSplitShellProps {
+export interface StudioSplitShellProps {
   layout: StudioSplitLayout
   sizeVariant?: StudioControlSize
   iconLeft?: React.ReactNode
@@ -1414,7 +1414,7 @@ interface StudioSplitShellProps {
   rightRailContent?: React.ReactNode
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 }
-const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
+export const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps,
   leftRailClassName, rightRailClassName, leftRailProps, rightRailProps,
