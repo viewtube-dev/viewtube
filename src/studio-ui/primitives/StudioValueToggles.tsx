@@ -81,7 +81,7 @@ export function StudioArrowToggle(props: StudioArrowToggleProps) {
   const layout = iconSide === "double" ? "double" : iconSide;
   return <StudioSplitShell layout={layout} sizeVariant={size}
     className={["vt-studio-value-toggle", "vt-studio-value-toggle--arrow", className].filter(Boolean).join(" ")}
-    shellProps={{ "data-vt-studio-value-toggle": "arrow", style: appearanceStyle(appearance) }}
+    shellProps={{ "data-vt-studio-value-toggle": "arrow", "aria-label": ariaLabel, style: appearanceStyle(appearance) }}
     leftRailContent={left ? arrowRail(props, -1, "left") : undefined}
     rightRailContent={right ? arrowRail(props, 1, "right") : undefined}>
     <span className="vt-studio-value-toggle__face" aria-live="polite" aria-label={ariaLabel} title={current}>{current}</span>
@@ -98,7 +98,7 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
   </div>;
   return <StudioSplitShell layout={arrowSide} sizeVariant={size}
     className={["vt-studio-value-toggle", "vt-studio-value-toggle--side", className].filter(Boolean).join(" ")}
-    shellProps={{ "data-vt-studio-value-toggle": "side", style: appearanceStyle(props.appearance) }}
+    shellProps={{ "data-vt-studio-value-toggle": "side", "aria-label": ariaLabel, style: appearanceStyle(props.appearance) }}
     leftRailContent={arrowSide === "left" ? arrows : undefined}
     rightRailContent={arrowSide === "right" ? arrows : undefined}>
     <span className="vt-studio-value-toggle__face" data-content-width={reserveLabel ? "true" : undefined} aria-live="polite" aria-label={ariaLabel} title={current}><span>{current}</span>{reserveLabel && <span className="vt-studio-value-toggle__measure" aria-hidden="true">{reserveLabel}</span>}</span>
@@ -177,7 +177,7 @@ export function StudioBarToggle({
   </button>;
   return <StudioSplitShell layout="double" sizeVariant={size}
     className={["vt-studio-value-toggle", "vt-studio-value-toggle--bar", className].filter(Boolean).join(" ")}
-    shellProps={{ "data-vt-studio-value-toggle": "bar", style: appearanceStyle(appearance) }}
+    shellProps={{ "data-vt-studio-value-toggle": "bar", "aria-label": ariaLabel, style: appearanceStyle(appearance) }}
     leftRailContent={decrease} rightRailContent={increase}>
     <div className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={bars * 10}>
       {Array.from({ length: 10 }, (_, index) => <span key={index} className="vt-studio-value-toggle__bar" data-active={index < bars ? "true" : "false"} />)}
