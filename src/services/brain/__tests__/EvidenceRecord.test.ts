@@ -3,6 +3,7 @@ import type { CanonicalIntelligenceEvidenceBundle } from "../../analytics-canon"
 import {
  compareEvidenceRecords,
  EVIDENCE_EPISTEMIC_STATES,
+ isEvidenceRecord,
  formatEvidenceRecordForPrompt,
  projectCanonicalEvidenceRecords,
  selectEvidenceRecordsForPrompt,
@@ -61,6 +62,27 @@ describe("EvidenceRecord", () => {
    "KNOWN", "OBSERVED", "CALCULATED", "USER_PROVIDED", "INFERRED",
    "HYPOTHESIS", "ESTIMATE", "STALE", "MISSING", "CONFLICTING",
   ])
+ })
+
+
+ it("validates persisted evidence records before they are projected into UI", () => {
+  const record: EvidenceRecord = {
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon",
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   metric: "views",
+   value: 2800,
+   freshness: "fresh",
+   epistemicState: "OBSERVED",
+   provenance: { evidenceIds: ["evidence:channel-summary"], sourceRoute: "/analytics" },
+  }
+
+  expect(isEvidenceRecord(record)).toBe(true)
+  expect(isEvidenceRecord({ ...record, id: "" })).toBe(false)
+  expect(isEvidenceRecord({ ...record, owner: "untrusted-owner" })).toBe(false)
+  expect(isEvidenceRecord({ ...record, provenance: { evidenceIds: [42] } })).toBe(false)
+  expect(isEvidenceRecord(null)).toBe(false)
  })
 
  it("projects canonical analytics metrics without changing their source owner or provenance", () => {

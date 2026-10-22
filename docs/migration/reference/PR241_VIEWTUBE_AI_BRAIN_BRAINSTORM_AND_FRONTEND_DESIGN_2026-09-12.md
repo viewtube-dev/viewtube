@@ -709,3 +709,16 @@ The first code PR should be one vertical slice, not a page-wide redesign: typed 
 - Corrections and learning use existing governance.
 - Keyboard, screen-reader, narrow-screen, zoom and reduced-motion checks have execution evidence.
 - Final report lists requirement-to-commit mapping, files changed, tests actually run, CI results, known unrelated failures and rollback path.
+
+
+### Implementation record — accessible AI Journal capture (2026-10-22)
+
+The first UI implementation slice is in progress on `/ai-brain`:
+
+- Extracted the existing AI Journal overlay into `src/components/brain/BrainJournalDialog.tsx`; this is a presentation/accessibility boundary, not a new journal store.
+- Added a named modal contract (`role="dialog"`, `aria-modal`, title and description relationships) and a programmatic label for the entry field.
+- Added initial focus, Escape-to-close, Tab focus containment and focus restoration when the dialog closes.
+- Kept save behavior on the existing `handleJournalSave` / AI Journal flow. The dialog explicitly states that saving a note does not promote it to confirmed knowledge.
+- Added a component regression test for the accessible dialog contract and empty-save prevention.
+
+**Verification status:** the test is committed on the implementation branch but has not yet been reported green by CI. This slice does not certify the broader restore, evidence-parity, receipt-lineage, or full accessibility checklist. The next implementation gate remains a turn-bound evidence presentation contract and claim-to-source parity, followed by receipt-backed result states.

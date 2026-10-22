@@ -400,3 +400,10 @@ The [PR241 Brain brainstorm/front-end design reference, Part 5.9–5.10](../migr
 ## AI Brain page build sequence — 2026-10-22
 
 The companion [AI Brain page evidence-first implementation plan](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#511-ai-brain-page--evidence-first-implementation-plan-2026-10-22) defines the page information architecture, canonical-owner boundaries, accessibility contract and phased vertical slices. It complements the backend/evidence quick wins: build the typed turn presentation projection first, then prove one claim-to-source path before expanding to receipt-backed outputs, context corrections, and governed learning. It is a plan, not evidence of shipped UI or passing tests.
+
+
+## Implementation progress — AI Brain page accessibility slice (2026-10-22)
+
+**In progress:** the existing AI Journal overlay on `src/views/AIBrainCommandInterface.tsx` is being moved into a reusable, accessible dialog component at `src/components/brain/BrainJournalDialog.tsx`. It reuses the existing journal save callback, adds semantic dialog/label relationships, keyboard dismissal and focus management, and prevents empty saves. It does not add a second store or silently promote notes to confirmed knowledge.
+
+See the [frontend design reference implementation record](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#implementation-record--accessible-ai-journal-capture-2026-10-22). The focused test is added; CI verification is pending. The next vertical slice remains evidence-to-claim provenance parity, then canonical receipt-backed result cards and governed context corrections.

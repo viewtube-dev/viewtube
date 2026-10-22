@@ -9,6 +9,7 @@ import AIBrainCommandInterface, {
  BrainFeedbackControls,
  BrainPromptLibrary,
  promptCardSummary,
+ readPromptEvidenceRecords,
  shouldSendBrainComposerKey,
  UserMessage,
 } from "../AIBrainCommandInterface"
@@ -69,6 +70,35 @@ describe("AIBrainCommandInterface", () => {
   expect(html).not.toContain(">Brain Learning Lab<")
   expect(html).not.toContain(">Tool Handoffs<")
   expect(html).not.toContain(">Advanced Health<")
+ })
+
+
+ it("restores only typed prompt evidence whose ordered IDs match the saved turn contract", () => {
+  const record = {
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon",
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   metric: "views",
+   value: 2800,
+   freshness: "fresh",
+   epistemicState: "OBSERVED",
+   provenance: { evidenceIds: ["source-1"], sourceRoute: "/analytics" },
+  }
+
+  expect(readPromptEvidenceRecords({
+   evidenceRecords: [record],
+   promptEvidenceRecordIds: [record.id],
+  })).toEqual([record])
+  expect(readPromptEvidenceRecords({
+   evidenceRecords: [record],
+   promptEvidenceRecordIds: ["different-record"],
+  })).toBeUndefined()
+  expect(readPromptEvidenceRecords({
+   evidenceRecords: [{ ...record, owner: "not-canonical" }],
+   promptEvidenceRecordIds: [record.id],
+  })).toBeUndefined()
+  expect(readPromptEvidenceRecords({})).toBeUndefined()
  })
 
  it("shows the ambient context rail without requiring any selection", () => {

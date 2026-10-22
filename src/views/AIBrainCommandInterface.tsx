@@ -82,7 +82,9 @@ import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRi
 import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
+import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -123,6 +125,7 @@ export type ChatMessage = {
  handoff?: AIBrainChatHandoff | null
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
+ evidenceRecords?: EvidenceRecord[]
  readiness?: AIBrainTurnReadiness
  contextUsed?: BrainCreatorContextSnapshot
  learningReceipt?: {
@@ -136,6 +139,22 @@ export type ChatMessage = {
  }
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
+}
+
+/**
+ * Read only the exact typed evidence array recorded as rendered to the model.
+ * If IDs or record contracts disagree, omit the detailed provenance rather than
+ * displaying a different evidence set as though it were the prompt input.
+ */
+export const readPromptEvidenceRecords = (
+ metadata: Record<string, unknown> | undefined,
+): EvidenceRecord[] | undefined => {
+ if (!metadata || !Array.isArray(metadata.evidenceRecords) || !Array.isArray(metadata.promptEvidenceRecordIds)) return undefined
+ const records = metadata.evidenceRecords
+ const ids = metadata.promptEvidenceRecordIds
+ if (!records.every(isEvidenceRecord) || !ids.every((id) => typeof id === "string")) return undefined
+ if (records.length !== ids.length || records.some((record, index) => record.id !== ids[index])) return undefined
+ return records
 }
 
 export type BrainCreatorContextSnapshot = {
@@ -739,7 +758,7 @@ const CreatorResponseCard: React.FC<{
     ) : null}
     <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
-    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} compact /> : null}
+    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} compact /> : null}
     {openQuestions[0] ? (
      <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
     ) : null}
@@ -1135,6 +1154,7 @@ const AIBrainCommandInterface: React.FC = () => {
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
+     evidenceRecords: readPromptEvidenceRecords(turn.metadata),
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
       : undefined,
@@ -1326,7 +1346,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1899,18 +1919,12 @@ const AIBrainCommandInterface: React.FC = () => {
       ) : null}
 
       {journalOpen ? (
-       <div className="absolute inset-0 z-50 grid place-items-center bg-black/40 p-4">
-        <section className={`${shellCard} w-full max-w-2xl overflow-hidden`}>
-         <div data-vt-brain-part="journal-dialog-heading" className="border-b-[2px] border-black bg-[#36E0F6] px-4 py-3"><h2 className="text-xl font-[1000] uppercase">Save To AI Journal</h2></div>
-         <div className="grid gap-3 p-4">
-          <StudioTextArea data-vt-brain-part="journal-entry-input" value={journalInput} onChange={(event) => setJournalInput(event.target.value)} sizeVariant="standard" rows={4} placeholder="A goal, content style note, audience insight, constraint, or decision you want the Brain to remember." className="min-h-[92px] resize-none" />
-          <div data-vt-brain-part="journal-dialog-actions" className="flex justify-end gap-1">
-           <StudioButton data-vt-brain-part="journal-cancel" sizeVariant="compact" tone="neutral" type="button" onClick={() => setJournalOpen(false)}>Cancel</StudioButton>
-           <StudioButton data-vt-brain-part="journal-save" sizeVariant="compact" tone="success" type="button" disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</StudioButton>
-          </div>
-         </div>
-        </section>
-       </div>
+       <BrainJournalDialog
+        value={journalInput}
+        onChange={setJournalInput}
+        onClose={() => setJournalOpen(false)}
+        onSave={() => { handleJournalSave(); setJournalOpen(false) }}
+       />
       ) : null}
      </section>
     )}
