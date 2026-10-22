@@ -83,6 +83,7 @@ import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavi
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
+import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
@@ -208,7 +209,7 @@ export type BrainCreatorContextSnapshot = {
   knowledgeClass: string
   lifecycleState: string
   confirmationState: string | null
-  source: string
+  source: "brain_memory_claim" | "channel_knowledge_model" | "learning_candidate"
   sourceId: string
   evidenceRefs: string[]
   status: "confirmed" | "inferred"
@@ -221,7 +222,7 @@ export type BrainCreatorContextSnapshot = {
 const BrainContextUsedDrawer: React.FC<{
  contextUsed?: BrainCreatorContextSnapshot
  turnId?: string
- onCorrectItem?: (id: string, statement: string) => void
+ onCorrectItem?: (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => void
 }> = ({ contextUsed, turnId, onCorrectItem }) => {
  if (!contextUsed) return null
  const items = buildBrainContextDisplayItems({
@@ -281,7 +282,7 @@ const BrainContextUsedDrawer: React.FC<{
          <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
          <code className="block break-all text-[8px] text-black/55">{item.id}</code>
          {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
-         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item.id, item.statement)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Propose correction</button> : null}
+         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Propose correction</button> : null}
         </li>
        ))}
       </ul>
@@ -678,7 +679,7 @@ const CreatorResponseCard: React.FC<{
  onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
  onCorrectReceipt: (message: ChatMessage) => void
  onRejectReceipt: (message: ChatMessage) => void
- onCorrectContextItem: (id: string, statement: string) => void
+ onCorrectContextItem: (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => void
 }> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt, onCorrectContextItem }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
@@ -990,6 +991,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
+ const [contextCorrectionItem, setContextCorrectionItem] = useState<BrainContextCorrectionItem | null>(null)
  const composerRef = useRef<HTMLTextAreaElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
@@ -1243,9 +1245,8 @@ const AIBrainCommandInterface: React.FC = () => {
   }
  }
 
- const handleCorrectContextItem = (id: string, statement: string) => {
-  setInput(`Correct this AI Brain context item ${id}. Current statement: "${statement}". Ask me to confirm the correction, then route the updated preference/fact through the existing learning governance path. Do not silently replace the existing record.`)
-  composerRef.current?.focus()
+ const handleCorrectContextItem = (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => {
+  setContextCorrectionItem({ ...item, source: item.source as BrainContextCorrectionItem["source"] })
  }
 
  const handleClearSurfaceSelection = () => {
@@ -1916,6 +1917,18 @@ const AIBrainCommandInterface: React.FC = () => {
          <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
         </div>
        </div>
+      ) : null}
+
+      {contextCorrectionItem ? (
+       <BrainContextCorrectionDialog
+        channelId={channelId}
+        item={contextCorrectionItem}
+        onClose={() => setContextCorrectionItem(null)}
+        onApplied={() => {
+         setInput(`Verify that the governed correction for context item ${contextCorrectionItem.sourceId} is reflected in the next answer. If the refreshed context does not contain it, show the unresolved conflict instead of assuming it was applied.`)
+         window.setTimeout(() => composerRef.current?.focus(), 0)
+        }}
+       />
       ) : null}
 
       {journalOpen ? (
