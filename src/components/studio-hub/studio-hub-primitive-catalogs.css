@@ -3320,36 +3320,39 @@
   text-overflow: ellipsis;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v1"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v2"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
   color: #000 !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v3"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
+  background: var(--pair-a, #36e0f6) !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v4"] > [data-vt-studio-button-face] {
   background: #000 !important;
-  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: var(--pair-a, #36e0f6) !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v5"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v6"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v6"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
@@ -3357,7 +3360,7 @@
   color: #fff !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v7"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #fff !important;
   -webkit-text-stroke-color: #fff !important;
 }

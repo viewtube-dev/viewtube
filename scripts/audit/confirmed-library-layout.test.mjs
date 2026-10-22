@@ -520,3 +520,18 @@ test("button primary/secondary skins use the canonical primary and secondary pal
   assert.match(grid, /specimenRows\?: SpecimenGridRow\[\]/);
   assert.match(grid, /specimenRows\s*\?\s*authoredRows/);
 });
+
+test("button gallery maps primary and secondary directly to canonical pair tokens", () => {
+  const buttonStyles = styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery."));
+  assert.match(buttonStyles, /data-vt-button-skin="v1"[^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
+  assert.match(buttonStyles, /data-vt-button-skin="v2"[^{}]*\{[^}]*background:\s*var\(--pair-b,/s);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"[^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][^{}]*\{[^}]*background:\s*var\(--pair-b,/s);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="false"\][^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
+});
+
+test("V3 button toggle changes both the visible state label and primary/secondary face", () => {
+  assert.match(catalog, /variant === 3 \? \(isOn \? "SECONDARY" : "PRIMARY"\)/);
+  assert.match(catalog, /data-vt-button-on=\{toggle && isOn \? "true" : "false"\}/);
+  assert.match(catalog, /onClick=\{onClick\}/);
+});
