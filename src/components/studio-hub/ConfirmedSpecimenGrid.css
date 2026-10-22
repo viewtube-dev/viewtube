@@ -76,3 +76,63 @@
   min-width: 0;
   max-width: 100%;
 }
+
+
+/* Canonical button module: ordered, proportional rows span the entire module. */
+.vt-specimen-layout-rows {
+  display: grid;
+  gap: var(--vt-specimen-gap);
+  width: 100%;
+  min-width: 0;
+}
+.vt-specimen-layout-row {
+  display: grid;
+  grid-template-columns: repeat(144, minmax(0, 1fr));
+  gap: var(--vt-specimen-gap);
+  align-items: start;
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-layout-row--panels {
+  align-items: start;
+}
+.vt-specimen-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  align-self: stretch;
+}
+.vt-specimen-panel-rows {
+  display: grid;
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-content: start;
+}
+.vt-specimen-panel .vt-specimen-layout-row {
+  width: 100%;
+}
+.vt-specimen-layout-row .vt-specimen-slot {
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-layout-row .vt-specimen-slot > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.vt-specimen-row--proportional {
+  display: grid;
+  grid-template-columns: repeat(144, minmax(0, 1fr));
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-items: start;
+}
+.vt-specimen-row--proportional > .vt-specimen-slot {
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-row--proportional > .vt-specimen-slot > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
