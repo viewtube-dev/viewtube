@@ -30,11 +30,32 @@ describe("StudioPublishingCard size variants", () => {
     expect(html).toContain("FEATURED")
   })
 
-  it("keeps the card ratio, 16:9 thumbnail, pair fill, and size-matched strokes", () => {
+  it("locks outer card and thumbnail ratios against parent grid stretching", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-publishing-card.css"), "utf8")
+    const cardRule = css.match(/\.vt-studio-publishing-card\s*\{([^}]*)\}/)?.[1] ?? ""
+    const thumbnailRule = css.match(/\.vt-studio-publishing-card__thumbnail\s*\{([^}]*)\}/)?.[1] ?? ""
+    const uploadRule = css.match(/\.vt-studio-publishing-card__upload\s*\{([^}]*)\}/)?.[1] ?? ""
+
+    expect(cardRule).toContain("aspect-ratio: 5 / 7;")
+    expect(cardRule).toContain("height: auto;")
+    expect(cardRule).toContain("align-self: start;")
+    expect(cardRule).toContain("min-height: 0;")
+
+    expect(thumbnailRule).toContain("aspect-ratio: 16 / 9;")
+    expect(thumbnailRule).toContain("position: relative;")
+    expect(thumbnailRule).toContain("align-self: start;")
+    expect(thumbnailRule).toContain("height: auto;")
+
+    expect(uploadRule).toContain("position: absolute;")
+    expect(uploadRule).toContain("inset: 0;")
+    expect(uploadRule).toContain("width: 100%;")
+    expect(uploadRule).toContain("height: 100%;")
+    expect(uploadRule).toContain("min-height: 0;")
+  })
+
+  it("preserves pair fill, size-matched strokes, and undistorted thumbnail media", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-publishing-card.css"), "utf8")
 
-    expect(css).toContain("aspect-ratio: 5 / 7;")
-    expect(css).toContain("aspect-ratio: 16 / 9;")
     expect(css).toContain("color-mix(in srgb, var(--vt-publishing-secondary) 25%, transparent)")
     expect(css).toContain('--vt-publishing-stroke: 3px;')
     expect(css).toContain('--vt-publishing-stroke: 2px;')
