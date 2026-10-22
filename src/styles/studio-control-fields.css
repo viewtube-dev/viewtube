@@ -41,8 +41,7 @@ textarea[data-vt-studio-control="true"]:focus-visible,
   box-shadow: none;
 }
 
-/* Textareas inherit the same input typography tokens; only editable-row
-   line-height is specialized to reduce spacing between description lines. */
+/* Textareas inherit the same input typography tokens and shared default line-height. */
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] textarea {
   line-height: 1;
