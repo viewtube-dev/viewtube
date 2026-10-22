@@ -461,3 +461,23 @@ test("ConfirmedSpecimenGrid uses catalog-only 4px arrangement styles without res
   assert.match(gridSource, /aria-controls=\{contentId\}/);
   assert.doesNotMatch(gridCss, /\.vt-specimen-slot\s+(?:button|input|textarea|select)[^{]*\{[^}]*(?:height|border|background|font-size|padding)\s*:/s);
 });
+
+
+test("button catalog uses production StudioButton for seven standard skins and four Supreme skins", () => {
+  const buttonFamily = catalog.match(/<Family title="Button"[^]*?<\/Family>/)?.[0] ?? "";
+  assert.ok(buttonFamily.includes('data-vt-button-skin="v7"'), "standard V7 specimen exists");
+  assert.ok(buttonFamily.includes('data-vt-button-skin="v4"'), "V4 specimen exists");
+  assert.ok(buttonFamily.includes('sizeVariant="supreme"'), "Supreme specimens use production StudioButton sizing");
+  assert.ok(buttonFamily.includes('sizeVariant="micro"'), "micro specimens use production StudioButton sizing");
+  assert.equal((buttonFamily.match(/data-vt-button-skin="v[1-7]"/g) ?? []).length >= 7, true);
+  assert.doesNotMatch(buttonFamily, /standard [1-7]|supreme [1-4]/i, "specimen labels use no numbered standard/supreme names");
+  assert.match(buttonFamily, /aria-label="Button V3 toggle"[^]*?onClick=/);
+  assert.match(buttonFamily, /aria-label="Button V5 ON/OFF toggle"[^]*?onClick=/);
+  assert.match(buttonFamily, /aria-label="Button V6 YES/NO toggle"[^]*?onClick=/);
+});
+
+test("button specimen faces contain long text within the production button border", () => {
+  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?min-width:\s*0/s);
+  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow:\s*hidden/s);
+  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow-wrap:\s*anywhere/s);
+});
