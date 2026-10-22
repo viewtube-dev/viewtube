@@ -1003,6 +1003,8 @@ export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Global visual/interaction variant shared by all StudioButton consumers. */
   variant?: StudioButtonVariant
+  /** Keep nested split-shell anatomy intact; ordinary labels use a constrained text slot. */
+  faceLayout?: "label" | "split"
   /** Alternate label/content for V5 and V6 when toggled on. */
   activeChildren?: React.ReactNode
   /** Optional leading icon; activeIcon replaces it when V5/V6 is toggled on. */
@@ -1030,6 +1032,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
   (
     {
       variant = "v1",
+      faceLayout = "label",
       activeChildren,
       icon,
       activeIcon,
@@ -1093,7 +1096,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
       >
         <span data-vt-studio-button-face>
           {visibleIcon !== undefined && <span data-vt-studio-button-icon>{visibleIcon}</span>}
-          {visibleIcon !== undefined ? (
+          {faceLayout === "split" ? visibleChildren : (
             <span data-vt-studio-button-label>
               {textLayout === "two-line" ? (
                 <>
@@ -1102,12 +1105,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
                 </>
               ) : visibleChildren}
             </span>
-          ) : textLayout === "two-line" ? (
-            <>
-              <span data-vt-studio-button-line="first">{firstLine}</span>
-              <span data-vt-studio-button-line="second">{secondLine}</span>
-            </>
-          ) : visibleChildren}
+          )}
         </span>
       </button>
     )
@@ -1432,7 +1430,7 @@ const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
       <StudioSplitShell layout="left" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>{children}</StudioSplitShell>
     </StudioButton>
   ),
@@ -1447,7 +1445,7 @@ export interface StudioSplitRightButtonProps extends StudioButtonProps {
 }
 export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
       <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
     </StudioButton>
   ),
