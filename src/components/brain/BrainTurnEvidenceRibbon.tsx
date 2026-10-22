@@ -32,7 +32,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  evidencePack,
  citedEvidenceIds = [],
  evidenceRecords,
- evidenceIntegrityStatus = evidenceRecords === undefined ? "unavailable" : "verified",
+ evidenceIntegrityStatus = "unavailable",
  compact = false,
  className = "",
 }) => {
