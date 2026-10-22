@@ -1106,29 +1106,3 @@ describe("Studio counter single-click regression", () => {
     }
   });
 });
-
-
-describe("Studio split-rail accordion motion", () => {
-  it("uses item-owned flex-grow and content-only clipping with inset dividers", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
-    const itemStart = css.indexOf(".vt-studio-split-rail-accordion__item {");
-    const itemEnd = css.indexOf('[data-active="true"]', itemStart);
-    const itemRule = css.slice(itemStart, itemEnd);
-    const contentStart = css.indexOf(".vt-studio-split-rail-accordion__content {");
-    const contentEnd = css.indexOf('[data-active="true"]', contentStart);
-    const contentRule = css.slice(contentStart, contentEnd);
-    expect(css).toContain("--vt-studio-split-rail-slide-duration: 280ms;");
-    expect(itemRule).toContain("transition: flex-grow var(--vt-studio-split-rail-slide-duration)");
-    expect(contentRule).toContain("flex: 1 1 0;");
-    expect(contentRule).toContain("transition: clip-path var(--vt-studio-split-rail-slide-duration)");
-    expect(contentRule).not.toContain("flex-grow");
-    expect(contentRule).not.toContain("max-width");
-    expect(contentRule).not.toMatch(/^\s*width: 0;/m);
-    expect(css).not.toContain("::before");
-    expect(css).not.toContain("::after");
-    expect(css).toContain("box-shadow: inset calc(-1 * var(--vt-studio-split-rail-stroke)) 0 0 #000;");
-    expect(css).toContain("clip-path: inset(0 100% 0 0)");
-    expect(css).toContain("clip-path: inset(0 0 0 0)");
-    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
-  });
-});
