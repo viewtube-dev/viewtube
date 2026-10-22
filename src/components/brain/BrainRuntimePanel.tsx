@@ -308,6 +308,7 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
       <p className="py-1 text-[9px] leading-4">No provenance chain is available yet. This is an empty state, not a claim that lineage is complete.</p>
      )}
     </details>
+     <BrainReceiptBackedOutputCard chain={snapshot.provenance.latestChain} build={build ? { id: build.id, assetIds: build.assetIds } : null} />
    </section>
   )
  }
@@ -465,7 +466,9 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
     </details>
    </section>
 
-   <footer
+   <BrainReceiptBackedOutputCard chain={snapshot.provenance.latestChain} build={build ? { id: build.id, assetIds: build.assetIds } : null} />
+
+    <footer
     className="flex flex-wrap items-center gap-1 border-t px-2 py-1.5"
     style={{ borderColor: `${INK}44`, color: INK, backgroundColor: "#EEF2F7" }}
    >
