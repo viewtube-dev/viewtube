@@ -1,7 +1,5 @@
 import React from "react"
-import { StudioCloseableBadge, StudioLegendMultiDropdown, StudioUploadFrame } from "./StudioControls"
-import { StudioTextInput } from "./StudioTextInput"
-import { StudioTextArea } from "./StudioTextArea"
+import { StudioCloseableBadge, StudioLegendMultiDropdown, StudioUploadFrame, StudioTextInput, StudioTextArea, type StudioLegendMultiDropdownOption } from "../primitives/StudioControls"
 import "../../styles/studio-publishing-card.css"
 
 export type StudioPublishingCardOption = { value: string; label: string; disabled?: boolean }
