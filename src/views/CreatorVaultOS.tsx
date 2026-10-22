@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { StudioLegendMultiDropdown, StudioSpectrumTag, StudioTextArea, StudioTextBox, StudioTextInput, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
@@ -111,6 +111,7 @@ import {
  buildVaultSelectionProjectDraft,
 } from "../services/vaultProjectHandoff"
 import { getVaultAssetUsage, getVaultAssetUsageIndex } from "../services/vaultUsage"
+import { resolveVaultAssetDeepLink } from "../services/vaultAssetDeepLink"
 import {
  createVaultSelectionManifest,
  serializeVaultSelectionManifest,
