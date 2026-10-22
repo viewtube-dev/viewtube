@@ -63,9 +63,9 @@ describe("StudioSplitAccordion", () => {
     expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
     expect(css).toContain("background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));");
     expect(css).not.toMatch(/color-mix\([^;]*accent/i);
-    expect(css).toContain('.vt-studio-split-accordion[data-size="standard"] .vt-studio-split-accordion__content-inner {\\n  font-size: 38px;');
-    expect(css).toContain('.vt-studio-split-accordion[data-size="compact"] .vt-studio-split-accordion__content-inner {\\n  font-size: 24px;');
-    expect(css).toContain('.vt-studio-split-accordion[data-size="micro"] .vt-studio-split-accordion__content-inner {\\n  font-size: 10px;');
+    expect(css).toContain('.vt-studio-split-accordion[data-size="standard"] .vt-studio-split-accordion__content-inner {\n  font-size: 38px;');
+    expect(css).toContain('.vt-studio-split-accordion[data-size="compact"] .vt-studio-split-accordion__content-inner {\n  font-size: 24px;');
+    expect(css).toContain('.vt-studio-split-accordion[data-size="micro"] .vt-studio-split-accordion__content-inner {\n  font-size: 10px;');
     expect(css).toContain("width: min(var(--vt-studio-control-icon-size, 38px), 100%);");
     expect(css).not.toContain("box-shadow:");
   });
