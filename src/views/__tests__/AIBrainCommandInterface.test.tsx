@@ -10,6 +10,7 @@ import AIBrainCommandInterface, {
  BrainPromptLibrary,
  promptCardSummary,
  readPromptEvidenceRecords,
+ getPromptEvidenceIntegrityStatus,
  shouldSendBrainComposerKey,
  UserMessage,
 } from "../AIBrainCommandInterface"
@@ -50,6 +51,26 @@ describe("AIBrainCommandInterface", () => {
 
  afterEach(() => {
   vi.unstubAllGlobals()
+ })
+
+
+ it("distinguishes missing legacy prompt manifests from mismatched evidence records", () => {
+  const record = {
+   id: "analytics:snapshot-1:channel_summary:views",
+   owner: "analytics-canon",
+   sourceRef: "channel_summary",
+   sourceSnapshotId: "snapshot-1",
+   metric: "views",
+   value: 2800,
+   freshness: "fresh",
+   epistemicState: "OBSERVED",
+   provenance: { evidenceIds: ["source-1"], sourceRoute: "/analytics" },
+  }
+  expect(getPromptEvidenceIntegrityStatus(undefined)).toBe("unavailable")
+  expect(getPromptEvidenceIntegrityStatus({ evidenceRecords: [record] })).toBe("unavailable")
+  expect(getPromptEvidenceIntegrityStatus({ evidenceRecords: [record], promptEvidenceRecordIds: [record.id] })).toBe("verified")
+  expect(getPromptEvidenceIntegrityStatus({ evidenceRecords: [record], promptEvidenceRecordIds: ["different-id"] })).toBe("mismatch")
+  expect(getPromptEvidenceIntegrityStatus({ evidenceRecords: [], promptEvidenceRecordIds: [record.id] })).toBe("mismatch")
  })
 
  it("renders one autonomous surface with no tab or mode selector", () => {

@@ -854,3 +854,16 @@ The AI Brain page's existing **Propose correction** action now opens a dedicated
 Active memory claims use the explicit teaching path and are only reported as applied after the replacement claim is resolvable. Model hypotheses and learning candidates are recorded as unconfirmed correction proposals because no generic source-specific update contract exists for them; their original records remain unchanged. The dialog supports Escape dismissal, focus restoration/trapping, visible result/error messaging, and a next-turn verification prompt after a governed claim update.
 
 Regression tests cover claim routing, channel isolation, empty input, proposal-only sources, dialog semantics, and explicit-vs-inferred status. **Verification status:** CI and live keyboard/screen-reader/mobile checks are pending. No local execution or accessibility certification is claimed.
+
+
+### Implementation record — prompt evidence identity in the Brain conversation (2026-10-22)
+
+The AI Brain response evidence panel now receives an explicit prompt-evidence integrity state derived from the turn's saved metadata:
+
+- **Verified:** the typed evidence records are valid and their ordered IDs exactly match the stored prompt evidence manifest.
+- **Unavailable:** a legacy turn did not save a complete prompt manifest. This is not labeled as a mismatch.
+- **Mismatch:** a manifest exists but its records/IDs are malformed or disagree. The UI exposes an accessible alert and withholds record-level provenance rather than implying that a different evidence set was supplied to the model.
+
+The state is restored with saved turns and recalculated after generation retries. This is a presentation of the existing canonical turn metadata, not a second evidence store; it deliberately does not compare unrelated video/evidence-pack IDs against analytics record IDs as if they shared a namespace.
+
+Regression tests cover all three states and the visible alert/status semantics. **Verification status:** CI pending; no local test execution, live browser verification, or accessibility certification is claimed. Next: broaden the same disclosure to explicitly distinguish empty, partial, stale, unavailable, and conflicting source data, then run the complete Brain-route keyboard/mobile/screen-reader audit.
