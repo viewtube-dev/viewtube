@@ -5323,13 +5323,13 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow:focus-visible { outline: 2px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: -3px; }
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow-stack { display: grid; grid-template-rows: 1fr 1fr; width: 100%; height: 100%; min-height: 0; }
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg { width: min(24px, 100%); height: min(24px, 100%); }
-.vt-studio-value-toggle--double:not(.vt-studio-split-shell) { display: flex; align-items: stretch; gap: 0; width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 44px); box-sizing: border-box; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: 0; overflow: hidden; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); }
+.vt-studio-value-toggle--double:not(.vt-studio-split-shell) { display: flex; align-items: stretch; gap: 0; width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 44px); box-sizing: border-box; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
 .vt-studio-value-toggle__double-side > .vt-studio-split-shell { flex: 1 1 auto; min-width: 0; width: 100%; border: 0; border-radius: 0; }
 .vt-studio-value-toggle__double-side[data-content-width="true"] { flex: 0 1 auto; width: max-content; max-width: 50%; }
 .vt-studio-value-toggle__double-side[data-content-width="true"] > .vt-studio-split-shell { width: max-content; }
 .vt-studio-value-toggle__double-side[data-content-width="true"] .vt-studio-value-toggle__face { width: max-content; flex: 0 0 auto; padding-inline: 8px; }
-.vt-studio-value-toggle__divider { flex: 0 0 var(--vt-studio-control-stroke, 3px); background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+.vt-studio-value-toggle__divider { flex: 0 0 var(--vt-studio-control-stroke, 3px); background: #000; }
 .vt-studio-split-shell.vt-studio-value-toggle--nested { border: 0; border-radius: 0; box-shadow: none; }
 .vt-studio-split-shell.vt-studio-value-toggle--nested > [data-vt-studio-split-rail] { border-radius: 0; }
 .vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label] { overflow: visible; }
@@ -5340,3 +5340,10 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-split-shell.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar { flex-basis: 10px; width: 10px; height: 20px; }
 .vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars { gap: 1px; padding: 0; }
 .vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar { flex-basis: 3px; width: 3px; height: 8px; }
+
+/* Side Toggle's vertical arrow stack is two square button cells with one shared divider. */
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow:first-child {
+  border-bottom: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-split-shell.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow:first-child { border-bottom-width: 2px; }
+.vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow:first-child { border-bottom-width: 1px; }
