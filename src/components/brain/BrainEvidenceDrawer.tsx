@@ -91,7 +91,7 @@ export const BrainEvidenceDrawer: React.FC<{
      {sourceCount ? <EvidenceBadge label={String(sourceCount)} tone="#36E0F6" /> : null}
     </summary>
    ) : (
-    <summary className="cursor-pointer list-none border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47]">
+    <summary className="flex min-h-11 cursor-pointer list-none items-center border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
      <span className="flex flex-wrap items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.08em]">
       <span>{summaryLabel}</span>
       {sourceCount ? <EvidenceBadge label={`${sourceCount} sources`} tone="#36E0F6" /> : null}
